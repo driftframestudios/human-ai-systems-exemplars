@@ -101,7 +101,7 @@
     <text x="1110" y="658" class="mono profile-label ink">INTERPRETATION CONDITIONS</text>
     <text x="1110" y="699" class="sans profile-title ink">Validity checks</text>
     <text x="1110" y="738" class="sans profile-copy body"><tspan x="1110">Contamination signal, evaluation awareness,</tspan><tspan x="1110" dy="23">grader gaming, harness fit, and exclusions.</tspan></text>
-    <text x="1110" y="809" class="sans profile-copy body"><tspan x="1110">Each check can narrow or redirect the claim</tspan><tspan x="1110" dy="23">without erasing the underlying observation.</tspan></text>
+    <text x="1110" y="809" class="sans profile-copy body"><tspan x="1110">Each check can narrow or redirect the claim</tspan><tspan x="1110" dy="23">while preserving the underlying observation.</tspan></text>
   </g>
 
   <text x="50" y="1000" class="mono footer body">The structured reading beside this figure carries definitions, source links, grader choices, and the complete reporting profile.</text>

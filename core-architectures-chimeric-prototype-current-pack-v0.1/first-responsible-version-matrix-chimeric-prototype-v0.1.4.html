@@ -195,6 +195,15 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    @media screen {
+      #tableEquivalent th, #tableEquivalent td { min-width: 16ch; }
+      #tableEquivalent :is(th, td):is(:first-child, :nth-child(5), :nth-child(6), :last-child) { min-width: 24ch; }
+    }
+    #tableEquivalent :is(.type-pill, .placement-pill, .status-pill, .route-pill) { overflow-wrap: normal; word-break: normal; }
 </style>
 <style data-canary-stack-css>
 .visitor-boundary{border-block-start:1px solid currentColor;box-sizing:border-box;display:grid;flex:1 0 100%;gap:.75rem;grid-column:1/-1;inline-size:100%;margin:clamp(1.5rem,4vw,3rem) auto 0;max-inline-size:82rem;overflow-wrap:anywhere;padding:1rem clamp(1rem,3vw,1.75rem) 0;user-select:text}.visitor-boundary__marker{box-sizing:border-box;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.7rem;font-variant-ligatures:none;line-height:1.55;margin:0;max-inline-size:100%;white-space:normal}.visitor-boundary__context{box-sizing:border-box;font-family:inherit;font-size:.8rem;line-height:1.55;margin:0;max-inline-size:70ch}@media print{.visitor-boundary{border-color:#000;color:#000}}@media (forced-colors:active){.visitor-boundary{border-color:CanvasText;color:CanvasText}}
@@ -253,7 +262,7 @@
     <section>
       <h2>Text / Table Equivalent</h2>
       <p class="tiny">This table is the reading surface for the diagram and preserves full text via reveal controls.</p>
-      <div id="tableEquivalent" class="table-wrap"></div>
+      <div id="tableEquivalent" class="table-wrap" role="region" tabindex="0" aria-label="First Responsible Version Matrix: cards in the active view; scroll horizontally"></div>
     </section>
 
     <section class="grid-2">
@@ -308,7 +317,7 @@
             <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
           </div>
         </fieldset>
-        <p class="tiny" id="promptViewDescription">Plain Markdown carries the complete threshold context without asking the receiver to load a repository skill.</p>
+        <p class="tiny" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete threshold context.</p>
         <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <noscript><p class="notice">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
         <pre id="aiPrompt" class="copy-area" data-prompt-view-active="plain" aria-labelledby="promptCapsuleHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: First Responsible Version Matrix
@@ -515,7 +524,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     <section>
       <h2>Advanced Identity Registry</h2>
       <p class="tiny">Stable IDs are semantic identity. Display order and visibility are focus view state.</p>
-      <div id="identityRegistry" class="table-wrap"></div>
+      <div id="identityRegistry" class="table-wrap" role="region" tabindex="0" aria-label="First Responsible Version Matrix: identity registry; scroll horizontally"></div>
     </section>
 
     <section class="soft">
@@ -828,9 +837,9 @@ function truncate(value, n) { const s = String(value || ''); return s.length > n
 function renderTableEquivalent() {
   const rows = visibleCards().map(card => {
     const uid = 'full-' + card.id;
-    return `<tr><td><strong>${esc(card.title)}</strong><div class="tiny">${esc(card.id)}</div></td><td><span class="type-pill">${esc(typeLabel(card.type))}</span></td><td><span class="placement-pill">${esc(placementLabel(card.placement))}</span></td><td>${statusPill(card.evidence_status)}</td><td><div class="text-preview">${esc(card.reason)}</div>${card.reason.length > 110 ? `<button type="button" class="secondary reveal-btn" data-target="${uid}">Show full text</button><div id="${uid}" class="text-full">${esc(card.reason)}</div>` : ''}</td><td>${routePill(card.handoff)}<div class="tiny">${esc(routeFamily(card.handoff))}</div></td><td>${esc(card.review_trigger || '')}</td></tr>`;
+    return `<tr data-record-id="${esc(card.id)}" data-label="First Responsible Version Matrix card: ${esc(card.title)}"><th scope="row" data-label="Card"><strong>${esc(card.title)}</strong><div class="tiny"><code>${esc(card.id)}</code></div></th><td><span class="type-pill">${esc(typeLabel(card.type))}</span></td><td><span class="placement-pill">${esc(placementLabel(card.placement))}</span></td><td>${statusPill(card.evidence_status)}</td><td><div class="text-preview">${esc(card.reason)}</div>${card.reason.length > 110 ? `<button type="button" class="secondary reveal-btn" data-target="${uid}">Show full text</button><div id="${uid}" class="text-full">${esc(card.reason)}</div>` : ''}</td><td>${routePill(card.handoff)}<div class="tiny">${esc(routeFamily(card.handoff))}</div></td><td>${esc(card.review_trigger || '')}</td></tr>`;
   }).join('');
-  document.getElementById('tableEquivalent').innerHTML = `<table><thead><tr><th>Card</th><th>Type</th><th>Placement</th><th>Status</th><th>Reason</th><th>Route</th><th>Review trigger</th></tr></thead><tbody>${rows || '<tr><td colspan="7">No visible cards.</td></tr>'}</tbody></table>`;
+  document.getElementById('tableEquivalent').innerHTML = `<table><caption>First Responsible Version Matrix: cards in the active view</caption><thead><tr><th scope="col" data-label="Card">Card</th><th scope="col" data-label="Type">Type</th><th scope="col" data-label="Placement">Placement</th><th scope="col" data-label="Status">Status</th><th scope="col" data-label="Reason">Reason</th><th scope="col" data-label="Route">Route</th><th scope="col" data-label="Review trigger">Review trigger</th></tr></thead><tbody>${rows || '<tr><td colspan="7">No visible cards.</td></tr>'}</tbody></table>`;
 }
 function renderInspector() {
   const view = getActiveView();
@@ -851,8 +860,8 @@ function renderRecoveryCalibration() {
   document.getElementById('recoveryCalibration').innerHTML = `<h3>Strain cues</h3><ul>${r.strain_cues.map(x => `<li>${esc(x)}</li>`).join('')}</ul><h3>Stabilizing read</h3><p>${esc(r.stabilizing_read)}</p><h3>Restored state</h3><p>${esc(r.restored_state)}</p><h3>Recovery moves</h3><ul>${r.recovery_moves.map(x => `<li>${esc(x)}</li>`).join('')}</ul><h3>Named Failure Geometries</h3><div class="toolbar">${r.named_failure_geometries.map(x => `<span class="pill">${esc(x)}</span>`).join('')}</div>`;
 }
 function renderIdentityRegistry() {
-  const rows = orderedCards().map(card => `<tr><td>${esc(card.id)}</td><td>${esc(card.title)}</td><td>${card.canonical_order}</td><td>${displayOrder(card.id)}</td><td>${visibleOrder(card.id) || 'hidden'}</td><td>${isHidden(card.id) ? 'hidden in focus view' : 'visible'}</td><td>${esc(card.placement)}</td></tr>`).join('');
-  document.getElementById('identityRegistry').innerHTML = `<table><thead><tr><th>Stable ID</th><th>Title</th><th>Canonical</th><th>Display</th><th>Visible</th><th>Visibility</th><th>Placement</th></tr></thead><tbody>${rows}</tbody></table>`;
+  const rows = orderedCards().map(card => `<tr data-record-id="${esc(card.id)}" data-label="First Responsible Version Matrix identity: ${esc(card.id)}"><th scope="row" data-label="Stable ID"><code>${esc(card.id)}</code></th><td>${esc(card.title)}</td><td>${card.canonical_order}</td><td>${displayOrder(card.id)}</td><td>${visibleOrder(card.id) || 'hidden'}</td><td>${isHidden(card.id) ? 'hidden in focus view' : 'visible'}</td><td>${esc(card.placement)}</td></tr>`).join('');
+  document.getElementById('identityRegistry').innerHTML = `<table><caption>First Responsible Version Matrix: identity registry</caption><thead><tr><th scope="col" data-label="Stable ID">Stable ID</th><th scope="col" data-label="Title">Title</th><th scope="col" data-label="Canonical">Canonical</th><th scope="col" data-label="Display">Display</th><th scope="col" data-label="Visible">Visible</th><th scope="col" data-label="Visibility">Visibility</th><th scope="col" data-label="Placement">Placement</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function getJsonExport() {
   const view = getActiveView();
@@ -1101,7 +1110,7 @@ function updateOutputs() {
   document.querySelectorAll('[data-prompt-view]').forEach(control => { control.checked = control.value === promptCapsuleView; });
   document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
     ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented matrix state and fingerprint remain the same.'
-    : 'Plain Markdown carries the complete threshold context without asking the receiver to load a repository skill.';
+    : 'Plain Markdown is a self-contained handoff with the complete threshold context.';
 }
 function renderAll() {
   normalizeView(getActiveView());

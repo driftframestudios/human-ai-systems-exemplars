@@ -2,7 +2,8 @@
 
 ## Effective repository settings
 
-The repository API reported this state on 2026-08-26:
+The repository API reported this state on 2026-08-26. These values retain that
+observation date:
 
 | Setting | Effective value |
 |---|---|
@@ -18,10 +19,16 @@ model. Organization or enterprise policy can further narrow this repository
 view. A new external action receives a deliberate policy and workflow review
 before use.
 
+The Issue #63 reconciliation on 2026-10-03 reads workflow source at
+`3355430196a8732cf8b5a2e3d90cb6cc38dbe11c`. Current live account settings,
+repository and environment variables, usage, and remaining allocations are
+unknown in that source-only observation. This document preserves the recorded
+policy and resting activation values; it changes no account setting.
+
 ## Immutable GitHub-owned actions
 
 The public-boundary, schema receiver-route, schema publication, schema delivery,
-prototype-unit, and two LIMS/ELN proof workflows use only these reviewed
+prototype, production-carrier, and two LIMS/ELN proof workflows use these reviewed
 GitHub-owned action revisions:
 
 | Action | Reviewed tag | Pinned commit |
@@ -34,45 +41,96 @@ GitHub-owned action revisions:
 | `actions/deploy-pages` | `v5.0.0` | `cd2ce8fcbc39b97be8ca5fce6e763baed58fa128` |
 | `actions/upload-artifact` | `v7.0.1` | `043fb46d1a93c77aae656e7c1c64a875d1fc6a0a` |
 
-The workflows use read-only contents permission unless the connected Pages job
-needs `pages: write` and `id-token: write`. None calls a reusable workflow
-through `jobs.<job_id>.uses`.
+The workflows use read-only contents permission. The connected Pages job also
+declares `pages: write` and `id-token: write` at job scope, including
+verification-only dispatches; its activation input gates the upload and deploy
+steps. None calls a reusable workflow through `jobs.<job_id>.uses`.
 
 ## Receiver and budget boundary
 
-`main` remains a budget-active evidence receiver. Its successor-owned
+The recorded policy keeps `main` a budget-active evidence receiver. Its two
+advisory jobs require `ACTIONS_BUDGET_MAIN=true`. The successor-owned
 public-boundary job has a two-minute ceiling and a one-day aggregate receipt.
-Its schema receiver-route job has a six-minute ceiling, reads the shared route
-map through the schema check and Pages build, and contributes an advisory
-summary for matching changes while preserving the review path.
+Its schema receiver-route job has a six-minute ceiling, runs
+`npm run check:schemas && npm run test:schema-pages`, and contributes an
+advisory summary for matching changes while preserving the review path.
 The prototype-unit job has its own resting switch:
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=false` keeps matching pull-request execution at
-rest while explicit dispatch remains available. The LIMS/ELN proof jobs require
-both `ENABLE_GITHUB_ACTIONS=true` and a selected confirmation.
+rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
+`narrative`, and `all` selections share one ten-minute job; manual browser
+coverage requires `include_browser=true`, while an enabled PR receiver includes
+the selected browser contracts. The workflow's separate ten-minute media job
+runs for matching pull requests and for confirmed `media` or `all` dispatches.
+That job installs the locked Node toolchain, Chromium, and FFmpeg; exercises
+media preparation, manifest, delivery, and native-video receiver contracts;
+and dry-runs the Worker package. Same-ref manual suites can supersede one
+another. The LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a
+selected confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise
+offline and database matrix jobs have fifteen- and thirty-minute ceilings
+respectively. Those ceilings remain distinct from approved allocations.
 
-`release` and `prod` each have an approved 300-minute allocation for the current
-collaboration cycle. One shared schema-delivery workflow gives both branches a
-12-minute automatic contract and an eight-minute connected deployment ceiling.
-The contract stays with the established schema, Static Assets, Wrangler, and
-secret-material readers. Visual review, unit proof, scheduling, and broader
-package questions retain their own deliberately selected routes. Superseded
-contracts cancel; deployments serialize by receiver and finish their current
-upload.
+The production-carrier lane accepted in PR #255 receives matching `main` pull
+requests, including drafts, and manual dispatch. Its read-only ten-minute job
+tests production contracts. Pull requests exercise immutable
+`production-v0.2.0` as a historical regression fixture; manual dispatch
+requires an explicit annotated `production-vMAJOR.MINOR.PATCH` tag. The lane
+grants no host credential or deployment action. Preserve that trigger posture.
+The human budget owner has approved **300 minutes per
+month** for this lane, adjustable through a later explicit budget decision.
+The allowance is a human-held budget; automated monthly metering is outside
+the declared workflow contract. Current usage and remaining allocation stay
+unknown in this source inventory. Workflow triggers, permissions, and activation
+remain unchanged.
 
-The Pages workflow receives an exact accepted source commit and reviewed
-`docs` commit through manual dispatch. Its read-only job rebuilds and compares
-the complete receiver before an explicit deployment selection gives a separate
-job the minimal Pages permissions. The current live site uses this workflow
-route. Each hosted pair starts after its accepted source reaches `main` and its
-reviewed projection reaches `docs`; the `github-pages` environment keeps both
-branch rules. The recorded legacy `docs:/` source remains the recovery route.
+`release` and `prod` each retain the recorded approved 300-minute allocation
+per collaboration cycle. One shared schema-delivery workflow gives both
+branches a 12-minute automatic contract. It installs the separate root and
+schema Worker locks, verifies schema identity and the checked-in accepted Worker
+publication independently from later source drift, proves the reviewed dependency
+path, runs Worker unit tests, dry-runs the bundle through the nested
+Wrangler CLI, and inspects the selected public artifact through the pinned
+secret-material reader. Visual review, live observation, scheduling, and
+broader package questions retain their own deliberately selected routes.
+Superseded contracts cancel.
+
+Only a successful `prod` push can enter the connected deployment job. Its
+eight-minute ceiling, single production concurrency group, branch-restricted
+`prod` environment, credential check, active-receiver condition, and repository
+variable `SCHEMA_WORKER_DEPENDENCY_GATE=open` keep the accepted
+`cloudflare/schemas-worker` bundle aligned with the existing Custom Domain. The
+reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` chain satisfies the
+dependency floor owned by Issue #402. The dependency gate remains a human-held
+activation control. The job finishes its current upload and records the
+preceding Worker version as the recovery route.
+
+The Pages workflow receives an exact accepted source commit, reviewed `docs`
+commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One
+connected fifteen-minute standard-runner job verifies the source, projection,
+tag, and artifact, then conditionally uploads and deploys in the same job.
+The default `activate_deployment=false` keeps publication steps resting. Pages permissions
+are job-level, and the `schema-pages` concurrency group serializes runs with
+`cancel-in-progress: false`. PRs #308/#309 record the accepted tagged-release
+transition. The accepted current Pages coordinate is `pages-v0.2.0`; the
+2026-10-01 `pages-v0.1.0` observation remains historical evidence.
+Each selected pair starts after its source reaches `main` and its projection
+reaches `docs`; the documented `github-pages` environment admits both branches.
+The recorded legacy `docs:/` source remains the recovery route.
 Evidence budgets and deployment authority stay independent:
-`DEPLOYMENT_ACTIVE_RECEIVERS=[]` currently lets release and production checks
-run while their Worker uploads rest. Naming a receiver in that list admits its
-connected deployment only after the matching branch-restricted environment
-provides its account coordinate and least-privilege token. The repository's
-paid-overage boundary remains $0; a named human can return a receiver variable
-to its resting value when its allocation or useful receipt settles.
+the documented `DEPLOYMENT_ACTIVE_RECEIVERS=[]` posture lets release and
+production contracts run while the production upload rests. Naming `prod`
+and opening the dependency gate admit that connected deployment only after the
+branch-restricted environment provides its account coordinate and
+least-privilege token. Release remains a contract receiver and carries no route
+to the live Worker. The repository's paid-overage boundary remains $0; a named
+human can return the receiver or dependency variable to its resting value when
+its allocation or useful receipt settles.
+
+[AUTOMATION.md](AUTOMATION.md) inventories all eight workflows and their source
+owners. [ENVIRONMENTS.md](ENVIRONMENTS.md) retains environment and variable
+ownership. Record month-level allocation when an authorized activation change
+occurs. Current usage and account enforcement require a separately scoped live
+observation; the historical settings and declared workflow gates remain useful
+without presenting them as newly observed account state.
 
 Third-party Marketplace actions, external actions outside the allowed
 organizations, hosted visual sweeps, broad package validation, and recurring

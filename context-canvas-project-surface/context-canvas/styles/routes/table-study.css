@@ -1,0 +1,71 @@
+/* Readable Tables Debrief: comparison geometry for the two source tables.
+   Reading, navigation, cards and visual fields retain the shared owners.
+   Load after debrief-composition.css. */
+.table-study-page .table-study-records {
+  inline-size: 100%;
+  table-layout: auto;
+}
+
+.table-study-page .table-study-records :is(th, td) {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.table-study-page .table-study-equation {
+  margin-block: 1.25rem;
+  padding: 1rem;
+  overflow-x: auto;
+  border-inline-start: .25rem solid currentColor;
+  background: rgb(255 255 255 / .14);
+}
+
+.table-study-page .table-study-equation math {
+  min-inline-size: max-content;
+  font-size: 1.12em;
+}
+
+.table-study-page .table-study-notes {
+  margin-block: 1.5rem;
+}
+
+.table-study-page .table-study-notes > summary {
+  padding-block: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-study-page .table-study-equation:focus-visible,
+.table-study-page .table-study-notes > summary:focus-visible {
+  outline: .2rem solid currentColor;
+  outline-offset: .2rem;
+}
+
+@media screen {
+  .table-study-page .table-study-records {
+    min-inline-size: 48rem;
+  }
+
+  .table-study-page .table-study-records th[scope="row"] {
+    min-inline-size: 11rem;
+  }
+}
+
+@media print {
+  .table-study-page .table-study-equation {
+    overflow: visible;
+    break-inside: avoid;
+  }
+
+  .table-study-page .table-study-equation math {
+    font-size: 1em;
+  }
+
+  .table-study-page .table-study-records {
+    min-inline-size: 0;
+  }
+
+  .table-study-page .table-study-records tr {
+    break-inside: avoid;
+  }
+}

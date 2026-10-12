@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="atlas-ai4i-rate-figure" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-labelledby="atlas-ai4i-rate-title atlas-ai4i-rate-description">
+<title id="atlas-ai4i-rate-title">Machine-failure frequency by product type: All product types</title>
+<desc id="atlas-ai4i-rate-description">All product types: 10000 records, 339 Machine failure labels, 348 records with any mode flag, 27 label/flag disagreements. Rates use the published Machine failure field. The released table supplies record identifiers rather than observation timestamps. Source type: published-generated-records; DOI https://doi.org/10.24432/C5HS5C; license CC-BY-4.0; verified-input SHA-256 dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e.</desc>
+<style>
+#atlas-ai4i-rate-figure text{font-family:Verdana,sans-serif;fill:#1d3557}
+#atlas-ai4i-rate-figure .small{font-size:14px}#atlas-ai4i-rate-figure .body{font-size:16px}
+#atlas-ai4i-rate-figure .label{font-size:19px}#atlas-ai4i-rate-figure .number{font-size:25px;font-variant-numeric:tabular-nums}
+#atlas-ai4i-rate-figure .big{font-size:38px;font-weight:bold}#atlas-ai4i-rate-figure .tick{font-size:13px}
+#atlas-ai4i-rate-figure .cell{font-size:14px;font-variant-numeric:tabular-nums}#atlas-ai4i-rate-figure .inverse{fill:#fffcf5}
+#atlas-ai4i-rate-figure .rule{stroke:#d4e3f5;stroke-width:1}
+</style>
+<rect width="1200" height="760" fill="#fffcf5"/>
+<g id="atlas-ai4i-rate-reading-context">
+<text x="40" y="35" class="small" font-weight="bold">AI4I 2020 / PUBLISHED GENERATED RECORDS</text>
+<text x="40" y="79" font-size="30" font-weight="bold">Machine-failure frequency by product type</text>
+<text x="40" y="113" class="label">All product types | 10000 records | 339 machine-failure labels</text>
+<text x="40" y="144" class="small">Descriptive comparison. Product type is a source quality variant; record identifiers are not timestamps.</text>
+</g>
+<g id="atlas-ai4i-rate-product-comparison" data-scale-max="5"><text x="40" y="198" class="small" font-weight="bold">PRODUCT TYPE</text>
+<text x="220" y="198" class="small" font-weight="bold">RATE PER 100 RECORDS</text>
+<text x="815" y="198" class="small" font-weight="bold" text-anchor="end">RATE / 100</text>
+<text x="970" y="198" class="small" font-weight="bold" text-anchor="end">LABELS</text>
+<text x="1150" y="198" class="small" font-weight="bold" text-anchor="end">RECORDS</text>
+<line class="rule" x1="220" x2="220" y1="226" y2="548"/>
+<text x="220" y="580" class="small" text-anchor="middle">0</text>
+<line class="rule" x1="312" x2="312" y1="226" y2="548"/>
+<text x="312" y="580" class="small" text-anchor="middle">1</text>
+<line class="rule" x1="404" x2="404" y1="226" y2="548"/>
+<text x="404" y="580" class="small" text-anchor="middle">2</text>
+<line class="rule" x1="496" x2="496" y1="226" y2="548"/>
+<text x="496" y="580" class="small" text-anchor="middle">3</text>
+<line class="rule" x1="588" x2="588" y1="226" y2="548"/>
+<text x="588" y="580" class="small" text-anchor="middle">4</text>
+<line class="rule" x1="680" x2="680" y1="226" y2="548"/>
+<text x="680" y="580" class="small" text-anchor="middle">5</text>
+<g id="atlas-ai4i-rate-product-L" aria-label="Product type L: 235 labels among 6000 records; rate 3.9 per 100">
+<text x="40" y="284" class="label" font-weight="bold">Type L</text>
+<rect x="220" y="260" width="360.333" height="34" fill="#2855f3"/>
+<text x="815" y="284" class="number" text-anchor="end">3.9</text>
+<text x="970" y="284" class="number" text-anchor="end">235</text>
+<text x="1150" y="284" class="number" text-anchor="end">6000</text>
+</g>
+<g id="atlas-ai4i-rate-product-M" aria-label="Product type M: 83 labels among 2997 records; rate 2.8 per 100">
+<text x="40" y="390" class="label" font-weight="bold">Type M</text>
+<rect x="220" y="366" width="254.788" height="34" fill="#2855f3"/>
+<text x="815" y="390" class="number" text-anchor="end">2.8</text>
+<text x="970" y="390" class="number" text-anchor="end">83</text>
+<text x="1150" y="390" class="number" text-anchor="end">2997</text>
+</g>
+<g id="atlas-ai4i-rate-product-H" aria-label="Product type H: 21 labels among 1003 records; rate 2.1 per 100">
+<text x="40" y="496" class="label" font-weight="bold">Type H</text>
+<rect x="220" y="472" width="192.622" height="34" fill="#2855f3"/>
+<text x="815" y="496" class="number" text-anchor="end">2.1</text>
+<text x="970" y="496" class="number" text-anchor="end">21</text>
+<text x="1150" y="496" class="number" text-anchor="end">1003</text>
+</g>
+<text x="40" y="622" class="body">The scale stays fixed across product selections. Counts preserve the denominator behind each rate.</text></g>
+<g id="atlas-ai4i-rate-source-context">
+<line class="rule" x1="40" x2="1160" y1="654" y2="654"/>
+<text x="40" y="680" class="small">AI4I 2020 Predictive Maintenance Dataset | Published generated records | CC-BY-4.0</text>
+<text x="40" y="707" class="small">Source: https://doi.org/10.24432/C5HS5C</text>
+<text x="40" y="735" class="tick">The released table supplies record identifiers rather than observation timestamps</text>
+</g>
+</svg>

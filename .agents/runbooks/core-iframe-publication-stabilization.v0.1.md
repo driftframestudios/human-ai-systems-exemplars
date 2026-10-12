@@ -1,6 +1,6 @@
 ---
 title: Iframe and production publication stabilization
-version: 0.1.2
+version: 0.1.5
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -19,6 +19,14 @@ deployment place both closures; signed-out observation then establishes the
 direct hosted responses and every manifest-covered parent-carrier
 relationship. The same accepted source coordinate feeds the smallest public
 route documentation and the human-selected long-lived branch receivers.
+
+Issue
+[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+owns the current source, carrier, tag, activation, and live-acceptance cycle.
+Closed Issues in the source-contract table preserve implemented decisions and
+historical receipts; they supply precedent while #464 carries the current
+release coordinate. #72 and #102 continue to own iframe activation and
+parent-carrier response observations, and #406 owns current schema delivery.
 
 Completion is one accepted `main` coordinate whose source, exact aggregate iframe
 package, primary and iframe cPanel closures, reviewed promotion, observed-live
@@ -74,15 +82,16 @@ When local dependency download or browser launch is unavailable, route the
 exact check through the approved bounded-support or CI browser worker. Retain
 the same command, viewport or route coverage, evidence claim, and safe return.
 
-Before private-repository cPanel activation, confirm one human-authorized,
-host-supported GitHub access route: cPanel Terminal or shell with a bounded
-deploy credential, or another bounded credential path held by the protected
-receiver. Keep the credential and exact account path in that receiver. When
-neither path is confirmed, stop at the reviewed cPanel closures and return
-`friction`; the repository remains private and the deployment phase remains at
-rest.
+Before cPanel activation, select one human-authorized, host-supported receiver.
+A shell-capable account can use the managed-clone and Bash-installer route. A
+shell-free account can use a verified carrier archive, private staging, and a
+human-operated cutover through the repository-owned transfer-envelope builder
+and verifier. Keep credentials, exact account paths, and host limits with the
+protected receiver. When neither route has a verified staging and recovery
+path, stop at the reviewed cPanel closures and return `friction`; the repository
+remains private and the deployment phase remains at rest.
 
-## Current source owners
+## Source contracts and decision records
 
 | Surface | Owner | What it contributes |
 | --- | --- | --- |
@@ -97,10 +106,13 @@ rest.
 | Hosted carrier hardening | [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) | Route-scoped response, cache, header, and parent-carrier posture |
 | Hosted route activation | [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) | Accepted package activation, signed-out direct and parent observation, and accepted live return |
 | Parallel production-source treatment | [#117](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/117) | Accepted inline-code and About presentation that travels with the selected visitor source |
-| Production-selected asset inventory | [#88](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/88) | Stable authored asset paths and the declared dependency facts consumed by production assembly |
-| Primary and iframe projections | [#118](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/118) | Two deterministic, disjoint cPanel-ready closures from one accepted authored tree and one exact iframe package |
-| Public route language | [#121](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/121) | Authored, intended, generated, and observed-live route map |
-| Long-lived branch receivers | [#108](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/108) | Human-accepted `main` coordinate and branch-specific advance or rest decisions |
+| Production-selected asset inventory | [#88](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/88) | Accepted retirement and inventory record for authored assets consumed by production assembly. New ambiguity routes to the current source owner and #464; reopen #88 only when the accepted disposition itself changes. |
+| Schema Worker dependency and accepted-release gates | [#402](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/402) and [#406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) | Reviewed delivery-tool dependency floor plus verification of the pinned accepted source, Pages tag, Worker bytes, and publication closure before protected promotion |
+| Primary and iframe projection precedent | [#118](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/118) | Historical v0.2 implementation of two deterministic, disjoint cPanel-ready closures from one accepted authored tree and one exact iframe package |
+| Current production release | [#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464) | Current source freeze, branch promotion, carrier formation, tags, shell-free activation, signed-out acceptance, and recovery |
+| Shell-free receiver precedent | [#253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253) and the [artifact-delivery guide](../../deployment/cpanel/SHELL-FREE-ARTIFACT-DELIVERY.md) | Historical implementation of the build-verified carrier archive, bounded File Manager staging, ordered cutover, and recovery contract |
+| Public route language precedent | [#121](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/121) | Historical authored, intended, generated, and observed-live route map |
+| Long-lived branch precedent | [#108](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/108) | Historical branch-receiver contract for the accepted `main` coordinate and branch-specific advance or rest decisions |
 
 The standalone Participatory Design Kit set receives the universal footer
 stack in the source-wide pass. [#111](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/111)
@@ -193,6 +205,12 @@ policy, and accepted local hashes for that revision. The artifact secret scan
 establishes its named package scope. cPanel closure membership and live
 Cloudflare parity remain open until the later phases establish them.
 
+When a release-candidate-only change leaves the aggregate manifest digest and
+every generated file unchanged, record that exact parity and bind the existing
+hosted package to the new accepted source coordinate. Byte-identical output
+requires no repeat upload; a changed digest or file requires one atomic upload
+and fresh live verification.
+
 **Recovery and stop:** A changed route count, undeclared dependency, package
 escape, unused declaration, failed source parity, or unexpected capability
 returns to canonical source or the route manifest. Keep the prior accepted
@@ -202,7 +220,7 @@ after repair.
 ### Phase 3 — Assemble both cPanel closures
 
 **Action mode:** `implementation_authorized` when the current assigned packet
-activates local work inside #118's accepted source and output contract.
+activates local work inside #464's selected source and output contract.
 Destination-bearing configuration and deployment remain human-selected
 actions in Phase 4.
 
@@ -221,8 +239,8 @@ source tree and the exact Phase 2 iframe package:
 The controlled iframe staging step consumes the accepted route manifest and
 declared package membership. It copies each selected regular file and verifies
 its digest; it does not recursively copy the ignored `.iframe-route-build/`
-tree or treat an unlisted file there as production input. #88 supplies the
-production-selected asset inventory and dependency facts while established
+tree or treat an unlisted file there as production input. #88 preserves the
+accepted asset-retirement and inventory decision while established
 `img/`, prototype-local, route-local, and generated roles retain their owners.
 
 Receive #117's accepted production-source treatment alongside the source set
@@ -230,19 +248,23 @@ selected by #116/#119/#120/#125/#126 and any accepted #128 excerpt. Keep
 authored Context Canvas source nested, preserve absolute iframe routes,
 and keep both output closures disjoint.
 
-Run #118's implemented build, check, secret-boundary, and deployment-package
-tests. `build:public-references` or the publication assembler may carry
+Run the build, check, secret-boundary, deployment-package contracts, and tests
+implemented under #118 and selected for the current release by #464.
+`build:public-references` or the publication assembler may carry
 configured destinations; run it only when the current packet explicitly grants
 those values and output.
 
 ```sh
+npm run check:debrief-image-derivatives
 npm run test:prod-deployment
 npm run check:prod-projection
 npm run build:prod-projection
 npm run security:secrets:artifact -- .prod-projection-build
 ```
 
-The test establishes source-owned behavior with repository fixtures. The check
+The derivative check establishes eligible widths, exact dimensions, and
+accepted-source aspect ratios without rewriting tracked media. The production
+test establishes source-owned behavior with repository fixtures. The check
 composes the authorized configuration in temporary storage. The build writes
 the same plan to the ignored local projection, and the artifact scan inspects
 that exact output.
@@ -252,9 +274,10 @@ establish deterministic primary and iframe cPanel closures for the accepted
 source and exact aggregate package. They do not establish cPanel document-root
 identity, host access, deployment, or public availability.
 
-**Recovery and stop:** A missing dependency, output collision, path escape,
-private locator, placeholder publication URL, undeclared asset, package digest
-mismatch, or document-root ambiguity returns to #118 or #88. Preserve source
+**Recovery and stop:** An ineligible or malformed derivative, missing
+dependency, output collision, path escape, private locator, placeholder
+publication URL, undeclared asset, package digest mismatch, or document-root
+ambiguity returns to the owning image source, #464, or #88. Preserve source
 compatibility, repair the owning source or assembler, and rebuild both closures
 from one accepted coordinate.
 
@@ -267,37 +290,49 @@ release, destination, credential, and recovery decisions.
 Review the exact source SHA, aggregate package coordinate, both closure
 manifests, secret-boundary result, and recovery path. Follow the canonical
 [accepted release sequence](../../deployment/cpanel/README.md#accepted-release-sequence)
-from source promotion through the carrier-only release and cPanel's **Update
-from Remote** and **Deploy HEAD Commit** actions. #108 owns the human-selected
-protected branch path. #118's checked-in deployment route installs the prebuilt
-`primary-public/` and `iframe-public/` closures into verified, separate document
-roots. The cPanel clone stays outside both roots; the accepted source and
-manifest select publication membership before the host receives the release.
+from source promotion through the carrier-only release. The host capability
+then selects one receiver:
 
-Private-repository activation begins after the receiver confirms cPanel
-Terminal or shell access with a bounded deploy credential, or another bounded
-credential path explicitly authorized by the human. The protected receiver
-keeps exact account paths and secret values. The deployment packet names the
-legacy-site takeover, retained host-managed allowlist, cache behavior, and
-recoverable release mechanism. Settle and apply #102's route-scoped response,
-header, and cache posture through its separately granted receiver before the
-direct observation begins.
+- a shell-capable account follows the [pull-model enrollment and cutover
+  guide](../../deployment/cpanel/FIRST-CUTOVER.md) for managed-clone
+  registration, private configuration, backup, canary rehearsal, cPanel's
+  **Update from Remote** and **Deploy HEAD Commit** actions, and recovery; or
+- a shell-free account follows [artifact delivery and first
+  cutover](../../deployment/cpanel/SHELL-FREE-ARTIFACT-DELIVERY.md) for an
+  immutable archive, private File Manager staging, backup, ordered two-root
+  convergence, recovery, and later bounded automation.
+
+#464 owns the current branch promotion, activation, and shell-free release;
+#108, #118, and #253 preserve the accepted topology, projection, and adapter
+precedents. The accepted source, production tag, manifest,
+and file index select publication membership before either host receiver
+accepts the release.
+
+Host activation begins after the protected receiver confirms exact document
+roots, private staging, backup, retained host-owned paths, and a recoverable
+release mechanism. The shell-capable route adds its bounded deploy credential;
+the manual shell-free pilot needs no cPanel-held GitHub credential. The
+deployment packet names legacy-site takeover, cache behavior, and the selected
+transport. Settle and apply #102's route-scoped response, header, and cache
+posture through its separately granted receiver before direct observation
+begins.
 
 A separately granted iframe-only manual upload remains an interim compatibility
 action. It cannot establish this runbook's final release state because it does
 not place the reviewed primary and iframe closures from one accepted
-coordinate. Once #118's assembler and cPanel route are accepted, deploy both
+coordinate. Once #464 accepts the assembler output and cPanel route, deploy both
 closures together.
 
-**Checkpoint:** The reviewed promotion and cPanel task establish that the
-accepted prebuilt closures were selected for both document roots and that the
-managed clone remains clean. Signed-out hosted response and byte parity remain
-open until Phase 5.
+**Checkpoint:** The reviewed promotion and host task establish that the
+accepted prebuilt closures were selected for both document roots. The pull
+route additionally establishes a clean managed clone; the artifact route
+records its archive and transfer receipt. Signed-out hosted response and byte
+parity remain open until Phase 5.
 
-**Recovery and stop:** An unconfirmed private-repository access route, unknown
-document root, overlapping roots, missing recovery mechanism, unexpected host
-capability, promotion divergence, or retained legacy-content ambiguity stops
-before activation and returns to #118/#108. Keep the last accepted deployment
+**Recovery and stop:** An unconfirmed host receiver, unknown document root,
+overlapping roots, missing recovery mechanism, unexpected host capability,
+promotion divergence, or retained legacy-content ambiguity stops before
+activation and returns to #464. Keep the last accepted deployment
 available while the protected receiver supplies the bounded missing fact.
 
 ### Phase 5 — Observe the direct hosted iframe routes
@@ -328,13 +363,13 @@ threshold.
 **Checkpoint:** The accepted signed-out observation establishes direct iframe
 route status, media type, intended response posture, and byte parity for the
 complete manifest closure. Phase 6 establishes the parent-child framing
-relationships. #118 separately owns the primary site's signed-out status,
+relationships. #464 separately owns the primary site's signed-out status,
 media type, response, 404, and manifest-byte observations; that acceptance
 remains open until its bounded live packet is recorded.
 
 **Recovery and stop:** A byte mismatch, unexpected Cloudflare mutation,
 incorrect media type, blocked frame, wider permission need, or protected-origin
-dependency pauses activation. Return the bounded condition to #72/#102/#118
+dependency pauses activation. Return the bounded condition to #72/#102/#464
 without publishing raw headers, protected coordinates, browser state, or
 account details. Restore or redeploy only an accepted complete closure.
 
@@ -380,8 +415,8 @@ last accepted state until a fresh repair packet is granted.
 ### Phase 7 — Finalize public orientation and topology return
 
 **Action mode:** `repair_authorized` or `implementation_authorized` when the
-current assigned packet activates #121's documentation scope. Any branch
-mutation still outstanding continues only through #108's explicit human
+current assigned packet activates #464's documentation scope. Any branch
+mutation still outstanding continues only through #464's explicit human
 selection and protected review path.
 
 1. Describe each route as **authored**, **intended**, **generated**, or
@@ -389,21 +424,20 @@ selection and protected review path.
 2. Keep `/v1/core/` as the sole hosted Core iframe grammar and `/v1/canvas/`
    as a distinct delivery family whose sources retain their own identities.
 3. Name schema identity separately from retrieval and runtime networking.
-4. Complete #121's schema-activation wording only after [#18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18)
-   supplies its accepted live retrieval observation; the other route-map work
-   can proceed from its own evidence.
+4. Complete schema-activation wording only after #406 supplies its accepted
+   release verification and live retrieval observation; the other route-map
+   work can proceed from its own evidence.
 5. Attach the accepted primary-site, direct-iframe, and parent-carrier
    observations to the exact source and production coordinate selected during
    Phase 4.
-6. Give every branch disposition not already settled by #108 an evidence-backed
+6. Give every branch disposition an evidence-backed
    advance, recreation, projection, promotion, or rest disposition.
-7. Return the resulting deployment topology to #90 without reopening an
-   already accepted source or promotion decision.
+7. Return the resulting deployment topology to #464; reopen the historical
+   branch sweep only at the exact frozen coordinate named there.
 
 **Checkpoint:** Public orientation matches implemented commands and observed
-route standing. #108 records the accepted source and two-closure deployment
-coordinate, prior recovery tips, and each receiving branch's own decision;
-#90 receives the resulting topology return.
+route standing. #464 records the accepted source and two-closure deployment
+coordinate, prior recovery tips, and each receiving branch's own decision.
 
 **Recovery and stop:** Documentation that outruns observation returns to
 “intended” or “generated.” A divergent history, branch recreation, protected
@@ -452,7 +486,7 @@ receiver. The public handback names the bounded condition and next owner.
 
 The runbook releases when both cPanel closures from one accepted coordinate are
 deployed; the primary site, direct iframe routes, and every selected parent
-carrier have their accepted observations; #108 accepts the settlement; and
+carrier have their accepted observations; #464 accepts the settlement; and
 every remaining long-lived branch has its own reviewed advance or explicit
 rest. A source, package, asset-inventory, route, response-policy,
 production-projection, host-access, or branch-topology change reopens the

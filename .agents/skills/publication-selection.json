@@ -16,6 +16,21 @@
   ],
   "skills": [
     {
+      "name": "agency-and-action-writing",
+      "sourcePath": ".agents/skills/agency-and-action-writing/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The initial repository exercise is complete. Public projection remains held until a source-package review and another natural use test the skill outside this Debrief language pass."
+    },
+    {
+      "name": "audit-anthropomorphic-cues",
+      "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
       "name": "bounded-support-routing",
       "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
       "publicationStanding": "public_ready",
@@ -25,6 +40,14 @@
         ".agents/skills/bounded-support-routing/references/openai-codex-spark.md",
         ".github/workflows/prototype-unit-tests.yml"
       ]
+    },
+    {
+      "name": "citation-atlas-selection",
+      "sourcePath": ".agents/skills/citation-atlas-selection/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The first natural exercise establishes deterministic selection against one accepted Atlas snapshot. Public promotion remains held until an independent receiving use and source-package review test the helper's data-shape transfer beyond that initial Atlas and declare scripts/lookup.py in the complete public source package."
     },
     {
       "name": "collaboration-accounting",
@@ -75,6 +98,36 @@
       "dependencies": []
     },
     {
+      "name": "conversation-data-visualization",
+      "sourcePath": ".agents/skills/conversation-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+    },
+    {
+      "name": "cost-and-ownership-analysis",
+      "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+        ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+        ".agents/skills/practitioner-probe/SKILL.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+        ".agents/skills/collaboration-accounting/SKILL.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
+      ]
+    },
+    {
+      "name": "data-visualization-foundations",
+      "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+    },
+    {
       "name": "declarative-skill-authoring",
       "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
       "publicationStanding": "public_ready",
@@ -82,6 +135,13 @@
       "dependencies": [
         ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md"
       ]
+    },
+    {
+      "name": "embedded-prototype-layout",
+      "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
     },
     {
       "name": "evidence-grounded-research-spike",
@@ -108,6 +168,14 @@
       ]
     },
     {
+      "name": "pdf-data-visualization",
+      "sourcePath": ".agents/skills/pdf-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+    },
+    {
       "name": "practitioner-probe",
       "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
       "publicationStanding": "public_ready",
@@ -130,6 +198,22 @@
       "publicationNote": "Promote after its runbook family has a public-ready source package with public retrieval targets."
     },
     {
+      "name": "repository-handoff-readiness",
+      "sourcePath": ".agents/skills/repository-handoff-readiness/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The repository inventory retains this working skill. A source-package review after the first Context Canvas receiving exercise will decide whether its planning link belongs in a public projection."
+    },
+    {
+      "name": "repository-orientation-stewardship",
+      "sourcePath": ".agents/skills/repository-orientation-stewardship/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The repository inventory retains this skill while a source-package review establishes its public publication route."
+    },
+    {
       "name": "repository-reentry",
       "sourcePath": ".agents/skills/repository-reentry/SKILL.md",
       "publicationStanding": "public_ready",
@@ -149,9 +233,20 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": [
+        ".agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
         "threadkeeping/repository-secret-material-boundary.md",
         "threadkeeping/context-canvas-public-reference-materialization.md",
         "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md"
+      ]
+    },
+    {
+      "name": "semantic-table-design",
+      "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md"
       ]
     },
     {
@@ -166,7 +261,12 @@
       "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
-      "dependencies": []
+      "dependencies": [
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+        "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+        "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs"
+      ]
     },
     {
       "name": "supportive-change-writing",
@@ -182,6 +282,14 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": []
+    },
+    {
+      "name": "web-data-visualization",
+      "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
     }
   ]
 }

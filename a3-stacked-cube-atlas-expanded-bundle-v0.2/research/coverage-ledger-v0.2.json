@@ -5,7 +5,7 @@
   "status": "complete_for_external_primary_source_pass",
   "rows": [
     {
-      "source_name": "A3 · Appendix — Stacked Cube Model (Strangler-Fig Storyboards)",
+      "source_name": "Evidence-Guided Capability Transfer Model (four-frame storyboards)",
       "address_attempted": "Authorized resolver source key SRC-A3",
       "accessed": true,
       "read_depth": "full",
@@ -27,7 +27,7 @@
       "failure_citation": null
     },
     {
-      "source_name": "A3 Stacked Cube canonical registry v0.1",
+      "source_name": "Evidence-Guided Capability Transfer Model canonical registry v0.1",
       "address_attempted": "local canonical JSON",
       "accessed": true,
       "read_depth": "full",
@@ -152,7 +152,7 @@
       "address_attempted": "original pattern descriptions and AWS prescriptive guidance",
       "accessed": true,
       "read_depth": "full_pages",
-      "role_in_analysis": "interception seam, incremental authority change, abstraction, limitations",
+      "role_in_analysis": "interception boundary, incremental authority change, abstraction, limitations",
       "report_section": "authority and runtime lenses",
       "citation": "https://martinfowler.com/bliki/OriginalStranglerFigApplication.html",
       "failure_state": "pattern guidance does not establish product-specific separability",

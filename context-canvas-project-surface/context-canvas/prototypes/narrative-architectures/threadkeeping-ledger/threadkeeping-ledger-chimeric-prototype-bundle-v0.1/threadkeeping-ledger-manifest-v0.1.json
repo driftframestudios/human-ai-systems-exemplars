@@ -17,6 +17,7 @@
     "button-based column visibility and order controls",
     "fixed-cell full-text reveal dialog",
     "selected inspector",
+    "inline accessible deletion confirmation with focus recovery",
     "review queue",
     "continuity assessment",
     "supersession fields",

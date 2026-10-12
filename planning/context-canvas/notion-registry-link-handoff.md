@@ -4,6 +4,14 @@
 
 This handoff gives Context Canvas a public-safe route for replacing working Notion references with visitor-facing Enterprise Human-AI Practitioner Registry destinations. Exact workspace resolution remains in a private Notion coordination surface. The repository carries the counts, route choices, family plan, settled public destinations, and return method that materially support implementation. The companion [public reference routes](notion-public-reference-routes.csv) keep the family plan editable.
 
+The current implementation advances that plan through a tracked, reviewed
+[Registry binding](../../deployment/public-references/README.md). The binding
+maps every live Context Canvas Registry token to one exact current Atlas record
+and normalized `kindlight.systems` route. The complete Atlas remains an
+external, dated discovery corpus; its prose carries no repository action
+authority. Ignored `.env.public` now carries only the separately approved
+professional-profile destination.
+
 This handoff is the shared coordination surface for Context Canvas and Practitioner Registry routes. The eighteen-artifact family now sends affinities 01–15 to their substantive Registry children, keeps affinity 16 on its settled two-depth route, and uses the shared parent for resolver-open affinities 17–18. The parent continues as the family map and fallback. The Grammar Family carries one comparison atlas with eight directly addressable teaching specimens, and Visual Fidelity carries complementary conceptual and operational Atlas routes. The canonical-counterpart return folds five comparison routes into their cleaned canonical pages while PODA retains one distinct public-grade practice companion.
 
 ## Inventory snapshot
@@ -29,15 +37,18 @@ These counts orient the size of the collaboration. Visitor usefulness, claim cov
 
 The route decisions in this handoff now enter authored Context Canvas HTML as
 stable `PUBLIC_URL_REGISTRY_*` semantic keys. Even a Registry route that may
-become public stays outside tracked visitor source as a direct Notion URL. An
-ignored `.env.public` or matching process environment supplies the
-human-approved destination, and one dependency-free Node build materializes
-ordinary anchor and JSON-LD links into an ignored static subtree.
+become public stays outside tracked visitor source as a direct Notion URL. A
+reviewed tracked binding supplies the current public Registry destinations,
+ignored `.env.public` supplies the professional-profile destination, and one
+dependency-free Node build materializes ordinary anchor and JSON-LD links into
+an ignored static subtree.
 
 This keeps three decisions distinct:
 
 - the private resolver establishes exact lineage and Registry ancestry;
 - the human steward establishes content standing and signed-out reader fit;
+- the tracked binding records the accepted Atlas identity and exact route for
+  every source-discovered Registry key;
 - the materializer establishes complete, credential-free HTTPS substitution
   while leaving tracked source unchanged.
 
@@ -96,7 +107,7 @@ The parent and children remain public-possible receiving areas. The semantic rec
 
 | Affinity | Direct Registry receiver | Local visitor surface |
 | --- | --- | --- |
-| `cc-site-reading-01` | **The Queue That Was Secretly a Status Machine** · `PUBLIC_URL_REGISTRY_THE_QUEUE_THAT_WAS_SECRETLY_A_STATUS_MACHINE` | `genomic-viewer-replatforming.html` |
+| `cc-site-reading-01` | **The Queue That Was Secretly a Status Machine** · `PUBLIC_URL_REGISTRY_SITE_READING_QUEUE_STATUS_MACHINE` | `genomic-viewer-replatforming.html` |
 | `cc-site-reading-02` | **The Boolean Building Blocks That Were Quietly an ETL Substrate** · `PUBLIC_URL_REGISTRY_THE_BOOLEAN_BUILDING_BLOCKS_THAT_WERE_QUIETLY_AN_ETL_SUBSTRATE` | `fmi-clinical-trial-coordination.html` |
 | `cc-site-reading-03` | **The Discrete Result That Kept Arriving as a PDF** · `PUBLIC_URL_REGISTRY_THE_DISCRETE_RESULT_THAT_KEPT_ARRIVING_AS_A_PDF` | `ehr-discrete-genomic-result.html` |
 | `cc-site-reading-04` | **Two Charts, One Result** · `PUBLIC_URL_REGISTRY_TWO_CHARTS_ONE_RESULT` | `ehr-two-charts-one-result.html` |
@@ -112,8 +123,19 @@ The parent and children remain public-possible receiving areas. The semantic rec
 | `cc-site-reading-14` | **Three-Way Comparative & The Return** · `PUBLIC_URL_REGISTRY_THREE_WAY_COMPARATIVE_AND_THE_RETURN` | `three-way-comparative-return.html` |
 | `cc-site-reading-15` | **From Narrative to Execution** · `PUBLIC_URL_REGISTRY_FROM_NARRATIVE_TO_EXECUTION_A_DEEP_RESEARCH_COLLABORATION_ATLAS` | `narrative-execution-gap-research-atlas.html` |
 | `cc-site-reading-16` | Field Watch practice + Generated Research synthesis | `prompt-side-conditions-practice.html` |
-| `cc-site-reading-17` | Shared family parent · resolver-open | `exemplar-brief-exploration.html` |
-| `cc-site-reading-18` | Shared family parent · resolver-open | `exemplar-gallery-list.html` |
+| `cc-site-reading-17` | Shared family parent · resolver-open | `spatial-capture-collaborative-memory.html` |
+| `cc-site-reading-18` | Shared family parent · resolver-open | `debriefs.html` |
+
+Issue #88 superseded the former source-era gallery receiver. Git history keeps
+that earlier coordinate recoverable; the maintained Debrief catalog now owns
+the current family-level route.
+
+The Genomic Viewer receiver keeps the Site Reading above as its page-level source. It uses
+`PUBLIC_URL_REGISTRY_CONTEXT_TREE` for the method companion and four claim-specific depth carriers only where their
+implementation beats are cited: `PUBLIC_URL_REGISTRY_QUEUE_INTEROP_BOTTLENECK`,
+`PUBLIC_URL_REGISTRY_QUEUE_PERMISSION_LEDGER`, `PUBLIC_URL_REGISTRY_QUEUE_DASHBOARD_OUTCOME`, and
+`PUBLIC_URL_REGISTRY_QUEUE_VERIFICATION_PORTFOLIO`. These depth carriers enrich one receiving identity and leave the
+visitor-surface identity count unchanged.
 
 This return raises the current visitor-facing identity count from 37 to 52 while preserving 93 occurrences. The added identities represent greater semantic precision rather than added source dependency. Stable affinity handles and private source keys continue to support later route changes.
 
@@ -319,7 +341,9 @@ Current-tree publication, public Git history, and runtime security are distinct 
 - Visible link language describes what a visitor reaches.
 - Deferred routes keep a clear reason and return condition.
 - Exact workspace identities, private URLs, ancestry, and source-local annotation remain in their intended workspace surface.
-- Authored Context Canvas HTML carries no direct Notion page route; accepted Registry keys materialize through external configuration into ordinary static links.
+- Authored Context Canvas HTML carries no direct Notion page route; accepted
+  Registry keys materialize through the reviewed tracked binding into ordinary
+  static links.
 - Each implementation wave concludes after one focused search of the changed paths.
 
 ## Re-entry

@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -60,6 +62,8 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
   ]);
   const plain = staticPrompt(html);
   const route = routeManifest.routes.find(({ id }) => id === "first-responsible-version-matrix");
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
 
   assert.doesNotMatch(html, /PROMPT_CAPSULE_STATIC_BASELINE/u);
   assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
@@ -106,8 +110,16 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
-  assert.match(inventory, /First Responsible Version Matrix v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  assert.match(currentInventory, /First Responsible Version Matrix v0\.1\.4/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });
 
 test("First Responsible Version Matrix pins the exact public skills it offers", async () => {
@@ -121,8 +133,7 @@ test("First Responsible Version Matrix pins the exact public skills it offers", 
 
   assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}';`, "u"));
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(sha256(source), expectedDigest);
+    assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
     assert.ok(html.includes(`path: '${path}'`));
     assert.ok(html.includes(`sha256: '${expectedDigest}'`));
   }

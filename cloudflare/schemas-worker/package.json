@@ -1,0 +1,19 @@
+{
+  "name": "schemas-worker",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:publication": "node prepare-publication.mjs",
+    "check:publication": "node prepare-publication.mjs --check",
+    "check:accepted-publication": "node verify-accepted-publication.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:receiver": "node test/live-receiver.mjs",
+    "test:browser": "node test/catalog-browser.mjs",
+    "dev": "wrangler dev",
+    "deploy": "npm run check:accepted-publication && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.149.0"
+  }
+}

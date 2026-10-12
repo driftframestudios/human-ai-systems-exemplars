@@ -94,8 +94,8 @@
       "subtitle": "Comparative Collaboration Field",
       "family": "Comparison and Threshold",
       "shape": "anchored dimension matrix + editable profile field + collaboration extensions",
-      "current_file": "strategy-canvas-chimeric-prototype-v0.2.4.html",
-      "current_version": "0.2.4",
+      "current_file": "strategy-canvas-chimeric-prototype-v0.2.5.html",
+      "current_version": "0.2.5",
       "current_expression": "canonical",
       "semantic_contract": "strategy-canvas/2.0",
       "schema_file": "../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -103,14 +103,14 @@
       "expression_coordinates": {
         "canonical": {
           "manifest_file": "../core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
-          "current_file": "../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html",
-          "current_version": "0.2.4",
+          "current_file": "../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html",
+          "current_version": "0.2.5",
           "compatibility_route": "../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
         },
         "context_canvas": {
           "manifest_file": "../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
-          "current_file": "../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-          "current_version": "0.2.2",
+          "current_file": "../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
+          "current_version": "0.2.3",
           "compatibility_route": "../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
         }
       },

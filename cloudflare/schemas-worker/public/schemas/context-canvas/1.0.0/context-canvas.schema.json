@@ -1,0 +1,546 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+  "title": "Context Canvas artifact",
+  "description": "A shared contract for Context Canvas collections, visitor surfaces, prototype surfaces, and reference artifacts. The contract carries designed experience, first-use routing, independent standing, divided authority, representations, relations, fidelity contracts, and recovery routes while preserving namespaced variation.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "@context",
+    "id",
+    "kind",
+    "name",
+    "description",
+    "experienceIntent",
+    "standing",
+    "authority",
+    "representations",
+    "extensions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "@context": {
+      "$ref": "#/$defs/contextReference"
+    },
+    "id": {
+      "$ref": "#/$defs/schemeQualifiedIdentifier"
+    },
+    "kind": {
+      "enum": [
+        "collection",
+        "visitor_surface",
+        "prototype_surface",
+        "reference_artifact"
+      ]
+    },
+    "name": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "experienceIntent": {
+      "$ref": "#/$defs/experienceIntent"
+    },
+    "firstUsePrior": {
+      "$ref": "#/$defs/firstUsePrior"
+    },
+    "standing": {
+      "$ref": "#/$defs/standing"
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "representations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/representation"
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    },
+    "contractRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contractRef"
+      }
+    },
+    "recoveryRoutes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recoveryRoute"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemeQualifiedIdentifier": {
+      "type": "string",
+      "description": "A scheme-qualified identifier shape. The URI format remains an annotation in the current local validator.",
+      "format": "uri",
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+    },
+    "contextReference": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      ]
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "expectation": {
+      "type": "object",
+      "required": [
+        "readerCanExpect"
+      ],
+      "properties": {
+        "readerCanExpect": {
+          "$ref": "#/$defs/stringList"
+        },
+        "revisionCues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "firstUsePrior": {
+      "type": "object",
+      "description": "An elicited routing prior for where the artifact's first useful work usually begins. Each component is independently constrained to the inclusive 0–1 range; natural use supplies later revision evidence.",
+      "required": [
+        "probabilityOf",
+        "solution",
+        "implementation",
+        "recovery",
+        "basis",
+        "reviewTrigger"
+      ],
+      "properties": {
+        "probabilityOf": {
+          "const": "where the artifact's first useful work usually begins"
+        },
+        "solution": {
+          "$ref": "#/$defs/probability",
+          "description": "Likelihood that first useful work begins by understanding, shaping, or choosing the solution."
+        },
+        "implementation": {
+          "$ref": "#/$defs/probability",
+          "description": "Likelihood that first useful work begins by applying, building, or operationalizing a known solution."
+        },
+        "recovery": {
+          "$ref": "#/$defs/probability",
+          "description": "Likelihood that first useful work begins by restoring legibility, resolving strain, or finding a return route."
+        },
+        "basis": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reviewTrigger": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "focalization": {
+      "type": "object",
+      "description": "A declared reading that foregrounds selected material while the remaining artifact, identity, standing, and authority stay intact.",
+      "required": [
+        "vantage",
+        "foregrounds"
+      ],
+      "properties": {
+        "lensRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "vantage": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "foregrounds": {
+          "$ref": "#/$defs/stringList"
+        },
+        "holdsAside": {
+          "type": "array",
+          "description": "Material retained in the artifact while this reading gives it less prominence.",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "useCondition": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "handoffRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "opportunity": {
+      "type": "object",
+      "required": [
+        "availableMoves"
+      ],
+      "properties": {
+        "availableMoves": {
+          "$ref": "#/$defs/stringList"
+        },
+        "enablingConditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "handoffRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/schemeQualifiedIdentifier"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "experienceIntent": {
+      "type": "object",
+      "required": [
+        "desiredState",
+        "useConditions",
+        "primaryCognitiveMove",
+        "intendedReaders",
+        "recognitionSignals",
+        "boundaries"
+      ],
+      "properties": {
+        "desiredState": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "useConditions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "primaryCognitiveMove": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "intendedReaders": {
+          "$ref": "#/$defs/stringList"
+        },
+        "recognitionSignals": {
+          "$ref": "#/$defs/stringList"
+        },
+        "boundaries": {
+          "$ref": "#/$defs/stringList"
+        },
+        "preservedQualities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "expectation": {
+          "$ref": "#/$defs/expectation"
+        },
+        "focalization": {
+          "$ref": "#/$defs/focalization"
+        },
+        "opportunity": {
+          "$ref": "#/$defs/opportunity"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "currentness": {
+      "type": "object",
+      "description": "Freshness standing kept independent from evidence, review, visibility, lifecycle, and authority.",
+      "required": [
+        "state",
+        "basis",
+        "reviewTrigger"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "current",
+            "current_with_caveats",
+            "review_due",
+            "stale",
+            "unknown"
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "asOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "reviewTrigger": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "standing": {
+      "type": "object",
+      "required": [
+        "claimStatus",
+        "evidenceClass",
+        "sourceRefs",
+        "currentness",
+        "reviewState",
+        "visibility",
+        "lifecycleStatus"
+      ],
+      "properties": {
+        "claimStatus": {
+          "enum": [
+            "illustrative",
+            "prospective",
+            "observed",
+            "operational"
+          ]
+        },
+        "evidenceClass": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/stringList"
+        },
+        "currentness": {
+          "$ref": "#/$defs/currentness"
+        },
+        "reviewState": {
+          "enum": [
+            "unreviewed",
+            "working",
+            "reviewed",
+            "revision_due"
+          ]
+        },
+        "visibility": {
+          "enum": [
+            "public",
+            "public_safe_summary",
+            "internal",
+            "private"
+          ]
+        },
+        "lifecycleStatus": {
+          "enum": [
+            "candidate",
+            "active",
+            "retained",
+            "deprecated",
+            "superseded",
+            "retired"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "humanMeaningAuthorityRef",
+        "schemaAuthorityRef",
+        "contentAuthorityRef",
+        "decisionAuthorityRole",
+        "automationRole",
+        "scope"
+      ],
+      "properties": {
+        "humanMeaningAuthorityRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "schemaAuthorityRef": {
+          "const": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json"
+        },
+        "contentAuthorityRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decisionAuthorityRole": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "automationRole": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scope": {
+          "$ref": "#/$defs/stringList"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "representation": {
+      "type": "object",
+      "required": [
+        "kind",
+        "locator",
+        "mediaType",
+        "status"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "canonical_html",
+            "machine_representation",
+            "static_fallback",
+            "embedded_prototype",
+            "served_projection"
+          ]
+        },
+        "locator": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "mediaType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "active",
+            "stale",
+            "superseded",
+            "unreachable"
+          ]
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "branch": {
+          "$ref": "#/$defs/nonEmptyString",
+          "description": "Source branch that publishes or prepares this projection; branch names remain outside canonical schema identity."
+        },
+        "environment": {
+          "$ref": "#/$defs/nonEmptyString",
+          "description": "Named deployment or discovery environment that prefers this projection; instance meaning remains invariant."
+        },
+        "revision": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "dependentRequired": {
+        "branch": [
+          "environment"
+        ],
+        "environment": [
+          "branch"
+        ]
+      },
+      "unevaluatedProperties": false
+    },
+    "relation": {
+      "type": "object",
+      "required": [
+        "type",
+        "targetRef"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "defines",
+            "profiles",
+            "projects",
+            "implements",
+            "references",
+            "hands_to",
+            "supersedes"
+          ]
+        },
+        "targetRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "note": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "contractRef": {
+      "type": "object",
+      "required": [
+        "type",
+        "ref"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "visual_fidelity",
+            "interaction",
+            "source_boundary",
+            "recovery",
+            "related"
+          ]
+        },
+        "ref": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "application": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "recoveryRoute": {
+      "type": "object",
+      "required": [
+        "strainCue",
+        "smallestUsefulMove",
+        "receivingSurfaceRef",
+        "revisitCondition"
+      ],
+      "properties": {
+        "strainCue": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "smallestUsefulMove": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "receivingSurfaceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisitCondition": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Additive values keyed by a scheme-qualified namespace convention.",
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9+.-]*:[!-~]+$": true
+      },
+      "additionalProperties": false
+    }
+  }
+}

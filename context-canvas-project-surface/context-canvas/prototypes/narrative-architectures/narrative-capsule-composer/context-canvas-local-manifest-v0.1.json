@@ -16,8 +16,14 @@
     "usedByPages": "manifest-directory"
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
-  "archive": {"status": "rebuilt-local-snapshot", "path": "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "5a65744025af46f5de5cd6c30694acb8302b5bf35de265a15948ed3e7b82edc5"},
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "d73d3212f52ccf2224c7c08ef98f9a363ab399b70bc86592471ed247fdc5c9d9"
+  },
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/",
@@ -25,7 +31,7 @@
   "sourceManifest": "narrative-capsules-chimeric-prototype-manifest-v0.1.json",
   "localAdaptations": [
     "The manifest-current Core Architecture Family Index is adapted into companions/ so the capsule link remains child-directory relative.",
-    "The source preview and target registry resolve explicitly to the Context Canvas facilitation workbench v0.2.2.",
+    "The source preview and target registry resolve explicitly to the Context Canvas facilitation workbench v0.2.3.",
     "The published Strategy Canvas schema validator establishes the source contract before adapter mapping.",
     "Prompt Capsule 0.1.0 projects role-aware plain and skill-assisted GitHub Flavored Markdown, complete Strategy Canvas dimension meaning, a shared state-only fingerprint, two related loops, and exact visible, copy, download, and API bytes.",
     "The deterministic local bundle carries the manifest-current canonical Strategy worksheet as a distinct portable companion with its expression, version, and digest identity."

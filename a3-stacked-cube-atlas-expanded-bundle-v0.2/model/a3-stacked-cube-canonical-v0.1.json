@@ -2,8 +2,8 @@
   "schema_version": "0.1.0",
   "artifact_identity": {
     "id": "A3-CUBE-MANIFEST",
-    "display_name": "A3 Stacked Cube Visual System",
-    "subtitle": "Strangler-Fig Authority, Evidence, and Recovery Model",
+    "display_name": "Evidence-Guided Capability Transfer Model",
+    "subtitle": "Bounded Authority, Evidence, and Recovery Model",
     "version": "0.1.0",
     "family": "Shared Surfaces and Topology / Recovery Routing and Revision",
     "placement": "A3 Appendix / Visual Production Extension",
@@ -28,7 +28,7 @@
   "semantic_contract": {
     "cube_means": "a bounded software capability or service dependency; never a team, screen, or human activity merely because it appears in a workflow",
     "position_means": "current execution or decision authority only; position does not encode value, maturity, effort, safety, or priority",
-    "migration_means": "a reversible routing and authority change through an explicit seam, validation gate, and rollback route; it is not a copy animation",
+    "migration_means": "a reversible routing and authority change through an explicit boundary, validation gate, and rollback route; it is not a copy animation",
     "coupling_rule": "visible gaps imply verified separability; coupled or unknown items remain banded, linked, or retained",
     "human_work_rule": "curator activities remain a human-workflow ribbon unless a bounded software capability has been separately evidenced",
     "unknown_rule": "UNKNOWN is a durable state that stays visible; it is never rendered as an empty or negative state",
@@ -47,10 +47,10 @@
     {
       "id": "F1",
       "sequence": 1,
-      "label": "Seam identified",
+      "label": "Boundary identified",
       "short_label": "No move yet",
-      "annotation": "The operational and assignment seam is bounded. Dependencies, evidence, and rollback are named before routing changes.",
-      "cognitive_move": "distinguish a candidate seam from a completed migration"
+      "annotation": "The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes.",
+      "cognitive_move": "distinguish a candidate boundary from a completed transfer"
     },
     {
       "id": "F2",
@@ -77,7 +77,7 @@
     },
     {
       "id": "seam",
-      "label": "Seam identified",
+      "label": "Boundary identified",
       "visual": "outlined block"
     },
     {
@@ -666,7 +666,7 @@
     "views": [
       {
         "id": "view-default",
-        "name": "A3 first-responsible focus",
+        "name": "First-responsible capability focus",
         "active_frame_id": "F0",
         "cube_order": [
           "CAP-OP-ASSIGN",
@@ -696,7 +696,7 @@
   },
   "semantic_locality": {
     "preferred_phrasing": [
-      "candidate seam",
+      "candidate boundary",
       "legacy authority",
       "shadow / dual-run",
       "validated authority",

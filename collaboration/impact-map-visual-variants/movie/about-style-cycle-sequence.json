@@ -1,0 +1,164 @@
+{
+  "version": "0.4.0",
+  "output": {
+    "width": 960,
+    "height": 540,
+    "hold_ms": 1200,
+    "transition_frame_ms": 160,
+    "palette_colors": 56,
+    "palette_strategy": "per_frame",
+    "dither": "none"
+  },
+  "progressive_video": {
+    "width": 1280,
+    "height": 720,
+    "frames_per_second": 25,
+    "codec": "libx264",
+    "preset": "slow",
+    "crf": 16,
+    "pixel_format": "yuv420p",
+    "audio": false,
+    "fast_start": true
+  },
+  "transition": {
+    "id": "assembly_relay",
+    "grid_columns": 10,
+    "grid_rows": 6,
+    "progress": [
+      0.38,
+      0.72
+    ],
+    "colors": [
+      "#2456f5",
+      "#ecff3f",
+      "#fbf8f1"
+    ],
+    "inspiration": [
+      "https://tympanus.net/codrops/2023/04/05/ideas-for-pixel-page-transitions/",
+      "https://tympanus.net/codrops/2018/02/06/slice-revealer/"
+    ]
+  },
+  "frames": [
+    {
+      "id": "genomics-plate-viewer",
+      "label": "Genomics plate viewer",
+      "stage": "implementation",
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-1920.webp",
+      "sha256": "36f8288909bc0902643de20ef03fd7fa97fe60a2eb9fc681e52f7d569f87af65",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "poda-investment-flow",
+      "label": "PODA investment flow",
+      "stage": "problem",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/poda-investment-flow.png",
+      "sha256": "00cae65fe6ef7190f793c6c592731cc66e8786f8ebff962af1c8d0b74f4d9f23",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "cpg-member-experience-redesigned",
+      "label": "Redesigned member experience",
+      "stage": "solution",
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned-1920.webp",
+      "sha256": "ee9b386d2426614774889cb6b040a153c9f07592f8afa27b0688662dc054c949",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "context-board-pop-drafting",
+      "label": "Actor Context Board",
+      "stage": "problem",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/context-board-pop-drafting.png",
+      "sha256": "28752e0fa4161ea3bf3c54b7e9d8c7e0d36f371a557919561cea801fadc6c6d3",
+      "centering": [
+        0.5,
+        0.05
+      ]
+    },
+    {
+      "id": "who-to-believe-system-graph",
+      "label": "Review-routing system graph",
+      "stage": "implementation",
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp",
+      "sha256": "c3cbc13d4c9170afdf395dbca159024882bc1e0fec75383b09499f5c869c4725",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "impact-branch-cobalt-drafting",
+      "label": "Impact Map branch view",
+      "stage": "solution",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/impact-branch-cobalt-drafting.png",
+      "sha256": "6a0e3656a0c8af9dbb2268fb82da35c2d714b6a07f102f9c36de86b7b4bf8460",
+      "centering": [
+        0.5,
+        0.52
+      ]
+    },
+    {
+      "id": "genomics-axonometric-process-viewer",
+      "label": "Genomics sequencing process view",
+      "stage": "implementation",
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-1920.webp",
+      "sha256": "3d830b94437071e779a81f6d2a83ebd69daf12fad3e5bb795c64fd2c29881f82",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "context-assembly-ledger-quintile",
+      "label": "Context Assembly",
+      "stage": "problem",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/context-assembly-ledger-quintile.png",
+      "sha256": "b961d1dfe81ab3fec683524af09e86298b07d82f0f8fccc1b54f43dbc6b30dd8",
+      "centering": [
+        0.5,
+        0.04
+      ]
+    },
+    {
+      "id": "clinical-trial-tumor-board-cohort",
+      "label": "Clinical-trial cohort rule builder",
+      "stage": "solution",
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort-1920.webp",
+      "sha256": "4bfc6ced4931880a2b4a94150fff24f4cd7f6c734ce942f211a127bd4b6361d1",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "context-shared-cobalt-drafting",
+      "label": "Shared Context",
+      "stage": "problem",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/context-shared-cobalt-drafting.png",
+      "sha256": "82e6ce8f5d7a40e31a66152430252d9fbc6cb7e2ce09b6b97d967a7bd0baed66",
+      "centering": [
+        0.5,
+        0.04
+      ]
+    },
+    {
+      "id": "impact-narrative-pop-quintile",
+      "label": "Impact Map narrative sequence",
+      "stage": "solution",
+      "source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-source-frames/impact-narrative-pop-quintile.png",
+      "sha256": "cc22511d67f55bdab531d67a302f1ee3ffd7358f3890e087a5a65e16dc1b89ea",
+      "centering": [
+        0.5,
+        0.5
+      ]
+    }
+  ]
+}

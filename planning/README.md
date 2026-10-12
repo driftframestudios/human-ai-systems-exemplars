@@ -19,11 +19,15 @@ The planning surface references source material instead of becoming a second cop
 
 ## Current planning areas
 
+- [Repository test architecture and evidence coherence](testing-suite-consolidation/README.md): owned Node, Python and browser suites; phased evidence bundles; helper convergence; and draft testing skills.
+
 - [Cross-repository LIMS/ELN functional nucleus](functional-nucleus-assessment-horizon.md)
 - [Context Canvas — principal engineering and publication](context-canvas/README.md) — includes the approved contrast architecture, visual-consistency milestone, and skill-cultivation continuations.
+- [Media publication](media-publication/README.md) — source-owned responsive raster delivery, accepted-byte video posters, concise visual sequences, accessible native receivers, R2-backed progressive video through the same-origin Cloudflare CDN route, a retained Stream migration path, metadata boundaries, bounded video descriptors, and draft publication skills and runbooks.
 - [Core and Narrative unit-test collaboration](unit-testing/README.md) — source-owned expectations, direct Node/Ajv seams, current contract findings, Practitioner Registry and external research, focused browser behavior, milestones, and purposeful holds.
 - [Repository skill architecture and research spike](repository-skill-architecture.md)
 - [Repository collaboration cycle — docket and tranche architecture](repository-collaboration-cycle-options.md) — the selected cold-session launcher, full-cycle runbook, conditional domain overlays, capacity-aware bounded-support branch, environment preparation, and first exercise route.
+- [Repositories with Friends — owner-operable foundations and delivery forms](repositories-with-friends-owner-operable-foundations.md) — the direct Context Canvas transfer sequence, portable readiness skill and handoff runbook, bounded drift reconciliation, event-triggered context routing, and four future delivery forms.
 - [Schema contract research and implementation](schema-contract-research-and-implementation-plan.md) — the v1 schema nucleus, dual retrieval model, evidence-grounded pitfalls, and three receiving collaboration waves.
 - [Locator-free public-history rehearsal](locator-free-public-history-rehearsal.md) — the cutoff-bound ref, pull-ref, Pages, schema-link, GitHub-prose, metadata, recovery, and route-confidence packet. Repository-wide source and collaboration-link settlement supplies its prerequisite. The clean-successor hybrid is the selected route; shared pre-cutover preparation continues here while technical-collaboration replay develops independently.
 

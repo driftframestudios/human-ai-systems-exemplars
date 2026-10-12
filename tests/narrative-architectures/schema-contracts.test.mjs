@@ -6,6 +6,8 @@ import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const prototypesRoot = resolve(
   repositoryRoot,
@@ -34,6 +36,13 @@ const schemaPaths = {
   technology: resolve(technologyRoot, "technology-fit-sampling-tableau-state.schema.v0.1.json"),
   threadkeeping: resolve(threadkeepingRoot, "threadkeeping-ledger.schema.v0.1.json"),
   localManifest: resolve(prototypesRoot, "prototype-local-manifest.schema.json")
+};
+
+const contextPaths = {
+  composer: resolve(composerRoot, "narrative-capsule-composition.context.v0.1.jsonld"),
+  semantic: resolve(semanticRoot, "narrative-sampling-tableau.context.v0.1.jsonld"),
+  technology: resolve(technologyRoot, "technology-fit-sampling-tableau.context.v0.1.jsonld"),
+  threadkeeping: resolve(threadkeepingRoot, "threadkeeping-ledger.context.v0.1.jsonld")
 };
 
 const json = async (path) => JSON.parse(await readFile(path, "utf8"));
@@ -84,6 +93,15 @@ function familyIndexSeed(source) {
   return JSON.parse(match[1]);
 }
 
+function embeddedJsonScript(source, id) {
+  const match = source.match(new RegExp(
+    `<script\\s+type=["']application/ld\\+json["']\\s+id=["']${id}["']>([\\s\\S]*?)<\\/script>`,
+    "u"
+  ));
+  assert.ok(match, `${id} remains available as an embedded JSON-LD script`);
+  return JSON.parse(match[1]);
+}
+
 test("current Narrative and local-manifest schemas compile in the named strict posture", async (t) => {
   for (const [name, path] of Object.entries(schemaPaths)) {
     await t.test(name, async () => {
@@ -91,6 +109,36 @@ test("current Narrative and local-manifest schemas compile in the named strict p
       assert.equal(typeof validate, "function");
     });
   }
+});
+
+test("standalone Narrative contexts retain their source-owned runtime projections", async () => {
+  const [contexts, composer, semantic, technology, threadkeeping] = await Promise.all([
+    Promise.all(Object.values(contextPaths).map(json)),
+    readFile(resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
+    readFile(resolve(semanticRoot, "narrative-sampling-tableau-chimeric-prototype-v0.1.html"), "utf8"),
+    readFile(resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"), "utf8"),
+    readFile(resolve(threadkeepingRoot, "threadkeeping-ledger-chimeric-prototype-v0.1.html"), "utf8")
+  ]);
+  const [composerContext, semanticContext, technologyContext, threadkeepingContext] = contexts;
+
+  const embeddedComposer = embeddedJsonScript(composer, "jsonld-data")["@context"];
+  assert.ok(Object.keys(composerContext["@context"]).length > Object.keys(embeddedComposer).length);
+  for (const [term, definition] of Object.entries(embeddedComposer)) {
+    assert.deepEqual(definition, composerContext["@context"][term], term);
+  }
+
+  const semanticMatch = semantic.match(/^const CONTEXT=(.+);$/mu);
+  assert.ok(semanticMatch, "Semantic Sampling publishes its standalone context projection");
+  assert.deepEqual(JSON.parse(semanticMatch[1]), semanticContext);
+
+  const technologyMatch = technology.match(/^const JSONLD_CONTEXT=(.+);$/mu);
+  assert.ok(technologyMatch, "Technology Fit publishes its standalone context projection");
+  assert.deepEqual(JSON.parse(technologyMatch[1]), technologyContext["@context"]);
+
+  assert.deepEqual(
+    embeddedJsonScript(threadkeeping, "jsonldGraph")["@context"],
+    threadkeepingContext["@context"]
+  );
 });
 
 test("Narrative Capsule composition examples express accepted and rejected contracts", async () => {
@@ -179,8 +227,7 @@ test("Narrative Capsule Composer publishes the shared Prompt Capsule exchange co
     [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -425,8 +472,7 @@ test("Semantic Sampling publishes its canonical state and Prompt Capsule coordin
     [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -496,9 +542,7 @@ test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skil
     [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"]
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    const actualDigest = createHash("sha256").update(source).digest("hex");
-    assert.equal(actualDigest, expectedDigest, `${path} should retain the capsule's exact source digest`);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -506,6 +550,7 @@ test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skil
 
 test("Threadkeeping Ledger material state has a meaningful identity boundary", async () => {
   const validate = await compile(schemaPaths.threadkeeping);
+  const schema = await json(schemaPaths.threadkeeping);
   const valid = await threadkeepingExample();
   const invalid = clone(valid);
   delete invalid.artifactIdentity;
@@ -521,6 +566,14 @@ test("Threadkeeping Ledger material state has a meaningful identity boundary", a
   literal.threadkeeper.entries[0].title = "A quoted \"title\" with <literal> markup";
   literal.threadkeeper.entries[0].summary = "Literal collaborator text stays intact: 'single', \"double\", <angle>, and & ampersand.";
   assert.equal(validate(literal), true, JSON.stringify(validate.errors, null, 2));
+
+  assert.deepEqual(
+    schema.$defs.ContextContinuityAssessment.properties.assessorType.enum,
+    ["human", "ai_collaborator", "mechanical", "mixed"],
+    "the published v0.1 machine enum remains byte-stable",
+  );
+  assert.ok(valid.threadkeeper.entries.some(({ recordedBy }) => recordedBy === "AI system"));
+  assert.ok(valid.threadkeeper.entries.some(({ recordedBy }) => recordedBy.includes("AI-system assistance")));
 });
 
 test("Threadkeeping Ledger publishes its complete state through the shared Prompt Capsule contract", async () => {
@@ -539,6 +592,13 @@ test("Threadkeeping Ledger publishes its complete state through the shared Promp
   assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
   assert.match(html, /window\.threadkeepingLedger=Object\.freeze\(/u);
   assert.match(html, /Every ledger entry, next candidate, continuity assessment, relationship field, recovery field, and source note contributes/u);
+  assert.match(html, /id="entryDeleteConfirmation"[^>]+role="group"[^>]+hidden/u);
+  assert.match(html, /id="candidateDeleteConfirmation"[^>]+role="group"[^>]+hidden/u);
+  assert.match(html, /id="ledgerActionStatus" role="status" aria-live="polite"/u);
+  assert.doesNotMatch(html, /\bconfirm\s*\(/u);
+  assert.match(html, /<option value="ai_collaborator">AI system<\/option>/u);
+  assert.doesNotMatch(html, />AI collaborator</u);
+  assert.match(html, /Human-AI Collaboration Field Guide/u);
 
   const revision = "b8b305c78b82a288ae2aca9574bb86d7d3d574d9";
   assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));
@@ -548,8 +608,7 @@ test("Threadkeeping Ledger publishes its complete state through the shared Promp
     [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }

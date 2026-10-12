@@ -177,7 +177,7 @@ const expectedCarrierInventory = [
     "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     "https://iframes.vik.guru/v1/canvas/who-to-believe-context-tree/",
     "Interactive Who To Believe Context Tree",
-    "eager",
+    "lazy",
   ],
   [
     exemplarOwner,
@@ -438,6 +438,27 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
       `${repositoryPath(path)} does not construct a hidden iframe carrier`,
     );
   }
+});
+
+test("the Who To Believe Context Tree sits beside outcomes in an expanded viewing frame", async () => {
+  const html = await readFile(join(contextRoot, "who-to-believe-reviews-platform.html"), "utf8");
+  const serviceModel = html.indexOf('id="wtb-figure-service-model-after"');
+  const contextTree = html.indexOf('id="context-tree-title"');
+  const outcomes = html.indexOf('id="solution-outcomes-title"');
+
+  assert.ok(serviceModel >= 0 && contextTree >= 0 && outcomes >= 0, "all three narrative landmarks exist");
+  assert.ok(serviceModel < contextTree, "the Context Tree follows the redesigned service model");
+  assert.ok(contextTree < outcomes, "the Context Tree prepares the outcome reading");
+  assert.match(
+    html,
+    /\.wtb-context-embed iframe\s*\{[^}]*block-size:\s*clamp\(58rem,\s*calc\(78vh \+ 16rem\),\s*78rem\)/u,
+    "the default iframe frame adds 256px to its visible range",
+  );
+  assert.match(
+    html,
+    /@media screen and \(max-width: 42rem\)[\s\S]*?\.wtb-context-embed iframe\s*\{\s*block-size:\s*76rem;/u,
+    "the narrow frame carries the complete first role card into view",
+  );
 });
 
 test("the retained cobalt exemplar keeps exact carrier parity with the primary index", async () => {

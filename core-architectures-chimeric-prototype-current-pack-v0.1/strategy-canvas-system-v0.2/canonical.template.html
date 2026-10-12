@@ -41,7 +41,7 @@
         </div>
       </div>
       <details class="sc-implications" open>
-        <summary>Instruction implications for human and AI collaborators</summary>
+        <summary>Instructions for human participants and generative AI systems</summary>
         <ul>
           <li><strong>Define scale anchors before requesting scores.</strong> An observable low, middle, and high condition gives the number a shared local meaning.</li>
           <li><strong>Keep offering level and consequence weight distinct.</strong> Offering level moves the curve. Consequence weight directs discussion attention while leaving the plotted score unchanged.</li>
@@ -49,7 +49,7 @@
           <li><strong>Ask when task position or evidence standing remains open.</strong> Clarify which decision this canvas supports, which horizon it serves, and what evidence gives a current-state reading its standing.</li>
           <li><strong>Treat good enough as the next-phase threshold.</strong> Desired describes the stronger future condition; good enough marks the condition adequate for the named horizon.</li>
           <li><strong>Apply the action lens after the baseline shape is visible.</strong> Eliminate, Reduce, Raise, and Create become interpretations of an inspectable configuration.</li>
-          <li><strong>Keep AI suggestions visibly attributed.</strong> AI-generated factors, anchors, scores, and interpretations enter as proposals outside human aggregates until an explicit review accepts them.</li>
+          <li><strong>Keep system-generated suggestions visibly attributed.</strong> AI-generated factors, anchors, scores, and interpretations enter as proposals outside human aggregates until an explicit review accepts them.</li>
           <li><strong>Choose the AI handoff scope explicitly.</strong> Assemble a packet from the reviewed fields participants have placed in scope. This local prototype performs the assembly in the browser and makes no network request.</li>
         </ul>
       </details>
@@ -109,15 +109,15 @@
           </svg>
         </div>
         <div class="sc-table-wrap">
-          <table class="sc-score-table">
-            <thead><tr><th scope="col">Dimension</th><th scope="col">Current</th><th scope="col">Good enough</th><th scope="col">Desired</th><th scope="col">Consequence</th></tr></thead>
+          <table data-label="Starting Strategy Canvas values" class="sc-score-table">
+            <thead><tr><th data-label="Dimension" scope="col">Dimension</th><th data-label="Current" scope="col">Current</th><th data-label="Good enough" scope="col">Good enough</th><th data-label="Desired" scope="col">Desired</th><th data-label="Consequence" scope="col">Consequence</th></tr></thead>
             <tbody>
-              <tr><th scope="row">Goal fidelity</th><td>4</td><td>7</td><td>9</td><td>5</td></tr>
-              <tr><th scope="row">Evidence provenance</th><td>3</td><td>7</td><td>10</td><td>5</td></tr>
-              <tr><th scope="row">Decision legibility</th><td>5</td><td>7</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Participant reach</th><td>4</td><td>6</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Recovery clarity</th><td>3</td><td>6</td><td>8</td><td>5</td></tr>
-              <tr><th scope="row">Cross-surface continuity</th><td>4</td><td>7</td><td>9</td><td>4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Goal fidelity"><th data-label="Dimension" scope="row">Goal fidelity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Evidence provenance"><th data-label="Dimension" scope="row">Evidence provenance</th><td data-label="Current">3</td><td data-label="Good enough">7</td><td data-label="Desired">10</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Decision legibility"><th data-label="Dimension" scope="row">Decision legibility</th><td data-label="Current">5</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Participant reach"><th data-label="Dimension" scope="row">Participant reach</th><td data-label="Current">4</td><td data-label="Good enough">6</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Recovery clarity"><th data-label="Dimension" scope="row">Recovery clarity</th><td data-label="Current">3</td><td data-label="Good enough">6</td><td data-label="Desired">8</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Cross-surface continuity"><th data-label="Dimension" scope="row">Cross-surface continuity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
             </tbody>
           </table>
         </div>
@@ -212,7 +212,7 @@
                 <label><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
               </div>
             </fieldset>
-            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown carries the complete working context without asking the receiver to load a repository skill.</p>
+            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown is a self-contained handoff with the complete working context.</p>
             <pre class="sc-code" data-sc-role="prompt" data-prompt-view="plain" aria-labelledby="prompt-capsule-heading" aria-describedby="prompt-view-description" tabindex="0"></pre>
           </div>
         </div>
@@ -231,7 +231,7 @@
     <p class="sc-live" data-sc-role="live" aria-live="polite" aria-atomic="true"></p>
 
     <footer class="sc-footer artifact-attribution">
-      <p><strong>Method boundary.</strong> This canonical artifact supports two declared postures. Market strategy compares locally defined factors and relative offering levels. Internal collaboration tuning compares current support, a next-phase good-enough threshold, and a desired condition. Naming the posture keeps the interpretation available to every participant and receiving AI collaborator.</p>
+      <p><strong>Method boundary.</strong> This canonical artifact supports two declared postures. Market strategy compares locally defined factors and relative offering levels. Internal collaboration tuning compares current support, a next-phase good-enough threshold, and a desired condition. Naming the posture keeps the interpretation available to every participant and any generative AI system receiving the reviewed context.</p>
       <p>Eliminate, Reduce, Raise, and Create form an action lens applied after the baseline shape becomes inspectable. Hold and Open are local extensions for continuity and inquiry.</p>
       <section class="sc-method-source" data-strategy-canvas-source="method-origin" aria-labelledby="strategy-canvas-source-heading">
         <h2 id="strategy-canvas-source-heading">Method source and local adaptation</h2>

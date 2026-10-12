@@ -121,7 +121,7 @@
     <text x="818" y="927" class="sans small body">and an explicit commitment boundary.</text>
 
     <rect x="1154" y="846" width="366" height="96" rx="12" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
-    <text x="1176" y="877" class="mono chip ink">AI COLLABORATOR</text>
+    <text x="1176" y="877" class="mono chip ink">GENERATIVE AI SYSTEM</text>
     <text x="1176" y="906" class="sans small body">Stable context, named uncertainty, and</text>
     <text x="1176" y="927" class="sans small body">routes that preserve source boundaries.</text>
   </g>

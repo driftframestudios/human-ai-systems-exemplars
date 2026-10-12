@@ -186,8 +186,12 @@ function assertPairsMeet(colors, backgrounds, minimum, label) {
 }
 
 test("shared visitor-link roles meet their known light and dark fields", async () => {
-  const css = await readCanvasFile("expanded.css");
-  const rootRule = rulesFor(css, ":root")[0];
+  const [tokens, foundation, legacy] = await Promise.all([
+    readCanvasFile("styles/core/tokens.css"),
+    readCanvasFile("styles/core/foundation.css"),
+    readCanvasFile("expanded.css"),
+  ]);
+  const rootRule = rulesFor(tokens, ":root")[0];
   assert.ok(rootRule, "Expected an actual :root rule");
 
   const lightLinks = [
@@ -214,24 +218,25 @@ test("shared visitor-link roles meet their known light and dark fields", async (
   ], 4.5, "dark-field link palette");
 
   assert.ok(
-    rulesFor(css, "a").some(rule => declaration(rule, "color") === "var(--canvas-link-color)"),
+    rulesFor(foundation, "a").some(rule => declaration(rule, "color") === "var(--canvas-link-color)"),
     "base anchors consume the active unvisited role",
   );
   assert.ok(
-    rulesFor(css, "a:visited").some(rule => declaration(rule, "color") === "var(--canvas-link-visited-color)"),
+    rulesFor(foundation, "a:visited").some(rule => declaration(rule, "color") === "var(--canvas-link-visited-color)"),
     "visited anchors consume the active visited role",
   );
   assert.ok(
-    rulesFor(css, "a:is(:active, :hover)").some(
+    rulesFor(foundation, "a:is(:active, :hover)").some(
       rule => declaration(rule, "text-decoration-thickness") === ".14em",
     ),
     "hover and active states retain a non-color cue",
   );
-  assert.doesNotMatch(css, /--canvas-link(?:-inverse|-visited)?\s*:/u);
-  assert.doesNotMatch(css, /:is\(a,\s*a:visited\)/u);
-  assert.doesNotMatch(css, /filter:\s*(?:none|brightness\()/u);
+  const sharedCss = `${tokens}\n${foundation}\n${legacy}`;
+  assert.doesNotMatch(sharedCss, /--canvas-link(?:-inverse|-visited)?\s*:/u);
+  assert.doesNotMatch(sharedCss, /:is\(a,\s*a:visited\)/u);
+  assert.doesNotMatch(sharedCss, /filter:\s*(?:none|brightness\()/u);
   assert.doesNotMatch(
-    css,
+    sharedCss,
     /\.content__container\.bg__adjust--lightsalmon\s+a:hover\s*\{[^}]*color\s*:/u,
     "the salmon surface keeps the shared hover cue instead of reverting to white text",
   );
@@ -240,6 +245,7 @@ test("shared visitor-link roles meet their known light and dark fields", async (
 test("painted surface owners carry complete active link-role pairs", async () => {
   const sources = Object.fromEntries(await Promise.all([
     "expanded.css",
+    "styles/components/tables.css",
     "styles/routes/debriefs.css",
     "styles/contracts/debrief-composition.css",
     "field-inspection.css",
@@ -268,7 +274,7 @@ test("painted surface owners carry complete active link-role pairs", async () =>
   }
 
   const lightOwners = [
-    ["expanded.css", "table"],
+    ["styles/components/tables.css", "table"],
     ["expanded.css", ".cornerstone-definition"],
     ["expanded.css", ".interpretive-aside"],
     ["expanded.css", ".architecture-pair article"],
@@ -472,7 +478,7 @@ test("route-specific gradients, table roles, and compact rails retain their evid
   }
 
   assert.ok(
-    rulesFor(await readCanvasFile("expanded.css"), ".table-scroll > table > caption").some(
+    rulesFor(await readCanvasFile("styles/components/tables.css"), ".table-scroll > table > caption").some(
       rule => declaration(rule, "max-inline-size")
         === "calc(100vw - (2 * var(--canvas-page-gutter)))",
     ),
@@ -488,5 +494,86 @@ test("route-specific gradients, table roles, and compact rails retain their evid
     whoToBelieve,
     /\.wtb-context-actions a\s*\{[^}]*color:/gu,
     "WTB context actions inherit screen and print roles from their painted owner",
+  );
+  assert.ok(
+    rulesFor(
+      whoToBelieve,
+      ".wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4)",
+    ).some(rule => declaration(rule, "color") === "#edf3fb"),
+    "WTB level-four headings receive a readable foreground on the dark implementation field",
+  );
+  assert.ok(
+    rulesFor(
+      whoToBelieve,
+      ".wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4)",
+    ).some(rule => isPrintRule(rule) && declaration(rule, "color") === "#000"),
+    "WTB level-four headings return to dark ink when print removes the dark field",
+  );
+});
+
+test("the Who To Believe graph separates source colors from readable text roles", async () => {
+  const source = await readCanvasFile("who-to-believe-reviews-platform.html");
+  const owner = rulesFor(source, ".wtb-system-graph")[0];
+  assert.ok(owner, "Expected the graph to own its color roles");
+
+  const canvas = hexDeclaration(owner, "--graph-canvas");
+  const coral = hexDeclaration(owner, "--graph-coral");
+  const core = hexDeclaration(owner, "--graph-core");
+  const degraded = hexDeclaration(owner, "--graph-degraded");
+  const darkInk = hexDeclaration(owner, "--graph-dark-ink");
+  const degradedInk = hexDeclaration(owner, "--graph-degraded-ink");
+  const coralInk = hexDeclaration(owner, "--graph-coral-ink");
+  const coreInk = hexDeclaration(owner, "--graph-core-ink");
+
+  assert.deepEqual(
+    { coral, core, degraded },
+    { coral: "#f45d4c", core: "#8a8f2a", degraded: "#d9a400" },
+    "source-authentic accent colors remain available to fills, strokes, and dots",
+  );
+  assertPairsMeet([darkInk], [coral, core], 4.5, "checked concern and broken detail text");
+  assertPairsMeet([degradedInk, coralInk], [canvas], 4.5, "strained and broken edge labels");
+  assertPairsMeet([coralInk, coreInk], ["#ffffff"], 4.5, "concern tags");
+
+  assert.ok(
+    rulesFor(
+      source,
+      '.wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span',
+    ).some(rule => declaration(rule, "color") === "var(--graph-dark-ink)"),
+    "the checked coral and core controls consume the shared dark-ink role",
+  );
+  assert.ok(
+    rulesFor(
+      source,
+      '.wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span',
+    ).some(rule => (
+      rule.atRules.includes("@media (forced-colors: active)")
+      && declaration(rule, "color") === "HighlightText"
+    )),
+    "forced colors replace the companion ink with the visitor-selected highlight text",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__edge-label[data-status="strained"]')
+      .some(rule => declaration(rule, "fill") === "var(--graph-degraded-ink)"),
+    "strained edge labels consume the degraded text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__edge-label[data-status="broken"]')
+      .some(rule => declaration(rule, "fill") === "var(--graph-coral-ink)"),
+    "broken edge labels consume the coral text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__detail-panel[data-status="broken"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-dark-ink)"),
+    "the broken detail panel consumes the dark-ink role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__tag[data-dimension="abuse"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-coral-ink) !important"),
+    "the abuse tag consumes the coral text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__tag[data-dimension="core"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-core-ink) !important"),
+    "the core tag consumes the core text role",
   );
 });

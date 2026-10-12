@@ -1,0 +1,1302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:technology-profile:v0.1",
+  "title": "Repository handoff technology profile v0.1",
+  "description": "A closed, source-bound observation contract. Present facts carry evidence; unobserved stack choices stay unspecified and route through coverage or unresolved records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "artifactType",
+    "key",
+    "version",
+    "title",
+    "source",
+    "authority",
+    "evidence",
+    "observations",
+    "coverage",
+    "unresolved",
+    "projection"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schema/technology-profile.schema.v0.1.json"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "artifactType": {
+      "const": "repository_handoff_technology_profile"
+    },
+    "key": {
+      "$ref": "#/$defs/stableKey"
+    },
+    "version": {
+      "$ref": "#/$defs/semanticVersion"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "observations": {
+      "$ref": "#/$defs/observations"
+    },
+    "coverage": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/coverage"
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/unresolved"
+      }
+    },
+    "projection": {
+      "$ref": "#/$defs/projection"
+    }
+  },
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?![^/]{256})(?!.*\\/[^/]{256})(?!.*(?:^|\\/)(?:\\.|\\.\\.)(?:\\/|$))(?!.*(?:^|\\/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.[^/]*)?(?:\\/|$))(?!.*\\.(?:\\/|$))[A-Za-z0-9._-]+(?:\\/[A-Za-z0-9._-]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "basis": {
+      "enum": [
+        "declared",
+        "observed",
+        "derived",
+        "exercised"
+      ]
+    },
+    "evidenceReferences": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "factReferences": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "publicLocator": {
+      "type": "string",
+      "description": "A reviewed public HTTPS route with a DNS name. User information, IP or dotless hosts, query strings, and fragments stay outside the durable profile.",
+      "minLength": 9,
+      "maxLength": 500,
+      "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:/[^\\s?#]*)?$"
+    },
+    "locator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "url"
+          ],
+          "properties": {
+            "type": {
+              "const": "public_url"
+            },
+            "url": {
+              "$ref": "#/$defs/publicLocator"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "resolverKey"
+          ],
+          "properties": {
+            "type": {
+              "const": "authorized_resolver"
+            },
+            "resolverKey": {
+              "$ref": "#/$defs/stableKey"
+            }
+          }
+        }
+      ]
+    },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "git_commit",
+            "version_tag",
+            "observation_key"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "git_commit"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceDigest": {
+      "type": "object",
+      "description": "A reproducible SHA-256 coordinate. raw_bytes_sha256_v1 hashes exact file bytes. git_ls_tree_full_z_sha256_v1 hashes the exact stdout bytes from git ls-tree -r -z --full-tree <revision>. portable_path_digest_manifest_sha256_v1 hashes the exact UTF-8 bytes of a manifest whose NFC portable-path entries are sorted by UTF-8 byte order and serialized as path, NUL, decimal byte length, NUL, lowercase SHA-256, LF. utf8_label_sha256_v1 hashes the exact UTF-8 bytes of procedureInput.",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "scope",
+        "procedure",
+        "procedureInput",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "scope": {
+          "enum": [
+            "archive_bytes",
+            "git_tree",
+            "declared_source_file_manifest",
+            "received_tree_manifest",
+            "illustrative_fixture_identity"
+          ]
+        },
+        "procedure": {
+          "enum": [
+            "raw_bytes_sha256_v1",
+            "git_ls_tree_full_z_sha256_v1",
+            "portable_path_digest_manifest_sha256_v1",
+            "utf8_label_sha256_v1"
+          ]
+        },
+        "procedureInput": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "value": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "scope": { "const": "archive_bytes" } }, "required": ["scope"] },
+          "then": { "properties": { "procedure": { "const": "raw_bytes_sha256_v1" }, "procedureInput": { "$ref": "#/$defs/portablePath" } } }
+        },
+        {
+          "if": { "properties": { "scope": { "const": "git_tree" } }, "required": ["scope"] },
+          "then": { "properties": { "procedure": { "const": "git_ls_tree_full_z_sha256_v1" } } }
+        },
+        {
+          "if": { "properties": { "scope": { "enum": ["declared_source_file_manifest", "received_tree_manifest"] } }, "required": ["scope"] },
+          "then": { "properties": { "procedure": { "const": "portable_path_digest_manifest_sha256_v1" }, "procedureInput": { "$ref": "#/$defs/portablePath" } } }
+        },
+        {
+          "if": { "properties": { "scope": { "const": "illustrative_fixture_identity" } }, "required": ["scope"] },
+          "then": { "properties": { "procedure": { "const": "utf8_label_sha256_v1" }, "procedureInput": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" } } }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "relationship",
+        "origin",
+        "revision",
+        "digest"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "relationship": {
+          "enum": [
+            "received_for_inspection",
+            "accepted_maintained_source",
+            "reference_snapshot",
+            "illustrative_fixture"
+          ]
+        },
+        "origin": {
+          "$ref": "#/$defs/locator"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "digest": {
+          "$ref": "#/$defs/sourceDigest"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "relationship": {
+                "const": "illustrative_fixture"
+              }
+            },
+            "required": [
+              "relationship"
+            ]
+          },
+          "then": {
+            "properties": {
+              "digest": {
+                "type": "object",
+                "properties": {
+                  "scope": {
+                    "const": "illustrative_fixture_identity"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "digest": {
+                "type": "object",
+                "properties": {
+                  "scope": {
+                    "not": {
+                      "const": "illustrative_fixture_identity"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceAcceptanceOwner",
+        "observationOwner",
+        "implementationAuthority",
+        "credentialOwner",
+        "publicationOwner"
+      ],
+      "properties": {
+        "sourceAcceptanceOwner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "observationOwner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "implementationAuthority": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "credentialOwner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "publicationOwner": {
+          "$ref": "#/$defs/stableKey"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "kind",
+        "basis",
+        "establishes",
+        "coverageBoundary"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "kind": {
+          "enum": [
+            "source_file",
+            "source_metadata",
+            "normalized_command_result",
+            "browser_observation",
+            "manual_observation",
+            "fixture_declaration"
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/basis"
+        },
+        "sourcePath": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "sourceSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "locator": {
+          "$ref": "#/$defs/locator"
+        },
+        "normalizedResult": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "establishes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "coverageBoundary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "source_file"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "sourcePath",
+              "sourceSha256"
+            ],
+            "properties": {
+              "sourcePath": {
+                "$ref": "#/$defs/portablePath"
+              },
+              "sourceSha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "sourceSha256"
+            ]
+          },
+          "then": {
+            "required": [
+              "sourcePath"
+            ],
+            "properties": {
+              "sourcePath": {
+                "$ref": "#/$defs/portablePath"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "normalized_command_result"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "normalizedResult"
+            ],
+            "properties": {
+              "normalizedResult": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          }
+        }
+      ]
+    },
+    "pathFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "path",
+        "role",
+        "basis",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "path": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "basis": {
+          "$ref": "#/$defs/basis"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "technologyFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name",
+        "basis",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "basis": {
+          "$ref": "#/$defs/basis"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "scriptFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name",
+        "declaredAt",
+        "standing",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "declaredAt": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "standing": {
+          "enum": [
+            "declared",
+            "exercised",
+            "blocked"
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "commandObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "purpose",
+        "scriptKey",
+        "standing",
+        "authorization",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "scriptKey": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "standing": {
+          "enum": [
+            "declared",
+            "exercised",
+            "blocked"
+          ]
+        },
+        "authorization": {
+          "const": "separate_task_grant_required"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "routeFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "pattern",
+        "kind",
+        "basis",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "basis": {
+          "$ref": "#/$defs/basis"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "environmentVariable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name",
+        "standing",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "standing": {
+          "enum": [
+            "declared_required",
+            "declared_optional",
+            "observed_reference"
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "boundaryFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "kind",
+        "purpose",
+        "basis",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "basis": {
+          "$ref": "#/$defs/basis"
+        },
+        "locator": {
+          "$ref": "#/$defs/locator"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "browserState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "routeKey",
+        "state",
+        "viewport",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "routeKey": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "viewport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height"
+          ],
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 240,
+              "maximum": 10000
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 240,
+              "maximum": 10000
+            }
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceReferences"
+        }
+      }
+    },
+    "pagesCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "state",
+        "publicationDecisionOwner",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "state": {
+          "enum": [
+            "compatible",
+            "conditional",
+            "incompatible",
+            "not_assessed"
+          ]
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "publicationDecisionOwner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableKey"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "conditional"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "required": [
+              "condition"
+            ],
+            "properties": {
+              "condition": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_assessed"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "evidenceRefs": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "evidenceRefs": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceLayout": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "editableSource": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "$ref": "#/$defs/pathFact"
+              }
+            },
+            "generatedOutput": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "$ref": "#/$defs/pathFact"
+              }
+            }
+          }
+        },
+        "runtimes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/technologyFact"
+          }
+        },
+        "packageManagers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/technologyFact"
+          }
+        },
+        "lockfiles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/pathFact"
+          }
+        },
+        "manifests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/pathFact"
+          }
+        },
+        "scripts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/scriptFact"
+          }
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/commandObservation"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": {
+            "$ref": "#/$defs/routeFact"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": {
+            "$ref": "#/$defs/pathFact"
+          }
+        },
+        "styles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/pathFact"
+          }
+        },
+        "fonts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/pathFact"
+          }
+        },
+        "environmentVariables": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/environmentVariable"
+          }
+        },
+        "externalRequests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "forms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "storage": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "authentication": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "analytics": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "hosting": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/boundaryFact"
+          }
+        },
+        "browserStates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/browserState"
+          }
+        },
+        "pagesCompatibility": {
+          "$ref": "#/$defs/pagesCompatibility"
+        }
+      }
+    },
+    "coverageArea": {
+      "enum": [
+        "source-layout",
+        "runtimes",
+        "package-managers",
+        "lockfiles",
+        "manifests",
+        "scripts",
+        "commands",
+        "routes",
+        "assets",
+        "styles",
+        "fonts",
+        "environment-variables",
+        "external-requests",
+        "forms",
+        "storage",
+        "authentication",
+        "analytics",
+        "hosting",
+        "browser-states",
+        "pages-compatibility"
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "area",
+        "state",
+        "scope",
+        "establishes",
+        "coverageBoundary",
+        "factKeys",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "area": {
+          "$ref": "#/$defs/coverageArea"
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "not_found_in_scope",
+            "not_assessed",
+            "not_applicable"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "establishes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "coverageBoundary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "factKeys": {
+          "$ref": "#/$defs/factReferences"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableKey"
+          }
+        },
+        "nextReceiver": {
+          "$ref": "#/$defs/stableKey"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "observed"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "factKeys": {
+                "type": "array",
+                "minItems": 1
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_found_in_scope"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "factKeys": {
+                "type": "array",
+                "maxItems": 0
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_assessed"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "required": [
+              "nextReceiver"
+            ],
+            "properties": {
+              "nextReceiver": {
+                "$ref": "#/$defs/stableKey"
+              },
+              "factKeys": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_applicable"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "factKeys": {
+                "type": "array",
+                "maxItems": 0
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "unresolved": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "area",
+        "question",
+        "nextReceiver",
+        "releaseEvent",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "area": {
+          "$ref": "#/$defs/coverageArea"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "nextReceiver": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "releaseEvent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableKey"
+          }
+        }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "jsonSource",
+        "yamlTarget",
+        "mode",
+        "derivationNote"
+      ],
+      "properties": {
+        "authority": {
+          "const": "json"
+        },
+        "jsonSource": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "yamlTarget": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "mode": {
+          "const": "exact_json_bytes"
+        },
+        "derivationNote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

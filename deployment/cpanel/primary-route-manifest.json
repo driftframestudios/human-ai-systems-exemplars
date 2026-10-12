@@ -48,6 +48,21 @@
       "media_type": "image/png"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery-model.js",
+      "projected_path": "atlas-gallery-model.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery-table.js",
+      "projected_path": "atlas-gallery-table.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+      "projected_path": "atlas-gallery.js",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/benchmark-orientation.html",
       "projected_path": "benchmark-orientation.html",
       "media_type": "text/html"
@@ -248,14 +263,14 @@
       "media_type": "text/javascript"
     },
     {
-      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
-      "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
-      "media_type": "text/javascript"
-    },
-    {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "media_type": "application/json"
+    },
+    {
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "media_type": "text/javascript"
     },
     {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -271,6 +286,46 @@
       "source_path": "context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html",
       "projected_path": "cross-platform-collaboration-cycle.html",
       "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/gallery.v1.json",
+      "projected_path": "data/visualization-fidelity/ai4i/gallery.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/README.md",
+      "projected_path": "data/visualization-fidelity/ai4i/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/summary.v1.json",
+      "projected_path": "data/visualization-fidelity/ai4i/summary.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/README.md",
+      "projected_path": "data/visualization-fidelity/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/README.md",
+      "projected_path": "data/visualization-fidelity/research/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
+      "projected_path": "data/visualization-fidelity/research/sources.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/summary.v1.json",
+      "projected_path": "data/visualization-fidelity/research/summary.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/secom-monthly.json",
+      "projected_path": "data/visualization-fidelity/secom-monthly.json",
+      "media_type": "application/json"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/debriefs-catalog.js",
@@ -313,16 +368,6 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/exemplar-brief-exploration.html",
-      "projected_path": "exemplar-brief-exploration.html",
-      "media_type": "text/html"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/exemplar-gallery-list.html",
-      "projected_path": "exemplar-gallery-list.html",
-      "media_type": "text/html"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/expanded.css",
       "projected_path": "expanded.css",
       "media_type": "text/css"
@@ -361,6 +406,11 @@
       "source_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
       "projected_path": "fmi-lims-eln-replatforming.html",
       "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/form-challenge.png",
+      "projected_path": "form-challenge.png",
+      "media_type": "image/png"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/forms_upfront.png",
@@ -553,6 +603,631 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-biomarkers-investigation.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-tumor-board-cohort.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-beacon-list-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-beacon-list-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-beacon-list-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-beacon-list-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-beacon-list.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-beacon-list.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-calibration-files-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-calibration-files-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-calibration-files-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-calibration-files-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-calibration-files.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-calibration-files.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-map-setup-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-map-setup-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-map-setup-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-map-setup-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-map-setup.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-map-setup.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-communication-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-communication-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-communication-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-communication-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-communication.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-communication.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-management-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-management-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-management-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-management-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-site-management.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-site-management.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-permission-profile-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-permission-profile-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-permission-profile-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-permission-profile-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/payment-step-reference-480.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/payment-step-reference-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/payment-step-reference.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/payment-step-reference.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-error-lab-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-error-lab-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-error-lab-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-error-lab-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-error-lab.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-error-lab.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-infrastructure-environments.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-instruction-analysis.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-process-mapping-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-process-mapping-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-process-mapping-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-process-mapping-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-process-mapping.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-process-mapping.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/discovery-wall-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/discovery-wall-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/discovery-wall.webp",
+      "projected_path": "img/debriefs/spatial-capture/discovery-wall.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/production-storyboard-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/production-storyboard-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/production-storyboard.webp",
+      "projected_path": "img/debriefs/spatial-capture/production-storyboard.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-before-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-before-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-before-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-before-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-before.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-before.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-member-experience-redesigned.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-after-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-after-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-after-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-after-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-after.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-after.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-before-1920.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-before-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-before-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-before-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-review-service-model-before.webp",
+      "projected_path": "img/debriefs/who-to-believe/cpg-pharma-review-service-model-before.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "projected_path": "img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "media_type": "image/webp"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
       "projected_path": "img/media/impact-map-style-cycle-calm.gif",
       "media_type": "image/gif"
@@ -575,6 +1250,31 @@
     {
       "source_path": "context-canvas-project-surface/img/plot/ai_systems_accountability_blueprint.svg",
       "projected_path": "img/plot/ai_systems_accountability_blueprint.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_conditions.svg",
+      "projected_path": "img/plot/atlas_ai4i_conditions.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_count.svg",
+      "projected_path": "img/plot/atlas_ai4i_count.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_rate.svg",
+      "projected_path": "img/plot/atlas_ai4i_rate.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_reconciliation.svg",
+      "projected_path": "img/plot/atlas_ai4i_reconciliation.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_public_research.svg",
+      "projected_path": "img/plot/atlas_public_research.svg",
       "media_type": "image/svg+xml"
     },
     {
@@ -743,6 +1443,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg",
+      "projected_path": "img/plot/lims_eln_capability_transfer_model.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/inspection_platform_operating_map.svg",
       "projected_path": "img/plot/inspection_platform_operating_map.svg",
       "media_type": "image/svg+xml"
@@ -793,6 +1498,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/recoverable_form_contract.svg",
+      "projected_path": "img/plot/recoverable_form_contract.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/registry_goal_fidelity_operating_field.svg",
       "projected_path": "img/plot/registry_goal_fidelity_operating_field.svg",
       "media_type": "image/svg+xml"
@@ -818,6 +1528,26 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/spatial_capture_collaborative_memory.svg",
+      "projected_path": "img/plot/spatial_capture_collaborative_memory.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",
+      "projected_path": "img/plot/table_reading_contract.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_study_observations.svg",
+      "projected_path": "img/plot/table_study_observations.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_verification_states.svg",
+      "projected_path": "img/plot/table_verification_states.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/talent_intake_retrieval_field.svg",
       "projected_path": "img/plot/talent_intake_retrieval_field.svg",
       "media_type": "image/svg+xml"
@@ -830,6 +1560,11 @@
     {
       "source_path": "context-canvas-project-surface/img/plot/three_way_disagreement_surface.svg",
       "projected_path": "img/plot/three_way_disagreement_surface.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/three_way_market_decision_map.svg",
+      "projected_path": "img/plot/three_way_market_decision_map.svg",
       "media_type": "image/svg+xml"
     },
     {
@@ -850,6 +1585,11 @@
     {
       "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",
       "projected_path": "img/plot/visualization_fidelity_clean_exemplar.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_original_exemplar.svg",
+      "projected_path": "img/plot/visualization_fidelity_original_exemplar.svg",
       "media_type": "image/svg+xml"
     },
     {
@@ -948,14 +1688,19 @@
       "media_type": "image/png"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+      "projected_path": "multilingual-clinical-vocabulary-practice.html",
+      "media_type": "text/html"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html",
       "projected_path": "narrative-execution-gap-research-atlas.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/occipital.png",
-      "projected_path": "occipital.png",
-      "media_type": "image/png"
+      "source_path": "context-canvas-project-surface/context-canvas/one-figure-several-readings.html",
+      "projected_path": "one-figure-several-readings.html",
+      "media_type": "text/html"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/planning-surface.html",
@@ -983,8 +1728,8 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
@@ -998,8 +1743,8 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.6.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.6.html",
       "media_type": "text/html"
     },
     {
@@ -1008,8 +1753,8 @@
       "media_type": "application/json"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.4.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.4.html",
       "media_type": "text/html"
     },
     {
@@ -1038,33 +1783,33 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.5.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.5.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.6.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.6.html",
       "media_type": "text/html"
     },
     {
@@ -1078,8 +1823,8 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.6.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.6.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.7.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.7.html",
       "media_type": "text/html"
     },
     {
@@ -1093,8 +1838,8 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
       "media_type": "text/html"
     },
     {
@@ -1108,18 +1853,18 @@
       "media_type": "text/javascript"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.4.html",
-      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.5.html",
+      "projected_path": "prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.5.html",
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-      "projected_path": "prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.6.html",
+      "projected_path": "prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.6.html",
       "media_type": "text/html"
     },
     {
@@ -1140,6 +1885,16 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
       "projected_path": "prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html",
+      "projected_path": "readable-tables-reusable-evidence.html",
+      "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
+      "projected_path": "recoverable-enterprise-forms.html",
       "media_type": "text/html"
     },
     {
@@ -1173,6 +1928,11 @@
       "media_type": "application/xml"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
+      "projected_path": "spatial-capture-collaborative-memory.html",
+      "media_type": "text/html"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/components/debrief-reading.css",
       "projected_path": "styles/components/debrief-reading.css",
       "media_type": "text/css"
@@ -1183,8 +1943,33 @@
       "media_type": "text/css"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/route-card-grid.css",
+      "projected_path": "styles/components/route-card-grid.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/site-navigation.css",
+      "projected_path": "styles/components/site-navigation.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/tables.css",
+      "projected_path": "styles/components/tables.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/contracts/debrief-composition.css",
       "projected_path": "styles/contracts/debrief-composition.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/core/foundation.css",
+      "projected_path": "styles/core/foundation.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/core/tokens.css",
+      "projected_path": "styles/core/tokens.css",
       "media_type": "text/css"
     },
     {
@@ -1228,6 +2013,11 @@
       "media_type": "text/css"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/table-study.css",
+      "projected_path": "styles/routes/table-study.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/three-movement-debrief.css",
       "projected_path": "styles/routes/three-movement-debrief.css",
       "media_type": "text/css"
@@ -1256,6 +2046,11 @@
       "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
       "projected_path": "who-to-believe-reviews-platform.html",
       "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js",
+      "projected_path": "who-to-believe-system-graph.js",
+      "media_type": "text/javascript"
     }
   ]
 }

@@ -1164,14 +1164,14 @@
         <section class="semantic-equivalent" aria-labelledby="static-context-title">
           <h2 id="static-context-title" style="padding:1rem 1rem 0">Genomic review context</h2>
           <div class="semantic-table-wrap">
-            <table class="semantic-table">
-              <thead><tr><th>Group</th><th>Change supported</th><th>Context that improves the next decision</th><th>Receiving architecture</th></tr></thead>
+<table data-label="Genomic review context" aria-labelledby="static-context-title" class="semantic-table">
+              <thead><tr><th data-label="Group" scope="col">Group</th><th data-label="Change supported" scope="col">Change supported</th><th data-label="Context that improves the next decision" scope="col">Context that improves the next decision</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th></tr></thead>
               <tbody>
-                <tr><td>Molecular pathologist</td><td>Provenance, source scope, and assumptions remain visible at the point of judgment.</td><td>Evidence source, classification history, review state, and the transformations applied before evidence reached review.</td><td>Service-design Blueprint · AI Systems Service Blueprint</td></tr>
-                <tr><td>Bioinformatics analyst</td><td>Filtering, classification, and prioritization assumptions remain inspectable downstream.</td><td>Pipeline assumptions, filtering logic, sample-metadata quality, reference version, and the human judgment that completes interpretation.</td><td>Software Architecture Views</td></tr>
-                <tr><td>Research coordinator</td><td>Sample, consent, and study-state exceptions surface early enough to preserve review flow.</td><td>Consent version, sample identity, study state, exception routes, and review-entry criteria.</td><td>Service-design Blueprint · Specification-by-Example</td></tr>
-                <tr><td>Data steward</td><td>Provenance, auditability, and dataset readiness remain coherent across review states.</td><td>Metadata completeness, lineage, audit events, retention state, and shared assets.</td><td>Cross-channel Blueprint · Software Architecture Views</td></tr>
-                <tr><td>AI assistance surface</td><td>Generated summaries stay source-linked, scope-visible, and connected to completing human judgment.</td><td>Source materials in scope, provenance display, uncertainty expression, and the human judgment that completes each claim.</td><td>AI Systems Service Blueprint</td></tr>
+                <tr data-label="Genomic review context: Molecular pathologist"><td data-label="Group">Molecular pathologist</td><td data-label="Change supported">Provenance, source scope, and assumptions remain visible at the point of judgment.</td><td data-label="Context that improves the next decision">Evidence source, classification history, review state, and the transformations applied before evidence reached review.</td><td data-label="Receiving architecture">Service-design Blueprint · AI Systems Service Blueprint</td></tr>
+                <tr data-label="Genomic review context: Bioinformatics analyst"><td data-label="Group">Bioinformatics analyst</td><td data-label="Change supported">Filtering, classification, and prioritization assumptions remain inspectable downstream.</td><td data-label="Context that improves the next decision">Pipeline assumptions, filtering logic, sample-metadata quality, reference version, and the human judgment that completes interpretation.</td><td data-label="Receiving architecture">Software Architecture Views</td></tr>
+                <tr data-label="Genomic review context: Research coordinator"><td data-label="Group">Research coordinator</td><td data-label="Change supported">Sample, consent, and study-state exceptions surface early enough to preserve review flow.</td><td data-label="Context that improves the next decision">Consent version, sample identity, study state, exception routes, and review-entry criteria.</td><td data-label="Receiving architecture">Service-design Blueprint · Specification-by-Example</td></tr>
+                <tr data-label="Genomic review context: Data steward"><td data-label="Group">Data steward</td><td data-label="Change supported">Provenance, auditability, and dataset readiness remain coherent across review states.</td><td data-label="Context that improves the next decision">Metadata completeness, lineage, audit events, retention state, and shared assets.</td><td data-label="Receiving architecture">Cross-channel Blueprint · Software Architecture Views</td></tr>
+                <tr data-label="Genomic review context: AI assistance surface"><td data-label="Group">AI assistance surface</td><td data-label="Change supported">Generated summaries stay source-linked, scope-visible, and connected to completing human judgment.</td><td data-label="Context that improves the next decision">Source materials in scope, provenance display, uncertainty expression, and the human judgment that completes each claim.</td><td data-label="Receiving architecture">AI Systems Service Blueprint</td></tr>
               </tbody>
             </table>
           </div>
@@ -1774,7 +1774,7 @@
     function renderMatrix() {
       const groups = visibleGroups();
       const questions = visibleQuestions();
-      const head = groups.map(group => `<th scope="col">
+      const head = groups.map(group => `<th data-label="${escapeAttribute(group.label)}" scope="col">
         <button class="matrix-group-button" type="button" data-select-type="group" data-select-id="${escapeAttribute(group.id)}">
           ${escapeHtml(group.label)}<small>${escapeHtml(group.organization)}</small>
         </button>
@@ -1782,18 +1782,18 @@
       const body = questions.map(question => {
         const cells = groups.map(group => {
           const items = itemsForCell(group.id, question.id);
-          return `<td><div class="matrix-cell">${items.length ? items.map(item => contextCard(item, { compact: true })).join("") : emptyInvitation()}</div></td>`;
+          return `<td data-label="${escapeAttribute(group.label)}"><div class="matrix-cell">${items.length ? items.map(item => contextCard(item, { compact: true })).join("") : emptyInvitation()}</div></td>`;
         }).join("");
-        return `<tr><th scope="row">
+        return `<tr data-label="Context questions answered across visible collaborators: ${escapeAttribute(question.label)}"><th data-label="Context question" scope="row">
           <button class="matrix-question-button" type="button" data-select-type="question" data-select-id="${escapeAttribute(question.id)}">
             ${escapeHtml(question.label)}<small>${escapeHtml(titleCase(question.kind))}</small>
           </button>
         </th>${cells}</tr>`;
       }).join("");
       const table = groups.length && questions.length
-        ? `<div class="matrix-wrap" data-scroll-key="matrix"><table class="context-matrix">
+        ? `<div class="matrix-wrap" data-scroll-key="matrix"><table data-label="Context questions answered across visible collaborators" class="context-matrix">
             <caption class="visually-hidden">Context questions answered across visible collaborators</caption>
-            <thead><tr><th scope="col">Context question</th>${head}</tr></thead><tbody>${body}</tbody>
+            <thead><tr><th data-label="Context question" scope="col">Context question</th>${head}</tr></thead><tbody>${body}</tbody>
           </table></div>`
         : emptyInvitation("Choose the groups and questions that matter to this reading.");
       return surfaceHeading("matrix", `${visibleItems().length} context items · ${groups.length} groups`) + table;
@@ -1911,19 +1911,19 @@
         const routes = routeLabelsFor(item);
         const route = routeByLabel(routes[0]);
         const highlight = state.readings.routes || routes.some(label => selected("route", label)) || selected("item", item.id);
-        return `<tr data-route-highlight="${highlight}" style="--route-row-color:${route?.color || "var(--surface-accent)"}">
-          <td><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
-          <td>${escapeHtml(group?.label || "Context group")}</td>
-          <td>${escapeHtml(question?.label || "Context question")}</td>
-          <td>${state.readings.statuses ? statusChip(item.status) : escapeHtml(statusById(item.status).label)}</td>
-          <td>${routes.map(routeChip).join("")}<div class="layer-code">${escapeHtml([...new Set(routes.map(label => routeByLabel(label)?.family || "Receiving architecture"))].join(" · "))}</div></td>
-          <td>${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
-          <td>${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
+        return `<tr data-label="Context entering each receiving architecture: ${escapeAttribute(item.text)}; ${escapeAttribute(group?.label || "Context group")}; ${escapeAttribute(question?.label || "Context question")}" data-route-highlight="${highlight}" style="--route-row-color:${route?.color || "var(--surface-accent)"}">
+          <td data-label="Context entering a handoff"><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
+          <td data-label="Collaborator">${escapeHtml(group?.label || "Context group")}</td>
+          <td data-label="Question">${escapeHtml(question?.label || "Context question")}</td>
+          <td data-label="Evidence / readiness">${state.readings.statuses ? statusChip(item.status) : escapeHtml(statusById(item.status).label)}</td>
+          <td data-label="Receiving architecture">${routes.map(routeChip).join("")}<div class="layer-code">${escapeHtml([...new Set(routes.map(label => routeByLabel(label)?.family || "Receiving architecture"))].join(" · "))}</div></td>
+          <td data-label="Decision made easier">${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
+          <td data-label="Service position">${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
         </tr>`;
       }).join("");
-      const table = items.length ? `<div class="ledger-wrap" data-scroll-key="handoff"><table class="handoff-table">
+      const table = items.length ? `<div class="ledger-wrap" data-scroll-key="handoff"><table data-label="Context entering each receiving architecture" class="handoff-table">
         <caption class="visually-hidden">Context entering each receiving architecture</caption>
-        <thead><tr><th>Context entering a handoff</th><th>Collaborator</th><th>Question</th><th>Evidence / readiness</th><th>Receiving architecture</th><th>Decision made easier</th><th>Service position</th></tr></thead>
+        <thead><tr><th data-label="Context entering a handoff" scope="col">Context entering a handoff</th><th data-label="Collaborator" scope="col">Collaborator</th><th data-label="Question" scope="col">Question</th><th data-label="Evidence / readiness" scope="col">Evidence / readiness</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th><th data-label="Decision made easier" scope="col">Decision made easier</th><th data-label="Service position" scope="col">Service position</th></tr></thead>
         <tbody>${rows}</tbody>
       </table></div>` : emptyInvitation("Connect a context item to the architecture that can make it inspectable.");
       return surfaceHeading("handoff", `${items.length} routed context items · ${new Set(items.flatMap(routeLabelsFor)).size} architectures`) + table;
@@ -1933,22 +1933,22 @@
       const stages = visibleStages();
       const layers = visibleLayers();
       const items = state.model.items;
-      const head = stages.map(stage => `<th scope="col">${escapeHtml(stage.label)}</th>`).join("");
+      const head = stages.map(stage => `<th data-label="${escapeAttribute(stage.label)}" scope="col">${escapeHtml(stage.label)}</th>`).join("");
       const body = layers.map(layer => {
         const cells = stages.map(stage => {
           const cellItems = items.filter(item => item.stage === stage.id && item.layer === layer.id);
-          return `<td><div class="blueprint-cell">${cellItems.length ? cellItems.map(item => `<button class="blueprint-item${selected("item", item.id) ? " selected-card" : ""}" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}" data-has-route="${routeLabelsFor(item).length ? "true" : "false"}" data-shared-context="${item.sharedKey ? "true" : "false"}"${routeStyle(routeLabelsFor(item)[0])}>
+          return `<td data-label="${escapeAttribute(stage.label)}"><div class="blueprint-cell">${cellItems.length ? cellItems.map(item => `<button class="blueprint-item${selected("item", item.id) ? " selected-card" : ""}" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}" data-has-route="${routeLabelsFor(item).length ? "true" : "false"}" data-shared-context="${item.sharedKey ? "true" : "false"}"${routeStyle(routeLabelsFor(item)[0])}>
             <strong>${escapeHtml(item.text)}</strong>
             <small>${escapeHtml(groupById(item.groupId)?.label || "Context")}${state.readings.statuses ? ` · ${escapeHtml(statusById(item.status).label)}` : ""}</small>
             ${state.readings.routes ? `<span class="card-meta">${routeChipsFor(item)}</span>` : ""}
           </button>`).join("") : '<span class="blueprint-invitation">What context makes work reliable at this stage and layer?</span>'}</div></td>`;
         }).join("");
-        return `<tr data-layer="${escapeAttribute(layer.id)}"><th scope="row">${escapeHtml(layer.label)}<span class="layer-code">${escapeHtml(layer.code)}</span></th>${cells}</tr>`;
+        return `<tr data-label="Context positioned by service stage and working layer: ${escapeAttribute(layer.label)}" data-layer="${escapeAttribute(layer.id)}"><th data-label="Layer / stage" scope="row">${escapeHtml(layer.label)}<span class="layer-code">${escapeHtml(layer.code)}</span></th>${cells}</tr>`;
       }).join("");
       const table = stages.length && layers.length
-        ? `<div class="blueprint-field"><div class="blueprint-wrap" data-scroll-key="blueprint"><table class="blueprint-table">
+        ? `<div class="blueprint-field"><div class="blueprint-wrap" data-scroll-key="blueprint"><table data-label="Context positioned by service stage and working layer" class="blueprint-table">
             <caption class="visually-hidden">Context positioned by service stage and working layer</caption>
-            <thead><tr><th scope="col">Layer / stage</th>${head}</tr></thead><tbody>${body}</tbody>
+            <thead><tr><th data-label="Layer / stage" scope="col">Layer / stage</th>${head}</tr></thead><tbody>${body}</tbody>
           </table></div></div>`
         : emptyInvitation("Choose the service stages and working layers that matter to this reading.");
       return surfaceHeading("blueprint", `${items.filter(item => includes(state.visibleStageIds, item.stage) && includes(state.visibleLayerIds, item.layer)).length} placed context items · ${stages.length} stages · ${layers.length} layers`) + table;
@@ -2163,22 +2163,22 @@
         const visibleHere = state.view === "blueprint"
           ? includes(state.visibleStageIds, item.stage) && includes(state.visibleLayerIds, item.layer)
           : includes(state.visibleGroupIds, item.groupId) && includes(state.visibleQuestionIds, item.questionId);
-        return `<tr>
-        <td><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
-        <td>${escapeHtml(groupById(item.groupId)?.label || "Context group")}</td>
-        <td>${escapeHtml(questionById(item.questionId)?.label || "Context question")}</td>
-        <td>${escapeHtml(statusById(item.status).label)}</td>
-        <td>${escapeHtml(postureById(item.posture).label)}</td>
-        <td>${routeLabelsFor(item).length ? routeLabelsFor(item).map(routeChip).join("") : "Route still to locate."}</td>
-        <td>${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
-        <td>${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
-        <td>${visibleHere ? "Visible in the current reading" : "Available in the complete Context Tree"}</td>
+        return `<tr data-label="Complete Context Tree: ${escapeAttribute(item.text)}; ${escapeAttribute(groupById(item.groupId)?.label || "Context group")}; ${escapeAttribute(questionById(item.questionId)?.label || "Context question")}">
+        <td data-label="Context"><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
+        <td data-label="Collaborator">${escapeHtml(groupById(item.groupId)?.label || "Context group")}</td>
+        <td data-label="Question">${escapeHtml(questionById(item.questionId)?.label || "Context question")}</td>
+        <td data-label="Evidence / readiness">${escapeHtml(statusById(item.status).label)}</td>
+        <td data-label="Decision role">${escapeHtml(postureById(item.posture).label)}</td>
+        <td data-label="Receiving architecture">${routeLabelsFor(item).length ? routeLabelsFor(item).map(routeChip).join("") : "Route still to locate."}</td>
+        <td data-label="Service position">${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
+        <td data-label="Decision made easier">${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
+        <td data-label="Current reading">${visibleHere ? "Visible in the current reading" : "Available in the complete Context Tree"}</td>
       </tr>`;
       }).join("");
-      semanticTable.innerHTML = `<table class="semantic-table">
+      semanticTable.innerHTML = `<table data-label="Complete Context Tree data across every collaborator and context question" class="semantic-table">
         <caption class="visually-hidden">Complete Context Tree data across every collaborator and context question</caption>
-        <thead><tr><th>Context</th><th>Collaborator</th><th>Question</th><th>Evidence / readiness</th><th>Decision role</th><th>Receiving architecture</th><th>Service position</th><th>Decision made easier</th><th>Current reading</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="9">Bring context into view to read its complete semantic equivalent.</td></tr>'}</tbody>
+        <thead><tr><th data-label="Context" scope="col">Context</th><th data-label="Collaborator" scope="col">Collaborator</th><th data-label="Question" scope="col">Question</th><th data-label="Evidence / readiness" scope="col">Evidence / readiness</th><th data-label="Decision role" scope="col">Decision role</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th><th data-label="Service position" scope="col">Service position</th><th data-label="Decision made easier" scope="col">Decision made easier</th><th data-label="Current reading" scope="col">Current reading</th></tr></thead>
+        <tbody>${rows || '<tr data-label="Complete Context Tree: no context items"><td data-label="Complete Context Tree availability" colspan="9">Bring context into view to read its complete semantic equivalent.</td></tr>'}</tbody>
       </table>`;
     }
 

@@ -52,14 +52,14 @@ const acceptedRoutes = [
   "initiative-costing.html",
   "field-inspection-harness-replatform.html",
   "distributed-inspection-harness.html",
-  "exemplar-brief-exploration.html",
-  "exemplar-gallery-list.html",
+  "spatial-capture-collaborative-memory.html",
+  "multilingual-clinical-vocabulary-practice.html",
+  "recoverable-enterprise-forms.html",
+  "readable-tables-reusable-evidence.html",
+  "one-figure-several-readings.html",
 ].sort();
 const restingExemplars = [
-  "exemplar-ideal-debrief.html",
   "exemplar-index-landing.html",
-  "exemplar-maximal-debrief.html",
-  "exemplar-maximal-information-radiator.html",
 ];
 const robotsCommon = `# Search discovery and person-directed retrieval are welcome.
 User-agent: OAI-SearchBot
@@ -98,7 +98,62 @@ async function loadPrimaryManifest() {
   return validatePrimaryManifest(JSON.parse(source));
 }
 
-test("the production manifest carries the accepted 37-route primary collection and its explicit closure", async () => {
+function quotedHtmlAttribute(tag, name) {
+  const match = new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, "iu").exec(tag);
+  return match?.[2] ?? null;
+}
+
+function localStylesheetReferences(html) {
+  const references = [];
+  for (const match of html.matchAll(/<link\b[^>]*>/giu)) {
+    const tag = match[0];
+    const rel = quotedHtmlAttribute(tag, "rel");
+    const href = quotedHtmlAttribute(tag, "href");
+    if (
+      href === null ||
+      rel === null ||
+      !rel.split(/\s+/u).some((token) => token.toLowerCase() === "stylesheet") ||
+      /^(?:[a-z][a-z0-9+.-]*:|\/\/|\/|#|\{\{)/iu.test(href)
+    ) {
+      continue;
+    }
+    references.push(href.split(/[?#]/u, 1)[0]);
+  }
+  return references;
+}
+
+function firstJsonLd(html, label) {
+  const block = html.match(
+    /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/u,
+  );
+  assert.ok(block, `${label} carries JSON-LD`);
+  return JSON.parse(block[1]);
+}
+
+function allJsonLdObjects(value) {
+  if (Array.isArray(value)) return value.flatMap(allJsonLdObjects);
+  if (value === null || typeof value !== "object") return [];
+  return [value, ...Object.values(value).flatMap(allJsonLdObjects)];
+}
+
+function pageDateModified(html, location, label) {
+  const document = firstJsonLd(html, label);
+  if (typeof document.dateModified === "string") return document.dateModified;
+  const dates = new Set(
+    allJsonLdObjects(document)
+      .filter((entry) =>
+        entry.url === location ||
+        entry["@id"] === location ||
+        (typeof entry["@id"] === "string" && entry["@id"].startsWith(`${location}#`)),
+      )
+      .map((entry) => entry.dateModified)
+      .filter((value) => typeof value === "string"),
+  );
+  assert.equal(dates.size, 1, `${label} carries one page-level dateModified`);
+  return [...dates][0];
+}
+
+test("the production manifest carries the accepted 40-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
   const rootHtml = manifest.files
@@ -130,8 +185,35 @@ test("the production manifest carries the accepted 37-route primary collection a
     "android-chrome-144x144.png",
     "android-chrome-192x192.png",
     "apple-touch-icon.png",
+    "readable-tables-reusable-evidence.html",
+    "styles/routes/table-study.css",
+    "img/plot/table_reading_contract.svg",
+    "img/plot/table_study_observations.svg",
+    "img/plot/table_verification_states.svg",
+    "img/debriefs/choose-your-player/robotics-upfront-480.webp",
+    "img/debriefs/choose-your-player/robotics-upfront-960.webp",
+    "img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
   ]) {
     assert.ok(projectedPaths.has(required), `${required} belongs to the primary closure`);
+  }
+  for (const sourceOnlyOrRetired of [
+    "img/debriefs/choose-your-player/robotics-upfront.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan.webp",
+    "img/plot/structure_sensor_3_angled.webp",
+    "occipital.png",
+    "exemplar-gallery-list.html",
+    "exemplar-ideal-debrief.html",
+    "exemplar-maximal-debrief.html",
+    "exemplar-maximal-information-radiator.html",
+  ]) {
+    assert.equal(projectedPaths.has(sourceOnlyOrRetired), false, `${sourceOnlyOrRetired} stays outside the primary closure`);
   }
   assert.ok(manifest.files.length > acceptedRoutes.length + 1);
   for (const file of manifest.files) {
@@ -140,6 +222,107 @@ test("the production manifest carries the accepted 37-route primary collection a
     );
     assert.ok(status.isFile() && !status.isSymbolicLink(), file.source_path);
   }
+});
+
+test("every local stylesheet linked by production-selected HTML belongs to the explicit closure", async () => {
+  const manifest = await loadPrimaryManifest();
+  const selectedSources = new Set(manifest.files.map(({ source_path }) => source_path));
+  for (const file of manifest.files.filter(({ media_type }) => media_type === "text/html")) {
+    const html = await readFile(path.join(repositoryRoot, file.source_path), "utf8");
+    for (const reference of localStylesheetReferences(html)) {
+      const sourcePath = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file.source_path), reference),
+      );
+      assert.ok(
+        selectedSources.has(sourcePath),
+        `${file.source_path} links ${reference}; ${sourcePath} must belong to the production closure`,
+      );
+    }
+  }
+});
+
+test("the manufacturing gallery carries its exact primary closure and generated image provenance", async () => {
+  const manifest = await loadPrimaryManifest();
+  const views = ["rate", "count", "reconciliation", "conditions"];
+  const expected = [
+    ...["atlas-gallery.js", "atlas-gallery-model.js", "atlas-gallery-table.js"].map((file) =>
+      [`${canvasRoot}/${file}`, file, "text/javascript"]),
+    ...[["gallery.v1.json", "application/json"], ["summary.v1.json", "application/json"],
+      ["README.md", "text/markdown"]].map(([file, mediaType]) =>
+      [`context-canvas-project-surface/data/visualization-fidelity/ai4i/${file}`,
+        `data/visualization-fidelity/ai4i/${file}`, mediaType]),
+    ...views.map((view) => [`context-canvas-project-surface/img/plot/atlas_ai4i_${view}.svg`,
+      `img/plot/atlas_ai4i_${view}.svg`, "image/svg+xml"]),
+  ];
+  for (const [source_path, projected_path, media_type] of expected) {
+    assert.deepEqual(manifest.files.filter((file) => file.source_path === source_path),
+      [{ source_path, projected_path, media_type }], source_path);
+    const status = await lstat(path.join(repositoryRoot, source_path));
+    assert.ok(status.isFile() && !status.isSymbolicLink(), source_path);
+  }
+  const inventory = validateAssetInventory(JSON.parse(await readFile(
+    path.join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8",
+  )));
+  for (const view of views) {
+    const sourcePath = `context-canvas-project-surface/img/plot/atlas_ai4i_${view}.svg`;
+    const families = inventory.families.filter(({ selector }) => selector.prefix === undefined
+      ? selector.paths.includes(sourcePath) : sourcePath.startsWith(selector.prefix));
+    assert.deepEqual(families.map(({ id }) => id), ["context-canvas.shared-plot"]);
+    const overrides = inventory.overrides.filter(({ source_path }) => source_path === sourcePath);
+    assert.equal(overrides.length, 1, sourcePath);
+    assert.equal(overrides[0].semantic_key, `context-canvas.shared-plot.ai4i-${view}`);
+    assert.deepEqual(overrides[0].source_relationship, {
+      standing: "generated_derivative",
+      canonical_source_path: "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+      generator_path: "tools/atlas-gallery-model.mjs",
+      profile: `ai4i-gallery-${view}-v1`,
+    });
+    assert.ok(overrides[0].roles.some(({ accessibility_text_owner }) =>
+      /svg title and description/i.test(accessibility_text_owner)));
+    const bytes = await readFile(path.join(repositoryRoot, sourcePath));
+    assert.equal(inspectImageDimensions(bytes, "image/svg+xml", sourcePath).standing, "available");
+    assert.match(bytes.toString("utf8"), /<title(?:\s|>)/i);
+    assert.match(bytes.toString("utf8"), /<desc(?:\s|>)/i);
+  }
+});
+
+test("the public research extract carries its exact primary closure and generated image provenance", async () => {
+  const manifest = await loadPrimaryManifest();
+  const sourcePath = "context-canvas-project-surface/img/plot/atlas_public_research.svg";
+  const expected = [
+    [sourcePath, "img/plot/atlas_public_research.svg", "image/svg+xml"],
+    ...[["sources.v1.json", "application/json"], ["summary.v1.json", "application/json"],
+      ["README.md", "text/markdown"]].map(([file, mediaType]) =>
+      [`context-canvas-project-surface/data/visualization-fidelity/research/${file}`,
+        `data/visualization-fidelity/research/${file}`, mediaType]),
+  ];
+  for (const [source_path, projected_path, media_type] of expected) {
+    assert.deepEqual(manifest.files.filter((file) => file.source_path === source_path),
+      [{ source_path, projected_path, media_type }], source_path);
+    const status = await lstat(path.join(repositoryRoot, source_path));
+    assert.ok(status.isFile() && !status.isSymbolicLink(), source_path);
+  }
+  const inventory = validateAssetInventory(JSON.parse(await readFile(
+    path.join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8",
+  )));
+  const families = inventory.families.filter(({ selector }) => selector.prefix === undefined
+    ? selector.paths.includes(sourcePath) : sourcePath.startsWith(selector.prefix));
+  assert.deepEqual(families.map(({ id }) => id), ["context-canvas.shared-plot"]);
+  const overrides = inventory.overrides.filter(({ source_path }) => source_path === sourcePath);
+  assert.equal(overrides.length, 1, sourcePath);
+  assert.equal(overrides[0].semantic_key, "context-canvas.shared-plot.public-research-topic-memberships");
+  assert.deepEqual(overrides[0].source_relationship, {
+    standing: "generated_derivative",
+    canonical_source_path: "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
+    generator_path: "tools/build-atlas-research-view.mjs",
+    profile: "public-research-topic-memberships-v1",
+  });
+  assert.ok(overrides[0].roles.some(({ accessibility_text_owner }) =>
+    /svg title and description/i.test(accessibility_text_owner)));
+  const bytes = await readFile(path.join(repositoryRoot, sourcePath));
+  assert.equal(inspectImageDimensions(bytes, "image/svg+xml", sourcePath).standing, "available");
+  assert.match(bytes.toString("utf8"), /<title(?:\s|>)/i);
+  assert.match(bytes.toString("utf8"), /<desc(?:\s|>)/i);
 });
 
 test("the semantic inventory resolves every selected image without becoming a membership source", async () => {
@@ -219,21 +402,34 @@ test("the semantic inventory resolves every selected image without becoming a me
   }
 });
 
-test("the sitemap identifies exactly the 37 indexable production routes", async () => {
+test("the sitemap identifies exactly the 41 indexable production routes with page-owned dates", async () => {
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",
   );
   const legacyBase =
     "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
-  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  const routes = locs.map((location) => {
+  const entries = [...sitemap.matchAll(
+    /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/gu,
+  )].map(([, location, lastModified]) => ({ location, lastModified }));
+  const routes = entries.map(({ location }) => {
     assert.ok(location.startsWith(legacyBase), location);
     return location === legacyBase ? "index.html" : location.slice(legacyBase.length);
   });
   assert.deepEqual(routes.sort(), acceptedRoutes);
   assert.equal(routes.includes("404.html"), false);
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
+  for (const { location, lastModified } of entries) {
+    const route = location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const html = await readFile(path.join(repositoryRoot, canvasRoot, route), "utf8");
+    // Advance both owners for meaningful public content or structured-data changes.
+    // Mechanical styling and footer-only edits keep the latest substantive date.
+    assert.equal(
+      lastModified,
+      pageDateModified(html, location, route),
+      `${route}: current modification date`,
+    );
+  }
 });
 
 test("the duplicated Strategy Canvas contract files agree across primary and iframe delivery", async () => {

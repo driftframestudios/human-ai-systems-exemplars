@@ -9,8 +9,9 @@ collaboration_account:
   source_state: "successor settlement commit 607b5da17ecfdb312c9df6dfc61b53c8bcf5a171"
   routes:
     secret_boundary_inspection: "create_now"
+    embedded_metadata_publication_boundary: "iterate_now_as_conditional_context"
     externalized_reference_materialization: "observe_hold"
-  next_return: "after a real finding or changed engine, configuration, and scope behavior"
+  next_return: "after a real finding; changed engine, configuration, or scope behavior; or a natural binary-publication use that tests the new conditional context"
 ```
 
 ## Working moment
@@ -79,3 +80,28 @@ Revise the skill only for residue that would improve another material use. If
 the receiving commands and repository ground carry the job without distinct
 instruction yield, retain the executable affordance and let the portable
 contract rest.
+
+## 2026-09-25 iteration · embedded metadata
+
+A repository-publication assessment supplied a materially different boundary
+observation: the canary-proven credential scan passed while format-aware image
+inspection found device and lens serial metadata in three related background
+variants and device/capture metadata in seven raster files. No GPS coordinate
+field was observed across the 76 inspected raster files. The human confirmed
+that location capture had been purposefully disabled and identified the gap as
+transferable because another team may rely on a device setting without checking
+the assembled release.
+
+`collaboration-accounting` selects `iterate_now` for
+`secret-boundary-inspection`. The portable contract keeps credential detection
+as its primary result and now routes binary publication closures to one
+conditional metadata reference. This preserves separate claims for
+credential-shaped material, embedded metadata, and human-held audience, rights,
+and consent decisions. It also avoids forming a second standing skill before a
+natural use demonstrates an independently routable metadata workflow.
+
+The next materially similar publication supplies the forward test. A repeated
+need for format selection, deterministic metadata normalization, or a shared
+receipt schema can reopen `create_now` for a dedicated embedded-metadata
+inspection skill. Until then, the conditional reference carries the useful
+decision without expanding the active catalog.

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import nodePath from "node:path";
+import { digest, openCheckpoints } from "./observation-checkpoint.mjs";
+import { corePlanningInputs } from "./evidence-inputs.mjs";
 
 import { chromium } from "@playwright/test";
 
@@ -15,15 +19,15 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  poda: "poda-chimeric-prototype-v0.1.4.html",
+  poda: "poda-chimeric-prototype-v0.1.5.html",
   alignment: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
   frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
   sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
-  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
   softwareViews: "software-architecture-views-chimeric-prototype-v0.1.4.html",
   participatory: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
-  plusDelta: "plus-delta-chimeric-prototype-v0.1.4.html",
-  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.4.html"
+  plusDelta: "plus-delta-chimeric-prototype-v0.1.5.html",
+  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.5.html"
 };
 
 const checks = [];
@@ -220,12 +224,12 @@ async function podaPath(browser, origin, route) {
       apiName: "poda",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "poda.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "poda.prompt-capsule.r0.1.5.skill-assisted.md",
       loopIds: ["repository-reentry", "skill-from-receiving-use"],
       promptSelector: "#aiPrompt",
       stateContract: "poda-state.v0.1",
       title: "PODA",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     initialPlain = initial.plain;
     assert.equal(initial.projection.objectives.length, initial.state.poda.objectives.length);
@@ -1014,12 +1018,12 @@ async function aiSystemsPath(browser, origin, route) {
       apiName: "aiSystemsServiceBlueprint",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "ai-systems-service-blueprint.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "ai-systems-service-blueprint.prompt-capsule.r0.1.5.skill-assisted.md",
       loopIds: ["repository-reentry", "visitor-surface-change"],
       promptSelector: "#promptOut",
       stateContract: "ai-systems-service-blueprint-state.v0.1",
       title: "AI Systems Service Blueprint",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     assert.equal(
       initialPrompt.projection.ai_systems_service_blueprint.cells.length,
@@ -1594,12 +1598,12 @@ async function plusDeltaPath(browser, origin, route) {
       apiName: "plusDelta",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "plus-delta.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "plus-delta.prompt-capsule.r0.1.5.skill-assisted.md",
       loopIds: ["repository-reentry", "skill-from-receiving-use"],
       promptSelector: "#aiPrompt",
       stateContract: "plus-delta-state.v0.1",
       title: "Plus / Delta",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     assert.equal(initialPrompt.projection.observations.length, 5);
     assert.ok(initialPrompt.projection.observations.every(observation => [
@@ -1857,7 +1861,7 @@ async function upstreamPath(browser, origin, route) {
     assert.equal(initial.frozen, true);
     assert.deepEqual(
       [initial.version, initial.contract, initial.stateContract, initial.view],
-      ["0.1.4", "prompt-capsule/0.1.0", "upstream-revision-loop-state.v0.1", "plain"],
+      ["0.1.5", "prompt-capsule/0.1.0", "upstream-revision-loop-state.v0.1", "plain"],
     );
     assert.equal(initial.plain, initial.explicitPlain);
     assert.equal(initial.visible, initial.plain);
@@ -1934,7 +1938,7 @@ async function upstreamPath(browser, origin, route) {
     const downloadPromise = page.waitForEvent("download");
     await page.locator("#downloadPromptBtn").click();
     const download = await downloadPromise;
-    assert.equal(download.suggestedFilename(), "upstream-revision-loop.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(download.suggestedFilename(), "upstream-revision-loop.prompt-capsule.r0.1.5.skill-assisted.md");
     assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
     const stream = await download.createReadStream();
     const chunks = [];
@@ -2114,20 +2118,41 @@ assert.equal(projections.length, 2, "The planning-instrument contract should exe
 assert.equal(paths.length, 9, "The planning-instrument contract should exercise all nine planning instruments.");
 assert.deepEqual([...pathKeys].sort(), expectedArtifactKeys, "Planning-instrument paths should match the maintained artifact inventory.");
 assert.equal(new Set(pathKeys).size, paths.length, "Each planning instrument should have one browser path.");
-const expectedCheckCount = projections.length * paths.length;
-
-const staticServer = await startStaticServer();
-const browser = await chromium.launch({ headless: true });
+const args = process.argv.slice(2);
+const artifactFlag = args.indexOf("--artifact");
+const selectedArtifact = artifactFlag < 0 ? null : args[artifactFlag + 1];
+assert(artifactFlag < 0 || expectedArtifactKeys.includes(selectedArtifact), "--artifact names a maintained planning instrument");
+const selectedPaths = selectedArtifact ? paths.filter(([, key]) => key === selectedArtifact) : paths;
+const expectedCheckCount = projections.length * selectedPaths.length;
+const root = nodePath.resolve(import.meta.dirname, "..");
+const checkpoints = await openCheckpoints(nodePath.join(root, ".visual-runs/core-planning/checkpoints"));
+const definitions = [];
+for (const file of corePlanningInputs) {
+  definitions.push(digest(await fs.readFile(nodePath.join(root, file))));
+}
+const runtime = await fs.stat(chromium.executablePath());
+const definition = digest(JSON.stringify([definitions, process.version, process.platform, process.arch, runtime.size, runtime.mtimeMs]));
+let staticServer;
+let browser;
+let reused = 0;
 try {
   for (const projection of projections) {
-    for (const [label, artifactKey, path] of paths) {
+    for (const [label, artifactKey, path] of selectedPaths) {
       const route = `${projection.root}/${artifactNames[artifactKey]}`;
+      const signature = digest(definition + digest(await fs.readFile(nodePath.join(root, route))));
+      const saved = args.includes("--resume") && await checkpoints.read(route, signature, () => true);
+      if (saved) { checks.push(saved); reused += 1; continue; }
+      if (!staticServer) staticServer = await startStaticServer();
+      if (!browser) browser = await chromium.launch({ headless: true });
       await verify(`${projection.label} · ${label}`, () => path(browser, staticServer.origin, route));
+      const check = checks.at(-1);
+      await checkpoints.write(route, signature, {}, { ...check, standing: check.status === "passed" ? "pass" : "incomplete" });
+      await fs.appendFile(nodePath.join(root, ".visual-runs/core-planning/cases.jsonl"), JSON.stringify(check) + "\n");
     }
   }
 } finally {
-  await browser.close();
-  await staticServer.close();
+  if (browser) await browser.close();
+  if (staticServer) await staticServer.close();
 }
 
 assert.equal(checks.length, expectedCheckCount, `The planning-instrument contract should complete ${expectedCheckCount} projection checks.`);
@@ -2141,5 +2166,5 @@ if (failures.length) {
   console.error(`Core planning-instrument browser contract: ${checks.length - failures.length}/${checks.length} passed.`);
   process.exitCode = 1;
 } else {
-  console.log(`Core planning-instrument browser contract: ${checks.length}/${checks.length} passed.`);
+  console.log(`Core planning-instrument browser contract: ${checks.length}/${checks.length} passed; ${reused} reused.`);
 }

@@ -15,11 +15,14 @@ import {
   publishingCompany,
 } from "./attribution-contract.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
+import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication } from "./schema-publication.mjs";
+import { pagesReleaseTag } from "./schema-site-release.mjs";
 import {
   assertExactFileInventory,
   assertPublicMaterial,
   assertTermsAbsent,
   resolvePublicationFile,
+  serializeJsonForHtmlScript,
 } from "./publication-boundary.mjs";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -33,6 +36,9 @@ const skillSelectionPath = resolve(
 );
 const marker = "  <!-- schema-pages:deployment-metadata -->";
 const collaborationMarker = "  <!-- schema-pages:collaboration-deployment-metadata -->";
+const navigationStartMarker = "  <!-- schema-pages:primary-navigation:start -->";
+const navigationEndMarker = "  <!-- schema-pages:primary-navigation:end -->";
+const publicContactEmail = "consulting@vik.guru";
 const publicCarrierPaths = Object.freeze([
   "LICENSE",
   "AUTHORS",
@@ -64,6 +70,69 @@ function htmlEscape(value) {
 
 function digest(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
+}
+
+function renderPrimaryNavigation(relativeRoot, currentArea) {
+  requirement(
+    new Set(["registry", "skills", "collaboration"]).has(currentArea),
+    `primary navigation needs a recognized current area: ${currentArea}`,
+  );
+  const links = [
+    ["registry", relativeRoot || "./", "Schema registry"],
+    ["skills", `${relativeRoot}skills/`, "Skills"],
+    ["collaboration", `${relativeRoot}collaboration/`, "Collaboration guide"],
+  ];
+  const items = links
+    .map(([area, href, label]) => {
+      const current = area === currentArea ? ' aria-current="page"' : "";
+      return `<li><a href="${href}"${current}>${label}</a></li>`;
+    })
+    .join("");
+  return `${navigationStartMarker}
+  <nav class="site-nav" aria-label="Primary"><div class="site-nav__inner"><ul>${items}</ul></div></nav>
+${navigationEndMarker}`;
+}
+
+function projectPrimaryNavigation(source, relativeRoot, currentArea) {
+  const start = source.indexOf(navigationStartMarker);
+  const end = source.indexOf(navigationEndMarker);
+  requirement(
+    start >= 0 && end > start,
+    `${currentArea} source must carry one primary navigation block`,
+  );
+  requirement(
+    source.indexOf(navigationStartMarker, start + navigationStartMarker.length) < 0 &&
+      source.indexOf(navigationEndMarker, end + navigationEndMarker.length) < 0,
+    `${currentArea} source must carry one primary navigation block`,
+  );
+  return `${source.slice(0, start)}${renderPrimaryNavigation(relativeRoot, currentArea)}${source.slice(end + navigationEndMarker.length)}`;
+}
+
+function validatePrimaryNavigation(source, relativeRoot, currentArea, surfaceName) {
+  const start = source.indexOf(navigationStartMarker);
+  const end = source.indexOf(navigationEndMarker);
+  requirement(start >= 0 && end > start, `${surfaceName} must carry primary navigation`);
+  const navigation = source.slice(start, end + navigationEndMarker.length);
+  const expected = [
+    ["registry", relativeRoot || "./", "Schema registry"],
+    ["skills", `${relativeRoot}skills/`, "Skills"],
+    ["collaboration", `${relativeRoot}collaboration/`, "Collaboration guide"],
+  ];
+  requirement(
+    occurrenceCount(navigation, '<nav class="site-nav" aria-label="Primary">') === 1,
+    `${surfaceName} must expose one labeled primary navigation`,
+  );
+  requirement(
+    occurrenceCount(navigation, 'aria-current="page"') === 1,
+    `${surfaceName} must expose one current primary area`,
+  );
+  for (const [area, href, label] of expected) {
+    const current = area === currentArea ? ' aria-current="page"' : "";
+    requirement(
+      navigation.includes(`<a href="${href}"${current}>${label}</a>`),
+      `${surfaceName} must link ${label} through ${href}`,
+    );
+  }
 }
 
 async function readSourceRevision(relativePaths) {
@@ -251,6 +320,7 @@ function validateVisitorBoundaryFooter(source, surfaceName) {
 }
 
 function validateRegistryIndex(source, deploymentBase = null) {
+  validatePrimaryNavigation(source, "", "registry", "the registry page");
   requirement(
     occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
     "the registry page must carry one resolved author metadata value",
@@ -273,6 +343,13 @@ function validateRegistryIndex(source, deploymentBase = null) {
   requirement(structuredData.license === artifactLicense, "structured license must match attribution.yml");
 
   validateVisitorBoundaryFooter(source, "the registry page");
+
+  for (const skillName of ["embedded-prototype-layout", "semantic-table-design"]) {
+    requirement(
+      source.includes(`href="skills/${skillName}/"`),
+      `the registry page must feature ${skillName}`,
+    );
+  }
 
   for (const route of schemaReceiverRoutes) {
     requirement(
@@ -310,6 +387,7 @@ function normalizedBaseUrl(rawValue) {
 }
 
 const baseUrl = normalizedBaseUrl(process.env.PAGES_BASE_URL);
+const releaseTag = process.env.PAGES_RELEASE_TAG ? pagesReleaseTag(process.env.PAGES_RELEASE_TAG) : null;
 
 function browserPath(path) {
   return path.split(sep).join("/");
@@ -466,8 +544,9 @@ function renderSkillFooter(relativeRoot) {
     .map((boundaryMarker) => `        <p class="canary" data-visitor-boundary-marker="${boundaryMarker.id}">${boundaryMarker.lines.map(htmlEscape).join("<br>")}</p>`)
     .join("\n");
   return `<footer class="site-footer"><div class="site-footer__inner">
-    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
+    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains this repository's expectations for automated use.</p>
     <ul class="footer-links"><li><a href="${relativeRoot}AUTHORS" rel="author">Authors and provenance</a></li><li><a href="${relativeRoot}CITATION.cff">Citation metadata</a></li><li><a href="${relativeRoot}attribution.yml">Machine-readable attribution</a></li><li><a href="${relativeRoot}LICENSE" rel="license">Apache 2.0 license</a></li><li><a href="${relativeRoot}AI-DATA-USE.md">Data-use posture</a></li></ul>
+    <p class="site-contact">For assistance or collaboration, write to ${publicContactEmail}.</p>
     <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers"><p class="visitor-boundary__context" data-visitor-boundary-context>${htmlEscape(visitorBoundary.contextText)}</p>
 ${markerHtml}
     </div>
@@ -489,8 +568,8 @@ function renderSkillPage(skill, sourceRevision, deploymentBase) {
   const sourceHref = `../${skill.sourceRoute}`;
   const dependencyItems = skill.dependencies.length
     ? `<ul class="dependency-list">${skill.dependencies.map((dependency) => `<li><a href="../${htmlEscape(dependency.path)}"><code>${htmlEscape(dependency.sourcePath)}</code></a><br><span>SHA-256 <code>${dependency.sha256}</code></span></li>`).join("")}</ul>`
-    : "<p>This skill has no additional files in its public source package.</p>";
-  const structuredData = JSON.stringify(
+    : "<p>The linked <code>SKILL.md</code> is the complete public source package for this skill.</p>";
+  const structuredData = serializeJsonForHtmlScript(
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -502,7 +581,6 @@ function renderSkillPage(skill, sourceRevision, deploymentBase) {
       isPartOf: deploymentBase ? `${deploymentBase}/skills/` : "skills/",
       encodingFormat: "text/html",
     },
-    null,
     2,
   );
   return `<!doctype html>
@@ -526,20 +604,26 @@ ${deploymentMetadata}
   <style>
     :root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,sans-serif; line-height:1.6; --ink:#17223d; --muted:#526078; --paper:#f8f5ec; --field:#d8f1eb; --card:#fffdf7; --line:#a9b2c0; --accent:#173a91; --code:#111c34; }
     * { box-sizing:border-box; } body { margin:0; color:var(--ink); background:var(--paper); } a { color:var(--accent); text-underline-offset:.2em; } a:focus-visible { outline:.2rem solid #2458d6; outline-offset:.22rem; } code { overflow-wrap:anywhere; }
+    .skip-link { position:absolute; left:.75rem; top:.75rem; z-index:4; padding:.65rem .85rem; color:var(--paper); background:var(--ink); transform:translateY(-180%); } .skip-link:focus { transform:translateY(0); }
+    .site-nav { color:var(--paper); background:var(--ink); } .site-nav__inner { width:min(76rem,calc(100% - 2rem)); margin-inline:auto; } .site-nav ul { display:flex; flex-wrap:wrap; gap:.25rem .55rem; margin:0; padding:.55rem 0; list-style:none; } .site-nav li { max-width:100%; } .site-nav a { display:block; border:1px solid transparent; border-radius:999px; color:inherit; padding:.4rem .7rem; } .site-nav a[aria-current="page"] { border-color:currentColor; font-weight:800; text-decoration:none; }
     .hero { background:var(--field); border-bottom:1px solid var(--line); } .hero__inner, main, .site-footer__inner { width:min(76rem,calc(100% - 2rem)); margin-inline:auto; } .hero__inner { padding:clamp(2.5rem,7vw,6rem) 0 clamp(2rem,5vw,4rem); }
     .eyebrow { margin:0 0 1rem; font-size:.78rem; font-weight:750; letter-spacing:.16em; text-transform:uppercase; } h1 { max-width:17ch; margin:0; font-size:clamp(2.25rem,6vw,5.2rem); line-height:.98; letter-spacing:-.04em; } .lede { max-width:66ch; font-size:clamp(1.05rem,2vw,1.35rem); }
     main { padding:2.5rem 0 5rem; } main > section { margin-block:0 3rem; } h2 { font-size:clamp(1.6rem,3vw,2.4rem); line-height:1.1; } .skill-actions { display:flex; flex-wrap:wrap; gap:.55rem 1rem; } .skill-actions a:first-child { border:2px solid currentColor; border-radius:999px; font-weight:750; padding:.55rem .9rem; text-decoration:none; }
+    .contract-result { max-width:72ch; border-left:.4rem solid var(--accent); background:var(--card); padding:1.15rem 1.3rem; } .contract-result h2 { margin-top:0; } .contract-result p:last-child { margin-bottom:0; }
     .skill-facts { display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr)); margin:0; } .skill-facts div { background:var(--card); border:1px solid var(--line); border-radius:.65rem; padding:1rem; min-width:0; } .skill-facts dt { color:var(--muted); font-size:.78rem; font-weight:750; letter-spacing:.08em; text-transform:uppercase; } .skill-facts dd { margin:.25rem 0 0; overflow-wrap:anywhere; }
     .dependency-list { display:grid; gap:.85rem; padding-left:1.25rem; } pre { background:var(--code); border-radius:.75rem; color:#f7f9ff; max-width:100%; overflow:auto; padding:1rem; white-space:pre; } pre code { overflow-wrap:normal; } .skill-source:focus-visible { outline:.2rem solid #2458d6; outline-offset:.22rem; }
     .site-footer { border-top:1px solid var(--line); background:#eef0f3; } .site-footer__inner { padding:2.5rem 0 1.5rem; } .footer-links { display:flex; flex-wrap:wrap; gap:.5rem 1.1rem; padding:0; list-style:none; } .canary-stack { margin-top:2.5rem; padding-top:1.25rem; border-top:1px solid var(--line); } .visitor-boundary__context { max-width:70ch; font-size:.84rem; } .canary { max-width:none; font-family:ui-monospace,monospace; font-size:.72rem; overflow-wrap:anywhere; } .artifact-attribution { max-width:none; margin-top:1.5rem; font-size:.8rem; color:var(--muted); }
-    @media (max-width:48rem) { .hero__inner, main, .site-footer__inner { width:min(100% - 1.25rem,76rem); } } @media (forced-colors:active) { .skill-facts div,.skill-actions a:first-child { border-color:CanvasText; } }
-    @media print { .skill-actions { display:none; } pre { border:1px solid currentColor; color:inherit; white-space:pre-wrap; } }
+    @media (max-width:48rem) { .site-nav__inner,.hero__inner,main,.site-footer__inner { width:min(100% - 1.25rem,76rem); } } @media (forced-colors:active) { .skill-facts div,.skill-actions a:first-child,.contract-result { border-color:CanvasText; } }
+    @media print { .skip-link,.site-nav,.skill-actions { display:none; } pre { border:1px solid currentColor; color:inherit; white-space:pre-wrap; } }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to skill content</a>
+  ${renderPrimaryNavigation("../../", "skills")}
   <header class="hero"><div class="hero__inner"><p class="eyebrow">Public-ready repository skill</p><h1>${htmlEscape(skill.title)}</h1><p class="lede">${htmlEscape(skill.description)}</p></div></header>
-  <main>
+  <main id="main-content" tabindex="-1">
     <nav class="skill-actions" aria-label="Skill formats"><a href="${sourceHref}">Open exact Markdown</a><a href="projection.json">Open JSON projection</a><a href="../">Browse all public skills</a></nav>
+    <section class="contract-result" aria-labelledby="result-title"><h2 id="result-title">What this produces</h2><p data-contract-result>${htmlEscape(skill.produces)}</p></section>
     <section aria-labelledby="coordinate-title"><h2 id="coordinate-title">Source and version</h2><dl class="skill-facts"><div><dt>Repository path</dt><dd><code>${htmlEscape(skill.sourcePath)}</code></dd></div><div><dt>Source revision</dt><dd><code>${sourceRevision}</code></dd></div><div><dt>Source SHA-256</dt><dd><code>${skill.sourceSha256}</code></dd></div><div><dt>Publication standing</dt><dd>Public ready</dd></div></dl></section>
     <section aria-labelledby="dependencies-title"><h2 id="dependencies-title">Included source files</h2>${dependencyItems}</section>
     <section aria-labelledby="source-title"><h2 id="source-title">Complete skill source</h2><p>The Markdown below matches the exact source text. The format link above opens the file on its own.</p><pre class="skill-source" role="region" aria-labelledby="source-title" tabindex="0"><code>${htmlEscape(skill.sourceText)}</code></pre></section>
@@ -564,13 +648,20 @@ function renderSkillsIndex(catalog, deploymentBase) {
         <li class="skill-card" data-skill-name="${htmlEscape(skill.name)}">
           <h3><code>${htmlEscape(skill.name)}</code></h3>
           <p>${htmlEscape(skill.description)}</p>
+          <p data-use-when><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p>
+          <p data-produces><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p>
           <p class="skill-links"><a href="${htmlEscape(skill.pagePath)}"><strong>Read this skill</strong></a> · <a href="${htmlEscape(skill.projectionPath)}">JSON projection</a> · <a href="${htmlEscape(skill.sourceRoute)}">Exact Markdown</a></p>
         </li>`)
     .join("");
-  const markerHtml = visitorBoundary.markers
-    .map((boundaryMarker) => `        <p class="canary" data-visitor-boundary-marker="${boundaryMarker.id}">${boundaryMarker.lines.map(htmlEscape).join("<br>")}</p>`)
-    .join("\n");
-  const structuredData = JSON.stringify(
+  const featuredNames = ["embedded-prototype-layout", "semantic-table-design"];
+  const featuredCards = featuredNames
+    .map((name) => {
+      const skill = catalog.skills.find((entry) => entry.name === name);
+      requirement(skill, `${name} must be public-ready before it is featured`);
+      return `<article class="featured-card" data-featured-skill="${skill.name}"><p class="card-label">New in this collection</p><h3>${htmlEscape(skill.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p><p><a href="${htmlEscape(skill.pagePath)}">Read ${htmlEscape(skill.title)}</a></p></article>`;
+    })
+    .join("");
+  const structuredData = serializeJsonForHtmlScript(
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -580,7 +671,6 @@ function renderSkillsIndex(catalog, deploymentBase) {
       publisher: { "@type": "Organization", name: publishingCompany },
       license: artifactLicense,
     },
-    null,
     2,
   );
 
@@ -605,29 +695,30 @@ ${deploymentMetadata}
   <style>
     :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, sans-serif; line-height: 1.6; --ink:#17223d; --muted:#526078; --paper:#f8f5ec; --field:#d8f1eb; --card:#fffdf7; --line:#a9b2c0; --accent:#173a91; }
     * { box-sizing: border-box; } body { margin:0; color:var(--ink); background:var(--paper); } a { color:var(--accent); text-underline-offset:.2em; } a:focus-visible { outline:.2rem solid #2458d6; outline-offset:.22rem; } code { overflow-wrap:anywhere; }
+    .skip-link { position:absolute; left:.75rem; top:.75rem; z-index:4; padding:.65rem .85rem; color:var(--paper); background:var(--ink); transform:translateY(-180%); } .skip-link:focus { transform:translateY(0); }
+    .site-nav { color:var(--paper); background:var(--ink); } .site-nav__inner { width:min(76rem,calc(100% - 2rem)); margin-inline:auto; } .site-nav ul { display:flex; flex-wrap:wrap; gap:.25rem .55rem; margin:0; padding:.55rem 0; list-style:none; } .site-nav li { max-width:100%; } .site-nav a { display:block; border:1px solid transparent; border-radius:999px; color:inherit; padding:.4rem .7rem; } .site-nav a[aria-current="page"] { border-color:currentColor; font-weight:800; text-decoration:none; }
     .hero { background:var(--field); border-bottom:1px solid var(--line); } .hero__inner, main, .site-footer__inner { width:min(76rem, calc(100% - 2rem)); margin-inline:auto; } .hero__inner { padding:clamp(3rem,8vw,7rem) 0 clamp(2.5rem,6vw,5rem); }
     .eyebrow { margin:0 0 1rem; font-size:.78rem; font-weight:750; letter-spacing:.16em; text-transform:uppercase; } h1 { max-width:13ch; margin:0; font-size:clamp(2.6rem,7.5vw,6.3rem); line-height:.94; letter-spacing:-.045em; } .lede { max-width:60ch; font-size:clamp(1.1rem,2.3vw,1.5rem); }
-    main { padding:3rem 0 5rem; } h2 { font-size:clamp(1.8rem,4vw,3rem); line-height:1.05; } .orientation { max-width:72ch; } .skill-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap:1rem; padding:0; list-style:none; }
-    .skill-card { max-width:none; padding:1.25rem; border:1px solid var(--line); border-radius:.8rem; background:var(--card); } .skill-card h3 { margin:0; font-size:1.08rem; } .skill-links { color:var(--muted); }
+    main { padding:3rem 0 5rem; } main > section + section { margin-top:clamp(3.5rem,7vw,6rem); } h2 { font-size:clamp(1.8rem,4vw,3rem); line-height:1.05; } .orientation { max-width:72ch; } .featured-grid,.skill-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap:1rem; } .featured-grid { margin-top:1.25rem; } .skill-list { padding:0; list-style:none; }
+    .featured-card,.skill-card { max-width:none; padding:1.25rem; border:1px solid var(--line); border-radius:.8rem; background:var(--card); } .featured-card { border-top:.42rem solid #2458d6; } .featured-card h3,.skill-card h3 { margin:0; font-size:1.08rem; } .card-label { margin:0 0 .45rem; color:var(--muted); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; } .skill-links { color:var(--muted); }
+    .practice-example { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:1.25rem; align-items:start; } .practice-copy { padding:1.25rem; border-left:.4rem solid var(--accent); background:var(--card); } .practice-frame { min-width:0; margin:0; } .practice-frame iframe { display:block; width:100%; min-height:30rem; border:1px solid var(--line); background:var(--card); } .practice-frame figcaption { margin-top:.55rem; color:var(--muted); font-size:.92rem; }
     .site-footer { border-top:1px solid var(--line); background:#eef0f3; } .site-footer__inner { padding:2.5rem 0 1.5rem; } .footer-links { display:flex; flex-wrap:wrap; gap:.5rem 1.1rem; padding:0; list-style:none; } .canary-stack { margin-top:2.5rem; padding-top:1.25rem; border-top:1px solid var(--line); } .visitor-boundary__context { max-width:70ch; font-size:.84rem; } .canary { max-width:none; font-family:ui-monospace,monospace; font-size:.72rem; overflow-wrap:anywhere; } .artifact-attribution { max-width:none; margin-top:1.5rem; font-size:.8rem; color:var(--muted); }
-    @media (max-width:48rem) { .hero__inner, main, .site-footer__inner { width:min(100% - 1.25rem,76rem); } } @media (forced-colors:active) { .skill-card { border:1px solid CanvasText; } }
+    @media (max-width:48rem) { .site-nav__inner,.hero__inner,main,.site-footer__inner { width:min(100% - 1.25rem,76rem); } .practice-example { grid-template-columns:1fr; } .practice-frame iframe { min-height:34rem; } } @media (forced-colors:active) { .featured-card,.skill-card,.practice-copy,.practice-frame iframe { border-color:CanvasText; } }
+    @media print { .skip-link,.site-nav,.practice-frame { display:none; } }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to skill catalog</a>
+  ${renderPrimaryNavigation("../", "skills")}
   <header class="hero"><div class="hero__inner"><p class="eyebrow">Repository-local public skills</p><h1>Working methods with their sources intact.</h1><p class="lede">Each entry pairs a portable collaboration contract with an exact source package and a machine-readable projection. The collection stays specific to Human–AI Systems Exemplars.</p></div></header>
-  <main>
+  <main id="main-content" tabindex="-1">
     <section class="orientation" aria-labelledby="orientation-title"><h2 id="orientation-title">Use the source when judgment matters</h2><p>The JSON projection makes the contract easy to exchange. The linked <code>SKILL.md</code> defines its meaning, boundaries, and completion. Current intent, repository evidence, and granted authority continue to govern each use.</p><p><a href="catalog.json">Download the complete public catalog</a> · <a href="../collaboration-skills/0.1.0/collaboration-skill.schema.json">Read the projection schema</a> · <a href="../">Return to the schema registry</a></p></section>
+    <section aria-labelledby="featured-title"><h2 id="featured-title">New methods for tables and embedded prototypes</h2><p>These two contracts join meaning, comparison, and the actual parent-and-child layout boundary while keeping their responsibilities distinct.</p><div class="featured-grid">${featuredCards}</div></section>
+    <section id="methods-in-practice" aria-labelledby="practice-title"><h2 id="practice-title">Methods in practice</h2><div class="practice-example"><div class="practice-copy"><p class="card-label">Worked reference · Native table + embedded preview</p><h3>Keep comparison meaning intact inside its real frame</h3><p>This source-owned example gives the child document native table relationships and gives the parent page the preview size, contextual title, sandbox, and onward route.</p><p>Source inspection establishes the ownership pattern. Browser observation of this reviewed artifact establishes its tested layout; accessibility conformance and behavior on another host each require their own observation.</p><p><a href="../examples/readable-table-embedded-layout/">Open the example in a full view</a></p></div><figure class="practice-frame"><iframe src="../examples/readable-table-embedded-layout/" title="Worked example of a semantic comparison table inside an embedded preview" sandbox loading="lazy"></iframe><figcaption>The same source-owned child opens independently through the full-view route.</figcaption></figure></div></section>
     <section aria-labelledby="skills-title"><h2 id="skills-title">${catalog.skills.length} public-ready contracts</h2><ul class="skill-list">${cards}
       </ul></section>
   </main>
-  <footer class="site-footer"><div class="site-footer__inner">
-    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
-    <ul class="footer-links"><li><a href="../AUTHORS" rel="author">Authors and provenance</a></li><li><a href="../CITATION.cff">Citation metadata</a></li><li><a href="../attribution.yml">Machine-readable attribution</a></li><li><a href="../LICENSE" rel="license">Apache 2.0 license</a></li><li><a href="../AI-DATA-USE.md">Data-use posture</a></li></ul>
-    <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers"><p class="visitor-boundary__context" data-visitor-boundary-context>${htmlEscape(visitorBoundary.contextText)}</p>
-${markerHtml}
-    </div>
-    <p class="artifact-attribution">${htmlEscape(artifactAttribution)}</p>
-  </div></footer>
+  ${renderSkillFooter("../")}
 </body>
 </html>
 `;
@@ -637,6 +728,14 @@ async function buildSkillsProjection() {
   const { selection, entries, possibleTerms, publicSourcePaths } =
     await loadSkillPublicationSelection();
   const sourceRevision = await readSourceRevision(publicSourcePaths);
+  await assertPublicationRevision(repositoryRoot, sourceRevision, [
+    "schemas", ".agents/skills/publication-selection.json", ...publicSourcePaths,
+    "tools/build-schema-pages.mjs", "tools/schema-publication.mjs", "tools/schema-publication-lock.json",
+    "tools/schema-receiver-routes.mjs", "tools/schema-site-release.mjs", "tools/publication-boundary.mjs",
+    "tools/attribution-contract.mjs", "package.json", "package-lock.json", ...publicCarrierPaths,
+    "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
+    ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+  ]);
   const publicEntries = entries.filter((entry) => entry.publicationStanding === "public_ready");
   const possibleNames = entries
     .filter((entry) => entry.publicationStanding === "public_possible")
@@ -702,15 +801,22 @@ async function buildSkillsProjection() {
     repository: selection.repository,
     sourceRevision,
     schemaRef: schema.$id,
+    schemaRefRole: "canonical_schema_identity",
+    schemaRetrievalUrl: baseUrl
+      ? retrievalUrl("collaboration-skills/0.1.0/collaboration-skill.schema.json", baseUrl)
+      : "../collaboration-skills/0.1.0/collaboration-skill.schema.json",
     publicationStanding: "public_ready",
     selectionRule: selection.publicationPolicy.sourceRule,
     skills: projections.map(({ entry, projectionPath }) => ({
       name: entry.name,
       title: entry.parsed.title,
       description: entry.parsed.description,
+      useWhen: entry.parsed.contract.when[0],
+      produces: entry.parsed.contract.result,
       publicationStanding: "public_ready",
       pagePath: `${entry.name}/`,
       projectionPath,
+      projectionRetrievalUrl: baseUrl ? retrievalUrl(`skills/${projectionPath}`, baseUrl) : projectionPath,
       sourcePath: entry.sourcePath,
       sourceRoute: sourceRecordByPath.get(entry.sourcePath).publicRoute,
       sourceSha256: sourceRecordByPath.get(entry.sourcePath).sha256,
@@ -782,7 +888,7 @@ async function projectRegistryReadmeLinks() {
   const readmePath = resolve(outputRoot, "README.md");
   let source = await readFile(readmePath, "utf8");
 
-  for (const route of schemaReceiverRoutes) {
+  for (const route of [...schemaReceiverRoutes, ...schemaCompanionRoutes]) {
     const authoredHref = browserPath(
       relative(sourceRoot, resolve(repositoryRoot, route.source)),
     );
@@ -821,6 +927,8 @@ async function projectRegistryIndexLinks() {
     );
   }
 
+  source = projectPrimaryNavigation(source, "", "registry");
+
   await writeFile(indexPath, source);
 }
 
@@ -841,6 +949,8 @@ async function projectCollaborationGuideLinks(catalog) {
     );
   }
 
+  source = projectPrimaryNavigation(source, "../", "collaboration");
+
   await writeFile(collaborationGuidePath, source);
 }
 
@@ -860,6 +970,7 @@ async function validateCustomDomain() {
 }
 
 function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = null) {
+  validatePrimaryNavigation(source, "../", "skills", "the skills page");
   requirement(
     occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
     "the skills page must carry one resolved author metadata value",
@@ -896,7 +1007,27 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
     requirement(source.includes(`href="${skill.pagePath}"`), `${skill.name} reading page must be linked`);
     requirement(source.includes(`href="${skill.projectionPath}"`), `${skill.name} projection must be linked`);
     requirement(source.includes(`href="${skill.sourceRoute}"`), `${skill.name} source must be linked`);
+    requirement(
+      source.includes(`<p data-use-when><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p>`),
+      `${skill.name} must expose its source-derived trigger`,
+    );
+    requirement(
+      source.includes(`<p data-produces><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p>`),
+      `${skill.name} must expose its source-derived result`,
+    );
   }
+  for (const featuredName of ["embedded-prototype-layout", "semantic-table-design"]) {
+    requirement(
+      occurrenceCount(source, `data-featured-skill="${featuredName}"`) === 1,
+      `${featuredName} must appear once in first-contact discovery`,
+    );
+  }
+  requirement(
+    source.includes('id="methods-in-practice"') &&
+      source.includes('href="../examples/readable-table-embedded-layout/"') &&
+      source.includes('src="../examples/readable-table-embedded-layout/"'),
+    "the skills page must carry the source-owned methods-in-practice route",
+  );
   for (const possibleName of possibleNames) {
     requirement(!source.includes(possibleName), `${possibleName} must remain outside the skills page`);
   }
@@ -910,6 +1041,7 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
 }
 
 function validateCollaborationGuide(source, catalog, possibleNames, deploymentBase = null) {
+  validatePrimaryNavigation(source, "../", "collaboration", "the collaboration guide");
   requirement(
     occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
     "the collaboration guide must carry one resolved author metadata value",
@@ -1025,6 +1157,7 @@ function validateCollaborationGuide(source, catalog, possibleNames, deploymentBa
 }
 
 function validateSkillPage(source, skill, sourceRevision, possibleNames, deploymentBase = null) {
+  validatePrimaryNavigation(source, "../../", "skills", `${skill.name} page`);
   requirement(
     occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
     `${skill.name} page must carry one resolved author metadata value`,
@@ -1046,6 +1179,10 @@ function validateSkillPage(source, skill, sourceRevision, possibleNames, deploym
   requirement(source.includes(`href="../${skill.sourceRoute}"`), `${skill.name} page must link exact Markdown`);
   requirement(source.includes('href="projection.json"'), `${skill.name} page must link its JSON projection`);
   requirement(source.includes('href="../"'), `${skill.name} page must return to the catalog`);
+  requirement(
+    source.includes(`<p data-contract-result>${htmlEscape(skill.produces)}</p>`),
+    `${skill.name} page must expose its exact Contract Result`,
+  );
   requirement(
     occurrenceCount(source, visitorBoundary.contextText) === 1,
     `${skill.name} page must carry the exact canary context once`,
@@ -1127,6 +1264,24 @@ for (const route of schemaReceiverRoutes) {
 
 const { catalog: publicSkillCatalog, possibleNames: publicPossibleSkillNames } =
   await buildSkillsProjection();
+await copySchemaPayload(repositoryRoot, outputRoot);
+const schemaCatalog = await schemaPublication(repositoryRoot, baseUrl, publicSkillCatalog.sourceRevision);
+await writeFile(resolve(outputRoot, "schema-catalog.json"), `${JSON.stringify(schemaCatalog, null, 2)}\n`);
+await writeFile(resolve(outputRoot, "release.json"), `${JSON.stringify({
+  schemaVersion: "1", releaseTag, sourceRevision: publicSkillCatalog.sourceRevision,
+  deliveryBase: baseUrl, schemaCatalog: "schema-catalog.json", skillCatalog: "skills/catalog.json",
+}, null, 2)}\n`);
+const registryPath = resolve(outputRoot, "index.html");
+let registry = await readFile(registryPath, "utf8");
+for (const contract of schemaCatalog.contracts) {
+  const anchor = registry.indexOf(`href="${contract.path}"`);
+  requirement(anchor >= 0, `the registry must link ${contract.path}`);
+  const end = registry.indexOf("</li>", anchor);
+  const details = `<details data-schema-path="${htmlEscape(contract.path)}"><summary>Identity and source: ${htmlEscape(contract.path.split("/").at(-1))}</summary><p>Download from this site: <a href="${htmlEscape(contract.path)}">${htmlEscape(contract.retrievalUrl)}</a></p><p>Stable schema identity: <code>${htmlEscape(contract.canonicalId)}</code></p><p>Repository source: <code>${htmlEscape(contract.sourcePath)}</code></p><p>SHA-256: <code>${contract.sha256}</code></p></details>\n`;
+  registry = registry.slice(0, end) + details + registry.slice(end);
+}
+registry = registry.replace("<!-- schema-pages:release -->", `<p>Site release: <code>${releaseTag ?? "local build"}</code>. Source revision: <code>${publicSkillCatalog.sourceRevision}</code>.</p><p><a href="release.json">Release coordinates</a> · <a href="schema-catalog.json">Schema identities, downloads, and digests</a></p>`);
+await writeFile(registryPath, registry);
 await projectRegistryReadmeLinks();
 await projectCollaborationSkillsReadmeLinks();
 await projectRegistryIndexLinks();

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { runInNewContext } from 'node:vm';
 
 const sourceDirectory = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.4.html');
+const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.5.html');
 const compatibilityPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.1.1.html');
 const validatorPath = resolve(sourceDirectory, 'strategy-canvas-validator.js');
 const defaultExamplePath = resolve(sourceDirectory, '..', '..', 'prompt-capsules', '0.1.0', 'examples', 'strategy-canvas.md');
@@ -25,8 +25,8 @@ const schema = JSON.parse(schemaText);
 const evidence = JSON.parse(evidenceText);
 const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
 const compatibilityOutput = compatibility.replaceAll(
-  '../strategy-canvas-chimeric-prototype-v0.2.4.html',
-  'strategy-canvas-chimeric-prototype-v0.2.4.html'
+  '../strategy-canvas-chimeric-prototype-v0.2.5.html',
+  'strategy-canvas-chimeric-prototype-v0.2.5.html'
 );
 if (validator.includes('/*__STRATEGY_CANVAS_SCHEMA__*/')) {
   throw new Error('The Strategy Canvas validator contains an unresolved schema marker.');

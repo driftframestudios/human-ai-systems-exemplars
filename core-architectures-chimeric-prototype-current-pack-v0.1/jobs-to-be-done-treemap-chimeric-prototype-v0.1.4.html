@@ -102,6 +102,7 @@
       white-space: nowrap;
     }
     .route-pill { border-radius: 5px; padding: 8px; white-space: normal; align-items: flex-start; }
+    .meta-row > .pill { max-inline-size: 100%; white-space: normal; }
     .weight-pill { font-weight: 700; background: #efe7d6; }
     .driver-pill { background: #edf1ec; }
     .status-known { background: #e4efe5; border-color: #b8d2bd; }
@@ -223,6 +224,16 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    @media screen {
+      #identity-registry th, #identity-registry td { min-width: 12ch; }
+      #identity-registry :is(th, td):first-child { min-width: 28ch; }
+      #identity-registry :is(th, td):nth-child(2) { min-width: 26ch; }
+    }
+    #identity-registry :is(th, td):first-child { overflow-wrap: normal; word-break: normal; }
 </style>
   <script type="application/ld+json" id="jsonld-data">{}</script>
 <style data-canary-stack-css>
@@ -311,7 +322,7 @@
     <section class="panel">
       <h2>Text / Table Equivalent</h2>
       <p class="tiny">The table preserves full text and route information. It reflects the active focus view but hidden jobs remain in the source artifact and exports.</p>
-      <div class="table-wrap" id="table-equivalent"></div>
+      <div class="table-wrap" id="table-equivalent" role="region" tabindex="0" aria-label="Jobs-to-be-Done Treemap: jobs in the active view; scroll horizontally"></div>
     </section>
 
     <section class="grid two">
@@ -588,7 +599,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     <section class="panel">
       <h2>Advanced Identity Registry</h2>
       <p class="tiny">Stable IDs describe semantic identity. Display order and visibility belong to active view state.</p>
-      <div class="table-wrap" id="identity-registry"></div>
+      <div class="table-wrap" id="identity-registry" role="region" tabindex="0" aria-label="Jobs-to-be-Done Treemap: identity registry; scroll horizontally"></div>
     </section>
 
     <section class="panel soft">
@@ -1321,9 +1332,9 @@ function renderSelectedPanel() {
 function renderTableEquivalent() {
   const rows = visibleJobs().map(job => {
     const route = routeInfo(job.route);
-    return `<tr data-row-job="${escapeHtml(job.id)}">
+    return `<tr data-row-job="${escapeHtml(job.id)}" data-record-id="${escapeHtml(job.id)}" data-label="Jobs-to-be-Done Treemap job: ${escapeHtml(job.label)}">
       <td><button class="small" type="button" data-select-job="${escapeHtml(job.id)}">Inspect</button></td>
-      <td><strong>${escapeHtml(job.label)}</strong><br><span class="tiny mono">${escapeHtml(job.id)}</span></td>
+      <th scope="row" data-label="Job"><strong>${escapeHtml(job.label)}</strong><br><code class="tiny mono">${escapeHtml(job.id)}</code></th>
       <td>${escapeHtml(job.actor)}</td>
       <td><span class="weight-pill">${escapeHtml(job.relative_weight)} / 10</span></td>
       <td><div class="cell-preview">${escapeHtml(job.weight_driver)}</div></td>
@@ -1331,7 +1342,7 @@ function renderTableEquivalent() {
       <td><span class="route-pill">${escapeHtml(job.route || 'No route selected')}<br><span class="tiny">${escapeHtml(route.family)}</span></span></td>
     </tr>`;
   }).join('');
-  document.getElementById('table-equivalent').innerHTML = `<table><thead><tr><th>Action</th><th>Job</th><th>Actor / role</th><th>Weight</th><th>Weight driver</th><th>Status</th><th>Route</th></tr></thead><tbody>${rows || '<tr><td colspan="7">No visible jobs.</td></tr>'}</tbody></table>`;
+  document.getElementById('table-equivalent').innerHTML = `<table><caption>Jobs-to-be-Done Treemap: jobs in the active view</caption><thead><tr><th scope="col" data-label="Action">Action</th><th scope="col" data-label="Job">Job</th><th scope="col" data-label="Actor / role">Actor / role</th><th scope="col" data-label="Weight (out of 10)">Weight (out of 10)</th><th scope="col" data-label="Weight driver">Weight driver</th><th scope="col" data-label="Status">Status</th><th scope="col" data-label="Route">Route</th></tr></thead><tbody>${rows || '<tr><td colspan="7">No visible jobs.</td></tr>'}</tbody></table>`;
   document.querySelectorAll('#table-equivalent [data-select-job]').forEach(btn => btn.addEventListener('click', () => setSelectedJob(btn.dataset.selectJob)));
 }
 
@@ -1718,7 +1729,7 @@ function renderIdentityRegistry() {
   const view = normalizeView();
   const ordered = orderedJobs();
   const visible = visibleJobs();
-  document.getElementById('identity-registry').innerHTML = `<table><thead><tr><th>Job ID</th><th>Label</th><th>Canonical order</th><th>Display order</th><th>Visible order</th><th>Visible?</th></tr></thead><tbody>${state.jobs.map(job => `<tr><td class="mono">${escapeHtml(job.id)}</td><td>${escapeHtml(job.label)}</td><td>${escapeHtml(job.canonical_order)}</td><td>${ordered.findIndex(j => j.id === job.id) + 1}</td><td>${visible.findIndex(j => j.id === job.id) + 1 || '—'}</td><td>${view.hidden_job_ids.includes(job.id) ? 'No' : 'Yes'}</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('identity-registry').innerHTML = `<table><caption>Jobs-to-be-Done Treemap: identity registry</caption><thead><tr><th scope="col" data-label="Job ID">Job ID</th><th scope="col" data-label="Label">Label</th><th scope="col" data-label="Canonical order">Canonical order</th><th scope="col" data-label="Display order">Display order</th><th scope="col" data-label="Visible order">Visible order</th><th scope="col" data-label="Visible?">Visible?</th></tr></thead><tbody>${state.jobs.map(job => `<tr data-record-id="${escapeHtml(job.id)}" data-label="Jobs-to-be-Done Treemap identity: ${escapeHtml(job.id)}"><th scope="row" data-label="Job ID" class="mono"><code>${escapeHtml(job.id)}</code></th><td>${escapeHtml(job.label)}</td><td>${escapeHtml(job.canonical_order)}</td><td>${ordered.findIndex(j => j.id === job.id) + 1}</td><td>${visible.findIndex(j => j.id === job.id) + 1 || '—'}</td><td>${view.hidden_job_ids.includes(job.id) ? 'No' : 'Yes'}</td></tr>`).join('')}</tbody></table>`;
 }
 function renderAll() {
   normalizeView();
