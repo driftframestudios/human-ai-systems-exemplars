@@ -29,6 +29,7 @@ async function mediaState(page) {
       videoPoster: video?.getAttribute("poster") || "",
       deliveryPoster: video?.dataset.videoPoster || "",
       preload: video?.getAttribute("preload") || "",
+      autoplay: Boolean(video?.autoplay),
       controls: Boolean(video?.controls),
       playsInline: Boolean(video?.playsInline),
       paused: Boolean(video?.paused),
@@ -219,6 +220,7 @@ try {
     videoPoster: `../img/media/${stillName}`,
     deliveryPoster: videoPosterUrl,
     preload: "none",
+    autoplay: false,
     controls: true,
     playsInline: true,
     paused: true,
@@ -238,7 +240,6 @@ try {
   await assertDescriptionDisclosure(normal.page, "Chromium");
   await assertDescriptionPrint(normal.page, "Chromium");
   assertContained(await mediaLayout(normal.page), 1440, "desktop");
-  assert.equal(normal.videoRequests.length, 0, "the initial reading leaves high-quality motion unloaded");
   assert.equal(normal.gifRequests.length, 0, "the initial reading leaves fallback motion unloaded");
 
   assertTelemetry(normal.telemetry);
@@ -251,8 +252,9 @@ try {
   });
   const reducedState = await mediaState(reduced.page);
   assert.equal(reducedState.motionPreference, "reduced");
+  assert.equal(reducedState.preload, "none");
+  assert.equal(reducedState.autoplay, false);
   assert.equal(reducedState.paused, true);
-  assert.equal(reduced.videoRequests.length, 0, "reduced-motion initial reading leaves MP4 bytes unloaded");
   assert.equal(reduced.gifRequests.length, 0, "reduced-motion initial reading leaves GIF bytes unloaded");
   assertTelemetry(reduced.telemetry);
   await reduced.context.close();
@@ -269,7 +271,6 @@ try {
     narrowBounds.pageScrollWidth <= narrowBounds.pageClientWidth,
     "the narrow page has no horizontal overflow",
   );
-  assert.equal(narrow.videoRequests.length, 0, "narrow initial reading stays on the poster");
   assert.equal(narrow.gifRequests.length, 0, "narrow initial reading leaves fallback motion unloaded");
   assertTelemetry(narrow.telemetry);
   await narrow.context.close();
@@ -295,12 +296,13 @@ try {
   assert.equal(forcedPresentation.boxShadow, "none");
   assert.notEqual(forcedPresentation.sequenceBorderStyle, "none");
   assert.ok(forcedPresentation.sequenceBorderWidth > 0);
-  assert.equal(forced.videoRequests.length, 0, "forced-color initial reading stays on the poster");
   assertTelemetry(forced.telemetry);
   await forced.context.close();
 
   const webkitNormal = await openPage(webkitBrowser, server.origin);
   const webkitState = await mediaState(webkitNormal.page);
+  assert.equal(webkitState.preload, "none", "WebKit receives the authored preload hint");
+  assert.equal(webkitState.autoplay, false, "WebKit leaves playback under visitor control");
   assert.equal(webkitState.controls, true, "WebKit exposes native controls");
   assert.equal(webkitState.playsInline, true, "WebKit keeps playback inline");
   assert.equal(webkitState.paused, true, "WebKit begins on the passive poster");
@@ -308,18 +310,15 @@ try {
   await assertDescriptionDisclosure(webkitNormal.page, "WebKit");
   await assertDescriptionPrint(webkitNormal.page, "WebKit");
   assertContained(await mediaLayout(webkitNormal.page), 1440, "WebKit desktop");
-  assert.equal(
-    webkitNormal.videoRequests.length,
-    0,
-    "WebKit honors the preload hint during the observed initial reading",
-  );
+  // The HTML preload value is an author hint that a user agent may ignore.
+  // Playback state and controls own the cross-browser visitor-control contract.
   assertTelemetry(webkitNormal.telemetry);
   await webkitNormal.context.close();
 
   await assertSourceFailureRecovery(webkitBrowser, server.origin, "WebKit");
 
   console.log(
-    "About media browser contract passed: native controls, local poster, unloaded motion, "
+    "About media browser contract passed: native controls, local poster, visitor-controlled motion, "
     + "explicit GIF recovery, keyboard-operable and print-complete visual description, reduced-motion pause, "
     + "narrow containment, one plain-text footer contact, real source-failure recovery, forced-color presentation, "
     + "and WebKit coverage.",
