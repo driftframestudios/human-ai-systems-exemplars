@@ -18,12 +18,14 @@ The selected publication is bound to the reviewed Pages release:
 
 | Role | Coordinate |
 | --- | --- |
+| Exact Worker publication | `382620d8626a87b6d96f4039ebc87f01ad94687e` |
 | Semantic and schema source | `dc6b62c6e3f1e8748237fc767def75b32527140a` |
 | Pages release | `pages-v0.2.0` |
 | Annotated tag object | `9165a4af5c0de7d5e81eb2c86ec7cc83d2af5b76` |
 | Reviewed Pages projection | `bf257f6674e88945ed143c95f010b8e827066ade` |
 | Complete Pages closure | `f25cf5b3b6681c67fddc81a82f5c0ba3bb49c3766d0a79df92fa3b1bbe26cf61` |
 
+`accepted-publication-lock.json` records the exact Worker-tree coordinate.
 `publication-manifest.json` records the selected source and annotated Pages
 coordinate. Preparation verifies the tag binding before it receives shared
 files. The source revision remains the meaning and schema coordinate; the Pages
@@ -120,17 +122,34 @@ npm run prepare:publication -- \
   --pages-release-tag pages-v0.2.0
 ```
 
-Later checks retain the coordinates recorded in the manifest:
+Validate the checked-in accepted release without consulting current source
+selection or current source bytes:
 
 ```sh
-npm run check:publication
+npm run check:accepted-publication
 npm test
 ```
 
-The publication check compares exact inventory and bytes, validates the Pages
-tag and source relation, preserves all prior frozen paths, and confirms the
+The accepted-release check uses `accepted-publication-lock.json` to compare the
+entire checked-in Worker tree with the exact commit that formed the publication.
+It also validates the annotated Pages tag and complete closure digest, reads
+skill selection from the manifest's accepted source revision, and confirms the
 17-schema, 16-companion, and 70-file skill closure. The unit suite exercises the
 same manifest through the production handler.
+
+`npm run check:publication` retains a distinct job: it compares the prepared
+artifact with current source and reports when a new publication release needs
+to be formed. That check can report expected source drift while the pinned
+accepted release remains internally complete and deployable. Use
+`prepare:publication` with newly human-accepted source and Pages coordinates to
+form a later release; preserve the accepted artifact until that decision.
+
+A later accepted release uses two reviewed commits. First, merge the newly
+prepared `public/` tree to `main`. Then update `accepted-publication-lock.json`
+in a follow-up review to name that already formed publication commit. The
+verifier requires the locked commit to precede `origin/main` and the receiving
+candidate. Acceptance therefore begins on reviewed `main`; release and
+production branches receive that coordinate.
 
 Run the repository-owned boundary checks from the repository root:
 
@@ -215,11 +234,12 @@ for `schemas.vik.guru`, and it builds, checks, dry-runs, and deploys
 and portability role under `cloudflare/schema-delivery/`; it has no production
 Custom Domain authority in this route.
 
-Issue #402 owns the Wrangler dependency gate. The current accepted lock resolves
-Wrangler through Miniflare to Sharp `0.35.4`; production activation waits for an
-accepted published closure with Sharp `0.35.5` or newer, or for a separately
-reviewed fallback. Artifact preparation, unit review, and dry-run evidence can
-continue while that dependency owner holds the activation boundary.
+Issue #402 owns the Wrangler dependency gate. Both reviewed locks now resolve
+Wrangler `4.149.0` through Miniflare `5.20261006.1-alpha` to stable Sharp
+`0.35.5`. The repository dependency test proves that exact lock topology and
+floor; schema-delivery CI also observes both installed trees. Human-controlled
+receiver and environment gates continue to hold production activation until
+the selected release reaches its production boundary.
 
 After the dependency gate is satisfied, an explicit human production selection
 authorizes deployment of the reviewed bundle:
@@ -228,7 +248,7 @@ authorizes deployment of the reviewed bundle:
 npm run deploy
 ```
 
-The deployment command checks the publication first. Credentials remain in
+The deployment command checks the pinned accepted publication first. Credentials remain in
 Cloudflare's secret store through `wrangler secret put`; local `.dev.vars`,
 `.env.*`, and Wrangler runtime state remain ignored.
 

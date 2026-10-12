@@ -7,7 +7,6 @@ import worker from "../src/index.js";
 import manifest from "../public/publication-manifest.json" with { type: "json" };
 import schemaCatalog from "../public/schema-catalog.json" with { type: "json" };
 import skillCatalog from "../public/skills/catalog.json" with { type: "json" };
-import publicationSelection from "../../../.agents/skills/publication-selection.json" with { type: "json" };
 import {
   cacheHeader,
   expectedContentType,
@@ -212,24 +211,10 @@ test("all 17 schema contracts retain canonical and direct-asset identities", asy
 
 test("the 23-skill machine/source closure is complete, linked, and revalidating", async () => {
   const paths = skillArtifactPaths(skillCatalog);
-  const selectedReady = publicationSelection.skills
-    .filter(({ publicationStanding }) => publicationStanding === "public_ready")
-    .map(({ name }) => name)
-    .sort();
-  const selectedPossible = publicationSelection.skills
-    .filter(({ publicationStanding }) => publicationStanding === "public_possible")
-    .map(({ name }) => name)
-    .sort();
   assert.equal(paths.length, 70);
   assert(paths.every((path) => !path.endsWith("/index.html")));
   assert(skillCatalog.skills.every(({ publicationStanding }) => publicationStanding === "public_ready"));
-  assert.deepEqual(skillCatalog.skills.map(({ name }) => name).sort(), selectedReady);
-  assert.equal(selectedReady.length, 23);
-  assert.equal(selectedPossible.length, 8);
-  for (const name of selectedPossible) {
-    assert(!paths.some((path) => path.startsWith(`skills/${name}/`) || path.includes(`/.agents/skills/${name}/`)), name);
-    assert.equal(manifest.resources[`/skills/${name}/projection.json`], undefined, name);
-  }
+  assert.equal(skillCatalog.skills.length, 23);
 
   const sourceRecords = new Map();
   const addSource = (path, digest) => {

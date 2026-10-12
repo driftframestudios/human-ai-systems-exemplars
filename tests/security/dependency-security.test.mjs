@@ -11,6 +11,16 @@ const uri = ajvRequire("fast-uri");
 const root = new URL("../../", import.meta.url);
 const readJson = async relative => JSON.parse(await readFile(new URL(relative, root), "utf8"));
 
+function meetsStableFloor(version, floor) {
+  const match = /^(\d+)\.(\d+)\.(\d+)$/u.exec(version);
+  if (!match) return false;
+  const value = match.slice(1).map(Number);
+  for (let index = 0; index < floor.length; index += 1) {
+    if (value[index] !== floor[index]) return value[index] > floor[index];
+  }
+  return true;
+}
+
 function meetsFloor(version) {
   const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(version);
   if (!match) return false;
@@ -35,6 +45,32 @@ test("the root policy, complete lock resolution and installed Ajv dependency mee
     assert.equal(installed.version, locked.version, name + " matches the lock");
   }
   assert.equal(ajvRequire.resolve("fast-uri"), require.resolve("fast-uri"), "Ajv uses the inspected root resolution");
+});
+
+test("both Wrangler locks resolve the same reviewed Sharp path", async () => {
+  for (const version of ["0.35.4", "0.35.5-rc.1"]) assert.equal(meetsStableFloor(version, [0, 35, 5]), false);
+  for (const version of ["0.35.5", "0.36.0", "1.0.0"]) assert.equal(meetsStableFloor(version, [0, 35, 5]), true);
+  const observedChains = [];
+  for (const [label, prefix] of [
+    ["root", ""],
+    ["schema Worker", "cloudflare/schemas-worker/"],
+  ]) {
+    const manifest = await readJson(`${prefix}package.json`);
+    const lock = await readJson(`${prefix}package-lock.json`);
+    const wrangler = lock.packages["node_modules/wrangler"];
+    const miniflare = lock.packages["node_modules/miniflare"];
+    const sharp = lock.packages["node_modules/sharp"];
+
+    assert.equal(manifest.devDependencies?.wrangler, "4.149.0", `${label} pins the reviewed Wrangler release`);
+    assert.equal(lock.packages[""]?.devDependencies?.wrangler, manifest.devDependencies.wrangler, `${label} manifest and lock agree`);
+    assert.equal(wrangler?.version, manifest.devDependencies.wrangler, `${label} lock resolves the pinned Wrangler release`);
+    assert.equal(wrangler?.dependencies?.miniflare, miniflare?.version, `${label} Wrangler resolves the inspected Miniflare package`);
+    assert.equal(miniflare?.dependencies?.sharp, sharp?.version, `${label} Miniflare resolves the inspected Sharp package`);
+    assert(meetsStableFloor(sharp?.version ?? "", [0, 35, 5]), `${label} Sharp is a stable release at or above the 0.35.5 reviewed floor`);
+
+    observedChains.push([wrangler.version, miniflare.version, sharp.version]);
+  }
+  assert.deepEqual(observedChains[1], observedChains[0], "root and schema Worker retain one reviewed dependency chain");
 });
 
 test("CVE-2026-86472: encoded and literal host case retain one identity", () => {

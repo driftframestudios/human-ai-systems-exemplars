@@ -115,7 +115,15 @@ const sourceInputs = [
 // The schema-source pin stays stable across commits to the receiving Worker.
 // Preparation is O(selected bytes + route count), with sorted inventory checks.
 execFileSync("git", ["merge-base", "--is-ancestor", revision, "origin/main"], { cwd: root });
-execFileSync("git", ["diff", "--quiet", revision, "--", ...sourceInputs], { cwd: root });
+try {
+  execFileSync("git", ["diff", "--quiet", revision, "--", ...sourceInputs], { cwd: root, stdio: "ignore" });
+} catch (error) {
+  if (error.status !== 1) throw error;
+  assert.fail(
+    `Current publication inputs differ from accepted source ${revision}. ` +
+    "The accepted release remains available; form a later release from newly reviewed source and Pages coordinates.",
+  );
+}
 const untracked = execFileSync("git", ["ls-files", "--others", "--exclude-standard", "--", ...sourceInputs], { cwd: root, encoding: "utf8" });
 assert.equal(untracked, "", "Publication inputs belong to the selected source revision");
 

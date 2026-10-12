@@ -1,6 +1,6 @@
 ---
 title: Iframe and production publication stabilization
-version: 0.1.4
+version: 0.1.5
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -106,7 +106,8 @@ remains private and the deployment phase remains at rest.
 | Hosted carrier hardening | [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) | Route-scoped response, cache, header, and parent-carrier posture |
 | Hosted route activation | [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) | Accepted package activation, signed-out direct and parent observation, and accepted live return |
 | Parallel production-source treatment | [#117](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/117) | Accepted inline-code and About presentation that travels with the selected visitor source |
-| Production-selected asset inventory | [#88](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/88) | Stable authored asset paths and the declared dependency facts consumed by production assembly |
+| Production-selected asset inventory | [#88](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/88) | Accepted retirement and inventory record for authored assets consumed by production assembly. New ambiguity routes to the current source owner and #464; reopen #88 only when the accepted disposition itself changes. |
+| Schema Worker dependency and accepted-release gates | [#402](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/402) and [#406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) | Reviewed delivery-tool dependency floor plus verification of the pinned accepted source, Pages tag, Worker bytes, and publication closure before protected promotion |
 | Primary and iframe projection precedent | [#118](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/118) | Historical v0.2 implementation of two deterministic, disjoint cPanel-ready closures from one accepted authored tree and one exact iframe package |
 | Current production release | [#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464) | Current source freeze, branch promotion, carrier formation, tags, shell-free activation, signed-out acceptance, and recovery |
 | Shell-free receiver precedent | [#253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253) and the [artifact-delivery guide](../../deployment/cpanel/SHELL-FREE-ARTIFACT-DELIVERY.md) | Historical implementation of the build-verified carrier archive, bounded File Manager staging, ordered cutover, and recovery contract |
@@ -204,6 +205,12 @@ policy, and accepted local hashes for that revision. The artifact secret scan
 establishes its named package scope. cPanel closure membership and live
 Cloudflare parity remain open until the later phases establish them.
 
+When a release-candidate-only change leaves the aggregate manifest digest and
+every generated file unchanged, record that exact parity and bind the existing
+hosted package to the new accepted source coordinate. Byte-identical output
+requires no repeat upload; a changed digest or file requires one atomic upload
+and fresh live verification.
+
 **Recovery and stop:** A changed route count, undeclared dependency, package
 escape, unused declaration, failed source parity, or unexpected capability
 returns to canonical source or the route manifest. Keep the prior accepted
@@ -232,8 +239,8 @@ source tree and the exact Phase 2 iframe package:
 The controlled iframe staging step consumes the accepted route manifest and
 declared package membership. It copies each selected regular file and verifies
 its digest; it does not recursively copy the ignored `.iframe-route-build/`
-tree or treat an unlisted file there as production input. #88 supplies the
-production-selected asset inventory and dependency facts while established
+tree or treat an unlisted file there as production input. #88 preserves the
+accepted asset-retirement and inventory decision while established
 `img/`, prototype-local, route-local, and generated roles retain their owners.
 
 Receive #117's accepted production-source treatment alongside the source set

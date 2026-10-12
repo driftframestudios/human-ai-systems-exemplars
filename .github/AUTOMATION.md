@@ -127,9 +127,10 @@ live settings and delivery are separate observations from this inventory.
 `schema-delivery.yml` receives every non-draft pull request into and every push
 to `release` or `prod` while that receiver's approved budget is active. One
 read-only contract job checks out complete history and tags, installs the root
-and schema Worker toolchains from their separate locks, checks the mapped schema
-surface, verifies the checked-in manifest-driven publication, runs the Worker
-unit tests, and dry-runs the Worker bundle through its nested Wrangler CLI. The
+and schema Worker toolchains from their separate locks, observes the installed
+Wrangler dependency path, checks the mapped schema surface, verifies the
+checked-in accepted publication independently from later source drift, runs the
+Worker unit tests, and dry-runs the Worker bundle through its nested Wrangler CLI. The
 pinned secret-material reader proves its fresh canary before inspecting the
 selected `cloudflare/schemas-worker/public` artifact.
 
@@ -141,9 +142,9 @@ an eight-minute ceiling, serializes in one production group, uses the
 branch-restricted `prod` GitHub environment, and also requires `prod` in
 `DEPLOYMENT_ACTIVE_RECEIVERS` plus the repository variable
 `SCHEMA_WORKER_DEPENDENCY_GATE=open`. The receiver's documented resting value is
-`[]`, and the dependency gate stays held until Issue #402 accepts an ordinary
-published Wrangler/Miniflare/Sharp closure or a separately reviewed fallback.
-Preserve that activation posture and the recorded 300-minute allocation for
+`[]`. The reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` locks satisfy
+the dependency floor owned by Issue #402; the dependency gate remains a separate
+human-held activation control. Preserve that activation posture and the recorded 300-minute allocation for
 each branch per collaboration cycle. Current live variable values and remaining
 allocation require their own account observation.
 
