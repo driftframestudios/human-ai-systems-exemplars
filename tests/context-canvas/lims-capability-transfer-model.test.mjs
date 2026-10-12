@@ -42,3 +42,36 @@ test("the stacked-cube model distinguishes correction, selection, and completed 
   assert.match(svg, /NEW LIMS \/ ELN · PRODUCTION/u);
   assert.doesNotMatch(svg, /TARGET CONDITION|HISTORICAL RESULT · PARTIAL/u);
 });
+
+test("the production closure carries the LIMS capability-transfer model and its semantic role", async () => {
+  const sourcePath = "context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg";
+  const manifest = JSON.parse(await readFile(
+    resolve(repositoryRoot, "deployment/cpanel/primary-route-manifest.json"),
+    "utf8",
+  ));
+  const inventory = JSON.parse(await readFile(
+    resolve(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"),
+    "utf8",
+  ));
+
+  assert.deepEqual(
+    manifest.files.filter((file) => file.source_path === sourcePath),
+    [{
+      source_path: sourcePath,
+      projected_path: "img/plot/lims_eln_capability_transfer_model.svg",
+      media_type: "image/svg+xml",
+    }],
+  );
+  assert.deepEqual(
+    inventory.overrides.filter((entry) => entry.source_path === sourcePath)
+      .map(({ semantic_key, roles }) => ({ semantic_key, roles })),
+    [{
+      semantic_key: "context-canvas.shared-plot.lims-eln-capability-transfer-model",
+      roles: [{
+        id: "capability_transfer_model",
+        visitor_job: "Show the laboratory capability transfer from observed work through participant correction and vendor selection to completed production authority.",
+        accessibility_text_owner: "The SVG title and description and the referring LIMS and ELN Debrief image alternative.",
+      }],
+    }],
+  );
+});

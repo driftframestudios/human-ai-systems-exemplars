@@ -1448,6 +1448,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg",
+      "projected_path": "img/plot/lims_eln_capability_transfer_model.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/inspection_platform_operating_map.svg",
       "projected_path": "img/plot/inspection_platform_operating_map.svg",
       "media_type": "image/svg+xml"
