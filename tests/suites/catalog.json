@@ -151,6 +151,7 @@
       "kind": "node-test",
       "members": [
         "tests/context-canvas/about-first-paint-css.test.mjs",
+        "tests/context-canvas/ai-systems-cross-references.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
         "tests/context-canvas/code-and-about-treatment.test.mjs",
