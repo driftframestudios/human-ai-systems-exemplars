@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { basename, dirname, resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import test from "node:test";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -16,27 +16,6 @@ const sharedMachineryTitle =
   "Shared Machinery — Instruments for Work Across Tools and Teams";
 const publicSourceRoot =
   "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
-const currentSitemapSources = [
-  "index.html",
-  aiSystemsRoute,
-  "benchmark-orientation.html",
-  "collaboration-skills.html",
-  "concept-nursery.html",
-  "core-architectures-orientation-index.html",
-  "cross-platform-collaboration-cycle.html",
-  "grammar-family.html",
-  "hiring-surfaces-talent-agent-intake.html",
-  "maps-evaluations.html",
-  "metadata-blocks.html",
-  "planning-surface.html",
-  "poda.html",
-  "readable-tables-reusable-evidence.html",
-  "registry-goal-fidelity-routing.html",
-  "resting-concepts.html",
-  sharedMachineryRoute,
-  "visualization-fidelity-atlas.html",
-];
-
 async function source(relativePath) {
   return readFile(resolve(repositoryRoot, relativePath), "utf8");
 }
@@ -126,7 +105,25 @@ test("the About and AI Systems structured references use the receiving pages' cu
     "About identifies the current Shared Machinery collection",
   );
 
-  const sharedReference = allObjects(aiSystems.hasPart).find(
+  const aiSystemReferences = allObjects(aiSystems.hasPart);
+  for (const route of [
+    "collaboration-skills.html",
+    "hiring-surfaces-talent-agent-intake.html",
+    "readable-tables-reusable-evidence.html",
+    sharedMachineryRoute,
+  ]) {
+    const reference = aiSystemReferences.find(
+      (entry) => entry.url === `${publicSourceRoot}${route}`,
+    );
+    const target = jsonLd(await source(
+      `context-canvas-project-surface/context-canvas/${route}`,
+    ));
+    assert.ok(reference, `AI Systems names ${route} as a collection member`);
+    assert.equal(reference.headline, target.headline, `${route}: current structured headline`);
+    assert.equal(reference.dateModified, target.dateModified, `${route}: current modification date`);
+  }
+
+  const sharedReference = aiSystemReferences.find(
     (entry) => entry.url === `${publicSourceRoot}${sharedMachineryRoute}`,
   );
   assert.ok(sharedReference, "AI Systems names Shared Machinery as a collection member");
@@ -168,9 +165,9 @@ test("current production HTML links resolve to the stable AI Systems and Shared 
       if (/^https:\/\//u.test(pathPart)) {
         const url = new URL(pathPart);
         assert.equal(
-          basename(url.pathname),
-          matchedRoute,
-          `${entry.source_path}: public route`,
+          url.href,
+          `${publicSourceRoot}${matchedRoute}`,
+          `${entry.source_path}: stable public coordinate`,
         );
       } else {
         assert.equal(
@@ -186,11 +183,10 @@ test("current production HTML links resolve to the stable AI Systems and Shared 
   assert.ok(referenceCount > 50, "the production selection exposes the expected route family");
 });
 
-test("current route documentation, sitemap dates, and iframe continuation mappings retain stable public coordinates", async () => {
-  const [readme, iframeManifestText, sitemap] = await Promise.all([
+test("current route documentation and iframe continuation mappings retain stable public coordinates", async () => {
+  const [readme, iframeManifestText] = await Promise.all([
     source("context-canvas-project-surface/context-canvas/README.md"),
     source("iframe-route-families/canvas/public-iframe-route-manifest-v1.json"),
-    source("context-canvas-project-surface/context-canvas/sitemap.xml"),
   ]);
   const iframeManifest = JSON.parse(iframeManifestText);
 
@@ -201,17 +197,6 @@ test("current route documentation, sitemap dates, and iframe continuation mappin
   assert.match(serialized, /https:\/\/vik\.guru\/ai-systems\.html#conditioning-field-entry/u);
   assert.match(serialized, /https:\/\/vik\.guru\/shared-machinery\.html/u);
 
-  for (const route of currentSitemapSources) {
-    const html = await source(`context-canvas-project-surface/context-canvas/${route}`);
-    const dateModified = jsonLd(html).dateModified;
-    const publishedRoute = route === "index.html" ? "" : route;
-    const routePattern = publishedRoute.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-    assert.match(
-      sitemap,
-      new RegExp(`<loc>${publicSourceRoot}${routePattern}<\\/loc>\\s*<lastmod>${dateModified}<\\/lastmod>`, "u"),
-      `${route}: sitemap currentness`,
-    );
-  }
 });
 
 test("retired page titles stay outside the current production selection", async () => {

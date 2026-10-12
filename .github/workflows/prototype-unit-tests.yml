@@ -216,9 +216,11 @@ jobs:
               npm run check:iframe-routes
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
+                npm run test:about-media-browser
                 npm run test:debrief-catalog-preview-browser
                 npm run test:context-canvas-image-delivery-browser
                 npm run test:who-to-believe-system-graph-browser
+                npm run test:prod-css-projection-browser
                 npm run test:prototype-control-labels
                 npm run test:core-browser
                 npm run test:canvas-iframe-routes
