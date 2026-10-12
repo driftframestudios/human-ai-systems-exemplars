@@ -672,7 +672,7 @@ class VisitorLabelContracts(unittest.TestCase):
             [projection.text(cell.text) for cell in newest.cells],
             [
                 "Designer and Engineer",
-                "Fully redesigned an FDA-approved clinical-genomics medical device and implemented production code that helped teams deliver treatment-decision insights for people with cancer.",
+                "Fully redesigned and launched an FDA-approved clinical-genomics medical device, including production code that helped teams deliver treatment-decision insights for people with cancer.",
                 "Eliminated an entire category of assignment errors, retired a brittle failure-tracking spreadsheet, and saved about 25 minutes per person when querying statistics and sample state.",
                 "Genomics · 2022–2025",
             ],
@@ -683,6 +683,23 @@ class VisitorLabelContracts(unittest.TestCase):
                          ("th", "row"))
         self.assertTrue(all(cell.tag == "td" for cell in newest.cells[1:]))
         self.assertEqual([cell.attribute("data-label") for cell in newest.cells], fields)
+
+        product_leader = table.rows[3]
+        self.assertEqual(projection.text(product_leader.cells[0].text), "Product leader")
+        self.assertIn(
+            "equipped designers to participate directly in technical discussions",
+            projection.text(product_leader.cells[1].text),
+        )
+
+        designer_engineer = table.rows[4]
+        self.assertEqual(projection.text(designer_engineer.cells[0].text),
+                         "Designer and engineer")
+        changed_work = projection.text(designer_engineer.cells[1].text)
+        self.assertIn("A shared implementation model replaced design-to-engineering handoffs",
+                      changed_work)
+        self.assertIn("API constraints shaped feasible features early", changed_work)
+        self.assertIn("the design system scaled beyond atomic components", changed_work)
+        self.assertNotIn("into engineering handoff", changed_work)
 
     def test_runtime_fixtures_match_the_native_counterparts(self):
         self.assertEqual(len(self.contract["runtime"]), 2)

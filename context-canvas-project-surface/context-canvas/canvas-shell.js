@@ -19,7 +19,7 @@
       ["PODA", "poda.html"],
       ["Metadata Blocks", "metadata-blocks.html"],
       ["Composable Readings", "grammar-family.html"],
-      ["Skills as Working Affordances", "collaboration-skills.html"],
+      ["Reusable Skills", "collaboration-skills.html"],
       ["Visualization Fidelity Atlas", "visualization-fidelity-atlas.html"],
       ["Core Architectures", "core-architectures-orientation-index.html"],
       ["Concept Nursery", "concept-nursery.html"],
@@ -99,6 +99,7 @@
     var boundarySelector = visitorBoundaryContract ? visitorBoundaryContract.rootSelector : "[data-visitor-boundary]";
     var visitorBoundary = footer.querySelector(":scope > " + boundarySelector + ", :scope > * > " + boundarySelector);
     var attribution = footer.querySelector(":scope > .site-attribution, :scope > * > .site-attribution");
+    var contact = footer.querySelector(":scope > [data-context-canvas-contact], :scope > * > [data-context-canvas-contact]");
     if (visitorBoundary && visitorBoundaryContract) {
       var boundaryContext = visitorBoundary.querySelector(visitorBoundaryContract.contextSelector);
       var markers = Array.prototype.slice.call(visitorBoundary.querySelectorAll(visitorBoundaryContract.markerSelector));
@@ -110,6 +111,7 @@
     }
     if (visitorBoundary) visitorBoundary.remove();
     if (attribution) attribution.remove();
+    if (contact) contact.remove();
 
     if (footer.childNodes.length) {
       var local = element("div", "super-footer__local");
@@ -155,8 +157,12 @@
         ),
       );
     }
+    if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
+    contact.classList.add("super-footer__contact");
+    contact.setAttribute("data-context-canvas-contact", "");
     closing.appendChild(registry);
     closing.appendChild(network);
+    closing.appendChild(contact);
     footer.appendChild(closing);
 
     if (visitorBoundary) footer.appendChild(visitorBoundary);

@@ -35,10 +35,85 @@ async function mediaState(page) {
       fallback: fallback?.getAttribute("href") || "",
       statusHidden: Boolean(status?.hidden),
       motionPreference: root?.dataset.motionPreference || "",
+      visualDescriptionElement: sequence?.tagName || "",
+      visualDescriptionOpen: Boolean(sequence?.open),
+      visualDescriptionSummary: sequence?.querySelector("summary")?.textContent?.trim() || "",
       visualDescriptionItems: sequence?.querySelectorAll("li").length || 0,
       visualDescriptionText: sequence?.textContent?.trim() || "",
     };
   });
+}
+
+async function assertDescriptionDisclosure(page, engineLabel) {
+  const details = page.locator("details#about-media-sequence");
+  const summary = details.locator("summary");
+  assert.equal(await details.evaluate(element => element.open), false, `${engineLabel}: visual description begins closed`);
+  await summary.focus();
+  await summary.press("Enter");
+  assert.equal(await details.evaluate(element => element.open), true, `${engineLabel}: keyboard opens the visual description`);
+  assert.equal(await summary.evaluate(element => element === document.activeElement), true, `${engineLabel}: summary retains focus`);
+  await summary.press("Enter");
+  assert.equal(await details.evaluate(element => element.open), false, `${engineLabel}: keyboard closes the visual description`);
+}
+
+async function assertDescriptionPrint(page, engineLabel) {
+  const details = page.locator("details#about-media-sequence");
+  await details.evaluate(element => {
+    element.open = false;
+  });
+  await page.emulateMedia({ media: "print" });
+  try {
+    const presentation = await details.evaluate(element => {
+      const summary = element.querySelector("summary");
+      const list = element.querySelector("ol");
+      const firstItem = list?.querySelector("li");
+      const serialize = target => {
+        const style = target ? window.getComputedStyle(target) : null;
+        const rect = target?.getBoundingClientRect();
+        return {
+          display: style?.display || "",
+          visibility: style?.visibility || "",
+          width: rect?.width || 0,
+          height: rect?.height || 0,
+        };
+      };
+      return {
+        open: element.open,
+        summary: serialize(summary),
+        list: serialize(list),
+        firstItem: serialize(firstItem),
+      };
+    });
+
+    assert.equal(presentation.open, false, `${engineLabel}: print keeps the disclosure state collapsed`);
+    assert.notEqual(presentation.summary.display, "none", `${engineLabel}: print labels the visual-description list`);
+    assert.notEqual(presentation.summary.visibility, "hidden", `${engineLabel}: print keeps the visual-description label visible`);
+    assert.ok(presentation.summary.width > 0 && presentation.summary.height > 0, `${engineLabel}: print gives the visual-description label geometry`);
+    assert.notEqual(presentation.list.display, "none", `${engineLabel}: print renders the visual-description list`);
+    assert.notEqual(presentation.list.visibility, "hidden", `${engineLabel}: print keeps the visual-description list visible`);
+    assert.ok(presentation.list.width > 0 && presentation.list.height > 0, `${engineLabel}: print gives the visual-description list geometry`);
+    assert.notEqual(presentation.firstItem.display, "none", `${engineLabel}: print renders visual-description items`);
+    assert.ok(presentation.firstItem.height > 0, `${engineLabel}: print gives visual-description items geometry`);
+  } finally {
+    await page.emulateMedia({ media: "screen" });
+  }
+}
+
+async function assertFooterContact(page, engineLabel) {
+  const contactState = await page.evaluate(() => {
+    const contacts = [...document.querySelectorAll("[data-context-canvas-contact]")];
+    return {
+      count: contacts.length,
+      text: contacts.map(contact => contact.textContent?.trim() || ""),
+      linkedCount: contacts.filter(contact => contact.matches("a") || contact.closest("a")).length,
+      mailtoCount: document.querySelectorAll('a[href^="mailto:" i]').length,
+    };
+  });
+
+  assert.equal(contactState.count, 1, `${engineLabel}: the enhanced footer contains one contact address`);
+  assert.deepEqual(contactState.text, ["contact@vik.guru"], `${engineLabel}: the footer retains the exact contact address`);
+  assert.equal(contactState.linkedCount, 0, `${engineLabel}: the footer contact remains plain text`);
+  assert.equal(contactState.mailtoCount, 0, `${engineLabel}: the page contains no mailto link`);
 }
 
 async function mediaLayout(page) {
@@ -150,12 +225,18 @@ try {
     fallback: `../img/media/${gifName}`,
     statusHidden: true,
     motionPreference: "visitor-controlled",
+    visualDescriptionElement: "DETAILS",
+    visualDescriptionOpen: false,
+    visualDescriptionSummary: "Visual description",
     visualDescriptionItems: 5,
     visualDescriptionText: normalState.visualDescriptionText,
   });
   assert.match(normalState.visualDescriptionText, /Visual description/u);
   assert.match(normalState.visualDescriptionText, /genomics plate view/u);
   assert.match(normalState.visualDescriptionText, /decision space/u);
+  await assertFooterContact(normal.page, "Chromium");
+  await assertDescriptionDisclosure(normal.page, "Chromium");
+  await assertDescriptionPrint(normal.page, "Chromium");
   assertContained(await mediaLayout(normal.page), 1440, "desktop");
   assert.equal(normal.videoRequests.length, 0, "the initial reading leaves high-quality motion unloaded");
   assert.equal(normal.gifRequests.length, 0, "the initial reading leaves fallback motion unloaded");
@@ -223,6 +304,9 @@ try {
   assert.equal(webkitState.controls, true, "WebKit exposes native controls");
   assert.equal(webkitState.playsInline, true, "WebKit keeps playback inline");
   assert.equal(webkitState.paused, true, "WebKit begins on the passive poster");
+  await assertFooterContact(webkitNormal.page, "WebKit");
+  await assertDescriptionDisclosure(webkitNormal.page, "WebKit");
+  await assertDescriptionPrint(webkitNormal.page, "WebKit");
   assertContained(await mediaLayout(webkitNormal.page), 1440, "WebKit desktop");
   assert.equal(
     webkitNormal.videoRequests.length,
@@ -236,8 +320,9 @@ try {
 
   console.log(
     "About media browser contract passed: native controls, local poster, unloaded motion, "
-    + "explicit GIF recovery, visible sequence, reduced-motion pause, narrow containment, "
-    + "real source-failure recovery, forced-color presentation, and WebKit coverage.",
+    + "explicit GIF recovery, keyboard-operable and print-complete visual description, reduced-motion pause, "
+    + "narrow containment, one plain-text footer contact, real source-failure recovery, forced-color presentation, "
+    + "and WebKit coverage.",
   );
 } finally {
   await browser.close();

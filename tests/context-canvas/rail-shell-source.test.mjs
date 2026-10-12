@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -31,6 +31,56 @@ test("the shared rail keeps one external visual readout with complete link names
   assert.match(source, /readout\.setAttribute\("aria-hidden", "true"\)/u);
   assert.match(source, /link\.setAttribute\("aria-label", label\)/u);
   assert.doesNotMatch(source, /page-section-rail__label/u);
+});
+
+test("every Context Canvas footer receives the same plain-text contact address", async () => {
+  const shell = await readFile(resolve(canvasRoot, "canvas-shell.js"), "utf8");
+  const routes = (await readdir(canvasRoot, { withFileTypes: true }))
+    .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
+    .map(entry => entry.name)
+    .sort();
+
+  assert.match(
+    shell,
+    /footer\.querySelector\(":scope > \[data-context-canvas-contact\], :scope > \* > \[data-context-canvas-contact\]"\)/u,
+  );
+  assert.match(shell, /if \(!contact\) contact = element\("p", "super-footer__contact", "contact@vik\.guru"\)/u);
+  assert.match(shell, /contact\.remove\(\)/u);
+  assert.match(shell, /closing\.appendChild\(contact\)/u);
+  assert.doesNotMatch(shell, /mailto:/iu);
+
+  for (const route of routes) {
+    const source = await readFile(resolve(canvasRoot, route), "utf8");
+    const footerStart = source.lastIndexOf("<footer");
+    const footerEnd = source.lastIndexOf("</footer>");
+    assert.ok(footerStart >= 0 && footerEnd > footerStart, `${route}: final footer`);
+    const footer = source.slice(footerStart, footerEnd + "</footer>".length);
+    const contacts = footer.match(/data-context-canvas-contact/gu) ?? [];
+
+    assert.equal(contacts.length, 1, `${route}: one authored contact address`);
+    assert.match(
+      footer,
+      /<p class="super-footer__contact" data-context-canvas-contact>contact@vik\.guru<\/p>/u,
+      `${route}: exact plain-text contact address`,
+    );
+    assert.doesNotMatch(footer, /mailto:/iu, route);
+    assert.ok(
+      footer.indexOf("data-context-canvas-contact") < footer.indexOf("data-visitor-boundary"),
+      `${route}: contact precedes the visitor boundary`,
+    );
+    assert.ok(
+      footer.indexOf("data-visitor-boundary") < footer.indexOf("© 2003–2026"),
+      `${route}: attribution closes the footer`,
+    );
+
+    if (route !== "404.html") {
+      assert.match(
+        source,
+        /<script src="canvas-shell\.js" defer><\/script>/u,
+        `${route}: shared footer runtime`,
+      );
+    }
+  }
 });
 
 test("compact rail scrolling and transient readout paint retain separate owners", async () => {
