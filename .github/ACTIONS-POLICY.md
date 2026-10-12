@@ -71,10 +71,11 @@ respectively. Those ceilings remain distinct from approved allocations.
 
 The production-carrier lane accepted in PR #255 receives matching `main` pull
 requests, including drafts, and manual dispatch. Its read-only ten-minute job
-tests production contracts and exercises the immutable `production-v0.2.0`
-archive using the candidate tool. Its source declares no budget-variable or
-confirmation gate and grants no host credential or deployment action. Preserve
-that trigger posture. The human budget owner has approved **300 minutes per
+tests production contracts. Pull requests exercise immutable
+`production-v0.2.0` as a historical regression fixture; manual dispatch
+requires an explicit annotated `production-vMAJOR.MINOR.PATCH` tag. The lane
+grants no host credential or deployment action. Preserve that trigger posture.
+The human budget owner has approved **300 minutes per
 month** for this lane, adjustable through a later explicit budget decision.
 The allowance is a human-held budget; automated monthly metering is outside
 the declared workflow contract. Current usage and remaining allocation stay
@@ -107,8 +108,9 @@ connected fifteen-minute standard-runner job verifies the source, projection,
 tag, and artifact, then conditionally uploads and deploys in the same job.
 The default `activate_deployment=false` keeps publication steps resting. Pages permissions
 are job-level, and the `schema-pages` concurrency group serializes runs with
-`cancel-in-progress: false`. PRs #308/#309 and the 2026-10-01 #63 receipt record
-the accepted tagged-release transition and its dated deployment observation.
+`cancel-in-progress: false`. PRs #308/#309 record the accepted tagged-release
+transition. The accepted current Pages coordinate is `pages-v0.2.0`; the
+2026-10-01 `pages-v0.1.0` observation remains historical evidence.
 Each selected pair starts after its source reaches `main` and its projection
 reaches `docs`; the documented `github-pages` environment admits both branches.
 The recorded legacy `docs:/` source remains the recovery route.

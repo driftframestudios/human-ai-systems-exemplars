@@ -69,6 +69,17 @@ Issue #118 preserves the completed `production-v0.2.0` transport and recovery
 handoff as historical release evidence; #251 owns that release's remaining live
 assessment. Publishing newer source requires a new accepted source/carrier pair,
 tag, and authorized handoff rather than reopening the immutable release.
+Issue
+[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
+activation, acceptance, and recovery sequence.
+
+The next tagged GitHub Pages projection follows the cPanel release by default.
+The current visitor carrier has no runtime dependency on a newer Pages
+artifact, while `pages-v0.2.0` remains the accepted schema and skill
+publication coordinate. Issue #406 completes that accepted Worker parity
+before protected production promotion; a later Pages release receives its own
+source, docs, tag, activation, and signed-out receipt.
 
 ## Current entry condition
 
@@ -131,13 +142,15 @@ portable-path collision stop projection formation. The loading-graph parser
 uses source spans and HTML data-state boundaries; comments and raw or inert
 regions cannot supply stylesheet owners.
 
-For the accepted source graph, an enhanced screen moves from seven stylesheet
-requests and 76,213 raw bytes to two requests and 55,120 raw bytes; the
-independently compressed sums move from 17,555 to 11,842 gzip-9 bytes and from
-14,736 to 10,465 Brotli-11 bytes. The scriptless path moves from eight requests
-and 76,621 raw bytes to three requests and 55,417 raw bytes; gzip-9 moves from
-17,758 to 11,987 bytes and Brotli-11 from 14,897 to 10,572 bytes. These are
-repository-side distribution observations, not deployed transfer claims.
+For the current source graph, an enhanced screen moves from seven stylesheet
+requests and 77,081 raw bytes to two requests and 55,814 raw bytes; the
+independently compressed sums move from 17,674 to 11,914 gzip-9 bytes and from
+14,823 to 10,536 Brotli-11 bytes. The scriptless path moves from eight requests
+and 77,489 raw bytes to three requests and 56,111 raw bytes; gzip-9 moves from
+17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. These are
+repository-side distribution observations. The final carrier manifest binds
+the generated filenames and digests; deployed transfer claims begin with the
+signed-out receiver observation.
 
 The primary manifest alone selects primary files and public paths.
 `asset-inventory.json` describes the images already selected by the primary and
@@ -246,8 +259,9 @@ npm run check:prod-projection
 npm run build:prod-projection
 npm run stage:prod-carrier
 npm run check:prod-carrier
-npm run build:prod-carrier-transfer -- --tag production-v0.2.0
-npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
+: "${PRODUCTION_TAG:?Set the approved annotated production-v* tag}"
+npm run build:prod-carrier-transfer -- --tag "$PRODUCTION_TAG"
+npm run verify:prod-carrier-transfer -- --tag "$PRODUCTION_TAG" --receipt ".cpanel-transfer/$PRODUCTION_TAG/hase-$PRODUCTION_TAG.receipt.json"
 ```
 
 `check:prod-projection` writes and verifies the newly composed plan in

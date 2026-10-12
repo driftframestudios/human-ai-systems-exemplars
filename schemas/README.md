@@ -140,8 +140,9 @@ Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
 
 1. Accept the source PR on main, including source-owned public material checks.
 2. Build with `PAGES_BASE_URL=https://schemas.radiantnull.com`,
-   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and `PAGES_RELEASE_TAG=pages-v0.2.0`.
-   Run the schema, Pages, and focused browser checks.
+   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and
+   `PAGES_RELEASE_TAG=<selected pages-vMAJOR.MINOR.PATCH tag>`. Run the schema,
+   Pages, and focused browser checks.
 3. Review the complete generated artifact in a PR targeting docs. Compare exact
    file membership and bytes with the source build using the receiver verifier.
 4. Create an annotated `pages-vMAJOR.MINOR.PATCH` tag on the accepted docs commit.
@@ -157,8 +158,9 @@ Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
 Site versions describe catalog, presentation, and delivery changes. Schema
 versions describe individual contracts. New capabilities advance the site minor
 version; compatible corrections advance its patch version; changed site-level
-consumer contracts earn a major version. The first dedicated site tag is
-`pages-v0.1.0`; earlier deployments retain their source/docs receipts.
+consumer contracts earn a major version. The accepted current site tag is
+`pages-v0.2.0`; `pages-v0.1.0` and earlier deployments retain their own
+source/docs receipts.
 
 The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
 entries preserve exact-version bytes, including annotations. New identities and

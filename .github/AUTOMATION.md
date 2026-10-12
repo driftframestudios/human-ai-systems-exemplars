@@ -21,7 +21,7 @@ below names every workflow; the following sections explain each receiving job.
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, and #406 schema delivery; #63 inventory |
 | `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PRs always receive the media job while `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the prototype job | 10 minutes per job | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, and #434 |
-| `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch | 10 minutes | Cancel same PR/ref run | #253 and PR #255 |
+| `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #464 current release; #253 and PR #255 implementation precedent |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
 | `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
 
@@ -113,9 +113,10 @@ commits, rebuilds from source, and requires complete file membership and byte
 equality before upload.
 
 Pages settings remain the custom-domain authority. The recorded Pages family
-is `schemas.radiantnull.com`; Issue #18 owns the distinct schema receiver
-standing. The 2026-10-01 #63 receipt records deployment of `pages-v0.1.0` through
-the verified workflow. That dated release observation retains its own scope.
+is `schemas.radiantnull.com`; Issue #406 owns current schema-publication and
+Worker parity. The accepted current Pages coordinate is `pages-v0.2.0`, whose
+annotated tag targets docs commit `bf257f6674e8` and records source commit
+`dc6b62c`; the earlier `pages-v0.1.0` observation remains historical evidence.
 The recorded `docs:/` source setting remains the recovery coordinate: an
 authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
 and return the environment allowlist to its prior state when needed. Current
@@ -158,21 +159,24 @@ production workflow.
 ## Production-carrier contract
 
 `production-carrier-contracts.yml` is the source-owned CI lane accepted in
-PR #255 for Issue #253. Its matching `main` pull-request paths cover the
-workflow, root package and lock files, `deployment/cpanel/**`,
-`tests/prod-deployment/**`, the projection builder, and the transfer packager.
-Manual dispatch is also available. The declared trigger includes draft PRs;
-this lane has no confirmation input or budget-variable condition. This
-inventory preserves that accepted trigger behavior.
+PR #255 for historical Issue #253. Its matching `main` pull-request paths cover
+the workflow, root package and lock files, production and public-reference
+inputs, Context Canvas and iframe source families, `deployment/cpanel/**`,
+`tests/prod-deployment/**`, and the complete `tools/**` implementation seam.
+Manual dispatch requires one explicit annotated `production-vMAJOR.MINOR.PATCH`
+tag. The declared trigger includes draft PRs; this lane has no budget-variable
+condition or deployment authority.
 
 One read-only Ubuntu 24.04 job uses pinned checkout and Node setup actions,
 Node 22, the locked toolchain, and a ten-minute ceiling. It runs
-`npm run test:prod-deployment`, forms the `production-v0.2.0` transfer envelope,
-verifies its receipt against that explicit tag, and exercises the ZIP with
-`unzip -t`. The immutable tag is the payload input; the candidate checkout
-supplies the packaging implementation. The workflow uploads no artifact and
-uses no hosting credential. Its receipt establishes tests and archive
-formation, while #118 and #251 retain host activation and live acceptance.
+`npm run test:prod-deployment`, forms the selected transfer envelope, verifies
+its receipt against that explicit tag, and exercises the ZIP with `unzip -t`.
+Pull requests use immutable `production-v0.2.0` as a historical regression
+fixture; a manual run uses its required selected tag. The immutable tag is the
+payload input; the candidate checkout supplies the packaging implementation.
+The workflow uploads no artifact and uses no hosting credential. Issue #464
+owns current host activation and live acceptance; #118 and #251 retain only
+their historical `production-v0.2.0` standing.
 
 The human budget owner has approved **300 minutes per month** for this lane,
 adjustable through a later explicit budget decision. The allowance records

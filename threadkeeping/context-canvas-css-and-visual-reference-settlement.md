@@ -4,12 +4,12 @@
 threadkeeping:
   id: "context-canvas.css-and-visual-reference-settlement.v0.1"
   settled_on: "2026-08-23"
-  updated_on: "2026-10-07"
+  updated_on: "2026-10-12"
   planning_surface: "planning/context-canvas/css-modularization-and-visual-reference-plan.md"
   visual_reference_issue: work:context-visual-reference
   css_modularization_issue: work:context-css-modularization
   debrief_badge_issue: work:debrief-badge-height
-  next: "observe the bounded About production CSS projection; retain readable owners and expand only after its deterministic, cascade, delivery, and recovery gate settles"
+  next: "bind the verified About projection to the accepted v0.3 carrier, then observe deployed transfer and cache behavior before admitting another route family"
 ```
 
 ## Decision
@@ -55,14 +55,19 @@ digest, and recovery route. Generated CSS carries no public source map because
 the readable repository sources and bounded manifest lineage already serve that
 job.
 
-For the accepted source graph, the enhanced path moves from seven stylesheets
-and 76,213 raw bytes to two stylesheets and 55,120 raw bytes. The independently
-compressed sums move from 17,555 to 11,842 gzip-9 bytes and from 14,736 to
-10,465 Brotli-11 bytes. The scriptless path moves from eight stylesheets and
-76,621 raw bytes to three stylesheets and 55,417 raw bytes; gzip-9 moves from
-17,758 to 11,987 bytes and Brotli-11 from 14,897 to 10,572 bytes. These are
-source-side projection observations. A deployed canary still owns response
-headers, cache behavior, and transferred-byte evidence.
+For the current source graph, the enhanced path moves from seven stylesheets
+and 77,081 raw bytes to two stylesheets and 55,814 raw bytes. The independently
+compressed sums move from 17,674 to 11,914 gzip-9 bytes and from 14,823 to
+10,536 Brotli-11 bytes. The scriptless path moves from eight stylesheets and
+77,489 raw bytes to three stylesheets and 56,111 raw bytes; gzip-9 moves from
+17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. The generated
+base, no-script, and shell outputs are respectively
+`f7f4d4dc899f49ff2154b047bbf3f3a384874fa8c0b17ea0d46955fcdd4c85eb.css`,
+`b2bfbc13f2342874a4896ff3a8351a0d839aff8bbfc3a09073ce3690bbaeba30.css`,
+and `8276346d7f30d88387aef91cd85e896d243f8c9a9d6b6ff64fa2a3763a2adc9b.css`.
+These are source-side projection observations. The final carrier binds them to
+its exact source coordinate, while the deployed receiver owns response headers,
+cache behavior, and transferred-byte evidence.
 
 Removing `css_projection` from tracked configuration and rebuilding restores
 the readable production link graph. Another route family enters this distribution

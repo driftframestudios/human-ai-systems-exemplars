@@ -1068,6 +1068,36 @@
       "recovery_condition": "Restore the accepted background-pattern blob and rebuild the production projection."
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg",
+      "semantic_key": "context-canvas.shared-plot.lims-eln-capability-transfer-model",
+      "roles": [
+        {
+          "id": "capability_transfer_model",
+          "visitor_job": "Show the laboratory capability transfer from observed work through participant correction and vendor selection to completed production authority.",
+          "accessibility_text_owner": "The SVG title and description and the referring LIMS and ELN Debrief image alternative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted LIMS and ELN capability-transfer SVG and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/three_way_market_decision_map.svg",
+      "semantic_key": "context-canvas.shared-plot.three-way-market-decision-map",
+      "roles": [
+        {
+          "id": "comparative_market_decision_map",
+          "visitor_job": "Compare three industry-specific value paths and the distinct evidence each path carries into a shared investment decision.",
+          "accessibility_text_owner": "The SVG title and description and the referring comparative-return Debrief image alternative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted three-way market decision SVG and rebuild the production projection."
+    },
+    {
       "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
       "semantic_key": "context-canvas.about.visual-sequence.motion",
       "roles": [
