@@ -36,10 +36,6 @@ const repeatedImageAlternatives = new Map([
     "langwhich_upfront.png",
     "Two LangWhich prototype screens showing learner-selected English and Spanish clinical vocabulary views.",
   ],
-  [
-    "../img/plot/structure_sensor_3_angled.webp",
-    "A current black Structure Sensor 3 shown at an angle.",
-  ],
 ]);
 
 const socialImageAlternatives = new Map([
@@ -65,6 +61,7 @@ const debriefProxyContracts = [
     route: "choose-your-player-humatics.html",
     directory: "choose-your-player",
     publicSafePatterns: [/company-neutral, IP-free 2026 interface/iu, /synthetic/iu],
+    alternateReceivers: ["robotics-upfront.webp"],
   },
   {
     route: "genomic-viewer-replatforming.html",
@@ -75,6 +72,7 @@ const debriefProxyContracts = [
     route: "fmi-lims-eln-replatforming.html",
     directory: "sample-noone-could-find",
     publicSafePatterns: [/generalized workflows and\s+synthetic content/iu],
+    alternateReceivers: ["clinical-trial-coordination-upfront.webp"],
   },
   {
     route: "who-to-believe-reviews-platform.html",
@@ -132,7 +130,7 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 203);
+  assert.equal(imageCount, 202);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
@@ -236,6 +234,7 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
   assert.doesNotMatch(source, /alt="Forms upfront"/u);
   assert.doesNotMatch(source, /alt="Persona types"/u);
   assert.doesNotMatch(source, /role="img" aria-label="Decorative falling leaves"/u);
+  assert.doesNotMatch(source, /structure_sensor_3_angled\.webp/u);
 });
 
 test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
@@ -250,7 +249,7 @@ test("working Debrief systems preserve standing, figure identity, responsive sou
       /<figure\b[^>]*class="[^"]*\bdebrief-proxy-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gu,
     ), match => match[0]);
     const originals = (await readdir(join(debriefImageRoot, directory)))
-      .filter(name => name.endsWith(".webp") && !/-(?:960|1920)\.webp$/u.test(name))
+      .filter(name => name.endsWith(".webp") && !/-(?:480|960|1920)\.webp$/u.test(name))
       .filter(name => !alternateReceivers.includes(name))
       .sort();
     assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);

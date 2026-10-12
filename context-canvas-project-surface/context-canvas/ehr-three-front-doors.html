@@ -84,6 +84,36 @@
               <div><dt>Relevance now</dt><dd>The scenario shows how a shared clinical contract can scale through local conformance and activation rather than forcing several institutions into one operating shape.</dd></div>
             </dl>
             <p><strong>Basis and limits:</strong> Public standards and source-period vendor behavior ground this teaching reconstruction. Delivered client history sits outside its scope.</p>
+            <div class="debrief-case-brief__tracks" data-case-brief-detail>
+              <h3 class="txt-h3">Solution and implementation quick scan</h3>
+              <article class="debrief-case-brief__track" data-case-brief-track="solution">
+                <h4 class="txt-h4">Solution track</h4>
+                <ol>
+                  <li><a href="#solution-debrief">§a Debrief</a> — I extended the canonical result into one order-and-result contract so Epic, Oracle Health, and athenahealth could preserve the same clinical promise through different front doors.</li>
+                  <li><a href="#solution-bottleneck">§b Bottleneck</a> — The reconstruction separates ordering differences, three identity domains, and per-organization versus multi-tenant distribution so each receives a fitting acceptance boundary.</li>
+                  <li><a href="#solution-intervention">§c Intervention</a> — Target-specific transformers, identity policies, fixtures, and activation paths reuse the shared contract while every multi-tenant interaction carries explicit organization and tenant context.</li>
+                  <li><a href="#solution-outcome">§d Outcome</a> — The shared capability expands to a third EHR, and a modeled tenant-scoping near-miss strengthens the release contract before one-to-many onboarding scales.</li>
+                  <li><a href="#solution-repeatability">§e Repeatability</a> — Canonical clinical meaning, distribution-shaped onboarding, and tenant-bound identity controls make additional front doors safer to activate.</li>
+                </ol>
+              </article>
+              <article class="debrief-case-brief__track" data-case-brief-track="implementation">
+                <h4 class="txt-h4">Implementation track</h4>
+                <ol>
+                  <li><a href="#implementation-debrief">§a Debrief</a> — A shared onboarding core composes target adapters, organization configuration, tenant scope, and activation state around one reusable clinical model.</li>
+                  <li><a href="#implementation-bottleneck">§b Bottleneck</a> — Shared examples and explicit tenant checks expose the clinical drift and wrong-practice risk hidden by three parallel builds.</li>
+                  <li><a href="#implementation-intervention">§c Intervention</a> — Per-target adapters preserve the canonical order and result while organization, identity, conformance, recovery, and tenant isolation remain locally governed.</li>
+                  <li><a href="#implementation-outcome">§d Outcome</a> — The network gains reusable onboarding and common fixtures while each practice retains activation state, isolation controls, recovery ownership, and release authority.</li>
+                  <li><a href="#implementation-repeatability">§e Repeatability</a> — Declaring distribution, transformations, identity, tenancy, fixtures, gates, and recovery owners creates a complete promotion contract for every new target.</li>
+                </ol>
+              </article>
+            </div>
+            <div class="debrief-case-brief__media" data-case-brief-media>
+              <h4 class="txt-h4">Related figures and diagrams</h4>
+              <ul>
+                <li><strong>Diagram:</strong> <a href="#solution-intervention">Canonical EHR front-door map</a> — Shows one order-and-result contract moving through three target-specific workflow and identity boundaries.</li>
+                <li><strong>Table:</strong> <a href="#implementation-intervention">Three-front-door implementation contract</a> — Compares canonical, per-organization, and multi-tenant responsibilities.</li>
+              </ul>
+            </div>
             <p><a href="#solution-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
               <p>Scale came from a shared clinical contract and a front-door strategy; each system retained its own operating shape.</p>
@@ -127,7 +157,7 @@
             <p class="debrief-track-label"><span>Track I</span><strong>Solution Architecture · Purpose and Changed Work</strong><small>Choose each front door by distribution, workflow, and safety.</small></p>
             <h2 id="solution-title" class="txt-h2 architecture-track-title">I. Solution Architecture — Choose the front-door strategy by distribution and safety</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — Three Front Doors, One Clinical Promise</h3>
+            <h3 id="solution-debrief" class="txt-h3 beat-title">§a Debrief — Three Front Doors, One Clinical Promise</h3>
             <p>
               Ambulatory practices across the network ordered the same genomic service and needed the same clinically
               faithful result in return. Epic, Oracle Health, and athenahealth presented different ordering workflows,
@@ -139,7 +169,7 @@
               what had to remain equivalent across the network; the front-door strategy defined what could remain different.
             </p>
 
-            <h3 class="txt-h3 beat-title">§b The Bottleneck — Ordering Asymmetry, Three Identity Domains, Three Distribution Models</h3>
+            <h3 id="solution-bottleneck" class="txt-h3 beat-title">§b The Bottleneck — Ordering Asymmetry, Three Identity Domains, Three Distribution Models</h3>
             <div class="architecture-pair cobalt-operating-field-cards">
               <article>
                 <p class="architecture-pair__label">Ordering workflow</p>
@@ -158,7 +188,7 @@
               </article>
             </div>
 
-            <h3 class="txt-h3 beat-title">§c The Intervention — Extend the Canonical Model and Specialize the Front Door</h3>
+            <h3 id="solution-intervention" class="txt-h3 beat-title">§c The Intervention — Extend the Canonical Model and Specialize the Front Door</h3>
             <p>
               The shared contract gained ordering intent, required clinical context, specimen linkage, and target-neutral
               status. Each EHR received a dedicated ordering and result transformer, identity policy, conformance suite,
@@ -176,7 +206,7 @@
               </figcaption>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§d The Outcome — Successful Expansion with a Tenant-Scoping Near-Miss</h3>
+            <h3 id="solution-outcome" class="txt-h3 beat-title">§d The Outcome — Successful Expansion with a Tenant-Scoping Near-Miss</h3>
             <p>
               The canonical capability extended from two receiving systems to three, and the multi-tenant path changed the
               economics from repeated site builds toward reusable onboarding. The tenant-scoping near-miss is retained as
@@ -185,7 +215,7 @@
               That scenario changed the release contract before the operating model scaled.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — Let Distribution Shape Onboarding and Identity Shape Safety</h3>
+            <h3 id="solution-repeatability" class="txt-h3 beat-title">§e Repeatability — Let Distribution Shape Onboarding and Identity Shape Safety</h3>
             <p>
               Keep the clinical promise canonical. Choose onboarding and activation by the receiving system’s distribution
               model. For multi-tenant systems, make organization and tenant scope part of every identity, authorization,
@@ -206,7 +236,7 @@
             <p class="debrief-track-label"><span>Track II</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Bind order, result, identity, tenant, activation, and recovery.</small></p>
             <h2 id="implementation-title" class="txt-h2 architecture-track-title">II. Implementation Architecture — Bind order, result, identity, and tenant scope</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — From Site-by-Site Interfaces to a Shared Onboarding Core</h3>
+            <h3 id="implementation-debrief" class="txt-h3 beat-title">§a Debrief — From Site-by-Site Interfaces to a Shared Onboarding Core</h3>
             <p>
               The earlier implementation pattern treated each practice as a distinct interface project. The newer shape
               maintains one order-and-result model, then composes target adapters, organization configuration, tenant scope,
@@ -214,7 +244,7 @@
               deliberate ownership.
             </p>
 
-            <h3 class="txt-h3 beat-title">§b The Bottleneck — Three Parallel Builds Fragmented Assurance</h3>
+            <h3 id="implementation-bottleneck" class="txt-h3 beat-title">§b The Bottleneck — Three Parallel Builds Fragmented Assurance</h3>
             <p>
               Independent builds duplicate mappings and hide whether all three front doors preserve equivalent clinical
               meaning. Endpoint breadth creates another trap: a technically available operation may still be the wrong
@@ -222,7 +252,7 @@
               context binding to verify.
             </p>
 
-            <h3 class="txt-h3 beat-title">§c The Intervention — Per-Target Adapters on a Tenant-Bound Contract</h3>
+            <h3 id="implementation-intervention" class="txt-h3 beat-title">§c The Intervention — Per-Target Adapters on a Tenant-Bound Contract</h3>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Three-front-door implementation contract">
                 <table class="table--comparison table--comfortable" data-label="Every front door receives the same clinical contract and its own operational controls">
@@ -239,7 +269,7 @@
               </div>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§d The Outcome — Reusable Capability with Local Release Authority</h3>
+            <h3 id="implementation-outcome" class="txt-h3 beat-title">§d The Outcome — Reusable Capability with Local Release Authority</h3>
             <p>
               The network gains a shared onboarding core, a common clinical fixture set, and target-specific release gates.
               Multi-tenant distribution can amortize certification and deployment work across practices, while each practice
@@ -247,7 +277,7 @@
               permanent conformance class rather than a dramatic anecdote.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — Onboard by Contract, Promote by Context</h3>
+            <h3 id="implementation-repeatability" class="txt-h3 beat-title">§e Repeatability — Onboard by Contract, Promote by Context</h3>
             <p>
               Add a front door by declaring its distribution model, order transformer, result transformer, identity domain,
               tenant model, fixtures, activation gate, and recovery owner. Reuse the canonical core; promote the target only

@@ -196,12 +196,22 @@ npm run visual:context-canvas-reference -- --phase <name>
 ```
 
 The derivative check requires no encoder and leaves bytes unchanged; it
-verifies eligible widths, exact dimensions, and accepted-source aspect ratios.
-The build route requires `cwebp` and remains separately invoked after an
-accepted source replacement. The catalog-preview browser contract proves that
+verifies named source profiles, eligible widths, exact dimensions,
+accepted-source aspect ratios, and expressive missing, stale, or unexpected
+derivative states. Configured-width orphans remain derivative state: checks
+report the missing accepted source, and builds remove the orphan. The build
+route requires `cwebp` and remains separately
+invoked after an accepted source replacement. Full-Debrief profiles create
+`960w` and `1920w` candidates; selected catalog-card and catalog-preview
+profiles add a `480w` candidate for their smaller receiver geometry. The
+catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
-overflow.
+overflow. The same focused route selects Case Brief mode at `390px` and
+`1440px`, then verifies all sixteen source-owned scans, their stable six-field
+order and related media, the five-route EHR group's atomic replacement and
+recovery behavior, accurate displayed-route counts, and a delayed request that
+settles after the visitor returns to Catalog Overview.
 
 The image-delivery browser contract serves the complete repository tree over
 loopback HTTP. Chromium and Playwright WebKit each scroll every authored image

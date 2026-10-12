@@ -82,6 +82,36 @@
               <div><dt>Relevance now</dt><dd>The scenario helps clinical and AI-assisted product teams distinguish a working integration from a receiving workflow that changes safely and sustainably.</dd></div>
             </dl>
             <p><strong>Basis and limits:</strong> Public standards, clinical decision-support research, and common operating patterns ground this teaching reconstruction. Local telemetry measures delivery and adoption signals; a defined comparison and measured clinical outcomes establish effect.</p>
+            <div class="debrief-case-brief__tracks" data-case-brief-detail>
+              <h3 class="txt-h3">Solution and implementation quick scan</h3>
+              <article class="debrief-case-brief__track" data-case-brief-track="solution">
+                <h4 class="txt-h4">Solution track</h4>
+                <ol>
+                  <li><a href="#solution-debrief">§a Debrief</a> — I reframed a correctly delivered pharmacogenomic alert as a clinical intervention competing for finite clinician attention.</li>
+                  <li><a href="#solution-bottleneck">§b Bottleneck</a> — The reconstruction makes specificity, expected alert volume, receiving action, and continued stewardship explicit before an interruption earns a place in prescribing work.</li>
+                  <li><a href="#solution-intervention">§c Intervention</a> — Patient-specific logic, a concise card, and a SMART application establish the technical path while deferred threshold and workflow ownership exposes the adoption gap.</li>
+                  <li><a href="#solution-outcome">§d Outcome</a> — Correct context and reliable rendering still produce routine dismissal, so the organization shifts guidance toward order defaults and pharmacist review.</li>
+                  <li><a href="#solution-repeatability">§e Repeatability</a> — Teams can govern attention by naming the intended behavior, population, severity, volume, alternative path, and tuning owner before launch.</li>
+                </ol>
+              </article>
+              <article class="debrief-case-brief__track" data-case-brief-track="implementation">
+                <h4 class="txt-h4">Implementation track</h4>
+                <ol>
+                  <li><a href="#implementation-debrief">§a Debrief</a> — Portable CDS logic improves inspection while the receiving organization still owns interruption timing and the surrounding alert stream.</li>
+                  <li><a href="#implementation-bottleneck">§b Bottleneck</a> — An elegant service boundary reproduces override behavior when workflow placement, cardinality, and adoption remain undefined.</li>
+                  <li><a href="#implementation-intervention">§c Intervention</a> — Separate contracts assign context delivery, clinical specificity, attention placement, and stewardship to the groups equipped to observe each state.</li>
+                  <li><a href="#implementation-outcome">§d Outcome</a> — Moving guidance into a default, pharmacist queue, or longitudinal workflow changes the receiving actor and attention cost while preserving the useful technical service.</li>
+                  <li><a href="#implementation-repeatability">§e Repeatability</a> — An interruption inventory, severity thresholds, expected volume, alternative routes, and clinical-action measures turn the receiving workflow into an operable architecture.</li>
+                </ol>
+              </article>
+            </div>
+            <div class="debrief-case-brief__media" data-case-brief-media>
+              <h4 class="txt-h4">Related figures and diagrams</h4>
+              <ul>
+                <li><strong>Diagram:</strong> <a href="#solution-intervention">Pharmacogenomics attention and adoption map</a> — Contrasts technical conformance with the receiving workflow that governs clinical attention.</li>
+                <li><strong>Table:</strong> <a href="#implementation-intervention">Pharmacogenomics decision-support contracts</a> — Assigns useful states, failure signals, and receiving groups across delivery and adoption.</li>
+              </ul>
+            </div>
             <p><a href="#solution-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
               <p>Technical conformance established delivery. Clinical adoption required a different operating model.</p>
@@ -121,7 +151,7 @@
             <p class="debrief-track-label"><span>Track I</span><strong>Solution Architecture · Purpose and Changed Work</strong><small>Treat clinical attention as a finite operating resource.</small></p>
             <h2 id="solution-title" class="txt-h2 architecture-track-title">I. Solution Architecture — Treat attention as an operating resource</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — The Integration Was the Easier Problem</h3>
+            <h3 id="solution-debrief" class="txt-h3 beat-title">§a Debrief — The Integration Was the Easier Problem</h3>
             <p>
               Discrete genomic results made a new promise possible: bring drug–gene guidance to the clinician while a
               medication order is being composed. The project initially framed success as a correct trigger, a clinically
@@ -134,14 +164,14 @@
               signal-to-noise ratio of the whole prescribing workflow.
             </p>
 
-            <h3 class="txt-h3 beat-title">§b Bottleneck — Specificity, Cardinality, and an Undefined Adoption State</h3>
+            <h3 id="solution-bottleneck" class="txt-h3 beat-title">§b Bottleneck — Specificity, Cardinality, and an Undefined Adoption State</h3>
             <div class="architecture-pair cobalt-operating-field-cards">
               <article><p class="architecture-pair__label">Clinical specificity</p><h4 class="txt-h4">Guidance must change the next decision</h4><p>A card needs patient, medication, phenotype, severity, and an actionable alternative precise enough to justify interruption.</p></article>
               <article><p class="architecture-pair__label">Attention cardinality</p><h4 class="txt-h4">Every alert changes the surrounding stream</h4><p>Severity thresholds and expected volume determine whether a useful message arrives as signal or joins a reflexive dismissal pattern.</p></article>
               <article><p class="architecture-pair__label">Adoption definition</p><h4 class="txt-h4">Rendered is a transport state</h4><p>Clinical effect requires an agreed receiving action, a non-interruptive path, and a sustained way to review whether the intervention still earns attention.</p></article>
             </div>
 
-            <h3 class="txt-h3 beat-title">§c Intervention — Correct Plumbing, Deferred Stewardship</h3>
+            <h3 id="solution-intervention" class="txt-h3 beat-title">§c Intervention — Correct Plumbing, Deferred Stewardship</h3>
             <p>
               The source-period implementation used the <code>medication-prescribe</code> hook for a prescribe-time request.
               A current implementation would choose <code>order-select</code> or <code>order-sign</code> according to the intended
@@ -162,7 +192,7 @@
               </figcaption>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§d Outcome — A Correct System That Failed in Use</h3>
+            <h3 id="solution-outcome" class="txt-h3 beat-title">§d Outcome — A Correct System That Failed in Use</h3>
             <p>
               The hook fired, the patient context was correct, and the detail application opened as designed. In use, the
               card joined an already saturated interruptive stream and was routinely dismissed. The receiving organization
@@ -173,7 +203,7 @@
               pharmacist receiving queue, while interruptive cards became candidates for explicit severity and cardinality stewardship.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — Design the Receiving Workflow Before the Card</h3>
+            <h3 id="solution-repeatability" class="txt-h3 beat-title">§e Repeatability — Design the Receiving Workflow Before the Card</h3>
             <p>
               Before implementation, name the behavior the intervention should support, the population receiving it, the
               severity that earns interruption, the expected volume, the alternative workflow, and the group responsible
@@ -194,21 +224,21 @@
             <p class="debrief-track-label"><span>Track II</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Separate delivery state from clinical action and stewardship.</small></p>
             <h2 id="implementation-title" class="txt-h2 architecture-track-title">II. Implementation Architecture — Separate delivery from clinical effect</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — Externalized Logic Left the Attention Surface Intact</h3>
+            <h3 id="implementation-debrief" class="txt-h3 beat-title">§a Debrief — Externalized Logic Left the Attention Surface Intact</h3>
             <p>
               Earlier EHR alerts placed rules and presentation inside the receiving system. A CDS Hooks service and SMART
               application make the logic more portable and inspectable. They do not, by themselves, change when a clinician
               is interrupted or what competing alerts have already taught that clinician to do.
             </p>
 
-            <h3 class="txt-h3 beat-title">§b Bottleneck — A Better Service Can Reproduce the Same Failure</h3>
+            <h3 id="implementation-bottleneck" class="txt-h3 beat-title">§b Bottleneck — A Better Service Can Reproduce the Same Failure</h3>
             <p>
               The service boundary improved maintainability while leaving workflow placement untouched. Even patient-specific
               guidance, unmanaged cardinality, and a missing adoption definition reproduced the familiar override pattern
               through more elegant plumbing.
             </p>
 
-            <h3 class="txt-h3 beat-title">§c Intervention — Explicit Technical and Clinical Contracts</h3>
+            <h3 id="implementation-intervention" class="txt-h3 beat-title">§c Intervention — Explicit Technical and Clinical Contracts</h3>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Pharmacogenomics decision support contracts">
                 <table class="table--comparison table--comfortable" data-label="Delivery and adoption are separate contracts with different owners and failure states">
@@ -224,14 +254,14 @@
               </div>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§d Outcome — Failure Repeats Until Placement Changes</h3>
+            <h3 id="implementation-outcome" class="txt-h3 beat-title">§d Outcome — Failure Repeats Until Placement Changes</h3>
             <p>
               The implementation contract passed while the clinical contract failed. Moving the same guidance to a default,
               pharmacist review queue, or longitudinal care workflow changes both the receiving actor and the cost of attention.
               The technical service remains useful; the interruptive presentation is the part that changes.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — Govern Cardinality Before Launch</h3>
+            <h3 id="implementation-repeatability" class="txt-h3 beat-title">§e Repeatability — Govern Cardinality Before Launch</h3>
             <p>
               Maintain an inventory of interruptive guidance, name the severity that earns each interruption, model the
               expected volume, and preserve a non-interruptive route. Keep clinical action distinct from delivery telemetry.

@@ -128,6 +128,37 @@
               <div><dt>Relevance now</dt><dd>Teams can use accessible semantics and progressive enhancement to keep people, browsers, services, payment providers, support teams, and AI systems aligned on one recoverable contract.</dd></div>
             </dl>
             <p><strong>Basis and limits:</strong> My Q2 2016 project documents the screenshot-to-semantic-form decision, and current standards support the architectural patterns. Each receiving service must verify conversion, assistive-technology behavior, provider boundaries, support continuity, security, and payment outcomes.</p>
+            <div class="debrief-case-brief__tracks" data-case-brief-detail aria-labelledby="case-brief-tracks-title">
+              <h3 id="case-brief-tracks-title" class="txt-h3">Solution and implementation quick scan</h3>
+              <article class="debrief-case-brief__track" data-case-brief-track="solution" aria-labelledby="case-brief-solution-track-title">
+                <h4 id="case-brief-solution-track-title" class="txt-h4">Solution Architecture</h4>
+                <ol>
+                  <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I translated a static account-and-payment screenshot into semantic HTML, exposing labels, groups, input types, and submission behavior as an institutional contract whose response people can understand and continue.</li>
+                  <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> A page can look complete while browser, service, provider, analytics, and support layers carry different portions of purpose, state, recovery, and receipt; behavioral fidelity coordinates those layers around one request.</li>
+                  <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> The team names one interaction contract across meaning, state, validation and recovery, submission and receipt, external boundaries, and verification so each layer has a clear authority and observation.</li>
+                  <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> Native semantics preserve meaning through enhancement, stable operation identities let equivalent replay return the prior receipt while preserving one effect, and durable receipts let people and support teams continue from the same accepted, rejected, review, or unresolved state.</li>
+                  <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> A shared platform packages contract-bearing primitives, content, schemas, examples, provider profiles, observation, and migration while each receiving service retains its domain meaning, policy, population needs, and outcome measures.</li>
+                </ol>
+              </article>
+              <article class="debrief-case-brief__track" data-case-brief-track="implementation" aria-labelledby="case-brief-implementation-track-title">
+                <h4 id="case-brief-implementation-track-title" class="txt-h4">Implementation Architecture</h4>
+                <ol>
+                  <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> HTML preserves form ownership, labels, groups, input purpose, focus, serialization, and submission while progressive layers add capability; text semantics and a validated provider boundary keep payment identifiers precise and minimize sensitive-data reach.</li>
+                  <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Shared field and issue identities keep browser constraints, client rules, service schemas, domain policy, provider decisions, and support exceptions distinct while presenting one meaningful state and continuation.</li>
+                  <li><strong><a href="#implementation-intervention-title">Intervention.</a></strong> A canonical registry plus typed command and receipt carries operation identity, authority, schema, issues, outcome, resume route, and support reference; equivalent replay returns the stored receipt.</li>
+                  <li><strong><a href="#implementation-outcome-title">Outcome.</a></strong> Stable operation and resource references preserve valid work and meaningful state across timeout, renewed authentication, mobile interruption, provider callback, and support handoff.</li>
+                  <li><strong><a href="#implementation-repeatability-title">Repeatability.</a></strong> Versioned patterns join semantics, contracts, failure exercises, assistive-technology review, privacy, provider reconciliation, and migration; incidents and support learning return to the contract that can absorb them.</li>
+                </ol>
+              </article>
+            </div>
+            <div class="debrief-case-brief__media" data-case-brief-media>
+              <h4 class="txt-h4">Related figures and media</h4>
+              <ul>
+                <li><strong>Figure — <a href="#recoverable-forms-complete-reference">Complete source-era form challenge.</a></strong> The visible sequence and states supplied a starting point; implementation exposed the semantic and behavioral specification beneath them.</li>
+                <li><strong>Diagram — <a href="#recoverable-form-contract">Recoverable form contract.</a></strong> Human purpose travels through semantic controls, understandable state, typed recovery, service and provider boundaries, a durable receipt, and support.</li>
+                <li><strong>Diagram — <a href="#pan-validation-flow">Payment-account validation flow.</a></strong> The sequence separates candidate-network matching, checksum consistency, provider tokenization, and issuer authorization.</li>
+              </ul>
+            </div>
             <p><a href="#solution-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
               <p>A screenshot can show where controls sit. The contract explains what they mean, which system can accept them, how a person can recover, and what receipt lets everyone continue from the same state.</p>
@@ -157,7 +188,7 @@
             <p class="debrief-track-label"><span>Track I</span><strong>Solution Architecture · Purpose and Changed Work</strong><small>Read the visible form as an institutional conversation.</small></p>
             <h2 id="solution-title" class="txt-h2 architecture-track-title">I. Solution Architecture — Name the interaction contract</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — The Screenshot Was Only the First Specification</h3>
+            <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — The Screenshot Was Only the First Specification</h3>
             <p>
               The original assignment was to reconstruct a static form image in HTML, CSS, and JavaScript. That work
               revealed a richer specification beneath the visible interface. Labels connected language with controls.
@@ -172,7 +203,7 @@
             </p>
 
             <div class="debrief-image-grid table-span-all" role="group" aria-label="Source-era enterprise form references">
-              <figure class="story-visual">
+              <figure id="recoverable-forms-complete-reference" class="story-visual">
                 <a class="story-visual__open" href="../img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp" aria-label="Open the complete historical form challenge at full size">
                   <img src="../img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp" srcset="../img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp 480w, ../img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp 700w" sizes="(min-width: 48rem) 30rem, 100vw" width="480" height="858" loading="eager" alt="A three-step account and payment form shows portfolio naming, account details, inline email feedback, card entry, and a final submission action.">
                 </a>
@@ -186,7 +217,7 @@
               </figure>
             </div>
 
-            <h3 class="txt-h3 beat-title">§b The Bottleneck — Behavioral Fidelity Completes the Form</h3>
+            <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — Behavioral Fidelity Completes the Form</h3>
             <p>
               Visual fidelity establishes recognition, hierarchy, and affordance. Behavioral fidelity carries purpose,
               state, transition, recovery, and receipt through the complete service.
@@ -220,7 +251,7 @@
               </p>
             </aside>
 
-            <h3 class="txt-h3 beat-title">§c The Intervention — Name the Interaction Contract</h3>
+            <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — Name the Interaction Contract</h3>
             <p>The team names one contract across six dimensions:</p>
             <div class="architecture-pair cobalt-operating-field-cards table-span-all">
               <article><p class="architecture-pair__label">Meaning</p><h4 class="txt-h4">Make the purpose and relationship understandable</h4><p>Name the field’s purpose, label, instructions, group, units, locale, ownership, and necessity for the human outcome.</p></article>
@@ -231,7 +262,7 @@
               <article><p class="architecture-pair__label">Verification</p><h4 class="txt-h4">Match every claim with its observation</h4><p>Use semantic inspection, browser and assistive-technology behavior, service tests, failure exercises, support rehearsal, and observed user outcomes.</p></article>
             </div>
 
-            <figure class="story-visual table-span-all">
+            <figure id="recoverable-form-contract" class="story-visual table-span-all">
               <a class="story-visual__open" href="../img/plot/recoverable_form_contract.svg" aria-label="Open the recoverable form contract at full size">
                 <img src="../img/plot/recoverable_form_contract.svg" width="1600" height="1040" loading="lazy" alt="A person’s purpose moves through semantic HTML, understandable state, typed validation and recovery, a replay-safe service command, a provider boundary, and a durable receipt and support route before returning to continued human purpose.">
               </a>
@@ -241,7 +272,7 @@
               </figcaption>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§d The Outcome — A Resilient, Recoverable Service</h3>
+            <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — A Resilient, Recoverable Service</h3>
             <p>
               The form behaves as one understandable service across modalities and interruptions. Native semantics provide
               the baseline. Enhancements accelerate the path while preserving its meaning. A person can correct an issue
@@ -255,7 +286,7 @@
               granted authority.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — The Enterprise Form Platform</h3>
+            <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — The Enterprise Form Platform</h3>
             <p>
               The reusable unit is a contract-bearing primitive rather than a screenshot or CSS class. A shared platform
               can provide semantic fields and groups, reviewed content, field and issue schemas, commands and receipts,
@@ -282,7 +313,7 @@
             <p class="debrief-track-label"><span>Track II</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Preserve meaning while frameworks, services, and providers change.</small></p>
             <h2 id="implementation-title" class="txt-h2 architecture-track-title">II. Implementation Architecture — Native semantics as the stable core</h2>
 
-            <h3 class="txt-h3 beat-title">§a Debrief — Native Semantics as the Stable Core</h3>
+            <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — Native Semantics as the Stable Core</h3>
             <p>
               HTML supplies form ownership, labels, groups, input purpose, constraint state, focus, serialization, and
               submission. CSS, JavaScript, component systems, typed schemas, APIs, providers, localization, analytics,
@@ -328,7 +359,7 @@
               candidate networks while preserving Unknown and Ambiguous as useful states. Prefix matching does not establish
               that an account exists, belongs to the person, carries funds, or can be authorized.
             </p>
-            <figure class="story-visual table-span-all">
+            <figure id="pan-validation-flow" class="story-visual table-span-all">
               <a class="story-visual__open" href="../img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg" aria-label="Open the PAN identifier validation flow at full size">
                 <img src="../img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg" width="1600" height="1120" loading="lazy" alt="A card number is captured as text, interpreted as issuer identification, account identification, and a check digit, screened with the Luhn checksum, and sent through a payment provider for tokenization and issuer authorization.">
               </a>
@@ -347,7 +378,7 @@
               </p>
             </aside>
 
-            <h3 class="txt-h3 beat-title">§b The Bottleneck — Fragmented Validation and Ambiguous State</h3>
+            <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — Fragmented Validation and Ambiguous State</h3>
             <p>
               Forms commonly accumulate browser constraints, client rules, service schemas, domain policy, provider
               decisions, and support exceptions. Shared field and issue identity lets these layers remain distinct while
@@ -370,7 +401,7 @@
               </div>
             </figure>
 
-            <h3 class="txt-h3 beat-title">§c The Intervention — One Typed Issue, Command, and Receipt Contract</h3>
+            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — One Typed Issue, Command, and Receipt Contract</h3>
             <p>
               A canonical field and issue registry joins the page, service, analytics pipeline, and support route. The same
               issue identity can appear in the page title signal, error summary, inline relationship, focus route, service
@@ -388,7 +419,7 @@
               receipt relationship inspectable beside the service behavior they describe.
             </p>
 
-            <h3 class="txt-h3 beat-title">§d The Outcome — Accessible Recovery Across Channels</h3>
+            <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — Accessible Recovery Across Channels</h3>
             <p>
               The person receives the same meaningful state when an interaction resumes after a timeout, renewed
               authentication, mobile interruption, provider callback, or support handoff. Valid work remains available
@@ -401,7 +432,7 @@
               meaning.
             </p>
 
-            <h3 class="txt-h3 beat-title">§e Repeatability — Tested Primitives, Policy, and Migration</h3>
+            <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Tested Primitives, Policy, and Migration</h3>
             <p>
               A reusable form pattern carries semantics, content, schemas, examples, source, tests, provider profiles,
               migration, and change history together. Verification follows the claim: document and accessibility-tree

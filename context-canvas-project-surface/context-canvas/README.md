@@ -39,21 +39,48 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
+## Debrief reading modes
+
+[`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
+Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
+Case Brief mode projects the source page's orientation, ordered six-field scan,
+basis and limits, and concise related-media index directly into the catalog;
+its actions then open either the source `#case-brief` or the complete Debrief.
+The source Case Brief carries the same six fields followed by linked Solution
+and Implementation track scans that account for every primary beat. A reading
+whose architecture uses another truthful pair, such as Comparison and Return,
+names that pair directly.
+
+HTML owns the complete source reading. `debriefs-catalog.js` adds the catalog
+projection as a bounded enhancement. A successful grouped load replaces one
+ordinary catalog card atomically; a source-load failure keeps that ordinary
+card and its Full Debrief route available. The focused browser contract checks
+the six-field order, related media, grouped EHR behavior, accurate status
+counts, delayed mode changes, and both reading actions at narrow and desktop
+widths.
+
 The five Debrief working-system and visual-comparison families retain their accepted,
-unsuffixed WebPs as full-size inspection targets. Run
-`npm run build:debrief-image-derivatives` after replacing an accepted source;
-the repository-owned generator uses `cwebp` to produce the `960w` and `1920w`
-responsive candidates declared in the pages and inventory. It skips a
-candidate at or above the accepted source width, removes a previously generated
-candidate that has become ineligible, writes through a verified same-directory
-temporary file, and reports the active `cwebp` version without
-treating encoded bytes as stable across encoder releases. Run
+unsuffixed WebPs as full-size inspection targets. Catalog-specific canonical
+WebPs remain source-only when the page needs only their smaller public carriers.
+Run `npm run build:debrief-image-derivatives` after replacing an accepted source.
+The repository-owned generator applies named source profiles: full-Debrief
+figures receive `960w` and `1920w` candidates, while selected catalog cards and
+previews receive `480w`, `960w`, and `1920w` candidates. Each derivative uses
+`cwebp` at quality 82, method 6, sharp YUV, with metadata removed and source
+aspect ratio preserved. The generator skips a candidate at or above the source
+width, removes a configured candidate that has become stale, reports an
+unexpected width, reserves configured width suffixes for derivatives, reports
+an orphaned derivative during checks, removes that orphan during builds, writes
+through a verified same-directory temporary file, and reports the active
+`cwebp` version without treating encoded bytes as stable across encoder
+releases. Run
 `npm run check:debrief-image-derivatives` to check candidate eligibility, exact
-dimensions, and preserved source aspect ratios without rewriting the tracked
-files. Source replacement becomes current by running the build command; the
-check avoids inferring content freshness from checkout timestamps or partial
-Git history. Review interface text and geometry in regenerated candidates
-before rebuilding the production projection. The extracted table component
+dimensions, source-profile membership, and preserved source aspect ratios
+without rewriting the tracked files. Source replacement becomes current by
+running the build command; the check reads declared roles and file geometry
+rather than checkout timestamps or partial Git history. Review interface text
+and geometry in regenerated candidates before rebuilding the production
+projection. The extracted table component
 and remaining legacy rules keep dense landscape interfaces on a
 keyboard-scrollable `56rem` inspection canvas with a `78rem` wide cap, while
 portrait views use the narrower `42rem` cap.

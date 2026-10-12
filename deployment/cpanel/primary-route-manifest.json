@@ -758,6 +758,21 @@
       "media_type": "image/webp"
     },
     {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-960.webp",
+      "projected_path": "img/debriefs/choose-your-player/robotics-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
       "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
       "media_type": "image/webp"
@@ -978,6 +993,21 @@
       "media_type": "image/webp"
     },
     {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+      "projected_path": "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-error-lab-1920.webp",
       "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-error-lab-1920.webp",
       "media_type": "image/webp"
@@ -1065,6 +1095,21 @@
     {
       "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization.webp",
       "projected_path": "img/debriefs/sample-noone-could-find/lims-eln-wet-lab-process-axonometric-visualization.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+      "projected_path": "img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
       "media_type": "image/webp"
     },
     {
@@ -1486,11 +1531,6 @@
       "source_path": "context-canvas-project-surface/img/plot/spatial_capture_collaborative_memory.svg",
       "projected_path": "img/plot/spatial_capture_collaborative_memory.svg",
       "media_type": "image/svg+xml"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/plot/structure_sensor_3_angled.webp",
-      "projected_path": "img/plot/structure_sensor_3_angled.webp",
-      "media_type": "image/webp"
     },
     {
       "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",

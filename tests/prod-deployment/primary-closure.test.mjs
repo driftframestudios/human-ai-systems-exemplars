@@ -163,8 +163,25 @@ test("the production manifest carries the accepted 41-route primary collection a
     "img/plot/table_reading_contract.svg",
     "img/plot/table_study_observations.svg",
     "img/plot/table_verification_states.svg",
+    "img/debriefs/choose-your-player/robotics-upfront-480.webp",
+    "img/debriefs/choose-your-player/robotics-upfront-960.webp",
+    "img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
   ]) {
     assert.ok(projectedPaths.has(required), `${required} belongs to the primary closure`);
+  }
+  for (const sourceOnlyOrRetired of [
+    "img/debriefs/choose-your-player/robotics-upfront.webp",
+    "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+    "img/debriefs/spatial-capture/3d-modeling-scan.webp",
+    "img/plot/structure_sensor_3_angled.webp",
+  ]) {
+    assert.equal(projectedPaths.has(sourceOnlyOrRetired), false, `${sourceOnlyOrRetired} stays outside the primary closure`);
   }
   assert.ok(manifest.files.length > acceptedRoutes.length + 1);
   for (const file of manifest.files) {
