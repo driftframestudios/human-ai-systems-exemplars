@@ -434,9 +434,9 @@ class VisitorLabelContracts(unittest.TestCase):
             self.assertEqual(cell.attribute("data-label"), field, context + ": label")
 
     def _assert_capital_table(self, table):
-        topic = "Prospective staged-capital bands and the operating result each tranche buys"
+        topic = "Current staged-capital bands and the operating result each tranche buys"
         fields = ("Stage", "Operating result", "Planning duration",
-                  "Prospective planning band", "What becomes knowable")
+                  "Current planning band", "What becomes knowable")
         self.assertEqual(table.element.tag, "table")
         self.assertEqual(projection.text(table.caption), topic)
         self.assertEqual(table.element.attribute("data-label"), topic)
@@ -463,7 +463,7 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(summary.cells[0].attribute("colspan"), "3")
         self.assertEqual(summary.cells[0].attribute("scope"), "row")
         self.assertEqual([c.attribute("data-label") for c in summary.cells],
-                         ["Full build envelope", "Prospective planning band", "What becomes knowable"])
+                         ["Full build envelope", "Current planning band", "What becomes knowable"])
         self.assertEqual(projection.text(summary.cells[1].text), "USD 95k\u2013167k")
         self.assertEqual(projection.text(summary.cells[2].text),
                          "Shared implementation overlap is reflected; capital remains staged.")

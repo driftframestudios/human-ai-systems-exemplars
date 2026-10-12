@@ -116,12 +116,40 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <span id="case-brief" aria-hidden="true"></span>
+          <!-- debrief-at-a-glance-projection:start -->
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="case-brief-at-a-glance-title">
+            <h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance</h2>
+            <p>At Foundation Medicine, I worked directly with directors and executives across scientific, business, and medical-affairs functions; biomarker and biometrics specialists; production engineering; and biomarker-repository operations. As Senior Manager and Principal Designer, then Product Designer and Software Engineer III, I helped six working groups turn their knowledge into one inspectable clinical-trial rule grammar; the shipped coordination interface later became the foundation for a repeatable transformation pathway.</p>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Situation and stakes</dt>
+                <dd>Foundation Medicine&rsquo;s genomic-profiling products inform cancer-care and clinical-trial decisions. Six groups needed one usable way to translate partner data, biomarker criteria, cohort logic, implementation state, and regulatory consequence while retaining their distinct knowledge.</dd>
+              </div>
+              <div>
+                <dt>Scope and role</dt>
+                <dd>From 2019–2023, I worked directly with directors, opened the engagement, negotiated time with specialists carrying live work, and coordinated decisions across business units—first as Senior Manager and Principal Product Designer on Data Products, then as Product Designer and Software Engineer III in Computational Biology Engineering.</dd>
+              </div>
+              <div>
+                <dt>Core constraint</dt>
+                <dd>Each population held a different part of the rule system. The product needed one shared, inspectable model that retained partner-specific meaning and clarified the handoffs.</dd>
+              </div>
+              <div>
+                <dt>Key decision</dt>
+                <dd>Define a shared object grammar with nested Boolean rules, deploy it in tools people already used, and let partner data seed a reviewable initial state that people could correct.</dd>
+              </div>
+              <div>
+                <dt>Outcome and evidence</dt>
+                <dd>I designed the shared rule grammar and complete interaction states; engineering built the application in one quarter while the design remained stable. Each Data Manager could set up three to five more cases per week, and measurable setup errors fell 50%.</dd>
+              </div>
+              <div>
+                <dt>Relevance now</dt>
+                <dd>The case connects participatory specification with executable data contracts: shared visual objects can carry meaning from inquiry into templates, mappings, and human-reviewed automation.</dd>
+              </div>
+            </dl>
+            <p><strong>Basis and limits:</strong> Production use established the throughput gain, measurable error reduction, and durable grammar. My 2023 work established a partner-fed proposal method; its numeric result remains undisclosed, and the partner-facing extension reached design and partial implementation.</p>
+          </section>
+          <!-- debrief-at-a-glance-projection:end -->
 
-          <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading carried across the engagement">
-            <p>The boolean building blocks were doing more than the interface was showing.</p>
-            <footer>Architectural reading carried across the 2019–2023 engagement</footer>
-          </aside>
           <aside class="debrief-outcome-banner debrief-outcome-banner--partial" aria-label="Outcome state">
             <p class="debrief-outcome-banner__label">Outcome state</p>
             <strong>Delivered foundation — the coordination interface shipped and its grammar persisted beyond the original application.</strong>
@@ -130,7 +158,7 @@
 
           <section id="clinical-trial-boolean-builder-walkthrough" aria-labelledby="clinical-trial-boolean-builder-walkthrough-title">
             <h2 id="clinical-trial-boolean-builder-walkthrough-title" class="txt-h2">Boolean cohort-builder demonstration</h2>
-            <p id="clinical-trial-boolean-builder-standing">I designed and built this 2026 cohort-builder interface with synthetic, de-identified specimen scenarios and explicit environment labels. The demonstration makes nested cohort logic visible as a reviewable rule, matching count, and result set.</p>
+            <p id="clinical-trial-boolean-builder-standing">I designed and built this 2026 cohort-builder interface with synthetic specimen scenarios and explicit environment labels. The demonstration makes nested cohort logic visible as a reviewable rule, matching count, and result set.</p>
             <figure class="story-visual table-span-all">
               <video
                 controls
@@ -381,6 +409,11 @@
               <figcaption class="table-note"><strong>Figure 1.</strong> SoT Cartography&rsquo;s cohort builder at laptop width, with an open biomarker-class selector inside nested Boolean rules. The view keeps rule authoring, compiled logic, match counts, and the independent consent hold visible together.</figcaption>
             </figure>
 
+            <aside class="debrief-quote debrief-quote--orientation" aria-label="Conclusion from the 2019–2023 clinical-trial coordination work">
+              <p>The boolean building blocks were doing more than the interface was showing.</p>
+              <footer>Conclusion from the 2019–2023 clinical-trial coordination work</footer>
+            </aside>
+
             <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — Built in a Quarter, Reused Across Teams and Tools</h3>
             <p>
               Directors responded to my preliminary design by asking about training, onboarding, rollout sequence, parallel
@@ -442,7 +475,7 @@
             <figure id="clinical-resequencing-candidate" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic re-sequencing cohort builder. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
                 <a class="story-visual__open" href="../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp" aria-label="Open the synthetic re-sequencing cohort builder at full size">
-                  <img src="../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp" srcset="../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-960.webp 960w, ../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-1920.webp 1920w, ../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp 5118w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5118" height="2710" loading="lazy" decoding="async" alt="Synthetic re-sequencing cohort rule combining a QC-concern group with active-consent, tumor-content, and variant-review conditions; one de-identified candidate is matched and exportable.">
+                  <img src="../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp" srcset="../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-960.webp 960w, ../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate-1920.webp 1920w, ../img/debriefs/boolean-building-blocks/clinical-trial-resequencing-candidate.webp 5118w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5118" height="2710" loading="lazy" decoding="async" alt="Synthetic re-sequencing cohort rule combining a QC-concern group with active-consent, tumor-content, and variant-review conditions; one synthetic candidate is matched and exportable.">
                 </a>
               </div>
               <figcaption class="table-note"><strong>Figure 3.</strong> A re-sequencing rule combines a quality concern with active consent, tumor content, and variant-review state. Reusing the same grammar for an operational question yields one candidate while preserving the conditions that selected it.</figcaption>

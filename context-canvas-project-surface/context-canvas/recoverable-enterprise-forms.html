@@ -116,12 +116,40 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <span id="case-brief" aria-hidden="true"></span>
+          <!-- debrief-at-a-glance-projection:start -->
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="case-brief-at-a-glance-title">
+            <h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance</h2>
+            <p>During a Fresh Tilled Soil apprenticeship, I focused on front-end architecture and translated an account-and-payment screenshot into a semantic form. This reading carries that foundation into recovery, replay, support, and service continuity.</p>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Situation and stakes</dt>
+                <dd>An enterprise form asks an institution to act—create an account, accept an application or payment, record consent, correct information, or continue interrupted work.</dd>
+              </div>
+              <div>
+                <dt>Scope and role</dt>
+                <dd>In Q2 2016, I focused on front-end architecture in the Fresh Tilled Soil apprenticeship cohort with support from a senior engineering mentor. The current reading adds accessibility, payment, security, and service recovery.</dd>
+              </div>
+              <div>
+                <dt>Core constraint</dt>
+                <dd>A screenshot could show placement while leaving meaning, validation authority, interruption recovery, provider behavior, and the institution’s durable response unspecified.</dd>
+              </div>
+              <div>
+                <dt>Key decision</dt>
+                <dd>Turn the screenshot into a semantic specification: native HTML as the stable core, shared issue identity across layers, an authoritative submission command, and a durable receipt.</dd>
+              </div>
+              <div>
+                <dt>Outcome and evidence</dt>
+                <dd>Partial: I implemented the semantic HTML substrate in 2016. The current design extends it into a reviewable architecture for recovery, replay, support, and service continuity; receiving services still need to verify operating outcomes.</dd>
+              </div>
+              <div>
+                <dt>Relevance now</dt>
+                <dd>Teams can use accessible semantics and progressive enhancement to keep people, browsers, services, payment providers, support teams, and AI systems aligned on one recoverable contract.</dd>
+              </div>
+            </dl>
+            <p><strong>Basis and limits:</strong> My Q2 2016 project documents the screenshot-to-semantic-form decision, and current standards support the architectural patterns. Each receiving service must verify conversion, assistive-technology behavior, provider boundaries, support continuity, security, and payment outcomes.</p>
+          </section>
+          <!-- debrief-at-a-glance-projection:end -->
 
-          <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
-            <p>A screenshot can show where controls sit. The contract explains what they mean, which system can accept them, how a person can recover, and what receipt lets everyone continue from the same state.</p>
-            <footer>Central architectural reading</footer>
-          </aside>
           <aside class="debrief-outcome-banner debrief-outcome-banner--partial" aria-label="Outcome state">
             <p class="debrief-outcome-banner__label">Outcome state</p>
             <strong>Partial — the semantic substrate is established; the contemporary architecture extends it through recovery, replay, and service continuity.</strong>
@@ -173,6 +201,11 @@
                 <figcaption class="table-note">The payment step makes a consequential transition visible: a familiar set of controls sits at the boundary between human intent, payment data, provider rules, authorization, and receipt.</figcaption>
               </figure>
             </div>
+
+            <aside class="debrief-quote debrief-quote--orientation" aria-label="Conclusion from the form-system comparison">
+              <p>A screenshot can show where controls sit. The contract explains what they mean, which system can accept them, how a person can recover, and what receipt lets everyone continue from the same state.</p>
+              <footer>Conclusion from the form-system comparison</footer>
+            </aside>
 
             <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — Behavioral Fidelity Completes the Form</h3>
             <p>

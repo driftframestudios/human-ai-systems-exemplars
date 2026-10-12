@@ -8,10 +8,10 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 - [`ai-systems.html`](ai-systems.html) gathers the AI-legible architecture and related instrument routes.
 - [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
 - [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
-- [`debriefs.html`](debriefs.html) provides the catalog of completed and prospective readings.
+- [`debriefs.html`](debriefs.html) provides the catalog of completed and ongoing readings.
 - [`grammar-family.html`](grammar-family.html) compares composable site readings and debriefs across portable assets, embedded instruments, and contextual delivery.
 - [`collaboration-skills.html`](collaboration-skills.html) explains portable skill contracts, bounded projections, candidacy, release, and cross-platform adoption.
-- [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) demonstrates a prospective, implementation-gated enterprise reading.
+- [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) demonstrates an ongoing, implementation-gated enterprise program with proposed architecture, current planning estimates, and explicit pilot proof gates.
 - [`prototypes/index.html`](prototypes/index.html) exposes the local prototype library and its source-aware manifests.
 
 Each public page remains useful when enhancement is unavailable. Embedded prototypes pair their interactive surface with a semantic orientation or static equivalent in the parent page.
@@ -50,8 +50,11 @@ quick scans directly into the catalog. Each quick scan begins collapsed and
 uses its truthful track names, including Comparison and Return where those
 names describe the reading more accurately than Solution and Implementation.
 One fragment-free action continues into the Full Debrief. The complete reading
-therefore begins with its own narrative rather than repeating the compact
-catalog account.
+repeats the source-owned At-a-Glance orientation, ordered six-field scan, and
+basis-and-limits paragraph before the route-owned narrative. The paired quick
+scans, related-media index, and continuation action remain in Case Brief mode,
+so each reading context repeats only the orientation contract that serves its
+visitor job.
 
 The bounded
 [`debrief-case-briefs.source.html`](../data/debrief-case-briefs.source.html)
@@ -59,13 +62,21 @@ file owns all compact accounts. Run `npm run build:debrief-case-briefs` after
 changing that source. The dependency-free materializer validates all declared
 routes, ordered six-field scans, paired track disclosures, basis-and-limits
 paragraphs, related-media links, and their source-fragment destinations, then
-refreshes one bounded template block in
-`debriefs.html`; `npm run check:debrief-case-briefs` confirms exact parity.
+refreshes one bounded template block in `debriefs.html` and one bounded
+At-a-Glance block in each declared Full Debrief;
+`npm run check:debrief-case-briefs` confirms exact parity across both receiver
+families.
+The build validates every declared receiver before writing. Each changed file
+is replaced atomically after a last-moment source comparison; a concurrent
+route edit stops the replacement and remains intact. Rerunning the build
+resumes an interrupted multi-file run, and check mode identifies any receiver
+that still needs projection.
 The generated carrier qualifies each source-local fragment with its Debrief
 route, so those destinations remain correct before JavaScript enhancement.
-Each Full Debrief retains one empty `#case-brief` compatibility target for
-previously published coordinates; the central source remains the sole owner of
-compact-account content.
+Each Full Debrief carries one visible `#case-brief` coordinate whose
+At-a-Glance content comes from the same central source. The central source
+remains the sole owner of the repeated orientation, six-field wording, and
+basis-and-limits statement.
 `debriefs-catalog.js` reveals that authored projection as a bounded enhancement,
 so local file inspection and HTTP delivery use the same source-derived scan.
 The focused browser contract checks all sixteen compact accounts, thirty-two

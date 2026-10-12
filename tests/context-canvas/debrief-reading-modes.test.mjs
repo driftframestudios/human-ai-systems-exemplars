@@ -203,7 +203,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   );
 
   const ehrStart = html.indexOf('<li id="catalog-ehr-integration"');
-  const ehrEnd = html.indexOf('<li id="catalog-lims-eln"', ehrStart);
+  const ehrEnd = html.indexOf('<li id="catalog-', ehrStart + 1);
   const ehrCard = html.slice(ehrStart, ehrEnd);
   const ehrRoutes = values(
     cards.find(card => card.id === "catalog-ehr-integration").tag,
@@ -213,12 +213,36 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
     /<li><a href="([^"#]+)"><strong>SR\d/gu,
   ), match => match[1]).sort();
   assert.deepEqual(ehrSeriesLinks, ehrRoutes, "Each EHR series route should open its complete Full Debrief");
+  assert.deepEqual(
+    cards.slice(0, 8).map(card => card.id),
+    [
+      "catalog-genomic-viewer",
+      "catalog-clinical-trial",
+      "catalog-lims-eln",
+      "catalog-humatics",
+      "catalog-who-to-believe",
+      "catalog-ehr-integration",
+      "catalog-initiative-costing",
+      "catalog-field-inspection",
+    ],
+    "The EHR reading family should follow Who To Believe and lead into the initiative and field-investment readings",
+  );
 
   const eras = Array.from(html.matchAll(
     /<p class="debrief-card__era" aria-label="[^"]+">([^<]+)<\/p>/gu,
   ), match => match[1].trim());
   assert.equal(eras.length, cards.length, "Every catalog entry should expose one visible era or date");
   assert.ok(eras.every(Boolean), "Every era or date label should carry visible text");
+  assert.match(html, /aria-label="Ongoing program: July 2026">Jul 2026 · Ongoing<\/p>/u);
+  assert.match(html, /aria-label="Ongoing exemplar year: 2026">2026 · Ongoing<\/p>/u);
+  assert.doesNotMatch(
+    html.slice(
+      html.indexOf('<li id="catalog-field-inspection"'),
+      html.indexOf('<li id="catalog-three-way-return"'),
+    ),
+    />[^<]*Prospective[^<]*</u,
+    "The two ongoing inspection cards should present proposed components and current estimates without a prospective visitor-state label",
+  );
   assert.match(
     html,
     /Choose one reading mode, then add any topics or tools that help narrow the collection\. Choose the\s*<strong>Case Brief mode<\/strong> for a scanning-friendly overview directly on this page\./u,
@@ -318,7 +342,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   }
 });
 
-test("The bounded compact-account source owns every catalogued Case Brief", async () => {
+test("The bounded compact-account source owns every catalogued Case Brief and Full Debrief At-a-Glance", async () => {
   const [catalog, compactSource] = await Promise.all([
     readCanvasFile("debriefs.html"),
     readFile(compactSourcePath, "utf8"),
@@ -432,18 +456,65 @@ test("The bounded compact-account source owns every catalogued Case Brief", asyn
     assert.equal(
       Array.from(html.matchAll(/\bid="case-brief"/gu)).length,
       1,
-      `${route} should retain exactly one published-coordinate compatibility target`,
+      `${route} should retain exactly one visible published-coordinate target`,
     );
-    assert.match(
+    assert.doesNotMatch(
       html,
       /<span id="case-brief" aria-hidden="true"><\/span>/u,
-      `${route} compatibility target should remain empty and hidden from the accessibility tree`,
+      `${route} should replace the legacy empty coordinate with its visible At-a-Glance`,
     );
-    assert.doesNotMatch(html, /\bdata-content-form="case-brief"|\bdata-case-brief-(?:detail|media|track)\b/u, `${route} should begin with its complete narrative rather than repeat the compact account`);
+    const fullDebriefProjection = html.match(
+      /<!-- debrief-at-a-glance-projection:start -->\s*(<section\b(?=[^>]*\bid="case-brief")(?=[^>]*\bdata-content-form="case-brief")(?=[^>]*\baria-labelledby="case-brief-at-a-glance-title")[^>]*>[\s\S]*?<\/section>)\s*<!-- debrief-at-a-glance-projection:end -->/u,
+    );
+    assert.ok(fullDebriefProjection, `${route} should carry one bounded visible At-a-Glance projection`);
+    const fullDebriefAtAGlance = fullDebriefProjection[1];
+    assert.match(
+      fullDebriefAtAGlance,
+      /<h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance<\/h2>/u,
+      `${route} should name the repeated orientation for visual and non-visual readers`,
+    );
+    const fullDebriefOrientation = fullDebriefAtAGlance.match(
+      /<h2\b[^>]*>At-a-Glance<\/h2>\s*<p>([\s\S]*?)<\/p>\s*<dl class="debrief-at-glance">/u,
+    );
+    assert.ok(fullDebriefOrientation, `${route} should place its source-owned orientation before the six fields`);
+    assert.equal(
+      normalizeVisibleText(fullDebriefOrientation[1]),
+      normalizeVisibleText(orientation[1]),
+      `${route} Full Debrief should preserve the source-owned orientation wording`,
+    );
+    assert.deepEqual(
+      definitionPairs(fullDebriefAtAGlance),
+      definitionPairs(definitionList[0]),
+      `${route} Full Debrief should preserve the source-owned six-field wording`,
+    );
+    const sourceBasis = source.match(/<p\b[^>]*\bdata-case-brief-basis\b[^>]*>([\s\S]*?)<\/p>/u);
+    const fullDebriefBasis = fullDebriefAtAGlance.match(/<p><strong>Basis and limits:<\/strong>([\s\S]*?)<\/p>/u);
+    assert.ok(sourceBasis && fullDebriefBasis, `${route} should carry its Basis and limits paragraph in both reading contexts`);
+    assert.equal(
+      normalizeVisibleText(fullDebriefBasis[0]),
+      normalizeVisibleText(sourceBasis[0]),
+      `${route} Full Debrief should preserve the source-owned Basis and limits wording`,
+    );
+    assert.doesNotMatch(
+      fullDebriefAtAGlance,
+      /\bdata-case-brief-(?:detail|media|track)\b|Related figures and media|Read the Full Debrief/u,
+      `${route} should repeat the orientation contract while leaving quick scans, media, and continuation actions in the catalog`,
+    );
+    assert.doesNotMatch(
+      html,
+      /\bdata-case-brief-(?:detail|media|track)\b/u,
+      `${route} should keep its deeper compact-account disclosures in the catalog projection`,
+    );
+    const firstTrackDestination = source.match(/<a\b[^>]*href="#([^"]+)"/u)?.[1];
+    assert.ok(firstTrackDestination, `${route} source should name at least one complete-reading destination`);
+    assert.ok(
+      html.indexOf("<!-- debrief-at-a-glance-projection:end -->") < html.indexOf(`id="${firstTrackDestination}"`),
+      `${route} should orient the reader before the complete architecture narrative`,
+    );
     assert.doesNotMatch(
       html,
       /class="[^"]*\bdebrief-case-brief__media\b|\bdata-case-brief-media\b/u,
-      `${route} should leave the legacy compact-account media carrier in the catalog projection`,
+      `${route} should leave the compact-account media carrier in the catalog projection`,
     );
     assert.doesNotMatch(
       html,
@@ -477,6 +548,79 @@ test("Who To Believe keeps rounded outcome figures anchored to contemporaneous t
   assert.doesNotMatch(`${caseBrief}\n${outcomes}`, /(?:My (?:approximate|directional) recollection|I (?:recall|remember))/u);
 });
 
+test("Choose Your Player distinguishes employer, client, project leadership, and mentoring", async () => {
+  const [fullDebrief, catalog, compactSource] = await Promise.all([
+    readCanvasFile("choose-your-player-humatics.html"),
+    readCanvasFile("debriefs.html"),
+    readFile(compactSourcePath, "utf8"),
+  ]);
+  const source = caseBriefSources(compactSource)
+    .find(entry => entry.route === "choose-your-player-humatics.html")?.html || "";
+  const projection = caseBriefProjections(catalog)
+    .find(entry => entry.route === "choose-your-player-humatics.html")?.html || "";
+  const combined = `${source}\n${projection}\n${fullDebrief}`;
+
+  assert.match(combined, /Janeiro Digital/u);
+  assert.match(combined, /Senior Product Designer and Lead/u);
+  assert.match(combined, /Humatics (?:client )?project(?:&rsquo;|’)s principal designer/u);
+  assert.match(combined, /mentored two junior designers/u);
+  assert.doesNotMatch(combined, /At Humatics, I served as/u);
+});
+
+test("Debrief diagrams preserve protocol generation and genomic coding distinctions", async () => {
+  const [pgx, fanout, frontDoors, discreteResult] = await Promise.all([
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_pgx_attention_failure_map.svg"), "utf8"),
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_two_charts_fanout_map.svg"), "utf8"),
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_canonical_front_doors_map.svg"), "utf8"),
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/ehr_discrete_result_contract_map.svg"), "utf8"),
+  ]);
+
+  assert.match(pgx, /CDS Hooks 1\.x/u);
+  assert.match(pgx, /medication-prescribe/u);
+  assert.doesNotMatch(pgx, /CDS Hooks v2/u);
+  for (const svg of [fanout, frontDoors, discreteResult]) {
+    assert.doesNotMatch(svg, /LOINC-coded (?:clinical truth|clinical meaning|findings)/u);
+  }
+});
+
+test("Debrief recovery and data-provenance claims match their demonstrated behavior", async () => {
+  const [inspectionFlow, limsDebrief, trialDebrief] = await Promise.all([
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg"), "utf8"),
+    readCanvasFile("fmi-lims-eln-replatforming.html"),
+    readCanvasFile("fmi-clinical-trial-coordination.html"),
+  ]);
+
+  assert.match(inspectionFlow, /server de-duplication/u);
+  assert.match(limsDebrief, /returns no new transfer plan/u);
+  assert.doesNotMatch(limsDebrief, /exact replay returns the original result/u);
+  assert.doesNotMatch(trialDebrief, /synthetic, de-identified|de-identified candidate/u);
+});
+
+test("inspection readings present an ongoing state while preserving proposal and validation boundaries", async () => {
+  const [field, distributed, compactSource] = await Promise.all([
+    readCanvasFile("field-inspection-harness-replatform.html"),
+    readCanvasFile("distributed-inspection-harness.html"),
+    readFile(compactSourcePath, "utf8"),
+  ]);
+
+  assert.match(field, /Ongoing Site Reading · implementation-gated · July 2026 planning basis/u);
+  assert.match(field, /All schedules and dollar bands are current July 2026\s+planning envelopes/u);
+  assert.match(field, /a field pilot establishes whether the bounded pilot outcome is met/u);
+  assert.match(distributed, /Ongoing Site Reading · Teaching exemplar · Version 0\.1\.0/u);
+  assert.match(distributed, /A proposed reference stack for the Now track/u);
+  assert.match(distributed, /field performance remains to be tested/u);
+
+  const fieldSource = caseBriefSources(compactSource)
+    .find(source => source.route === "field-inspection-harness-replatform.html")?.html || "";
+  const distributedSource = caseBriefSources(compactSource)
+    .find(source => source.route === "distributed-inspection-harness.html")?.html || "";
+  assert.match(fieldSource, /advancing this ongoing program/u);
+  assert.match(fieldSource, /proposed offline vehicle-inspection architecture/u);
+  assert.match(fieldSource, /remain current planning estimates/u);
+  assert.match(distributedSource, /developing this ongoing teaching exemplar/u);
+  assert.match(distributedSource, /must establish field durability, recovery, security, operating cost, dispute reduction, and downstream outcomes/u);
+});
+
 test("the two table-reading articles retain ordinary routes and the Atlas reading closes the catalog", async () => {
   const html = await readCanvasFile("debriefs.html");
   const cards = [...html.matchAll(/<li id="(catalog-[^"]+)" class="project__media debrief-catalog__card"[^>]*>/gu)];
@@ -498,6 +642,30 @@ test("the two table-reading articles retain ordinary routes and the Atlas readin
   const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
   const list = graph["@graph"].find(item => item["@type"] === "ItemList");
   assert.equal(list.numberOfItems, list.itemListElement.length);
+  assert.deepEqual(
+    list.itemListElement.slice(0, 13).map(item => item.name),
+    [
+      "The Queue That Was Secretly a Status Machine",
+      "The Boolean Building Blocks That Were Quietly an ETL Substrate",
+      "The Sample Nobody Could Find",
+      "Choose Your Player",
+      "Who To Believe",
+      "The Discrete Result That Kept Arriving as a PDF",
+      "Two Charts, One Result",
+      "Three Front Doors",
+      "The Alert Nobody Clicked",
+      "Re-platforming the Backbone",
+      "Initiative Costing",
+      "Funding a Field-Inspection Platform in Recoverable Stages",
+      "Distributed Inspection Harness",
+    ],
+    "Structured collection order should match the visible catalog, with the EHR family expanded in place",
+  );
+  assert.deepEqual(
+    list.itemListElement.map(item => item.position),
+    Array.from({ length: list.numberOfItems }, (_, index) => index + 1),
+    "Structured positions should remain contiguous after catalog reordering",
+  );
   assert.equal(list.itemListElement.at(-1).position, list.numberOfItems);
   assert.ok(list.itemListElement.at(-1).url.endsWith("/one-figure-several-readings.html"));
   const article = await readCanvasFile("readable-tables-reusable-evidence.html");

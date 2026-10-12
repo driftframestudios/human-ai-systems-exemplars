@@ -140,7 +140,39 @@
 
       <div class="content__container bg__adjust--soft-apricot fmi-solution-field fmi-solution-field--orientation">
         <div class="content content--editorial">
-          <span id="case-brief" aria-hidden="true"></span>
+          <!-- debrief-at-a-glance-projection:start -->
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="case-brief-at-a-glance-title">
+            <h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance</h2>
+            <p>At Foundation Medicine, I served as Senior Manager and Principal Product Designer and led research and product design that made shared laboratory objects, failure paths, and build-or-buy choices explicit. My work informed vendor selection; the program completed production authority transfer a couple of business quarters later.</p>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Situation and stakes</dt>
+                <dd>A build-or-buy decision followed a prior big-bang rollback. Hundreds of lab personnel needed reliable answers about sample location, status, connected work, provenance, and approval.</dd>
+              </div>
+              <div>
+                <dt>Scope and role</dt>
+                <dd>During the 2021–2022 engagement, I served as Senior Manager and Principal Product Designer, led two Value Streams, and worked with a three-person leadership team and six-plus working groups drawing from eight-plus teams; participatory reach accumulated to roughly n≈70–100+ across sessions.</dd>
+              </div>
+              <div>
+                <dt>Core constraint</dt>
+                <dd>Vendor-feature comparison fragmented shared objects, workflow states, instruments, sites, and approval pathways. The collaboration also needed a medium familiar enough for lab teams to revise together.</dd>
+              </div>
+              <div>
+                <dt>Key decision</dt>
+                <dd>Reduce the full-suite ambition to a pilot, use an Excel-aligned PowerPoint language, and name shared objects and approval pathways before comparing vendors or implementation paths.</dd>
+              </div>
+              <div>
+                <dt>Outcome and evidence</dt>
+                <dd>All candidate vendors were rated with the System Usability Scale and a weighted evaluation matrix. A vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later. My prototypes also made the scale of a bespoke build legible to engineers at the beginning of the decision.</dd>
+              </div>
+              <div>
+                <dt>Relevance now</dt>
+                <dd>Teams can reuse participatory specifications across vendor demonstrations, cost comparison, automation, acceptance tests, and reversible migration.</dd>
+              </div>
+            </dl>
+            <p><strong>Basis and limits:</strong> My project records, working artifacts, participant quotations, and later program reports document these changes. The 2025–2026 specification and implementation examples answer present-day design questions; each receiving environment qualifies its own behavior.</p>
+          </section>
+          <!-- debrief-at-a-glance-projection:end -->
 
           <section id="genomics-sequencing-process-walkthrough" aria-labelledby="genomics-sequencing-process-walkthrough-title">
             <h2 id="genomics-sequencing-process-walkthrough-title" class="txt-h2">Sequencing-process visualization demonstration</h2>
@@ -977,7 +1009,7 @@ allowed transition + expected version + actor + reason
               <article>
                 <h4 class="txt-h4">§c.3 Preserve custody and location through every move</h4>
                 <p><strong>Then.</strong> A folder move could drop plates midway; duplication could crash the client.</p>
-                <p><strong>Now.</strong> Aggregate state, custody event, and outbound integration record share one commit. An exact replay returns the original result with one committed effect.</p>
+                <p><strong>Now.</strong> Aggregate state, custody event, and outbound integration record share one commit. An exact replay is recognized and returns no new transfer plan, so the commit count remains one.</p>
                 <pre><code>def test_transfer_plans_state_event_and_outbox(self):
     transfer = plan_transfer(self.initial, self.transfer_command())
     assert transfer is not None

@@ -14,6 +14,9 @@ const catalogRelativePath = path.relative(repositoryRoot, catalogPath);
 const startMarker = "  <!-- debrief-case-brief-projections:start -->";
 const endMarker = "  <!-- debrief-case-brief-projections:end -->";
 const insertionSentinel = "</main><!-- /content class on main -->";
+const fullDebriefStartMarker = "          <!-- debrief-at-a-glance-projection:start -->";
+const fullDebriefEndMarker = "          <!-- debrief-at-a-glance-projection:end -->";
+const fullDebriefInsertionSentinel = "          <span id=\"case-brief\" aria-hidden=\"true\"></span>";
 const routePattern = /^[a-z0-9][a-z0-9-]*\.html$/;
 const fragmentPattern = /^#[A-Za-z][A-Za-z0-9_.:-]*$/;
 const expectedFieldLabels = [
@@ -43,6 +46,13 @@ class MaterializationError extends Error {
 
 function fail(message) {
   throw new MaterializationError(message);
+}
+
+export function formatMaterializationError(error) {
+  if (error instanceof MaterializationError) return error.message;
+  const code = error && typeof error.code === "string" ? ` (${error.code})` : "";
+  const detail = error instanceof Error ? error.message : "unknown error";
+  return `Case Brief projection materialization failed${code}: ${detail}`;
 }
 
 function escapeAttribute(value) {
@@ -275,22 +285,22 @@ function validateSafeAttributes(node, route) {
   }
 }
 
-function renderSafeNode(node, route) {
+function renderSafeNode(node, route, fragmentPrefix = route) {
   if (node.type === "text") return node.value.replace(/\s+/g, " ");
   if (!allowedElements.has(node.tag)) fail(`${route} contains the unsupported <${node.tag}> element in its Case Brief projection`);
   validateSafeAttributes(node, route);
   const attributes = [];
   for (const [name, value] of node.attributes) {
-    if (name === "href") attributes.push(`href="${escapeAttribute(route + value)}"`);
+    if (name === "href") attributes.push(`href="${escapeAttribute(fragmentPrefix + value)}"`);
     if (name === "class") attributes.push(`class="${escapeAttribute(value)}"`);
   }
   const open = attributes.length > 0 ? `<${node.tag} ${attributes.join(" ")}>` : `<${node.tag}>`;
   if (voidElements.has(node.tag)) return open;
-  return `${open}${node.children.map((child) => renderSafeNode(child, route)).join("")}</${node.tag}>`;
+  return `${open}${node.children.map((child) => renderSafeNode(child, route, fragmentPrefix)).join("")}</${node.tag}>`;
 }
 
-function renderChildren(node, route) {
-  return node.children.map((child) => renderSafeNode(child, route)).join("").trim();
+function renderChildren(node, route, fragmentPrefix = route) {
+  return node.children.map((child) => renderSafeNode(child, route, fragmentPrefix)).join("").trim();
 }
 
 function assertAttributes(node, expected, fileLabel) {
@@ -432,6 +442,11 @@ function validateEntryAgainstRoute(sourceEntry, routeSource) {
   if (normalizedText(heading) !== normalizedText(sourceEntry.title)) {
     fail(`${caseBriefSourceRelativePath} title for ${route} must match its Full Debrief h1`);
   }
+  one(
+    descendants(main, (node) => node.attributes.get("id") === "case-brief"),
+    "published #case-brief coordinate",
+    fileLabel,
+  );
   const identifiers = new Set();
   descendants(routeTree, (node) => {
     const identifier = node.attributes.get("id");
@@ -448,6 +463,31 @@ function validateEntryAgainstRoute(sourceEntry, routeSource) {
       fail(`${caseBriefSourceRelativePath} entry ${route} targets the missing Full Debrief fragment ${href}`);
     }
   }
+}
+
+function renderFullDebriefAtAGlance(sourceEntry) {
+  const { route } = sourceEntry;
+  const fieldMarkup = sourceEntry.fieldGroups.map((group) => {
+    const [term, description] = directElements(group);
+    return [
+      "              <div>",
+      `                <dt>${renderChildren(term, route, "")}</dt>`,
+      `                <dd>${renderChildren(description, route, "")}</dd>`,
+      "              </div>",
+    ].join("\n");
+  }).join("\n");
+  return [
+    fullDebriefStartMarker,
+    "          <section id=\"case-brief\" data-content-form=\"case-brief\" aria-labelledby=\"case-brief-at-a-glance-title\">",
+    `            <h2 id="case-brief-at-a-glance-title" class="txt-h2">${renderChildren(sourceEntry.orientationHeading, route, "")}</h2>`,
+    `            <p>${renderChildren(sourceEntry.orientation, route, "")}</p>`,
+    "            <dl class=\"debrief-at-glance\">",
+    fieldMarkup,
+    "            </dl>",
+    `            <p>${renderChildren(sourceEntry.basis, route, "")}</p>`,
+    "          </section>",
+    fullDebriefEndMarker,
+  ].join("\n");
 }
 
 function renderTemplate(sourceEntry) {
@@ -493,6 +533,54 @@ function markerOffsets(source) {
   return { start: starts[0], end: ends[0] + endMarker.length };
 }
 
+function fullDebriefMarkerOffsets(source, fileLabel) {
+  const starts = Array.from(source.matchAll(new RegExp(fullDebriefStartMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
+  const ends = Array.from(source.matchAll(new RegExp(fullDebriefEndMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
+  if (starts.length > 1 || ends.length > 1 || starts.length !== ends.length) {
+    fail(`${fileLabel} must contain either zero or one complete generated At-a-Glance projection block`);
+  }
+  if (starts.length === 0) return null;
+  if (starts[0] >= ends[0]) fail(`${fileLabel} contains At-a-Glance projection markers in the wrong order`);
+  return { start: starts[0], end: ends[0] + fullDebriefEndMarker.length };
+}
+
+function assertFullDebriefProjectionOwnership(source, offsets, fileLabel) {
+  const routeTree = parseHtml(source, fileLabel);
+  const projectionTree = parseHtml(
+    source.slice(offsets.start, offsets.end),
+    `${fileLabel} generated At-a-Glance projection`,
+  );
+  for (const identifier of ["case-brief", "case-brief-at-a-glance-title"]) {
+    const owned = descendants(projectionTree, (node) => node.attributes.get("id") === identifier).length;
+    const total = descendants(routeTree, (node) => node.attributes.get("id") === identifier).length;
+    const outside = total - owned;
+    if (owned !== 1 || outside !== 0) {
+      fail(`${fileLabel} generated At-a-Glance projection must own exactly one #${identifier} and keep that identifier out of route-owned markup; found ${owned} inside and ${outside} outside`);
+    }
+  }
+}
+
+export function replaceGeneratedAtAGlance(source, generatedBlock, {
+  fileLabel = "Full Debrief",
+  requireGeneratedBlock = false,
+} = {}) {
+  const offsets = fullDebriefMarkerOffsets(source, fileLabel);
+  if (offsets) {
+    const expected = source.slice(0, offsets.start) + generatedBlock + source.slice(offsets.end);
+    assertFullDebriefProjectionOwnership(expected, fullDebriefMarkerOffsets(expected, fileLabel), fileLabel);
+    return expected;
+  }
+  if (requireGeneratedBlock) fail(`${fileLabel} is missing its generated At-a-Glance projection block`);
+  const sentinels = Array.from(source.matchAll(new RegExp(fullDebriefInsertionSentinel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")), (match) => match.index);
+  if (sentinels.length !== 1) {
+    fail(`${fileLabel} must contain exactly one legacy #case-brief insertion coordinate before its first At-a-Glance build`);
+  }
+  const offset = sentinels[0];
+  const expected = source.slice(0, offset) + generatedBlock + source.slice(offset + fullDebriefInsertionSentinel.length);
+  assertFullDebriefProjectionOwnership(expected, fullDebriefMarkerOffsets(expected, fileLabel), fileLabel);
+  return expected;
+}
+
 function validateExistingTemplates(source, offsets, expectedRoutes, exact) {
   if (!offsets) {
     if (exact) fail(`${catalogRelativePath} is missing its generated Case Brief projection block`);
@@ -522,11 +610,20 @@ function materializedCatalog(source, block) {
   return source.slice(0, sentinelIndex) + block + "\n" + source.slice(sentinelIndex);
 }
 
-async function writeAtomically(destination, content) {
+export async function writeAtomically(destination, content, {
+  expectedSource,
+  fileLabel = path.relative(repositoryRoot, destination),
+} = {}) {
   const temporary = `${destination}.tmp-${process.pid}`;
   try {
     await access(temporary, fsConstants.F_OK).then(() => fail(`Refusing to replace the existing temporary file ${path.basename(temporary)}`), () => undefined);
     await writeFile(temporary, content, { encoding: "utf8", flag: "wx", mode: 0o644 });
+    if (expectedSource !== undefined) {
+      const currentSource = await readFile(destination, "utf8");
+      if (currentSource !== expectedSource) {
+        fail(`${fileLabel} changed after materialization planning; preserve the newer edits and rerun the build`);
+      }
+    }
     await rename(temporary, destination);
   } catch (error) {
     await unlink(temporary).catch(() => undefined);
@@ -573,28 +670,52 @@ async function main() {
   });
   const sourceEntries = extractSourceEntries(caseBriefSource, routes);
   const templates = [];
+  const fullDebriefProjections = [];
   for (const sourceEntry of sourceEntries) {
     const routeSourcePath = validateRoute(sourceEntry.route);
     const routeSource = await readAdmittedCaseBriefSource(routeSourcePath);
     validateEntryAgainstRoute(sourceEntry, routeSource);
     templates.push(renderTemplate(sourceEntry));
+    fullDebriefProjections.push({
+      destination: routeSourcePath,
+      fileLabel: path.relative(repositoryRoot, routeSourcePath),
+      source: routeSource,
+      expected: replaceGeneratedAtAGlance(routeSource, renderFullDebriefAtAGlance(sourceEntry), {
+        fileLabel: path.relative(repositoryRoot, routeSourcePath),
+        requireGeneratedBlock: check,
+      }),
+    });
   }
   const block = `${startMarker}\n${templates.join("\n")}\n${endMarker}`;
   const expected = materializedCatalog(catalog, block);
 
   if (check) {
     if (expected !== catalog) fail(`${catalogRelativePath} Case Brief projections are stale; run npm run build:debrief-case-briefs`);
-    process.stdout.write(`Case Brief projections are current: ${routes.length} source routes.\n`);
+    const staleFullDebrief = fullDebriefProjections.find(({ source, expected: routeExpected }) => source !== routeExpected);
+    if (staleFullDebrief) fail(`${staleFullDebrief.fileLabel} At-a-Glance projection is stale; run npm run build:debrief-case-briefs`);
+    process.stdout.write(`Case Brief and Full Debrief At-a-Glance projections are current: ${routes.length} source routes.\n`);
     return;
   }
-  if (expected !== catalog) await writeAtomically(catalogPath, expected);
-  process.stdout.write(`Materialized ${routes.length} Case Brief projections in ${catalogRelativePath}.\n`);
+  for (const projection of fullDebriefProjections) {
+    if (projection.expected !== projection.source) {
+      await writeAtomically(projection.destination, projection.expected, {
+        expectedSource: projection.source,
+        fileLabel: projection.fileLabel,
+      });
+    }
+  }
+  if (expected !== catalog) {
+    await writeAtomically(catalogPath, expected, {
+      expectedSource: catalog,
+      fileLabel: catalogRelativePath,
+    });
+  }
+  process.stdout.write(`Materialized ${routes.length} catalog Case Brief and Full Debrief At-a-Glance projections.\n`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main().catch((error) => {
-    const message = error instanceof MaterializationError ? error.message : "Case Brief projection materialization failed";
-    process.stderr.write(`${message}\n`);
+    process.stderr.write(`${formatMaterializationError(error)}\n`);
     process.exitCode = 1;
   });
 }
