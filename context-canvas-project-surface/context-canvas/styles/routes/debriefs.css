@@ -328,10 +328,29 @@
     box-shadow: .55rem .55rem 0 rgba(40, 85, 243, .15);
 }
 
-.debrief-catalog__card > .txt-h2 {
+.debrief-card__heading {
+    align-items: start;
+    display: grid;
+    gap: .5rem 1rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.debrief-card__heading > .txt-h2 {
     color: var(--debrief-ink);
     font-size: clamp(1.25rem, 2vw, 1.7rem);
-    margin-top: 0;
+    margin: 0;
+}
+
+.debrief-card__era {
+    background: var(--debrief-acid);
+    border: 1px solid var(--debrief-cobalt-deep);
+    color: var(--debrief-ink);
+    font: 700 .64rem/1.2 Futura, "Arial Nova", sans-serif;
+    letter-spacing: .045em;
+    margin: .15rem 0 0;
+    padding: .35rem .5rem;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .debrief-card__types,
@@ -423,13 +442,14 @@
     overflow-wrap: anywhere;
 }
 
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__types,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__catalog-meta,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .project__media--container,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .project__media--text,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .article__summary,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .txt-right,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > hr,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__types,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__heading .debrief-card__era,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__catalog-meta,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .project__media--container,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .project__media--text,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .article__summary,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .txt-right,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > hr,
 .debrief-catalog[data-reading-mode="full-debrief"] .debrief-catalog__card[data-case-brief-routes] > .txt-right,
 .debrief-catalog[data-reading-mode="full-debrief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__types li:first-child {
     display: none;
@@ -458,6 +478,25 @@
 .debrief-card__case-brief .debrief-preview-note {
     color: var(--debrief-body);
     max-inline-size: var(--canvas-reading-measure);
+}
+
+.debrief-card__case-brief-media {
+    border-block-start: 1px solid rgba(40, 85, 243, .24);
+    margin-block-start: 1rem;
+    padding-block-start: .85rem;
+}
+
+.debrief-card__case-brief-media > :first-child {
+    color: var(--debrief-ink);
+    font-size: .8rem;
+    margin-block: 0 .5rem;
+}
+
+.debrief-card__case-brief-media ul {
+    display: grid;
+    gap: .45rem;
+    margin: 0;
+    padding-inline-start: 1.2rem;
 }
 
 .debrief-card__case-brief .debrief-preview-facts dt {
@@ -746,6 +785,15 @@
     .debrief-card__catalog-meta {
         grid-template-columns: minmax(0, 1fr);
     }
+
+    .debrief-card__heading {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .debrief-card__era {
+        justify-self: start;
+        margin-block: -.1rem .15rem;
+    }
 }
 
 @media screen and (max-width: 26rem) {
@@ -810,6 +858,7 @@
 
     .debrief-card__types li,
     .debrief-card__topics li,
+    .debrief-card__era,
     .debrief-tag-cloud strong {
         background: Canvas;
         border: 1px solid CanvasText;
@@ -872,7 +921,7 @@
 
     .debrief-system-summary .txt-h2,
     .debrief-catalog__preview .txt-h3,
-    .debrief-catalog__card > .txt-h2,
+    .debrief-card__heading > .txt-h2,
     .debrief-eyebrow {
         color: #000;
     }

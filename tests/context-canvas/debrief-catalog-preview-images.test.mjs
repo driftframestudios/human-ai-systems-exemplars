@@ -13,7 +13,7 @@ const previewSources = new Map([
   ["catalog-genomic-viewer", "../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp"],
   ["catalog-clinical-trial", "../img/debriefs/sample-noone-could-find/lims-eln-lab-process-axonometric-visualization.webp"],
   ["catalog-ehr-integration", "../img/plot/ehr_discrete_result_contract_map.svg"],
-  ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/lims-eln-process-mapping.webp"],
+  ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp"],
   ["catalog-humatics", "../img/debriefs/choose-your-player/robotics-map-setup.webp"],
   ["catalog-who-to-believe", "../img/plot/who_to_believe_influence_map.svg"],
   ["catalog-field-inspection", "../img/plot/inspection_platform_operating_map.svg"],
@@ -28,7 +28,7 @@ const previewDimensions = new Map([
   ["catalog-genomic-viewer", ["5120", "2708"]],
   ["catalog-clinical-trial", ["5116", "2710"]],
   ["catalog-ehr-integration", ["1600", "1120"]],
-  ["catalog-lims-eln", ["5114", "2710"]],
+  ["catalog-lims-eln", ["480", "269"]],
   ["catalog-humatics", ["5110", "2708"]],
   ["catalog-who-to-believe", ["1600", "1180"]],
   ["catalog-field-inspection", ["1600", "1200"]],
@@ -37,6 +37,27 @@ const previewDimensions = new Map([
   ["catalog-structure-sensor", ["1440", "1080"]],
   ["catalog-langwhich", ["1440", "882"]],
   ["catalog-accessible-forms", ["700", "1250"]],
+]);
+
+const catalogCardImages = new Map([
+  [
+    "catalog-humatics",
+    {
+      src: "../img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      srcset: "../img/debriefs/choose-your-player/robotics-upfront-480.webp 480w, ../img/debriefs/choose-your-player/robotics-upfront-960.webp 960w, ../img/debriefs/choose-your-player/robotics-upfront-1920.webp 1920w",
+      width: "480",
+      height: "255",
+    },
+  ],
+  [
+    "catalog-structure-sensor",
+    {
+      src: "../img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      srcset: "../img/debriefs/spatial-capture/3d-modeling-scan-480.webp 480w, ../img/debriefs/spatial-capture/3d-modeling-scan-960.webp 960w, ../img/debriefs/spatial-capture/3d-modeling-scan-1920.webp 1920w",
+      width: "480",
+      height: "401",
+    },
+  ],
 ]);
 
 function attribute(tag, name) {
@@ -90,6 +111,34 @@ test("Full Debrief catalog cards declare reviewed responsive preview visuals", a
 
   assert.match(html, /<figcaption data-preview-caption>Preview visual from the selected reading\.<\/figcaption>/u);
   assert.match(html, /<img[^>]*width="1600"[^>]*height="1120"[^>]*data-preview-image>/u);
+});
+
+test("selected catalog cards use role-sized responsive image contracts", async () => {
+  const html = await readFile(resolve(canvasRoot, "debriefs.html"), "utf8");
+
+  for (const [cardId, expected] of catalogCardImages) {
+    const block = cardBlock(html, cardId);
+    const imageTag = block.match(/<img class="project__upfront"[^>]*>/u)?.[0] ?? "";
+    assert.equal(attribute(imageTag, "src"), expected.src, `${cardId} source`);
+    assert.equal(attribute(imageTag, "srcset"), expected.srcset, `${cardId} source set`);
+    assert.equal(attribute(imageTag, "sizes"), "(min-width: 46.0625rem) 19rem, calc(100vw - 5rem)", `${cardId} sizes`);
+    assert.equal(attribute(imageTag, "width"), expected.width, `${cardId} width`);
+    assert.equal(attribute(imageTag, "height"), expected.height, `${cardId} height`);
+    assert.equal(attribute(imageTag, "loading"), "lazy", `${cardId} loading`);
+    assert.equal(attribute(imageTag, "decoding"), "async", `${cardId} decoding`);
+    assert.ok(attribute(imageTag, "alt").length > 40, `${cardId} alternative`);
+    await access(resolve(canvasRoot, expected.src));
+    for (const candidate of expected.srcset.split(/,\s*/u)) {
+      await access(resolve(canvasRoot, candidate.split(/\s+/u)[0]));
+    }
+  }
+
+  assert.equal(
+    html.match(/3d-modeling-scan-(?:480|960|1920)\.webp/gu)?.length,
+    4,
+    "The 3D scan belongs only to the spatial-capture catalog card contract",
+  );
+  assert.doesNotMatch(html, /structure_sensor_3_angled\.webp/u);
 });
 
 test("Catalog preview image selection falls back cleanly and clears stale responsive metadata", async () => {

@@ -57,8 +57,76 @@
     max-inline-size: var(--canvas-reading-measure);
 }
 
+/* The Full Debrief owns this quick-scan layer. The catalog projects only the
+   preceding six-field definition list, while this ordered digest keeps every
+   Solution and Implementation beat available to source-page readers. */
+.debrief-case-brief__tracks {
+    border-block-start: 1px solid var(--canvas-rule);
+    display: grid;
+    gap: 1rem;
+    margin-block-start: 1.5rem;
+    padding-block-start: 1.25rem;
+}
+
+.debrief-case-brief__tracks > .txt-h3 {
+    grid-column: 1 / -1;
+    margin-block: 0;
+}
+
+.debrief-case-brief__track {
+    background: color-mix(in srgb, var(--canvas-field) 18%, var(--canvas-paper) 82%);
+    border: 1px solid var(--canvas-rule);
+    border-block-start: .25rem solid var(--canvas-accent);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.debrief-case-brief__track > .txt-h4,
+.debrief-case-brief__media > .txt-h4 {
+    margin-block: 0 .75rem;
+}
+
+.debrief-case-brief__track > ol,
+.debrief-case-brief__track-list,
+.debrief-case-brief__media > ul,
+.debrief-case-brief__media-list {
+    display: grid;
+    gap: .75rem;
+    margin: 0;
+    padding-inline-start: 1.35rem;
+}
+
+.debrief-case-brief__track > ol li,
+.debrief-case-brief__track-list li,
+.debrief-case-brief__media > ul li,
+.debrief-case-brief__media-list li {
+    padding-inline-start: .2rem;
+}
+
+.debrief-case-brief__media {
+    border-block-start: 1px solid var(--canvas-rule);
+    margin-block-start: 1.5rem;
+    padding-block-start: 1rem;
+}
+
+@media screen and (min-width: 46.0625rem) {
+    .debrief-case-brief__tracks {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media print {
     .track-index {
         break-inside: avoid;
+    }
+
+    .debrief-case-brief__tracks {
+        display: block;
+    }
+
+    .debrief-case-brief__track,
+    .debrief-case-brief__media {
+        break-inside: avoid;
+        margin-block-start: 1rem;
     }
 }

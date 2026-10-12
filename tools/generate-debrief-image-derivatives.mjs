@@ -8,20 +8,50 @@ import {
   rename,
   rm,
 } from "node:fs/promises";
-import { extname, join, parse, resolve } from "node:path";
+import { dirname, extname, join, parse, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const imageRoot = join(repositoryRoot, "context-canvas-project-surface/img/debriefs");
-const families = [
-  "boolean-building-blocks",
-  "choose-your-player",
-  "queue-secretly-status-machine",
-  "sample-noone-could-find",
-  "who-to-believe",
-];
-const widths = [960, 1920];
+export const derivativeProfiles = Object.freeze({
+  families: Object.freeze([
+    Object.freeze({
+      id: "full-debrief",
+      directories: Object.freeze([
+        "boolean-building-blocks",
+        "choose-your-player",
+        "queue-secretly-status-machine",
+        "sample-noone-could-find",
+        "who-to-believe",
+      ]),
+      widths: Object.freeze([960, 1920]),
+    }),
+  ]),
+  sources: Object.freeze([
+    Object.freeze({
+      id: "catalog-card",
+      paths: Object.freeze([
+        "choose-your-player/robotics-upfront.webp",
+        "spatial-capture/3d-modeling-scan.webp",
+      ]),
+      widths: Object.freeze([480, 960, 1920]),
+    }),
+    Object.freeze({
+      id: "catalog-preview",
+      paths: Object.freeze([
+        "sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+      ]),
+      widths: Object.freeze([480, 960, 1920]),
+    }),
+  ]),
+});
+
+export function configuredDerivativeWidths(profiles = derivativeProfiles) {
+  return [...new Set(
+    [...profiles.families, ...profiles.sources].flatMap((profile) => profile.widths),
+  )].sort((left, right) => left - right);
+}
 
 function uint24le(buffer, offset) {
   return buffer[offset] | (buffer[offset + 1] << 8) | (buffer[offset + 2] << 16);
@@ -89,7 +119,7 @@ export async function readWebpDimensions(path) {
   return webpDimensions(await readFile(path), path);
 }
 
-export function derivativePlan(sourceDimensions, requestedWidths = widths) {
+export function derivativePlan(sourceDimensions, requestedWidths = [960, 1920]) {
   return requestedWidths
     .filter((width) => width < sourceDimensions.width)
     .map((width) => ({
@@ -103,10 +133,22 @@ export async function verifyDerivative({
   targetPath,
   expectedWidth,
 }) {
-  const [sourceDimensions, targetDimensions] = await Promise.all([
-    readWebpDimensions(sourcePath),
-    readWebpDimensions(targetPath),
-  ]);
+  let sourceDimensions;
+  let targetDimensions;
+  try {
+    [sourceDimensions, targetDimensions] = await Promise.all([
+      readWebpDimensions(sourcePath),
+      readWebpDimensions(targetPath),
+    ]);
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      throw new Error(
+        `${targetPath} is missing. Run npm run build:debrief-image-derivatives to create it.`,
+        { cause: error },
+      );
+    }
+    throw error;
+  }
   const expectedHeight = Math.ceil(
     sourceDimensions.height * expectedWidth / sourceDimensions.width,
   );
@@ -195,25 +237,6 @@ export async function generateDerivative({
   }
 }
 
-export async function settleIneligibleDerivative({ targetPath, check }) {
-  try {
-    await access(targetPath);
-  } catch (error) {
-    if (error.code === "ENOENT") return false;
-    throw error;
-  }
-
-  if (check) {
-    throw new Error(
-      `${targetPath} is an obsolete derivative at or above its accepted source width. `
-        + "Run npm run build:debrief-image-derivatives to remove it.",
-    );
-  }
-
-  await rm(targetPath, { force: true });
-  return true;
-}
-
 function parseArguments(argumentsList) {
   const unknown = argumentsList.filter((argument) => argument !== "--check");
   if (unknown.length > 0) {
@@ -224,39 +247,218 @@ function parseArguments(argumentsList) {
   return { check: argumentsList.includes("--check") };
 }
 
-async function sourceEntries(directory) {
-  const derivativePattern = new RegExp(`-(?:${widths.join("|")})\\.webp$`, "u");
-  return (await readdir(directory, { withFileTypes: true }))
+async function familyEntries(directory, configuredWidths) {
+  const entries = (await readdir(directory, { withFileTypes: true }))
     .filter((entry) => entry.isFile() && extname(entry.name) === ".webp")
-    .filter((entry) => !derivativePattern.test(entry.name))
     .sort((left, right) => left.name.localeCompare(right.name));
+  const names = new Set(entries.map((entry) => entry.name));
+  const sources = [];
+  const orphanDerivatives = [];
+
+  for (const entry of entries) {
+    const match = /-(\d+)\.webp$/u.exec(entry.name);
+    if (!match) {
+      sources.push(entry);
+      continue;
+    }
+
+    const possibleSource = `${entry.name.slice(0, match.index)}.webp`;
+    if (names.has(possibleSource)) continue;
+
+    const width = Number(match[1]);
+    if (configuredWidths.includes(width)) {
+      orphanDerivatives.push({
+        canonicalSourcePath: join(directory, possibleSource),
+        path: join(directory, entry.name),
+      });
+      continue;
+    }
+
+    sources.push(entry);
+  }
+
+  return { orphanDerivatives, sources };
 }
 
-export async function processDerivativeFamilies({ check = false } = {}) {
+async function compileDerivativeTopology({
+  root = imageRoot,
+  profiles = derivativeProfiles,
+} = {}) {
+  const jobs = new Map();
+  const orphanDerivatives = [];
+  const configuredWidths = configuredDerivativeWidths(profiles);
+
+  for (const profile of profiles.families) {
+    for (const directoryName of profile.directories) {
+      const directory = join(root, directoryName);
+      const entries = await familyEntries(directory, configuredWidths);
+      orphanDerivatives.push(...entries.orphanDerivatives);
+      for (const entry of entries.sources) {
+        const sourcePath = join(directory, entry.name);
+        jobs.set(sourcePath, {
+          profileId: profile.id,
+          sourcePath,
+          widths: [...profile.widths],
+        });
+      }
+    }
+  }
+
+  // A source-specific profile intentionally replaces its family default. This
+  // keeps card and preview delivery geometry explicit without making every
+  // sibling in that directory inherit the same candidate widths.
+  for (const profile of profiles.sources) {
+    for (const relativePath of profile.paths) {
+      const sourcePath = join(root, relativePath);
+      await access(sourcePath);
+      jobs.set(sourcePath, {
+        profileId: profile.id,
+        sourcePath,
+        widths: [...profile.widths],
+      });
+    }
+  }
+
+  return {
+    jobs: [...jobs.values()].sort((left, right) =>
+      left.sourcePath.localeCompare(right.sourcePath)),
+    orphanDerivatives: orphanDerivatives.sort((left, right) =>
+      left.path.localeCompare(right.path)),
+  };
+}
+
+export async function compileDerivativeJobs(options = {}) {
+  return (await compileDerivativeTopology(options)).jobs;
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
+async function assertConfiguredDerivativeWidths(sourcePath, configuredWidths) {
+  const source = parse(sourcePath);
+  const candidatePattern = new RegExp(
+    `^${escapeRegExp(source.name)}-(\\d+)\\.webp$`,
+    "u",
+  );
+  for (const entry of await readdir(dirname(sourcePath), { withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    const match = candidatePattern.exec(entry.name);
+    if (!match) continue;
+    const width = Number(match[1]);
+    if (!configuredWidths.includes(width)) {
+      throw new Error(
+        `${join(dirname(sourcePath), entry.name)} is an unexpected derivative for ${sourcePath}; configured widths are ${configuredWidths.join(", ")}.`,
+      );
+    }
+  }
+}
+
+async function settleStaleDerivatives({
+  sourcePath,
+  expectedWidths,
+  configuredWidths,
+  check,
+}) {
+  const source = parse(sourcePath);
+  const candidatePattern = new RegExp(
+    `^${escapeRegExp(source.name)}-(\\d+)\\.webp$`,
+    "u",
+  );
+  let removed = 0;
+
+  for (const entry of await readdir(dirname(sourcePath), { withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    const match = candidatePattern.exec(entry.name);
+    if (!match) continue;
+    const width = Number(match[1]);
+    const targetPath = join(dirname(sourcePath), entry.name);
+    if (!configuredWidths.includes(width)) {
+      throw new Error(
+        `${targetPath} is an unexpected derivative for ${sourcePath}; configured widths are ${configuredWidths.join(", ")}.`,
+      );
+    }
+    if (expectedWidths.includes(width)) continue;
+    if (check) {
+      throw new Error(
+        `${targetPath} is a stale derivative for ${sourcePath}. `
+          + "Run npm run build:debrief-image-derivatives to remove it.",
+      );
+    }
+    await rm(targetPath, { force: true });
+    removed += 1;
+  }
+
+  return removed;
+}
+
+export async function processDerivativeFamilies({
+  check = false,
+  root = imageRoot,
+  profiles = derivativeProfiles,
+} = {}) {
   let processed = 0;
   let skipped = 0;
   let removed = 0;
+  const configuredWidths = configuredDerivativeWidths(profiles);
+  const { jobs, orphanDerivatives } = await compileDerivativeTopology({ root, profiles });
 
-  for (const family of families) {
-    const directory = join(imageRoot, family);
-    for (const entry of await sourceEntries(directory)) {
-      const sourcePath = join(directory, entry.name);
-      const sourceDimensions = await readWebpDimensions(sourcePath);
-      for (const width of widths) {
-        const basename = parse(entry.name).name;
-        const targetPath = join(directory, `${basename}-${width}.webp`);
-        if (width >= sourceDimensions.width) {
-          skipped += 1;
-          if (await settleIneligibleDerivative({ targetPath, check })) removed += 1;
-          continue;
-        }
-        if (check) {
-          await verifyDerivative({ sourcePath, targetPath, expectedWidth: width });
-        } else {
-          await generateDerivative({ sourcePath, targetPath, expectedWidth: width });
-        }
-        processed += 1;
+  // Complete the naming preflight before a build writes or removes any bytes.
+  // An unrecognized responsive width therefore fails as one coherent unit.
+  for (const job of jobs) {
+    await assertConfiguredDerivativeWidths(job.sourcePath, configuredWidths);
+  }
+
+  if (check && orphanDerivatives.length > 0) {
+    const orphan = orphanDerivatives[0];
+    throw new Error(
+      `${orphan.path} is an orphan derivative because its accepted source `
+        + `${orphan.canonicalSourcePath} is missing. `
+        + "Run npm run build:debrief-image-derivatives to remove it.",
+    );
+  }
+
+  // Read every accepted source before the build removes or replaces bytes.
+  // A malformed source therefore leaves the complete derivative set unchanged.
+  const preparedJobs = [];
+  for (const job of jobs) {
+    const sourceDimensions = await readWebpDimensions(job.sourcePath);
+    const plan = derivativePlan(sourceDimensions, job.widths);
+    const expectedWidths = plan.map(({ width }) => width);
+    skipped += job.widths.length - expectedWidths.length;
+    preparedJobs.push({ ...job, expectedWidths, plan });
+  }
+
+  for (const orphan of orphanDerivatives) {
+    await rm(orphan.path, { force: true });
+    removed += 1;
+  }
+
+  for (const job of preparedJobs) {
+    removed += await settleStaleDerivatives({
+      sourcePath: job.sourcePath,
+      expectedWidths: job.expectedWidths,
+      configuredWidths,
+      check,
+    });
+
+    for (const { width } of job.plan) {
+      const source = parse(job.sourcePath);
+      const targetPath = join(source.dir, `${source.name}-${width}.webp`);
+      if (check) {
+        await verifyDerivative({
+          sourcePath: job.sourcePath,
+          targetPath,
+          expectedWidth: width,
+        });
+      } else {
+        await generateDerivative({
+          sourcePath: job.sourcePath,
+          targetPath,
+          expectedWidth: width,
+        });
       }
+      processed += 1;
     }
   }
 

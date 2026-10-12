@@ -128,13 +128,13 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
     assert.equal(attribute(card.tag, "data-case-brief-routes"), "");
   }
 
-  const compactCallsToAction = Array.from(html.matchAll(
-    /<span class="txt-right">\s*<a href="([^"#]+)#case-brief">Read the Case Brief/gu,
+  const fullDebriefCallsToAction = Array.from(html.matchAll(
+    /<span class="txt-right">\s*<a href="([^"#]+)">Read the Full Debrief/gu,
   ), match => match[1]).sort();
   assert.deepEqual(
-    compactCallsToAction,
+    fullDebriefCallsToAction,
     caseBriefCards.map(card => values(card.tag, "data-case-brief-routes")[0]).sort(),
-    "Each Case Brief card should retain a direct compact path without scripting",
+    "Each Full Debrief card should keep a fragment-free complete-account route without scripting",
   );
 
   const ehrStart = html.indexOf('<li id="catalog-ehr-integration"');
@@ -145,9 +145,29 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
     "data-case-brief-routes",
   ).sort();
   const ehrSeriesLinks = Array.from(ehrCard.matchAll(
-    /<li><a href="([^"#]+)#case-brief"><strong>SR\d/gu,
+    /<li><a href="([^"#]+)"><strong>SR\d/gu,
   ), match => match[1]).sort();
-  assert.deepEqual(ehrSeriesLinks, ehrRoutes, "Each EHR series route should retain its own Case Brief path");
+  assert.deepEqual(ehrSeriesLinks, ehrRoutes, "Each EHR series route should open its complete Full Debrief");
+
+  assert.doesNotMatch(html, /href="[^"]+#case-brief"/u);
+  const eras = Array.from(html.matchAll(
+    /<p class="debrief-card__era" aria-label="[^"]+">([^<]+)<\/p>/gu,
+  ), match => match[1].trim());
+  assert.equal(eras.length, cards.length, "Every catalog entry should expose one visible era or date");
+  assert.ok(eras.every(Boolean), "Every era or date label should carry visible text");
+  assert.match(
+    html,
+    /Choose one reading mode, then add any topics or tools that help narrow the collection\. Choose the\s*<strong>Case Brief mode<\/strong> for a scanning-friendly overview directly on this page\./u,
+  );
+  assert.equal(
+    Array.from(html.matchAll(/\{\{PUBLIC_URL_REGISTRY_SITE_READING_STORY_WALL\}\}/gu)).length,
+    1,
+    "The Story Wall continuation should have one public-reference owner",
+  );
+  assert.ok(
+    html.indexOf("{{PUBLIC_URL_REGISTRY_SITE_READING_STORY_WALL}}") > html.indexOf('id="debrief-amplified-reach-title"'),
+    "The Story Wall continuation should follow the catalog",
+  );
 
   assert.doesNotMatch(html, /Executive Summar(?:y|ies)/u);
   assert.match(script, /"executive-summary": \{ kind: "format", value: "case-brief" \}/u);
@@ -158,7 +178,13 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   assert.match(script, /function createCaseBriefArticle\(card, route, source, index\)/u);
   assert.match(script, /existing\.setAttribute\("data-card-full-index", ""\)/u);
   assert.match(script, /cloneForCatalog\(source\.fields, "debrief-preview-facts", route\)/u);
+  assert.match(script, /cloneForCatalog\(source\.media, "debrief-card__case-brief-media", route\)/u);
+  assert.doesNotMatch(script, /createCaseBriefFallback/u);
+  assert.doesNotMatch(script, /source page carries this complete Case Brief/iu);
+  assert.doesNotMatch(script, /source\.detail/u, "The catalog should leave the deeper track digest on the source page");
   assert.match(script, /caseBriefCache\.delete\(route\)/u, "A rejected source request should remain retryable");
+  assert.match(script, /route \+ "#case-brief", "Open the Case Brief"/u);
+  assert.match(script, /route, "Read the Full Debrief"/u);
   assert.match(html, /data-preview-link[^>]*>[\s\S]*?Read the Full Debrief/u);
   assert.doesNotMatch(html, /data-preview-case-brief-content/u);
 });
@@ -174,6 +200,11 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
 
   for (const route of uniqueRoutes) {
     const html = await readCanvasFile(route);
+    assert.match(
+      html,
+      /<link rel="stylesheet" href="styles\/components\/debrief-reading\.css">/u,
+      `${route} should load the shared owner for its Case Brief track and media styles`,
+    );
     const sections = Array.from(html.matchAll(
       /<section\b(?=[^>]*\bid="case-brief")(?=[^>]*\bdata-content-form="case-brief")(?=[^>]*\baria-labelledby="([^"]+)")[^>]*>([\s\S]*?)<\/section>/gu,
     ));
@@ -201,6 +232,46 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
     const labels = Array.from(definitionList[1].matchAll(/<dt>([^<]+)<\/dt>/gu), match => match[1]);
     assert.deepEqual(labels, expectedCaseBriefFields, `${route} should carry the six-field Case Brief contract`);
     assert.match(section, /<p><strong>Basis and limits:<\/strong>[^<]+<\/p>/u, `${route} should state its basis and limits`);
+
+    const detailStart = section.indexOf('data-case-brief-detail');
+    const basisStart = section.indexOf("<strong>Basis and limits:</strong>");
+    const continuationStart = section.indexOf("Read the Full Debrief");
+    assert.ok(detailStart > basisStart, `${route} should place the track digest after its evidence boundary`);
+    assert.ok(continuationStart > detailStart, `${route} should place the Full Debrief continuation after the digest`);
+    assert.match(
+      section,
+      /<div\b(?=[^>]*\bdata-case-brief-detail\b)[^>]*>[\s\S]*?<\/article>\s*<\/div>\s*<div\b(?=[^>]*\bdata-case-brief-media\b)[^>]*>/u,
+      `${route} should keep the concise media index beside, rather than inside, the source-page track digest`,
+    );
+
+    const tracks = Array.from(section.matchAll(
+      /<article\b(?=[^>]*\bclass="[^"]*\bdebrief-case-brief__track\b[^"]*")(?=[^>]*\bdata-case-brief-track="([^"]+)")[^>]*>([\s\S]*?)<\/article>/gu,
+    ), match => ({ kind: match[1], html: match[2] }));
+    const expectedTrackKinds = route === "three-way-comparative-return.html"
+      ? ["comparative", "return"]
+      : ["solution", "implementation"];
+    assert.deepEqual(tracks.map(track => track.kind), expectedTrackKinds, `${route} should expose its truthful paired scan`);
+
+    for (const track of tracks) {
+      const links = Array.from(track.html.matchAll(/<li\b[^>]*>[\s\S]*?<a\b[^>]*href="#([^"]+)"/gu), match => match[1]);
+      const expectedCount = route === "three-way-comparative-return.html"
+        ? (track.kind === "comparative" ? 5 : 3)
+        : (route === "field-inspection-harness-replatform.html" && track.kind === "implementation" ? 6 : 5);
+      assert.equal(links.length, expectedCount, `${route} ${track.kind} scan should represent every owned beat`);
+      for (const id of links) {
+        assert.match(html, new RegExp(`\\bid="${id}"`, "u"), `${route} should resolve ${track.kind} scan link #${id}`);
+      }
+    }
+
+    const media = section.match(
+      /<div class="debrief-case-brief__media" data-case-brief-media>([\s\S]*?)<\/div>/u,
+    );
+    assert.ok(media, `${route} should carry one reviewed related-media index`);
+    const mediaLinks = Array.from(media[1].matchAll(/<li\b[^>]*>[\s\S]*?<a\b[^>]*href="#([^"]+)"/gu), match => match[1]);
+    assert.ok(mediaLinks.length >= 1 && mediaLinks.length <= 3, `${route} should keep its related-media index concise`);
+    for (const id of mediaLinks) {
+      assert.match(html, new RegExp(`\\bid="${id}"`, "u"), `${route} should resolve media link #${id}`);
+    }
 
     const continuation = section.match(/<a\b[^>]*href="(#[^"]+)"[^>]*>\s*Read the Full Debrief[^<]*<\/a>/u);
     assert.ok(continuation, `${route} should continue into the Full Debrief`);

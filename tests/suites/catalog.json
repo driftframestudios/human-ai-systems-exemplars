@@ -1791,7 +1791,7 @@
         "appendMembers": false
       },
       "owner": "context-canvas-project-surface/context-canvas/README.md",
-      "scope": "Tracked Debrief derivatives retain eligible widths, exact dimensions, and accepted-source aspect ratios; check mode leaves bytes unchanged.",
+      "scope": "Tracked Debrief derivatives follow named full-Debrief, catalog-card, and catalog-preview width profiles; checks preserve bytes while reporting exact geometry plus missing, stale, unexpected, and orphan derivative states.",
       "aliases": [
         "check:debrief-image-derivatives"
       ]

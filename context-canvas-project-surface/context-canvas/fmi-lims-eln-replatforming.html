@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="styles/components/site-navigation.css">
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
+    <link rel="stylesheet" href="styles/components/debrief-reading.css">
     <link rel="stylesheet" href="fmi-lims-eln-replatforming.css">
     <link rel="stylesheet" href="canvas-shell.css">
   <script src="visitor-boundary-contract.js" defer></script>
@@ -169,6 +170,37 @@
               </div>
             </dl>
             <p><strong>Basis and limits:</strong> My project records, working artifacts, participant quotations, and later program reports document these changes. The 2025–2026 specification and implementation examples answer present-day design questions; each receiving environment qualifies its own behavior.</p>
+            <div class="debrief-case-brief__tracks" data-case-brief-detail aria-labelledby="case-brief-tracks-title">
+              <h3 id="case-brief-tracks-title" class="txt-h3">Solution and implementation quick scan</h3>
+              <article class="debrief-case-brief__track" data-case-brief-track="solution" aria-labelledby="case-brief-solution-track-title">
+                <h4 id="case-brief-solution-track-title" class="txt-h4">Solution Architecture</h4>
+                <ol>
+                  <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> As Senior Manager and Principal Product Designer, I joined a build-or-buy re-platforming effort after a failed big-bang refresh had returned the laboratories to their legacy LIMS; hundreds of practitioners needed specimen identity, custody, state, review, and scientific meaning to remain coherent across sites and shifts.</li>
+                  <li><strong><a href="#shared-grammar-title">Bottleneck.</a></strong> Six-plus groups and eight-plus teams had forked their own models of samples, plates, reagents, runs, and sign-offs, while email, Slack, tickets, memory, and separate systems carried the handoffs and failure recovery.</li>
+                  <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> I used working prototypes, shared-object definitions, a first-class failure register, scenario specifications, and a deeply worked pilot to make disagreement inexpensive and turn participant corrections into vendor demonstrations, acceptance criteria, and automation tests.</li>
+                  <li><strong><a href="#solution-outcomes-title">Outcome.</a></strong> Every candidate vendor received a System Usability Scale rating and weighted evaluation, one vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later; the prototypes also revealed the scope of a bespoke build before commitment.</li>
+                  <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> Teams can name shared objects and failures first, design in the open, adapt the carrier to the audience, translate scenarios into tests, and cost migration, validation, training, recovery, and operating change as part of the platform decision.</li>
+                </ol>
+              </article>
+              <article class="debrief-case-brief__track" data-case-brief-track="implementation" aria-labelledby="case-brief-implementation-track-title">
+                <h4 id="case-brief-implementation-track-title" class="txt-h4">Implementation Architecture</h4>
+                <ol>
+                  <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> I compare the 2021–2022 client/server LIMS, ELN, EBR, Sample Monitor, file-processing, on-premises, AWS, batch, and file-drop estate with a distinct 2025–2026 lifecycle-centered reference architecture that retains the shared-object grammar.</li>
+                  <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Private data models split sample findability, sign-off history, movement, skips, recovery latency, verification, and deletion across systems; a slow EBR screen connected interface performance directly to rescanning, thawing reagents, and recoverable lab work.</li>
+                  <li><strong><a href="#implementation-intervention-title">Intervention.</a></strong> The reference architecture canonicalizes shared objects, models lifecycle state, makes custody changes transactional, captures instrument data at the source, records attributable review meaning, and carries executable scenarios through vendor, migration, failure, and acceptance boundaries.</li>
+                  <li><strong><a href="#implementation-outcome-title">Outcome.</a></strong> The historical production transfer remains distinct from the contemporary reference: the current program constellation, contracts, carriers, and nine runnable samples make system fit, recovery, authority, and investment inspectable while configured environments retain their own qualification work.</li>
+                  <li><strong><a href="#implementation-repeatability-title">Repeatability.</a></strong> Canonical objects, explicit state machines, recoverable operations, source capture, attributable review, executable scenarios, and up-front migration and validation costs travel; vendor maturity, infrastructure, organizational history, and regulated use remain local conditions.</li>
+                </ol>
+              </article>
+            </div>
+            <div class="debrief-case-brief__media" data-case-brief-media>
+              <h4 class="txt-h4">Related figures and media</h4>
+              <ul>
+                <li><strong>Movie — <a href="#genomics-sequencing-process-walkthrough-title">Sequencing-process visualization demonstration.</a></strong> Axonometric sequencing lanes connect plate and well quality control with a process graph, camera views, and selected-record detail.</li>
+                <li><strong>Figure — <a href="#lims-source-cartography">Specimen source cartography.</a></strong> Specimen accession anchors regional LIMS, consent, identity, instruments, manifests, storage, compute, review, reporting, audit, and authorization relationships.</li>
+                <li><strong>Figure — <a href="#lims-full-process-atlas">Complete laboratory process atlas.</a></strong> Eleven lanes connect accession, laboratory preparation, sequencing, analysis, scientific review, quality, release, reporting, and clinical exchange through explicit gates and handoffs.</li>
+              </ul>
+            </div>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
           </section>
 

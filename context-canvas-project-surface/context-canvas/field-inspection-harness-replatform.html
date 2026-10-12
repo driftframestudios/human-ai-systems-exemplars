@@ -148,6 +148,37 @@
               </div>
             </dl>
             <p><strong>Basis and limits:</strong> Public sources ground the planning inputs, and I synthesized them into the proposed design. A current workflow audit, target-device trials, and commercial inputs support a priced proposal; a field pilot establishes whether the bounded pilot outcome is met. Schedules, dollar bands, and the 60–75% delivery prior remain prospective.</p>
+            <div class="debrief-case-brief__tracks" data-case-brief-detail>
+              <h3 class="txt-h3">Solution and implementation quick scan</h3>
+              <article class="debrief-case-brief__track" data-case-brief-track="solution">
+                <h4 class="txt-h4">Solution track</h4>
+                <ol class="debrief-case-brief__track-list">
+                  <li><a href="#solution-debrief-title"><strong>Field constraint.</strong></a> I framed continuity across identity, ordered capture, media, grading, acknowledgement, and recovery as the product problem.</li>
+                  <li><a href="#solution-bottleneck-title"><strong>Local field truth.</strong></a> The device records observed work durably during a visit; the server coordinates accepted shared state and acknowledgement.</li>
+                  <li><a href="#solution-intervention-title"><strong>Five-station flow.</strong></a> Capture, queue, sync, ingest, and grade give structured records and media independent recovery paths.</li>
+                  <li><a href="#solution-outcome-title"><strong>Localized conflict.</strong></a> Sync envelopes keep accepted, pending, and contested work distinct so inspectors can continue unrelated capture.</li>
+                  <li><a href="#solution-repeatability-title"><strong>Reliable core first.</strong></a> Offline capture, private media, resumable sync, and human-owned grading establish the base for later assistance.</li>
+                </ol>
+              </article>
+              <article class="debrief-case-brief__track" data-case-brief-track="implementation">
+                <h4 class="txt-h4">Implementation track</h4>
+                <ol class="debrief-case-brief__track-list">
+                  <li><a href="#implementation-coexistence-title"><strong>Managed coexistence.</strong></a> Clappia remains runnable while web coordination and native field work prove parity, support, restore, and reconciliation.</li>
+                  <li><a href="#implementation-components-title"><strong>Owned components.</strong></a> Web, native inspection, Postgres, private object storage, and adapters each carry one explicit source-of-truth boundary.</li>
+                  <li><a href="#implementation-sync-title"><strong>Replay-safe exchange.</strong></a> Versioned envelopes and entity-specific conflict rules preserve work through retry and concurrent change.</li>
+                  <li><a href="#implementation-media-title"><strong>Canonical media.</strong></a> Immutable originals move through named verification and attachment states while derivatives retain lineage.</li>
+                  <li><a href="#implementation-market-signal-title"><strong>Human-confirmed signal.</strong></a> Canada-market assistance returns a supported positive signal or <code>UNKNOWN</code>; a person owns the classification.</li>
+                  <li><a href="#implementation-sequence-title"><strong>Reversible assistance.</strong></a> The first release completes capture and recovery; later feature-flagged assistance earns expansion through observed correction and abstention.</li>
+                </ol>
+              </article>
+            </div>
+            <div class="debrief-case-brief__media" data-case-brief-media>
+                <h4 class="txt-h4">Related figures and diagrams</h4>
+                <ul class="debrief-case-brief__media-list">
+                  <li><a href="#field-inspection-operating-map"><strong>Diagram · Field-inspection operating map.</strong></a> The retained continuity rail and target system show how records, media, grading, and market signals recover independently.</li>
+                  <li><a href="#staged-capital-title"><strong>Tables · Staged-capital sequence.</strong></a> The funding view connects each tranche to a usable operating result and a next observation.</li>
+                </ul>
+            </div>
             <p><a href="#prospective-ledger-title">Read the Full Debrief →</a></p>
           </section>
 
@@ -193,7 +224,7 @@
             <p class="field-inspection-track-label"><span>Solution movement</span> Source basis and changed work · five-beat account</p>
             <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">I. Solution Architecture — from serial form to field-operating platform</h2>
 
-            <h3 class="txt-h3 beat-title">Debrief — the field constraint</h3>
+            <h3 id="solution-debrief-title" class="txt-h3 beat-title">Debrief — the field constraint</h3>
             <p>
               The incumbent path treats an inspection as a series of remote form submissions. That works while signal,
               device temperature, app state, attachment upload, and spreadsheet behavior all cooperate. In the field, those
@@ -214,7 +245,7 @@
               </p>
             </aside>
 
-            <h3 class="txt-h3 beat-title">Bottleneck — the shift: device is source of truth</h3>
+            <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">Bottleneck — the shift: device is source of truth</h3>
             <p>
               During the visit, the device owns the latest observed state. Every answer, section transition, defect, media
               capture, and local decision is durably recorded before network work begins. The server remains authoritative for
@@ -226,7 +257,7 @@
               captured, queued, syncing, acknowledged, or requiring resolution.
             </p>
 
-            <h3 class="txt-h3 beat-title">Intervention — capture, queue, sync, ingest, grade</h3>
+            <h3 id="solution-intervention-title" class="txt-h3 beat-title">Intervention — capture, queue, sync, ingest, grade</h3>
             <p>
               The operating flow uses five explicit stations. Small structured records and larger media objects travel through
               coordinated but independently recoverable paths. The grade remains a human-owned decision with its derivation and
@@ -282,7 +313,7 @@
               <figcaption class="table-note">The flow describes a target operating contract for prospective implementation.</figcaption>
             </figure>
 
-            <h3 class="txt-h3 beat-title">Outcomes — sync envelopes and per-entity conflict</h3>
+            <h3 id="solution-outcome-title" class="txt-h3 beat-title">Outcomes — sync envelopes and per-entity conflict</h3>
             <p>
               A sync envelope preserves the operation sequence while each entity applies its own contention rule.
               Appointment assignment may reject a stale write. An inspection answer may accept an untouched-column update.
@@ -294,7 +325,7 @@
               The inspector can continue unrelated capture while the smallest responsible population resolves the exception.
             </p>
 
-            <h3 class="txt-h3 beat-title">Repeatability — reliable capture now, AI assistance next</h3>
+            <h3 id="solution-repeatability-title" class="txt-h3 beat-title">Repeatability — reliable capture now, AI assistance next</h3>
             <p>
               Reliable offline capture, resumable synchronization, private media, and human-owned grading form the first
               responsible system. OCR or market-signal assistance can later enter at Capture because the source image, crop, text
@@ -308,7 +339,7 @@
               remain separate attributes that may disagree.
             </p>
 
-            <figure class="story-visual table-span-all field-inspection-visual field-inspection-visual--handoff">
+            <figure id="field-inspection-operating-map" class="story-visual table-span-all field-inspection-visual field-inspection-visual--handoff">
               <img src="../img/plot/inspection_platform_operating_map.svg" width="1600" height="1200" loading="eager" alt="The retained Clappia continuity path sits beside a target field operating model. Device-local capture flows through queue, synchronization, platform ingest, private S3 media, grading, and human-confirmed Canada-market signals, with explicit per-entity conflict routes.">
               <figcaption class="table-note">
                 The operating map separates record sync, media lifecycle, and market-signal assistance so each can recover
@@ -353,7 +384,7 @@
               carries it, which exception can be isolated, and which proof permits a controlled handoff.
             </p>
 
-            <h3 class="txt-h3 beat-title">II.a Coexistence is part of the target state</h3>
+            <h3 id="implementation-coexistence-title" class="txt-h3 beat-title">II.a Coexistence is part of the target state</h3>
             <div class="architecture-pair cobalt-operating-field-cards table-span-all">
               <article>
                 <p class="architecture-pair__label">Continuity path · Clappia retained</p>
@@ -367,7 +398,7 @@
               </article>
             </div>
 
-            <h3 class="txt-h3 beat-title">II.b Component responsibilities</h3>
+            <h3 id="implementation-components-title" class="txt-h3 beat-title">II.b Component responsibilities</h3>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Target component responsibility table">
                 <table class="table--reading table--comfortable" data-label="Target components, their system responsibility, and the boundary each preserves">
@@ -416,7 +447,7 @@
               </div>
             </figure>
 
-            <h3 class="txt-h3 beat-title">II.c Sync envelope and per-entity conflict contract</h3>
+            <h3 id="implementation-sync-title" class="txt-h3 beat-title">II.c Sync envelope and per-entity conflict contract</h3>
             <p>
               Each change carries an operation ID, idempotency key, organization, device, actor, entity, entity version,
               base version, local time, schema version, and payload hash. Server acknowledgement is durable and replay-safe.
@@ -464,7 +495,7 @@
               </div>
             </figure>
 
-            <h3 class="txt-h3 beat-title">II.d Canonical private media and an explicit state machine</h3>
+            <h3 id="implementation-media-title" class="txt-h3 beat-title">II.d Canonical private media and an explicit state machine</h3>
             <p>
               Media follows <code>captured → hashed → queued → uploading → uploaded → verified → attached</code>. Failed and
               quarantined are explicit exception states. The state machine replaces a single uploaded flag with enough
@@ -480,7 +511,7 @@
               </p>
             </aside>
 
-            <h3 class="txt-h3 beat-title">II.e Canada positive-signal → <code>UNKNOWN</code> boundary</h3>
+            <h3 id="implementation-market-signal-title" class="txt-h3 beat-title">II.e Canada positive-signal → <code>UNKNOWN</code> boundary</h3>
             <p>
               Canada-market assistance observes source material; vehicle classification remains a human-owned decision.
               The complete conformity-label image is saved first. A verified National Safety Mark or prescribed conformity
@@ -494,7 +525,7 @@
               change listing, valuation, disclosure, reconciliation, or arbitration records.
             </p>
 
-            <h3 class="txt-h3 beat-title">II.f Reliable core first; reversible assistance later</h3>
+            <h3 id="implementation-sequence-title" class="txt-h3 beat-title">II.f Reliable core first; reversible assistance later</h3>
             <p>
               The first release completes capture, sync, media, grading, and manual market-signal selection. The core inspection
               completes independently of later feature-flagged assistance. Release learning includes useful abstention,

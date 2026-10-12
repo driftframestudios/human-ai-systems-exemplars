@@ -91,6 +91,37 @@
             <div><dt>Relevance now</dt><dd>The case centers prior expertise, accessible control, versioned terminology, and recoverable learning state—useful foundations for contemporary multilingual education and service design.</dd></div>
           </dl>
           <p><strong>Basis and limits:</strong> Five usability participants shaped the design pivot, with three sessions preserved in detail. A receiving program would need to measure retrieval, accessibility, terminology quality, workload, and local fit.</p>
+          <div class="debrief-case-brief__tracks" data-case-brief-detail aria-labelledby="case-brief-tracks-title">
+            <h3 id="case-brief-tracks-title" class="txt-h3">Solution and implementation quick scan</h3>
+            <article class="debrief-case-brief__track" data-case-brief-track="solution" aria-labelledby="case-brief-solution-track-title">
+              <h4 id="case-brief-solution-track-title" class="txt-h4">Solution Architecture</h4>
+              <ol>
+                <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I began with multilingual nurses&rsquo; established clinical knowledge and tested a Spanish&ndash;English prototype with five participants; their difficulty reading its purpose and navigating parts-of-speech collisions redirected the concept toward learner control.</li>
+                <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> System-directed passage switching interrupted the clinical learning task and foregrounded the application&rsquo;s guess, creating a need for term-level support at the depth each learner selected.</li>
+                <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> I made translation, pronunciation, context, saved terms, private notes, and retrieval prompts learner-selected and reversible so the original passage remained available throughout practice.</li>
+                <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> The proposed service carries source-aware terms across commute, home, class, and supervised preparation, allowing learners to inspect provenance and bring precise questions to educators.</li>
+                <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> A receiving program combines its languages, terminology sources, curriculum, accessibility conditions, and educator capacity with learner control, then measures retrieval, workload, terminology quality, and local fit.</li>
+              </ol>
+            </article>
+            <article class="debrief-case-brief__track" data-case-brief-track="implementation" aria-labelledby="case-brief-implementation-track-title">
+              <h4 id="case-brief-implementation-track-title" class="txt-h4">Implementation Architecture</h4>
+              <ol>
+                <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> The architecture joins concept identity, language and dialect, terminology release, provenance, review, and supersession with learning state while the document preserves language, script, keyboard, zoom, reflow, caption, and assistive-technology semantics.</li>
+                <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Bare word pairs, silent versions, and offline conflicts fragment learning history; stable concept, version, and event identities make corrections visible and let a learner resume calmly.</li>
+                <li><strong><a href="#implementation-intervention-title">Intervention.</a></strong> Versioned terms, learner-chosen projections, practice events, offline acknowledgements, and review records connect each view to its exact source and learning history.</li>
+                <li><strong><a href="#implementation-outcome-title">Outcome.</a></strong> Learners can resume practice and understand corrections while educators, terminology stewards, accessibility specialists, and support teams inspect the source and review state that govern each continuation.</li>
+                <li><strong><a href="#implementation-repeatability-title">Repeatability.</a></strong> Each release verifies terminology lineage, language-of-parts behavior, accessible interaction, offline replay, privacy, educator review, and retrieval; the receiving institution establishes readiness and authority.</li>
+              </ol>
+            </article>
+          </div>
+          <div class="debrief-case-brief__media" data-case-brief-media>
+            <h4 class="txt-h4">Related figures and media</h4>
+            <ul>
+              <li><strong>Figure — <a href="#language-learner-situation-model">Learner situation model.</a></strong> Established nursing knowledge connects to English terminology practice across commute, classroom, home, and supervised-preparation contexts.</li>
+              <li><strong>Photograph — <a href="#language-prototype-in-use">Source-era prototype in use.</a></strong> A participant works with the bilingual mobile prototype where language choice, clinical vocabulary, and professional preparation meet.</li>
+              <li><strong>Figure — <a href="#language-onboarding-prototype">Iterated onboarding prototype.</a></strong> Hand-drawn illustrations explain the learning purpose before the interface presents granular language controls.</li>
+            </ul>
+          </div>
           <p><a href="#solution-title">Read the Full Debrief →</a></p>
           <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
             <p>The learner arrives carrying expertise. The service helps that expertise travel.</p>
@@ -115,7 +146,7 @@
           <p class="debrief-track-label"><span>Track I</span><strong>Solution Architecture · Learner Agency and Changed Learning</strong><small>Begin with established knowledge; let the learner choose the next projection.</small></p>
           <h2 id="solution-title" class="txt-h2 architecture-track-title">I. Solution Architecture — Learner-controlled clinical vocabulary practice</h2>
 
-          <h3 class="txt-h3 beat-title">§a Debrief — The Story Begins Before the Application</h3>
+          <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — The Story Begins Before the Application</h3>
           <p>
             In 2016, I focused the project on multilingual nursing learners carrying work, school, family responsibility,
             migration, and care for others at the same time. The work then narrowed to Katarina. She was already a nurse. She
@@ -144,7 +175,7 @@
             presentation problem. The durable pivot transferred authority: the learner chooses when to inspect another
             language, compare terms, hear pronunciation, save a phrase, retrieve it from memory, or remain with the current passage.
           </p>
-          <figure class="story-visual table-span-all">
+          <figure id="language-learner-situation-model" class="story-visual table-span-all">
             <a class="story-visual__open" href="../img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp" aria-label="Open the Katarina learner situation model at full size">
               <picture>
                 <source media="(max-width: 600px)" srcset="../img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp" width="390" height="6012">
@@ -161,7 +192,7 @@
               </a>
               <figcaption class="table-note">The sprint plan made inquiry, assumptions, conflicts, prototyping, and human feedback visible as connected work rather than a single interface-production step.</figcaption>
             </figure>
-            <figure class="story-visual">
+            <figure id="language-prototype-in-use" class="story-visual">
               <a class="story-visual__open" href="../img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp" aria-label="Open the historical prototype-in-use photograph at full size">
                 <img src="../img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp" srcset="../img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp 480w, ../img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp 1440w" sizes="(min-width: 48rem) 30rem, 100vw" width="480" height="294" loading="lazy" alt="A person holds a phone showing the source-era multilingual vocabulary prototype in Spanish and English.">
               </a>
@@ -169,7 +200,7 @@
             </figure>
           </div>
 
-          <h3 class="txt-h3 beat-title">§b The Bottleneck — System-Directed Language Behavior Displaced Learner Intent</h3>
+          <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — System-Directed Language Behavior Displaced Learner Intent</h3>
           <p>
             The prototype centered what the application could change. Learners were trying to preserve what they were doing:
             understand a clinical idea, locate the unfamiliar expression, and continue learning without losing the thread.
@@ -181,7 +212,7 @@
             <article><p class="architecture-pair__label">Shared support</p><h4 class="txt-h4">Institutions carry named responsibilities</h4><p>Educators, terminology stewards, accessibility specialists, programs, and licensing authorities remain visible.</p></article>
           </div>
 
-          <h3 class="txt-h3 beat-title">§c The Intervention — A Learner-Controlled Terminology Practice</h3>
+          <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — A Learner-Controlled Terminology Practice</h3>
           <p>
             The intervention begins with a term, phrase, or passage chosen by the learner. From there, the learner can reveal
             a translation, inspect an explanation, hear pronunciation, compare contexts, save a term, add a private note, or
@@ -207,7 +238,7 @@
               </a>
               <figcaption class="table-note">Disposable sketches kept the concept revisable while testing whether comparison and reinforcement could stay close to the learner’s existing knowledge.</figcaption>
             </figure>
-            <figure class="story-visual">
+            <figure id="language-onboarding-prototype" class="story-visual">
               <a class="story-visual__open" href="../img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp" aria-label="Open the iterated onboarding prototype at full size">
                 <img src="../img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp" srcset="../img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp 480w, ../img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp 610w" sizes="(min-width: 48rem) 30rem, 100vw" width="480" height="350" loading="lazy" alt="Two LangWhich onboarding screens use hand-drawn illustrations to introduce learner-controlled English and Spanish vocabulary views.">
               </a>
@@ -215,7 +246,7 @@
             </figure>
           </div>
 
-          <h3 class="txt-h3 beat-title">§d The Outcome — Source-Aware Learning Across Real Contexts</h3>
+          <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — Source-Aware Learning Across Real Contexts</h3>
           <p>
             The proposed experience is designed to travel while each setting retains its character. During a commute, Katarina can
             inspect one saved term, listen through headphones, and resume after interruption. At home, she can compare
@@ -254,7 +285,7 @@
             </p>
           </aside>
 
-          <h3 class="txt-h3 beat-title">§e Repeatability — Agency, Provenance, Retrieval, and Human Support</h3>
+          <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Agency, Provenance, Retrieval, and Human Support</h3>
           <p>
             The portable pattern keeps learner choice, concept-centered terminology, retrieval in context, and named human
             continuations together. A receiving program contributes its learners, languages, terminology sources, curriculum,
@@ -273,7 +304,7 @@
           <p class="debrief-track-label"><span>Track II</span><strong>Implementation Architecture · Versioned Terms, Continuity, and Review</strong><small>Keep language choice connected to concept, source, learning state, and a human continuation.</small></p>
           <h2 id="implementation-title" class="txt-h2 architecture-track-title">II. Implementation Architecture — Reviewable multilingual practice</h2>
 
-          <h3 class="txt-h3 beat-title">§a Debrief — Language Is Structured Content</h3>
+          <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — Language Is Structured Content</h3>
           <p>
             A bare word pair omits much of the structure a learning system must preserve: concept identity, language and dialect,
             terminology release, semantic context, pronunciation source, reviewer state, supersession, and the learner’s own
@@ -286,7 +317,7 @@
             reflow, and assistive-technology behavior become explicit parts of the service contract.
           </p>
 
-          <h3 class="txt-h3 beat-title">§b The Bottleneck — Word Pairs, Silent Versions, and Fragile Synchronization</h3>
+          <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — Word Pairs, Silent Versions, and Fragile Synchronization</h3>
           <div class="architecture-pair cobalt-operating-field-cards">
             <article><p class="architecture-pair__label">Concept continuity</p><h4 class="txt-h4">An expression returns to a stable concept</h4><p>Source edition, semantic context, examples, and review keep meaning inspectable.</p></article>
             <article><p class="architecture-pair__label">Version continuity</p><h4 class="txt-h4">A change creates a superseding record</h4><p>Saved practice remains connected to the exact term and explanation the learner encountered.</p></article>
@@ -294,7 +325,7 @@
           </div>
           <p>These are service conditions rather than learner failings. The constructive state makes source, version, synchronization, and correction visible and gives the learner a calm continuation.</p>
 
-          <h3 class="txt-h3 beat-title">§c The Intervention — Versioned Terms and Replay-Safe Learning Events</h3>
+          <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — Versioned Terms and Replay-Safe Learning Events</h3>
           <figure class="table-figure table-figure--wide table-span-all"><div class="table-scroll" role="region" tabindex="0" aria-label="Multilingual terminology and learning-state contract">
             <table class="table--comparison table--comfortable" data-label="Shared objects keep learner choice connected to meaning and continuity">
               <caption>Shared objects keep learner choice connected to meaning and continuity</caption>
@@ -314,7 +345,7 @@
             context, model and version, review state, and correction lineage.
           </p>
 
-          <h3 class="txt-h3 beat-title">§d The Outcome — Reviewable Multilingual Practice</h3>
+          <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — Reviewable Multilingual Practice</h3>
           <p>
             One concept identity can travel through translation, explanation, pronunciation, contextual examples, saved
             lists, retrieval prompts, learner notes, and educator review. Accessibility tools can recognize language changes.
@@ -327,7 +358,7 @@
             provenance and review status remain attached.
           </p>
 
-          <h3 class="txt-h3 beat-title">§e Repeatability — Terminology, Accessibility, and Release Governance</h3>
+          <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Terminology, Accessibility, and Release Governance</h3>
           <p>
             Each release verifies concept and source resolution; terminology lineage; language, dialect, and semantic
             equivalence; language-of-parts behavior; script and bidirectional presentation; keyboard, zoom, reflow, captions,
