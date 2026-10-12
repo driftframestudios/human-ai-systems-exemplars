@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:issue-route-bindings:v0.1",
+  "title": "Repository handoff Issue route bindings v0.1",
+  "description": "A repository-bound map from one Issue route's semantic keys to exact GitHub resource identities and current human-readable coordinates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "artifactType",
+    "routeKey",
+    "seedSha256",
+    "repository",
+    "labels",
+    "milestones",
+    "issues"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:repository-handoff-foundation:schema:issue-route-bindings:v0.1"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "artifactType": {
+      "const": "repository_handoff_issue_route_bindings"
+    },
+    "routeKey": {
+      "description": "The semantic key of the admitted Issue route seed whose resources these bindings identify.",
+      "$ref": "#/$defs/stableKey"
+    },
+    "seedSha256": {
+      "description": "The SHA-256 of the exact admitted Issue route seed bytes.",
+      "$ref": "#/$defs/sha256"
+    },
+    "repository": {
+      "$ref": "#/$defs/repositoryIdentity"
+    },
+    "labels": {
+      "$ref": "#/$defs/labelBindings"
+    },
+    "milestones": {
+      "$ref": "#/$defs/milestoneBindings"
+    },
+    "issues": {
+      "$ref": "#/$defs/issueBindings"
+    }
+  },
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "immutableId": {
+      "type": "integer",
+      "description": "The immutable positive integer GitHub database identity for this resource.",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "repositoryFullName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 140,
+      "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?/(?!\\.{1,2}$)[A-Za-z0-9._-]{1,100}$"
+    },
+    "repositoryIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "fullName"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "fullName": {
+          "$ref": "#/$defs/repositoryFullName"
+        }
+      }
+    },
+    "labelBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "name"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "milestoneBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "number",
+        "title"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "issueBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "number",
+        "title"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "labelBindings": {
+      "type": "object",
+      "description": "Each property name is one label semantic key from the Issue route seed. A materializer serializes these properties in UTF-8 byte order when deterministic bytes matter.",
+      "maxProperties": 64,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/labelBinding"
+        }
+      },
+      "additionalProperties": false
+    },
+    "milestoneBindings": {
+      "type": "object",
+      "description": "Each property name is one milestone semantic key from the Issue route seed. A materializer serializes these properties in UTF-8 byte order when deterministic bytes matter.",
+      "maxProperties": 32,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/milestoneBinding"
+        }
+      },
+      "additionalProperties": false
+    },
+    "issueBindings": {
+      "type": "object",
+      "description": "Each property name is one Issue semantic key from the Issue route seed. A materializer serializes these properties in UTF-8 byte order when deterministic bytes matter.",
+      "maxProperties": 128,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/issueBinding"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

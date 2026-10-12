@@ -26,7 +26,7 @@ Precipitate the FMI LIMS/ELN reading set into a self-contained Debrief that lets
 
 - Page: `context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html`
 - Shared stylesheet: `context-canvas-project-surface/context-canvas/expanded.css`
-- Maximal exemplar: `context-canvas-project-surface/context-canvas/exemplar-maximal-debrief.html`
+- Maximal exemplar at the time of this record: `context-canvas-project-surface/context-canvas/exemplar-maximal-debrief.html` (retired from current source under Issue #88; recoverable through Git history)
 - Lead decision visual: `context-canvas-project-surface/img/plot/fmi_shared_object_map.svg`
 
 ### Re-entry map
@@ -71,7 +71,7 @@ machine_node_update:
 
   artifact:
     working_path: "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
-    reference_path: "context-canvas-project-surface/context-canvas/exemplar-maximal-debrief.html"
+    reference_path: "context-canvas-project-surface/context-canvas/exemplar-maximal-debrief.html" # historical path; retired under Issue #88
 
   source_set:
     coordination:

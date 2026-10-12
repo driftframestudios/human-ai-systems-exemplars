@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/secret-boundary-inspection/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "secret-boundary-inspection",
+  "description": "Produces a canary-proven, scope-explicit secret-material observation for a repository, exact proposed index, locally available history, or named artifact. Applies before snapshot, publication, delivery, or receiving-repository handoffs where credential-shaped material could travel.",
+  "semanticAuthorityRef": "../source/.agents/skills/secret-boundary-inspection/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/18",
+  "contract": {
+    "what": "A repository-grounded method for proving the selected detector path with a fresh synthetic canary, observing one named material scope, and returning a safe, bounded receipt or finding response.",
+    "when": [
+      "Source, an exact proposed index, locally available history, or a named generated artifact is preparing to cross a snapshot, publication, delivery, or repository-reception boundary."
+    ],
+    "boundaries": [
+      "The repository-owned implementation defines the engine, version, configuration, commands, and supported scopes. Credential-shaped material, embedded binary metadata, audience fit, and rights or consent are separate publication claims with fitting observations. This skill supplies neither universal secret absence nor authority to validate a credential, publish material, rotate access, rewrite history, change refs, or disclose a finding. Those actions keep their existing owners and authorization boundaries."
+    ],
+    "result": "The detector path proves itself before interpretation; each requested scope returns zero unresolved matches or enters a private response route; and the receipt names what was observed, what it establishes, and where its evidence stops."
+  },
+  "receivingUse": {
+    "job": "Source, an exact proposed index, locally available history, or a named generated artifact is preparing to cross a snapshot, publication, delivery, or repository-reception boundary.",
+    "materialResult": "The detector path proves itself before interpretation; each requested scope returns zero unresolved matches or enters a private response route; and the receipt names what was observed, what it establishes, and where its evidence stops.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/secret-boundary-inspection/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

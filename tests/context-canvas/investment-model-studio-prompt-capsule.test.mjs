@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const studioPath = resolve(
@@ -33,8 +34,7 @@ test("the Investment Model Studio publishes one complete selected-model Prompt C
     [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path: "${path}"`));
     assert.ok(html.includes(`sha256: "${expectedDigest}"`));
   }

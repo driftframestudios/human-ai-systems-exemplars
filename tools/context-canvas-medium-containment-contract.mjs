@@ -16,11 +16,6 @@ const ANCHOR_ROUTES = Object.freeze([
   "genomic-viewer-replatforming.html",
   "prompt-side-conditions-practice.html"
 ]);
-const RAIL_OPTIONAL_ROUTES = new Set([
-  // This information-radiator exemplar has one authored section destination,
-  // so canvas-shell.js intentionally leaves the generated rail at rest.
-  "exemplar-maximal-information-radiator.html"
-]);
 
 // Chromium is the fast, repeatable geometry gate for this repository. The
 // visual-verification skill routes engine-specific evidence to a focused
@@ -152,7 +147,7 @@ function collectFailures(route, width, observation) {
   const leftRailEntries = [];
   const expectedRailClass = route === FMI_ROUTE
     ? "fmi-reading-rail"
-    : RAIL_OPTIONAL_ROUTES.has(route) ? null : "page-section-rail";
+    : "page-section-rail";
 
   if (!observation.matchedFrameCount) {
     failures.push(`${prefix}: the source-discovered route contains no wide-field frame in the rendered document.`);

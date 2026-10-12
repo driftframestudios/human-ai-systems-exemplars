@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/context-canvas-surface-reading/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "context-canvas-surface-reading",
+  "description": "Reads a Context Canvas page or route family as a visitor surface and primary design input. Applies before assessment, planning, or material changes to a Canvas page, embedded instrument, or family relationship.",
+  "semanticAuthorityRef": "../source/.agents/skills/context-canvas-surface-reading/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/5",
+  "contract": {
+    "what": "A source-grounded model of one page or route family.",
+    "when": [
+      "Assessment, planning, or material visitor-surface change begins."
+    ],
+    "boundaries": [
+      "Page meaning remains rooted in authored source, evidence boundaries, and human authority. Visual variation remains available within the wider grammar."
+    ],
+    "result": "Route standing, visitor ability, evidence boundary, runtime owners, visual fingerprint, and affected family."
+  },
+  "receivingUse": {
+    "job": "Assessment, planning, or material visitor-surface change begins.",
+    "materialResult": "Route standing, visitor ability, evidence boundary, runtime owners, visual fingerprint, and affected family.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/context-canvas-surface-reading/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

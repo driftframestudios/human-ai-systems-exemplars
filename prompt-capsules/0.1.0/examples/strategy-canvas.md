@@ -2,9 +2,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `strategy-canvas-collaboration-field`
-- Source: `strategy-canvas-canonical@0.2.4`
+- Source: `strategy-canvas-canonical@0.2.5`
 - State: `strategy-canvas/2.0` · revision `1`
-- Fingerprint: `fnv1a32-utf8:13bcf93f`
+- Fingerprint: `fnv1a32-utf8:cb592f7c`
 - View: `plain`
 
 ## Purpose and target
@@ -81,7 +81,7 @@ Collaborate with this Strategy Canvas as an inspectable working revision.
 
 ### Cross-surface continuity (`cross-surface-continuity`)
 
-- Meaning: Meaning remains coherent as the work moves between workshops, documents, code, and AI collaborators.
+- Meaning: Meaning remains coherent as the work moves between workshops, documents, code, and generative AI systems.
 - Low anchor: Each surface requires substantial context reconstruction.
 - Middle anchor: Selected artifacts carry reusable context.
 - High anchor: Stable identities, decisions, evidence, and open conditions remain portable.
@@ -94,9 +94,9 @@ Collaborate with this Strategy Canvas as an inspectable working revision.
 
 - Current describes the present working reading. Good enough describes the threshold for the named horizon. Desired describes the stronger future condition.
 - Consequence weight directs discussion attention and leaves the score geometry unchanged.
-- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. AI suggestions enter as visibly attributed proposals outside human aggregates.
+- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. System-generated suggestions enter as visibly attributed proposals outside human aggregates.
 - People retain decisions about handoff scope, interpretation, acceptance, and publication.
-- AI handoff scope: The receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.
+- AI handoff scope: Before an external packet is assembled, a human operator should confirm which reviewed fields are in scope.
 
 ## Requested return
 

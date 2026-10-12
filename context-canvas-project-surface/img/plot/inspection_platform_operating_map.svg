@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="operating-map-title operating-map-desc">
   <title id="operating-map-title">Field inspection platform operating map</title>
-  <desc id="operating-map-desc">A prospective operating map preserves Clappia through a controlled bridge while an offline inspector and managed platform become supportable. Capture, queue, sync, ingest, and grade form the central flow. Structured records use idempotent envelopes and per-entity conflict handling. Media follows an explicit state machine into canonical private S3. Canada-market assistance recognizes a positive National Safety Mark signal or returns UNKNOWN for human confirmation.</desc>
+  <desc id="operating-map-desc">A proposed operating map preserves Clappia through a controlled bridge while an offline inspector and managed platform become supportable. Capture, queue, sync, ingest, and grade form the central flow. Structured records use idempotent envelopes and per-entity conflict handling. Media follows an explicit state machine into canonical private S3. Canada-market assistance recognizes a positive National Safety Mark signal or returns UNKNOWN for human confirmation.</desc>
   <defs>
     <pattern id="operating-grid" width="28" height="28" patternUnits="userSpaceOnUse">
       <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/>
@@ -33,11 +33,11 @@
 
   <g class="sans">
     <text x="72" y="88" class="title ink">Field inspection platform: preserve field truth through every handoff</text>
-    <text x="72" y="124" class="subtitle muted">A prospective operating map for Clappia continuity, offline capture, ordered sync, private media, and human-confirmed market signals.</text>
-    <g transform="translate(1306 64)" aria-label="Prospective planning status">
+    <text x="72" y="124" class="subtitle muted">A proposed operating map for Clappia continuity, offline capture, ordered sync, private media, and human-confirmed market signals.</text>
+    <g transform="translate(1306 64)" aria-label="Proposed design status">
       <rect x="7" y="7" width="222" height="62" rx="16" fill="#17345f" aria-hidden="true"/>
       <rect width="222" height="62" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
-      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">PROSPECTIVE DESIGN</text>
+      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">PROPOSED DESIGN</text>
       <text x="111" y="48" text-anchor="middle" class="tiny muted">PLANNING SURFACE · v0.1</text>
     </g>
 

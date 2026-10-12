@@ -21,7 +21,12 @@ import {
   inspectPublicReferenceSource,
   isPublicReferencePathWithin,
   materializePublicReferences,
+  resolvePublicReferenceDestinations,
 } from "../../tools/materialize-public-references.mjs";
+import {
+  DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+  loadRegistryReferenceBinding,
+} from "../../tools/registry-reference-contract.mjs";
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
@@ -176,6 +181,19 @@ async function symlinkOrSkip(t, target, path, type) {
     throw error;
   }
 }
+
+test("accepts Registry routes only through the immutable validated authority", async () => {
+  await assertContractFailure(
+    resolvePublicReferenceDestinations([PRIMARY_KEY], {
+      configurationSource: "",
+      environment: {},
+      registryDestinations: new Map([
+        [PRIMARY_KEY, "https://kindlight.systems/unreviewed"],
+      ]),
+    }),
+    "PUBLIC_REFERENCE_REGISTRY_BINDING",
+  );
+});
 
 test("materializes one resolved value into HTML and JSON-LD without changing source", async (t) => {
   const source = pageWithTwin();
@@ -1186,16 +1204,21 @@ test("the repository source materializes from discovered keys without frozen rou
     "utf8",
   );
 
-  const example = await readFile(
-    join(dirname(PUBLIC_REFERENCE_SOURCE), ".env.public.example"),
-    "utf8",
-  );
+  const example = await readFile(join(dirname(PUBLIC_REFERENCE_SOURCE), ".env.public.example"), "utf8");
   const exampleKeys = new Set(
     [...example.matchAll(/^([A-Z][A-Z0-9_]*)=/gm)].map((match) => match[1]),
   );
-  for (const key of inventory.keys) {
-    assert.equal(exampleKeys.has(key), true, `${key} is discoverable in .env.public.example`);
-  }
+  assert.deepEqual([...exampleKeys], [PUBLIC_AUTHOR_PROFILE_KEY]);
+
+  const registryKeys = [...inventory.keys]
+    .filter((key) => key.startsWith(PUBLIC_REFERENCE_NAMESPACE))
+    .sort();
+  const registryReference = await loadRegistryReferenceBinding({
+    path: DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+    requiredKeys: registryKeys,
+  });
+  assert.equal(registryReference.destinations.size, registryKeys.length);
+  assert.equal(registryReference.receipt.atlas.publicRoot, "https://kindlight.systems/");
 
   const before = new Map();
   const materializedRecords = [
@@ -1209,16 +1232,9 @@ test("the repository source materializes from discovered keys without frozen rou
 
   const root = await mkdtemp(join(tmpdir(), "public-reference-repository-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const environment = Object.fromEntries(
-    [...inventory.keys].map((key) => [
-      key,
-      key === PUBLIC_AUTHOR_PROFILE_KEY
-        ? PROFILE_ROUTE
-        : `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
-    ]),
-  );
+  const environment = { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE };
   const outputRoot = join(root, "context-canvas-project-surface");
-  await materializePublicReferences({
+  const result = await materializePublicReferences({
     outputRoot,
     outputBoundaryRoot: root,
     configPath: join(root, "no-config-file"),
@@ -1230,10 +1246,19 @@ test("the repository source materializes from discovered keys without frozen rou
     assert.equal(await readFile(record.path, "utf8"), before.get(record.path));
     const generated = await readFile(join(outputRoot, record.safePath), "utf8");
     assert.doesNotMatch(generated, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/);
+    assert.doesNotMatch(generated, /registry\.example|%7B%7BPUBLIC_URL_/i);
     for (const body of jsonLdBodies(generated)) {
-      if (body.includes("https://registry.example/")) JSON.parse(body);
+      if (body.includes("https://kindlight.systems/")) JSON.parse(body);
     }
   }
+
+  assert.equal(result.registryReference.bindingCount, registryKeys.length);
+  const marker = JSON.parse(
+    await readFile(join(outputRoot, ".public-reference-materialization.json"), "utf8"),
+  );
+  assert.equal(marker.format, 2);
+  assert.equal(marker.registry_reference.bindingCount, registryKeys.length);
+  assert.equal(marker.registry_reference.atlas.referenceVersion, "0.2.1");
 
   const generatedShell = await readFile(
     join(outputRoot, "context-canvas/canvas-shell.js"),

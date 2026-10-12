@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:foundation-profile:v0.2",
+  "title": "Repository handoff foundation profile v0.2",
+  "description": "A closed capability-selection contract that binds the exact foundation manifest and, after source receipt, the exact technology profile while human-held decisions remain visible.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "artifactType",
+    "key",
+    "version",
+    "title",
+    "foundationManifest",
+    "baseProfile",
+    "sourceStanding",
+    "selectedModules",
+    "selectedEntryKeys",
+    "selectedIssueSeedKeys",
+    "heldDecisions",
+    "nextOwnerAction",
+    "projection"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schema/foundation-profile.schema.v0.2.json"
+    },
+    "schemaVersion": {
+      "const": "0.2"
+    },
+    "artifactType": {
+      "const": "repository_handoff_foundation_profile"
+    },
+    "key": {
+      "$ref": "#/$defs/stableKey"
+    },
+    "version": {
+      "$ref": "#/$defs/semanticVersion"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "foundationManifest": {
+      "$ref": "#/$defs/foundationManifestReference"
+    },
+    "baseProfile": {
+      "$ref": "#/$defs/baseProfileReference"
+    },
+    "sourceStanding": {
+      "enum": [
+        "source_awaiting",
+        "source_received"
+      ]
+    },
+    "technologyProfile": {
+      "$ref": "#/$defs/technologyProfileReference"
+    },
+    "selectedModules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "selectedEntryKeys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "selectedIssueSeedKeys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "heldDecisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/heldDecision"
+      }
+    },
+    "nextOwnerAction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "projection": {
+      "$ref": "#/$defs/projection"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "sourceStanding": {
+            "const": "source_awaiting"
+          }
+        },
+        "required": [
+          "sourceStanding"
+        ]
+      },
+      "then": {
+        "properties": {
+          "technologyProfile": false
+        }
+      },
+      "else": {
+        "required": [
+          "technologyProfile"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?![^/]{256})(?!.*\\/[^/]{256})(?!.*(?:^|\\/)(?:\\.|\\.\\.)(?:\\/|$))(?!.*(?:^|\\/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.[^/]*)?(?:\\/|$))(?!.*\\.(?:\\/|$))[A-Za-z0-9._-]+(?:\\/[A-Za-z0-9._-]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "foundationManifestReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "key",
+        "version",
+        "sourcePath",
+        "sha256"
+      ],
+      "properties": {
+        "artifactType": {
+          "const": "repository_handoff_foundation_manifest"
+        },
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "version": {
+          "$ref": "#/$defs/semanticVersion"
+        },
+        "sourcePath": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "baseProfileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "sourcePath",
+        "sha256"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "sourcePath": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "technologyProfileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "key",
+        "version",
+        "sourcePath",
+        "sha256"
+      ],
+      "properties": {
+        "artifactType": {
+          "const": "repository_handoff_technology_profile"
+        },
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "version": {
+          "$ref": "#/$defs/semanticVersion"
+        },
+        "sourcePath": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "heldDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "owner",
+        "state",
+        "decision",
+        "availableRoute",
+        "releaseEvent"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "owner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "state": {
+          "const": "held"
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "availableRoute": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "releaseEvent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "jsonSource",
+        "yamlTarget",
+        "mode",
+        "derivationNote"
+      ],
+      "properties": {
+        "authority": {
+          "const": "json"
+        },
+        "jsonSource": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "yamlTarget": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "mode": {
+          "const": "exact_json_bytes"
+        },
+        "derivationNote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

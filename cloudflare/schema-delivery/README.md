@@ -1,58 +1,66 @@
-# Static schema delivery receiver
+# Portable static schema adapter
 
-This package forms the first reviewable source closure for delivering a production schema through Cloudflare Workers Static Assets. It prepares one accepted schema family from an explicit allowlist. A later protected receiver holds the deployment and domain decisions.
+This earlier asset-only adapter prepares the schema subset of the selected
+GitHub Pages contracts for local dry-runs and portable static delivery.
+`tools/schema-receiver-routes.mjs` owns contract selection;
+`tools/schema-publication-lock.json` binds frozen bytes. The shared publication
+module owns identities, dependency selection, digests, and host-local retrieval
+metadata. Source schemas retain their established `$id` values.
 
-## Public closure
+The artifact contains selected schemas and companions, a host-specific catalog,
+index and recovery page, approved attribution carriers, and generated headers.
+The exact inventory and every output byte are checked against the selected source.
+Operational repository trees and skill candidates retain their own publication
+boundaries. The Pages projection publishes readable skill pages, and
+[`../schemas-worker/`](../schemas-worker/) owns the complete production schema
+and public-ready skill closure for `schemas.vik.guru`.
 
-The generated, ignored `dist/` directory contains four files:
-
-| Route or delivery file | Source | Receiving job |
-| --- | --- | --- |
-| `/` | `source/index.html` | Human-readable list of exact-version routes and receipts |
-| `/404.html` | `source/404.html` | Calm route recovery toward the current index |
-| `/_headers` | `source/_headers` | CORS, content hardening, framing, and versioned-cache posture |
-| `/prototype-exemplars/1.0.0/prototype-exemplars.schema.json` | `schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json` | Byte-identical first-family schema |
-
-The builder accepts regular files only, rejects extra output, compares every generated file byte-for-byte with its source, and confirms this first-family receipt:
-
-- size: `12309` bytes;
-- SHA-256: `42910b5238a62c666cf5fcdbdc5a364b64d7c5301d959ac9bdaea11c8743ccf2`; and
-- established schema identity: `https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json`.
-
-## Build and inspect
-
-Run from the repository root:
-
-```bash
+```sh
 npm run build:schema-delivery
 npm run check:schema-delivery
 npm run dry-run:schema-delivery
 npm run dry-run:schema-delivery:release
 ```
 
-The first two commands use Node.js only. The dry run uses the repository's locked Wrangler dependency after `npm ci` has prepared the local toolchain.
+`workers_dev: false` and the release environment's empty routes keep this
+adapter unbound. Its build and dry-run commands support static portability and
+historical comparison. Production domain binding, credentials, budget
+activation, and recovery belong to `cloudflare/schemas-worker/` and its gated
+workflow. The schema release is independent of the primary site and iframe
+upload.
 
-## Delivery posture
+## Response contract
 
-`wrangler.jsonc` declares an asset-only package. Its authored surface contains the distribution directory and delivery behavior; application logic, bindings, storage resources, routes, and runtime secrets each retain their own receiving work. `workers_dev: false` leaves public routing to a separately reviewed receiver. The named `release` environment carries an explicit empty route set and uploads an independently versioned, un-routed integration Worker. The top-level configuration remains the production receiver and can add the accepted Custom Domain after its branch, credential, budget, and rollback decisions are ready.
+The root `/` serves the catalog with HTTP 200 and revalidation. Built-in
+`auto-trailing-slash` HTML handling resolves the root to `index.html`; exact JSON
+paths retain direct retrieval, and unknown schema paths use the genuine 404
+response. Include the root, an exact schema URL, and a missing file inside a
+versioned directory in every receiver observation. The platform behavior is
+described in [Cloudflare's HTML handling reference](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).
 
-Cloudflare recommends a Custom Domain when a Worker is the origin. That route can serve the exact Vik Guru paths directly and preserve Worker-version rollback. A Bulk Redirect remains a contingency for specific paths; it redirects rather than serving Vik Guru bytes and executes after the WAF.
+Each selected exact-version schema has an exact-path immutable cache rule.
+Catalogs, orientation, examples, unversioned contracts, and attribution carriers
+revalidate. The default `no-store` rule covers missing paths, including missing
+files inside versioned directories. Specific rules detach that default before
+adding their policy. Observe the effective response on the preview receiver
+before activation; header-source inspection alone leaves platform behavior open.
 
-The static runtime reads public assets only. A connected GitHub deployment token belongs to the narrow protected environment that performs the deployment. Cloudflare Secrets Store becomes useful when later Worker behavior needs a runtime credential for another service.
+The existing permissive public-schema CORS policy, content hardening, and
+frame-ancestor boundary remain in place. Direct retrieval on either schema host
+returns its selected bytes. An HTTPS redirect belongs to the host's edge policy,
+with path and query preserved; schema paths keep their exact-version identity.
 
-## Connected release path
+## Portable observation and recovery
 
-`.github/workflows/schema-delivery.yml` checks every eligible `release` and `prod` candidate against the same schema, asset, Wrangler, and secret-material contracts. A successful push can deploy only when the corresponding repository budget is active and `DEPLOYMENT_ACTIVE_RECEIVERS` names that receiver. The `release` job targets the un-routed Wrangler environment automatically. The `prod` job passes through its exact-branch GitHub environment and the human handoff accepted before connected production activation.
+Accept and pin one source revision. Build and inspect the un-routed release
+artifact, then observe an explicitly approved preview host for byte identity,
+media types, CORS, conditional retrieval, cache policy, and genuine 404
+responses. Production activation proceeds through the schema Worker owner,
+which preserves all promised routes and records its own Worker-version recovery
+coordinate.
 
-The connected jobs use the repository's locked Wrangler version and strict deployment mode. Release and production credentials remain environment-scoped: `CLOUDFLARE_ACCOUNT_ID` is a non-sensitive variable and `CLOUDFLARE_API_TOKEN` is a least-privilege secret. Credential values live exclusively in matching GitHub environment settings and briefly enter process memory for confirmation and deployment. Repository content and retained receipts carry the binding names, repository coordinate, and redacted state only.
-
-## Evidence boundary
-
-A passing build and check establish the named allowlist, regular-file boundary, byte agreement, size, and digest in the local generated closure. A Wrangler dry run establishes that the locked CLI can package the asset-only configuration. Deployment, custom-domain ownership, signed-out production behavior, cache observation, and rollback remain open until their receiving packet is granted and observed.
-
-Current platform references:
-
-- [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)
-- [Static Asset headers](https://developers.cloudflare.com/workers/static-assets/headers/)
-- [Workers routes and domains](https://developers.cloudflare.com/workers/configuration/routing/)
-- [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/)
+The generated static payload remains portable to cPanel. A cPanel receiver
+requires its own response-header adapter and activation receipt before use.
+Public returns carry source/artifact coordinates and normalized outcomes;
+credentials, account details, and raw infrastructure diagnostics stay with the
+protected operator.

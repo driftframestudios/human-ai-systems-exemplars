@@ -3,8 +3,8 @@
 ```yaml
 planning_surface:
   id: "prototype-exemplars.repository-skills.v0.1"
-  as_of: "2026-08-31"
-  status: "nineteen portable contracts; two settled projections; first typed exchange family active"
+  as_of: "2026-09-30"
+  status: "twenty-three portable contracts; two settled projections; first typed exchange family active"
   standing_ground: "AGENTS.md"
   skill_root: ".agents/skills"
   later_tranche_issue: work:repository-skill-tranche
@@ -329,11 +329,14 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | --- | --- | --- | --- |
 | `repository-reentry` | Reconstruct current truth across repository and GitHub surfaces | Resume, handoff, status reconciliation, stale plan | Settled/current/open/next model with one re-entry route |
 | `repository-collaboration-cycle` | Carry one authorized task from re-entry through route selection, conditional setup, source-owned execution, evidence, delivery, and exact continuation | A cold or resumed collaborator is expected to complete a full repository cycle | One receiver-ready change, finding, or held route with proportionate evidence and exact re-entry |
+| `repository-orientation-stewardship` | Reconcile a repository's README graph across first receipt, repeat use, and re-entry | Root and nested routes drift, duplicate mutable state, or obscure practical value and authority | A layered source-aware orientation graph with quickest proof and return paths |
+| `uv-backed-python-execution` | Resolve and run repository-declared Python checks through an isolated or lock-aware `uv` environment | A required interpreter, lock, dependency set, or host-Python boundary enters validation | The named check with runtime coordinates and a bounded result |
 | `context-canvas-surface-reading` | Read one page or family as visitor surface and design input | Assessment, planning, material Canvas change | Standing, visitor ability, evidence, owners, fingerprint, family effects |
 | `context-canvas-css-ownership` | Make CSS ownership, extraction, and selector migration legible | `expanded.css`, first paint, cascade, rename, contract map | Consumer map, receiving module, affected-family comparison |
 | `context-canvas-visual-verification` | Select proportionate source-bound visual and browser evidence | Layout, responsive behavior, interaction state, print, forced colors, visible regression | Fitting reference or focused check, interpreted result, limits, risk, and next receiver |
 | `practitioner-probe` | Turn ambiguous terrain into a decision-changing technical question | Plausible-but-shallow code, unclear gap, issue assessment | Mechanism, observation, instruction yield, bounded route |
 | `supportive-change-writing` | Produce negation-aware, evidence-calibrated repository prose | README, planning, issue, instructions, explanation | Desired state, authority, evidence limit, revisable next move |
+| `audit-anthropomorphic-cues` | Audit bundled person-like cues while keeping interpretation, system behavior, and accountable authority distinct | Names, pronouns, avatars, voice, emotion, or delegation language may change reliance or recovery | A cue-bundle ledger and proportionate retain, qualify, separate, disclose, test, or revise route |
 | `contextual-jargon-scan` | Distinguish exact language and useful compact metaphors from replaceable inside shorthand | Public, visitor-facing, cross-team, or durable prose with a bounded reader job | Scoped occurrence map, targeted revisions, intentional retentions, verification, and any material deferral |
 | `evidence-grounded-research-spike` | Convert current evidence into a bounded repository decision | Contemporary technical or collaboration question | Synthesis, evidence map, instruction delta, transfer limits |
 | `declarative-skill-authoring` | Author a transferable skill through contract, rules, workflow, and sparse scenarios | New skill, routing friction, scenario layering, conditional context | Conventional skill with explicit behavior, transfer boundary, and completion |
@@ -348,10 +351,12 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | `repository-attribution-stewardship` | Align copyright-holder, citation, contribution, notice, and bounded machine-projection carriers | Repository attribution, citation metadata, contributor credit, or adaptation guidance changes | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
 | `collaboration-runbook-authoring` | Convert a settled multi-phase route into a re-entrant versioned procedure | Known work spans several source owners, Issues, checks, recovery paths, and handbacks | AI-legible entry, authority, action modes, checks, recovery, stop, and handback |
 
-Twenty portable skill contracts now form the standing catalog. The first
-eight began as instruction-only experiments. Twelve later contracts joined after
+Twenty-three portable skill contracts now form the standing catalog. The first
+eight began as instruction-only experiments. Fifteen later contracts joined after
 material work established distinct receiving jobs:
-`contextual-jargon-scan`, `schema-contract-authoring`, `source-authority-mapping`,
+`repository-orientation-stewardship`, `uv-backed-python-execution`,
+`audit-anthropomorphic-cues`, `contextual-jargon-scan`,
+`schema-contract-authoring`, `source-authority-mapping`,
 `issue-chain-stewardship`, `bounded-support-routing`,
 `locator-boundary-stewardship`, `stateful-artifact-behavior-contracts`,
 `secret-boundary-inspection`, `repository-attribution-stewardship`,
@@ -389,6 +394,7 @@ No task-bound projection is currently active. The two completed projections rema
 | Agent observation channel agreement | Map one browser task across semantic/accessibility, DOM geometry, and rendered screenshot channels, then route a decision-changing divergence | Milestone-22 issue #149 runs a real repository task through an AX/DOM-style observation and a screenshot/VLM-style observation, and the result changes a decision beyond surface reading plus a practitioner probe |
 | Surface color-state stewardship | Carry a painted-owner foreground and state contract into a visitor system outside Context Canvas | A second non-Canvas system needs the same role/state/mode matrix and exposes a distinct decision not already carried by its CSS owner or visual-verification route |
 | Cloudflare contextual delivery | Connect a Canvas source closure to direct view, Worker envelope, storage, and framing choices | Another authorized proof requires a repeated delivery decision beyond the existing pilot |
+| Managed-host release reception | Receive one accepted source/carrier coordinate through a bounded managed-host transport, including a platform-managed clone or verified artifact push, with private configuration, preflight, first cutover, recovery, and signed-out handback while source and host authority remain distinct | The first live cPanel activation exposes decision-changing enrollment or recovery friction, or a second repository needs the same host-reception route beyond the existing publication runbook and deployment owner |
 | LIMS/ELN constellation re-entry | Navigate five source repositories, the integrated nucleus, issue long tail, and pull-request reassessment | Context Canvas workflows settle and constellation reassessment resumes |
 | Debrief composition stewardship | Map source-native movements, catalog relationships, route rail, and shared composition CSS | The Debriefs CSS tranche establishes stable module boundaries |
 | Planning inventory | Arrange artifacts, decisions, dependencies, receiving surfaces, resting conditions, and opportunities for selection and handoff | A non-Canvas planning cycle accepts the inventory itself as a decision-bearing deliverable and demonstrates opportunity capture, lower rediscovery cost, or clearer expectation negotiation beyond existing owners |
@@ -398,6 +404,17 @@ No task-bound projection is currently active. The two completed projections rema
 
 These candidates are vocabulary and possibility, rather than a commitment to populate the catalog. A future tranche should remain smaller than the set of recurring jobs it replaces. Single selectors, one-off bug mechanisms, exact visual choices, and current vendor facts continue through ordinary reasoning, owning skills, or current official documentation.
 
+The provider-confirmed shell-free cPanel route on 2026-09-24 broadens the
+`Managed-host release reception` billet from a platform-managed clone to a
+transport-neutral receiving job. The current route uses existing
+source-authority, secret-boundary, issue-chain, research, runbook, and bounded
+support contracts, plus the publication runbook and Issue #253. Its disposition
+remains `queue_with_trigger`: the first live artifact cutover can expose the
+decision-changing enrollment, interruption, or recovery behavior needed to
+form a portable skill. A second repository needing the same receiver can also
+activate formation. Until then, a new skill would mainly repeat the active
+runbook and Issue rather than remove rediscovery.
+
 The former Visual-reference cycle billet has precipitated into
 `context-canvas-visual-verification`. Visual-fingerprint stewardship folds into
 that contract's distinction between intended route variation and regression.
@@ -406,7 +423,7 @@ records the source evidence, private/public Registry boundary, and next natural
 uses.
 
 This candidate ledger preserves later skill terrain as a collaboration
-surface. Twenty portable contracts form the standing experiment; the two
+surface. Twenty-three portable contracts form the standing experiment; the two
 retired projections remain available as use evidence through Git history and
 threadkeeping.
 
@@ -423,7 +440,7 @@ Fresh-context comparison remains occasional and human-visible. It enters when a 
 - **Skill version manifests and changelogs:** Git history owns repository-local evolution. Version metadata returns when compatibility or external distribution requires it.
 - **Further machine-readable skill architecture:** Collaboration Skills 0.1.0 now carries one portable contract, one retired projection, and one collaboration account into a named visitor-facing adoption kit. JSON-LD, composition objects, registries, routing services, and hosted workflows return only when another material receiver needs them.
 - **Projection registry:** each projection declares its own binding profile and exit event. A separate inventory returns only if concurrent projections make re-entry materially difficult.
-- **Router skill:** nineteen distinct descriptions remain easy for a human and model to scan. Observed misrouting or further material catalog growth can earn a router.
+- **Router skill:** the human-readable `.agents/skills/README.md` supplies the current selector for twenty-three distinct contracts. Observed misrouting that a catalog cannot resolve can earn a separate router.
 - **Plugin packaging:** local practice should stabilize the useful vocabulary first.
 - **Cross-model conformance matrix:** the portable `SKILL.md` form is sufficient for now; another target environment can earn its own reading.
 - **CI and hosted evaluations:** the prototype unit-test workflow is manually dispatchable, and its pull-request receiver rests by default. Setting `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` activates the bounded automatic path within the approved standard-runner Actions budget; local checks remain the ordinary development path.

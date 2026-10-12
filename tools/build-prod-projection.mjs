@@ -11,6 +11,11 @@ import os from "node:os";
 import path from "node:path";
 import { promisify, TextDecoder } from "node:util";
 import { fileURLToPath } from "node:url";
+import {
+  minify as minifyCss,
+  syntax as cssSyntax,
+  version as cssOptimizerVersion,
+} from "csso";
 
 import {
   assertPackageOutputPath,
@@ -21,18 +26,41 @@ import {
 } from "./iframe-route-package-engine.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 import {
+  assertCanvasPublicAttribution,
+  decorateCanvasPublicDocument,
+} from "./package-canvas-iframe-routes.mjs";
+import {
   inspectProfessionalProfileScript,
   inspectPublicReferenceHtml,
   materializeProfessionalProfileScript,
   materializePublicReferenceHtml,
+  PUBLIC_REFERENCE_NAMESPACE,
   resolvePublicReferenceDestinations,
 } from "./materialize-public-references.mjs";
+import {
+  DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+  REGISTRY_ATLAS_DATA_USE_NOTICE,
+  parseRegistryReferenceBinding,
+  verifyRegistryAtlasDataUse,
+} from "./registry-reference-contract.mjs";
 
 const execFileAsync = promisify(execFile);
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
 
 const configurationId = "prod-projection.configuration.v1";
+const cssProjectionId = "prod-projection.css-profile.v1";
+const cssProjectionProfile = "about-conservative-v1";
+const cssProjectionConsumer =
+  "context-canvas-project-surface/context-canvas/index.html";
+const cssProjectionOutputDirectory = "assets/css";
+const cssProjectionTool = "csso";
+const cssProjectionToolVersion = "5.0.5";
+const cssProjectionOptions = Object.freeze({
+  restructure: false,
+  forceMediaMerge: false,
+  comments: false,
+});
 const primaryManifestId = "prod-projection.primary-route-manifest.v1";
 const assetInventoryId = "prod-projection.asset-inventory.v1";
 const deploymentManifestId = "prod-projection.deployment-manifest.v1";
@@ -43,6 +71,13 @@ const carrierIndexRelativePath = `${carrierRelativeRoot}/deployment-files.tsv`;
 const deploymentFileIndexHeader =
   "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
 const productionPublicReferenceConfig = ".env.public";
+const productionRegistryReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_REGISTRY_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
+const productionPublicReferenceCoordinationRoot =
+  path.posix.dirname(productionRegistryReferenceBinding);
+const productionRegistryDataUseNotice = REGISTRY_ATLAS_DATA_USE_NOTICE;
 const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
 const contextCoreManifestPath =
   "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json";
@@ -67,7 +102,10 @@ const excludedPrimaryRoots = new Set([
   "tools",
 ]);
 
-const excludedRepositoryPrefixes = [carrierRelativeRoot];
+const excludedRepositoryPrefixes = [
+  carrierRelativeRoot,
+  productionPublicReferenceCoordinationRoot,
+];
 const excludedReferenceRoots = new Set([
   ".git",
   ".iframe-route-build",
@@ -203,7 +241,10 @@ function assertRepositoryInputPath(sourcePath, label) {
   for (const excludedPrefix of excludedRepositoryPrefixes) {
     const prefixKey = portablePathKey(excludedPrefix);
     if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
-      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+      const standing = excludedPrefix === carrierRelativeRoot
+        ? "generated carrier root"
+        : "repository-only coordination root";
+      fail(`${label} stays outside ${standing} ${excludedPrefix}.`);
     }
   }
   return safePath;
@@ -230,7 +271,10 @@ function assertRepositoryReferencePath(sourcePath, label) {
   for (const excludedPrefix of excludedRepositoryPrefixes) {
     const prefixKey = portablePathKey(excludedPrefix);
     if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
-      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+      const standing = excludedPrefix === carrierRelativeRoot
+        ? "generated carrier root"
+        : "repository-only coordination root";
+      fail(`${label} stays outside ${standing} ${excludedPrefix}.`);
     }
   }
   return safePath;
@@ -284,6 +328,81 @@ function validatePublicationConfiguration(publication) {
   };
 }
 
+function validateCssProjectionConfiguration(cssProjection) {
+  assertExactKeys(
+    cssProjection,
+    ["id", "profile", "consumer", "output_directory", "tool"],
+    "Production CSS projection configuration",
+  );
+  if (
+    cssProjection.id !== cssProjectionId ||
+    cssProjection.profile !== cssProjectionProfile
+  ) {
+    fail(
+      `Production CSS projection must use ${cssProjectionId} profile ${cssProjectionProfile}.`,
+    );
+  }
+  const consumer = assertRepositoryInputPath(
+    cssProjection.consumer,
+    "Production CSS projection consumer",
+  );
+  if (path.posix.extname(consumer).toLowerCase() !== ".html") {
+    fail("Production CSS projection consumer must be an HTML file.");
+  }
+  if (consumer !== cssProjectionConsumer) {
+    fail(`Production CSS projection consumer must be ${cssProjectionConsumer}.`);
+  }
+  const outputDirectory = assertPortableProjectionPath(
+    cssProjection.output_directory,
+    "Production CSS projection output directory",
+  );
+  if (path.posix.extname(outputDirectory) !== "") {
+    fail("Production CSS projection output_directory must identify a directory.");
+  }
+  if (outputDirectory !== cssProjectionOutputDirectory) {
+    fail(`Production CSS projection output_directory must be ${cssProjectionOutputDirectory}.`);
+  }
+  assertExactKeys(
+    cssProjection.tool,
+    ["name", "version", "options"],
+    "Production CSS projection tool",
+  );
+  if (
+    cssProjection.tool.name !== cssProjectionTool ||
+    cssProjection.tool.version !== cssProjectionToolVersion
+  ) {
+    fail(
+      `Production CSS projection tool must be ${cssProjectionTool} ${cssProjectionToolVersion}.`,
+    );
+  }
+  assertExactKeys(
+    cssProjection.tool.options,
+    Object.keys(cssProjectionOptions),
+    "Production CSS projection tool options",
+  );
+  for (const [option, value] of Object.entries(cssProjectionOptions)) {
+    if (cssProjection.tool.options[option] !== value) {
+      fail(`Production CSS projection option ${option} must be ${value}.`);
+    }
+  }
+  if (cssOptimizerVersion !== cssProjectionToolVersion) {
+    fail(
+      `Production CSS projection runtime must provide ${cssProjectionTool} ${cssProjectionToolVersion}.`,
+    );
+  }
+  return {
+    id: cssProjectionId,
+    profile: cssProjectionProfile,
+    consumer,
+    output_directory: outputDirectory,
+    tool: {
+      name: cssProjectionTool,
+      version: cssProjectionToolVersion,
+      options: { ...cssProjectionOptions },
+    },
+  };
+}
+
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
   if (Object.hasOwn(configuration ?? {}, "asset_inventory")) {
@@ -292,6 +411,9 @@ function validateConfiguration(configuration) {
   if (Object.hasOwn(configuration ?? {}, "publication")) keys.push("publication");
   if (Object.hasOwn(configuration ?? {}, "iframe_origin_robots")) {
     keys.push("iframe_origin_robots");
+  }
+  if (Object.hasOwn(configuration ?? {}, "css_projection")) {
+    keys.push("css_projection");
   }
   assertExactKeys(
     configuration,
@@ -328,11 +450,22 @@ function validateConfiguration(configuration) {
       configuration.publication,
     );
   }
+  if (configuration.css_projection !== undefined) {
+    configuration.css_projection = validateCssProjectionConfiguration(
+      configuration.css_projection,
+    );
+  }
   if (
     configuration.asset_inventory !== undefined &&
     configuration.publication === undefined
   ) {
     fail("Production asset inventory requires publication geometry for authored-consumer resolution.");
+  }
+  if (
+    configuration.css_projection !== undefined &&
+    configuration.publication === undefined
+  ) {
+    fail("Production CSS projection requires publication geometry.");
   }
   return configuration;
 }
@@ -1421,6 +1554,77 @@ function svgDimensions(bytes) {
     : { standing: "not_declared", source: "svg_root" };
 }
 
+function webpDimensions(bytes, label) {
+  if (
+    bytes.byteLength < 20 ||
+    bytes.subarray(0, 4).toString("ascii") !== "RIFF" ||
+    bytes.subarray(8, 12).toString("ascii") !== "WEBP"
+  ) {
+    fail(`${label} must contain a WebP RIFF container.`);
+  }
+  const containerEnd = bytes.readUInt32LE(4) + 8;
+  if (containerEnd > bytes.byteLength || containerEnd < 20) {
+    fail(`${label} must contain a complete WebP RIFF container.`);
+  }
+
+  for (let offset = 12; offset + 8 <= containerEnd;) {
+    const chunk = bytes.subarray(offset, offset + 4).toString("ascii");
+    const size = bytes.readUInt32LE(offset + 4);
+    const dataStart = offset + 8;
+    const dataEnd = dataStart + size;
+    if (dataEnd > containerEnd) {
+      fail(`${label} must contain complete WebP chunks.`);
+    }
+
+    let width;
+    let height;
+    let source;
+    if (chunk === "VP8X") {
+      if (size < 10) fail(`${label} must contain a complete WebP VP8X header.`);
+      width = bytes.readUIntLE(dataStart + 4, 3) + 1;
+      height = bytes.readUIntLE(dataStart + 7, 3) + 1;
+      source = "webp_vp8x_canvas";
+    } else if (chunk === "VP8L") {
+      if (size < 5 || bytes[dataStart] !== 0x2f) {
+        fail(`${label} must contain a complete WebP VP8L header.`);
+      }
+      width = 1 + bytes[dataStart + 1] + ((bytes[dataStart + 2] & 0x3f) << 8);
+      height = 1 +
+        (bytes[dataStart + 2] >> 6) +
+        (bytes[dataStart + 3] << 2) +
+        ((bytes[dataStart + 4] & 0x0f) << 10);
+      source = "webp_vp8l_header";
+    } else if (chunk === "VP8 ") {
+      if (
+        size < 10 ||
+        !bytes.subarray(dataStart + 3, dataStart + 6).equals(
+          Buffer.from([0x9d, 0x01, 0x2a]),
+        )
+      ) {
+        fail(`${label} must contain a complete WebP VP8 frame header.`);
+      }
+      width = bytes.readUInt16LE(dataStart + 6) & 0x3fff;
+      height = bytes.readUInt16LE(dataStart + 8) & 0x3fff;
+      source = "webp_vp8_frame";
+    }
+
+    if (source !== undefined) {
+      if (width < 1 || height < 1) {
+        fail(`${label} must declare positive WebP dimensions.`);
+      }
+      return {
+        standing: "available",
+        width,
+        height,
+        unit: "pixel",
+        source,
+      };
+    }
+    offset = dataEnd + (size % 2);
+  }
+  fail(`${label} must contain a supported WebP image header.`);
+}
+
 export function inspectImageDimensions(bytes, mediaType, label = "Image asset") {
   if (!Buffer.isBuffer(bytes)) fail(`${label} dimensions require exact bytes.`);
   if (mediaType === "image/png") {
@@ -1467,6 +1671,7 @@ export function inspectImageDimensions(bytes, mediaType, label = "Image asset") 
   }
   if (mediaType === "image/jpeg") return jpegDimensions(bytes, label);
   if (mediaType === "image/svg+xml") return svgDimensions(bytes);
+  if (mediaType === "image/webp") return webpDimensions(bytes, label);
   if (mediaType === "image/x-icon") {
     if (
       bytes.byteLength < 6 ||
@@ -1754,6 +1959,28 @@ function assertResolvedPrimaryBytes(bytes, sourcePath) {
   ) {
     fail(`Primary projection source retains an unresolved public URL token: ${sourcePath}.`);
   }
+}
+
+function canvasRouteForPrimarySource(aggregatePlan, sourcePath) {
+  const routes = aggregatePlan.familyPlans.get("canvas")?.contract?.routes;
+  if (!Array.isArray(routes)) {
+    fail("Production projection requires the Canvas route contract from its aggregate plan.");
+  }
+  return routes.find((route) => route.source_file === sourcePath) ?? null;
+}
+
+function decorateCanvasPrimaryProjection(bytes, file, aggregatePlan) {
+  if (path.posix.extname(file.source_path).toLowerCase() !== ".html") {
+    return bytes;
+  }
+  const route = canvasRouteForPrimarySource(aggregatePlan, file.source_path);
+  if (route === null) return bytes;
+  const html = bytes.toString("utf8");
+  if (["decorated_copy", "decorated_rewrite"].includes(route.projection_kind)) {
+    return Buffer.from(decorateCanvasPublicDocument(html, route), "utf8");
+  }
+  assertCanvasPublicAttribution(html, route, 0);
+  return bytes;
 }
 
 function hasUnsettledProductionAuthority(bytes) {
@@ -2061,6 +2288,899 @@ function rewriteCssReferences(text, rewrite) {
     cursor = comment.index + comment[0].length;
   }
   return `${rewritten}${rewriteCssReferenceChunk(text.slice(cursor), rewrite)}`;
+}
+
+function htmlAttributes(element, label) {
+  const body = element
+    .replace(/^<[A-Za-z][A-Za-z0-9:-]*/, "")
+    .replace(/\/?>[ \t\n\f\r]*$/, "");
+  const attributes = new Map();
+  const matcher = /([^ \t\n\f\r"'<>\/=]+)(?:[ \t\n\f\r]*=[ \t\n\f\r]*(?:"([^"]*)"|'([^']*)'|([^ \t\n\f\r"'=<>`]+)))?/g;
+  let cursor = 0;
+  for (const match of body.matchAll(matcher)) {
+    const gap = body.slice(cursor, match.index);
+    if (!/^[ \t\n\f\r]*$/.test(gap)) fail(`${label} contains unsupported attribute syntax.`);
+    cursor = match.index + match[0].length;
+    const name = match[1].toLowerCase();
+    if (attributes.has(name)) fail(`${label} repeats attribute ${name}.`);
+    const value = match[2] ?? match[3] ?? match[4] ?? null;
+    const quote = match[2] !== undefined
+      ? '"'
+      : match[3] !== undefined
+        ? "'"
+        : null;
+    attributes.set(name, { value, quote });
+  }
+  if (!/^[ \t\n\f\r]*$/.test(body.slice(cursor))) {
+    fail(`${label} contains unsupported attribute syntax.`);
+  }
+  return attributes;
+}
+
+function htmlTagEnd(text, start, label) {
+  let quote = null;
+  for (let index = start; index < text.length; index += 1) {
+    const character = text[index];
+    if (quote === null && (character === '"' || character === "'")) {
+      quote = character;
+    } else if (quote === character) {
+      quote = null;
+    } else if (quote === null && character === ">") {
+      return index + 1;
+    }
+  }
+  fail(`${label} contains an unterminated HTML tag.`);
+}
+
+function isHtmlNameStart(character) {
+  return typeof character === "string" && /^[A-Za-z]$/.test(character);
+}
+
+function isHtmlNameCharacter(character) {
+  return typeof character === "string" && /^[A-Za-z0-9:-]$/.test(character);
+}
+
+function isHtmlSpace(character) {
+  return typeof character === "string" && /^[ \t\n\f\r]$/.test(character);
+}
+
+function htmlTagNameAt(text, start) {
+  if (!isHtmlNameStart(text[start])) return null;
+  let end = start + 1;
+  while (isHtmlNameCharacter(text[end])) end += 1;
+  return { name: text.slice(start, end).toLowerCase(), end };
+}
+
+function rawTextClosingTag(text, start, tagName, label) {
+  const lower = text.toLowerCase();
+  const marker = `</${tagName}`;
+  let cursor = start;
+  while (cursor < text.length) {
+    const opening = lower.indexOf(marker, cursor);
+    if (opening < 0) return null;
+    const boundary = text[opening + marker.length];
+    if (boundary === ">" || boundary === "/" || isHtmlSpace(boundary)) {
+      return {
+        kind: "end_tag",
+        name: tagName,
+        start: opening,
+        end: htmlTagEnd(text, opening, label),
+      };
+    }
+    cursor = opening + marker.length;
+  }
+  return null;
+}
+
+function htmlTokenStream(text, label) {
+  const tokens = [];
+  const rawTextElements = new Set(["script", "style", "title", "textarea"]);
+  let cursor = 0;
+  let templateDepth = 0;
+  while (cursor < text.length) {
+    const opening = text.indexOf("<", cursor);
+    if (opening < 0) break;
+    if (text.startsWith("<!--", opening)) {
+      if (
+        text.startsWith("<!-->", opening) ||
+        text.startsWith("<!--->", opening)
+      ) {
+        fail(`${label} contains a noncanonical HTML comment close.`);
+      }
+      const closing = text.indexOf("-->", opening + 4);
+      const bangClosing = text.indexOf("--!>", opening + 4);
+      if (
+        bangClosing >= 0 &&
+        (closing < 0 || bangClosing < closing)
+      ) {
+        fail(`${label} contains a noncanonical HTML comment close.`);
+      }
+      if (closing < 0) {
+        fail(`${label} contains an unterminated HTML comment.`);
+      }
+      const end = closing + 3;
+      tokens.push({
+        kind: "comment",
+        name: null,
+        start: opening,
+        end,
+        text: text.slice(opening, end),
+        active: templateDepth === 0,
+      });
+      cursor = end;
+      continue;
+    }
+    const next = text[opening + 1];
+    if (next === "!" || next === "?") {
+      cursor = htmlTagEnd(text, opening, label);
+      continue;
+    }
+    const closing = next === "/";
+    const nameStart = opening + (closing ? 2 : 1);
+    const parsedName = htmlTagNameAt(text, nameStart);
+    if (parsedName === null) {
+      cursor = opening + 1;
+      continue;
+    }
+    const nameBoundary = text[parsedName.end];
+    if (
+      nameBoundary !== ">" &&
+      nameBoundary !== "/" &&
+      !isHtmlSpace(nameBoundary)
+    ) {
+      fail(`${label} contains an unsupported HTML tag-name boundary.`);
+    }
+    const end = htmlTagEnd(text, opening, label);
+    if (closing) {
+      const active = templateDepth === 0;
+      tokens.push({
+        kind: "end_tag",
+        name: parsedName.name,
+        start: opening,
+        end,
+        text: text.slice(opening, end),
+        active,
+      });
+      if (parsedName.name === "template" && templateDepth > 0) {
+        templateDepth -= 1;
+      }
+      cursor = end;
+      continue;
+    }
+
+    const active = templateDepth === 0;
+    tokens.push({
+      kind: "start_tag",
+      name: parsedName.name,
+      start: opening,
+      end,
+      text: text.slice(opening, end),
+      active,
+    });
+    if (parsedName.name === "template") templateDepth += 1;
+    if (rawTextElements.has(parsedName.name)) {
+      const rawClosing = rawTextClosingTag(text, end, parsedName.name, label);
+      if (rawClosing === null) {
+        cursor = text.length;
+        continue;
+      }
+      tokens.push({
+        ...rawClosing,
+        text: text.slice(rawClosing.start, rawClosing.end),
+        active,
+      });
+      cursor = rawClosing.end;
+      continue;
+    }
+    cursor = end;
+  }
+  return tokens;
+}
+
+function ignorableHtmlRange(html, tokens, start, end) {
+  let cursor = start;
+  for (const token of tokens) {
+    if (token.kind !== "comment" || token.start < start || token.end > end) {
+      continue;
+    }
+    if (!/^[ \t\n\f\r]*$/.test(html.slice(cursor, token.start))) return false;
+    cursor = token.end;
+  }
+  return /^[ \t\n\f\r]*$/.test(html.slice(cursor, end));
+}
+
+function aboutStylesheetGraph(html, label) {
+  const tokens = htmlTokenStream(html, label);
+  const headOpenings = tokens.filter((token) =>
+    token.active && token.kind === "start_tag" && token.name === "head",
+  );
+  const headClosings = tokens.filter((token) =>
+    token.active && token.kind === "end_tag" && token.name === "head",
+  );
+  if (headOpenings.length !== 1 || headClosings.length !== 1) {
+    fail(`${label} must contain one complete head element.`);
+  }
+  const headStart = headOpenings[0].end;
+  const headEnd = headClosings[0].start;
+  if (headEnd <= headStart) fail(`${label} has an invalid head element.`);
+  if (
+    tokens.some((token) =>
+      token.active && token.kind === "start_tag" && token.name === "base",
+    )
+  ) {
+    fail(`${label} must not contain an active base element.`);
+  }
+  if (
+    tokens.some((token) =>
+      token.active &&
+      token.kind === "start_tag" &&
+      token.name === "style" &&
+      token.start >= headStart &&
+      token.end <= headEnd,
+    )
+  ) {
+    fail(`${label} must not contain an active head style owner.`);
+  }
+
+  const noscriptOpenings = tokens.filter((token) =>
+    token.active &&
+    token.kind === "start_tag" &&
+    token.name === "noscript" &&
+    token.start >= headStart &&
+    token.end <= headEnd,
+  );
+  if (noscriptOpenings.length !== 1) {
+    fail(`${label} must contain exactly one head noscript owner.`);
+  }
+  const noscriptOpening = noscriptOpenings[0];
+  const noscriptClosings = tokens.filter((token) =>
+    token.active &&
+    token.kind === "end_tag" &&
+    token.name === "noscript" &&
+    token.start >= noscriptOpening.end &&
+    token.end <= headEnd,
+  );
+  if (noscriptClosings.length !== 1) {
+    fail(`${label} has an unterminated head noscript owner.`);
+  }
+  const noscriptClosing = noscriptClosings[0];
+  const noscript = {
+    start: noscriptOpening.start,
+    contentStart: noscriptOpening.end,
+    contentEnd: noscriptClosing.start,
+    end: noscriptClosing.end,
+  };
+
+  const links = [];
+  for (const span of tokens.filter((token) =>
+    token.active && token.kind === "start_tag" && token.name === "link",
+  )) {
+    const attributes = htmlAttributes(span.text, `${label} link`);
+    const relAttribute = attributes.get("rel");
+    if (typeof relAttribute?.value !== "string") continue;
+    if (relAttribute.value.includes("&")) {
+      fail(`${label} stylesheet rel must not contain HTML character references.`);
+    }
+    const relTokens = relAttribute.value
+      .replace(/^[ \t\n\f\r]+|[ \t\n\f\r]+$/g, "")
+      .toLowerCase()
+      .split(/[ \t\n\f\r]+/);
+    if (!relTokens.includes("stylesheet")) continue;
+    if (span.start < headStart || span.end > headEnd) {
+      fail(`${label} must not contain an active stylesheet owner outside its head graph.`);
+    }
+    if (relTokens.length !== 1 || relTokens[0] !== "stylesheet") {
+      fail(`${label} stylesheet link rel must contain only stylesheet.`);
+    }
+    const allowed = new Set(["rel", "href", "media"]);
+    for (const name of attributes.keys()) {
+      if (!allowed.has(name)) {
+        fail(`${label} stylesheet link uses unsupported loading attribute ${name}.`);
+      }
+    }
+    for (const name of ["rel", "href", "media"]) {
+      const attribute = attributes.get(name);
+      if (attribute !== undefined && attribute.quote === null) {
+        fail(`${label} stylesheet attribute ${name} must be quoted.`);
+      }
+      if (
+        name !== "rel" &&
+        typeof attribute?.value === "string" &&
+        attribute.value.includes("&")
+      ) {
+        fail(`${label} stylesheet ${name} must not contain HTML character references.`);
+      }
+    }
+    const href = attributes.get("href")?.value;
+    if (typeof href !== "string" || href.length === 0) {
+      fail(`${label} stylesheet link requires one href.`);
+    }
+    links.push({
+      ...span,
+      href,
+      media: attributes.get("media")?.value,
+      inNoscript:
+        span.start >= noscript.contentStart && span.end <= noscript.contentEnd,
+    });
+  }
+  if (links.length !== 8) {
+    fail(`${label} must contain the exact eight-owner About stylesheet graph.`);
+  }
+  const base = links.slice(0, 6);
+  const noscriptLink = links[6];
+  const shell = links[7];
+  for (const [index, link] of base.entries()) {
+    if (link.inNoscript || link.media?.toLowerCase() !== "all") {
+      fail(`${label} base stylesheet owner ${index + 1} must remain media=all in the document context.`);
+    }
+    if (
+      index > 0 &&
+      !ignorableHtmlRange(
+        html,
+        tokens,
+        base[index - 1].end,
+        link.start,
+      )
+    ) {
+      fail(`${label} base stylesheet owners must remain one contiguous loading run.`);
+    }
+  }
+  if (!noscriptLink.inNoscript || noscriptLink.media?.toLowerCase() !== "all") {
+    fail(`${label} seventh stylesheet must remain the media=all noscript owner.`);
+  }
+  if (
+    !ignorableHtmlRange(
+      html,
+      tokens,
+      noscript.contentStart,
+      noscriptLink.start,
+    ) ||
+    !ignorableHtmlRange(
+      html,
+      tokens,
+      noscriptLink.end,
+      noscript.contentEnd,
+    )
+  ) {
+    fail(`${label} noscript owner must contain only its stylesheet link.`);
+  }
+  if (shell.inNoscript || shell.media !== undefined) {
+    fail(`${label} eighth stylesheet must remain the unqualified document shell owner.`);
+  }
+  if (!(base[5].end <= noscript.start && noscript.end <= shell.start)) {
+    fail(`${label} stylesheet loading-context order has changed.`);
+  }
+  return {
+    links,
+    runs: [
+      {
+        id: "about-document-base",
+        links: base,
+        execution_context: {
+          owner: "document",
+          scripts: "any",
+          media: "all",
+          sequence: 1,
+        },
+      },
+      {
+        id: "about-noscript",
+        links: [noscriptLink],
+        execution_context: {
+          owner: "noscript",
+          scripts: "unavailable",
+          media: "all",
+          sequence: 2,
+        },
+      },
+      {
+        id: "about-document-shell",
+        links: [shell],
+        execution_context: {
+          owner: "document",
+          scripts: "any",
+          media: "all",
+          sequence: 3,
+        },
+      },
+    ],
+  };
+}
+
+function assertCssProjectionMap(value, label) {
+  if (!(value instanceof Map)) fail(`${label} must be a Map.`);
+  return value;
+}
+
+function assertFullGitObjectId(value, label) {
+  const objectId = assertNonemptyString(value, label);
+  if (!/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(objectId)) {
+    fail(`${label} must be one full Git object id.`);
+  }
+  return objectId;
+}
+
+function assertUnambiguousLocalUrlPathname(pathname, label) {
+  if (pathname.includes("%")) {
+    fail(`${label} must not contain percent encoding.`);
+  }
+  if (pathname.includes("\\")) {
+    fail(`${label} must not contain backslashes.`);
+  }
+}
+
+function aboutStylesheetSourcePath(
+  reference,
+  consumerSourcePath,
+  consumerSourceRoot,
+  projectedPaths,
+) {
+  if (!isLocalReference(reference)) {
+    fail(`Production CSS projection stylesheet href must be local: ${reference}.`);
+  }
+  const { pathname, suffix } = splitReferenceSuffix(reference);
+  if (pathname === "") {
+    fail(`Production CSS projection stylesheet href must name one file: ${reference}.`);
+  }
+  assertUnambiguousLocalUrlPathname(
+    pathname,
+    `Production CSS projection stylesheet href pathname ${reference}`,
+  );
+  const sourcePath = pathname.startsWith("/")
+    ? path.posix.normalize(
+        path.posix.join(consumerSourceRoot, pathname.replace(/^\/+/, "")),
+      )
+    : path.posix.normalize(
+        path.posix.join(path.posix.dirname(consumerSourcePath), pathname),
+      );
+  if (sourcePath === ".." || sourcePath.startsWith("../")) {
+    fail(`Production CSS projection stylesheet href escapes the repository: ${reference}.`);
+  }
+  if (
+    pathname.startsWith("/") &&
+    sourcePath !== consumerSourceRoot &&
+    !sourcePath.startsWith(`${consumerSourceRoot}/`)
+  ) {
+    fail(`Production CSS projection root-relative stylesheet href escapes its source root: ${reference}.`);
+  }
+  assertRepositoryInputPath(sourcePath, "Production CSS projection stylesheet");
+  if (path.posix.extname(sourcePath).toLowerCase() !== ".css") {
+    fail(`Production CSS projection stylesheet href must resolve to CSS: ${reference}.`);
+  }
+  if (!projectedPaths.has(sourcePath)) {
+    fail(`Production CSS projection stylesheet is absent from its selected closure: ${sourcePath}.`);
+  }
+  assertUnambiguousLocalUrlPathname(
+    projectedPaths.get(sourcePath),
+    `Production CSS projection projected stylesheet pathname ${sourcePath}`,
+  );
+  return { sourcePath, suffix, absolute: pathname.startsWith("/") };
+}
+
+function renderedAboutStylesheetHref(
+  reference,
+  consumerSourcePath,
+  consumerSourceRoot,
+  consumerProjectedPath,
+  projectedPaths,
+) {
+  const resolution = aboutStylesheetSourcePath(
+    reference,
+    consumerSourcePath,
+    consumerSourceRoot,
+    projectedPaths,
+  );
+  const target = projectedPaths.get(resolution.sourcePath);
+  if (resolution.absolute) return `/${target}${resolution.suffix}`;
+  let relative = path.posix.relative(
+    path.posix.dirname(consumerProjectedPath),
+    target,
+  );
+  if (relative === "") relative = path.posix.basename(target);
+  if (reference.startsWith("./") && !relative.startsWith(".")) relative = `./${relative}`;
+  return `${relative}${resolution.suffix}`;
+}
+
+function cssProjectionSourcePath(
+  reference,
+  sourcePath,
+  consumerSourceRoot,
+  projectedPaths,
+) {
+  if (!isLocalReference(reference)) return null;
+  const { pathname } = splitReferenceSuffix(reference);
+  if (pathname === "") return null;
+  assertUnambiguousLocalUrlPathname(
+    pathname,
+    `Production CSS projection local URL pathname ${sourcePath} -> ${reference}`,
+  );
+  const rootRelative = pathname.startsWith("/");
+  const target = rootRelative
+    ? path.posix.normalize(
+        path.posix.join(consumerSourceRoot, pathname.replace(/^\/+/, "")),
+      )
+    : path.posix.normalize(
+        path.posix.join(path.posix.dirname(sourcePath), pathname),
+      );
+  if (target === ".." || target.startsWith("../")) {
+    fail(`Production CSS projection URL escapes the repository: ${sourcePath} -> ${reference}.`);
+  }
+  if (
+    rootRelative &&
+    target !== consumerSourceRoot &&
+    !target.startsWith(`${consumerSourceRoot}/`)
+  ) {
+    fail(`Production CSS projection root-relative URL escapes its source root: ${sourcePath} -> ${reference}.`);
+  }
+  if (!projectedPaths.has(target)) {
+    fail(
+      `Production CSS projection dependency is absent from its tracked selected closure: ${sourcePath} -> ${target}.`,
+    );
+  }
+  assertUnambiguousLocalUrlPathname(
+    projectedPaths.get(target),
+    `Production CSS projection projected dependency pathname ${sourcePath} -> ${target}`,
+  );
+  return { target, rootRelative };
+}
+
+function projectedCssUrl(
+  reference,
+  sourcePath,
+  consumerSourceRoot,
+  outputDirectory,
+  projectedPaths,
+  onResolvedReference,
+) {
+  const resolution = cssProjectionSourcePath(
+    reference,
+    sourcePath,
+    consumerSourceRoot,
+    projectedPaths,
+  );
+  if (resolution === null) return reference;
+  const { target, rootRelative } = resolution;
+  onResolvedReference?.({ consumer_path: sourcePath, target_path: target });
+  const { suffix } = splitReferenceSuffix(reference);
+  if (rootRelative) return `/${projectedPaths.get(target)}${suffix}`;
+  let relative = path.posix.relative(
+    outputDirectory,
+    projectedPaths.get(target),
+  );
+  if (relative === "") relative = path.posix.basename(projectedPaths.get(target));
+  if (reference.startsWith("./") && !relative.startsWith(".")) relative = `./${relative}`;
+  return `${relative}${suffix}`;
+}
+
+function projectedCssSource(
+  bytes,
+  sourcePath,
+  consumerSourceRoot,
+  outputDirectory,
+  projectedPaths,
+  onResolvedReference,
+) {
+  const source = bytes.toString("utf8");
+  const delimiters = [];
+  let quote = null;
+  let inComment = false;
+  const matchingDelimiter = new Map([["}", "{"], [")", "("], ["]", "["]]);
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    const next = source[index + 1];
+    if (inComment) {
+      if (character === "*" && next === "/") {
+        inComment = false;
+        index += 1;
+      }
+      continue;
+    }
+    if (quote !== null) {
+      if (character === "\\") {
+        index += 1;
+      } else if (character === quote) {
+        quote = null;
+      } else if (character === "\n" || character === "\r") {
+        fail(`Production CSS projection rejects an unclosed string in ${sourcePath}.`);
+      }
+      continue;
+    }
+    if (character === "/" && next === "*") {
+      inComment = true;
+      index += 1;
+    } else if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === "\\") {
+      index += 1;
+    } else if (["{", "(", "["].includes(character)) {
+      delimiters.push(character);
+    } else if (matchingDelimiter.has(character)) {
+      if (delimiters.pop() !== matchingDelimiter.get(character)) {
+        fail(`Production CSS projection rejects unbalanced syntax in ${sourcePath}.`);
+      }
+    }
+  }
+  if (inComment) {
+    fail(`Production CSS projection rejects an unclosed comment in ${sourcePath}.`);
+  }
+  if (quote !== null) {
+    fail(`Production CSS projection rejects an unclosed string in ${sourcePath}.`);
+  }
+  if (delimiters.length > 0) {
+    fail(`Production CSS projection rejects unbalanced syntax in ${sourcePath}.`);
+  }
+  let ast;
+  try {
+    ast = cssSyntax.parse(source, {
+      context: "stylesheet",
+      filename: sourcePath,
+      positions: false,
+      parseCustomProperty: true,
+    });
+  } catch (error) {
+    fail(
+      `Production CSS projection could not parse ${sourcePath}: ` +
+      `${error instanceof Error ? error.message : error}`,
+    );
+  }
+  cssSyntax.walk(ast, function inspectCssNode(node) {
+    const boundedContainerPrelude =
+      node.type === "Raw" &&
+      this.atrule?.name?.toLowerCase() === "container" &&
+      this.atrule.prelude === node &&
+      /^[a-z_][a-z0-9_-]*\s+\(\s*(?:min-|max-)?(?:width|height|inline-size|block-size)\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ch|vw|vh|vmin|vmax)\s*\)$/i.test(
+        node.value,
+      );
+    if (node.type === "Raw" && !boundedContainerPrelude) {
+      fail(
+        `Production CSS projection rejects invalid or unsupported raw CSS in ${sourcePath}.`,
+      );
+    }
+    if (node.type === "Atrule" && node.name.includes("\\")) {
+      fail(`Production CSS projection rejects an escaped at-rule name in ${sourcePath}.`);
+    }
+    if (node.type === "Function" && node.name.includes("\\")) {
+      fail(`Production CSS projection rejects an escaped function name in ${sourcePath}.`);
+    }
+    if (
+      node.type === "String" &&
+      ["image-set", "-webkit-image-set"].includes(
+        this.function?.name?.toLowerCase(),
+      )
+    ) {
+      fail(`Production CSS projection rejects string-form image-set sources in ${sourcePath}.`);
+    }
+    if (
+      node.type === "Atrule" &&
+      ["import", "charset", "namespace"].includes(node.name.toLowerCase())
+    ) {
+      fail(`Production CSS projection rejects @${node.name} in ${sourcePath}.`);
+    }
+    if (node.type === "Url") {
+      if (typeof node.value !== "string") {
+        fail(`Production CSS projection found an unsupported URL in ${sourcePath}.`);
+      }
+      node.value = projectedCssUrl(
+        node.value,
+        sourcePath,
+        consumerSourceRoot,
+        outputDirectory,
+        projectedPaths,
+        onResolvedReference,
+      );
+    }
+  });
+  return cssSyntax.generate(ast);
+}
+
+function replaceAboutStylesheetGraph(html, graph, generated) {
+  const replacements = [];
+  const hrefFor = (output) => {
+    let relative = path.posix.relative(
+      path.posix.dirname(generated.consumer_projected_path),
+      output.projected_path,
+    );
+    if (relative === "") relative = path.posix.basename(output.projected_path);
+    return relative;
+  };
+  const rewriteLink = (link, output) => rewriteHtmlAttribute(
+    link.text,
+    "href",
+    () => hrefFor(output),
+  );
+  replacements.push({
+    start: graph.runs[0].links[0].start,
+    end: graph.runs[0].links.at(-1).end,
+    text: rewriteLink(graph.runs[0].links[0], generated.outputs[0]),
+  });
+  replacements.push({
+    start: graph.runs[1].links[0].start,
+    end: graph.runs[1].links[0].end,
+    text: rewriteLink(graph.runs[1].links[0], generated.outputs[1]),
+  });
+  replacements.push({
+    start: graph.runs[2].links[0].start,
+    end: graph.runs[2].links[0].end,
+    text: rewriteLink(graph.runs[2].links[0], generated.outputs[2]),
+  });
+  let rewritten = html;
+  for (const replacement of replacements.sort((left, right) => right.start - left.start)) {
+    rewritten = `${rewritten.slice(0, replacement.start)}${replacement.text}${rewritten.slice(replacement.end)}`;
+  }
+  return rewritten;
+}
+
+export function projectAboutCssProfile({
+  consumer,
+  consumerSourceRoot = path.posix.dirname(consumer?.source_path ?? ""),
+  renderedConsumerBytes = consumer?.bytes,
+  cssSources,
+  projectedPaths,
+  profile,
+  onResolvedReference,
+}) {
+  if (!isPlainObject(consumer) || !Buffer.isBuffer(consumer.bytes)) {
+    fail("Production CSS projection requires tracked consumer bytes.");
+  }
+  const consumerSourcePath = assertRepositoryInputPath(
+    consumer.source_path,
+    "Production CSS projection consumer",
+  );
+  const consumerProjectedPath = assertPortableProjectionPath(
+    consumer.projected_path,
+    "Production CSS projection consumer output",
+  );
+  const normalizedConsumerSourceRoot = assertRepositoryInputPath(
+    consumerSourceRoot,
+    "Production CSS projection consumer source root",
+  );
+  if (
+    consumerSourcePath !== normalizedConsumerSourceRoot &&
+    !consumerSourcePath.startsWith(`${normalizedConsumerSourceRoot}/`)
+  ) {
+    fail("Production CSS projection consumer must remain inside its configured source root.");
+  }
+  if (!Buffer.isBuffer(renderedConsumerBytes)) {
+    fail("Production CSS projection requires rendered consumer bytes.");
+  }
+  const normalizedProfile = validateCssProjectionConfiguration(profile);
+  if (normalizedProfile.consumer !== consumerSourcePath) {
+    fail("Production CSS projection profile and tracked consumer differ.");
+  }
+  assertCssProjectionMap(cssSources, "Production CSS projection CSS sources");
+  assertCssProjectionMap(projectedPaths, "Production CSS projection selected paths");
+  if (projectedPaths.get(consumerSourcePath) !== consumerProjectedPath) {
+    fail("Production CSS projection consumer is absent from its selected closure.");
+  }
+  const sourceGraph = aboutStylesheetGraph(
+    consumer.bytes.toString("utf8"),
+    "Tracked About consumer",
+  );
+  const renderedGraph = aboutStylesheetGraph(
+    renderedConsumerBytes.toString("utf8"),
+    "Rendered About consumer",
+  );
+  for (const [index, sourceLink] of sourceGraph.links.entries()) {
+    const expected = renderedAboutStylesheetHref(
+      sourceLink.href,
+      consumerSourcePath,
+      normalizedConsumerSourceRoot,
+      consumerProjectedPath,
+      projectedPaths,
+    );
+    if (renderedGraph.links[index].href !== expected) {
+      fail(
+        `Rendered About stylesheet graph differs from tracked owner ${index + 1}: ` +
+        `expected ${expected}.`,
+      );
+    }
+  }
+  const outputs = [];
+  for (const run of sourceGraph.runs) {
+    const orderedSources = [];
+    const chunks = [];
+    for (const link of run.links) {
+      const { sourcePath } = aboutStylesheetSourcePath(
+        link.href,
+        consumerSourcePath,
+        normalizedConsumerSourceRoot,
+        projectedPaths,
+      );
+      const input = cssSources.get(sourcePath);
+      if (!isPlainObject(input) || !Buffer.isBuffer(input.bytes)) {
+        fail(`Production CSS projection stylesheet is unavailable as tracked bytes: ${sourcePath}.`);
+      }
+      if (projectedPaths.get(sourcePath) === undefined) {
+        fail(`Production CSS projection stylesheet is absent from its selected closure: ${sourcePath}.`);
+      }
+      const gitBlobId = assertFullGitObjectId(
+        input.git_blob_id,
+        `Production CSS projection ${sourcePath} Git blob id`,
+      );
+      orderedSources.push({
+        source_path: sourcePath,
+        git_blob_id: gitBlobId,
+        sha256: sha256(input.bytes),
+      });
+      chunks.push(projectedCssSource(
+        input.bytes,
+        sourcePath,
+        normalizedConsumerSourceRoot,
+        normalizedProfile.output_directory,
+        projectedPaths,
+        onResolvedReference,
+      ));
+    }
+    let minified;
+    try {
+      minified = minifyCss(`${chunks.join("\n")}\n`, {
+        ...cssProjectionOptions,
+      }).css;
+    } catch (error) {
+      fail(
+        `Production CSS projection could not optimize ${run.id}: ` +
+        `${error instanceof Error ? error.message : error}`,
+      );
+    }
+    const bytes = Buffer.from(minified, "utf8");
+    const digest = sha256(bytes);
+    const projectedPath = `${normalizedProfile.output_directory}/${digest}.css`;
+    outputs.push({
+      id: run.id,
+      bytes,
+      projected_path: projectedPath,
+      lineage: {
+        kind: "css_projection",
+        profile: normalizedProfile.profile,
+        consumer: {
+          source_path: consumerSourcePath,
+          projected_path: consumerProjectedPath,
+        },
+        execution_context: run.execution_context,
+        tool: normalizedProfile.tool,
+        ordered_sources: orderedSources,
+        output: {
+          projected_path: projectedPath,
+          bytes: bytes.byteLength,
+          sha256: digest,
+          media_type: "text/css",
+        },
+        recovery_condition:
+          "Regenerate from the tracked consumer and ordered tracked CSS sources with this exact profile. To recover readable unbundled delivery, remove css_projection from the tracked configuration and rebuild; retain the readable source CSS outputs.",
+      },
+    });
+  }
+  const generated = {
+    consumer_projected_path: consumerProjectedPath,
+    outputs,
+  };
+  const consumerBytes = Buffer.from(
+    replaceAboutStylesheetGraph(
+      renderedConsumerBytes.toString("utf8"),
+      renderedGraph,
+      generated,
+    ),
+    "utf8",
+  );
+  return {
+    consumer_bytes: consumerBytes,
+    input: {
+      id: normalizedProfile.id,
+      profile: normalizedProfile.profile,
+      consumer: {
+        source_path: consumerSourcePath,
+        projected_path: consumerProjectedPath,
+        git_blob_id: assertFullGitObjectId(
+          consumer.git_blob_id,
+          "Production CSS projection consumer Git blob id",
+        ),
+        sha256: sha256(consumer.bytes),
+      },
+      output_directory: normalizedProfile.output_directory,
+      tool: normalizedProfile.tool,
+    },
+    outputs,
+  };
 }
 
 function rewriteStyleBlocks(text, rewrite) {
@@ -2657,6 +3777,7 @@ async function loadPublicationInput(
   publication,
   primaryInputs,
   trackedBlobs,
+  trackedInputs,
 ) {
   const configPath = path.resolve(root, productionPublicReferenceConfig);
   if (trackedBlobs.has(productionPublicReferenceConfig)) {
@@ -2692,17 +3813,125 @@ async function loadPublicationInput(
     }
     for (const key of inspection?.keys ?? []) keys.add(key);
   }
+  const sortedKeys = [...keys].sort(compareUtf8Paths);
+  const registryKeys = sortedKeys.filter((key) =>
+    key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+  );
+  const externalKeys = sortedKeys.filter((key) =>
+    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+  );
+  const hasTrackedRegistryBinding = trackedBlobs.has(
+    productionRegistryReferenceBinding,
+  );
+
+  if (!hasTrackedRegistryBinding) {
+    if (registryKeys.length > 0) {
+      fail(
+        `Production Registry tokens require the tracked binding: ` +
+        `${productionRegistryReferenceBinding}.`,
+      );
+    }
+    const destinations = await resolvePublicReferenceDestinations(keys, {
+      configurationSource: configurationBytes.toString("utf8"),
+      environment: {},
+    });
+    return {
+      destinations,
+      input: {
+        source_relationship: "external_digest_bound_input",
+        configuration_path: productionPublicReferenceConfig,
+        configuration_sha256: sha256(configurationBytes),
+        keys: sortedKeys,
+      },
+      state: {
+        path: configPath,
+        sha256: sha256(configurationBytes),
+      },
+    };
+  }
+
+  if (trackedBlobs.get(productionRegistryReferenceBinding)?.mode !== "100644") {
+    fail(
+      `Production Registry binding must be a tracked non-executable blob: ` +
+      `${productionRegistryReferenceBinding}.`,
+    );
+  }
+  const bindingInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    productionRegistryReferenceBinding,
+    "Production Registry binding",
+  );
+  const registryReference = parseRegistryReferenceBinding(bindingInput.bytes, {
+    requiredKeys: registryKeys,
+  });
+  trackedInputs.set(productionRegistryReferenceBinding, bindingInput);
+  if (trackedBlobs.get(productionRegistryDataUseNotice)?.mode !== "100644") {
+    fail(
+      `Production Registry DATA-USE notice must be a tracked non-executable blob: ` +
+      `${productionRegistryDataUseNotice}.`,
+    );
+  }
+  const dataUseInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    productionRegistryDataUseNotice,
+    "Production Registry DATA-USE notice",
+  );
+  const dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
+  trackedInputs.set(productionRegistryDataUseNotice, dataUseInput);
   const destinations = await resolvePublicReferenceDestinations(keys, {
     configurationSource: configurationBytes.toString("utf8"),
     environment: {},
+    registryDestinations: registryReference.destinations,
   });
+  const atlas = registryReference.receipt.atlas;
   return {
     destinations,
     input: {
-      source_relationship: "external_digest_bound_input",
-      configuration_path: productionPublicReferenceConfig,
-      configuration_sha256: sha256(configurationBytes),
-      keys: [...keys].sort(),
+      source_relationship:
+        "tracked_registry_binding_with_external_digest_bound_input",
+      keys: sortedKeys,
+      tracked_registry: {
+        keys: registryKeys,
+        binding: {
+          source_path: productionRegistryReferenceBinding,
+          git_blob_id: bindingInput.object,
+          sha256: registryReference.receipt.bindingSha256,
+          id: registryReference.receipt.id,
+          version: registryReference.receipt.version,
+          binding_count: registryReference.receipt.bindingCount,
+        },
+        data_use: {
+          source_path: productionRegistryDataUseNotice,
+          git_blob_id: dataUseInput.object,
+          sha256: dataUseReceipt.sha256,
+          bytes: dataUseReceipt.bytes,
+        },
+        atlas_receipt: {
+          reference_version: atlas.referenceVersion,
+          guide_version: atlas.guideVersion,
+          data_schema_version: atlas.dataSchemaVersion,
+          snapshot_date: atlas.snapshotDate,
+          accepted_at: atlas.acceptedAt,
+          archive_sha256: atlas.archiveSha256,
+          registry_atlas_sha256: atlas.registryAtlasSha256,
+          manifest_sha256: atlas.manifestSha256,
+          current_route_map_sha256: atlas.currentRouteMapSha256,
+          license: atlas.license,
+          content_role: atlas.contentRole,
+          action_authority: atlas.actionAuthority,
+          data_use_notice: atlas.dataUseNotice,
+          data_use_sha256: atlas.dataUseSha256,
+          benchmark_scope: atlas.benchmarkScope,
+        },
+      },
+      external_configuration: {
+        source_relationship: "external_digest_bound_input",
+        configuration_path: productionPublicReferenceConfig,
+        configuration_sha256: sha256(configurationBytes),
+        keys: externalKeys,
+      },
     },
     state: {
       path: configPath,
@@ -2872,6 +4101,7 @@ export async function createProductionProjectionPlan(options = {}) {
         selection.configuration.publication,
         primaryInputs,
         trackedBlobs,
+        trackedInputs,
       );
   const aggregatePlan = assertAggregatePlan(
     options.aggregatePlan ?? await createAggregatePackagePlan(),
@@ -2908,10 +4138,11 @@ export async function createProductionProjectionPlan(options = {}) {
   const outputs = [];
   let primaryBytes = 0;
   let iframeBytes = 0;
+  let cssProjectionPlan = null;
 
   for (const file of primaryManifest.files) {
     const sourceBytes = primaryInputs.get(file.source_path).bytes;
-    const bytes = publicationInput === null
+    let bytes = publicationInput === null
       ? sourceBytes
       : transformPrimaryBytes(
           sourceBytes,
@@ -2923,6 +4154,31 @@ export async function createProductionProjectionPlan(options = {}) {
           absoluteProjectionUrls,
           noteResolvedReference,
         );
+    bytes = decorateCanvasPrimaryProjection(bytes, file, aggregatePlan);
+    if (file.source_path === selection.configuration.css_projection?.consumer) {
+      cssProjectionPlan = projectAboutCssProfile({
+        consumer: {
+          source_path: file.source_path,
+          projected_path: file.projected_path,
+          bytes: sourceBytes,
+          git_blob_id: primaryInputs.get(file.source_path).object,
+        },
+        consumerSourceRoot: selection.configuration.publication.source_root,
+        renderedConsumerBytes: bytes,
+        cssSources: new Map(
+          [...primaryInputs.entries()]
+            .filter(([sourcePath]) => path.posix.extname(sourcePath).toLowerCase() === ".css")
+            .map(([sourcePath, input]) => [
+              sourcePath,
+              { bytes: input.bytes, git_blob_id: input.object },
+            ]),
+        ),
+        projectedPaths,
+        profile: selection.configuration.css_projection,
+        onResolvedReference: noteResolvedReference,
+      });
+      bytes = cssProjectionPlan.consumer_bytes;
+    }
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
     assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
@@ -2951,6 +4207,30 @@ export async function createProductionProjectionPlan(options = {}) {
       });
     }
     outputs.push(output);
+  }
+
+  if (
+    selection.configuration.css_projection !== undefined &&
+    cssProjectionPlan === null
+  ) {
+    fail("Production CSS projection consumer is absent from the primary manifest.");
+  }
+  for (const generated of cssProjectionPlan?.outputs ?? []) {
+    const projectedPath = `primary-public/${generated.projected_path}`;
+    assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
+    outputFiles.set(projectedPath, generated.bytes);
+    primaryBytes += generated.bytes.byteLength;
+    outputs.push({
+      surface: "primary",
+      source_path: `css-projection:${generated.id}`,
+      projected_path: projectedPath,
+      media_type: "text/css",
+      bytes: generated.bytes.byteLength,
+      sha256: sha256(generated.bytes),
+      standing: "generated",
+      css_projection_id: generated.id,
+      generation: generated.lineage,
+    });
   }
 
   assertSettledProductionAuthority(outputFiles, aggregatePlan.outputFiles);
@@ -3065,6 +4345,9 @@ export async function createProductionProjectionPlan(options = {}) {
       ...(publicationInput === null
         ? {}
         : { public_references: publicationInput.input }),
+      ...(cssProjectionPlan === null
+        ? {}
+        : { css_projection: cssProjectionPlan.input }),
       ...(iframeOriginRobotsInput === null
         ? {}
         : {
@@ -3086,7 +4369,7 @@ export async function createProductionProjectionPlan(options = {}) {
     surfaces: {
       primary: {
         root: "primary-public/",
-        files: primaryManifest.files.length,
+        files: outputs.filter((output) => output.surface === "primary").length,
         bytes: primaryBytes,
       },
       iframe: {

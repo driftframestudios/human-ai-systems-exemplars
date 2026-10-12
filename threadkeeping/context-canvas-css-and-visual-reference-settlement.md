@@ -4,24 +4,81 @@
 threadkeeping:
   id: "context-canvas.css-and-visual-reference-settlement.v0.1"
   settled_on: "2026-08-23"
+  updated_on: "2026-10-12"
   planning_surface: "planning/context-canvas/css-modularization-and-visual-reference-plan.md"
   visual_reference_issue: work:context-visual-reference
   css_modularization_issue: work:context-css-modularization
   debrief_badge_issue: work:debrief-badge-height
-  next: "re-enter through a larger demonstrated shared-reading or composition family; retain the two-rule Debrief sequence seam until then"
+  next: "bind the verified About projection to the accepted v0.3 carrier, then observe deployed transfer and cache behavior before admitting another route family"
 ```
 
 ## Decision
 
-The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Fifteen routes now share the Debrief reading component, and seven composed Debriefs place their opt-in composition layer under a contract-specific source owner.
+The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Twenty routes now share the Debrief reading component, and ten composed Debriefs place their opt-in composition layer under a contract-specific source owner.
 
-The general utility now discovers all 40 top-level Context Canvas HTML files. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
+The general utility now discovers all 46 top-level Context Canvas HTML files and requires each route to belong to exactly one family. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
 
 The [focused plan](../planning/context-canvas/css-modularization-and-visual-reference-plan.md) receives three implementation outcomes:
 
 - the full-page visual-reference set;
 - modular CSS and route-family bundles; and
 - the Debriefs Reading types badge-height correction.
+
+## About first-paint ownership return
+
+About now owns a complete direct source graph and leaves `expanded.css` outside its first paint. Its order is `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`; the no-script source remains media-gated. Forty-three adjacent routes continue to load the legacy remainder after their direct shared-core and component dependencies.
+
+The core separates tokens and foundation from demonstrated multi-consumer components. Foundation owns the responsive heading scale; navigation owns the three-destination shell, route state, and canonical `5rem` anchor clearance; tables and route cards carry their complete responsive, print, forced-color, and reduced-motion groups. Each declaration family has one authored owner, and the extraction retains the pre-existing cascade rather than introducing `@layer` alongside unlayered route inputs.
+
+The ordinary About path falls from 122,737 to 76,213 raw bytes, from 24,514 to 17,555 gzip-9 bytes, and from 20,937 to 14,736 Brotli-11 bytes. The compressed values sum the seven independently modeled responses. The separate authored request count moves from three to seven. This source-first tradeoff remains explicit: production can recover request boundaries without replacing readable source authority.
+
+Enhanced and no-script computed-style and geometry comparisons match at narrow, desktop, and wide viewports, as well as print, forced-colors, and reduced-motion states. Focused tests assert the exact About order, all 43 legacy consumer graphs, complete component opt-in, and single-owner boundaries. The legacy deep-blue selector remains unchanged in this tranche; a separate observed visual defect and affected-family proof can receive any selector repair.
+
+## About production CSS projection
+
+The cPanel assembler now owns a bounded distribution projection for the stable
+About graph. Profile `about-conservative-v1` reads the selected route and CSS
+from tracked blobs at the accepted source coordinate, derives the six
+contiguous enhanced owners, the no-script owner, and the later shell owner from
+their authored HTML order, then emits three content-addressed files beneath
+`primary-public/assets/css/`. CSSO 5.0.5 runs with restructuring and forced
+media merging disabled and comments removed. Full SHA-256 digests stay in the
+filenames and deployment manifest.
+
+The production HTML alone receives those generated references. Repository
+`index.html` and all eight readable stylesheets remain the editing, review, and
+recovery authority; their independently selected projections also remain in the
+carrier while adjacent routes still consume them. The manifest records the
+profile, minifier and exact version, conservative options, consumer and
+execution context, ordered source paths and digests, generated bytes and
+digest, and recovery route. Generated CSS carries no public source map because
+the readable repository sources and bounded manifest lineage already serve that
+job.
+
+For the current source graph, the enhanced path moves from seven stylesheets
+and 77,081 raw bytes to two stylesheets and 55,814 raw bytes. The independently
+compressed sums move from 17,674 to 11,914 gzip-9 bytes and from 14,823 to
+10,536 Brotli-11 bytes. The scriptless path moves from eight stylesheets and
+77,489 raw bytes to three stylesheets and 56,111 raw bytes; gzip-9 moves from
+17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. The generated
+base, no-script, and shell outputs are respectively
+`f7f4d4dc899f49ff2154b047bbf3f3a384874fa8c0b17ea0d46955fcdd4c85eb.css`,
+`b2bfbc13f2342874a4896ff3a8351a0d839aff8bbfc3a09073ce3690bbaeba30.css`,
+and `8276346d7f30d88387aef91cd85e896d243f8c9a9d6b6ff64fa2a3763a2adc9b.css`.
+These are source-side projection observations. The final carrier binds them to
+its exact source coordinate, while the deployed receiver owns response headers,
+cache behavior, and transferred-byte evidence.
+
+Removing `css_projection` from tracked configuration and rebuilding restores
+the readable production link graph. Another route family enters this distribution
+path only after the About canary establishes deterministic bytes, complete
+runtime-reference closure, cascade and alternate-mode equivalence, a useful
+request or transfer result, and exact carrier recovery. That gate keeps source
+modularization and delivery optimization related without making either one the
+authority for the other. A second consumer also triggers extraction of the pure
+profile parser, rebasing, and projection logic into a focused module so the
+cPanel assembler remains an orchestration owner rather than a growing profile
+library.
 
 ## Why this shape fits
 

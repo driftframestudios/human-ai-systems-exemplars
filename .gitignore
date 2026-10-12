@@ -192,6 +192,7 @@ cython_debug/
 # Local operating-system metadata
 .DS_Store
 .DStore
+*.textClipping
 
 # Local JavaScript tooling
 node_modules/
@@ -204,6 +205,8 @@ yarn-error.log*
 
 # Local rendered-page verification artifacts
 .visual-runs/
+.about-style-cycle-build/
+.about-style-cycle-stage-*/
 playwright-report/
 test-results/
 
@@ -216,6 +219,9 @@ test-results/
 # Local production-shaped projection and transactional staging
 .prod-projection-build/
 .prod-projection-transaction-*/
+
+# Verified shell-free cPanel transfer envelopes
+.cpanel-transfer/
 
 # Local GitHub Pages build artifact
 .schema-pages/

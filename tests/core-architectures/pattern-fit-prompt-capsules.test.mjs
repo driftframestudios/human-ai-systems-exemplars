@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -24,11 +26,11 @@ const artifacts = [
   {
     id: "pattern-problem-surface-matrix",
     name: "Pattern–Problem Surface Matrix",
-    version: "0.1.4",
-    currentFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-    historicalFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-    currentDigest: "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
-    historicalDigest: "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+    version: "0.1.5",
+    currentFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+    historicalFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+    currentDigest: "53992af5ad8d7ab02374d78693ee958fa174b15aadcf7a550b21295b3c20049b",
+    historicalDigest: "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
     stateContract: "pattern-problem-surface-matrix-state.v0.1",
     apiName: "patternProblemSurfaceMatrix",
     promptId: "aiPrompt",
@@ -45,7 +47,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
     historicalFile: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-    currentDigest: "f72a7449433f550145aa2c58f1a7a97ae9634f6bdabac7ddfd487623d525bdd3",
+    currentDigest: "f91497ea6c61655084a8cab5a381f1afd86cf020d29c8a190192ff2618a80d18",
     historicalDigest: "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
     stateContract: "jobs-to-be-done-treemap-state.v0.1",
     apiName: "jobsToBeDoneTreemap",
@@ -59,11 +61,11 @@ const artifacts = [
   {
     id: "unit-test-first-design",
     name: "Unit-test-first Design",
-    version: "0.1.4",
-    currentFile: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
-    historicalFile: "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-    currentDigest: "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
-    historicalDigest: "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+    version: "0.1.5",
+    currentFile: "unit-test-first-design-chimeric-prototype-v0.1.5.html",
+    historicalFile: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+    currentDigest: "46b6806724dfca86408a61e1105d34543fbf021b3a3da7bda8405d04511c9bb8",
+    historicalDigest: "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
     stateContract: "unit-test-first-design-state.v0.1",
     apiName: "unitTestFirstDesign",
     promptId: "promptOut",
@@ -161,7 +163,7 @@ for (const artifact of artifacts) {
     }
     for (const skillId of artifact.skills) {
       const [path, expectedDigest] = skills.get(skillId);
-      assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), expectedDigest);
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
       assert.ok(html.includes(path));
       assert.ok(html.includes(expectedDigest));
     }
@@ -182,8 +184,18 @@ for (const artifact of artifacts) {
 
 test("Pattern Fit and Behavior Protection advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /Pattern–Problem Surface Matrix v0\.1\.4/u);
-  assert.match(inventory, /Jobs-to-be-Done Treemap v0\.1\.4/u);
-  assert.match(inventory, /Unit-test-first Design v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Pattern–Problem Surface Matrix v0\.1\.5/u);
+  assert.match(currentInventory, /Jobs-to-be-Done Treemap v0\.1\.4/u);
+  assert.match(currentInventory, /Unit-test-first Design v0\.1\.5/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });

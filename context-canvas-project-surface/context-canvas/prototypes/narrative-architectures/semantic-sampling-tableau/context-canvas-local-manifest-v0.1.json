@@ -16,8 +16,14 @@
     "usedByPages": "manifest-directory"
   },
   "publicationPosture": "repository-local-experimental-projection",
-  "archive": {"status": "rebuilt-local-snapshot", "path": "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "66d98b8dbdb8bb929587e22e13b848229cbedd1a60bb32ce0c4f71ec45ef7436"},
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "a17c532a56767c3de8019de7b1de185bef0d646590167a0750f1a979b63721da"
+  },
   "canonicalStatus": "context_canvas_owned_experimental_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/",

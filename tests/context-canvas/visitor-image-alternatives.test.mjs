@@ -1,12 +1,18 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { access, readFile, readdir } from "node:fs/promises";
+import { dirname, extname, join, resolve } from "node:path";
 import test from "node:test";
+
+import { inspectImageDimensions } from "../../tools/build-prod-projection.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
+);
+const debriefImageRoot = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/img/debriefs",
 );
 
 const repeatedImageAlternatives = new Map([
@@ -26,18 +32,54 @@ const repeatedImageAlternatives = new Map([
     "forms_upfront.png",
     "Step three of a payment form shows card number, security code, expiration date, and a Create your portfolio button.",
   ],
+  [
+    "langwhich_upfront.png",
+    "Two LangWhich prototype screens showing learner-selected English and Spanish clinical vocabulary views.",
+  ],
 ]);
 
 const socialImageAlternatives = new Map([
   ["index.html", "Portrait of Vikrant Kudesia, smiling."],
   ["debriefs.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
-  ["exemplar-gallery-list.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
-  ["exemplar-brief-exploration.html", "A wall-sized handwritten mind map connects architecture, construction, inspections, augmented reality, and measurement ideas."],
+  ["spatial-capture-collaborative-memory.html", "A recurring coordination job moves through capture authority, an immutable source, task-fitted spatial representations, fitness evidence, role review, correction, and reuse."],
+  ["multilingual-clinical-vocabulary-practice.html", "Katarina learner situation model showing established nursing knowledge, English terminology mapping, commute, classroom, home and supervised-preparation contexts, learner-chosen language support, and distinct educator, terminology and licensure authority routes."],
+  ["recoverable-enterprise-forms.html", "A person’s purpose moves through semantic HTML, understandable state, typed validation and recovery, a replay-safe service command, a provider boundary, and a durable receipt and support route."],
   ["exemplar-index-landing.html", "A handwritten customer-support journey map sits beside a sketched person and a cup of tea."],
-  ["exemplar-ideal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
-  ["exemplar-maximal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
-  ["exemplar-maximal-information-radiator.html", "An abstract pink contour visualization radiates from a small central point."],
 ]);
+
+const debriefProxyContracts = [
+  {
+    route: "fmi-clinical-trial-coordination.html",
+    directory: "boolean-building-blocks",
+    publicSafePatterns: [/synthetic specimen scenarios/iu],
+  },
+  {
+    route: "choose-your-player-humatics.html",
+    directory: "choose-your-player",
+    publicSafePatterns: [/company-neutral, IP-free 2026 interface/iu, /synthetic/iu],
+    alternateReceivers: ["robotics-upfront.webp"],
+  },
+  {
+    route: "genomic-viewer-replatforming.html",
+    directory: "queue-secretly-status-machine",
+    publicSafePatterns: [/original code and synthetic\s+specimen/iu],
+  },
+  {
+    route: "fmi-lims-eln-replatforming.html",
+    directory: "sample-noone-could-find",
+    publicSafePatterns: [/generalized workflows and\s+synthetic content/iu],
+    alternateReceivers: ["clinical-trial-coordination-upfront.webp"],
+  },
+  {
+    route: "who-to-believe-reviews-platform.html",
+    directory: "who-to-believe",
+    publicSafePatterns: [/fictional\s+content/iu],
+    alternateReceivers: [
+      "cpg-pharma-dual-stack-system-graph.webp",
+      "who-to-believe-upfront.webp",
+    ],
+  },
+];
 
 function withoutComments(source) {
   return source.replace(/<!--[\s\S]*?-->/gu, "");
@@ -47,6 +89,14 @@ function attribute(tag, name) {
   const escapedName = name.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
   return tag.match(new RegExp(`\\b${escapedName}="([^"]*)"`, "u"))?.[1];
 }
+
+const rasterMediaTypes = new Map([
+  [".gif", "image/gif"],
+  [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+]);
 
 async function parentRoutes() {
   return (await readdir(canvasRoot, { withFileTypes: true }))
@@ -76,12 +126,81 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 146);
+  // About now uses one native-video receiver; its poster, name, and visible
+  // sequence description are exercised by the focused About media contract.
+  assert.equal(imageCount, 153);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
     "Only the scripted debrief preview begins with an empty alternative",
   );
+});
+
+test("Who To Believe figures preserve the intended narrative sequence", async () => {
+  const html = withoutComments(await readFile(
+    join(canvasRoot, "who-to-believe-reviews-platform.html"),
+    "utf8",
+  ));
+  const orderedLandmarks = [
+    'id="wtb-figure-member-experience-redesigned"',
+    'id="cpg-pharma-conversational-ai-walkthrough"',
+    'id="solution-debrief-title"',
+    'id="wtb-figure-member-experience-before"',
+    'id="solution-bottleneck-title"',
+    'id="wtb-figure-service-model-before"',
+    'id="solution-intervention-title"',
+    'id="wtb-figure-concept-matrix"',
+    'id="wtb-figure-service-model-after"',
+    'id="context-tree-title"',
+    'id="solution-outcomes-title"',
+    'id="implementation-bottleneck-title"',
+    'id="wtb-figure-dual-stack-system"',
+    'id="implementation-intervention-title"',
+  ];
+  const positions = orderedLandmarks.map(landmark => {
+    const position = html.indexOf(landmark);
+    assert.notEqual(position, -1, `Missing narrative landmark ${landmark}`);
+    return position;
+  });
+
+  for (let index = 1; index < positions.length; index += 1) {
+    assert.ok(
+      positions[index] > positions[index - 1],
+      `${orderedLandmarks[index]} follows ${orderedLandmarks[index - 1]}`,
+    );
+  }
+});
+
+test("static top-level raster carriers declare byte-matched intrinsic geometry", async () => {
+  let rasterCount = 0;
+
+  for (const route of await parentRoutes()) {
+    const routePath = join(canvasRoot, route);
+    const html = withoutComments(await readFile(routePath, "utf8"));
+    for (const match of html.matchAll(/<img\b[^>]*>/gu)) {
+      const tag = match[0];
+      const src = attribute(tag, "src");
+      if (!src || /^(?:data:|https?:|\/\/)/iu.test(src)) continue;
+
+      const sourcePath = src.split(/[?#]/u)[0];
+      const mediaType = rasterMediaTypes.get(extname(sourcePath).toLowerCase());
+      if (!mediaType) continue;
+
+      const label = `${route}: ${src}`;
+      const width = Number(attribute(tag, "width"));
+      const height = Number(attribute(tag, "height"));
+      assert.ok(Number.isInteger(width) && width > 0, `${label} intrinsic width`);
+      assert.ok(Number.isInteger(height) && height > 0, `${label} intrinsic height`);
+
+      const bytes = await readFile(resolve(dirname(routePath), sourcePath));
+      const intrinsic = inspectImageDimensions(bytes, mediaType, label);
+      assert.equal(width, intrinsic.width, `${label} width matches source bytes`);
+      assert.equal(height, intrinsic.height, `${label} height matches source bytes`);
+      rasterCount += 1;
+    }
+  }
+
+  assert.ok(rasterCount > 0, "Expected top-level raster image carriers");
 });
 
 test("curated social previews describe the pictured subject", async () => {
@@ -112,4 +231,116 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
   assert.doesNotMatch(source, /alt="Forms upfront"/u);
   assert.doesNotMatch(source, /alt="Persona types"/u);
   assert.doesNotMatch(source, /role="img" aria-label="Decorative falling leaves"/u);
+  assert.doesNotMatch(source, /structure_sensor_3_angled\.webp/u);
+});
+
+test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
+  for (const { route, directory, publicSafePatterns, alternateReceivers = [] } of debriefProxyContracts) {
+    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    assert.match(html, /working/iu, `${route}: working-system standing`);
+    assert.match(html, /2026/iu, `${route}: contemporary standing`);
+    for (const pattern of publicSafePatterns) {
+      assert.match(html, pattern, `${route}: route-specific public-safe content standing`);
+    }
+    const figures = Array.from(html.matchAll(
+      /<figure\b[^>]*class="[^"]*\bdebrief-proxy-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gu,
+    ), match => match[0]);
+    const originals = (await readdir(join(debriefImageRoot, directory)))
+      .filter(name => name.endsWith(".webp") && !/-(?:480|960|1920)\.webp$/u.test(name))
+      .filter(name => !alternateReceivers.includes(name))
+      .sort();
+    assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);
+
+    const figureIds = new Set();
+    for (const [index, figure] of figures.entries()) {
+      const figureTag = figure.match(/<figure\b[^>]*>/u)?.[0] ?? "";
+      const figureId = attribute(figureTag, "id");
+      assert.ok(figureId, `${route}: Figure ${index + 1} needs a stable semantic id`);
+      assert.ok(!figureIds.has(figureId), `${route}: ${figureId} must be unique`);
+      figureIds.add(figureId);
+      assert.match(
+        figure,
+        new RegExp(`<figcaption\\b[\\s\\S]*?<strong>\\s*Figure ${index + 1}\\.`, "u"),
+        `${route}: proxy figures need page-local sequential labels`,
+      );
+    }
+
+    for (const filename of originals) {
+      const basename = filename.replace(/\.webp$/u, "");
+      const original = `../img/debriefs/${directory}/${basename}.webp`;
+      const figure = figures.find(candidate => candidate.includes(`href="${original}"`));
+      assert.ok(figure, `${route}: ${basename} needs a full-size source link`);
+      const frameTag = figure.match(/<div\b[^>]*class="[^"]*\bdebrief-proxy-frame\b[^"]*"[^>]*>/u)?.[0] ?? "";
+
+      const imageTag = figure.match(/<img\b[^>]*>/u)?.[0] ?? "";
+      const width = Number(attribute(imageTag, "width"));
+      const height = Number(attribute(imageTag, "height"));
+      assert.equal(attribute(imageTag, "src"), original, `${route}: ${basename} source`);
+      assert.ok(Number.isInteger(width) && width > 1920, `${route}: ${basename} intrinsic width`);
+      assert.ok(Number.isInteger(height) && height > 0, `${route}: ${basename} intrinsic height`);
+      assert.equal(
+        attribute(frameTag, "class")?.includes("debrief-proxy-frame--portrait"),
+        height > width,
+        `${route}: ${basename} portrait treatment`,
+      );
+      if (height > width) {
+        assert.equal(attribute(frameTag, "role"), undefined, `${route}: ${basename} fitted portrait role`);
+        assert.equal(attribute(frameTag, "tabindex"), undefined, `${route}: ${basename} fitted portrait focus`);
+      } else {
+        assert.equal(attribute(frameTag, "role"), "region", `${route}: ${basename} scroll-boundary role`);
+        assert.equal(attribute(frameTag, "tabindex"), "0", `${route}: ${basename} keyboard-scroll boundary`);
+        assert.ok(attribute(frameTag, "aria-label")?.length > 20, `${route}: ${basename} scroll-boundary name`);
+      }
+      assert.equal(attribute(imageTag, "loading"), "lazy", `${route}: ${basename} loading`);
+      assert.equal(attribute(imageTag, "decoding"), "async", `${route}: ${basename} decoding`);
+      assert.ok(attribute(imageTag, "alt")?.length > 40, `${route}: ${basename} needs a meaningful alternative`);
+      assert.ok(attribute(imageTag, "sizes"), `${route}: ${basename} sizes`);
+      assert.equal(
+        attribute(imageTag, "srcset"),
+        `${original.replace(/\.webp$/u, "-960.webp")} 960w, ${original.replace(/\.webp$/u, "-1920.webp")} 1920w, ${original} ${width}w`,
+        `${route}: ${basename} responsive source set`,
+      );
+      await access(join(debriefImageRoot, directory, `${basename}-960.webp`));
+      await access(join(debriefImageRoot, directory, `${basename}-1920.webp`));
+      assert.match(figure, /<figcaption\b[\s\S]{80,}?<\/figcaption>/iu, `${route}: ${basename} narrative caption`);
+    }
+  }
+});
+
+test("Who To Believe routes its graph exemplar and catalog orientation image to their current owners", async () => {
+  const [debrief, catalog, atlas, inventory] = await Promise.all([
+    readFile(join(canvasRoot, "who-to-believe-reviews-platform.html"), "utf8"),
+    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
+    readFile(join(canvasRoot, "visualization-fidelity-atlas.html"), "utf8"),
+    readFile(join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8").then(JSON.parse),
+  ]);
+
+  assert.match(debrief, /id="wtb-figure-dual-stack-system"[\s\S]*?data-wtb-system-graph/u);
+  assert.doesNotMatch(debrief, /<img[^>]+cpg-pharma-dual-stack-system-graph/u);
+  assert.match(atlas, /<img[^>]+cpg-pharma-dual-stack-system-graph\.webp/u);
+  assert.match(atlas, /cpg-pharma-dual-stack-system-graph-960\.webp 960w/u);
+  assert.match(atlas, /cpg-pharma-dual-stack-system-graph-1920\.webp 1920w/u);
+  assert.match(catalog, /<img class="project__upfront"[^>]+who-to-believe-upfront\.webp/u);
+  assert.match(catalog, /who-to-believe-upfront-960\.webp 960w/u);
+  assert.match(catalog, /id="catalog-who-to-believe"[^>]+data-catalog-preview-src="\.\.\/img\/plot\/who_to_believe_influence_map\.svg"/u);
+
+  const expectedRoles = new Map([
+    ["who-to-believe-upfront.webp", "catalog_orientation"],
+    ["who-to-believe-upfront-960.webp", "catalog_orientation"],
+    ["cpg-pharma-dual-stack-system-graph.webp", "visual_fidelity_technical_example"],
+    ["cpg-pharma-dual-stack-system-graph-960.webp", "visual_fidelity_technical_example"],
+    ["cpg-pharma-dual-stack-system-graph-1920.webp", "visual_fidelity_technical_example"],
+  ]);
+  for (const [basename, expectedRole] of expectedRoles) {
+    const sourcePath = `context-canvas-project-surface/img/debriefs/who-to-believe/${basename}`;
+    const override = inventory.overrides.find(entry => entry.source_path === sourcePath);
+    assert.ok(override, `${basename} should carry an asset-specific semantic override`);
+    assert.deepEqual(override.roles.map(role => role.id), [expectedRole], `${basename} semantic role`);
+  }
+
+  await Promise.all([
+    access(join(debriefImageRoot, "who-to-believe/cpg-pharma-dual-stack-system-graph.webp")),
+    access(join(debriefImageRoot, "who-to-believe/who-to-believe-upfront.webp")),
+    access(join(debriefImageRoot, "who-to-believe/who-to-believe-upfront-960.webp")),
+  ]);
 });

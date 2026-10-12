@@ -1,0 +1,54 @@
+{
+  "id": "composition-modernization-strategy-canvas-public-example",
+  "type": "CapsuleCompositionRecord",
+  "sourceCapsuleVersionRefs": [
+    "na:capsules/expectation-modernization/v0.1",
+    "na:capsules/opportunity-modernization/v0.1"
+  ],
+  "compositionMode": "multi_capsule",
+  "resultMode": "projection_only",
+  "targetPairRef": "ca:strategy-canvas",
+  "sourceSelections": [
+    {
+      "id": "module-expectation-001",
+      "sourceCapsuleVersionRef": "na:capsules/expectation-modernization/v0.1",
+      "moduleKind": "expectation",
+      "inclusionState": "included",
+      "role": "primary",
+      "valueOrigin": "human_declared",
+      "reviewState": "working"
+    },
+    {
+      "id": "module-opportunity-001",
+      "sourceCapsuleVersionRef": "na:capsules/opportunity-modernization/v0.1",
+      "moduleKind": "opportunity",
+      "inclusionState": "included",
+      "role": "primary",
+      "valueOrigin": "human_declared",
+      "reviewState": "working"
+    }
+  ],
+  "targetBindings": [
+    {
+      "id": "binding-strategy-canvas-dimensions",
+      "targetSlotRef": "ca:strategy-canvas/slots/dimensions",
+      "sourceSelectionRefs": [
+        "module-expectation-001",
+        "module-opportunity-001"
+      ],
+      "bindingState": "bound",
+      "valueOrigin": "human_declared",
+      "humanReviewRequired": true,
+      "reviewState": "working"
+    }
+  ],
+  "gapRefs": [
+    "gap-recommended-evidence"
+  ],
+  "aiContextProjectionRef": "projection-modernization-strategy-canvas-example",
+  "readinessState": "ready_with_caveats",
+  "assemblyRationale": "Compose expectation and opportunity state for a reviewable Strategy Canvas projection.",
+  "valueOrigin": "human_led_ai_supported",
+  "createdAt": "2026-08-26T00:00:00Z",
+  "reviewState": "working"
+}

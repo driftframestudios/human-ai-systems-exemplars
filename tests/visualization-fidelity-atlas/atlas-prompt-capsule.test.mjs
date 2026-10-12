@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const atlasRoot = resolve(repositoryRoot, "visualization-fidelity-atlas-bundle-v0.1");
@@ -26,8 +27,6 @@ const loopCoordinates = [
   ["visitor-surface-change", "https://schemas.radiantnull.com/collaboration/#visitor-surface-change"],
   ["repository-reentry", "https://schemas.radiantnull.com/collaboration/#repository-reentry"],
 ];
-
-const sha256 = value => createHash("sha256").update(value).digest("hex");
 
 async function json(path) {
   return JSON.parse(await readFile(path, "utf8"));
@@ -150,7 +149,7 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
 
   assert.ok(source.includes(skillRevision));
   for (const [path, digest] of skillCoordinates) {
-    assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), digest);
+    assertImmutableSkillCoordinate(skillRevision, path, digest);
     assert.ok(source.includes(path), `the Atlas source names ${path}`);
     assert.ok(source.includes(digest), `the Atlas source pins ${path}`);
   }
@@ -161,7 +160,7 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
   }
 });
 
-test("Atlas download capability and the 28-source inventory agree across receivers", async () => {
+test("Atlas download capability and the current inventory agree across receivers", async () => {
   const [routeManifest, carrier, readme, inventory, qualitativeSelector] = await Promise.all([
     json(resolve(repositoryRoot, "iframe-route-families/canvas/public-iframe-route-manifest-v1.json")),
     readFile(resolve(repositoryRoot, "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html"), "utf8"),
@@ -190,8 +189,21 @@ test("Atlas download capability and the 28-source inventory agree across receive
   );
   assert.match(iframe, /allow="clipboard-write"/u);
 
-  assert.match(readme, /all 28 source artifacts implement `prompt-capsule\/0\.1\.0`/u);
-  assert.match(inventory, /Visualization Fidelity Atlas are the 28 current\s+adoptions/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
+  const readmePopulation = readme.match(/all (\d+) source artifacts implement `prompt-capsule\/0\.1\.0`/u);
+  assert.ok(readmePopulation, "the README names its current adoption total");
+  assert.equal(Number(readmePopulation[1]), tableCount, "the README agrees with the current inventory");
+  assert.ok(currentInventory.includes("| Visualization Fidelity Atlas | 1 |"), "the Atlas retains its standalone source membership");
   assert.match(inventory, /\| Visualization Fidelity Atlas \| 1 \|[\s\S]*?implements `prompt-capsule\/0\.1\.0`/u);
   assert.doesNotMatch(`${readme}\n${inventory}`, /27 of 28|27 current adoptions|The remaining source/u);
 
@@ -199,5 +211,5 @@ test("Atlas download capability and the 28-source inventory agree across receive
   assert.match(qualitativeSelector, /The parent reading carries the complete static mapping/u);
   assert.doesNotMatch(qualitativeSelector, /prompt-capsule\/0\.1\.0/u);
   assert.match(inventory, /\| Adjacent qualitative selector \|/u);
-  assert.match(inventory, /sits beside the 28-source population without becoming another capsule source/u);
+  assert.match(inventory, new RegExp(`sits beside the ${tableCount}-source population without becoming another capsule source`, "u"));
 });

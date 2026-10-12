@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="640" viewBox="0 0 1440 640" role="img" aria-labelledby="title desc">
+  <title id="title">An illustrative verification episode with a return to repair</title>
+  <desc id="desc">Discovery moves to Repair at rate 0.1 per eligible minute. Repair moves to Verification at 0.2. Verification returns to Repair at 0.05 or reaches Handoff at 0.2. Rates are chosen inputs for a numerical example, not estimates of the collaboration. Expected times from the four states are 21.25, 11.25, 6.25, and zero minutes under these fixed assumptions.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#16345e" stroke-opacity=".08"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#16345e"/></marker>
+    <style>text{fill:#16345e;font-family:Futura,'Trebuchet MS',sans-serif}.kicker{font-family:monospace;font-size:21px;font-weight:700;letter-spacing:2px}.title{font-size:42px;font-weight:700}.name{font-size:27px;font-weight:700}.state{font-size:44px;font-weight:700}.body{font-size:22px}.rate{font-family:monospace;font-size:21px;font-weight:700}.line{fill:none;stroke:#16345e;stroke-width:3;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1440" height="640" fill="#fff7e6"/>
+  <rect width="1440" height="640" fill="url(#grid)"/>
+  <text x="60" y="58" class="kicker">FIXED-RATE EXAMPLE / FOUR STATES / ONE RECORDED EPISODE</text>
+  <text x="60" y="119" class="title">A return to repair can preserve a useful handoff.</text>
+  <text x="60" y="161" class="body">Chosen rates exercise the model. Observed transition rates remain unestimated.</text>
+  <g aria-label="Discovery"><rect x="60" y="225" width="260" height="160" rx="8" fill="#d3e8f4" stroke="#16345e" stroke-width="3"/><text x="86" y="284" class="state">D</text><text x="86" y="328" class="name">Discovery</text><text x="86" y="361" class="body">Expected: 21.25 min</text></g>
+  <g aria-label="Repair"><rect x="415" y="225" width="260" height="160" rx="8" fill="#56d8c9" stroke="#16345e" stroke-width="3"/><text x="441" y="284" class="state">R</text><text x="441" y="328" class="name">Repair</text><text x="441" y="361" class="body">Expected: 11.25 min</text></g>
+  <g aria-label="Verification"><rect x="770" y="225" width="260" height="160" rx="8" fill="#f2ff67" stroke="#16345e" stroke-width="3"/><text x="796" y="284" class="state">V</text><text x="796" y="328" class="name">Verification</text><text x="796" y="361" class="body">Expected: 6.25 min</text></g>
+  <g aria-label="Handoff"><rect x="1125" y="225" width="255" height="160" rx="8" fill="#fff" stroke="#16345e" stroke-width="3"/><text x="1151" y="284" class="state">H</text><text x="1151" y="328" class="name">Handoff</text><text x="1151" y="361" class="body">Expected: 0 min</text></g>
+  <path class="line" d="M320 294H402"/><text x="335" y="275" class="rate">0.1</text>
+  <path class="line" d="M675 294H757"/><text x="690" y="275" class="rate">0.2</text>
+  <path class="line" d="M1030 294H1112"/><text x="1045" y="275" class="rate">0.2</text>
+  <path class="line" d="M900 385V451Q900 473 878 473H567Q545 473 545 451V397"/>
+  <rect x="587" y="450" width="304" height="47" fill="#fff7e6"/><text x="606" y="481" class="rate">0.05 / revisit repair</text>
+  <path d="M60 536H1380" stroke="#16345e" stroke-width="2"/>
+  <text x="60" y="578" class="body">Rates: transitions per eligible minute. Expected values use these fixed assumptions.</text>
+  <text x="60" y="611" class="body">A later finding starts a linked episode; the recorded handoff keeps its scope and history.</text>
+</svg>

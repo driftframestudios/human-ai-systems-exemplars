@@ -11,8 +11,8 @@ import {
   artifactLicense,
 } from "./attribution-contract.mjs";
 
-const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html";
-const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
+const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html";
+const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html";
 const PROMPT_CAPSULE_EXAMPLE = "prompt-capsules/0.1.0/examples/strategy-canvas.md";
 const RELATED_LOOPS = [
   {
@@ -1640,15 +1640,15 @@ async function compatibilityContract(browser, origin) {
   const routes = [
     {
       route: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      current: "strategy-canvas-chimeric-prototype-v0.2.4.html"
+      current: "strategy-canvas-chimeric-prototype-v0.2.5.html"
     },
     {
       route: "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+      current: "strategy-canvas-chimeric-prototype-v0.2.3.html"
     },
     {
       route: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+      current: "strategy-canvas-chimeric-prototype-v0.2.3.html"
     }
   ];
   for (const { route, current } of routes) {

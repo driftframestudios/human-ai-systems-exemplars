@@ -1,0 +1,287 @@
+# Schema and skill projection Worker
+
+This Worker is the production owner for `https://schemas.vik.guru/`. It serves
+the schema cohort and public-ready skill closure accepted for `pages-v0.2.0`
+from one reviewed source revision while GitHub Pages provides the richer visitor
+and skill-reading surface.
+
+The fetch handler runs before its `ASSETS` binding and owns HTTPS redirects,
+exact-route lookup, media types, cache classes, conditional retrieval, CORS,
+and bounded recovery responses. The earlier `cloudflare/schema-delivery/`
+package remains a portable static adapter and supplies shared source templates
+and response policy. Future production deployment of `schemas.vik.guru` flows
+through this Worker.
+
+## Accepted peer-release coordinate
+
+The selected publication is bound to the reviewed Pages release:
+
+| Role | Coordinate |
+| --- | --- |
+| Exact Worker publication | `382620d8626a87b6d96f4039ebc87f01ad94687e` |
+| Semantic and schema source | `dc6b62c6e3f1e8748237fc767def75b32527140a` |
+| Pages release | `pages-v0.2.0` |
+| Annotated tag object | `9165a4af5c0de7d5e81eb2c86ec7cc83d2af5b76` |
+| Reviewed Pages projection | `bf257f6674e88945ed143c95f010b8e827066ade` |
+| Complete Pages closure | `f25cf5b3b6681c67fddc81a82f5c0ba3bb49c3766d0a79df92fa3b1bbe26cf61` |
+
+`accepted-publication-lock.json` records the exact Worker-tree coordinate.
+`publication-manifest.json` records the selected source and annotated Pages
+coordinate. Preparation verifies the tag binding before it receives shared
+files. The source revision remains the meaning and schema coordinate; the Pages
+projection remains the reviewed peer artifact used for exact cross-receiver
+comparison.
+
+## Publication boundary
+
+`tools/schema-receiver-routes.mjs` selects 17 schema contracts.
+`tools/schema-publication.mjs` selects their 16 examples, contexts, and guide
+companions. `tools/schema-publication-lock.json` binds every schema contract to
+its accepted digest. The Worker publishes each contract through its established
+route and its `/schemas/` asset route while preserving its canonical `$id`.
+
+The accepted skill boundary contains 70 shared files under `/skills/`:
+
+- `/skills/catalog.json` is the exact reviewed public-ready catalog.
+- `/skills/<name>/projection.json` carries each of the 23 machine-readable
+  projections at its declared `https://schemas.vik.guru/skills/<name>/projection.json`
+  identity.
+- `/skills/source/` carries 46 unique source files: all 23 exact `SKILL.md`
+  semantic authorities, their declared public dependencies, and the catalog's
+  supporting source.
+
+GitHub Pages owns the 24 skill HTML discovery files: one Skills index and 23
+readable skill pages. This Worker carries the shared catalog, projections, and
+source closure, so `/skills/index.html` and `/skills/<name>/index.html` stay with
+the Pages receiver. The eight `public_possible` packages retain their
+repository-only standing and remain outside every Worker route and artifact
+manifest.
+
+The complete checked-in Worker publication contains 111 regular files:
+
+- 17 schemas and 16 companions;
+- 70 skill catalog, projection, semantic-source, and dependency files;
+- five attribution and data-use carriers; and
+- the root registry, schema catalog, and publication manifest.
+
+## Identity, retrieval, and exact bytes
+
+Canonical schema and skill-projection identifiers express stable identity.
+Host-local URLs express retrieval. A mirrored exact-version schema keeps its
+original `$id` and bytes even when that identifier names another canonical
+host. Each skill projection keeps its `schemas.vik.guru` identity and relative
+references to the mirrored `/skills/catalog.json` and `/skills/source/`
+closure.
+
+The shared skill catalog is a byte-exact peer of the tagged Pages artifact. Its
+Pages retrieval fields therefore continue to identify the reviewed Pages copy;
+the projection `id` fields provide the canonical Worker routes. A future need
+for a Worker-specific skill catalog would require its own named projection
+rather than an in-place rewrite of this shared receipt.
+
+Preparation compares every retained frozen resource with the existing
+publication before writing. Earlier exact-version routes keep their published
+bytes. A revised immutable contract receives a new versioned route.
+
+## Media and cache policy
+
+The publication manifest assigns each `/skills/` resource an explicit media
+type and cache class:
+
+| Resource | Media type | Cache class |
+| --- | --- | --- |
+| Skill catalog and projections | `application/json; charset=utf-8` | Revalidate |
+| `SKILL.md`, references, and threadkeeping sources | `text/markdown; charset=utf-8` | Revalidate |
+| Included workflow source | `application/yaml; charset=utf-8` | Revalidate |
+| Included JavaScript and module sources | `text/javascript; charset=utf-8` | Revalidate |
+
+Versionless skill resources can receive a later accepted source revision, so
+successful responses use `public, max-age=0, must-revalidate`. The same policy
+applies to catalogs, examples, contexts, guides, orientation, attribution, and
+the publication manifest.
+
+Sixteen exact-version schemas use `public, max-age=31536000, immutable` through
+both their established and `/schemas/` routes. One route is already its own
+`/schemas/` asset path, producing 31 unique immutable request paths. The
+unversioned `prototype-local-manifest.schema.json` remains revalidatable.
+
+Missing resources, asset failures, redirects, preflight responses, and
+unsupported methods use `no-store`. Successful `HEAD` and conditional `304`
+responses retain the selected resource's media, cache, CORS, and validator
+policy.
+
+## Prepare and check
+
+Use Node.js 22 or newer. The initial selection names both accepted coordinates:
+
+```sh
+cd cloudflare/schemas-worker
+npm ci --ignore-scripts --no-audit --no-fund
+npm run prepare:publication -- \
+  --source-revision dc6b62c6e3f1e8748237fc767def75b32527140a \
+  --pages-release-tag pages-v0.2.0
+```
+
+Validate the checked-in accepted release without consulting current source
+selection or current source bytes:
+
+```sh
+npm run check:accepted-publication
+npm test
+```
+
+The accepted-release check uses `accepted-publication-lock.json` to compare the
+entire checked-in Worker tree with the exact commit that formed the publication.
+It also validates the annotated Pages tag and complete closure digest, reads
+skill selection from the manifest's accepted source revision, and confirms the
+17-schema, 16-companion, and 70-file skill closure. The unit suite exercises the
+same manifest through the production handler.
+
+`npm run check:publication` retains a distinct job: it compares the prepared
+artifact with current source and reports when a new publication release needs
+to be formed. That check can report expected source drift while the pinned
+accepted release remains internally complete and deployable. Use
+`prepare:publication` with newly human-accepted source and Pages coordinates to
+form a later release; preserve the accepted artifact until that decision.
+
+A later accepted release uses two reviewed commits. First, merge the newly
+prepared `public/` tree to `main`. Then update `accepted-publication-lock.json`
+in a follow-up review to name that already formed publication commit. The
+verifier requires the locked commit to precede `origin/main` and the receiving
+candidate. Acceptance therefore begins on reviewed `main`; release and
+production branches receive that coordinate.
+
+Run the repository-owned boundary checks from the repository root:
+
+```sh
+npm run check:schemas
+npm run check:readme-routes
+npm run test:dependency-security
+npm run security:secrets:artifact -- cloudflare/schemas-worker/public
+```
+
+The artifact secret-material check establishes the named generated boundary. It
+does not inspect Cloudflare credentials or protected operator diagnostics;
+those values stay in the platform secret store.
+
+## Routes and response behavior
+
+| Request | Response |
+| --- | --- |
+| HTTP | `308` to HTTPS with hostname, encoded path, and query preserved |
+| `GET /` | Revalidating registry orientation with schema and skill-catalog discovery |
+| Established schema URL | Manifest-owned retrieval of the selected schema bytes |
+| `/schemas/` asset URL | Direct retrieval of the same schema bytes and identity |
+| `/skills/catalog.json` | Exact accepted public-ready skill catalog |
+| `/skills/<name>/projection.json` | The named projection at its canonical identity |
+| `/skills/source/...` | Exact semantic source or declared public dependency |
+| Missing resource | JSON `404` naming the requested path with `no-store` |
+| Asset error or binding failure | Bounded error response with `no-store` |
+| `HEAD` | Matching status and headers with an empty body |
+| `OPTIONS` | Public read-only CORS preflight |
+
+The asset binding uses `html_handling: "none"` because the handler maps `/`
+explicitly to `/index.html`. ETags and conditional request handling continue to
+come from `ASSETS`; the Worker applies the reviewed public headers, media type,
+and cache class to the resulting response.
+
+## Local and live observations
+
+Start a local HTTPS preview from this directory:
+
+```sh
+npm run dev -- --local --local-protocol https
+```
+
+Use the preview's locally trusted certificate for HTTPS checks. Exercise every
+schema contract, the complete skill catalog/projection/source closure, both
+schema retrieval forms, explicit media types, cache classes, ETag/304, `HEAD`,
+CORS, root discovery, and missing routes. The unit suite owns the HTTP-to-HTTPS
+redirect case.
+
+The checked-in checks divide the evidence by behavior:
+
+- `test/receiver.test.mjs` exercises the handler against the prepared artifact,
+  including all selected schemas and skill resources, their bytes, identities,
+  media types, cache classes, conditional requests, `HEAD`, CORS, and failures.
+- `test/manifest-transition.test.mjs` confirms that a fresh bundle activates a
+  declared mutable-to-immutable schema transition while versionless skill
+  resources continue to revalidate.
+- `test/live-receiver.mjs` observes the running Worker and compares shared bytes
+  with the accepted Pages peer coordinate.
+- `test/catalog-source-preservation.test.mjs` distinguishes exact root bytes
+  from the narrowly recorded Cloudflare edge addition.
+- `test/catalog-browser.mjs` checks root discovery and horizontal containment at
+  390 px and 1280 px with JavaScript unavailable.
+
+Run the live and browser checks against an explicitly selected preview or
+production origin:
+
+```sh
+npm run test:receiver -- https://schemas.vik.guru --http-origin http://schemas.vik.guru
+npm run test:browser -- https://schemas.vik.guru
+```
+
+Local, dry-run, and live results establish only the environments they exercise.
+The production observation supplies the edge, certificate, Custom Domain, and
+signed-out response evidence.
+
+## Production owner and activation gate
+
+`.github/workflows/schema-delivery.yml` is the single future production route
+for `schemas.vik.guru`, and it builds, checks, dry-runs, and deploys
+`cloudflare/schemas-worker/`. The legacy static adapter retains its historical
+and portability role under `cloudflare/schema-delivery/`; it has no production
+Custom Domain authority in this route.
+
+Issue #402 owns the Wrangler dependency gate. Both reviewed locks now resolve
+Wrangler `4.149.0` through Miniflare `5.20261006.1-alpha` to stable Sharp
+`0.35.5`. The repository dependency test proves that exact lock topology and
+floor; schema-delivery CI also observes both installed trees. Human-controlled
+receiver and environment gates continue to hold production activation until
+the selected release reaches its production boundary.
+
+After the dependency gate is satisfied, an explicit human production selection
+authorizes deployment of the reviewed bundle:
+
+```sh
+npm run deploy
+```
+
+The deployment command checks the pinned accepted publication first. Credentials remain in
+Cloudflare's secret store through `wrangler secret put`; local `.dev.vars`,
+`.env.*`, and Wrangler runtime state remain ignored.
+
+## Recovery
+
+The preceding accepted Worker version remains the immediate platform recovery
+coordinate. The repository retains reproducible source, the annotated Pages
+peer coordinate, and every promised versioned schema byte. A forward repair
+restores the complete accepted route set when an activation observation finds
+friction; recovery preserves all previously published immutable routes.
+
+Platform references: [asset-binding behavior](https://developers.cloudflare.com/workers/static-assets/binding/),
+[Worker-first routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/),
+and [HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).
+
+### Catalog source and edge observation
+
+The single root capture on 2026-10-04 UTC returned HTTP 200 HTML. All 8,116
+authored bytes remained in their original order, with one 938-byte script
+inserted immediately before the unique authored `</body>` boundary. The capture
+stays in ignored local evidence. Its observed script references the platform's
+challenge-detection route; that observation establishes a transformation shape
+rather than independent script provenance or runtime security.
+
+`test/catalog-source-preservation.mjs` accepts exact byte parity or that recorded
+addition. The entire added program is fingerprinted after replacing only its
+quoted 16-character lowercase-hex request value and canonical-base64 timestamp
+containing ten decimal digits. Every other added byte, the insertion position,
+and every authored byte remain exact. A changed edge shape receives another
+bounded observation and review.
+
+Conditional live checks use HTTP-standard weak ETag comparison: the quoted
+opaque value stays identical while either header may carry the `W/` marker.
+Malformed or missing validators fail the check. Exact schema and skill digests,
+canonical identities, media types, and security settings retain their own
+assertions. See [RFC 9110 sections 8.8.3 and 13.1.2](https://www.rfc-editor.org/rfc/rfc9110.html#section-8.8.3).

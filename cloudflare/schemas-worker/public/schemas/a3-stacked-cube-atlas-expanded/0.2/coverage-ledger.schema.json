@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+  "title": "Deep Research Atlas coverage ledger",
+  "type": "object",
+  "required": ["schema_version", "as_of", "method", "status", "rows"],
+  "properties": {
+    "schema_version": { "const": "0.2.0" },
+    "as_of": { "type": "string", "format": "date" },
+    "method": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "minLength": 1 },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_name",
+          "address_attempted",
+          "accessed",
+          "read_depth",
+          "role_in_analysis",
+          "report_section",
+          "citation",
+          "failure_state",
+          "failure_citation"
+        ],
+        "properties": {
+          "source_name": { "type": "string", "minLength": 1 },
+          "address_attempted": { "type": "string", "minLength": 1 },
+          "accessed": { "type": "boolean" },
+          "read_depth": { "type": "string", "minLength": 1 },
+          "role_in_analysis": { "type": "string", "minLength": 1 },
+          "report_section": { "type": "string", "minLength": 1 },
+          "citation": { "type": "string", "minLength": 1 },
+          "failure_state": { "type": ["string", "null"] },
+          "failure_citation": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

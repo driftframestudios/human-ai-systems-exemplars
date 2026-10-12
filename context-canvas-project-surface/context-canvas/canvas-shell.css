@@ -3,8 +3,9 @@
    Owns: the progressively generated route shelf, shared footer, section rail,
    source-derived rail mode, and their responsive, reduced-motion,
    forced-color, and print behavior.
-   Load order: after expanded.css and applicable component and route bundles;
-   an explicitly documented opt-in composition stylesheet may follow.
+   Load order: after the shared core, the legacy remainder where consumed,
+   and applicable component and route bundles; an explicitly documented
+   opt-in composition stylesheet may follow.
    Current source-derived consumer: debriefs.html. The neutral
    [data-canvas-page-rail-source] extension exposes direct identified children
    while ordinary major-section discovery remains the shared fallback.
@@ -281,10 +282,6 @@
     }
 }
 
-main :where([id]) {
-    scroll-margin-block-start: 6rem;
-}
-
 h2.super-footer__heading {
     color: var(--about-tiffany, #56d8c9);
 }
@@ -310,6 +307,7 @@ h2.super-footer__heading {
         block-size: 100%;
         display: grid;
         gap: 0;
+        grid-auto-rows: 1.5rem;
         inline-size: 1.75rem;
         overflow-y: auto;
         padding: .35rem 0;

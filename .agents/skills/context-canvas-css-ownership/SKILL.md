@@ -10,7 +10,7 @@ description: Establishes legible Context Canvas CSS ownership. Applies when expa
 - **What:** A consumer-grounded move from broad CSS terrain into legible core, component, contract, route, or legacy ownership.
 - **When:** `expanded.css`, cascade behavior, selector naming, first paint, visual-contract mapping, or route-family bundles enter scope.
 - **Boundaries:** Readable authored source remains the collaboration surface. Route fingerprints and meaningful variation remain available. HTML carries an explicit, shallow stylesheet order for first paint.
-- **Result:** Findable ownership, smaller unrelated route CSS, and an affected-family visual comparison.
+- **Result:** Findable ownership and proportionate evidence for the changed boundary, with reduced unrelated route CSS when reduction is an intended outcome.
 
 ## Rules
 
@@ -34,9 +34,23 @@ Declaration parity establishes that moved behavior remains present. Computed own
 
 CSS filenames, selectors, tokens, and comments describe reusable visual or structural meaning. Content identity remains available in routes, titles, metadata, references, and visible prose.
 
+Comments name non-obvious ownership, load-order, cascade, fallback, or
+containment mechanics and leave self-evident declarations alone. They support
+AI and nonvisual code reading; semantic HTML, alternatives, labels, and
+document order remain the rendered accessibility owners.
+
+### Rule: Architecture views distinguish relationships and quantities
+
+A CSS architecture view labels stylesheet load order, semantic ownership,
+consumer membership, and generated delivery as distinct relationships.
+Before-and-after delivery views keep raw bytes, compressed bytes, and authored
+request counts separate and pair them with exact values and source coordinates.
+Diagrams improve re-entry; declaration parity, computed styles, and rendered
+observations retain behavioral authority.
+
 ### Rule: Comparison preserves composition
 
-Local initial-state images at `390 × 844`, `1440 × 1000`, and `2560 × 1440` support comparison of hierarchy, composition, content presence, overflow, and responsive movement. System-font and raster differences remain ordinary variation.
+Local initial-state images at `390 × 844`, `1440 × 1000`, and `2560 × 1440` remain available for comparison of hierarchy, composition, content presence, overflow, and responsive movement. [Context Canvas visual verification](../context-canvas-visual-verification/SKILL.md) selects the smallest fitting source or rendered observation, including consequential states, affected routes or families, and source-adjacent widths when a responsive seam changes. System-font and raster differences remain ordinary variation.
 
 ### Rule: Visual strain routes to the owning source
 
@@ -60,7 +74,7 @@ Each authored module carries a short header naming owner, neutral consumer scope
 4. **Load shape:** Every affected route receives an explicit direct-stylesheet order.
 5. **Coherent move:** One component or route responsibility moves or receives new names at a time, through complete rules and reconstructed conditional containers.
 6. **Cascade seam reading:** Computed styles confirm the winning declaration at moved-versus-shared boundaries whose relative file position changed.
-7. **Local comparison:** The affected family is captured and compared in ignored `.visual-runs/` at the three standing viewports.
+7. **Fitting observation:** The visual-verification contract selects source inspection or the smallest fitting route/family, state, and viewport comparison. Generated captures remain in ignored `.visual-runs/`.
 8. **Findability reading:** A cold-collaborator reading confirms that owner, consumers, load position, contract relationship, and extension point remain visible.
 
 ## Representative scenario
@@ -81,4 +95,4 @@ The skill loads [references/surface-color-and-state-roles.md](references/surface
 
 ## Completion
 
-CSS ownership completes when class, owner, consumers, load position, contract relationship, and extension point are easy to find; cascade seams preserve their intended winning declarations; affected routes load less unrelated CSS; and the family retains meaningful visual behavior.
+CSS ownership completes when class, owner, consumers, load position, contract relationship, and extension point are easy to find; affected cascade seams preserve their intended winning declarations; and fitting evidence establishes the changed behavior while preserving meaningful route variation. When reduction is an intended outcome, affected routes also load less unrelated CSS.

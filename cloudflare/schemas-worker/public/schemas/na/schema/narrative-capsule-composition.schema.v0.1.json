@@ -1,0 +1,599 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.driftframestudios.org/na/schema/narrative-capsule-composition.schema.v0.1.json",
+  "title": "Narrative Capsule Composition and AI Context Projection",
+  "description": "Target-specific composition of one or more Narrative Capsule versions and modules, including Core Architecture target pairs, slot bindings, gap review, and a multi-source AI Context Projection.",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "sourceCapsuleVersionRefs",
+    "compositionMode",
+    "resultMode",
+    "targetPairRef",
+    "sourceSelections",
+    "targetBindings",
+    "gapRefs",
+    "aiContextProjectionRef",
+    "readinessState",
+    "createdAt",
+    "reviewState"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "const": "CapsuleCompositionRecord"
+    },
+    "sourceCapsuleVersionRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "compositionMode": {
+      "enum": [
+        "single_capsule",
+        "multi_capsule",
+        "module_bundle",
+        "decomposition_return"
+      ]
+    },
+    "resultMode": {
+      "enum": [
+        "projection_only",
+        "composite_capsule_version",
+        "target_artifact_seed",
+        "decomposition_return"
+      ]
+    },
+    "targetPairRef": {
+      "type": "string"
+    },
+    "targetProfileRef": {
+      "type": "string"
+    },
+    "sourceSelections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/CapsuleSourceSelection"
+      }
+    },
+    "targetBindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CapsuleTargetBinding"
+      }
+    },
+    "gapRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aiContextProjectionRef": {
+      "type": "string"
+    },
+    "boundaryManifestRef": {
+      "type": "string"
+    },
+    "readinessState": {
+      "enum": [
+        "ready",
+        "ready_with_caveats",
+        "needs_hydration",
+        "needs_binding_review",
+        "needs_target_revision",
+        "blocked"
+      ]
+    },
+    "assemblyRationale": {
+      "type": "string"
+    },
+    "valueOrigin": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewState": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "CapsuleSourceSelection": {
+      "type": "object",
+      "required": [
+        "id",
+        "sourceCapsuleVersionRef",
+        "moduleKind",
+        "inclusionState",
+        "role",
+        "valueOrigin",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sourceCapsuleVersionRef": {
+          "type": "string"
+        },
+        "sourceModuleRef": {
+          "type": "string"
+        },
+        "moduleKind": {
+          "enum": [
+            "expectation",
+            "focalization",
+            "indeterminacy",
+            "blending",
+            "opportunity",
+            "relational",
+            "temporal",
+            "continuity",
+            "affordance",
+            "evidence",
+            "defensibility",
+            "open_question",
+            "unasked_question",
+            "recovery",
+            "custom"
+          ]
+        },
+        "inclusionState": {
+          "enum": [
+            "included",
+            "held_open",
+            "protected",
+            "omitted"
+          ]
+        },
+        "role": {
+          "enum": [
+            "primary",
+            "supporting",
+            "contextual",
+            "contrast",
+            "recovery"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "freshnessState": {
+          "enum": [
+            "current",
+            "current_with_caveats",
+            "review_due",
+            "stale",
+            "unknown"
+          ]
+        },
+        "sourceBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceOfTruthBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "valueOrigin": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "CapsuleTargetBinding": {
+      "type": "object",
+      "required": [
+        "id",
+        "targetSlotRef",
+        "bindingState",
+        "sourceSelectionRefs",
+        "valueOrigin",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "targetSlotRef": {
+          "type": "string"
+        },
+        "sourceSelectionRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bindingState": {
+          "enum": [
+            "bound",
+            "target_local_provisional",
+            "held_open",
+            "missing",
+            "withheld",
+            "not_applicable"
+          ]
+        },
+        "targetValue": {},
+        "transformationRef": {
+          "type": "string"
+        },
+        "gapRef": {
+          "type": "string"
+        },
+        "valueOrigin": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "string"
+        },
+        "humanReviewRequired": {
+          "type": "boolean"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "CapsuleCompositionGap": {
+      "type": "object",
+      "required": [
+        "id",
+        "gapType",
+        "consequence",
+        "currentHandling",
+        "resolutionState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "gapType": {
+          "enum": [
+            "missing_required_module",
+            "held_open_required_module",
+            "missing_recommended_module",
+            "missing_target_slot",
+            "ambiguous_binding",
+            "stale_source",
+            "boundary_withheld",
+            "target_local_input",
+            "target_mismatch",
+            "custom"
+          ]
+        },
+        "moduleKind": {
+          "enum": [
+            "expectation",
+            "focalization",
+            "indeterminacy",
+            "blending",
+            "opportunity",
+            "relational",
+            "temporal",
+            "continuity",
+            "affordance",
+            "evidence",
+            "defensibility",
+            "open_question",
+            "unasked_question",
+            "recovery",
+            "custom"
+          ]
+        },
+        "targetSlotRef": {
+          "type": "string"
+        },
+        "consequence": {
+          "type": "string"
+        },
+        "gapUtility": {
+          "enum": [
+            "generative",
+            "neutral",
+            "coordination_gap",
+            "harmful",
+            "unknown"
+          ]
+        },
+        "currentHandling": {
+          "enum": [
+            "hold_open",
+            "request_hydration",
+            "request_human_input",
+            "use_target_local_provisional",
+            "omit_with_disclosure",
+            "revise_target",
+            "block_projection"
+          ]
+        },
+        "resolutionState": {
+          "enum": [
+            "open",
+            "held_open",
+            "reviewing",
+            "resolved",
+            "superseded"
+          ]
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "AIContextProjection": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "projectionOfCapsuleVersionRefs",
+        "compositionRef",
+        "targetPairRef",
+        "promptRole",
+        "includedModuleRefs",
+        "promptSections",
+        "knownGapRefs",
+        "requiredAcknowledgements",
+        "requestedOutputKinds",
+        "responseContract",
+        "contentHash",
+        "generatedAt",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "AIContextProjection"
+        },
+        "projectionOfCapsuleVersionRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "projectionOfModuleRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "compositionRef": {
+          "type": "string"
+        },
+        "targetPairRef": {
+          "type": "string"
+        },
+        "targetProfileRef": {
+          "type": "string"
+        },
+        "targetCognitiveMove": {
+          "type": "string"
+        },
+        "promptRole": {
+          "enum": [
+            "orient",
+            "generate",
+            "adapt",
+            "critique",
+            "decompose",
+            "continue"
+          ]
+        },
+        "includedModuleRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "withheldModuleRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "promptSections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/PromptSection"
+          }
+        },
+        "targetBindingRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knownGapRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "boundaryManifestRef": {
+          "type": "string"
+        },
+        "requiredAcknowledgements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "requestedOutputKinds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "html",
+              "svg",
+              "json",
+              "jsonld",
+              "table",
+              "markdown",
+              "schema_example",
+              "analysis"
+            ]
+          }
+        },
+        "responseContract": {
+          "type": "string"
+        },
+        "sourceTruthStatement": {
+          "type": "string"
+        },
+        "contentHash": {
+          "type": "string"
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "PromptSection": {
+      "type": "object",
+      "required": [
+        "id",
+        "heading",
+        "body",
+        "semanticRole"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "heading": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "semanticRole": {
+          "enum": [
+            "identity",
+            "target",
+            "source_state",
+            "binding_plan",
+            "gap_disclosure",
+            "boundary",
+            "requested_result",
+            "verification",
+            "receipt"
+          ]
+        }
+      }
+    },
+    "CoreArchitectureTargetPairSnapshot": {
+      "type": "object",
+      "required": [
+        "id",
+        "cardRef",
+        "readerRef",
+        "prototypeRef",
+        "family",
+        "cognitiveMove",
+        "requiredModuleKinds",
+        "targetSlotRequirements"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "cardRef": {
+          "type": "string"
+        },
+        "readerRef": {
+          "type": "string"
+        },
+        "prototypeRef": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "cognitiveMove": {
+          "type": "string"
+        },
+        "artifactModelRef": {
+          "type": "string"
+        },
+        "requiredModuleKinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "expectation",
+              "focalization",
+              "indeterminacy",
+              "blending",
+              "opportunity",
+              "relational",
+              "temporal",
+              "continuity",
+              "affordance",
+              "evidence",
+              "defensibility",
+              "open_question",
+              "unasked_question",
+              "recovery",
+              "custom"
+            ]
+          }
+        },
+        "recommendedModuleKinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "expectation",
+              "focalization",
+              "indeterminacy",
+              "blending",
+              "opportunity",
+              "relational",
+              "temporal",
+              "continuity",
+              "affordance",
+              "evidence",
+              "defensibility",
+              "open_question",
+              "unasked_question",
+              "recovery",
+              "custom"
+            ]
+          }
+        },
+        "targetSlotRequirements": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

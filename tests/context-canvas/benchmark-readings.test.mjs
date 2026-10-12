@@ -108,53 +108,28 @@ test("shared navigation and neighboring readings carry the two-route continuatio
   assert.match(promptPractice, /href="maps-evaluations\.html"/u);
 });
 
-test("Debriefs visible cards, preview counts, type counts, and JSON-LD stay synchronized", async () => {
+test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => {
   const html = await readCanvasFile("debriefs.html");
   const jsonLd = firstJsonLd(html);
   const itemList = jsonLd["@graph"].find(item => item["@type"] === "ItemList");
   assert.ok(itemList);
-  assert.equal(itemList.numberOfItems, 20);
-  assert.equal(itemList.itemListElement.length, 20);
+  assert.equal(itemList.numberOfItems, 23);
+  assert.equal(itemList.itemListElement.length, 23);
   assert.deepEqual(
     itemList.itemListElement.map(item => item.position),
-    Array.from({ length: 20 }, (_, index) => index + 1),
+    Array.from({ length: 23 }, (_, index) => index + 1),
   );
 
   const itemUrls = itemList.itemListElement.map(item => item.url);
   assert.ok(itemUrls.some(url => url.endsWith("/benchmark-orientation.html")));
   assert.ok(itemUrls.some(url => url.endsWith("/maps-evaluations.html")));
 
-  const cards = Array.from(html.matchAll(/<li id="catalog-[^"]+"[^>]*data-types="([^"]+)"/gu));
-  assert.equal(cards.length, 17);
-  assert.match(html, /Showing all 17 catalog entries\./u);
-  assert.match(html, /All 17 catalog entries are in view\./u);
+  const cards = Array.from(html.matchAll(/<li id="catalog-[^"]+"[^>]*data-formats="[^"]+"[^>]*data-topics="[^"]+"/gu));
+  assert.equal(cards.length, 19);
+  assert.match(html, /Showing all 19 catalog entries\./u);
+  assert.match(html, /All 19 catalog entries are in view\./u);
   assert.match(html, /id="catalog-benchmark-orientation"/u);
   assert.match(html, /id="catalog-maps-evaluations"/u);
-
-  const observedCounts = new Map();
-  for (const card of cards) {
-    for (const type of card[1].split(/\s+/u)) {
-      observedCounts.set(type, (observedCounts.get(type) ?? 0) + 1);
-    }
-  }
-
-  const tagCloud = html.match(/<ul class="debrief-tag-cloud[\s\S]*?<\/ul>/u);
-  assert.ok(tagCloud);
-  const displayLabels = new Map([
-    ["Debrief", "debrief"],
-    ["Article", "article"],
-    ["Executive Summary", "executive-summary"],
-    ["Practice", "practice"],
-    ["Data Visualization", "data-visualization"],
-    ["Research", "research"],
-    ["AI Systems Entry", "ai-systems-entry"],
-    ["Instrument", "instrument"],
-  ]);
-  const displayedCounts = new Map(
-    Array.from(tagCloud[0].matchAll(/<li><span>([^<]+)<\/span><strong>(\d+)<\/strong><\/li>/gu))
-      .map(match => [displayLabels.get(match[1]), Number.parseInt(match[2], 10)]),
-  );
-  assert.deepEqual(displayedCounts, observedCounts);
 });
 
 test("sitemap and local route inventory expose both readings", async () => {

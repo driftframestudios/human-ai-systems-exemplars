@@ -12,6 +12,12 @@ description: Resolves and runs repository-declared Python checks through uv whil
 - **Boundaries:** Current task authority and repository declarations govern the run. The host Python installation and global packages remain unchanged. Dependency upgrades, lock creation, project-metadata edits, and toolchain conversion belong to separately authorized work. A prepared environment and a passing repository check are distinct observations.
 - **Result:** The named check runs through an identified `uv` and Python combination; the return says whether dependencies came from a checked lockfile or were resolved for this run; tracked source remains legible; and any unresolved environment condition has one owner and a clear trigger for another attempt.
 
+This contract owns repository-declared Python checks. Conversation-only figures
+default to an isolated session runtime and can opt into repository-version
+matching or the documented project environment. Their rendering preference
+leaves the source-owned runtime, lock and evidence requirements for repository
+checks intact.
+
 ## Fit and attention
 
 - **Useful when:** macOS supplies an older base Python, several interpreters are available, a repository has a `uv.lock`, an existing `.venv` has uncertain standing, or the default `uv` cache is outside the current write boundary.

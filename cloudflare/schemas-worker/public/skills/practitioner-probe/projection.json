@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/practitioner-probe/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "practitioner-probe",
+  "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
+  "semanticAuthorityRef": "../source/.agents/skills/practitioner-probe/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/14",
+  "contract": {
+    "what": "A small set of technical questions that distinguishes consequential possibilities.",
+    "when": [
+      "Code appears plausible but shallow, a gap lacks mechanism, or an issue lacks decision-changing evidence."
+    ],
+    "boundaries": [
+      "A direct, already-scoped repair proceeds through its owning workflow. Scores, levels, and probabilities appear only when they change a decision. Any level or veracity label describes one artifact claim, evidence state, or repair path; it does not credential a practitioner, rank an AI system, or certify the probe itself."
+    ],
+    "result": "Mechanism, observable evidence, gap utility, instruction yield, transfer boundary, and receiving route."
+  },
+  "receivingUse": {
+    "job": "Code appears plausible but shallow, a gap lacks mechanism, or an issue lacks decision-changing evidence.",
+    "materialResult": "Mechanism, observable evidence, gap utility, instruction yield, transfer boundary, and receiving route.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/practitioner-probe/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

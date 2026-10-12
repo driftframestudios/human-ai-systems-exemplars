@@ -7,7 +7,7 @@
   "sources": [
     {
       "id": "SRC-A3",
-      "title": "A3 · Appendix — Stacked Cube Model",
+      "title": "Evidence-Guided Capability Transfer Model",
       "url": "urn:source-key:SRC-A3",
       "role": "Protected historical and semantic baseline.",
       "boundary": "Internal source assertion; operational evidence still required for new claims."
@@ -135,14 +135,14 @@
       "id": "SRC-AWS-STRANGLER",
       "title": "AWS Strangler Fig Pattern",
       "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html",
-      "role": "Proxy and anti-corruption seam with risks and limitations.",
+      "role": "Proxy and anti-corruption boundary with risks and limitations.",
       "boundary": "Implementation choice and domain boundary remain product-specific."
     },
     {
       "id": "SRC-FOWLER-ABSTRACTION",
       "title": "Fowler — Branch by Abstraction",
       "url": "https://martinfowler.com/bliki/BranchByAbstraction.html",
-      "role": "Inner seam, coexisting implementations, feature-flagged switching.",
+      "role": "Inner boundary, coexisting implementations, feature-flagged switching.",
       "boundary": "Requires a viable abstraction; not always available."
     },
     {

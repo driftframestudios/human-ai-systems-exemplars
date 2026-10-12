@@ -12,6 +12,8 @@ on:
       - ready_for_review
     paths:
       - ".github/workflows/schema-receiver-routes.yml"
+      - ".github/workflows/schema-pages.yml"
+      - ".github/workflows/prototype-unit-tests.yml"
       - "package.json"
       - "package-lock.json"
       - "AUTHORS"
@@ -19,16 +21,34 @@ on:
       - "LICENSE"
       - "AI-DATA-USE.md"
       - "attribution.yml"
+      - "collaboration/investment-analysis/**"
       - "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js"
       - "tests/schema-pages/**"
       - "tools/attribution-contract.mjs"
       - "tools/check-schema-surface.mjs"
       - "tools/build-schema-pages.mjs"
+      - "tools/core-architecture-browser-helper.mjs"
+      - "tools/publication-boundary.mjs"
       - "tools/schema-receiver-routes.mjs"
+      - "tools/schema-publication.mjs"
+      - "tools/schema-publication-lock.json"
+      - "tools/schema-site-release.mjs"
+      - "tools/verify-schema-pages-receiver.mjs"
+      - ".agents/skills/**"
       - "schemas/**"
+      - "threadkeeping/collaboration-accounts/**"
+      - "threadkeeping/context-canvas-public-reference-materialization.md"
+      - "threadkeeping/repository-secret-material-boundary.md"
+      - "context-canvas-project-surface/context-canvas/collaboration-skills.html"
+      - "context-canvas-project-surface/context-canvas/atlas-gallery.js"
+      - "tests/visualization-fidelity-atlas/**"
+      - "core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json"
+      - "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json"
+      - "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json"
       - "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/**"
       - "a3-stacked-cube-visual-system-bundle-v0.1/schema/**"
-      - "visualization-fidelity-atlas-bundle-v0.1/*.schema*.json"
+      - "visualization-fidelity-atlas-bundle-v0.1/*.json*"
+      - "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/**"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json"
       - "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
       - "supportive-change-writing-exemplars-bundle-v0.1/manifest.json"
@@ -52,7 +72,7 @@ jobs:
       (github.event_name == 'workflow_dispatch' ||
        github.event.pull_request.draft == false)
     runs-on: ubuntu-24.04
-    timeout-minutes: 6
+    timeout-minutes: 12
     environment:
       name: main
       deployment: false
@@ -72,6 +92,9 @@ jobs:
 
       - name: Install the locked schema toolchain
         run: npm ci --ignore-scripts
+
+      - name: Install the browser used by the public-surface checks
+        run: npm exec -- playwright install --with-deps chromium
 
       - name: Read schema identities and build receiver routes
         id: schema

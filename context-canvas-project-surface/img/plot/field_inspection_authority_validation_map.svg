@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" role="img" aria-labelledby="authority-map-title authority-map-desc">
   <title id="authority-map-title">Field inspection authority and validation map</title>
-  <desc id="authority-map-desc">A prospective authority-and-recovery map shows five written handoffs: inspector observation, durable local capture, replay-safe platform acknowledgement, human review, and controlled release. Three authority panels name field ownership, platform custody, and quality and operational release. A recovery rail preserves local work, quarantines failed media, retains Clappia until handoff, and allows optional assistance to be disabled. Release gates include zero lost acknowledged captures across a bounded corpus, tenant-isolation denial tests, record and media reconciliation, restore within agreed recovery objectives, and named evidence owners.</desc>
+  <desc id="authority-map-desc">A proposed authority-and-recovery map shows five written handoffs: inspector observation, durable local capture, replay-safe platform acknowledgement, human review, and controlled release. Three authority panels name field ownership, platform custody, and quality and operational release. A recovery rail preserves local work, quarantines failed media, retains Clappia until handoff, and allows optional assistance to be disabled. Release gates include zero lost acknowledged captures across a bounded corpus, tenant-isolation denial tests, record and media reconciliation, restore within agreed recovery objectives, and named evidence owners.</desc>
   <defs>
     <pattern id="authority-grid" width="28" height="28" patternUnits="userSpaceOnUse">
       <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".07"/>
@@ -23,13 +23,13 @@
 
   <g class="sans">
     <g role="group" aria-labelledby="authority-header-title">
-      <title id="authority-header-title">Prospective authority and release orientation</title>
+      <title id="authority-header-title">Proposed authority and release orientation</title>
       <text x="72" y="84" class="title ink">Authority follows the object; release follows bounded evidence</text>
       <text x="72" y="118" class="subtitle body-ink">Observation stays field-owned, durable state stays inspectable, and consequential decisions remain human-owned.</text>
       <g transform="translate(1300 58)">
         <rect x="8" y="8" width="220" height="66" rx="15" fill="#17345f" aria-hidden="true"/>
         <rect width="220" height="66" rx="15" fill="#d9efea" class="outline"/>
-        <text x="110" y="27" text-anchor="middle" class="eyebrow ink">PROSPECTIVE CONTRACT</text>
+        <text x="110" y="27" text-anchor="middle" class="eyebrow ink">PROPOSED CONTRACT</text>
         <text x="110" y="49" text-anchor="middle" class="tiny body-ink">IMPLEMENTATION-GATED · v0.1</text>
       </g>
       <g transform="translate(72 148)" aria-label="Visual key">
