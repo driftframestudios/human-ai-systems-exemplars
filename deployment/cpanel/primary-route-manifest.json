@@ -1568,6 +1568,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/three_way_market_decision_map.svg",
+      "projected_path": "img/plot/three_way_market_decision_map.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/three_way_return_motion.svg",
       "projected_path": "img/plot/three_way_return_motion.svg",
       "media_type": "image/svg+xml"
