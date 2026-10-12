@@ -547,6 +547,32 @@ async function interactionReceipt(page) {
     };
   });
 
+  const visualDescription = page.locator("details.about-media-sequence");
+  const visualDescriptionSummary = visualDescription.locator("summary");
+  assert.equal(
+    await visualDescription.getAttribute("open"),
+    null,
+    "visual description begins closed",
+  );
+  assert.equal(
+    (await visualDescriptionSummary.textContent()).trim(),
+    "Visual description",
+    "visual description keeps a concise accessible name",
+  );
+  await visualDescriptionSummary.focus();
+  await visualDescriptionSummary.press("Enter");
+  assert.equal(
+    await visualDescription.getAttribute("open"),
+    "",
+    "visual description opens from its keyboard-operable native control",
+  );
+  const visualDescriptionReceipt = await visualDescription.evaluate(element => ({
+    open: element.open,
+    summaryFocused: document.activeElement === element.querySelector("summary"),
+    itemCount: element.querySelectorAll("li").length,
+    firstItemVisible: getComputedStyle(element.querySelector("li")).display !== "none",
+  }));
+
   const media = await page.evaluate(() => {
     const video = document.querySelector("[data-about-media-video]");
     const source = video?.querySelector("source");
@@ -562,7 +588,12 @@ async function interactionReceipt(page) {
       visualDescriptionItems: document.querySelectorAll("#about-media-sequence li").length,
     };
   });
-  return { focused, disclosure: disclosureReceipt, media };
+  return {
+    focused,
+    disclosure: disclosureReceipt,
+    visualDescription: visualDescriptionReceipt,
+    media,
+  };
 }
 
 async function runScenario(browser, server, projection, viewport, mode) {
@@ -669,6 +700,16 @@ async function runScenario(browser, server, projection, viewport, mode) {
         sourceInteractions.focused.active,
         true,
         `${label}: the source primary navigation accepts keyboard focus`,
+      );
+      assert.deepEqual(
+        sourceInteractions.visualDescription,
+        {
+          open: true,
+          summaryFocused: true,
+          itemCount: 5,
+          firstItemVisible: true,
+        },
+        `${label}: the native visual-description disclosure is keyboard operable`,
       );
       assert.deepEqual(
         sourceInteractions.media,

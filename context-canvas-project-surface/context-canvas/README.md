@@ -5,7 +5,8 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 ## Start with the reading surface
 
 - [`index.html`](index.html) introduces the technology leadership portfolio and the Context Canvas method.
-- [`ai-systems.html`](ai-systems.html) gathers the AI-legible architecture and related instrument routes.
+- [`ai-systems.html`](ai-systems.html) gathers methods, contracts, and working software for accountable decisions, explicit human authority, and recoverable work.
+- [`shared-machinery.html`](shared-machinery.html) compares ten instruments for framing, shaping, staging, recovering, and handing off work across tools and teams.
 - [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
 - [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
 - [`debriefs.html`](debriefs.html) provides the catalog of completed and ongoing readings.

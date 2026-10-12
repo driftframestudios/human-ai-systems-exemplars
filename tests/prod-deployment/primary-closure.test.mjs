@@ -126,6 +126,37 @@ function localStylesheetReferences(html) {
   return references;
 }
 
+function firstJsonLd(html, label) {
+  const block = html.match(
+    /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/u,
+  );
+  assert.ok(block, `${label} carries JSON-LD`);
+  return JSON.parse(block[1]);
+}
+
+function allJsonLdObjects(value) {
+  if (Array.isArray(value)) return value.flatMap(allJsonLdObjects);
+  if (value === null || typeof value !== "object") return [];
+  return [value, ...Object.values(value).flatMap(allJsonLdObjects)];
+}
+
+function pageDateModified(html, location, label) {
+  const document = firstJsonLd(html, label);
+  if (typeof document.dateModified === "string") return document.dateModified;
+  const dates = new Set(
+    allJsonLdObjects(document)
+      .filter((entry) =>
+        entry.url === location ||
+        entry["@id"] === location ||
+        (typeof entry["@id"] === "string" && entry["@id"].startsWith(`${location}#`)),
+      )
+      .map((entry) => entry.dateModified)
+      .filter((value) => typeof value === "string"),
+  );
+  assert.equal(dates.size, 1, `${label} carries one page-level dateModified`);
+  return [...dates][0];
+}
+
 test("the production manifest carries the accepted 41-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
@@ -370,21 +401,34 @@ test("the semantic inventory resolves every selected image without becoming a me
   }
 });
 
-test("the sitemap identifies exactly the 41 indexable production routes", async () => {
+test("the sitemap identifies exactly the 41 indexable production routes with page-owned dates", async () => {
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",
   );
   const legacyBase =
     "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
-  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  const routes = locs.map((location) => {
+  const entries = [...sitemap.matchAll(
+    /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/gu,
+  )].map(([, location, lastModified]) => ({ location, lastModified }));
+  const routes = entries.map(({ location }) => {
     assert.ok(location.startsWith(legacyBase), location);
     return location === legacyBase ? "index.html" : location.slice(legacyBase.length);
   });
   assert.deepEqual(routes.sort(), acceptedRoutes);
   assert.equal(routes.includes("404.html"), false);
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
+  for (const { location, lastModified } of entries) {
+    const route = location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const html = await readFile(path.join(repositoryRoot, canvasRoot, route), "utf8");
+    // Advance both owners for meaningful public content or structured-data changes.
+    // Mechanical styling and footer-only edits keep the latest substantive date.
+    assert.equal(
+      lastModified,
+      pageDateModified(html, location, route),
+      `${route}: current modification date`,
+    );
+  }
 });
 
 test("the duplicated Strategy Canvas contract files agree across primary and iframe delivery", async () => {

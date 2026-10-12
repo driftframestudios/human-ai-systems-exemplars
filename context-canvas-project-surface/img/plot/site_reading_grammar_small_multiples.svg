@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160" role="img" aria-labelledby="grammar-title grammar-desc">
-  <title id="grammar-title">Eight Site Reading and Debrief grammar specimens shown as small multiples</title>
-  <desc id="grammar-desc">Eight cards compare the opening, track arrangement, beat spine, time treatment, spillover, close, and authoring investment of teaching Site Reading and Debrief forms. The specimens are historical teaching material; current project claims require their own sources.</desc>
+  <title id="grammar-title">Eight Site Reading and Debrief reference forms shown as small multiples</title>
+  <desc id="grammar-desc">Eight cards compare the opening, track arrangement, beat spine, time treatment, spillover, close, and authoring investment of historical Site Reading and Debrief reference forms. Their grammar can guide current work while each example retains its original context.</desc>
   <defs>
     <pattern id="grammar-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/></pattern>
     <style>
@@ -15,13 +15,13 @@
     <rect x="32" y="30" width="1536" height="154" rx="20" fill="#2855f3"/>
     <text x="72" y="72" class="mono eyebrow white">COMPOSABLE SITE READINGS + DEBRIEFS</text>
     <text x="72" y="120" class="sans title white">Choose structure by the reading burden it must carry.</text>
-    <text x="72" y="154" class="sans lead white">Eight teaching specimens preserve distinct openings, tracks, time treatments, depth routes, and closes.</text>
+    <text x="72" y="154" class="sans lead white">Eight reference forms preserve distinct openings, tracks, time treatments, depth routes, and closes.</text>
     <rect x="1280" y="66" width="230" height="52" rx="26" fill="#f2ff67" class="outline"/>
     <text x="1395" y="98" text-anchor="middle" class="mono chip ink">STRUCTURE TRANSFERS</text>
   </g>
 
   <g role="group" aria-labelledby="grammar-site-reading-title">
-    <title id="grammar-site-reading-title">Site Reading specimens</title>
+    <title id="grammar-site-reading-title">Site Reading reference forms</title>
     <text x="56" y="226" class="mono eyebrow ink">SITE READING FORMS</text>
 
     <rect x="64" y="264" width="354" height="324" rx="17" class="shadow"/>
@@ -78,7 +78,7 @@
   </g>
 
   <g role="group" aria-labelledby="grammar-debrief-title">
-    <title id="grammar-debrief-title">Debrief specimens</title>
+    <title id="grammar-debrief-title">Debrief reference forms</title>
     <text x="56" y="640" class="mono eyebrow ink">DEBRIEF FORMS</text>
 
     <rect x="64" y="678" width="354" height="324" rx="17" class="shadow"/>

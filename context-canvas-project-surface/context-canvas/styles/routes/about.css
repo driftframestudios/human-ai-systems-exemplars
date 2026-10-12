@@ -465,12 +465,22 @@ p#on-dark-iron-ore {
     padding: .75rem 1rem .85rem;
 }
 
-.about-media-sequence h3 {
+.about-media-sequence summary {
     color: var(--about-ink-strong);
+    cursor: pointer;
     font: 800 .78rem/1.3 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     letter-spacing: .08em;
-    margin: 0 0 .55rem;
+    padding-block: .15rem;
     text-transform: uppercase;
+}
+
+.about-media-sequence[open] summary {
+    margin-block-end: .55rem;
+}
+
+.about-media-sequence summary:focus-visible {
+    outline: .2rem solid var(--about-cobalt);
+    outline-offset: .2rem;
 }
 
 .about-media-sequence ol {
@@ -521,9 +531,25 @@ p#on-dark-iron-ore {
         color: #000;
     }
 
-    .about-media-sequence h3,
+    .about-media-sequence summary,
     .about-media-sequence ol {
         color: #000;
+    }
+
+    .about-media-sequence summary {
+        cursor: default;
+        display: block;
+        list-style: none;
+    }
+
+    .about-media-sequence summary::marker,
+    .about-media-sequence summary::-webkit-details-marker {
+        content: "";
+        display: none;
+    }
+
+    .about-media-sequence:not([open]) > :not(summary) {
+        display: grid !important;
     }
 }
 

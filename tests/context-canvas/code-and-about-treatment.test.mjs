@@ -252,7 +252,11 @@ test("the About visual sequence begins on a local poster and leaves native playb
   );
   assert.match(
     section,
-    /<aside class="about-media-sequence" id="about-media-sequence" aria-labelledby="about-media-sequence-title">/u,
+    /<details class="about-media-sequence" id="about-media-sequence"><summary>Visual description<\/summary>/u,
+  );
+  assert.doesNotMatch(
+    section,
+    /<details class="about-media-sequence"[^>]*\sopen(?:\s|=|>)/u,
   );
   assert.equal((section.match(/<li>/gu) ?? []).length, 5);
 
@@ -385,8 +389,10 @@ test("the About visual sequence begins on a local poster and leaves native playb
   assert.match(css, /\.about-media__video\s*\{[^}]*object-fit:\s*cover/su);
   assert.match(css, /\.about-media__status\[hidden\]\s*\{[^}]*display:\s*none/su);
   assert.match(css, /\.about-media-sequence\s*\{[^}]*border-inline-start:/su);
+  assert.match(css, /\.about-media-sequence summary\s*\{[^}]*cursor:\s*pointer/su);
+  assert.match(css, /\.about-media-sequence summary:focus-visible\s*\{[^}]*outline:/su);
   assert.match(css, /@media \(forced-colors: active\)[\s\S]*?\.about-media/su);
-  assert.match(css, /@media print[\s\S]*?\.about-media-sequence/su);
+  assert.match(css, /@media print[\s\S]*?\.about-media-sequence:not\(\[open\]\) > :not\(summary\)/su);
 });
 
 test("the About prose and role table state action and consequence directly", async () => {
@@ -403,6 +409,14 @@ test("the About prose and role table state action and consequence directly", asy
     html,
     /A boarding pass that fails to load at the gate and a bill-payment path buried in ambiguous links are all too common occurrences\./u,
   );
+  assert.match(
+    html,
+    /That fit becomes clearer early when the team can state system and process maturity, evidence reach, and decision rights plainly\. <strong>I can help you figure this out\.<\/strong>/u,
+  );
+  assert.match(
+    html,
+    /Repairing channel coverage and ownership first gave the team a direct way to reduce time to response, recover missed sales conversations, and measure escalations against the channel customers actually used\./u,
+  );
 
   const table = html.match(
     /<table class="about-role-table" data-label="I’ve worked as…">[\s\S]*?<\/table>/u,
@@ -413,7 +427,56 @@ test("the About prose and role table state action and consequence directly", asy
   )?.[1];
   assert.ok(newestRow, "Expected the 2022–2025 work to be the first body row");
   assert.match(newestRow, /<th scope="row" data-label="Role in the situation">Designer and Engineer<\/th>/u);
-  assert.match(newestRow, /<td data-label="Changed work">Fully redesigned an <abbr[^>]+>FDA<\/abbr>-approved clinical-genomics medical device/u);
+  assert.match(newestRow, /<td data-label="Changed work">Fully redesigned and launched an <abbr[^>]+>FDA<\/abbr>-approved clinical-genomics medical device/u);
   assert.match(newestRow, /<td data-label="Reported consequence">Eliminated an entire category of assignment errors,[\s\S]*saved about 25 minutes per person/u);
   assert.match(newestRow, /<td data-label="Context">Genomics · 2022–2025<\/td>/u);
+
+  const productLeaderRow = table.match(
+    /(<tr data-label="I’ve worked as…: Product leader">[\s\S]*?<\/tr>)/u,
+  )?.[1];
+  assert.ok(productLeaderRow, "Expected the product-leadership row");
+  assert.match(
+    productLeaderRow,
+    /equipped designers to participate directly in technical discussions/u,
+  );
+
+  const designerEngineerRow = table.match(
+    /(<tr data-label="I’ve worked as…: Designer and engineer">[\s\S]*?<\/tr>)/u,
+  )?.[1];
+  assert.ok(designerEngineerRow, "Expected the robotics design-and-engineering row");
+  assert.match(
+    designerEngineerRow,
+    /A shared implementation model replaced design-to-engineering handoffs: API constraints shaped feasible features early, and the design system scaled beyond atomic components into production-connected prototypes\./u,
+  );
+  assert.doesNotMatch(designerEngineerRow, /into engineering handoff/u);
+});
+
+test("the About prompt-side readings resolve through public Registry bindings", async () => {
+  const [html, bindingSource] = await Promise.all([
+    readCanvasFile("index.html"),
+    readFile(resolve(
+      repositoryRoot,
+      "deployment/public-references/context-canvas-registry-bindings.v1.json",
+    ), "utf8"),
+  ]);
+  const tokens = [
+    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_SHAPE_THE_COLLABORATION_BEFORE_THE_ANSWER",
+    "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION",
+  ];
+  const promptReading = html.match(
+    /<p class="about-evidence-note">Registry reading:[\s\S]*?<\/p>/u,
+  )?.[0];
+  assert.ok(promptReading, "Expected the About prompt-side Registry reading");
+
+  const bindings = JSON.parse(bindingSource).bindings;
+  for (const token of tokens) {
+    assert.match(promptReading, new RegExp(`href="\\{\\{${token}\\}\\}"`, "u"));
+    const binding = bindings.find(candidate => candidate.token === token);
+    assert.ok(binding, `Expected a binding for ${token}`);
+    const destination = new URL(binding.url);
+    assert.equal(destination.origin, "https://kindlight.systems");
+    assert.equal(binding.expected_source_lifecycle, "Current");
+    assert.equal(binding.expected_route_state, "Identity verified");
+    assert.doesNotMatch(binding.url, /notion\.(?:so|site)|notion\.com/iu);
+  }
 });
