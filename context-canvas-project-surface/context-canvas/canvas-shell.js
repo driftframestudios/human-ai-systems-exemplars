@@ -56,8 +56,7 @@
       ["MAPS Evaluations", "maps-evaluations.html"],
       ["The Photographs Were a Proxy", "spatial-capture-collaborative-memory.html"],
       ["Language Control Belongs with the Learner", "multilingual-clinical-vocabulary-practice.html"],
-      ["The Form Is a Contract", "recoverable-enterprise-forms.html"],
-      ["Gallery List exemplar", "exemplar-gallery-list.html"]
+      ["The Form Is a Contract", "recoverable-enterprise-forms.html"]
     ]
   };
 

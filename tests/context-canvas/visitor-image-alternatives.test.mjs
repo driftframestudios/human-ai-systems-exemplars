@@ -41,14 +41,10 @@ const repeatedImageAlternatives = new Map([
 const socialImageAlternatives = new Map([
   ["index.html", "Portrait of Vikrant Kudesia, smiling."],
   ["debriefs.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
-  ["exemplar-gallery-list.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
   ["spatial-capture-collaborative-memory.html", "A recurring coordination job moves through capture authority, an immutable source, task-fitted spatial representations, fitness evidence, role review, correction, and reuse."],
   ["multilingual-clinical-vocabulary-practice.html", "Katarina learner situation model showing established nursing knowledge, English terminology mapping, commute, classroom, home and supervised-preparation contexts, learner-chosen language support, and distinct educator, terminology and licensure authority routes."],
   ["recoverable-enterprise-forms.html", "A person’s purpose moves through semantic HTML, understandable state, typed validation and recovery, a replay-safe service command, a provider boundary, and a durable receipt and support route."],
   ["exemplar-index-landing.html", "A handwritten customer-support journey map sits beside a sketched person and a cup of tea."],
-  ["exemplar-ideal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
-  ["exemplar-maximal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
-  ["exemplar-maximal-information-radiator.html", "An abstract pink contour visualization radiates from a small central point."],
 ]);
 
 const debriefProxyContracts = [
@@ -132,7 +128,7 @@ test("parent visitor images carry a legible text relationship", async () => {
 
   // About now uses one native-video receiver; its poster, name, and visible
   // sequence description are exercised by the focused About media contract.
-  assert.equal(imageCount, 201);
+  assert.equal(imageCount, 153);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],

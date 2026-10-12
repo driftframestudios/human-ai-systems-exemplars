@@ -49,40 +49,14 @@ test("the About cartography retains its recorded embedded-document exception", a
   }
 });
 
-test("current catalogs link the Forms Debrief while retained examples preserve their recorded pending state", async () => {
+test("the current Debrief catalog links the Forms Debrief", async () => {
   const currentHeading = "<h2 class=\"txt-h2\">The Form Is a Contract</h2>";
-  for (const owner of ["debriefs.html", "exemplar-gallery-list.html"]) {
-    const html = await readFile(join(canvasRoot, owner), "utf8");
-    const currentHeadingIndex = html.indexOf(currentHeading);
-    assert.ok(currentHeadingIndex >= 0, `${owner} names the Forms Debrief`);
-    const currentCard = html.slice(currentHeadingIndex, currentHeadingIndex + 5000);
-    assert.match(currentCard, /href="recoverable-enterprise-forms\.html"/u);
-    assert.doesNotMatch(currentCard, /Dedicated reading in preparation\./u);
-  }
-
-  const retainedOwners = [
-    "exemplar-ideal-debrief.html",
-    "exemplar-maximal-debrief.html",
-    "exemplar-maximal-information-radiator.html",
-  ];
-  let cards = 0;
-
-  for (const owner of retainedOwners) {
-    const html = await readFile(join(canvasRoot, owner), "utf8");
-    const heading = "<h2 class=\"txt-h2\">The Architecture of Accessible Forms</h2>";
-    let headingIndex = html.indexOf(heading);
-    while (headingIndex !== -1) {
-      const cardStart = html.lastIndexOf("<li", headingIndex);
-      const pendingIndex = html.indexOf("Dedicated reading in preparation.</span>", headingIndex);
-      assert.ok(cardStart >= 0 && pendingIndex >= 0, `${owner} keeps a complete pending card`);
-      const card = html.slice(cardStart, pendingIndex + "Dedicated reading in preparation.</span>".length);
-      cards += 1;
-      assert.doesNotMatch(card, /<a\b/iu, `${owner} keeps the pending card non-linking`);
-      headingIndex = html.indexOf(heading, pendingIndex);
-    }
-  }
-
-  assert.equal(cards, 4, "the retained examples preserve four recorded pending cards");
+  const html = await readFile(join(canvasRoot, "debriefs.html"), "utf8");
+  const currentHeadingIndex = html.indexOf(currentHeading);
+  assert.ok(currentHeadingIndex >= 0, "debriefs.html names the Forms Debrief");
+  const currentCard = html.slice(currentHeadingIndex, currentHeadingIndex + 5000);
+  assert.match(currentCard, /href="recoverable-enterprise-forms\.html"/u);
+  assert.doesNotMatch(currentCard, /Dedicated reading in preparation\./u);
 });
 
 test("the current Debrief routes expose truthful navigation and progressive enhancement", async () => {

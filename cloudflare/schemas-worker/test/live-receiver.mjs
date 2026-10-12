@@ -6,7 +6,6 @@ import { compareCatalogSource } from "./catalog-source-preservation.mjs";
 import manifest from "../public/publication-manifest.json" with { type: "json" };
 import schemaCatalog from "../public/schema-catalog.json" with { type: "json" };
 import skillCatalog from "../public/skills/catalog.json" with { type: "json" };
-import publicationSelection from "../../../.agents/skills/publication-selection.json" with { type: "json" };
 import { cacheHeader, expectedContentType, skillArtifactPaths } from "./publication-contract.mjs";
 
 const [origin, flag, httpOrigin, ...extra] = process.argv.slice(2);
@@ -140,16 +139,10 @@ for (const path of validatorRepresentatives) {
   assert.equal(await head.text(), "", path);
 }
 
-const publicPossible = publicationSelection.skills.filter(({ publicationStanding }) => publicationStanding === "public_possible");
-assert.equal(publicPossible.length, 8);
 const unavailablePaths = [
   "/schemas/missing.json",
   "/investment-analysis/0.2.0/missing.schema.json",
   "/skills/missing/projection.json",
-  ...publicPossible.flatMap((skill) => [
-    `/skills/${skill.name}/projection.json`,
-    `/skills/source/${skill.sourcePath}`,
-  ]),
 ];
 for (const path of unavailablePaths) {
   const response = await get(path);

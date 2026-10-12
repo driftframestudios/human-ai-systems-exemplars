@@ -179,20 +179,20 @@ Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
 | --- | --- | --- |
-| [`styles/core/tokens.css`](styles/core/tokens.css) | 44 top-level routes | Stable palette and link roles, measures, spacing, and shared table dimensions; first source in the shared core graph. |
-| [`styles/core/foundation.css`](styles/core/foundation.css) | 44 top-level routes | Box sizing, document type, semantic normalization, links, lists, images, figures, the established type scale, and shared reading-container and prose-flow composition. |
-| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 44 top-level routes | Shared three-destination navigation, page offset, route state, and canonical `5rem` in-page anchor clearance. |
-| [`styles/components/tables.css`](styles/components/tables.css) | 39 routes with semantic tables or shared table wrappers | Table structure, responsive containment, focus, state, forced-color, and print behavior. |
+| [`styles/core/tokens.css`](styles/core/tokens.css) | 40 top-level routes | Stable palette and link roles, measures, spacing, and shared table dimensions; first source in the shared core graph. |
+| [`styles/core/foundation.css`](styles/core/foundation.css) | 40 top-level routes | Box sizing, document type, semantic normalization, links, lists, images, figures, the established type scale, and shared reading-container and prose-flow composition. |
+| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 40 top-level routes | Shared three-destination navigation, page offset, route state, and canonical `5rem` in-page anchor clearance. |
+| [`styles/components/tables.css`](styles/components/tables.css) | 38 routes with semantic tables or shared table wrappers | Table structure, responsive containment, focus, state, forced-color, and print behavior. |
 | [`styles/components/route-card-grid.css`](styles/components/route-card-grid.css) | [`index.html`](index.html), [`prompt-side-conditions-practice.html`](prompt-side-conditions-practice.html) | Shared two-column route collection and its narrow and reduced-motion behavior. |
-| [`expanded.css`](expanded.css) | 43 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
-| [`canvas-shell.css`](canvas-shell.css) | 45 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
+| [`expanded.css`](expanded.css) | 39 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
+| [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
-| [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-ideal-debrief.html`](exemplar-ideal-debrief.html), [`exemplar-index-landing.html`](exemplar-index-landing.html), [`exemplar-maximal-debrief.html`](exemplar-maximal-debrief.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
+| [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
 | [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
@@ -415,8 +415,8 @@ npm run visual:context-canvas-reference -- --phase before
 npm run visual:context-canvas-reference -- --phase after-about --family entry-and-catalog
 ```
 
-Each run requires all 46 current routes to have exactly one family, then records
-138 narrow, desktop, and wide full-page images, the source revision, route
+Each run requires all 42 current routes to have exactly one family, then records
+126 narrow, desktop, and wide full-page images, the source revision, route
 standing, browser observations, and a local route-group index under ignored
 `.visual-runs/context-canvas-reference/`. When the loopback runner requests a
 declared `iframes.vik.guru/v1/` carrier, one exact Chromium

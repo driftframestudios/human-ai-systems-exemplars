@@ -63,13 +63,21 @@ jobs:
         working-directory: cloudflare/schemas-worker
         run: npm ci --ignore-scripts --no-audit --no-fund
 
+      - name: Observe the installed Wrangler dependency path
+        run: |
+          npm ls wrangler miniflare sharp --all
+          npm --prefix cloudflare/schemas-worker ls wrangler miniflare sharp --all
+
       - name: Check schema identities
         run: npm run check:schemas
+
+      - name: Check the reviewed dependency floor
+        run: npm run test:dependency-security
 
       - name: Check the accepted schema Worker publication
         working-directory: cloudflare/schemas-worker
         run: |
-          npm run check:publication
+          npm run check:accepted-publication
           npm test
 
       - name: Dry-run the schema Worker bundle
@@ -101,7 +109,7 @@ jobs:
             else
               echo "- Approved cycle allocation: \`${PROD_BUDGET_MINUTES:-unset} minutes\`"
             fi
-            echo "- Contract: schema identity, exact Worker publication, Worker unit tests, Wrangler dry run, and selected-artifact secret boundary"
+            echo "- Contract: schema identity, reviewed dependency path, exact accepted Worker publication, Worker unit tests, Wrangler dry run, and selected-artifact secret boundary"
             echo "- Deployment authority: a successful \`prod\` push with \`DEPLOYMENT_ACTIVE_RECEIVERS\` and \`SCHEMA_WORKER_DEPENDENCY_GATE=open\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -149,7 +157,7 @@ jobs:
 
       - name: Verify the accepted schema Worker publication
         working-directory: cloudflare/schemas-worker
-        run: npm run check:publication
+        run: npm run check:accepted-publication
 
       - name: Deploy the accepted schema Worker
         working-directory: cloudflare/schemas-worker

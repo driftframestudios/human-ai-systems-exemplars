@@ -124,7 +124,11 @@ The parent and children remain public-possible receiving areas. The semantic rec
 | `cc-site-reading-15` | **From Narrative to Execution** · `PUBLIC_URL_REGISTRY_FROM_NARRATIVE_TO_EXECUTION_A_DEEP_RESEARCH_COLLABORATION_ATLAS` | `narrative-execution-gap-research-atlas.html` |
 | `cc-site-reading-16` | Field Watch practice + Generated Research synthesis | `prompt-side-conditions-practice.html` |
 | `cc-site-reading-17` | Shared family parent · resolver-open | `spatial-capture-collaborative-memory.html` |
-| `cc-site-reading-18` | Shared family parent · resolver-open | `exemplar-gallery-list.html` |
+| `cc-site-reading-18` | Shared family parent · resolver-open | `debriefs.html` |
+
+Issue #88 superseded the former source-era gallery receiver. Git history keeps
+that earlier coordinate recoverable; the maintained Debrief catalog now owns
+the current family-level route.
 
 The Genomic Viewer receiver keeps the Site Reading above as its page-level source. It uses
 `PUBLIC_URL_REGISTRY_CONTEXT_TREE` for the method companion and four claim-specific depth carriers only where their

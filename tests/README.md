@@ -260,7 +260,7 @@ owners.
 
 The complete visual runner discovers every top-level route and requires each
 route to belong to exactly one family. Its standing three-viewport campaign is
-46 routes and 138 captures. Exit success establishes capture completion only;
+42 routes and 126 captures. Exit success establishes capture completion only;
 review `summary.json` for console, HTTP, page, request, and traversal
 observations before interpreting the run.
 

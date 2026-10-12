@@ -57,13 +57,9 @@ const acceptedRoutes = [
   "recoverable-enterprise-forms.html",
   "readable-tables-reusable-evidence.html",
   "one-figure-several-readings.html",
-  "exemplar-gallery-list.html",
 ].sort();
 const restingExemplars = [
-  "exemplar-ideal-debrief.html",
   "exemplar-index-landing.html",
-  "exemplar-maximal-debrief.html",
-  "exemplar-maximal-information-radiator.html",
 ];
 const robotsCommon = `# Search discovery and person-directed retrieval are welcome.
 User-agent: OAI-SearchBot
@@ -157,7 +153,7 @@ function pageDateModified(html, location, label) {
   return [...dates][0];
 }
 
-test("the production manifest carries the accepted 41-route primary collection and its explicit closure", async () => {
+test("the production manifest carries the accepted 40-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
   const rootHtml = manifest.files
@@ -211,6 +207,11 @@ test("the production manifest carries the accepted 41-route primary collection a
     "img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
     "img/debriefs/spatial-capture/3d-modeling-scan.webp",
     "img/plot/structure_sensor_3_angled.webp",
+    "occipital.png",
+    "exemplar-gallery-list.html",
+    "exemplar-ideal-debrief.html",
+    "exemplar-maximal-debrief.html",
+    "exemplar-maximal-information-radiator.html",
   ]) {
     assert.equal(projectedPaths.has(sourceOnlyOrRetired), false, `${sourceOnlyOrRetired} stays outside the primary closure`);
   }

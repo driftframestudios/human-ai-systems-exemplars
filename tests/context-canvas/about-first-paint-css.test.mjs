@@ -103,8 +103,8 @@ test("legacy consumers load extracted owners before their remaining route terrai
     );
   }
 
-  assert.equal(legacyConsumerCount, 43);
-  assert.equal(tableConsumerCount, 38);
+  assert.equal(legacyConsumerCount, 39);
+  assert.equal(tableConsumerCount, 37);
   assert.deepEqual(routeCardConsumers, ["prompt-side-conditions-practice.html"]);
 });
 

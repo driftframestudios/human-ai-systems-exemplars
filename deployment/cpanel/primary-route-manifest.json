@@ -368,11 +368,6 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/exemplar-gallery-list.html",
-      "projected_path": "exemplar-gallery-list.html",
-      "media_type": "text/html"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/expanded.css",
       "projected_path": "expanded.css",
       "media_type": "text/css"
@@ -1701,11 +1696,6 @@
       "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html",
       "projected_path": "narrative-execution-gap-research-atlas.html",
       "media_type": "text/html"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/occipital.png",
-      "projected_path": "occipital.png",
-      "media_type": "image/png"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/one-figure-several-readings.html",
