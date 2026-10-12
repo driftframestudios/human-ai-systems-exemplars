@@ -415,7 +415,39 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <span id="case-brief" aria-hidden="true"></span>
+          <!-- debrief-at-a-glance-projection:start -->
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="case-brief-at-a-glance-title">
+            <h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance</h2>
+            <p>At BzzAgent, dunnhumby&rsquo;s social-marketing and advocacy company within Tesco, I helped move a review platform from response volume toward trusted relationships and inspectable campaign decisions. I returned after acquisition to diagnose a navigation failure rooted in divided ownership between two application and schema-management paths.</p>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Situation and stakes</dt>
+                <dd>BzzAgent connected people with products, surveys, reviews, and campaigns. Those interactions supplied customer signals to dunnhumby&rsquo;s data-science practice and Tesco&rsquo;s wider customer understanding, so contribution quality, consent, household context, and consequential human judgment all mattered.</dd>
+              </div>
+              <div>
+                <dt>Scope and role</dt>
+                <dd>I worked in product strategy and experience design across product, engineering, campaign operations, privacy, safety, marketing, and leadership, then returned after ownership changed as a stabilization consultant.</dd>
+              </div>
+              <div>
+                <dt>Core constraint</dt>
+                <dd>Influencers already managed campaigns as paid work, while ordinary marriages, roommates, and caregiving changes could resemble campaign manipulation in the data. Acquisition also left Symfony with Doctrine ORM and Spring Data JPA with Hibernate ORM writing one US database while Doctrine schema diff and Flyway migration history presented competing accounts of schema state.</dd>
+              </div>
+              <div>
+                <dt>Key decision</dt>
+                <dd>Create three relationship tiers, score household transitions to focus human review, place mobile actions beside the task, and use nightly reconciliation while two schema-change mechanisms remained active.</dd>
+              </div>
+              <div>
+                <dt>Outcome and evidence</dt>
+                <dd>Contemporaneous telemetry notes record new signups rising about 20%; multiple-account-abuse logins falling about 10% initially and about 50% by year end; and fewer total logins alongside more activity per session. dunnhumby used my GDPR and data-inventory materials as a company-wide example. The competing schema-change mechanisms persisted.</dd>
+              </div>
+              <div>
+                <dt>Relevance now</dt>
+                <dd>I kept weighted signals connected to human interpretation and appeal; my post-acquisition return showed how platform ownership determines whether an interaction survives later change.</dd>
+              </div>
+            </dl>
+            <p><strong>Basis and limits:</strong> These rounded percentages come from contemporaneous notes taken from system telemetry. The surviving notes establish the checkpoints. Original denominators and event definitions would reconstruct the rates; causal attribution would require the original experiment or a defensible observational design. Public company records establish the organizational context, and the linked Registry page gives my fuller account of the engagement.</p>
+          </section>
+          <!-- debrief-at-a-glance-projection:end -->
           <p>
             Six numbered figures show a working, IP-free 2026 proxy system I designed and built with fictional content.
             The figures make historical relationships and present-day scenarios concrete enough to inspect and discuss;
@@ -841,8 +873,8 @@
             <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">II. Implementation Architecture</h2>
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">II.a Debrief</h3>
             <p>
-              BzzAgent&rsquo;s platform joined two regional databases, a Symfony and Doctrine estate, Spring Boot services using
-              JPA with Hibernate as the persistence provider and Flyway for schema migrations on the US database, React and
+              BzzAgent&rsquo;s platform joined two regional databases, a Symfony and Doctrine ORM estate, Spring Boot services using
+              Spring Data JPA with Hibernate ORM and Flyway for schema migrations on the US database, React and
               React Native clients, Redis-backed browser-session state, stateless JWT authentication for service calls,
               a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. Thunderball
               was a physical box under a colleague&rsquo;s desk; the reason for the name had faded from team memory. It scored
@@ -862,7 +894,7 @@
               <li><strong>On-location mobile capability:</strong> receipt scanning, video capture, push recruitment, and offline survey work needed an API and mobile client boundary.</li>
               <li><strong>Attention at scale:</strong> millions of participants needed a discriminator that could focus a finite human-review tier.</li>
               <li><strong>Purpose state:</strong> special-category data, regional access, withdrawal, endorsement, and safety handoff needed explicit lifecycle behavior.</li>
-              <li><strong>Migration ownership:</strong> two application/ORM paths writing the same US tables, with Doctrine and Flyway carrying competing schema histories, needed a daily, human-readable reconciliation report.</li>
+              <li><strong>Migration ownership:</strong> two application/ORM paths wrote the same US tables while Doctrine schema diff and Flyway migration history presented competing accounts of schema state, creating the need for a daily, human-readable reconciliation report.</li>
             </ul>
 
             <p>
@@ -1120,8 +1152,8 @@
               A planned Spring expansion to the UK and retirement of Symfony stalled because each cron job required its own
               migration project, and the queue kept growing. Thunderball kept graph processing on a batch cadence. People
               carried right-to-erasure requests through a manual workflow. Each proposed cloud service added a measurable
-              per-call cost. Doctrine schema tooling and the Spring/Flyway path continued writing competing accounts of the
-              US database.
+              per-call cost. Doctrine schema diff and Flyway migration history continued presenting competing accounts of the
+              US database&rsquo;s schema state while Symfony/Doctrine ORM and Spring Data JPA/Hibernate ORM wrote shared tables.
             </p>
 
             <figure class="story-visual table-span-all">
@@ -1167,7 +1199,7 @@
               </article>
               <article aria-labelledby="move-reconciliation-title">
                 <p class="implementation-companion__eyebrow">§c.6 · Migration ownership and reconciliation signals</p>
-                <h4 id="move-reconciliation-title" class="txt-h4">A nightly comparison translated two schema histories</h4>
+                <h4 id="move-reconciliation-title" class="txt-h4">A nightly comparison turned schema differences into a shared report</h4>
                 <p>An engineer wrote the smallest useful bridge in two evenings. A staging cron compared the schema Doctrine inferred from entity mappings and live-database introspection with the state implied by Flyway&rsquo;s ordered migration history, raised an alert around protected fields, and linked to a Jira item that planned its replacement. Two weeks before the GDPR deadline, compliance found it in an unrelated Slack thread. A <code>--report</code> option turned the temporary script into a document people could use; the July audit passed, and the bridge later became a service, UI, Slack integration, and standard multi-database pattern.</p>
               </article>
             </div>

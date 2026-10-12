@@ -70,12 +70,40 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <span id="case-brief" aria-hidden="true"></span>
+          <!-- debrief-at-a-glance-projection:start -->
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="case-brief-at-a-glance-title">
+            <h2 id="case-brief-at-a-glance-title" class="txt-h2">At-a-Glance</h2>
+            <p>I synthesized public standards, clinical decision-support research, and common operating patterns into this principal-level teaching reconstruction of a prescribing workflow. The scenario distinguishes successful pharmacogenomic delivery from a behaviorally failed intervention.</p>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Situation and stakes</dt>
+                <dd>A service returned the right pharmacogenomic guidance for the right patient at prescribe time. The card rendered and the application opened, yet clinical behavior barely changed.</dd>
+              </div>
+              <div>
+                <dt>Scope and role</dt>
+                <dd>This principal-level teaching reconstruction reads 2021–2022 interruptive alerts alongside 2025–2026 CDS Hooks and SMART patterns across prescribing, pharmacy, informatics, leadership, engineering, design, analytics, and vendor roles.</dd>
+              </div>
+              <div>
+                <dt>Core constraint</dt>
+                <dd>The delivery team optimized technical conformance while leaving clinician attention, workflow placement, adoption state, and ongoing stewardship under-designed.</dd>
+              </div>
+              <div>
+                <dt>Key decision</dt>
+                <dd>Separate delivery from clinical effect, move suitable guidance into non-interruptive routes, define the behavior that counts as adoption, and give attention stewardship an operating owner.</dd>
+              </div>
+              <div>
+                <dt>Outcome and evidence</dt>
+                <dd>Failed teaching intervention: the technical path works, yet the interruptive guidance does not earn sustained clinical attention. The delivery result still establishes technical reach.</dd>
+              </div>
+              <div>
+                <dt>Relevance now</dt>
+                <dd>The scenario helps clinical and AI-assisted product teams distinguish a working integration from a receiving workflow that changes safely and sustainably.</dd>
+              </div>
+            </dl>
+            <p><strong>Basis and limits:</strong> Public standards, clinical decision-support research, and common operating patterns ground this teaching reconstruction. Local telemetry measures delivery and adoption signals; a defined comparison and measured clinical outcomes establish effect.</p>
+          </section>
+          <!-- debrief-at-a-glance-projection:end -->
 
-          <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
-            <p>Technical conformance established delivery. Clinical adoption required a different operating model.</p>
-            <footer>Central architectural reading</footer>
-          </aside>
           <p class="table-note">
             Read this reconstruction as a decision model for delivery, attention, adoption, and stewardship.
             Organization-specific telemetry measures volume, override behavior, workflow delay, and adoption signals; a defined comparison and measured clinical outcomes establish effect.
@@ -122,6 +150,11 @@
               signal-to-noise ratio of the whole prescribing workflow.
             </p>
 
+            <aside class="debrief-quote debrief-quote--orientation" aria-label="Conclusion from the alert-delivery failure reconstruction">
+              <p>Technical conformance established delivery. Clinical adoption required a different operating model.</p>
+              <footer>Conclusion from the alert-delivery failure reconstruction</footer>
+            </aside>
+
             <h3 id="solution-bottleneck" class="txt-h3 beat-title">§b Bottleneck — Specificity, Cardinality, and an Undefined Adoption State</h3>
             <div class="architecture-pair cobalt-operating-field-cards">
               <article><p class="architecture-pair__label">Clinical specificity</p><h4 class="txt-h4">Guidance must change the next decision</h4><p>A card needs patient, medication, phenotype, severity, and an actionable alternative precise enough to justify interruption.</p></article>
@@ -141,7 +174,7 @@
 
             <figure class="story-visual cobalt-operating-field__visual table-span-all">
               <a class="story-visual__open" href="../img/plot/ehr_pgx_attention_failure_map.svg" aria-label="Open the pharmacogenomics attention and adoption map at full size">
-                <img src="../img/plot/ehr_pgx_attention_failure_map.svg" width="1600" height="1120" loading="eager" alt="Two connected rails contrast successful SMART and CDS Hooks delivery with a saturated clinical attention surface, then route the guidance toward order-set and pharmacist workflows with ongoing stewardship.">
+                <img src="../img/plot/ehr_pgx_attention_failure_map.svg" width="1600" height="1120" loading="eager" alt="Two connected rails contrast successful source-period SMART and CDS Hooks delivery with a saturated clinical attention surface, then route the guidance toward order-set and pharmacist workflows with ongoing stewardship.">
               </a>
               <figcaption class="table-note">
                 Conformance passes on the technical rail while adoption fails on the clinical rail. The useful recovery is

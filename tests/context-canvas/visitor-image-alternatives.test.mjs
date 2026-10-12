@@ -55,7 +55,7 @@ const debriefProxyContracts = [
   {
     route: "fmi-clinical-trial-coordination.html",
     directory: "boolean-building-blocks",
-    publicSafePatterns: [/synthetic, de-identified specimen scenarios/iu],
+    publicSafePatterns: [/synthetic specimen scenarios/iu],
   },
   {
     route: "choose-your-player-humatics.html",

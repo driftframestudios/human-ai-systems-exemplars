@@ -199,9 +199,12 @@ npm run visual:context-canvas-reference -- --phase <name>
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
 Case Brief carrier check is dependency-free and verifies that every generated
-same-document scan remains current with the bounded compact-account source,
-including its six-field story contract, paired quick scans, related media,
-route-qualified source fragments, and fragment-free Full Debrief action.
+catalog scan and Full Debrief At-a-Glance remains current with the bounded
+compact-account source. Catalog checks cover the six-field story contract,
+paired quick scans, related media, route-qualified source fragments, and the
+fragment-free Full Debrief action. Full Debrief checks cover the repeated
+orientation, six-field wording, and basis-and-limits statement while keeping
+the deeper quick scans and media index in the catalog.
 
 The derivative check requires no encoder and leaves bytes unchanged; it
 verifies named source profiles, eligible widths, exact dimensions,

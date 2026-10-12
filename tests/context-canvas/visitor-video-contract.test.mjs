@@ -100,12 +100,14 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
   const video = videos[0]?.[0];
   assert.ok(video, "The Humatics Debrief needs its accepted demonstration video");
 
-  const orientationStart = html.indexOf('class="debrief-quote debrief-quote--orientation"');
+  const atAGlanceStart = html.indexOf('<section id="case-brief" data-content-form="case-brief"');
+  const orientationConclusion = html.indexOf('class="debrief-quote debrief-quote--orientation"');
   const demonstrationStart = html.indexOf('<section id="working-proxy-walkthrough"');
   const architectureNav = html.indexOf('<nav aria-labelledby="track-index-title">');
-  assert.ok(orientationStart >= 0 && demonstrationStart >= 0 && architectureNav >= 0);
-  assert.ok(orientationStart < demonstrationStart, "The demonstration follows the opening architectural reading");
+  assert.ok(atAGlanceStart >= 0 && orientationConclusion >= 0 && demonstrationStart >= 0 && architectureNav >= 0);
+  assert.ok(atAGlanceStart < demonstrationStart, "The demonstration follows the opening At-a-Glance orientation");
   assert.ok(demonstrationStart < architectureNav, "The demonstration precedes architecture navigation");
+  assert.ok(architectureNav < orientationConclusion, "The earned architectural conclusion follows the opening carrier and navigation");
 
   const openingTag = video.match(/<video\b[^>]*>/u)?.[0] ?? "";
   assert.match(openingTag, /\scontrols(?:\s|>)/u);
