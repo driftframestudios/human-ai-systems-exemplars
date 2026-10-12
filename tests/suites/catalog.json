@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "main@e1f00de baseline plus owned suite-routing additions",
+  "sourceRevision": "main@e1f00de baseline plus owned suite-routing and Case Brief carrier additions",
   "countingUnit": "Distinct source files, not runtime test cases",
   "profiles": [
     {
@@ -156,6 +156,7 @@
         "tests/context-canvas/code-and-about-treatment.test.mjs",
         "tests/context-canvas/contrast-treatment.test.mjs",
         "tests/context-canvas/cornerstone-definitions.test.mjs",
+        "tests/context-canvas/debrief-case-brief-materializer.test.mjs",
         "tests/context-canvas/debrief-catalog-preview-images.test.mjs",
         "tests/context-canvas/debrief-image-derivatives.test.mjs",
         "tests/context-canvas/debrief-reading-modes.test.mjs",
@@ -1018,7 +1019,7 @@
         "appendMembers": true
       },
       "owner": "context-canvas-project-surface/context-canvas/README.md",
-      "scope": "Rendered catalog preview replacement across responsive WebP, SVG fallback, and later WebP states at narrow and desktop widths.",
+      "scope": "Rendered catalog preview replacement plus Case Brief projection, responsive geometry, fallback, and direct-file behavior in Chromium and Playwright WebKit.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
       ]
@@ -1797,6 +1798,29 @@
       ]
     },
     {
+      "id": "carrier.debrief-case-briefs",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/materialize-debrief-case-briefs.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/materialize-debrief-case-briefs.mjs",
+          "--check"
+        ],
+        "appendMembers": false
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Source-owned Case Brief routes materialize into one deterministic same-document projection; check mode verifies route order, semantic shape, safe source entries, and exact generated parity.",
+      "aliases": [
+        "check:debrief-case-briefs"
+      ]
+    },
+    {
       "id": "carrier.iframe",
       "family": "carrier",
       "kind": "node-script",
@@ -2167,6 +2191,7 @@
         "node.security",
         "worker.source",
         "carrier.debrief-image-derivatives",
+        "carrier.debrief-case-briefs",
         "carrier.iframe",
         "carrier.production",
         "carrier.r2-video-delivery",

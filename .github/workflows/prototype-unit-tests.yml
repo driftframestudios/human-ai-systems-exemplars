@@ -74,6 +74,7 @@ on:
       - "tools/initiative-costing-label-contract.mjs"
       - "tools/iframe-route-package-engine.mjs"
       - "tools/materialize-public-references.mjs"
+      - "tools/materialize-debrief-case-briefs.mjs"
       - "tools/package-canvas-iframe-routes.mjs"
       - "tools/package-iframe-routes.mjs"
       - "tools/package-v1-iframe-routes.mjs"
@@ -161,6 +162,7 @@ jobs:
 
       - name: Exercise Context Canvas source and inventory contracts
         run: |
+          npm run check:debrief-case-briefs
           npm run test:context-canvas
           npm run test:suites:unit
           npm run visual:context-canvas-reference -- --list
@@ -171,7 +173,7 @@ jobs:
         run: npm exec -- playwright install --with-deps chromium
 
       - name: Install WebKit for the Context Canvas image-delivery contract
-        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && inputs.suite == 'all') }}
+        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && (inputs.suite == 'all' || inputs.suite == 'iframe')) }}
         run: npm exec -- playwright install --with-deps webkit
 
       - name: Exercise the selected source contracts

@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
+import { resolve } from "node:path";
 import { after, before, test } from "node:test";
+import { pathToFileURL } from "node:url";
 
-import { chromium } from "@playwright/test";
+import { chromium, webkit } from "@playwright/test";
 
 import {
   assertTelemetry,
@@ -10,6 +12,10 @@ import {
 } from "../../tools/core-architecture-browser-helper.mjs";
 
 const route = "/context-canvas-project-surface/context-canvas/debriefs.html";
+const localRoute = resolve(
+  import.meta.dirname,
+  "../../context-canvas-project-surface/context-canvas/debriefs.html",
+);
 const expectedCaseBriefFields = [
   "Situation and stakes",
   "Scope and role",
@@ -92,20 +98,15 @@ async function focusPreview(page, cardSelector) {
   }, cardSelector);
 }
 
-async function chooseCaseBriefMode(page, { expectBusy = true } = {}) {
+async function chooseCaseBriefMode(page) {
   await page.locator('input[data-filter][value="case-brief"]').check();
-  if (expectBusy) {
-    await page.locator("[data-debrief-list]").evaluate(element => {
-      if (element.getAttribute("aria-busy") !== "true") {
-        throw new Error("Case Brief projection should expose its loading state");
-      }
-    });
-  }
 }
 
 async function waitForCaseBriefProjection(page) {
   await page.waitForFunction(() => (
-    document.querySelector("[data-debrief-list]")?.getAttribute("aria-busy") === "false"
+    document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden]) [data-card-case-briefs] > .debrief-card__case-brief',
+    ).length === 16
   ));
 }
 
@@ -120,7 +121,6 @@ async function inspectCaseBriefProjection(page) {
 
     return {
       visibleCards: cards.length,
-      loadedCards: cards.filter(card => card.getAttribute("data-case-brief-state") === "loaded").length,
       articles: articles.map(article => {
         const fieldLabels = [...article.querySelectorAll(".debrief-preview-facts dt")]
           .map(label => label.textContent.trim());
@@ -144,6 +144,34 @@ async function inspectCaseBriefProjection(page) {
       linkedHeadingCount: articles.filter(article => (
         article.querySelector(":scope > .debrief-card__case-brief-title > a[href]")
       )).length,
+      eras: cards.map(card => {
+        const era = card.querySelector(":scope > .debrief-card__heading .debrief-card__era");
+        const eraBox = era?.getBoundingClientRect();
+        const badges = [...card.querySelectorAll(
+          ":scope > .debrief-card__types > li, :scope > .debrief-card__topics > li",
+        )];
+        const intersects = box => Boolean(eraBox && !(
+          eraBox.right <= box.left
+          || eraBox.left >= box.right
+          || eraBox.bottom <= box.top
+          || eraBox.top >= box.bottom
+        ));
+        return {
+          card: card.id,
+          text: era?.textContent.trim() || "",
+          visible: Boolean(
+            era
+            && eraBox?.width
+            && eraBox?.height
+            && getComputedStyle(era).visibility !== "hidden"
+            && getComputedStyle(era).display !== "none"
+          ),
+          overlaps: badges
+            .map(badge => ({ text: badge.textContent.trim(), box: badge.getBoundingClientRect() }))
+            .filter(item => intersects(item.box))
+            .map(item => item.text),
+        };
+      }),
     };
   });
 }
@@ -202,8 +230,8 @@ for (const width of [390, 1440]) {
   });
 }
 
-for (const width of [390, 1440]) {
-  test(`Case Brief mode projects complete source-owned scans atomically at ${width}px`, async t => {
+for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
+  test(`Case Brief mode reveals static source-owned scans with stable badge geometry at ${width}px`, async t => {
     const context = await browser.newContext({
       viewport: { width, height: 1000 },
       reducedMotion: "reduce",
@@ -212,49 +240,12 @@ for (const width of [390, 1440]) {
     const page = await context.newPage();
     page.setDefaultTimeout(7000);
     const telemetry = monitor(page);
-    let releaseRoute;
-    let markRouteStarted;
-    const routeGate = new Promise(resolve => {
-      releaseRoute = resolve;
-    });
-    const routeStarted = new Promise(resolve => {
-      markRouteStarted = resolve;
-    });
-    t.after(() => releaseRoute());
-
-    await page.route("**/ehr-interface-engine-replatform.html", async intercepted => {
-      markRouteStarted();
-      await routeGate;
-      await intercepted.continue();
-    });
     await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
     await chooseCaseBriefMode(page);
-    await routeStarted;
-
-    const pendingReceipt = await page.locator("#catalog-ehr-integration").evaluate(card => ({
-      state: card.getAttribute("data-case-brief-state"),
-      ordinaryImageVisible: getComputedStyle(card.querySelector(".project__media--container")).display !== "none",
-      ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
-      compactHidden: card.querySelector("[data-card-case-briefs]")?.hidden,
-      projectedArticles: card.querySelectorAll(".debrief-card__case-brief").length,
-    }));
-    assert.deepEqual(pendingReceipt, {
-      state: null,
-      ordinaryImageVisible: true,
-      ordinaryTextVisible: true,
-      compactHidden: true,
-      projectedArticles: 0,
-    }, "the ordinary EHR card remains complete while one of its five source requests is pending");
-
-    releaseRoute();
     await waitForCaseBriefProjection(page);
-    await page.waitForFunction(() => (
-      document.querySelectorAll('[data-formats~="case-brief"][data-case-brief-state="loaded"]').length === 12
-    ));
 
     const projection = await inspectCaseBriefProjection(page);
     assert.equal(projection.visibleCards, 12);
-    assert.equal(projection.loadedCards, 12);
     assert.equal(projection.articles.length, 16);
     assert.equal(projection.clonedDetailCount, 0, "catalog scans stop before source-page track detail");
     assert.equal(projection.genericFallbackCount, 0, "the catalog synthesizes no generic brief fallback");
@@ -272,13 +263,28 @@ for (const width of [390, 1440]) {
         article.mediaItems,
         `${article.route} related-media entries should retain inspectable links`,
       );
+      assert.ok(
+        article.mediaLinks.every(href => href.startsWith(`${article.route}#`)),
+        `${article.route} should qualify each source-local related-media fragment after cloning`,
+      );
       assert.deepEqual(
         article.actions,
         [
-          { label: "Open the Case Brief", href: `${article.route}#case-brief` },
+          { label: "Read the Easy-to-Scan Case Brief", href: `${article.route}#case-brief` },
           { label: "Read the Full Debrief", href: article.route },
         ],
         `${article.route} should expose distinct compact and complete reading routes`,
+      );
+    }
+
+    assert.equal(projection.eras.length, 12);
+    for (const era of projection.eras) {
+      assert.ok(era.text, `${era.card} should name its era in Case Brief mode`);
+      assert.equal(era.visible, true, `${era.card} should keep its era visible in Case Brief mode`);
+      assert.deepEqual(
+        era.overlaps,
+        [],
+        `${era.card} era should remain clear of format, topic, and tool badges at ${width}px`,
       );
     }
 
@@ -288,29 +294,22 @@ for (const width of [390, 1440]) {
       .sort();
     assert.deepEqual(ehrRoutes, expectedEhrRoutes.slice().sort(), "the EHR series remains five distinct Case Brief panels");
 
-    const settledReceipt = await page.locator("#catalog-ehr-integration").evaluate(card => ({
-      state: card.getAttribute("data-case-brief-state"),
-      ordinaryImageVisible: getComputedStyle(card.querySelector(".project__media--container")).display !== "none",
-      ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
-      compactVisible: !card.querySelector("[data-card-case-briefs]")?.hidden,
-      projectedArticles: card.querySelectorAll(".debrief-card__case-brief").length,
-    }));
-    assert.deepEqual(settledReceipt, {
-      state: "loaded",
-      ordinaryImageVisible: false,
-      ordinaryTextVisible: false,
-      compactVisible: true,
-      projectedArticles: 5,
-    }, "all five EHR scans replace the ordinary card body as one settled projection");
+    await page.locator('input[data-filter][value="catalog"]').check();
+    await chooseCaseBriefMode(page);
+    await page.locator('input[data-filter][value="catalog"]').check();
+    await chooseCaseBriefMode(page);
+    const repeated = await inspectCaseBriefProjection(page);
+    assert.equal(repeated.articles.length, 16, "repeated mode changes should clone each projection once");
+    assert.equal(new Set(repeated.articles.map(article => article.route)).size, 16);
 
     assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 Case Briefs across 12 catalog cases/u);
     assertTelemetry(telemetry);
   });
 }
 
-test("an EHR source failure retains the ordinary card and reports the displayed Case Brief count", async t => {
+test("a missing EHR projection retains its complete ordinary card as one atomic fallback", async t => {
   const context = await browser.newContext({
-    viewport: { width: 1440, height: 1000 },
+    viewport: { width: 390, height: 1000 },
     reducedMotion: "reduce",
   });
   t.after(() => context.close());
@@ -318,24 +317,38 @@ test("an EHR source failure retains the ordinary card and reports the displayed 
   page.setDefaultTimeout(7000);
   const telemetry = monitor(page);
 
-  await page.route("**/ehr-interface-engine-replatform.html", intercepted => intercepted.abort("failed"));
+  await page.route(`**${route}`, async intercepted => {
+    const response = await intercepted.fetch();
+    const body = await response.text();
+    const withoutProjection = body.replace(
+      /\s*<template\b(?=[^>]*\bdata-case-brief-projection="ehr-interface-engine-replatform\.html")[^>]*>[\s\S]*?<\/template>/u,
+      "",
+    );
+    assert.notEqual(withoutProjection, body, "the fixture should remove the intended EHR projection");
+    await intercepted.fulfill({ response, body: withoutProjection });
+  });
   await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
-  await chooseCaseBriefMode(page, { expectBusy: false });
-  await waitForCaseBriefProjection(page);
+  await chooseCaseBriefMode(page);
+  await page.waitForFunction(() => (
+    document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden]) [data-card-case-briefs] > .debrief-card__case-brief',
+    ).length === 11
+  ));
 
   const projection = await inspectCaseBriefProjection(page);
   assert.equal(projection.visibleCards, 12);
-  assert.equal(projection.loadedCards, 11);
   assert.equal(projection.articles.length, 11, "the five-route EHR card remains atomic when one source fails");
   assert.equal(projection.genericFallbackCount, 0);
   assert.equal(projection.linkedHeadingCount, 0);
+  const failedEra = projection.eras.find(era => era.card === "catalog-ehr-integration");
+  assert.ok(failedEra?.visible, "the fallback EHR card should retain its era orientation");
+  assert.deepEqual(failedEra?.overlaps, [], "the fallback era should remain clear of its visible badges at 390px");
   assert.equal(projection.articles.some(article => expectedEhrRoutes.includes(article.route)), false);
 
   const failedCard = await page.locator("#catalog-ehr-integration").evaluate(card => {
     const fullRoute = card.querySelector(":scope > .txt-right a");
     const compact = card.querySelector("[data-card-case-briefs]");
     return {
-      state: card.getAttribute("data-case-brief-state"),
       ordinaryImageVisible: getComputedStyle(card.querySelector(".project__media--container")).display !== "none",
       ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
       compactHidden: compact?.hidden,
@@ -345,7 +358,6 @@ test("an EHR source failure retains the ordinary card and reports the displayed 
     };
   });
   assert.deepEqual(failedCard, {
-    state: null,
     ordinaryImageVisible: true,
     ordinaryTextVisible: true,
     compactHidden: true,
@@ -358,90 +370,81 @@ test("an EHR source failure retains the ordinary card and reports the displayed 
     "11 of 16 Case Briefs are displayed in the catalog. 5 Full Debrief routes remain available in their catalog cards.",
   );
 
-  assert.deepEqual(telemetry.pageErrors, []);
-  assert.deepEqual(telemetry.responseErrors, []);
-  assert.ok(telemetry.requestFailures.length >= 1, "the deliberately aborted source request should be observable");
-  assert.ok(
-    telemetry.requestFailures.every(message => /ehr-interface-engine-replatform\.html/u.test(message)),
-    telemetry.requestFailures.join(" | "),
-  );
-  assert.ok(
-    telemetry.consoleErrors.every(message => /failed to load resource|err_failed/iu.test(message)),
-    telemetry.consoleErrors.join(" | "),
-  );
+  assertTelemetry(telemetry);
 });
 
-test("a resolved Case Brief request stays hidden after the visitor returns to Catalog overview", async t => {
+test("Case Brief mode reads every static scan from file URLs without request failures", async t => {
   const context = await browser.newContext({
-    viewport: { width: 390, height: 1000 },
+    viewport: { width: 736, height: 1000 },
     reducedMotion: "reduce",
   });
   t.after(() => context.close());
   const page = await context.newPage();
   page.setDefaultTimeout(7000);
-  const telemetry = monitor(page);
-  let releaseRoute;
-  let markRouteStarted;
-  const routeGate = new Promise(resolve => {
-    releaseRoute = resolve;
-  });
-  const routeStarted = new Promise(resolve => {
-    markRouteStarted = resolve;
-  });
-  t.after(() => releaseRoute());
-
-  await page.route("**/ehr-interface-engine-replatform.html", async intercepted => {
-    markRouteStarted();
-    await routeGate;
-    await intercepted.continue();
-  });
-  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
-  await chooseCaseBriefMode(page);
-  await routeStarted;
-  await page.locator('input[data-filter][value="catalog"]').check();
-  await chooseCaseBriefMode(page);
-
-  const reentryReceipt = await page.locator("#catalog-ehr-integration").evaluate(card => {
-    const compact = card.querySelector("[data-card-case-briefs]");
-    return {
-      state: card.getAttribute("data-case-brief-state"),
-      compactHidden: compact?.hidden,
-      compactVisible: compact ? getComputedStyle(compact).display !== "none" : false,
-      ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
-    };
-  });
-  assert.deepEqual(reentryReceipt, {
-    state: null,
-    compactHidden: true,
-    compactVisible: false,
-    ordinaryTextVisible: true,
-  }, "rapid Case Brief re-entry keeps the in-flight projection hidden and the ordinary card complete");
-
-  await page.locator('input[data-filter][value="catalog"]').check();
-  releaseRoute();
-  await page.waitForFunction(() => (
-    document.querySelector("#catalog-ehr-integration [data-card-case-briefs]")
-      ?.getAttribute("data-case-brief-complete") === "true"
+  const pageErrors = [];
+  const requestFailures = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  page.on("requestfailed", request => requestFailures.push(
+    `${request.url()} :: ${request.failure()?.errorText || "request failed"}`,
   ));
 
-  const receipt = await page.locator("#catalog-ehr-integration").evaluate(card => {
-    const compact = card.querySelector("[data-card-case-briefs]");
-    return {
-      readingMode: document.querySelector(".debrief-catalog")?.getAttribute("data-reading-mode"),
-      previewHidden: document.querySelector("[data-debrief-preview]")?.hidden,
-      compactHidden: compact?.hidden,
-      compactVisible: compact ? getComputedStyle(compact).display !== "none" : false,
-      ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
-    };
+  await page.goto(pathToFileURL(localRoute).href, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await waitForCaseBriefProjection(page);
+
+  const projection = await inspectCaseBriefProjection(page);
+  assert.equal(projection.visibleCards, 12);
+  assert.equal(projection.articles.length, 16);
+  assert.deepEqual(pageErrors, []);
+  assert.deepEqual(requestFailures, []);
+});
+
+test("WebKit preserves the Case Brief contract over HTTP and direct-file viewing", async t => {
+  const webkitBrowser = await webkit.launch({ headless: true });
+  t.after(() => webkitBrowser.close());
+  const context = await webkitBrowser.newContext({
+    viewport: { width: 736, height: 1000 },
+    reducedMotion: "reduce",
   });
-  assert.deepEqual(receipt, {
-    readingMode: "catalog",
-    previewHidden: false,
-    compactHidden: true,
-    compactVisible: false,
-    ordinaryTextVisible: true,
-  });
-  assertTelemetry(telemetry);
+  t.after(() => context.close());
+
+  for (const [destination, directFile] of [
+    [`${server.origin}${route}`, false],
+    [pathToFileURL(localRoute).href, true],
+  ]) {
+    const page = await context.newPage();
+    page.setDefaultTimeout(7000);
+    const pageErrors = [];
+    const requestFailures = [];
+    page.on("pageerror", error => pageErrors.push(error.message));
+    page.on("requestfailed", request => requestFailures.push(
+      `${request.url()} :: ${request.failure()?.errorText || "request failed"}`,
+    ));
+
+    await page.goto(destination, { waitUntil: "load" });
+    await chooseCaseBriefMode(page);
+    await waitForCaseBriefProjection(page);
+
+    const projection = await inspectCaseBriefProjection(page);
+    assert.equal(projection.visibleCards, 12);
+    assert.equal(projection.articles.length, 16);
+    assert.ok(projection.eras.every(era => era.visible && era.overlaps.length === 0));
+    assert.deepEqual(pageErrors, []);
+    assert.deepEqual(
+      requestFailures.filter(message => /\.html\b/iu.test(message)),
+      [],
+      "WebKit should make no sibling-page request for a Case Brief projection",
+    );
+    if (directFile) {
+      assert.ok(
+        requestFailures.every(message => /manifest\.json/iu.test(message)),
+        requestFailures.join(" | "),
+      );
+    } else {
+      assert.deepEqual(requestFailures, []);
+    }
+    await page.close();
+  }
 });
 
 test("the Full Debrief index names every EHR reading from its route-specific navigation", async t => {
