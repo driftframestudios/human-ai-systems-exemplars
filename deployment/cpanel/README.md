@@ -302,7 +302,10 @@ tag before any host activation.
    rather than a fresh cPanel delivery candidate. The
    [protected destination promotion adapter](../../BRANCHING.md#protected-destination-promotion-adapter)
    and [Issue #469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
-   own this procedure and its focused checks.
+   own this procedure and its focused checks. PR #470 supplies its first
+   worked `release → prod` receipt; the [publication stabilization
+   runbook](../../.agents/runbooks/core-iframe-publication-stabilization.v0.1.md#worked-destination-based-production-promotion--2026-10-12)
+   records the exact result.
 2. Start one carrier branch from exact `S`, run `npm run stage:prod-carrier`,
    and commit only `deployment/cpanel/carrier/**`.
 3. Run `npm run check:prod-carrier` on that branch and review the generated

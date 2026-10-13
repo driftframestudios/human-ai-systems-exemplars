@@ -110,10 +110,10 @@ accepted promotion result is production source `S = P`; `R` remains reserved
 for the later carrier-only merge result. That carrier branch starts from exact
 `S` and replaces the retained historical carrier.
 
-This adapter prevents future repetitions of the downstream-history merge that
-PR #468 accepted in canonical `stg`; it preserves that accepted history without
-rewrite. A conflict, unexpected path delta, moving destination, or changed
-upstream acceptance forms a new source or candidate review boundary.
+This adapter keeps downstream history on the destination side while canonical
+upstream history remains focused on its role. PR #468 remains accepted history
+without rewrite. A conflict, unexpected path delta, moving destination, or
+changed upstream acceptance forms a new source or candidate review boundary.
 
 The reviewed result must retain the topology receipt: `P^1 = D` and `P^2 = C`.
 Squash, rebase, and fast-forward results do not satisfy this promotion
@@ -123,7 +123,9 @@ and `S` before carrier formation begins.
 
 Issue [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
 owns the exercised procedure, focused local checker, and material failure-path
-tests.
+tests. [PR #470](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/470)
+is the first worked `release → prod` receipt; the publication stabilization
+runbook records its exact coordinates and subtree evidence.
 
 The schema Pages route is:
 

@@ -1,6 +1,6 @@
 ---
 title: Iframe and production publication stabilization
-version: 0.1.6
+version: 0.1.7
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -347,10 +347,32 @@ human approval after its final commit. A destination move forms a fresh
 candidate from the new exact `D`; a conflict or unexpected path delta returns
 to the source-owning lane. After merge, record `P` and its parents, verify the
 same source and carrier relationships, then retire the temporary ref once the
-durable receipt exists. This procedure prevents future repetitions of PR
-#468's downstream-history merge into canonical `stg`; it preserves that
-accepted history without rewrite. [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
+durable receipt exists. This procedure keeps downstream history on the
+destination side while canonical upstream history remains focused on its role.
+PR #468 remains accepted history without rewrite.
+[#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
 owns refinement of this procedure.
+
+### Worked destination-based production promotion · 2026-10-12
+
+Human-accepted PR #470 exercised the `release → prod` specialization:
+
+- `U = aaa475c354dcafe310261008e571cfbfc44a90be`;
+- `D = 2558bb8216a305aa7b87151019065d0e40e193df`;
+- `C = a97a45ff1a12dd13829dd86f823ccece115d64b1`, with parents `[D, U]`;
+- `S = P = 0eca8e977d8914b55294534b49579db248efd22d`, with parents `[D, C]`;
+- candidate and result tree `7a36344909f1cd163e675860e10852c0a303552d`;
+  and
+- complete retained carrier tree
+  `556d8acb56b4f116f498b0fbc3adffcba91ae60c`, containing 322 paths.
+
+The accepted result exactly matched `U` outside the carrier root and exactly
+matched `D` across the complete carrier subtree. GitHub verified the merge
+signature, and the post-merge [schema delivery
+contract](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/38323984014)
+passed while Worker deployment remained at rest. Durable receipts landed in
+#464, #90, and #469 before the temporary remote ref retired. The merged PR and
+production history retain the candidate and result commits.
 
 #464 owns the current branch promotion, activation, and shell-free release;
 #108, #118, and #253 preserve the accepted topology, projection, and adapter
