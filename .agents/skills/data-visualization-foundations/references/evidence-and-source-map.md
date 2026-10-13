@@ -94,15 +94,15 @@ operations, visible transformations, recoverable values, and evidence-calibrated
 uncertainty. Its local CLEAR adaptation complements the separately cited
 practitioner source; each retains its own wording and standing.
 
-## Public Registry and repository guidance
+## Public Registry and portable guidance
 
 - [Designing AI Skills as Situated Collaboration Affordances - Guidance for Notion Workspaces and Beyond](https://kindlight.systems/human-ai-collaboration-field-guide/designing-ai-skills-as-situated-collaboration-affordances-guidance-for-notion-workspaces-and-beyond) supplies one coherent job, fit, input/default/result, progressive disclosure, recovery, and material-use evaluation.
-- **Skills as Situated Collaboration Affordances - Deep Research Payload**, public handle `@driftframe/deep-research/skills-as-situated-collaboration-affordances`, supplies the research frame and claim classes. A research agenda identifies observations to make; it supplies no completed experiment by itself.
+- [Skills as Situated Collaboration Affordances - Deep Research Payload](https://kindlight.systems/research-atlas-observatory/skills-as-situated-collaboration-affordances-deep-research-payload) supplies the research frame and claim classes. A research agenda identifies observations to make; it supplies no completed experiment by itself.
 - **Semantic Attractor Design - Negation-Aware Instructions**, in the public Human-AI Collaboration Field Guide, supplies desired-state-first guidance, adjacent hard boundaries, and task-dependent evidence calibration. Its updated public treatment explicitly preserves model/task variability.
 - [Visualization Fidelity Atlas - Data Shape to Cognitive Move to Visual Form](https://kindlight.systems/research-atlas-observatory/visualization-fidelity-atlas-data-shape-cognitive-move-visual-form) supplies the five inputs, contextual recommendation classes, F0-F3 production commitment, and evidence companions.
 - **Visual & Data Communication Stabilizers - Cognitive Moves for Visual Forms**, cited at the bottom of the repository Atlas page, supplies the conceptual selection practice. The operational Atlas carries its public route and working interpretation.
 - **SVG - Enterprise Front-End Practitioner Probes** supplies coordinate, label, delivery, accessibility, export, and measured-performance questions. The [web reference](../../web-data-visualization/references/svg-and-coordinated-views.md) preserves the source-supported versus draft/local-measurement distinctions.
-- [Declarative skill authoring](../../declarative-skill-authoring/SKILL.md), [supportive change writing](../../supportive-change-writing/SKILL.md), and [semantic table design](../../semantic-table-design/SKILL.md) retain their repository ownership. The tone-goal index and evidence-and-structural-balance profile remain the writing register owners.
+- [Declarative skill authoring](../../declarative-skill-authoring/SKILL.md) retains the transferable skill-contract pattern, and [semantic table design](../../semantic-table-design/SKILL.md) owns complex table relationships. The public Semantic Attractor resource above carries the writing posture used here.
 
 The four skill contracts and their packaged references carry the actionable
 method. Private workspace access is optional background, not a prerequisite for
@@ -110,13 +110,15 @@ first useful use. Public-page names above are allowed Registry lineage; private
 research material travels only as an approved public extract with primary
 citations.
 
-## Atlas source owners
+## Working Atlas source boundary
 
-- [Visitor Atlas](../../../../context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html): visitor question, current static source-backed figure, native tables, qualitative selector, and bottom-of-page source basis.
-- [Full Atlas prototype](../../../../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html): nine exemplars, data/form mappings, state, citations, and source data. Its `citationFooter` and `citations` collection own the bibliography indexed below.
-- [Qualitative selector](../../../../collaboration/shared-machinery/visualization-fidelity-selector/index.html): contextual form selection; distinct from the full Atlas instrument.
-- [Companion design essay](../../../../context-canvas-project-surface/context-canvas/one-figure-several-readings.html): design practice, preserved original reference, and the source-backed rate/volume reading.
-- [SECOM source contract](../../../../context-canvas-project-surface/data/visualization-fidelity/README.md) and [AI4I source contract](../../../../context-canvas-project-surface/data/visualization-fidelity/ai4i/README.md): byte-preserved inputs and deterministic meaning owners.
+The portable rules and public citations above remain usable as a complete source
+package. Separately owned Atlas pages, prototypes, selectors, design essays, and
+dataset contracts carry live implementation state, derived examples, source-byte
+identity, and dataset-specific meaning. Those owners remain supporting project
+context rather than publication dependencies of this skill package. A receiving
+project admits its own source owners and preserves the same distinctions among
+citation evidence, implementation state, and dataset meaning.
 
 ## Complete prototype-footer bibliography index
 

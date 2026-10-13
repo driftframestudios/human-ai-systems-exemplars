@@ -57,7 +57,7 @@ the smallest adequate route when no contract adds material value.
 
 ## Visualization skill ladder
 
-These four draft contracts share one data-and-evidence foundation. Select the
+These four portable contracts share one data-and-evidence foundation. Select the
 destination owner for the receiving artifact; the foundation supplies meaning
 and form-selection decisions. The ladder describes progressive disclosure and
 composition, rather than a requirement to activate four skills in sequence.
@@ -73,10 +73,11 @@ The foundation's [evidence map](data-visualization-foundations/references/eviden
 preserves research, practitioner guidance, public Registry lineage, and their
 distinct warrants. [Atlas exercises](data-visualization-foundations/references/atlas-exercises.md)
 bind first use to Issues #358 and #360, with gallery and research-extract gates.
-Source authoring makes these methods available for cultivation. Hosted offering
-remains held for a new tag and complete public carrier. A future package includes
+Source authoring makes these methods available for cultivation. Their hosted
+offering travels through a reviewed tagged public carrier. The package includes
 the selected skill, its directly linked foundation and references, and the
-applicable shared source map; packaging proves that closure before publication.
+applicable shared source map; publication checks prove that closure before
+activation.
 
 ## How the catalog evolves
 
