@@ -100,8 +100,17 @@ variable `SCHEMA_WORKER_DEPENDENCY_GATE=open` keep the accepted
 `cloudflare/schemas-worker` bundle aligned with the existing Custom Domain. The
 reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` chain satisfies the
 dependency floor owned by Issue #402. The dependency gate remains a human-held
-activation control. The job finishes its current upload and records the
-preceding Worker version as the recovery route.
+activation control. Each admitted job finishes the selected deployment and
+records the accepted repository coordinate. Its deployment log names the new
+Worker version; Cloudflare deployment history and the linked Issue receipt
+preserve the preceding Worker version as the recovery coordinate.
+
+The first connected exercise used `prod@369b61b79dfe3d245c1193567d9f715263927670`.
+Run `38411427064` attempt 2 retained that exact push SHA and ref. The contract
+passed and the deployment job was admitted; the receiver list then returned to
+`[]` and the dependency gate to absent. The admitted deployment completed, and
+the signed-out checks passed. Completed Issue #406 carries the live receiver,
+Worker-version, and recovery observations.
 
 The Pages workflow receives an exact accepted source commit, reviewed `docs`
 commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One

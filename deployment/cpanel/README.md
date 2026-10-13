@@ -77,8 +77,8 @@ activation, acceptance, and recovery sequence.
 The tagged GitHub Pages projection followed the cPanel release as a separate
 receiver. The visitor carrier has no runtime dependency on that Pages artifact.
 `pages-v0.3.0` now supplies the accepted schema and skill publication
-coordinate, and Issue #406 carries the same accepted closure through the
-independently gated Worker review, promotion, activation, and signed-out
+coordinate, and completed Issue #406 carries the same accepted closure through
+the independently gated Worker review, promotion, activation, and signed-out
 receipt.
 
 ## Current entry condition

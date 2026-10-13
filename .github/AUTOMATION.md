@@ -113,8 +113,9 @@ commits, rebuilds from source, and requires complete file membership and byte
 equality before upload.
 
 Pages settings remain the custom-domain authority. The recorded Pages family
-is `schemas.radiantnull.com`; Issue #406 owns current schema-publication and
-Worker parity. The generated public `release.json`, accepted annotated tag, and
+is `schemas.radiantnull.com`; completed Issue #406 records the matching
+`schemas.vik.guru` Worker publication, activation, and live parity. The
+generated public `release.json`, accepted annotated tag, and
 matching workflow receipt identify the active Pages coordinate. The
 `pages-v0.3.0` tag at docs commit `2819c8564acfe` with recorded source commit
 `cfaa53f5b750` is active. `pages-v0.2.0` at docs commit `bf257f6674e8` and the
@@ -158,6 +159,25 @@ Environment-scoped Cloudflare credentials enter only the production deployment
 job. The earlier asset-only adapter retains its shared source inputs and local
 build or dry-run checks; it no longer owns a root deployment command or this
 production workflow.
+
+The first connected production activation retained exact
+`prod@369b61b79dfe3d245c1193567d9f715263927670`. Its initial push completed the
+contract while held repository gates skipped deployment. Opening both gates
+later did not create another push event, so the authorized activation reran the
+complete original workflow. GitHub retained the original `GITHUB_SHA` and
+`GITHUB_REF`; the contract passed and the deployment job was admitted. Both
+repository gates returned to rest before the admitted deployment completed and
+the signed-out checks began. GitHub's
+[rerun contract](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/re-run-workflows-and-jobs)
+states that a rerun uses the original commit SHA and Git ref. This exact-run
+rerun is the bounded activation path for an accepted production push whose
+deployment was deliberately held: recheck the immutable coordinate, open both
+gates for a bounded window, rerun the complete push workflow, observe the
+receiver, and restore both gates.
+
+Cloudflare deployment history and the completed Issue receipt name the deployed
+and preceding Worker versions. The workflow summary records the accepted
+repository coordinate and directs recovery to those durable identifiers.
 
 ## Production-carrier contract
 

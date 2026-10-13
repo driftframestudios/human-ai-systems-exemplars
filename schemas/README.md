@@ -53,8 +53,9 @@ The active `pages-v0.3.0` selection retains the 17-contract schema cohort first
 assembled for `pages-v0.2.0` and expands the public-ready skill collection to
 27 complete packages. Seven JSON-LD contexts, four examples, and one cohort
 orientation travel as revalidating companions and stay outside the contract
-count. The Worker cohort receives a production observation after its
-independently gated activation.
+count. The Worker cohort received its independently gated production
+observation on 2026-10-13: all 17 contracts, 27 skills, and shared public bytes
+passed the signed-out receiver and browser checks.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
 31 immutable paths for 16 frozen contracts; the unversioned local-manifest
@@ -171,9 +172,11 @@ paths receive reviewed additions. Updated visitor display names belong in the
 catalog. Recovery keeps every promised schema route; after adding contracts,
 prefer a forward repair over an older artifact that omits those routes.
 
-The accepted author-host Worker uses the same selected contract payload. Its
-approved deployment and cache/CORS observations remain a separate receipt in
-Issue #18 and PRs #311-#313. The catalog's observed edge addition is classified
+The accepted author-host Worker uses the same selected contract payload.
+Issue #18 and PRs #311-#313 preserve the earlier 13-contract delivery lineage;
+completed Issue #406, PR #480, and workflow run `38411427064` carry the current
+v0.3 activation, parity, cache/CORS, and recovery receipt. The catalog's
+observed edge addition is classified
 separately from exact schema-byte parity; the Worker README describes that
 source-preservation boundary and its focused check. Selected
 reviewed skill source copies are deliberate public artifacts; the complete

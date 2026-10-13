@@ -75,16 +75,16 @@ from destination variables.
 
 ## Serving posture
 
-One stable published surface is the fitting present form. `docs` remains the
-reviewed GitHub Pages projection at `schemas.radiantnull.com`, while the other
-branches express promotion and evidence posture. A deliberate workflow dispatch
-from `main` rebuilds the accepted source, compares it with the named `docs`
-commit, and deploys only after that pair agrees. The recorded `docs:/` source
-setting remains available for legacy recovery. GitHub treats standard Pages
-runner use as free; the `docs` evidence budget can rest while the accepted
-projection continues.
-Additional always-on surfaces follow a reader or operator job that benefits
-from them.
+Two live schema surfaces now serve distinct reader jobs. `docs` carries the
+reviewed GitHub Pages projection at `schemas.radiantnull.com`; Cloudflare serves
+the author-controlled Worker at `schemas.vik.guru`, while the `prod` GitHub
+environment gates its deployment credentials. A deliberate Pages workflow
+dispatch from `main` rebuilds the accepted source, compares it with the named
+`docs` commit, and deploys only after that pair agrees. The recorded `docs:/`
+source setting remains available for legacy Pages recovery. The repository and
+Issue receipt retain the accepted Worker source and signed-out observation;
+Cloudflare retains the active and recovery versions. Other branches continue
+to express promotion and evidence posture.
 
 When an interactive or request-shaped surface earns a runtime, a Cloudflare
 Worker or Pages project can receive a selected `stg`, `release`, or `prod`
@@ -93,8 +93,7 @@ accepted receiver and a named reader job.
 
 ## Credential routing at rest
 
-Credential state begins empty. Future credentials belong to the narrowest
-GitHub environment that needs them:
+Credentials belong to the narrowest GitHub environment that needs them:
 
 - account and non-sensitive deployment coordinates become environment
   variables;
@@ -103,33 +102,60 @@ GitHub environment that needs them:
 - `release` runs contract evidence without Cloudflare deployment credentials;
 - `prod` credentials reach the production resource only after the protected
   branch transition, active-receiver selection, dependency-gate opening, and
-  environment approval.
+  explicit human activation.
 
 The manifest-driven schema Worker publishes checked-in public artifacts. Each
 connected production deployment uses the non-sensitive
 `CLOUDFLARE_ACCOUNT_ID` variable and a least-privilege
-`CLOUDFLARE_API_TOKEN` secret from the `prod` GitHub environment. Secret values
-remain in that receiver and enter only the credential-confirmation and
-deployment steps. Evidence-budget activation, production-receiver activation,
-and dependency clearance are independent decisions: a receipt budget carries
-evidence authority, the receiver list carries publication authority, and the
-dependency gate records the separately accepted toolchain posture.
-
-Credential values live exclusively in GitHub environment settings and briefly
-enter process memory for those two steps. Repository files, generated assets,
-caches, logs, and retained receipts carry binding names and redacted state
-only.
+`CLOUDFLARE_API_TOKEN` secret from the `prod` GitHub environment. Credential
+values remain in GitHub environment settings and briefly enter process memory
+for the combined credential-check and deployment step. Repository files,
+generated assets, caches, logs, and retained receipts carry binding names and
+redacted state only. Evidence-budget activation, production-receiver
+activation, and dependency clearance are independent decisions: a receipt
+budget carries evidence authority, the receiver list carries publication
+authority, and the dependency gate records the separately accepted toolchain
+posture.
 
 ## Production boundary
 
-The `prod` branch supplies the source approval boundary: one approving
-pull-request review, stale-approval dismissal, and administrator inclusion. Its
-GitHub environment accepts deployment only from the exact `prod` branch. Before
-connected production activation, that environment receives its named human
-reviewer and the selected administrator-bypass posture. `release` provides
-contract evidence only and creates no live route. Production deployment retains
-source review, active-receiver selection, the held dependency gate, and a
-separately accepted environment handoff.
+The `prod` ruleset names one approving pull-request review, stale-approval
+dismissal, last-push separation, resolved conversations, and an administrator
+repository-role bypass. Its GitHub environment is a separate control: it
+accepts deployment only from the exact `prod` branch and keeps environment
+administrator bypass disabled. The first connected activation carried explicit
+human approval in the PR conversation and used the repository-role bypass;
+Issue #481 retains the future formal environment-review handoff. `release`
+supplies contract evidence; live-route authority remains with `prod`.
+Production deployment retains source acceptance, active-receiver selection, the
+dependency gate, and a separately accepted activation handoff.
+
+The current plan makes a named required reviewer available after the deliberate
+public transition; GitHub rejected that configuration while the repository was
+private. The environment kept its exact-`prod` branch policy and disabled
+administrator bypass. Issue
+[#481](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/481)
+owns the named `driftframestudios` reviewer, permitted self-review, and
+held-gate exercise after the deliberate public transition. Until that feature
+becomes available, explicit human source acceptance plus the two narrow
+repository gates supply the bounded activation decision.
+
+## First connected schema activation · 2026-10-13
+
+PR #480 merged accepted production source
+`369b61b79dfe3d245c1193567d9f715263927670` while both deployment gates remained
+at rest. The resulting push completed the schema contract and skipped the
+deployment job, establishing that credential presence alone leaves the receiver
+held. After explicit human activation, the two repository gates opened for one
+bounded window and the complete original push workflow was rerun. GitHub kept
+the original production SHA and ref. The contract passed and the deployment job
+was admitted; `DEPLOYMENT_ACTIVE_RECEIVERS` then returned to `[]` and
+`SCHEMA_WORKER_DEPENDENCY_GATE` to its absent held state. The admitted Worker
+deployment completed, and signed-out receiver and browser checks established
+the live schema and skill routes. Issue
+[#406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406)
+retains the accepted source, workflow, live observation, Worker version, and
+recovery receipt.
 
 ## Sources
 
