@@ -5,7 +5,7 @@
   "name": "evidence-grounded-research-spike",
   "description": "Converts current expert writing, official documentation, standards, and practiced experience into a bounded repository decision. Applies when contemporary evidence should change a plan, instruction, architecture boundary, or collaboration method.",
   "semanticAuthorityRef": "../source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/11",
+  "sourceRef": "../catalog.json#/skills/13",
   "contract": {
     "what": "A decision-oriented synthesis with direct evidence routes, claim classes, transfer limits, and instruction delta.",
     "when": [

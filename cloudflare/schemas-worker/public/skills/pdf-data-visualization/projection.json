@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/pdf-data-visualization/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "pdf-data-visualization",
+  "description": "Produces reproducible data figures for final PDF placement with physical-size legibility, source context, and a usable evidence companion. Applies when a report, paper, handout, or exported page requires reliable vector or mixed vector/raster visualization.",
+  "semanticAuthorityRef": "../source/.agents/skills/pdf-data-visualization/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/16",
+  "contract": {
+    "what": "A source-grounded figure whose final PDF placement preserves readable labels, quantitative geometry, context, and evidence access.",
+    "when": [
+      "The receiving artifact is a PDF report, scientific paper, editorial document, handout, or print-oriented export."
+    ],
+    "boundaries": [
+      "The data owner controls meaning; the document owner controls page composition and publication. A plotting backend supplies graphics, while PDF tagging, reading order, accessibility conformance, and production printing retain their own implementation and evidence."
+    ],
+    "result": "A reproducible figure and final-document handoff with fitting dimensions, export settings, caption/source, exact values, and an observed or explicitly pending placement check."
+  },
+  "receivingUse": {
+    "job": "The receiving artifact is a PDF report, scientific paper, editorial document, handout, or print-oriented export.",
+    "materialResult": "A reproducible figure and final-document handoff with fitting dimensions, export settings, caption/source, exact values, and an observed or explicitly pending placement check.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/pdf-data-visualization/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}
