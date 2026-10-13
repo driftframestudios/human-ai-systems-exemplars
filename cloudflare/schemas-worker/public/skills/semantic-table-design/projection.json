@@ -5,7 +5,7 @@
   "name": "semantic-table-design",
   "description": "Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.",
   "semanticAuthorityRef": "../source/.agents/skills/semantic-table-design/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/19",
+  "sourceRef": "../catalog.json#/skills/22",
   "contract": {
     "what": "A source-owned table contract that preserves the reader's operation, native header relationships, precise values and locally complete meaning across visual, interactive and extracted forms.",
     "when": [

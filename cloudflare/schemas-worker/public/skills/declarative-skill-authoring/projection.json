@@ -5,7 +5,7 @@
   "name": "declarative-skill-authoring",
   "description": "Authors or revises repository skills as declarative, transferable specifications. Applies when skill metadata, What/When/Boundaries contracts, Rule declarations, optional Given/When/Then examples, conditional context, or experiment-to-helper progression needs definition.",
   "semanticAuthorityRef": "../source/.agents/skills/declarative-skill-authoring/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/9",
+  "sourceRef": "../catalog.json#/skills/11",
   "contract": {
     "what": "A repository skill that combines precise routing, an action-bearing core, and proportionate behavior examples.",
     "when": [

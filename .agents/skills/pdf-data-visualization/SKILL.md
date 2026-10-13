@@ -126,7 +126,7 @@ route unsupported document semantics to the assembling owner.
 
 - Load [production and handoff](references/production-and-handoff.md) for physical sizing, Python export, mixed-mode rendering, or final-document acceptance.
 - Load the foundation's [evidence map](../data-visualization-foundations/references/evidence-and-source-map.md) for source support and technical documentation.
-- Load [Atlas exercises](../data-visualization-foundations/references/atlas-exercises.md) when the gallery receives an actual PDF/export request; the current web wave alone leaves that production route at rest.
+- Load [Atlas exercises](../data-visualization-foundations/references/atlas-exercises.md) when the gallery receives an actual PDF/export request; a web-only receiving request leaves that production route at rest.
 
 ## Completion and re-entry
 

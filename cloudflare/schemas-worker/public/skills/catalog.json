@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
+  "sourceRevision": "cfaa53f5b7500e3901d8470e1e471cd0230ff2a5",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
@@ -50,7 +50,7 @@
         {
           "sourcePath": ".github/workflows/prototype-unit-tests.yml",
           "path": "source/github/workflows/prototype-unit-tests.yml",
-          "sha256": "95f5af91163b85fecab82d0712be498213d8853397f7a5101e60328ce7262008"
+          "sha256": "c1e0a84e603836ca4f476a6ba70dbc1937336507caeeb496d079745d1c28497d"
         }
       ]
     },
@@ -167,6 +167,92 @@
       "dependencies": []
     },
     {
+      "name": "conversation-data-visualization",
+      "title": "Conversation data visualization",
+      "description": "Produces bounded exploratory data visuals with recoverable values and calibrated interpretation in a conversation. Applies when a human and AI are examining data together and a figure can change the next question or decision.",
+      "useWhen": "A shared data exploration needs a pattern, comparison, distribution, uncertainty, or relationship made visible before committing to a durable publication.",
+      "produces": "A useful figure or simpler alternative, a concise interpretation, and enough source/value context to continue or correct the exploration.",
+      "publicationStanding": "public_ready",
+      "pagePath": "conversation-data-visualization/",
+      "projectionPath": "conversation-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/conversation-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/conversation-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/conversation-data-visualization/SKILL.md",
+      "sourceSha256": "ede34cac9c90969f33e9ed8c41c04eacc24f36fead71f9d1f33090c997dbdbce",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+          "path": "source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+          "sha256": "af014508db0bee61810a7c36c63c0c8180bc1d1daa6284d1d3a717ec3eea389f"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    },
+    {
       "name": "cost-and-ownership-analysis",
       "title": "Cost and ownership analysis",
       "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
@@ -209,6 +295,82 @@
           "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
           "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
           "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
+        }
+      ]
+    },
+    {
+      "name": "data-visualization-foundations",
+      "title": "Data visualization foundations",
+      "description": "Establishes source-grounded data meaning, reader operations, visual encodings, and evidence companions before rendering. Applies when creating or materially revising a visualization across conversation, web, scientific, or document destinations.",
+      "useWhen": "A visualization's population, measure, comparison, uncertainty, or form needs a decision before production. A settled figure's isolated copy correction can use direct reasoning.",
+      "produces": "One usable form-selection decision with its data basis, scale, companion, supported reading, unresolved condition, and fitting observation.",
+      "publicationStanding": "public_ready",
+      "pagePath": "data-visualization-foundations/",
+      "projectionPath": "data-visualization-foundations/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/data-visualization-foundations/projection.json",
+      "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+      "sourceRoute": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+      "sourceSha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
         }
       ]
     },
@@ -305,6 +467,92 @@
       ]
     },
     {
+      "name": "pdf-data-visualization",
+      "title": "PDF data visualization",
+      "description": "Produces reproducible data figures for final PDF placement with physical-size legibility, source context, and a usable evidence companion. Applies when a report, paper, handout, or exported page requires reliable vector or mixed vector/raster visualization.",
+      "useWhen": "The receiving artifact is a PDF report, scientific paper, editorial document, handout, or print-oriented export.",
+      "produces": "A reproducible figure and final-document handoff with fitting dimensions, export settings, caption/source, exact values, and an observed or explicitly pending placement check.",
+      "publicationStanding": "public_ready",
+      "pagePath": "pdf-data-visualization/",
+      "projectionPath": "pdf-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/pdf-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/pdf-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/pdf-data-visualization/SKILL.md",
+      "sourceSha256": "3f14b0f0470f57dd2cec04081ce896e4ba7b4061e2087dc53d88db9ae98c005e",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+          "path": "source/.agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+          "sha256": "9054578b289befa31ab9fb0dda7842fe5c3e1fa6dc0e3e480c52306491a39f5e"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    },
+    {
       "name": "practitioner-probe",
       "title": "Practitioner probe",
       "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
@@ -376,7 +624,7 @@
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/secret-boundary-inspection/projection.json",
       "sourcePath": ".agents/skills/secret-boundary-inspection/SKILL.md",
       "sourceRoute": "source/.agents/skills/secret-boundary-inspection/SKILL.md",
-      "sourceSha256": "5a17b8e370963c3b1705bd5a2eb2c9ac6d03371c0564151c121218592826556a",
+      "sourceSha256": "a32b9cac0c88a872657c4bba3f238ea6eb45872174a7ba872e5fc9e58294a7aa",
       "dependencies": [
         {
           "sourcePath": ".agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
@@ -391,7 +639,7 @@
         {
           "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
           "path": "source/threadkeeping/context-canvas-public-reference-materialization.md",
-          "sha256": "1ae8eb005b82225fcea0e32983e46f97e6511122cf131136a38c635061d800d5"
+          "sha256": "9df756f5f309aacfa6269efb23f5f96308a7fb2a83e6deabc4c194f875f9bc2a"
         },
         {
           "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
@@ -422,7 +670,7 @@
         {
           "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
           "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
-          "sha256": "85e5bdc37f59151ea2e3f3d03c23a057234debc4987e111b9bc8c5732f745256"
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
         }
       ]
     },
@@ -491,6 +739,82 @@
       "sourceRoute": "source/.agents/skills/uv-backed-python-execution/SKILL.md",
       "sourceSha256": "53bded8c1986b748cf88ba5ca28b23c4595d28c062a50da761fdb80884e73511",
       "dependencies": []
+    },
+    {
+      "name": "web-data-visualization",
+      "title": "Web data visualization",
+      "description": "Integrates source-grounded editorial or scientific visualizations into existing web surfaces with semantic companions and coherent view state. Applies to static charts, SVG galleries, and coordinated interactive views whose delivery, responsive behavior, or export affects interpretation.",
+      "useWhen": "A website or digital instrument needs a new or materially revised static figure, scientific plot, gallery, or coordinated set of views.",
+      "produces": "An integrated, inspectable figure or view family with usable static reading, intentional enhancement, and evidence for the changed behavior.",
+      "publicationStanding": "public_ready",
+      "pagePath": "web-data-visualization/",
+      "projectionPath": "web-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/web-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/web-data-visualization/SKILL.md",
+      "sourceSha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
     }
   ],
   "supportingSources": [

@@ -90,7 +90,11 @@ A successor or delivery repository reruns its accepted implementation after popu
 
 ## Conditional context
 
-In Human-AI Systems Exemplars, load the [repository secret-material boundary](../../../threadkeeping/repository-secret-material-boundary.md) before invoking or changing the scanner. It owns the current Betterleaks version, exact commands, scope topology, reviewed exception surface, safe-output contract, evidence limits, and successor handoff.
+When the receiving repository defines a secret-material boundary record, load
+that local owner before invoking or changing the scanner. It should identify
+the current detector version, exact commands, scope topology, reviewed
+exception surface, safe-output contract, evidence limits, and successor
+handoff.
 
 Load [embedded metadata at a publication boundary](references/embedded-metadata-publication-boundary.md) when a named handoff contains images, documents, audio, video, or archives whose non-content metadata could travel with the release.
 
