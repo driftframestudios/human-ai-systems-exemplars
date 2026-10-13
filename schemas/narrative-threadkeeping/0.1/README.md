@@ -15,11 +15,19 @@ Each contract uses JSON Schema Draft 2020-12 and local fragment references only.
 
 ## Identity, retrieval, and exact versions
 
-The `schemas.driftframestudios.org` values are canonical identifiers for these exact contracts. They remain stable even when a different host delivers an equivalent copy. The next Pages and Worker publication cycles will expose the same accepted bytes at the receiver paths above on `schemas.radiantnull.com` and `schemas.vik.guru`.
+The `schemas.driftframestudios.org` values are canonical identifiers for these
+exact contracts. They remain stable when another host delivers an equivalent
+copy. The active Pages and Worker v0.3 releases expose the accepted bytes at the
+receiver paths above on `schemas.radiantnull.com` and `schemas.vik.guru`.
 
 Version `v0.1` identifies each contract. Its accepted schema bytes are immutable after publication. A contract change receives a new exact-version identity and path. JSON-LD contexts, representative examples, and this orientation remain typed companions and revalidate with their receiving site release.
 
-The checked-in source paths remain the authored review coordinates. A generated receiver is a delivery projection, and its host remains a delivery operator. Passing source checks establishes structure, identity, dependency closure, representative use, and the declared route. The successor publication cycles establish public availability, response behavior, and cross-host byte parity.
+The checked-in source paths remain the authored review coordinates. A generated
+receiver is a delivery projection, and its host remains a delivery operator.
+Passing source checks establishes structure, identity, dependency closure,
+representative use, and the declared route. The accepted Pages and Worker
+receipts establish public availability, response behavior, and cross-host byte
+parity for their named releases.
 
 ## Companion resources
 
