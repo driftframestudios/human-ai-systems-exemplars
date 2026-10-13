@@ -402,7 +402,7 @@ test("the semantic inventory resolves every selected image without becoming a me
   }
 });
 
-test("the sitemap identifies exactly the 41 indexable production routes with page-owned dates", async () => {
+test("the sitemap identifies exactly the 40 indexable production routes with page-owned dates", async () => {
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",

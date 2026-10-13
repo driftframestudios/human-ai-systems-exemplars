@@ -46,6 +46,16 @@ const publicCarrierPaths = Object.freeze([
   "attribution.yml",
   "AI-DATA-USE.md",
 ]);
+const featuredSkillNames = Object.freeze([
+  "embedded-prototype-layout",
+  "semantic-table-design",
+]);
+const visualizationLadder = Object.freeze([
+  { name: "data-visualization-foundations", label: "Shared foundation" },
+  { name: "conversation-data-visualization", label: "Conversation route" },
+  { name: "web-data-visualization", label: "Web route" },
+  { name: "pdf-data-visualization", label: "PDF route" },
+]);
 const require = createRequire(import.meta.url);
 const execFileAsync = promisify(execFile);
 const visitorBoundary = require(
@@ -344,12 +354,16 @@ function validateRegistryIndex(source, deploymentBase = null) {
 
   validateVisitorBoundaryFooter(source, "the registry page");
 
-  for (const skillName of ["embedded-prototype-layout", "semantic-table-design"]) {
+  for (const skillName of featuredSkillNames) {
     requirement(
       source.includes(`href="skills/${skillName}/"`),
       `the registry page must feature ${skillName}`,
     );
   }
+  requirement(
+    source.includes('href="skills/#visualization-ladder"'),
+    "the registry page must route visitors into the visualization ladder",
+  );
 
   for (const route of schemaReceiverRoutes) {
     requirement(
@@ -653,14 +667,24 @@ function renderSkillsIndex(catalog, deploymentBase) {
           <p class="skill-links"><a href="${htmlEscape(skill.pagePath)}"><strong>Read this skill</strong></a> · <a href="${htmlEscape(skill.projectionPath)}">JSON projection</a> · <a href="${htmlEscape(skill.sourceRoute)}">Exact Markdown</a></p>
         </li>`)
     .join("");
-  const featuredNames = ["embedded-prototype-layout", "semantic-table-design"];
-  const featuredCards = featuredNames
+  const featuredCards = featuredSkillNames
     .map((name) => {
       const skill = catalog.skills.find((entry) => entry.name === name);
       requirement(skill, `${name} must be public-ready before it is featured`);
-      return `<article class="featured-card" data-featured-skill="${skill.name}"><p class="card-label">New in this collection</p><h3>${htmlEscape(skill.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p><p><a href="${htmlEscape(skill.pagePath)}">Read ${htmlEscape(skill.title)}</a></p></article>`;
+      return `<article class="featured-card" data-featured-skill="${skill.name}"><p class="card-label">Featured in this collection</p><h3>${htmlEscape(skill.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p><p><a href="${htmlEscape(skill.pagePath)}">Read ${htmlEscape(skill.title)}</a></p></article>`;
     })
     .join("");
+  const visualizationSkills = visualizationLadder.map(({ name, label }) => {
+    const skill = catalog.skills.find((entry) => entry.name === name);
+    requirement(skill, `${name} must be public-ready before it enters the visualization ladder`);
+    return { ...skill, label };
+  });
+  const visualizationFoundation = visualizationSkills[0];
+  const visualizationDestinations = visualizationSkills
+    .slice(1)
+    .map((skill) => `<article class="visualization-ladder__card" data-visualization-skill="${skill.name}"><p class="card-label">${htmlEscape(skill.label)}</p><h3>${htmlEscape(skill.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p><p><a href="${htmlEscape(skill.pagePath)}">Read ${htmlEscape(skill.title)}</a></p></article>`)
+    .join("");
+  const visualizationLadderMarkup = `<article class="visualization-ladder__foundation" data-visualization-skill="${visualizationFoundation.name}"><p class="card-label">${htmlEscape(visualizationFoundation.label)}</p><h3>${htmlEscape(visualizationFoundation.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(visualizationFoundation.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(visualizationFoundation.produces)}</p><p><a href="${htmlEscape(visualizationFoundation.pagePath)}">Read ${htmlEscape(visualizationFoundation.title)}</a></p></article><p class="visualization-ladder__route-label" id="visualization-destinations-title">Choose one receiving surface</p><div class="visualization-ladder__destinations" aria-labelledby="visualization-destinations-title">${visualizationDestinations}</div>`;
   const structuredData = serializeJsonForHtmlScript(
     {
       "@context": "https://schema.org",
@@ -699,11 +723,11 @@ ${deploymentMetadata}
     .site-nav { color:var(--paper); background:var(--ink); } .site-nav__inner { width:min(76rem,calc(100% - 2rem)); margin-inline:auto; } .site-nav ul { display:flex; flex-wrap:wrap; gap:.25rem .55rem; margin:0; padding:.55rem 0; list-style:none; } .site-nav li { max-width:100%; } .site-nav a { display:block; border:1px solid transparent; border-radius:999px; color:inherit; padding:.4rem .7rem; } .site-nav a[aria-current="page"] { border-color:currentColor; font-weight:800; text-decoration:none; }
     .hero { background:var(--field); border-bottom:1px solid var(--line); } .hero__inner, main, .site-footer__inner { width:min(76rem, calc(100% - 2rem)); margin-inline:auto; } .hero__inner { padding:clamp(3rem,8vw,7rem) 0 clamp(2.5rem,6vw,5rem); }
     .eyebrow { margin:0 0 1rem; font-size:.78rem; font-weight:750; letter-spacing:.16em; text-transform:uppercase; } h1 { max-width:13ch; margin:0; font-size:clamp(2.6rem,7.5vw,6.3rem); line-height:.94; letter-spacing:-.045em; } .lede { max-width:60ch; font-size:clamp(1.1rem,2.3vw,1.5rem); }
-    main { padding:3rem 0 5rem; } main > section + section { margin-top:clamp(3.5rem,7vw,6rem); } h2 { font-size:clamp(1.8rem,4vw,3rem); line-height:1.05; } .orientation { max-width:72ch; } .featured-grid,.skill-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap:1rem; } .featured-grid { margin-top:1.25rem; } .skill-list { padding:0; list-style:none; }
-    .featured-card,.skill-card { max-width:none; padding:1.25rem; border:1px solid var(--line); border-radius:.8rem; background:var(--card); } .featured-card { border-top:.42rem solid #2458d6; } .featured-card h3,.skill-card h3 { margin:0; font-size:1.08rem; } .card-label { margin:0 0 .45rem; color:var(--muted); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; } .skill-links { color:var(--muted); }
+    main { padding:3rem 0 5rem; } main > section + section { margin-top:clamp(3.5rem,7vw,6rem); } h2 { font-size:clamp(1.8rem,4vw,3rem); line-height:1.05; } .orientation { max-width:72ch; } .featured-grid,.skill-list,.visualization-ladder__destinations { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap:1rem; } .featured-grid { margin-top:1.25rem; } .skill-list { padding:0; list-style:none; }
+    .featured-card,.skill-card,.visualization-ladder__foundation,.visualization-ladder__card { max-width:none; padding:1.25rem; border:1px solid var(--line); border-radius:.8rem; background:var(--card); } .featured-card { border-top:.42rem solid #2458d6; } .visualization-ladder { display:grid; gap:1rem; margin-top:1.25rem; } .visualization-ladder__foundation { border-left:.42rem solid var(--accent); background:var(--field); } .visualization-ladder__route-label { margin:.35rem 0 -.35rem; color:var(--muted); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; } .featured-card h3,.skill-card h3,.visualization-ladder h3 { margin:0; font-size:1.08rem; } .card-label { margin:0 0 .45rem; color:var(--muted); font-size:.75rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; } .skill-links { color:var(--muted); }
     .practice-example { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:1.25rem; align-items:start; } .practice-copy { padding:1.25rem; border-left:.4rem solid var(--accent); background:var(--card); } .practice-frame { min-width:0; margin:0; } .practice-frame iframe { display:block; width:100%; min-height:30rem; border:1px solid var(--line); background:var(--card); } .practice-frame figcaption { margin-top:.55rem; color:var(--muted); font-size:.92rem; }
     .site-footer { border-top:1px solid var(--line); background:#eef0f3; } .site-footer__inner { padding:2.5rem 0 1.5rem; } .footer-links { display:flex; flex-wrap:wrap; gap:.5rem 1.1rem; padding:0; list-style:none; } .canary-stack { margin-top:2.5rem; padding-top:1.25rem; border-top:1px solid var(--line); } .visitor-boundary__context { max-width:70ch; font-size:.84rem; } .canary { max-width:none; font-family:ui-monospace,monospace; font-size:.72rem; overflow-wrap:anywhere; } .artifact-attribution { max-width:none; margin-top:1.5rem; font-size:.8rem; color:var(--muted); }
-    @media (max-width:48rem) { .site-nav__inner,.hero__inner,main,.site-footer__inner { width:min(100% - 1.25rem,76rem); } .practice-example { grid-template-columns:1fr; } .practice-frame iframe { min-height:34rem; } } @media (forced-colors:active) { .featured-card,.skill-card,.practice-copy,.practice-frame iframe { border-color:CanvasText; } }
+    @media (max-width:48rem) { .site-nav__inner,.hero__inner,main,.site-footer__inner { width:min(100% - 1.25rem,76rem); } .practice-example { grid-template-columns:1fr; } .practice-frame iframe { min-height:34rem; } } @media (forced-colors:active) { .featured-card,.skill-card,.visualization-ladder__foundation,.visualization-ladder__card,.practice-copy,.practice-frame iframe { border-color:CanvasText; } }
     @media print { .skip-link,.site-nav,.practice-frame { display:none; } }
   </style>
 </head>
@@ -713,7 +737,8 @@ ${deploymentMetadata}
   <header class="hero"><div class="hero__inner"><p class="eyebrow">Repository-local public skills</p><h1>Working methods with their sources intact.</h1><p class="lede">Each entry pairs a portable collaboration contract with an exact source package and a machine-readable projection. The collection stays specific to Human–AI Systems Exemplars.</p></div></header>
   <main id="main-content" tabindex="-1">
     <section class="orientation" aria-labelledby="orientation-title"><h2 id="orientation-title">Use the source when judgment matters</h2><p>The JSON projection makes the contract easy to exchange. The linked <code>SKILL.md</code> defines its meaning, boundaries, and completion. Current intent, repository evidence, and granted authority continue to govern each use.</p><p><a href="catalog.json">Download the complete public catalog</a> · <a href="../collaboration-skills/0.1.0/collaboration-skill.schema.json">Read the projection schema</a> · <a href="../">Return to the schema registry</a></p></section>
-    <section aria-labelledby="featured-title"><h2 id="featured-title">New methods for tables and embedded prototypes</h2><p>These two contracts join meaning, comparison, and the actual parent-and-child layout boundary while keeping their responsibilities distinct.</p><div class="featured-grid">${featuredCards}</div></section>
+    <section id="visualization-ladder" aria-labelledby="visualization-ladder-title"><h2 id="visualization-ladder-title">Visualization ladder: settle meaning, then choose the receiving surface</h2><p>Begin with the shared data contract: reader question, admitted records, transformations, visual encoding, and exact-value companion. Then select the destination that will receive the figure. Conversation supports bounded exploration; web supports responsive and coordinated views; PDF supports fixed physical placement and reproducible export.</p><div class="visualization-ladder">${visualizationLadderMarkup}</div><p>When exact lookup or relationship comparison is the central job, <a href="semantic-table-design/">semantic table design</a> keeps the table and each extracted record meaningful.</p></section>
+    <section aria-labelledby="featured-title"><h2 id="featured-title">Featured methods for tables and embedded prototypes</h2><p>These two contracts join meaning, comparison, and the actual parent-and-child layout boundary while keeping their responsibilities distinct.</p><div class="featured-grid">${featuredCards}</div></section>
     <section id="methods-in-practice" aria-labelledby="practice-title"><h2 id="practice-title">Methods in practice</h2><div class="practice-example"><div class="practice-copy"><p class="card-label">Worked reference · Native table + embedded preview</p><h3>Keep comparison meaning intact inside its real frame</h3><p>This source-owned example gives the child document native table relationships and gives the parent page the preview size, contextual title, sandbox, and onward route.</p><p>Source inspection establishes the ownership pattern. Browser observation of this reviewed artifact establishes its tested layout; accessibility conformance and behavior on another host each require their own observation.</p><p><a href="../examples/readable-table-embedded-layout/">Open the example in a full view</a></p></div><figure class="practice-frame"><iframe src="../examples/readable-table-embedded-layout/" title="Worked example of a semantic comparison table inside an embedded preview" sandbox loading="lazy"></iframe><figcaption>The same source-owned child opens independently through the full-view route.</figcaption></figure></div></section>
     <section aria-labelledby="skills-title"><h2 id="skills-title">${catalog.skills.length} public-ready contracts</h2><ul class="skill-list">${cards}
       </ul></section>
@@ -1016,11 +1041,37 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
       `${skill.name} must expose its source-derived result`,
     );
   }
-  for (const featuredName of ["embedded-prototype-layout", "semantic-table-design"]) {
+  for (const featuredName of featuredSkillNames) {
     requirement(
       occurrenceCount(source, `data-featured-skill="${featuredName}"`) === 1,
       `${featuredName} must appear once in first-contact discovery`,
     );
+    requirement(
+      !source.includes(`data-visualization-skill="${featuredName}"`),
+      `${featuredName} must retain its distinct table-and-layout feature role`,
+    );
+  }
+  const visualizationSection = source.match(
+    /<section id="visualization-ladder"[\s\S]*?<\/section>/u,
+  )?.[0];
+  requirement(visualizationSection, "the skills page must expose the visualization ladder");
+  let previousVisualizationPosition = -1;
+  for (const { name } of visualizationLadder) {
+    const position = visualizationSection.indexOf(`data-visualization-skill="${name}"`);
+    requirement(position >= 0, `${name} must appear in the visualization ladder`);
+    requirement(
+      !source.includes(`data-featured-skill="${name}"`),
+      `${name} must retain its distinct visualization-ladder role`,
+    );
+    requirement(
+      position > previousVisualizationPosition,
+      "the visualization ladder must keep foundation and destination order",
+    );
+    requirement(
+      visualizationSection.includes(`href="${name}/"`),
+      `${name} must link to its readable skill route from the visualization ladder`,
+    );
+    previousVisualizationPosition = position;
   }
   requirement(
     source.includes('id="methods-in-practice"') &&

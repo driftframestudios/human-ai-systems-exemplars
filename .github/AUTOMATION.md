@@ -114,9 +114,11 @@ equality before upload.
 
 Pages settings remain the custom-domain authority. The recorded Pages family
 is `schemas.radiantnull.com`; Issue #406 owns current schema-publication and
-Worker parity. The accepted current Pages coordinate is `pages-v0.2.0`, whose
-annotated tag targets docs commit `bf257f6674e8` and records source commit
-`dc6b62c`; the earlier `pages-v0.1.0` observation remains historical evidence.
+Worker parity. The generated public `release.json`, accepted annotated tag, and
+matching workflow receipt identify the active Pages coordinate. The
+`pages-v0.3.0` tag at docs commit `2819c8564acfe` with recorded source commit
+`cfaa53f5b750` is active. `pages-v0.2.0` at docs commit `bf257f6674e8` and the
+earlier `pages-v0.1.0` observation remain historical evidence.
 The recorded `docs:/` source setting remains the recovery coordinate: an
 authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
 and return the environment allowlist to its prior state when needed. Current

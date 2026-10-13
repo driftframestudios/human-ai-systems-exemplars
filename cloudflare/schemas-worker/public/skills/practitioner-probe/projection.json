@@ -5,7 +5,7 @@
   "name": "practitioner-probe",
   "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
   "semanticAuthorityRef": "../source/.agents/skills/practitioner-probe/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/14",
+  "sourceRef": "../catalog.json#/skills/17",
   "contract": {
     "what": "A small set of technical questions that distinguishes consequential possibilities.",
     "when": [

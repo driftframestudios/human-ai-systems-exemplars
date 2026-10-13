@@ -1,6 +1,6 @@
 ---
 title: Iframe and production publication stabilization
-version: 0.1.5
+version: 0.1.7
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -110,6 +110,7 @@ remains private and the deployment phase remains at rest.
 | Schema Worker dependency and accepted-release gates | [#402](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/402) and [#406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) | Reviewed delivery-tool dependency floor plus verification of the pinned accepted source, Pages tag, Worker bytes, and publication closure before protected promotion |
 | Primary and iframe projection precedent | [#118](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/118) | Historical v0.2 implementation of two deterministic, disjoint cPanel-ready closures from one accepted authored tree and one exact iframe package |
 | Current production release | [#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464) | Current source freeze, branch promotion, carrier formation, tags, shell-free activation, signed-out acceptance, and recovery |
+| Protected destination promotion | [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469) | Short-lived destination-based promotion branches, pinned source and destination coordinates, parent and path invariants, strict-check review, and temporary-ref retirement |
 | Shell-free receiver precedent | [#253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253) and the [artifact-delivery guide](../../deployment/cpanel/SHELL-FREE-ARTIFACT-DELIVERY.md) | Historical implementation of the build-verified carrier archive, bounded File Manager staging, ordered cutover, and recovery contract |
 | Public route language precedent | [#121](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/121) | Historical authored, intended, generated, and observed-live route map |
 | Long-lived branch precedent | [#108](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/108) | Historical branch-receiver contract for the accepted `main` coordinate and branch-specific advance or rest decisions |
@@ -301,6 +302,77 @@ then selects one receiver:
   cutover](../../deployment/cpanel/SHELL-FREE-ARTIFACT-DELIVERY.md) for an
   immutable archive, private File Manager staging, backup, ordered two-root
   convergence, recovery, and later bounded automation.
+
+When a protected destination requires the pull-request head to contain its
+current base, form a short-lived destination-based promotion candidate rather
+than merging downstream history into the canonical upstream branch. Record:
+
+- `U`, the exact accepted upstream coordinate;
+- `D`, the exact current destination coordinate;
+- `C`, the temporary candidate created at `D` and merged with exact `U`; and
+- `P`, the reviewed promotion result. For `release → prod`, `S = P`; `R`
+  remains reserved for the subsequent carrier-only merge result.
+
+Before publication, verify `C^1 = D`, `C^2 = U`, and both ancestry relations.
+For `stg → release`, the candidate and accepted result trees equal the accepted
+staging tree. Merge the reviewed candidate with a merge commit and verify
+`P^1 = D` and `P^2 = C`; squash, rebase, and fast-forward results do not carry
+the required topology receipt. For `release → prod`, every path outside
+`deployment/cpanel/carrier/**` equals the accepted release, while the complete
+carrier subtree—including path set, modes, and bytes—equals the prior production
+destination. Verify both relationships on `C` and accepted production source
+`S = P`. The retained carrier is historical downstream state until the
+following carrier-only branch replaces it from exact `S`.
+
+Use the full recorded SHAs in an isolated worktree. This equivalent command
+sequence supplies the first deterministic verification surface while #469 owns
+the focused checker and material failure-path tests:
+
+```sh
+test "$(git rev-parse "${C}^1")" = "$D"
+test "$(git rev-parse "${C}^2")" = "$U"
+git merge-base --is-ancestor "$D" "$C"
+git merge-base --is-ancestor "$U" "$C"
+git diff --exit-code "$U" "$C" -- . ':(exclude)deployment/cpanel/carrier/**'
+test "$(git rev-parse "${D}:deployment/cpanel/carrier")" = \
+  "$(git rev-parse "${C}:deployment/cpanel/carrier")"
+```
+
+After the reviewed merge, apply the same checks with `S` in place of `C`, then
+also require `S^1 = D` and `S^2 = C`. For a destination without an intentionally
+retained carrier closure, require complete tree equality with `U` instead.
+
+Push only the temporary candidate, run the destination checks, and receive
+human approval after its final commit. A destination move forms a fresh
+candidate from the new exact `D`; a conflict or unexpected path delta returns
+to the source-owning lane. After merge, record `P` and its parents, verify the
+same source and carrier relationships, then retire the temporary ref once the
+durable receipt exists. This procedure keeps downstream history on the
+destination side while canonical upstream history remains focused on its role.
+PR #468 remains accepted history without rewrite.
+[#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
+owns refinement of this procedure.
+
+### Worked destination-based production promotion · 2026-10-12
+
+Human-accepted PR #470 exercised the `release → prod` specialization:
+
+- `U = aaa475c354dcafe310261008e571cfbfc44a90be`;
+- `D = 2558bb8216a305aa7b87151019065d0e40e193df`;
+- `C = a97a45ff1a12dd13829dd86f823ccece115d64b1`, with parents `[D, U]`;
+- `S = P = 0eca8e977d8914b55294534b49579db248efd22d`, with parents `[D, C]`;
+- candidate and result tree `7a36344909f1cd163e675860e10852c0a303552d`;
+  and
+- complete retained carrier tree
+  `556d8acb56b4f116f498b0fbc3adffcba91ae60c`, containing 322 paths.
+
+The accepted result exactly matched `U` outside the carrier root and exactly
+matched `D` across the complete carrier subtree. GitHub verified the merge
+signature, and the post-merge [schema delivery
+contract](https://github.com/driftframestudios/human-ai-systems-exemplars/actions/runs/38323984014)
+passed while Worker deployment remained at rest. Durable receipts landed in
+#464, #90, and #469 before the temporary remote ref retired. The merged PR and
+production history retain the candidate and result commits.
 
 #464 owns the current branch promotion, activation, and shell-free release;
 #108, #118, and #253 preserve the accepted topology, projection, and adapter
