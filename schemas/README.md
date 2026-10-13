@@ -49,7 +49,7 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The active `pages-v0.3.0` selection retains the 17-contract schema cohort first
+The accepted v0.3 release family retains the 17-contract schema cohort first
 assembled for `pages-v0.2.0` and expands the public-ready skill collection to
 27 complete packages. Seven JSON-LD contexts, four examples, and one cohort
 orientation travel as revalidating companions and stay outside the contract
@@ -162,9 +162,9 @@ version; compatible corrections advance its patch version; changed site-level
 consumer contracts earn a major version. In a tagged artifact, the generated
 `release.json` binds the selected site tag and exact source revision. The
 accepted annotated tag and matching workflow/deployment receipt identify the
-active coordinate. Their source/docs receipts preserve active `pages-v0.3.0`
-and historical `pages-v0.2.0` and `pages-v0.1.0` as durable release
-coordinates.
+active coordinate. The generated `release.json` names the active patch
+coordinate. Source/docs receipts preserve each accepted v0.3 tag and historical
+`pages-v0.2.0` and `pages-v0.1.0` as durable release coordinates.
 
 The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
 entries preserve exact-version bytes, including annotations. New identities and
