@@ -108,7 +108,10 @@
   .edit-card.hidden-card { opacity: .65; }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 760px) { .field-grid { grid-template-columns: 1fr; } }
-  .zone-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 10px; }
+  .zone-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 10px; }
+  .zone-heading > * { min-inline-size: 0; max-inline-size: 100%; }
+  .toolbar :is(button, .button-label, label.pill) { min-block-size: 44px; }
+  .pill input[type="checkbox"] { flex: none; }
   .hidden-panel { border: 1px dashed var(--line-strong); border-radius: 14px; padding: 12px; background: #fffdf9; margin-top: 12px; }
   .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: #fffefb; }
   table { width: 100%; border-collapse: collapse; min-width: 980px; }
@@ -149,6 +152,7 @@
   .legend-row { display: flex; flex-wrap: wrap; gap: 8px; }
   .inspector-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 14px; }
   @media (max-width: 900px) { .inspector-grid { grid-template-columns: 1fr; } }
+  .route-selection-label { margin: .35rem 0 .75rem; white-space: normal; overflow-wrap: anywhere; max-inline-size: 100%; }
   .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
   .basis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
   .hardline-note { border-top: 4px solid #25231f; padding-top: 12px; margin-top: 12px; }
@@ -161,7 +165,8 @@
     .asset-pill {
       max-width: 100%;
       white-space: normal;
-      overflow-wrap: anywhere;
+      overflow-wrap: normal;
+      word-break: normal;
     }
   }
   footer { border-top: 1px solid var(--line); padding: 18px 0; color: var(--muted); }
@@ -258,7 +263,7 @@
     <section>
       <h2>Text / Table Equivalent</h2>
       <p class="tiny">The table is the reading surface for the diagram. It preserves text, status, intensity basis values, and linked shared assets.</p>
-      <div id="tableEquivalent" class="table-wrap"></div>
+      <div id="tableEquivalent" class="table-wrap" tabindex="0" role="region" aria-label="Shared surface comparison; scroll horizontally"></div>
     </section>
 
     <section class="grid-2">
@@ -292,7 +297,7 @@
           <div><h2 id="promptCapsuleHeading">Prompt Capsule · Markdown</h2><p class="tiny">The complete context is a self-contained handoff. The artifact and its JSON export remain the state authority.</p></div>
           <fieldset class="prompt-view-control" data-prompt-view-control hidden><legend>Markdown view</legend><div class="prompt-view-options"><label class="prompt-view-option"><input type="radio" name="shared-surface-prompt-view" value="plain" data-prompt-view checked /> Plain</label><label class="prompt-view-option"><input type="radio" name="shared-surface-prompt-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label></div></fieldset>
         </div>
-        <p class="tiny" id="promptViewDescription">Plain Markdown carries the complete shared-surface context without asking the receiver to load a repository skill.</p>
+        <p class="tiny" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete shared-surface context.</p>
         <details class="related-loops" data-prompt-related-loops><summary><strong>Related loops</strong></summary><p class="tiny">These public collaboration loops fit when the receiving work meets the stated condition.</p><ul>
           <li data-related-loop-id="visitor-surface-change"><a href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change">Change a visitor surface with fitting visual evidence</a><p><strong>Fit condition:</strong> Use when a priority-map decision becomes a visitor-visible change that needs focused browser evidence.</p></li>
           <li data-related-loop-id="repository-reentry"><a href="https://schemas.radiantnull.com/collaboration/#repository-reentry">Re-enter, make one bounded change, and return it clearly</a><p><strong>Fit condition:</strong> Use when an accepted shared-surface map enters repository work and needs one source-owned change, fitting evidence, and a clear return.</p></li>
@@ -306,7 +311,7 @@
 - Capsule: `shared-surface-priority-map/current-cross-channel-priority-map`
 - Source: `shared-surface-priority-map@0.1.4`
 - State: `shared-surface-priority-map-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:5f9811b0`
+- Fingerprint: `fnv1a32-utf8:96be0f1c`
 - View: `plain`
 
 ## Purpose and target
@@ -824,11 +829,10 @@ Every surface × stage cell appears, including cells whose current intensity is 
 ### Source note
 
 - Local architecture: Cross-channel Blueprint: Shared Surface Priority Map
-- Visual reference: Cross-Channel Blueprint by Tyler Tate.
+- Article: Cross-Channel Blueprints: A tool for modern IA by Tyler Tate; URL http\://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html.
+- Diagram: Cross-Channel Blueprint; URL http\://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png.
 - License: Creative Commons Attribution 3.0 Unported License; license URL https\://creativecommons.org/licenses/by/3.0/.
-- Source locator status: not verified in this session.
-- Source carrier: uploaded in-session reference image.
-- Adaptation note: Used as a visual reference for heatmap layout and shared-assets-below-the-line structure. The prototype adapts this into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI collaboration context.
+- Adaptation note: Uses the task-by-channel matrix, prioritized cells, and shared-components-below-the-line structure as visual precedent. This prototype adapts that visual grammar into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI-system context.
 
 ### Semantic locality and recovery
 
@@ -920,8 +924,8 @@ A compatible import becomes the accepted working state and regenerates this caps
         <div class="panel soft">
           <h3>Source Note</h3>
           <p><strong>Local architecture:</strong> Cross-channel Blueprint: Shared Surface Priority Map.</p>
-          <p><strong>Visual reference:</strong> A reference image titled <em>Cross-Channel Blueprint</em> by Tyler Tate, licensed under Creative Commons Attribution 3.0 Unported, was provided in-session and used as a visual precedent for heatmap layout and shared-assets-below-the-line structure. Original source URL was not verified in this session.</p>
-          <p><strong>Adaptation note:</strong> This prototype adapts the reference layout into a Core Architecture chimeric artifact with stable IDs, view state, multiple intensity bases, SVG, JSON, JSON-LD, semantic locality, and AI collaboration context.</p>
+          <p><strong>Visual reference:</strong> Tyler Tate’s article <a href="http://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html"><cite>Cross-Channel Blueprints: A tool for modern IA</cite></a> and its <a href="http://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png"><cite>Cross-Channel Blueprint</cite> diagram</a> provide the visual precedent for the task-by-channel matrix, prioritized cells, and shared components below the line. Tate released the diagram under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+          <p><strong>Adaptation note:</strong> This prototype adapts that visual grammar into a Core Architecture chimeric artifact with stable IDs, view state, multiple intensity bases, SVG, JSON, JSON-LD, semantic locality, and AI-system context.</p>
         </div>
         <div class="panel soft">
           <h3>Semantic Locality</h3>
@@ -945,7 +949,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     <section>
       <h2>Advanced Identity Registry</h2>
       <p class="tiny">Stable IDs describe what a thing is. View state describes where and whether it appears. Hidden items remain in source data and export.</p>
-      <div id="identityRegistry" class="table-wrap"></div>
+      <div id="identityRegistry" class="table-wrap" tabindex="0" role="region" aria-label="Stage, surface, and shared-asset identities; scroll horizontally"></div>
     </section>
   </div>
 </main>
@@ -1157,12 +1161,14 @@ A compatible import becomes the accepted working state and regenerates this caps
         local_architecture: 'Cross-channel Blueprint: Shared Surface Priority Map',
         visual_reference: {
           title: 'Cross-Channel Blueprint',
+          article_title: 'Cross-Channel Blueprints: A tool for modern IA',
           creator: 'Tyler Tate',
           license: 'Creative Commons Attribution 3.0 Unported License',
           license_url: 'https://creativecommons.org/licenses/by/3.0/',
-          source_url: 'not verified in this session',
-          source: 'uploaded in-session reference image',
-          adaptation_note: 'Used as a visual reference for heatmap layout and shared-assets-below-the-line structure. The prototype adapts this into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI collaboration context.'
+          source_url: 'http://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html',
+          diagram_url: 'http://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png',
+          source: 'Tyler Tate article and primary diagram',
+          adaptation_note: 'Uses the task-by-channel matrix, prioritized cells, and shared-components-below-the-line structure as visual precedent. This prototype adapts that visual grammar into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI-system context.'
         }
       }
     };
@@ -1283,6 +1289,62 @@ A compatible import becomes the accepted working state and regenerates this caps
     updateJsonLdScript();
   }
 
+  function renderAllPreservingControlFocus(control){
+    const inspectorKey = control && (['data-cell-basis','data-cell-asset','data-asset-stage'].find(name => control.hasAttribute(name)) ||
+      (/^(cell|asset)-(status|route)$/.test(control.getAttribute('id') || '') ? 'id' : null));
+    const inspectorKind = inspectorKey && (inspectorKey === 'id' ? control.getAttribute('id').split('-')[0] :
+      inspectorKey.startsWith('data-cell-') ? 'cell' : 'asset');
+    const key = control && control === document.activeElement &&
+      (['data-basis-toggle','data-move-surface','data-move-asset'].find(name => control.hasAttribute(name)) ||
+        (inspectorKind === selectedKind ? inspectorKey : null));
+    const identity = key && {key, value:control.getAttribute(key), direction:control.getAttribute('data-dir'),
+      kind:inspectorKind, selected:inspectorKind ? selectedId : null};
+    const focusBounds = element => {
+      const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+      const reserve = ['none','hidden'].includes(style.outlineStyle) ? 0 :
+        Math.max(0, (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0));
+      return {top:rect.top-reserve, bottom:rect.bottom+reserve, left:rect.left-reserve, right:rect.right+reserve};
+    };
+    const viewport = document.documentElement;
+    const before = ['data-move-surface','data-move-asset'].includes(key) ? focusBounds(control) : null;
+    const wasInView = before && before.bottom > 0 && before.top < viewport.clientHeight &&
+      before.right > 0 && before.left < viewport.clientWidth;
+    renderAll();
+    if(!identity || (identity.kind && (selectedKind !== identity.kind || selectedId !== identity.selected))) return;
+    const matches = Array.from(document.querySelectorAll('[' + identity.key + ']')).filter(candidate =>
+      candidate.getAttribute(identity.key) === identity.value &&
+      candidate.getAttribute('data-dir') === identity.direction);
+    if(matches.length === 1 && !matches[0].disabled){
+      const target = matches[0];
+      target.focus({preventScroll:true});
+      if(wasInView && document.activeElement === target){
+        const after = focusBounds(target);
+        const delta = after.top < 0 ? after.top : after.bottom > viewport.clientHeight ? after.bottom-viewport.clientHeight : 0;
+        // Correct only this document's vertical viewport; keep the parent and horizontal position.
+        if(delta) window.scrollBy({top:delta, left:0, behavior:'instant'});
+      }
+    }
+  }
+
+  function inspectorRouteLabel(kind,value){
+    return '<p class="route-selection-label" id="' + kind + '-route-label">Current route: ' +
+      escapeHtml(value || 'No route selected') + '</p>';
+  }
+  function updateInspectorRouteReadout(){
+    const record = (selectedKind === 'asset' ? state.shared_assets : state.cells).find(item => item.id === selectedId);
+    const readout = document.getElementById(selectedKind + '-route-label');
+    if(record && readout) readout.textContent = 'Current route: ' + (record.handoff || 'No route selected');
+  }
+  function renderInspectorProjections(){
+    // Editors retain their DOM identity, so native forward/backward Tab can finish.
+    updateInspectorRouteReadout();
+    renderSvg();
+    renderTable();
+    renderIdentityRegistry();
+    renderAiPrompt();
+    updateJsonLdScript();
+  }
+
   function renderBasisToggles(){
     const v = activeView();
     const el = document.getElementById('basisToggles');
@@ -1296,7 +1358,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         if(e.target.checked){ if(!v.active_intensity_basis_ids.includes(id)) v.active_intensity_basis_ids.push(id); }
         else { v.active_intensity_basis_ids = v.active_intensity_basis_ids.filter(x => x !== id); }
         if(!v.active_intensity_basis_ids.length){ v.active_intensity_basis_ids = [id]; e.target.checked = true; }
-        renderAll();
+        renderAllPreservingControlFocus(e.currentTarget);
       });
     });
   }
@@ -1351,7 +1413,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     }).join('') : '<p class="tiny">No hidden surfaces.</p>');
     el.querySelectorAll('[data-surface-label]').forEach(input => input.addEventListener('blur', e => { const s = state.surfaces.find(x => x.id === e.target.dataset.surfaceLabel); if(s){ s.label = e.target.value.trim() || s.label; renderAll(); } }));
     el.querySelectorAll('[data-surface-type]').forEach(input => input.addEventListener('blur', e => { const s = state.surfaces.find(x => x.id === e.target.dataset.surfaceType); if(s){ s.surface_type = e.target.value.trim(); renderAll(); } }));
-    document.querySelectorAll('[data-move-surface]').forEach(btn => btn.addEventListener('click', e => moveItem('surface', e.target.dataset.moveSurface, Number(e.target.dataset.dir))));
+    document.querySelectorAll('[data-move-surface]').forEach(btn => btn.addEventListener('click', e => moveItem('surface', e.currentTarget.dataset.moveSurface, Number(e.currentTarget.dataset.dir), e.currentTarget)));
     document.querySelectorAll('[data-hide-surface]').forEach(btn => btn.addEventListener('click', e => hideItem('surface', e.target.dataset.hideSurface)));
     document.querySelectorAll('[data-show-surface]').forEach(btn => btn.addEventListener('click', e => showItem('surface', e.target.dataset.showSurface)));
     document.querySelectorAll('[data-remove-surface]').forEach(btn => btn.addEventListener('click', e => removeSurface(e.currentTarget.dataset.removeSurface,e.currentTarget)));
@@ -1382,13 +1444,13 @@ A compatible import becomes the accepted working state and regenerates this caps
     el.querySelectorAll('[data-asset-label]').forEach(input => input.addEventListener('blur', e => { const a = state.shared_assets.find(x => x.id === e.target.dataset.assetLabel); if(a){ a.label = e.target.value.trim() || a.label; renderAll(); } }));
     el.querySelectorAll('[data-asset-type]').forEach(input => input.addEventListener('blur', e => { const a = state.shared_assets.find(x => x.id === e.target.dataset.assetType); if(a){ a.asset_type = e.target.value.trim(); renderAll(); } }));
     document.querySelectorAll('[data-select-asset]').forEach(btn => btn.addEventListener('click', e => { selectedKind='asset'; selectedId=e.target.dataset.selectAsset; activeView().selected_shared_asset_id=selectedId; activeView().selected_cell_id=''; renderAll(); }));
-    document.querySelectorAll('[data-move-asset]').forEach(btn => btn.addEventListener('click', e => moveItem('asset', e.target.dataset.moveAsset, Number(e.target.dataset.dir))));
+    document.querySelectorAll('[data-move-asset]').forEach(btn => btn.addEventListener('click', e => moveItem('asset', e.currentTarget.dataset.moveAsset, Number(e.currentTarget.dataset.dir), e.currentTarget)));
     document.querySelectorAll('[data-hide-asset]').forEach(btn => btn.addEventListener('click', e => hideItem('asset', e.target.dataset.hideAsset)));
     document.querySelectorAll('[data-show-asset]').forEach(btn => btn.addEventListener('click', e => showItem('asset', e.target.dataset.showAsset)));
     document.querySelectorAll('[data-remove-asset]').forEach(btn => btn.addEventListener('click', e => removeAsset(e.currentTarget.dataset.removeAsset,e.currentTarget)));
   }
 
-  function moveItem(kind, id, dir){
+  function moveItem(kind, id, dir, control){
     const v = activeView();
     const key = kind === 'surface' ? 'surface_order' : 'shared_asset_order';
     const order = v[key];
@@ -1397,7 +1459,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     const next = idx + dir;
     if(next < 0 || next >= order.length) return;
     [order[idx], order[next]] = [order[next], order[idx]];
-    renderAll();
+    renderAllPreservingControlFocus(control);
   }
   function hideItem(kind, id){
     const v = activeView();
@@ -1605,7 +1667,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<div class="basis-grid">' + intensityDefs.map(b => '<label>' + escapeHtml(b.label) + '<select data-cell-basis="' + b.id + '">' + makeIntensityOptions(c.intensity_by_basis[b.id]) + '</select></label>').join('') + '</div>' +
         '<label for="cell-note">Cell note</label><textarea id="cell-note">' + escapeHtml(c.note) + '</textarea>' +
         '<label for="cell-status">Evidence status</label><select id="cell-status">' + makeStatusOptions(c.evidence_status) + '</select>' +
-        '<label for="cell-route">Handoff route</label><select id="cell-route">' + makeRouteOptions(c.handoff) + '</select>' +
+        '<label for="cell-route">Handoff route</label><select id="cell-route" aria-describedby="cell-route-label">' + makeRouteOptions(c.handoff) + '</select>' + inspectorRouteLabel('cell',c.handoff) +
         '<div id="cell-custom-route-wrap" style="display:' + (c.handoff && !routeRegistry.some(r => r.label === c.handoff) ? 'block':'none') + '"><label for="cell-custom-route">Custom route</label><input id="cell-custom-route" type="text" value="' + escapeHtml(c.handoff && !routeRegistry.some(r => r.label === c.handoff) ? c.handoff : '') + '"></div>' +
         '<label for="cell-reason">Route reason</label><textarea id="cell-reason">' + escapeHtml(c.reason) + '</textarea>' +
       '</div>' +
@@ -1620,23 +1682,23 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<p class="tiny"><strong>Visible in focus view:</strong> ' + (isCellVisible(c) ? 'yes':'no') + '</p>' +
       '</div>' +
     '</div>';
-    el.querySelectorAll('[data-cell-basis]').forEach(sel => sel.addEventListener('change', e => { c.intensity_by_basis[e.target.dataset.cellBasis] = e.target.value; renderAll(); }));
+    el.querySelectorAll('[data-cell-basis]').forEach(sel => sel.addEventListener('change', e => { c.intensity_by_basis[e.target.dataset.cellBasis] = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }));
     document.getElementById('cell-note').addEventListener('input', e => { c.note = e.target.value; });
-    document.getElementById('cell-note').addEventListener('blur', renderAll);
-    document.getElementById('cell-status').addEventListener('change', e => { c.evidence_status = e.target.value; renderAll(); });
+    document.getElementById('cell-note').addEventListener('blur', renderInspectorProjections);
+    document.getElementById('cell-status').addEventListener('change', e => { c.evidence_status = e.target.value; renderAllPreservingControlFocus(e.currentTarget); });
     document.getElementById('cell-route').addEventListener('change', e => {
-      if(e.target.value === '__custom__'){ document.getElementById('cell-custom-route-wrap').style.display = 'block'; c.handoff = document.getElementById('cell-custom-route').value.trim(); }
-      else { c.handoff = e.target.value; renderAll(); }
+      if(e.target.value === '__custom__'){ document.getElementById('cell-custom-route-wrap').style.display = 'block'; c.handoff = document.getElementById('cell-custom-route').value.trim(); updateInspectorRouteReadout(); }
+      else { c.handoff = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }
     });
     const custom = document.getElementById('cell-custom-route');
-    if(custom){ custom.addEventListener('input', e => { c.handoff = e.target.value; }); custom.addEventListener('blur', renderAll); }
+    if(custom){ custom.addEventListener('input', e => { c.handoff = e.target.value; updateInspectorRouteReadout(); }); custom.addEventListener('blur', renderInspectorProjections); }
     document.getElementById('cell-reason').addEventListener('input', e => { c.reason = e.target.value; });
-    document.getElementById('cell-reason').addEventListener('blur', renderAll);
+    document.getElementById('cell-reason').addEventListener('blur', renderInspectorProjections);
     el.querySelectorAll('[data-cell-asset]').forEach(box => box.addEventListener('change', e => {
       const id = e.target.dataset.cellAsset;
       if(e.target.checked){ if(!c.linked_shared_asset_ids.includes(id)) c.linked_shared_asset_ids.push(id); }
       else c.linked_shared_asset_ids = c.linked_shared_asset_ids.filter(x => x !== id);
-      renderAll();
+      renderAllPreservingControlFocus(e.currentTarget);
     }));
   }
   function renderAssetInspector(el){
@@ -1653,7 +1715,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<label for="asset-desc">Description</label><textarea id="asset-desc">' + escapeHtml(a.description || '') + '</textarea>' +
         '<label for="asset-status">Evidence status</label><select id="asset-status">' + makeStatusOptions(a.evidence_status || 'assumed') + '</select>' +
         '<label for="asset-owner">Owner or steward</label><input id="asset-owner" type="text" value="' + escapeHtml(a.owner_or_steward || '') + '">' +
-        '<label for="asset-route">Handoff route</label><select id="asset-route">' + makeRouteOptions(a.handoff || '') + '</select>' +
+        '<label for="asset-route">Handoff route</label><select id="asset-route" aria-describedby="asset-route-label">' + makeRouteOptions(a.handoff || '') + '</select>' + inspectorRouteLabel('asset',a.handoff) +
         '<div id="asset-custom-route-wrap" style="display:' + (a.handoff && !routeRegistry.some(r => r.label === a.handoff) ? 'block':'none') + '"><label for="asset-custom-route">Custom route</label><input id="asset-custom-route" type="text" value="' + escapeHtml(a.handoff && !routeRegistry.some(r => r.label === a.handoff) ? a.handoff : '') + '"></div>' +
         '<label for="asset-reason">Route reason</label><textarea id="asset-reason">' + escapeHtml(a.reason || '') + '</textarea>' +
         '<label for="asset-trigger">Review trigger</label><textarea id="asset-trigger">' + escapeHtml(a.review_trigger || '') + '</textarea>' +
@@ -1671,26 +1733,26 @@ A compatible import becomes the accepted working state and regenerates this caps
       '</div>' +
     '</div>';
     document.getElementById('asset-desc').addEventListener('input', e => { a.description = e.target.value; });
-    document.getElementById('asset-desc').addEventListener('blur', renderAll);
-    document.getElementById('asset-status').addEventListener('change', e => { a.evidence_status = e.target.value; renderAll(); });
+    document.getElementById('asset-desc').addEventListener('blur', renderInspectorProjections);
+    document.getElementById('asset-status').addEventListener('change', e => { a.evidence_status = e.target.value; renderAllPreservingControlFocus(e.currentTarget); });
     document.getElementById('asset-owner').addEventListener('input', e => { a.owner_or_steward = e.target.value; });
-    document.getElementById('asset-owner').addEventListener('blur', renderAll);
+    document.getElementById('asset-owner').addEventListener('blur', renderInspectorProjections);
     document.getElementById('asset-route').addEventListener('change', e => {
-      if(e.target.value === '__custom__'){ document.getElementById('asset-custom-route-wrap').style.display = 'block'; a.handoff = document.getElementById('asset-custom-route').value.trim(); }
-      else { a.handoff = e.target.value; renderAll(); }
+      if(e.target.value === '__custom__'){ document.getElementById('asset-custom-route-wrap').style.display = 'block'; a.handoff = document.getElementById('asset-custom-route').value.trim(); updateInspectorRouteReadout(); }
+      else { a.handoff = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }
     });
     const custom = document.getElementById('asset-custom-route');
-    if(custom){ custom.addEventListener('input', e => { a.handoff = e.target.value; }); custom.addEventListener('blur', renderAll); }
+    if(custom){ custom.addEventListener('input', e => { a.handoff = e.target.value; updateInspectorRouteReadout(); }); custom.addEventListener('blur', renderInspectorProjections); }
     document.getElementById('asset-reason').addEventListener('input', e => { a.reason = e.target.value; });
-    document.getElementById('asset-reason').addEventListener('blur', renderAll);
+    document.getElementById('asset-reason').addEventListener('blur', renderInspectorProjections);
     document.getElementById('asset-trigger').addEventListener('input', e => { a.review_trigger = e.target.value; });
-    document.getElementById('asset-trigger').addEventListener('blur', renderAll);
+    document.getElementById('asset-trigger').addEventListener('blur', renderInspectorProjections);
     el.querySelectorAll('[data-asset-stage]').forEach(box => box.addEventListener('change', e => {
       const id = e.target.dataset.assetStage;
       a.supported_stage_ids = a.supported_stage_ids || [];
       if(e.target.checked){ if(!a.supported_stage_ids.includes(id)) a.supported_stage_ids.push(id); }
       else a.supported_stage_ids = a.supported_stage_ids.filter(x => x !== id);
-      renderAll();
+      renderAllPreservingControlFocus(e.currentTarget);
     }));
   }
   function isCellVisible(c){
@@ -1705,13 +1767,13 @@ A compatible import becomes the accepted working state and regenerates this caps
 
   function renderTable(){
     const stages = visibleStages(); const surfaces = visibleSurfaces();
-    let html = '<table class="heatmap-table"><thead><tr><th>Surface / Stage</th>' + stages.map(s => '<th>' + escapeHtml(s.label) + '</th>').join('') + '</tr></thead><tbody>';
+    let html = '<table class="heatmap-table"><caption>Shared surface priority comparison</caption><thead><tr><th scope="col" data-label="Surface / Stage">Surface / Stage</th>' + stages.map(s => '<th scope="col" data-label="' + escapeHtml(s.label) + '">' + escapeHtml(s.label) + '</th>').join('') + '</tr></thead><tbody>';
     surfaces.forEach(surface => {
-      html += '<tr><th scope="row">' + escapeHtml(surface.label) + '<div class="tiny">' + escapeHtml(surface.surface_type || '') + '</div></th>';
+      html += '<tr data-label="Shared surface priority comparison: ' + escapeHtml(surface.label) + '"><th scope="row" data-label="Surface / Stage">' + escapeHtml(surface.label) + '<div class="tiny">' + escapeHtml(surface.surface_type || '') + '</div></th>';
       stages.forEach(stage => {
         const c = cellFor(surface.id, stage.id); const comp = compositeIntensity(c);
         const assets = (c.linked_shared_asset_ids || []).map(id => state.shared_assets.find(a => a.id === id)).filter(Boolean).map(a => a.label).join(', ');
-        html += '<td class="cell-td"><button type="button" class="cell-button ' + comp + (selectedKind==='cell' && selectedId===c.id?' selected':'') + '" data-select-cell="' + c.id + '">' +
+        html += '<td data-label="' + escapeHtml(stage.label) + '" class="cell-td"><button type="button" class="cell-button ' + comp + (selectedKind==='cell' && selectedId===c.id?' selected':'') + '" data-select-cell="' + c.id + '">' +
           '<strong>' + escapeHtml(labelForIntensity(comp)) + '</strong><br>' +
           '<span class="tiny">' + activeView().active_intensity_basis_ids.map(id => { const b = intensityDefs.find(x=>x.id===id); return escapeHtml((b?b.short:id[0]) + ':' + shortIntensity(c.intensity_by_basis[id])); }).join(' · ') + '</span>' +
           '<div class="text-preview">' + escapeHtml(c.note || 'No note yet.') + '</div>' +
@@ -1720,9 +1782,9 @@ A compatible import becomes the accepted working state and regenerates this caps
       });
       html += '</tr>';
     });
-    html += '<tr><th colspan="' + (stages.length+1) + '" class="hardline-note">Shared assets below the hard line</th></tr>';
+    html += '</tbody><tbody><tr><th scope="rowgroup" colspan="' + (stages.length+1) + '" class="hardline-note">Shared assets below the hard line</th></tr>';
     visibleAssets().forEach(asset => {
-      html += '<tr><th scope="row">' + escapeHtml(asset.label) + '<div class="tiny">' + escapeHtml(asset.asset_type || '') + '</div></th><td colspan="' + stages.length + '">' +
+      html += '<tr data-label="Shared assets: ' + escapeHtml(asset.label) + '"><th scope="row" data-label="Shared asset">' + escapeHtml(asset.label) + '<div class="tiny">' + escapeHtml(asset.asset_type || '') + '</div></th><td data-label="Description, evidence, handoff, and supported stages" colspan="' + stages.length + '">' +
         '<p>' + escapeHtml(asset.description || '') + '</p>' +
         '<p><span class="status-pill ' + (asset.evidence_status || 'assumed') + '"><span class="status-dot"></span>' + escapeHtml(statusLabels[asset.evidence_status] || asset.evidence_status || 'assumed') + '</span> ' +
         (asset.handoff ? '<span class="route-pill">' + escapeHtml(asset.handoff) + '</span>' : '') + '</p>' +
@@ -1737,11 +1799,26 @@ A compatible import becomes the accepted working state and regenerates this caps
   }
 
   function renderIdentityRegistry(){
-    const v = activeView();
-    const stageRows = orderedStages().map((s, i) => '<tr><td>Stage</td><td>' + escapeHtml(s.label) + '</td><td><code>' + escapeHtml(s.id) + '</code></td><td>' + s.canonical_order + '</td><td>' + (i+1) + '</td><td>' + (v.hidden_stage_ids.includes(s.id)?'hidden':'visible') + '</td></tr>').join('');
-    const surfaceRows = orderedSurfaces().map((s, i) => '<tr><td>Surface</td><td>' + escapeHtml(s.label) + '</td><td><code>' + escapeHtml(s.id) + '</code></td><td>' + s.canonical_order + '</td><td>' + (i+1) + '</td><td>' + (v.hidden_surface_ids.includes(s.id)?'hidden':'visible') + '</td></tr>').join('');
-    const assetRows = orderedAssets().map((a, i) => '<tr><td>Shared asset</td><td>' + escapeHtml(a.label) + '</td><td><code>' + escapeHtml(a.id) + '</code></td><td>' + a.canonical_order + '</td><td>' + (i+1) + '</td><td>' + (v.hidden_shared_asset_ids.includes(a.id)?'hidden':'visible') + '</td></tr>').join('');
-    document.getElementById('identityRegistry').innerHTML = '<table><thead><tr><th>Type</th><th>Label</th><th>Stable ID</th><th>Canonical order</th><th>Display order</th><th>Visibility</th></tr></thead><tbody>' + stageRows + surfaceRows + assetRows + '</tbody></table>';
+    const view = activeView();
+    const caption = 'Stage, surface, and shared-asset identities';
+    const headers = ['Type', 'Label', 'Stable ID', 'Canonical order', 'Display order', 'Visibility'];
+    const renderRows = (records, type, hiddenIds) => {
+      const hidden = new Set(hiddenIds);
+      return records.map((record, index) => {
+        const values = [type, record.label, record.id, record.canonical_order, index + 1, hidden.has(record.id) ? 'hidden' : 'visible'];
+        const cells = values.map((value, field) => {
+          const tag = field === 1 ? 'th' : 'td';
+          const scope = field === 1 ? ' scope="row"' : '';
+          const content = field === 2 ? '<code>' + escapeHtml(value) + '</code>' : escapeHtml(value);
+          return '<' + tag + scope + ' data-label="' + escapeHtml(headers[field]) + '">' + content + '</' + tag + '>';
+        }).join('');
+        return '<tr data-label="' + escapeHtml(caption + ': ' + type + ': ' + record.label) + '">' + cells + '</tr>';
+      }).join('');
+    };
+    document.getElementById('identityRegistry').innerHTML = '<table><caption>' + caption + '</caption><thead><tr>' +
+      headers.map(label => '<th scope="col" data-label="' + label + '">' + label + '</th>').join('') + '</tr></thead><tbody>' +
+      renderRows(orderedStages(), 'Stage', view.hidden_stage_ids) + renderRows(orderedSurfaces(), 'Surface', view.hidden_surface_ids) +
+      renderRows(orderedAssets(), 'Shared asset', view.hidden_shared_asset_ids) + '</tbody></table>';
   }
 
   function cloneData(value){ return JSON.parse(JSON.stringify(value)); }
@@ -1782,13 +1859,19 @@ A compatible import becomes the accepted working state and regenerates this caps
   function makeJsonLd(){
     const data = exportData();
     const v = activeView();
+    const reference = data.source_note.visual_reference;
+    const articleUrl = reference.source_url;
+    const diagramUrl = reference.diagram_url;
     const ctx = {
-      ca: 'https://vik.guru/vocabulary/core-architectures#', schema:'https://schema.org/', id:'@id', type:'@type', name:'schema:name', description:'schema:description', text:'schema:text',
+      ca: 'https://vik.guru/vocabulary/core-architectures#', schema:'https://schema.org/', id:'@id', type:'@type', name:'schema:name', description:'schema:description', text:'schema:text', creator:'schema:creator', creditText:'schema:creditText',
+      url:{'@id':'schema:url','@type':'@id'}, image:{'@id':'schema:image','@type':'@id'}, license:{'@id':'schema:license','@type':'@id'}, isBasedOn:{'@id':'schema:isBasedOn','@type':'@id'}, isPartOf:{'@id':'schema:isPartOf','@type':'@id'},
       CrossChannelBlueprint:'ca:CrossChannelBlueprint', SharedSurfacePriorityMap:'ca:SharedSurfacePriorityMap', Stage:'ca:Stage', Surface:'ca:Surface', HeatmapCell:'ca:HeatmapCell', SharedAsset:'ca:SharedAsset', ViewConfiguration:'ca:ViewConfiguration', HandoffRoute:'ca:HandoffRoute',
       hasStage:{'@id':'ca:hasStage','@type':'@id'}, hasSurface:{'@id':'ca:hasSurface','@type':'@id'}, hasCell:{'@id':'ca:hasCell','@type':'@id'}, hasSharedAsset:{'@id':'ca:hasSharedAsset','@type':'@id'}, activeView:{'@id':'ca:activeView','@type':'@id'}, belongsToSurface:{'@id':'ca:belongsToSurface','@type':'@id'}, belongsToStage:{'@id':'ca:belongsToStage','@type':'@id'}, linkedSharedAsset:{'@id':'ca:linkedSharedAsset','@type':'@id'}, supportsStage:{'@id':'ca:supportsStage','@type':'@id'}, handsTo:{'@id':'ca:handsTo','@type':'@id'}
     };
     const graph = [];
-    graph.push({ id:'#'+data.artifact_identity.id, type:['ca:CoreArchitectureArtifact','ca:CrossChannelBlueprint','ca:SharedSurfacePriorityMap','schema:CreativeWork'], name:data.artifact_identity.display_name, description:data.artifact_identity.subtitle, 'ca:version':data.artifact_identity.version, 'ca:family':data.artifact_identity.family, 'ca:placement':data.artifact_identity.placement, 'ca:primaryCognitiveMove':data.artifact_identity.primary_cognitive_move, hasStage:state.stages.map(s=>'#'+s.id), hasSurface:state.surfaces.map(s=>'#'+s.id), hasCell:state.cells.map(c=>'#'+c.id), hasSharedAsset:state.shared_assets.map(a=>'#'+a.id), activeView:'#'+v.id });
+    graph.push({ id:'#'+data.artifact_identity.id, type:['ca:CoreArchitectureArtifact','ca:CrossChannelBlueprint','ca:SharedSurfacePriorityMap','schema:CreativeWork'], name:data.artifact_identity.display_name, description:data.artifact_identity.subtitle, 'ca:version':data.artifact_identity.version, 'ca:family':data.artifact_identity.family, 'ca:placement':data.artifact_identity.placement, 'ca:primaryCognitiveMove':data.artifact_identity.primary_cognitive_move, isBasedOn:articleUrl, creditText:reference.adaptation_note, hasStage:state.stages.map(s=>'#'+s.id), hasSurface:state.surfaces.map(s=>'#'+s.id), hasCell:state.cells.map(c=>'#'+c.id), hasSharedAsset:state.shared_assets.map(a=>'#'+a.id), activeView:'#'+v.id });
+    graph.push({ id:articleUrl, type:['schema:Article','schema:CreativeWork'], name:reference.article_title, creator:reference.creator, url:articleUrl, image:diagramUrl });
+    graph.push({ id:diagramUrl, type:['schema:ImageObject','schema:CreativeWork'], name:reference.title, creator:reference.creator, license:reference.license_url, isPartOf:articleUrl });
     graph.push({ id:'#'+v.id, type:'ca:ViewConfiguration', name:v.name, 'ca:stageOrder':v.stage_order.map(id=>'#'+id), 'ca:hiddenStage':v.hidden_stage_ids.map(id=>'#'+id), 'ca:surfaceOrder':v.surface_order.map(id=>'#'+id), 'ca:hiddenSurface':v.hidden_surface_ids.map(id=>'#'+id), 'ca:sharedAssetOrder':v.shared_asset_order.map(id=>'#'+id), 'ca:hiddenSharedAsset':v.hidden_shared_asset_ids.map(id=>'#'+id), 'ca:activeIntensityBasis':v.active_intensity_basis_ids });
     state.stages.forEach((s,i) => graph.push({ id:'#'+s.id, type:'ca:Stage', name:s.label, 'ca:canonicalOrder':s.canonical_order, 'ca:displayOrder':v.stage_order.indexOf(s.id)+1, 'ca:visibleInActiveView':!v.hidden_stage_ids.includes(s.id), 'ca:canReorder':false }));
     state.surfaces.forEach(s => graph.push({ id:'#'+s.id, type:'ca:Surface', name:s.label, 'ca:surfaceType':s.surface_type, 'ca:canonicalOrder':s.canonical_order, 'ca:displayOrder':v.surface_order.indexOf(s.id)+1, 'ca:visibleInActiveView':!v.hidden_surface_ids.includes(s.id) }));
@@ -1848,8 +1931,8 @@ A compatible import becomes the accepted working state and regenerates this caps
       source_note:{
         local_architecture:stringValue(note.local_architecture),
         visual_reference:{
-          title:stringValue(reference.title),creator:stringValue(reference.creator),license:stringValue(reference.license),
-          license_url:stringValue(reference.license_url),source_url:stringValue(reference.source_url),source:stringValue(reference.source),
+          title:stringValue(reference.title),article_title:stringValue(reference.article_title),creator:stringValue(reference.creator),license:stringValue(reference.license),
+          license_url:stringValue(reference.license_url),source_url:stringValue(reference.source_url),diagram_url:stringValue(reference.diagram_url),source:stringValue(reference.source),
           adaptation_note:stringValue(reference.adaptation_note)
         }
       },
@@ -1972,10 +2055,9 @@ A compatible import becomes the accepted working state and regenerates this caps
       ].join('\n')),'',
       '### Source note','',
       '- Local architecture: '+markdownInline(projection.source_note.local_architecture),
-      '- Visual reference: '+markdownInline(projection.source_note.visual_reference.title)+' by '+markdownInline(projection.source_note.visual_reference.creator)+'.',
+      '- Article: '+markdownInline(projection.source_note.visual_reference.article_title)+' by '+markdownInline(projection.source_note.visual_reference.creator)+'; URL '+markdownInline(projection.source_note.visual_reference.source_url)+'.',
+      '- Diagram: '+markdownInline(projection.source_note.visual_reference.title)+'; URL '+markdownInline(projection.source_note.visual_reference.diagram_url)+'.',
       '- License: '+markdownInline(projection.source_note.visual_reference.license)+'; license URL '+markdownInline(projection.source_note.visual_reference.license_url)+'.',
-      '- Source locator status: '+markdownInline(projection.source_note.visual_reference.source_url)+'.',
-      '- Source carrier: '+markdownInline(projection.source_note.visual_reference.source)+'.',
       '- Adaptation note: '+markdownInline(projection.source_note.visual_reference.adaptation_note),'',
       '### Semantic locality and recovery','',
       '### Preferred phrasing','',...projection.semantic_locality.preferred_phrasing.map(value=>'- '+markdownInline(value)),'',
@@ -2023,7 +2105,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
     document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'
       ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented shared-surface map and fingerprint remain the same.'
-      : 'Plain Markdown carries the complete shared-surface context without asking the receiver to load a repository skill.';
+      : 'Plain Markdown is a self-contained handoff with the complete shared-surface context.';
   }
   function updateJsonLdScript(){ document.getElementById('jsonLdScript').textContent = JSON.stringify(makeJsonLd(), null, 2); }
 

@@ -2,7 +2,8 @@
    Consumer: genomic-viewer-replatforming.html under .genomic-viewer-page.
    Owns: warm solution fields, dark implementation fields,
    Context Tree and strategy treatments, route modes, and late cascade seams.
-   Load order: expanded.css, debrief-reading.css, this route, canvas-shell.css.
+   Load order: shared core, expanded.css, debrief-reading.css, this route,
+   canvas-shell.css.
    Contracts: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md,
    ../../../../visual-fidelity-contracts/rose-quartz-editorial-field.md, and
    ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
@@ -24,9 +25,7 @@
 }
 
 .genomic-viewer-hero {
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .4rem, transparent .45rem),
-        linear-gradient(135deg, #141c5b 0%, #0f2147 66%, #1f2421 100%);
+    background: var(--genomic-ink);
     border-block-end: .6rem solid var(--genomic-rose);
 }
 
@@ -165,6 +164,49 @@
     margin-block-end: .45rem;
 }
 
+.genomic-threadkeeping-pair {
+    display: grid;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    margin-block: clamp(2rem, 4vw, 3.5rem);
+}
+
+.genomic-threadkeeping-pair > * {
+    min-inline-size: 0;
+}
+
+.genomic-threadkeeping-pair .genomic-threadkeeping-aside {
+    margin: 0;
+}
+
+.genomic-threadkeeping-figure {
+    background: var(--genomic-warm-white);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: .6rem;
+    box-shadow: .4rem .4rem 0 var(--genomic-cobalt);
+    color: var(--genomic-ink);
+    margin: 0;
+    padding: clamp(.8rem, 2vw, 1.25rem);
+}
+
+.genomic-threadkeeping-preview {
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+    margin-inline: auto;
+    max-inline-size: 32.5rem;
+}
+
+.genomic-threadkeeping-figure .table-note {
+    max-inline-size: none;
+}
+
+@media screen and (min-width: 48rem) {
+    .genomic-threadkeeping-pair {
+        align-items: stretch;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 .rose-editorial-visual img {
     background: var(--genomic-rose);
     border: .125rem solid var(--genomic-ink);
@@ -259,6 +301,7 @@
     .rose-editorial-visual img,
     .rose-strategy-equivalent,
     .genomic-threadkeeping-aside,
+    .genomic-threadkeeping-figure,
     .genomic-stacked-cube-visual img {
         box-shadow: .3rem .3rem 0 var(--genomic-ink);
     }
@@ -268,6 +311,7 @@
     .genomic-context-tree-feature,
     .prototype-embed--rose,
     .genomic-threadkeeping-aside,
+    .genomic-threadkeeping-figure,
     .rose-editorial-visual img,
     .rose-strategy-equivalent,
     .genomic-stacked-cube-visual img {
@@ -306,6 +350,7 @@
         .genomic-context-tree-feature,
         .prototype-embed--rose,
         .genomic-threadkeeping-aside,
+        .genomic-threadkeeping-figure,
         .rose-editorial-visual img,
         .rose-strategy-equivalent,
         .genomic-stacked-cube-visual img,

@@ -10,29 +10,29 @@
     ],
     "primary_routes": 38,
     "generated_files": 68,
-    "generated_bytes": 4491728,
+    "generated_bytes": 4853271,
     "live_cloudflare_mutation": false
   },
   "families": [
     {
       "id": "core",
       "base_path": "/v1/core/",
-      "family_manifest_sha256": "c789fb0f4f69fc9007a6fdbf90005077ef2be3638485c15384f7d86dc9ad193e",
+      "family_manifest_sha256": "4a277d171e0c6e7d44af4333fd1ee8980d7d9523c8a0fbe04279cca41923037c",
       "route_receipt_file": "core/route-manifest.json",
-      "route_receipt_sha256": "ed9be7ab72246442a670377289001c53533c98ce8d6ee17f4562bf30fc154274",
+      "route_receipt_sha256": "5ee48a9fe09445180933a34310b9ae7ac0b942742163ffd2bcc16d31e8c674c6",
       "routes": 23,
       "files": 27,
-      "bytes": 2737380
+      "bytes": 2784424
     },
     {
       "id": "canvas",
       "base_path": "/v1/canvas/",
-      "family_manifest_sha256": "8c3e3b8d6e424465c763741d1fbd4368e61cdfa4d2922393bcbdb729152a60ab",
+      "family_manifest_sha256": "a7847cc0e6aadbdf1ab81731031a8a41057ffee3fc526001cf904e62be6e899a",
       "route_receipt_file": "canvas/route-manifest.json",
-      "route_receipt_sha256": "37d3a52f7f816b6a679180448b5463a968fa6807d9393e012dbe796e97899cd5",
+      "route_receipt_sha256": "33a9d305145eb617562eb3c0f3ae281944a714a7825e9f9975312b5d25a2de4d",
       "routes": 15,
       "files": 40,
-      "bytes": 1753216
+      "bytes": 2067715
     }
   ]
 }

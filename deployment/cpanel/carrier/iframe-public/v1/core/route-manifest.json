@@ -5,12 +5,12 @@
   "base_path": "/v1/core/",
   "route_contract": {
     "file": "public-iframe-route-manifest-v1.json",
-    "sha256": "c789fb0f4f69fc9007a6fdbf90005077ef2be3638485c15384f7d86dc9ad193e"
+    "sha256": "4a277d171e0c6e7d44af4333fd1ee8980d7d9523c8a0fbe04279cca41923037c"
   },
   "source_manifest": {
     "file": "manifest.json",
     "source_file": "core-architectures-chimeric-prototype-manifest-v0.1.json",
-    "sha256": "60056a80c149c466de83eeb631027accc1e1bade662f56196ec93d941b79434d"
+    "sha256": "7869f96d87b2bdf1dc875c01fe48b5cd70bdbabce7b0828e4213130ed500973e"
   },
   "package_contract": {
     "primary_routes": 23,
@@ -28,11 +28,11 @@
     {
       "id": "core-architectures-pack",
       "public_alias": "/v1/core/",
-      "source_file": "core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "core-architectures-chimeric-prototype-pack-index-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "context_adapted",
-      "activation_standing": "parity_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [],
         "permissions_policy": [],
@@ -50,10 +50,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 25612,
-      "source_sha256": "abe6fc88c9800699bb44ec01d311f021b17766b3b6003c5bc7c017e8f8eda14b",
-      "projection_bytes": 24979,
-      "projection_sha256": "00e6f7fb0d0c1cf1ae61208c79335ffb281d3b9aab03cc87d24d1b5fc7f56d41",
+      "source_bytes": 26439,
+      "source_sha256": "2141d866004e59dd88f1aee7462bc421fdfa28a307712dc60e727e5a5d6c5d94",
+      "projection_bytes": 25806,
+      "projection_sha256": "9766cbf5aad956a75e7e8457770a21e9eb22556011a0b89ec9c8ea23d3aab906",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -71,11 +71,11 @@
     {
       "id": "poda",
       "public_alias": "/v1/core/poda/",
-      "source_file": "poda-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "poda-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "context_adapted",
-      "activation_standing": "parity_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -110,10 +110,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 111057,
-      "source_sha256": "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
-      "projection_bytes": 111151,
-      "projection_sha256": "03011fe02e79a721e771bc4b6f2925c308ef27f3cbde4cb8bb47f81fdf4e9f26",
+      "source_bytes": 112762,
+      "source_sha256": "2f7e09dbf18059644b10c77f31b167b2c85ea0716afc897d6c7429525512e261",
+      "projection_bytes": 112856,
+      "projection_sha256": "a338616ab35731b07b8bca31b6f4ea29c70dfc50eae35c455eb75915e805fd79",
       "static_resource_closure": {
         "inline_references": 3,
         "package_files": []
@@ -134,8 +134,8 @@
       "source_file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -164,10 +164,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 106530,
-      "source_sha256": "86995621536d1d69f74fe6b828e6c5108fe84d4fabbd486f18504e6051465a45",
-      "projection_bytes": 106614,
-      "projection_sha256": "27f34af8cc25b8d4e239c774a00e01870c4455682efbf4ba1003effe986e4040",
+      "source_bytes": 107867,
+      "source_sha256": "6c9ae958983899a288c0fbf2eaa869688f29b74fbf7b44364ebc1c76bd1d9805",
+      "projection_bytes": 107951,
+      "projection_sha256": "e0e1178f94fc815d4dce48d79bc85049b1504a5191eb535aa53005caf2db5e86",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -188,8 +188,8 @@
       "source_file": "impact-map-chimeric-prototype-v0.1.5.html",
       "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -218,10 +218,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 83801,
-      "source_sha256": "f6bbc1177942fac7d9dcf1220ed26bc30f7e2bc6e3ea2416f89b2e52be8b102a",
-      "projection_bytes": 83885,
-      "projection_sha256": "81e00355912249ba8fb6f1c812987b4074535ae355247c7cd31af318a4d02952",
+      "source_bytes": 85689,
+      "source_sha256": "5841ac539623bba1a9688ba036bf9aca11f154b1ab8e9fc11da38412cf0f61d8",
+      "projection_bytes": 85773,
+      "projection_sha256": "bac88c4affa20f744b275213cae9dc9ad63e234dc31ad2279ec004f24a8e9e03",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -242,8 +242,8 @@
       "source_file": "context-tree-chimeric-prototype-v0.1.7.html",
       "source_version": "0.1.7",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -272,10 +272,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 134657,
-      "source_sha256": "193ad86f568669909802f9e304119f2ecf4a04e20b60798bf0a78ab178d5e805",
-      "projection_bytes": 134741,
-      "projection_sha256": "7eef0ab84cc52e5f7604750bd83859fab79a26ec5d87f774a851c8fba7df2bdf",
+      "source_bytes": 137140,
+      "source_sha256": "5bde5711a902673686104681b9852447a78431b45f75c1ae58109943a48a2fc1",
+      "projection_bytes": 137224,
+      "projection_sha256": "7330f06890618ba55c6caa5c4165745b34b838c8a0d42505139cd5448bf3ab6e",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -293,12 +293,12 @@
     {
       "id": "strategy-canvas",
       "public_alias": "/v1/core/strategy-canvas/",
-      "source_file": "strategy-canvas-chimeric-prototype-v0.2.4.html",
-      "source_version": "0.2.4",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.2.5.html",
+      "source_version": "0.2.5",
       "expression": "canonical",
       "receiver_standing": "context_adapted",
-      "activation_standing": "parity_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -327,10 +327,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 165694,
-      "source_sha256": "60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4",
-      "projection_bytes": 165862,
-      "projection_sha256": "c2935e18c0febb5d53c2684573c75e7ab13ace76b3e6db4a4320d58ede63ba10",
+      "source_bytes": 167650,
+      "source_sha256": "bfabfe3c7d11a493d6fd6a193609c4683571655ac8bd6da168947ea7d579d040",
+      "projection_bytes": 167818,
+      "projection_sha256": "8c6860f395e1f9480b26a6f99013f5f8dff98c04ad5a00aaf1a552a97a4d8652",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [
@@ -345,8 +345,8 @@
             "source_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
             "target_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
             "content_type": "application/json",
-            "bytes": 21648,
-            "sha256": "a4a7187f8501b27709a632a608e702a0a2e5312a8fd956a82df3726690eb49f7"
+            "bytes": 21694,
+            "sha256": "544065a8465763a10c114efcb5d580b426bf17bddd88270c1bf63022132fb573"
           }
         ]
       },
@@ -366,8 +366,8 @@
       "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -396,10 +396,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 93366,
-      "source_sha256": "8c2987d41ddb17ebf39e66f3dd74b4a3e4bc9407eb4d1dea374affba5a62329a",
-      "projection_bytes": 93450,
-      "projection_sha256": "9e911b88f90f2603999e9600cb49ed06b915098f8dd269e61a55cd217b293d29",
+      "source_bytes": 95205,
+      "source_sha256": "e642a72ba48ff05d9548145dff507923ff22c1b8aaee37749442742c2bdca3aa",
+      "projection_bytes": 95289,
+      "projection_sha256": "05023b92ec9727e15a5311615166311f86db14b7c37372e3a645bc7384980470",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -420,8 +420,8 @@
       "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "context_adapted",
-      "activation_standing": "provenance_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -444,16 +444,16 @@
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
-          "exit_links": 2,
-          "rewritten_links": 2,
+          "exit_links": 5,
+          "rewritten_links": 5,
           "dynamic_exit_templates": 0,
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 174032,
-      "source_sha256": "a631352d54d8cd736932e8045001718c1872ca2be99ceef4fcf820781231ad3e",
-      "projection_bytes": 174116,
-      "projection_sha256": "6dd65c9f53e6b19321027eb627944478d1844a9156d8ea509610cc5e3a612d6e",
+      "source_bytes": 181144,
+      "source_sha256": "1b9b716fdc04fae93194219a890bb82ff96fe9b922ada75d887607eddff91d2f",
+      "projection_bytes": 181354,
+      "projection_sha256": "f21bc1ca69255a10a63c8c5d11f9b825048262e4599bf3ede59959997d6f299f",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -461,21 +461,21 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 2,
-        "exit_links": 2,
-        "new_tab_exit_links": 2,
-        "secure_new_tab_exit_links": 2,
+        "external_links": 5,
+        "exit_links": 5,
+        "new_tab_exit_links": 5,
+        "secure_new_tab_exit_links": 5,
         "unresolved_local_links": []
       }
     },
     {
       "id": "service-design-blueprint",
       "public_alias": "/v1/core/service-design-blueprint/",
-      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
-      "source_version": "0.2.5",
+      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.6.html",
+      "source_version": "0.2.6",
       "receiver_standing": "context_adapted",
-      "activation_standing": "visitor_copy_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -504,10 +504,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 182647,
-      "source_sha256": "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
-      "projection_bytes": 182731,
-      "projection_sha256": "07516bbb5180fa3b6ab717304ee48a95c85a57be807a019e9a07dd61a9e064c5",
+      "source_bytes": 186984,
+      "source_sha256": "bdb1a46d62917e3ad217a273df492e378a96465c1f99dafd977b776af8fc6012",
+      "projection_bytes": 187068,
+      "projection_sha256": "0a2f6dbf3be25aee0836b2d438032c93ea1be26ca1a467fab7ee73c5c3f9cb8e",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -525,11 +525,11 @@
     {
       "id": "ai-systems-service-blueprint",
       "public_alias": "/v1/core/ai-systems-service-blueprint/",
-      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "navigation_observation",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -558,10 +558,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 127800,
-      "source_sha256": "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
-      "projection_bytes": 128010,
-      "projection_sha256": "a27e60ad997bb360f74ebe5b41ed79c4bacf0153e85b3fff4e7ecbdd245723ab",
+      "source_bytes": 128309,
+      "source_sha256": "938433bc7167ecd83bf92836f84ab7683163f01908397fe0ddcfdf11aa37eeb0",
+      "projection_bytes": 128519,
+      "projection_sha256": "438070b1fd4dd9ff0230622bc6cc6c9769f866ede05c20e0d908463aeaad7561",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -582,8 +582,8 @@
       "source_file": "software-architecture-views-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -612,10 +612,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 120977,
-      "source_sha256": "13ee65ff0602260847bd8375d9ea264067e6ca117c64f37acaba333653aa6da1",
-      "projection_bytes": 121061,
-      "projection_sha256": "0e93365d9771f01a3fc7f24e55979496a165ed29bdc9e1568c1f2762cce92bbe",
+      "source_bytes": 121590,
+      "source_sha256": "ae639340af83d5522352854d1133ce1dace48934ba38e474b9c38bfd0120fb38",
+      "projection_bytes": 121674,
+      "projection_sha256": "7695ee924817abcceec53aea9d7d32ba07196bdf653f4916128683380a5db137",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -636,8 +636,8 @@
       "source_file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
-      "activation_standing": "visitor_copy_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -666,10 +666,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 119255,
-      "source_sha256": "e86619691afe4a687bb22c6c474b3da38c55afec6a18de8a6ef1254fec3a7867",
-      "projection_bytes": 119339,
-      "projection_sha256": "1100a54b2fcf6a25bf643decc7cb315d4991e60d2b3a3e150927384f67be707e",
+      "source_bytes": 120647,
+      "source_sha256": "4fe6880e6df17c4897fe24cfbe65341215b28c207571e08743125b9502d6493d",
+      "projection_bytes": 120731,
+      "projection_sha256": "203963fd09c4aa87598e97427a7b604bdcdedbf6a215be6217920ab146ef6d9e",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -687,11 +687,11 @@
     {
       "id": "specification-by-example",
       "public_alias": "/v1/core/specification-by-example/",
-      "source_file": "specification-by-example-chimeric-prototype-v0.1.6.html",
-      "source_version": "0.1.6",
+      "source_file": "specification-by-example-chimeric-prototype-v0.1.7.html",
+      "source_version": "0.1.7",
       "receiver_standing": "context_adapted",
-      "activation_standing": "navigation_observation",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -720,10 +720,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 106630,
-      "source_sha256": "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
-      "projection_bytes": 106798,
-      "projection_sha256": "7611ee94784e33510de3b9a1531a04803c825e8585f416301f3890ede7052f8b",
+      "source_bytes": 108251,
+      "source_sha256": "9e89a38ddc9baec44ba21235703b5fb30cc88a49769dc8b188d919adeebdf071",
+      "projection_bytes": 108419,
+      "projection_sha256": "443a83fc9d9c9dea7172ef955079989cb2aeb2dd07f2fe9bba3c74cfbc7b7e0b",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -774,10 +774,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 100151,
-      "source_sha256": "426f8389626c80ea8cad890133f0ff551452c52d7fa1b79942bf0d4d7a959b22",
-      "projection_bytes": 100235,
-      "projection_sha256": "30b90edd93f17a64a985d1840c0b06b0407bffde9a80d9c967ee8b1b3ec4f5c4",
+      "source_bytes": 101835,
+      "source_sha256": "edd876b3ce9b3b445a090b833889ad05f44b8d812716113b1de503f29e394841",
+      "projection_bytes": 101919,
+      "projection_sha256": "b29dd863af3eb686bee17ae70240e2ee4d3c7e48dc84c21c80c9ef3ae19edadd",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -795,11 +795,11 @@
     {
       "id": "plus-delta",
       "public_alias": "/v1/core/plus-delta/",
-      "source_file": "plus-delta-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "plus-delta-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -828,10 +828,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 84718,
-      "source_sha256": "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
-      "projection_bytes": 84802,
-      "projection_sha256": "7663934d5ea5a2f66e3386647b60b057c833e1f9cfad3962e0b2d745540f768a",
+      "source_bytes": 86241,
+      "source_sha256": "03720635728e8708d6c3bb7a97539290bc2e2da804d554b78902c6c90f3b5553",
+      "projection_bytes": 86325,
+      "projection_sha256": "9c6dda18c35e0931f1bbcdeb1851896b2447a0ea02ee7a882d440620b53d39dd",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -849,11 +849,11 @@
     {
       "id": "practitioner-judgment-probes",
       "public_alias": "/v1/core/practitioner-judgment-probes/",
-      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -882,10 +882,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 114032,
-      "source_sha256": "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
-      "projection_bytes": 114116,
-      "projection_sha256": "462e36ce277749284df0b2163e829eaecbf9b5ce277660052d421b719f736f5f",
+      "source_bytes": 115429,
+      "source_sha256": "b4f4a62b3246368ce423ee86aec092774bf0621f3e9890dd22b8522d6b81ec5d",
+      "projection_bytes": 115513,
+      "projection_sha256": "096aa2b446360e86a2360e95783435ca7cded5c5214df1585cd5cbec9fdc4e36",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -903,11 +903,11 @@
     {
       "id": "pattern-problem-surface-matrix",
       "public_alias": "/v1/core/pattern-problem-surface-matrix/",
-      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -936,10 +936,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 154627,
-      "source_sha256": "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
-      "projection_bytes": 154711,
-      "projection_sha256": "bc631cc7e3702a3d6b98bc908b0f41a7e3414da49b7ad4152dc3d391aa7889a0",
+      "source_bytes": 155042,
+      "source_sha256": "53992af5ad8d7ab02374d78693ee958fa174b15aadcf7a550b21295b3c20049b",
+      "projection_bytes": 155126,
+      "projection_sha256": "075bc4c795b2962c988e1aa154565f718c7cb311d453dea31484059645afdbfa",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -960,8 +960,8 @@
       "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -990,10 +990,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 103876,
-      "source_sha256": "f72a7449433f550145aa2c58f1a7a97ae9634f6bdabac7ddfd487623d525bdd3",
-      "projection_bytes": 103960,
-      "projection_sha256": "e0e36458da65af47c804143c5690d508a203d38683a511e82d30b0d91d54d39d",
+      "source_bytes": 105795,
+      "source_sha256": "f91497ea6c61655084a8cab5a381f1afd86cf020d29c8a190192ff2618a80d18",
+      "projection_bytes": 105879,
+      "projection_sha256": "3b5357f4e4e88f79b7fb508c7135c7fdc7188b1be8667191f666091977588e47",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -1011,11 +1011,11 @@
     {
       "id": "unit-test-first-design",
       "public_alias": "/v1/core/unit-test-first-design/",
-      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "navigation_observation",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -1044,10 +1044,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 101510,
-      "source_sha256": "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
-      "projection_bytes": 101636,
-      "projection_sha256": "ed857186a31f88b0de0d83dd898d7e3a0cf3768793f95bb331b550099bb8ec35",
+      "source_bytes": 102016,
+      "source_sha256": "46b6806724dfca86408a61e1105d34543fbf021b3a3da7bda8405d04511c9bb8",
+      "projection_bytes": 102142,
+      "projection_sha256": "21aed2d6d8e867021e71746eb2ff98d871256b77776df1b8f2dcf53444c0a8b6",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -1065,11 +1065,11 @@
     {
       "id": "upstream-revision-loop",
       "public_alias": "/v1/core/upstream-revision-loop/",
-      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -1098,10 +1098,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 94311,
-      "source_sha256": "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
-      "projection_bytes": 94395,
-      "projection_sha256": "b4a94e321b2887d1a689869b128efa1f09b8dd3487fda128aba2b72b46531761",
+      "source_bytes": 95544,
+      "source_sha256": "af79684032787d47655c8e01a162f1a34f405848f8d63b34502f93c4ffaa8d36",
+      "projection_bytes": 95628,
+      "projection_sha256": "03fbc9c4f30db39bd67c46db098c9c58704b7ce6c30b53d3c4b25413c9a534e2",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -1119,11 +1119,11 @@
     {
       "id": "recovery-routing-atlas",
       "public_alias": "/v1/core/recovery-routing-atlas/",
-      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -1152,10 +1152,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 120756,
-      "source_sha256": "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
-      "projection_bytes": 120840,
-      "projection_sha256": "a9764f79ffb4fff70dfc505da29ea7122763d3ff8f68d21262cf2bf1a50ed759",
+      "source_bytes": 122357,
+      "source_sha256": "0c3bdc319ce5b8e830d8c1328c7ea3bedc246a3f407d6db7f9c64f60cd8d8475",
+      "projection_bytes": 122441,
+      "projection_sha256": "c86faa1cf8dd4a516fa381732eb60e4a988021d6be2ffaaeb66741b2cca5aeb6",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -1173,11 +1173,11 @@
     {
       "id": "core-architecture-family-index",
       "public_alias": "/v1/core/core-architecture-family-index/",
-      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-      "source_version": "0.1.5",
+      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
       "receiver_standing": "context_adapted",
-      "activation_standing": "parity_review",
-      "activation_eligible": false,
+      "activation_standing": "eligible",
+      "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -1212,10 +1212,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 122465,
-      "source_sha256": "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
-      "projection_bytes": 122559,
-      "projection_sha256": "e9c36c9b65c14d00d392589a3dbcd0453ce9b4ae9c17ab0f1f13e27dec1b8f35",
+      "source_bytes": 123313,
+      "source_sha256": "27e88170074498e609e01dfd2c240ad3eedc96d126ea01bcd58e058c690c1264",
+      "projection_bytes": 123407,
+      "projection_sha256": "74355bffd8e7d97156b559625c127d680b28b82908a9a34d3f20224f3609a40c",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -1274,10 +1274,10 @@
           "runtime_adapter": false
         }
       ],
-      "source_bytes": 89577,
-      "source_sha256": "5bd6698f4fdce05a1abdaf2a122610e138f740ed49a82bfe57f07e215e08167b",
-      "projection_bytes": 90366,
-      "projection_sha256": "c67793baa4409274747c672eff01db19c85f34e719697fc4be2d8ae00e5d17ef",
+      "source_bytes": 97164,
+      "source_sha256": "65d2189b5fe120456cf440e89c530f4a41ebf84b9aef5ca9b061307583ccdd85",
+      "projection_bytes": 97953,
+      "projection_sha256": "39b6052058834932b4dab857257432c35e7792abb454e4da148acc4959d59f96",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []

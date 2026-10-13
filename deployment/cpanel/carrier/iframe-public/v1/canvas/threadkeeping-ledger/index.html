@@ -393,6 +393,9 @@ textarea{min-height:96px;resize:vertical}
 button{border:1px solid var(--line2);background:#fffaf1;color:var(--ink);padding:8px 10px;border-radius:9px;cursor:pointer}
 button:hover{background:#f4ead9} button.primary{background:#e7ede1;border-color:#8b9a7d} button.danger{background:var(--roseSoft);border-color:#b58b84}
 button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.delete-confirmation{margin-top:9px;padding:10px;border:1px solid #b58b84;border-radius:10px;background:#fff5f1}
+.delete-confirmation p{margin-bottom:8px}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fffefb;max-height:600px}
 table{border-collapse:separate;border-spacing:0;width:100%;font-size:.84rem}
 th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px;vertical-align:top;text-align:left}
@@ -482,12 +485,13 @@ footer{padding:26px clamp(16px,3.5vw,52px) 48px;background:#e9e3d8;border-top:1p
           <label>Horizon<select id="horizonFilter"></select></label>
         </div>
         <div class="table-wrap" style="margin-top:10px">
-          <table id="ledgerTable" aria-label="Threadkeeping ledger">
+          <table data-label="Threadkeeping ledger" id="ledgerTable" aria-label="Threadkeeping ledger">
             <thead><tr id="ledgerHead"></tr></thead>
             <tbody id="ledgerBody"></tbody>
           </table>
         </div>
         <p class="muted" id="tableCount" style="margin-top:8px"></p>
+        <p class="muted" id="ledgerActionStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       </div>
 
       <div class="panel">
@@ -533,7 +537,7 @@ footer{padding:26px clamp(16px,3.5vw,52px) 48px;background:#e9e3d8;border-top:1p
 - Capsule: `fg:threadkeeping-ledger-prompt-capsule/v0.1`
 - Source: `fg:threadkeeping-ledger-v0.1@0.1`
 - State: `threadkeeping-ledger-state/0.1` · revision `0.1`
-- Fingerprint: `fnv1a32-utf8:e22f69fc`
+- Fingerprint: `fnv1a32-utf8:43e47697`
 - View: `plain`
 
 ## Purpose and target
@@ -579,7 +583,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 - Central contract: `na:contract-bearing-node`
 - Source band: `author_created`; `collaboration_stabilized`; source-of-truth band: `human_steward_review`.
 - Access confidence: `human_reported`; publication status: `candidate`.
-- Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:00:00Z`; as of `2026-06-20`.
+- Recorded by: human collaborator + AI-system assistance; recorded at `2026-06-20T12:00:00Z`; as of `2026-06-20`.
 - Review trigger: Review when three or more Driftframe packages use the same identity contract.; review after no scheduled date.
 - Supersedes: none; superseded by: none.
 - Source references: Narrative Architecture planning integration
@@ -596,7 +600,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 - Central contract: `na:coordination-horizon`
 - Source band: `author_created`; `collaboration_stabilized`; source-of-truth band: `human_steward_review`.
 - Access confidence: `human_reported`; publication status: `candidate`.
-- Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:05:00Z`; as of `2026-06-20`.
+- Recorded by: human collaborator + AI-system assistance; recorded at `2026-06-20T12:05:00Z`; as of `2026-06-20`.
 - Review trigger: Review after the first Coordination Horizon exemplar is used across a long pause.; review after no scheduled date.
 - Supersedes: none; superseded by: none.
 - Source references: Narrative Architecture orientation planning
@@ -630,7 +634,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 - Central contract: `na:hydration-contract`
 - Source band: `author_created`; source-of-truth band: `runtime_observation`; `human_steward_review`.
 - Access confidence: `human_reported`; publication status: `experimental_schema`.
-- Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:15:00Z`; as of `2026-06-20`.
+- Recorded by: human collaborator + AI-system assistance; recorded at `2026-06-20T12:15:00Z`; as of `2026-06-20`.
 - Review trigger: Review after two deliberately incomplete re-entry tests.; review after no scheduled date.
 - Supersedes: none; superseded by: none.
 - Source references: Architecture, Affordance, Instance, and Coordination Surface
@@ -647,7 +651,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 - Central contract: `fg:threadkeeping-ledger`
 - Source band: `author_created`; `collaboration_stabilized`; source-of-truth band: `human_steward_review`; `schema_validation`.
 - Access confidence: `human_reported`; publication status: `experimental_schema`.
-- Recorded by: AI collaborator; recorded at `2026-06-20T12:20:00Z`; as of `2026-06-20`.
+- Recorded by: AI system; recorded at `2026-06-20T12:20:00Z`; as of `2026-06-20`.
 - Review trigger: Review after first hands-on use.; review after no scheduled date.
 - Supersedes: none; superseded by: none.
 - Source references: Threadkeeping &amp;amp; Collaboration Memory reader-facing stabilization
@@ -664,7 +668,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 - Central contract: `fg:threadkeeping-collaboration-memory`
 - Source band: `author_created`; `source_supported`; source-of-truth band: `human_steward_review`; `source_note_only`.
 - Access confidence: `page_lookup_confirmed`; publication status: `candidate`.
-- Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:25:00Z`; as of `2026-06-20`.
+- Recorded by: human collaborator + AI-system assistance; recorded at `2026-06-20T12:25:00Z`; as of `2026-06-20`.
 - Review trigger: Review if future collaborators cannot recover why a choice was made.; review after no scheduled date.
 - Supersedes: `tk-entry-007`; superseded by: none.
 - Source references: Threadkeeping &amp;amp; Collaboration Memory
@@ -880,7 +884,11 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
         <label>Horizon<select name="horizonPosition"><option value="next">Next</option><option value="later">Later</option></select></label>
       </div>
       <label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:8px"><input name="preferred" type="checkbox"> Preferred candidate</label>
-      <div class="button-row"><button class="primary" type="submit" id="candidateSubmitBtn">Save candidate</button><button class="danger" type="button" id="deleteCandidateBtn">Delete candidate</button></div>
+      <div class="button-row"><button class="primary" type="submit" id="candidateSubmitBtn">Save candidate</button><button class="danger" type="button" id="deleteCandidateBtn" aria-expanded="false" aria-controls="candidateDeleteConfirmation">Delete candidate</button></div>
+      <div class="delete-confirmation" id="candidateDeleteConfirmation" role="group" aria-labelledby="candidateDeletePrompt" hidden>
+        <p id="candidateDeletePrompt">Delete this next candidate from the current working ledger?</p>
+        <div class="button-row"><button class="danger" type="button" id="confirmDeleteCandidateBtn">Delete candidate</button><button type="button" id="cancelDeleteCandidateBtn">Keep candidate</button></div>
+      </div>
     </form>
   </div>
 </dialog>
@@ -890,7 +898,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
     <div class="dialog-head"><div><h3>Add continuity assessment</h3></div><button data-close-dialog="continuityDialog">Close</button></div>
     <form id="continuityForm">
       <div class="controls-grid">
-        <label>Assessor<select name="assessorType"><option>human</option><option>ai_collaborator</option><option>mechanical</option><option>mixed</option></select></label>
+        <label>Assessor<select name="assessorType"><option>human</option><option value="ai_collaborator">AI system</option><option>mechanical</option><option>mixed</option></select></label>
         <label>Band<select name="band"><option>breathable</option><option>compressed</option><option>thinning</option><option>threadbare</option><option>rehydration_required</option></select></label>
         <label>Recommended move<select name="recommendedMove"><option>continue</option><option>precipitate_checkpoint</option><option>create_narrative_capsule</option><option>write_machine_node</option><option>reopen_source_note</option><option>begin_successor_threadkeeper</option></select></label>
       </div>
@@ -902,7 +910,7 @@ The complete semantic state contains 7 ledger entries, 3 next candidates, and 1 
 </dialog>
 
 <script>
-const INITIAL = {"artifactIdentity": {"id": "fg:threadkeeping-ledger-v0.1", "type": ["ThreadkeepingLedger", "CollaborationPattern", "ChimericPrototype"], "displayName": "Threadkeeping Ledger", "subtitle": "Durable collaboration memory, rationale, and re-entry", "version": "0.1", "package": "@driftframe/field-guide", "relatedPackage": "@driftframe/narrative-architecture", "sourceNursery": "@fieldform/loam-layer", "status": "experimental_public", "sourceBand": ["author_created", "collaboration_stabilized"]}, "quickUse": {"useWhen": "Work spans sessions, tools, branches, documents, prototypes, or collaborators, and the reasons behind decisions need to survive.", "restores": "Continuity: what changed, why it changed, what remains provisional, what was deferred, and where work can resume.", "goodNextQuestion": "What from this session will a future collaborator need in order to continue without reconstructing the reasoning?", "viewStateRule": "Stable IDs describe what a record is. View state describes where and whether it appears."}, "threadkeeper": {"id": "tk:narrative-architecture-planning", "type": "Threadkeeper", "title": "Narrative Architecture Planning Threadkeeper", "steward": "human_steward", "centralContractRef": "na:architecture-affordance-instance-surface", "centralContract": "Preserve the identity, rationale, boundaries, unresolved states, and possible continuations of Narrative Architecture planning across sessions and tools.", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review", "source_note_only"], "publicationStatus": "experimental_schema", "entries": [{"id": "tk-entry-001", "type": "ThreadkeeperEntry", "entryType": "decision", "title": "Use Contract-Bearing Node as the durable identity", "summary": "The stable identity is the named contract-bearing node rather than the current Notion page, pass, Markdown packet, or prototype.", "rationale": "Pages, passes, tests, code examples, and wording are mutable projections. The central contract and canonical ID need to survive those changes.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "na:contract-bearing-node", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI collaborator", "recordedAt": "2026-06-20T12:00:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review when three or more Driftframe packages use the same identity contract.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Narrative Architecture planning integration"], "evidenceRefs": ["R8→R9 integration checkpoint"], "openQuestionRefs": [], "nextCandidateRefs": ["next-001"], "reentryPoint": "na:stable-identity-and-contract-bearing-node"}, {"id": "tk-entry-002", "type": "ThreadkeeperEntry", "entryType": "decision", "title": "Treat Now–Next–Later as a Coordination Horizon", "summary": "Now–Next–Later places active work, prepared continuations, and deferred possibilities in a temporal coordination surface.", "rationale": "It is not an architecture mode or ordinary task list. The Next band contains typed nextCandidate references with readiness and lineage.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "na:coordination-horizon", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI collaborator", "recordedAt": "2026-06-20T12:05:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after the first Coordination Horizon exemplar is used across a long pause.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Narrative Architecture orientation planning"], "evidenceRefs": ["Folding and re-entry collaboration history"], "openQuestionRefs": [], "nextCandidateRefs": ["next-002"], "reentryPoint": "na:coordination-horizon"}, {"id": "tk-entry-003", "type": "ThreadkeeperEntry", "entryType": "constraint", "title": "Keep public and private memory surfaces distinct", "summary": "Private source notes, raw custom annotation, and private evidence stay in their source ecology; public artifacts receive reviewed summaries and source-band metadata.", "rationale": "The collaboration needs source richness and public portability without flattening or leaking private context.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "ca:publication-boundary", "sourceBand": ["policy_file"], "sourceOfTruthBand": ["policy_file"], "accessConfidence": "human_reported", "publicationStatus": "promoted", "recordedBy": "human collaborator", "recordedAt": "2026-06-20T12:10:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review whenever a source-note mirror is prepared for publication.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["PUBLICATION-BOUNDARY.md", "SOURCE-NOTE-MIRRORING.md"], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "ca:publication-boundary"}, {"id": "tk-entry-004", "type": "ThreadkeeperEntry", "entryType": "open_question", "title": "Discover the minimum reliable hydration contract", "summary": "The strict minimum appears to include identity, central contract, current state, Coordination Horizon, and source boundary.", "rationale": "The actual minimum should be tested behaviorally through re-entry rather than assumed from one coherent example.", "status": "provisional", "horizonPosition": "later", "centralContractRef": "na:hydration-contract", "sourceBand": ["author_created"], "sourceOfTruthBand": ["runtime_observation", "human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "experimental_schema", "recordedBy": "human collaborator + AI collaborator", "recordedAt": "2026-06-20T12:15:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after two deliberately incomplete re-entry tests.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Architecture, Affordance, Instance, and Coordination Surface"], "evidenceRefs": [], "openQuestionRefs": ["What is the minimum hydration contract required for reliable cross-session re-entry?"], "nextCandidateRefs": ["next-003"], "reentryPoint": "na:hydration-and-reentry"}, {"id": "tk-entry-005", "type": "ThreadkeeperEntry", "entryType": "next_candidate", "title": "Generate the Threadkeeping Ledger chimeric prototype", "summary": "Create a filterable, editable ledger with Now–Next–Later, review queue, supersession, continuity assessment, JSON/JSON-LD, and a visible AI prompt capsule.", "rationale": "The reader-facing pattern is stabilized enough to test the artifact projection and identify which fields recur across real use.", "status": "needs_review", "horizonPosition": "next", "centralContractRef": "fg:threadkeeping-ledger", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review", "schema_validation"], "accessConfidence": "human_reported", "publicationStatus": "experimental_schema", "recordedBy": "AI collaborator", "recordedAt": "2026-06-20T12:20:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after first hands-on use.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Threadkeeping & Collaboration Memory reader-facing stabilization"], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "fg:threadkeeping-ledger-prototype"}, {"id": "tk-entry-006", "type": "ThreadkeeperEntry", "entryType": "rationale", "title": "Preserve durable context rather than a full transcript", "summary": "A threadkeeper records decisions, rationale, open questions, review triggers, and re-entry points rather than every message exchanged.", "rationale": "A transcript preserves volume but can make retrieval harder. The ledger should preserve the effects and route back to source when source detail matters.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "fg:threadkeeping-collaboration-memory", "sourceBand": ["author_created", "source_supported"], "sourceOfTruthBand": ["human_steward_review", "source_note_only"], "accessConfidence": "page_lookup_confirmed", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI collaborator", "recordedAt": "2026-06-20T12:25:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review if future collaborators cannot recover why a choice was made.", "reviewAfter": "", "supersedes": "tk-entry-007", "supersededBy": "", "sourceRefs": ["Threadkeeping & Collaboration Memory"], "evidenceRefs": ["Distributed cognition", "Architecture decision records"], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "fg:threadkeeping-collaboration-memory"}, {"id": "tk-entry-007", "type": "ThreadkeeperEntry", "entryType": "assumption", "title": "Save the complete transcript as the memory surface", "summary": "Earlier working assumption that preserving every message would preserve collaboration memory.", "rationale": "Superseded after recognizing that unstructured volume can reduce retrieval and obscure rationale.", "status": "superseded", "horizonPosition": "later", "centralContractRef": "fg:threadkeeping-collaboration-memory", "sourceBand": ["author_created"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "retired", "recordedBy": "Planning surface", "recordedAt": "2026-06-19T10:00:00Z", "asOf": "2026-06-19", "reviewTrigger": "", "reviewAfter": "", "supersedes": "", "supersededBy": "tk-entry-006", "sourceRefs": [], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": ""}], "nextCandidates": [{"id": "next-001", "type": "NextCandidate", "title": "Stabilize Stable Identity and the Contract-Bearing Node", "reason": "The identity model is high-leverage across Narrative Architecture, Practitioner Probes, Research Atlases, and Core Architecture projections.", "candidateType": "branch", "readinessState": "ready_for_execution", "horizonPosition": "next", "inheritsFrom": ["tk-entry-001"], "requiredInputs": ["Architecture, Affordance, Instance, and Coordination Surface"], "blockedBy": [], "preferred": true, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "", "supersededBy": "", "retirementReason": ""}, {"id": "next-002", "type": "NextCandidate", "title": "Prototype the Narrative Coordination Surface", "reason": "The R8→R9 checkpoint provides a strong exemplar of machine nodes, settled inputs, open handoffs, verification, and prepared continuation.", "candidateType": "artifact", "readinessState": "ready_for_planning", "horizonPosition": "next", "inheritsFrom": ["tk-entry-002"], "requiredInputs": ["Narrative Coordination Surface schema candidate"], "blockedBy": ["Stable Identity page should clarify canonical identity first"], "preferred": false, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "", "supersededBy": "", "retirementReason": ""}, {"id": "next-003", "type": "NextCandidate", "title": "Run two incomplete hydration packet tests", "reason": "Behavioral re-entry tests are needed to discover which fields are truly required.", "candidateType": "research", "readinessState": "needs_input", "horizonPosition": "later", "inheritsFrom": ["tk-entry-004"], "requiredInputs": ["Two test packets", "A re-entry evaluator", "Dimensional verification rubric"], "blockedBy": [], "preferred": false, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "After the stable identity page is complete", "supersededBy": "", "retirementReason": ""}], "continuityAssessments": [{"id": "continuity-001", "type": "ContextContinuityAssessment", "assessorType": "human", "band": "breathable", "basis": "The central contract, approved working answers, generated planning files, and prepared next candidates remain reachable.", "atRiskElements": ["The exact minimum hydration contract remains untested."], "observedLoss": "", "recommendedMove": "continue", "reviewState": "human_confirmed", "asOf": "2026-06-20"}]}, "relationshipContract": {"executionSurfaceOwns": ["current implementation", "operational behavior", "runtime state"], "testsOwn": ["executable behavior evidence"], "schemasOwn": ["validation contract"], "sourceDocumentsOwn": ["source content", "authoritative wording"], "threadkeeperOwns": ["rationale", "collaboration state", "stable versus provisional distinction", "open questions", "review triggers", "prepared continuations", "cross-surface references"], "narrativeArchitectureOwns": ["branching", "folding", "compression", "re-entry", "supersession"]}, "recoveryCalibration": {"strainCues": ["Repeated context reconstruction", "Rationale exists only in chat", "Provisional state treated as settled", "Stale next candidate", "Orphaned handoff", "Transcript flooding", "Threadbare continuity"], "failureGeometries": ["ContextAmnesia", "RationaleEvaporation", "ProvisionalStateCollapse", "TranscriptFlooding", "ThreadbareContinuity", "OrphanedHandoff", "StaleHorizon"], "recoveryMoves": ["precipitate_checkpoint", "fold_into_successor", "refresh_machine_node", "create_narrative_capsule", "supersede_stale_entry", "reopen_source_note", "restore_coordination_horizon", "create_formal_decision_record"]}, "sourceNote": {"summary": "This prototype operationalizes the Human-AI Collaboration Field Guide's Threadkeeping & Collaboration Memory page and the related Narrative Architecture coordination contracts.", "researchAnchors": ["Distributed cognition", "Architecture decision records", "Portable collaboration memory", "Narrative Architecture — Coordination Horizons, Folding, and Re-entry"]}};
+const INITIAL = {"artifactIdentity": {"id": "fg:threadkeeping-ledger-v0.1", "type": ["ThreadkeepingLedger", "CollaborationPattern", "ChimericPrototype"], "displayName": "Threadkeeping Ledger", "subtitle": "Durable collaboration memory, rationale, and re-entry", "version": "0.1", "package": "@driftframe/field-guide", "relatedPackage": "@driftframe/narrative-architecture", "sourceNursery": "@fieldform/loam-layer", "status": "experimental_public", "sourceBand": ["author_created", "collaboration_stabilized"]}, "quickUse": {"useWhen": "Work spans sessions, tools, branches, documents, prototypes, or collaborators, and the reasons behind decisions need to survive.", "restores": "Continuity: what changed, why it changed, what remains provisional, what was deferred, and where work can resume.", "goodNextQuestion": "What from this session will a future collaborator need in order to continue without reconstructing the reasoning?", "viewStateRule": "Stable IDs describe what a record is. View state describes where and whether it appears."}, "threadkeeper": {"id": "tk:narrative-architecture-planning", "type": "Threadkeeper", "title": "Narrative Architecture Planning Threadkeeper", "steward": "human_steward", "centralContractRef": "na:architecture-affordance-instance-surface", "centralContract": "Preserve the identity, rationale, boundaries, unresolved states, and possible continuations of Narrative Architecture planning across sessions and tools.", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review", "source_note_only"], "publicationStatus": "experimental_schema", "entries": [{"id": "tk-entry-001", "type": "ThreadkeeperEntry", "entryType": "decision", "title": "Use Contract-Bearing Node as the durable identity", "summary": "The stable identity is the named contract-bearing node rather than the current Notion page, pass, Markdown packet, or prototype.", "rationale": "Pages, passes, tests, code examples, and wording are mutable projections. The central contract and canonical ID need to survive those changes.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "na:contract-bearing-node", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI-system assistance", "recordedAt": "2026-06-20T12:00:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review when three or more Driftframe packages use the same identity contract.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Narrative Architecture planning integration"], "evidenceRefs": ["R8→R9 integration checkpoint"], "openQuestionRefs": [], "nextCandidateRefs": ["next-001"], "reentryPoint": "na:stable-identity-and-contract-bearing-node"}, {"id": "tk-entry-002", "type": "ThreadkeeperEntry", "entryType": "decision", "title": "Treat Now–Next–Later as a Coordination Horizon", "summary": "Now–Next–Later places active work, prepared continuations, and deferred possibilities in a temporal coordination surface.", "rationale": "It is not an architecture mode or ordinary task list. The Next band contains typed nextCandidate references with readiness and lineage.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "na:coordination-horizon", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI-system assistance", "recordedAt": "2026-06-20T12:05:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after the first Coordination Horizon exemplar is used across a long pause.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Narrative Architecture orientation planning"], "evidenceRefs": ["Folding and re-entry collaboration history"], "openQuestionRefs": [], "nextCandidateRefs": ["next-002"], "reentryPoint": "na:coordination-horizon"}, {"id": "tk-entry-003", "type": "ThreadkeeperEntry", "entryType": "constraint", "title": "Keep public and private memory surfaces distinct", "summary": "Private source notes, raw custom annotation, and private evidence stay in their source ecology; public artifacts receive reviewed summaries and source-band metadata.", "rationale": "The collaboration needs source richness and public portability without flattening or leaking private context.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "ca:publication-boundary", "sourceBand": ["policy_file"], "sourceOfTruthBand": ["policy_file"], "accessConfidence": "human_reported", "publicationStatus": "promoted", "recordedBy": "human collaborator", "recordedAt": "2026-06-20T12:10:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review whenever a source-note mirror is prepared for publication.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["PUBLICATION-BOUNDARY.md", "SOURCE-NOTE-MIRRORING.md"], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "ca:publication-boundary"}, {"id": "tk-entry-004", "type": "ThreadkeeperEntry", "entryType": "open_question", "title": "Discover the minimum reliable hydration contract", "summary": "The strict minimum appears to include identity, central contract, current state, Coordination Horizon, and source boundary.", "rationale": "The actual minimum should be tested behaviorally through re-entry rather than assumed from one coherent example.", "status": "provisional", "horizonPosition": "later", "centralContractRef": "na:hydration-contract", "sourceBand": ["author_created"], "sourceOfTruthBand": ["runtime_observation", "human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "experimental_schema", "recordedBy": "human collaborator + AI-system assistance", "recordedAt": "2026-06-20T12:15:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after two deliberately incomplete re-entry tests.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Architecture, Affordance, Instance, and Coordination Surface"], "evidenceRefs": [], "openQuestionRefs": ["What is the minimum hydration contract required for reliable cross-session re-entry?"], "nextCandidateRefs": ["next-003"], "reentryPoint": "na:hydration-and-reentry"}, {"id": "tk-entry-005", "type": "ThreadkeeperEntry", "entryType": "next_candidate", "title": "Generate the Threadkeeping Ledger chimeric prototype", "summary": "Create a filterable, editable ledger with Now–Next–Later, review queue, supersession, continuity assessment, JSON/JSON-LD, and a visible AI prompt capsule.", "rationale": "The reader-facing pattern is stabilized enough to test the artifact projection and identify which fields recur across real use.", "status": "needs_review", "horizonPosition": "next", "centralContractRef": "fg:threadkeeping-ledger", "sourceBand": ["author_created", "collaboration_stabilized"], "sourceOfTruthBand": ["human_steward_review", "schema_validation"], "accessConfidence": "human_reported", "publicationStatus": "experimental_schema", "recordedBy": "AI system", "recordedAt": "2026-06-20T12:20:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review after first hands-on use.", "reviewAfter": "", "supersedes": "", "supersededBy": "", "sourceRefs": ["Threadkeeping & Collaboration Memory reader-facing stabilization"], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "fg:threadkeeping-ledger-prototype"}, {"id": "tk-entry-006", "type": "ThreadkeeperEntry", "entryType": "rationale", "title": "Preserve durable context rather than a full transcript", "summary": "A threadkeeper records decisions, rationale, open questions, review triggers, and re-entry points rather than every message exchanged.", "rationale": "A transcript preserves volume but can make retrieval harder. The ledger should preserve the effects and route back to source when source detail matters.", "status": "stable_for_now", "horizonPosition": "now", "centralContractRef": "fg:threadkeeping-collaboration-memory", "sourceBand": ["author_created", "source_supported"], "sourceOfTruthBand": ["human_steward_review", "source_note_only"], "accessConfidence": "page_lookup_confirmed", "publicationStatus": "candidate", "recordedBy": "human collaborator + AI-system assistance", "recordedAt": "2026-06-20T12:25:00Z", "asOf": "2026-06-20", "reviewTrigger": "Review if future collaborators cannot recover why a choice was made.", "reviewAfter": "", "supersedes": "tk-entry-007", "supersededBy": "", "sourceRefs": ["Threadkeeping & Collaboration Memory"], "evidenceRefs": ["Distributed cognition", "Architecture decision records"], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": "fg:threadkeeping-collaboration-memory"}, {"id": "tk-entry-007", "type": "ThreadkeeperEntry", "entryType": "assumption", "title": "Save the complete transcript as the memory surface", "summary": "Earlier working assumption that preserving every message would preserve collaboration memory.", "rationale": "Superseded after recognizing that unstructured volume can reduce retrieval and obscure rationale.", "status": "superseded", "horizonPosition": "later", "centralContractRef": "fg:threadkeeping-collaboration-memory", "sourceBand": ["author_created"], "sourceOfTruthBand": ["human_steward_review"], "accessConfidence": "human_reported", "publicationStatus": "retired", "recordedBy": "Planning surface", "recordedAt": "2026-06-19T10:00:00Z", "asOf": "2026-06-19", "reviewTrigger": "", "reviewAfter": "", "supersedes": "", "supersededBy": "tk-entry-006", "sourceRefs": [], "evidenceRefs": [], "openQuestionRefs": [], "nextCandidateRefs": [], "reentryPoint": ""}], "nextCandidates": [{"id": "next-001", "type": "NextCandidate", "title": "Stabilize Stable Identity and the Contract-Bearing Node", "reason": "The identity model is high-leverage across Narrative Architecture, Practitioner Probes, Research Atlases, and Core Architecture projections.", "candidateType": "branch", "readinessState": "ready_for_execution", "horizonPosition": "next", "inheritsFrom": ["tk-entry-001"], "requiredInputs": ["Architecture, Affordance, Instance, and Coordination Surface"], "blockedBy": [], "preferred": true, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "", "supersededBy": "", "retirementReason": ""}, {"id": "next-002", "type": "NextCandidate", "title": "Prototype the Narrative Coordination Surface", "reason": "The R8→R9 checkpoint provides a strong exemplar of machine nodes, settled inputs, open handoffs, verification, and prepared continuation.", "candidateType": "artifact", "readinessState": "ready_for_planning", "horizonPosition": "next", "inheritsFrom": ["tk-entry-002"], "requiredInputs": ["Narrative Coordination Surface schema candidate"], "blockedBy": ["Stable Identity page should clarify canonical identity first"], "preferred": false, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "", "supersededBy": "", "retirementReason": ""}, {"id": "next-003", "type": "NextCandidate", "title": "Run two incomplete hydration packet tests", "reason": "Behavioral re-entry tests are needed to discover which fields are truly required.", "candidateType": "research", "readinessState": "needs_input", "horizonPosition": "later", "inheritsFrom": ["tk-entry-004"], "requiredInputs": ["Two test packets", "A re-entry evaluator", "Dimensional verification rubric"], "blockedBy": [], "preferred": false, "reviewRequired": true, "createdAt": "2026-06-20", "reviewAfter": "", "reactivationTrigger": "After the stable identity page is complete", "supersededBy": "", "retirementReason": ""}], "continuityAssessments": [{"id": "continuity-001", "type": "ContextContinuityAssessment", "assessorType": "human", "band": "breathable", "basis": "The central contract, approved working answers, generated planning files, and prepared next candidates remain reachable.", "atRiskElements": ["The exact minimum hydration contract remains untested."], "observedLoss": "", "recommendedMove": "continue", "reviewState": "human_confirmed", "asOf": "2026-06-20"}]}, "relationshipContract": {"executionSurfaceOwns": ["current implementation", "operational behavior", "runtime state"], "testsOwn": ["executable behavior evidence"], "schemasOwn": ["validation contract"], "sourceDocumentsOwn": ["source content", "authoritative wording"], "threadkeeperOwns": ["rationale", "collaboration state", "stable versus provisional distinction", "open questions", "review triggers", "prepared continuations", "cross-surface references"], "narrativeArchitectureOwns": ["branching", "folding", "compression", "re-entry", "supersession"]}, "recoveryCalibration": {"strainCues": ["Repeated context reconstruction", "Rationale exists only in chat", "Provisional state treated as settled", "Stale next candidate", "Orphaned handoff", "Transcript flooding", "Threadbare continuity"], "failureGeometries": ["ContextAmnesia", "RationaleEvaporation", "ProvisionalStateCollapse", "TranscriptFlooding", "ThreadbareContinuity", "OrphanedHandoff", "StaleHorizon"], "recoveryMoves": ["precipitate_checkpoint", "fold_into_successor", "refresh_machine_node", "create_narrative_capsule", "supersede_stale_entry", "reopen_source_note", "restore_coordination_horizon", "create_formal_decision_record"]}, "sourceNote": {"summary": "This prototype operationalizes the Human-AI Collaboration Field Guide's Threadkeeping & Collaboration Memory page and the related Narrative Architecture coordination contracts.", "researchAnchors": ["Distributed cognition", "Architecture decision records", "Portable collaboration memory", "Narrative Architecture — Coordination Horizons, Folding, and Re-entry"]}};
 const PROMPT_CAPSULE_CONTRACT="prompt-capsule/0.1.0";
 const PROMPT_CAPSULE_ID="fg:threadkeeping-ledger-prompt-capsule/v0.1";
 const PROMPT_CAPSULE_STATE_CONTRACT="threadkeeping-ledger-state/0.1";
@@ -960,6 +968,20 @@ const today = () => new Date().toISOString().slice(0,10);
 const entryById = (id) => model.threadkeeper.entries.find(e => e.id === id);
 const candidateById = (id) => model.threadkeeper.nextCandidates.find(c => c.id === id);
 
+function announceLedgerAction(message) {
+  const status=$("ledgerActionStatus");
+  status.textContent="";
+  requestAnimationFrame(()=>{status.textContent=message});
+}
+
+function focusLedgerTarget(selector) {
+  requestAnimationFrame(()=>{
+    const target=document.querySelector(selector);
+    if(!target)return;
+    try{target.focus({preventScroll:true})}catch(error){target.focus()}
+  });
+}
+
 function guarded(fn, button) {
   if (actionLock) return;
   actionLock = true;
@@ -1014,7 +1036,16 @@ function bind() {
   $("importJsonBtn").addEventListener("click", importJson);
   $("entryForm").addEventListener("submit", submitEntry);
   $("candidateForm").addEventListener("submit", submitCandidate);
-  $("deleteCandidateBtn").addEventListener("click", deleteCandidate);
+  $("deleteCandidateBtn").addEventListener("click", requestCandidateDelete);
+  $("confirmDeleteCandidateBtn").addEventListener("click", confirmDeleteCandidate);
+  $("cancelDeleteCandidateBtn").addEventListener("click", ()=>cancelCandidateDelete(true));
+  $("candidateDeleteConfirmation").addEventListener("keydown", event=>{
+    if(event.key!=="Escape")return;
+    event.preventDefault();
+    event.stopPropagation();
+    cancelCandidateDelete(true);
+  });
+  $("candidateDialog").addEventListener("close", resetCandidateDeleteConfirmation);
   $("continuityForm").addEventListener("submit", submitContinuity);
   document.addEventListener("click", e => {
     const close = e.target.closest("[data-close-dialog]");
@@ -1105,10 +1136,10 @@ function renderHorizon() {
 
 function renderLedger() {
   const cols = view.columns.filter(c=>c.visible);
-  $("ledgerHead").innerHTML = cols.map(c=>`<th style="min-width:${c.width}px;max-width:${c.width}px">${esc(c.label)}</th>`).join("");
+  $("ledgerHead").innerHTML = cols.map(c=>`<th data-label="${esc(c.label)}" scope="col" style="min-width:${c.width}px;max-width:${c.width}px">${esc(c.label)}</th>`).join("");
   const entries = filteredEntries();
-  $("ledgerBody").innerHTML = entries.map(e => `<tr class="${e.id===view.selectedEntryId?'selected':''}" data-select-entry="${esc(e.id)}">
-    ${cols.map(c=>`<td style="min-width:${c.width}px;max-width:${c.width}px">${renderCell(e,c)}</td>`).join("")}
+  $("ledgerBody").innerHTML = entries.map(e => `<tr data-label="Threadkeeping ledger: ${esc(e.title)} (${esc(e.id)})" class="${e.id===view.selectedEntryId?'selected':''}" data-select-entry="${esc(e.id)}">
+    ${cols.map(c=>`<td data-label="${esc(c.label)}" style="min-width:${c.width}px;max-width:${c.width}px">${renderCell(e,c)}</td>`).join("")}
   </tr>`).join("");
   $("tableCount").textContent = `${entries.length} of ${model.threadkeeper.entries.length} entries visible`;
 }
@@ -1156,7 +1187,11 @@ function renderInspector() {
       <label>Central contract<input type="text" data-entry-field="centralContractRef" value="${esc(e.centralContractRef)}"></label>
       <label>Review trigger<textarea data-entry-field="reviewTrigger">${esc(e.reviewTrigger)}</textarea></label>
       <label>Re-entry point<input type="text" data-entry-field="reentryPoint" value="${esc(e.reentryPoint)}"></label>
-      <div class="button-row"><button class="danger" id="deleteEntryBtn">Delete entry</button></div>
+      <div class="button-row"><button class="danger" type="button" id="deleteEntryBtn" aria-expanded="false" aria-controls="entryDeleteConfirmation">Delete entry</button></div>
+      <div class="delete-confirmation" id="entryDeleteConfirmation" role="group" aria-labelledby="entryDeletePrompt" hidden>
+        <p id="entryDeletePrompt">Delete “${esc(e.title)}” from the current working ledger?</p>
+        <div class="button-row"><button class="danger" type="button" id="confirmDeleteEntryBtn">Delete entry</button><button type="button" id="cancelDeleteEntryBtn">Keep entry</button></div>
+      </div>
     </div>`;
   $("selectedInspector").querySelectorAll("[data-entry-field]").forEach(el => {
     const eventName = el.tagName === "SELECT" ? "change" : "blur";
@@ -1165,11 +1200,38 @@ function renderInspector() {
       renderAll();
     });
   });
-  $("deleteEntryBtn").addEventListener("click", () => {
-    if (!confirm("Delete this entry from the current working ledger?")) return;
-    model.threadkeeper.entries = model.threadkeeper.entries.filter(x=>x.id!==e.id);
-    view.selectedEntryId = model.threadkeeper.entries[0]?.id || "";
+  const deleteButton=$("deleteEntryBtn"),confirmation=$("entryDeleteConfirmation"),cancelButton=$("cancelDeleteEntryBtn");
+  const closeConfirmation=(restoreFocus=false)=>{
+    confirmation.hidden=true;
+    deleteButton.setAttribute("aria-expanded","false");
+    if(restoreFocus)deleteButton.focus();
+  };
+  deleteButton.addEventListener("click",()=>{
+    confirmation.hidden=false;
+    deleteButton.setAttribute("aria-expanded","true");
+    cancelButton.focus();
+  });
+  cancelButton.addEventListener("click",()=>closeConfirmation(true));
+  confirmation.addEventListener("keydown",event=>{
+    if(event.key!=="Escape")return;
+    event.preventDefault();
+    closeConfirmation(true);
+  });
+  $("confirmDeleteEntryBtn").addEventListener("click",()=>{
+    const index=model.threadkeeper.entries.findIndex(item=>item.id===e.id);
+    model.threadkeeper.entries=model.threadkeeper.entries.filter(item=>item.id!==e.id);
+    model.threadkeeper.entries.forEach(item=>{
+      if(item.supersedes===e.id)item.supersedes="";
+      if(item.supersededBy===e.id)item.supersededBy="";
+    });
+    model.threadkeeper.nextCandidates.forEach(candidate=>{
+      candidate.inheritsFrom=arr(candidate.inheritsFrom).filter(id=>id!==e.id);
+    });
+    const next=model.threadkeeper.entries[Math.min(index,model.threadkeeper.entries.length-1)];
+    view.selectedEntryId=next?.id||"";
     renderAll();
+    announceLedgerAction(`Entry “${e.title}” deleted; its entry and next-candidate references were removed.`);
+    focusLedgerTarget(next?'#selectedInspector [data-entry-field]':'#addEntryBtn');
   });
 }
 
@@ -1528,6 +1590,7 @@ function submitEntry(event) {
 
 function openCandidateDialog(id="") {
   const form=$("candidateForm"), c=id?candidateById(id):null;
+  resetCandidateDeleteConfirmation();
   form.reset();
   form.elements.id.value=c?.id||"";
   form.elements.title.value=c?.title||"";
@@ -1538,8 +1601,26 @@ function openCandidateDialog(id="") {
   form.elements.preferred.checked=!!c?.preferred;
   $("candidateDialogTitle").textContent=c?"Edit next candidate":"Add one next candidate";
   $("deleteCandidateBtn").style.display=c?"inline-block":"none";
+  $("candidateDeletePrompt").textContent=c?`Delete “${c.title}” from the current working ledger?`:"Delete this next candidate from the current working ledger?";
   view.selectedCandidateId=c?.id||"";
   $("candidateDialog").showModal();
+}
+
+function resetCandidateDeleteConfirmation() {
+  $("candidateDeleteConfirmation").hidden=true;
+  $("deleteCandidateBtn").setAttribute("aria-expanded","false");
+}
+
+function requestCandidateDelete() {
+  if(!$("candidateForm").elements.id.value)return;
+  $("candidateDeleteConfirmation").hidden=false;
+  $("deleteCandidateBtn").setAttribute("aria-expanded","true");
+  $("cancelDeleteCandidateBtn").focus();
+}
+
+function cancelCandidateDelete(restoreFocus=false) {
+  resetCandidateDeleteConfirmation();
+  if(restoreFocus)$("deleteCandidateBtn").focus();
 }
 
 function submitCandidate(event) {
@@ -1563,12 +1644,19 @@ function submitCandidate(event) {
   },button);
 }
 
-function deleteCandidate() {
+function confirmDeleteCandidate() {
   const id=$("candidateForm").elements.id.value;
-  if(!id||!confirm("Delete this next candidate from the current working ledger?"))return;
+  if(!id)return;
+  const index=model.threadkeeper.nextCandidates.findIndex(item=>item.id===id);
+  const deleted=candidateById(id);
   model.threadkeeper.nextCandidates=model.threadkeeper.nextCandidates.filter(x=>x.id!==id);
   model.threadkeeper.entries.forEach(e=>e.nextCandidateRefs=arr(e.nextCandidateRefs).filter(x=>x!==id));
-  $("candidateDialog").close(); renderAll();
+  const next=model.threadkeeper.nextCandidates[Math.min(index,model.threadkeeper.nextCandidates.length-1)];
+  view.selectedCandidateId=next?.id||"";
+  $("candidateDialog").close();
+  renderAll();
+  announceLedgerAction(`Next candidate “${deleted?.title||id}” deleted; its entry references were removed.`);
+  focusLedgerTarget(next?`[data-edit-candidate="${CSS.escape(next.id)}"]`:'#addCandidateBtn');
 }
 
 function submitContinuity(event) {

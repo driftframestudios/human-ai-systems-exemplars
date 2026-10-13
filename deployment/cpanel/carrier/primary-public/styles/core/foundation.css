@@ -1,0 +1,530 @@
+/* Context Canvas core: document foundation ---------------------------------
+   Consumers: every top-level route that uses the shared Context Canvas core.
+   Owns: box sizing, document type, semantic element normalization, active
+   link roles, lists, images, figures, selection, the established type scale,
+   and shared reading-container and prose-flow composition.
+   Load order: after tokens.css and before components and route bundles.
+   Extension: route owners may narrow these defaults inside a route scope. */
+
+*,
+::after,
+::before {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+html {
+    background-color: var(--canvas-night);
+    color: var(--canvas-ink);
+    font-family: 'Arial Nova', 'Helvetica Neue', sans-serif;
+    font-size: 100%;
+    font-weight: 400;
+    height: 100%;
+    line-height: 1.4;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+}
+
+::-moz-selection {
+    background: var(--canvas-accent);
+    color: #000;
+    text-shadow: none;
+}
+
+::selection {
+    background: var(--canvas-accent);
+    color: #000;
+    text-shadow: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #333;
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small,
+li small,
+p small {
+    display: inline-block;
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    margin: 0;
+}
+
+p {
+    margin-top: -1px;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+a {
+    background: 0 0;
+    color: var(--canvas-link-color);
+}
+
+a:visited {
+    color: var(--canvas-link-visited-color);
+}
+
+a:is(:active, :hover) {
+    text-decoration-thickness: .14em;
+}
+
+a:focus,
+a:visited:focus {
+    outline: thin dotted;
+}
+
+ol,
+ul {
+    padding-left: 24px;
+}
+
+ol {
+    font-family: Futura, arial, sans-serif;
+    font-size: .85em;
+    font-weight: 400;
+    list-style: decimal;
+}
+
+ol > :last-child,
+ul > :last-child {
+    margin-bottom: 0;
+}
+
+nav li {
+    margin: 0 0 8px;
+}
+
+img {
+    color: #ff99ac;
+    max-width: 100%;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+blockquote,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+pre {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: 0;
+    outline: 0;
+}
+
+a:active,
+a:hover,
+a:visited:active,
+a:visited:hover {
+    outline: 0;
+}
+
+nav ol,
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+ol,
+ul {
+    margin: 0 0 16px;
+}
+
+.tag-line,
+.project--slug {
+    font-family: monospace, serif;
+    font-size: 1.2em;
+    font-weight: 400;
+    letter-spacing: .02em;
+}
+
+.project--slug {
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    letter-spacing: .02em;
+    line-height: 1.125em;
+}
+
+.project--lead {
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: 400;
+    letter-spacing: .02em;
+    line-height: 1em;
+}
+
+.bluff {
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 770px) {
+    .project--slug {
+        font-size: .7em;
+        letter-spacing: .03em;
+    }
+
+    .tag-line,
+    .project--slug {
+        padding-bottom: 8px;
+    }
+}
+
+.h1-hero {
+    color: #fff;
+}
+
+@media screen and (max-width: 770px) {
+    .h1-spaced,
+    .tag-line {
+        letter-spacing: .05em;
+    }
+}
+
+.txt-h1,
+.txt-large,
+h1 {
+    font-weight: 700;
+    line-height: 1;
+}
+
+.txt-large {
+    font-size: 3.5em;
+    font-weight: 300;
+}
+
+.txt-medium {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: .75em;
+    opacity: .8;
+}
+
+.txt-h1,
+h1 {
+    font-size: 3.125em;
+    font-weight: 300;
+}
+
+.txt-h2,
+h2 {
+    font-size: 2.5em;
+    font-weight: 500;
+}
+
+.txt-h3,
+h3 {
+    font-size: 1.42em;
+    font-weight: 700;
+}
+
+.txt-h4,
+h4 {
+    font-size: 1.20em;
+    font-weight: 300;
+}
+
+.txt-h5,
+h5 {
+    font-size: 1.125em;
+    font-weight: 300;
+}
+
+.txt-h6,
+blockquote,
+h6 {
+    font-size: 1.05em;
+    font-weight: 300;
+}
+
+.txt-base {
+    font-size: 1.425em;
+    font-weight: 300;
+}
+
+.txt-small,
+small,
+sub,
+sup {
+    font-size: .875em;
+    font-weight: 300;
+}
+
+.txt-tiny {
+    font-size: .9rem;
+    font-weight: 400;
+}
+
+.slug {
+    font-size: .75em;
+    font-weight: 500;
+}
+
+.bold,
+b,
+cite,
+strong {
+    font-weight: 600;
+}
+
+blockquote,
+dfn,
+em,
+i,
+img {
+    font-style: italic;
+}
+
+article,
+aside,
+canvas,
+footer,
+header,
+main,
+nav,
+section,
+small {
+    display: block;
+}
+
+blockquote,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+kbd,
+li,
+nav ol,
+nav ul,
+samp,
+small {
+    margin-bottom: 16px;
+}
+
+figure {
+    margin-block: 0;
+    margin-inline: 0;
+    width: 100%;
+}
+
+figcaption {
+    padding: 32px 0 24px;
+}
+
+:is(
+    .interpretive-aside,
+    .discovery-aside,
+    .discovery-callout,
+    .callout-block,
+    .implementation-companion,
+    .story-visual,
+    figure
+) {
+    break-inside: avoid;
+}
+
+body {
+    font-size: 120%;
+}
+
+abbr {
+    cursor: help;
+    text-decoration: underline dotted #ff7a97;
+}
+
+.content {
+    container-name: canvas-reading;
+    container-type: inline-size;
+    inline-size: min(100%, var(--canvas-reading-measure));
+    margin: 0 auto;
+    max-width: none;
+    padding: 32px;
+}
+
+.content > :last-child {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 770px) {
+    .content {
+        padding: 28px 20px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .content {
+        inline-size: min(100%, var(--canvas-reading-measure));
+        padding: 56px 40px;
+    }
+}
+
+.content--reading {
+    inline-size: min(100%, var(--canvas-reading-measure));
+}
+
+.content--editorial {
+    inline-size: min(100%, var(--canvas-editorial-measure));
+}
+
+.content--wide {
+    inline-size: min(100%, var(--canvas-wide-measure));
+}
+
+.content--full-bleed {
+    inline-size: 100%;
+    padding-inline: 0;
+}
+
+/* Wide fields return their prose to readable measures. */
+.content :where(p, li, dd, figcaption, blockquote, summary) {
+    max-inline-size: min(100%, var(--canvas-reading-measure));
+}
+
+.content :where(h1, h2, h3, h4):not(.architecture-track-title) {
+    max-inline-size: min(100%, var(--canvas-heading-measure));
+    text-wrap: balance;
+}
+
+.content :where(.debrief-lead, .tag-line) {
+    max-inline-size: min(100%, var(--canvas-lead-measure));
+}
+
+.prose-flow > .debrief-lead {
+    break-inside: avoid;
+}
+
+@media screen and (min-width: 120rem) {
+    .content.content--editorial,
+    .content.content--wide,
+    .content.content--full-bleed {
+        inline-size: min(100%, var(--canvas-editorial-measure));
+        padding: clamp(3.5rem, 4vw, 6rem) var(--canvas-page-gutter);
+    }
+
+    .content.content--wide {
+        inline-size: min(100%, var(--canvas-wide-measure));
+    }
+
+    .content.content--full-bleed {
+        inline-size: 100%;
+    }
+}
+
+@container canvas-reading (min-width: 80rem) {
+    .prose-flow {
+        column-count: 2;
+        column-gap: var(--canvas-column-gap);
+        /* The solid rule keeps the column boundary when color-mix is unavailable. */
+        column-rule: 1px solid var(--canvas-rule);
+        column-rule: 1px solid color-mix(in srgb, var(--canvas-rule) 58%, transparent);
+        orphans: 3;
+        widows: 3;
+    }
+
+    .prose-flow > :is(h1, h2, .table-figure, .table-span-all, figure, .career-slide, .clean-list, .embed-slot, pre) {
+        column-span: all;
+    }
+
+    .prose-flow :is(h1, h2, blockquote, figure, pre, table) {
+        break-inside: avoid;
+    }
+
+    .prose-flow :is(h3, h4) {
+        break-after: avoid;
+    }
+
+    .prose-flow li {
+        break-inside: avoid;
+    }
+
+    .prose-flow .table-figure--column {
+        column-span: none;
+    }
+}
+
+@supports not (container-type: inline-size) {
+    @media screen and (min-width: 120rem) {
+        .prose-flow {
+            column-count: 2;
+            column-gap: var(--canvas-column-gap);
+            column-rule: 1px solid var(--canvas-rule);
+            orphans: 3;
+            widows: 3;
+        }
+
+        .prose-flow > :is(h1, h2, .table-figure, .table-span-all, figure, .career-slide, .clean-list, .embed-slot, pre) {
+            column-span: all;
+        }
+
+        .prose-flow :is(h1, h2, blockquote, figure, pre, table, li) {
+            break-inside: avoid;
+        }
+
+        .prose-flow :is(h3, h4) {
+            break-after: avoid;
+        }
+    }
+}
+
+@media screen and (max-width: 770px) {
+    body {
+        font-size: 78%;
+    }
+
+    .txt-h1,
+    h1 {
+        font-size: 2.35em;
+    }
+
+    li,
+    p {
+        font-size: 120%;
+    }
+
+    pre {
+        font-size: 125%;
+        line-height: 1.3;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .h1-spaced,
+    .tag-line {
+        font-size: 1em;
+        letter-spacing: .05em;
+    }
+
+    .txt-h1 {
+        font-size: 1.65em;
+        line-height: 1.3em;
+    }
+}

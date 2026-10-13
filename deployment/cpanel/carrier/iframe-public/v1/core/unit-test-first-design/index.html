@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unit-test-first Design · Business Rule Protection · Chimeric Prototype v0.1.4</title>
+<title>Unit-test-first Design · Business Rule Protection · Chimeric Prototype v0.1.5</title>
 <style>
   :root {
     --bg: #f7f4ef;
@@ -222,7 +222,7 @@
 </head>
 <body>
 <header class="hero">
-  <div class="eyebrow">Core Architectures · Chimeric Prototype v0.1.4</div>
+  <div class="eyebrow">Core Architectures · Chimeric Prototype v0.1.5</div>
   <h1>Unit-test-first Design</h1>
   <p class="subtitle">Business Rule Protection</p>
   <p class="muted">A single-file artifact for protecting vital business behavior before redesign, refactor, AI-assisted code generation, or implementation work changes the surrounding system.</p>
@@ -323,9 +323,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `unit-test-first-design/current-protected-behaviors`
-- Source: `unit-test-first-design@0.1.4`
-- State: `unit-test-first-design-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:332236d7`
+- Source: `unit-test-first-design@0.1.5`
+- State: `unit-test-first-design-state.v0.1` · revision `0.1.5`
+- Fingerprint: `fnv1a32-utf8:544ac498`
 - View: `plain`
 
 ## Purpose and target
@@ -479,7 +479,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 - Use: Protect the most important business rules before changing the system around them. · Context cue: Testing is planned for a later step.
 - Use: This behavior needs a protected boundary so the team can identify the change with clearer confidence. · Context cue: Confidence is low around this change.
 - Use: This test is producing implementation evidence that can guide revision. · Context cue: The test produced a different result.
-- Use: The protected behavior boundary can guide the AI collaborator toward the intended rule. · Context cue: The generated change altered the behavior.
+- Use: Supply the protected behavior boundary as generation context so the intended rule remains explicit. · Context cue: The generated change altered the behavior.
 
 - Recovery strain cues: the team feels risk because behavior needs executable protection; business rules are described verbally and need a test boundary; AI-generated code changes behavior the team meant to preserve; refactor confidence is low because legacy behavior is unclear; tests exist and the behavior people rely on still needs coverage
 - Stabilizing read: The collaboration needs protected behavior.
@@ -523,7 +523,7 @@ const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
 const PROMPT_CAPSULE_STATE_CONTRACT = 'unit-test-first-design-state.v0.1';
 const PROMPT_CAPSULE_ID = 'unit-test-first-design/current-protected-behaviors';
 const PROMPT_CAPSULE_SOURCE_ID = 'unit-test-first-design';
-const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.5';
 const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
 const PROMPT_CAPSULE_SKILL_REVISION = '22ff10cb2f6a122f89a905da695ebb18a0b0ec77';
 const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -605,7 +605,7 @@ let model = {
     id: 'ca-artifact-unit-test-first-design-genomics-001',
     display_name: 'Unit-test-first Design',
     subtitle: 'Business Rule Protection',
-    version: '0.1.4',
+    version: '0.1.5',
     family: 'Pattern Fit and Behavior Protection',
     placement: 'Implementation Architecture / Recovery Routing Atlas participant',
     primary_cognitive_move: 'verification-first behavior preservation',
@@ -724,7 +724,7 @@ let model = {
       { common:'Testing is planned for a later step.', stronger:'Protect the most important business rules before changing the system around them.' },
       { common:'Confidence is low around this change.', stronger:'This behavior needs a protected boundary so the team can identify the change with clearer confidence.' },
       { common:'The test produced a different result.', stronger:'This test is producing implementation evidence that can guide revision.' },
-      { common:'The generated change altered the behavior.', stronger:'The protected behavior boundary can guide the AI collaborator toward the intended rule.' }
+      { common:'The generated change altered the behavior.', stronger:'Supply the protected behavior boundary as generation context so the intended rule remains explicit.' }
     ]
   },
   recovery_calibration: {
@@ -1189,9 +1189,9 @@ function renderInspector(){
 function renderTableEquivalent(){
   const visible = visibleTargets();
   if(!visible.length){ $('tableEquivalent').innerHTML = `<div class="empty-state">No visible behavior targets.</div>`; return; }
-  $('tableEquivalent').innerHTML = `<table><thead><tr><th>Behavior</th><th>Source</th><th>Preconditions / Action / Expected</th><th>Test target</th><th>Status / Route</th></tr></thead><tbody>${visible.map(t=>{
+  $('tableEquivalent').innerHTML = `<table data-label="Unit-test-first Design behavior targets"><thead><tr><th data-label="Behavior" scope="col">Behavior</th><th data-label="Source" scope="col">Source</th><th data-label="Preconditions / Action / Expected" scope="col">Preconditions / Action / Expected</th><th data-label="Test target" scope="col">Test target</th><th data-label="Status / Route" scope="col">Status / Route</th></tr></thead><tbody>${visible.map(t=>{
     const route = routeMeta(t.handoff);
-    return `<tr onclick="window.utfd.selectTarget('${t.id}')"><td><strong>${esc(t.title)}</strong><br><span class="muted">${esc(t.why_it_matters)}</span></td><td>${esc((t.source_artifacts||[]).join(', '))}</td><td><details><summary>Show behavior shape</summary><p><strong>Preconditions</strong></p><ul>${(t.preconditions||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><strong>Action:</strong> ${esc(t.action)}</p><p><strong>Expected results</strong></p><ul>${(t.expected_results||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details></td><td>${esc(t.platform_agnostic_test)}</td><td><span class="status-pill status-${esc(t.protection_status)}">${esc(statusMeta(t.protection_status).label)}</span><br><span class="route-pill" style="margin-top:6px">${esc(route.label)}</span></td></tr>`;
+    return `<tr data-label="Unit-test-first Design behavior targets: ${esc(t.title)} (${esc(t.id)})" onclick="window.utfd.selectTarget('${t.id}')"><td data-label="Behavior"><strong>${esc(t.title)}</strong><br><span class="muted">${esc(t.why_it_matters)}</span></td><td data-label="Source">${esc((t.source_artifacts||[]).join(', '))}</td><td data-label="Preconditions / Action / Expected"><details><summary>Show behavior shape</summary><p><strong>Preconditions</strong></p><ul>${(t.preconditions||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><strong>Action:</strong> ${esc(t.action)}</p><p><strong>Expected results</strong></p><ul>${(t.expected_results||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details></td><td data-label="Test target">${esc(t.platform_agnostic_test)}</td><td data-label="Status / Route"><span class="status-pill status-${esc(t.protection_status)}">${esc(statusMeta(t.protection_status).label)}</span><br><span class="route-pill" style="margin-top:6px">${esc(route.label)}</span></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -1619,7 +1619,7 @@ function downloadPromptCapsule(){
 
 window.utfd = { render, selectTarget, moveTarget, hideTarget, showTarget, showAll, resetOrder, requestTargetRemoval, cancelTargetRemoval, removeTarget, addTarget, updateField };
 window.unitTestFirstDesign = Object.freeze({
-  version:'0.1.4',
+  version:'0.1.5',
   stateContract:PROMPT_CAPSULE_STATE_CONTRACT,
   contract:PROMPT_CAPSULE_CONTRACT,
   views:PROMPT_CAPSULE_VIEWS,

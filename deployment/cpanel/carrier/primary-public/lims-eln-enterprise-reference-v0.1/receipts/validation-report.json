@@ -15,7 +15,7 @@
   "executionClass": "verified_running",
   "executionScope": "local_offline_synthetic",
   "failures": [],
-  "generatedAt": "2026-08-23T02:17:40+00:00",
+  "generatedAt": "2026-10-06T06:02:32+00:00",
   "houseSyntax": {
     "successful": true
   },
@@ -26,7 +26,7 @@
     "Organizational migration, restore, security, and production acceptance remain accountable adoption receipts.",
     "Engineering tests contribute validation evidence; accountable Quality and Regulatory decisions establish the applicable compliance posture."
   ],
-  "receiptId": "lims-eln-reference-v0.3-local-20260823T021740Z",
+  "receiptId": "lims-eln-reference-v0.3-local-20261006T060232Z",
   "result": {
     "errors": 0,
     "failures": 0,
@@ -50,7 +50,7 @@
     "formatAssertions": true,
     "validated": 4
   },
-  "sourceDigest": "bb5eb71fe434276b12efe5e64e714862f86eeb62aa58a85e42a72c9264731cda",
+  "sourceDigest": "3c273410c811044a2441ce1952f05ca04a91d38df128ea9d17217070b45e6b1f",
   "sourceScope": {
     "algorithm": "sha256",
     "files": 89,

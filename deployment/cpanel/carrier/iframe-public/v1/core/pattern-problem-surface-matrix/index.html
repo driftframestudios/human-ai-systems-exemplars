@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pattern–Problem Surface Matrix Chimeric Prototype v0.1.4</title>
+  <title>Pattern–Problem Surface Matrix Chimeric Prototype v0.1.5</title>
   <style>
     :root {
       --bg: #f7f6f2;
@@ -168,7 +168,7 @@
 <body>
 <header>
   <h1>Pattern–Problem Surface Matrix</h1>
-  <div class="subtitle">Experience Design Patterns as Problem Surfaces · Chimeric Prototype v0.1.4</div>
+  <div class="subtitle">Experience Design Patterns as Problem Surfaces · Chimeric Prototype v0.1.5</div>
   <div class="version-pill">Matrix-shaped artifact · population cartographies · stable IDs + view state</div>
   <div class="quick-use" id="quickUse"></div>
 </header>
@@ -177,7 +177,7 @@
     <div class="section-title">
       <div>
         <h2>Pattern grammar</h2>
-        <p class="help">The same underlying design tension can be read differently by designers, executives, engineers, accessibility reviewers, researchers, auditors, and AI collaborators.</p>
+        <p class="help">The same underlying design tension can be read differently by designers, executives, engineers, accessibility reviewers, researchers, and auditors, and can also shape proposals from a generative AI system.</p>
       </div>
     </div>
     <div class="note" id="grammarNote"></div>
@@ -279,9 +279,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `pattern-problem-surface-matrix/current-pattern-fit`
-- Source: `pattern-problem-surface-matrix@0.1.4`
-- State: `pattern-problem-surface-matrix-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:2e7c4c74`
+- Source: `pattern-problem-surface-matrix@0.1.5`
+- State: `pattern-problem-surface-matrix-state.v0.1` · revision `0.1.5`
+- Fingerprint: `fnv1a32-utf8:d49761ec`
 - View: `plain`
 
 ## Purpose and target
@@ -301,7 +301,7 @@ Use this Pattern–Problem Surface Matrix to connect each interface or workflow 
 - Restored condition: Pattern fit grounded in problem, audience, signal, counter-signal, and implementation context.
 - Good next question: What problem surface does this pattern help make easier, clearer, safer, calmer, more reliable, or more inspectable?
 - Usual handoffs: HEART Chart; Specification-by-Example; Software Architecture Views; Participatory Design Kit; Service-design Blueprint; Unit-test-first Design; Plus / Delta
-- Strain cues: A pattern is proposed because it is common.; AI suggests interface patterns without explaining the problem they solve.; Stakeholders debate the pattern before naming the problem surface.; A pattern improves polish while leaving the goal under-supported.
+- Strain cues: A pattern is proposed because it is common.; A generative AI system proposes interface patterns without explaining the problem they solve.; Stakeholders debate the pattern before naming the problem surface.; A pattern improves polish while leaving the goal under-supported.
 
 ## Pattern grammar
 
@@ -680,7 +680,7 @@ The complete accepted matrix appears below: 8 patterns, 6 population readings, a
 - The complete semantic matrix travels independent of interface selection, display order, visibility, and expanded-preview state.
 - Interface selection, focus arrangements, notices, clipboard activity, pending removal, and Markdown-view choice stay outside this public projection and its fingerprint.
 - Unknown or private extensions round-trip through the JSON exchange and stay outside this public Markdown and its fingerprint.
-- AI suggestions enter as attributed proposals. Human reviewers retain interpretation, evidence acceptance, external sharing, and publication decisions.
+- Generative-AI proposals enter as attributed proposals. Human reviewers retain interpretation, evidence acceptance, external sharing, and publication decisions.
 
 ## Requested return
 
@@ -717,7 +717,7 @@ These public collaboration loops fit when the receiving work meets the stated co
 - Use: Which population reading reveals the constraint that should become more inspectable? · Context cue: Users do not understand the interface.
 
 - Retrieval aliases: Pattern–Problem Surface Matrix; Experience Design Patterns as Problem Surfaces; Population Cartography Matrix; Design Pattern Problem Map; Pattern Fit Matrix; Problem Surface Cartography
-- Recovery strain cues: a pattern is selected before the problem surface is named; AI suggests common patterns without local rationale; a polished pattern leaves the workflow under-supported; one population reading dominates while other constraints remain invisible
+- Recovery strain cues: a pattern is selected before the problem surface is named; a generative AI system proposes common patterns without local rationale; a polished pattern leaves the workflow under-supported; one population reading dominates while other constraints remain invisible
 - Stabilizing read: The collaboration needs pattern fit across population cartographies.
 - Restored state: Patterns are connected to problem surfaces, population-specific concerns, signals, counter-signals, and implementation routes.
 - Recovery moves: name the problem surface before selecting the pattern; choose the population cartographies that matter; write the constraint-outcome grammar; add signal and counter-signal; route implementation surfaces into adjacent architectures
@@ -775,7 +775,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     "id": "ca-artifact-pattern-problem-surface-matrix-001",
     "display_name": "Pattern–Problem Surface Matrix",
     "subtitle": "Experience Design Patterns as Problem Surfaces",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "family": "Pattern Fit and Behavior Protection",
     "placement": "Bridge Architecture / Implementation Architecture",
     "primary_cognitive_move": "pattern-to-problem translation",
@@ -800,7 +800,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     ],
     "strain_cues": [
       "A pattern is proposed because it is common.",
-      "AI suggests interface patterns without explaining the problem they solve.",
+      "A generative AI system proposes interface patterns without explaining the problem they solve.",
       "Stakeholders debate the pattern before naming the problem surface.",
       "A pattern improves polish while leaving the goal under-supported."
     ]
@@ -1139,7 +1139,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   "recovery_calibration": {
     "strain_cues": [
       "a pattern is selected before the problem surface is named",
-      "AI suggests common patterns without local rationale",
+      "a generative AI system proposes common patterns without local rationale",
       "a polished pattern leaves the workflow under-supported",
       "one population reading dominates while other constraints remain invisible"
     ],
@@ -1284,7 +1284,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   const PROMPT_CAPSULE_STATE_CONTRACT = 'pattern-problem-surface-matrix-state.v0.1';
   const PROMPT_CAPSULE_ID = 'pattern-problem-surface-matrix/current-pattern-fit';
   const PROMPT_CAPSULE_SOURCE_ID = 'pattern-problem-surface-matrix';
-  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.5';
   const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
   const PROMPT_CAPSULE_SKILL_REVISION = '22ff10cb2f6a122f89a905da695ebb18a0b0ec77';
   const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -1424,16 +1424,16 @@ These public collaboration loops fit when the receiving work meets the stated co
   function renderMatrix(){
     const pops = visiblePopulations();
     const pats = visiblePatterns();
-    let html = '<table aria-label="Pattern problem surface matrix"><thead><tr><th class="pattern-cell">Pattern</th>';
-    pops.forEach(pop => html += `<th><div class="pattern-title">${esc(pop.label)}</div><div class="mini">${esc(pop.description)}</div></th>`);
+    let html = '<table data-label="Pattern problem surface matrix" aria-label="Pattern problem surface matrix"><thead><tr><th data-label="Pattern" scope="col" class="pattern-cell">Pattern</th>';
+    pops.forEach(pop => html += `<th data-label="${esc(pop.label)}" scope="col"><div class="pattern-title">${esc(pop.label)}</div><div class="mini">${esc(pop.description)}</div></th>`);
     html += '</tr></thead><tbody>';
     pats.forEach(pattern => {
-      html += `<tr><td class="pattern-cell"><div class="pattern-title">${esc(pattern.label)}</div><div class="mini">${esc(pattern.category)}</div><div class="cell-meta"><span class="pill">${esc(pattern.pattern_status.replaceAll('_',' '))}</span><span class="route-pill">Route: ${esc(pattern.handoff || '—')}</span></div></td>`;
+      html += `<tr data-label="Pattern problem surface matrix: ${esc(pattern.label)} (${esc(pattern.id)})"><td data-label="Pattern" class="pattern-cell"><div class="pattern-title">${esc(pattern.label)}</div><div class="mini">${esc(pattern.category)}</div><div class="cell-meta"><span class="pill">${esc(pattern.pattern_status.replaceAll('_',' '))}</span><span class="route-pill">Route: ${esc(pattern.handoff || '—')}</span></div></td>`;
       pops.forEach(pop => {
         const id = cellId(pattern.id, pop.id);
         const status = pattern.cell_statuses[pop.id] || 'needs_to_surface';
         const text = pattern.reads[pop.id] || '';
-        html += `<td data-cell-id="${esc(id)}"><button class="tiny ghost select-cell" data-cell="${esc(id)}">Inspect</button><div class="cell-preview" id="preview-${esc(id)}">${esc(text)}</div><button class="tiny ghost toggle-preview" data-target="preview-${esc(id)}">Show full text</button><div class="cell-meta"><span class="status-pill ${cellStatusClass(status)}">${esc(STATUS[status])}</span></div><label for="text-${esc(id)}">Reading</label><textarea class="cell-textarea" id="text-${esc(id)}" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${esc(text)}</textarea><label>Status</label><select class="cell-status" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===status?'selected':''}>${esc(v)}</option>`).join('')}</select></td>`;
+        html += `<td data-label="${esc(pop.label)} (${esc(pop.id)})" data-cell-id="${esc(id)}"><button class="tiny ghost select-cell" data-cell="${esc(id)}">Inspect</button><div class="cell-preview" id="preview-${esc(id)}">${esc(text)}</div><button class="tiny ghost toggle-preview" data-target="preview-${esc(id)}">Show full text</button><div class="cell-meta"><span class="status-pill ${cellStatusClass(status)}">${esc(STATUS[status])}</span></div><label for="text-${esc(id)}">Reading</label><textarea class="cell-textarea" id="text-${esc(id)}" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${esc(text)}</textarea><label>Status</label><select class="cell-status" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===status?'selected':''}>${esc(v)}</option>`).join('')}</select></td>`;
       });
       html += '</tr>';
     });
@@ -1880,7 +1880,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       '- The complete semantic matrix travels independent of interface selection, display order, visibility, and expanded-preview state.',
       '- Interface selection, focus arrangements, notices, clipboard activity, pending removal, and Markdown-view choice stay outside this public projection and its fingerprint.',
       '- Unknown or private extensions round-trip through the JSON exchange and stay outside this public Markdown and its fingerprint.',
-      '- AI suggestions enter as attributed proposals. Human reviewers retain interpretation, evidence acceptance, external sharing, and publication decisions.',
+      '- Generative-AI proposals enter as attributed proposals. Human reviewers retain interpretation, evidence acceptance, external sharing, and publication decisions.',
       '',
       '## Requested return',
       '',
@@ -2178,7 +2178,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   document.querySelector('[data-prompt-view-control]').hidden=false;
   document.querySelector('[data-prompt-actions]').hidden=false;
   window.patternProblemSurfaceMatrix=Object.freeze({
-    version:'0.1.4',
+    version:'0.1.5',
     stateContract:PROMPT_CAPSULE_STATE_CONTRACT,
     contract:PROMPT_CAPSULE_CONTRACT,
     views:PROMPT_CAPSULE_VIEWS,

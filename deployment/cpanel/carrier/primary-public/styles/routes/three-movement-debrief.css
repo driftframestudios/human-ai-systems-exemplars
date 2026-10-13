@@ -2,8 +2,9 @@
    Consumer: .three-movement-debrief-page.
    Owns: the route hero accent, working-posture cards, then/current contract
    transitions, container response, and print grouping.
-   Load order: expanded.css, styles/components/debrief-reading.css, this route
-   bundle, canvas-shell.css, then styles/contracts/debrief-composition.css.
+   Load order: shared core, expanded.css, styles/components/debrief-reading.css,
+   this route bundle, canvas-shell.css, then
+   styles/contracts/debrief-composition.css.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The movement grammar remains stable while the route retains authority over
    palette, rhythm, density, topology, and source-earned experiments. */

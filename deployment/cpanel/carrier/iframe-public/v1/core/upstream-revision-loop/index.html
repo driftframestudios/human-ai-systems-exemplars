@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upstream Revision Loop · Chimeric Prototype v0.1.4</title>
+  <title>Upstream Revision Loop · Chimeric Prototype v0.1.5</title>
   <style>
     :root {
       --bg: #f7f4ee;
@@ -225,7 +225,7 @@
   <div class="page">
     <header class="hero">
       <div>
-        <div class="eyebrow">Core Architecture · Chimeric Prototype v0.1.4</div>
+        <div class="eyebrow">Core Architecture · Chimeric Prototype v0.1.5</div>
         <h1>Upstream Revision Loop</h1>
         <p class="subtitle">Revisiting Solution Artifacts</p>
       </div>
@@ -343,16 +343,16 @@
               <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
             </div>
           </fieldset>
-          <p class="note" id="promptViewDescription">Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.</p>
+          <p class="note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete revision context.</p>
           <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
           <noscript><p class="note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
           <pre id="aiPromptOut" data-prompt-view-active="plain" aria-labelledby="prompt-heading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Upstream Revision Loop
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `upstream-revision-loop/current-revision-state`
-- Source: `upstream-revision-loop@0.1.4`
-- State: `upstream-revision-loop-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:e062632f`
+- Source: `upstream-revision-loop@0.1.5`
+- State: `upstream-revision-loop-state.v0.1` · revision `0.1.5`
+- Fingerprint: `fnv1a32-utf8:5cb92ed5`
 - View: `plain`
 
 ## Purpose and target
@@ -392,14 +392,14 @@ Every accepted revision appears below in current display order. A hidden label n
 - Route reason: The unresolved behavior needs observable examples before threshold placement stabilizes.
 - AI context update: Treat unsupported-claim routing as open behavior context before proposing implementation polish.
 
-### AI / agent participation and data/evidence rows during human variant review — revision-summary-feature-service-layers
+### AI system / tool participation and data/evidence rows during human variant review — revision-summary-feature-service-layers
 
 - Order: display 2; canonical 2; visibility visible.
 - Evidence source: Software Architecture Views
 - Evidence observation: The summary feature touches retrieval sources, claim-source maps, audit logs, and review history.
 - Prior artifact: Service-design Blueprint
-- Previous read: AI suggests evidence summary during review.
-- Revised read: AI suggests source-linked claims during review, with claim-source map, unsupported-claim routing, audit trace, and human confirmation boundary.
+- Previous read: The summary-generation system proposes an evidence summary during review.
+- Revised read: The summary-generation system proposes source-linked claims during review, with claim-source map, unsupported-claim routing, audit trace, and human confirmation boundary.
 - Revision reason: Architecture views reveal attachments that should be represented as service layers.
 - Status: supersedes previous (supersedes\_previous).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology).
@@ -439,7 +439,7 @@ Every accepted revision appears below in current display order. A hidden label n
 - People decide whether evidence supports a revised read, which prior artifact receives it, and when a route is ready to hand off.
 - The previous read remains visible as provenance. The revised read states the current proposal or accepted interpretation supported by named evidence.
 - Display order and visibility shape the current focus arrangement. Hidden entries remain represented in the capsule and complete JSON export.
-- AI context updates guide a collaborator and remain proposals for human review; they carry neither acceptance nor publication authority.
+- AI context updates supply generation context and remain proposals for human review; they carry neither acceptance nor publication authority.
 
 ## Requested return
 
@@ -465,7 +465,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 - Which prior artifact does this evidence improve?
 - What is the smallest useful revision?
 - What should remain preserved from the earlier read?
-- What should the AI collaborator treat as current context now?
+- Which context should guide the generative AI system now?
 
 ### Replacement-state guidance
 
@@ -495,7 +495,7 @@ These public collaboration loops fit only when the receiving work meets the stat
                 <li>Which prior artifact does this evidence improve?</li>
                 <li>What is the smallest useful revision?</li>
                 <li>What should remain preserved from the earlier read?</li>
-                <li>What should the AI collaborator treat as current context now?</li>
+                <li>Which context should guide the generative AI system now?</li>
               </ul>
             </div>
             <div>
@@ -544,7 +544,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     const PROMPT_CAPSULE_STATE_CONTRACT = 'upstream-revision-loop-state.v0.1';
     const PROMPT_CAPSULE_ID = 'upstream-revision-loop/current-revision-state';
     const PROMPT_CAPSULE_SOURCE_ID = 'upstream-revision-loop';
-    const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+    const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.5';
     const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
     const PROMPT_CAPSULE_SKILL_REVISION = 'efb94fcf70a80630d8edd289697341699b966f00';
     const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -612,7 +612,7 @@ These public collaboration loops fit only when the receiving work meets the stat
         id: 'ca-artifact-upstream-revision-loop-genomics-001',
         display_name: 'Upstream Revision Loop',
         subtitle: 'Revisiting Solution Artifacts',
-        version: '0.1.4',
+        version: '0.1.5',
         family: 'Recovery Routing and Revision',
         placement: 'Recovery Routing Atlas participant → Implementation Architecture bridge',
         primary_cognitive_move: 'upstream correction from implementation evidence',
@@ -638,9 +638,9 @@ These public collaboration loops fit only when the receiving work meets the stat
           evidence_source: 'Software Architecture Views',
           evidence_observation: 'The summary feature touches retrieval sources, claim-source maps, audit logs, and review history.',
           prior_artifact: 'Service-design Blueprint',
-          revision_target: 'AI / agent participation and data/evidence rows during human variant review',
-          previous_read: 'AI suggests evidence summary during review.',
-          revised_read: 'AI suggests source-linked claims during review, with claim-source map, unsupported-claim routing, audit trace, and human confirmation boundary.',
+          revision_target: 'AI system / tool participation and data/evidence rows during human variant review',
+          previous_read: 'The summary-generation system proposes an evidence summary during review.',
+          revised_read: 'The summary-generation system proposes source-linked claims during review, with claim-source map, unsupported-claim routing, audit trace, and human confirmation boundary.',
           revision_reason: 'Architecture views reveal attachments that should be represented as service layers.',
           status: 'supersedes_previous',
           route: 'AI Systems Service Blueprint',
@@ -681,7 +681,7 @@ These public collaboration loops fit only when the receiving work meets the stat
         views: [{ id: 'view-default', name: 'Default revision view', revision_order: ['revision-ai-summary-review-route','revision-summary-feature-service-layers','revision-ai-boundary-clarity-dimension','revision-source-authority-discoverables'], hidden_revision_ids: [], text_mode: 'preview_with_reveal', selected_revision_id: 'revision-ai-summary-review-route' }]
       },
       semantic_locality: {
-        preferred_phrasing: ['Which prior artifact does this evidence improve?','What is the smallest useful revision?','What should remain preserved from the earlier read?','What should the AI collaborator treat as current context now?'],
+        preferred_phrasing: ['Which prior artifact does this evidence improve?','What is the smallest useful revision?','What should remain preserved from the earlier read?','Which context should guide the generative AI system now?'],
         replacement_state_guidance: [
           { common_phrase: 'We have to go backward.', stronger_phrase: 'We can re-enter the prior artifact with better evidence.' },
           { common_phrase: 'The premise was wrong.', stronger_phrase: 'The premise has been improved by downstream evidence.' },
@@ -821,18 +821,18 @@ These public collaboration loops fit only when the receiving work meets the stat
     }
 
     function renderTable() {
-      const rows = visibleRevisions().map(rev => `<tr>
-        <td><button data-action="select" data-id="${escapeHtml(rev.id)}">Inspect</button><br><span class="tiny">${escapeHtml(rev.id)}</span></td>
-        <td>${escapeHtml(rev.evidence_source)}</td>
-        <td>${previewBlock(rev.evidence_observation)}</td>
-        <td><strong>${escapeHtml(rev.prior_artifact)}</strong><br>${escapeHtml(rev.revision_target)}</td>
-        <td>${previewBlock(rev.previous_read)}</td>
-        <td>${previewBlock(rev.revised_read)}</td>
-        <td>${previewBlock(rev.revision_reason)}</td>
-        <td><span class="${statusClass(rev.status)}">${escapeHtml(STATUS_LABEL[rev.status] || rev.status)}</span></td>
-        <td><span class="route-pill">${escapeHtml(rev.route || 'No route')}</span><br><span class="tiny">${escapeHtml(routeFamily(rev.route))}</span></td>
+      const rows = visibleRevisions().map(rev => `<tr data-label="Upstream Revision Loop: ${escapeHtml(rev.prior_artifact)} / ${escapeHtml(rev.revision_target)} (${escapeHtml(rev.id)})">
+        <td data-label="Inspect"><button data-action="select" data-id="${escapeHtml(rev.id)}">Inspect</button><br><span class="tiny">${escapeHtml(rev.id)}</span></td>
+        <td data-label="Evidence source">${escapeHtml(rev.evidence_source)}</td>
+        <td data-label="Observation">${previewBlock(rev.evidence_observation)}</td>
+        <td data-label="Prior artifact / target"><strong>${escapeHtml(rev.prior_artifact)}</strong><br>${escapeHtml(rev.revision_target)}</td>
+        <td data-label="Previous read">${previewBlock(rev.previous_read)}</td>
+        <td data-label="Revised read">${previewBlock(rev.revised_read)}</td>
+        <td data-label="Reason">${previewBlock(rev.revision_reason)}</td>
+        <td data-label="Status"><span class="${statusClass(rev.status)}">${escapeHtml(STATUS_LABEL[rev.status] || rev.status)}</span></td>
+        <td data-label="Route"><span class="route-pill">${escapeHtml(rev.route || 'No route')}</span><br><span class="tiny">${escapeHtml(routeFamily(rev.route))}</span></td>
       </tr>`).join('');
-      document.getElementById('tableWrap').innerHTML = `<table><thead><tr><th>Inspect</th><th>Evidence source</th><th>Observation</th><th>Prior artifact / target</th><th>Previous read</th><th>Revised read</th><th>Reason</th><th>Status</th><th>Route</th></tr></thead><tbody>${rows || '<tr><td colspan="9">No visible revisions. Use Show all to restore focus view.</td></tr>'}</tbody></table>`;
+      document.getElementById('tableWrap').innerHTML = `<table data-label="Upstream Revision Loop"><thead><tr><th data-label="Inspect" scope="col">Inspect</th><th data-label="Evidence source" scope="col">Evidence source</th><th data-label="Observation" scope="col">Observation</th><th data-label="Prior artifact / target" scope="col">Prior artifact / target</th><th data-label="Previous read" scope="col">Previous read</th><th data-label="Revised read" scope="col">Revised read</th><th data-label="Reason" scope="col">Reason</th><th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th></tr></thead><tbody>${rows || '<tr data-label="Upstream Revision Loop: empty focus view"><td data-label="No visible revisions" colspan="9">No visible revisions. Use Show all to restore focus view.</td></tr>'}</tbody></table>`;
     }
 
     function renderInspector() {
@@ -864,9 +864,9 @@ These public collaboration loops fit only when the receiving work meets the stat
       const rows = orderedRevisions().map((rev, i) => {
         const hidden = activeView().hidden_revision_ids.includes(rev.id);
         const vIndex = visibleRevisions().findIndex(r => r.id === rev.id);
-        return `<tr><td><code>${escapeHtml(rev.id)}</code></td><td>${rev.canonical_order}</td><td>${i+1}</td><td>${hidden ? 'hidden' : 'visible ' + (vIndex+1)}</td></tr>`;
+        return `<tr data-label="Upstream Revision Loop identity registry: ${escapeHtml(rev.id)}"><td data-label="Revision ID"><code>${escapeHtml(rev.id)}</code></td><td data-label="Canonical">${rev.canonical_order}</td><td data-label="Display">${i+1}</td><td data-label="Visibility">${hidden ? 'hidden' : 'visible ' + (vIndex+1)}</td></tr>`;
       }).join('');
-      document.getElementById('identityRegistry').innerHTML = `<div class="table-scroll"><table style="min-width:360px"><thead><tr><th>Revision ID</th><th>Canonical</th><th>Display</th><th>Visibility</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      document.getElementById('identityRegistry').innerHTML = `<div class="table-scroll"><table data-label="Upstream Revision Loop identity registry" style="min-width:360px"><thead><tr><th data-label="Revision ID" scope="col">Revision ID</th><th data-label="Canonical" scope="col">Canonical</th><th data-label="Display" scope="col">Display</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${rows}</tbody></table></div>`;
     }
 
     function exportData() {
@@ -1170,7 +1170,7 @@ These public collaboration loops fit only when the receiving work meets the stat
         '- People decide whether evidence supports a revised read, which prior artifact receives it, and when a route is ready to hand off.',
         '- The previous read remains visible as provenance. The revised read states the current proposal or accepted interpretation supported by named evidence.',
         '- Display order and visibility shape the current focus arrangement. Hidden entries remain represented in the capsule and complete JSON export.',
-        '- AI context updates guide a collaborator and remain proposals for human review; they carry neither acceptance nor publication authority.',
+        '- AI context updates supply generation context and remain proposals for human review; they carry neither acceptance nor publication authority.',
         '',
         '## Requested return',
         '',
@@ -1237,7 +1237,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       });
       document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
         ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented revision state and fingerprint remain the same.'
-        : 'Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.';
+        : 'Plain Markdown is a self-contained handoff with the complete revision context.';
     }
 
     function renderAll() { normalizeView(); renderEditor(); renderSVG(); renderTable(); renderInspector(); renderIdentityRegistry(); renderExports(); document.getElementById('interactionNotice').textContent=interactionMessage; }
@@ -1285,7 +1285,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       if (adding) return;
       adding = true;
       const id = uid('revision');
-      state.revisions.push({ id, canonical_order: state.revisions.length + 1, evidence_source: 'New evidence source', evidence_observation: 'Describe the evidence observation.', prior_artifact: 'PODA', revision_target: 'Revision target', previous_read: 'Previous read to preserve.', revised_read: 'Revised read supported by evidence.', revision_reason: 'Why this evidence supports the revision.', status: 'assumed', route: 'Upstream Revision Loop', route_reason: 'Route reason.', ai_context_update: 'What the AI collaborator should treat as current context now.' });
+      state.revisions.push({ id, canonical_order: state.revisions.length + 1, evidence_source: 'New evidence source', evidence_observation: 'Describe the evidence observation.', prior_artifact: 'PODA', revision_target: 'Revision target', previous_read: 'Previous read to preserve.', revised_read: 'Revised read supported by evidence.', revision_reason: 'Why this evidence supports the revision.', status: 'assumed', route: 'Upstream Revision Loop', route_reason: 'Route reason.', ai_context_update: 'Which context should guide the generative AI system now?' });
       activeView().revision_order.push(id);
       activeView().selected_revision_id = id;
       renderAll();
@@ -1443,7 +1443,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     document.querySelector('[data-prompt-view-control]').hidden = false;
     document.querySelector('[data-prompt-actions]').hidden = false;
     window.upstreamRevisionLoop = Object.freeze({
-      version: '0.1.4',
+      version: '0.1.5',
       stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
       contract: PROMPT_CAPSULE_CONTRACT,
       views: PROMPT_CAPSULE_VIEWS,

@@ -5,7 +5,7 @@
   "base_path": "/v1/canvas/",
   "route_contract": {
     "file": "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
-    "sha256": "8c3e3b8d6e424465c763741d1fbd4368e61cdfa4d2922393bcbdb729152a60ab"
+    "sha256": "a7847cc0e6aadbdf1ab81731031a8a41057ffee3fc526001cf904e62be6e899a"
   },
   "package_contract": {
     "primary_routes": 15,
@@ -37,10 +37,10 @@
         "executable-scripts"
       ],
       "projection_file": "registry-goal-fidelity/index.html",
-      "source_bytes": 68289,
-      "source_sha256": "a92df214229c8b49e672a92e107ec314191bfd7e0e47a8759f302ea3c7fd7e0b",
-      "projection_bytes": 71003,
-      "projection_sha256": "85fca88f15a98f172120fc1850205a665aa6ced14f23d01c1a785e77322f1271",
+      "source_bytes": 68681,
+      "source_sha256": "4107e6e26619d9f730e1e291c53e9346c2896c1d129119913e940fd2ea306fc1",
+      "projection_bytes": 71395,
+      "projection_sha256": "ad77e6e195a2986583cce91158af0661510f50caa95c972da7725638016801a6",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -125,10 +125,10 @@
       },
       "observed_runtime_capabilities": [],
       "projection_file": "lims-eln-program-constellation/index.html",
-      "source_bytes": 53097,
-      "source_sha256": "452e5aa2259b07f25177ac9401bda272403ab96c021b2a38eaf34a1bb6c278dd",
-      "projection_bytes": 55811,
-      "projection_sha256": "16692b5817d10e8a7910a1ea9a234e3f5dd4aa21438d5e5ca90ac07c5bc87203",
+      "source_bytes": 54326,
+      "source_sha256": "7686e1018ff6967b3b6950df0b7ebb9d98f44ec7bbbe57e76f079960f361580b",
+      "projection_bytes": 57040,
+      "projection_sha256": "3753b49dca786659e3a027d76e64bf33a6125352d58cae600a800fbf5f98711f",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -172,10 +172,10 @@
         "executable-scripts"
       ],
       "projection_file": "genomic-viewer-context-tree/index.html",
-      "source_bytes": 40846,
-      "source_sha256": "6f1be43bc9f7ba35487acc030c6858b3fdcc6d3adc3961f8c6f5804f864f53af",
-      "projection_bytes": 43560,
-      "projection_sha256": "41cf0becd748128fde5b7fc0dc5e3cb6013e2f23cda4a0d20faf68a8d23c0f65",
+      "source_bytes": 41702,
+      "source_sha256": "044bd891132e1583381e9f47fb4758c9ffe3c7bd768f842f8e2944711ecb761c",
+      "projection_bytes": 44416,
+      "projection_sha256": "10f7efae38df58bc490c50ae5742673cfa7f3ed1317f82d635d891fbc6ee50e8",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -220,10 +220,10 @@
         "executable-scripts"
       ],
       "projection_file": "talent-agent-intake/index.html",
-      "source_bytes": 58052,
-      "source_sha256": "5dbec72a7a922fa357b7ae409c285a46d89c2aa5348e6689ddddf4a9fd438de5",
-      "projection_bytes": 61677,
-      "projection_sha256": "13f5321dd4082c24006007df3c0f0f5c036a68fe7ee4f02e228d7302a8b921c6",
+      "source_bytes": 60736,
+      "source_sha256": "353c52db5730456a9b90ff2e5bb62837afbd76e261dddf45e12cccf7944f0241",
+      "projection_bytes": 64361,
+      "projection_sha256": "701f0acba5fca6835dd2ebaee4cfec9d20209ff64a42058c982feefccfa160e6",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -258,20 +258,25 @@
       "projection_kind": "decorated_rewrite",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-popups",
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": []
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "observed_runtime_capabilities": [
-        "executable-scripts"
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "cross-functional-investment-studio/index.html",
-      "source_bytes": 142752,
-      "source_sha256": "28d09cd55b392c9059afa015e44e44cc9fd1506fd9836ee7f55017507000a6bd",
-      "projection_bytes": 145557,
-      "projection_sha256": "d8d39fae141ef9b705ff20d8a95722574952270ec11d33e327a7016e9979451f",
+      "source_bytes": 290708,
+      "source_sha256": "044e8dac7e367474eedba9f20ffa73dc0fd782c335f25151090d76c3e80b8d78",
+      "projection_bytes": 294424,
+      "projection_sha256": "400d8e6fa5dcda7ffe6a6fc7ae1dea0aebe540821de35deeea52ed3cc3e1bff0",
       "projection_rewrites": [
         {
           "kind": "primary_site_navigation",
@@ -295,8 +300,8 @@
           "kind": "iframe_exit_behavior",
           "exit_links": 8,
           "rewritten_links": 8,
-          "dynamic_exit_templates": 0,
-          "runtime_adapter": false
+          "dynamic_exit_templates": 1,
+          "runtime_adapter": true
         }
       ],
       "static_resource_closure": {
@@ -306,7 +311,7 @@
       },
       "navigation": {
         "packaged_links": 0,
-        "fragment_links": 18,
+        "fragment_links": 22,
         "external_links": 8,
         "exit_links": 8,
         "new_tab_exit_links": 8,
@@ -334,10 +339,10 @@
         "executable-scripts"
       ],
       "projection_file": "prompt-conditions-explorer/index.html",
-      "source_bytes": 39753,
-      "source_sha256": "b836573aa300a25153ecc60f17622b33f38d65c40f1a466d31c1f480acba671b",
-      "projection_bytes": 42362,
-      "projection_sha256": "677c0156fad99d94b951b21f11234bb5ff4f905ac47d13122da6f6d72c1be324",
+      "source_bytes": 41197,
+      "source_sha256": "e0e7e06fdb156321a3ca6f4d4dc8ea35f7ebbf6aa3b85877e593141c2774c703",
+      "projection_bytes": 43806,
+      "projection_sha256": "803a4f05733b52e90b5d775bfc0db82d4af5fd0ee1998509ea7113132f88a3b8",
       "projection_rewrites": [
         {
           "kind": "primary_site_navigation",
@@ -513,10 +518,10 @@
         "executable-scripts"
       ],
       "projection_file": "ai-method-gallery/index.html",
-      "source_bytes": 41802,
-      "source_sha256": "9a3162772ac6e8fcbb55036d744530f88889debd13158e69e2acdc1d05697123",
-      "projection_bytes": 42280,
-      "projection_sha256": "0da973c76d651e7e09e345a3008cfc45c7809cdfdad7292ff1aa3663d34c2202",
+      "source_bytes": 44586,
+      "source_sha256": "6aa45ed0b0315c1a8b3855d39b0eac5153612113d42c038db21d7c315bcf0b6d",
+      "projection_bytes": 45064,
+      "projection_sha256": "974870693b283dca2fbdcb6323b04d1b2260b930d78c70aaaeddc4a49855df1e",
       "projection_rewrites": [
         {
           "kind": "package_file",
@@ -820,8 +825,8 @@
             "content_type": "image/svg+xml",
             "source_reference": "../../context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
             "rewritten_references": 1,
-            "bytes": 22740,
-            "sha256": "c4094ff502311414e7216b9303b39b4a7e0d2735ee0b47a69a2cabee75da2134"
+            "bytes": 22750,
+            "sha256": "0d35a3928aff21592b682a4a235ed50b501ca3fa37af21bcede1d371dbc3a5ee"
           },
           {
             "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
@@ -898,17 +903,17 @@
         "file-download"
       ],
       "projection_file": "cross-functional-investment-model-studio/index.html",
-      "source_bytes": 113372,
-      "source_sha256": "821acc2f965468fb519c9ff2853212984f2d6934ec73f9e70d5d3730e9781d8c",
-      "projection_bytes": 116170,
-      "projection_sha256": "6bd9eacb475b115b4be5aeb2a12487b7e29df0145ec985e974a78ec0a272a919",
+      "source_bytes": 252216,
+      "source_sha256": "066b4ccdbd43da504684bfef3d2f1541dc2420aa6db85d3196fc17377b1e3a62",
+      "projection_bytes": 255925,
+      "projection_sha256": "52005fcbe1ba5babed3853dda0328fd0a56d3a5b72db4fc65f929a57177cf699",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
           "exit_links": 2,
           "rewritten_links": 2,
-          "dynamic_exit_templates": 0,
-          "runtime_adapter": false
+          "dynamic_exit_templates": 1,
+          "runtime_adapter": true
         }
       ],
       "static_resource_closure": {
@@ -918,7 +923,7 @@
       },
       "navigation": {
         "packaged_links": 0,
-        "fragment_links": 1,
+        "fragment_links": 3,
         "external_links": 2,
         "exit_links": 2,
         "new_tab_exit_links": 2,
@@ -937,7 +942,6 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
-          "allow-modals",
           "allow-popups",
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
@@ -949,14 +953,13 @@
       "observed_runtime_capabilities": [
         "executable-scripts",
         "clipboard-write",
-        "file-download",
-        "native-modals"
+        "file-download"
       ],
       "projection_file": "threadkeeping-ledger/index.html",
-      "source_bytes": 125221,
-      "source_sha256": "8b535e9c8da22dcb7654e157073a0c59f426ac61e28d7380373ae18338a54952",
-      "projection_bytes": 125263,
-      "projection_sha256": "a8a5278cd290051d9b17fbebab8b6b62c997ac1289bdaf84c511acb7bee91c09",
+      "source_bytes": 130154,
+      "source_sha256": "0be37ce3ac59d32871462640736db2d2e9d8830e814b1eed45518b841e7bbb67",
+      "projection_bytes": 130196,
+      "projection_sha256": "73b2d079a9f287d88ccbb6944880b4b0a581da6cf04f75edf51f76557436d733",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -1007,10 +1010,10 @@
         "file-download"
       ],
       "projection_file": "open-lesson-field/index.html",
-      "source_bytes": 204746,
-      "source_sha256": "fa5dc5c1b6556a1409eeb45c6748ea3a1be50b8a837c762ce0f07667d121c984",
-      "projection_bytes": 207544,
-      "projection_sha256": "56962fba16afcab30841bc82286f3839f4351220f492188536e54087b4d7d6cb",
+      "source_bytes": 211311,
+      "source_sha256": "e937e78b8b32656239983fa0f61cfb440a2da3cace8d47d29d9c9620cd41e73d",
+      "projection_bytes": 214109,
+      "projection_sha256": "3b8efdf4e0d4096e49c179353194010d6f7fe720c3f21e0e706a457342befad7",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -1060,10 +1063,10 @@
         "file-download"
       ],
       "projection_file": "visualization-fidelity-atlas/index.html",
-      "source_bytes": 211917,
-      "source_sha256": "c7ffce34ea84f3f27037f4dc0a0ea5f5457bd5a0bdd16698a10106f74e7a8768",
-      "projection_bytes": 214715,
-      "projection_sha256": "30f5ef793db6b9ba7ca311498da4023d30dc3dd39f6765f8778e88997f201c51",
+      "source_bytes": 213649,
+      "source_sha256": "858002fb19ee1884d07936c79dda73a6eb0b10ba32483c8ec263e6207b26419d",
+      "projection_bytes": 216447,
+      "projection_sha256": "ad8aabb23e28e29f3329adaa0ecf02d3effb1c6d280f7e022261b3cf1e605f01",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -1106,10 +1109,10 @@
         "executable-scripts"
       ],
       "projection_file": "visualization-fidelity-selector/index.html",
-      "source_bytes": 14300,
-      "source_sha256": "afb7e6b852ee75c70869c3c98eb4f6be416eac865dcf4ae676fea7e3c5f4334a",
-      "projection_bytes": 17014,
-      "projection_sha256": "c142392d36fc9ff2758b32572d4614a0ffe4e8a64b1adb3c24f3bb2477d13557",
+      "source_bytes": 14363,
+      "source_sha256": "d1a9947501413221de2d25b6356c10219d12e5a55083ef95e454f72b3e60f118",
+      "projection_bytes": 17077,
+      "projection_sha256": "813d00b1517b73a0bfcd90bede2525a24324bdbf107d16f113a78d8535979177",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",
@@ -1152,10 +1155,10 @@
         "executable-scripts"
       ],
       "projection_file": "who-to-believe-context-tree/index.html",
-      "source_bytes": 26092,
-      "source_sha256": "0868411523cb639f893dcf8145b45427449cbb2a443b1be1670249f564279948",
-      "projection_bytes": 28806,
-      "projection_sha256": "78979615d323ab54dadeac8ff7e93c7b6b47887000d0c21df10168bfd8b728f7",
+      "source_bytes": 29212,
+      "source_sha256": "0d828447773b3a152a1e8dbd683a7a218d228522b0520067493b792d327fe3c7",
+      "projection_bytes": 31926,
+      "projection_sha256": "5e96b4ce18761b3e615bb24229aa528dceb3a92ccc3191880f82dc08eb2eee14",
       "projection_rewrites": [
         {
           "kind": "iframe_exit_behavior",

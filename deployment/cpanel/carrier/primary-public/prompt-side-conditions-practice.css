@@ -336,37 +336,6 @@
     border-block-start: .6rem solid var(--practice-cobalt);
 }
 
-.prompt-side-practice-page .story-visual--system-map {
-    inline-size: min(96vw, 96rem);
-}
-
-.practice-system-map-sheet {
-    background: var(--practice-cream);
-    border: .125rem solid var(--practice-ink);
-    box-sizing: border-box;
-    max-inline-size: 100%;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scrollbar-gutter: stable;
-}
-
-.practice-system-map-sheet img {
-    border: 0;
-    inline-size: 100%;
-}
-
-@media screen and (max-width: 95.99rem) {
-    .practice-system-map-sheet img {
-        min-inline-size: 90rem;
-    }
-}
-
-@media screen and (max-width: 64rem) {
-    .prompt-side-practice-page .story-visual--system-map {
-        inline-size: 100%;
-    }
-}
-
 .lesson-field-static-equivalent,
 .lesson-field-boundary {
     background: var(--canvas-paper, #fffaf2);
@@ -464,10 +433,6 @@
         forced-color-adjust: auto;
     }
 
-    .practice-system-map-sheet {
-        border-color: CanvasText;
-    }
-
     .lesson-field-boundary,
     .lesson-field-readback {
         border-inline-start-style: double;
@@ -539,13 +504,5 @@
         background: #fff;
         box-shadow: none;
         color: #000;
-    }
-
-    .practice-system-map-sheet {
-        overflow: visible;
-    }
-
-    .practice-system-map-sheet img {
-        min-inline-size: 0;
     }
 }

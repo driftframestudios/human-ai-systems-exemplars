@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Practitioner Judgment Probes Chimeric Prototype v0.1.4</title>
+  <title>Practitioner Judgment Probes Chimeric Prototype v0.1.5</title>
   <style>
     :root {
       --bg: #f8f7f3;
@@ -104,6 +104,14 @@
     .route-pill { border-radius: 5px; padding: 8px; white-space: normal; align-items: flex-start; }
     .prob-pill { font-weight: 700; background: #efe7d6; }
     .family-pill { max-width: 100%; background: #edf1ec; white-space: normal; overflow-wrap: anywhere; }
+    @media (max-width: 520px) {
+      .pill, .status-pill, .route-pill, .prob-pill, .family-pill {
+        max-width: 100%;
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+    }
     .status-verified { background: #e4efe5; border-color: #b8d2bd; }
     .status-source_supported { background: #e5f0ec; border-color: #b7d5c8; }
     .status-source_specific { background: #e2edf4; border-color: #b6ccdb; }
@@ -231,7 +239,7 @@
     <h1>Practitioner Judgment Probes</h1>
     <p class="lede">A probe matrix that treats strong practitioner-level questions as compressed judgment models, surfacing causal paths, concern families, technical-veracity status, AI instruction yield, and architecture routes.</p>
     <div class="meta-row" aria-label="Artifact metadata">
-      <span class="pill">v0.1.4</span>
+      <span class="pill">v0.1.5</span>
       <span class="pill">Measurement, Reflection, and Judgment</span>
       <span class="pill">Interview Questions as Propensities</span>
       <span class="pill">HTML + SVG + JSON-LD</span>
@@ -368,9 +376,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `practitioner-judgment-probes/current-probe-collection`
-- Source: `practitioner-judgment-probes@0.1.4`
-- State: `practitioner-judgment-probes-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:6c2534d8`
+- Source: `practitioner-judgment-probes@0.1.5`
+- State: `practitioner-judgment-probes-state.v0.1` · revision `0.1.5`
+- Fingerprint: `fnv1a32-utf8:109f2e8b`
 - View: `plain`
 
 ## Purpose and target
@@ -533,13 +541,13 @@ These public collaboration loops fit when the receiving work meets the stated co
 - What would a strong practitioner ask here?
 - What concern is this probe revealing?
 - What is the probability of what?
-- What instruction should an AI collaborator receive from this probe?
+- Which instruction should this probe add to the generative AI system’s context?
 - Which technical claims are verified, source-supported, or ready for a resilience pass?
 
 ### Replacement-state guidance
 
 - Use: Surface the practitioner questions that reveal cross-cutting concerns and artifact evidence. · Context cue: Make this more senior.
-- Use: Which probe would have produced a better AI instruction before generation? · Context cue: The AI got the code wrong.
+- Use: Which probe would have supplied the missing instruction before generation? · Context cue: The generated code missed the protected behavior.
 - Use: Mark the claim with technical-veracity status and route it into verification. · Context cue: This technical claim is questionable.
 
 - Recovery strain cues: AI output feels plausible but shallow.; Artifact evidence is missing.; The team cannot name what a strong practitioner would ask.; Technical claims are confident but unsourced.
@@ -626,7 +634,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   const PROMPT_CAPSULE_STATE_CONTRACT = 'practitioner-judgment-probes-state.v0.1';
   const PROMPT_CAPSULE_ID = 'practitioner-judgment-probes/current-probe-collection';
   const PROMPT_CAPSULE_SOURCE_ID = 'practitioner-judgment-probes';
-  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.5';
   const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
   const PROMPT_CAPSULE_SKILL_REVISION = 'b43d51853c8625935d091dd781be7bba917d3040';
   const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -694,7 +702,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       id: 'ca-artifact-practitioner-judgment-probes-001',
       display_name: 'Practitioner Judgment Probes',
       subtitle: 'Interview Questions as Propensities',
-      version: '0.1.4',
+      version: '0.1.5',
       family: 'Measurement, Reflection, and Judgment',
       placement: ['Bridge Architecture', 'Implementation Architecture', 'Recovery Routing Atlas participant'],
       primary_cognitive_move: 'practitioner-judgment hydration',
@@ -793,12 +801,12 @@ These public collaboration loops fit when the receiving work meets the stated co
         'What would a strong practitioner ask here?',
         'What concern is this probe revealing?',
         'What is the probability of what?',
-        'What instruction should an AI collaborator receive from this probe?',
+        'Which instruction should this probe add to the generative AI system’s context?',
         'Which technical claims are verified, source-supported, or ready for a resilience pass?'
       ],
       replacement_state_guidance: [
         { common_phrase: 'Make this more senior.', stronger_phrase: 'Surface the practitioner questions that reveal cross-cutting concerns and artifact evidence.' },
-        { common_phrase: 'The AI got the code wrong.', stronger_phrase: 'Which probe would have produced a better AI instruction before generation?' },
+        { common_phrase: 'The generated code missed the protected behavior.', stronger_phrase: 'Which probe would have supplied the missing instruction before generation?' },
         { common_phrase: 'This technical claim is questionable.', stronger_phrase: 'Mark the claim with technical-veracity status and route it into verification.' }
       ]
     },
@@ -1359,20 +1367,20 @@ These public collaboration loops fit when the receiving work meets the stated co
   function renderTableEquivalent() {
     const probes = visibleProbes();
     const rows = probes.map((probe) => `
-      <tr data-probe-id="${escapeHtml(probe.id)}">
-        <td><button class="small" data-action="select-probe" data-probe-id="${escapeHtml(probe.id)}">Inspect</button></td>
-        <td><div class="cell-preview">${escapeHtml(probe.question)}</div><div class="cell-full">${escapeHtml(probe.question)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
-        <td>${escapeHtml(probe.concern_family)}</td>
-        <td><span class="prob-pill">${Math.round((Number(probe.probability_estimate) || 0) * 100)}%</span><br><span class="tiny">${escapeHtml(probe.probability_of_what)}</span></td>
-        <td><span class="status-pill status-${escapeHtml(probe.technical_veracity_status)}">${escapeHtml(statusLabel(probe.technical_veracity_status))}</span></td>
-        <td><div class="cell-preview">${escapeHtml(probe.ai_instruction_yield)}</div><div class="cell-full">${escapeHtml(probe.ai_instruction_yield)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
-        <td><span class="route-pill">${escapeHtml(probe.handoff || 'No route yet')}</span><div class="tiny">${escapeHtml(routeFamily(probe.handoff))}</div></td>
+      <tr data-label="Practitioner Judgment Probes: ${escapeHtml(probe.question)} (${escapeHtml(probe.id)})" data-probe-id="${escapeHtml(probe.id)}">
+        <td data-label="Inspect"><button class="small" data-action="select-probe" data-probe-id="${escapeHtml(probe.id)}">Inspect</button></td>
+        <td data-label="Probe"><div class="cell-preview">${escapeHtml(probe.question)}</div><div class="cell-full">${escapeHtml(probe.question)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
+        <td data-label="Concern family">${escapeHtml(probe.concern_family)}</td>
+        <td data-label="Probability (%)"><span class="prob-pill">${Math.round((Number(probe.probability_estimate) || 0) * 100)}%</span><br><span class="tiny">${escapeHtml(probe.probability_of_what)}</span></td>
+        <td data-label="Veracity"><span class="status-pill status-${escapeHtml(probe.technical_veracity_status)}">${escapeHtml(statusLabel(probe.technical_veracity_status))}</span></td>
+        <td data-label="AI instruction yield"><div class="cell-preview">${escapeHtml(probe.ai_instruction_yield)}</div><div class="cell-full">${escapeHtml(probe.ai_instruction_yield)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
+        <td data-label="Route"><span class="route-pill">${escapeHtml(probe.handoff || 'No route yet')}</span><div class="tiny">${escapeHtml(routeFamily(probe.handoff))}</div></td>
       </tr>
     `).join('');
     qs('#table-equivalent').innerHTML = `
-      <table>
-        <thead><tr><th>Inspect</th><th>Probe</th><th>Concern family</th><th>Probability</th><th>Veracity</th><th>AI instruction yield</th><th>Route</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="7">No probes visible in this focus view.</td></tr>'}</tbody>
+      <table data-label="Practitioner Judgment Probes">
+        <thead><tr><th data-label="Inspect" scope="col">Inspect</th><th data-label="Probe" scope="col">Probe</th><th data-label="Concern family" scope="col">Concern family</th><th data-label="Probability (%)" scope="col">Probability</th><th data-label="Veracity" scope="col">Veracity</th><th data-label="AI instruction yield" scope="col">AI instruction yield</th><th data-label="Route" scope="col">Route</th></tr></thead>
+        <tbody>${rows || '<tr data-label="Practitioner Judgment Probes: empty focus view"><td data-label="No visible probes" colspan="7">No probes visible in this focus view.</td></tr>'}</tbody>
       </table>
     `;
   }
@@ -1383,9 +1391,9 @@ These public collaboration loops fit when the receiving work meets the stated co
       const display = view.probe_order.indexOf(probe.id) + 1;
       const visible = !view.hidden_probe_ids.includes(probe.id);
       const visibleOrder = visible ? visibleProbes().findIndex((item) => item.id === probe.id) + 1 : 'hidden';
-      return `<tr><td class="mono">${escapeHtml(probe.id)}</td><td>${escapeHtml(probe.question.slice(0, 48))}${probe.question.length > 48 ? '…' : ''}</td><td>${display}</td><td>${visibleOrder}</td><td>${visible ? 'visible' : 'hidden'}</td></tr>`;
+      return `<tr data-label="Practitioner Judgment Probes identity registry: ${escapeHtml(probe.id)}"><td data-label="Probe ID" class="mono">${escapeHtml(probe.id)}</td><td data-label="Label">${escapeHtml(probe.question.slice(0, 48))}${probe.question.length > 48 ? '…' : ''}</td><td data-label="Display order">${display}</td><td data-label="Visible order">${visibleOrder}</td><td data-label="Visibility">${visible ? 'visible' : 'hidden'}</td></tr>`;
     }).join('');
-    qs('#identity-registry').innerHTML = `<table><thead><tr><th>Probe ID</th><th>Label</th><th>Display order</th><th>Visible order</th><th>Visibility</th></tr></thead><tbody>${rows}</tbody></table>`;
+    qs('#identity-registry').innerHTML = `<table data-label="Practitioner Judgment Probes identity registry"><thead><tr><th data-label="Probe ID" scope="col">Probe ID</th><th data-label="Label" scope="col">Label</th><th data-label="Display order" scope="col">Display order</th><th data-label="Visible order" scope="col">Visible order</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   function buildJsonExport() {
@@ -1988,7 +1996,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   qs('[data-prompt-view-control]').hidden = false;
   qs('[data-prompt-actions]').hidden = false;
   window.practitionerJudgmentProbes = Object.freeze({
-    version: '0.1.4',
+    version: '0.1.5',
     stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
     contract: PROMPT_CAPSULE_CONTRACT,
     views: PROMPT_CAPSULE_VIEWS,

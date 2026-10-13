@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Specification-by-Example · Behavior Example Bridge · Chimeric Prototype v0.1.6</title>
+<title>Specification-by-Example · Behavior Example Bridge · Chimeric Prototype v0.1.7</title>
 <style>
   :root {
     --paper:#fffdf8; --ink:#25231f; --muted:#686258; --line:#d8d0c1; --line-strong:#bcb3a2;
@@ -28,7 +28,7 @@
   .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}.summary-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fffefb}.summary-card strong{display:block;font-size:.88rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
   .wide-area{width:100%;max-width:100%;margin-inline:auto}.diagram-panel{padding:16px}.svg-wrap{width:100%;max-width:100%;min-width:0;overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:10px} svg{display:block;max-width:none}
   .editor-list{display:grid;gap:12px}.rule-card,.scenario-card{border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:14px}.scenario-card[hidden]{display:none}.card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.card-head h3{margin:0}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:860px){.field-grid{grid-template-columns:1fr}}.scenario-text-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media(max-width:980px){.scenario-text-grid{grid-template-columns:1fr}}
-  @media(max-width:560px){.editor-list>*{min-width:0}.card-head>*{min-width:0}.card-head{flex-wrap:wrap}}
+  @media(max-width:560px){.wrap{overflow-wrap:anywhere}.pill{max-width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere}.summary-grid{grid-template-columns:minmax(0,1fr)}.editor-list>*{min-width:0}.card-head>*{min-width:0}.card-head{flex-wrap:wrap}}
   .table-wrap{width:100%;max-width:100%;min-width:0;overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fffefb} table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px} th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:12px;text-align:left;vertical-align:top} th{background:#f8f3ea;font-weight:850} tr:last-child td{border-bottom:0} th:last-child,td:last-child{border-right:0}.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.reveal{margin-top:8px}.reveal summary{cursor:pointer;font-weight:760;color:var(--accent-ink)}
   .inspector{position:sticky;top:12px}.kv{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px 12px;border-top:1px solid var(--line);padding-top:12px}.kv div:nth-child(odd){font-weight:820;color:var(--muted)}
   .hidden-list{display:flex;flex-wrap:wrap;gap:8px}.hidden-chip{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:8px;display:inline-flex;gap:8px;align-items:center}.notice{border-left:4px solid var(--accent-strong);padding:10px 12px;background:#f2f7f7;border-radius:12px;color:var(--accent-ink);font-weight:650}.codebox{width:100%;min-width:0;min-height:240px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9rem;white-space:pre;overflow:auto}.promptbox{white-space:pre-wrap;border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:14px;max-height:520px;overflow:auto}.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.65fr);gap:18px}@media(max-width:1100px){.split{grid-template-columns:minmax(0,1fr)}.inspector{position:static}}
@@ -74,7 +74,7 @@
 <body>
 <header>
   <div class="wrap hero">
-    <div class="pill">Chimeric Prototype v0.1.6</div>
+    <div class="pill">Chimeric Prototype v0.1.7</div>
     <h1>Specification-by-Example</h1>
     <div class="subtitle">Behavior Example Bridge</div>
     <p class="deck">A bridge architecture that turns verbal agreement into concrete examples, then lets accepted examples become living specifications, tests, or implementation guidance. This single-file artifact preserves human-readable editing, SVG visualization, JSON/JSON-LD structure, semantic locality, recovery calibration, and an AI collaboration prompt capsule.</p>
@@ -85,7 +85,7 @@
     <h2>Quick Use</h2>
     <div class="summary-grid">
       <div class="summary-card"><strong>Use when</strong><p>A team agrees in principle but needs concrete examples of context, event, and observable outcome.</p></div>
-      <div class="summary-card"><strong>This restores</strong><p>Behavioral clarity across domain experts, designers, engineers, testers, reviewers, and AI collaborators.</p></div>
+      <div class="summary-card"><strong>This restores</strong><p>Behavioral clarity across domain experts, designers, engineers, testers, reviewers, and generative AI systems that consume the examples as implementation context.</p></div>
       <div class="summary-card"><strong>Good next question</strong><p>Can we express this as Given / When / Then?</p></div>
       <div class="summary-card"><strong>Usually hands to</strong><p>Unit-test-first Design, Software Architecture Views, HEART Chart, Service-design Blueprint, Upstream Revision Loop.</p></div>
     </div>
@@ -96,7 +96,7 @@
     <div class="grid-3">
       <div><label for="artifactTitle">Artifact title</label><input id="artifactTitle" type="text" value="Specification-by-Example" data-artifact-field="display_name"></div>
       <div><label for="artifactSubtitle">Subtitle</label><input id="artifactSubtitle" type="text" value="Behavior Example Bridge" data-artifact-field="subtitle"></div>
-      <div><label for="artifactVersion">Version</label><input id="artifactVersion" type="text" value="0.1.6" data-artifact-field="version"></div>
+      <div><label for="artifactVersion">Version</label><input id="artifactVersion" type="text" value="0.1.7" data-artifact-field="version"></div>
     </div>
     <div class="toolbar" style="margin-top:14px">
       <button id="addRuleBtn" type="button">Add rule</button>
@@ -152,7 +152,7 @@
 
       <section>
         <h2>Text / Table Equivalent</h2>
-        <p class="small-note">This table preserves readable scenario content for people and AI collaborators. Long text can be revealed without changing the compact visual flow.</p>
+        <p class="small-note">This table preserves readable scenario content for people and generative AI systems that consume the examples as structured context. Long text can be revealed without changing the compact visual flow.</p>
         <div id="tableEquivalent" class="table-wrap" tabindex="0" aria-label="Scrollable Specification-by-Example text equivalent"></div>
       </section>
     </div>
@@ -225,16 +225,16 @@
         <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
       </div>
     </fieldset>
-    <p class="small-note" id="promptViewDescription">Plain Markdown carries the complete behavior-example context without asking the receiver to load a repository skill.</p>
+    <p class="small-note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete behavior-example context.</p>
     <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript><p class="notice">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
     <pre id="aiPrompt" class="promptbox" data-prompt-view-active="plain" aria-labelledby="promptCapsuleHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Specification-by-Example
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `specification-by-example/current-behavior-examples`
-- Source: `specification-by-example@0.1.6`
-- State: `specification-by-example-state.v0.1` · revision `0.1.6`
-- Fingerprint: `fnv1a32-utf8:ebdc6a57`
+- Source: `specification-by-example@0.1.7`
+- State: `specification-by-example-state.v0.1` · revision `0.1.7`
+- Fingerprint: `fnv1a32-utf8:d8515a02`
 - View: `plain`
 
 ## Purpose and target
@@ -251,7 +251,7 @@ Use this Specification-by-Example to turn shared intent into concrete context, e
 ## Relevant context and inputs
 
 - Use when: the team agrees in principle but needs concrete examples of context, event, and observable outcome
-- Restored condition: behavioral clarity across domain experts, designers, engineers, testers, reviewers, and AI collaborators
+- Restored condition: behavioral clarity across domain experts, designers, engineers, testers, reviewers, and generative AI systems that consume the examples as implementation context
 - Good next question: Can we express this as Given / When / Then?
 - Usual handoffs: Unit-test-first Design; Software Architecture Views; HEART Chart; Service-design Blueprint; Upstream Revision Loop
 - Active focus view: Default focus view (`view-default`) with text mode `preview\_with\_reveal`.
@@ -443,7 +443,7 @@ These public collaboration loops fit only when the receiving work meets the stat
   const PROMPT_CAPSULE_STATE_CONTRACT = 'specification-by-example-state.v0.1';
   const PROMPT_CAPSULE_ID = 'specification-by-example/current-behavior-examples';
   const PROMPT_CAPSULE_SOURCE_ID = 'specification-by-example';
-  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.6';
+  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.7';
   const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
   const PROMPT_CAPSULE_SKILL_REVISION = '303067bad4b7da100844979c0e6fe847edde5122';
   const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -519,7 +519,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 
   let state = {
     artifact_identity: {
-      id:'ca-artifact-specification-by-example-genomics-001', display_name:'Specification-by-Example', subtitle:'Behavior Example Bridge', version:'0.1.6', family:'Participatory Elicitation and Specification', placement:'Bridge Architecture', primary_cognitive_move:'behavior example discovery and executable verification', source_band:['inherited_method','author_adapted_method','central_bridge_artifact']
+      id:'ca-artifact-specification-by-example-genomics-001', display_name:'Specification-by-Example', subtitle:'Behavior Example Bridge', version:'0.1.7', family:'Participatory Elicitation and Specification', placement:'Bridge Architecture', primary_cognitive_move:'behavior example discovery and executable verification', source_band:['inherited_method','author_adapted_method','central_bridge_artifact']
     },
     rules: [
       { id:'rule-consent-aware-review', label:'Consent-aware variant review', description:'Review behavior should respect current consent context and route sensitive actions to review when needed.', canonical_order:1 },
@@ -659,15 +659,15 @@ These public collaboration loops fit only when the receiving work meets the stat
   function renderTable(){
     const rows = visibleScenarios().map(s => {
       const rule = findRule(s.rule_id); const rf = routeFamily(s.handoff);
-      return `<tr data-action="select-scenario" data-id="${esc(s.id)}" tabindex="0">
-        <td><span class="rule-pill">${esc(rule?rule.label:'No rule')}</span><div class="tiny mono">${esc(s.id)}</div></td>
-        <td><strong>${esc(s.title)}</strong><div class="tiny">${esc(s.actor)}</div></td>
-        <td>${detailHTML(s.given)}</td><td>${detailHTML(s.when)}</td><td>${detailHTML(s.then)}</td>
-        <td class="status-cell"><span class="status-pill ${esc(s.status)}"><span class="status-dot"></span>${esc(statusFor(s.status).label)}</span></td>
-        <td>${s.handoff ? `<span class="route-pill">${esc(s.handoff)}</span><div class="tiny">${esc(rf)}</div>` : '<span class="tiny">No route</span>'}</td>
+      return `<tr data-label="Specification-by-Example: ${esc(s.title)} (${esc(s.id)})" data-action="select-scenario" data-id="${esc(s.id)}" tabindex="0">
+        <td data-label="Rule"><span class="rule-pill">${esc(rule?rule.label:'No rule')}</span><div class="tiny mono">${esc(s.id)}</div></td>
+        <td data-label="Scenario"><strong>${esc(s.title)}</strong><div class="tiny">${esc(s.actor)}</div></td>
+        <td data-label="Given">${detailHTML(s.given)}</td><td data-label="When">${detailHTML(s.when)}</td><td data-label="Then">${detailHTML(s.then)}</td>
+        <td data-label="Status" class="status-cell"><span class="status-pill ${esc(s.status)}"><span class="status-dot"></span>${esc(statusFor(s.status).label)}</span></td>
+        <td data-label="Handoff route">${s.handoff ? `<span class="route-pill">${esc(s.handoff)}</span><div class="tiny">${esc(rf)}</div>` : '<span class="tiny">No route</span>'}</td>
       </tr>`;
     }).join('');
-    el('tableEquivalent').innerHTML = `<table><thead><tr><th>Rule</th><th>Scenario</th><th>Given</th><th>When</th><th>Then</th><th>Status</th><th>Handoff route</th></tr></thead><tbody>${rows || `<tr><td colspan="7">No visible scenarios.</td></tr>`}</tbody></table>`;
+    el('tableEquivalent').innerHTML = `<table data-label="Specification-by-Example scenarios"><thead><tr><th data-label="Rule" scope="col">Rule</th><th data-label="Scenario" scope="col">Scenario</th><th data-label="Given" scope="col">Given</th><th data-label="When" scope="col">When</th><th data-label="Then" scope="col">Then</th><th data-label="Status" scope="col">Status</th><th data-label="Handoff route" scope="col">Handoff route</th></tr></thead><tbody>${rows || `<tr data-label="Specification-by-Example scenarios: empty focus view"><td data-label="No visible scenarios" colspan="7">No visible scenarios.</td></tr>`}</tbody></table>`;
   }
 
   function wrapText(str, maxChars, maxLines){
@@ -800,7 +800,7 @@ These public collaboration loops fit only when the receiving work meets the stat
   function quickUseState(){
     return {
       use_when:'the team agrees in principle but needs concrete examples of context, event, and observable outcome',
-      restores:'behavioral clarity across domain experts, designers, engineers, testers, reviewers, and AI collaborators',
+      restores:'behavioral clarity across domain experts, designers, engineers, testers, reviewers, and generative AI systems that consume the examples as implementation context',
       good_next_question:'Can we express this as Given / When / Then?',
       usual_handoffs:['Unit-test-first Design','Software Architecture Views','HEART Chart','Service-design Blueprint','Upstream Revision Loop']
     };
@@ -1121,14 +1121,14 @@ These public collaboration loops fit only when the receiving work meets the stat
     document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
     el('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'
       ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented example state and fingerprint remain the same.'
-      : 'Plain Markdown carries the complete behavior-example context without asking the receiver to load a repository skill.';
+      : 'Plain Markdown is a self-contained handoff with the complete behavior-example context.';
   }
 
   function renderIdentityRegistry(){
     const v=activeView();
-    const ruleRows = state.rules.map(r => `<tr><td>Rule</td><td class="mono">${esc(r.id)}</td><td>${esc(r.label)}</td><td>${esc(r.canonical_order)}</td><td>${esc(v.rule_order.indexOf(r.id)+1 || '')}</td><td>${v.hidden_rule_ids.includes(r.id)?'hidden':'visible'}</td></tr>`).join('');
-    const scenarioRows = state.scenarios.map(s => `<tr><td>Scenario</td><td class="mono">${esc(s.id)}</td><td>${esc(s.title)}</td><td>${esc(s.canonical_order)}</td><td>${esc(v.scenario_order.indexOf(s.id)+1 || '')}</td><td>${visibleScenarios().some(vs=>vs.id===s.id)?'visible':'hidden'}</td></tr>`).join('');
-    el('identityRegistry').innerHTML = `<table><thead><tr><th>Type</th><th>ID</th><th>Label</th><th>Canonical order</th><th>Display order</th><th>Visibility</th></tr></thead><tbody>${ruleRows}${scenarioRows}</tbody></table>`;
+    const ruleRows = state.rules.map(r => `<tr data-label="Specification-by-Example identity registry: Rule ${esc(r.label)} (${esc(r.id)})"><td data-label="Type">Rule</td><td data-label="ID" class="mono">${esc(r.id)}</td><td data-label="Label">${esc(r.label)}</td><td data-label="Canonical order">${esc(r.canonical_order)}</td><td data-label="Display order">${esc(v.rule_order.indexOf(r.id)+1 || '')}</td><td data-label="Visibility">${v.hidden_rule_ids.includes(r.id)?'hidden':'visible'}</td></tr>`).join('');
+    const scenarioRows = state.scenarios.map(s => `<tr data-label="Specification-by-Example identity registry: Scenario ${esc(s.title)} (${esc(s.id)})"><td data-label="Type">Scenario</td><td data-label="ID" class="mono">${esc(s.id)}</td><td data-label="Label">${esc(s.title)}</td><td data-label="Canonical order">${esc(s.canonical_order)}</td><td data-label="Display order">${esc(v.scenario_order.indexOf(s.id)+1 || '')}</td><td data-label="Visibility">${visibleScenarios().some(vs=>vs.id===s.id)?'visible':'hidden'}</td></tr>`).join('');
+    el('identityRegistry').innerHTML = `<table data-label="Specification-by-Example identity registry"><thead><tr><th data-label="Type" scope="col">Type</th><th data-label="ID" scope="col">ID</th><th data-label="Label" scope="col">Label</th><th data-label="Canonical order" scope="col">Canonical order</th><th data-label="Display order" scope="col">Display order</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${ruleRows}${scenarioRows}</tbody></table>`;
   }
 
   function updateModelFromField(target){
@@ -1347,7 +1347,7 @@ These public collaboration loops fit only when the receiving work meets the stat
   document.querySelector('[data-prompt-view-control]').hidden=false;
   document.querySelector('[data-prompt-actions]').hidden=false;
   window.specificationByExample=Object.freeze({
-    version:'0.1.6',
+    version:'0.1.7',
     stateContract:PROMPT_CAPSULE_STATE_CONTRACT,
     contract:PROMPT_CAPSULE_CONTRACT,
     views:PROMPT_CAPSULE_VIEWS,
