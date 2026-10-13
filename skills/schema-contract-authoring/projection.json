@@ -5,7 +5,7 @@
   "name": "schema-contract-authoring",
   "description": "Authors or revises repository schema families as bounded, legible contracts with distinct identity, authority, retrieval, examples, semantic context, dependency closure, and proportional material-use checks. Applies when a schema root, versioned contract, JSON-LD context, example family, publication route, or cross-repository schema projection enters scope.",
   "semanticAuthorityRef": "../source/.agents/skills/schema-contract-authoring/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/17",
+  "sourceRef": "../catalog.json#/skills/20",
   "contract": {
     "what": "A portable method for shaping a schema family around the objects collaborators need to understand, exchange, validate, and recover.",
     "when": [

@@ -23,10 +23,15 @@ recoverable through the authorized resolver.
 - Visible link text and neighboring explanation keep the unmaterialized source
   orienting; the generated artifact supplies navigation to the external route.
 - Required keys are discovered from authored HTML and the one approved shared
-  script carrier. No separate route manifest, ancestry registry, or recurring
-  workspace census owns that truth.
-- Ignored `.env.public` values or matching process-environment values supply
-  human-approved credential-free HTTPS destinations.
+  script carrier. A bounded tracked binding selects one exact current Registry
+  Atlas identity for each discovered Registry key; no recurring workspace
+  census or copied Atlas owns that truth.
+- Ignored `.env.public` or its matching process-environment value supplies the
+  separately approved professional-profile destination. Registry destinations
+  come from the reviewed binding, and external Registry overrides fail closed.
+- The complete Atlas remains an external, dated discovery corpus. The binding
+  retains its accepted coordinates and digests while Atlas prose remains inert
+  reference data rather than build instruction.
 - The materializer rejects URL userinfo and recognized credential-bearing query
   or fragment parameters without printing configured values. Human review owns
   path-shaped access coordinates and unfamiliar signing conventions.
@@ -79,9 +84,10 @@ professional-profile key set from source, exercises a complete synthetic
 materialization, parses only token-bearing JSON-LD, and confirms that authored
 input and activated iframe destinations remain unchanged.
 
-The build establishes deterministic substitution, context-appropriate escaping,
-and retained-generation recovery. It does not establish Registry ancestry,
-content standing, signed-out availability, or publication authority. The
+The build establishes deterministic substitution, exact Registry-key coverage,
+context-appropriate escaping, accepted-Atlas traceability, and
+retained-generation recovery. Registry ancestry, content standing, signed-out
+availability, and publication authority remain human-reviewed facts. The
 private resolver and human observation supply those receipts.
 
 The exact proposed-index comparison returned ready in no-additions mode. It
