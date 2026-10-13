@@ -71,7 +71,7 @@
     <path class="wing" d="M980 238H1318L1396 280L1318 322H980Z" fill="#d9efea"/>
     <text x="1022" y="267" class="mono wing-kicker" fill="#153fbe">RECEIVE · REVIEW TOGETHER</text>
     <text x="1022" y="295" class="sans wing-title ink">Named receiver + return</text>
-    <text x="1022" y="316" class="sans wing-copy body">A named collaborator inspects and revises.</text>
+    <text x="1022" y="316" class="sans wing-copy body">A named human receiver inspects and revises.</text>
   </g>
 
   <g id="artifact-packet-lane" role="group" aria-labelledby="artifact-lane-title">

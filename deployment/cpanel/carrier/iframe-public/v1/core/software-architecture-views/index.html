@@ -349,7 +349,7 @@
         <span class="status-chip" data-status="ready_to_route">ready to route</span>
       </div>
       <div class="matrix-table-wrap" style="margin-top:12px;" tabindex="0" aria-label="Scrollable Software Architecture Views table">
-        <table id="attachmentTable">
+        <table data-label="Software Architecture Views attachments" id="attachmentTable">
           <thead></thead>
           <tbody></tbody>
         </table>
@@ -401,7 +401,7 @@
             <li data-related-loop-id="visitor-surface-change"><a href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change" target="_blank" rel="noopener noreferrer">Change a visitor surface with fitting visual evidence</a><p><strong>Fit condition:</strong> Use when an attachment becomes a visitor-visible architecture change that needs focused browser evidence.</p></li>
           </ul></details>
           <fieldset class="prompt-view-control" data-prompt-view-control hidden><legend>Markdown view</legend><div class="prompt-view-options"><label class="prompt-view-option"><input type="radio" name="software-views-prompt-view" value="plain" data-prompt-view checked> Plain</label><label class="prompt-view-option"><input type="radio" name="software-views-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label></div></fieldset>
-          <p class="note" id="promptViewDescription">Plain Markdown carries the complete architecture context without asking the receiver to load a repository skill.</p><p class="prompt-status note" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+          <p class="note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete architecture context.</p><p class="prompt-status note" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
           <noscript><p class="quick-card">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
           <pre id="aiPrompt" data-prompt-view-active="plain" aria-labelledby="io-heading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Software Architecture Views
 
@@ -1086,22 +1086,22 @@ These public collaboration loops fit when the receiving work meets the stated co
 
     function renderTable() {
       const table = document.getElementById('attachmentTable');
-      table.querySelector('thead').innerHTML = `<tr><th>View</th><th>Attachment</th><th>Relationship</th><th>Status</th><th>Route</th><th>Controls</th></tr>`;
+      table.querySelector('thead').innerHTML = `<tr><th data-label="View" scope="col">View</th><th data-label="Attachment" scope="col">Attachment</th><th data-label="Relationship" scope="col">Relationship</th><th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th><th data-label="Controls" scope="col">Controls</th></tr>`;
       const rows = [];
       for (const view of visibleViews()) {
         const attachments = orderedAttachmentsForView(view.id);
         if (!attachments.length) {
-          rows.push(`<tr><td><span class="view-pill">${escapeHtml(view.label)}</span></td><td colspan="5"><span class="note">No visible attachments in this view.</span></td></tr>`);
+          rows.push(`<tr data-label="Software Architecture Views attachments: ${escapeHtml(view.label)} (${escapeHtml(view.id)})"><td data-label="View"><span class="view-pill">${escapeHtml(view.label)}</span></td><td data-label="No visible attachments" colspan="5"><span class="note">No visible attachments in this view.</span></td></tr>`);
         } else {
           for (const att of attachments) {
             const selected = activeView().selected_attachment_id === att.id;
-            rows.push(`<tr class="attachment-row ${selected ? 'selected' : ''}" data-attachment-id="${att.id}">
-              <td><span class="view-pill">${escapeHtml(view.label)}</span><div class="compact note">${escapeHtml(view.id)}</div></td>
-              <td>${previewBlock(att.label, 'label-' + att.id)}</td>
-              <td>${previewBlock(att.relationship || '', 'rel-' + att.id)}</td>
-              <td class="status-cell"><span class="status-chip" data-status="${att.status}">${escapeHtml((att.status || '').replace(/_/g,' '))}</span></td>
-              <td>${att.route ? `<span class="route-pill">${escapeHtml(att.route)}</span><div class="compact note">${escapeHtml(routeFamily(att.route))}</div>` : '<span class="note">No route</span>'}</td>
-              <td>
+            rows.push(`<tr data-label="Software Architecture Views attachments: ${escapeHtml(view.label)} / ${escapeHtml(att.label)} (${escapeHtml(att.id)})" class="attachment-row ${selected ? 'selected' : ''}" data-attachment-id="${att.id}">
+              <td data-label="View"><span class="view-pill">${escapeHtml(view.label)}</span><div class="compact note">${escapeHtml(view.id)}</div></td>
+              <td data-label="Attachment">${previewBlock(att.label, 'label-' + att.id)}</td>
+              <td data-label="Relationship">${previewBlock(att.relationship || '', 'rel-' + att.id)}</td>
+              <td data-label="Status" class="status-cell"><span class="status-chip" data-status="${att.status}">${escapeHtml((att.status || '').replace(/_/g,' '))}</span></td>
+              <td data-label="Route">${att.route ? `<span class="route-pill">${escapeHtml(att.route)}</span><div class="compact note">${escapeHtml(routeFamily(att.route))}</div>` : '<span class="note">No route</span>'}</td>
+              <td data-label="Controls">
                 <div class="controls">
                   <button class="small" data-action="select-attachment" data-id="${att.id}">Select</button>
                   <button class="small" data-action="toggle-attachment" data-id="${att.id}">Hide</button>
@@ -1205,7 +1205,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       document.getElementById('jsonld').textContent = JSON.stringify(jsonLd, null, 2);
       const prompt=document.getElementById('aiPrompt');prompt.textContent=promptCapsuleMarkdown(promptCapsuleView);prompt.dataset.promptViewActive=promptCapsuleView;
       document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
-      document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented attachment map and fingerprint remain the same.':'Plain Markdown carries the complete architecture context without asking the receiver to load a repository skill.';
+      document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented attachment map and fingerprint remain the same.':'Plain Markdown is a self-contained handoff with the complete architecture context.';
     }
 
     const ROOT_EXPORT_KEYS=new Set(['artifact_identity','quick_use','modeled_element','software_architecture_views','view_state','route_registry','status_vocabulary','semantic_locality','recovery_calibration']);

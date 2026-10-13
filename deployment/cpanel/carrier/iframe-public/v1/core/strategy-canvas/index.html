@@ -388,7 +388,7 @@
         </div>
       </div>
       <details class="sc-implications" open>
-        <summary>Instruction implications for human and AI collaborators</summary>
+        <summary>Instructions for human participants and generative AI systems</summary>
         <ul>
           <li><strong>Define scale anchors before requesting scores.</strong> An observable low, middle, and high condition gives the number a shared local meaning.</li>
           <li><strong>Keep offering level and consequence weight distinct.</strong> Offering level moves the curve. Consequence weight directs discussion attention while leaving the plotted score unchanged.</li>
@@ -396,7 +396,7 @@
           <li><strong>Ask when task position or evidence standing remains open.</strong> Clarify which decision this canvas supports, which horizon it serves, and what evidence gives a current-state reading its standing.</li>
           <li><strong>Treat good enough as the next-phase threshold.</strong> Desired describes the stronger future condition; good enough marks the condition adequate for the named horizon.</li>
           <li><strong>Apply the action lens after the baseline shape is visible.</strong> Eliminate, Reduce, Raise, and Create become interpretations of an inspectable configuration.</li>
-          <li><strong>Keep AI suggestions visibly attributed.</strong> AI-generated factors, anchors, scores, and interpretations enter as proposals outside human aggregates until an explicit review accepts them.</li>
+          <li><strong>Keep system-generated suggestions visibly attributed.</strong> AI-generated factors, anchors, scores, and interpretations enter as proposals outside human aggregates until an explicit review accepts them.</li>
           <li><strong>Choose the AI handoff scope explicitly.</strong> Assemble a packet from the reviewed fields participants have placed in scope. This local prototype performs the assembly in the browser and makes no network request.</li>
         </ul>
       </details>
@@ -469,15 +469,15 @@
           </svg>
         </div>
         <div class="sc-table-wrap">
-          <table class="sc-score-table">
-            <thead><tr><th scope="col">Dimension</th><th scope="col">Current</th><th scope="col">Good enough</th><th scope="col">Desired</th><th scope="col">Consequence</th></tr></thead>
+          <table data-label="Starting Strategy Canvas values" class="sc-score-table">
+            <thead><tr><th data-label="Dimension" scope="col">Dimension</th><th data-label="Current" scope="col">Current</th><th data-label="Good enough" scope="col">Good enough</th><th data-label="Desired" scope="col">Desired</th><th data-label="Consequence" scope="col">Consequence</th></tr></thead>
             <tbody>
-              <tr><th scope="row">Goal fidelity</th><td>4</td><td>7</td><td>9</td><td>5</td></tr>
-              <tr><th scope="row">Evidence provenance</th><td>3</td><td>7</td><td>10</td><td>5</td></tr>
-              <tr><th scope="row">Decision legibility</th><td>5</td><td>7</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Participant reach</th><td>4</td><td>6</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Recovery clarity</th><td>3</td><td>6</td><td>8</td><td>5</td></tr>
-              <tr><th scope="row">Cross-surface continuity</th><td>4</td><td>7</td><td>9</td><td>4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Goal fidelity"><th data-label="Dimension" scope="row">Goal fidelity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Evidence provenance"><th data-label="Dimension" scope="row">Evidence provenance</th><td data-label="Current">3</td><td data-label="Good enough">7</td><td data-label="Desired">10</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Decision legibility"><th data-label="Dimension" scope="row">Decision legibility</th><td data-label="Current">5</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Participant reach"><th data-label="Dimension" scope="row">Participant reach</th><td data-label="Current">4</td><td data-label="Good enough">6</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Recovery clarity"><th data-label="Dimension" scope="row">Recovery clarity</th><td data-label="Current">3</td><td data-label="Good enough">6</td><td data-label="Desired">8</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Cross-surface continuity"><th data-label="Dimension" scope="row">Cross-surface continuity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
             </tbody>
           </table>
         </div>
@@ -488,9 +488,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `strategy-canvas-collaboration-field`
-- Source: `strategy-canvas-canonical@0.2.4`
+- Source: `strategy-canvas-canonical@0.2.5`
 - State: `strategy-canvas/2.0` · revision `1`
-- Fingerprint: `fnv1a32-utf8:13bcf93f`
+- Fingerprint: `fnv1a32-utf8:cb592f7c`
 - View: `plain`
 
 ## Purpose and target
@@ -567,7 +567,7 @@ Collaborate with this Strategy Canvas as an inspectable working revision.
 
 ### Cross-surface continuity (`cross-surface-continuity`)
 
-- Meaning: Meaning remains coherent as the work moves between workshops, documents, code, and AI collaborators.
+- Meaning: Meaning remains coherent as the work moves between workshops, documents, code, and generative AI systems.
 - Low anchor: Each surface requires substantial context reconstruction.
 - Middle anchor: Selected artifacts carry reusable context.
 - High anchor: Stable identities, decisions, evidence, and open conditions remain portable.
@@ -580,9 +580,9 @@ Collaborate with this Strategy Canvas as an inspectable working revision.
 
 - Current describes the present working reading. Good enough describes the threshold for the named horizon. Desired describes the stronger future condition.
 - Consequence weight directs discussion attention and leaves the score geometry unchanged.
-- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. AI suggestions enter as visibly attributed proposals outside human aggregates.
+- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. System-generated suggestions enter as visibly attributed proposals outside human aggregates.
 - People retain decisions about handoff scope, interpretation, acceptance, and publication.
-- AI handoff scope: The receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.
+- AI handoff scope: Before an external packet is assembled, a human operator should confirm which reviewed fields are in scope.
 
 ## Requested return
 
@@ -689,7 +689,7 @@ These public collaboration loops fit only when the receiving work meets the stat
                 <label><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
               </div>
             </fieldset>
-            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown carries the complete working context without asking the receiver to load a repository skill.</p>
+            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown is a self-contained handoff with the complete working context.</p>
             <pre class="sc-code" data-sc-role="prompt" data-prompt-view="plain" aria-labelledby="prompt-capsule-heading" aria-describedby="prompt-view-description" tabindex="0"></pre>
           </div>
         </div>
@@ -708,7 +708,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     <p class="sc-live" data-sc-role="live" aria-live="polite" aria-atomic="true"></p>
 
     <footer class="sc-footer artifact-attribution">
-      <p><strong>Method boundary.</strong> This canonical artifact supports two declared postures. Market strategy compares locally defined factors and relative offering levels. Internal collaboration tuning compares current support, a next-phase good-enough threshold, and a desired condition. Naming the posture keeps the interpretation available to every participant and receiving AI collaborator.</p>
+      <p><strong>Method boundary.</strong> This canonical artifact supports two declared postures. Market strategy compares locally defined factors and relative offering levels. Internal collaboration tuning compares current support, a next-phase good-enough threshold, and a desired condition. Naming the posture keeps the interpretation available to every participant and any generative AI system receiving the reviewed context.</p>
       <p>Eliminate, Reduce, Raise, and Create form an action lens applied after the baseline shape becomes inspectable. Hold and Open are local extensions for continuity and inquiry.</p>
       <section class="sc-method-source" data-strategy-canvas-source="method-origin" aria-labelledby="strategy-canvas-source-heading">
         <h2 id="strategy-canvas-source-heading">Method source and local adaptation</h2>
@@ -857,7 +857,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>
-/* Strategy Canvas shared state engine v0.2.4 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.5 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
@@ -995,7 +995,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     {
       id: 'cross-surface-continuity',
       label: 'Cross-surface continuity',
-      definition: 'Meaning remains coherent as the work moves between workshops, documents, code, and AI collaborators.',
+      definition: 'Meaning remains coherent as the work moves between workshops, documents, code, and generative AI systems.',
       anchors: {
         low: 'Each surface requires substantial context reconstruction.',
         middle: 'Selected artifacts carry reusable context.',
@@ -1708,7 +1708,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     const includeReviewed = context?.collaboration?.session?.includeReviewedStateInAI === true;
     return includeReviewed && Array.isArray(aiChannel?.consentScope) && aiChannel.consentScope.length
       ? `Reviewed fields in scope: ${aiChannel.consentScope.map((value) => markdownInline(value)).join(', ')}. Reviewed revision: ${markdownInline(String(aiChannel.reviewedRevision ?? 'open'))}. Network policy: ${markdownInline(aiChannel.networkPolicy || 'local-only')}.`
-      : 'The receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.';
+      : 'Before an external packet is assembled, a human operator should confirm which reviewed fields are in scope.';
   }
 
   function canonicalValue(value) {
@@ -1726,7 +1726,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     return {
       contract: PROMPT_CAPSULE_CONTRACT,
       capsule: markdownInline(normalized.meta.id),
-      source: 'strategy-canvas-canonical@0.2.4',
+      source: 'strategy-canvas-canonical@0.2.5',
       state: {
         schemaVersion: markdownInline(normalized.schemaVersion),
         revision: normalized.meta.revision
@@ -1799,7 +1799,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       '',
       `- Contract: \`${PROMPT_CAPSULE_CONTRACT}\``,
       `- Capsule: \`${markdownInline(normalized.meta.id)}\``,
-      '- Source: `strategy-canvas-canonical@0.2.4`',
+      '- Source: `strategy-canvas-canonical@0.2.5`',
       `- State: \`${normalized.schemaVersion}\` · revision \`${normalized.meta.revision}\``,
       `- Fingerprint: \`${fingerprint}\``,
       `- View: \`${view}\``,
@@ -1827,7 +1827,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       '',
       '- Current describes the present working reading. Good enough describes the threshold for the named horizon. Desired describes the stronger future condition.',
       '- Consequence weight directs discussion attention and leaves the score geometry unchanged.',
-      '- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. AI suggestions enter as visibly attributed proposals outside human aggregates.',
+      '- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. System-generated suggestions enter as visibly attributed proposals outside human aggregates.',
       '- People retain decisions about handoff scope, interpretation, acceptance, and publication.',
       `- AI handoff scope: ${aiScope}`,
       '',
@@ -1872,7 +1872,7 @@ These public collaboration loops fit only when the receiving work meets the stat
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.4',
+    version: '0.2.5',
     schemaVersion: SCHEMA_VERSION,
     promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
     promptCapsuleViews: PROMPT_CAPSULE_VIEWS,
@@ -1902,7 +1902,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>
-/* Canonical Strategy Canvas controller v0.2.4 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.5 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -2328,17 +2328,17 @@ These public collaboration loops fit only when the receiving work meets the stat
     function renderScoreMatrix(state) {
       const container = find('score-matrix');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas score matrix', 'data-label': 'Strategy Canvas score matrix' });
       const head = element('thead');
       const headerRow = element('tr');
       ['Dimension', 'Current', 'Good enough', 'Desired', 'Consequence weight'].forEach((label, index) => {
-        headerRow.append(element('th', { scope: 'col', text: label, id: index ? undefined : 'sc-dimension-column' }));
+        headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label, id: index ? undefined : 'sc-dimension-column' }));
       });
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr', { 'data-selected': state.view.selectedDimensionId === dimension.id });
-        const dimensionHead = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas score matrix: ${dimension.label} (${dimension.id})`, 'data-selected': state.view.selectedDimensionId === dimension.id });
+        const dimensionHead = element('th', { scope: 'row', 'data-label': 'Dimension' });
         dimensionHead.append(
           element('button', {
             type: 'button',
@@ -2352,8 +2352,8 @@ These public collaboration loops fit only when the receiving work meets the stat
           element('div', { className: 'sc-help', text: dimension.definition })
         );
         row.append(dimensionHead);
-        core.series.forEach((series) => row.append(element('td', {}, scoreControl(state, dimension, series))));
-        const weightCell = element('td');
+        core.series.forEach((series) => row.append(element('td', { 'data-label': SERIES_LABELS[series] }, scoreControl(state, dimension, series))));
+        const weightCell = element('td', { 'data-label': 'Consequence weight (0 to 5)' });
         const weightInput = element('input', {
           type: 'number', min: 0, max: 5, step: 1, value: dimension.consequenceWeight,
           'data-dimension-field': 'consequenceWeight',
@@ -2425,15 +2425,15 @@ These public collaboration loops fit only when the receiving work meets the stat
     function renderTextEquivalent(state) {
       const container = find('text-equivalent');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas text equivalent', 'data-label': 'Strategy Canvas text equivalent' });
       const head = element('thead');
       const headerRow = element('tr');
-      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', text: label })));
+      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label })));
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr');
-        const dimensionCell = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas text equivalent: ${dimension.label} (${dimension.id})` });
+        const dimensionCell = element('th', { scope: 'row', 'data-label': 'Dimension and anchors' });
         dimensionCell.append(
           element('strong', { text: dimension.label }),
           element('p', { text: dimension.definition }),
@@ -2441,11 +2441,11 @@ These public collaboration loops fit only when the receiving work meets the stat
         );
         row.append(
           dimensionCell,
-          element('td', { text: dimension.scores.current }),
-          element('td', { text: dimension.scores.goodEnough }),
-          element('td', { text: dimension.scores.desired }),
-          element('td', { text: ACTION_LABELS[dimension.action] }),
-          element('td', { text: dimension.evidenceBasis || 'Open for the next review.' })
+          element('td', { 'data-label': 'Current', text: dimension.scores.current }),
+          element('td', { 'data-label': 'Good enough', text: dimension.scores.goodEnough }),
+          element('td', { 'data-label': 'Desired', text: dimension.scores.desired }),
+          element('td', { 'data-label': 'Action', text: ACTION_LABELS[dimension.action] }),
+          element('td', { 'data-label': 'Evidence basis', text: dimension.evidenceBasis || 'Open for the next review.' })
         );
         body.append(row);
       });
@@ -2495,7 +2495,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       if (promptDescription) {
         promptDescription.textContent = promptCapsuleView === 'skill-assisted'
           ? 'Skill-assisted Markdown adds exact public repository skill paths and their immutable revision. The Strategy Canvas state and fingerprint remain the same.'
-          : 'Plain Markdown carries the complete working context without asking the receiver to load a repository skill.';
+          : 'Plain Markdown is a self-contained handoff with the complete working context.';
       }
       if (validation) {
         const result = core.validateState(state);
@@ -2765,7 +2765,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.4',
+      version: '0.2.5',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
@@ -2778,7 +2778,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.4', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.5', mount });
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>

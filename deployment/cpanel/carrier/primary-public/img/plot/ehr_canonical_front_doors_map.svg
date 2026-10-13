@@ -91,7 +91,7 @@
     <text class="eyebrow" x="94" y="597">DISCRETE FINDING</text>
     <text class="card-title" x="94" y="621">Variant or biomarker</text>
     <text class="mono" x="94" y="645">OBX / Observation</text>
-    <text class="mono" x="94" y="663">LOINC-coded clinical meaning</text>
+    <text class="mono" x="94" y="663">LOINC name + coded genomic value</text>
 
     <rect class="card blush" x="76" y="694" width="256" height="122" rx="11"/>
     <text class="eyebrow" x="94" y="717">PATIENT IDENTITY</text>
@@ -114,7 +114,7 @@
     <rect class="card pale" x="454" y="390" width="378" height="116" rx="11"/>
     <text class="eyebrow" x="474" y="415">SHARED MEANING</text>
     <text class="body-strong" x="474" y="442">Order and result remain one clinical promise.</text>
-    <text class="body" x="474" y="466">LOINC-coded findings stay discrete while each</text>
+    <text class="body" x="474" y="466">Coded genomic findings stay discrete while each</text>
     <text class="body" x="474" y="486">target receives its conformant carrier.</text>
 
     <rect class="card sea" x="454" y="522" width="180" height="132" rx="11"/>

@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Service-design Blueprint · Service Topology Map · Chimeric Prototype v0.2.5</title>
+<title>Service-design Blueprint · Service Topology Map · Chimeric Prototype v0.2.6</title>
 <style>
   :root {
     --paper: #fffdf8;
@@ -102,9 +102,17 @@
   .matrix-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: #fffefb; }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 980px; }
   th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; }
-  th { background: #faf4e8; text-align: left; font-weight: 860; position: sticky; top: 0; z-index: 2; }
+  th { background: #faf4e8; text-align: left; font-weight: 860; }
+  thead th { position: sticky; top: 0; z-index: 2; }
   th:first-child, td:first-child { position: sticky; left: 0; z-index: 1; background: #fffaf0; min-width: 220px; }
-  th:first-child { z-index: 3; }
+  thead th:first-child { z-index: 3; }
+  caption { padding: 12px; text-align: left; font-weight: 780; }
+  .topology-cell { cursor: pointer; }
+  .topology-cell:focus-visible { outline: none; }
+  .topology-cell:focus-visible > rect { stroke: var(--ink); stroke-width: 4; stroke-dasharray: 6 3; }
+  .cell-button:focus-visible, .matrix-wrap:focus-visible, #cellInspector :is(input, textarea, select):focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+  #cellText { scroll-margin-block: 2rem; }
+  @media (forced-colors: active) { .topology-cell:focus-visible > rect { stroke: Highlight; } }
   .layer-label { display: grid; gap: 6px; }
   .layer-label .kind { color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
   .cell-button {
@@ -208,10 +216,10 @@
 <body>
 <header>
   <div class="wrap hero">
-    <p class="subtitle">Core Architecture Chimeric Prototype v0.2.5</p>
+    <p class="subtitle">Core Architecture Chimeric Prototype v0.2.6</p>
     <h1 id="pageTitle">Service-design Blueprint</h1>
     <p class="subtitle" id="pageSubtitle">Service Topology Map</p>
-    <p class="deck">A layered service map that shows visible experience, backstage work, AI or agent participation, system behavior, data and evidence, governance surfaces, and handoffs across a service journey. The HTML table is the reading and editing surface; the SVG is a compact visual companion generated from the same stable IDs.</p>
+    <p class="deck">A layered service map that shows visible experience, backstage work, AI-system or tool participation, system behavior, data and evidence, governance surfaces, and handoffs across a service journey. The HTML table is the reading and editing surface; the SVG is a compact visual companion generated from the same stable IDs.</p>
     <div class="summary-grid" id="quickSummary"></div>
   </div>
 </header>
@@ -219,17 +227,17 @@
   <section class="soft">
     <h2>Quick Use</h2>
     <div class="grid-3">
-      <div><h3>Use this when</h3><p>A team needs to see how visible experience, backstage work, AI or agent behavior, systems, data stores, policies, evidence, and handoffs fit together across a service journey.</p></div>
+      <div><h3>Use this when</h3><p>A team needs to see how visible experience, backstage work, AI-system or tool behavior, systems, data stores, policies, evidence, and handoffs fit together across a service journey.</p></div>
       <div><h3>This restores</h3><p>Layered service visibility.</p></div>
-      <div><h3>Good next question</h3><p>Which visible step depends on which backstage work, AI or agent behavior, system action, data surface, and governance condition?</p></div>
+      <div><h3>Good next question</h3><p>Which visible step depends on which backstage work, AI-system or tool behavior, system action, data surface, and governance condition?</p></div>
     </div>
   </section>
 
   <section class="wide-area diagram-panel">
     <div class="wrap" style="width:100%; max-width:1680px;">
       <h2>SVG Service Topology View</h2>
-      <p class="small-note">This SVG is generated from visible stages and visible layers. Hidden stages and layers remain in the source data, JSON, and JSON-LD.</p>
-      <div class="svg-wrap"><svg id="blueprintSvg" role="img" aria-label="Service-design Blueprint SVG view"></svg></div>
+      <p class="small-note" id="topologyInstructions">Select a cell, or focus it and press Enter or Space, to move to its editable details. This view shows visible stages and layers; hidden content remains in the source data, JSON, and JSON-LD.</p>
+      <div class="svg-wrap"><svg id="blueprintSvg" role="group" aria-label="Service-design Blueprint cell selection" aria-describedby="topologyInstructions"></svg></div>
     </div>
   </section>
 
@@ -249,7 +257,7 @@
     <div class="grid-2">
       <div>
         <h3>Service stages</h3>
-        <p class="small-note">Stages are semantic sequence columns. For v0.2.5 they can be hidden for focus, but not reordered casually.</p>
+        <p class="small-note">Stages are semantic sequence columns. For v0.2.6 they can be hidden for focus, but not reordered casually.</p>
         <div class="toolbar" style="margin:10px 0;"><button id="addStage">Add stage</button><button id="showAllStages" class="secondary">Show all stages</button></div>
         <div id="stageControls" class="controls-list"></div>
         <div id="hiddenStages" class="hidden-panel"></div>
@@ -270,7 +278,7 @@
       <h2>Text / Table Equivalent</h2>
       <p class="small-note">Select a cell to reveal and edit the full text, routes, linked shared assets, and stable IDs. Long text remains preserved in the data model even when previewed compactly.</p>
       <div class="legend" style="margin:10px 0;" id="statusLegend"></div>
-      <div class="matrix-wrap"><table id="serviceTable" aria-label="Editable Service-design Blueprint table"></table></div>
+      <div class="matrix-wrap" role="region" aria-label="Editable Service-design Blueprint table" tabindex="0"><table id="serviceTable"></table></div>
     </div>
   </section>
 
@@ -346,21 +354,21 @@
         <label class="prompt-view-option"><input type="radio" name="service-blueprint-prompt-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
       </div>
     </fieldset>
-    <p class="small-note" id="promptViewDescription">Plain Markdown carries the complete service-topology context without asking the receiver to load a repository skill.</p>
+    <p class="small-note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete service-topology context.</p>
     <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript><p class="focus-note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
     <pre id="promptOut" class="prompt-box" data-prompt-view-active="plain" aria-labelledby="promptCapsuleHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Service-design Blueprint
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `service-design-blueprint/current-service-topology`
-- Source: `service-design-blueprint@0.2.5`
-- State: `service-design-blueprint-state.v0.2` · revision `0.2.5`
-- Fingerprint: `fnv1a32-utf8:165b90a3`
+- Source: `service-design-blueprint@0.2.6`
+- State: `service-design-blueprint-state.v0.2` · revision `0.2.6`
+- Fingerprint: `fnv1a32-utf8:72d7449b`
 - View: `plain`
 
 ## Purpose and target
 
-Use this Service-design Blueprint to keep visible experience, backstage work, AI or agent participation, systems, data, governance, signals, and handoffs legible as one service topology.
+Use this Service-design Blueprint to keep visible experience, backstage work, AI-system or tool participation, systems, data, governance, signals, and handoffs legible as one service topology.
 
 - Artifact ID: `ca-artifact-service-design-blueprint-genomics-001`
 - Display name: Topology
@@ -372,7 +380,7 @@ Use this Service-design Blueprint to keep visible experience, backstage work, AI
 
 ## Relevant context and inputs
 
-- Use when: the team needs to see how visible experience, backstage work, AI or agent behavior, systems, data stores, policies, evidence, and handoffs fit together
+- Use when: the team needs to see how visible experience, backstage work, AI-system or tool behavior, systems, data stores, policies, evidence, and handoffs fit together
 - Restored condition: layered service visibility
 - Good next question: Which visible step depends on which support layer?
 - Usual handoffs: Specification-by-Example; Software Architecture Views; Unit-test-first Design; HEART Chart; Cross-channel Blueprint; Upstream Revision Loop
@@ -398,7 +406,7 @@ Every accepted stage, lane, cell, shared asset, and focus view appears below wit
 - `layer-participant` — Participant / actor action; kind `participant` (Participant / actor action); required `true`; source order `1`; canonical order `1`; visible in `view-default`; hidden in none.
 - `layer-frontstage` — Visible frontstage; kind `frontstage` (Visible frontstage); required `true`; source order `2`; canonical order `2`; visible in `view-default`; hidden in none.
 - `layer-backstage` — Backstage human work; kind `backstage` (Backstage human work); required `true`; source order `3`; canonical order `3`; visible in `view-default`; hidden in none.
-- `layer-ai` — AI / agent participation; kind `ai` (AI / agent participation); required `false`; source order `4`; canonical order `4`; visible in `view-default`; hidden in none.
+- `layer-ai` — AI system / tool participation; kind `ai` (AI system / tool participation); required `false`; source order `4`; canonical order `4`; visible in `view-default`; hidden in none.
 - `layer-system` — System behavior; kind `system` (System behavior); required `false`; source order `5`; canonical order `5`; visible in `view-default`; hidden in none.
 - `layer-data` — Data and evidence; kind `data` (Data and evidence); required `true`; source order `6`; canonical order `6`; visible in `view-default`; hidden in none.
 - `layer-governance` — Governance / review / escalation; kind `governance` (Governance / review / escalation); required `true`; source order `7`; canonical order `7`; visible in `view-default`; hidden in none.
@@ -413,7 +421,7 @@ Every accepted stage, lane, cell, shared asset, and focus view appears below wit
 - Text mode: `preview\_with\_reveal`.
 - Stage order: `stage-intake` (Sample and study context intake) → `stage-pipeline` (Pipeline output preparation) → `stage-review-prep` (Review preparation) → `stage-human-review` (Human variant review) → `stage-exception-routing` (Exception routing) → `stage-report` (Report preparation) → `stage-archive` (Archive and audit).
 - Hidden stages: None.
-- Layer order: `layer-participant` (Participant / actor action) → `layer-frontstage` (Visible frontstage) → `layer-backstage` (Backstage human work) → `layer-ai` (AI / agent participation) → `layer-system` (System behavior) → `layer-data` (Data and evidence) → `layer-governance` (Governance / review / escalation) → `layer-handoff` (Handoff or dependency) → `layer-signal` (Signal or metric candidate).
+- Layer order: `layer-participant` (Participant / actor action) → `layer-frontstage` (Visible frontstage) → `layer-backstage` (Backstage human work) → `layer-ai` (AI system / tool participation) → `layer-system` (System behavior) → `layer-data` (Data and evidence) → `layer-governance` (Governance / review / escalation) → `layer-handoff` (Handoff or dependency) → `layer-signal` (Signal or metric candidate).
 - Hidden layers: None.
 - Hidden shared assets: None.
 
@@ -629,74 +637,74 @@ Every accepted stage, lane, cell, shared asset, and focus view appears below wit
 - Route reason: Route this backstage human work item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Sample and study context intake (`cell-ai__intake`)
+#### AI system / tool participation × Sample and study context intake (`cell-ai__intake`)
 
 - Layer: `layer-ai`; stage: `stage-intake`.
-- Text: Agent detects study-status inconsistencies for review.
+- Text: The status-rule validator flags study-status inconsistencies for human review.
 - Status: needs-to-surface (`needs_to_surface`).
 - Linked shared assets: `asset-consent-state` (Consent state).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology; `ai-systems-service-blueprint`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Pipeline output preparation (`cell-ai__pipeline`)
+#### AI system / tool participation × Pipeline output preparation (`cell-ai__pipeline`)
 
 - Layer: `layer-ai`; stage: `stage-pipeline`.
-- Text: AI summarizes pipeline-readiness notes with source links.
+- Text: The pipeline-note summarizer generates source-linked readiness notes.
 - Status: assumed (`assumed`).
 - Linked shared assets: `asset-source-provenance` (Source provenance).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology; `ai-systems-service-blueprint`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Review preparation (`cell-ai__review-prep`)
+#### AI system / tool participation × Review preparation (`cell-ai__review-prep`)
 
 - Layer: `layer-ai`; stage: `stage-review-prep`.
-- Text: AI flags metadata fields that may affect review.
+- Text: The metadata validator flags fields that may affect human review.
 - Status: assumed (`assumed`).
 - Linked shared assets: `asset-sample-metadata` (Sample metadata).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology; `ai-systems-service-blueprint`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Human variant review (`cell-ai__human-review`)
+#### AI system / tool participation × Human variant review (`cell-ai__human-review`)
 
 - Layer: `layer-ai`; stage: `stage-human-review`.
-- Text: AI suggests variant evidence summary with source boundaries and human-confirmation status.
+- Text: The summary-generation system proposes a variant evidence summary with source boundaries and human-confirmation status.
 - Status: known (`known`).
 - Linked shared assets: `asset-source-provenance` (Source provenance); `asset-claim-source-map` (Claim-source map).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology; `ai-systems-service-blueprint`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Exception routing (`cell-ai__exception-routing`)
+#### AI system / tool participation × Exception routing (`cell-ai__exception-routing`)
 
 - Layer: `layer-ai`; stage: `stage-exception-routing`.
-- Text: Agent routes unsupported summary claims to review queue.
+- Text: The claim-source validator routes unsupported summary claims to the human review queue.
 - Status: needs-to-surface (`needs_to_surface`).
 - Linked shared assets: `asset-claim-source-map` (Claim-source map).
 - Route: Specification-by-Example (Participatory Elicitation and Specification; `specification-by-example`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Report preparation (`cell-ai__report`)
+#### AI system / tool participation × Report preparation (`cell-ai__report`)
 
 - Layer: `layer-ai`; stage: `stage-report`.
-- Text: AI drafts report-support notes from accepted review evidence.
+- Text: The drafting system generates report-support notes from accepted review evidence.
 - Status: assumed (`assumed`).
 - Linked shared assets: `asset-source-provenance` (Source provenance); `asset-audit-trail` (Audit trail).
 - Route: AI Systems Service Blueprint (Shared Surfaces and Topology; `ai-systems-service-blueprint`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
-#### AI / agent participation × Archive and audit (`cell-ai__archive`)
+#### AI system / tool participation × Archive and audit (`cell-ai__archive`)
 
 - Layer: `layer-ai`; stage: `stage-archive`.
-- Text: Agent checks that audit events are complete.
+- Text: The audit-event validator checks required audit events for completeness.
 - Status: assumed (`assumed`).
 - Linked shared assets: `asset-audit-trail` (Audit trail).
 - Route: Unit-test-first Design (Pattern Fit and Behavior Protection; `unit-test-first-design`).
-- Route reason: Route this ai / agent participation item if it needs deeper inspection.
+- Route reason: Route this ai system / tool participation item if it needs deeper inspection.
 - View annotation: visible in `view-default`; hidden in none.
 
 #### System behavior × Sample and study context intake (`cell-system__intake`)
@@ -1219,8 +1227,8 @@ These public collaboration loops fit when the receiving work meets the stated co
 - failure point → strain cue, handoff cue, routing cue, or service-layer cue
 
 - Recovery strain cues: visible workflow is clear but support layers remain soft; AI participation is described without source, review, or escalation boundaries; data stores appear late in implementation; governance is treated as a later addition; frontstage promises exceed backstage support; service handoffs cross groups without a shared map
-- Stabilizing read: The collaboration needs layered service visibility. The visible experience can be mapped with backstage work, AI and agent participation, systems, data, evidence, governance, and handoff dependencies so the service can be discussed as a whole.
-- Restored state: service layers are visible; AI and agent participation has context; data, evidence, audit, and provenance surfaces are easier to inspect; handoffs and dependencies can route into adjacent architectures; service transitions can become behavior examples; governance and review boundaries are part of the service topology
+- Stabilizing read: The collaboration needs layered service visibility. The visible experience can be mapped with backstage work, AI-system and tool participation, systems, data, evidence, governance, and handoff dependencies so the service can be discussed as a whole.
+- Restored state: service layers are visible; AI-system and tool participation is tied to named local functions; data, evidence, audit, and provenance surfaces are easier to inspect; handoffs and dependencies can route into adjacent architectures; service transitions can become behavior examples; governance and review boundaries are part of the service topology
 - Named failure geometries: Service-Layer Invisibility; Shared-Surface Opacity; Tacit Workflow Mismatch; Attachment Obscurity; Verbal Agreement Thinness; Signal / Metric Collapse; Upstream Revision Hesitancy
 - A compatible import becomes the accepted working state and regenerates this capsule. A malformed or semantically incompatible candidate leaves the current blueprint and capsule available, names the mismatch, and can return after revision.
 </pre>
@@ -1247,7 +1255,7 @@ const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
 const PROMPT_CAPSULE_STATE_CONTRACT = 'service-design-blueprint-state.v0.2';
 const PROMPT_CAPSULE_ID = 'service-design-blueprint/current-service-topology';
 const PROMPT_CAPSULE_SOURCE_ID = 'service-design-blueprint';
-const PROMPT_CAPSULE_SOURCE_VERSION = '0.2.5';
+const PROMPT_CAPSULE_SOURCE_VERSION = '0.2.6';
 const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain','skill-assisted']);
 const PROMPT_CAPSULE_SKILL_REVISION = '34a0047c4d6400aaa9f44e16e52640555f6a3129';
 const PROMPT_CAPSULE_SKILLS = Object.freeze([
@@ -1300,7 +1308,7 @@ const layerKinds = [
   {id:'participant', label:'Participant / actor action'},
   {id:'frontstage', label:'Visible frontstage'},
   {id:'backstage', label:'Backstage human work'},
-  {id:'ai', label:'AI / agent participation'},
+  {id:'ai', label:'AI system / tool participation'},
   {id:'system', label:'System behavior'},
   {id:'data', label:'Data and evidence'},
   {id:'governance', label:'Governance / review / escalation'},
@@ -1354,7 +1362,7 @@ const state = {
     id: 'ca-artifact-service-design-blueprint-genomics-001',
     display_name: 'Topology',
     subtitle: 'Service Design Blueprint',
-    version: '0.2.5',
+    version: '0.2.6',
     family: 'Shared Surfaces and Topology',
     placement: 'Bridge Architecture',
     primary_cognitive_move: 'multi-layer service topology mapping',
@@ -1373,7 +1381,7 @@ const state = {
     {id:'layer-participant', label:'Participant / actor action', kind:'participant', required:true, canonical_order:1},
     {id:'layer-frontstage', label:'Visible frontstage', kind:'frontstage', required:true, canonical_order:2},
     {id:'layer-backstage', label:'Backstage human work', kind:'backstage', required:true, canonical_order:3},
-    {id:'layer-ai', label:'AI / agent participation', kind:'ai', required:false, canonical_order:4},
+    {id:'layer-ai', label:'AI system / tool participation', kind:'ai', required:false, canonical_order:4},
     {id:'layer-system', label:'System behavior', kind:'system', required:false, canonical_order:5},
     {id:'layer-data', label:'Data and evidence', kind:'data', required:true, canonical_order:6},
     {id:'layer-governance', label:'Governance / review / escalation', kind:'governance', required:true, canonical_order:7},
@@ -1437,10 +1445,10 @@ const state = {
       'frontstage promises exceed backstage support',
       'service handoffs cross groups without a shared map'
     ],
-    stabilizing_read: 'The collaboration needs layered service visibility. The visible experience can be mapped with backstage work, AI and agent participation, systems, data, evidence, governance, and handoff dependencies so the service can be discussed as a whole.',
+    stabilizing_read: 'The collaboration needs layered service visibility. The visible experience can be mapped with backstage work, AI-system and tool participation, systems, data, evidence, governance, and handoff dependencies so the service can be discussed as a whole.',
     restored_state: [
       'service layers are visible',
-      'AI and agent participation has context',
+      'AI-system and tool participation is tied to named local functions',
       'data, evidence, audit, and provenance surfaces are easier to inspect',
       'handoffs and dependencies can route into adjacent architectures',
       'service transitions can become behavior examples',
@@ -1479,13 +1487,13 @@ const seedCellData = {
     'stage-archive': {text:'Data steward verifies retention and audit requirements.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']}
   },
   'layer-ai': {
-    'stage-intake': {text:'Agent detects study-status inconsistencies for review.', status:'needs_to_surface', handoff:'ai-systems-service-blueprint', asset_ids:['asset-consent-state']},
-    'stage-pipeline': {text:'AI summarizes pipeline-readiness notes with source links.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance']},
-    'stage-review-prep': {text:'AI flags metadata fields that may affect review.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-sample-metadata']},
-    'stage-human-review': {text:'AI suggests variant evidence summary with source boundaries and human-confirmation status.', status:'known', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-claim-source-map']},
-    'stage-exception-routing': {text:'Agent routes unsupported summary claims to review queue.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-claim-source-map']},
-    'stage-report': {text:'AI drafts report-support notes from accepted review evidence.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-audit-trail']},
-    'stage-archive': {text:'Agent checks that audit events are complete.', status:'assumed', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
+    'stage-intake': {text:'The status-rule validator flags study-status inconsistencies for human review.', status:'needs_to_surface', handoff:'ai-systems-service-blueprint', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'The pipeline-note summarizer generates source-linked readiness notes.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance']},
+    'stage-review-prep': {text:'The metadata validator flags fields that may affect human review.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'The summary-generation system proposes a variant evidence summary with source boundaries and human-confirmation status.', status:'known', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'The claim-source validator routes unsupported summary claims to the human review queue.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-claim-source-map']},
+    'stage-report': {text:'The drafting system generates report-support notes from accepted review evidence.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-audit-trail']},
+    'stage-archive': {text:'The audit-event validator checks required audit events for completeness.', status:'assumed', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
   },
   'layer-system': {
     'stage-intake': {text:'System links sample, study, and consent-state records.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-consent-state','asset-sample-metadata']},
@@ -1611,7 +1619,50 @@ function selectCell(cellId) {
   view.selected_cell_id = cellId;
   view.selected_asset_id = '';
   renderAll();
+  focusCellEditor(cellId);
 }
+function cellSelectionLabel(cell) {
+  return `Edit ${layerById(cell.layer_id).label}: ${stageById(cell.stage_id).label}. ${statusLabel(cell.status)}. Cell ${cell.id}.`;
+}
+function focusCellEditor(cellId) {
+  const editor = document.getElementById('cellText');
+  if (!editor || editor.dataset.cellId !== cellId || activeView().selected_cell_id !== cellId) return;
+  editor.focus({preventScroll:true});
+  editor.scrollIntoView({
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    block:'center',
+    inline:'nearest'
+  });
+}
+function captureCellEditorFocus() {
+  const inspector = document.getElementById('cellInspector');
+  const control = document.activeElement;
+  if (!control || !inspector.contains(control)) return null;
+  return {
+    cellId:inspector.dataset.cellId, id:control.id,
+    assetId:control.dataset.field === 'asset-link' ? control.dataset.id : null,
+    start:control.selectionStart, end:control.selectionEnd, direction:control.selectionDirection
+  };
+}
+function restoreCellEditorFocus(focus) {
+  const inspector = document.getElementById('cellInspector');
+  if (!focus || !focus.cellId || focus.cellId !== activeView().selected_cell_id || inspector.dataset.cellId !== focus.cellId) return;
+  const control = focus.id ? document.getElementById(focus.id)
+    : Array.from(inspector.querySelectorAll('[data-field="asset-link"]')).find(input => input.dataset.id === focus.assetId);
+  if (!control || !inspector.contains(control)) return;
+  control.focus({preventScroll:true});
+  if (typeof focus.start === 'number' && typeof control.setSelectionRange === 'function') {
+    control.setSelectionRange(focus.start, focus.end, focus.direction);
+  }
+}
+function activateTopologyKey(event) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const cell = event.target.closest('#blueprintSvg [data-action="select-cell"]');
+  if (!cell) return;
+  event.preventDefault();
+  if (!event.repeat) selectCell(cell.dataset.id);
+}
+
 function selectAsset(assetId) {
   const view = activeView();
   if (!assetById(assetId) || !isAssetVisible(assetId)) {
@@ -1671,16 +1722,17 @@ function renderTable() {
   const stages = visibleStages();
   const layers = visibleLayers();
   const view = activeView();
-  let html = '<thead><tr><th>Layer / Stage</th>';
-  for (const stage of stages) html += `<th><span class="stage-pill">${escapeHtml(stage.label)}</span><div class="tiny mono">${escapeHtml(stage.id)}</div></th>`;
+  const caption = `Service blueprint: ${state.artifact_identity.display_name}. Visible stages and layers`;
+  let html = `<caption>${escapeHtml(caption)}</caption><thead><tr><th scope="col" data-label="Service layer">Layer / Stage</th>`;
+  for (const stage of stages) html += `<th scope="col" data-label="${escapeHtml('Service stage: '+stage.label+' ('+stage.id+')')}"><span class="stage-pill">${escapeHtml(stage.label)}</span><div class="tiny mono">${escapeHtml(stage.id)}</div></th>`;
   html += '</tr></thead><tbody>';
   for (const layer of layers) {
-    html += `<tr><td class="${layerClass(layer.kind)}"><div class="layer-label"><strong>${escapeHtml(layer.label)}</strong><span class="kind">${escapeHtml(layerKindById[layer.kind]?.label || layer.kind)}</span><span class="tiny mono">${escapeHtml(layer.id)}</span></div></td>`;
+    html += `<tr data-label="${escapeHtml(caption+': '+layer.label+' ('+layer.id+')')}"><th scope="row" data-label="Service layer" class="${layerClass(layer.kind)}"><div class="layer-label"><strong>${escapeHtml(layer.label)}</strong><span class="kind">${escapeHtml(layerKindById[layer.kind]?.label || layer.kind)}</span><span class="tiny mono">${escapeHtml(layer.id)}</span></div></th>`;
     for (const stage of stages) {
       const cell = cellFor(layer.id, stage.id);
       const selected = view.selected_cell_id === cell.id;
       const assets = (cell.asset_ids || []).map(assetById).filter(Boolean).map(a => a.label).slice(0,2);
-      html += `<td class="${layerClass(layer.kind)}"><button class="cell-button" data-action="select-cell" data-id="${cell.id}"><div class="cell-card ${selected ? 'selected' : ''}"><div class="cell-preview">${escapeHtml(cell.text || 'Add service detail…')}</div><div class="cell-meta"><span class="status-pill ${cell.status}"><span class="status-dot"></span>${escapeHtml(statusLabel(cell.status))}</span>${cell.handoff ? `<span class="route-pill">${escapeHtml(routeLabel(cell.handoff, cell.custom_handoff))}</span>` : ''}${assets.length ? `<span class="asset-pill">${escapeHtml(assets.join(', '))}${(cell.asset_ids||[]).length>2?'…':''}</span>` : ''}</div><div class="tiny mono">${escapeHtml(cell.id)}</div></div></button></td>`;
+      html += `<td data-label="${escapeHtml('Service stage: '+stage.label+' ('+stage.id+')')}" class="${layerClass(layer.kind)}"><button type="button" class="cell-button" data-action="select-cell" data-id="${escapeHtml(cell.id)}" aria-label="${escapeHtml(cellSelectionLabel(cell))}" aria-pressed="${selected}" aria-controls="cellInspector"><div class="cell-card ${selected ? 'selected' : ''}"><div class="cell-preview">${escapeHtml(cell.text || 'Add service detail…')}</div><div class="cell-meta"><span class="status-pill ${cell.status}"><span class="status-dot"></span>${escapeHtml(statusLabel(cell.status))}</span>${cell.handoff ? `<span class="route-pill">${escapeHtml(routeLabel(cell.handoff, cell.custom_handoff))}</span>` : ''}${assets.length ? `<span class="asset-pill">${escapeHtml(assets.join(', '))}${(cell.asset_ids||[]).length>2?'…':''}</span>` : ''}</div><div class="tiny mono">${escapeHtml(cell.id)}</div></div></button></td>`;
     }
     html += '</tr>';
   }
@@ -1704,11 +1756,11 @@ function renderSvg() {
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
   const ns = 'http://www.w3.org/2000/svg';
   svg.innerHTML = '';
-  function add(tag, attrs={}, text='') {
+  function add(tag, attrs={}, text='', parent=svg) {
     const el = document.createElementNS(ns, tag);
     for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
     if (text) el.textContent = text;
-    svg.appendChild(el);
+    parent.appendChild(el);
     return el;
   }
   add('rect', {x:0,y:0,width,height,fill:'#fffefb'});
@@ -1729,13 +1781,16 @@ function renderSvg() {
       const x = leftW + cIdx*colW;
       const cell = cellFor(layer.id, stage.id);
       const selected = view.selected_cell_id === cell.id;
-      add('rect', {x:x+2,y:y+4,width:colW-12,height:rowH-12,rx:8,fill:selected?'#dfecec':'rgba(255,255,255,.62)',stroke:selected?'#335a61':'#d7d0c1','stroke-width':selected?3:1});
-      const title = document.createElementNS(ns, 'title');
-      title.textContent = `${layer.label} × ${stage.label}: ${cell.text}`;
-      svg.lastChild.appendChild(title);
-      wrapSvgText(cell.text || 'Add service detail…', 29, 3).forEach((line, li) => add('text', {x:x+12,y:y+28+li*16,'font-size':12,'font-weight':li===0?650:500,fill:'#25231f'}, line));
-      add('text', {x:x+12,y:y+84,'font-size':10,'font-weight':700,fill:'#335a61'}, statusLabel(cell.status));
-      if (cell.handoff) add('text', {x:x+12,y:y+99,'font-size':10,fill:'#335a61'}, truncate(routeLabel(cell.handoff, cell.custom_handoff), 26));
+      const group = add('g', {
+        class:'topology-cell', role:'button', tabindex:0,
+        'data-action':'select-cell', 'data-id':cell.id,
+        'aria-label':cellSelectionLabel(cell), 'aria-pressed':String(selected), 'aria-controls':'cellInspector'
+      });
+      add('rect', {x:x+2,y:y+4,width:colW-12,height:rowH-12,rx:8,fill:selected?'#dfecec':'rgba(255,255,255,.62)',stroke:selected?'#335a61':'#d7d0c1','stroke-width':selected?3:1}, '', group);
+      add('title', {}, `${layer.label} × ${stage.label}: ${cell.text}`, group);
+      wrapSvgText(cell.text || 'Add service detail…', 29, 3).forEach((line, li) => add('text', {x:x+12,y:y+28+li*16,'font-size':12,'font-weight':li===0?650:500,fill:'#25231f'}, line, group));
+      add('text', {x:x+12,y:y+84,'font-size':10,'font-weight':700,fill:'#335a61','data-cell-status':''}, statusLabel(cell.status), group);
+      if (cell.handoff) add('text', {x:x+12,y:y+99,'font-size':10,fill:'#335a61'}, truncate(routeLabel(cell.handoff, cell.custom_handoff), 26), group);
     });
   });
   // separating lines inspired by service blueprint convention
@@ -1759,6 +1814,7 @@ function renderCellInspector(message='') {
   const view = activeView();
   const cell = cellById(view.selected_cell_id);
   const el = document.getElementById('cellInspector');
+  el.dataset.cellId = cell?.id || '';
   if (!cell) {
     el.innerHTML = `<p class="small-note">${escapeHtml(message || 'Select a visible service cell from the table or SVG to inspect and edit it.')}</p>`;
     return;
@@ -1769,10 +1825,10 @@ function renderCellInspector(message='') {
   const statusOptionsHtml = statusOptions.map(s => `<option value="${s.id}" ${cell.status===s.id?'selected':''}>${escapeHtml(s.label)}</option>`).join('');
   const assetChecks = state.shared_assets.map(asset => `<label class="checkbox-line"><input type="checkbox" data-field="asset-link" data-id="${asset.id}" ${(cell.asset_ids||[]).includes(asset.id)?'checked':''} /> <span><strong>${escapeHtml(asset.label)}</strong><br><span class="tiny">${escapeHtml(asset.asset_type)}</span></span></label>`).join('');
   el.innerHTML = `
-    <div class="focus-note"><strong>${escapeHtml(layer.label)}</strong> × <strong>${escapeHtml(stage.label)}</strong><br><span class="tiny mono">${escapeHtml(cell.id)}</span></div>
+    <div class="focus-note" id="selectedCellContext"><strong>${escapeHtml(layer.label)}</strong> × <strong>${escapeHtml(stage.label)}</strong><br><span class="tiny mono">${escapeHtml(cell.id)}</span></div>
     <div class="inspector-grid" style="margin-top:12px;">
       <div>
-        <div class="field-row"><label for="cellText">Cell text</label><textarea id="cellText">${escapeHtml(cell.text)}</textarea></div>
+        <div class="field-row"><label for="cellText">Cell text</label><textarea id="cellText" data-cell-id="${escapeHtml(cell.id)}" aria-describedby="selectedCellContext">${escapeHtml(cell.text)}</textarea></div>
         <div class="field-row"><label for="cellStatus">Status</label><select id="cellStatus">${statusOptionsHtml}</select></div>
         <div class="field-row"><label for="cellRoute">Handoff route</label><select id="cellRoute"><option value="">No route yet</option>${routeOptions}</select></div>
         <div class="field-row" id="customRouteWrap" style="display:${cell.handoff==='custom'?'block':'none'}"><label for="cellCustomRoute">Custom route</label><input id="cellCustomRoute" type="text" value="${escapeHtml(cell.custom_handoff || '')}" /></div>
@@ -1787,15 +1843,13 @@ function renderCellInspector(message='') {
         <p class="tiny mono">stage_id: ${escapeHtml(cell.stage_id)}<br>layer_id: ${escapeHtml(cell.layer_id)}</p>
       </div>
     </div>`;
-  document.getElementById('cellText').addEventListener('input', e => { cell.text = e.target.value; updateExportsOnly(); });
-  document.getElementById('cellText').addEventListener('blur', () => renderAll());
+  document.getElementById('cellText').addEventListener('input', e => { cell.text = e.target.value; renderTable(); renderSvg(); updateExportsOnly(); });
   document.getElementById('cellStatus').addEventListener('change', e => { cell.status = e.target.value; renderAll(); });
   document.getElementById('cellRoute').addEventListener('change', e => { cell.handoff = e.target.value; renderAll(); });
   const custom = document.getElementById('cellCustomRoute');
-  if (custom) custom.addEventListener('input', e => { cell.custom_handoff = e.target.value; updateExportsOnly(); });
+  if (custom) custom.addEventListener('input', e => { cell.custom_handoff = e.target.value; renderTable(); renderSvg(); updateExportsOnly(); });
   const reason = document.getElementById('cellReason');
   reason.addEventListener('input', e => { cell.reason = e.target.value; updateExportsOnly(); });
-  reason.addEventListener('blur', () => renderAll());
   el.querySelectorAll('[data-field="asset-link"]').forEach(input => {
     input.addEventListener('change', e => {
       const id = e.target.dataset.id;
@@ -1880,7 +1934,7 @@ function extensionFields(record, knownKeys) {
 }
 function quickUseState() {
   return {
-    use_when: ['the team needs to see how visible experience, backstage work, AI or agent behavior, systems, data stores, policies, evidence, and handoffs fit together'],
+    use_when: ['the team needs to see how visible experience, backstage work, AI-system or tool behavior, systems, data stores, policies, evidence, and handoffs fit together'],
     restores: ['layered service visibility'],
     good_next_question: 'Which visible step depends on which support layer?',
     usually_hands_to: ['Specification-by-Example','Software Architecture Views','Unit-test-first Design','HEART Chart','Cross-channel Blueprint','Upstream Revision Loop'],
@@ -2227,7 +2281,7 @@ function promptCapsuleMarkdown(view='plain') {
     '',
     '## Purpose and target',
     '',
-    'Use this Service-design Blueprint to keep visible experience, backstage work, AI or agent participation, systems, data, governance, signals, and handoffs legible as one service topology.',
+    'Use this Service-design Blueprint to keep visible experience, backstage work, AI-system or tool participation, systems, data, governance, signals, and handoffs legible as one service topology.',
     '',
     '- Artifact ID: ' + markdownCode(projection.artifact.id),
     '- Display name: ' + projection.artifact.displayName,
@@ -2356,7 +2410,7 @@ function updateExportsOnly() {
   document.querySelectorAll('[data-prompt-view]').forEach(control => { control.checked = control.value === promptCapsuleView; });
   document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
     ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented service topology and fingerprint remain the same.'
-    : 'Plain Markdown carries the complete service-topology context without asking the receiver to load a repository skill.';
+    : 'Plain Markdown is a self-contained handoff with the complete service-topology context.';
 }
 
 function renderPanels() {
@@ -2372,11 +2426,12 @@ function renderPanels() {
   document.getElementById('sourcePanel').innerHTML = `
     <p><strong>Source band:</strong> inherited method + author-adapted method + bridge-capable artifact.</p>
     <p><strong>Public lineage:</strong> service blueprinting; frontstage / backstage / evidence / process language.</p>
-    <p><strong>Local adaptation:</strong> Service Topology Map extends the inherited service-blueprint structure with AI / agent, system behavior, data and evidence, governance, audit, provenance, human review, escalation, and implementation handoff layers.</p>
+    <p><strong>Local adaptation:</strong> Service Topology Map extends the inherited service-blueprint structure with AI-system and tool participation, system behavior, data and evidence, governance, audit, provenance, human review, escalation, and implementation handoff layers.</p>
     <p><strong>Reference-image policy:</strong> any in-session visual references used for layout calibration are not included in the artifact attribution or AI prompt capsule. This artifact’s source note focuses on service-blueprint lineage and local Core Architecture adaptation.</p>`;
 }
 
 function renderAll(message='') {
+  const editorFocus = captureCellEditorFocus();
   normalizeView();
   renderSummary();
   renderLegend();
@@ -2389,6 +2444,7 @@ function renderAll(message='') {
   renderIdentityRegistry();
   renderPanels();
   updateExportsOnly();
+  restoreCellEditorFocus(editorFocus);
 }
 
 function addStage() {
@@ -2630,6 +2686,7 @@ function importData(raw) {
 }
 
 // Event delegation
+document.addEventListener('keydown', activateTopologyKey);
 document.addEventListener('click',e=>{if(pendingRemoval&&e.target.closest('button')!==pendingRemoval.button)clearPendingRemoval();},true);
 document.addEventListener('input',()=>clearPendingRemoval(),true);
 document.addEventListener('change',()=>clearPendingRemoval(),true);
@@ -2652,7 +2709,7 @@ document.addEventListener('click', e => {
   if (action === 'remove-asset') removeAsset(id,btn);
 });
 
-document.getElementById('artifactName').addEventListener('input', e => { state.artifact_identity.display_name = e.target.value; renderSummary(); updateExportsOnly(); });
+document.getElementById('artifactName').addEventListener('input', e => { state.artifact_identity.display_name = e.target.value; renderSummary(); renderTable(); updateExportsOnly(); });
 document.getElementById('artifactSubtitle').addEventListener('input', e => { state.artifact_identity.subtitle = e.target.value; renderSummary(); updateExportsOnly(); });
 document.getElementById('addStage').addEventListener('click', addStage);
 document.getElementById('addLayer').addEventListener('click', addLayer);

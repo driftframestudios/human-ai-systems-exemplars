@@ -248,6 +248,16 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    @media screen {
+      #traceTable th, #traceTable td { min-width: 20ch; }
+      #traceTable :is(th, td):nth-child(3), #traceTable :is(th, td):nth-child(4) { min-width: 28ch; }
+      #traceTable :is(th, td):last-child { min-width: 24ch; }
+    }
+    #traceTable .status-chip { overflow-wrap: normal; word-break: normal; }
 </style>
 <style data-canary-stack-css>
 .visitor-boundary{border-block-start:1px solid currentColor;box-sizing:border-box;display:grid;flex:1 0 100%;gap:.75rem;grid-column:1/-1;inline-size:100%;margin:clamp(1.5rem,4vw,3rem) auto 0;max-inline-size:82rem;overflow-wrap:anywhere;padding:1rem clamp(1rem,3vw,1.75rem) 0;user-select:text}.visitor-boundary__marker{box-sizing:border-box;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.7rem;font-variant-ligatures:none;line-height:1.55;margin:0;max-inline-size:100%;white-space:normal}.visitor-boundary__context{box-sizing:border-box;font-family:inherit;font-size:.8rem;line-height:1.55;margin:0;max-inline-size:70ch}@media print{.visitor-boundary{border-color:#000;color:#000}}@media (forced-colors:active){.visitor-boundary{border-color:CanvasText;color:CanvasText}}
@@ -326,9 +336,9 @@
 
     <section aria-labelledby="tableTitle">
       <h2 id="tableTitle">Text / Table Equivalent</h2>
-      <div class="table-wrap">
-        <table id="traceTable">
-          <thead><tr><th>Goal</th><th>Actor</th><th>Impact</th><th>Discoverable</th><th>Status</th><th>Handoff route</th></tr></thead>
+      <div class="table-wrap" role="region" tabindex="0" aria-label="Impact Map: goal, actor, impact and discoverable trace; scroll horizontally">
+        <table id="traceTable"><caption>Impact Map: goal, actor, impact and discoverable trace</caption>
+          <thead><tr><th scope="col" data-label="Goal">Goal</th><th scope="col" data-label="Actor">Actor</th><th scope="col" data-label="Impact">Impact</th><th scope="col" data-label="Discoverable">Discoverable</th><th scope="col" data-label="Status">Status</th><th scope="col" data-label="Handoff route">Handoff route</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -355,13 +365,13 @@
         </div>
       </div>
       <h3 style="margin-top:18px;">Replacement-state guidance</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Common phrase</th><th>Stronger local phrase</th></tr></thead>
+      <div class="table-wrap" role="region" tabindex="0" aria-label="Impact Map: replacement-state guidance; scroll horizontally">
+        <table><caption>Impact Map: replacement-state guidance</caption>
+          <thead><tr><th scope="col" data-label="Common phrase">Common phrase</th><th scope="col" data-label="Stronger local phrase">Stronger local phrase</th></tr></thead>
           <tbody>
-            <tr><td>What are we delivering?</td><td>What should become discoverable before we commit to an artifact form?</td></tr>
-            <tr><td>Who is the user?</td><td>Which actors can influence, experience, maintain, review, or interpret this outcome?</td></tr>
-            <tr><td>The map is incomplete.</td><td>The map is showing where the next discoverable surfaces are.</td></tr>
+            <tr data-label="Impact Map replacement-state guidance: What are we delivering?"><th scope="row" data-label="Common phrase">What are we delivering?</th><td>What should become discoverable before we commit to an artifact form?</td></tr>
+            <tr data-label="Impact Map replacement-state guidance: Who is the user?"><th scope="row" data-label="Common phrase">Who is the user?</th><td>Which actors can influence, experience, maintain, review, or interpret this outcome?</td></tr>
+            <tr data-label="Impact Map replacement-state guidance: The map is incomplete."><th scope="row" data-label="Common phrase">The map is incomplete.</th><td>The map is showing where the next discoverable surfaces are.</td></tr>
           </tbody>
         </table>
       </div>
@@ -971,12 +981,12 @@ function flattenRows() {
 
 function renderTable() {
   const rows = flattenRows();
-  els.traceBody.innerHTML = rows.map((row, idx) => `
-    <tr>
-      <td>${idx === 0 ? escapeHtml(data.goal.text) : ''}</td>
+  els.traceBody.innerHTML = rows.map(row => `
+    <tr data-record-id="${escapeHtml(row.disc ? row.disc.id : row.impact.id)}" data-label="Impact Map: ${escapeHtml(row.actor.text)}; impact: ${escapeHtml(row.impact.text)}">
+      <td>${escapeHtml(data.goal.text)}</td>
       <td>${escapeHtml(row.actor.text)}</td>
       <td>${escapeHtml(row.impact.text)}</td>
-      <td>${row.disc ? escapeHtml(row.disc.text) : '<span class="help">No discoverable yet</span>'}</td>
+      <th scope="row" data-label="Discoverable">${row.disc ? escapeHtml(row.disc.text) : '<span class="help">No discoverable yet</span>'}</th>
       <td>${row.disc ? `<span class="status-chip status-${row.disc.status.replaceAll('_','-')}">${statusLabel(row.disc.status)}</span>` : ''}</td>
       <td>${row.disc && row.disc.handoff ? `<span class="route-pill">${escapeHtml(row.disc.handoff)}</span>` : ''}</td>
     </tr>

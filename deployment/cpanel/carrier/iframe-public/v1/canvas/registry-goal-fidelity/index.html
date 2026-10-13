@@ -1258,15 +1258,15 @@
             </div>
           </div>
           <div class="table-region" tabindex="0" role="region" aria-label="Recovery contract table; horizontally scrollable on narrow screens">
-            <table>
+            <table data-label="Recovery and re-entry contract">
               <caption>Recovery and re-entry contract</caption>
               <thead>
                 <tr>
-                  <th id="compact-column" scope="col">Type</th>
-                  <th scope="col">Object or terrain</th>
-                  <th scope="col">Recovery move</th>
-                  <th scope="col">Received state</th>
-                  <th scope="col">Accountability</th>
+                  <th data-label="Type" id="compact-column" scope="col">Type</th>
+                  <th data-label="Object or terrain" scope="col">Object or terrain</th>
+                  <th data-label="Recovery move" scope="col">Recovery move</th>
+                  <th data-label="Received state" scope="col">Received state</th>
+                  <th data-label="Accountability" scope="col">Accountability</th>
                 </tr>
               </thead>
               <tbody id="contractRows"></tbody>
@@ -2035,16 +2035,19 @@
 
     function appendTableRow(type, title, move, receivedState, accountability) {
       const row = document.createElement("tr");
-      const typeCell = createElement("td", "", type);
-      const titleCell = createElement("th", "", title);
-      titleCell.scope = "row";
-      row.append(
-        typeCell,
-        titleCell,
-        createElement("td", "", move),
-        createElement("td", "", receivedState),
-        createElement("td", "", accountability)
-      );
+      row.setAttribute("data-label", "Recovery and re-entry contract: " + type + "; " + title);
+      [
+        ["td", "Type", type],
+        ["th", "Object or terrain", title],
+        ["td", "Recovery move", move],
+        ["td", "Received state", receivedState],
+        ["td", "Accountability", accountability]
+      ].forEach(function ([tagName, label, text]) {
+        const cell = createElement(tagName, "", text);
+        cell.setAttribute("data-label", label);
+        if (tagName === "th") cell.scope = "row";
+        row.append(cell);
+      });
       elements.contractRows.append(row);
     }
 

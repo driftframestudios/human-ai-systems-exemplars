@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="vfa-title vfa-desc">
   <title id="vfa-title">Visualization Fidelity Atlas selection guide</title>
-  <desc id="vfa-desc">A five-question route moves from cognitive move through data shape, audience and stakes, uncertainty, and AI companion need. It produces Recommended, Conditional, and Reserved options with written reasons. A four-tier ladder shows ascending production commitment from portable text-embedded diagrams to high-fidelity renders.</desc>
+  <desc id="vfa-desc">A five-question route moves from cognitive move through data shape, audience and stakes, uncertainty, and structured companion need. It produces Recommended, Conditional, and Reserved options with written reasons. A four-tier ladder shows ascending production commitment from portable text-embedded diagrams to high-fidelity renders.</desc>
   <defs>
     <pattern id="vfa-grid" width="32" height="32" patternUnits="userSpaceOnUse">
       <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-opacity="0.42"/>
@@ -56,7 +56,7 @@
 
       <rect x="1304" y="242" width="232" height="132" rx="14" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
       <circle cx="1330" cy="270" r="15" fill="#17345f"/><text x="1330" y="275" text-anchor="middle" class="mono kicker white">5</text>
-      <text x="1356" y="274" class="sans card ink">AI companion</text>
+      <text x="1356" y="274" class="sans card ink">Structured companion</text>
       <text x="1326" y="311" class="sans copy body"><tspan x="1326">Structured table, caption,</tspan><tspan x="1326" dy="22">units, provenance?</tspan></text>
     </g>
   </g>

@@ -59,7 +59,7 @@
     <rect class="panel acid" x="1086" y="212" width="452" height="128" rx="14"/>
     <text class="eyebrow" x="1108" y="239">04 · DISCRETE FINDING</text>
     <text class="card-title" x="1108" y="270">Variant, biomarker, interpretation, and status</text>
-    <text class="mono" x="1108" y="295">OBX / Observation · LOINC-coded clinical meaning</text>
+    <text class="mono" x="1108" y="295">OBX / Observation · LOINC name + coded genomic value</text>
     <text class="body" x="1108" y="319">The finding can be searched and reviewed without re-keying.</text>
   </g>
 

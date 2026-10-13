@@ -158,6 +158,17 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    @media screen {
+      #idRegistryTable th, #idRegistryTable td { min-width: 12ch; }
+      #idRegistryTable :is(th, td):nth-child(2) { min-width: 28ch; }
+      #idRegistryTable :is(th, td):nth-child(3) { min-width: 26ch; }
+      #idRegistryTable :is(th, td):nth-child(4), #idRegistryTable :is(th, td):last-child { min-width: 20ch; }
+    }
+    #idRegistryTable .id-code { word-break: normal; overflow-wrap: normal; }
 </style>
 <style data-canary-stack-css>
 .visitor-boundary{border-block-start:1px solid currentColor;box-sizing:border-box;display:grid;flex:1 0 100%;gap:.75rem;grid-column:1/-1;inline-size:100%;margin:clamp(1.5rem,4vw,3rem) auto 0;max-inline-size:82rem;overflow-wrap:anywhere;padding:1rem clamp(1rem,3vw,1.75rem) 0;user-select:text}.visitor-boundary__marker{box-sizing:border-box;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.7rem;font-variant-ligatures:none;line-height:1.55;margin:0;max-inline-size:100%;white-space:normal}.visitor-boundary__context{box-sizing:border-box;font-family:inherit;font-size:.8rem;line-height:1.55;margin:0;max-inline-size:70ch}@media print{.visitor-boundary{border-color:#000;color:#000}}@media (forced-colors:active){.visitor-boundary{border-color:CanvasText;color:CanvasText}}
@@ -240,8 +251,8 @@
         <span class="status-chip status-ready-to-route">ready-to-route</span>
       </div>
       <p class="small-note">Status markers and focus-view metadata travel through the HTML table, SVG diagram, JSON export, and JSON-LD graph.</p>
-      <div class="matrix-shell" style="margin-top:16px;" tabindex="0" aria-label="Scrollable editable Context Tree matrix">
-        <table class="matrix-editor-table" id="matrixEditorTable">
+      <div class="matrix-shell" style="margin-top:16px;" role="region" tabindex="0" aria-label="Scrollable editable Context Tree matrix">
+        <table class="matrix-editor-table" id="matrixEditorTable"><caption>Context Tree: editable questions by role</caption>
           <thead></thead><tbody></tbody>
         </table>
       </div>
@@ -268,7 +279,7 @@
     <section aria-labelledby="tableTitle">
       <h2 id="tableTitle">Text / Table Equivalent</h2>
       <p class="text-handling-note">This table follows the active focus view. Long cell text is preserved in full in source data and exports; visible cells show a compact preview with a reveal control when text is longer than the preview surface.</p>
-      <div class="table-wrap" tabindex="0" aria-label="Scrollable Context Tree text equivalent"><table id="contextTable"><thead><tr><th>Context question</th><th>Group / role</th><th>Context cell</th><th>Status</th><th>Handoff route</th></tr></thead><tbody></tbody></table></div>
+      <div class="table-wrap" tabindex="0" aria-label="Scrollable Context Tree text equivalent" role="region"><table id="contextTable"><caption>Context Tree: context cells in the active view</caption><thead><tr><th scope="col" data-label="Context question">Context question</th><th scope="col" data-label="Group / role">Group / role</th><th scope="col" data-label="Context cell">Context cell</th><th scope="col" data-label="Status">Status</th><th scope="col" data-label="Handoff route">Handoff route</th></tr></thead><tbody></tbody></table></div>
     </section>
 
     <section aria-labelledby="semanticsTitle">
@@ -278,13 +289,13 @@
         <div><h3>Recovery calibration</h3><ul class="compact-list"><li><strong>Strain cue:</strong> role differences are being flattened.</li><li><strong>Stabilizing read:</strong> the collaboration needs role-specific context locality.</li><li><strong>Restored state:</strong> groups, collaborators, knowledge needs, and context still to surface are visible.</li></ul></div>
       </div>
       <h3 style="margin-top:18px;">Replacement-state guidance</h3>
-      <div class="table-wrap" tabindex="0" aria-label="Scrollable replacement-state guidance"><table><thead><tr><th>Common phrase</th><th>Stronger local phrase</th></tr></thead><tbody><tr><td>What are they missing?</td><td>What context still needs to surface?</td></tr><tr><td>Who owns this?</td><td>Which group understands, maintains, depends on, or acts on this part of the workflow?</td></tr><tr><td>The documentation is incomplete.</td><td>The table is showing which context surfaces deserve attention next.</td></tr></tbody></table></div>
+      <div class="table-wrap" tabindex="0" aria-label="Scrollable replacement-state guidance" role="region"><table><caption>Context Tree: replacement-state guidance</caption><thead><tr><th scope="col" data-label="Common phrase">Common phrase</th><th scope="col" data-label="Stronger local phrase">Stronger local phrase</th></tr></thead><tbody><tr data-label="Context Tree replacement-state guidance: What are they missing?"><th scope="row" data-label="Common phrase">What are they missing?</th><td>What context still needs to surface?</td></tr><tr data-label="Context Tree replacement-state guidance: Who owns this?"><th scope="row" data-label="Common phrase">Who owns this?</th><td>Which group understands, maintains, depends on, or acts on this part of the workflow?</td></tr><tr data-label="Context Tree replacement-state guidance: The documentation is incomplete."><th scope="row" data-label="Common phrase">The documentation is incomplete.</th><td>The table is showing which context surfaces deserve attention next.</td></tr></tbody></table></div>
     </section>
 
     <section aria-labelledby="idsTitle">
       <h2 id="idsTitle">Advanced Identity Registry</h2>
       <p class="help">Stable IDs make the table, SVG, JSON export, JSON-LD graph, and AI collaboration prompt refer to the same entities. Canonical order and active display order are shown separately.</p>
-      <details><summary><strong>Show group, row, and cell IDs</strong></summary><div class="table-wrap" style="margin-top:12px;" tabindex="0" aria-label="Scrollable Context Tree identity registry"><table id="idRegistryTable" class="id-table"><thead><tr><th>Type</th><th>ID</th><th>Label / summary</th><th>Related IDs</th><th>View state</th></tr></thead><tbody></tbody></table></div></details>
+      <details><summary><strong>Show group, row, and cell IDs</strong></summary><div class="table-wrap" style="margin-top:12px;" tabindex="0" aria-label="Scrollable Context Tree identity registry" role="region"><table id="idRegistryTable" class="id-table"><caption>Context Tree: identity registry</caption><thead><tr><th scope="col" data-label="Type">Type</th><th scope="col" data-label="ID">ID</th><th scope="col" data-label="Label / summary">Label / summary</th><th scope="col" data-label="Related IDs">Related IDs</th><th scope="col" data-label="View state">View state</th></tr></thead><tbody></tbody></table></div></details>
     </section>
 
     <section aria-labelledby="exportsTitle">
@@ -1126,8 +1137,8 @@ function renderRowsEditor() {
 function renderMatrixEditor() {
   const groups = visibleGroups();
   const rows = orderedRows();
-  els.matrixHead.innerHTML = `<tr><th>Context question</th>${groups.map(group => `<th>${escapeHtml(group.label)}</th>`).join('')}</tr>`;
-  els.matrixBody.innerHTML = rows.map(row => `<tr><td><strong>${escapeHtml(row.label)}</strong><br><span class="small-note">${escapeHtml(row.kind.replaceAll('_',' '))}</span></td>${groups.map(group => {
+  els.matrixHead.innerHTML = `<tr><th scope="col" data-label="Context question">Context question</th>${groups.map(group => `<th scope="col" data-label="${escapeHtml(group.label)}">${escapeHtml(group.label)}</th>`).join('')}</tr>`;
+  els.matrixBody.innerHTML = rows.map(row => `<tr data-record-id="${escapeHtml(row.id)}" data-label="Context Tree question: ${escapeHtml(row.label)}"><th scope="row" data-label="Context question"><strong>${escapeHtml(row.label)}</strong><br><span class="small-note">${escapeHtml(row.kind.replaceAll('_',' '))}</span></th>${groups.map(group => {
     const cell = getCell(row.id, group.id);
     return `<td data-cell-id="${escapeHtml(cell.id)}"><label class="visually-hidden" for="cell-text-${escapeHtml(cell.id)}">${escapeHtml(row.label)} for ${escapeHtml(group.label)}</label><textarea id="cell-text-${escapeHtml(cell.id)}" data-kind="cell-text" data-row-id="${escapeHtml(row.id)}" data-group-id="${escapeHtml(group.id)}">${escapeHtml(cell.text)}</textarea><div class="cell-controls"><div><label class="visually-hidden" for="cell-status-${escapeHtml(cell.id)}">Status</label><select id="cell-status-${escapeHtml(cell.id)}" data-kind="cell-status" data-row-id="${escapeHtml(row.id)}" data-group-id="${escapeHtml(group.id)}">${statusOptions.map(opt => `<option value="${opt.value}" ${opt.value === cell.status ? 'selected' : ''}>${opt.label}</option>`).join('')}</select></div><div><label class="visually-hidden" for="cell-route-${escapeHtml(cell.id)}">Handoff route</label><select id="cell-route-${escapeHtml(cell.id)}" data-kind="cell-route" data-row-id="${escapeHtml(row.id)}" data-group-id="${escapeHtml(group.id)}">${routeSelectOptions(cell.handoff)}</select></div></div><div class="custom-route-field" ${cell.handoff && !routeEntry(cell.handoff) ? '' : 'hidden'}><label class="visually-hidden" for="cell-custom-route-${escapeHtml(cell.id)}">Custom handoff route</label><input id="cell-custom-route-${escapeHtml(cell.id)}" type="text" value="${cell.handoff && !routeEntry(cell.handoff) ? escapeHtml(cell.handoff) : ''}" placeholder="Custom route label" data-kind="cell-custom-route" data-row-id="${escapeHtml(row.id)}" data-group-id="${escapeHtml(group.id)}" /></div></td>`;
   }).join('')}</tr>`).join('');
@@ -1140,7 +1151,7 @@ function renderCellText(cell) {
 }
 function renderTable() {
   const selectedCellId = currentSelectedCellId();
-  els.tableBody.innerHTML = flattenedCells({ visibleOnly: true }).map(({ row, group, cell }) => `<tr data-cell-id="${escapeHtml(cell.id)}" tabindex="0" class="${selectedCellId === cell.id ? 'table-row-selected' : ''}"><td>${escapeHtml(row.label)}</td><td>${escapeHtml(group.label)}</td><td class="text-cell">${renderCellText(cell)}</td><td><span class="status-chip status-${escapeHtml(cell.status.replaceAll('_','-'))}">${escapeHtml(statusLabel(cell.status))}</span></td><td>${cell.handoff ? `<span class="route-pill" title="${escapeHtml(routeFamily(cell.handoff))}">${escapeHtml(cell.handoff)}</span>` : ''}</td></tr>`).join('');
+  els.tableBody.innerHTML = flattenedCells({ visibleOnly: true }).map(({ row, group, cell }) => `<tr data-cell-id="${escapeHtml(cell.id)}" data-record-id="${escapeHtml(cell.id)}" data-label="Context Tree: ${escapeHtml(row.label)}; group / role: ${escapeHtml(group.label)}" tabindex="0" class="${selectedCellId === cell.id ? 'table-row-selected' : ''}"><th scope="row" data-label="Context question">${escapeHtml(row.label)}</th><td>${escapeHtml(group.label)}</td><td class="text-cell">${renderCellText(cell)}</td><td><span class="status-chip status-${escapeHtml(cell.status.replaceAll('_','-'))}">${escapeHtml(statusLabel(cell.status))}</span></td><td>${cell.handoff ? `<span class="route-pill" title="${escapeHtml(routeFamily(cell.handoff))}">${escapeHtml(cell.handoff)}</span>` : ''}</td></tr>`).join('');
 }
 function wrapSvgText(text, maxChars = 24, maxLines = 4) {
   const words = String(text || '').split(/\s+/).filter(Boolean);
@@ -1223,7 +1234,7 @@ function renderIdRegistry() {
   orderedGroups({ includeHidden: true }).forEach(group => rows.push({ type: 'Group', id: group.id, label: group.label, related: `canonical ${canonicalOrderFor(data.groups, group.id)}`, view: `${isGroupHidden(group.id) ? 'hidden' : 'visible'} · display ${displayOrderForGroup(group.id)}${isGroupHidden(group.id) ? '' : ` · visible ${visibleOrderForGroup(group.id)}`}` }));
   orderedRows({ includeHidden: true }).forEach(row => rows.push({ type: 'Context row', id: row.id, label: row.label, related: row.kind, view: `canonical ${canonicalOrderFor(data.context_rows, row.id)}` }));
   flattenedCells({ visibleOnly: false }).forEach(({ row, group, cell }) => rows.push({ type: 'Cell', id: cell.id, label: (cell.text || 'Empty cell').slice(0, 120), related: `${row.id} · ${group.id}`, view: isGroupHidden(group.id) ? 'hidden column' : 'visible column' }));
-  els.idRegistryBody.innerHTML = rows.map(item => `<tr><td>${escapeHtml(item.type)}</td><td><span class="id-code">${escapeHtml(item.id)}</span></td><td>${escapeHtml(item.label)}</td><td>${escapeHtml(item.related)}</td><td>${escapeHtml(item.view)}</td></tr>`).join('');
+  els.idRegistryBody.innerHTML = rows.map(item => `<tr data-record-id="${escapeHtml(item.id)}" data-label="Context Tree identity: ${escapeHtml(item.type)}; ${escapeHtml(item.id)}"><td>${escapeHtml(item.type)}</td><th scope="row" data-label="ID"><code class="id-code">${escapeHtml(item.id)}</code></th><td>${escapeHtml(item.label)}</td><td>${escapeHtml(item.related)}</td><td>${escapeHtml(item.view)}</td></tr>`).join('');
 }
 function prepareImportedData(raw) {
   requireRecord(raw, 'Imported Context Tree');

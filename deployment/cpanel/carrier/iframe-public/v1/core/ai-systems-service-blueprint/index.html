@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Systems Service Blueprint · Runtime–Knowledge–Infrastructure Topology Map · Chimeric Prototype v0.1.4</title>
+<title>AI Systems Service Blueprint · Runtime–Knowledge–Infrastructure Topology Map · Chimeric Prototype v0.1.5</title>
 <style>
   :root {
     --paper: #fffdf8;
@@ -201,7 +201,7 @@
 </head>
 <body>
 <header class="hero">
-  <div class="eyebrow">Core Architectures · Chimeric Prototype v0.1.4</div>
+  <div class="eyebrow">Core Architectures · Chimeric Prototype v0.1.5</div>
   <h1 id="artifactTitle">AI Systems Service Blueprint</h1>
   <p class="subtitle">Runtime–Knowledge–Infrastructure Topology Map</p>
   <p class="lede">A layered service blueprint that connects visible AI behavior to runtime orchestration, context and memory surfaces, tools, models, data stores, evaluation, observability, guardrails, budgets, technical-veracity status, and human review boundaries.</p>
@@ -263,12 +263,12 @@
   <section class="panel">
     <h2>Editable topology matrix</h2>
     <p class="muted">Full text is preserved. The table remains the primary editing and reading surface; SVG previews may truncate.</p>
-    <div class="matrix-scroll"><table id="matrixTable" aria-label="AI Systems Service Blueprint matrix"></table></div>
+    <div class="matrix-scroll"><table data-label="AI Systems Service Blueprint matrix" id="matrixTable" aria-label="AI Systems Service Blueprint matrix"></table></div>
   </section>
 
   <section class="panel" id="componentInventory">
     <h2>Component and boundary inventory</h2>
-    <p class="muted">These supporting components can be referenced by cells, inspected by AI collaborators, or routed into Software Architecture Views, Specification-by-Example, Unit-test-first Design, HEART, or Practitioner Judgment Probes.</p>
+    <p class="muted">These supporting components can be referenced by cells, supplied as structured context to the modeled generative AI system, or routed into Software Architecture Views, Specification-by-Example, Unit-test-first Design, HEART, or Practitioner Judgment Probes.</p>
     <div class="controls"><button class="primary" id="addComponentBtn">Add component</button></div>
     <div id="componentsList" class="focus-list"></div>
   </section>
@@ -303,16 +303,16 @@
           <label class="prompt-view-option"><input type="radio" name="ai-blueprint-prompt-view" value="plain" data-prompt-view checked> Plain</label>
           <label class="prompt-view-option"><input type="radio" name="ai-blueprint-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label>
         </div></fieldset>
-        <p class="small muted" id="promptViewDescription">Plain Markdown carries the complete topology context without asking the receiver to load a repository skill.</p>
+        <p class="small muted" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete topology context.</p>
         <p class="prompt-status small" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <noscript><p class="notice">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
         <pre id="promptOut" data-prompt-view-active="plain" aria-labelledby="promptHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: AI Systems Service Blueprint
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `ai-systems-service-blueprint/current-runtime-knowledge-infrastructure-topology`
-- Source: `ai-systems-service-blueprint@0.1.4`
-- State: `ai-systems-service-blueprint-state.v0.1` · revision `0.1.4`
-- Fingerprint: `fnv1a32-utf8:f90044fc`
+- Source: `ai-systems-service-blueprint@0.1.5`
+- State: `ai-systems-service-blueprint-state.v0.1` · revision `0.1.5`
+- Fingerprint: `fnv1a32-utf8:102cc89f`
 - View: `plain`
 
 ## Purpose and target
@@ -447,7 +447,7 @@ Every accepted stage, layer, cell, component, and focus view appears below. A hi
 #### Visible AI behavior × Context assembly (`cell-visible-ai__context`)
 
 - Layer: `layer-visible-ai`; stage: `stage-context`.
-- Text: AI prepares source-linked context package for review.
+- Text: The context assembler prepares a source-linked context package for review.
 - Status: `assumed`; technical veracity: `hypothesis`.
 - Linked components: None recorded.
 - Route: No route recorded.
@@ -479,7 +479,7 @@ Every accepted stage, layer, cell, component, and focus view appears below. A hi
 #### Visible AI behavior × Synthesis and response (`cell-visible-ai__respond`)
 
 - Layer: `layer-visible-ai`; stage: `stage-respond`.
-- Text: AI suggests a variant evidence summary with claim-level source references.
+- Text: The summary-generation system proposes a variant evidence summary with claim-level source references.
 - Status: `assumed`; technical veracity: `hypothesis`.
 - Linked components: None recorded.
 - Route: No route recorded.
@@ -783,7 +783,7 @@ Every accepted stage, layer, cell, component, and focus view appears below. A hi
 #### Budgets and boundaries × Tool or sub-agent action (`cell-budgets__act`)
 
 - Layer: `layer-budgets`; stage: `stage-act`.
-- Text: Assistant can suggest and route; it does not finalize review state.
+- Text: The proposal channel can generate suggestions and assign routes; human reviewers finalize review state.
 - Status: `assumed`; technical veracity: `hypothesis`.
 - Linked components: None recorded.
 - Route: No route recorded.
@@ -1006,7 +1006,7 @@ Every accepted stage, layer, cell, component, and focus view appears below. A hi
 - Stable semantic IDs preserve relationships across focus arrangements. Every focus view’s order, visibility, and text mode are represented.
 - Hide narrows a focus view. Hidden stages and layers remain represented in this capsule and the complete JSON and JSON-LD exports.
 - Current cell selection, notices, clipboard state, pending removal, private extensions, and Markdown-view choice stay outside the represented-state fingerprint.
-- AI suggestions enter as attributed proposals. Human reviewers retain interpretation, route acceptance, external sharing, and publication decisions.
+- Generative-AI proposals enter as attributed proposals. Human reviewers retain interpretation, route acceptance, external sharing, and publication decisions.
 
 ## Requested return
 
@@ -1114,7 +1114,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   const PROMPT_CAPSULE_STATE_CONTRACT='ai-systems-service-blueprint-state.v0.1';
   const PROMPT_CAPSULE_ID='ai-systems-service-blueprint/current-runtime-knowledge-infrastructure-topology';
   const PROMPT_CAPSULE_SOURCE_ID='ai-systems-service-blueprint';
-  const PROMPT_CAPSULE_SOURCE_VERSION='0.1.4';
+  const PROMPT_CAPSULE_SOURCE_VERSION='0.1.5';
   const PROMPT_CAPSULE_VIEWS=Object.freeze(['plain','skill-assisted']);
   const PROMPT_CAPSULE_SKILL_REVISION='34a0047c4d6400aaa9f44e16e52640555f6a3129';
   const PROMPT_CAPSULE_SKILLS=Object.freeze([
@@ -1135,7 +1135,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       id: 'ca-artifact-ai-systems-service-blueprint-genomics-001',
       display_name: 'AI Systems Service Blueprint',
       subtitle: 'Runtime–Knowledge–Infrastructure Topology Map',
-      version: '0.1.4',
+      version: '0.1.5',
       family: 'Shared Surfaces and Topology / AI Engineering Systems',
       placement: 'Bridge Architecture → Implementation Architecture',
       primary_cognitive_move: 'AI system component topology and operational boundary mapping',
@@ -1195,8 +1195,8 @@ These public collaboration loops fit when the receiving work meets the stated co
       'stage-review':'Confirm whether generated summary content can support interpretation.'
     },
     'layer-visible-ai': {
-      'stage-context':'AI prepares source-linked context package for review.',
-      'stage-respond':'AI suggests a variant evidence summary with claim-level source references.',
+      'stage-context':'The context assembler prepares a source-linked context package for review.',
+      'stage-respond':'The summary-generation system proposes a variant evidence summary with claim-level source references.',
       'stage-review':'Generated text remains marked as requiring human confirmation.'
     },
     'layer-human-review': {
@@ -1219,7 +1219,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     },
     'layer-budgets': {
       'stage-plan':'Iteration, retry, and tool-call limits are set before workflow begins.',
-      'stage-act':'Assistant can suggest and route; it does not finalize review state.',
+      'stage-act':'The proposal channel can generate suggestions and assign routes; human reviewers finalize review state.',
       'stage-review':'Human confirmation gates report-support use.'
     },
     'layer-evaluation': {
@@ -1321,10 +1321,10 @@ These public collaboration loops fit when the receiving work meets the stated co
   }
   function renderTable(){
     const table=document.getElementById('matrixTable'); const stages=visibleStages(); const layers=visibleLayers();
-    let html='<thead><tr><th>Layer / Stage</th>'+stages.map(s=>`<th>${escapeHtml(s.label)}<div class="small muted"><code>${escapeHtml(s.id)}</code></div></th>`).join('')+'</tr></thead><tbody>';
+    let html='<thead><tr><th data-label="Layer / Stage" scope="col">Layer / Stage</th>'+stages.map(s=>`<th data-label="${escapeHtml(s.label)} (${escapeHtml(s.id)})" scope="col">${escapeHtml(s.label)}<div class="small muted"><code>${escapeHtml(s.id)}</code></div></th>`).join('')+'</tr></thead><tbody>';
     layers.forEach(layer=>{
-      html+=`<tr><td><span class="layer-label">${escapeHtml(layer.label)}</span><span class="layer-kind">${escapeHtml(layer.kind.replace(/_/g,' / '))}</span><div class="small"><code>${escapeHtml(layer.id)}</code></div></td>`;
-      stages.forEach(stage=>{ const cell=cellFor(layer.id,stage.id); const route=routeInfo(cell.route); html+=`<td class="cell-editor" data-cell-id="${cell.id}">
+      html+=`<tr data-label="AI Systems Service Blueprint matrix: ${escapeHtml(layer.label)} (${escapeHtml(layer.id)})"><td data-label="Layer"><span class="layer-label">${escapeHtml(layer.label)}</span><span class="layer-kind">${escapeHtml(layer.kind.replace(/_/g,' / '))}</span><div class="small"><code>${escapeHtml(layer.id)}</code></div></td>`;
+      stages.forEach(stage=>{ const cell=cellFor(layer.id,stage.id); const route=routeInfo(cell.route); html+=`<td data-label="${escapeHtml(stage.label)} (${escapeHtml(stage.id)})" class="cell-editor" data-cell-id="${cell.id}">
         <button data-action="select-cell" data-id="${cell.id}" class="primary">Inspect</button>
         <label for="cell-text-${cell.id}">Cell text</label><textarea id="cell-text-${cell.id}" data-bind="cell-text" data-id="${cell.id}">${escapeHtml(cell.text)}</textarea>
         <div class="cell-meta">
@@ -1433,7 +1433,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       '### Components and boundaries','',...body.components.map(component=>['#### '+markdownInline(component.label)+' ('+markdownCode(component.id)+')','', '- Type: '+markdownCode(component.component_type)+'.','- Description: '+markdownInline(component.description),'- Status: '+markdownCode(component.status)+'; technical veracity: '+markdownCode(component.veracity)+'.','- Route: '+markdownInline(routeDescription(component.route)),'- Route reason: '+markdownInline(component.reason||'No route reason recorded.')].join('\n')),'',
       '### Vocabulary and routes','', '- Status values: '+state.status_vocabulary.map(markdownCode).join('; ')+'.','- Technical-veracity values: '+state.veracity_vocabulary.map(markdownCode).join('; ')+'.',...state.route_registry.map(route=>'- '+markdownCode(route.id)+' — '+markdownInline(route.label)+'; family '+markdownInline(route.family)+'.'),'',
       '## Boundaries and human-held decisions','',
-      '- Human reviewers decide which topology read fits, which boundary becomes accepted state, which route can receive it, and when the handoff is ready.','- Stable semantic IDs preserve relationships across focus arrangements. Every focus view’s order, visibility, and text mode are represented.','- Hide narrows a focus view. Hidden stages and layers remain represented in this capsule and the complete JSON and JSON-LD exports.','- Current cell selection, notices, clipboard state, pending removal, private extensions, and Markdown-view choice stay outside the represented-state fingerprint.','- AI suggestions enter as attributed proposals. Human reviewers retain interpretation, route acceptance, external sharing, and publication decisions.','',
+      '- Human reviewers decide which topology read fits, which boundary becomes accepted state, which route can receive it, and when the handoff is ready.','- Stable semantic IDs preserve relationships across focus arrangements. Every focus view’s order, visibility, and text mode are represented.','- Hide narrows a focus view. Hidden stages and layers remain represented in this capsule and the complete JSON and JSON-LD exports.','- Current cell selection, notices, clipboard state, pending removal, private extensions, and Markdown-view choice stay outside the represented-state fingerprint.','- Generative-AI proposals enter as attributed proposals. Human reviewers retain interpretation, route acceptance, external sharing, and publication decisions.','',
       '## Requested return','',
       'Return a Markdown topology handoff grouped by stable semantic ID. Keep every stage, layer, cell, component relationship, status, veracity value, route, reason, focus order, and visibility state with the item it describes.','',
       'Name the outcome or condition each probability describes before assigning a value.','',
@@ -1464,7 +1464,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     const json=JSON.stringify(buildExport(),null,2); const jsonld=JSON.stringify(buildJsonLd(),null,2); const prompt=promptCapsuleMarkdown(promptCapsuleView);
     document.getElementById('jsonOut').value=json; document.getElementById('jsonLdOut').value=jsonld; document.getElementById('promptOut').textContent=prompt; document.getElementById('promptOut').dataset.promptViewActive=promptCapsuleView; document.getElementById('jsonLdScript').textContent=jsonld;
     document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
-    document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented topology and fingerprint remain the same.':'Plain Markdown carries the complete topology context without asking the receiver to load a repository skill.';
+    document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented topology and fingerprint remain the same.':'Plain Markdown is a self-contained handoff with the complete topology context.';
   }
   function renderAll(){ normalize(); renderControls(); renderSvg(); renderTable(); renderInspector(); renderComponents(); renderIdentity(); renderExports(); }
   function selectCell(id){ activeView().selected_cell_id=id; renderAll(); }
@@ -1567,7 +1567,7 @@ These public collaboration loops fit when the receiving work meets the stated co
   }
   renderAll();
   document.querySelector('[data-prompt-view-control]').hidden=false;document.querySelector('[data-prompt-actions]').hidden=false;
-  window.aiSystemsServiceBlueprint=Object.freeze({version:'0.1.4',stateContract:PROMPT_CAPSULE_STATE_CONTRACT,contract:PROMPT_CAPSULE_CONTRACT,views:PROMPT_CAPSULE_VIEWS,skillRevision:PROMPT_CAPSULE_SKILL_REVISION,skills:PROMPT_CAPSULE_SKILLS,relatedLoops:PROMPT_CAPSULE_RELATED_LOOPS,getState:()=>cloneData(buildExport()),exportState:()=>cloneData(buildExport()),importState:value=>applyAiImport(cloneData(value)),promptCapsuleStateProjection:()=>cloneData(representedState()),promptCapsuleFingerprint,promptCapsule:()=>promptCapsuleMarkdown('plain'),promptCapsuleMarkdown:(view=promptCapsuleView)=>promptCapsuleMarkdown(view),getPromptCapsuleView:()=>promptCapsuleView});
+  window.aiSystemsServiceBlueprint=Object.freeze({version:'0.1.5',stateContract:PROMPT_CAPSULE_STATE_CONTRACT,contract:PROMPT_CAPSULE_CONTRACT,views:PROMPT_CAPSULE_VIEWS,skillRevision:PROMPT_CAPSULE_SKILL_REVISION,skills:PROMPT_CAPSULE_SKILLS,relatedLoops:PROMPT_CAPSULE_RELATED_LOOPS,getState:()=>cloneData(buildExport()),exportState:()=>cloneData(buildExport()),importState:value=>applyAiImport(cloneData(value)),promptCapsuleStateProjection:()=>cloneData(representedState()),promptCapsuleFingerprint,promptCapsule:()=>promptCapsuleMarkdown('plain'),promptCapsuleMarkdown:(view=promptCapsuleView)=>promptCapsuleMarkdown(view),getPromptCapsuleView:()=>promptCapsuleView});
 })();
 </script>
   <footer class="artifact-attribution">

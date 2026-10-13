@@ -340,6 +340,11 @@
       .hero-grid, .grid-2, .grid-3, .inspector-grid { grid-template-columns: 1fr; }
       header.hero { padding-top: 28px; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      button, .button-like { transition: none; }
+      button:active { transform: none; }
+    }
 
   .artifact-attribution {
     position: static;
@@ -987,14 +992,14 @@ These public collaboration loops fit when the receiving work meets the stated co
   }
   function renderEditTable(){
     const rows = visibleRows();
-    const html = `<table aria-label="Editable HEART chart rows"><thead><tr>
-      <th>Focus controls</th><th>HEART area</th><th>Goal</th><th>Signal</th><th>Metric</th><th>Interpretation</th><th>Tolerance</th><th>Counter-signal</th><th>Qualitative companion</th><th>Status</th><th>Route</th>
+    const html = `<table data-label="Editable HEART chart rows" aria-label="Editable HEART chart rows"><thead><tr>
+      <th data-label="Focus controls" scope="col">Focus controls</th><th data-label="HEART area" scope="col">HEART area</th><th data-label="Goal" scope="col">Goal</th><th data-label="Signal" scope="col">Signal</th><th data-label="Metric" scope="col">Metric</th><th data-label="Interpretation" scope="col">Interpretation</th><th data-label="Tolerance" scope="col">Tolerance</th><th data-label="Counter-signal" scope="col">Counter-signal</th><th data-label="Qualitative companion" scope="col">Qualitative companion</th><th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th>
     </tr></thead><tbody>${rows.map((r,idx)=>editRow(r,idx,rows.length)).join('')}</tbody></table>`;
     document.getElementById('editTable').innerHTML = html;
   }
   function editRow(r,idx,total){
-    return `<tr class="row-card" data-row-id="${esc(r.id)}">
-      <td>
+    return `<tr data-label="Editable HEART chart rows: ${esc(r.category)} (${esc(r.id)})" class="row-card" data-row-id="${esc(r.id)}">
+      <td data-label="Focus controls">
         <span class="category-badge">${esc(r.category)}</span>
         <div class="mini-controls">
           <button type="button" data-action="move-up" data-row-id="${esc(r.id)}" ${idx===0?'disabled':''}>Move earlier</button>
@@ -1005,16 +1010,16 @@ These public collaboration loops fit when the receiving work meets the stated co
         </div>
         <p class="small">ID: <code>${esc(r.id)}</code></p>
       </td>
-      <td><label>Category<select data-field="category" data-row-id="${esc(r.id)}">${heartCategories.map(c=>`<option value="${esc(c)}" ${r.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label></td>
-      <td><textarea aria-label="Goal for ${esc(r.category)}" data-field="goal" data-row-id="${esc(r.id)}">${esc(r.goal)}</textarea></td>
-      <td><textarea aria-label="Signal for ${esc(r.category)}" data-field="signal" data-row-id="${esc(r.id)}">${esc(r.signal)}</textarea></td>
-      <td><textarea aria-label="Metric for ${esc(r.category)}" data-field="metric" data-row-id="${esc(r.id)}">${esc(r.metric)}</textarea></td>
-      <td><textarea aria-label="Interpretation for ${esc(r.category)}" data-field="interpretation" data-row-id="${esc(r.id)}">${esc(r.interpretation)}</textarea></td>
-      <td><textarea aria-label="Tolerance for ${esc(r.category)}" data-field="tolerance" data-row-id="${esc(r.id)}">${esc(r.tolerance)}</textarea></td>
-      <td><textarea aria-label="Counter-signal for ${esc(r.category)}" data-field="counter_signal" data-row-id="${esc(r.id)}">${esc(r.counter_signal)}</textarea></td>
-      <td><textarea aria-label="Qualitative companion for ${esc(r.category)}" data-field="qualitative_companion" data-row-id="${esc(r.id)}">${esc(r.qualitative_companion)}</textarea></td>
-      <td><select aria-label="Evidence status for ${esc(r.category)}" data-field="status" data-row-id="${esc(r.id)}">${statusOptions.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.replaceAll('_',' ')}</option>`).join('')}</select></td>
-      <td>
+      <td data-label="HEART area"><label>Category<select data-field="category" data-row-id="${esc(r.id)}">${heartCategories.map(c=>`<option value="${esc(c)}" ${r.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label></td>
+      <td data-label="Goal"><textarea aria-label="Goal for ${esc(r.category)}" data-field="goal" data-row-id="${esc(r.id)}">${esc(r.goal)}</textarea></td>
+      <td data-label="Signal"><textarea aria-label="Signal for ${esc(r.category)}" data-field="signal" data-row-id="${esc(r.id)}">${esc(r.signal)}</textarea></td>
+      <td data-label="Metric"><textarea aria-label="Metric for ${esc(r.category)}" data-field="metric" data-row-id="${esc(r.id)}">${esc(r.metric)}</textarea></td>
+      <td data-label="Interpretation"><textarea aria-label="Interpretation for ${esc(r.category)}" data-field="interpretation" data-row-id="${esc(r.id)}">${esc(r.interpretation)}</textarea></td>
+      <td data-label="Tolerance"><textarea aria-label="Tolerance for ${esc(r.category)}" data-field="tolerance" data-row-id="${esc(r.id)}">${esc(r.tolerance)}</textarea></td>
+      <td data-label="Counter-signal"><textarea aria-label="Counter-signal for ${esc(r.category)}" data-field="counter_signal" data-row-id="${esc(r.id)}">${esc(r.counter_signal)}</textarea></td>
+      <td data-label="Qualitative companion"><textarea aria-label="Qualitative companion for ${esc(r.category)}" data-field="qualitative_companion" data-row-id="${esc(r.id)}">${esc(r.qualitative_companion)}</textarea></td>
+      <td data-label="Status"><select aria-label="Evidence status for ${esc(r.category)}" data-field="status" data-row-id="${esc(r.id)}">${statusOptions.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.replaceAll('_',' ')}</option>`).join('')}</select></td>
+      <td data-label="Route">
         <select aria-label="Route for ${esc(r.category)}" data-field="handoff" data-row-id="${esc(r.id)}">${selectOptions(r.handoff)}</select>
         <label style="margin-top:8px;">Custom route<input data-field="custom_route" data-row-id="${esc(r.id)}" value="${esc(r.custom_route || (!routeRegistry.some(rr=>rr.label===r.handoff)?r.handoff:''))}" placeholder="Custom route if needed" /></label>
         <label style="margin-top:8px;">Route reason<textarea data-field="reason" data-row-id="${esc(r.id)}">${esc(r.reason)}</textarea></label>
@@ -1142,14 +1147,14 @@ These public collaboration loops fit when the receiving work meets the stated co
   function renderReadableTable(){
     const rows = visibleRows();
     const cols = ['goal','signal','metric','interpretation','tolerance','counter_signal','qualitative_companion'];
-    const html = `<table class="read-table" aria-label="Readable HEART chart table"><thead><tr><th>HEART area</th>${cols.map(c=>`<th>${esc(labelFor(c))}</th>`).join('')}<th>Status</th><th>Route</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.category)}</strong><br><code>${esc(r.id)}</code></td>${cols.map(c=>readCell(r,c)).join('')}<td><span class="status-chip status-${esc(r.status)}">${esc(r.status.replaceAll('_',' '))}</span></td><td>${effectiveRoute(r)?`<span class="route-pill">${esc(effectiveRoute(r))}</span>`:''}</td></tr>`).join('')}</tbody></table>`;
+    const html = `<table data-label="Readable HEART chart table" class="read-table" aria-label="Readable HEART chart table"><thead><tr><th data-label="HEART area" scope="col">HEART area</th>${cols.map(c=>`<th data-label="${esc(labelFor(c))}" scope="col">${esc(labelFor(c))}</th>`).join('')}<th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th></tr></thead><tbody>${rows.map(r=>`<tr data-label="Readable HEART chart table: ${esc(r.category)} (${esc(r.id)})"><td data-label="HEART area"><strong>${esc(r.category)}</strong><br><code>${esc(r.id)}</code></td>${cols.map(c=>readCell(r,c)).join('')}<td data-label="Status"><span class="status-chip status-${esc(r.status)}">${esc(r.status.replaceAll('_',' '))}</span></td><td data-label="Route">${effectiveRoute(r)?`<span class="route-pill">${esc(effectiveRoute(r))}</span>`:''}</td></tr>`).join('')}</tbody></table>`;
     document.getElementById('readableTable').innerHTML = html;
   }
   function readCell(r,field){
     const txt = String(r[field]||'');
     const needs = txt.length > 120;
     const id = `full-${r.id}-${field}`;
-    return `<td><div class="clamp">${esc(txt)}</div>${needs?`<button type="button" data-action="toggle-full" data-target="${id}" aria-controls="${id}" aria-expanded="false">Show full text</button><div id="${id}" class="full-text" hidden>${esc(txt)}</div>`:''}</td>`;
+    return `<td data-label="${esc(labelFor(field))}"><div class="clamp">${esc(txt)}</div>${needs?`<button type="button" data-action="toggle-full" data-target="${id}" aria-controls="${id}" aria-expanded="false">Show full text</button><div id="${id}" class="full-text" hidden>${esc(txt)}</div>`:''}</td>`;
   }
 
   function deepClone(value){ return structuredClone(value); }
@@ -1484,7 +1489,7 @@ These public collaboration loops fit when the receiving work meets the stated co
 
   function labelFor(f){ return ({goal:'Goal',signal:'Signal',metric:'Metric',interpretation:'Interpretation',tolerance:'Tolerance',counter_signal:'Counter-signal',qualitative_companion:'Qualitative companion',reason:'Route reason'}[f] || f); }
   function short(s,n){ s=String(s||''); return s.length>n ? s.slice(0,n-1)+'…' : s; }
-  function selectRow(id){ activeView().selected_row_id = id; renderSvg(); renderInspector(); renderExports(); document.getElementById('inspector-title').scrollIntoView({block:'start', behavior:'smooth'}); }
+  function selectRow(id){ activeView().selected_row_id = id; renderSvg(); renderInspector(); renderExports(); const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches; document.getElementById('inspector-title').scrollIntoView({block:'start', behavior:reducedMotion?'auto':'smooth'}); }
   function updateRow(id, field, value){
     const r = data.rows.find(x=>x.id===id); if(!r) return;
     if (field === 'handoff') {
@@ -1495,6 +1500,10 @@ These public collaboration loops fit when the receiving work meets the stated co
       if (!routeRegistry.some(rr=>rr.label===r.handoff)) r.handoff = value;
     } else {
       r[field] = value;
+    }
+    if (field === 'category') {
+      const row = [...document.getElementById('editTable').querySelectorAll('tr[data-row-id]')].find(el=>el.dataset.rowId===id);
+      if (row) row.setAttribute('data-label', `Editable HEART chart rows: ${r.category} (${r.id})`);
     }
     renderSvg(); renderInspector(); renderReadableTable(); renderExports();
   }
