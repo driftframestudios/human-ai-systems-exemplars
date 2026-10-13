@@ -5,7 +5,7 @@
   "name": "repository-reentry",
   "description": "Reconstructs current truth across source, Git, GitHub, planning, and threadkeeping. Applies during resumed work, handoffs, status reconciliation, stale-plan review, and branch or pull-request re-entry.",
   "semanticAuthorityRef": "../source/.agents/skills/repository-reentry/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/16",
+  "sourceRef": "../catalog.json#/skills/19",
   "contract": {
     "what": "A compact model of settled, current, open, and next terrain.",
     "when": [

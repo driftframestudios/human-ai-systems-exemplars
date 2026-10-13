@@ -17,7 +17,7 @@ This family gives cross-platform collaborators a small typed projection of a col
 
 ## Receiving use
 
-The first receiver is the Context Canvas “Skills as Working Affordances” page and its cross-platform adoption kit. A collaborator can begin with the human-readable contract, load the JSON projection into another working environment, bind selected behavior to one named task, and return a material observation through a collaboration account. Direct reasoning remains available when the work needs no skill.
+The first receiver is the Context Canvas “Reusable Skills for Human–AI Work” page and its cross-platform adoption kit. A collaborator can begin with the human-readable contract, load the JSON projection into another working environment, bind selected behavior to one named task, and return a material observation through a collaboration account. Direct reasoning remains available when the work needs no skill.
 
 ## Forms
 

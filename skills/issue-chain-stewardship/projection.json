@@ -5,7 +5,7 @@
   "name": "issue-chain-stewardship",
   "description": "Makes related repository issues legible as a revisable work route while each issue retains its own outcome, authority, and acceptance boundary. Applies when completion, evidence, or a human-held decision in one issue materially changes whether another issue can begin or settle.",
   "semanticAuthorityRef": "../source/.agents/skills/issue-chain-stewardship/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/12",
+  "sourceRef": "../catalog.json#/skills/14",
   "contract": {
     "what": "A compact account of the current front, typed issue relationships, held conditions, transition evidence, next receiver, and release event.",
     "when": [

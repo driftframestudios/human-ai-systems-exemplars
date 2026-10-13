@@ -20,7 +20,7 @@ The [static discovery page](index.html) presents the same first-contact route wh
 
 The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
 
-The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. A small featured set supports first contact while the complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
+The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. The first-contact view routes readers from the shared visualization foundation into conversation, web, or PDF production while keeping semantic-table and embedded-layout methods distinct. The complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
 
 ## Authority
 
@@ -49,15 +49,15 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The current source selection adds four exact-version Narrative Architecture and
-Threadkeeping contracts, bringing the prepared source cohort to 17 contracts.
-Their public availability and response behavior begin with the successor Pages
-and Worker publication cycles. Seven JSON-LD contexts, four examples, and one
-cohort orientation travel as revalidating companions and stay outside the
-contract count.
+The `pages-v0.2.0` selection adds four exact-version Narrative Architecture and
+Threadkeeping contracts, bringing the released Pages cohort and prepared
+successor Worker cohort to 17 contracts. Seven JSON-LD contexts, four examples,
+and one cohort orientation travel as revalidating companions and stay outside
+the contract count. The Worker cohort receives a production observation after
+its independently gated activation.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
-23 immutable paths for 12 frozen contracts; the unversioned local-manifest
+31 immutable paths for 16 frozen contracts; the unversioned local-manifest
 schema and discovery resources revalidate. Each receiver keeps its own cache
 policy while preserving the same selected schema bytes. These are dated
 delivery observations rather than a continuous-availability guarantee.
@@ -140,8 +140,9 @@ Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
 
 1. Accept the source PR on main, including source-owned public material checks.
 2. Build with `PAGES_BASE_URL=https://schemas.radiantnull.com`,
-   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and `PAGES_RELEASE_TAG=pages-v0.2.0`.
-   Run the schema, Pages, and focused browser checks.
+   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and
+   `PAGES_RELEASE_TAG=<selected pages-vMAJOR.MINOR.PATCH tag>`. Run the schema,
+   Pages, and focused browser checks.
 3. Review the complete generated artifact in a PR targeting docs. Compare exact
    file membership and bytes with the source build using the receiver verifier.
 4. Create an annotated `pages-vMAJOR.MINOR.PATCH` tag on the accepted docs commit.
@@ -157,8 +158,11 @@ Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
 Site versions describe catalog, presentation, and delivery changes. Schema
 versions describe individual contracts. New capabilities advance the site minor
 version; compatible corrections advance its patch version; changed site-level
-consumer contracts earn a major version. The first dedicated site tag is
-`pages-v0.1.0`; earlier deployments retain their source/docs receipts.
+consumer contracts earn a major version. In a tagged artifact, the generated
+`release.json` binds the selected site tag and exact source revision. The
+accepted annotated tag and matching workflow/deployment receipt identify the
+active coordinate. Their source/docs receipts preserve `pages-v0.2.0`,
+`pages-v0.1.0`, and every later release as durable historical coordinates.
 
 The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
 entries preserve exact-version bytes, including annotations. New identities and

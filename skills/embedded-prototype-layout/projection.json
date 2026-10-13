@@ -5,7 +5,7 @@
   "name": "embedded-prototype-layout",
   "description": "Resolves prototype layout pressure at the actual parent and iframe boundary. Applies when a self-contained instrument works standalone but its embedded controls, tables, focus, shadows or onward route become difficult to use.",
   "semanticAuthorityRef": "../source/.agents/skills/embedded-prototype-layout/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/10",
+  "sourceRef": "../catalog.json#/skills/12",
   "contract": {
     "what": "A measured parent/child layout contract that keeps a compact preview useful for deciding whether to continue in a full view, while preserving the instrument's meaningful interactions and comparisons.",
     "when": [
