@@ -85,6 +85,48 @@ The production route is:
 4. `release` binds the accepted source, evidence, and integration result.
 5. A separately reviewed move advances accepted release material to `prod`.
 
+### Protected destination promotion adapter
+
+A downstream ruleset can require the pull-request head to contain the current
+destination coordinate. Preserve the long-lived upstream branch by adapting
+one accepted coordinate on a short-lived branch:
+
+1. record the exact accepted upstream coordinate `U` and current destination
+   coordinate `D`;
+2. create a temporary promotion branch at exact `D`;
+3. merge exact `U` into that branch, producing candidate `C` with parents
+   `[D, U]`;
+4. verify the expected tree and path relationships before pushing;
+5. review `C → destination` after the destination checks pass;
+6. merge with a merge commit, producing promotion result `P` with parents
+   `[D, C]`; and
+7. verify `P`, record the durable receipt, then retire the temporary branch.
+
+For `stg → release`, `C` carries the accepted staging tree. For
+`release → prod`, `C` carries accepted release source outside
+`deployment/cpanel/carrier/**` while its complete carrier subtree—including
+path set, modes, and bytes—equals the preceding production destination. The
+accepted promotion result is production source `S = P`; `R` remains reserved
+for the later carrier-only merge result. That carrier branch starts from exact
+`S` and replaces the retained historical carrier.
+
+This adapter keeps downstream history on the destination side while canonical
+upstream history remains focused on its role. PR #468 remains accepted history
+without rewrite. A conflict, unexpected path delta, moving destination, or
+changed upstream acceptance forms a new source or candidate review boundary.
+
+The reviewed result must retain the topology receipt: `P^1 = D` and `P^2 = C`.
+Squash, rebase, and fast-forward results do not satisfy this promotion
+contract, even when their file trees match. For `release → prod`, verify the
+same outside-carrier and complete-carrier-subtree relationships on both `C`
+and `S` before carrier formation begins.
+
+Issue [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
+owns the exercised procedure, focused local checker, and material failure-path
+tests. [PR #470](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/470)
+is the first worked `release → prod` receipt; the publication stabilization
+runbook records its exact coordinates and subtree evidence.
+
 The schema Pages route is:
 
 1. An exact accepted `main` revision supplies the source.
