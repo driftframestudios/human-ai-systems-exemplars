@@ -74,12 +74,12 @@ Issue
 owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
 activation, acceptance, and recovery sequence.
 
-The next tagged GitHub Pages projection follows the cPanel release by default.
-The current visitor carrier has no runtime dependency on a newer Pages
-artifact, while `pages-v0.2.0` remains the accepted schema and skill
-publication coordinate. Issue #406 completes that accepted Worker parity
-before protected production promotion; a later Pages release receives its own
-source, docs, tag, activation, and signed-out receipt.
+The tagged GitHub Pages projection followed the cPanel release as a separate
+receiver. The visitor carrier has no runtime dependency on that Pages artifact.
+`pages-v0.3.0` now supplies the accepted schema and skill publication
+coordinate, and Issue #406 carries the same accepted closure through the
+independently gated Worker review, promotion, activation, and signed-out
+receipt.
 
 ## Current entry condition
 
