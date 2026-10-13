@@ -1,11 +1,11 @@
 {
   "schemaVersion": "2",
-  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
+  "sourceRevision": "cfaa53f5b7500e3901d8470e1e471cd0230ff2a5",
   "peerRelease": {
-    "releaseTag": "pages-v0.2.0",
-    "tagObject": "9165a4af5c0de7d5e81eb2c86ec7cc83d2af5b76",
-    "projectionRevision": "bf257f6674e88945ed143c95f010b8e827066ade",
-    "closureSha256": "f25cf5b3b6681c67fddc81a82f5c0ba3bb49c3766d0a79df92fa3b1bbe26cf61"
+    "releaseTag": "pages-v0.3.0",
+    "tagObject": "a25f224cc9496c1e951dbb07ca45d8cfc415d46b",
+    "projectionRevision": "2819c8564acfe5623288670ecef09639685a1db7",
+    "closureSha256": "9e4e9827a0fac3b42b4630ce0ce5a4ccdbc60c082c9efb607f65442160675288"
   },
   "frozen": [
     "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
@@ -317,8 +317,18 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/conversation-data-visualization/projection.json": {
+      "asset": "/skills/conversation-data-visualization/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/cost-and-ownership-analysis/projection.json": {
       "asset": "/skills/cost-and-ownership-analysis/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/data-visualization-foundations/projection.json": {
+      "asset": "/skills/data-visualization-foundations/projection.json",
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
@@ -344,6 +354,11 @@
     },
     "/skills/locator-boundary-stewardship/projection.json": {
       "asset": "/skills/locator-boundary-stewardship/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/pdf-data-visualization/projection.json": {
+      "asset": "/skills/pdf-data-visualization/projection.json",
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
@@ -392,6 +407,11 @@
       "contentType": "application/json; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/web-data-visualization/projection.json": {
+      "asset": "/skills/web-data-visualization/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md": {
       "asset": "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -432,8 +452,18 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/conversation-data-visualization/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/conversation-data-visualization/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md": {
       "asset": "/skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -459,6 +489,11 @@
     },
     "/skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md": {
       "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/pdf-data-visualization/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/pdf-data-visualization/SKILL.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -507,6 +542,11 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/web-data-visualization/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/web-data-visualization/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md": {
       "asset": "/skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -542,6 +582,56 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
+    "/skills/source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md": {
+      "asset": "/skills/source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md": {
+      "asset": "/skills/source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md": {
+      "asset": "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md": {
+      "asset": "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md": {
+      "asset": "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md": {
+      "asset": "/skills/source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
     "/skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md": {
       "asset": "/skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -557,11 +647,6 @@
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
-    "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md": {
-      "asset": "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
-      "contentType": "text/markdown; charset=utf-8",
-      "cache": "revalidate"
-    },
     "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md": {
       "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
       "contentType": "text/markdown; charset=utf-8",
@@ -569,6 +654,11 @@
     },
     "/skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md": {
       "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/pdf-data-visualization/references/production-and-handoff.md": {
+      "asset": "/skills/source/.agents/skills/pdf-data-visualization/references/production-and-handoff.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -589,16 +679,6 @@
     },
     "/skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md": {
       "asset": "/skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
-      "contentType": "text/markdown; charset=utf-8",
-      "cache": "revalidate"
-    },
-    "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md": {
-      "asset": "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
-      "contentType": "text/markdown; charset=utf-8",
-      "cache": "revalidate"
-    },
-    "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md": {
-      "asset": "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
       "contentType": "text/markdown; charset=utf-8",
       "cache": "revalidate"
     },
@@ -859,12 +939,15 @@
     "skills/context-canvas-surface-reading/projection.json",
     "skills/context-canvas-visual-verification/projection.json",
     "skills/contextual-jargon-scan/projection.json",
+    "skills/conversation-data-visualization/projection.json",
     "skills/cost-and-ownership-analysis/projection.json",
+    "skills/data-visualization-foundations/projection.json",
     "skills/declarative-skill-authoring/projection.json",
     "skills/embedded-prototype-layout/projection.json",
     "skills/evidence-grounded-research-spike/projection.json",
     "skills/issue-chain-stewardship/projection.json",
     "skills/locator-boundary-stewardship/projection.json",
+    "skills/pdf-data-visualization/projection.json",
     "skills/practitioner-probe/projection.json",
     "skills/repository-attribution-stewardship/projection.json",
     "skills/repository-reentry/projection.json",
@@ -886,9 +969,17 @@
     "skills/source/.agents/skills/context-canvas-surface-reading/SKILL.md",
     "skills/source/.agents/skills/context-canvas-visual-verification/SKILL.md",
     "skills/source/.agents/skills/contextual-jargon-scan/SKILL.md",
+    "skills/source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+    "skills/source/.agents/skills/conversation-data-visualization/SKILL.md",
     "skills/source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
     "skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
     "skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+    "skills/source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+    "skills/source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+    "skills/source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+    "skills/source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+    "skills/source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+    "skills/source/.agents/skills/data-visualization-foundations/SKILL.md",
     "skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
     "skills/source/.agents/skills/declarative-skill-authoring/SKILL.md",
     "skills/source/.agents/skills/embedded-prototype-layout/SKILL.md",
@@ -897,6 +988,8 @@
     "skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
     "skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
     "skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+    "skills/source/.agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+    "skills/source/.agents/skills/pdf-data-visualization/SKILL.md",
     "skills/source/.agents/skills/practitioner-probe/SKILL.md",
     "skills/source/.agents/skills/repository-attribution-stewardship/SKILL.md",
     "skills/source/.agents/skills/repository-reentry/SKILL.md",
@@ -910,6 +1003,8 @@
     "skills/source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
     "skills/source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
     "skills/source/.agents/skills/uv-backed-python-execution/SKILL.md",
+    "skills/source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+    "skills/source/.agents/skills/web-data-visualization/SKILL.md",
     "skills/source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
     "skills/source/github/workflows/prototype-unit-tests.yml",
     "skills/source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
@@ -919,6 +1014,7 @@
     "skills/source/threadkeeping/context-canvas-public-reference-materialization.md",
     "skills/source/threadkeeping/repository-secret-material-boundary.md",
     "skills/stateful-artifact-behavior-contracts/projection.json",
-    "skills/uv-backed-python-execution/projection.json"
+    "skills/uv-backed-python-execution/projection.json",
+    "skills/web-data-visualization/projection.json"
   ]
 }

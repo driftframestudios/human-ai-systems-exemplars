@@ -1,10 +1,10 @@
-name: Prototype and iframe contracts
+name: Prototype, iframe, media, and public-reference contracts
 
 on:
   workflow_dispatch:
     inputs:
       suite:
-        description: Prototype family to exercise
+        description: Contract family to exercise
         required: true
         default: all
         type: choice
@@ -12,14 +12,16 @@ on:
           - all
           - core
           - iframe
+          - media
           - narrative
+          - public-references
       confirm_run:
         description: Acquire a standard runner for this selected suite
         required: true
         default: false
         type: boolean
       include_browser:
-        description: Exercise the selected rendered-page contracts with Chromium
+        description: Exercise selected rendered-page contracts with Chromium and their named engine checks
         required: true
         default: false
         type: boolean
@@ -33,6 +35,10 @@ on:
       - ready_for_review
     paths:
       - ".github/workflows/prototype-unit-tests.yml"
+      - ".agents/skills/**/SKILL.md"
+      - ".agents/skills/**/scripts/**"
+      - ".agents/skills/publication-selection.json"
+      - ".env.public.example"
       - "package.json"
       - "package-lock.json"
       - "AUTHORS"
@@ -46,6 +52,17 @@ on:
       - "tests/suites/**"
       - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
+      - "tests/media-publication/**"
+      - "tests/public-references/**"
+      - "tests/skills/**"
+      - "planning/media-publication/**"
+      - "deployment/public-references/**"
+      - "tools/build-prod-projection.mjs"
+      - "tools/prepare-r2-progressive-video.mjs"
+      - "tools/registry-reference-contract.mjs"
+      - "tools/verify-r2-video-route.mjs"
+      - "tools/verify-registry-public-references.mjs"
+      - "cloudflare/r2-video-delivery/**"
       - "tools/core-architecture-browser-helper.mjs"
       - "tools/core-decision-canvas-contract.mjs"
       - "tools/core-iframe-carrier-contract.mjs"
@@ -57,6 +74,7 @@ on:
       - "tools/initiative-costing-label-contract.mjs"
       - "tools/iframe-route-package-engine.mjs"
       - "tools/materialize-public-references.mjs"
+      - "tools/materialize-debrief-case-briefs.mjs"
       - "tools/package-canvas-iframe-routes.mjs"
       - "tools/package-iframe-routes.mjs"
       - "tools/package-v1-iframe-routes.mjs"
@@ -82,15 +100,51 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  public-reference-contracts:
+    name: Public-reference contracts
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' &&
+       inputs.confirm_run &&
+       (inputs.suite == 'all' || inputs.suite == 'public-references'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out the candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Use the reviewed Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+
+      - name: Use the reviewed Python runtime
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install the locked Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Exercise the owned contract routes
+        run: npm run test:public-reference-contracts
+
   prototype-units:
     name: Selected prototype or iframe contract
     if: >-
-      (github.event_name == 'workflow_dispatch' && inputs.confirm_run) ||
+      (github.event_name == 'workflow_dispatch' &&
+       inputs.confirm_run &&
+       inputs.suite != 'media' &&
+       inputs.suite != 'public-references') ||
       (github.event_name == 'pull_request' &&
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    # The explicit all-plus-browser route exercises Chromium and WebKit across every carrier family.
+    timeout-minutes: 20
 
     steps:
       - name: Check out the candidate source
@@ -108,6 +162,7 @@ jobs:
 
       - name: Exercise Context Canvas source and inventory contracts
         run: |
+          npm run check:debrief-case-briefs
           npm run test:context-canvas
           npm run test:suites:unit
           npm run visual:context-canvas-reference -- --list
@@ -116,6 +171,10 @@ jobs:
       - name: Install Chromium for the selected rendered-page contracts
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
         run: npm exec -- playwright install --with-deps chromium
+
+      - name: Install WebKit for the Context Canvas image-delivery contract
+        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && (inputs.suite == 'all' || inputs.suite == 'iframe')) }}
+        run: npm exec -- playwright install --with-deps webkit
 
       - name: Exercise the selected source contracts
         env:
@@ -157,7 +216,11 @@ jobs:
               npm run check:iframe-routes
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
+                npm run test:about-media-browser
                 npm run test:debrief-catalog-preview-browser
+                npm run test:context-canvas-image-delivery-browser
+                npm run test:who-to-believe-system-graph-browser
+                npm run test:prod-css-projection-browser
                 npm run test:prototype-control-labels
                 npm run test:core-browser
                 npm run test:canvas-iframe-routes
@@ -171,3 +234,47 @@ jobs:
               exit 2
               ;;
           esac
+
+  media-publication:
+    name: Media preparation and delivery contracts
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' &&
+       inputs.confirm_run &&
+       (inputs.suite == 'all' || inputs.suite == 'media'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Use the reviewed Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+
+      - name: Install the locked root toolchain
+        run: npm ci --ignore-scripts
+
+      - name: Install Chromium for native video receiver checks
+        run: npm exec -- playwright install --with-deps chromium
+
+      - name: Install the Ubuntu media receiver
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+
+      - name: Confirm the media toolchain and exercise both preparation strategies
+        env:
+          MEDIA_TEST_REQUIRE_FFMPEG: "true"
+        run: |
+          ffmpeg -version
+          ffprobe -version
+          npm run test:media-publication
+          npm run test:video-receivers-browser
+
+      - name: Compile the exact Worker package without activation
+        run: npm run dry-run:r2-video-delivery
