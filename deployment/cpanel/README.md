@@ -74,12 +74,12 @@ Issue
 owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
 activation, acceptance, and recovery sequence.
 
-The next tagged GitHub Pages projection follows the cPanel release by default.
-The current visitor carrier has no runtime dependency on a newer Pages
-artifact, while `pages-v0.2.0` remains the accepted schema and skill
-publication coordinate. Issue #406 completes that accepted Worker parity
-before protected production promotion; a later Pages release receives its own
-source, docs, tag, activation, and signed-out receipt.
+The tagged GitHub Pages projection followed the cPanel release as a separate
+receiver. The visitor carrier has no runtime dependency on that Pages artifact.
+`pages-v0.3.0` now supplies the accepted schema and skill publication
+coordinate, and Issue #406 carries the same accepted closure through the
+independently gated Worker review, promotion, activation, and signed-out
+receipt.
 
 ## Current entry condition
 
@@ -290,8 +290,22 @@ tag before any host activation.
 ## Accepted release sequence
 
 1. Promote the reviewed source through `main`, `stg`, and `release` into
-   `prod`. The resulting accepted `prod` commit is `S`; it is not yet a fresh
-   cPanel delivery candidate.
+   `prod`. When the protected destination requires a current-base head, create
+   a temporary branch at exact destination `D`, merge exact accepted upstream
+   `U`, and review candidate `C` with parents `[D, U]`. For
+   `release → prod`, verify that source paths outside
+   `deployment/cpanel/carrier/**` equal `U` and that the complete carrier
+   subtree equals `D`. Merge the reviewed candidate with a merge commit and
+   verify accepted `prod` source `S` has parents `[D, C]`; squash, rebase, and
+   fast-forward results do not satisfy this receipt. Recheck both path
+   relationships on `S`. Its retained carrier is historical downstream state
+   rather than a fresh cPanel delivery candidate. The
+   [protected destination promotion adapter](../../BRANCHING.md#protected-destination-promotion-adapter)
+   and [Issue #469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
+   own this procedure and its focused checks. PR #470 supplies its first
+   worked `release → prod` receipt; the [publication stabilization
+   runbook](../../.agents/runbooks/core-iframe-publication-stabilization.v0.1.md#worked-destination-based-production-promotion--2026-10-12)
+   records the exact result.
 2. Start one carrier branch from exact `S`, run `npm run stage:prod-carrier`,
    and commit only `deployment/cpanel/carrier/**`.
 3. Run `npm run check:prod-carrier` on that branch and review the generated
@@ -309,6 +323,12 @@ tag before any host activation.
 If `prod` advances before step 4, begin again from the new accepted source and
 regenerate the carrier. Updating the older carrier branch would weaken the
 `R^1 = S` relationship that makes the handoff inspectable.
+
+If a protected destination advances before its source-promotion review,
+record the new exact destination and form a fresh temporary candidate. Preserve
+the superseded pull request as its observation receipt. A conflict or path
+relationship outside the expected source and carrier boundaries returns to the
+owning source lane before production acceptance.
 
 The human-operated [pull-model enrollment and first cutover](FIRST-CUTOVER.md)
 owns a shell-capable managed clone. [Shell-free cPanel artifact

@@ -1,7 +1,7 @@
 # Schema and skill projection Worker
 
 This Worker is the production owner for `https://schemas.vik.guru/`. It serves
-the schema cohort and public-ready skill closure accepted for `pages-v0.2.0`
+the schema cohort and public-ready skill closure accepted for `pages-v0.3.0`
 from one reviewed source revision while GitHub Pages provides the richer visitor
 and skill-reading surface.
 
@@ -18,12 +18,12 @@ The selected publication is bound to the reviewed Pages release:
 
 | Role | Coordinate |
 | --- | --- |
-| Exact Worker publication | `382620d8626a87b6d96f4039ebc87f01ad94687e` |
-| Semantic and schema source | `dc6b62c6e3f1e8748237fc767def75b32527140a` |
-| Pages release | `pages-v0.2.0` |
-| Annotated tag object | `9165a4af5c0de7d5e81eb2c86ec7cc83d2af5b76` |
-| Reviewed Pages projection | `bf257f6674e88945ed143c95f010b8e827066ade` |
-| Complete Pages closure | `f25cf5b3b6681c67fddc81a82f5c0ba3bb49c3766d0a79df92fa3b1bbe26cf61` |
+| Exact Worker publication | `8dd501d20ff6fb8c58b955ea920c703d9f702c03` |
+| Semantic and schema source | `cfaa53f5b7500e3901d8470e1e471cd0230ff2a5` |
+| Pages release | `pages-v0.3.0` |
+| Annotated tag object | `a25f224cc9496c1e951dbb07ca45d8cfc415d46b` |
+| Reviewed Pages projection | `2819c8564acfe5623288670ecef09639685a1db7` |
+| Complete Pages closure | `9e4e9827a0fac3b42b4630ce0ce5a4ccdbc60c082c9efb607f65442160675288` |
 
 `accepted-publication-lock.json` records the exact Worker-tree coordinate.
 `publication-manifest.json` records the selected source and annotated Pages
@@ -40,27 +40,27 @@ companions. `tools/schema-publication-lock.json` binds every schema contract to
 its accepted digest. The Worker publishes each contract through its established
 route and its `/schemas/` asset route while preserving its canonical `$id`.
 
-The accepted skill boundary contains 70 shared files under `/skills/`:
+The accepted skill boundary contains 86 shared files under `/skills/`:
 
 - `/skills/catalog.json` is the exact reviewed public-ready catalog.
-- `/skills/<name>/projection.json` carries each of the 23 machine-readable
+- `/skills/<name>/projection.json` carries each of the 27 machine-readable
   projections at its declared `https://schemas.vik.guru/skills/<name>/projection.json`
   identity.
-- `/skills/source/` carries 46 unique source files: all 23 exact `SKILL.md`
+- `/skills/source/` carries 58 unique source files: all 27 exact `SKILL.md`
   semantic authorities, their declared public dependencies, and the catalog's
   supporting source.
 
-GitHub Pages owns the 24 skill HTML discovery files: one Skills index and 23
+GitHub Pages owns the 28 skill HTML discovery files: one Skills index and 27
 readable skill pages. This Worker carries the shared catalog, projections, and
 source closure, so `/skills/index.html` and `/skills/<name>/index.html` stay with
-the Pages receiver. The eight `public_possible` packages retain their
+the Pages receiver. The six `public_possible` packages retain their
 repository-only standing and remain outside every Worker route and artifact
 manifest.
 
-The complete checked-in Worker publication contains 111 regular files:
+The complete checked-in Worker publication contains 127 regular files:
 
 - 17 schemas and 16 companions;
-- 70 skill catalog, projection, semantic-source, and dependency files;
+- 86 skill catalog, projection, semantic-source, and dependency files;
 - five attribution and data-use carriers; and
 - the root registry, schema catalog, and publication manifest.
 
@@ -118,8 +118,8 @@ Use Node.js 22 or newer. The initial selection names both accepted coordinates:
 cd cloudflare/schemas-worker
 npm ci --ignore-scripts --no-audit --no-fund
 npm run prepare:publication -- \
-  --source-revision dc6b62c6e3f1e8748237fc767def75b32527140a \
-  --pages-release-tag pages-v0.2.0
+  --source-revision cfaa53f5b7500e3901d8470e1e471cd0230ff2a5 \
+  --pages-release-tag pages-v0.3.0
 ```
 
 Validate the checked-in accepted release without consulting current source
@@ -134,7 +134,7 @@ The accepted-release check uses `accepted-publication-lock.json` to compare the
 entire checked-in Worker tree with the exact commit that formed the publication.
 It also validates the annotated Pages tag and complete closure digest, reads
 skill selection from the manifest's accepted source revision, and confirms the
-17-schema, 16-companion, and 70-file skill closure. The unit suite exercises the
+17-schema, 16-companion, and 86-file skill closure. The unit suite exercises the
 same manifest through the production handler.
 
 `npm run check:publication` retains a distinct job: it compares the prepared
