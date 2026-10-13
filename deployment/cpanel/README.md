@@ -302,8 +302,17 @@ tag before any host activation.
    rather than a fresh cPanel delivery candidate. The
    [protected destination promotion adapter](../../BRANCHING.md#protected-destination-promotion-adapter)
    and [Issue #469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
-   own this procedure and its focused checks. PR #470 supplies its first
-   worked `release → prod` receipt; the [publication stabilization
+   record this procedure and its focused checks. Run the checker with full
+   commit IDs before carrier formation:
+
+   ```sh
+   npm run check:promotion-topology -- \
+     --upstream "$U" --destination "$D" --candidate "$C" --result "$S" \
+     --retained-root deployment/cpanel/carrier
+   ```
+
+   PR #470 supplies its first worked `release → prod` receipt; the
+   [publication stabilization
    runbook](../../.agents/runbooks/core-iframe-publication-stabilization.v0.1.md#worked-destination-based-production-promotion--2026-10-12)
    records the exact result.
 2. Start one carrier branch from exact `S`, run `npm run stage:prod-carrier`,
@@ -329,6 +338,14 @@ record the new exact destination and form a fresh temporary candidate. Preserve
 the superseded pull request as its observation receipt. A conflict or path
 relationship outside the expected source and carrier boundaries returns to the
 owning source lane before production acceptance.
+
+An equal-tree promotion changes Git ancestry and review receipts while the
+accepted source tree stays byte-identical. Existing iframe packages,
+production projections, media families, tag refs, carriers, and live
+deployments remain at their recorded coordinates. A separately authorized
+artifact contract starts any rebuild, tag, carrier staging, or activation.
+Production carrier staging begins after exact `S` acceptance and may update
+commit-bound metadata even when authored source stayed equal.
 
 The human-operated [pull-model enrollment and first cutover](FIRST-CUTOVER.md)
 owns a shell-capable managed clone. [Shell-free cPanel artifact
