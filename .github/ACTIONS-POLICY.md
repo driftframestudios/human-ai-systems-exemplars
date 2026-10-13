@@ -112,8 +112,8 @@ are job-level, and the `schema-pages` concurrency group serializes runs with
 `cancel-in-progress: false`. PRs #308/#309 record the accepted tagged-release
 transition. The generated public `release.json`, its annotated tag, and the
 matching workflow receipt identify the active Pages coordinate. The accepted
-`pages-v0.2.0` and 2026-10-01 `pages-v0.1.0` observations remain historical
-evidence.
+`pages-v0.3.0` coordinate is active; `pages-v0.2.0` and the 2026-10-01
+`pages-v0.1.0` observations remain historical evidence.
 Each selected pair starts after its source reaches `main` and its projection
 reaches `docs`; the documented `github-pages` environment admits both branches.
 The recorded legacy `docs:/` source remains the recovery route.

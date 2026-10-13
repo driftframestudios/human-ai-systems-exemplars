@@ -49,12 +49,12 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The `pages-v0.2.0` selection adds four exact-version Narrative Architecture and
-Threadkeeping contracts, bringing the released Pages cohort and prepared
-successor Worker cohort to 17 contracts. Seven JSON-LD contexts, four examples,
-and one cohort orientation travel as revalidating companions and stay outside
-the contract count. The Worker cohort receives a production observation after
-its independently gated activation.
+The active `pages-v0.3.0` selection retains the 17-contract schema cohort first
+assembled for `pages-v0.2.0` and expands the public-ready skill collection to
+27 complete packages. Seven JSON-LD contexts, four examples, and one cohort
+orientation travel as revalidating companions and stay outside the contract
+count. The Worker cohort receives a production observation after its
+independently gated activation.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
 31 immutable paths for 16 frozen contracts; the unversioned local-manifest
@@ -161,8 +161,9 @@ version; compatible corrections advance its patch version; changed site-level
 consumer contracts earn a major version. In a tagged artifact, the generated
 `release.json` binds the selected site tag and exact source revision. The
 accepted annotated tag and matching workflow/deployment receipt identify the
-active coordinate. Their source/docs receipts preserve `pages-v0.2.0`,
-`pages-v0.1.0`, and every later release as durable historical coordinates.
+active coordinate. Their source/docs receipts preserve active `pages-v0.3.0`
+and historical `pages-v0.2.0` and `pages-v0.1.0` as durable release
+coordinates.
 
 The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
 entries preserve exact-version bytes, including annotations. New identities and
