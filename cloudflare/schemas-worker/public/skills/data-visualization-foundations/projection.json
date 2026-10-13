@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/data-visualization-foundations/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "data-visualization-foundations",
+  "description": "Establishes source-grounded data meaning, reader operations, visual encodings, and evidence companions before rendering. Applies when creating or materially revising a visualization across conversation, web, scientific, or document destinations.",
+  "semanticAuthorityRef": "../source/.agents/skills/data-visualization-foundations/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/10",
+  "contract": {
+    "what": "A visual contract connecting a reader's question to admitted records, transformations, encodings, interpretation, and recoverable evidence.",
+    "when": [
+      "A visualization's population, measure, comparison, uncertainty, or form needs a decision before production. A settled figure's isolated copy correction can use direct reasoning."
+    ],
+    "boundaries": [
+      "The method is operator-, renderer-, and destination-independent. Source owners establish meaning; domain reviewers retain consequential interpretation; the current task grants execution and publication authority. A visual contract describes a defensible representation rather than validating the underlying world."
+    ],
+    "result": "One usable form-selection decision with its data basis, scale, companion, supported reading, unresolved condition, and fitting observation."
+  },
+  "receivingUse": {
+    "job": "A visualization's population, measure, comparison, uncertainty, or form needs a decision before production. A settled figure's isolated copy correction can use direct reasoning.",
+    "materialResult": "One usable form-selection decision with its data basis, scale, companion, supported reading, unresolved condition, and fitting observation.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/data-visualization-foundations/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

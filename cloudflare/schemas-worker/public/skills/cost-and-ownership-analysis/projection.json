@@ -5,7 +5,7 @@
   "name": "cost-and-ownership-analysis",
   "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
   "semanticAuthorityRef": "../source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/8",
+  "sourceRef": "../catalog.json#/skills/9",
   "contract": {
     "what": "A source-grounded account of scoped function cost, input boundaries, and mutation ownership, followed by the smallest authorized repair and its decision-changing evidence.",
     "when": [
