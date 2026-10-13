@@ -100,10 +100,24 @@
     {
       "name": "conversation-data-visualization",
       "sourcePath": ".agents/skills/conversation-data-visualization/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
-      "dependencies": [],
-      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+        ".agents/skills/data-visualization-foundations/SKILL.md",
+        ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+        ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+        ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+        ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+        ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+        ".agents/skills/declarative-skill-authoring/SKILL.md",
+        ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+        ".agents/skills/semantic-table-design/SKILL.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/web-data-visualization/SKILL.md",
+        ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md"
+      ]
     },
     {
       "name": "cost-and-ownership-analysis",
@@ -122,10 +136,22 @@
     {
       "name": "data-visualization-foundations",
       "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
-      "dependencies": [],
-      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+        ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+        ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+        ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+        ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+        ".agents/skills/declarative-skill-authoring/SKILL.md",
+        ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+        ".agents/skills/semantic-table-design/SKILL.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/web-data-visualization/SKILL.md",
+        ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md"
+      ]
     },
     {
       "name": "declarative-skill-authoring",
@@ -170,10 +196,24 @@
     {
       "name": "pdf-data-visualization",
       "sourcePath": ".agents/skills/pdf-data-visualization/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
-      "dependencies": [],
-      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/data-visualization-foundations/SKILL.md",
+        ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+        ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+        ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+        ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+        ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+        ".agents/skills/declarative-skill-authoring/SKILL.md",
+        ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+        ".agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+        ".agents/skills/semantic-table-design/SKILL.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/web-data-visualization/SKILL.md",
+        ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md"
+      ]
     },
     {
       "name": "practitioner-probe",
@@ -286,10 +326,22 @@
     {
       "name": "web-data-visualization",
       "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
-      "dependencies": [],
-      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/data-visualization-foundations/SKILL.md",
+        ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+        ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+        ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+        ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+        ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+        ".agents/skills/declarative-skill-authoring/SKILL.md",
+        ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+        ".agents/skills/semantic-table-design/SKILL.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md"
+      ]
     }
   ]
 }

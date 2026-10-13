@@ -61,6 +61,16 @@ const copiedCarriers = [
   "AI-DATA-USE.md",
 ];
 const publicContactEmail = "consulting@vik.guru";
+const featuredSkillNames = Object.freeze([
+  "embedded-prototype-layout",
+  "semantic-table-design",
+]);
+const visualizationLadderNames = Object.freeze([
+  "data-visualization-foundations",
+  "conversation-data-visualization",
+  "web-data-visualization",
+  "pdf-data-visualization",
+]);
 
 function occurrenceCount(source, value) {
   return source.split(value).length - 1;
@@ -232,6 +242,7 @@ test("the built registry resolves current authorship, license, and deployment me
     "skills/evidence-grounded-research-spike/",
     "skills/embedded-prototype-layout/",
     "skills/semantic-table-design/",
+    "skills/#visualization-ladder",
     "skills/",
   ]) {
     assert.ok(html.includes(`href="${route}"`), `${route} is prominent on the registry entry surface`);
@@ -626,6 +637,25 @@ test("the private selection ledger classifies the complete repository skill fami
   assert.equal(new Set(selectedNames).size, selectedNames.length);
   assert.ok(selection.skills.every((entry) =>
     new Set(["public_ready", "public_possible"]).has(entry.publicationStanding)));
+  const readyNames = selection.skills
+    .filter((entry) => entry.publicationStanding === "public_ready")
+    .map((entry) => entry.name);
+  const possibleNames = selection.skills
+    .filter((entry) => entry.publicationStanding === "public_possible")
+    .map((entry) => entry.name);
+  assert.equal(readyNames.length, 27);
+  assert.equal(possibleNames.length, 6);
+  assert.deepEqual(possibleNames, [
+    "agency-and-action-writing",
+    "citation-atlas-selection",
+    "repository-collaboration-cycle",
+    "repository-handoff-readiness",
+    "repository-orientation-stewardship",
+    "supportive-change-writing",
+  ]);
+  for (const skillName of visualizationLadderNames) {
+    assert.ok(readyNames.includes(skillName), `${skillName} is selected for public release`);
+  }
 
   const selectedPaths = [
     ...selection.catalogDependencies,
@@ -661,18 +691,6 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
 
-  assert.deepEqual(possibleNames, [
-    "agency-and-action-writing",
-    "citation-atlas-selection",
-    "conversation-data-visualization",
-    "data-visualization-foundations",
-    "pdf-data-visualization",
-    "repository-collaboration-cycle",
-    "repository-handoff-readiness",
-    "repository-orientation-stewardship",
-    "supportive-change-writing",
-    "web-data-visualization",
-  ]);
   assert.equal(catalog.publicationStanding, "public_ready");
   assert.deepEqual(catalog.skills.map((entry) => entry.name), readyNames);
   assert.equal(catalog.skills.length, readyNames.length);
@@ -693,8 +711,31 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
       `${skill.name} makes the readable route its primary action`,
     );
   }
-  for (const featuredName of ["embedded-prototype-layout", "semantic-table-design"]) {
+  for (const featuredName of featuredSkillNames) {
     assert.equal(occurrenceCount(index, `data-featured-skill="${featuredName}"`), 1);
+    assert.equal(occurrenceCount(index, `data-visualization-skill="${featuredName}"`), 0);
+  }
+  const visualizationSection = index.match(
+    /<section id="visualization-ladder"[\s\S]*?<\/section>/u,
+  )?.[0];
+  assert.ok(visualizationSection);
+  let previousVisualizationPosition = -1;
+  for (const skillName of visualizationLadderNames) {
+    const skill = catalog.skills.find((entry) => entry.name === skillName);
+    assert.ok(skill);
+    const position = visualizationSection.indexOf(`data-visualization-skill="${skillName}"`);
+    assert.ok(position > previousVisualizationPosition, `${skillName} retains ladder order`);
+    assert.equal(occurrenceCount(index, `data-visualization-skill="${skillName}"`), 1);
+    assert.equal(occurrenceCount(index, `data-featured-skill="${skillName}"`), 0);
+    assert.ok(visualizationSection.includes(`href="${skill.pagePath}"`));
+    assert.ok(visualizationSection.includes(`<strong>Use when:</strong> ${htmlEscape(skill.useWhen)}`));
+    assert.ok(visualizationSection.includes(`<strong>Produces:</strong> ${htmlEscape(skill.produces)}`));
+    await Promise.all([
+      stat(resolve(skillsOutputRoot, skill.pagePath, "index.html")),
+      stat(resolve(skillsOutputRoot, skill.projectionPath)),
+      stat(resolve(skillsOutputRoot, skill.sourceRoute)),
+    ]);
+    previousVisualizationPosition = position;
   }
   assert.ok(index.includes('id="methods-in-practice"'));
   assert.ok(index.includes('src="../examples/readable-table-embedded-layout/"'));
@@ -891,6 +932,15 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
     assert.ok(table.includes(
       `href="https://schemas.radiantnull.com/skills/${readyName}/"`,
     ));
+  }
+  for (const skillName of visualizationLadderNames) {
+    const source = await readFile(
+      resolve(repositoryRoot, `.agents/skills/${skillName}/SKILL.md`),
+      "utf8",
+    );
+    const parsed = parseSkillSource(source);
+    assert.ok(table.includes(htmlEscape(parsed.contract.when[0])));
+    assert.ok(table.includes(htmlEscape(parsed.contract.result)));
   }
   for (const possibleName of possibleNames) assert.ok(!table.includes(possibleName));
 });

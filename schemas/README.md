@@ -20,7 +20,7 @@ The [static discovery page](index.html) presents the same first-contact route wh
 
 The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
 
-The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. A small featured set supports first contact while the complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
+The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. The first-contact view routes readers from the shared visualization foundation into conversation, web, or PDF production while keeping semantic-table and embedded-layout methods distinct. The complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
 
 ## Authority
 
@@ -158,9 +158,11 @@ Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
 Site versions describe catalog, presentation, and delivery changes. Schema
 versions describe individual contracts. New capabilities advance the site minor
 version; compatible corrections advance its patch version; changed site-level
-consumer contracts earn a major version. The accepted current site tag is
-`pages-v0.2.0`; `pages-v0.1.0` and earlier deployments retain their own
-source/docs receipts.
+consumer contracts earn a major version. In a tagged artifact, the generated
+`release.json` binds the selected site tag and exact source revision. The
+accepted annotated tag and matching workflow/deployment receipt identify the
+active coordinate. Their source/docs receipts preserve `pages-v0.2.0`,
+`pages-v0.1.0`, and every later release as durable historical coordinates.
 
 The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
 entries preserve exact-version bytes, including annotations. New identities and

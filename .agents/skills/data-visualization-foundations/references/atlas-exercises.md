@@ -88,8 +88,8 @@ the web and PDF carriers. Record font, raster/vector, or placement findings only
 when they change the result.
 
 **Observable result:** The document receiver can read and recover the figure at
-final size. The current web wave can leave this exercise at rest without losing
-its source or later re-entry condition.
+final size. A web-only receiving request leaves this exercise at rest while
+preserving its source and later re-entry condition.
 
 ## E. Separate research-extract gate
 
@@ -124,6 +124,7 @@ when assessing routing behavior. The next real Atlas wave supplies the primary
 material-use observation; further review rests when it leaves that next decision
 unchanged.
 
-These source drafts prepare a future public skill offering. The complete method
-and dependency/reference closure must travel in its selected package. Hosted
-publication remains held until a new tag and complete public carrier are produced.
+These source contracts support a reviewed public skill offering. Each selected
+package carries the complete method and dependency/reference closure. An
+accepted annotated tag, complete public carrier, and activation receipt identify
+the version available through its hosted route.
