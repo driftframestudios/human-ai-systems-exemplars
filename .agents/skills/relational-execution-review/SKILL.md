@@ -52,6 +52,9 @@ foreign-key actions, precision/scale, finite temporal meaning, document versions
 and absence states. Match API/domain representations to database constraints and
 retrieved values. Ordinary direct-SQL writers provide a useful invariant probe.
 Keep engine-specific type equivalence and catalog facts tied to that engine.
+When an aggregate validator continues after a structural finding, its semantic
+checks still receive invalid values. Preserve useful diagnostics with bounded
+parsing or explicit admission, including overlong numeric declarations.
 
 ### Rule: The runtime role is part of the implementation
 
