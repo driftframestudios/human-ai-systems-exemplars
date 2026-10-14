@@ -223,6 +223,14 @@
       "dependencies": []
     },
     {
+      "name": "relational-execution-review",
+      "sourcePath": ".agents/skills/relational-execution-review/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Provisional instruction-only contract under Issue #486. First-use review and independent challenge establish bounded receiving evidence; public packaging and broader effectiveness retain their separate review."
+    },
+    {
       "name": "repository-attribution-stewardship",
       "sourcePath": ".agents/skills/repository-attribution-stewardship/SKILL.md",
       "publicationStanding": "public_ready",

@@ -39,6 +39,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
 - `cost-and-ownership-analysis` maps scoped function cost, input boundaries, and mutation ownership to proportionate repairs and evidence.
+- `relational-execution-review` connects relational contracts, ordinary-role SQL, query plans, object ownership, and named recovery events to bounded implementation evidence.
 - `supportive-change-writing` shapes repository prose and instruction surfaces.
 - `agency-and-action-writing` restores truthful actors, actual actions, concrete objects, and material consequences when prose hides them while preserving flexible voice and precise abstractions.
 - `audit-anthropomorphic-cues` inspects bundled person-like cues, separates human effects from system-output hypotheses, and restores precise technical and authority referents before interface language changes.

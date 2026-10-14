@@ -34,6 +34,7 @@ the smallest adequate route when no contract adds material value.
 | --- | --- | --- |
 | [`practitioner-probe`](practitioner-probe/SKILL.md) | A plausible concern lacks a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
 | [`cost-and-ownership-analysis`](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
+| [`relational-execution-review`](relational-execution-review/SKILL.md) | SQL, relationships, roles, objects, query plans, or restart claims need source-bound review | Localized findings and independently reviewed repairs with exact execution and recovery evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and decision delta |
 | [`citation-atlas-selection`](citation-atlas-selection/SKILL.md) | A supplied citation Atlas should resolve to one exact public reference or a bounded candidate set | A deterministic lookup with exact coordinates and visible selection limits |
 | [`supportive-change-writing`](supportive-change-writing/SKILL.md) | Human-facing prose or instructions change materially | Desired-state, negation-aware, evidence-calibrated language |
