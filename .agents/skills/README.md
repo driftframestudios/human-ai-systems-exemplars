@@ -80,6 +80,27 @@ the selected skill, its directly linked foundation and references, and the
 applicable shared source map; publication checks prove that closure before
 activation.
 
+### Continue into a scientific or database example
+
+Choose these optional public Registry packages when the receiving question
+needs a more specific domain treatment. The local visualization foundation and
+destination skills still own the HASE artifact; each linked package supplies
+its instruction source, supporting references, and bounded exercises.
+
+| Receiving question | Public continuation | Evidence to preserve |
+| --- | --- | --- |
+| Which genomic coordinate, assay measurement, or comparison does the view represent? | [Omics coordinate and measurement views](https://kindlight.io/skills/omics-coordinate-and-measurement-views/) | Coordinate convention, measurement units, biological sample identity, and the analysis that supports an inference. |
+| How should a transform, scale, interval, or density preserve the measured quantity? | [Scientific scale and transform fidelity](https://kindlight.io/skills/scientific-scale-and-transform-fidelity/) | Raw-value meaning, transformed domain, interval semantics, and recoverable values. |
+| How should panels, labels, color, and export support one scientific reading? | [Scientific figure composition](https://kindlight.io/skills/scientific-figure-composition/) | Panel relationships, non-color distinctions, physical placement, and the inspected output. |
+| How does a partial index change the work of an ordinary-role SQL query? | [PostgreSQL pending-outbox query · 0.1.0](https://kindlight.io/snippets/postgresql-pending-outbox-query/0.1.0/) | Equal results before plan comparison, exact engine and workload, and the measured scope. |
+
+For the SQL example, the [relational review route](#research-probe-and-write)
+connects the observed plan to source, role, object ownership, and the recovery
+event under review. The packages' synthetic exercises establish their stated
+mechanisms. A receiving HASE figure or database task supplies its own domain,
+accessibility, performance, and operational observations. These links provide
+continuations; HASE's publication selection retains its existing scope.
+
 ## How the catalog evolves
 
 `collaboration-accounting` routes natural
