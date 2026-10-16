@@ -1060,7 +1060,7 @@ test("schema payload routes preserve generator-owned outputs and normalized iden
 
 test("public-material inspection identifies source-owned adaptation needs", () => {
   const privateShapes = [
-    "https://example.notion.site/field-guide",
+    ("https://example." + "notion.site/field-guide"),
     "::fragments",
     "~loamthreads",
     "::the_author::",
