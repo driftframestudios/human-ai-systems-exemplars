@@ -180,7 +180,13 @@ Record normalization and resource limits before scanning: decoding depth,
 maximum decoded bytes, archive member counts, expansion ratio, nesting depth,
 timeouts and supported formats. Bind the host and root-identity constants to the current checkpoint and an
 accepted Atlas record before exercising their controls. Parse hostnames and
-URL structure rather than matching an incidental host substring. Inspect archives with contained readers
+URL structure rather than matching an incidental host substring. Recover a
+reader link from its carrier grammar before comparing it with an Atlas record:
+Markdown delimiters, prose punctuation and serialized quoting belong to the
+carrier. Preserve punctuation that belongs inside the actual target. Exercise
+a closing delimiter, a punctuation-bearing target and an encoded target;
+confirm candidate targets against the source bytes before selecting a repair.
+Inspect archives with contained readers
 that reject traversal and symlink escapes; acquire bytes without executing
 repository scripts, attachments, macros or embedded content as data.
 
