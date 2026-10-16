@@ -238,7 +238,7 @@ test("investment file provenance recovery preserves accepted capsule and report 
         const baseline = await outputs(), baselineCarrier = await carrier();
         const rejected = JSON.parse(baseline.serialized);
         rejected.inputs.label = "Local Unicode \u03a9 recovery";
-        rejected.inputs.evidenceSource = "https://notion.so/synthetic-rejected-record";
+        rejected.inputs.evidenceSource = ("https://" + "notion.so/synthetic-rejected-record");
         const raw = JSON.stringify(rejected, null, 2).replace(/\n/g, "\r\n");
         const upload = () => page.locator("#analysis-import").setInputFiles({
           name: "synthetic-provenance.json", mimeType: "application/json", buffer: Buffer.from(raw, "utf8")

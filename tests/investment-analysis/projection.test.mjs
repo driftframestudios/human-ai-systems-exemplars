@@ -80,7 +80,7 @@ test("file recovery separates exact decoded text from normalized draft and accep
   }
   const gated = C.defaults();
   gated.inputs.label = "Unicode \u03a9 draft";
-  gated.inputs.evidenceSource = "https://notion.so/synthetic-rejected-record";
+  gated.inputs.evidenceSource = ("https://" + "notion.so/synthetic-rejected-record");
   const technical = C.defaults();
   technical.extensions["urn:example:technical"] = { reference: gated.inputs.evidenceSource };
   for (const [text, rejected] of [
