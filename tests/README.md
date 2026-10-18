@@ -187,6 +187,7 @@ npm run check:debrief-case-briefs
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:debrief-reading-layout-browser
 npm run test:context-canvas-image-delivery-browser
 npm run test:who-to-believe-system-graph
 npm run test:who-to-believe-system-graph-browser
@@ -196,6 +197,16 @@ npm run test:context-canvas-medium-containment
 npm run test:context-canvas-narrow-rails
 npm run visual:context-canvas-reference -- --phase <name>
 ```
+
+The Debrief reading-layout contract uses Chromium, Firefox, and Playwright
+WebKit. Prepare its engines with `npm run playwright:install:debrief-reading`.
+It checks complete movement headers, headings above prose, and wide evidence
+between prose runs across the eleven opted-in routes, with source-adjacent
+widths and focused alternate-mode,
+long-label, enlarged-text, and scripting-disabled observations on the reported
+pair. Controlled regressions exercise the same behavioral assertions. Browser
+geometry supports the focused paint comparisons; native Safari and DuckDuckGo
+confirmation retains its own environment record.
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
 Case Brief carrier check is dependency-free and verifies that every generated

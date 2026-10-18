@@ -259,56 +259,64 @@
 
       <div class="content__container genomic-solution-field genomic-solution-field--rose">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="solution-architecture-title">
-            <p class="genomic-track-label"><span>Track I</span> Solution Architecture · Population Context and Changed Work</p>
-            <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">I. Solution Architecture</h2>
-            <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — At the Desk Where a Research Tool Became Clinical Infrastructure</h3>
-            <p>
-              The genomic viewer began as a research-built browser client and hardened into a mission-critical application as
-              acquisition, multi-protocol assays, methylation, longitudinal liquid biopsy, and automation expanded the work
-              around it. Curators, Pathology, Translational Oncology, Computational Bioinformatics, and Medical Affairs
-              depended on the viewer alongside IGV, LIMS/ELN, the analysis pipeline, and downstream transmission assets.<sup><a href="#source-solution-debrief">1</a></sup>
-            </p>
-            <p>
-              At a Curator's desk, one case crossed a laptop, a second monitor, the viewer, IGV, an internal wiki,
-              papers, reference files, and many browser tabs. Participation in a diagnostic pathway made that arrangement
-              consequential. The system's intended use, boundaries, and controls determined its classification; the
-              architectural question was which work, decisions, and handoffs had become core operating elements, and which
-              investment would let them change safely.
-            </p>
-            <p>
-              I redesigned search in Q1 2019 and later joined the full platform program inside Research &amp;
-              Development's Computational Biology Engineering team. The work joined participant research, design, and deep
-              Java implementation with a core delivery group and the wider 50-plus-engineer Computational Biology organization.
-            </p>
-            <aside class="interpretive-aside" aria-labelledby="investment-frame-title">
-              <h4 id="investment-frame-title" class="txt-h4">The investment was broader than a framework migration</h4>
-              <p>
-                The target state required a React component foundation, integration continuity, permission semantics, parallel operation,
-                training, quality work, support, and recoverable retirement. The opportunity cost included science and product
-                work deferred while the migration proceeded.
-              </p>
-            </aside>
+          <section class="debrief-movement" aria-labelledby="solution-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="genomic-track-label"><span>Track I</span> Solution Architecture · Population Context and Changed Work</p>
+              <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">I. Solution Architecture</h2>
+            </header>
+            <div class="debrief-reading-flow">
+              <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — At the Desk Where a Research Tool Became Clinical Infrastructure</h3>
+              <div class="prose-flow">
+                <p>
+                  The genomic viewer began as a research-built browser client and hardened into a mission-critical application as
+                  acquisition, multi-protocol assays, methylation, longitudinal liquid biopsy, and automation expanded the work
+                  around it. Curators, Pathology, Translational Oncology, Computational Bioinformatics, and Medical Affairs
+                  depended on the viewer alongside IGV, LIMS/ELN, the analysis pipeline, and downstream transmission assets.<sup><a href="#source-solution-debrief">1</a></sup>
+                </p>
+                <p>
+                  At a Curator's desk, one case crossed a laptop, a second monitor, the viewer, IGV, an internal wiki,
+                  papers, reference files, and many browser tabs. Participation in a diagnostic pathway made that arrangement
+                  consequential. The system's intended use, boundaries, and controls determined its classification; the
+                  architectural question was which work, decisions, and handoffs had become core operating elements, and which
+                  investment would let them change safely.
+                </p>
+                <p>
+                  I redesigned search in Q1 2019 and later joined the full platform program inside Research &amp;
+                  Development's Computational Biology Engineering team. The work joined participant research, design, and deep
+                  Java implementation with a core delivery group and the wider 50-plus-engineer Computational Biology organization.
+                </p>
+                <aside class="interpretive-aside" aria-labelledby="investment-frame-title">
+                  <h4 id="investment-frame-title" class="txt-h4">The investment was broader than a framework migration</h4>
+                  <p>
+                    The target state required a React component foundation, integration continuity, permission semantics, parallel operation,
+                    training, quality work, support, and recoverable retirement. The opportunity cost included science and product
+                    work deferred while the migration proceeded.
+                  </p>
+                </aside>
+                </div>
+              </div>
           </section>
         </div>
       </div>
 
       <div class="content__container genomic-solution-field genomic-solution-field--paper">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="solution-bottleneck-title">
+          <section class="debrief-reading-flow" aria-labelledby="solution-bottleneck-title">
             <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — The Queue That Was Secretly a Status Machine</h3>
-            <p>
-              Human queues carried hidden operational states such as “on hold” and “investigating.” Curators spent an estimated
-              fifteen to twenty minutes each morning assigning and reassigning work. A plate-wide issue could scatter cases
-              across 70–100 people, turning Slack and email into the recovery layer. Okta authenticated people, while the product
-              still needed a granular model for profile, assay, jurisdiction, and action.<sup><a href="#source-solution-bottleneck">2</a></sup>
-            </p>
-            <p>
-              The same hidden-state pattern appeared elsewhere. Advanced Search hid valid results behind an unpaginated service limit.
-              Study names acted as a hidden ETL layer: they carried partner workflow, repeated validation, and environment
-              distinctions inside labels that looked descriptive. A correct sequencing address depended on a manually maintained
-              German-team process. Morning SQL and a macro-based Failure Tracker recovered states the viewer could have carried directly.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Human queues carried hidden operational states such as “on hold” and “investigating.” Curators spent an estimated
+                fifteen to twenty minutes each morning assigning and reassigning work. A plate-wide issue could scatter cases
+                across 70–100 people, turning Slack and email into the recovery layer. Okta authenticated people, while the product
+                still needed a granular model for profile, assay, jurisdiction, and action.<sup><a href="#source-solution-bottleneck">2</a></sup>
+              </p>
+              <p>
+                The same hidden-state pattern appeared elsewhere. Advanced Search hid valid results behind an unpaginated service limit.
+                Study names acted as a hidden ETL layer: they carried partner workflow, repeated validation, and environment
+                distinctions inside labels that looked descriptive. A correct sequencing address depended on a manually maintained
+                German-team process. Morning SQL and a macro-based Failure Tracker recovered states the viewer could have carried directly.
+              </p>
+              </div>
             <figure id="genomic-plate-operating-state" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic plate view with visible operating state">
                 <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp" aria-label="Open the genomic plate view at full size">
@@ -330,40 +338,44 @@
                 qualified recovery from shared product state rather than a Slack-and-email reconstruction.
               </figcaption>
             </figure>
-            <p>
-              The plate view remained a desired engineering concept during the project. Here, it asks which plate-wide conditions
-              should reorganize individual work and makes consent state part of that discussion. A rescinded consent ring can
-              reveal the manual recovery path across downstream systems before another person has to reconstruct it through
-              Slack, email, and case-by-case reassignment.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The plate view remained a desired engineering concept during the project. Here, it asks which plate-wide conditions
+                should reorganize individual work and makes consent state part of that discussion. A rescinded consent ring can
+                reveal the manual recovery path across downstream systems before another person has to reconstruct it through
+                Slack, email, and case-by-case reassignment.
+              </p>
+              </div>
           </section>
         </div>
       </div>
 
       <div class="content__container genomic-solution-field genomic-solution-field--quiet">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="solution-intervention-title">
+          <section class="debrief-reading-flow" aria-labelledby="solution-intervention-title">
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — Just Show It in the Interface</h3>
-            <p>
-              Profiles and permissions became the First Responsible Version: the smallest product change able to align current
-              sign-off, visible studies, assignable cases, and permitted actions. This converted an abstract re-platforming into
-              an operating contract with explicit requirements that could support deterministic routing later.<sup><a href="#source-solution-intervention">3</a></sup>
-            </p>
-            <p>
-              A strangler approach moved the operational and assignment layers first while reusing Java services. Values already
-              present in the system moved to the point of use. High-impact improvements supported current work while the target
-              architecture developed, and expensive system-wide interface concepts were retired when they weakened the migration.
-            </p>
-            <p>
-              Participant time was scarce and expensive, so the research rhythm mixed budgeted synchronous sessions, concise
-              leave-behinds, and asynchronous prototype review. Live interface states gave scientists and operators something
-              specific to correct. <a href="{{PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE}}">Specification by Example</a>
-              then carried their language into scenarios that design, engineering, and quality work could examine together.
-            </p>
-            <blockquote class="debrief-quote">
-              <p>What if we just showed it to you in the interface, so it’s unnecessary to even have to go find that file and open it up?</p>
-              <cite>My project recollection</cite>
-            </blockquote>
+            <div class="prose-flow">
+              <p>
+                Profiles and permissions became the First Responsible Version: the smallest product change able to align current
+                sign-off, visible studies, assignable cases, and permitted actions. This converted an abstract re-platforming into
+                an operating contract with explicit requirements that could support deterministic routing later.<sup><a href="#source-solution-intervention">3</a></sup>
+              </p>
+              <p>
+                A strangler approach moved the operational and assignment layers first while reusing Java services. Values already
+                present in the system moved to the point of use. High-impact improvements supported current work while the target
+                architecture developed, and expensive system-wide interface concepts were retired when they weakened the migration.
+              </p>
+              <p>
+                Participant time was scarce and expensive, so the research rhythm mixed budgeted synchronous sessions, concise
+                leave-behinds, and asynchronous prototype review. Live interface states gave scientists and operators something
+                specific to correct. <a href="{{PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE}}">Specification by Example</a>
+                then carried their language into scenarios that design, engineering, and quality work could examine together.
+              </p>
+              <blockquote class="debrief-quote">
+                <p>What if we just showed it to you in the interface, so it’s unnecessary to even have to go find that file and open it up?</p>
+                <cite>My project recollection</cite>
+              </blockquote>
+              </div>
             <div class="architecture-pair table-span-all cobalt-operating-field-cards">
               <article>
                 <p class="architecture-pair__label">First responsible version</p>
@@ -398,11 +410,13 @@
                 assignment rules can be reviewed before work is exposed or changed.
               </figcaption>
             </figure>
-            <p>
-              The access grid turns a broad permission conversation into component-level questions: which profiles reveal a tab,
-              expose a column, enable row or select-all actions, or authorize an API request? The interface can explain the grant;
-              server-side authorization remains the deciding control for every read and write.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The access grid turns a broad permission conversation into component-level questions: which profiles reveal a tab,
+                expose a column, enable row or select-all actions, or authorize an API request? The interface can explain the grant;
+                server-side authorization remains the deciding control for every read and write.
+              </p>
+              </div>
 
             <figure class="story-visual table-span-all rose-editorial-visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_strategy_canvas.svg" aria-label="Open the genomic viewer Strategy Canvas at full size">
@@ -470,38 +484,42 @@
 
       <div class="content__container genomic-solution-field genomic-solution-field--paper">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="solution-outcome-title">
+          <section class="debrief-reading-flow" aria-labelledby="solution-outcome-title">
             <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — Qualified Assignment, Visible State, and Work Returned to Care</h3>
-            <p>
-              My profile and permission work eliminated recurring assignment errors and enabled qualified automatic assignment.
-              My Advanced Search redesign spread across business units with little internal promotion. Direct users responded
-              strongly to working versions, and quiet adoption indicated everyday fit. These observations establish adoption;
-              usage breadth and causal magnitude require separate measurement.<sup><a href="#source-solution-outcome">4</a></sup>
-            </p>
-            <p>
-              Profile-scoped dashboards moved morning reconstruction into a shared dashboard. Structured notes recorded human
-              interventions across tiered automation candidates, making the remaining judgment work countable and reviewable.
-              Those observations establish where people intervened and where routing could mature; comparative automation quality
-              and patient outcomes require their own evidence. The dashboard also had a discoverability shortfall, so quiet use
-              stayed a prompt for inquiry. The bounded capability family returned attention to case work, while the larger
-              “app store” vision remained future work.
-            </p>
+            <div class="prose-flow">
+              <p>
+                My profile and permission work eliminated recurring assignment errors and enabled qualified automatic assignment.
+                My Advanced Search redesign spread across business units with little internal promotion. Direct users responded
+                strongly to working versions, and quiet adoption indicated everyday fit. These observations establish adoption;
+                usage breadth and causal magnitude require separate measurement.<sup><a href="#source-solution-outcome">4</a></sup>
+              </p>
+              <p>
+                Profile-scoped dashboards moved morning reconstruction into a shared dashboard. Structured notes recorded human
+                interventions across tiered automation candidates, making the remaining judgment work countable and reviewable.
+                Those observations establish where people intervened and where routing could mature; comparative automation quality
+                and patient outcomes require their own evidence. The dashboard also had a discoverability shortfall, so quiet use
+                stayed a prompt for inquiry. The bounded capability family returned attention to case work, while the larger
+                “app store” vision remained future work.
+              </p>
+              </div>
           </section>
         </div>
       </div>
 
       <div class="content__container genomic-solution-field genomic-solution-field--rose">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="solution-repeatability-title">
+          <section class="debrief-reading-flow" aria-labelledby="solution-repeatability-title">
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — What Held Up, What Changed, and What Travels</h3>
-            <p>
-              What held up was the decision contract: role-local context, an Impact Map, profile-first decomposition,
-              scenario-shaped specifications, and visible operational state let participating units inspect the work together.
-              What changed was its expression—screens, services, components, and tests evolved as operating learning returned
-              upstream. What travels is the method: the same Core Architectures supported the FMI LIMS/ELN re-platforming,
-              providing a second materially different application setting. People who carried the work began writing
-              specifications for its behavior.<sup><a href="#source-solution-repeatability">5</a></sup>
-            </p>
+            <div class="prose-flow">
+              <p>
+                What held up was the decision contract: role-local context, an Impact Map, profile-first decomposition,
+                scenario-shaped specifications, and visible operational state let participating units inspect the work together.
+                What changed was its expression—screens, services, components, and tests evolved as operating learning returned
+                upstream. What travels is the method: the same Core Architectures supported the FMI LIMS/ELN re-platforming,
+                providing a second materially different application setting. People who carried the work began writing
+                specifications for its behavior.<sup><a href="#source-solution-repeatability">5</a></sup>
+              </p>
+              </div>
             <ol class="debrief-sequence table-span-all">
               <li><strong>Name the operational state.</strong> Treat queues, sheets, and recurring messages as clues to missing system concepts.</li>
               <li><strong>Move the permission boundary first.</strong> Visible work, assignable work, and allowed actions share one profile model.</li>
@@ -515,101 +533,111 @@
 
       <div class="content__container implementation-track-start genomic-implementation-field genomic-implementation-field--iron">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="implementation-architecture-title">
-            <p class="genomic-track-label genomic-track-label--dark"><span>Track II</span> Implementation Architecture · State, Authority, and Recovery</p>
-            <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">II. Implementation Architecture</h2>
-            <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — The Stack Changes Who Can Join the Work</h3>
-            <p>
-              The legacy client compiled Java into browser code through GWT. React, TypeScript, MUI's data grid, and Storybook
-              offered a more familiar contribution path for engineers whose primary experience was in backend systems. The
-              combined Principal Product Designer and Software Engineer III role built the visual system, core tables, forms,
-              modes, super-header, and component library; the wider engineering group extended the same component foundation.<sup><a href="#source-implementation-debrief">6</a></sup>
-            </p>
-            <p>
-              Inside the R&amp;D Computational Biology Engineering team, I designed and implemented the React and TypeScript
-              interface layer, maintained GWT interoperability, and worked across Java services, DTOs, and database mediation. That staffing consequence made
-              the stack an arrangement for shared work: runnable component states connected design, implementation, onboarding,
-              and testing across the core group and a 50-plus-engineer organization.
-            </p>
-            <p>
-              My contemporary interpretation is that generative AI widens the consequence of that choice. A new contributor may now shape a component
-              family or connected code area in one collaboration cycle. Typed contribution paths, runnable states, tests,
-              review capacity, and clear ownership determine whether that reach becomes safe participation. Current research
-              describes both gains and slowdowns across different settings. The historical work established the shared-work
-              architecture. AI-assisted delivery effects require local evidence from the work where those tools are used.
-            </p>
-            <blockquote class="debrief-quote">
-              <p>The stack an organization uses, develops and maintains dictates who they can hire.</p>
-              <cite>Implementation Architecture source</cite>
-            </blockquote>
-            <h4 id="genomics-responsive-interface-walkthrough-title" class="txt-h4">Responsive-interface demonstration</h4>
-            <p id="genomics-responsive-interface-standing">The opening frame shows the adjustable viewport boundary: the interface occupies the left side, and the dark field to its right is the remaining resize canvas. Three connected interfaces reflow across wide and narrow viewports while their controls, status cues, and record details remain available.</p>
-            <figure id="genomics-responsive-interface-walkthrough" class="story-visual table-span-all">
-              <video
-                controls
-                playsinline
-                preload="metadata"
-                width="1920"
-                height="980"
-                poster="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/poster.webp"
-                aria-label="Genomics responsive-interface demonstration"
-                aria-describedby="genomics-responsive-interface-standing genomics-responsive-interface-caption"
-                aria-details="genomics-responsive-interface-transcript"
-              >
-                <source src="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4" type="video/mp4">
-                <p><a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
-              </video>
-              <figcaption id="genomics-responsive-interface-caption" class="table-note"><strong>Demonstration of responsive genomic workspaces.</strong> Cohort Builder, Next Arc Packet, and Specimen Register move from wide multi-column layouts into narrow stacked readings while controls, status, and selected-record detail remain available. <a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
-            </figure>
-            <aside id="genomics-responsive-interface-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-responsive-interface-transcript-title">
-              <p class="implementation-companion__eyebrow">Visual description</p>
-              <h4 id="genomics-responsive-interface-transcript-title" class="txt-h4">Three dense workspaces retain their meaning as the viewport narrows</h4>
-              <ol>
-                <li>The Cohort Builder begins in a wide, multi-column layout that keeps rule controls, cohort status, and result context in view.</li>
-                <li>The viewport narrows and the same controls and status cues move into a stacked reading order.</li>
-                <li>The Next Arc Packet repeats the wide-to-narrow transition while retaining readiness, validation, and record detail.</li>
-                <li>The Specimen Register completes the demonstration by reflowing specimen cards and controls into a narrow layout that preserves each record&rsquo;s identity and state.</li>
-              </ol>
-            </aside>
-            <figure id="genomic-validation-lanes" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic engineering-process view in a validation environment">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp" aria-label="Open the computational-biology engineering-process view at full size">
-                  <img
-                    src="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp"
-                    srcset="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp 4786w"
-                    sizes="(min-width: 64rem) min(92vw, 78rem), 56rem"
-                    width="4786"
-                    height="2706"
-                    loading="lazy"
-                    decoding="async"
-                    alt="Synthetic dark axonometric corridor view places secondary analysis, variant review, cancer biology, reciprocal trace, and result-release processes in version-locked validation lanes."
-                  >
-                </a>
+          <section class="debrief-movement" aria-labelledby="implementation-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="genomic-track-label genomic-track-label--dark"><span>Track II</span> Implementation Architecture · State, Authority, and Recovery</p>
+              <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">II. Implementation Architecture</h2>
+            </header>
+            <div class="debrief-reading-flow">
+              <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — The Stack Changes Who Can Join the Work</h3>
+              <div class="prose-flow">
+                <p>
+                  The legacy client compiled Java into browser code through GWT. React, TypeScript, MUI's data grid, and Storybook
+                  offered a more familiar contribution path for engineers whose primary experience was in backend systems. The
+                  combined Principal Product Designer and Software Engineer III role built the visual system, core tables, forms,
+                  modes, super-header, and component library; the wider engineering group extended the same component foundation.<sup><a href="#source-implementation-debrief">6</a></sup>
+                </p>
+                <p>
+                  Inside the R&amp;D Computational Biology Engineering team, I designed and implemented the React and TypeScript
+                  interface layer, maintained GWT interoperability, and worked across Java services, DTOs, and database mediation. That staffing consequence made
+                  the stack an arrangement for shared work: runnable component states connected design, implementation, onboarding,
+                  and testing across the core group and a 50-plus-engineer organization.
+                </p>
+                <p>
+                  My contemporary interpretation is that generative AI widens the consequence of that choice. A new contributor may now shape a component
+                  family or connected code area in one collaboration cycle. Typed contribution paths, runnable states, tests,
+                  review capacity, and clear ownership determine whether that reach becomes safe participation. Current research
+                  describes both gains and slowdowns across different settings. The historical work established the shared-work
+                  architecture. AI-assisted delivery effects require local evidence from the work where those tools are used.
+                </p>
+                <blockquote class="debrief-quote">
+                  <p>The stack an organization uses, develops and maintains dictates who they can hire.</p>
+                  <cite>Implementation Architecture source</cite>
+                </blockquote>
+                <h4 id="genomics-responsive-interface-walkthrough-title" class="txt-h4">Responsive-interface demonstration</h4>
+                <p id="genomics-responsive-interface-standing">The opening frame shows the adjustable viewport boundary: the interface occupies the left side, and the dark field to its right is the remaining resize canvas. Three connected interfaces reflow across wide and narrow viewports while their controls, status cues, and record details remain available.</p>
+                </div>
+              <figure id="genomics-responsive-interface-walkthrough" class="story-visual table-span-all">
+                <video
+                  controls
+                  playsinline
+                  preload="metadata"
+                  width="1920"
+                  height="980"
+                  poster="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/poster.webp"
+                  aria-label="Genomics responsive-interface demonstration"
+                  aria-describedby="genomics-responsive-interface-standing genomics-responsive-interface-caption"
+                  aria-details="genomics-responsive-interface-transcript"
+                >
+                  <source src="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4" type="video/mp4">
+                  <p><a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+                </video>
+                <figcaption id="genomics-responsive-interface-caption" class="table-note"><strong>Demonstration of responsive genomic workspaces.</strong> Cohort Builder, Next Arc Packet, and Specimen Register move from wide multi-column layouts into narrow stacked readings while controls, status, and selected-record detail remain available. <a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+              </figure>
+              <aside id="genomics-responsive-interface-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-responsive-interface-transcript-title">
+                <p class="implementation-companion__eyebrow">Visual description</p>
+                <h4 id="genomics-responsive-interface-transcript-title" class="txt-h4">Three dense workspaces retain their meaning as the viewport narrows</h4>
+                <ol>
+                  <li>The Cohort Builder begins in a wide, multi-column layout that keeps rule controls, cohort status, and result context in view.</li>
+                  <li>The viewport narrows and the same controls and status cues move into a stacked reading order.</li>
+                  <li>The Next Arc Packet repeats the wide-to-narrow transition while retaining readiness, validation, and record detail.</li>
+                  <li>The Specimen Register completes the demonstration by reflowing specimen cards and controls into a narrow layout that preserves each record&rsquo;s identity and state.</li>
+                </ol>
+              </aside>
+              <figure id="genomic-validation-lanes" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic engineering-process view in a validation environment">
+                  <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp" aria-label="Open the computational-biology engineering-process view at full size">
+                    <img
+                      src="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp"
+                      srcset="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp 4786w"
+                      sizes="(min-width: 64rem) min(92vw, 78rem), 56rem"
+                      width="4786"
+                      height="2706"
+                      loading="lazy"
+                      decoding="async"
+                      alt="Synthetic dark axonometric corridor view places secondary analysis, variant review, cancer biology, reciprocal trace, and result-release processes in version-locked validation lanes."
+                    >
+                  </a>
+                </div>
+                <figcaption class="table-note">
+                  <strong>Figure 3. Computational-biology validation lanes.</strong> Secondary analysis, variant review, cancer biology,
+                  reciprocal trace, quality, and release sit in one axonometric corridor with their gates and knowledge sources.
+                  The view connects a stack decision to the scientific work its typed contribution path must carry.
+                </figcaption>
+              </figure>
+              <div class="prose-flow">
+                <p>
+                  This corridor isolates the computational-biology portion served by the viewer so participants can correct its
+                  boundaries, gates, and handoffs. Figure 7 later restores the complete accession-to-report process and keeps a local
+                  implementation choice connected to the laboratory system it must support.
+                </p>
+                </div>
               </div>
-              <figcaption class="table-note">
-                <strong>Figure 3. Computational-biology validation lanes.</strong> Secondary analysis, variant review, cancer biology,
-                reciprocal trace, quality, and release sit in one axonometric corridor with their gates and knowledge sources.
-                The view connects a stack decision to the scientific work its typed contribution path must carry.
-              </figcaption>
-            </figure>
-            <p>
-              This corridor isolates the computational-biology portion served by the viewer so participants can correct its
-              boundaries, gates, and handoffs. Figure 7 later restores the complete accession-to-report process and keeps a local
-              implementation choice connected to the laboratory system it must support.
-            </p>
           </section>
         </div>
       </div>
 
       <div class="content__container genomic-implementation-field genomic-implementation-field--cobalt">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="implementation-bottleneck-title">
+          <section class="debrief-reading-flow" aria-labelledby="implementation-bottleneck-title">
             <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — Interop and the Masonry Everyone Loved</h3>
-            <p>
-              JSNI placed raw JavaScript inside Java, and <code>gwt-react</code> provided a historically useful but fragile bridge.
-              Lifecycle, validation, DTO handling, payload size, and paint cost accumulated at the interoperability boundary. The Masonry concept
-              was widely loved, yet its global mounting and validation demands weakened the migration.<sup><a href="#source-implementation-bottleneck">7</a></sup>
-            </p>
+            <div class="prose-flow">
+              <p>
+                JSNI placed raw JavaScript inside Java, and <code>gwt-react</code> provided a historically useful but fragile bridge.
+                Lifecycle, validation, DTO handling, payload size, and paint cost accumulated at the interoperability boundary. The Masonry concept
+                was widely loved, yet its global mounting and validation demands weakened the migration.<sup><a href="#source-implementation-bottleneck">7</a></sup>
+              </p>
+              </div>
             <figure id="genomic-specimen-masonry" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic specimen-masonry interface">
                 <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp" aria-label="Open the genomic specimen-masonry view at full size">
@@ -631,14 +659,16 @@
                 teams and how each visible state increased validation and policy work.
               </figcaption>
             </figure>
-            <p>
-              Familiar e-commerce patterns and Baymard's product-list research supplied a practical grammar for scanning,
-              filtering, comparing, and finding dense information.<sup><a href="#source-baymard-product-lists">21</a></sup>
-              Participants wanted the Masonry concept across the application because it made many kinds of work feel coherent.
-              An Associate Director of Computational Biology Engineering also pressed for enough visible differentiation to make
-              the investment legible. The design succeeded as a shared language, then I retired my own favored global treatment
-              when its coupled lifecycle and validation cost exceeded what the migration could safely carry.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Familiar e-commerce patterns and Baymard's product-list research supplied a practical grammar for scanning,
+                filtering, comparing, and finding dense information.<sup><a href="#source-baymard-product-lists">21</a></sup>
+                Participants wanted the Masonry concept across the application because it made many kinds of work feel coherent.
+                An Associate Director of Computational Biology Engineering also pressed for enough visible differentiation to make
+                the investment legible. The design succeeded as a shared language, then I retired my own favored global treatment
+                when its coupled lifecycle and validation cost exceeded what the migration could safely carry.
+              </p>
+              </div>
             <figure class="story-visual table-span-all cobalt-operating-field__visual genomic-stacked-cube-visual">
               <a class="story-visual__open" href="../../a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-triptych-v0.1.svg" aria-label="Open the Evidence-Guided Capability Transfer Model triptych at full size">
                 <img src="../../a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-triptych-v0.1.svg" width="1350" height="760" loading="lazy" alt="Three capability-transfer states show current legacy authority, a bounded evidence period with legacy authority and rollback retained, and validated selective transfer. Curators surface workflow needs, shape the design through continuing review, and train as each portion and its launch procedures become ready.">
@@ -669,41 +699,45 @@
                 <p>Retiring the favored concept preserved migration credibility and reduced the number of coupled points of failure.</p>
               </article>
             </div>
-            <p>
-              A typed update boundary can keep an omitted field, an explicit clear, an intentionally empty object, and
-              meaningful falsy values distinct before JSON serialization. My work on the viewer established the organizational
-              and interoperability context. The company-neutral Registry artifact is a later, independently authored runnable
-              mechanism with its own source, tests, and version.
-              <a href="https://kindlight.io/snippets/typed-absence-and-wire-shape/0.1.0/">Inspect typed absence and wire shape in TypeScript</a>.
-            </p>
+            <div class="prose-flow">
+              <p>
+                A typed update boundary can keep an omitted field, an explicit clear, an intentionally empty object, and
+                meaningful falsy values distinct before JSON serialization. My work on the viewer established the organizational
+                and interoperability context. The company-neutral Registry artifact is a later, independently authored runnable
+                mechanism with its own source, tests, and version.
+                <a href="https://kindlight.io/snippets/typed-absence-and-wire-shape/0.1.0/">Inspect typed absence and wire shape in TypeScript</a>.
+              </p>
+              </div>
           </section>
         </div>
       </div>
 
       <div class="content__container genomic-implementation-field genomic-implementation-field--deep-cobalt">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="implementation-intervention-title">
+          <section class="debrief-reading-flow" aria-labelledby="implementation-intervention-title">
             <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — The Exploding Table and the Permission Ledger</h3>
-            <p>
-              The exploding-table modal kept the dense row scan intact while moving assembly-aware variant detail into a focused
-              interaction. A permission ledger bound profile, assay, product, geography, jurisdiction, lifecycle, and action.
-              The Floating Drawer made references and actions available across tabs without duplicating each capability.<sup><a href="#source-implementation-intervention">8</a></sup>
-            </p>
-            <p>
-              Sample collaboration moved beside the sample record, reducing per-sample Slack channels and ServiceNow tickets.
-              Case &amp; Automated Advice replaced the Failure Tracker with match criteria, history, and recoverable state. These
-              were distinct component moves, but they shared one architectural effect: evidence, action, and operating state
-              arrived in the context where judgment occurred.
-            </p>
-            <p>
-              An Associate Director of Computational Biology Engineering helped keep scientific fidelity and visible product
-              improvement in the same decision. Server-side permission checks preserved the authorization boundary while profiles
-              supported qualified assignment. Structured notes made human interventions countable, the dashboard made operational
-              state inspectable, and the component library gave each bounded move a shared implementation language.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The exploding-table modal kept the dense row scan intact while moving assembly-aware variant detail into a focused
+                interaction. A permission ledger bound profile, assay, product, geography, jurisdiction, lifecycle, and action.
+                The Floating Drawer made references and actions available across tabs without duplicating each capability.<sup><a href="#source-implementation-intervention">8</a></sup>
+              </p>
+              <p>
+                Sample collaboration moved beside the sample record, reducing per-sample Slack channels and ServiceNow tickets.
+                Case &amp; Automated Advice replaced the Failure Tracker with match criteria, history, and recoverable state. These
+                were distinct component moves, but they shared one architectural effect: evidence, action, and operating state
+                arrived in the context where judgment occurred.
+              </p>
+              <p>
+                An Associate Director of Computational Biology Engineering helped keep scientific fidelity and visible product
+                improvement in the same decision. Server-side permission checks preserved the authorization boundary while profiles
+                supported qualified assignment. Structured notes made human interventions countable, the dashboard made operational
+                state inspectable, and the component library gave each bounded move a shared implementation language.
+              </p>
 
-            <h4 id="genomics-permissions-walkthrough-title" class="txt-h4">Permissions and failure-state demonstration</h4>
-            <p id="genomics-permissions-standing">The demonstration connects regional access rules with connection settings, interface preferences, and observable failure behavior.</p>
+              <h4 id="genomics-permissions-walkthrough-title" class="txt-h4">Permissions and failure-state demonstration</h4>
+              <p id="genomics-permissions-standing">The demonstration connects regional access rules with connection settings, interface preferences, and observable failure behavior.</p>
+              </div>
             <figure id="genomics-permissions-walkthrough" class="story-visual table-span-all">
               <video
                 controls
@@ -754,12 +788,14 @@
                 Probe controls and banner or toast channels make the condition available for diagnosis and team notification.
               </figcaption>
             </figure>
-            <p>
-              The persistent COSMIC banner marks a dependency that continues to constrain work; transient toasts carry shorter
-              authentication and probe events. Showing both channels gives engineering and operations a concrete way to decide
-              which failures call for retry with backoff and jitter, which need durable escalation, and how WebSocket updates,
-              query fan-out, and concurrent case edits or reassignments should reconcile on another Curator&rsquo;s open screen.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The persistent COSMIC banner marks a dependency that continues to constrain work; transient toasts carry shorter
+                authentication and probe events. Showing both channels gives engineering and operations a concrete way to decide
+                which failures call for retry with backoff and jitter, which need durable escalation, and how WebSocket updates,
+                query fan-out, and concurrent case edits or reassignments should reconcile on another Curator&rsquo;s open screen.
+              </p>
+              </div>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_boundary_contract_map.svg" aria-label="Open the profile and permission boundary map at full size">
@@ -776,25 +812,27 @@
 
       <div class="content__container genomic-implementation-field genomic-implementation-field--iron">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="implementation-outcome-title">
+          <section class="debrief-reading-flow" aria-labelledby="implementation-outcome-title">
             <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — The Dashboard That Replaced the Morning SQL Ritual</h3>
-            <p>
-              A profile-scoped dashboard surfaced plate-gender discordance, stuck samples, and control issues. Three
-              implementation changes reduced reliance on the Failure Tracker and overloaded queues: service-layer updates for current
-              reads, structured fields on downstream transmission assets, and first-class note types in the viewer.<sup><a href="#source-implementation-outcome">9</a></sup>
-            </p>
-            <p>
-              My dashboard work retired a daily SQL-and-email ritual that took more than thirty minutes. This saving applied to
-              morning operating intelligence and is separate from the fifteen-to-twenty-minute assignment saving. My structured-note
-              work made human interventions countable across tiered automation candidates. Those counts identified where judgment
-              entered the workflow and which automation candidates needed more evidence; comparative automation quality and clinical
-              effect require separate evaluation.
-            </p>
-            <p>
-              The change gave each tracker job a fitting home: current reads in the service layer, transmission state in structured
-              fields, intervention history in notes, and profile-scoped exceptions in the dashboard. The result preserved the
-              distinct work behind the tracker while retiring the spreadsheet as its shared operating record.
-            </p>
+            <div class="prose-flow">
+              <p>
+                A profile-scoped dashboard surfaced plate-gender discordance, stuck samples, and control issues. Three
+                implementation changes reduced reliance on the Failure Tracker and overloaded queues: service-layer updates for current
+                reads, structured fields on downstream transmission assets, and first-class note types in the viewer.<sup><a href="#source-implementation-outcome">9</a></sup>
+              </p>
+              <p>
+                My dashboard work retired a daily SQL-and-email ritual that took more than thirty minutes. This saving applied to
+                morning operating intelligence and is separate from the fifteen-to-twenty-minute assignment saving. My structured-note
+                work made human interventions countable across tiered automation candidates. Those counts identified where judgment
+                entered the workflow and which automation candidates needed more evidence; comparative automation quality and clinical
+                effect require separate evaluation.
+              </p>
+              <p>
+                The change gave each tracker job a fitting home: current reads in the service layer, transmission state in structured
+                fields, intervention history in notes, and profile-scoped exceptions in the dashboard. The result preserved the
+                distinct work behind the tracker while retiring the spreadsheet as its shared operating record.
+              </p>
+              </div>
 
             <figure id="genomic-quality-release-gates" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic quality-control and release-gate view">
@@ -817,12 +855,14 @@
                 override authority, reviewer concordance, and e-signature completion remain visible.
               </figcaption>
             </figure>
-            <p>
-              Curators specifically asked to see the active environment because training, partner studies, validation, and
-              research carried different work. The proposed readiness percentage records another useful question: which steps
-              count, how should they be weighted, when should the value recalculate, and when could one number misstate a case?
-              Those semantics remained a post-MVP research and implementation decision.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Curators specifically asked to see the active environment because training, partner studies, validation, and
+                research carried different work. The proposed readiness percentage records another useful question: which steps
+                count, how should they be weighted, when should the value recalculate, and when could one number misstate a case?
+                Those semantics remained a post-MVP research and implementation decision.
+              </p>
+              </div>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_operating_surface_map.svg" aria-label="Open the genomic operating-surface map at full size">
@@ -839,19 +879,21 @@
 
       <div class="content__container implementation-repeatability cobalt-operating-field genomic-implementation-field genomic-implementation-field--deep-cobalt">
         <div class="content content--editorial">
-          <section class="prose-flow" aria-labelledby="implementation-repeatability-title">
+          <section class="debrief-reading-flow" aria-labelledby="implementation-repeatability-title">
             <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Unit-Test-First and the Living Component Library</h3>
-            <p>
-              Unit-Test-First Design, the Upstream Revision Loop, Storybook, and Testing Library joined scenario, component,
-              implementation, and repair. An observed defect could revise the specification, component state, and test together.
-              Managers, QA, engineers, and domain experts could inherit described behavior instead of reconstructing it from
-              colleague memory.<sup><a href="#source-implementation-repeatability">10</a></sup>
-            </p>
-            <p>
-              Those scenarios also preserved operating knowledge through reorganizations, manager changes, and shifting delivery
-              teams. A new participant could inspect the accepted behavior, run the component state, and see where later learning
-              belonged. Continuity came from the shared examples and executable states rather than from any one person's availability.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Unit-Test-First Design, the Upstream Revision Loop, Storybook, and Testing Library joined scenario, component,
+                implementation, and repair. An observed defect could revise the specification, component state, and test together.
+                Managers, QA, engineers, and domain experts could inherit described behavior instead of reconstructing it from
+                colleague memory.<sup><a href="#source-implementation-repeatability">10</a></sup>
+              </p>
+              <p>
+                Those scenarios also preserved operating knowledge through reorganizations, manager changes, and shifting delivery
+                teams. A new participant could inspect the accepted behavior, run the component state, and see where later learning
+                belonged. Continuity came from the shared examples and executable states rather than from any one person's availability.
+              </p>
+              </div>
             <div class="repeatability-cards table-span-all">
               <article>
                 <p class="repeatability-cards__label">Scenario</p>
@@ -896,21 +938,23 @@
                 a whole-system map for the transitions and dependencies its scenarios and tests must preserve.
               </figcaption>
             </figure>
-            <p>
-              The full corridor is an orientation and correction instrument: laboratory, computational, quality, and reporting
-              teams can point to the boundary where their account diverges, then revise the named transition while preserving
-              the surrounding process. It keeps the computational slice in Figure 3 proportional to the complete clinical workflow.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The full corridor is an orientation and correction instrument: laboratory, computational, quality, and reporting
+                teams can point to the boundary where their account diverges, then revise the named transition while preserving
+                the surrounding process. It keeps the computational slice in Figure 3 proportional to the complete clinical workflow.
+              </p>
 
-            <h4 id="industry-transfer-title" class="txt-h4">Where the decision contract transfers</h4>
-            <p>
-              The transferable test begins where two competent systems can still disagree. In NCI-MATCH, detection
-              agreement remained high across 28 assays and 26 laboratories while filtering and interpretation contributed
-              to reporting differences. A VICC study similarly found that harmonizing variant representations increased
-              overlap across six oncology knowledgebases.<sup><a href="#source-nci-match">11</a>, <a href="#source-vicc">12</a></sup>
-              Those bounded findings make the component library more useful when it preserves the transitions and context
-              behind a displayed answer.
-            </p>
+              <h4 id="industry-transfer-title" class="txt-h4">Where the decision contract transfers</h4>
+              <p>
+                The transferable test begins where two competent systems can still disagree. In NCI-MATCH, detection
+                agreement remained high across 28 assays and 26 laboratories while filtering and interpretation contributed
+                to reporting differences. A VICC study similarly found that harmonizing variant representations increased
+                overlap across six oncology knowledgebases.<sup><a href="#source-nci-match">11</a>, <a href="#source-vicc">12</a></sup>
+                Those bounded findings make the component library more useful when it preserves the transitions and context
+                behind a displayed answer.
+              </p>
+              </div>
             <figure class="table-figure table-figure--wide table-span-all cobalt-operating-field__table">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Repeatable genomic review decision contracts">
                 <table class="table--comparison table--comfortable" data-label="Industry disagreements translated into inspectable component behavior">
@@ -974,12 +1018,14 @@
                 where qualified human judgment remains attached to report release.
               </figcaption>
             </figure>
-            <p>
-              The chain also gives Pathologists a place to show where work moves backward. A threshold-adjacent quality metric or
-              subtle sequencing artifact may return a case to curation or trigger re-sequencing, creating multiple records for one
-              patient. The prototype brings that loop into the conversation so repeat and re-sequenced records can stay distinct
-              from longitudinal assays through an explicit test-type model.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The chain also gives Pathologists a place to show where work moves backward. A threshold-adjacent quality metric or
+                subtle sequencing artifact may return a case to curation or trigger re-sequencing, creating multiple records for one
+                patient. The prototype brings that loop into the conversation so repeat and re-sequenced records can stay distinct
+                from longitudinal assays through an explicit test-type model.
+              </p>
+              </div>
 
             <aside class="interpretive-aside table-span-all cobalt-operating-field__aside" aria-labelledby="competitive-frontier-title">
               <h4 id="competitive-frontier-title" class="txt-h4">Public product workflows leave specific operating questions open</h4>
