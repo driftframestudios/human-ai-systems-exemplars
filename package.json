@@ -133,7 +133,8 @@
     "test:debrief-companion-spacing-browser": "node --test tests/context-canvas/debrief-companion-spacing.browser.mjs",
     "test:site-navigation-browser": "node --test tests/context-canvas/site-navigation.browser.mjs",
     "test:debrief-card-measure-browser": "node --test tests/context-canvas/debrief-card-measure.browser.mjs",
-    "test:debrief-hero-colors-browser": "node --test tests/context-canvas/debrief-hero-colors.browser.mjs"
+    "test:debrief-hero-colors-browser": "node --test tests/context-canvas/debrief-hero-colors.browser.mjs",
+    "test:debrief-link-cues-browser": "node --test tests/context-canvas/debrief-link-cues.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
