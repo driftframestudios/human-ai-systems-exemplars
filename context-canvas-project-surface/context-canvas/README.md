@@ -21,6 +21,30 @@ The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/REA
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the matching `schemas.vik.guru` parity and activation cycle.
 
+## Primary navigation
+
+Forty top-level routes share the three native destination links owned by
+`styles/components/site-navigation.css`. Complete labels determine the flex
+rows; remaining space is shared within each row. The sticky header participates
+in document flow, so its actual height places the initial reading. The body
+provides the full scroll range, and the header retains a viewport-wide limit
+when a route has a larger minimum body width. Narrow link padding scales with
+text while every destination keeps a 44px minimum touch target. The existing
+fragment and rail reserves clear the observed one- and two-row arrangements;
+`main` itself receives the same skip-target clearance as its descendants.
+HTML continues to own labels, destinations, and current-page or current-location
+semantics. Route palettes and the generated or authored reading rails retain
+their separate owners.
+
+`npm run test:site-navigation-browser` inventories all forty consumers in
+Chromium and exercises entry, catalog, AI, Debrief, authored-rail, and historical
+shells across Chromium, Firefox, and Playwright WebKit. Label fragments,
+text-dependent row transitions, the foundation and rail seams, enlarged text,
+keyboard and touch navigation with scripting unavailable, skip and fragment
+clearance, alternate media, and a restored equal-cell fault provide the
+focused regression evidence. The full route reference retains the broader
+composition comparison.
+
 ## Movement headers and reading regions
 
 Seventeen catalog readings use `.reading-flow`: the sixteen Full
