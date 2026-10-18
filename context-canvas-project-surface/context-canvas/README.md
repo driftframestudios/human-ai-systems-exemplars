@@ -243,6 +243,11 @@ styles follow those shared owners and precede `canvas-shell.css` when their
 cascade depends on the shared layer. About is the first route whose complete
 first-paint graph leaves `expanded.css` behind.
 
+`npm run test:ai-entry-cascade-browser` checks the five entry bridges across
+Chromium, Firefox, and Playwright WebKit. It observes the accepted cyan field,
+every border side, the inclusive 30rem shadow seam, and print/forced-color
+behavior. Controlled palette and shadow faults demonstrate the oracle.
+
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
@@ -258,7 +263,7 @@ Current high-signal ownership:
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
-| [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
+| [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
 | [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, and opt-in movement headers, loaded directly after `expanded.css`. |
