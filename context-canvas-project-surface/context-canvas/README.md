@@ -120,13 +120,18 @@ The authored FMI navigation uses `fmi-reading-rail.js` and
 “Reading” tracks the section crossing the reading line; “Selected” retains
 the recognized URL destination. Native links, fragment history, and keyboard
 focus remain browser-owned. Compact rail labels expose a viewport-contained
-preview on hover or focus. The page's method companion links intentionally
+preview during deliberate keyboard or pointer inspection. Activation and resumed
+page scrolling dismiss that preview while the horizontal current marker remains
+slightly enlarged. Touch navigation keeps the reading field clear; the selected
+URL destination retains its separate outline and accessible state. The page's
+method companion links intentionally
 open full-view tools in new tabs, with visible icons and accessible cues.
 
 `npm run test:fmi-reading-room-browser` observes actual text fragments,
 heading order, responsive seams, canonical scan borders, alternate media,
 and method-link closure. `npm run test:fmi-reading-rail-browser` exercises
-state transitions, history, reflow, compact labels, and scriptless behavior.
+state transitions, history, reflow, compact-label inspection and dismissal across
+input modalities, and scriptless behavior.
 Both include restored faults and Chromium, Firefox, and Playwright WebKit
 observations. [Issue #506](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/506)
 holds this receiving boundary and the related Debrief room audit.

@@ -37,6 +37,7 @@
   let pendingFrame = null;
   let focusedEntry = null;
   let pointerEntry = null;
+  let touchPoint = null;
   let previewEntry = null;
   let previewDismissed = false;
 
@@ -101,33 +102,81 @@
     if (pendingFrame === null) pendingFrame = window.requestAnimationFrame(update);
   }
 
+  function dismissPreview() {
+    // Retain native focus and pointer position. A fresh focus or pointer entry
+    // can reopen the label; resize and state updates keep reading clear.
+    focusedEntry = null;
+    previewDismissed = true;
+    scheduleUpdate();
+  }
+
   rail.addEventListener("focusin", event => {
-    focusedEntry = entryFromNode(event.target);
-    previewDismissed = false;
+    const entry = entryFromNode(event.target);
+    focusedEntry = entry && entry.link.matches(":focus-visible") ? entry : null;
+    if (focusedEntry) previewDismissed = false;
     scheduleUpdate();
   });
-  rail.addEventListener("focusout", event => {
-    focusedEntry = entryFromNode(event.relatedTarget);
+  rail.addEventListener("focusout", () => {
+    focusedEntry = null;
     scheduleUpdate();
   });
-  rail.addEventListener("pointerover", event => {
+  function enterPointer(event) {
     const next = entryFromNode(event.target);
     if (next !== pointerEntry) previewDismissed = false;
     pointerEntry = next;
     scheduleUpdate();
+  }
+
+  rail.addEventListener("pointerover", event => {
+    if (touchPoint || (event.pointerType !== "mouse" && event.pointerType !== "pen")) return;
+    enterPointer(event);
   });
+  document.addEventListener("pointermove", event => {
+    if (!touchPoint) return;
+    if (event.pointerType === "touch") {
+      if (event.pointerId === touchPoint.pointerId) {
+        touchPoint.x = event.clientX;
+        touchPoint.y = event.clientY;
+      }
+      return;
+    }
+    if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+    if (event.clientX === touchPoint.x && event.clientY === touchPoint.y) return;
+    // WebKit can retain a compatibility cursor at the final touch position.
+    // A changed hover position establishes deliberate inspection again.
+    touchPoint = null;
+    if (entryFromNode(event.target)) enterPointer(event);
+  });
+  function endTouch(event) {
+    if (!touchPoint || event.pointerType !== "touch" || event.pointerId !== touchPoint.pointerId) return;
+    if (event.type === "pointerup") {
+      touchPoint.x = event.clientX;
+      touchPoint.y = event.clientY;
+    }
+    touchPoint.pointerId = null;
+  }
+  document.addEventListener("pointerup", endTouch);
+  document.addEventListener("pointercancel", endTouch);
   rail.addEventListener("pointerout", event => {
-    pointerEntry = entryFromNode(event.relatedTarget);
+    if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+    if (entryFromNode(event.relatedTarget) !== pointerEntry) pointerEntry = null;
     scheduleUpdate();
   });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && previewEntry) {
-      previewDismissed = true;
-      scheduleUpdate();
+  rail.addEventListener("pointerdown", event => {
+    if (event.pointerType === "touch") {
+      touchPoint = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+      pointerEntry = null;
+      dismissPreview();
     }
   });
+  rail.addEventListener("click", event => {
+    if (entryFromNode(event.target)) dismissPreview();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && previewEntry) dismissPreview();
+  });
   list.addEventListener("scroll", scheduleUpdate, { passive: true });
-  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("scroll", dismissPreview, { passive: true });
   window.addEventListener("resize", scheduleUpdate);
   window.addEventListener("hashchange", scheduleUpdate);
   window.addEventListener("pageshow", scheduleUpdate);

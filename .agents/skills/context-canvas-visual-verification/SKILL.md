@@ -122,7 +122,7 @@ Existing commands are starting points rather than required ceremony. A new helpe
 
 ## Conditional context
 
-Load [references/behavior-oracles-and-verification-scope.md](references/behavior-oracles-and-verification-scope.md) when text fragments and paint disagree, an existing visual check misses a plausible failure, a perturbation behaves differently across engines, or late findings make focused versus family-wide verification unclear.
+Load [references/behavior-oracles-and-verification-scope.md](references/behavior-oracles-and-verification-scope.md) when touch, keyboard, and pointer sequences diverge, text fragments and paint disagree, an existing visual check misses a plausible failure, a perturbation behaves differently across engines, or late findings make focused versus family-wide verification unclear.
 
 ## Completion
 

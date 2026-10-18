@@ -32,7 +32,8 @@
 
     .fmi-reading-rail a.is-current .fmi-reading-rail__tick {
         background: var(--fmi-cobalt);
-        block-size: .6rem;
+        block-size: .42rem;
+        inline-size: .86rem;
     }
 
     .fmi-reading-rail a.is-selected .fmi-reading-rail__tick {
