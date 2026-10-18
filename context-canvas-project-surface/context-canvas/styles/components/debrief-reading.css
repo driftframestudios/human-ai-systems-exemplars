@@ -4,7 +4,7 @@
    .debrief-movement composition, and dense .debrief-proxy-figure references.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, movement-header grouping, dense reference figure
-   inspection, and print grouping.
+   inspection, canonical six-beat scan borders, and print grouping.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
    bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
@@ -275,5 +275,33 @@ details.debrief-case-brief__track--disclosure > ol {
 
     .debrief-case-brief__track-state {
         display: none !important;
+    }
+}
+
+/* Canonical six-beat scans keep real cell boundaries even when a route gives
+   the grid and its cells the same field. Later route palettes may vary accents. */
+:where([data-content-form="case-brief"]) .debrief-at-glance > div {
+    border: 1px solid var(--canvas-rule-strong);
+    border-block-start: .22rem solid #2855f3;
+}
+
+:where([data-content-form="case-brief"]) .debrief-at-glance > div:nth-child(3n + 2) {
+    border-block-start-color: #fa7065;
+}
+
+:where([data-content-form="case-brief"]) .debrief-at-glance > div:nth-child(3n) {
+    border-block-start-color: #17345f;
+}
+
+@media (forced-colors: active) {
+    :where([data-content-form="case-brief"]) .debrief-at-glance > div {
+        border-color: CanvasText !important;
+    }
+}
+
+@media print {
+    :where([data-content-form="case-brief"]) .debrief-at-glance > div {
+        border-color: #000 !important;
+        break-inside: avoid;
     }
 }

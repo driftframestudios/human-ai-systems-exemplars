@@ -2208,6 +2208,50 @@
       "aliases": [
         "test:debrief-reference-figures-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.fmi-reading-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/fmi-reading-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Sixteen canonical six-beat scans and FMI companion text distribution, explicit borders, variant palettes, method-link disclosure and production closure, enlarged text, print/forced colors, and restored distribution/border faults.",
+      "aliases": [
+        "test:fmi-reading-room-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.fmi-reading-rail",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/fmi-reading-rail.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "FMI native hash-selected destinations and viewport-current sections across three engines, compact label paint, keyboard/pointer/history and responsive states, scriptless anchors, restored state/clipping faults, and bounded initialization.",
+      "aliases": [
+        "test:fmi-reading-rail-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2301,7 +2345,9 @@
         "browser.context-canvas.technology-fit-layout",
         "browser.context-canvas.ai-entry-cascade",
         "browser.visualization-fidelity-atlas.atlas-cascade.browser",
-        "browser.context-canvas.debrief-reference-figures"
+        "browser.context-canvas.debrief-reference-figures",
+        "browser.context-canvas.fmi-reading-room",
+        "browser.context-canvas.fmi-reading-rail"
       ]
     },
     {
@@ -2315,7 +2361,9 @@
         "visual.requested-surface",
         "browser.context-canvas.prompt-side-figure",
         "browser.visualization-fidelity-atlas.atlas-research.browser",
-        "browser.context-canvas.debrief-reference-figures"
+        "browser.context-canvas.debrief-reference-figures",
+        "browser.context-canvas.fmi-reading-room",
+        "browser.context-canvas.fmi-reading-rail"
       ]
     },
     {

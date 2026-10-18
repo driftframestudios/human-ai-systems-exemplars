@@ -538,6 +538,35 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
       } finally { await lims.close(); }
     });
 
+    await t.test("painted-text observation distinguishes the declared accessible cue from changed hiding", async () => {
+      const session = await openPage(browser, "fmi-lims-eln-replatforming.html", { viewport: { width: 390, height: 844 } });
+      try {
+        const cue = session.page.locator(".reading-flow > .prose-flow p .fmi-link-cue").first();
+        const cueText = (await cue.textContent()).trim();
+        const observedCues = reading => reading.flows.flatMap(flow => flow.paragraphs)
+          .filter(part => part.text === cueText);
+        assert.equal(await session.page.getByRole("link", {
+          name: "Service Design Blueprint (opens in a new tab)", exact: true,
+        }).count(), 1, "The clipped cue remains part of the accessible link name.");
+        const accepted = await observeReading(session.page);
+        assert.equal(observedCues(accepted).length, 0, "The declared fully clipped cue contributes no painted fragment.");
+        assertReading(accepted, "fmi-lims-eln-replatforming.html");
+        for (const [property, value] of [["clip-path", "none"], ["width", "2px"]]) {
+          const original = await cue.getAttribute("style");
+          try {
+            await cue.evaluate((node, fault) => node.style.setProperty(fault.property, fault.value, "important"), { property, value });
+            assert.ok(observedCues(await observeReading(session.page)).length > 0,
+              `${property}: a changed hiding contract receives ordinary fragment observation`);
+          } finally {
+            await cue.evaluate((node, style) => style === null ? node.removeAttribute("style") : node.setAttribute("style", style), original);
+          }
+          const restored = await observeReading(session.page);
+          assert.equal(observedCues(restored).length, 0, "The restored accessible cue retains its bounded paint role.");
+          assertReading(restored, "fmi-lims-eln-replatforming.html");
+        }
+      } finally { await session.close(); }
+    });
+
     await t.test("negative controls expose clipping, column reversal, and evidence overlap", async () => {
       const session = await openPage(browser, "fmi-clinical-trial-coordination.html");
       try {

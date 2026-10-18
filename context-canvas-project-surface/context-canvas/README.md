@@ -105,6 +105,32 @@ The existing image-alternatives source contract retains semantic and image
 identity coverage. [Issue #51](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/51)
 receives the bounded extraction while keeping broader legacy ownership open.
 
+FMI LIMS/ELN's six companion panels keep their headings above the body.
+`fmi-lims-eln-replatforming.css` gives five longer bodies up to two continuous
+columns when two useful measures fit; the short Context Tree note uses a
+compact panel. Available width includes the reading rail's reserve, so the
+column count can decrease when the rail first appears. Print returns these
+bodies to one continuous reading. The shared Debrief component supplies
+explicit borders and three repeating accents to the sixteen canonical
+six-beat scans; Genomic Viewer and Field Inspection retain their later palette
+rules. Beat names and borders convey grouping alongside color.
+
+The authored FMI navigation uses `fmi-reading-rail.js` and
+`styles/routes/fmi-reading-rail-state.css`, loaded after the shell owners.
+“Reading” tracks the section crossing the reading line; “Selected” retains
+the recognized URL destination. Native links, fragment history, and keyboard
+focus remain browser-owned. Compact rail labels expose a viewport-contained
+preview on hover or focus. The page's method companion links intentionally
+open full-view tools in new tabs, with visible icons and accessible cues.
+
+`npm run test:fmi-reading-room-browser` observes actual text fragments,
+heading order, responsive seams, canonical scan borders, alternate media,
+and method-link closure. `npm run test:fmi-reading-rail-browser` exercises
+state transitions, history, reflow, compact labels, and scriptless behavior.
+Both include restored faults and Chromium, Firefox, and Playwright WebKit
+observations. [Issue #506](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/506)
+holds this receiving boundary and the related Debrief room audit.
+
 ## Source and public route map
 
 | Role | Current route and standing |
@@ -288,7 +314,7 @@ Current high-signal ownership:
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, opt-in movement headers, and dense reference-interface figure frames, loaded directly after `expanded.css`. The figure rules serve five routes; later palette, rail, and composition owners remain explicit. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, opt-in movement headers, canonical six-beat scan borders, and dense reference-interface figure frames, loaded directly after `expanded.css`. The figure rules serve five routes; later palette, rail, and composition owners remain explicit. |
 | [`styles/components/reading-flow.css`](styles/components/reading-flow.css) | Seventeen composed catalog readings and six AI Systems readings | Direct beat-heading break grouping and first-heading spacing around continuous prose runs; follows `expanded.css` and optional `debrief-reading.css`, before route bundles. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
