@@ -347,7 +347,10 @@ npm run check:prod-carrier
 The test suite covers explicit primary membership, Core and Canvas package
 composition, URL materialization, exact digests, separate document roots,
 transactional replacement, deployment-bundle ancestry, and the fail-closed
-installer.
+installer. It also exercises the protected-destination promotion contract:
+exact candidate and result parents, equal-tree promotions, production's
+retained carrier subtree, and the material failure paths that require a fresh
+candidate or source repair.
 The projection check composes and verifies a temporary result; the build
 replaces only ignored `.prod-projection-build/`. Staging replaces only the
 tracked cPanel deployment bundle, and the bundle check requires its committed
