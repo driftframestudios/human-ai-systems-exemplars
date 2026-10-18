@@ -23,29 +23,47 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 
 ## Movement headers and reading regions
 
-Eleven composed routes use `.debrief-movement`: Genomic Viewer, FMI Clinical
-Trial Coordination, the five EHR readings, Humatics, Spatial Capture,
-Multilingual Clinical Vocabulary Practice, and Recoverable Enterprise Forms.
-Its `.debrief-movement__header` groups the written track label and `h2` outside
-`.prose-flow`. The ordinary block body uses `.debrief-reading-flow`: each
-direct `.beat-title` and each existing full-width evidence field stands
-between continuous `.prose-flow` runs. Headings visibly precede both columns,
-and wide evidence keeps its authored position. Column-local figures retain
-their place within prose. The genomic route also applies this body relation
-to its eight separate beat sections. Ordinary internal headings retain their
-existing flow and rhythm.
+Seventeen catalog readings use `.debrief-reading-flow`: the sixteen Full
+Debriefs and Initiative Costing. Each direct `.beat-title`, section title,
+and existing full-width evidence field stands between continuous
+`.prose-flow` runs. Headings visibly precede both columns, and wide evidence
+keeps its authored position. Column-local figures retain their place within
+prose. Ordinary internal headings keep their existing rhythm.
+
+Fourteen of these routes also use `.debrief-movement` to group an authored
+track label and `h2` in `.debrief-movement__header` before the reading body.
+Genomic Viewer, FMI Clinical Trial Coordination, the five EHR readings,
+Humatics, Spatial Capture, Multilingual Clinical Vocabulary Practice,
+Recoverable Enterprise Forms, FMI LIMS/ELN, Field Inspection, and Distributed
+Inspection retain their own labels. Who To Believe, Three-Way Comparative
+& The Return, and Initiative Costing keep their title-only orientation.
+FMI LIMS/ELN's Implementation constellation, Field Inspection's Assurance
+and Population fields, and the other independent panels retain their
+block/grid composition. The LIMS/ELN rail reserves its own width, so its
+column transition follows the remaining reading container. Its short
+orientation promise remains an ordinary block before the first beat, keeping
+the promise and its border together. Initiative Costing keeps its short,
+single-paragraph principles in ordinary block flow; the longer multi-element
+reading retains continuous columns.
 
 `styles/components/debrief-reading.css` owns header containment and beat
 spacing. Core foundation owns responsive columns within each prose run;
 headings and wide evidence remain in ordinary block flow at every width.
-The route or composition stylesheet owns palette and readable foregrounds
-through the added wrappers. Keep labels and heading IDs in document order,
-and keep the header outside the fragmented prose when adding a movement.
-Keep wide evidence between prose runs so later content follows it in both
-source order and browser paint. The browser contract exercises the target
-pair, all eleven consumers, and unaffected controls through
-`npm run test:debrief-reading-layout-browser`; its native-browser confirmation
-remains a separate receiving observation.
+Route or composition styles own palette and readable foregrounds through
+the wrappers. Keep labels and heading IDs in document order and keep wide
+evidence between prose runs so subsequent content follows it in both source
+order and browser paint.
+
+The browser contract, `npm run test:debrief-reading-layout-browser`, covers
+all twenty-three catalog readings. The seventeen consumers exercise the
+heading-first relation; the six other readings preserve their independent
+composition. One Figure, Several Readings keeps labels outside its prose,
+Readable Tables keeps one pure prose run between its heading and figure,
+and the NEG Atlas, Prompt-Side Practice, Benchmark Orientation, and MAPS
+Evaluations retain their block/grid layouts. Native-browser confirmation
+and verification of the actually deployed source remain separate receiving
+observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
+holds the family extension and deployment-status boundary.
 
 ## Source and public route map
 

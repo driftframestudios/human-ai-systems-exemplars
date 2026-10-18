@@ -7,6 +7,14 @@ import { startStaticServer } from "../../tools/core-architecture-browser-helper.
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const output = new URL("../../.visual-runs/debrief-reading-layout/", import.meta.url);
 const targets = ["genomic-viewer-replatforming.html", "fmi-clinical-trial-coordination.html"];
+const extendedFamily = [
+  "fmi-lims-eln-replatforming.html",
+  "field-inspection-harness-replatform.html",
+  "distributed-inspection-harness.html",
+  "who-to-believe-reviews-platform.html",
+  "three-way-comparative-return.html",
+  "initiative-costing.html",
+];
 const family = [
   ...targets,
   "choose-your-player-humatics.html",
@@ -18,14 +26,49 @@ const family = [
   "multilingual-clinical-vocabulary-practice.html",
   "recoverable-enterprise-forms.html",
   "spatial-capture-collaborative-memory.html",
+  ...extendedFamily,
 ];
+// These counts preserve each authored composition, including title-only owners.
+const nativeMovements = {
+  "choose-your-player-humatics.html": 3,
+  "fmi-lims-eln-replatforming.html": 1,
+  "field-inspection-harness-replatform.html": 3,
+  "distributed-inspection-harness.html": 2,
+  "who-to-believe-reviews-platform.html": 0,
+  "three-way-comparative-return.html": 0,
+  "initiative-costing.html": 0,
+};
+const extensionShape = {
+  "fmi-lims-eln-replatforming.html": [4, 4],
+  "field-inspection-harness-replatform.html": [3, 13],
+  "distributed-inspection-harness.html": [3, 2],
+  "who-to-believe-reviews-platform.html": [2, 16],
+  "three-way-comparative-return.html": [2, 1],
+  "initiative-costing.html": [2, 9],
+};
+const controls = [
+  "one-figure-several-readings.html",
+  "readable-tables-reusable-evidence.html",
+  "narrative-execution-gap-research-atlas.html",
+  "prompt-side-conditions-practice.html",
+  "benchmark-orientation.html",
+  "maps-evaluations.html",
+];
+const familyWidths = [390, 1440, 2560];
+const modePlan = new Map([
+  ...targets.map(route => [route, ["print", "forced-colors", "no-script", "enlarged-initial", "enlarged-long-label"]]),
+  [extendedFamily[0], ["print", "forced-colors", "no-script", "enlarged-long-label"]],
+  [extendedFamily[1], ["print", "forced-colors", "enlarged-long-label"]],
+  [extendedFamily[2], ["no-script", "enlarged-long-label"]],
+  [extendedFamily[3], ["print", "forced-colors", "no-script", "enlarged-long-label"]],
+  [extendedFamily[4], ["enlarged-initial"]],
+  [extendedFamily[5], ["enlarged-long-label"]],
+]);
 const viewports = [
-  { width: 390, height: 844 },
   { width: 1359, height: 1000 },
   { width: 1360, height: 1000 },
   { width: 1361, height: 1000 },
   { width: 1512, height: 982 },
-  { width: 2560, height: 1440 },
 ];
 let server;
 
@@ -70,8 +113,8 @@ async function openPage(browser, route, options = {}) {
   return { page, close: () => context.close() };
 }
 
-async function observeReading(page) {
-  return page.evaluate(() => {
+async function observeReading(page, { includeOrdinary = false } = {}) {
+  return page.evaluate(includeOrdinary => {
     const rect = box => ({
       left: box.left, right: box.right, top: box.top, bottom: box.bottom,
       width: box.width, height: box.height,
@@ -95,6 +138,7 @@ async function observeReading(page) {
         const boxes = [...range.getClientRects()].map(rect).filter(positive);
         result.push({
           text: node.textContent.slice(start, end), boxes,
+          raised: Boolean(node.parentElement.closest("sup, sub")),
           visible: style.display !== "none" && style.visibility === "visible",
         });
       }
@@ -102,7 +146,7 @@ async function observeReading(page) {
     };
     const movementHeaders = [...document.querySelectorAll(".debrief-movement")].map(movement => {
       const header = movement.querySelector(":scope > .debrief-movement__header");
-      const label = header?.querySelector(".debrief-track-label, .genomic-track-label");
+      const label = header?.querySelector(".debrief-track-label, .genomic-track-label, .fmi-track-marker, .field-inspection-track-label, .inspection-track-label");
       const title = header?.querySelector("h2");
       const flow = movement.querySelector(":scope > .debrief-reading-flow");
       if (!header || !label || !title || !flow) return { valid: false };
@@ -115,18 +159,18 @@ async function observeReading(page) {
         box: box(header), labelBox: box(label), titleBox: box(title), flowBox: box(flow),
         label: fragments(label), title: fragments(title),
         parts: [...label.children].map(child => ({ tag: child.tagName, box: box(child) })),
-        rail: Boolean(document.querySelector(`.page-section-rail a[href="#${title.id}"]`)),
+        rail: Boolean(document.querySelector(`:is(.page-section-rail, [data-canvas-page-rail]) a[href="#${title.id}"]`)),
       };
     });
 
     const wideSelector = "h1, h2, figure, .table-figure, .table-span-all, .career-slide, .clean-list, .embed-slot, pre";
     const isWide = node => node.matches(wideSelector) && !node.matches(".table-figure--column");
-    const owners = [...document.querySelectorAll(".debrief-reading-flow")].map(owner => {
+    const owners = [...document.querySelectorAll(includeOrdinary ? ".prose-flow" : ".debrief-reading-flow")].map(owner => {
       const children = [...owner.children];
       const flowBox = box(owner);
       // The nested selector also observes the negative control that puts an
       // opening heading back into columns, where a continuation can precede it.
-      const headings = owner.querySelectorAll(":scope > .beat-title, :scope > .prose-flow > .beat-title");
+      const headings = owner.querySelectorAll(":scope > :is(h1, h2, .beat-title), :scope > .prose-flow > :is(h1, h2, .beat-title)");
       const regions = [...headings].map(heading => {
         const content = [];
         for (let sibling = heading.nextElementSibling; sibling; sibling = sibling.nextElementSibling) {
@@ -141,6 +185,8 @@ async function observeReading(page) {
           ? heading.parentElement : heading.nextElementSibling;
         return {
           id: heading.id || heading.textContent.trim(),
+          beat: heading.matches(".beat-title"),
+          level: heading.tagName,
           heading: fragments(heading),
           columns: run?.matches(".prose-flow") ? Number.parseInt(getComputedStyle(run).columnCount, 10) || 1 : 1,
           // Both column starts are derived from the complete region's text
@@ -157,20 +203,42 @@ async function observeReading(page) {
         const following = fragments(next).flatMap(part => part.boxes);
         return [{ id: wide.id || wide.tagName, box: box(wide), following }];
       });
-      return { box: flowBox, regions, boundaries };
+      const title = owner.querySelector(":scope > h2");
+      return {
+        box: flowBox, regions, boundaries,
+        titleNamed: !title || owner.getAttribute("aria-labelledby")?.split(/\s+/u).includes(title.id),
+      };
     });
-    const flows = [...document.querySelectorAll(".debrief-reading-flow > .prose-flow")].map(flow => ({
-      columns: Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1,
-      misplaced: [...flow.children].filter(child => child.matches(".beat-title") || isWide(child))
-        .map(child => child.id || child.tagName),
-    }));
+    const rootFont = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const flows = [...document.querySelectorAll(".debrief-reading-flow > .prose-flow")].map(flow => {
+      const container = flow.closest(".content");
+      const style = getComputedStyle(container);
+      const containerWidth = container.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
+      return {
+        columns: Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1,
+        box: box(flow), ownerBox: box(flow.parentElement), paragraphs: [...flow.children].filter(child => child.matches("p")).flatMap(fragments),
+        containerWidth, columnThreshold: 80 * rootFont,
+        misplaced: [...flow.children].filter(child => child.matches(".beat-title") || isWide(child))
+          .map(child => child.id || child.tagName),
+      };
+    });
     return {
       viewport: document.documentElement.clientWidth,
       documentWidth: document.documentElement.scrollWidth,
       headers: movementHeaders,
-      owners, flows,
+      owners, flows, rootFont,
+      principles: [...document.querySelectorAll('[aria-labelledby="doctrines-title"] > .beat-title')].flatMap(heading => {
+        const next = heading.nextElementSibling;
+        const paragraph = next?.matches("p") ? next
+          : next?.matches(".prose-flow") && next.children.length === 1 && next.firstElementChild.matches("p") ? next.firstElementChild : null;
+        return paragraph ? [{ text: paragraph.textContent.trim(), fragments: [...paragraph.getClientRects()].map(rect).filter(positive) }] : [];
+      }),
+      promises: [...document.querySelectorAll(".debrief-reading-flow .fmi-track-promise")].map(promise => ({
+        fragments: [...promise.getClientRects()].map(rect).filter(positive),
+        owner: box(promise.closest(".debrief-reading-flow")),
+      })),
     };
-  });
+  }, includeOrdinary);
 }
 
 function assertText(text, owner, context) {
@@ -227,7 +295,7 @@ function assertRegions(reading, label) {
       if (region.columns === 2 && region.starts.every(value => value !== null)) paired += 1;
     }
   }
-  assert.ok(count > 0, `${label}: observes authored beat regions`);
+  assert.ok(count > 0, `${label}: observes authored title or beat regions`);
   return { count, paired };
 }
 
@@ -245,12 +313,100 @@ function assertWideBoundaries(reading, label) {
 }
 
 function assertReading(reading, route, options = {}) {
-  assertHeaders(reading, route === "choose-your-player-humatics.html" ? 3 : 2, route, options);
-  assert.ok(reading.documentWidth <= reading.viewport + 2,
-    `${route}: page remains contained (${reading.documentWidth}px within ${reading.viewport}px)`);
+  assertHeaders(reading, nativeMovements[route] ?? 2, route, options);
+  if (extensionShape[route]) {
+    assert.deepEqual([reading.owners.length, reading.owners.flatMap(owner => owner.regions).filter(region => region.beat).length],
+      extensionShape[route], `${route}: source-native owners and beats remain observable`);
+  }
+  assert.ok(reading.owners.every(owner => owner.titleNamed), `${route}: title-only readings retain their accessible names`);
+  if (options.media !== "print") {
+    assert.ok(reading.documentWidth <= reading.viewport + 2,
+      `${route}: page remains contained (${reading.documentWidth}px within ${reading.viewport}px)`);
+  }
+  // Print decorations can enlarge scrollWidth without clipping reader text.
+  // Actual title/prose geometry, evidence order, and the mixed capital table
+  // below supply the print claim; screen document containment stays strict.
+  assert.ok(reading.owners.every(owner => owner.box.left >= -2 && owner.box.right <= reading.viewport + 2),
+    `${route}: reading owners fit the visitor field`);
+  for (const promise of reading.promises) {
+    assert.equal(promise.fragments.length, 1, `${route}: the introductory promise remains one unfragmented callout`);
+    assert.ok(promise.fragments[0].left >= promise.owner.left - 2 && promise.fragments[0].right <= promise.owner.right + 2,
+      `${route}: introductory callout fits its reading owner`);
+  }
+  for (const flow of reading.flows) {
+    assert.ok(flow.box.left >= flow.ownerBox.left - 2 && flow.box.right <= flow.ownerBox.right + 2
+      && flow.box.left >= -2 && flow.box.right <= reading.viewport + 2,
+    `${route}: continuous prose fits its reading owner and visitor field`);
+    // Raised footnote references can sit above the first line's block box.
+    // Keep their inline bounds in the flow and their vertical bounds within
+    // the outer reading; ordinary paragraph text stays inside the flow box.
+    const ordinary = flow.paragraphs.filter(part => !part.raised);
+    const raised = flow.paragraphs.filter(part => part.raised);
+    if (ordinary.length) assertText(ordinary, flow.box, `${route}: continuous paragraph text`);
+    if (raised.length) assertText(raised,
+      { ...flow.box, top: flow.ownerBox.top, bottom: flow.ownerBox.bottom },
+      `${route}: raised footnote text`);
+  }
+  if (route === "who-to-believe-reviews-platform.html") {
+    assert.equal(reading.owners.flatMap(owner => owner.regions).filter(region => region.level === "H4").length, 6,
+      "Who To Believe preserves its six authored subordinate beats");
+  }
+  if (route === "initiative-costing.html") {
+    assert.equal(reading.principles.length, 8, "all short costing principles remain observable");
+    assert.ok(reading.principles.every(principle => principle.fragments.length === 1),
+      "short costing principles remain single readings without an isolated column continuation");
+  }
   const result = assertRegions(reading, route);
   assertWideBoundaries(reading, route);
   return result;
+}
+
+function assertColumnActivation(reading, route) {
+  assert.ok(reading.flows.length > 0, `${route}: has continuous prose`);
+  for (const flow of reading.flows) {
+    assert.equal(flow.columns, flow.containerWidth >= flow.columnThreshold ? 2 : 1,
+      `${route}: columns follow the actual reading container (${flow.containerWidth}px / ${flow.columnThreshold}px)`);
+  }
+}
+
+async function settleColumns(page) {
+  await expect.poll(async () => {
+    const reading = await observeReading(page);
+    return reading.flows.every(flow => flow.columns === (flow.containerWidth >= flow.columnThreshold ? 2 : 1));
+  }, { timeout: 3000, message: "responsive columns settle at the actual container boundary" }).toBe(true);
+}
+
+async function observeCapitalTable(page) {
+  return page.locator('[aria-label="Current staged capital plan"] > table').evaluate(table => {
+    const rect = box => ({ left: box.left, right: box.right, top: box.top, bottom: box.bottom });
+    return {
+      viewport: document.documentElement.clientWidth,
+      box: rect(table.getBoundingClientRect()),
+      cells: [...table.querySelectorAll("th, td")].map(cell => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        return { text: cell.textContent.trim(), box: rect(cell.getBoundingClientRect()),
+          fragments: [...range.getClientRects()].filter(box => box.width > 0 && box.height > 0).map(rect) };
+      }),
+    };
+  });
+}
+
+function assertCapitalTable(table) {
+  assert.ok(table.box.left >= -2 && table.box.right <= table.viewport + 2,
+    "the printed capital table fits the reading field");
+  for (const cell of table.cells) {
+    assert.ok(cell.text && cell.fragments.length, "each printed capital value has text layout bounds");
+    assert.ok(cell.fragments.every(fragment => fragment.left >= cell.box.left - 2 && fragment.right <= cell.box.right + 2
+      && fragment.top >= cell.box.top - 2 && fragment.bottom <= cell.box.bottom + 2),
+    "printed capital text remains inside its table cell");
+  }
+}
+
+async function captureCapitalTable(page, prefix) {
+  await page.locator('[aria-label="Current staged capital plan"]').evaluate(node =>
+    window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 150));
+  await page.screenshot({ path: new URL(`${prefix}.png`, output).pathname });
 }
 
 async function captureOpenings(page, prefix) {
@@ -265,10 +421,17 @@ async function captureOpenings(page, prefix) {
     }).map(image => image.decode())));
     await page.screenshot({ path: new URL(`${prefix}-${suffix}.png`, output).pathname });
   };
-  const headers = page.locator(".debrief-movement__header");
+  const headers = page.locator(".debrief-movement__header, .debrief-reading-flow > h2");
   for (let index = 0; index < await headers.count(); index += 1) {
     await headers.nth(index).evaluate(node => window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 150));
     await capture(index + 1);
+  }
+  // Paint-only fragments need a visual comparison: a Range can establish
+  // layout order while an engine still paints a later glyph above a figure.
+  const evidence = page.locator(".debrief-reading-flow > figure:has(+ .prose-flow)").first();
+  if (await evidence.count()) {
+    await evidence.evaluate(node => window.scrollTo(0, node.getBoundingClientRect().bottom + window.scrollY - 550));
+    await capture("evidence-return");
   }
   const intervention = page.locator('.debrief-reading-flow > .beat-title').filter({ hasText: /§c|\.c /u }).first();
   if (await intervention.count()) {
@@ -284,17 +447,43 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
     let regions = 0;
     let pairedRegions = 0;
 
+    await t.test("the complete catalog has an explicit reading disposition", async () => {
+      const session = await openPage(browser, "debriefs.html");
+      try {
+        const routes = await session.page.locator('script[type="application/ld+json"]').evaluateAll(nodes =>
+          nodes.flatMap(node => {
+            const data = JSON.parse(node.textContent);
+            const items = data["@graph"] || [data];
+            return items.filter(item => item["@type"] === "ItemList").flatMap(item => item.itemListElement)
+              .map(item => new URL(item.url).pathname.split("/").at(-1));
+          }));
+        assert.deepEqual(routes.sort(), [...family, ...controls].sort(), "all 23 catalog routes have a consumer or control observation");
+      } finally { await session.close(); }
+    });
+
     for (const route of family) {
-      await t.test(`${route}: desktop family reading`, async () => {
-        const session = await openPage(browser, route);
-        try {
-          const result = assertReading(await observeReading(session.page), route);
-          regions += result.count;
-          pairedRegions += result.paired;
-          assert.ok(result.paired > 0, `${route}: exercises real two-column continuation`);
-          if (targets.includes(route)) await captureOpenings(session.page, `${engine}-${route}-1440`);
-        } finally { await session.close(); }
-      });
+      for (const width of familyWidths) {
+        await t.test(`${route}: ${width}px family reading`, async () => {
+          const session = await openPage(browser, route, { viewport: { width, height: width === 390 ? 844 : width === 2560 ? 1440 : 1000 } });
+          try {
+            const reading = await observeReading(session.page);
+            const result = assertReading(reading, route);
+            assertColumnActivation(reading, route);
+            if (width === 1440) {
+              regions += result.count;
+              pairedRegions += result.paired;
+            }
+            if (width === 2560) assert.ok(result.paired > 0, `${route}: exercises real two-column continuation`);
+            if ((width === 1440 && [...targets, ...extendedFamily].includes(route))
+              || (width !== 1440 && [...targets, ...extendedFamily.slice(0, 2), extendedFamily[3], extendedFamily[5]].includes(route))) {
+              await captureOpenings(session.page, `${engine}-${route}-${width}`);
+              if (route === "field-inspection-harness-replatform.html" && width === 1440) {
+                await captureCapitalTable(session.page, `${engine}-field-capital-screen-1440`);
+              }
+            }
+          } finally { await session.close(); }
+        });
+      }
     }
 
     for (const route of targets) {
@@ -304,62 +493,76 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           try {
             const reading = await observeReading(session.page);
             assertReading(reading, route);
-            const expectedColumns = viewport.width < 1360 ? 1 : 2;
-            assert.ok(reading.flows.every(flow => flow.columns === expectedColumns),
-              `${route}: actual 80rem reading-container transition at ${viewport.width}px`);
-            if (viewport.width === 390 || viewport.width === 2560) {
-              await captureOpenings(session.page, `${engine}-${route}-${viewport.width}`);
-            }
+            assertColumnActivation(reading, route);
           } finally { await session.close(); }
         });
       }
     }
 
-    for (const route of targets) {
-      await t.test(`${route}: live viewport changes preserve reading in both directions`, async () => {
+    for (const route of [...targets, extendedFamily[0]]) {
+      await t.test(`${route}: live viewport changes cross its actual reading seam in both directions`, async () => {
         const session = await openPage(browser, route);
         try {
-          for (const width of [1359, 1360, 390, 1440]) {
+          // Locate the viewport that gives this route 80rem of reading space.
+          // LIMS reserves rail width, so its seam differs from ordinary pages.
+          const initial = (await observeReading(session.page)).flows[0];
+          const seam = Math.round(1440 + initial.columnThreshold - initial.containerWidth);
+          if (route === extendedFamily[0]) assert.ok(seam > 1360, "the LIMS rail reserves reading space");
+          else assert.equal(seam, 1360, "ordinary reading activates at the established seam");
+          for (const width of [seam - 1, seam, seam + 1, 390, 2560, 1440]) {
             await session.page.setViewportSize({ width, height: 1000 });
-            const columns = width < 1360 ? 1 : 2;
-            await expect.poll(() => session.page.locator(".debrief-reading-flow > .prose-flow")
-              .evaluateAll(flows => flows.map(flow => Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1)),
-            { timeout: 3000 }).toEqual((await observeReading(session.page)).flows.map(() => columns));
-            assertReading(await observeReading(session.page), route);
+            await settleColumns(session.page);
+            const reading = await observeReading(session.page);
+            assertReading(reading, route);
+            assertColumnActivation(reading, route);
+            if (Math.abs(width - seam) <= 1) {
+              assert.ok(reading.flows.every(flow => flow.columns === (width < seam ? 1 : 2)),
+                `${route}: crosses its measured seam at ${seam}px`);
+            }
           }
         } finally { await session.close(); }
       });
+    }
 
-      for (const mode of ["print", "forced-colors", "no-script", "enlarged-initial", "enlarged-long-label"]) {
+    for (const [route, modes] of modePlan) {
+      for (const mode of modes) {
         await t.test(`${route}: ${mode} retains complete orientation`, async () => {
           const session = await openPage(browser, route, {
             javaScriptEnabled: mode !== "no-script",
             forcedColors: mode === "forced-colors" ? "active" : "none",
             enlargedInitially: mode === "enlarged-initial",
+            // The LIMS reserved rail needs a wider viewport to exercise both
+            // sides of text enlargement; all other representatives use 1440.
+            viewport: { width: route === extendedFamily[0] ? 1800 : 1440, height: 1000 },
           });
           try {
             let enlargement;
             if (mode === "print") await session.page.emulateMedia({ media: "print" });
             if (mode === "enlarged-long-label") {
               enlargement = await session.page.addStyleTag({ content: "html { font-size: 200%; }" });
-              await session.page.locator(".debrief-movement__header p").evaluateAll(labels => {
+              await session.page.locator(".debrief-movement__header > p:first-child, .debrief-reading-flow > h2").evaluateAll(labels => {
                 for (const label of labels) label.append(document.createTextNode(
                   " · Extended movement orientation names the receiving people, retained responsibility, and next observable decision.",
                 ));
               });
             }
             const reading = await observeReading(session.page);
-            assertReading(reading, route, { rails: mode !== "no-script" });
+            assertReading(reading, route, { rails: mode !== "no-script", media: mode === "print" ? "print" : "screen" });
+            if (mode === "print") {
+              t.diagnostic(`${route}: print document extent ${reading.documentWidth}px / ${reading.viewport}px; title and prose layout bounds checked.`);
+              if (route === "field-inspection-harness-replatform.html") {
+                assertCapitalTable(await observeCapitalTable(session.page));
+                await captureCapitalTable(session.page, `${engine}-field-capital-print-1440`);
+              }
+            }
             if (mode.startsWith("enlarged")) {
+              assert.equal(reading.rootFont, 32, `${route}: observes enlarged root text`);
               assert.ok(reading.flows.every(flow => flow.columns === 1),
                 `${route}: enlarged text exits the multicolumn reading state`);
             }
             if (enlargement) {
               await enlargement.evaluate(node => node.remove());
-              await expect.poll(() => session.page.locator(".debrief-reading-flow > .prose-flow").evaluateAll(flows =>
-                flows.filter(flow => getComputedStyle(flow).columnCount !== "2")
-                  .map(flow => flow.previousElementSibling?.id || "prose continuation")),
-              { timeout: 3000, message: `${route}: responsive reading returns to two columns` }).toEqual([]);
+              await settleColumns(session.page);
               const restored = await observeReading(session.page);
               assertReading(restored, route);
               assert.ok(restored.flows.every(flow => flow.columns === 2),
@@ -373,37 +576,147 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
       }
     }
 
-    await t.test("labels outside columns and ordinary unlabeled prose retain their reading", async () => {
-      for (const route of ["one-figure-several-readings.html", "grammar-family.html"]) {
-        const session = await openPage(browser, route);
-        try {
-          const control = await session.page.evaluate(() => ({
-            optedIn: document.querySelectorAll(".debrief-movement, .debrief-reading-flow").length,
-            labels: [...document.querySelectorAll(".debrief-track-label")].map(label => ({
-              outside: !label.closest(".prose-flow"),
-              top: label.getBoundingClientRect().top,
-              bottom: label.getBoundingClientRect().bottom,
-              next: label.nextElementSibling.getBoundingClientRect().top,
-            })),
-            flows: [...document.querySelectorAll(".prose-flow")].map(flow => ({
-              columns: getComputedStyle(flow).columnCount,
-              width: flow.getBoundingClientRect().width,
-              text: flow.innerText.trim().length,
-            })),
-            width: document.documentElement.clientWidth,
-            pageWidth: document.documentElement.scrollWidth,
-          }));
-          assert.equal(control.optedIn, 0, `${route}: retains its independent composition`);
-          assert.ok(control.pageWidth <= control.width + 2, `${route}: stays contained`);
-          if (route.startsWith("one-figure")) {
-            assert.equal(control.labels.length, 2);
-            assert.ok(control.labels.every(label => label.outside && label.bottom > label.top && label.bottom <= label.next + 2));
-          } else {
-            assert.ok(control.flows.some(flow => flow.columns === "2" && flow.width > 0 && flow.text > 0),
-              "ordinary prose retains its two-column reading");
-          }
-        } finally { await session.close(); }
+    for (const route of controls) {
+      for (const width of familyWidths) {
+        await t.test(`${route}: ${width}px independent composition control`, async () => {
+          const session = await openPage(browser, route, { viewport: { width, height: 1000 } });
+          try {
+            const control = await session.page.evaluate(() => ({
+              optedIn: document.querySelectorAll(".debrief-movement, .debrief-reading-flow").length,
+              labels: [...document.querySelectorAll(".debrief-track-label")].map(label => ({
+                outside: !label.closest(".prose-flow"),
+                top: label.getBoundingClientRect().top,
+                bottom: label.getBoundingClientRect().bottom,
+                next: label.nextElementSibling.getBoundingClientRect().top,
+              })),
+              headings: [...document.querySelectorAll("main h2")].map(heading => ({
+                left: heading.getBoundingClientRect().left, right: heading.getBoundingClientRect().right,
+                width: heading.getBoundingClientRect().width, height: heading.getBoundingClientRect().height,
+                text: heading.textContent.trim(),
+              })).filter(heading => heading.width > 0 && heading.height > 0),
+              flows: [...document.querySelectorAll(".prose-flow")].map(flow => ({
+                columns: Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1,
+                tags: [...flow.children].map(child => child.tagName),
+                top: flow.getBoundingClientRect().top, bottom: flow.getBoundingClientRect().bottom,
+                before: flow.previousElementSibling?.getBoundingClientRect().bottom,
+                beforeTag: flow.previousElementSibling?.tagName,
+                after: flow.nextElementSibling?.getBoundingClientRect().top,
+                afterTag: flow.nextElementSibling?.tagName,
+              })),
+              width: document.documentElement.clientWidth,
+              pageWidth: document.documentElement.scrollWidth,
+            }));
+            assert.equal(control.optedIn, 0, `${route}: retains its independent composition`);
+            assert.ok(control.pageWidth <= control.width + 2, `${route}: stays contained`);
+            assert.ok(control.headings.length > 0, `${route}: retains readable section orientation`);
+            assert.ok(control.headings.every(heading => heading.text && heading.left >= -2 && heading.right <= width + 2),
+              `${route}: visible section titles fit the visitor field`);
+            if (route === controls[0]) {
+              assert.equal(control.labels.length, 2);
+              assert.ok(control.labels.every(label => label.outside && label.bottom > label.top && label.bottom <= label.next + 2));
+              assertRegions(await observeReading(session.page, { includeOrdinary: true }), route);
+            } else if (route === controls[1]) {
+              assert.equal(control.flows.length, 1);
+              const flow = control.flows[0];
+              assert.deepEqual(flow.tags, ["P", "P", "P"], "Readable Tables retains its pure three-paragraph flow");
+              assert.equal(flow.beforeTag, "P");
+              assert.equal(flow.afterTag, "FIGURE");
+              assert.ok(flow.before <= flow.top + 2 && flow.bottom <= flow.after + 2,
+                "the independent prose remains between its introduction and evidence");
+              assert.equal(flow.columns, width >= 1360 ? 2 : 1);
+            } else {
+              assert.equal(control.flows.length, 0, `${route}: keeps its block/grid composition`);
+            }
+          } finally { await session.close(); }
+        });
       }
+    }
+
+    await t.test("the mixed capital table remains readable in a narrow print field", async () => {
+      const session = await openPage(browser, "field-inspection-harness-replatform.html", { viewport: { width: 800, height: 1100 } });
+      try {
+        await session.page.emulateMedia({ media: "print" });
+        assertReading(await observeReading(session.page), "field-inspection-harness-replatform.html", { media: "print" });
+        assertCapitalTable(await observeCapitalTable(session.page));
+        await captureCapitalTable(session.page, `${engine}-field-capital-print-800`);
+        // Whole-table numeric styling incorrectly makes narrative cells nowrap.
+        await session.page.locator('[aria-label="Current staged capital plan"] > table').evaluate(table => table.classList.add("table--numeric"));
+        const fault = await observeCapitalTable(session.page);
+        assert.throws(() => assertCapitalTable(fault), /printed capital table fits/u);
+      } finally { await session.close(); }
+    });
+
+    await t.test("Who To Believe keeps graph interaction and title navigation after prose separation", async () => {
+      const session = await openPage(browser, "who-to-believe-reviews-platform.html");
+      try {
+        const graph = session.page.locator("[data-wtb-system-graph]");
+        await expect(graph).toHaveAttribute("data-graph-state", "enhanced");
+        assert.equal(await graph.locator(".wtb-system-graph__node").count(), 22);
+        assert.equal(await graph.locator(".wtb-system-graph__edge").count(), 26);
+        await graph.getByLabel("Partial Spring Boot migration").check();
+        await expect(graph.locator("[data-detail-status]")).toHaveText("BREAKING");
+        await graph.locator('[data-node-id="risk"]').click();
+        await expect(graph.locator("[data-detail-title]")).toHaveText("Risk scoring");
+        await graph.locator("[data-detail-neighbors] button", { hasText: "→ Kit fulfillment" }).click();
+        await expect(graph.locator("[data-detail-title]")).toHaveText("Kit fulfillment");
+        const links = session.page.locator('.page-section-rail a[href="#implementation-architecture-title"]');
+        assert.equal(await links.count(), 1, "the title-only implementation remains in the reading rail");
+        await links.click();
+        await expect(session.page).toHaveURL(/#implementation-architecture-title$/u);
+        assertReading(await observeReading(session.page), "who-to-believe-reviews-platform.html");
+      } finally { await session.close(); }
+    });
+
+    await t.test("title-only and callout faults expose new-family reading regressions", async () => {
+      const session = await openPage(browser, "initiative-costing.html", { viewport: { width: 2560, height: 1440 } });
+      try {
+        assertReading(await observeReading(session.page), "initiative-costing.html");
+        await session.page.evaluate(() => {
+          const title = document.querySelector(".debrief-reading-flow > h2");
+          title.nextElementSibling.style.transform = "translateY(-1000px)";
+        });
+        const titleFault = await observeReading(session.page);
+        assert.throws(() => assertRegions(titleFault, "title-only continuation"), /heading precedes its first continuation/u);
+        await session.page.reload({ waitUntil: "load" });
+        await session.page.evaluate(() => {
+          const heading = document.querySelector(".debrief-reading-flow > .beat-title:not([id])");
+          const paragraph = heading.nextElementSibling;
+          const run = document.createElement("div");
+          run.className = "prose-flow";
+          heading.before(run);
+          run.append(heading, paragraph);
+        });
+        const unnamedFault = await observeReading(session.page);
+        assert.throws(() => assertWideBoundaries(unnamedFault, "unnamed beat in columns"), /continuous prose keeps authored headings/u);
+        await session.page.reload({ waitUntil: "load" });
+        await session.page.evaluate(() => {
+          const paragraph = [...document.querySelectorAll('[aria-labelledby="doctrines-title"] > .beat-title + p')]
+            .find(node => node.textContent.includes("recovery work"));
+          const run = document.createElement("div");
+          run.className = "prose-flow";
+          paragraph.before(run);
+          run.append(paragraph);
+        });
+        const splitPrinciple = await observeReading(session.page);
+        assert.throws(() => assertReading(splitPrinciple, "initiative-costing.html"), /short costing principles remain single readings/u);
+      } finally { await session.close(); }
+      const lims = await openPage(browser, "fmi-lims-eln-replatforming.html", { viewport: { width: 2560, height: 1440 } });
+      try {
+        assertReading(await observeReading(lims.page), "fmi-lims-eln-replatforming.html");
+        // Firefox keeps the historic callout in one column. Chromium and
+        // WebKit reproduce its split; all engines check the repaired source.
+        if (engine !== "firefox") {
+          await lims.page.evaluate(() => {
+            const promise = document.querySelector(".debrief-reading-flow > .fmi-track-promise");
+            const run = document.createElement("div");
+            run.className = "prose-flow";
+            promise.before(run);
+            run.append(promise);
+          });
+          const fragmented = await observeReading(lims.page);
+          assert.throws(() => assertReading(fragmented, "fmi-lims-eln-replatforming.html"), /one unfragmented callout/u);
+        }
+      } finally { await lims.close(); }
     });
 
     await t.test("negative controls expose clipping, column reversal, and evidence overlap", async () => {
