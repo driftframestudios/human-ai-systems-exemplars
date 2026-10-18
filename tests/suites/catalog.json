@@ -1049,6 +1049,28 @@
       ]
     },
     {
+      "id": "browser.context-canvas.ai-systems-reading-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-systems-reading-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-four AI Systems and Shared Machinery readings plus the Debriefs parent across Chromium, Firefox and Playwright WebKit at narrow, desktop and wide dimensions; repaired reading owners, actual container seams, metadata and heading text containment, local table overflow, representative print, forced colors, enlarged text, scriptless reading and controlled faults with restoration. Embedded-document behavior, native browsers and deployed publication retain separate observations.",
+      "aliases": [
+        "test:ai-systems-reading-layout-browser"
+      ]
+    },
+    {
       "id": "browser.context-canvas.visitor-image-delivery",
       "family": "context-canvas",
       "kind": "node-test",
@@ -2186,7 +2208,8 @@
         "browser.table-reading",
         "worker.browser",
         "browser.context-canvas.prompt-side-figure",
-        "browser.visualization-fidelity-atlas.atlas-research.browser"
+        "browser.visualization-fidelity-atlas.atlas-research.browser",
+        "browser.context-canvas.ai-systems-reading-layout"
       ]
     },
     {
@@ -2444,7 +2467,8 @@
     "browserSupport": [
       "tools/core-architecture-browser-helper.mjs",
       "tools/table-reading-observer.mjs",
-      "tools/table-focused-acceptance.mjs"
+      "tools/table-focused-acceptance.mjs",
+      "tests/context-canvas/reading-layout-helper.mjs"
     ],
     "evidenceSupport": [
       "tools/evidence-campaign.mjs",

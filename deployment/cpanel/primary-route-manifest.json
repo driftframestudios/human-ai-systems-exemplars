@@ -1938,6 +1938,11 @@
       "media_type": "text/css"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/reading-flow.css",
+      "projected_path": "styles/components/reading-flow.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/components/instrument-atlas.css",
       "projected_path": "styles/components/instrument-atlas.css",
       "media_type": "text/css"
