@@ -7,7 +7,7 @@
    measure and placement, movement-header grouping, dense reference figure
    inspection, canonical six-beat scan borders, sustained prose and code
    distribution, compact evidence frames, chronological columns, numbered
-   procedure pairs, and print grouping. Each opt-in body keeps its heading in
+   procedure pairs, screen inline-padding floors, and print grouping. Each opt-in body keeps its heading in
    the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
@@ -502,6 +502,10 @@ details.debrief-case-brief__track--disclosure > ol {
 @media screen {
     .debrief-companion-frame,
     .debrief-companion--compact {
+        /* Local padding owners consume this screen-only lower bound. Their
+           fluid growth, upper bounds, vertical rhythm, and print spacing stay
+           with the route; native list gutters retain room for numbering. */
+        --debrief-companion-inline-floor: .5rem;
         --debrief-companion-viewport-reserve: 2.5rem;
         max-inline-size: min(100%, var(--debrief-companion-measure, 100%), calc(100vw - var(--debrief-companion-viewport-reserve)));
         margin-inline: auto;
