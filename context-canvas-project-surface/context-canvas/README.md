@@ -23,7 +23,7 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 
 ## Movement headers and reading regions
 
-Seventeen catalog readings use `.debrief-reading-flow`: the sixteen Full
+Seventeen catalog readings use `.reading-flow`: the sixteen Full
 Debriefs and Initiative Costing. Each direct `.beat-title`, section title,
 and existing full-width evidence field stands between continuous
 `.prose-flow` runs. Headings visibly precede both columns, and wide evidence
@@ -46,8 +46,11 @@ the promise and its border together. Initiative Costing keeps its short,
 single-paragraph principles in ordinary block flow; the longer multi-element
 reading retains continuous columns.
 
-`styles/components/debrief-reading.css` owns header containment and beat
-spacing. Core foundation owns responsive columns within each prose run;
+`styles/components/debrief-reading.css` owns Debrief movement-header containment.
+`styles/components/reading-flow.css` owns the shared direct beat-heading
+break grouping and first-heading spacing. It loads after `expanded.css` and,
+on Debrief consumers, after `debrief-reading.css`, before route bundles.
+Core foundation owns responsive columns within each prose run;
 headings and wide evidence remain in ordinary block flow at every width.
 Route or composition styles own palette and readable foregrounds through
 the wrappers. Keep labels and heading IDs in document order and keep wide
@@ -64,6 +67,27 @@ Evaluations retain their block/grid layouts. Native-browser confirmation
 and verification of the actually deployed source remain separate receiving
 observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
 holds the family extension and deployment-status boundary.
+
+AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
+Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
+`.reading-flow` boundary in thirteen reading regions. Their metadata,
+section and beat headings, and full-width evidence occupy ordinary blocks.
+Isolated orientation and continuation paragraphs stay in block flow; longer
+multi-element passages retain continuous columns. Grammar's specimen section,
+PODA's second section title, and independently composed asides keep their
+authored position. These routes load the neutral component directly after
+`expanded.css`; their route bundles continue to own color, measure, and rhythm.
+
+`npm run test:ai-systems-reading-layout-browser` exercises the twenty-four
+AI Systems / Shared Machinery primary and directly linked example readings,
+plus the Debriefs parent, in Chromium, Firefox, and Playwright WebKit. The
+route population distinguishes authored reading links from global navigation,
+external references, and embedded instrument interiors. Shared Machinery and
+the other block/grid readings retain their existing composition.
+[Issue #498](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/498)
+records the inventory, paint-sensitive observations, and acceptance boundary;
+[Issue #499](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/499)
+receives the separate Technology Fit instrument header repair.
 
 ## Source and public route map
 
@@ -237,7 +261,8 @@ Current high-signal ownership:
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, and opt-in movement headers and heading-first prose, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, and opt-in movement headers, loaded directly after `expanded.css`. |
+| [`styles/components/reading-flow.css`](styles/components/reading-flow.css) | Seventeen composed catalog readings and six AI Systems readings | Direct beat-heading break grouping and first-heading spacing around continuous prose runs; follows `expanded.css` and optional `debrief-reading.css`, before route bundles. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
