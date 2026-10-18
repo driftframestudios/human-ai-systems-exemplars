@@ -34,6 +34,10 @@ A catalog or full-family question begins with aggregate route, class, asset, ifr
 
 Document meaning, accessibility-tree or DOM representation, rendered visibility, geometry, and screenshot content are distinct observation channels. Agreement in one channel leaves the others open. When an AI-visitor claim enters, the reading identifies the agent's actual channel and version, compares it with the corresponding human-visible task, and treats benchmark architecture as a hypothesis source until a local task supplies behavior evidence.
 
+### Rule: Available width serves content relationships
+
+A wide-region investigation distinguishes readable prose measure from the container's distribution of content. The reading identifies continuous narrative, comparable records, instructions, code, and onward links before choosing their arrangement. It measures usable space after fixed neighbors and padding, then asks which units can stand beside one another while preserving source order and their shared heading. Independent groups may form a grid; continuous prose retains its reading sequence and a comfortable line length. Short orientation and intentional negative space can remain as authored. A contained scrollbar establishes reachability; useful distribution requires its own visitor-task observation.
+
 ## Operating sequence
 
 1. **Orientation:** The reading begins at `context-canvas-project-surface/context-canvas/README.md`.
@@ -58,6 +62,15 @@ Document meaning, accessibility-tree or DOM representation, rendered visibility,
 - When the page's implementation implications are assessed
 - Then `grammar-family.html` supplies repository context
 - And current official Cloudflare documentation supplies contemporary platform facts
+
+### Scenario: A wide companion concentrates its content in one column
+
+- Given a broad companion contains a narrative explanation and an independently useful set of onward links
+- When the visitor has room to scan both groups together
+- Then the reading considers adjacent groups under their shared heading
+- And each group's internal reading order and prose measure remain legible
+- And the narrow composition returns both groups to their authored sequence
+- And a short introductory paragraph remains eligible for intentional open space
 
 ## Completion
 
