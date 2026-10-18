@@ -90,6 +90,28 @@ strain; recovery re-establishes the complete reading. At ordinary desktop and
 wide widths, the same comparison preserves text geometry and palette. Header
 containment leaves body-content and embedded-artifact layout with their owners.
 
+## Debrief captions on mixed fields
+
+`styles/routes/genomic-viewer.css` owns the Genomic dark-field caption role,
+`--genomic-caption-ink`. Strong text, sources, and caveats inherit the resolved
+caption foreground; weight retains emphasis. This follows the existing proxy
+figure convention while shared table defaults and other route palettes keep
+their separate scopes. The five existing light-inset families reset the role
+at their painted boundary and retain their shared light link pairs. Print
+sets the field role and caption foreground to black; native forced-color
+adjustment remains available.
+
+`tests/context-canvas/debrief-caption-colors.browser.mjs` inventories all
+23 catalog routes, including media-linked descriptions and their emphasis,
+code, links, and disclosure content. The three-engine checks cover the two
+repaired captions at narrow, laptop, wide, and enlarged-text widths; actual
+light insets; a caption extension inside each inset family; keyboard focus,
+hover and active links; print and forced colors; and restored descendant-ink
+and inherited-role faults. Contrast uses composited ancestor paint and a
+conservative bound for existing linear textures. Declared visited roles
+receive source and resolved-palette checks; actual browser history paint and
+embedded-document interiors retain their separate observation boundaries.
+
 ## Links to other reading contexts
 
 The twenty-three catalog readings and their parent retain ordinary native link
