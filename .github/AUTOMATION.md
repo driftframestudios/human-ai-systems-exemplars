@@ -21,7 +21,7 @@ below names every workflow; the following sections explain each receiving job.
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, #406, and #531 schema delivery; #63 inventory |
 | `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PRs always receive the media job while `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the prototype job | 10 minutes per job | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, and #434 |
-| `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #464 current release; #253 and PR #255 implementation precedent |
+| `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #540 current release; #464, #253, and PR #255 precedents |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
 | `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
 
@@ -207,9 +207,10 @@ its receipt against that explicit tag, and exercises the ZIP with `unzip -t`.
 Pull requests use immutable `production-v0.2.0` as a historical regression
 fixture; a manual run uses its required selected tag. The immutable tag is the
 payload input; the candidate checkout supplies the packaging implementation.
-The workflow uploads no artifact and uses no hosting credential. Issue #464
-owns current host activation and live acceptance; #118 and #251 retain only
-their historical `production-v0.2.0` standing.
+The workflow performs read-only contract verification. Issue #540's
+human-operated receiver retains artifact transfer, host activation, and live
+acceptance authority; #464 retains the immutable `production-v0.3.0` receipt,
+and #118 and #251 retain their historical `production-v0.2.0` standing.
 
 The human budget owner has approved **300 minutes per month** for this lane,
 adjustable through a later explicit budget decision. The allowance records

@@ -478,10 +478,10 @@ family membership, capabilities, packaging, and hosted comparison.
 | --- | --- |
 | Authored Context Canvas | [`context-canvas-project-surface/context-canvas/`](context-canvas-project-surface/context-canvas/) is the tracked meaning and behavior source. |
 | Local development | `http://127.0.0.1:8000/context-canvas-project-surface/context-canvas/` preserves repository-relative paths while serving from the repository root. |
-| Primary production | `.prod-projection-build/primary-public/` is the generated source tree for the **observed live** `https://vik.guru/` document root. The `production-v0.3.0` carrier receipt and signed-out checks establish the accepted cPanel deployment, while a later release still requires its own source, carrier, installation, and response observations. |
+| Primary production | `.prod-projection-build/primary-public/` is the generated source tree for the **observed live** `https://vik.guru/` document root. The `production-v0.3.0` carrier receipt and signed-out checks establish the accepted cPanel deployment. [Issue #540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540) owns the distinct v0.4.0 source, carrier, installation, response, and recovery observations. |
 | Hosted iframe production | `.prod-projection-build/iframe-public/v1/` is the generated complete file tree for the distinct `/v1/core/` and `/v1/canvas/` families at `https://iframes.vik.guru/`; Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) own acceptance of live bytes and response policy. |
 | Full-view and embedded instruments | The primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` routes. Each iframe keeps its manifest-owned cross-origin `src`; its adjacent full-view link opens the matching primary-site artifact. |
-| Schema identity and retrieval | Each JSON Schema keeps its declared `$id`. `https://schemas.radiantnull.com/` is the **observed live** GitHub Pages mirror. `https://schemas.vik.guru/` is the **observed live** Worker receiver for the accepted `pages-v0.3.1` schema and public-ready skill closure; signed-out receiver and browser checks establish its route, byte, media, cache, CORS, validator, method, and bounded-failure behavior. |
+| Schema identity and retrieval | Each JSON Schema keeps its declared `$id`. `https://schemas.radiantnull.com/` is the **observed live** GitHub Pages mirror. `https://schemas.vik.guru/` is the **observed live** Worker receiver for the accepted `pages-v0.3.1` schema and public-ready skill closure; completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531) records the signed-out route, byte, media, cache, CORS, validator, method, and bounded-failure receipt. |
 
 The [cPanel deployment route](deployment/cpanel/README.md) owns assembly,
 tracked carrier staging, transfer archives, installation, rollback, and live
@@ -617,10 +617,10 @@ reviewed projection; it remains excluded from authored production inputs.
 The [first-cutover guide](deployment/cpanel/FIRST-CUTOVER.md) gives the human
 operator the SSH enrollment, managed-clone, private-configuration, backup,
 deployment, recovery, and signed-out verification route. Issue
-[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
-owns the current `v0.3.0` source, carrier, tag, activation, and host-acceptance
-sequence. Issue #118 preserves the implemented `production-v0.2.0` projection
-contract as historical precedent.
+[#540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
+owns the current `v0.4.0` source, carrier, tag, activation, and host-acceptance
+sequence. Issue #464 preserves the immutable `production-v0.3.0` receipt, and
+Issue #118 preserves the implemented `production-v0.2.0` projection contract.
 
 The three Strategy Canvas receiving archives are the deliberate exception:
 their builder generates deterministic ZIP files that remain tracked as

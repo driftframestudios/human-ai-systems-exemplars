@@ -70,12 +70,14 @@ handoff as historical release evidence; #251 owns that release's remaining live
 assessment. Publishing newer source requires a new accepted source/carrier pair,
 tag, and authorized handoff rather than reopening the immutable release.
 Issue
-[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
-owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
-activation, acceptance, and recovery sequence.
+[#540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
+owns the current `stable-core-v0.4.0` and `production-v0.4.0` formation,
+activation, acceptance, and recovery sequence. Issue #464 preserves the
+immutable v0.3.0 release receipt and passes its accepted host and recovery
+decisions into the current release.
 
 The tagged GitHub Pages projection followed the cPanel release as a separate
-receiver. The visitor carrier has no runtime dependency on that Pages artifact.
+receiver. The visitor carrier operates independently of that Pages artifact.
 `pages-v0.3.1` supplies the accepted schema and skill publication coordinate.
 Completed Issue #531 records that closure's independently gated Worker review,
 promotion, activation, and signed-out receipt. Completed Issue #406
