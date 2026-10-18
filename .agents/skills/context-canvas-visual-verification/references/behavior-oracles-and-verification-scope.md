@@ -52,6 +52,19 @@ preserves the unsettled condition for diagnosis. Stable final-state evidence
 leaves first-paint and transient behavior with their separate observations;
 the receiving test owns its predicates, timing bounds, and failure evidence.
 
+Initialization behavior receives paired first-load and settled observations.
+A source fault enters the served markup before a fresh document parses; the
+first observation precedes a resize or other action that can rebuild layout.
+A later DOM mutation exercises the already-initialized document and can leave
+the original fault unexercised. For inline SVGs, markup size declarations and
+CSS paint receive one coordinated check. In the Debrief link-cue repair,
+Playwright WebKit retained one companion column with unsized SVG markup across
+six sampled render frames despite loaded fonts. Matching authored SVG dimensions
+and CSS em sizes restored two columns from the first observation. This local
+engine observation motivates the source-before-parse check; other engines and
+native applications retain their own evidence. Recovery opens a fresh document
+from the accepted source and re-establishes both initial and settled reading.
+
 ## Fragmentation and containment
 
 For a reading-order claim, locate the named heading and the actual continuation it governs. Inspect nonempty text fragments and the semantic relationship that makes their order meaningful. Arbitrary nearby text and the outer element box can miss a later fragment or select an unrelated region.
@@ -155,6 +168,15 @@ Harness failures keep their own outcome. Preserve completed cases, identify miss
 - Then the attempted fault remains unexercised in that environment
 - And a naturally fragmented source case or another declared perturbation supplies the distinguishing observation
 - And the positive paragraph-containment check retains its independent result
+
+### A settled-page mutation leaves an initialization fault open
+
+- Given an inline SVG's initial size affects a multicolumn reading
+- And a settled page already displays both columns
+- When a fault removes sizing attributes only after that layout
+- Then the mutation establishes the later state's behavior while initial parsing remains open
+- And a fresh page receives the source perturbation before parsing
+- And the first-load observation distinguishes the fault before resize, followed by fresh-source recovery
 
 ### A visibility helper disagrees with a printed disclosure
 
