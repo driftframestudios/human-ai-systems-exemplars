@@ -1,9 +1,10 @@
 # Schema and skill projection Worker
 
-This Worker is the production owner for `https://schemas.vik.guru/`. It serves
-the schema cohort and public-ready skill closure accepted for `pages-v0.3.0`
-from one reviewed source revision while GitHub Pages provides the richer visitor
-and skill-reading surface.
+This Worker is the production owner for `https://schemas.vik.guru/`. The
+checked-in successor carries the schema cohort and public-ready skill closure
+accepted for `pages-v0.3.1` from one reviewed source revision while GitHub Pages
+provides the richer visitor and skill-reading surface. The production
+observation below identifies the active receiver until successor activation.
 
 The fetch handler runs before its `ASSETS` binding and owns HTTPS redirects,
 exact-route lookup, media types, cache classes, conditional retrieval, CORS,
@@ -18,12 +19,12 @@ The selected publication is bound to the reviewed Pages release:
 
 | Role | Coordinate |
 | --- | --- |
-| Exact Worker publication | `8dd501d20ff6fb8c58b955ea920c703d9f702c03` |
-| Semantic and schema source | `cfaa53f5b7500e3901d8470e1e471cd0230ff2a5` |
-| Pages release | `pages-v0.3.0` |
-| Annotated tag object | `a25f224cc9496c1e951dbb07ca45d8cfc415d46b` |
-| Reviewed Pages projection | `2819c8564acfe5623288670ecef09639685a1db7` |
-| Complete Pages closure | `9e4e9827a0fac3b42b4630ce0ce5a4ccdbc60c082c9efb607f65442160675288` |
+| Exact Worker publication | `554a2074327fb51a40255066d0c9b9ed5401a6f6` |
+| Semantic and schema source | `c1e35fdd57c2193812c2b183955aca15a5020be8` |
+| Pages release | `pages-v0.3.1` |
+| Annotated tag object | `15c9a0ced1a49f3f20797682282526a95afbef88` |
+| Reviewed Pages projection | `fbf568496b90cf26cb0de5993189801d8a8c2be9` |
+| Complete Pages closure | `b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0` |
 
 `accepted-publication-lock.json` records the exact Worker-tree coordinate.
 `publication-manifest.json` records the selected source and annotated Pages
@@ -32,9 +33,14 @@ files. The source revision remains the meaning and schema coordinate; the Pages
 projection remains the reviewed peer artifact used for exact cross-receiver
 comparison.
 
+Issue
+[#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
+owns this successor's publication, lock, promotion, activation, observation,
+and recovery receipts.
+
 ## Active production observation
 
-The accepted Worker closure became active at `https://schemas.vik.guru/` on
+The v0.3.0 Worker closure became active at `https://schemas.vik.guru/` on
 2026-10-13 from accepted `prod@369b61b79dfe3d245c1193567d9f715263927670`.
 The signed-out receiver check observed all 17 contracts, 33 schema routes, 27
 public-ready skills, 86 skill artifacts, and 160 allowlisted routes. It also
@@ -134,14 +140,16 @@ policy.
 
 ## Prepare and check
 
-Use Node.js 22 or newer. The initial selection names both accepted coordinates:
+Use Node.js 22 or newer. Form the publication in a clean checkout at the exact
+accepted semantic source so later repository work retains its own release
+boundary. The initial selection names both accepted coordinates:
 
 ```sh
 cd cloudflare/schemas-worker
 npm ci --ignore-scripts --no-audit --no-fund
 npm run prepare:publication -- \
-  --source-revision cfaa53f5b7500e3901d8470e1e471cd0230ff2a5 \
-  --pages-release-tag pages-v0.3.0
+  --source-revision c1e35fdd57c2193812c2b183955aca15a5020be8 \
+  --pages-release-tag pages-v0.3.1
 ```
 
 Validate the checked-in accepted release without consulting current source
@@ -166,12 +174,14 @@ accepted release remains internally complete and deployable. Use
 `prepare:publication` with newly human-accepted source and Pages coordinates to
 form a later release; preserve the accepted artifact until that decision.
 
-A later accepted release uses two reviewed commits. First, merge the newly
-prepared `public/` tree to `main`. Then update `accepted-publication-lock.json`
-in a follow-up review to name that already formed publication commit. The
-verifier requires the locked commit to precede `origin/main` and the receiving
-candidate. Acceptance therefore begins on reviewed `main`; release and
-production branches receive that coordinate.
+A later accepted release uses two reviewed commits. First, form the newly
+prepared `public/` tree directly atop the accepted semantic source and merge
+that exact publication commit to `main` while preserving it as an ancestor.
+Then branch from the publication commit, update
+`accepted-publication-lock.json` in a follow-up review, and merge that exact
+lock commit to `main`. The verifier requires the locked publication to precede
+`origin/main` and the receiving candidate. Promotion selects the reviewed lock
+commit, allowing later `main` work to retain a separate release boundary.
 
 Run the repository-owned boundary checks from the repository root:
 
