@@ -20,10 +20,7 @@
 }
 
 .field-inspection-hero {
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .38rem, transparent .42rem),
-        linear-gradient(135deg, #17345f 0%, #0f2147 66%, #1f2421 100%);
-    border-block-end: .6rem solid var(--inspection-coral);
+    --debrief-hero-border: var(--inspection-coral);
 }
 
 .field-inspection-page .debrief-at-glance {

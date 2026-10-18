@@ -47,6 +47,22 @@
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
     <link rel="stylesheet" href="styles/components/reading-flow.css">
     <style>
+      .who-to-believe-page {
+        --wtb-slate: #132034;
+        --wtb-cream: #fff8e8;
+        --wtb-teal: #6adfd0;
+        --wtb-coral: #ff806f;
+        --wtb-rose: #ffd3d0;
+        --wtb-pale-blue: #bed0e6;
+      }
+      .wtb-hero {
+        --debrief-hero-background: var(--wtb-slate);
+        --debrief-hero-title: var(--wtb-cream);
+        --debrief-hero-tagline: var(--wtb-teal);
+        --debrief-hero-copy: var(--wtb-cream);
+        --debrief-hero-kicker: var(--wtb-pale-blue);
+        --debrief-hero-border: var(--wtb-coral);
+      }
       .wtb-orientation-field {
         --canvas-link-color: #fff8e8;
         --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
@@ -82,9 +98,7 @@
       .wtb-context-actions a { font-weight: 700; }
       .wtb-solution-track {
         --canvas-ink-muted: #304a71;
-        background:
-          radial-gradient(circle at 92% 8%, rgba(242, 255, 103, .72) 0 5.5rem, transparent 5.65rem),
-          linear-gradient(135deg, #fdebe9, #ffd3d0 58%, #f6e4df);
+        background: var(--wtb-rose);
       }
       .wtb-barrier-table tbody th { min-inline-size: 11rem; }
       .wtb-barrier-table td:last-child { background: #e5f4f0; }
@@ -401,7 +415,7 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-      <header class="non-index-hero__container debrief-hero">
+      <header class="non-index-hero__container debrief-hero debrief-hero--palette wtb-hero">
         <p class="debrief-kicker">Solution Architecture · Implementation Architecture · 2017–2020 + the return</p>
         <h1 class="txt-h1 h1-spaced h1-hero">Who To Believe</h1>
         <p class="tag-line">Reweighting whose voices shaped campaigns, customer science, and client trust</p>

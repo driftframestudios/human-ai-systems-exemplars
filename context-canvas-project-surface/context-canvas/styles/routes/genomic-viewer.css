@@ -25,8 +25,7 @@
 }
 
 .genomic-viewer-hero {
-    background: var(--genomic-ink);
-    border-block-end: .6rem solid var(--genomic-rose);
+    --debrief-hero-border: var(--genomic-rose);
 }
 
 .genomic-viewer-page .debrief-at-glance {
