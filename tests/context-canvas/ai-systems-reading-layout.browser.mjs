@@ -11,7 +11,8 @@ const routes = [
   "ai-systems.html", "shared-machinery.html", "benchmark-orientation.html",
   "collaboration-skills.html", "concept-nursery.html", "conditioning-field.html",
   "core-architectures-orientation-index.html", "cross-platform-collaboration-cycle.html",
-  "fmi-lims-eln-replatforming.html", "grammar-family.html", "hiring-surfaces-talent-agent-intake.html",
+  "fmi-clinical-trial-coordination.html", "fmi-lims-eln-replatforming.html",
+  "genomic-viewer-replatforming.html", "grammar-family.html", "hiring-surfaces-talent-agent-intake.html",
   "maps-evaluations.html", "metadata-blocks.html", "planning-surface.html", "poda.html",
   "prompt-side-conditions-practice.html", "readable-tables-reusable-evidence.html",
   "registry-goal-fidelity-routing.html", "resting-concepts.html", "visualization-fidelity-atlas.html",
@@ -175,7 +176,7 @@ async function captureOpening(page, engine, route) {
 }
 
 test("AI Systems and Shared Machinery have an explicit reading-route population", async () => {
-  assert.equal(new Set(routes).size, 24);
+  assert.equal(new Set(routes).size, 26);
   const links = new Set();
   for (const route of routes) {
     const html = await readFile(new URL(`../../context-canvas-project-surface/context-canvas/${route}`, import.meta.url), "utf8");

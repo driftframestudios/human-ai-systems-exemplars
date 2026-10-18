@@ -70,7 +70,7 @@ test("tracked Debrief derivatives preserve exact dimensions and source ratio", a
 
   const beforeCheck = await readFile(derivativeFixture);
   assert.deepEqual(await processDerivativeFamilies({ check: true }), {
-    processed: 70,
+    processed: 82,
     skipped: 1,
     removed: 0,
   });
@@ -127,9 +127,15 @@ test("catalog sources and responsive derivatives preserve exact accepted geometr
   }
 });
 
-test("catalog source identities stay pinned to the accepted bytes", async () => {
+test("accepted source identities stay pinned to the reviewed bytes", async () => {
   const expected = new Map([
+    ["boolean-building-blocks/clinical-trial-context-tree.webp", "56898a1a192e5e029d3f64c551bff8ca9b4ebd97e7f6b7228bdcfc4d70f0ef8d"],
+    ["boolean-building-blocks/clinical-trial-situation-model-player-cards.webp", "4b60295084fdcda1ae0ee705811a6619dcf1fdee69dc2d0cdd5091d25875b7fa"],
+    ["boolean-building-blocks/clinical-trial-specification-suite.webp", "8ae40ccc6d93e622c00f9be4515616bd91b348b0c7c50c0bcd0b931f51f98443"],
+    ["boolean-building-blocks/clinical-trial-strategy-canvas.webp", "fe16e7d8b3b642929230ebee10f294107e102b4224f56db493b3d8cf138b1918"],
     ["choose-your-player/robotics-upfront.webp", "ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a"],
+    ["queue-secretly-status-machine/genomics-situation-model-player-cards.webp", "53d948f1bfc26ef002fb61db169fd2f9ec36ace6a9ae1b7faa17dc4c1035cfb1"],
+    ["queue-secretly-status-machine/genomics-specification-suite-strategy-canvas.webp", "55d880f4b54d5a50ee579ed32244260be0dd86f36a7a33477958bcf5b9078dd6"],
     ["sample-noone-could-find/clinical-trial-coordination-upfront.webp", "92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833"],
     ["spatial-capture/3d-modeling-scan.webp", "415675935c936bf69ee822e4e6608dd5d05c780c0c2d4b033782f8a4d1484766"],
   ]);

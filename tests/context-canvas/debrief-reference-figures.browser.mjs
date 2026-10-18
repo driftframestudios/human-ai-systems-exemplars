@@ -6,9 +6,9 @@ import { startStaticServer } from '../../tools/core-architecture-browser-helper.
 const root = '/context-canvas-project-surface/context-canvas/';
 const routes = new Map([
   ['choose-your-player-humatics.html', [5, 1]],
-  ['fmi-clinical-trial-coordination.html', [5, 1]],
+  ['fmi-clinical-trial-coordination.html', [9, 2]],
   ['fmi-lims-eln-replatforming.html', [6, 0]],
-  ['genomic-viewer-replatforming.html', [8, 0]],
+  ['genomic-viewer-replatforming.html', [10, 0]],
   ['who-to-believe-reviews-platform.html', [5, 1]],
 ]);
 const screenWidths = [390, 896, 897, 1023, 1024, 1025, 1199, 1200, 1440, 2560];

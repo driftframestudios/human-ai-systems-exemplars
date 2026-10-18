@@ -128,12 +128,39 @@ test("parent visitor images carry a legible text relationship", async () => {
 
   // About now uses one native-video receiver; its poster, name, and visible
   // sequence description are exercised by the focused About media contract.
-  assert.equal(imageCount, 153);
+  assert.equal(imageCount, 165);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
     "Only the scripted debrief preview begins with an empty alternative",
   );
+});
+
+test("new architecture examples retain one Debrief owner and one AI Systems reading route", async () => {
+  const contracts = [
+    ["clinical-trial-context-tree", "fmi-clinical-trial-coordination.html", "core-architectures-orientation-index.html"],
+    ["clinical-trial-situation-model-player-cards", "fmi-clinical-trial-coordination.html", "ai-systems.html"],
+    ["clinical-trial-specification-suite", "fmi-clinical-trial-coordination.html", "core-architectures-orientation-index.html"],
+    ["clinical-trial-strategy-canvas", "fmi-clinical-trial-coordination.html", "core-architectures-orientation-index.html"],
+    ["genomics-situation-model-player-cards", "genomic-viewer-replatforming.html", "ai-systems.html"],
+    ["genomics-specification-suite-strategy-canvas", "genomic-viewer-replatforming.html", "core-architectures-orientation-index.html"],
+  ];
+
+  for (const [stem, debriefRoute, systemsRoute] of contracts) {
+    for (const route of [debriefRoute, systemsRoute]) {
+      const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+      assert.match(html, new RegExp(`${stem}\\.webp`, "u"), `${route}: ${stem} original`);
+      assert.match(html, new RegExp(`${stem}-960\\.webp 960w`, "u"), `${route}: ${stem} 960w`);
+      assert.match(html, new RegExp(`${stem}-1920\\.webp 1920w`, "u"), `${route}: ${stem} 1920w`);
+    }
+  }
+
+  for (const route of ["ai-systems.html", "core-architectures-orientation-index.html"]) {
+    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    assert.match(html, /IP-free 2026/iu, `${route}: current research standing`);
+    assert.match(html, /Figma Make/iu, `${route}: production method`);
+    assert.match(html, /kindlight\.systems architecture definitions/iu, `${route}: architecture source`);
+  }
 });
 
 test("Who To Believe figures preserve the intended narrative sequence", async () => {

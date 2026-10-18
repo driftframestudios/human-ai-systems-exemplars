@@ -623,6 +623,21 @@
       "media_type": "image/webp"
     },
     {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-context-tree-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-context-tree-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-context-tree-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-context-tree-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-context-tree.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-context-tree.webp",
+      "media_type": "image/webp"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-1920.webp",
       "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-linked-cohort-builder-1920.webp",
       "media_type": "image/webp"
@@ -665,6 +680,51 @@
     {
       "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder.webp",
       "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-responsive-boolean-builder.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-situation-model-player-cards.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-specification-suite-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-specification-suite-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-specification-suite-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-specification-suite-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-specification-suite.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-specification-suite.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas-1920.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas-960.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas.webp",
+      "projected_path": "img/debriefs/boolean-building-blocks/clinical-trial-strategy-canvas.webp",
       "media_type": "image/webp"
     },
     {
@@ -950,6 +1010,36 @@
     {
       "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp",
       "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-situation-model-player-cards.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas-1920.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas-1920.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas-960.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas.webp",
+      "projected_path": "img/debriefs/queue-secretly-status-machine/genomics-specification-suite-strategy-canvas.webp",
       "media_type": "image/webp"
     },
     {

@@ -201,7 +201,7 @@ receives the separate Technology Fit instrument header repair.
 
 The Debrief reading component also owns the dense reference-interface figure
 frames used by Genomic Viewer, FMI Clinical Trial Coordination, FMI LIMS/ELN,
-Humatics, and Who To Believe. Their 29 figures keep source-size links and
+Humatics, and Who To Believe. Their 35 figures keep source-size links and
 HTML-owned image identities. Landscape frames keep a 56rem reading canvas
 inside a named keyboard-scrollable region; portrait frames fit within 42rem.
 The component preserves the shared figure's full-width behavior through 64rem;
@@ -392,8 +392,11 @@ complete reading. Chromium and WebKit also open the page directly from the
 local filesystem so this bounded projection stays independent of sibling-page
 requests.
 
-The five Debrief working-system and visual-comparison families retain their accepted,
-unsuffixed WebPs as full-size inspection targets. Catalog-specific canonical
+The five Debrief project-reference families retain their accepted, unsuffixed
+WebPs as full-size inspection targets. The Boolean Building Blocks and Queue
+families combine working-system screenshots with current Core Architecture
+examples shared by their Debriefs and the relevant AI Systems readings; the
+captions and surrounding prose distinguish those roles. Catalog-specific canonical
 WebPs remain source-only when the page needs only their smaller public carriers.
 Run `npm run build:debrief-image-derivatives` after replacing an accepted source.
 The repository-owned generator applies named source profiles: full-Debrief
@@ -501,7 +504,7 @@ Current high-signal ownership:
 | [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
-| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
+| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, project-reference figure, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
 | [`styles/routes/visualization-fidelity-atlas.css`](styles/routes/visualization-fidelity-atlas.css) | [`visualization-fidelity-atlas.html`](visualization-fidelity-atlas.html) | Flat references, local table/SVG reading canvases, gallery controls, hidden states, and print disclosures; loads directly after the AI Systems family and before the shell. One Figure, Several Readings retains its Debrief composition styles. |
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
