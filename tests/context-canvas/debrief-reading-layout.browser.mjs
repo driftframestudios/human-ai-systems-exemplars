@@ -39,6 +39,20 @@ const nativeMovements = {
   "three-way-comparative-return.html": 0,
   "initiative-costing.html": 0,
 };
+const orientationRoutes = new Set([
+  "choose-your-player-humatics.html",
+  "distributed-inspection-harness.html",
+  "ehr-discrete-genomic-result.html",
+  "ehr-interface-engine-replatform.html",
+  "ehr-pgx-alert-failure.html",
+  "ehr-three-front-doors.html",
+  "ehr-two-charts-one-result.html",
+  "fmi-clinical-trial-coordination.html",
+  "multilingual-clinical-vocabulary-practice.html",
+  "recoverable-enterprise-forms.html",
+  "spatial-capture-collaborative-memory.html",
+  "three-way-comparative-return.html",
+]);
 const extensionShape = {
   "fmi-lims-eln-replatforming.html": [4, 4],
   "field-inspection-harness-replatform.html": [3, 13],
@@ -178,6 +192,31 @@ function assertReading(reading, route, options = {}) {
     if (raised.length) assertText(raised,
       { ...flow.box, top: flow.ownerBox.top, bottom: flow.ownerBox.bottom },
       `${route}: raised footnote text`);
+  }
+  assert.equal(reading.orientations.length, orientationRoutes.has(route) ? 1 : 0,
+    `${route}: direct-child orientation callout inventory`);
+  for (const orientation of reading.orientations) {
+    assert.equal(orientation.display, "inline-block",
+      `${route}: orientation callout establishes one atomic painted object`);
+    assert.equal(orientation.breakInside, "avoid",
+      `${route}: orientation callout requests intact column placement`);
+    assert.equal(orientation.fragments.length, 1,
+      `${route}: orientation callout has one painted fragment`);
+    const [fragment] = orientation.fragments;
+    assert.ok(fragment.left >= orientation.owner.left - 2 && fragment.right <= orientation.owner.right + 2
+      && fragment.top >= orientation.owner.top - 2 && fragment.bottom <= orientation.owner.bottom + 2,
+    `${route}: orientation callout stays inside its continuous-reading owner`);
+    assert.ok(Math.abs(fragment.width - orientation.inlineSize) <= 2,
+      `${route}: orientation callout fills its declared atomic inline size`);
+    for (const [role, child] of [["paragraph", orientation.paragraph], ["footer", orientation.footer]]) {
+      assert.ok(child, `${route}: orientation callout retains its ${role}`);
+      assert.ok(child.box.left >= fragment.left - 2 && child.box.right <= fragment.right + 2
+        && child.box.top >= fragment.top - 2 && child.box.bottom <= fragment.bottom + 2,
+      `${route}: orientation ${role} stays inside the single painted boundary`);
+      assertText(child.text, fragment, `${route}: orientation ${role}`);
+    }
+    assert.ok(orientation.footer.box.top >= orientation.paragraph.box.bottom - 2,
+      `${route}: orientation footer follows its statement inside the same boundary`);
   }
   if (route === "who-to-believe-reviews-platform.html") {
     assert.equal(reading.owners.flatMap(owner => owner.regions).filter(region => region.level === "H4").length, 6,
@@ -536,6 +575,39 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           assert.throws(() => assertReading(fragmented, "fmi-lims-eln-replatforming.html"), /one unfragmented callout/u);
         }
       } finally { await lims.close(); }
+    });
+
+    await t.test("orientation callouts retain one boundary across continuous-reading columns", async () => {
+      const session = await openPage(browser, "fmi-clinical-trial-coordination.html", {
+        viewport: { width: 1512, height: 982 },
+      });
+      try {
+        const selector = ".prose-flow > .debrief-quote--orientation";
+        const accepted = await observeReading(session.page);
+        assertReading(accepted, "fmi-clinical-trial-coordination.html");
+        const original = await session.page.locator(selector).getAttribute("style");
+        try {
+          await session.page.locator(selector).evaluate(node => {
+            node.style.setProperty("display", "block", "important");
+            node.style.setProperty("break-inside", "auto", "important");
+          });
+          const fragmented = await observeReading(session.page);
+          assert.equal(fragmented.orientations[0].display, "block",
+            "the controlled fault restores ordinary block fragmentation behavior");
+          assert.equal(fragmented.orientations[0].breakInside, "auto",
+            "the controlled fault releases the intact-column request");
+          assert.ok(fragmented.orientations[0].fragments.length > 1,
+            "the controlled fault paints the callout across column fragments");
+          assert.throws(() => assertReading(fragmented, "fmi-clinical-trial-coordination.html"),
+            /orientation callout establishes one atomic painted object|orientation callout has one painted fragment/u);
+        } finally {
+          await session.page.locator(selector).evaluate((node, style) => {
+            if (style === null) node.removeAttribute("style");
+            else node.setAttribute("style", style);
+          }, original);
+        }
+        assertReading(await observeReading(session.page), "fmi-clinical-trial-coordination.html");
+      } finally { await session.close(); }
     });
 
     await t.test("painted-text observation distinguishes the declared accessible cue from changed hiding", async () => {

@@ -121,10 +121,25 @@ export async function observeReading(page, { includeOrdinary = false, allHeading
           .map(child => child.id || child.tagName),
       };
     });
+    const orientations = [...document.querySelectorAll(".prose-flow > .debrief-quote--orientation")].map(orientation => {
+      const style = getComputedStyle(orientation);
+      const child = node => node ? { box: box(node), text: fragments(node) } : null;
+      return {
+        name: orientation.getAttribute("aria-label") || orientation.textContent.trim(),
+        box: box(orientation),
+        fragments: [...orientation.getClientRects()].map(rect).filter(positive),
+        owner: box(orientation.parentElement),
+        paragraph: child(orientation.querySelector(":scope > p")),
+        footer: child(orientation.querySelector(":scope > :is(footer, cite)")),
+        display: style.display,
+        breakInside: style.breakInside,
+        inlineSize: Number.parseFloat(style.inlineSize),
+      };
+    });
     return {
       viewport: document.documentElement.clientWidth,
       documentWidth: document.documentElement.scrollWidth,
-      headers: movementHeaders,
+      headers: movementHeaders, orientations,
       owners, flows, rootFont,
       principles: [...document.querySelectorAll('[aria-labelledby="doctrines-title"] > .beat-title')].flatMap(heading => {
         const next = heading.nextElementSibling;

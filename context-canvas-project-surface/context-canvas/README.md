@@ -178,6 +178,13 @@ and verification of the actually deployed source remain separate receiving
 observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
 holds the family extension and deployment-status boundary.
 
+Twelve direct-child orientation callouts participate in continuous prose as
+one atomic painted object. Their statement and footer remain together inside
+the same visible boundary as the reading changes between one and two columns.
+The three-engine layout contract inventories this family, checks child and
+visible-text containment across the standing viewport seams, and exercises the
+ordinary fragmenting state before restoring the accepted component contract.
+
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
 `.reading-flow` boundary in thirteen reading regions. Their metadata,
