@@ -324,23 +324,25 @@ destination. Verify both relationships on `C` and accepted production source
 `S = P`. The retained carrier is historical downstream state until the
 following carrier-only branch replaces it from exact `S`.
 
-Use the full recorded SHAs in an isolated worktree. This equivalent command
-sequence supplies the first deterministic verification surface while #469 owns
-the focused checker and material failure-path tests:
+Use full recorded commit IDs and run the read-only repository checker before
+publication. Omit `--result` while reviewing the candidate, then include the
+accepted destination result after merge:
 
 ```sh
-test "$(git rev-parse "${C}^1")" = "$D"
-test "$(git rev-parse "${C}^2")" = "$U"
-git merge-base --is-ancestor "$D" "$C"
-git merge-base --is-ancestor "$U" "$C"
-git diff --exit-code "$U" "$C" -- . ':(exclude)deployment/cpanel/carrier/**'
-test "$(git rev-parse "${D}:deployment/cpanel/carrier")" = \
-  "$(git rev-parse "${C}:deployment/cpanel/carrier")"
+npm run check:promotion-topology -- \
+  --upstream "$U" \
+  --destination "$D" \
+  --candidate "$C" \
+  --result "$P" \
+  --retained-root deployment/cpanel/carrier
 ```
 
-After the reviewed merge, apply the same checks with `S` in place of `C`, then
-also require `S^1 = D` and `S^2 = C`. For a destination without an intentionally
-retained carrier closure, require complete tree equality with `U` instead.
+The checker requires `C^1 = D`, `C^2 = U`, both ancestry relationships,
+`P^1 = D`, and `P^2 = C`. With `--retained-root`, every path outside the
+carrier equals `U` while the complete retained tree object equals `D` on both
+candidate and result. Omit `--retained-root` for a destination whose complete
+candidate and result trees must equal `U`. The command reads Git objects and
+leaves refs and worktree state unchanged.
 
 Push only the temporary candidate, run the destination checks, and receive
 human approval after its final commit. A destination move forms a fresh
@@ -351,7 +353,15 @@ durable receipt exists. This procedure keeps downstream history on the
 destination side while canonical upstream history remains focused on its role.
 PR #468 remains accepted history without rewrite.
 [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
-owns refinement of this procedure.
+records the exercised procedure and its focused failure-path contract.
+
+An equal-tree promotion changes Git ancestry and review receipts while the
+accepted source tree stays byte-identical. Existing iframe packages,
+production projections, media families, tag refs, carriers, and live
+deployments remain at their recorded coordinates. A separately authorized
+artifact contract starts any rebuild, tag, carrier staging, or activation.
+Production carrier staging begins after exact `S` acceptance and may update
+commit-bound metadata even when authored source stayed equal.
 
 ### Worked destination-based production promotion · 2026-10-12
 

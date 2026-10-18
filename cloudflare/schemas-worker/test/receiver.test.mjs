@@ -84,12 +84,12 @@ test("the publication media-type table uses the exact receiver literals", () => 
 
 test("the v2 manifest is the exact 17-contract and 27-skill publication allowlist", async () => {
   assert.equal(manifest.schemaVersion, "2");
-  assert.equal(manifest.sourceRevision, "cfaa53f5b7500e3901d8470e1e471cd0230ff2a5");
+  assert.equal(manifest.sourceRevision, "c1e35fdd57c2193812c2b183955aca15a5020be8");
   assert.deepEqual(manifest.peerRelease, {
-    releaseTag: "pages-v0.3.0",
-    tagObject: "a25f224cc9496c1e951dbb07ca45d8cfc415d46b",
-    projectionRevision: "2819c8564acfe5623288670ecef09639685a1db7",
-    closureSha256: "9e4e9827a0fac3b42b4630ce0ce5a4ccdbc60c082c9efb607f65442160675288",
+    releaseTag: "pages-v0.3.1",
+    tagObject: "15c9a0ced1a49f3f20797682282526a95afbef88",
+    projectionRevision: "fbf568496b90cf26cb0de5993189801d8a8c2be9",
+    closureSha256: "b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0",
   });
   assert.equal(schemaCatalog.sourceRevision, manifest.sourceRevision);
   assert.equal(skillCatalog.sourceRevision, manifest.sourceRevision);

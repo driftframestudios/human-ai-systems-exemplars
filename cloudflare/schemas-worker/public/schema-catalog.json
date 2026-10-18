@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1",
-  "sourceRevision": "cfaa53f5b7500e3901d8470e1e471cd0230ff2a5",
+  "sourceRevision": "c1e35fdd57c2193812c2b183955aca15a5020be8",
   "deliveryBase": "https://schemas.vik.guru",
   "identityRole": "canonicalId identifies the contract; retrievalUrl downloads this site's copy.",
   "contracts": [

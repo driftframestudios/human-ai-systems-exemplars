@@ -15,15 +15,15 @@ const publicRoot = fileURLToPath(new URL("../public/", import.meta.url));
 
 test("the checked-in Worker is the exact accepted Pages and source closure", async () => {
   assert.deepEqual(await verifyAcceptedPublication({ repositoryRoot, publicRoot }), {
-    publicationRevision: "8dd501d20ff6fb8c58b955ea920c703d9f702c03",
-    sourceRevision: "cfaa53f5b7500e3901d8470e1e471cd0230ff2a5",
-    releaseTag: "pages-v0.3.0",
+    publicationRevision: "554a2074327fb51a40255066d0c9b9ed5401a6f6",
+    sourceRevision: "c1e35fdd57c2193812c2b183955aca15a5020be8",
+    releaseTag: "pages-v0.3.1",
     schemas: 17,
     publicReadySkills: 27,
     publicPossibleSkills: 6,
     files: 127,
     routes: 160,
-    closureSha256: "9e4e9827a0fac3b42b4630ce0ce5a4ccdbc60c082c9efb607f65442160675288",
+    closureSha256: "b20fe3e1932566dae2508aa8e4c994945ebdc5bb011a0476c00b1c80dfb59ed0",
   });
 });
 
