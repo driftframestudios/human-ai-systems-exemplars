@@ -49,14 +49,14 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The accepted `pages-v0.3.1` release and checked-in Worker successor retain the
+The accepted `pages-v0.3.1` release and active Worker receiver retain the
 17-contract schema cohort first assembled for `pages-v0.2.0` and the 27-package
 public-ready skill collection. Seven JSON-LD contexts, four examples, and one
 cohort orientation travel as revalidating companions and stay outside the
-contract count. The active v0.3.0 Worker cohort received its independently
-gated production observation on 2026-10-13: all 17 contracts, 27 skills, and
+contract count. The active v0.3.1 Worker cohort received its independently
+gated production observation on 2026-10-18: all 17 contracts, 27 skills, and
 shared public bytes passed the signed-out receiver and browser checks. Issue
-#531 owns the v0.3.1 successor through activation and signed-out acceptance.
+#531 records the v0.3.1 activation and signed-out acceptance.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
 31 immutable paths for 16 frozen contracts; the unversioned local-manifest
@@ -175,10 +175,10 @@ prefer a forward repair over an older artifact that omits those routes.
 
 The accepted author-host Worker uses the same selected contract payload.
 Issue #18 and PRs #311-#313 preserve the earlier 13-contract delivery lineage;
-completed Issue #406, PR #480, and workflow run `38411427064` carry the active
-v0.3.0 activation, parity, cache/CORS, and recovery receipt. Issue #531 carries
-the reviewed v0.3.1 successor and its pending activation receipt. The catalog's
-observed edge addition is classified
+completed Issue #406, PR #480, and workflow run `38411427064` preserve the
+v0.3.0 activation lineage. Issue #531, PR #536, and workflow run `39166814705`
+carry the active v0.3.1 parity, cache/CORS, activation, and recovery receipt.
+The catalog's observed edge addition is classified
 separately from exact schema-byte parity; the Worker README describes that
 source-preservation boundary and its focused check. Selected
 reviewed skill source copies are deliberate public artifacts; the complete
