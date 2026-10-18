@@ -121,9 +121,31 @@ contract, even when their file trees match. For `release → prod`, verify the
 same outside-carrier and complete-carrier-subtree relationships on both `C`
 and `S` before carrier formation begins.
 
+Run the repository-owned checker with the four recorded coordinates. Omit the
+result while reviewing a candidate; include it after the destination merge:
+
+```sh
+npm run check:promotion-topology -- \
+  --upstream "$U" --destination "$D" --candidate "$C" --result "$P"
+```
+
+Add `--retained-root deployment/cpanel/carrier` for the `release → prod`
+specialization. The checker accepts only full commit object IDs, reads Git
+objects without moving refs or worktree state, and returns a compact normalized
+receipt. Its focused tests cover accepted topology and the failure paths that
+form a fresh candidate or return work to its source-owning lane.
+
+An equal-tree promotion changes Git ancestry and review receipts while the
+accepted source tree stays byte-identical. Existing iframe packages,
+production projections, media families, tag refs, carriers, and live
+deployments remain at their recorded coordinates. A separately authorized
+artifact contract starts any rebuild, tag, carrier staging, or activation.
+Production carrier staging begins after exact `S` acceptance and may update
+commit-bound metadata even when authored source stayed equal.
+
 Issue [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
-owns the exercised procedure, focused local checker, and material failure-path
-tests. [PR #470](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/470)
+records the exercised procedure and its verification contract.
+[PR #470](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/470)
 is the first worked `release → prod` receipt; the publication stabilization
 runbook records its exact coordinates and subtree evidence.
 
