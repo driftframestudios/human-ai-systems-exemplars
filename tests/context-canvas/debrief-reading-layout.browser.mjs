@@ -328,6 +328,11 @@ function assertReading(reading, route, options = {}) {
   // below supply the print claim; screen document containment stays strict.
   assert.ok(reading.owners.every(owner => owner.box.left >= -2 && owner.box.right <= reading.viewport + 2),
     `${route}: reading owners fit the visitor field`);
+  for (const promise of reading.promises) {
+    assert.equal(promise.fragments.length, 1, `${route}: the introductory promise remains one unfragmented callout`);
+    assert.ok(promise.fragments[0].left >= promise.owner.left - 2 && promise.fragments[0].right <= promise.owner.right + 2,
+      `${route}: introductory callout fits its reading owner`);
+  }
   for (const flow of reading.flows) {
     assert.ok(flow.box.left >= flow.ownerBox.left - 2 && flow.box.right <= flow.ownerBox.right + 2
       && flow.box.left >= -2 && flow.box.right <= reading.viewport + 2,
@@ -350,11 +355,6 @@ function assertReading(reading, route, options = {}) {
     assert.equal(reading.principles.length, 8, "all short costing principles remain observable");
     assert.ok(reading.principles.every(principle => principle.fragments.length === 1),
       "short costing principles remain single readings without an isolated column continuation");
-  }
-  for (const promise of reading.promises) {
-    assert.equal(promise.fragments.length, 1, `${route}: the introductory promise remains one unfragmented callout`);
-    assert.ok(promise.fragments[0].left >= promise.owner.left - 2 && promise.fragments[0].right <= promise.owner.right + 2,
-      `${route}: introductory callout fits its reading owner`);
   }
   const result = assertRegions(reading, route);
   assertWideBoundaries(reading, route);
