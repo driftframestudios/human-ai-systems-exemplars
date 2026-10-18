@@ -2164,6 +2164,28 @@
       "aliases": [
         "test:ai-entry-cascade-browser"
       ]
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-cascade.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Atlas reference and gallery cascade across Chromium, Firefox and Playwright WebKit: flat reference treatment, native control layout, hidden-state precedence, local table/SVG reading canvases, closed print disclosures, forced colors, static reading, and controlled faults with restoration. Native print and deployed delivery retain separate observations.",
+      "aliases": [
+        "test:atlas-cascade-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2255,7 +2277,8 @@
         "browser.visualization-fidelity-atlas.atlas-research.browser",
         "browser.context-canvas.ai-systems-reading-layout",
         "browser.context-canvas.technology-fit-layout",
-        "browser.context-canvas.ai-entry-cascade"
+        "browser.context-canvas.ai-entry-cascade",
+        "browser.visualization-fidelity-atlas.atlas-cascade.browser"
       ]
     },
     {

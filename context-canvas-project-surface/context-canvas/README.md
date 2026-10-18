@@ -248,6 +248,11 @@ Chromium, Firefox, and Playwright WebKit. It observes the accepted cyan field,
 every border side, the inclusive 30rem shadow seam, and print/forced-color
 behavior. Controlled palette and shadow faults demonstrate the oracle.
 
+`npm run test:atlas-cascade-browser` checks the Atlas route's moved style
+seams in the same three engines. The existing gallery contract owns full
+selection, recovery, and export behavior. Its companion article retains its
+independent Debrief composition and essay checks.
+
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
@@ -261,8 +266,9 @@ Current high-signal ownership:
 | [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
-| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
+| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
+| [`styles/routes/visualization-fidelity-atlas.css`](styles/routes/visualization-fidelity-atlas.css) | [`visualization-fidelity-atlas.html`](visualization-fidelity-atlas.html) | Flat references, local table/SVG reading canvases, gallery controls, hidden states, and print disclosures; loads directly after the AI Systems family and before the shell. One Figure, Several Readings retains its Debrief composition styles. |
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |

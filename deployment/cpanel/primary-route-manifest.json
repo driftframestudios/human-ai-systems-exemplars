@@ -1998,6 +1998,11 @@
       "media_type": "text/css"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/visualization-fidelity-atlas.css",
+      "projected_path": "styles/routes/visualization-fidelity-atlas.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/benchmark-readings.css",
       "projected_path": "styles/routes/benchmark-readings.css",
       "media_type": "text/css"
