@@ -141,7 +141,9 @@ The shared Debrief reading component also offers opt-in companion bodies.
 columns when two 26rem measures fit. `debrief-companion-regions` places a
 quotation and its onward references in adjacent, intact reading regions.
 Their headings remain outside the distributed body. Available container width
-and enlarged text determine when these bodies return to one lane.
+and enlarged text determine when these bodies return to one lane. The explicit
+`debrief-companion-frame` opt-in keeps a text-scaled gutter beside the narrow
+reading rail and allows long words to wrap inside their frame.
 
 Code companions pair explanation with a labelled keyboard-scrollable code
 region when the example's useful line width and a 26rem explanation both fit.

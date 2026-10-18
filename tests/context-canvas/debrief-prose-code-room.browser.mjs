@@ -237,3 +237,50 @@ test('Restored one-column, stacked-pair, and clipped-code faults change the mate
   assertObservation(await observe(page, ids));
   await assertCodeReachability(page, 'semantic-form-example-title');
 });
+
+async function observeReadingGutter(page, ids) {
+  return page.evaluate(ids => {
+    const selected = document.querySelector('.page-section-rail__link[aria-current="location"]');
+    const marker = getComputedStyle(selected, '::before'), link = selected.getBoundingClientRect();
+    const width = parseFloat(marker.width) + (marker.boxSizing === 'border-box' ? 0 : parseFloat(marker.borderLeftWidth) + parseFloat(marker.borderRightWidth));
+    return ids.map(id => {
+      const heading = document.getElementById(id), panel = heading.closest('aside'), frame = panel.getBoundingClientRect();
+      const range = document.createRange(); range.selectNodeContents(heading);
+      const fragments = [...range.getClientRects()].filter(r => r.width && r.height).map(r => ({ left: r.left, right: r.right }));
+      return { id, left: frame.left, right: frame.right, markerRight: link.left + width, fragments };
+    });
+  }, ids);
+}
+function assertReadingGutter(items) {
+  for (const item of items) {
+    assert.ok(item.left >= item.markerRight + 1, `${item.id}: frame clears the selected narrow rail marker`);
+    assert.ok(item.fragments.length && item.fragments.every(r => r.left >= item.left - 1 && r.right <= item.right + 1), `${item.id}: complete heading fragments fit the frame`);
+  }
+}
+for (const engine of ['chromium', 'firefox', 'webkit']) {
+  test(`${engine}: narrow enlarged companions retain headings and selected-rail clearance`, async t => {
+    for (const [route, ids] of routes) {
+      const page = await open(t, engine, route);
+      await page.locator('.page-section-rail__link').first().evaluate(link => { location.hash = link.hash; });
+      await page.waitForSelector('.page-section-rail__link[aria-current="location"]');
+      await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      for (const width of [320, 390, 768]) {
+        await settle(page, width);
+        assertReadingGutter(await observeReadingGutter(page, ids));
+        assertObservation(await observe(page, ids));
+      }
+      if (route === 'prompt-side-conditions-practice.html') {
+        await settle(page, 390);
+        const gutter = await page.addStyleTag({ content: '.debrief-companion-frame { max-inline-size: 100% !important; }' });
+        const overlapped = await observeReadingGutter(page, ['boundary-title']);
+        assert.throws(() => assertReadingGutter(overlapped), /frame clears/u);
+        await gutter.evaluate(node => node.remove());
+        const wrapping = await page.addStyleTag({ content: '.debrief-companion-frame { overflow-wrap: normal !important; }' });
+        const clipped = await observeReadingGutter(page, ['boundary-title']);
+        assert.throws(() => assertReadingGutter(clipped), /heading fragments/u);
+        await wrapping.evaluate(node => node.remove());
+        assertReadingGutter(await observeReadingGutter(page, ids));
+      }
+    }
+  });
+}

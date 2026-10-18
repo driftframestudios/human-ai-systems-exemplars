@@ -422,3 +422,17 @@ details.debrief-case-brief__track--disclosure > ol {
         overflow: visible;
     }
 }
+
+/* Opt-in companion frames retain a text-scaled gutter beside the narrow rail.
+   Two 1.25rem sides clear its widest 1.16rem selected marker. Desktop frame
+   and code measures remain with their existing route or variant owners. */
+.debrief-companion-frame {
+    overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 56rem) {
+    .debrief-companion-frame {
+        max-inline-size: min(100%, calc(100vw - 2.5rem));
+        margin-inline: auto;
+    }
+}
