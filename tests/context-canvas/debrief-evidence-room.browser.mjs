@@ -118,7 +118,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       const page = await open(t, engine, route);
       await page.setViewportSize({ width: 768, height: 1100 });
       const enlarged = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-      for (const width of [320, 390, 768]) {
+      for (const width of [320, 390, 768, 1440]) {
         await page.setViewportSize({ width, height: 1100 });
         for (const id of ids) assertGeometry(await observe(page, id), id, { compact: false });
       }

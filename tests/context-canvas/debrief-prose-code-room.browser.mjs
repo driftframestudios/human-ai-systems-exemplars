@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { observeCompanionBoundary as observeReadingGutter, assertCompanionBoundary as assertReadingGutter } from './companion-reading-boundary.mjs';
 import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
@@ -33,6 +34,8 @@ async function open(t, engine, route) {
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Embedded owner</title>' }));
   await page.goto(server.origin + root + route, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
+  await page.locator(".page-section-rail__link").first().evaluate(link => { location.hash = link.hash; });
+  await page.waitForSelector(".page-section-rail__link[aria-current=\"location\"]");
   return page;
 }
 
@@ -84,7 +87,9 @@ async function observe(page, ids) {
 }
 
 function isTwo(body) {
-  if (body.kind === 'prose') return body.box.width + .1 >= 2 * body.columnWidth + body.gap;
+  // A fractional shortfall still selects one column in WebKit; compare the
+  // actual available width with the declared two-column minimum.
+  if (body.kind === 'prose') return body.box.width >= 2 * body.columnWidth + body.gap;
   if (body.kind === 'regions') return body.box.width + .1 >= 2 * 26 * (body.rootFont ?? 16) + body.gap;
   return body.box.width + .1 >= body.children.reduce((sum, child) => sum + child.basis, 0) + body.gap;
 }
@@ -159,6 +164,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
         await t.test(`${width}px`, async () => {
           await settle(page, width);
           const items = await observe(page, ids); assertObservation(items);
+          assertReadingGutter(await observeReadingGutter(page, ids));
           if (width === 390) for (const item of items.filter(item => item.code)) await assertCodeReachability(page, item.id);
         });
       }
@@ -184,6 +190,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
       const enlarged = await observe(page, ids);
       assertObservation(enlarged);
+      assertReadingGutter(await observeReadingGutter(page, ids));
       for (const item of enlarged.filter(item => item.body)) assert.equal(isTwo({ ...item.body, rootFont: item.rootFont }), false, `${item.id}: enlarged text uses the source-ordered single lane`);
       // Reload restores the source-owned styles before alternate-media checks.
       await page.reload({ waitUntil: 'load' }); await page.evaluate(() => document.fonts.ready);
@@ -238,25 +245,6 @@ test('Restored one-column, stacked-pair, and clipped-code faults change the mate
   await assertCodeReachability(page, 'semantic-form-example-title');
 });
 
-async function observeReadingGutter(page, ids) {
-  return page.evaluate(ids => {
-    const selected = document.querySelector('.page-section-rail__link[aria-current="location"]');
-    const marker = getComputedStyle(selected, '::before'), link = selected.getBoundingClientRect();
-    const width = parseFloat(marker.width) + (marker.boxSizing === 'border-box' ? 0 : parseFloat(marker.borderLeftWidth) + parseFloat(marker.borderRightWidth));
-    return ids.map(id => {
-      const heading = document.getElementById(id), panel = heading.closest('aside'), frame = panel.getBoundingClientRect();
-      const range = document.createRange(); range.selectNodeContents(heading);
-      const fragments = [...range.getClientRects()].filter(r => r.width && r.height).map(r => ({ left: r.left, right: r.right }));
-      return { id, left: frame.left, right: frame.right, markerRight: link.left + width, fragments };
-    });
-  }, ids);
-}
-function assertReadingGutter(items) {
-  for (const item of items) {
-    assert.ok(item.left >= item.markerRight + 1, `${item.id}: frame clears the selected narrow rail marker`);
-    assert.ok(item.fragments.length && item.fragments.every(r => r.left >= item.left - 1 && r.right <= item.right + 1), `${item.id}: complete heading fragments fit the frame`);
-  }
-}
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: narrow enlarged companions retain headings and selected-rail clearance`, async t => {
     for (const [route, ids] of routes) {

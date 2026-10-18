@@ -128,7 +128,8 @@
     "test:fmi-reading-room-browser": "node --test tests/context-canvas/fmi-reading-room.browser.mjs",
     "test:fmi-reading-rail-browser": "node --test tests/context-canvas/fmi-reading-rail.browser.mjs",
     "test:debrief-prose-code-room-browser": "node --test tests/context-canvas/debrief-prose-code-room.browser.mjs",
-    "test:debrief-evidence-room-browser": "node --test tests/context-canvas/debrief-evidence-room.browser.mjs"
+    "test:debrief-evidence-room-browser": "node --test tests/context-canvas/debrief-evidence-room.browser.mjs",
+    "test:debrief-ordered-room-browser": "node --test tests/context-canvas/debrief-ordered-room.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

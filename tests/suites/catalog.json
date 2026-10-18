@@ -2296,6 +2296,28 @@
       "aliases": [
         "test:debrief-evidence-room-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-ordered-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-ordered-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nine visual-description and procedure panels: actual ordered-item geometry, marker and source sequence, retained media description relationships, compact menu note, responsive seams, enlarged text, alternate media, and restored ordering or distribution faults.",
+      "aliases": [
+        "test:debrief-ordered-room-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2393,7 +2415,8 @@
         "browser.context-canvas.fmi-reading-room",
         "browser.context-canvas.fmi-reading-rail",
         "browser.context-canvas.debrief-prose-code-room",
-        "browser.context-canvas.debrief-evidence-room"
+        "browser.context-canvas.debrief-evidence-room",
+        "browser.context-canvas.debrief-ordered-room"
       ]
     },
     {
@@ -2411,7 +2434,8 @@
         "browser.context-canvas.fmi-reading-room",
         "browser.context-canvas.fmi-reading-rail",
         "browser.context-canvas.debrief-prose-code-room",
-        "browser.context-canvas.debrief-evidence-room"
+        "browser.context-canvas.debrief-evidence-room",
+        "browser.context-canvas.debrief-ordered-room"
       ]
     },
     {

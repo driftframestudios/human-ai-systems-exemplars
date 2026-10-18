@@ -142,8 +142,11 @@ columns when two 26rem measures fit. `debrief-companion-regions` places a
 quotation and its onward references in adjacent, intact reading regions.
 Their headings remain outside the distributed body. Available container width
 and enlarged text determine when these bodies return to one lane. The explicit
-`debrief-companion-frame` opt-in keeps a text-scaled gutter beside the narrow
-reading rail and allows long words to wrap inside their frame.
+`debrief-companion-frame` opt-in reserves the rail’s current side of the
+reading field and allows long words to wrap inside the frame. Screen frames
+use a 2.5rem total narrow reserve and the shell’s 10rem desktop evidence-field
+reserve; compact notes and the Python example retain their smaller useful
+measures through `--debrief-companion-measure`.
 
 Code companions pair explanation with a labelled keyboard-scrollable code
 region when the example's useful line width and a 26rem explanation both fit.
@@ -172,6 +175,22 @@ routes, including the selected rail marker's paint, source-adjacent widths,
 enlarged text, print, forced colors, onward-link focus, both disclosure states,
 and restored frame or gutter faults. The Field Inspection delivery check
 retains its source-to-pilot parity role.
+
+Ordered companion bodies retain two distinct reading sequences. Six visual
+descriptions use `debrief-ordered-reading` for continuous chronological columns;
+whole native numbered items travel together. Two procedures use
+`debrief-procedure` and `debrief-ordered-steps` for rowwise pairs when their
+containers provide two useful lanes. The short menu-detour description retains
+one compact frame. Introductions, headings, and consequences keep their authored
+positions around those lists; media `aria-details` retains its exact receiver.
+
+`npm run test:debrief-ordered-room-browser` checks all nine panels across five
+routes, including actual item and marker geometry, column-start alignment,
+chronological or rowwise sequence, responsive seams, narrow/enlarged states,
+print, forced colors, accessible relationships, and restored layout faults.
+The prose/code and ordered suites share a frame/heading/rail paint observation;
+each suite retains its own content behavior. The compact-note suite also checks
+enlarged desktop text because its measure scales with the text.
 
 ## Source and public route map
 
