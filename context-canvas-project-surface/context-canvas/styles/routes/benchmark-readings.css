@@ -135,6 +135,7 @@
     border: .125rem solid var(--benchmark-ink);
     border-inline-start: .55rem solid var(--benchmark-cobalt);
     padding: clamp(1rem, 2.5vw, 1.5rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.5vw, 1.5rem);
 }
 
 .benchmark-reading-page .benchmark-boundary > :first-child {

@@ -231,6 +231,10 @@
     box-shadow: .42rem .42rem 0 var(--inspection-ink);
 }
 
+.field-inspection-sampling-aside {
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.125em), 3vw, 1.125em);
+}
+
 .field-inspection-sampling-aside details {
     background: var(--inspection-warm-white);
     border: .125rem solid var(--inspection-ink);
@@ -336,6 +340,7 @@
     color: var(--inspection-ink);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.1rem, 3vw, 1.8rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.1rem), 3vw, 1.8rem);
 }
 
 .field-inspection-evidence-boundary :is(h3, p),

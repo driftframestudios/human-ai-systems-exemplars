@@ -1619,6 +1619,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-block: 1px solid var(--canvas-rule-strong);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.2rem, 3vw, 2rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.2rem), 3vw, 2rem);
     break-inside: avoid;
 }
 
@@ -1834,6 +1835,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-inline-start: .35rem solid var(--canvas-ink-strong);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.2rem, 3vw, 2rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.2rem), 3vw, 2rem);
 }
 
 .implementation-companion > :first-child {
@@ -1881,6 +1883,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-radius: .75rem;
     box-shadow: .5rem .5rem 0 var(--operating-field-ink, #17345f);
     padding: clamp(1rem, 2.4vw, 1.5rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.4vw, 1.5rem);
 }
 
 .cobalt-operating-field__table .table-scroll {

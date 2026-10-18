@@ -2318,6 +2318,28 @@
       "aliases": [
         "test:debrief-ordered-room-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-companion-spacing",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-companion-spacing.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty-eight opted-in companion frames across fifteen routes: useful narrow reading width, restored-padding comparisons, native multi-digit markers, focused long links, fluid-padding seams, retained wide and print geometry, and three browser engines.",
+      "aliases": [
+        "test:debrief-companion-spacing-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2416,7 +2438,8 @@
         "browser.context-canvas.fmi-reading-rail",
         "browser.context-canvas.debrief-prose-code-room",
         "browser.context-canvas.debrief-evidence-room",
-        "browser.context-canvas.debrief-ordered-room"
+        "browser.context-canvas.debrief-ordered-room",
+        "browser.context-canvas.debrief-companion-spacing"
       ]
     },
     {
@@ -2435,7 +2458,8 @@
         "browser.context-canvas.fmi-reading-rail",
         "browser.context-canvas.debrief-prose-code-room",
         "browser.context-canvas.debrief-evidence-room",
-        "browser.context-canvas.debrief-ordered-room"
+        "browser.context-canvas.debrief-ordered-room",
+        "browser.context-canvas.debrief-companion-spacing"
       ]
     },
     {

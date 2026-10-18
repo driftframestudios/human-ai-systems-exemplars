@@ -84,6 +84,7 @@
     border: .125rem solid var(--practice-ink);
     margin-block: clamp(1.5rem, 3vw, 2.5rem);
     padding: clamp(1.1rem, 2.8vw, 1.8rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.1rem), 2.8vw, 1.8rem);
 }
 
 .persona-distinction {
@@ -201,6 +202,7 @@
     border-inline-start: .75rem double var(--practice-cobalt);
     margin-block: clamp(1.5rem, 3vw, 2.25rem);
     padding: clamp(1rem, 2.6vw, 1.75rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.6vw, 1.75rem);
 }
 
 .lesson-capsule-intro > :first-child,
@@ -340,6 +342,7 @@
     margin-block: clamp(1.5rem, 3vw, 2.5rem);
     min-inline-size: 0;
     padding: clamp(1rem, 2.6vw, 1.75rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.6vw, 1.75rem);
 }
 
 .lesson-field-static-equivalent {

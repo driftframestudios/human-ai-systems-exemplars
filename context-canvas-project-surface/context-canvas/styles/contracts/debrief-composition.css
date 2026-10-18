@@ -317,6 +317,7 @@
   break-inside: avoid;
   margin-block: clamp(2rem, 4vw, 3.25rem) 0;
   padding: clamp(1.15rem, 2.8vw, 1.75rem);
+  padding-inline: clamp(var(--debrief-companion-inline-floor, 1.15rem), 2.8vw, 1.75rem);
 }
 
 .debrief-composition-page .debrief-evidence-boundary > :first-child,

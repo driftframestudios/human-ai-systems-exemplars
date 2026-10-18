@@ -148,6 +148,17 @@ use a 2.5rem total narrow reserve and the shell’s 10rem desktop evidence-field
 reserve; compact notes and the Python example retain their smaller useful
 measures through `--debrief-companion-measure`.
 
+The same opt-in frames set a screen-only `--debrief-companion-inline-floor`
+for narrow reading. Each existing padding owner consumes this lower bound
+while retaining its own fluid growth, maximum, vertical spacing, and print
+fallback. The owners remain `expanded.css`, the Debrief composition contract,
+the Benchmark readings route, the Prompt-Side and Field Inspection styles,
+and Distributed Inspection's local style. Native list gutters retain their
+numbering space; visitor text size and the outer reading-rail reserve keep
+their separate owners. `npm run test:debrief-companion-spacing-browser` checks
+all thirty-eight frames across fifteen routes at ordinary and enlarged text,
+with desktop, wide, print, native-marker, focus, and restored-spacing controls.
+
 Code companions pair explanation with a labelled keyboard-scrollable code
 region when the example's useful line width and a 26rem explanation both fit.
 The JavaScript and HTML examples keep their own measured code widths; the
