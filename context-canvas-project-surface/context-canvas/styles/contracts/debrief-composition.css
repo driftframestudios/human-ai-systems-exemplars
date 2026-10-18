@@ -253,7 +253,7 @@
 }
 
 .debrief-composition-page .debrief-track--implementation .debrief-track-label,
-.debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .debrief-reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote) {
+.debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote) {
   color: var(--debrief-paper);
 }
 
@@ -472,7 +472,7 @@
     color: CanvasText;
   }
 
-  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .debrief-reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
   .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label) {
     color: CanvasText;
   }
@@ -502,7 +502,7 @@
     color: #000 !important;
   }
 
-  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .debrief-reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
   .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label),
   .debrief-composition-page .debrief-track--implementation .story-visual figcaption {
     color: #000 !important;

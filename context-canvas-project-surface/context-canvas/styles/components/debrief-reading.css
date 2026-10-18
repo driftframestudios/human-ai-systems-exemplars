@@ -1,10 +1,10 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
    using .track-index, .source-basis, .debrief-quote--orientation, or the
-   .debrief-movement / .debrief-reading-flow composition.
+   .debrief-movement composition.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
-   measure and placement, movement-header grouping, heading-first reading
-   regions, and print grouping.
+   measure and placement, movement-header grouping, and print grouping.
+   The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
    bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
    follow for composed readings.
@@ -21,17 +21,6 @@
 
 .debrief-movement__header > p {
     max-inline-size: none;
-}
-
-/* Headings and wide evidence keep their authored order as ordinary blocks.
-   Core foundation owns the responsive columns inside each prose run. */
-.debrief-reading-flow > .beat-title {
-    break-inside: avoid;
-    break-after: avoid;
-}
-
-.debrief-reading-flow > .beat-title:first-child {
-    margin-block-start: 0;
 }
 
 .track-index {

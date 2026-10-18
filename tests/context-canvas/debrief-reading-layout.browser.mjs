@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { after, before, test } from "node:test";
 import { chromium, expect, firefox, webkit } from "@playwright/test";
 import { startStaticServer } from "../../tools/core-architecture-browser-helper.mjs";
+import { assertColumnActivation, assertRegions, assertText, assertWideBoundaries, observeReading, settleColumns } from "./reading-layout-helper.mjs";
 
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const output = new URL("../../.visual-runs/debrief-reading-layout/", import.meta.url);
@@ -113,145 +114,7 @@ async function openPage(browser, route, options = {}) {
   return { page, close: () => context.close() };
 }
 
-async function observeReading(page, { includeOrdinary = false } = {}) {
-  return page.evaluate(includeOrdinary => {
-    const rect = box => ({
-      left: box.left, right: box.right, top: box.top, bottom: box.bottom,
-      width: box.width, height: box.height,
-    });
-    const box = node => rect(node.getBoundingClientRect());
-    const positive = value => value.width > 0 && value.height > 0;
-    const fragments = root => {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-      const result = [];
-      let node;
-      while ((node = walker.nextNode())) {
-        const start = node.textContent.search(/\S/u);
-        if (start < 0) continue;
-        const end = node.textContent.search(/\s*$/u);
-        const range = document.createRange();
-        range.setStart(node, start);
-        range.setEnd(node, end);
-        const style = getComputedStyle(node.parentElement);
-        // WebKit can return empty extra rectangles around a multicol spanner.
-        // Only nonempty ranges establish text-fragment geometry.
-        const boxes = [...range.getClientRects()].map(rect).filter(positive);
-        result.push({
-          text: node.textContent.slice(start, end), boxes,
-          raised: Boolean(node.parentElement.closest("sup, sub")),
-          visible: style.display !== "none" && style.visibility === "visible",
-        });
-      }
-      return result;
-    };
-    const movementHeaders = [...document.querySelectorAll(".debrief-movement")].map(movement => {
-      const header = movement.querySelector(":scope > .debrief-movement__header");
-      const label = header?.querySelector(".debrief-track-label, .genomic-track-label, .fmi-track-marker, .field-inspection-track-label, .inspection-track-label");
-      const title = header?.querySelector("h2");
-      const flow = movement.querySelector(":scope > .debrief-reading-flow");
-      if (!header || !label || !title || !flow) return { valid: false };
-      return {
-        valid: true,
-        semantic: movement.matches("section, article"),
-        id: title.id,
-        named: movement.getAttribute("aria-labelledby")?.split(/\s+/u).includes(title.id),
-        ordered: header.nextElementSibling === flow && label.nextElementSibling === title,
-        box: box(header), labelBox: box(label), titleBox: box(title), flowBox: box(flow),
-        label: fragments(label), title: fragments(title),
-        parts: [...label.children].map(child => ({ tag: child.tagName, box: box(child) })),
-        rail: Boolean(document.querySelector(`:is(.page-section-rail, [data-canvas-page-rail]) a[href="#${title.id}"]`)),
-      };
-    });
 
-    const wideSelector = "h1, h2, figure, .table-figure, .table-span-all, .career-slide, .clean-list, .embed-slot, pre";
-    const isWide = node => node.matches(wideSelector) && !node.matches(".table-figure--column");
-    const owners = [...document.querySelectorAll(includeOrdinary ? ".prose-flow" : ".debrief-reading-flow")].map(owner => {
-      const children = [...owner.children];
-      const flowBox = box(owner);
-      // The nested selector also observes the negative control that puts an
-      // opening heading back into columns, where a continuation can precede it.
-      const headings = owner.querySelectorAll(":scope > :is(h1, h2, .beat-title), :scope > .prose-flow > :is(h1, h2, .beat-title)");
-      const regions = [...headings].map(heading => {
-        const content = [];
-        for (let sibling = heading.nextElementSibling; sibling; sibling = sibling.nextElementSibling) {
-          // An authored heading or wide evidence field ends this region. The
-          // complete intervening prose supplies its actual continuation starts.
-          if (sibling.matches(".beat-title") || isWide(sibling)) break;
-          content.push(...fragments(sibling));
-        }
-        const body = content.flatMap(item => item.boxes);
-        const midpoint = flowBox.left + flowBox.width / 2;
-        const run = heading.parentElement.matches(".prose-flow")
-          ? heading.parentElement : heading.nextElementSibling;
-        return {
-          id: heading.id || heading.textContent.trim(),
-          beat: heading.matches(".beat-title"),
-          level: heading.tagName,
-          heading: fragments(heading),
-          columns: run?.matches(".prose-flow") ? Number.parseInt(getComputedStyle(run).columnCount, 10) || 1 : 1,
-          // Both column starts are derived from the complete region's text
-          // fragments. This catches continuations far above a tall heading.
-          starts: [
-            body.filter(value => value.left < midpoint),
-            body.filter(value => value.left >= midpoint),
-          ].map(column => column.length ? Math.min(...column.map(value => value.top)) : null),
-        };
-      });
-      const boundaries = children.filter(isWide).flatMap(wide => {
-        const next = wide.nextElementSibling;
-        if (!next) return [];
-        const following = fragments(next).flatMap(part => part.boxes);
-        return [{ id: wide.id || wide.tagName, box: box(wide), following }];
-      });
-      const title = owner.querySelector(":scope > h2");
-      return {
-        box: flowBox, regions, boundaries,
-        titleNamed: !title || owner.getAttribute("aria-labelledby")?.split(/\s+/u).includes(title.id),
-      };
-    });
-    const rootFont = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const flows = [...document.querySelectorAll(".debrief-reading-flow > .prose-flow")].map(flow => {
-      const container = flow.closest(".content");
-      const style = getComputedStyle(container);
-      const containerWidth = container.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
-      return {
-        columns: Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1,
-        box: box(flow), ownerBox: box(flow.parentElement), paragraphs: [...flow.children].filter(child => child.matches("p")).flatMap(fragments),
-        containerWidth, columnThreshold: 80 * rootFont,
-        misplaced: [...flow.children].filter(child => child.matches(".beat-title") || isWide(child))
-          .map(child => child.id || child.tagName),
-      };
-    });
-    return {
-      viewport: document.documentElement.clientWidth,
-      documentWidth: document.documentElement.scrollWidth,
-      headers: movementHeaders,
-      owners, flows, rootFont,
-      principles: [...document.querySelectorAll('[aria-labelledby="doctrines-title"] > .beat-title')].flatMap(heading => {
-        const next = heading.nextElementSibling;
-        const paragraph = next?.matches("p") ? next
-          : next?.matches(".prose-flow") && next.children.length === 1 && next.firstElementChild.matches("p") ? next.firstElementChild : null;
-        return paragraph ? [{ text: paragraph.textContent.trim(), fragments: [...paragraph.getClientRects()].map(rect).filter(positive) }] : [];
-      }),
-      promises: [...document.querySelectorAll(".debrief-reading-flow .fmi-track-promise")].map(promise => ({
-        fragments: [...promise.getClientRects()].map(rect).filter(positive),
-        owner: box(promise.closest(".debrief-reading-flow")),
-      })),
-    };
-  }, includeOrdinary);
-}
-
-function assertText(text, owner, context) {
-  assert.ok(text.length, `${context}: has authored text`);
-  for (const part of text) {
-    assert.ok(part.visible && part.boxes.length, `${context}: visible text has nonempty layout bounds (${part.text.slice(0, 50)})`);
-    for (const box of part.boxes) {
-      assert.ok(box.left >= owner.left - 2 && box.right <= owner.right + 2
-        && box.top >= owner.top - 2 && box.bottom <= owner.bottom + 2,
-      `${context}: text fragment stays inside its visible owner`);
-    }
-  }
-}
 
 function assertHeaders(reading, expected, label, { rails = true } = {}) {
   assert.equal(reading.headers.length, expected, `${label}: source-native movement count`);
@@ -279,38 +142,7 @@ function assertHeaders(reading, expected, label, { rails = true } = {}) {
   }
 }
 
-function assertRegions(reading, label) {
-  let count = 0;
-  let paired = 0;
-  for (const owner of reading.owners) {
-    for (const region of owner.regions) {
-      count += 1;
-      const heading = region.heading.flatMap(part => part.boxes);
-      assertText(region.heading, owner.box, `${label} ${region.id}: heading`);
-      const bottom = Math.max(...heading.map(value => value.bottom));
-      for (const start of region.starts.filter(value => value !== null)) {
-        assert.ok(start >= bottom - 2,
-          `${label} ${region.id}: heading precedes its first continuation (${start.toFixed(1)} < ${bottom.toFixed(1)})`);
-      }
-      if (region.columns === 2 && region.starts.every(value => value !== null)) paired += 1;
-    }
-  }
-  assert.ok(count > 0, `${label}: observes authored title or beat regions`);
-  return { count, paired };
-}
 
-function assertWideBoundaries(reading, label) {
-  for (const owner of reading.owners) {
-    for (const boundary of owner.boundaries) {
-      for (const fragment of boundary.following) {
-        assert.ok(fragment.top >= boundary.box.bottom - 2,
-          `${label} ${boundary.id}: wide evidence precedes the following text`);
-      }
-    }
-  }
-  assert.deepEqual(reading.flows.flatMap(flow => flow.misplaced), [],
-    `${label}: continuous prose keeps authored headings and wide evidence at its outer boundary`);
-}
 
 function assertReading(reading, route, options = {}) {
   assertHeaders(reading, nativeMovements[route] ?? 2, route, options);
@@ -361,20 +193,7 @@ function assertReading(reading, route, options = {}) {
   return result;
 }
 
-function assertColumnActivation(reading, route) {
-  assert.ok(reading.flows.length > 0, `${route}: has continuous prose`);
-  for (const flow of reading.flows) {
-    assert.equal(flow.columns, flow.containerWidth >= flow.columnThreshold ? 2 : 1,
-      `${route}: columns follow the actual reading container (${flow.containerWidth}px / ${flow.columnThreshold}px)`);
-  }
-}
 
-async function settleColumns(page) {
-  await expect.poll(async () => {
-    const reading = await observeReading(page);
-    return reading.flows.every(flow => flow.columns === (flow.containerWidth >= flow.columnThreshold ? 2 : 1));
-  }, { timeout: 3000, message: "responsive columns settle at the actual container boundary" }).toBe(true);
-}
 
 async function observeCapitalTable(page) {
   return page.locator('[aria-label="Current staged capital plan"] > table').evaluate(table => {
@@ -421,19 +240,19 @@ async function captureOpenings(page, prefix) {
     }).map(image => image.decode())));
     await page.screenshot({ path: new URL(`${prefix}-${suffix}.png`, output).pathname });
   };
-  const headers = page.locator(".debrief-movement__header, .debrief-reading-flow > h2");
+  const headers = page.locator(".debrief-movement__header, .reading-flow > h2");
   for (let index = 0; index < await headers.count(); index += 1) {
     await headers.nth(index).evaluate(node => window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 150));
     await capture(index + 1);
   }
   // Paint-only fragments need a visual comparison: a Range can establish
   // layout order while an engine still paints a later glyph above a figure.
-  const evidence = page.locator(".debrief-reading-flow > figure:has(+ .prose-flow)").first();
+  const evidence = page.locator(".reading-flow > figure:has(+ .prose-flow)").first();
   if (await evidence.count()) {
     await evidence.evaluate(node => window.scrollTo(0, node.getBoundingClientRect().bottom + window.scrollY - 550));
     await capture("evidence-return");
   }
-  const intervention = page.locator('.debrief-reading-flow > .beat-title').filter({ hasText: /§c|\.c /u }).first();
+  const intervention = page.locator('.reading-flow > .beat-title').filter({ hasText: /§c|\.c /u }).first();
   if (await intervention.count()) {
     await intervention.evaluate(node => window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 150));
     await capture("intervention");
@@ -540,7 +359,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
             if (mode === "print") await session.page.emulateMedia({ media: "print" });
             if (mode === "enlarged-long-label") {
               enlargement = await session.page.addStyleTag({ content: "html { font-size: 200%; }" });
-              await session.page.locator(".debrief-movement__header > p:first-child, .debrief-reading-flow > h2").evaluateAll(labels => {
+              await session.page.locator(".debrief-movement__header > p:first-child, .reading-flow > h2").evaluateAll(labels => {
                 for (const label of labels) label.append(document.createTextNode(
                   " · Extended movement orientation names the receiving people, retained responsibility, and next observable decision.",
                 ));
@@ -582,7 +401,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           const session = await openPage(browser, route, { viewport: { width, height: 1000 } });
           try {
             const control = await session.page.evaluate(() => ({
-              optedIn: document.querySelectorAll(".debrief-movement, .debrief-reading-flow").length,
+              optedIn: document.querySelectorAll(".debrief-movement, .reading-flow").length,
               labels: [...document.querySelectorAll(".debrief-track-label")].map(label => ({
                 outside: !label.closest(".prose-flow"),
                 top: label.getBoundingClientRect().top,
@@ -672,14 +491,14 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
       try {
         assertReading(await observeReading(session.page), "initiative-costing.html");
         await session.page.evaluate(() => {
-          const title = document.querySelector(".debrief-reading-flow > h2");
+          const title = document.querySelector(".reading-flow > h2");
           title.nextElementSibling.style.transform = "translateY(-1000px)";
         });
         const titleFault = await observeReading(session.page);
         assert.throws(() => assertRegions(titleFault, "title-only continuation"), /heading precedes its first continuation/u);
         await session.page.reload({ waitUntil: "load" });
         await session.page.evaluate(() => {
-          const heading = document.querySelector(".debrief-reading-flow > .beat-title:not([id])");
+          const heading = document.querySelector(".reading-flow > .beat-title:not([id])");
           const paragraph = heading.nextElementSibling;
           const run = document.createElement("div");
           run.className = "prose-flow";
@@ -707,7 +526,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
         // WebKit reproduce its split; all engines check the repaired source.
         if (engine !== "firefox") {
           await lims.page.evaluate(() => {
-            const promise = document.querySelector(".debrief-reading-flow > .fmi-track-promise");
+            const promise = document.querySelector(".reading-flow > .fmi-track-promise");
             const run = document.createElement("div");
             run.className = "prose-flow";
             promise.before(run);
@@ -735,7 +554,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
         await session.page.evaluate(() => {
           const movement = document.querySelector(".debrief-movement");
           const header = movement.querySelector(".debrief-movement__header");
-          const flow = movement.querySelector(".debrief-reading-flow > .prose-flow");
+          const flow = movement.querySelector(".reading-flow > .prose-flow");
           flow.prepend(...header.children);
           header.remove();
         });
@@ -744,14 +563,14 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           /one named movement groups label, title, then prose/u);
         await session.page.reload({ waitUntil: "load" });
         await session.page.evaluate(() => {
-          const heading = document.querySelector(".debrief-reading-flow > .beat-title");
+          const heading = document.querySelector(".reading-flow > .beat-title");
           heading.nextElementSibling.prepend(heading);
         });
         const brokenHeading = await observeReading(session.page);
         assert.throws(() => assertRegions(brokenHeading, "heading inside columns"), /heading precedes its first continuation/u);
         await session.page.reload({ waitUntil: "load" });
         await session.page.evaluate(() => {
-          const figure = document.querySelector(".debrief-reading-flow > figure");
+          const figure = document.querySelector(".reading-flow > figure");
           figure.nextElementSibling.style.transform = "translateY(-10000px)";
         });
         const overlappingEvidence = await observeReading(session.page);
