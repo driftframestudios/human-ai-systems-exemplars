@@ -136,6 +136,27 @@ Both include restored faults and Chromium, Firefox, and Playwright WebKit
 observations. [Issue #506](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/506)
 holds this receiving boundary and the related Debrief room audit.
 
+The shared Debrief reading component also offers opt-in companion bodies.
+`debrief-companion-reading` gives sustained prose at most two continuous
+columns when two 26rem measures fit. `debrief-companion-regions` places a
+quotation and its onward references in adjacent, intact reading regions.
+Their headings remain outside the distributed body. Available container width
+and enlarged text determine when these bodies return to one lane.
+
+Code companions pair explanation with a labelled keyboard-scrollable code
+region when the example's useful line width and a 26rem explanation both fit.
+The JavaScript and HTML examples keep their own measured code widths; the
+longer Python example retains its introduction, code, and return in a bounded
+vertical panel. Code bytes and source order remain with the authored example.
+Print wraps code into the available page width.
+
+`npm run test:debrief-prose-code-room-browser` checks all twelve opted-in
+panels across seven routes in Chromium, Firefox, and Playwright WebKit.
+Actual text fragments, responsive transitions, keyboard-reachable code line
+endings, disclosures, enlarged text, alternate media, and restored layout
+faults establish the receiving behavior. The ordinary Debrief layout, catalog,
+and reference-figure suites retain their separate contracts.
+
 ## Source and public route map
 
 | Role | Current route and standing |

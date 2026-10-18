@@ -1,10 +1,13 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
    using .track-index, .source-basis, .debrief-quote--orientation, or the
-   .debrief-movement composition, and dense .debrief-proxy-figure references.
+   .debrief-movement composition, dense .debrief-proxy-figure references, and
+   opt-in .debrief-companion-reading/regions and .debrief-code-* bodies.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, movement-header grouping, dense reference figure
-   inspection, canonical six-beat scan borders, and print grouping.
+   inspection, canonical six-beat scan borders, sustained companion and code
+   distribution, and print grouping. Each opt-in body keeps its heading in
+   the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
    bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may

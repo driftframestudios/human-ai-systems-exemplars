@@ -126,7 +126,8 @@
     "test:atlas-cascade-browser": "node --test tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs",
     "test:debrief-reference-figures-browser": "node --test tests/context-canvas/debrief-reference-figures.browser.mjs",
     "test:fmi-reading-room-browser": "node --test tests/context-canvas/fmi-reading-room.browser.mjs",
-    "test:fmi-reading-rail-browser": "node --test tests/context-canvas/fmi-reading-rail.browser.mjs"
+    "test:fmi-reading-rail-browser": "node --test tests/context-canvas/fmi-reading-rail.browser.mjs",
+    "test:debrief-prose-code-room-browser": "node --test tests/context-canvas/debrief-prose-code-room.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
