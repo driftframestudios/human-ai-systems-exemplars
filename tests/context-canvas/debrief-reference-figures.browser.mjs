@@ -12,6 +12,18 @@ const routes = new Map([
   ['who-to-believe-reviews-platform.html', [5, 1]],
 ]);
 const screenWidths = [390, 896, 897, 1023, 1024, 1025, 1199, 1200, 1440, 2560];
+const boundedCaptions = new Map([
+  ['fmi-clinical-trial-coordination.html', {
+    selector: 'figure:has(img[src$="fmi_human_automation_diff.svg"])',
+    paintedOwner: '.prose-flow',
+    text: ['operational rather than performative', 'Partner-specific values remain undisclosed'],
+  }],
+  ['genomic-viewer-replatforming.html', {
+    selector: '#genomics-situation-models',
+    paintedOwner: '.genomic-context-tree-feature',
+    text: ['Figure 3. Genomics situation-model player cards.', 'Each account stays revisable'],
+  }],
+]);
 const browsers = new Map();
 let server;
 before(async () => {
@@ -77,6 +89,47 @@ async function observeFigures(page) {
   });
 }
 
+async function observeBoundedCaption(page, { selector, paintedOwner }) {
+  return page.locator(selector).evaluate((figure, ownerSelector) => {
+    const bounds = value => {
+      return {
+        left: value.left, right: value.right, top: value.top, bottom: value.bottom,
+        width: value.width, height: value.height, center: value.left + value.width / 2,
+      };
+    };
+    const rect = node => bounds(node.getBoundingClientRect());
+    const caption = figure.querySelector(':scope > figcaption.table-note');
+    const media = figure.querySelector(':scope > .debrief-proxy-frame')
+      || figure.querySelector(':scope > .story-visual__open');
+    const owner = figure.closest(ownerSelector);
+    const captionStyle = getComputedStyle(caption);
+    const walker = document.createTreeWalker(caption, NodeFilter.SHOW_TEXT);
+    const fragments = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      const start = node.textContent.search(/\S/u);
+      if (start < 0) continue;
+      const end = node.textContent.search(/\s*$/u);
+      const range = document.createRange();
+      range.setStart(node, start);
+      range.setEnd(node, end);
+      fragments.push(...[...range.getClientRects()]
+        .filter(value => value.width > 0 && value.height > 0)
+        .map(bounds));
+    }
+    return {
+      optedIn: figure.classList.contains('story-visual--bounded-caption'),
+      text: caption.textContent.replace(/\s+/gu, ' ').trim(),
+      figure: rect(figure), caption: rect(caption), media: rect(media), paintedOwner: rect(owner),
+      margins: {
+        start: Number.parseFloat(captionStyle.marginInlineStart),
+        end: Number.parseFloat(captionStyle.marginInlineEnd),
+      },
+      fragments,
+    };
+  }, paintedOwner);
+}
+
 function near(actual, expected, message) {
   assert.ok(Math.abs(actual - expected) <= 1, `${message}: ${actual}px / ${expected}px`);
 }
@@ -128,6 +181,28 @@ function assertFallbackSeam(observation, route, width) {
   for (const figure of observation.figures) {
     if (width <= 1024) near(figure.box.width, figure.parentWidth, `${figure.id}: the inclusive 64rem shared fallback fills its parent`);
     else near(figure.box.width, Math.min(width * .92, 1248), `${figure.id}: above 64rem the proxy retains its bounded inspection width`);
+  }
+}
+
+function assertBoundedCaption(observation, expected, label) {
+  assert.equal(observation.optedIn, true, `${label}: the authored figure opts into the bounded caption treatment`);
+  for (const fragment of expected.text) {
+    assert.ok(observation.text.includes(fragment), `${label}: the authored caption retains “${fragment}”`);
+  }
+  near(observation.caption.center, observation.figure.center, `${label}: caption stays centered in its extended visual`);
+  near(observation.margins.start, observation.margins.end, `${label}: logical auto margins share the available room`);
+  near(observation.media.left, observation.figure.left, `${label}: media keeps its existing inline start`);
+  near(observation.media.right, observation.figure.right, `${label}: media keeps its existing inline end`);
+  assert.ok(observation.caption.left >= observation.paintedOwner.left - 1
+    && observation.caption.right <= observation.paintedOwner.right + 1,
+  `${label}: caption stays inside its local painted reading boundary`);
+  assert.ok(observation.fragments.length > 0, `${label}: caption exposes visible text fragments`);
+  for (const fragment of observation.fragments) {
+    assert.ok(fragment.left >= observation.caption.left - 1 && fragment.right <= observation.caption.right + 1
+      && fragment.top >= observation.caption.top - 1 && fragment.bottom <= observation.caption.bottom + 1,
+    `${label}: each visible text fragment stays inside the caption box`);
+    assert.ok(fragment.left >= observation.paintedOwner.left - 1 && fragment.right <= observation.paintedOwner.right + 1,
+      `${label}: each visible text fragment stays inside the painted reading boundary`);
   }
 }
 
@@ -195,6 +270,36 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       }
     });
   }
+
+  test(`${engine}: selected extended visuals center their captions inside the local painted reading`, async t => {
+    for (const [route, expected] of boundedCaptions) {
+      const page = await openReading(t, engine, route);
+      for (const width of screenWidths) {
+        await settle(page, width);
+        assertBoundedCaption(await observeBoundedCaption(page, expected), expected, `${route} at ${width}px`);
+      }
+    }
+  });
+
+  test(`${engine}: the bounded-caption oracle rejects a displaced margin while media geometry stays fixed`, async t => {
+    const route = 'genomic-viewer-replatforming.html';
+    const expected = boundedCaptions.get(route);
+    const page = await openReading(t, engine, route);
+    await settle(page, 2560);
+    const accepted = await observeBoundedCaption(page, expected);
+    assertBoundedCaption(accepted, expected, `${route} accepted geometry`);
+    const marginFault = await page.addStyleTag({
+      content: '.story-visual--bounded-caption > figcaption.table-note { margin-inline: 0 !important; }',
+    });
+    try {
+      const changed = await observeBoundedCaption(page, expected);
+      near(changed.media.left, accepted.media.left, 'The controlled caption fault leaves media inline start unchanged');
+      near(changed.media.right, accepted.media.right, 'The controlled caption fault leaves media inline end unchanged');
+      assert.throws(() => assertBoundedCaption(changed, expected, 'controlled margin fault'),
+        /caption stays centered|caption stays inside its local painted reading boundary/u);
+    } finally { await marginFault.evaluate(node => node.remove()); }
+    assertBoundedCaption(await observeBoundedCaption(page, expected), expected, `${route} restored geometry`);
+  });
 
   test(`${engine}: reference oracles reject lost canvas width, displaced caption color, and shared fallback faults, then restore`, async t => {
     const route = 'who-to-believe-reviews-platform.html';

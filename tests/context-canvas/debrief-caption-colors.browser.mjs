@@ -142,7 +142,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       inventory.push({ route, records }); await page.close();
     }
     const roots = inventory.reduce((sum, entry) => sum + entry.records.length, 0);
-    assert.equal(roots, 161, 'Catalog captions plus media-linked descriptions define the current receiving population.');
+    assert.equal(roots, 167, 'Catalog captions plus media-linked descriptions define the current receiving population.');
     await writeFile(new URL(`${engine}-inventory.json`, output), JSON.stringify(inventory, null, 2));
   });
 
