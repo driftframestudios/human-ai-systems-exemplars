@@ -1,10 +1,10 @@
 # Schema and skill projection Worker
 
 This Worker is the production owner for `https://schemas.vik.guru/`. The
-checked-in successor carries the schema cohort and public-ready skill closure
+checked-in publication carries the schema cohort and public-ready skill closure
 accepted for `pages-v0.3.1` from one reviewed source revision while GitHub Pages
 provides the richer visitor and skill-reading surface. The production
-observation below identifies the active receiver until successor activation.
+observation below identifies the active receiver and immediate recovery pair.
 
 The fetch handler runs before its `ASSETS` binding and owns HTTPS redirects,
 exact-route lookup, media types, cache classes, conditional retrieval, CORS,
@@ -35,30 +35,30 @@ comparison.
 
 Issue
 [#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
-owns this successor's publication, lock, promotion, activation, observation,
-and recovery receipts.
+records this publication's lock, promotion, activation, observation, and
+recovery receipts.
 
 ## Active production observation
 
-The v0.3.0 Worker closure became active at `https://schemas.vik.guru/` on
-2026-10-13 from accepted `prod@369b61b79dfe3d245c1193567d9f715263927670`.
+The v0.3.1 Worker closure became active at `https://schemas.vik.guru/` on
+2026-10-18 from accepted `prod@a2545cb03e2e3767cfa5abd167f017944498dcd7`.
 The signed-out receiver check observed all 17 contracts, 33 schema routes, 27
 public-ready skills, 86 skill artifacts, and 160 allowlisted routes. It also
 established the declared redirect, byte, media-type, cache, CORS, validator,
 conditional-request, `HEAD`, method, and bounded JSON `404` behavior. The
 JavaScript-disabled browser check passed at 390 px and 1280 px. Issue
-[#406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406)
+[#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
 carries the activation, Worker-version, and recovery receipt.
 
 | Production role | Accepted coordinate |
 | --- | --- |
-| Production source | `prod@369b61b79dfe3d245c1193567d9f715263927670` |
-| GitHub Actions run | `38411427064`, attempt 2 |
-| GitHub deployment | `7040992633` |
-| Active Worker version | `a21e8ecf-01c2-4bac-9c2c-db2a8371b817` |
-| Active Cloudflare deployment | `3fc0be95-d114-43f7-bdea-470ab3b4d6b7` |
-| Immediate recovery version | `4d258fa1-a350-4f8c-b0a9-fad20dcd0034` |
-| Immediate recovery deployment | `5e904e29-d7af-4c96-8b51-7c16570b6c90` |
+| Production source | `prod@a2545cb03e2e3767cfa5abd167f017944498dcd7` |
+| GitHub Actions run | `39166814705`, attempt 2 |
+| GitHub deployment | `7160825687` |
+| Active Worker version | `93a84428-b8c4-4f25-aa92-8e64bedf8b77` |
+| Active Cloudflare deployment | `f3b1a792-dae6-40d2-9107-fe52b133ac27` |
+| Immediate recovery version | `a21e8ecf-01c2-4bac-9c2c-db2a8371b817` |
+| Immediate recovery deployment | `3fc0be95-d114-43f7-bdea-470ab3b4d6b7` |
 
 ## Publication boundary
 
@@ -303,7 +303,7 @@ enter through the process environment.
 
 ## Recovery
 
-Worker version `4d258fa1-a350-4f8c-b0a9-fad20dcd0034` remains the immediate
+Worker version `a21e8ecf-01c2-4bac-9c2c-db2a8371b817` remains the immediate
 platform recovery coordinate for this release. A later accepted deployment
 advances that predecessor coordinate through its own durable receipt. The
 repository retains reproducible source, the annotated Pages
@@ -331,7 +331,7 @@ containing ten decimal digits. Every other added byte, the insertion position,
 and every authored byte remain exact. A changed edge shape receives another
 bounded observation and review.
 
-The 2026-10-13 production acceptance matched this recorded 938-byte addition at
+The 2026-10-18 production acceptance matched this recorded 938-byte addition at
 both `/` and `/index.html`; every authored byte remained in order. That dated
 match records current delivery evidence, while subsequent deliveries receive
 fresh checks.

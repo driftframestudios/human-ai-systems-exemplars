@@ -113,9 +113,10 @@ commits, rebuilds from source, and requires complete file membership and byte
 equality before upload.
 
 Pages settings remain the custom-domain authority. The recorded Pages family
-is `schemas.radiantnull.com`; completed Issue #406 records the active
-`schemas.vik.guru` v0.3.0 Worker publication, activation, and live parity.
-Issue #531 owns the v0.3.1 Worker successor. The generated public
+is `schemas.radiantnull.com`; completed Issue #406 preserves the
+`schemas.vik.guru` v0.3.0 Worker activation and recovery lineage. Completed
+Issue #531 records the active v0.3.1 Worker publication and live parity. The
+generated public
 `release.json`, accepted annotated tag, and matching workflow receipt identify
 the active Pages coordinate. The `pages-v0.3.1` tag at docs commit
 `fbf568496b90` with recorded source commit `c1e35fdd57c2` is active.
@@ -179,6 +180,13 @@ receiver, and restore both gates.
 Cloudflare deployment history and the completed Issue receipt name the deployed
 and preceding Worker versions. The workflow summary records the accepted
 repository coordinate and directs recovery to those durable identifiers.
+
+The 2026-10-18 v0.3.1 activation exercised the same route at exact
+`prod@a2545cb03e2e3767cfa5abd167f017944498dcd7`. Run `39166814705` attempt 2
+passed the contract, admitted the deployment job, and completed after both
+repository gates returned to rest. Issue #531 records the active Worker,
+Cloudflare deployment, signed-out route observations, and v0.3.0 recovery
+coordinate.
 
 ## Production-carrier contract
 
