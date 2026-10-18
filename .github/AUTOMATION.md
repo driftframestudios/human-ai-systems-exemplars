@@ -19,7 +19,7 @@ below names every workflow; the following sections explain each receiving job.
 | `res-public-boundary-intake.yml` | Non-draft `main` PR; `ACTIONS_BUDGET_MAIN=true` | 2 minutes | Cancel superseded PR run | #63 inventory |
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
-| `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, and #406 schema delivery; #63 inventory |
+| `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, #406, and #531 schema delivery; #63 inventory |
 | `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PRs always receive the media job while `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the prototype job | 10 minutes per job | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, and #434 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #464 current release; #253 and PR #255 implementation precedent |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
@@ -113,12 +113,14 @@ commits, rebuilds from source, and requires complete file membership and byte
 equality before upload.
 
 Pages settings remain the custom-domain authority. The recorded Pages family
-is `schemas.radiantnull.com`; Issue #406 owns current schema-publication and
-Worker parity. The generated public `release.json`, accepted annotated tag, and
-matching workflow receipt identify the active Pages coordinate. The
-`pages-v0.3.0` tag at docs commit `2819c8564acfe` with recorded source commit
-`cfaa53f5b750` is active. `pages-v0.2.0` at docs commit `bf257f6674e8` and the
-earlier `pages-v0.1.0` observation remain historical evidence.
+is `schemas.radiantnull.com`; completed Issue #406 records the active
+`schemas.vik.guru` v0.3.0 Worker publication, activation, and live parity.
+Issue #531 owns the v0.3.1 Worker successor. The generated public
+`release.json`, accepted annotated tag, and matching workflow receipt identify
+the active Pages coordinate. The `pages-v0.3.1` tag at docs commit
+`fbf568496b90` with recorded source commit `c1e35fdd57c2` is active.
+`pages-v0.3.0`, `pages-v0.2.0`, and the earlier `pages-v0.1.0` observation
+remain historical evidence.
 The recorded `docs:/` source setting remains the recovery coordinate: an
 authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
 and return the environment allowlist to its prior state when needed. Current
@@ -158,6 +160,25 @@ Environment-scoped Cloudflare credentials enter only the production deployment
 job. The earlier asset-only adapter retains its shared source inputs and local
 build or dry-run checks; it no longer owns a root deployment command or this
 production workflow.
+
+The first connected production activation retained exact
+`prod@369b61b79dfe3d245c1193567d9f715263927670`. Its initial push completed the
+contract while held repository gates skipped deployment. Opening both gates
+later did not create another push event, so the authorized activation reran the
+complete original workflow. GitHub retained the original `GITHUB_SHA` and
+`GITHUB_REF`; the contract passed and the deployment job was admitted. Both
+repository gates returned to rest before the admitted deployment completed and
+the signed-out checks began. GitHub's
+[rerun contract](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/re-run-workflows-and-jobs)
+states that a rerun uses the original commit SHA and Git ref. This exact-run
+rerun is the bounded activation path for an accepted production push whose
+deployment was deliberately held: recheck the immutable coordinate, open both
+gates for a bounded window, rerun the complete push workflow, observe the
+receiver, and restore both gates.
+
+Cloudflare deployment history and the completed Issue receipt name the deployed
+and preceding Worker versions. The workflow summary records the accepted
+repository coordinate and directs recovery to those durable identifiers.
 
 ## Production-carrier contract
 

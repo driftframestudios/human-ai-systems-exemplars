@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "main@e1f00de baseline plus owned suite-routing and Case Brief carrier additions",
+  "sourceRevision": "main@e1f00de baseline plus owned suite-routing additions",
   "countingUnit": "Distinct source files, not runtime test cases",
   "profiles": [
     {
@@ -326,6 +326,7 @@
         "tests/prod-deployment/carrier.test.mjs",
         "tests/prod-deployment/installer.test.mjs",
         "tests/prod-deployment/primary-closure.test.mjs",
+        "tests/prod-deployment/promotion-topology.test.mjs",
         "tests/prod-deployment/projection.test.mjs"
       ],
       "profile": "node-source",
