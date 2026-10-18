@@ -44,6 +44,14 @@ runtime update can reopen the choice. Ordinary agreeing observations use the
 existing helper; this branch releases when the discrepancy and fault sensitivity
 are established.
 
+After changing text size, viewport geometry, or focus state, a final-state
+observation waits for the relevant computed fonts, frames, and paint properties
+to settle within a bounded window. Driver-side polling keeps this observation
+available when page scripting or animation timers are unavailable. A timeout
+preserves the unsettled condition for diagnosis. Stable final-state evidence
+leaves first-paint and transient behavior with their separate observations;
+the receiving test owns its predicates, timing bounds, and failure evidence.
+
 ## Fragmentation and containment
 
 For a reading-order claim, locate the named heading and the actual continuation it governs. Inspect nonempty text fragments and the semantic relationship that makes their order meaningful. Arbitrary nearby text and the outer element box can miss a later fragment or select an unrelated region.
