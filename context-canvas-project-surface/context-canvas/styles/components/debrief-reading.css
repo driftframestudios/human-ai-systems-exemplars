@@ -7,7 +7,8 @@
    measure and placement, movement-header grouping, dense reference figure
    inspection, canonical six-beat scan borders, sustained prose and code
    distribution, compact evidence frames, chronological columns, numbered
-   procedure pairs, opt-in hero color roles, screen inline-padding floors, and print grouping. Each opt-in body keeps its heading in
+   procedure pairs, hero word containment, opt-in hero color roles, screen
+   inline-padding floors, and print grouping. Each opt-in body keeps its heading in
    the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
@@ -16,6 +17,12 @@
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */
+
+/* Hero words retain their ordinary breaks; an oversized word can use the
+   available text measure when the visitor enlarges text or narrows the page. */
+.debrief-hero :where(.h1-hero, .tag-line, .debrief-lead, .debrief-kicker) {
+    overflow-wrap: anywhere;
+}
 
 /* Opt-in solid hero planes pair each text role with its painted owner. Route
    palettes supply the values; ordinary Debriefs retain their existing header. */
