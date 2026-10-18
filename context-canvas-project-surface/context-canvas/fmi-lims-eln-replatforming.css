@@ -728,19 +728,6 @@
     break-inside: avoid;
 }
 
-.fmi-new-tab-icon {
-    display: inline;
-    inline-size: .85em;
-    block-size: .85em;
-    margin-inline-start: .2em;
-    vertical-align: baseline;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
 .fmi-link-cue {
     position: absolute;
     inline-size: 1px;

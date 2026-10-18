@@ -72,6 +72,25 @@ dark-foreground faults. Caption emphasis has a separate painted-owner boundary;
 the hero contract leaves caption and embedded-artifact interiors with their
 existing owners.
 
+## Links to other reading contexts
+
+The twenty-three catalog readings and their parent retain ordinary native link
+behavior. Authored links to another website or repository companion document
+carry the shared square-arrow SVG, an accessible “outside Context Canvas”
+qualifier, and a matching hover title. The seventeen FMI method companions keep
+their explicit “opens in a new tab” cue and authored tab choice. Nearby footer
+sentences name the external destinations directly. Full-size images, supplied
+movie files, and local Canvas routes retain their existing explicit labels.
+
+`canvas-shell.css` owns the opt-in `canvas-link-icon` paint; authored HTML owns
+its destination and accessible meaning. Each SVG declares matching em dimensions
+so its initial inline size participates in WebKit column balancing. The icon follows the link foreground,
+text size, wrapping, focus, print, and forced-color modes. Public-reference
+materialization resolves Registry URLs while preserving this authored meaning.
+`test:debrief-link-cues-browser` inventories every catalog reading, checks
+representative cross-engine paint and accessible names, and exercises a missing
+cue before restoring the intended state.
+
 ## Movement headers and reading regions
 
 Seventeen catalog readings use `.reading-flow`: the sixteen Full
