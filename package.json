@@ -135,7 +135,8 @@
     "test:debrief-card-measure-browser": "node --test tests/context-canvas/debrief-card-measure.browser.mjs",
     "test:debrief-hero-colors-browser": "node --test tests/context-canvas/debrief-hero-colors.browser.mjs",
     "test:debrief-link-cues-browser": "node --test tests/context-canvas/debrief-link-cues.browser.mjs",
-    "test:debrief-hero-wrapping-browser": "node --test tests/context-canvas/debrief-hero-wrapping.browser.mjs"
+    "test:debrief-hero-wrapping-browser": "node --test tests/context-canvas/debrief-hero-wrapping.browser.mjs",
+    "test:debrief-caption-colors-browser": "node --test tests/context-canvas/debrief-caption-colors.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
