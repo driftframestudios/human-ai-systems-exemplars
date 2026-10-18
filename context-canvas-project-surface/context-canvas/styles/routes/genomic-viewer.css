@@ -252,7 +252,8 @@
     background: #0f2147;
 }
 
-.genomic-implementation-field .content > section > :is(h2, h3, h4, p, blockquote) {
+.genomic-implementation-field .content > section > :is(h2, h3, h4, p, blockquote),
+.genomic-implementation-field :is(.debrief-movement__header, .debrief-reading-flow, .debrief-reading-flow > .prose-flow) > :is(h2, h3, h4, p, blockquote) {
     color: var(--genomic-warm-white);
 }
 

@@ -19,7 +19,7 @@
     },
     {
       "id": "browser",
-      "runtime": "Node >=22, repository Playwright, real Chromium, and suite-selected Playwright WebKit",
+      "runtime": "Node >=22, repository Playwright, and the Chromium, Firefox or WebKit engines named by the selected suite",
       "prerequisites": [
         "Root npm dependencies and the browser engines named by the selected suite installed.",
         "Existing harness prerequisites, source packages and explicit local execution authority."
@@ -1024,6 +1024,28 @@
       "scope": "Rendered catalog preview replacement plus sixteen Case Brief projections, thirty-two independent collapsed track disclosures, state-aware labels, responsive geometry, atomic fallback, forced-colors and print presentation, and HTTP/direct-file behavior in Chromium and Playwright WebKit.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-reading-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-reading-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Movement-header completeness, headings above column prose, and wide evidence between prose runs across eleven composed routes in Chromium, Firefox and Playwright WebKit; responsive seam, alternate modes, long labels, enlarged text, scriptless reading, unaffected controls and controlled layout regressions. Native-browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:debrief-reading-layout-browser"
       ]
     },
     {
@@ -2143,6 +2165,7 @@
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
+        "browser.context-canvas.debrief-reading-layout",
         "browser.context-canvas.visitor-image-delivery",
         "browser.context-canvas.video-receivers",
         "browser.context-canvas.who-to-believe-system-graph",

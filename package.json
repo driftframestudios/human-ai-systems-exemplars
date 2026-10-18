@@ -117,7 +117,9 @@
     "test:suites:plan": "node tools/test-suite-plan.mjs",
     "test:suites:unit": "node --test tests/suites/planner.test.mjs",
     "test:tables:python": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all",
-    "test:tables:python:entry": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v"
+    "test:tables:python:entry": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v",
+    "test:debrief-reading-layout-browser": "node --test tests/context-canvas/debrief-reading-layout.browser.mjs",
+    "playwright:install:debrief-reading": "playwright install chromium firefox webkit"
   },
   "overrides": {
     "fast-uri": "4.1.5"

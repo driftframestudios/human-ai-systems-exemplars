@@ -21,6 +21,32 @@ The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/REA
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the matching `schemas.vik.guru` parity and activation cycle.
 
+## Movement headers and reading regions
+
+Eleven composed routes use `.debrief-movement`: Genomic Viewer, FMI Clinical
+Trial Coordination, the five EHR readings, Humatics, Spatial Capture,
+Multilingual Clinical Vocabulary Practice, and Recoverable Enterprise Forms.
+Its `.debrief-movement__header` groups the written track label and `h2` outside
+`.prose-flow`. The ordinary block body uses `.debrief-reading-flow`: each
+direct `.beat-title` and each existing full-width evidence field stands
+between continuous `.prose-flow` runs. Headings visibly precede both columns,
+and wide evidence keeps its authored position. Column-local figures retain
+their place within prose. The genomic route also applies this body relation
+to its eight separate beat sections. Ordinary internal headings retain their
+existing flow and rhythm.
+
+`styles/components/debrief-reading.css` owns header containment and beat
+spacing. Core foundation owns responsive columns within each prose run;
+headings and wide evidence remain in ordinary block flow at every width.
+The route or composition stylesheet owns palette and readable foregrounds
+through the added wrappers. Keep labels and heading IDs in document order,
+and keep the header outside the fragmented prose when adding a movement.
+Keep wide evidence between prose runs so later content follows it in both
+source order and browser paint. The browser contract exercises the target
+pair, all eleven consumers, and unaffected controls through
+`npm run test:debrief-reading-layout-browser`; its native-browser confirmation
+remains a separate receiving observation.
+
 ## Source and public route map
 
 | Role | Current route and standing |
@@ -193,12 +219,12 @@ Current high-signal ownership:
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, and opt-in movement headers and heading-first prose, loaded directly after `expanded.css`. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
-| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Ten composed Debriefs, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
+| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
@@ -379,6 +405,7 @@ npm run test:context-canvas
 npm run check:debrief-case-briefs
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:debrief-reading-layout-browser
 npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
