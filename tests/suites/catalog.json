@@ -2406,6 +2406,28 @@
       "aliases": [
         "test:debrief-hero-colors-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-link-cues",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-link-cues.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three Debriefs and their catalog: complete outgoing-link inventory, visible and accessible destination cues, preserved native tab choice, SVG sizing and first-load columns, Registry materialization, alternate media, and restored cue or initialization faults.",
+      "aliases": [
+        "test:debrief-link-cues-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2508,7 +2530,8 @@
         "browser.context-canvas.debrief-companion-spacing",
         "browser.context-canvas.site-navigation",
         "browser.context-canvas.debrief-card-measure",
-        "browser.context-canvas.debrief-hero-colors"
+        "browser.context-canvas.debrief-hero-colors",
+        "browser.context-canvas.debrief-link-cues"
       ]
     },
     {
@@ -2531,7 +2554,8 @@
         "browser.context-canvas.debrief-companion-spacing",
         "browser.context-canvas.site-navigation",
         "browser.context-canvas.debrief-card-measure",
-        "browser.context-canvas.debrief-hero-colors"
+        "browser.context-canvas.debrief-hero-colors",
+        "browser.context-canvas.debrief-link-cues"
       ]
     },
     {

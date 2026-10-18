@@ -1,7 +1,7 @@
 /* Context Canvas shared component: navigation shell ----------------------
    Consumers: 41 top-level Context Canvas routes loading canvas-shell.css.
    Owns: the progressively generated route shelf, shared footer, section rail,
-   source-derived rail mode, and their responsive, reduced-motion,
+   source-derived rail mode, opt-in outbound/new-tab link icons, and responsive, reduced-motion,
    forced-color, and print behavior.
    Load order: after the shared core, the legacy remainder where consumed,
    and applicable component and route bundles; an explicitly documented
@@ -14,6 +14,22 @@
    behavior and receives route variation through established custom properties.
    Semantic page content and local footer links remain useful without scripting;
    canvas-shell.js progressively installs the shared navigation surfaces. */
+
+/* Authored links and their accessible names own destination and tab meaning.
+   Authored em dimensions establish its first layout in WebKit multicolumns;
+   this opt-in paint follows each link’s current foreground in every mode. */
+.canvas-link-icon {
+    display: inline;
+    inline-size: .85em;
+    block-size: .85em;
+    margin-inline-start: .2em;
+    vertical-align: baseline;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
 
 .super-footer {
     background: var(--about-deep-forest-charcoal, #242a24);
