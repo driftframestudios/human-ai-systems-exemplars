@@ -78,6 +78,7 @@
     "test:attribution": "node --test tests/attribution/*.test.mjs tests/context-canvas/visitor-surface-attribution.test.mjs",
     "test:schema-pages": "node --test tests/schema-pages/*.test.mjs",
     "test:iframe-routes": "node --test tests/iframe-routes/*.test.mjs",
+    "check:promotion-topology": "node tools/check-promotion-topology.mjs",
     "test:prod-deployment": "node --test tests/prod-deployment/*.test.mjs",
     "test:prod-css-projection-browser": "node tests/prod-deployment/about-css-projection.browser.mjs",
     "test:canvas-iframe-routes": "npm run build:iframe-routes && node tools/canvas-iframe-route-browser-contract.mjs",
