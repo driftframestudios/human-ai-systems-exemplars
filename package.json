@@ -121,7 +121,8 @@
     "test:debrief-reading-layout-browser": "node --test tests/context-canvas/debrief-reading-layout.browser.mjs",
     "playwright:install:debrief-reading": "playwright install chromium firefox webkit",
     "test:ai-systems-reading-layout-browser": "node --test tests/context-canvas/ai-systems-reading-layout.browser.mjs",
-    "test:technology-fit-layout-browser": "node --test tests/context-canvas/technology-fit-layout.browser.mjs"
+    "test:technology-fit-layout-browser": "node --test tests/context-canvas/technology-fit-layout.browser.mjs",
+    "test:ai-entry-cascade-browser": "node --test tests/context-canvas/ai-entry-cascade.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

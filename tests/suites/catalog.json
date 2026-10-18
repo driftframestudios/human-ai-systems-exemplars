@@ -2142,6 +2142,28 @@
       "owner": "context-canvas-project-surface/data/visualization-fidelity/research/README.md",
       "scope": "The research example's native table, linked SVG, source disclosure, keyboard scrolling and print reading at narrow and desktop widths; the separately owned instrument uses a local substitute.",
       "aliases": []
+    },
+    {
+      "id": "browser.context-canvas.ai-entry-cascade",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-entry-cascade.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Five AI Systems entry bridges across Chromium, Firefox and Playwright WebKit: accepted cyan palette, all border sides, inclusive 30rem shadow seam, print table width, forced colors, controlled faults and restoration. Native browsers and publication retain separate observations.",
+      "aliases": [
+        "test:ai-entry-cascade-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2232,7 +2254,8 @@
         "browser.context-canvas.prompt-side-figure",
         "browser.visualization-fidelity-atlas.atlas-research.browser",
         "browser.context-canvas.ai-systems-reading-layout",
-        "browser.context-canvas.technology-fit-layout"
+        "browser.context-canvas.technology-fit-layout",
+        "browser.context-canvas.ai-entry-cascade"
       ]
     },
     {
