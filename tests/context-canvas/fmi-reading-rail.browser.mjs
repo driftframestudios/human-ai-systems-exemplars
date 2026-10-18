@@ -95,6 +95,8 @@ async function divergentJourney(page) {
 }
 
 for (const engine of ['chromium', 'firefox', 'webkit']) {
+  // WebKit's macOS preference uses Option-Tab to include links.
+  const nextLinkKey = engine === 'webkit' ? 'Alt+Tab' : 'Tab';
   test(`${engine}: authored rail distinguishes current reading from the selected destination`, async t => {
     const page = await open(t, engine);
     await assertState(page, null, null);
@@ -159,12 +161,19 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
         currentTick: getComputedStyle(node.querySelector('.is-current .fmi-reading-rail__tick')).backgroundColor,
         restingTick: getComputedStyle(node.querySelector('a:not(.is-current):not(.is-selected) .fmi-reading-rail__tick')).backgroundColor,
         selectedTick: getComputedStyle(node.querySelector('.is-selected .fmi-reading-rail__tick')).outlineStyle,
+        currentSize: ['width', 'height'].map(dimension => node.querySelector('.is-current .fmi-reading-rail__tick').getBoundingClientRect()[dimension]),
+        restingSize: ['width', 'height'].map(dimension => node.querySelector('a:not(.is-current):not(.is-selected) .fmi-reading-rail__tick').getBoundingClientRect()[dimension]),
       }));
       assert.ok(observations.pageWidth <= observations.viewport + 1, 'Reading state retains page containment.');
       assert.ok(observations.links.every(box => box.width >= 24 && box.height >= 24), 'Each rail destination remains at least 24px square.');
       if (width < 1200) {
         assert.notEqual(observations.currentTick, observations.restingTick, 'Compact current reading has a filled marker.');
         assert.equal(observations.selectedTick, 'solid', 'Compact selection has an independent outline.');
+        for (const [actual, expected] of observations.currentSize.map((value, index) => [value, [13.76, 6.72][index]])) {
+          assert.ok(Math.abs(actual - expected) < .1, 'Current reading uses the subtle horizontal marker enlargement.');
+        }
+        assert.ok(observations.currentSize[0] > observations.restingSize[0] && observations.currentSize[1] > observations.restingSize[1], 'Current reading enlarges the established resting marker in both dimensions.');
+        assert.ok(observations.currentSize[0] > observations.currentSize[1], 'The active marker retains its horizontal shape.');
       }
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -198,11 +207,160 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     } finally {
       await fault.evaluate(node => node.remove());
     }
-    await link(page, implementation).focus();
+    await link(page, 'solution-outcomes-title').focus();
+    await page.keyboard.press(nextLinkKey);
     await assertCompactLabelPaint(page, implementation);
     await page.setViewportSize({ width: 768, height: 240 });
     await link(page, 'population-cartography-title').focus();
     await assertCompactLabelPaint(page, 'population-cartography-title');
+  });
+
+  test(`${engine}: compact activation and reading dismiss previews until deliberate pointer re-entry`, async t => {
+    for (const width of [390, 768]) {
+      const page = await open(t, engine, { viewport: { width, height: 844 } });
+      const label = link(page, solution).locator('.fmi-reading-rail__text');
+      await link(page, solution).hover();
+      await assertCompactLabelPaint(page, solution);
+      await link(page, solution).click();
+      await assertState(page, solution, solution);
+      await expect(label).toBeHidden();
+      // Moving directly to another marker is fresh intent, including when
+      // pointerout names that marker before its pointerover arrives.
+      await link(page, 'shared-grammar-title').hover();
+      await assertCompactLabelPaint(page, 'shared-grammar-title');
+      await link(page, solution).click();
+      await expect(label).toBeHidden();
+      await page.setViewportSize({ width, height: 843 });
+      await scrollToHeading(page, implementation);
+      await assertState(page, implementation, solution);
+      await expect(label).toBeHidden();
+      await expect(link(page, solution)).toHaveAccessibleName('Solution');
+      assert.equal(new URL(page.url()).hash, '#' + solution);
+      await page.mouse.move(width - 20, 200);
+      await link(page, solution).hover();
+      await assertCompactLabelPaint(page, solution);
+      const box = await label.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await assertCompactLabelPaint(page, solution);
+      // Deliberate inspection survives ordinary state/layout updates.
+      await page.setViewportSize({ width, height: 844 });
+      await assertCompactLabelPaint(page, solution);
+      await page.mouse.wheel(0, 160);
+      await expect(label).toBeHidden();
+      await page.setViewportSize({ width, height: 843 });
+      await expect(label).toBeHidden();
+    }
+  });
+
+  test(`${engine}: touch activation leaves compact reading clear while retaining native destination state`, async t => {
+    for (const width of [390, 768]) {
+      const page = await open(t, engine, { viewport: { width, height: 844 }, hasTouch: true });
+      await page.evaluate(() => {
+        window.railPointerTypes = [];
+        document.querySelector('.fmi-reading-rail').addEventListener('pointerdown', event => window.railPointerTypes.push(event.pointerType));
+      });
+      await link(page, solution).tap();
+      await assertState(page, solution, solution);
+      await expect(link(page, solution).locator('.fmi-reading-rail__text')).toBeHidden();
+      assert.deepEqual(await page.evaluate(() => window.railPointerTypes), ['touch'], 'The activation exercises actual emulated touch events.');
+      await expect(link(page, solution)).toHaveAccessibleName('Solution');
+      await expect(link(page, solution)).toHaveAccessibleDescription('Reading · Selected');
+      await scrollToHeading(page, implementation);
+      await assertState(page, implementation, solution);
+      await page.setViewportSize({ width, height: 840 });
+      await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+      assert.equal(new URL(page.url()).hash, '#' + solution, 'Touch reading preserves the selected native fragment.');
+      // A second tap selects again without a retained focus/hover preview.
+      await link(page, solution).tap();
+      await assertState(page, solution, solution);
+      await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+      // An attached mouse can resume deliberate hover after touch navigation.
+      await page.mouse.move(width - 20, 200);
+      await link(page, solution).hover();
+      await assertCompactLabelPaint(page, solution);
+    }
+  });
+
+  test(`${engine}: shifted touch release keeps compatibility hover separate from later mouse intent`, async t => {
+    const page = await open(t, engine, { viewport: { width: 390, height: 844 }, hasTouch: true });
+    // This bounded event simulation observes a shifted release that the tap
+    // helper cannot express; the adjacent case retains real emulated taps.
+    const release = await link(page, solution).evaluate(node => {
+      const box = node.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      const touch = (type, dx, dy, pointerId = 7) => node.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, pointerType: 'touch', pointerId, clientX: x + dx, clientY: y + dy,
+      }));
+      touch('pointerdown', 0, 0);
+      touch('pointermove', 1, 1);
+      touch('pointerup', 20, 20, 8); // An unrelated contact retains its own lifecycle.
+      touch('pointerup', 2, 2);
+      node.click();
+      return { x: x + 2, y: y + 2 };
+    });
+    await assertState(page, solution, solution);
+    await link(page, solution).evaluate((node, point) => {
+      for (const type of ['pointerover', 'pointermove']) node.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, pointerType: 'mouse', pointerId: 1, clientX: point.x, clientY: point.y,
+      }));
+    }, release);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    await expect(link(page, solution).locator('.fmi-reading-rail__text')).toBeHidden();
+    await page.setViewportSize({ width: 390, height: 840 });
+    await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+    await page.mouse.move(release.x + 3, release.y);
+    await assertCompactLabelPaint(page, solution);
+  });
+
+  test(`${engine}: keyboard preview remains inspectable and activation returns to clear reading`, async t => {
+    const page = await open(t, engine, { viewport: { width: 390, height: 844 } });
+    await link(page, first).focus();
+    await page.keyboard.press(nextLinkKey);
+    await expect(link(page, solution)).toBeFocused();
+    await assertCompactLabelPaint(page, solution);
+    await page.setViewportSize({ width: 390, height: 840 });
+    await assertCompactLabelPaint(page, solution);
+    await page.keyboard.press('Enter');
+    await assertState(page, solution, solution);
+    await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+    await link(page, first).focus();
+    await page.keyboard.press(nextLinkKey);
+    await assertCompactLabelPaint(page, solution);
+    await page.keyboard.press('Escape');
+    await expect(link(page, solution)).toBeFocused();
+    await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+    await page.keyboard.press(nextLinkKey);
+    await expect(link(page, 'shared-grammar-title')).toBeFocused();
+    await assertCompactLabelPaint(page, 'shared-grammar-title');
+    await scrollToHeading(page, implementation);
+    await assertState(page, implementation, solution);
+    await expect(link(page, 'shared-grammar-title')).toBeFocused();
+    await expect(page.locator(`${rail} a.is-preview`)).toHaveCount(0);
+  });
+
+  test(`${engine}: a restored persistent-preview fault proves activation dismissal`, async t => {
+    const page = await open(t, engine, { viewport: { width: 390, height: 844 } });
+    const source = await readFile(new URL('../../context-canvas-project-surface/context-canvas/fmi-reading-rail.js', import.meta.url), 'utf8');
+    assert.equal(source.split('previewDismissed = true;').length, 2, 'The dismissal fault has one exact source boundary.');
+    await page.route('**/fmi-reading-rail.js', request => request.fulfill({
+      status: 200, contentType: 'text/javascript',
+      body: source.replace('previewDismissed = true;', 'previewDismissed = false;'),
+    }));
+    try {
+      await page.reload({ waitUntil: 'load' });
+      await link(page, solution).click();
+      await assertState(page, solution, solution);
+      await assert.rejects(() => expect(link(page, solution).locator('.fmi-reading-rail__text')).toBeHidden(), 'The oracle detects retained hover intent after native activation.');
+    } finally {
+      await page.unroute('**/fmi-reading-rail.js');
+      await page.goto(server.origin + route, { waitUntil: 'load' });
+    }
+    await link(page, solution).click();
+    await assertState(page, solution, solution);
+    await expect(link(page, solution).locator('.fmi-reading-rail__text')).toBeHidden();
   });
 
   test(`${engine}: content reflow refreshes current position while keeping selection`, async t => {

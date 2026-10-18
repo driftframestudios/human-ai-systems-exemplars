@@ -54,6 +54,31 @@ Keep local containment separate from document containment. A wide table can exce
 
 Expected typography keeps a precise exception. A raised footnote reference may extend above its paragraph’s ordinary line box while remaining inside the enclosing reading region. The test can preserve paragraph inline containment and use the named outer region for that reference’s vertical bounds. Ordinary paragraph text retains its own full containment assertion. A discovered exception refines the owning relation and leaves neighboring assertions active.
 
+## Input modality and preview lifetime
+
+A narrow viewport establishes available space; touch, keyboard, and pointer
+input establish different interaction sequences. A destination can remain
+selected or focused after activation while its temporary label has already
+served the visitor. Give durable navigation state and preview visibility
+separate owners, then observe the transition back to reading.
+
+For a floating label, test deliberate inspection, activation, continued page
+reading, dismissal, and fresh re-entry. Include touch tap or an explicitly
+bounded pointer-event simulation alongside keyboard and hover observations.
+A mouse click at a mobile width leaves native touch behavior unspecified.
+Check that a retained URL destination, focus, resize, or synthesized pointer
+transition preserves the dismissed state until a fresh inspection request.
+The lasting marker and accessible name should remain useful after the overlay
+leaves the reading field.
+
+Use the visitor's selection, dismissal, or resumed-reading action to end a
+preview where that fits the interaction. Deliberate keyboard and hover
+inspection needs enough time to read and reach the content; an arbitrary
+expiry can defeat that ability. [W3C's Content on Hover or Focus guidance](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html)
+supplies the dismissible, hoverable, and persistent inspection boundary.
+Native application behavior and assistive-technology integration retain their
+own receiving observations.
+
 ## Demonstrate the fault and restore the receiver
 
 A positive observation establishes the intended state in the declared environment. A counterfactual observation establishes that the check distinguishes the named fault there. Both are useful and separate.
