@@ -182,11 +182,12 @@ and preceding Worker versions. The workflow summary records the accepted
 repository coordinate and directs recovery to those durable identifiers.
 
 The 2026-10-18 v0.3.1 activation exercised the same route at exact
-`prod@a2545cb03e2e3767cfa5abd167f017944498dcd7`. Run `39166814705` attempt 2
-passed the contract, admitted the deployment job, and completed after both
-repository gates returned to rest. Issue #531 records the active Worker,
-Cloudflare deployment, signed-out route observations, and v0.3.0 recovery
-coordinate.
+`prod@a2545cb03e2e3767cfa5abd167f017944498dcd7`. Following explicit human
+authorization, an operator opened the bounded activation window for run
+`39166814705` attempt 2. The run passed the contract and admitted the deployment
+job. The operator returned both repository gates to rest while the admitted job
+completed. Issue #531 records the active Worker, Cloudflare deployment,
+signed-out route observations, and v0.3.0 recovery coordinate.
 
 ## Production-carrier contract
 

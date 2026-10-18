@@ -48,7 +48,7 @@ established the declared redirect, byte, media-type, cache, CORS, validator,
 conditional-request, `HEAD`, method, and bounded JSON `404` behavior. The
 JavaScript-disabled browser check passed at 390 px and 1280 px. Issue
 [#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
-carries the activation, Worker-version, and recovery receipt.
+records the activation, Worker-version, and recovery receipt.
 
 | Production role | Accepted coordinate |
 | --- | --- |

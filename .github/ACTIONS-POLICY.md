@@ -109,18 +109,19 @@ The first connected exercise used `prod@369b61b79dfe3d245c1193567d9f715263927670
 Run `38411427064` attempt 2 retained that exact push SHA and ref. The contract
 passed and the deployment job was admitted; the receiver list then returned to
 `[]` and the dependency gate to absent. The admitted deployment completed, and
-the signed-out checks passed. Completed Issue #406 carries the live receiver,
-Worker-version, and recovery observations. Issue #531 carried the accepted
-v0.3.1 successor through protected promotion, activation, and signed-out
+the signed-out checks passed. Completed Issue #406 records the live receiver,
+Worker-version, and recovery observations. Completed Issue #531 records the
+accepted v0.3.1 successor's protected promotion, activation, and signed-out
 acceptance.
 
 The v0.3.1 successor used the same bounded route at
 `prod@a2545cb03e2e3767cfa5abd167f017944498dcd7`. Run `39166814705` attempt 2
-rechecked that exact push coordinate, admitted the deployment job after the
-contract passed, and returned both repository gates to rest while the admitted
-job completed. Signed-out receiver and browser checks then established all 160
-allowlisted routes and both no-script viewport states. Issue #531 carries the
-active Worker and immediate recovery coordinates.
+rechecked that exact push coordinate and admitted the deployment job after the
+contract passed. Following explicit human authorization, an operator returned
+both repository gates to rest while the admitted job completed. Signed-out
+receiver and browser checks then established all 160 allowlisted routes and
+both no-script viewport states. Issue #531 records the active Worker and
+immediate recovery coordinates.
 
 The Pages workflow receives an exact accepted source commit, reviewed `docs`
 commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One
