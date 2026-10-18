@@ -2186,6 +2186,28 @@
       "aliases": [
         "test:atlas-cascade-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-reference-figures",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-reference-figures.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-nine dense reference-interface figures on five Debriefs across Chromium, Firefox and Playwright WebKit: current cascade winners and rail seams, scriptless 64rem boundary, landscape keyboard scrolling, portrait fit, focus, print, forced colors, and controlled extraction faults with restoration. Native applications and publication retain separate observations.",
+      "aliases": [
+        "test:debrief-reference-figures-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2278,7 +2300,8 @@
         "browser.context-canvas.ai-systems-reading-layout",
         "browser.context-canvas.technology-fit-layout",
         "browser.context-canvas.ai-entry-cascade",
-        "browser.visualization-fidelity-atlas.atlas-cascade.browser"
+        "browser.visualization-fidelity-atlas.atlas-cascade.browser",
+        "browser.context-canvas.debrief-reference-figures"
       ]
     },
     {
@@ -2291,7 +2314,8 @@
         "visual.context-canvas-visual-reference",
         "visual.requested-surface",
         "browser.context-canvas.prompt-side-figure",
-        "browser.visualization-fidelity-atlas.atlas-research.browser"
+        "browser.visualization-fidelity-atlas.atlas-research.browser",
+        "browser.context-canvas.debrief-reference-figures"
       ]
     },
     {

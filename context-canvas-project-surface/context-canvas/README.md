@@ -89,6 +89,22 @@ records the inventory, paint-sensitive observations, and acceptance boundary;
 [Issue #499](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/499)
 receives the separate Technology Fit instrument header repair.
 
+The Debrief reading component also owns the dense reference-interface figure
+frames used by Genomic Viewer, FMI Clinical Trial Coordination, FMI LIMS/ELN,
+Humatics, and Who To Believe. Their 29 figures keep source-size links and
+HTML-owned image identities. Landscape frames keep a 56rem reading canvas
+inside a named keyboard-scrollable region; portrait frames fit within 42rem.
+The component preserves the shared figure's full-width behavior through 64rem;
+the later shell and route rules retain their rail and composition overrides.
+Print releases the local scrolling frame into the page's reading width.
+
+`npm run test:debrief-reference-figures-browser` checks the figure family and
+its width seams across Chromium, Firefox, and Playwright WebKit, including
+keyboard access, portrait fit, alternate media, and restored cascade faults.
+The existing image-alternatives source contract retains semantic and image
+identity coverage. [Issue #51](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/51)
+receives the bounded extraction while keeping broader legacy ownership open.
+
 ## Source and public route map
 
 | Role | Current route and standing |
@@ -272,7 +288,7 @@ Current high-signal ownership:
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, and opt-in movement headers, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, opt-in movement headers, and dense reference-interface figure frames, loaded directly after `expanded.css`. The figure rules serve five routes; later palette, rail, and composition owners remain explicit. |
 | [`styles/components/reading-flow.css`](styles/components/reading-flow.css) | Seventeen composed catalog readings and six AI Systems readings | Direct beat-heading break grouping and first-heading spacing around continuous prose runs; follows `expanded.css` and optional `debrief-reading.css`, before route bundles. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
