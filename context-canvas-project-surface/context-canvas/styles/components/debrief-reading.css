@@ -74,6 +74,15 @@
     max-inline-size: var(--canvas-reading-measure);
 }
 
+/* Short source boundaries keep their complete frame near the reading measure.
+   Two 1.25rem gutters clear the narrow rail's 1.16rem active marker, including
+   its border-box paint. The viewport reserve grows with enlarged text.
+   Palette, padding, and the paragraph measure remain with existing owners. */
+.debrief-companion--compact {
+    max-inline-size: min(100%, calc(var(--canvas-reading-measure) + 4rem), calc(100vw - 2.5rem));
+    margin-inline: auto;
+}
+
 /*
  * Dense reference-interface proxies keep a laptop-sized inspection canvas.
  * Narrow readers receive a labelled, keyboard-scrollable region and the
