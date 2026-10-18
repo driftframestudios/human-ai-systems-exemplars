@@ -45,6 +45,33 @@ clearance, alternate media, and a restored equal-cell fault provide the
 focused regression evidence. The full route reference retains the broader
 composition comparison.
 
+## Debrief hero color
+
+The twenty-three catalog readings use solid header planes. Genomic Viewer,
+Field Inspection, and Who To Believe opt into `debrief-hero--palette` in
+`styles/components/debrief-reading.css`. The component pairs background,
+title, tagline, lead, kicker, accent border, and active link roles. Genomic
+Viewer and Field Inspection use the shared night, cream, and field palette;
+their existing route sheets retain the rose and coral borders. Who To Believe
+assigns its local slate, warm cream, teal, pale blue, and coral palette in its
+page-owned style. Print resets the complete palette to dark text on white;
+forced colors preserve system adjustment.
+
+Distributed Inspection, the NEG Atlas, Benchmark Orientation, MAPS
+Evaluations, and Readable Tables retain their existing typography and color
+families on solid planes through their own style owners. The shared AI-family
+hero remains available to its other readers. FMI LIMS/ELN keeps its existing
+deep-blue header. Who To Believe's Solution field uses a solid rose plane;
+authored line-grid textures inside other reading fields retain their role.
+
+`tests/context-canvas/debrief-hero-colors.browser.mjs` inventories the catalog
+and checks the opted-in palettes at narrow, desktop, wide, and enlarged-text
+states in Chromium, Firefox, and Playwright WebKit. It also exercises inherited
+native link roles, focus paint, print, forced colors, and restored gradient and
+dark-foreground faults. Caption emphasis has a separate painted-owner boundary;
+the hero contract leaves caption and embedded-artifact interiors with their
+existing owners.
+
 ## Movement headers and reading regions
 
 Seventeen catalog readings use `.reading-flow`: the sixteen Full
@@ -247,6 +274,17 @@ manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
 ## Debrief reading modes
+
+The nineteen catalog card slugs use their card's available width, owned by
+`.debrief-catalog__card .project--slug` in `styles/routes/debriefs.css`.
+Floated media then shapes the text's actual line room; the foundation's
+balanced wrapping remains active. The shared `--canvas-heading-measure`
+continues to supply the 32ch limit for ordinary headings across Context
+Canvas. `npm run test:debrief-card-measure-browser` checks actual title
+fragments, float clearance, responsive seams, enlarged text, reading modes,
+and a restored 32ch fault across three browser engines. The repair gives
+these short orientation headings the room their cards already provide;
+font choice and title wording continue to determine individual line breaks.
 
 [`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
 Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
