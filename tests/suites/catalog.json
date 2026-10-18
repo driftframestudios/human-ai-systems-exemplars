@@ -2362,6 +2362,50 @@
       "aliases": [
         "test:site-navigation-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-card-measure",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-card-measure.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nineteen catalog card titles: actual available width beside floated media, laptop line endings, responsive seams, enlarged text, filter and reading modes, alternate media, and restored-measure faults across three engines.",
+      "aliases": [
+        "test:debrief-card-measure-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-hero-colors",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-hero-colors.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three catalog headers: solid paint, opt-in route palettes, actual foreground contrast, held FMI LIMS hero, viewport and text containment, link states, alternate media, and restored gradient or foreground faults.",
+      "aliases": [
+        "test:debrief-hero-colors-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2462,7 +2506,9 @@
         "browser.context-canvas.debrief-evidence-room",
         "browser.context-canvas.debrief-ordered-room",
         "browser.context-canvas.debrief-companion-spacing",
-        "browser.context-canvas.site-navigation"
+        "browser.context-canvas.site-navigation",
+        "browser.context-canvas.debrief-card-measure",
+        "browser.context-canvas.debrief-hero-colors"
       ]
     },
     {
@@ -2483,7 +2529,9 @@
         "browser.context-canvas.debrief-evidence-room",
         "browser.context-canvas.debrief-ordered-room",
         "browser.context-canvas.debrief-companion-spacing",
-        "browser.context-canvas.site-navigation"
+        "browser.context-canvas.site-navigation",
+        "browser.context-canvas.debrief-card-measure",
+        "browser.context-canvas.debrief-hero-colors"
       ]
     },
     {

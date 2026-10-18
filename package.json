@@ -131,7 +131,9 @@
     "test:debrief-evidence-room-browser": "node --test tests/context-canvas/debrief-evidence-room.browser.mjs",
     "test:debrief-ordered-room-browser": "node --test tests/context-canvas/debrief-ordered-room.browser.mjs",
     "test:debrief-companion-spacing-browser": "node --test tests/context-canvas/debrief-companion-spacing.browser.mjs",
-    "test:site-navigation-browser": "node --test tests/context-canvas/site-navigation.browser.mjs"
+    "test:site-navigation-browser": "node --test tests/context-canvas/site-navigation.browser.mjs",
+    "test:debrief-card-measure-browser": "node --test tests/context-canvas/debrief-card-measure.browser.mjs",
+    "test:debrief-hero-colors-browser": "node --test tests/context-canvas/debrief-hero-colors.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
