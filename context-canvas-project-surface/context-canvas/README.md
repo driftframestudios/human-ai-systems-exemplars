@@ -72,6 +72,24 @@ dark-foreground faults. Caption emphasis has a separate painted-owner boundary;
 the hero contract leaves caption and embedded-artifact interiors with their
 existing owners.
 
+## Debrief hero word containment
+
+`styles/components/debrief-reading.css` gives the twenty-two shared Debrief
+heroes an emergency break inside an oversized title, tagline, lead, or kicker
+word. Ordinary word breaks, authored wording, font sizes, and header gutters
+retain their existing owners. The independent NEG Atlas hero keeps its local
+composition and participates as a containment control.
+
+`tests/context-canvas/debrief-hero-wrapping.browser.mjs` measures actual text
+fragments against each role, the header content region, and the viewport across
+all twenty-three catalog readings. Chromium, Firefox, and Playwright WebKit
+cover 320px and 390px with ordinary and doubled root text, ordinary desktop and
+wide composition, print, and forced colors. Restoring ordinary wrapping exposes
+the original EHR pharmacogenomic lead and Prompt-Side Collaboration title
+strain; recovery re-establishes the complete reading. At ordinary desktop and
+wide widths, the same comparison preserves text geometry and palette. Header
+containment leaves body-content and embedded-artifact layout with their owners.
+
 ## Links to other reading contexts
 
 The twenty-three catalog readings and their parent retain ordinary native link
