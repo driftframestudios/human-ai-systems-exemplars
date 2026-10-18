@@ -2274,6 +2274,28 @@
       "aliases": [
         "test:debrief-prose-code-room-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-evidence-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-evidence-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Seventeen compact evidence and operating notes across nine routes: frame and text geometry, painted rail clearance, source order and links, sampling disclosure, enlarged text, alternate media, positive ledger control, and restored frame faults.",
+      "aliases": [
+        "test:debrief-evidence-room-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2370,7 +2392,8 @@
         "browser.context-canvas.debrief-reference-figures",
         "browser.context-canvas.fmi-reading-room",
         "browser.context-canvas.fmi-reading-rail",
-        "browser.context-canvas.debrief-prose-code-room"
+        "browser.context-canvas.debrief-prose-code-room",
+        "browser.context-canvas.debrief-evidence-room"
       ]
     },
     {
@@ -2387,7 +2410,8 @@
         "browser.context-canvas.debrief-reference-figures",
         "browser.context-canvas.fmi-reading-room",
         "browser.context-canvas.fmi-reading-rail",
-        "browser.context-canvas.debrief-prose-code-room"
+        "browser.context-canvas.debrief-prose-code-room",
+        "browser.context-canvas.debrief-evidence-room"
       ]
     },
     {

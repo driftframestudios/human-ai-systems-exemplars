@@ -159,6 +159,20 @@ endings, disclosures, enlarged text, alternate media, and restored layout
 faults establish the receiving behavior. The ordinary Debrief layout, catalog,
 and reference-figure suites retain their separate contracts.
 
+Short evidence and operating notes use `debrief-companion--compact` to keep
+their painted frame near a readable paragraph measure. The cap scales with
+text and retains space beside the selected narrow rail marker; long words
+wrap within the frame as text grows. All seventeen
+opted-in notes preserve their complete source qualifications and destinations;
+Field Inspection's sampling prompt remains an intact native disclosure, and
+its four-card prospective ledger keeps its wide comparison layout.
+
+`npm run test:debrief-evidence-room-browser` observes these notes across nine
+routes, including the selected rail marker's paint, source-adjacent widths,
+enlarged text, print, forced colors, onward-link focus, both disclosure states,
+and restored frame or gutter faults. The Field Inspection delivery check
+retains its source-to-pilot parity role.
+
 ## Source and public route map
 
 | Role | Current route and standing |

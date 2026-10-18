@@ -118,7 +118,10 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       const page = await open(t, engine, route);
       await page.setViewportSize({ width: 768, height: 1100 });
       const enlarged = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-      for (const id of ids) assertGeometry(await observe(page, id), id, { compact: false });
+      for (const width of [320, 390, 768]) {
+        await page.setViewportSize({ width, height: 1100 });
+        for (const id of ids) assertGeometry(await observe(page, id), id, { compact: false });
+      }
       await enlarged.evaluate(node => node.remove());
       await page.emulateMedia({ forcedColors: 'active' });
       for (const id of ids) {
@@ -150,6 +153,20 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       if (width >= 1440) assert.equal(lanes, 4, 'The ledger keeps its four useful comparison lanes.');
       if (width === 390) assert.equal(lanes, 1, 'The narrow ledger retains one authored sequence.');
     }
+    await page.setViewportSize({ width: 320, height: 1100 });
+    const enlarged = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    await summary.focus(); await page.keyboard.press('Enter');
+    await expect(prompt).toBeVisible();
+    assertGeometry(await observe(page, 'route-sampling-title'), 'route-sampling-title', { compact: false });
+    const wrapping = await page.addStyleTag({ content: '.debrief-companion--compact { overflow-wrap: normal !important; }' });
+    try {
+      const fault = await observe(page, 'route-sampling-title');
+      assert.throws(() => assertGeometry(fault, 'route-sampling-title', { compact: false }), /text stays inside/, 'The oracle detects long words leaving the narrow enlarged-text frame.');
+    } finally { await wrapping.evaluate(node => node.remove()); }
+    assertGeometry(await observe(page, 'route-sampling-title'), 'route-sampling-title', { compact: false });
+    await summary.focus(); await page.keyboard.press('Enter');
+    await enlarged.evaluate(node => node.remove());
+    await page.setViewportSize({ width: 768, height: 1100 });
     await page.emulateMedia({ forcedColors: 'active' });
     await summary.focus(); await page.keyboard.press('Enter');
     await expect(prompt).toBeVisible();

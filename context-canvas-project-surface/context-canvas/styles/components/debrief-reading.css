@@ -6,7 +6,7 @@
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, movement-header grouping, dense reference figure
    inspection, canonical six-beat scan borders, sustained companion and code
-   distribution, and print grouping. Each opt-in body keeps its heading in
+   distribution, compact evidence frames, and print grouping. Each opt-in body keeps its heading in
    the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
@@ -435,7 +435,8 @@ details.debrief-case-brief__track--disclosure > ol {
 /* Opt-in companion frames retain a text-scaled gutter beside the narrow rail.
    Two 1.25rem sides clear its widest 1.16rem selected marker. Desktop frame
    and code measures remain with their existing route or variant owners. */
-.debrief-companion-frame {
+.debrief-companion-frame,
+.debrief-companion--compact {
     overflow-wrap: anywhere;
 }
 
