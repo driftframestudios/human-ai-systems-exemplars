@@ -2340,6 +2340,28 @@
       "aliases": [
         "test:debrief-companion-spacing-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.site-navigation",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/site-navigation.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Shared primary navigation: complete labels, intrinsic wrapping, flow height, touch and keyboard targets, sticky fragments, focus paint, text enlargement, print, and forced colors across the existing consumer population.",
+      "aliases": [
+        "test:site-navigation-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2439,7 +2461,8 @@
         "browser.context-canvas.debrief-prose-code-room",
         "browser.context-canvas.debrief-evidence-room",
         "browser.context-canvas.debrief-ordered-room",
-        "browser.context-canvas.debrief-companion-spacing"
+        "browser.context-canvas.debrief-companion-spacing",
+        "browser.context-canvas.site-navigation"
       ]
     },
     {
@@ -2459,7 +2482,8 @@
         "browser.context-canvas.debrief-prose-code-room",
         "browser.context-canvas.debrief-evidence-room",
         "browser.context-canvas.debrief-ordered-room",
-        "browser.context-canvas.debrief-companion-spacing"
+        "browser.context-canvas.debrief-companion-spacing",
+        "browser.context-canvas.site-navigation"
       ]
     },
     {
