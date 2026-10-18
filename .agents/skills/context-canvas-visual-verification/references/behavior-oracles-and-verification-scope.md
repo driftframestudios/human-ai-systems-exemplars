@@ -26,6 +26,24 @@ When the accepted baseline or reported environment is unavailable, record the cu
 
 The oracle follows the claimed behavior. Selector existence and class counts can establish inventory. Computed properties can establish a winning cascade rule. Text fragments can establish measured text placement. A focused image can reveal painted slicing or overlap. Each signal keeps its own claim rather than becoming a proxy for the entire visitor experience.
 
+## Automation predicates and rendered state
+
+A browser library's visibility helper is an observation with its own implementation.
+When that helper disagrees with a focused capture or a native browser observation,
+inspect its installed, engine-specific path before changing the visitor source.
+Compare the accepted baseline and current source in the same state. Native
+visibility, loaded-resource state, element and text geometry, and inspected paint
+can identify which part of the helper's model differs from the rendered result.
+Each retains its own evidence boundary; positive geometry alone establishes space,
+while a focused capture establishes the observed paint.
+
+A replacement oracle names the actual visitor ability and rejects a controlled
+fault at that mechanism. Restore the receiver and re-establish its valid state.
+Keep any library-specific explanation beside the affected assertion so a future
+runtime update can reopen the choice. Ordinary agreeing observations use the
+existing helper; this branch releases when the discrepancy and fault sensitivity
+are established.
+
 ## Fragmentation and containment
 
 For a reading-order claim, locate the named heading and the actual continuation it governs. Inspect nonempty text fragments and the semantic relationship that makes their order meaningful. Arbitrary nearby text and the outer element box can miss a later fragment or select an unrelated region.
@@ -87,6 +105,16 @@ Harness failures keep their own outcome. Preserve completed cases, identify miss
 - And a naturally fragmented source case or another declared perturbation supplies the distinguishing observation
 - And the positive paragraph-containment check retains its independent result
 
+### A visibility helper disagrees with a printed disclosure
+
+- Given CSS exposes the contents of an authored closed disclosure in print
+- And an automation helper reports the descendant hidden in one engine
+- When accepted-source comparison, native visibility, loaded-image geometry,
+  and focused paint inspection establish the rendered contents
+- Then the test observes that print behavior directly and documents the helper boundary
+- And a controlled content-hiding fault must fail the same assertion before restoration
+- And a changed library or engine implementation can reopen the observation choice
+
 ### A late route-local fix follows a family pass
 
 - Given the accepted family observation is attached to a named source and assertion set
@@ -100,6 +128,13 @@ These scenarios express intended decisions. Actual source, executed checks, focu
 ## Evidence and transfer
 
 The accepted Debrief repairs established concrete examples of fragment/paint disagreement, engine-specific fault construction, complete short-block reading, and raised-reference containment. A later AI Systems reading exposed duplicated paragraph paint that geometry alone had missed. These observations motivate the material distinctions above; each receiving repair establishes its own final source, exercised behavior, and independent acceptance. Its PR body holds the decision-changing receipt.
+
+An Atlas CSS extraction supplied a further receiving observation: the installed
+WebKit visibility helper treated closed-disclosure ancestry as hidden while the
+engine painted CSS-expanded print contents. Baseline comparison, native state,
+focused paint, and a restored hiding fault established the bounded replacement
+oracle. This observation applies to that tested library/engine combination;
+future combinations retain their own verification.
 
 The experimental `research` branch’s Protective Verification Window describes closure-candidate binding and affected-evidence reopening. Its recorded feasibility work supports a descriptive procedure; predictive calibration, adaptive test skipping, measured savings, and broader effectiveness retain their separate research conditions. This reference applies the descriptive source-and-scope discipline while preserving all required acceptance checks.
 

@@ -107,6 +107,7 @@ does not claim a new audit or execution of all their assertions.
 | `tests/tables/core-followthrough/browser.mjs` | Core follow-through table behavior and checkpoints. |
 | `tests/tables/hiring-schema-print.browser.mjs` | Hiring/schema table and print behavior. |
 | `tests/context-canvas/ai-entry-cascade.browser.mjs` | Five entry bridges, accepted cascade, 30rem shadow seam, print and forced-color treatment, controlled faults and restoration across three engines. |
+| `tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs` | Atlas CSS cascade, local table/SVG canvases, hidden states, closed print disclosures, forced colors, static reading, and restored faults across three engines. |
 | `tests/visualization-fidelity-atlas/atlas-essay.browser.mjs` | Essay figure/table checks and context modes. |
 | `tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs` | Gallery selection, recovery, export, and context modes. |
 
