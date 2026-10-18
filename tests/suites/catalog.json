@@ -2428,6 +2428,28 @@
       "aliases": [
         "test:debrief-link-cues-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-hero-wrapping",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-hero-wrapping.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three catalog title and introductory text regions, including the independent NEG lead: narrow ordinary and enlarged containment, desktop and wide composition parity, print and forced colors, scriptless named controls, and restored oversized-word faults across three engines.",
+      "aliases": [
+        "test:debrief-hero-wrapping-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2531,7 +2553,8 @@
         "browser.context-canvas.site-navigation",
         "browser.context-canvas.debrief-card-measure",
         "browser.context-canvas.debrief-hero-colors",
-        "browser.context-canvas.debrief-link-cues"
+        "browser.context-canvas.debrief-link-cues",
+        "browser.context-canvas.debrief-hero-wrapping"
       ]
     },
     {
@@ -2555,7 +2578,8 @@
         "browser.context-canvas.site-navigation",
         "browser.context-canvas.debrief-card-measure",
         "browser.context-canvas.debrief-hero-colors",
-        "browser.context-canvas.debrief-link-cues"
+        "browser.context-canvas.debrief-link-cues",
+        "browser.context-canvas.debrief-hero-wrapping"
       ]
     },
     {
