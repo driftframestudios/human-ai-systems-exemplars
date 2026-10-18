@@ -248,6 +248,17 @@ asset and exact source digest.
 
 ## Debrief reading modes
 
+The nineteen catalog card slugs use their card's available width, owned by
+`.debrief-catalog__card .project--slug` in `styles/routes/debriefs.css`.
+Floated media then shapes the text's actual line room; the foundation's
+balanced wrapping remains active. The shared `--canvas-heading-measure`
+continues to supply the 32ch limit for ordinary headings across Context
+Canvas. `npm run test:debrief-card-measure-browser` checks actual title
+fragments, float clearance, responsive seams, enlarged text, reading modes,
+and a restored 32ch fault across three browser engines. The repair gives
+these short orientation headings the room their cards already provide;
+font choice and title wording continue to determine individual line breaks.
+
 [`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
 Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
 Case Brief mode projects the canonical compact source's orientation, ordered
