@@ -1049,6 +1049,28 @@
       ]
     },
     {
+      "id": "browser.context-canvas.technology-fit-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/technology-fit-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Technology Fit Sampling Tableau header and comparison-toolbar layout in Chromium, Firefox and Playwright WebKit at narrow, desktop, wide and source-adjacent breakpoint dimensions; complete pill text and native controls, local SVG/table overflow, comparison state changes, enlarged text and controlled historical faults. Parent reading, native browser presentation and deployed delivery retain separate observations.",
+      "aliases": [
+        "test:technology-fit-layout-browser"
+      ]
+    },
+    {
       "id": "browser.context-canvas.ai-systems-reading-layout",
       "family": "context-canvas",
       "kind": "node-test",
@@ -2209,7 +2231,8 @@
         "worker.browser",
         "browser.context-canvas.prompt-side-figure",
         "browser.visualization-fidelity-atlas.atlas-research.browser",
-        "browser.context-canvas.ai-systems-reading-layout"
+        "browser.context-canvas.ai-systems-reading-layout",
+        "browser.context-canvas.technology-fit-layout"
       ]
     },
     {

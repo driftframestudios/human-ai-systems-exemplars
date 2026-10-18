@@ -120,7 +120,8 @@
     "test:tables:python:entry": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v",
     "test:debrief-reading-layout-browser": "node --test tests/context-canvas/debrief-reading-layout.browser.mjs",
     "playwright:install:debrief-reading": "playwright install chromium firefox webkit",
-    "test:ai-systems-reading-layout-browser": "node --test tests/context-canvas/ai-systems-reading-layout.browser.mjs"
+    "test:ai-systems-reading-layout-browser": "node --test tests/context-canvas/ai-systems-reading-layout.browser.mjs",
+    "test:technology-fit-layout-browser": "node --test tests/context-canvas/technology-fit-layout.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
