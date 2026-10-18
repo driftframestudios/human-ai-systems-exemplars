@@ -46,6 +46,7 @@ async function readings(page, selector = captionRoots, includeDescriptions = fal
         : [...values.slice(0, 3), values[3] ?? 1];
     };
     const composite = (front, back) => [...front.slice(0, 3).map((channel, i) => channel * front[3] + back[i] * (1 - front[3])), 1];
+    const variantLimit = 64;
     const background = node => {
       const chain = []; for (let owner = node; owner; owner = owner.parentElement) chain.push(owner);
       let paint = [255, 255, 255, 1], variants = [paint]; const images = [];
@@ -64,7 +65,10 @@ async function readings(page, selector = captionRoots, includeDescriptions = fal
           if (/url\(|radial-gradient|conic-gradient/.test(image)) throw new Error('Caption background needs a separate image-paint observation.');
           const stops = [...image.matchAll(/rgba?\([^)]*\)/g)].map(([value]) => rgba(value)).filter(value => value[3] > 0).reverse();
           if (!stops.length) throw new Error('Caption gradient needs an explicit color-stop interpretation.');
-          for (const stop of stops) variants = [...variants, ...variants.map(value => composite(stop, value))];
+          for (const stop of stops) {
+            if (variants.length > variantLimit / 2) throw new Error(`Caption texture exceeds the ${variantLimit}-variant observation budget; use a separate paint observation.`);
+            variants = [...variants, ...variants.map(value => composite(stop, value))];
+          }
         }
       }
       return { paint, variants, images };
@@ -234,6 +238,21 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     assert.ok(focused.outline !== 'none' && focused.outlineWidth > 0 && contrast(focused.outlineColor, focused.background) >= 3, 'Forced colors retain a visible native caption-link focus.');
     await page.emulateMedia({ forcedColors: 'none' });
     assertReadable(await readings(page, repaired), 'restored screen');
+  });
+
+  test(`${engine}: texture observation bounds expansion and recovers after an over-budget field`, async t => {
+    const page = await open(t, engine);
+    const selector = '#genomics-responsive-interface-caption';
+    const texture = layers => `${selector} { background-image: ${Array(layers).fill('linear-gradient(rgba(255, 255, 255, .01), rgba(0, 0, 0, 0))').join(', ')}; }`;
+    const field = await page.addStyleTag({ content: texture(6) });
+    try {
+      const bounded = await readings(page, selector);
+      assert.equal(bounded[0].parts[0].backgrounds.length, 64, 'The observation admits its complete finite budget.');
+      assertReadable(bounded, 'bounded texture');
+      await field.evaluate((node, css) => { node.textContent = css; }, texture(7));
+      await assert.rejects(() => readings(page, selector), /exceeds the 64-variant observation budget; use a separate paint observation/);
+    } finally { await field.evaluate(node => node.remove()); }
+    assertReadable(await readings(page, selector), 'restored ordinary field');
   });
 
   test(`${engine}: restoring explicit dark descendant ink fails the contrast oracle`, async t => {
