@@ -54,6 +54,24 @@ Keep local containment separate from document containment. A wide table can exce
 
 Expected typography keeps a precise exception. A raised footnote reference may extend above its paragraph’s ordinary line box while remaining inside the enclosing reading region. The test can preserve paragraph inline containment and use the named outer region for that reference’s vertical bounds. Ordinary paragraph text retains its own full containment assertion. A discovered exception refines the owning relation and leaves neighboring assertions active.
 
+For native ordered lists distributed across columns, observe each item's marker,
+text fragments, intact extent, and first-item position in each lane. Inter-item
+margins can carry into a continuation column differently across engines, so
+compare column starts when their alignment governs scanning. Keep the declared
+reading sequence explicit: chronological columns progress down each lane;
+rowwise procedure grids progress across each row. The authored DOM, native
+numbering, and visible geometry together establish that relationship.
+
+Combine states when their mechanisms share the same reading boundary. A
+text-scaled navigation marker beside a fixed page gutter calls for narrow
+width, enlarged text, and selected navigation in one observation. Measure the
+actual pseudo-element box sizing and paint, then inspect long words and focus
+at the available content width. Ordinary-width and enlarged-desktop passes
+each retain their evidence while this combined observation establishes their
+interaction. A restored gutter or wrapping fault demonstrates which boundary
+the check protects; a changed frame, font, marker, or responsive owner reopens
+that observation.
+
 ## Input modality and preview lifetime
 
 A narrow viewport establishes available space; touch, keyboard, and pointer

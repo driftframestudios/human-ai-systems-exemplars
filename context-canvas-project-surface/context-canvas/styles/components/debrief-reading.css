@@ -132,12 +132,12 @@
     max-inline-size: var(--canvas-reading-measure);
 }
 
-/* Short source boundaries keep their complete frame near the reading measure.
-   Two 1.25rem gutters clear the narrow rail's 1.16rem active marker, including
-   its border-box paint. The viewport reserve grows with enlarged text.
+/* Compact notes set their useful measure; the shared screen frame below
+   also accounts for the rail's current side and text-scaled paint reserve.
    Palette, padding, and the paragraph measure remain with existing owners. */
 .debrief-companion--compact {
-    max-inline-size: min(100%, calc(var(--canvas-reading-measure) + 4rem), calc(100vw - 2.5rem));
+    --debrief-companion-measure: calc(var(--canvas-reading-measure) + 4rem);
+    max-inline-size: min(100%, var(--debrief-companion-measure));
     margin-inline: auto;
 }
 
@@ -439,6 +439,7 @@ details.debrief-case-brief__track--disclosure > ol {
 }
 
 .debrief-code-panel--sequence {
+    --debrief-companion-measure: 68rem;
     max-inline-size: min(100%, 68rem);
     margin-inline: auto;
 }
@@ -490,17 +491,26 @@ details.debrief-case-brief__track--disclosure > ol {
     }
 }
 
-/* Opt-in companion frames retain a text-scaled gutter beside the narrow rail.
-   Two 1.25rem sides clear its widest 1.16rem selected marker. Desktop frame
-   and code measures remain with their existing route or variant owners. */
+/* Opt-in companion frames reserve the rail's actual side of the reading field.
+   The narrow rail uses two 1.25rem gutters; the wide rail uses the shell's
+   10rem total evidence-field reserve. A variant can retain a smaller measure. */
 .debrief-companion-frame,
 .debrief-companion--compact {
     overflow-wrap: anywhere;
 }
 
-@media screen and (max-width: 56rem) {
-    .debrief-companion-frame {
-        max-inline-size: min(100%, calc(100vw - 2.5rem));
+@media screen {
+    .debrief-companion-frame,
+    .debrief-companion--compact {
+        --debrief-companion-viewport-reserve: 2.5rem;
+        max-inline-size: min(100%, var(--debrief-companion-measure, 100%), calc(100vw - var(--debrief-companion-viewport-reserve)));
         margin-inline: auto;
+    }
+}
+
+@media screen and (min-width: 56.0625rem) {
+    .debrief-companion-frame,
+    .debrief-companion--compact {
+        --debrief-companion-viewport-reserve: 10rem;
     }
 }

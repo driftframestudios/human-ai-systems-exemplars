@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { observeCompanionBoundary, assertCompanionBoundary } from './companion-reading-boundary.mjs';
 import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
@@ -36,6 +37,8 @@ async function open(t, engine, route) {
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Media owner</title>' }));
   await page.goto(server.origin + root + route, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
+  await page.locator('.page-section-rail__link').first().evaluate(link => { location.hash = link.hash; });
+  await page.waitForSelector('.page-section-rail__link[aria-current="location"]');
   return page;
 }
 
@@ -145,6 +148,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       for (const width of [390, 768, 896, 897, 1024, 1025, 1199, 1200, 1201, 1440, 1920, 2560]) {
         await settle(page, width);
         for (const panel of selected) assertPanel(await observe(page, panel), panel);
+        assertCompanionBoundary(await observeCompanionBoundary(page, selected.map(panel => panel.id)));
       }
       for (const panel of selected.filter(value => value.kind !== 'compact')) {
         // Bracket each panel's actual column threshold, including its padding.
@@ -160,8 +164,9 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       await settle(page, 1440);
       const enlarged = await page.addStyleTag({ content: 'html { font-size: 32px !important; }' });
       try {
-        for (const width of [390, 768, 1440]) {
+        for (const width of [320, 390, 768, 1440]) {
           await settle(page, width);
+          assertCompanionBoundary(await observeCompanionBoundary(page, selected.map(panel => panel.id)));
           for (const panel of selected) {
             const value = await observe(page, panel); assert.equal(value.rootFont, 32);
             assertPanel(value, panel, { lanes: 1 });
@@ -183,6 +188,14 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     const sequence = panels.find(panel => panel.id === 'cpg-pharma-conversational-ai-transcript-title');
     const procedure = panels.find(panel => panel.id === 'method-activity-title');
     const compact = panels.find(panel => panel.kind === 'compact');
+    await settle(page, 1440);
+    assertCompanionBoundary(await observeCompanionBoundary(page, [sequence.id]));
+    const reserve = await page.addStyleTag({ content: '.debrief-companion-frame { --debrief-companion-viewport-reserve: 2.5rem !important; }' });
+    try {
+      const fault = await observeCompanionBoundary(page, [sequence.id]);
+      assert.throws(() => assertCompanionBoundary(fault), /frame clears/, 'The wider rail requires its own paint reserve.');
+    } finally { await reserve.evaluate(node => node.remove()); }
+    assertCompanionBoundary(await observeCompanionBoundary(page, [sequence.id]));
     for (const [css, panel, failure] of [
       ['.debrief-ordered-reading { column-count: 1 !important; }', sequence, /actual items use 2 reading lanes/u],
       ['.debrief-ordered-reading > li { max-inline-size: 12rem !important; }', sequence, /readable share/u],
