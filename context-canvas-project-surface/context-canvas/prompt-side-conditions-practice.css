@@ -210,10 +210,7 @@
 }
 
 .lesson-field-first-run {
-    display: grid;
-    gap: .75rem;
     margin-block: 1.25rem 0;
-    padding-inline-start: 1.35rem;
 }
 
 .lesson-field-first-run li {

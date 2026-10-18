@@ -1,12 +1,13 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
    using .track-index, .source-basis, .debrief-quote--orientation, or the
-   .debrief-movement composition, dense .debrief-proxy-figure references, and
-   opt-in .debrief-companion-reading/regions and .debrief-code-* bodies.
+   .debrief-movement composition, dense .debrief-proxy-figure references,
+   opt-in companion bodies, code examples, and ordered descriptions/procedures.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, movement-header grouping, dense reference figure
-   inspection, canonical six-beat scan borders, sustained companion and code
-   distribution, compact evidence frames, and print grouping. Each opt-in body keeps its heading in
+   inspection, canonical six-beat scan borders, sustained prose and code
+   distribution, compact evidence frames, chronological columns, numbered
+   procedure pairs, and print grouping. Each opt-in body keeps its heading in
    the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
@@ -15,6 +16,63 @@
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */
+
+/* Chronological descriptions continue down the first column, then the second.
+   A whole numbered item travels together; its native marker keeps a reserved
+   gutter. The minimum column measure follows available room and enlarged text. */
+.debrief-ordered-reading {
+    columns: 2 26rem;
+    column-gap: 4rem;
+    column-rule: 1px solid var(--canvas-rule);
+    padding-inline-start: 1.5rem;
+}
+
+/* End padding keeps inter-item space with its item at a column boundary. */
+.debrief-ordered-reading > li {
+    break-inside: avoid;
+    margin-block: 0;
+    padding-block-end: 1rem;
+}
+
+.debrief-ordered-reading > li:last-child {
+    padding-block-end: 0;
+}
+
+/* Procedures use numbered rowwise pairs when their own panel has room. Their
+   introductions and consequences remain outside the ordered working steps. */
+.debrief-procedure {
+    container: debrief-procedure / inline-size;
+}
+
+.debrief-procedure > .debrief-ordered-steps {
+    display: grid;
+    gap: .75rem 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline-start: 1.5rem;
+}
+
+@container debrief-procedure (min-width: 54rem) {
+    .debrief-procedure > .debrief-ordered-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media print {
+    .debrief-ordered-reading {
+        columns: auto;
+        column-rule: none;
+    }
+
+    .debrief-procedure > .debrief-ordered-steps {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (forced-colors: active) {
+    .debrief-ordered-reading {
+        column-rule-color: CanvasText;
+    }
+}
 
 /* Movement metadata and its title share an ordinary full-width header outside
    .prose-flow. The body keeps headings and wide evidence between prose runs. */
