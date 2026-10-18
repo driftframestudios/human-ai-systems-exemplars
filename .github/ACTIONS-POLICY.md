@@ -110,7 +110,8 @@ Run `38411427064` attempt 2 retained that exact push SHA and ref. The contract
 passed and the deployment job was admitted; the receiver list then returned to
 `[]` and the dependency gate to absent. The admitted deployment completed, and
 the signed-out checks passed. Completed Issue #406 carries the live receiver,
-Worker-version, and recovery observations.
+Worker-version, and recovery observations. Issue #531 owns the accepted v0.3.1
+successor through protected promotion, activation, and signed-out acceptance.
 
 The Pages workflow receives an exact accepted source commit, reviewed `docs`
 commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One
@@ -121,8 +122,8 @@ are job-level, and the `schema-pages` concurrency group serializes runs with
 `cancel-in-progress: false`. PRs #308/#309 record the accepted tagged-release
 transition. The generated public `release.json`, its annotated tag, and the
 matching workflow receipt identify the active Pages coordinate. The accepted
-`pages-v0.3.0` coordinate is active; `pages-v0.2.0` and the 2026-10-01
-`pages-v0.1.0` observations remain historical evidence.
+`pages-v0.3.1` coordinate is active; `pages-v0.3.0`, `pages-v0.2.0`, and the
+2026-10-01 `pages-v0.1.0` observations remain historical evidence.
 Each selected pair starts after its source reaches `main` and its projection
 reaches `docs`; the documented `github-pages` environment admits both branches.
 The recorded legacy `docs:/` source remains the recovery route.
