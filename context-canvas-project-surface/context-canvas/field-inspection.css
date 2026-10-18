@@ -168,7 +168,8 @@
     color: var(--inspection-warm-white);
 }
 
-.field-inspection-implementation-field .content > article > :is(h2, h3, p) {
+.field-inspection-implementation-field .content > article > :is(h2, h3, p),
+.field-inspection-implementation-field :is(.debrief-movement__header, .debrief-reading-flow, .debrief-reading-flow > .prose-flow) > :is(h2, h3, p) {
     color: var(--inspection-warm-white);
 }
 
