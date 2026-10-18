@@ -109,6 +109,13 @@
     color: var(--blueprint-ink);
 }
 
+/* The operating principle participates as the fourth card in the Solution field. */
+.ai-systems-solution-field .blueprint-pop-cards > .debrief-quote--operating-principle {
+    margin: 0;
+    max-inline-size: none;
+    min-inline-size: 0;
+}
+
 .ai-systems-page .anchor_ai_systems,
 .ai-systems-page .anchor_ai_systems:visited {
     background: rgba(0, 0, 0, .6);
@@ -156,6 +163,33 @@
 
 .blueprint-pop-cards .architecture-pair__label {
     color: var(--blueprint-cobalt-deep);
+}
+
+/* Project-reference figures stay bounded by their architecture card at every width. */
+.architecture-example__figure {
+    margin: 1rem 0 0;
+    min-inline-size: 0;
+}
+
+.architecture-example__figure .story-visual__open {
+    display: block;
+}
+
+.architecture-example__figure img {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+}
+
+.architecture-example__figure--portrait img {
+    margin-inline: auto;
+    max-inline-size: 28rem;
+}
+
+.architecture-example__figure figcaption {
+    margin-block-start: .75rem;
 }
 
 .blueprint-pop-visual img {
