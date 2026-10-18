@@ -49,6 +49,10 @@ Measure the outer frame, its visible paint extent, and any fixed or sticky neigh
 
 A route's palette, rhythm, density, asymmetry, negative space, and art direction can vary while its semantic and interaction contracts hold. Compare hierarchy, containment, content presence, ordering, reachability, and intended state before treating raster difference as regression.
 
+### Rule: Useful distribution has its own observable result
+
+When a repair changes how content occupies a broad region, the observation names the units meant to share a row, the heading that introduces them, their usable container width, and the reading order at narrow widths. Prose measure and container distribution remain separate: a readable paragraph can occupy one bounded part of a useful multi-group composition. Geometry and screenshots establish the intended relationship at its responsive seam and a representative wider width. Measure the actual paragraphs, list items, or records as well as their outer container: a full-width list can still pack every item into one narrow lane. Page or local scrollbar containment establishes reachability and leaves that distribution claim open. A restored layout fault should detect the lost relationship; raw space-fill ratios alone leave semantic fit and intentional negative space unspecified.
+
 ### Rule: State evidence retains its limits
 
 Browser privacy can conceal `:visited` state from script. Forced-color emulation does not reproduce every real Windows High Contrast behavior. Headless rendering, system fonts, and rasterization can vary. The return names the mechanism actually observed and preserves a real-system or human-review receiver when that distinction matters.
@@ -107,6 +111,14 @@ Existing commands are starting points rather than required ceremony. A new helpe
 - And its owned border, outline, and shadow paint remain clear of that rail
 - And any wider table content remains available through its named local scroll region
 - And one representative width inside the affected interval establishes whether the condition persists beyond the seam
+
+### Scenario: A broad companion gains adjacent content groups
+
+- Given a companion's explanation and onward routes share one heading
+- When its responsive composition gives both groups usable reading space
+- Then the wide observation establishes their adjacent placement beneath that heading
+- And the narrow observation establishes their complete authored sequence and reachable links
+- And restoring the former single-column constraint breaks the distribution assertion even when scrollbar containment still passes
 
 ## Conditional context
 

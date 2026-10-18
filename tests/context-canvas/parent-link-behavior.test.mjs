@@ -24,8 +24,12 @@ test("ordinary parent links preserve the visitor's browsing-context choice", asy
     const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
     for (const match of html.matchAll(/<a\b[^>]*\btarget="_blank"[^>]*>/gu)) {
       const href = match[0].match(/\bhref="([^"]+)"/u)?.[1];
-      forcedNewTabs.push(`${route}:${href}`);
       assert.match(match[0], /\brel="noopener noreferrer"/u, `${route}: ${href}`);
+      // The human-selected FMI method companions explicitly preserve the
+      // reading in its tab; their icon, cue and destinations have a focused contract.
+      const methodCompanion = route === "fmi-lims-eln-replatforming.html"
+        && /\bclass="fmi-method-link"/u.test(match[0]);
+      if (!methodCompanion) forcedNewTabs.push(`${route}:${href}`);
     }
   }
 

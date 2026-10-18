@@ -408,6 +408,11 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/fmi-reading-rail.js",
+      "projected_path": "fmi-reading-rail.js",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/form-challenge.png",
       "projected_path": "form-challenge.png",
       "media_type": "image/png"
@@ -1995,6 +2000,11 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/ai-systems.css",
       "projected_path": "styles/routes/ai-systems.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/fmi-reading-rail-state.css",
+      "projected_path": "styles/routes/fmi-reading-rail-state.css",
       "media_type": "text/css"
     },
     {

@@ -14,6 +14,16 @@ export async function observeReading(page, { includeOrdinary = false, allHeading
       const result = [];
       let node;
       while ((node = walker.nextNode())) {
+        const cue = node.parentElement.closest(".fmi-link-cue");
+        if (cue) {
+          const cueStyle = getComputedStyle(cue);
+          // This declared new-tab cue stays in the accessible link name. Its
+          // fully clipped one-pixel carrier supplies no painted text bounds.
+          // A changed hiding contract returns it to ordinary observation.
+          if (cueStyle.position === "absolute" && cueStyle.clipPath === "inset(50%)"
+            && cueStyle.overflowX === "hidden" && cueStyle.overflowY === "hidden"
+            && Number.parseFloat(cueStyle.width) === 1 && Number.parseFloat(cueStyle.height) === 1) continue;
+        }
         const start = node.textContent.search(/\S/u);
         if (start < 0) continue;
         const end = node.textContent.search(/\s*$/u);
