@@ -737,10 +737,11 @@
                 <figcaption class="table-note"><strong>Figure 4.</strong> A site drawing and its source-file drawer bring together DXF linework, a survey PDF, field photographs, and an operating procedure. The view makes the source-file set and its lifecycle boundary visible; checksum, validation, conversion, revision, and recovery still require explicit implementation.</figcaption>
               </figure>
 
-              <aside class="implementation-companion table-span-all" aria-labelledby="player-selection-transition-title">
+              <aside class="debrief-companion-frame implementation-companion table-span-all" aria-labelledby="player-selection-transition-title">
                 <p class="implementation-companion__eyebrow">HUMA-C13-S04 · Working transition · player-selection state</p>
                 <h4 id="player-selection-transition-title" class="txt-h4">The transition makes interruption an ordinary state</h4>
-                <pre><code>if (event.type === "submit") {
+                <div class="debrief-code-companion debrief-code-companion--transition">
+                <pre class="debrief-code-window" role="region" tabindex="0" aria-labelledby="player-selection-transition-title"><code>if (event.type === "submit") {
   if (!state.selectedPlayerId) throw new Error("a player must be selected");
   if (!["editing", "failed"].includes(state.phase)) {
     throw new Error(`cannot submit while ${state.phase}`);
@@ -757,9 +758,10 @@
                   This compact example makes the selection and recovery transition inspectable as a current implementation contract
                   expression. Dated artifacts remain the basis for historical production behavior.
                 </p>
+                </div>
               </aside>
 
-              <aside class="implementation-companion table-span-all" aria-labelledby="document-evidence-workflow-title">
+              <aside class="debrief-companion-frame implementation-companion table-span-all debrief-code-panel--sequence" aria-labelledby="document-evidence-workflow-title">
                 <p class="implementation-companion__eyebrow">Candidate artifact · document-evidence-extraction@0.1.0 · Python 3.12</p>
                 <h4 id="document-evidence-workflow-title" class="txt-h4">Carry reviewed document evidence from capture to recoverable orientation</h4>
                 <p>
@@ -768,7 +770,7 @@
                   deterministic ordering; and a seeded word-cloud orientation rendered through a staged, explicitly authorized
                   replacement path.
                 </p>
-                <pre><code>capture_bytes = capture_path.read_bytes()
+                <pre class="debrief-code-window" role="region" tabindex="0" aria-labelledby="document-evidence-workflow-title"><code>capture_bytes = capture_path.read_bytes()
 documents = _validate_capture(json.loads(capture_bytes.decode("utf-8")))
 stopwords, stopwords_digest = load_stopwords(stopwords_path)
 by_era, combined, normalized = extract_term_weights(documents, stopwords, top_n=top_n)

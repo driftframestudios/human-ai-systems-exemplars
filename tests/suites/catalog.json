@@ -2252,6 +2252,28 @@
       "aliases": [
         "test:fmi-reading-rail-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-prose-code-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-prose-code-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nine sustained prose/evidence companions and three code examples: content-derived columns or regions, code-line reachability, heading-first source order, disclosure states, enlarged text, alternate media, three browser engines, and restored layout faults.",
+      "aliases": [
+        "test:debrief-prose-code-room-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2347,7 +2369,8 @@
         "browser.visualization-fidelity-atlas.atlas-cascade.browser",
         "browser.context-canvas.debrief-reference-figures",
         "browser.context-canvas.fmi-reading-room",
-        "browser.context-canvas.fmi-reading-rail"
+        "browser.context-canvas.fmi-reading-rail",
+        "browser.context-canvas.debrief-prose-code-room"
       ]
     },
     {
@@ -2363,7 +2386,8 @@
         "browser.visualization-fidelity-atlas.atlas-research.browser",
         "browser.context-canvas.debrief-reference-figures",
         "browser.context-canvas.fmi-reading-room",
-        "browser.context-canvas.fmi-reading-rail"
+        "browser.context-canvas.fmi-reading-rail",
+        "browser.context-canvas.debrief-prose-code-room"
       ]
     },
     {

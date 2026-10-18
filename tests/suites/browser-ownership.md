@@ -107,6 +107,7 @@ does not claim a new audit or execution of all their assertions.
 | `tests/tables/core-followthrough/browser.mjs` | Core follow-through table behavior and checkpoints. |
 | `tests/tables/hiring-schema-print.browser.mjs` | Hiring/schema table and print behavior. |
 | `tests/context-canvas/fmi-reading-room.browser.mjs` | FMI companion text distribution, rail-aware column seams, compact notes, canonical six-beat borders, alternate media, and prototype-link closure; restored layout faults distinguish the repaired behavior. |
+| `tests/context-canvas/debrief-prose-code-room.browser.mjs` | Nine sustained prose/evidence companions and three code examples: content-derived columns or regions, code-line reachability, heading-first source order, disclosure states, enlarged text, alternate media, three browser engines, and restored layout faults. |
 | `tests/context-canvas/fmi-reading-rail.browser.mjs` | Authored FMI rail current versus selected state, native navigation/history, compact label reachability, reflow, scriptless recovery, and restored state/clipping faults across three engines. |
 | `tests/context-canvas/debrief-reference-figures.browser.mjs` | Dense figure cascade, local keyboard scrolling, portrait fit, scriptless width boundary, alternate media, and restored extraction faults across three engines. |
 | `tests/context-canvas/ai-entry-cascade.browser.mjs` | Five entry bridges, accepted cascade, 30rem shadow seam, print and forced-color treatment, controlled faults and restoration across three engines. |

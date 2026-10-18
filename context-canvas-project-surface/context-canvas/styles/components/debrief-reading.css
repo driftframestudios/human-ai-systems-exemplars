@@ -1,10 +1,13 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
    using .track-index, .source-basis, .debrief-quote--orientation, or the
-   .debrief-movement composition, and dense .debrief-proxy-figure references.
+   .debrief-movement composition, dense .debrief-proxy-figure references, and
+   opt-in .debrief-companion-reading/regions and .debrief-code-* bodies.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, movement-header grouping, dense reference figure
-   inspection, canonical six-beat scan borders, and print grouping.
+   inspection, canonical six-beat scan borders, sustained companion and code
+   distribution, and print grouping. Each opt-in body keeps its heading in
+   the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
    bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
@@ -303,5 +306,133 @@ details.debrief-case-brief__track--disclosure > ol {
     :where([data-content-form="case-brief"]) .debrief-at-glance > div {
         border-color: #000 !important;
         break-inside: avoid;
+    }
+}
+
+/* Opt-in companion bodies keep the route-owned heading and painted frame
+   together while sustained prose uses the room inside that frame. */
+.debrief-companion-reading {
+    columns: 2 26rem;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--canvas-rule-strong);
+    orphans: 3;
+    widows: 3;
+}
+
+.debrief-companion-reading > :first-child,
+.debrief-companion-regions > :first-child,
+.debrief-companion-regions > div > :first-child {
+    margin-block-start: 0;
+}
+
+.debrief-companion-reading > :last-child,
+.debrief-companion-regions > :last-child,
+.debrief-companion-regions > div > :last-child {
+    margin-block-end: 0;
+}
+
+/* The quotation and its onward references remain distinct, source-ordered
+   regions. The two direct children cap this auto-fitting grid at two lanes. */
+.debrief-companion-regions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+    gap: 2rem;
+    align-items: start;
+}
+
+.debrief-companion-regions > blockquote {
+    margin: 0;
+}
+
+.debrief-companion-regions > * {
+    min-inline-size: 0;
+}
+
+/* Code retains its exact lines. Each example declares a useful code measure;
+   flex wrapping pairs its explanation only when both regions fit. */
+.debrief-code-companion {
+    --debrief-code-measure: 39rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2rem;
+    align-items: start;
+}
+
+.debrief-code-companion--transition {
+    --debrief-code-measure: 55rem;
+}
+
+.debrief-code-companion > .debrief-code-window {
+    flex: 1 1 var(--debrief-code-measure);
+}
+
+.debrief-code-companion > p {
+    flex: 1 1 26rem;
+    margin-block: 0;
+}
+
+.debrief-code-panel--sequence {
+    max-inline-size: min(100%, 68rem);
+    margin-inline: auto;
+}
+
+.debrief-code-window {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    margin-block: 0;
+    padding-block: .25rem;
+    white-space: pre;
+}
+
+.debrief-code-panel--sequence > .debrief-code-window {
+    margin-block: 1.5rem;
+}
+
+.debrief-code-window:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: .25rem;
+}
+
+@media (forced-colors: active) {
+    .debrief-companion-reading {
+        column-rule-color: CanvasText;
+    }
+}
+
+@media print {
+    .debrief-companion-reading {
+        columns: auto;
+    }
+
+    .debrief-companion-regions,
+    .debrief-code-companion {
+        display: block;
+    }
+
+    .debrief-companion-regions > * + *,
+    .debrief-code-companion > * + * {
+        margin-block-start: 1rem;
+    }
+
+    .debrief-code-window {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        overflow: visible;
+    }
+}
+
+/* Opt-in companion frames retain a text-scaled gutter beside the narrow rail.
+   Two 1.25rem sides clear its widest 1.16rem selected marker. Desktop frame
+   and code measures remain with their existing route or variant owners. */
+.debrief-companion-frame {
+    overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 56rem) {
+    .debrief-companion-frame {
+        max-inline-size: min(100%, calc(100vw - 2.5rem));
+        margin-inline: auto;
     }
 }
