@@ -27,9 +27,17 @@ description: Selects proportionate visual and browser evidence for Context Canva
 
 Use the source or browser state that can establish the claim. Static rules can prove token values, owner pairs, and media placement. Browser checks can prove computed cascade, focus visibility, target geometry, clipping, and printed presentation. A screenshot of a resting page leaves hover, focus, visited history, and alternate media unspecified.
 
+### Rule: Regression assertions distinguish the material fault
+
+A persisted browser assertion names the visitor behavior, a plausible fault, the observable distinction, and its consequence. Confirm that the intended state passes and an observed baseline or controlled perturbation creates the claimed failure in the declared environment. Fragment geometry, visible paint, semantic order, and page containment retain distinct evidence roles. A perturbation that leaves the material state unchanged records an unexercised fault; the positive behavior check can remain valid within its own scope. Restore the source state before the next comparison.
+
 ### Rule: Coverage expands with consequence
 
 One affected route and one standing viewport often suffice for a localized repair. Use the affected family when shared ownership changes. Use the complete route reference when a broadly loaded source or system-wide role changes. Add Firefox or WebKit when the mechanism, prior evidence, or acceptance boundary makes engine variation plausible.
+
+### Rule: A closure candidate binds the final evidence
+
+The agreed route set, source and projection owners, consequential states, and intended assertions define one coherent closure candidate. Focused observations resolve named uncertainties during discovery and repair. Final acceptance checks use the fitting scope and run after the last relevant behavior change. A later finding names its source owner and the evidence it reopens; still-applicable observations keep their source and coverage boundaries. Mandatory checks and current task authority continue to govern acceptance. A new family, shared dependency, environment, or material assertion reopens the fitting coverage rather than silently inheriting an earlier pass.
 
 ### Rule: Breakpoint evidence brackets the source seam
 
@@ -99,6 +107,10 @@ Existing commands are starting points rather than required ceremony. A new helpe
 - And its owned border, outline, and shadow paint remain clear of that rail
 - And any wider table content remains available through its named local scroll region
 - And one representative width inside the affected interval establishes whether the condition persists beyond the seam
+
+## Conditional context
+
+Load [references/behavior-oracles-and-verification-scope.md](references/behavior-oracles-and-verification-scope.md) when text fragments and paint disagree, an existing visual check misses a plausible failure, a perturbation behaves differently across engines, or late findings make focused versus family-wide verification unclear.
 
 ## Completion
 
