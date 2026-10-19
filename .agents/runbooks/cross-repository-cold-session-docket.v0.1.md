@@ -1,6 +1,6 @@
 ---
 title: Cross-repository cold-session docket
-version: 0.1.1
+version: 0.1.2
 status: exercised
 audience: ai_collaborators
 source_band: public_possible
@@ -432,6 +432,28 @@ migration and restore rehearsal, production security and observability, and
 Quality/Regulatory applicability receive independent receipts.
 
 ## Complete the selected route
+
+### Data-layer review overlay
+
+When SQL, entity relationships, persistence objects, query plans, or restart
+recovery enter scope, load
+[`relational-execution-review`](../skills/relational-execution-review/SKILL.md).
+Bind each repository to its actual owner: declarations, runnable database code,
+simulation, evidence reception, or assurance. A source-only repository can
+complete its part through the existing runtime handoff.
+
+The task capsule adds the engine/driver and migration route, runtime role,
+fixture/data ownership, actual plan coordinate when observed, and the component
+whose restart or failure is tested. Review the existing Issue chain before
+forming localized repair Issues. A finite improvement milestone can group the
+current defects while broader database delivery keeps its end-to-end acceptance.
+Compare fitting mechanisms, implement the selected source-owned slices, and
+obtain independent review. Preserve ordinary-role execution, client allocation,
+application restart, database crash, and restore as distinct evidence claims.
+
+This overlay releases with the reviewed repairs and their named residual
+receivers. Source implementations stay in the receiving repositories; HASE
+retains the portable review method.
 
 After the authority map is legible, continue through the
 [Repository collaboration cycle](repository-collaboration-cycle.v0.1.md). It

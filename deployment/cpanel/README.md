@@ -70,16 +70,19 @@ handoff as historical release evidence; #251 owns that release's remaining live
 assessment. Publishing newer source requires a new accepted source/carrier pair,
 tag, and authorized handoff rather than reopening the immutable release.
 Issue
-[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
-owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
-activation, acceptance, and recovery sequence.
+[#540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
+owns the current `stable-core-v0.4.0` and `production-v0.4.0` formation,
+activation, acceptance, and recovery sequence. Issue #464 preserves the
+immutable v0.3.0 release receipt and passes its accepted host and recovery
+decisions into the current release.
 
 The tagged GitHub Pages projection followed the cPanel release as a separate
-receiver. The visitor carrier has no runtime dependency on that Pages artifact.
+receiver. The visitor carrier operates independently of that Pages artifact.
 `pages-v0.3.1` supplies the accepted schema and skill publication coordinate.
-Issue #531 carries that closure through the independently gated Worker review,
-promotion, activation, and signed-out receipt, while completed Issue #406
-preserves the active v0.3.0 Worker and recovery lineage.
+Completed Issue #531 records that closure's independently gated Worker review,
+promotion, activation, and signed-out receipt. Completed Issue #406
+preserves the v0.3.0 activation lineage, whose accepted Worker now supplies the
+immediate platform recovery coordinate.
 
 ## Current entry condition
 
@@ -142,12 +145,12 @@ portable-path collision stop projection formation. The loading-graph parser
 uses source spans and HTML data-state boundaries; comments and raw or inert
 regions cannot supply stylesheet owners.
 
-For the current source graph, an enhanced screen moves from seven stylesheet
-requests and 77,081 raw bytes to two requests and 55,814 raw bytes; the
-independently compressed sums move from 17,674 to 11,914 gzip-9 bytes and from
-14,823 to 10,536 Brotli-11 bytes. The scriptless path moves from eight requests
-and 77,489 raw bytes to three requests and 56,111 raw bytes; gzip-9 moves from
-17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. These are
+At source `2d8e708`, an enhanced screen moves from seven stylesheet
+requests and 78,460 raw bytes to two requests and 56,443 raw bytes; the
+independently compressed sums move from 18,215 to 12,069 gzip-9 bytes and from
+15,243 to 10,679 Brotli-11 bytes. The scriptless path moves from eight requests
+and 78,868 raw bytes to three requests and 56,740 raw bytes; gzip-9 moves from
+18,418 to 12,214 bytes and Brotli-11 from 15,404 to 10,786 bytes. These are
 repository-side distribution observations. The final carrier manifest binds
 the generated filenames and digests; deployed transfer claims begin with the
 signed-out receiver observation.

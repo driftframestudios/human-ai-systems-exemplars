@@ -45,7 +45,24 @@
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <link rel="stylesheet" href="styles/components/reading-flow.css">
     <style>
+      .who-to-believe-page {
+        --wtb-slate: #132034;
+        --wtb-cream: #fff8e8;
+        --wtb-teal: #6adfd0;
+        --wtb-coral: #ff806f;
+        --wtb-rose: #ffd3d0;
+        --wtb-pale-blue: #bed0e6;
+      }
+      .wtb-hero {
+        --debrief-hero-background: var(--wtb-slate);
+        --debrief-hero-title: var(--wtb-cream);
+        --debrief-hero-tagline: var(--wtb-teal);
+        --debrief-hero-copy: var(--wtb-cream);
+        --debrief-hero-kicker: var(--wtb-pale-blue);
+        --debrief-hero-border: var(--wtb-coral);
+      }
       .wtb-orientation-field {
         --canvas-link-color: #fff8e8;
         --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
@@ -81,9 +98,7 @@
       .wtb-context-actions a { font-weight: 700; }
       .wtb-solution-track {
         --canvas-ink-muted: #304a71;
-        background:
-          radial-gradient(circle at 92% 8%, rgba(242, 255, 103, .72) 0 5.5rem, transparent 5.65rem),
-          linear-gradient(135deg, #fdebe9, #ffd3d0 58%, #f6e4df);
+        background: var(--wtb-rose);
       }
       .wtb-barrier-table tbody th { min-inline-size: 11rem; }
       .wtb-barrier-table td:last-child { background: #e5f4f0; }
@@ -138,7 +153,6 @@
         border-radius: .75rem;
         box-shadow: .5rem .5rem 0 #07101d;
       }
-      .wtb-method-activity ol { display: grid; gap: .65rem; padding-inline-start: 1.25rem; }
       .wtb-method-activity code { overflow-wrap: anywhere; white-space: normal; }
       .wtb-system-graph {
         --graph-paper: #fbeeea;
@@ -401,7 +415,7 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-      <header class="non-index-hero__container debrief-hero">
+      <header class="non-index-hero__container debrief-hero debrief-hero--palette wtb-hero">
         <p class="debrief-kicker">Solution Architecture · Implementation Architecture · 2017–2020 + the return</p>
         <h1 class="txt-h1 h1-spaced h1-hero">Who To Believe</h1>
         <p class="tag-line">Reweighting whose voices shaped campaigns, customer science, and client trust</p>
@@ -473,8 +487,8 @@
             with my kindlight.systems architecture to supply working code and design guidance to Figma Make. Engineering
             and design can therefore work in different applications while carrying the same component structure,
             interaction states, and visual rules. See the
-            <a href="{{PUBLIC_URL_REGISTRY_SOFT_COLOR_BLOCKING_VISUAL_FIDELITY_CONTRACT}}">Soft Color Blocking Visual Fidelity Contract and interactive design library</a>,
-            and <a href="{{PUBLIC_URL_REGISTRY_VISUAL_FIDELITY_PRACTITIONER_PROBES_LAYERED_JUDGMENT_EVIDENCE}}">AI-legible guidance for scaling visual contracts beyond a design library</a>.
+            <a href="{{PUBLIC_URL_REGISTRY_SOFT_COLOR_BLOCKING_VISUAL_FIDELITY_CONTRACT}}" aria-label="Soft Color Blocking Visual Fidelity Contract and interactive design library (outside Context Canvas)" title="Outside Context Canvas">Soft Color Blocking Visual Fidelity Contract and interactive design library<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>,
+            and <a href="{{PUBLIC_URL_REGISTRY_VISUAL_FIDELITY_PRACTITIONER_PROBES_LAYERED_JUDGMENT_EVIDENCE}}" aria-label="AI-legible guidance for scaling visual contracts beyond a design library (outside Context Canvas)" title="Outside Context Canvas">AI-legible guidance for scaling visual contracts beyond a design library<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>.
           </p>
 
           <section id="cpg-pharma-conversational-ai-walkthrough" aria-labelledby="cpg-pharma-conversational-ai-walkthrough-title">
@@ -497,10 +511,10 @@
               </video>
               <figcaption id="cpg-pharma-conversational-ai-caption" class="table-note"><strong>Guided review and safety-reporting demonstration.</strong> The sequence follows a participant from a guided product review through receipt matching and qualification checks into a side-effect report, while persistent cards keep each next step visible. <a href="https://vik.guru/v1-cdn/video/cpg-pharma-conversational-ai/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
             </figure>
-            <aside id="cpg-pharma-conversational-ai-transcript" class="implementation-companion table-span-all" aria-labelledby="cpg-pharma-conversational-ai-transcript-title">
+            <aside id="cpg-pharma-conversational-ai-transcript" class="debrief-companion-frame implementation-companion table-span-all" aria-labelledby="cpg-pharma-conversational-ai-transcript-title">
               <p class="implementation-companion__eyebrow">Visual description</p>
               <h3 id="cpg-pharma-conversational-ai-transcript-title" class="txt-h3">One guided path carries review, qualification, and safety reporting</h3>
-              <ol>
+              <ol class="debrief-ordered-reading">
                 <li>A participant identifies a product, rates it, describes the experience, and answers guided review questions.</li>
                 <li>Receipt upload, capture, and matching connect the review to the purchased product.</li>
                 <li>Product qualification checks profile and address information, reports the current status, and offers a retry path when information needs correction.</li>
@@ -514,35 +528,37 @@
 
       <div class="content__container bg__adjust--tiffany wtb-solution-track">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-architecture-title">
+          <article class="reading-flow" aria-labelledby="solution-architecture-title">
             <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">I. Solution Architecture</h2>
             <h3 id="solution-debrief-title" class="txt-h3 beat-title">I.a Debrief</h3>
-            <p>
-              At the start of this work, dunnhumby was Tesco&rsquo;s wholly owned customer-science subsidiary. It analyzed
-              customer data to help retailers and brands understand what people wanted and turn that understanding into
-              action; Tesco used that capability as part of its own consumer-insight practice. BzzAgent was dunnhumby&rsquo;s
-              social-marketing and advocacy company.<sup><a href="#source-tesco-bzzagent" aria-label="Source: Tesco acquisition statement">source</a></sup>
-              <sup><a href="#source-dunnhumby-backgrounder" aria-label="Source: dunnhumby corporate backgrounder">source</a></sup>
-            </p>
-            <p>
-              BzzAgent connected brands with people who tried products, shared feedback, completed surveys, and published
-              reviews, photographs, videos, and conversations. Each campaign met an immediate client need and supplied
-              customer signals to dunnhumby and Tesco.<sup><a href="#source-tesco-product-exhibit" aria-label="Source: Tesco BzzAgent product exhibit">source</a></sup>
-              Participants relied on fair opportunities and contextual judgment; shoppers relied on honest disclosure;
-              brand, campaign, and data-science teams relied on credible contributions; and privacy and safety teams relied
-              on enough context to route consequential reports and decisions responsibly.
-            </p>
-            <p>
-              The deeper product matched clients with the specific people they needed to hear from and supported those
-              contributors in doing meaningful work. Reviews were one result of a system joining participants, campaigns, products,
-              household context, customer science, and client decisions. My product strategy and design work preserved that
-              specificity while strengthening participant dignity, regional purpose, and client trust.
-            </p>
-            <p>
-              I reconstructed the earlier member-facing entry state. Putting the campaign promise, navigation, explanation,
-              and available work on one page gave participants and teams something specific to correct. They could point
-              to where the promise and the next meaningful action separated, then describe the task they expected to find.
-            </p>
+            <div class="prose-flow">
+              <p>
+                At the start of this work, dunnhumby was Tesco&rsquo;s wholly owned customer-science subsidiary. It analyzed
+                customer data to help retailers and brands understand what people wanted and turn that understanding into
+                action; Tesco used that capability as part of its own consumer-insight practice. BzzAgent was dunnhumby&rsquo;s
+                social-marketing and advocacy company.<sup><a href="#source-tesco-bzzagent" aria-label="Source: Tesco acquisition statement">source</a></sup>
+                <sup><a href="#source-dunnhumby-backgrounder" aria-label="Source: dunnhumby corporate backgrounder">source</a></sup>
+              </p>
+              <p>
+                BzzAgent connected brands with people who tried products, shared feedback, completed surveys, and published
+                reviews, photographs, videos, and conversations. Each campaign met an immediate client need and supplied
+                customer signals to dunnhumby and Tesco.<sup><a href="#source-tesco-product-exhibit" aria-label="Source: Tesco BzzAgent product exhibit">source</a></sup>
+                Participants relied on fair opportunities and contextual judgment; shoppers relied on honest disclosure;
+                brand, campaign, and data-science teams relied on credible contributions; and privacy and safety teams relied
+                on enough context to route consequential reports and decisions responsibly.
+              </p>
+              <p>
+                The deeper product matched clients with the specific people they needed to hear from and supported those
+                contributors in doing meaningful work. Reviews were one result of a system joining participants, campaigns, products,
+                household context, customer science, and client decisions. My product strategy and design work preserved that
+                specificity while strengthening participant dignity, regional purpose, and client trust.
+              </p>
+              <p>
+                I reconstructed the earlier member-facing entry state. Putting the campaign promise, navigation, explanation,
+                and available work on one page gave participants and teams something specific to correct. They could point
+                to where the promise and the next meaningful action separated, then describe the task they expected to find.
+              </p>
+            </div>
             <figure id="wtb-figure-member-experience-before" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable reconstruction of the member landing page before redesign">
                 <a class="story-visual__open" href="../img/debriefs/who-to-believe/cpg-pharma-member-experience-before.webp" aria-label="Open the member landing-page reconstruction before redesign at full size">
@@ -555,43 +571,47 @@
                 reconstruction made the distance between the invitation and a member&rsquo;s next task easy to identify.
               </figcaption>
             </figure>
-            <aside class="interpretive-aside" aria-labelledby="regulated-boundary-title">
-              <h4 id="regulated-boundary-title" class="txt-h4">The safety boundary stays explicit</h4>
-              <p>
-                Participants could submit product experiences that might require safety follow-up. At intake, the platform
-                treated those submissions as potential safety reports for validation. The accountable sponsor, manufacturer,
-                or marketing-authorization holder determined whether a report met the criteria for a valid individual case
-                safety report and retained follow-up, coding, reportability assessment, and regulatory submission. Product,
-                privacy, security, safety, and domain specialists designed
-                the lawful processing, retention, regional handling, and handoff behavior.<sup><a href="#source-ema-gvp-module-vi" aria-label="Source: EMA good pharmacovigilance practices Module VI">source</a></sup>
-                <sup><a href="#source-ich-e2b-r3" aria-label="Source: ICH E2B R3 individual case safety report specification">source</a></sup>
-              </p>
-            </aside>
+            <div class="prose-flow">
+              <aside class="interpretive-aside" aria-labelledby="regulated-boundary-title">
+                <h4 id="regulated-boundary-title" class="txt-h4">The safety boundary stays explicit</h4>
+                <p>
+                  Participants could submit product experiences that might require safety follow-up. At intake, the platform
+                  treated those submissions as potential safety reports for validation. The accountable sponsor, manufacturer,
+                  or marketing-authorization holder determined whether a report met the criteria for a valid individual case
+                  safety report and retained follow-up, coding, reportability assessment, and regulatory submission. Product,
+                  privacy, security, safety, and domain specialists designed
+                  the lawful processing, retention, regional handling, and handoff behavior.<sup><a href="#source-ema-gvp-module-vi" aria-label="Source: EMA good pharmacovigilance practices Module VI">source</a></sup>
+                  <sup><a href="#source-ich-e2b-r3" aria-label="Source: ICH E2B R3 individual case safety report specification">source</a></sup>
+                </p>
+              </aside>
+            </div>
 
             <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">I.b The Bottleneck — Who To Believe</h3>
-            <p>
-              The platform already had feedback at enormous scale. Mid-range influencers brought the authentic communities
-              and lived context that could improve research and market decisions, but another generic survey held little
-              value for them. Some kept their own spreadsheets of campaigns, products, deadlines, and promised payments.
-              They were influencers, and any conversation competed with work they could invoice; some asked for thousands
-              of dollars just to get on a call. Yet a product that genuinely fit the story they told on their channels could
-              bring them happily into a survey. The product needed a relationship model; a louder form would have repeated
-              the mismatch.
-            </p>
-            <p>
-              The people changing profiles were real participants living through changing household circumstances. Some
-              altered household or therapy details to qualify for high-value campaigns; marriage, roommates, caregiving,
-              and other ordinary changes could produce the same data shape. The company needed campaign integrity, and
-              participants needed a person able to interpret context.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The platform already had feedback at enormous scale. Mid-range influencers brought the authentic communities
+                and lived context that could improve research and market decisions, but another generic survey held little
+                value for them. Some kept their own spreadsheets of campaigns, products, deadlines, and promised payments.
+                They were influencers, and any conversation competed with work they could invoice; some asked for thousands
+                of dollars just to get on a call. Yet a product that genuinely fit the story they told on their channels could
+                bring them happily into a survey. The product needed a relationship model; a louder form would have repeated
+                the mismatch.
+              </p>
+              <p>
+                The people changing profiles were real participants living through changing household circumstances. Some
+                altered household or therapy details to qualify for high-value campaigns; marriage, roommates, caregiving,
+                and other ordinary changes could produce the same data shape. The company needed campaign integrity, and
+                participants needed a person able to interpret context.
+              </p>
 
-            <p>
-              I traced the same tension through the complete member journey. The service model placed survey discovery,
-              receipt review, household changes, side-effect reporting, support, and rebate status on one timeline. Product,
-              operations, safety, and engineering teams could point to the exact handoff where time, context, or ownership
-              fell away and explain what a reliable service response required. Figure 3 gives the team a shared service
-              model for reviewing the campaign work contributors tracked in spreadsheets and the workarounds participants used.
-            </p>
+              <p>
+                I traced the same tension through the complete member journey. The service model placed survey discovery,
+                receipt review, household changes, side-effect reporting, support, and rebate status on one timeline. Product,
+                operations, safety, and engineering teams could point to the exact handoff where time, context, or ownership
+                fell away and explain what a reliable service response required. Figure 3 gives the team a shared service
+                model for reviewing the campaign work contributors tracked in spreadsheets and the workarounds participants used.
+              </p>
+            </div>
             <figure id="wtb-figure-service-model-before" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable current-state member review service model with delays and repeat work">
                 <a class="story-visual__open" href="../img/debriefs/who-to-believe/cpg-pharma-review-service-model-before.webp" aria-label="Open the current-state member review service model at full size">
@@ -606,11 +626,13 @@
               </figcaption>
             </figure>
 
-            <blockquote class="debrief-quote cornerstone-definition" data-term-id="focalization">
-              <p><dfn>Focalization</dfn> — Directing attention toward what can change the named decision while keeping the wider context recoverable.</p>
-              <footer>Working definition · decision-focused attention</footer>
-            </blockquote>
-            <p class="cornerstone-consequence">Here, the decision is whose contribution should shape research or market action; contributor context, competing explanations, and an appeal route remain recoverable beside the weighting signal.</p>
+            <div class="prose-flow">
+              <blockquote class="debrief-quote cornerstone-definition" data-term-id="focalization">
+                <p><dfn>Focalization</dfn> — Directing attention toward what can change the named decision while keeping the wider context recoverable.</p>
+                <footer>Working definition · decision-focused attention</footer>
+              </blockquote>
+              <p class="cornerstone-consequence">Here, the decision is whose contribution should shape research or market action; contributor context, competing explanations, and an appeal route remain recoverable beside the weighting signal.</p>
+            </div>
 
             <h4 id="solution-barriers-title" class="txt-h4 beat-title">I.b.i Barriers to Adoption</h4>
             <figure class="table-figure table-span-all">
@@ -660,17 +682,21 @@
                 </table>
               </div>
             </figure>
-            <p class="source-vintage">
-              I experienced these barriers in the BzzAgent product. The present-day controls name the decision role,
-              preserve versioned reasons and appeal routes, compare cohort scorecards, and declare regional data movement.
-            </p>
+            <div class="prose-flow">
+              <p class="source-vintage">
+                I experienced these barriers in the BzzAgent product. The present-day controls name the decision role,
+                preserve versioned reasons and appeal routes, compare cohort scorecards, and declare regional data movement.
+              </p>
+            </div>
 
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">I.c The Intervention</h3>
-            <p>
-              I put seven redesign concepts beside nine member and operating needs, then asked product, engineering, review,
-              privacy, and safety colleagues to challenge each rating. Figure 4 turned preference into a shared review:
-              show me which task fails, and show me what would change your mind.
-            </p>
+            <div class="prose-flow">
+              <p>
+                I put seven redesign concepts beside nine member and operating needs, then asked product, engineering, review,
+                privacy, and safety colleagues to challenge each rating. Figure 4 turned preference into a shared review:
+                show me which task fails, and show me what would change your mind.
+              </p>
+            </div>
             <figure id="wtb-figure-concept-matrix" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable matrix comparing seven redesign concepts across nine member and operating needs">
                 <a class="story-visual__open" href="../img/debriefs/who-to-believe/cpg-pharma-redesign-concept-matrix.webp" aria-label="Open the redesign concept comparison matrix at full size">
@@ -690,16 +716,18 @@
               <li><strong>A focused review layer for roster legitimacy.</strong> Timestamped transition flags narrowed a large roster to specific profile histories; reviewers interpreted each change, made the decision, and preserved an appeal route.</li>
               <li><strong>Privacy and disclosure practice strengthened client trust.</strong> Purpose-specific processing, disclosure support, and regional handling became part of the product relationship.</li>
             </ol>
-            <p>
-              Staff began joining top-tier contributors at shoots with product, disclosure guidance, schedules, and
-              partner-specific constraints—sometimes no food, dogs, or children in the frame. The relationship became
-              richer and more bespoke as its capacity limit became visible.
-            </p>
-            <p>
-              That privacy work traveled beyond the BzzAgent product. dunnhumby adopted my GDPR and data-inventory
-              materials as a company-wide example. Teams across the business reused the product-level inventory as a
-              practical reference for the customer data they carried.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Staff began joining top-tier contributors at shoots with product, disclosure guidance, schedules, and
+                partner-specific constraints—sometimes no food, dogs, or children in the frame. The relationship became
+                richer and more bespoke as its capacity limit became visible.
+              </p>
+              <p>
+                That privacy work traveled beyond the BzzAgent product. dunnhumby adopted my GDPR and data-inventory
+                materials as a company-wide example. Teams across the business reused the product-level inventory as a
+                practical reference for the customer data they carried.
+              </p>
+            </div>
 
             <figure class="story-visual table-span-all">
               <img src="../img/plot/who_to_believe_influence_map.svg" width="1600" height="1180" loading="eager" alt="Three participation tiers feed a household-transition graph and focused review, with legitimate marriage and roommate patterns protected through contextual judgment.">
@@ -713,8 +741,9 @@
               </figcaption>
             </figure>
 
-            <aside class="interpretive-aside wtb-trust-aside table-span-all" aria-labelledby="information-scent-title">
+            <aside class="debrief-companion-frame interpretive-aside wtb-trust-aside table-span-all" aria-labelledby="information-scent-title">
               <h4 id="information-scent-title" class="txt-h4">A trusted voice can hide the cues people use to decide where to look.</h4>
+              <div class="debrief-companion-reading">
               <p>
                 Ragavan and Alipour’s 2024 information-foraging account calls those proximal cues <em>information scent</em>.
                 In LLM chat, trust in a familiar voice can replace cues people normally use to decide where to look next. The WTB
@@ -726,6 +755,7 @@
                 I use this research to specify one present-day interface requirement: show candidate explanations before
                 recommending one. Verbalized Sampling offers one method for doing so.
               </p>
+              </div>
               <details class="wtb-prompt-example">
                 <summary>Try the candidate-set prompt with a generative AI system</summary>
                 <blockquote>
@@ -750,13 +780,15 @@
               </figcaption>
             </figure>
 
-            <p>
-              Before choosing the redesign, I reviewed the service model with engineers against each interface concept.
-              Together we identified which choices were feasible, which team would own or hand off each responsibility, and where the
-              design needed flexibility. Figure 5 joins eligibility, identity, receipt guidance, contextual risk review,
-              participant appeal, and the pharmacovigilance handoff so each team can confirm its changed responsibility and
-              point to the next mismatch.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Before choosing the redesign, I reviewed the service model with engineers against each interface concept.
+                Together we identified which choices were feasible, which team would own or hand off each responsibility, and where the
+                design needed flexibility. Figure 5 joins eligibility, identity, receipt guidance, contextual risk review,
+                participant appeal, and the pharmacovigilance handoff so each team can confirm its changed responsibility and
+                point to the next mismatch.
+              </p>
+            </div>
             <figure id="wtb-figure-service-model-after" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable redesigned member review service model with trust and safety pathways">
                 <a class="story-visual__open" href="../img/debriefs/who-to-believe/cpg-pharma-review-service-model-after.webp" aria-label="Open the redesigned member review service model at full size">
@@ -797,7 +829,7 @@
                 </figcaption>
               </figure>
               <div class="wtb-context-actions">
-                <a href="../../collaboration/context-tree-visual-variants/who-to-believe-presentation.html">Open the WTB Context Tree</a>
+                <a href="../../collaboration/context-tree-visual-variants/who-to-believe-presentation.html" aria-label="Open the WTB Context Tree (outside Context Canvas)" title="Outside Context Canvas">Open the WTB Context Tree<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>
                 <a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html">Open the canonical editable Context Tree</a>
               </div>
               <p class="source-vintage">
@@ -857,81 +889,87 @@
             </figure>
 
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">I.e Repeatability</h3>
-            <ul>
-              <li><strong>Reweight whose feedback counts:</strong> identify the contributor tier the product wants to sustain, then redesign the exchange around that tier.</li>
-              <li><strong>Meet high-value contributors in their working context:</strong> direct partnership may take staff to shoots and contributor channels as the relationship becomes more bespoke.</li>
-              <li><strong>Make roster legitimacy a client-facing ability:</strong> show how contextual review protects both campaign fit and legitimate participants.</li>
-              <li><strong>Diagnose patterns by the problem they solve:</strong> bind controls to the task context that makes them useful.</li>
-            </ul>
+            <div class="prose-flow">
+              <ul>
+                <li><strong>Reweight whose feedback counts:</strong> identify the contributor tier the product wants to sustain, then redesign the exchange around that tier.</li>
+                <li><strong>Meet high-value contributors in their working context:</strong> direct partnership may take staff to shoots and contributor channels as the relationship becomes more bespoke.</li>
+                <li><strong>Make roster legitimacy a client-facing ability:</strong> show how contextual review protects both campaign fit and legitimate participants.</li>
+                <li><strong>Diagnose patterns by the problem they solve:</strong> bind controls to the task context that makes them useful.</li>
+              </ul>
+            </div>
           </article>
         </div>
       </div>
 
       <div class="content__container wtb-implementation-track">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="implementation-architecture-title">
+          <article class="reading-flow" aria-labelledby="implementation-architecture-title">
             <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">II. Implementation Architecture</h2>
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">II.a Debrief</h3>
-            <p>
-              BzzAgent&rsquo;s platform joined two regional databases, a Symfony and Doctrine ORM estate, Spring Boot services using
-              Spring Data JPA with Hibernate ORM and Flyway for schema migrations on the US database, React and
-              React Native clients, Redis-backed browser-session state, stateless JWT authentication for service calls,
-              a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. Thunderball
-              was a physical box under a colleague&rsquo;s desk; the reason for the name had faded from team memory. It scored
-              transitions in batches and returned ambiguous cases to the review queue. The UK database remained Symfony-only;
-              Symfony/Doctrine and Spring Data JPA/Hibernate both wrote the US database. Doctrine&rsquo;s schema diff and Flyway&rsquo;s
-              migration history then carried competing accounts of its structure.
-            </p>
-            <p>
-              The B2B platform carried campaign telemetry, partner portals, and participant reports that could require client
-              safety follow-up. Changes to mobile capture, roster decisions, processing purpose, lawful basis, consent or
-              withdrawal where applicable, incident routing, or
-              migration behavior altered participant access, campaign operations, safety handoffs, or database reliability.
-            </p>
+            <div class="prose-flow">
+              <p>
+                BzzAgent&rsquo;s platform joined two regional databases, a Symfony and Doctrine ORM estate, Spring Boot services using
+                Spring Data JPA with Hibernate ORM and Flyway for schema migrations on the US database, React and
+                React Native clients, Redis-backed browser-session state, stateless JWT authentication for service calls,
+                a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. Thunderball
+                was a physical box under a colleague&rsquo;s desk; the reason for the name had faded from team memory. It scored
+                transitions in batches and returned ambiguous cases to the review queue. The UK database remained Symfony-only;
+                Symfony/Doctrine and Spring Data JPA/Hibernate both wrote the US database. Doctrine&rsquo;s schema diff and Flyway&rsquo;s
+                migration history then carried competing accounts of its structure.
+              </p>
+              <p>
+                The B2B platform carried campaign telemetry, partner portals, and participant reports that could require client
+                safety follow-up. Changes to mobile capture, roster decisions, processing purpose, lawful basis, consent or
+                withdrawal where applicable, incident routing, or
+                migration behavior altered participant access, campaign operations, safety handoffs, or database reliability.
+              </p>
+            </div>
 
             <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">II.b The Bottleneck</h3>
-            <ul>
-              <li><strong>On-location mobile capability:</strong> receipt scanning, video capture, push recruitment, and offline survey work needed an API and mobile client boundary.</li>
-              <li><strong>Attention at scale:</strong> millions of participants needed a discriminator that could focus a finite human-review tier.</li>
-              <li><strong>Purpose state:</strong> special-category data, regional access, withdrawal, endorsement, and safety handoff needed explicit lifecycle behavior.</li>
-              <li><strong>Migration ownership:</strong> two application/ORM paths wrote the same US tables while Doctrine schema diff and Flyway migration history presented competing accounts of schema state, creating the need for a daily, human-readable reconciliation report.</li>
-            </ul>
+            <div class="prose-flow">
+              <ul>
+                <li><strong>On-location mobile capability:</strong> receipt scanning, video capture, push recruitment, and offline survey work needed an API and mobile client boundary.</li>
+                <li><strong>Attention at scale:</strong> millions of participants needed a discriminator that could focus a finite human-review tier.</li>
+                <li><strong>Purpose state:</strong> special-category data, regional access, withdrawal, endorsement, and safety handoff needed explicit lifecycle behavior.</li>
+                <li><strong>Migration ownership:</strong> two application/ORM paths wrote the same US tables while Doctrine schema diff and Flyway migration history presented competing accounts of schema state, creating the need for a daily, human-readable reconciliation report.</li>
+              </ul>
 
-            <p>
-              I argued for one authoritative schema-change mechanism for the US database. I lost that architecture argument,
-              and the organization kept both paths active. Doctrine generated changes by comparing entity mappings with the
-              live schema; Flyway applied ordered migrations recorded in its schema-history table. Each release therefore
-              depended on manual reconciliation to align entity mappings, live schema, and migration history. Documentation
-              captured intent; the nightly comparison exposed divergence among them. The planned phased migration began to
-              feel closer to a spiral off a cliff.<sup><a href="#source-doctrine-schema-tool" aria-label="Source: Doctrine ORM schema tooling">source</a></sup>
-              <sup><a href="#source-flyway-schema-history" aria-label="Source: Flyway schema history table">source</a></sup>
-            </p>
-            <p>
-              The deadline changed the emotional temperature: GDPR was the foreground, and leadership saw timely readiness
-              as a condition of continued UK market access—borderline panic and, by borderline panic, pure panic. During the data inventory,
-              I found a legacy Facebook authorization whose requested social-graph permissions exceeded the product&rsquo;s
-              declared purpose. My contemporaneous review recorded location information beyond the participant&rsquo;s own
-              profile and established the purpose mismatch. Identifying the exact API version and permission path would
-              require the original authorization record. The March 2018
-              Cambridge Analytica revelations changed how those cheap permissions were understood;
-              the useful target became purpose-specific collection and a traceable decision about every regional data flow.
-            </p>
+              <p>
+                I argued for one authoritative schema-change mechanism for the US database. I lost that architecture argument,
+                and the organization kept both paths active. Doctrine generated changes by comparing entity mappings with the
+                live schema; Flyway applied ordered migrations recorded in its schema-history table. Each release therefore
+                depended on manual reconciliation to align entity mappings, live schema, and migration history. Documentation
+                captured intent; the nightly comparison exposed divergence among them. The planned phased migration began to
+                feel closer to a spiral off a cliff.<sup><a href="#source-doctrine-schema-tool" aria-label="Source: Doctrine ORM schema tooling">source</a></sup>
+                <sup><a href="#source-flyway-schema-history" aria-label="Source: Flyway schema history table">source</a></sup>
+              </p>
+              <p>
+                The deadline changed the emotional temperature: GDPR was the foreground, and leadership saw timely readiness
+                as a condition of continued UK market access—borderline panic and, by borderline panic, pure panic. During the data inventory,
+                I found a legacy Facebook authorization whose requested social-graph permissions exceeded the product&rsquo;s
+                declared purpose. My contemporaneous review recorded location information beyond the participant&rsquo;s own
+                profile and established the purpose mismatch. Identifying the exact API version and permission path would
+                require the original authorization record. The March 2018
+                Cambridge Analytica revelations changed how those cheap permissions were understood;
+                the useful target became purpose-specific collection and a traceable decision about every regional data flow.
+              </p>
 
-            <p>
-              I mapped those four concerns onto the dual-stack system as sources, services, models, connections, and
-              operating states. Engineers could select a concern, compare the Symfony and partial-Spring states, choose any
-              node, and follow its incoming and outgoing connections. Each selection made the architecture
-              discussable: where a capability entered, what carried it, where the connection degraded, and who experienced
-              the consequence before code or migration state changed.
-            </p>
-            <p class="source-vintage">
-              Figure 6 is a 2026 technical reconstruction. The historical account supplies the regional databases,
-              Doctrine/Flyway ownership conflict, cron backlog, batch scoring, phased migration, and navigation failure.
-              Kafka, Snowflake, Neo4j, Prophet, the retrieval assistant, MedDRA coding, and E2B (R3) export are present-day
-              proxy choices that make the same responsibilities, strain points, and recovery needs inspectable. Working, Degraded, and
-              Breaking describe capability availability within the scenario; validation, assurance, and technology maturity
-              require their own evidence.
-            </p>
+              <p>
+                I mapped those four concerns onto the dual-stack system as sources, services, models, connections, and
+                operating states. Engineers could select a concern, compare the Symfony and partial-Spring states, choose any
+                node, and follow its incoming and outgoing connections. Each selection made the architecture
+                discussable: where a capability entered, what carried it, where the connection degraded, and who experienced
+                the consequence before code or migration state changed.
+              </p>
+              <p class="source-vintage">
+                Figure 6 is a 2026 technical reconstruction. The historical account supplies the regional databases,
+                Doctrine/Flyway ownership conflict, cron backlog, batch scoring, phased migration, and navigation failure.
+                Kafka, Snowflake, Neo4j, Prophet, the retrieval assistant, MedDRA coding, and E2B (R3) export are present-day
+                proxy choices that make the same responsibilities, strain points, and recovery needs inspectable. Working, Degraded, and
+                Breaking describe capability availability within the scenario; validation, assurance, and technology maturity
+                require their own evidence.
+              </p>
+            </div>
             <figure id="wtb-figure-dual-stack-system" class="table-span-all">
               <div class="wtb-system-graph" data-wtb-system-graph data-contract-id="wtb-system-graph-contract" aria-labelledby="wtb-system-graph-title">
                 <h4 id="wtb-system-graph-title" class="wtb-system-graph__sr-only" data-graph-title>Compare the dual-stack platform and inspect each declared relationship.</h4>
@@ -1128,10 +1166,10 @@
               </figcaption>
             </figure>
 
-            <aside class="implementation-companion wtb-method-activity table-span-all" aria-labelledby="method-activity-title">
+            <aside class="debrief-companion-frame debrief-procedure implementation-companion wtb-method-activity table-span-all" aria-labelledby="method-activity-title">
               <p class="implementation-companion__eyebrow">A team can do this this week · 45 minutes</p>
               <h4 id="method-activity-title" class="txt-h4">Rehearse one real decision before selecting a model.</h4>
-              <ol>
+              <ol class="debrief-ordered-steps">
                 <li>Name the decision, accountable owner, affected population, and consequence of a false hold and false pass.</li>
                 <li>List three candidates, including a deterministic baseline; a method earns consideration by the decision it improves.</li>
                 <li>For each candidate, name the outcome, population, horizon, supporting evidence, one assumption, and one falsifier. Supply a probability only when a calibration basis exists; otherwise use an explicitly ordinal comparison.</li>
@@ -1148,13 +1186,15 @@
             </aside>
 
             <h4 id="implementation-barriers-title" class="txt-h4 beat-title">II.b.i Barriers to Adoption</h4>
-            <p>
-              A planned Spring expansion to the UK and retirement of Symfony stalled because each cron job required its own
-              migration project, and the queue kept growing. Thunderball kept graph processing on a batch cadence. People
-              carried right-to-erasure requests through a manual workflow. Each proposed cloud service added a measurable
-              per-call cost. Doctrine schema diff and Flyway migration history continued presenting competing accounts of the
-              US database&rsquo;s schema state while Symfony/Doctrine ORM and Spring Data JPA/Hibernate ORM wrote shared tables.
-            </p>
+            <div class="prose-flow">
+              <p>
+                A planned Spring expansion to the UK and retirement of Symfony stalled because each cron job required its own
+                migration project, and the queue kept growing. Thunderball kept graph processing on a batch cadence. People
+                carried right-to-erasure requests through a manual workflow. Each proposed cloud service added a measurable
+                per-call cost. Doctrine schema diff and Flyway migration history continued presenting competing accounts of the
+                US database&rsquo;s schema state while Symfony/Doctrine ORM and Spring Data JPA/Hibernate ORM wrote shared tables.
+              </p>
+            </div>
 
             <figure class="story-visual table-span-all">
               <img src="../img/plot/who_to_believe_return_map.svg" width="1600" height="1180" loading="lazy" alt="A platform-return map places schema contention, reconciliation, later adapters, a phantom navigation symptom, heatmap evidence, recordings, and email recovery in sequence while marking the exact trigger as an open question.">
@@ -1257,39 +1297,45 @@
             </figure>
 
             <h3 id="implementation-outcomes-title" class="txt-h3 beat-title">II.d Outcomes</h3>
-            <p>
-              My work helped ship Spring, Symfony, and React capability against the US database; the UK database remained
-              Symfony-only. The transition graph focused attention while reviewers supplied context alongside transition
-              data. The record of who consented to what, when, and for which purpose, together with the reconciliation
-              process, held through audit, and the GDPR data inventory became
-              a dunnhumby-wide working example. Cron migration, erasure automation, and one authoritative schema-migration mechanism per schema
-              remained material investments.
-            </p>
+            <div class="prose-flow">
+              <p>
+                My work helped ship Spring, Symfony, and React capability against the US database; the UK database remained
+                Symfony-only. The transition graph focused attention while reviewers supplied context alongside transition
+                data. The record of who consented to what, when, and for which purpose, together with the reconciliation
+                process, held through audit, and the GDPR data inventory became
+                a dunnhumby-wide working example. Cron migration, erasure automation, and one authoritative schema-migration mechanism per schema
+                remained material investments.
+              </p>
+            </div>
 
             <h4 id="stabilization-title" class="txt-h4 beat-title">II.d.1 Post-Acquisition Stabilization</h4>
-            <p>
-              When the acquiring organization called me back, I helped the team pause feature delivery long enough to map
-              what the inherited system actually did. We treated the code and runtime behavior as the current system map,
-              used characterization tests to trace pivotal data and control paths, and compared runtime behavior with the diagrams. The biomedical-engineering
-              question—what is signal, what is noise, where is the loop broken?—became a practical diagnostic for the
-              inherited system.
-            </p>
+            <div class="prose-flow">
+              <p>
+                When the acquiring organization called me back, I helped the team pause feature delivery long enough to map
+                what the inherited system actually did. We treated the code and runtime behavior as the current system map,
+                used characterization tests to trace pivotal data and control paths, and compared runtime behavior with the diagrams. The biomedical-engineering
+                question—what is signal, what is noise, where is the loop broken?—became a practical diagnostic for the
+                inherited system.
+              </p>
+            </div>
 
             <h4 id="return-title" class="txt-h4 beat-title">II.d.2 The Return — When the Hamburger Came Back</h4>
-            <p>
-              When I came back, the styling was new and the hamburger was back. Nobody on the new team had designed it.
-              Support language sounded evasive only because the control itself flickered: “the menu thing,” “the icon that
-              wasn&rsquo;t there,” “I clicked but nothing happened.” A click heatmap showed activity in the empty space where
-              full navigation should have been; about three consenting recordings showed why.
-            </p>
-            <p>
-              Surviving accounts preserve two plausible hypotheses and leave the exact root cause open. One recalls a cross-stack
-              authentication and server-response-composition failure involving Symfony and Spring. Another recalls a
-              post-acquisition adapter selecting a deprecated render path for particular request states. Shared-table writes
-              and ORM differences describe background coupling. Identifying the specific trigger would require the request
-              trace, cache key, configuration value, or branch that produced the menu. I therefore carry divided ownership
-              as the established risk condition and the trigger as an open question.
-            </p>
+            <div class="prose-flow">
+              <p>
+                When I came back, the styling was new and the hamburger was back. Nobody on the new team had designed it.
+                Support language sounded evasive only because the control itself flickered: “the menu thing,” “the icon that
+                wasn&rsquo;t there,” “I clicked but nothing happened.” A click heatmap showed activity in the empty space where
+                full navigation should have been; about three consenting recordings showed why.
+              </p>
+              <p>
+                Surviving accounts preserve two plausible hypotheses and leave the exact root cause open. One recalls a cross-stack
+                authentication and server-response-composition failure involving Symfony and Spring. Another recalls a
+                post-acquisition adapter selecting a deprecated render path for particular request states. Shared-table writes
+                and ORM differences describe background coupling. Identifying the specific trigger would require the request
+                trace, cache key, configuration value, or branch that produced the menu. I therefore carry divided ownership
+                as the established risk condition and the trigger as an open question.
+              </p>
+            </div>
 
             <section id="cpg-pharma-menu-bottleneck-walkthrough" class="table-span-all" aria-labelledby="cpg-pharma-menu-bottleneck-walkthrough-title">
               <h5 id="cpg-pharma-menu-bottleneck-walkthrough-title" class="txt-h4">Historical navigation bottleneck demonstration</h5>
@@ -1311,7 +1357,7 @@
                 </video>
                 <figcaption id="cpg-pharma-menu-bottleneck-caption" class="table-note"><strong>Historical navigation bottleneck demonstration.</strong> A campaign homepage opens into a dense compressed menu before the path reaches Member Sign In. The short sequence shows the visible detour behind an apparently simple task. <a href="https://vik.guru/v1-cdn/video/cpg-pharma-menu-bottleneck/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
               </figure>
-              <aside id="cpg-pharma-menu-bottleneck-transcript" class="implementation-companion table-span-all" aria-labelledby="cpg-pharma-menu-bottleneck-transcript-title">
+              <aside id="cpg-pharma-menu-bottleneck-transcript" class="implementation-companion debrief-companion--compact table-span-all" aria-labelledby="cpg-pharma-menu-bottleneck-transcript-title">
                 <p class="implementation-companion__eyebrow">Visual description</p>
                 <h5 id="cpg-pharma-menu-bottleneck-transcript-title" class="txt-h4">A compressed menu turns a sign-in task into a detour</h5>
                 <ol>
@@ -1324,21 +1370,25 @@
             </section>
 
             <h4 id="marketing-misread-title" class="txt-h4 beat-title">II.d.3 The Marketing Misread</h4>
-            <p>
-              Marketing saw unusually strong email reopens and click-throughs. Heatmaps, support language, and about three
-              diagnostic recordings indicated that at least part of the repeat-open and click activity reflected recovery:
-              people reopened messages because email links reached pages more reliably than site navigation. Email-open
-              telemetry is noisy, so the evidence supports product recovery as one contributor; estimating its share requires
-              stronger causal design. Push notifications supplied another route around the same failure. The organization had adapted
-              around a bug before anyone had named it.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Marketing saw unusually strong email reopens and click-throughs. Heatmaps, support language, and about three
+                diagnostic recordings indicated that at least part of the repeat-open and click activity reflected recovery:
+                people reopened messages because email links reached pages more reliably than site navigation. Email-open
+                telemetry is noisy, so the evidence supports product recovery as one contributor; estimating its share requires
+                stronger causal design. Push notifications supplied another route around the same failure. The organization had adapted
+                around a bug before anyone had named it.
+              </p>
+            </div>
 
             <h4 id="return-proves-title" class="txt-h4 beat-title">II.d.4 What the Return Proves</h4>
-            <p>
-              The return confirmed the diagnostic I had used: choose a pattern by the problem it solves. Subsequent render
-              paths, adapters, and schema changes still had to preserve the task, state, and navigation conditions that made
-              the original design work.
-            </p>
+            <div class="prose-flow">
+              <p>
+                The return confirmed the diagnostic I had used: choose a pattern by the problem it solves. Subsequent render
+                paths, adapters, and schema changes still had to preserve the task, state, and navigation conditions that made
+                the original design work.
+              </p>
+            </div>
 
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Operating consequence and investment table">
@@ -1531,20 +1581,20 @@
               the two later research papers help compare the historical case with present-day AI behavior.
             </p>
             <ol class="source-list">
-              <li id="source-tesco-bzzagent">Read <a href="https://www.tescoplc.com/tesco-plc-first-quarter-management-statement/">Tesco PLC&rsquo;s 2011 first-quarter management statement</a> for dunnhumby&rsquo;s place in Tesco&rsquo;s marketing-services business and its acquisition of BzzAgent to extend client services into social media.</li>
-              <li id="source-tesco-product-exhibit">Read <a href="https://www.tescoplc.com/media/4xdhvz0f/investor_and_analyst_innovation_exhibition_content.pdf">Tesco PLC&rsquo;s 2012 innovation exhibition</a> for BzzAgent&rsquo;s company-issued description as dunnhumby&rsquo;s social-marketing arm, its participant model, and its use of household insight for targeting and measurement.</li>
-              <li id="source-dunnhumby-backgrounder">Read <a href="https://www.dunnhumby.com/sites/default/files/filepicker/1/dunnhumby_CorporateBackgrounder_June2015.pdf">dunnhumby&rsquo;s 2015 corporate backgrounder</a> for its Tesco ownership, customer-science model, and inclusion of BzzAgent among its social-marketing and advocacy capabilities.</li>
-              <li id="source-wtb-registry-account">Read <a href="{{PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE}}">Who To Believe</a> for the fuller public account of the engagement, trust decisions, migration, and telemetry-note outcomes.</li>
-              <li id="source-ftc-endorsement-guides">Read the <a href="https://www.ftc.gov/news-events/news/press-releases/2009/10/ftc-publishes-final-guides-governing-endorsements-testimonials">Federal Trade Commission&rsquo;s 2009 Endorsement Guides announcement</a> for the period-applicable disclosure context around material connections and free products.</li>
-              <li id="source-doctrine-schema-tool">Read the <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/tools.html">Doctrine ORM tools reference</a> for how schema generation and comparison derive from mapping metadata and the live database.</li>
-              <li id="source-flyway-schema-history">Read the <a href="https://documentation.red-gate.com/flyway/flyway-concepts/migrations/flyway-schema-history-table">Flyway schema-history reference</a> for ordered migration state, checksums, and applied-change history.</li>
-              <li id="source-ema-gvp-module-vi">Read <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports-suspected-adverse-reactions-medicinal-products-tracked-changes-rev-2-tracked-changes_en.pdf">EMA good pharmacovigilance practices Module VI</a> for the minimum information used to validate an individual case safety report and the responsibilities that follow intake.</li>
-              <li id="source-ich-e2b-r3">Read the <a href="https://www.ich.org/page/e2br3-individual-case-safety-report-icsr-specification-and-related-files">ICH E2B(R3) Individual Case Safety Report specification</a> for the electronic exchange standard represented as a present-day proxy choice in Figure 6.</li>
-              <li id="source-eu-legal-grounds">Read the European Commission&rsquo;s <a href="https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/legal-grounds-processing-data_en">legal-grounds guidance</a> for the distinction among purpose, consent, and other lawful grounds after withdrawal.</li>
-              <li id="source-eu-data-rights">Read the European Commission&rsquo;s <a href="https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/dealing-requests-individuals_en">guidance for handling individual data requests</a> for identity verification, erasure, and applicable retention duties.</li>
-              <li id="source-aws-redshift-copy">Read the <a href="https://docs.aws.amazon.com/redshift/latest/dg/t_Loading_tables_with_the_COPY_command.html">Amazon Redshift COPY guidance</a> for the batch-load category used in the Figure 6 reconstruction.</li>
-              <li id="source-information-foraging"><a href="https://arxiv.org/abs/2406.04452">Ragavan and Alipour (2024), Revisiting Human Information Foraging: Adaptations for LLM-based Chatbots</a></li>
-              <li id="source-verbalized-sampling"><a href="https://arxiv.org/abs/2510.01171">Zhang et al. (2025), Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity</a></li>
+              <li id="source-tesco-bzzagent">Read <a href="https://www.tescoplc.com/tesco-plc-first-quarter-management-statement/" aria-label="Tesco PLC’s 2011 first-quarter management statement (outside Context Canvas)" title="Outside Context Canvas">Tesco PLC&rsquo;s 2011 first-quarter management statement<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for dunnhumby&rsquo;s place in Tesco&rsquo;s marketing-services business and its acquisition of BzzAgent to extend client services into social media.</li>
+              <li id="source-tesco-product-exhibit">Read <a href="https://www.tescoplc.com/media/4xdhvz0f/investor_and_analyst_innovation_exhibition_content.pdf" aria-label="Tesco PLC’s 2012 innovation exhibition (outside Context Canvas)" title="Outside Context Canvas">Tesco PLC&rsquo;s 2012 innovation exhibition<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for BzzAgent&rsquo;s company-issued description as dunnhumby&rsquo;s social-marketing arm, its participant model, and its use of household insight for targeting and measurement.</li>
+              <li id="source-dunnhumby-backgrounder">Read <a href="https://www.dunnhumby.com/sites/default/files/filepicker/1/dunnhumby_CorporateBackgrounder_June2015.pdf" aria-label="dunnhumby’s 2015 corporate backgrounder (outside Context Canvas)" title="Outside Context Canvas">dunnhumby&rsquo;s 2015 corporate backgrounder<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for its Tesco ownership, customer-science model, and inclusion of BzzAgent among its social-marketing and advocacy capabilities.</li>
+              <li id="source-wtb-registry-account">Read <a href="{{PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE}}" aria-label="Who To Believe (outside Context Canvas)" title="Outside Context Canvas">Who To Believe<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the fuller public account of the engagement, trust decisions, migration, and telemetry-note outcomes.</li>
+              <li id="source-ftc-endorsement-guides">Read the <a href="https://www.ftc.gov/news-events/news/press-releases/2009/10/ftc-publishes-final-guides-governing-endorsements-testimonials" aria-label="Federal Trade Commission’s 2009 Endorsement Guides announcement (outside Context Canvas)" title="Outside Context Canvas">Federal Trade Commission&rsquo;s 2009 Endorsement Guides announcement<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the period-applicable disclosure context around material connections and free products.</li>
+              <li id="source-doctrine-schema-tool">Read the <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/tools.html" aria-label="Doctrine ORM tools reference (outside Context Canvas)" title="Outside Context Canvas">Doctrine ORM tools reference<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for how schema generation and comparison derive from mapping metadata and the live database.</li>
+              <li id="source-flyway-schema-history">Read the <a href="https://documentation.red-gate.com/flyway/flyway-concepts/migrations/flyway-schema-history-table" aria-label="Flyway schema-history reference (outside Context Canvas)" title="Outside Context Canvas">Flyway schema-history reference<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for ordered migration state, checksums, and applied-change history.</li>
+              <li id="source-ema-gvp-module-vi">Read <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/guideline-good-pharmacovigilance-practices-gvp-module-vi-collection-management-submission-reports-suspected-adverse-reactions-medicinal-products-tracked-changes-rev-2-tracked-changes_en.pdf" aria-label="EMA good pharmacovigilance practices Module VI (outside Context Canvas)" title="Outside Context Canvas">EMA good pharmacovigilance practices Module VI<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the minimum information used to validate an individual case safety report and the responsibilities that follow intake.</li>
+              <li id="source-ich-e2b-r3">Read the <a href="https://www.ich.org/page/e2br3-individual-case-safety-report-icsr-specification-and-related-files" aria-label="ICH E2B(R3) Individual Case Safety Report specification (outside Context Canvas)" title="Outside Context Canvas">ICH E2B(R3) Individual Case Safety Report specification<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the electronic exchange standard represented as a present-day proxy choice in Figure 6.</li>
+              <li id="source-eu-legal-grounds">Read the European Commission&rsquo;s <a href="https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/legal-grounds-processing-data_en" aria-label="legal-grounds guidance (outside Context Canvas)" title="Outside Context Canvas">legal-grounds guidance<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the distinction among purpose, consent, and other lawful grounds after withdrawal.</li>
+              <li id="source-eu-data-rights">Read the European Commission&rsquo;s <a href="https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/dealing-requests-individuals_en" aria-label="guidance for handling individual data requests (outside Context Canvas)" title="Outside Context Canvas">guidance for handling individual data requests<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for identity verification, erasure, and applicable retention duties.</li>
+              <li id="source-aws-redshift-copy">Read the <a href="https://docs.aws.amazon.com/redshift/latest/dg/t_Loading_tables_with_the_COPY_command.html" aria-label="Amazon Redshift COPY guidance (outside Context Canvas)" title="Outside Context Canvas">Amazon Redshift COPY guidance<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the batch-load category used in the Figure 6 reconstruction.</li>
+              <li id="source-information-foraging"><a href="https://arxiv.org/abs/2406.04452" aria-label="Ragavan and Alipour (2024), Revisiting Human Information Foraging: Adaptations for LLM-based Chatbots (outside Context Canvas)" title="Outside Context Canvas">Ragavan and Alipour (2024), Revisiting Human Information Foraging: Adaptations for LLM-based Chatbots<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
+              <li id="source-verbalized-sampling"><a href="https://arxiv.org/abs/2510.01171" aria-label="Zhang et al. (2025), Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity (outside Context Canvas)" title="Outside Context Canvas">Zhang et al. (2025), Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
             </ol>
             <p class="table-note">
               I describe historical implementation details from direct experience; contemporaneous project notes carry the

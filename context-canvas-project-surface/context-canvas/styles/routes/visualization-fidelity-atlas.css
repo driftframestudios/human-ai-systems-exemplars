@@ -1,0 +1,62 @@
+/* Context Canvas route bundle: visualization references and gallery --------
+   Consumers: the visualization-fidelity-atlas.html reference and gallery fields.
+   Owns: flat reference frames, local table and SVG reading canvases, gallery
+   controls, hidden-state precedence, and complete print reference views.
+   Load order: after ai-systems.css and before canvas-shell.css. Shared tables
+   own overflow, keyboard focus, and forced colors; the later shell owns rail
+   clearance. Gallery enhancement owns selection and disclosure state.
+   Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   Extension: reference and gallery scopes retain their own reading geometry;
+   route palette tokens continue to come from the AI Systems family. */
+
+/* Flat reference comparison ---------------------------------------------- */
+.ai-systems-page .atlas-reference .story-visual,
+.ai-systems-page .atlas-reference .story-visual__open,
+.ai-systems-page .atlas-reference .story-visual img {
+  box-shadow: none;
+  filter: none;
+}
+
+.ai-systems-page .atlas-reference .story-visual img {
+  background: #fffcf5;
+}
+
+@media screen {
+  .atlas-reference .table-scroll table { min-width: 42rem; }
+}
+
+/* Coordinated gallery: native controls and locally scrollable SVGs --------- */
+.atlas-gallery .atlas-gallery-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--blueprint-ink);
+  background: var(--blueprint-cream);
+}
+.atlas-gallery .atlas-gallery-controls label { display: grid; gap: .4rem; }
+.atlas-gallery .atlas-gallery-controls select {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: .5rem;
+  color: var(--blueprint-ink);
+  background: #fffcf5;
+  border: 1px solid currentColor;
+  font: inherit;
+}
+.atlas-gallery .story-visual { inline-size: 100%; margin-inline: 0; transform: none; }
+.atlas-gallery .atlas-gallery-figure svg,
+.atlas-gallery .atlas-gallery-figure img { display: block; inline-size: 100%; block-size: auto; }
+.atlas-gallery [hidden] { display: none !important; }
+@media screen {
+  .atlas-gallery .atlas-gallery-figure svg,
+  .atlas-gallery .atlas-gallery-figure img { min-inline-size: 60rem; }
+}
+@media print {
+  .atlas-gallery .atlas-gallery-controls,
+  .atlas-gallery [data-gallery-live] { display: none !important; }
+  .atlas-gallery .atlas-gallery-figure { break-inside: avoid; }
+  .atlas-gallery details::details-content { content-visibility: visible; }
+}

@@ -1,14 +1,152 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
-   using .track-index, .source-basis, or .debrief-quote--orientation.
+   using .track-index, .source-basis, .debrief-quote--orientation, or the
+   .debrief-movement composition, dense .debrief-proxy-figure references,
+   opt-in companion bodies, code examples, and ordered descriptions/procedures.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
-   measure and placement, and print grouping.
+   measure and placement, movement-header grouping, dense reference figure
+   inspection, canonical six-beat scan borders, sustained prose and code
+   distribution, compact evidence frames, chronological columns, numbered
+   procedure pairs, hero word containment, opt-in hero color roles, screen
+   inline-padding floors, and print grouping. Each opt-in body keeps its heading in
+   the ordinary outer flow; route styles retain their frame and palette.
+   The adjacent reading-flow component owns shared beat-heading behavior.
    Load order: shared core, expanded.css, this component, the relevant route
    bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
    follow for composed readings.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */
+
+/* Hero words retain their ordinary breaks; an oversized word can use the
+   available text measure when the visitor enlarges text or narrows the page. */
+.debrief-hero :where(.h1-hero, .tag-line, .debrief-lead, .debrief-kicker) {
+    overflow-wrap: anywhere;
+}
+
+/* Opt-in solid hero planes pair each text role with its painted owner. Route
+   palettes supply the values; ordinary Debriefs retain their existing header. */
+.debrief-hero--palette {
+    --debrief-hero-background: var(--canvas-night);
+    --debrief-hero-title: var(--canvas-cream);
+    --debrief-hero-tagline: var(--canvas-field);
+    --debrief-hero-copy: var(--canvas-cream);
+    --debrief-hero-kicker: var(--canvas-paper);
+    --debrief-hero-border: var(--canvas-field);
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+    background: var(--debrief-hero-background);
+    border-block-end: .6rem solid var(--debrief-hero-border);
+    color: var(--debrief-hero-copy);
+}
+
+.debrief-hero--palette .h1-hero {
+    color: var(--debrief-hero-title);
+}
+
+.debrief-hero--palette .tag-line {
+    color: var(--debrief-hero-tagline);
+}
+
+.debrief-hero--palette .debrief-lead {
+    color: var(--debrief-hero-copy);
+}
+
+.debrief-hero--palette .debrief-kicker {
+    color: var(--debrief-hero-kicker);
+}
+
+@media print {
+    .debrief-hero.debrief-hero--palette {
+        --debrief-hero-background: #fff;
+        --debrief-hero-title: #000;
+        --debrief-hero-tagline: #000;
+        --debrief-hero-copy: #000;
+        --debrief-hero-kicker: #000;
+        --debrief-hero-border: #000;
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    }
+}
+
+@media (forced-colors: active) {
+    .debrief-hero.debrief-hero--palette {
+        --debrief-hero-background: Canvas;
+        --debrief-hero-title: CanvasText;
+        --debrief-hero-tagline: CanvasText;
+        --debrief-hero-copy: CanvasText;
+        --debrief-hero-kicker: CanvasText;
+        --debrief-hero-border: CanvasText;
+    }
+}
+
+/* Chronological descriptions continue down the first column, then the second.
+   A whole numbered item travels together; its native marker keeps a reserved
+   gutter. The minimum column measure follows available room and enlarged text. */
+.debrief-ordered-reading {
+    columns: 2 26rem;
+    column-gap: 4rem;
+    column-rule: 1px solid var(--canvas-rule);
+    padding-inline-start: 1.5rem;
+}
+
+/* End padding keeps inter-item space with its item at a column boundary. */
+.debrief-ordered-reading > li {
+    break-inside: avoid;
+    margin-block: 0;
+    padding-block-end: 1rem;
+}
+
+.debrief-ordered-reading > li:last-child {
+    padding-block-end: 0;
+}
+
+/* Procedures use numbered rowwise pairs when their own panel has room. Their
+   introductions and consequences remain outside the ordered working steps. */
+.debrief-procedure {
+    container: debrief-procedure / inline-size;
+}
+
+.debrief-procedure > .debrief-ordered-steps {
+    display: grid;
+    gap: .75rem 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline-start: 1.5rem;
+}
+
+@container debrief-procedure (min-width: 54rem) {
+    .debrief-procedure > .debrief-ordered-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media print {
+    .debrief-ordered-reading {
+        columns: auto;
+        column-rule: none;
+    }
+
+    .debrief-procedure > .debrief-ordered-steps {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (forced-colors: active) {
+    .debrief-ordered-reading {
+        column-rule-color: CanvasText;
+    }
+}
+
+/* Movement metadata and its title share an ordinary full-width header outside
+   .prose-flow. The body keeps headings and wide evidence between prose runs. */
+.debrief-movement__header {
+    break-inside: avoid;
+    break-after: avoid;
+}
+
+.debrief-movement__header > p {
+    max-inline-size: none;
+}
 
 .track-index {
     display: grid;
@@ -55,6 +193,81 @@
 .debrief-quote--orientation {
     margin-block: clamp(1.5rem, 3vw, 2.5rem);
     max-inline-size: var(--canvas-reading-measure);
+}
+
+/* An orientation callout is one painted object inside continuous prose.
+   The atomic inline block keeps WebKit from carrying its footer into the
+   next column while the direct-child scope leaves other quote layouts free. */
+.prose-flow > .debrief-quote--orientation {
+    break-inside: avoid;
+    display: inline-block;
+    inline-size: 100%;
+}
+
+/* Compact notes set their useful measure; the shared screen frame below
+   also accounts for the rail's current side and text-scaled paint reserve.
+   Palette, padding, and the paragraph measure remain with existing owners. */
+.debrief-companion--compact {
+    --debrief-companion-measure: calc(var(--canvas-reading-measure) + 4rem);
+    max-inline-size: min(100%, var(--debrief-companion-measure));
+    margin-inline: auto;
+}
+
+/*
+ * Dense reference-interface proxies keep a laptop-sized inspection canvas.
+ * Narrow readers receive a labelled, keyboard-scrollable region and the
+ * source-size link remains available for exact text inspection.
+ */
+.debrief-proxy-figure {
+    inline-size: min(92vw, 78rem);
+}
+
+.debrief-proxy-frame {
+    inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-gutter: stable;
+}
+
+.debrief-proxy-frame:focus-visible {
+    outline: .2rem solid currentColor;
+    outline-offset: .25rem;
+}
+
+.debrief-proxy-frame .story-visual__open {
+    inline-size: max(100%, 56rem);
+}
+
+.debrief-proxy-frame--portrait {
+    inline-size: min(100%, 42rem);
+    margin-inline: auto;
+}
+
+.debrief-proxy-frame--portrait .story-visual__open {
+    inline-size: 100%;
+}
+
+.debrief-proxy-figure .table-note strong {
+    color: inherit;
+}
+
+/* The shared story figure fills its reading region through 64rem. Preserve
+   that winner after this component moves later in the authored cascade;
+   the later shell and route owners retain their rail and composition rules. */
+@media screen and (max-width: 64rem) {
+    .debrief-proxy-figure {
+        inline-size: 100%;
+    }
+}
+
+@media print {
+    .debrief-proxy-figure,
+    .debrief-proxy-frame,
+    .debrief-proxy-frame .story-visual__open {
+        inline-size: 100%;
+        min-inline-size: 0;
+        overflow: visible;
+    }
 }
 
 /* data/debrief-case-briefs.source.html owns this quick-scan layer. Its catalog
@@ -204,5 +417,176 @@ details.debrief-case-brief__track--disclosure > ol {
 
     .debrief-case-brief__track-state {
         display: none !important;
+    }
+}
+
+/* Canonical six-beat scans keep real cell boundaries even when a route gives
+   the grid and its cells the same field. Later route palettes may vary accents. */
+:where([data-content-form="case-brief"]) .debrief-at-glance > div {
+    border: 1px solid var(--canvas-rule-strong);
+    border-block-start: .22rem solid #2855f3;
+}
+
+:where([data-content-form="case-brief"]) .debrief-at-glance > div:nth-child(3n + 2) {
+    border-block-start-color: #fa7065;
+}
+
+:where([data-content-form="case-brief"]) .debrief-at-glance > div:nth-child(3n) {
+    border-block-start-color: #17345f;
+}
+
+@media (forced-colors: active) {
+    :where([data-content-form="case-brief"]) .debrief-at-glance > div {
+        border-color: CanvasText !important;
+    }
+}
+
+@media print {
+    :where([data-content-form="case-brief"]) .debrief-at-glance > div {
+        border-color: #000 !important;
+        break-inside: avoid;
+    }
+}
+
+/* Opt-in companion bodies keep the route-owned heading and painted frame
+   together while sustained prose uses the room inside that frame. */
+.debrief-companion-reading {
+    columns: 2 26rem;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--canvas-rule-strong);
+    orphans: 3;
+    widows: 3;
+}
+
+.debrief-companion-reading > :first-child,
+.debrief-companion-regions > :first-child,
+.debrief-companion-regions > div > :first-child {
+    margin-block-start: 0;
+}
+
+.debrief-companion-reading > :last-child,
+.debrief-companion-regions > :last-child,
+.debrief-companion-regions > div > :last-child {
+    margin-block-end: 0;
+}
+
+/* The quotation and its onward references remain distinct, source-ordered
+   regions. The two direct children cap this auto-fitting grid at two lanes. */
+.debrief-companion-regions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+    gap: 2rem;
+    align-items: start;
+}
+
+.debrief-companion-regions > blockquote {
+    margin: 0;
+}
+
+.debrief-companion-regions > * {
+    min-inline-size: 0;
+}
+
+/* Code retains its exact lines. Each example declares a useful code measure;
+   flex wrapping pairs its explanation only when both regions fit. */
+.debrief-code-companion {
+    --debrief-code-measure: 39rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2rem;
+    align-items: start;
+}
+
+.debrief-code-companion--transition {
+    --debrief-code-measure: 55rem;
+}
+
+.debrief-code-companion > .debrief-code-window {
+    flex: 1 1 var(--debrief-code-measure);
+}
+
+.debrief-code-companion > p {
+    flex: 1 1 26rem;
+    margin-block: 0;
+}
+
+.debrief-code-panel--sequence {
+    --debrief-companion-measure: 68rem;
+    max-inline-size: min(100%, 68rem);
+    margin-inline: auto;
+}
+
+.debrief-code-window {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    margin-block: 0;
+    padding-block: .25rem;
+    white-space: pre;
+}
+
+.debrief-code-panel--sequence > .debrief-code-window {
+    margin-block: 1.5rem;
+}
+
+.debrief-code-window:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: .25rem;
+}
+
+@media (forced-colors: active) {
+    .debrief-companion-reading {
+        column-rule-color: CanvasText;
+    }
+}
+
+@media print {
+    .debrief-companion-reading {
+        columns: auto;
+    }
+
+    .debrief-companion-regions,
+    .debrief-code-companion {
+        display: block;
+    }
+
+    .debrief-companion-regions > * + *,
+    .debrief-code-companion > * + * {
+        margin-block-start: 1rem;
+    }
+
+    .debrief-code-window {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        overflow: visible;
+    }
+}
+
+/* Opt-in companion frames reserve the rail's actual side of the reading field.
+   The narrow rail uses two 1.25rem gutters; the wide rail uses the shell's
+   10rem total evidence-field reserve. A variant can retain a smaller measure. */
+.debrief-companion-frame,
+.debrief-companion--compact {
+    overflow-wrap: anywhere;
+}
+
+@media screen {
+    .debrief-companion-frame,
+    .debrief-companion--compact {
+        /* Local padding owners consume this screen-only lower bound. Their
+           fluid growth, upper bounds, vertical rhythm, and print spacing stay
+           with the route; native list gutters retain room for numbering. */
+        --debrief-companion-inline-floor: .5rem;
+        --debrief-companion-viewport-reserve: 2.5rem;
+        max-inline-size: min(100%, var(--debrief-companion-measure, 100%), calc(100vw - var(--debrief-companion-viewport-reserve)));
+        margin-inline: auto;
+    }
+}
+
+@media screen and (min-width: 56.0625rem) {
+    .debrief-companion-frame,
+    .debrief-companion--compact {
+        --debrief-companion-viewport-reserve: 10rem;
     }
 }

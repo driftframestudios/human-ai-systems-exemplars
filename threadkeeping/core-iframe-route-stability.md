@@ -1,5 +1,7 @@
 # Core iframe route stability settlement
 
+The accepted live package now carries 2 families, 38 routes, 68 files, and 4,853,271 bytes. Issues #72 and #102 retain the upload, signed-out route, response-policy, and real-parent verification receipts. The receiver sequence below remains the rebuild procedure when a changed package earns another publication.
+
 ## Desired state
 
 The current Core Architectures pack can travel as a finite iframe population

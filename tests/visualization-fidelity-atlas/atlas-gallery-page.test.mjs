@@ -298,7 +298,8 @@ test('authored page retains the exact generated gallery and existing style owner
   assert.deepEqual([...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/gu)].map(match => match[1]),
     [
       'styles/core/tokens.css', 'styles/core/foundation.css', 'styles/components/site-navigation.css',
-      'styles/components/tables.css', 'expanded.css', 'styles/routes/ai-systems.css', 'canvas-shell.css',
+      'styles/components/tables.css', 'expanded.css', 'styles/routes/ai-systems.css',
+      'styles/routes/visualization-fidelity-atlas.css', 'canvas-shell.css',
     ]);
   assert.equal((html.match(/<iframe /gu) || []).length, 2);
 });

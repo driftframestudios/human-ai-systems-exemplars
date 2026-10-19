@@ -34,6 +34,7 @@ the smallest adequate route when no contract adds material value.
 | --- | --- | --- |
 | [`practitioner-probe`](practitioner-probe/SKILL.md) | A plausible concern lacks a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
 | [`cost-and-ownership-analysis`](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
+| [`relational-execution-review`](relational-execution-review/SKILL.md) | SQL, relationships, roles, objects, query plans, or restart claims need source-bound review | Localized findings and independently reviewed repairs with exact execution and recovery evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and decision delta |
 | [`citation-atlas-selection`](citation-atlas-selection/SKILL.md) | A supplied citation Atlas should resolve to one exact public reference or a bounded candidate set | A deterministic lookup with exact coordinates and visible selection limits |
 | [`supportive-change-writing`](supportive-change-writing/SKILL.md) | Human-facing prose or instructions change materially | Desired-state, negation-aware, evidence-calibrated language |
@@ -78,6 +79,27 @@ offering travels through a reviewed tagged public carrier. The package includes
 the selected skill, its directly linked foundation and references, and the
 applicable shared source map; publication checks prove that closure before
 activation.
+
+### Continue into a scientific or database example
+
+Choose these optional public Registry packages when the receiving question
+needs a more specific domain treatment. The local visualization foundation and
+destination skills still own the HASE artifact; each linked package supplies
+its instruction source, supporting references, and bounded exercises.
+
+| Receiving question | Public continuation | Evidence to preserve |
+| --- | --- | --- |
+| Which genomic coordinate, assay measurement, or comparison does the view represent? | [Omics coordinate and measurement views](https://kindlight.io/skills/omics-coordinate-and-measurement-views/) | Coordinate convention, measurement units, biological sample identity, and the analysis that supports an inference. |
+| How should a transform, scale, interval, or density preserve the measured quantity? | [Scientific scale and transform fidelity](https://kindlight.io/skills/scientific-scale-and-transform-fidelity/) | Raw-value meaning, transformed domain, interval semantics, and recoverable values. |
+| How should panels, labels, color, and export support one scientific reading? | [Scientific figure composition](https://kindlight.io/skills/scientific-figure-composition/) | Panel relationships, non-color distinctions, physical placement, and the inspected output. |
+| How does a partial index change the work of an ordinary-role SQL query? | [PostgreSQL pending-outbox query · 0.1.0](https://kindlight.io/snippets/postgresql-pending-outbox-query/0.1.0/) | Equal results before plan comparison, exact engine and workload, and the measured scope. |
+
+For the SQL example, the [relational review route](#research-probe-and-write)
+connects the observed plan to source, role, object ownership, and the recovery
+event under review. The packages' synthetic exercises establish their stated
+mechanisms. A receiving HASE figure or database task supplies its own domain,
+accessibility, performance, and operational observations. These links provide
+continuations; HASE's publication selection retains its existing scope.
 
 ## How the catalog evolves
 

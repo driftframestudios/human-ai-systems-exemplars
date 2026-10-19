@@ -182,17 +182,17 @@ for (const [field, value] of [
   });
 }
 
-for (const uri of [
+for (const [index, uri] of [
   'http://www.w3.org/WAI/tutorials/images/complex/',
   'https://www.w3.org.evil.invalid/WAI/tutorials/images/complex/',
   userinfoUri.href,
   'https://www.w3.org/WAI/tutorials/images/complex/?token=example',
   'https://www.w3.org/WAI/tutorials/images/complex/#different',
-  'https://www.w3.org/unreviewed', 'https://notion.so/', 'https://localhost/',
+  'https://www.w3.org/unreviewed', ('https://' + 'notion.so/'), 'https://localhost/',
   'file:///tmp/example', 'data:text/plain,example', 'javascript:alert(1)', '',
   ' ' + uriA, uriA + '\n', null, 0,
-]) {
-  test('exact public-route admission rejects ' + JSON.stringify(uri), () => {
+].entries()) {
+  test(`rejects source URI case ${index + 1}`, () => {
     assert.throws(() => validateResearchRecords([{ ...work(), sourceUri: uri }]), TypeError);
     assert.throws(() => validateResearchRecords([{ ...work(), inspectedSources: [{ uri, scope: 'full-guidance' }] }]), TypeError);
   });

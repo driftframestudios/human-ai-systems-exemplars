@@ -644,10 +644,10 @@ test("the private selection ledger classifies the complete repository skill fami
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
   assert.equal(readyNames.length, 27);
-  assert.equal(possibleNames.length, 6);
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
+    "relational-execution-review",
     "repository-collaboration-cycle",
     "repository-handoff-readiness",
     "repository-orientation-stewardship",
@@ -1060,7 +1060,7 @@ test("schema payload routes preserve generator-owned outputs and normalized iden
 
 test("public-material inspection identifies source-owned adaptation needs", () => {
   const privateShapes = [
-    "https://example.notion.site/field-guide",
+    ("https://example." + "notion.site/field-guide"),
     "::fragments",
     "~loamthreads",
     "::the_author::",

@@ -247,10 +247,10 @@ readers.
 
 `release` and `prod` each carry an approved 300-minute Actions allocation and
 the shared automatic schema-delivery contract. Deployment remains a separate
-receiver choice: `release` uploads to its un-routed integration Worker and
-`prod` passes through its exact-branch environment and accepted human handoff
-when their names enter
-`DEPLOYMENT_ACTIVE_RECEIVERS`. `research`, `res/*`, `dev`, `docs`, and `stg`
+receiver choice: `release` exercises the contract-only integration route, while
+an accepted `prod` push can pass through its exact-branch environment and human
+handoff when `prod` enters `DEPLOYMENT_ACTIVE_RECEIVERS`. `research`, `res/*`,
+`dev`, `docs`, and `stg`
 retain their resting budget values. The shared profile envelope remains
 human-managed. `.github/ENVIRONMENTS.md` carries the operative receiver,
 serving, deployment, and credential-routing contract.

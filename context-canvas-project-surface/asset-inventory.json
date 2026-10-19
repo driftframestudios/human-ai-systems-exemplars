@@ -215,12 +215,12 @@
       "selector": {
         "prefix": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/"
       },
-      "semantic_owner": "Clinical trial coordination Debrief",
+      "semantic_owner": "Clinical trial coordination Debrief, AI Systems reading, and Core Architectures Orientation Index",
       "roles": [
         {
-          "id": "working_reference_system_screenshot",
-          "visitor_job": "Show how clinical-trial rules, cohorts, consent, evidence review, and environment posture operate in a working, IP-free 2026 proxy system.",
-          "accessibility_text_owner": "The clinical trial coordination Debrief image alternatives, captions, and surrounding prose."
+          "id": "project_reference_visual",
+          "visitor_job": "Show how clinical-trial rules, cohorts, consent, evidence review, and environment posture operate in a working, IP-free 2026 proxy system, and how current Core Architecture diagrams help teams compare context, strategy, situations, and specifications.",
+          "accessibility_text_owner": "The clinical trial coordination Debrief, AI Systems reading, and Core Architectures Orientation Index image alternatives, captions, and surrounding prose."
         }
       ],
       "build_consumers": [
@@ -233,10 +233,10 @@
       },
       "source_relationship": {
         "standing": "accepted_generated_asset",
-        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
-        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, IP-free 2026 proxy system using synthetic data. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html",
+        "lineage_standing": "The family combines accepted screenshots of a working, IP-free 2026 proxy system using synthetic data with 2026 Figma Make diagrams derived from kindlight.systems architecture definitions. The accepted originals are clinical-trial-context-tree.webp at SHA-256 56898a1a192e5e029d3f64c551bff8ca9b4ebd97e7f6b7228bdcfc4d70f0ef8d, clinical-trial-situation-model-player-cards.webp at SHA-256 4b60295084fdcda1ae0ee705811a6619dcf1fdee69dc2d0cdd5091d25875b7fa, clinical-trial-specification-suite.webp at SHA-256 8ae40ccc6d93e622c00f9be4515616bd91b348b0c7c50c0bcd0b931f51f98443, and clinical-trial-strategy-canvas.webp at SHA-256 fe16e7d8b3b642929230ebee10f294107e102b4224f56db493b3d8cf138b1918. These diagrams carry current research inputs for review. The -960 and -1920 WebPs are deterministic responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
       },
-      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "recovery_condition": "Restore the accepted source visuals, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
     },
     {
@@ -273,12 +273,12 @@
       "selector": {
         "prefix": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/"
       },
-      "semantic_owner": "Genomic viewer replatforming Debrief",
+      "semantic_owner": "Genomic viewer replatforming Debrief, AI Systems reading, and Core Architectures Orientation Index",
       "roles": [
         {
-          "id": "working_reference_system_screenshot",
-          "visitor_job": "Show specimen state, authorization, quality gates, connection recovery, and reversible genomic work in working, IP-free 2026 SoT Cartography software.",
-          "accessibility_text_owner": "The genomic viewer replatforming Debrief image alternatives, captions, and surrounding prose."
+          "id": "project_reference_visual",
+          "visitor_job": "Show specimen state, authorization, quality gates, connection recovery, and reversible genomic work in working, IP-free 2026 SoT Cartography software, and show how current situation, specification, and strategy diagrams help teams shape the work.",
+          "accessibility_text_owner": "The genomic viewer replatforming Debrief, AI Systems reading, and Core Architectures Orientation Index image alternatives, captions, and surrounding prose."
         }
       ],
       "build_consumers": [
@@ -291,10 +291,10 @@
       },
       "source_relationship": {
         "standing": "accepted_generated_asset",
-        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
-        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software using synthetic data. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is intended for a future open-source release; this inventory does not claim that release has occurred."
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+        "lineage_standing": "The family combines accepted screenshots of working, IP-free 2026 SoT Cartography software using synthetic data with 2026 Figma Make diagrams derived from kindlight.systems architecture definitions. The accepted originals are genomics-situation-model-player-cards.webp at SHA-256 53d948f1bfc26ef002fb61db169fd2f9ec36ace6a9ae1b7faa17dc4c1035cfb1 and genomics-specification-suite-strategy-canvas.webp at SHA-256 55d880f4b54d5a50ee579ed32244260be0dd86f36a7a33477958bcf5b9078dd6. These diagrams carry current research inputs for review. The -960 and -1920 WebPs are deterministic responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography remains planned for a future open-source release."
       },
-      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "recovery_condition": "Restore the accepted source visuals, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
     },
     {
