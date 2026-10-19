@@ -211,9 +211,21 @@ direct heading ownership distinct from painted fragmentation. Dynamic
 container checks capture the effective root-font size and complete inline
 state, keep one test stylesheet attached while a root attribute selects the
 prior and enlarged states, then restore the exact source state as cleanup.
-They synchronize on the computed column state after a render update. Browser
-geometry supports the focused paint comparisons; native Safari and DuckDuckGo
-confirmation retains its own environment record.
+They synchronize on the computed column state after a render update. Chromium
+and WebKit establish the live 32px-to-prior-size reverse transition. Firefox
+establishes that transition whenever its multicolumn state invalidates; the
+one exact stale reverse-invalidation signature observed on hosted Linux Firefox
+for the 1440-pixel Genomic Viewer route also requires the live enlargement and
+bidirectional viewport-seam contracts. The bounded signature identifies three
+known flow indices across two named reading owners at the 16-pixel root and
+1280-pixel container threshold; all unaffected flows retain two columns. A
+fresh page then verifies the prior-size, two-column state with the same
+extended-label population. That exact
+Firefox 153.0 child observation records the bounded same-document restoration
+boundary as a TODO after the fresh-context assertions pass. Every other
+mismatch remains a failing observation. Browser geometry supports the focused
+paint comparisons; native Safari and DuckDuckGo confirmation retains its own
+environment record.
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
 Case Brief carrier check is dependency-free and verifies that every generated

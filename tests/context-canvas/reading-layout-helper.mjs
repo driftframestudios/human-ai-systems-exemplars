@@ -212,14 +212,8 @@ export function assertColumnActivation(reading, route) {
   }
 }
 
-export async function settleColumns(page) {
-  // Font-size and viewport changes invalidate both the container query and
-  // multicolumn layout. Yield through the render boundary, then poll only the
-  // state this synchronization helper owns; the complete geometry observer
-  // runs once after settlement. This keeps CI load from consuming the poll
-  // budget while preserving actionable mismatch data for every engine.
-  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-  await expect.poll(() => page.evaluate(() => {
+export async function observeColumnMismatches(page) {
+  return page.evaluate(() => {
     const rootFont = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
     const flows = [...document.querySelectorAll(".reading-flow > .prose-flow")].map((flow, index) => {
       const container = flow.closest(".content");
@@ -245,7 +239,17 @@ export async function settleColumns(page) {
     });
     if (!flows.length) return [{ issue: "continuous prose flow is absent" }];
     return flows.filter(flow => flow.columns !== flow.expected);
-  }), {
+  });
+}
+
+export async function settleColumns(page) {
+  // Font-size and viewport changes invalidate both the container query and
+  // multicolumn layout. Yield through the render boundary, then poll only the
+  // state this synchronization helper owns; the complete geometry observer
+  // runs once after settlement. This keeps CI load from consuming the poll
+  // budget while preserving actionable mismatch data for every engine.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await expect.poll(() => observeColumnMismatches(page), {
     timeout: 7000,
     message: "responsive columns settle at the actual container boundary",
   }).toEqual([]);
