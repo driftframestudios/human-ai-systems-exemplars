@@ -57,13 +57,13 @@ async function assertDescriptionDisclosure(page, engineLabel) {
   assert.equal(await details.evaluate(element => element.open), false, `${engineLabel}: keyboard closes the visual description`);
 }
 
-async function assertDescriptionPrint(page, engineLabel) {
-  const details = page.locator("details#about-media-sequence");
-  await details.evaluate(element => {
-    element.open = false;
-  });
-  await page.emulateMedia({ media: "print" });
+async function assertDescriptionPrint(browser, origin, engineLabel) {
+  // Load alternate presentations in their own stable page state. Switching one
+  // live page between screen and print can make WebKit cancel and recreate an
+  // otherwise valid embedded resource.
+  const printed = await openPage(browser, origin, { media: "print" });
   try {
+    const details = printed.page.locator("details#about-media-sequence");
     const presentation = await details.evaluate(element => {
       const summary = element.querySelector("summary");
       const list = element.querySelector("ol");
@@ -95,12 +95,9 @@ async function assertDescriptionPrint(page, engineLabel) {
     assert.ok(presentation.list.width > 0 && presentation.list.height > 0, `${engineLabel}: print gives the visual-description list geometry`);
     assert.notEqual(presentation.firstItem.display, "none", `${engineLabel}: print renders visual-description items`);
     assert.ok(presentation.firstItem.height > 0, `${engineLabel}: print gives visual-description items geometry`);
-    // Print can activate same-origin resources inside otherwise collapsed details.
-    // Let those accepted requests settle before restoring screen media so the
-    // transition cannot cancel a valid asset and register a false failure.
-    await page.waitForLoadState("networkidle");
+    assertTelemetry(printed.telemetry);
   } finally {
-    await page.emulateMedia({ media: "screen" });
+    await printed.context.close();
   }
 }
 
@@ -159,7 +156,7 @@ function assertContained(layout, viewportWidth, label) {
 async function openPage(
   browser,
   origin,
-  { contextOptions = {}, failVideoRequest = false } = {},
+  { contextOptions = {}, failVideoRequest = false, media = "screen" } = {},
 ) {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
@@ -175,6 +172,7 @@ async function openPage(
   }
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
+  await page.emulateMedia({ media });
   const telemetry = monitor(page);
   const videoRequests = [];
   const gifRequests = [];
@@ -182,7 +180,9 @@ async function openPage(
     if (request.url() === videoUrl) videoRequests.push(request.url());
     if (request.url().endsWith(gifName)) gifRequests.push(request.url());
   });
-  await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+  // The load boundary includes the page's same-origin SVG object. Telemetry is
+  // therefore asserted after embedded resources settle in the selected medium.
+  await page.goto(`${origin}/${route}`, { waitUntil: "load" });
   return { context, page, telemetry, videoRequests, gifRequests };
 }
 
@@ -242,12 +242,12 @@ try {
   assert.match(normalState.visualDescriptionText, /decision space/u);
   await assertFooterContact(normal.page, "Chromium");
   await assertDescriptionDisclosure(normal.page, "Chromium");
-  await assertDescriptionPrint(normal.page, "Chromium");
   assertContained(await mediaLayout(normal.page), 1440, "desktop");
   assert.equal(normal.gifRequests.length, 0, "the initial reading leaves fallback motion unloaded");
 
   assertTelemetry(normal.telemetry);
   await normal.context.close();
+  await assertDescriptionPrint(browser, server.origin, "Chromium");
 
   await assertSourceFailureRecovery(browser, server.origin, "Chromium");
 
@@ -312,12 +312,12 @@ try {
   assert.equal(webkitState.paused, true, "WebKit begins on the passive poster");
   await assertFooterContact(webkitNormal.page, "WebKit");
   await assertDescriptionDisclosure(webkitNormal.page, "WebKit");
-  await assertDescriptionPrint(webkitNormal.page, "WebKit");
   assertContained(await mediaLayout(webkitNormal.page), 1440, "WebKit desktop");
   // The HTML preload value is an author hint that a user agent may ignore.
   // Playback state and controls own the cross-browser visitor-control contract.
   assertTelemetry(webkitNormal.telemetry);
   await webkitNormal.context.close();
+  await assertDescriptionPrint(webkitBrowser, server.origin, "WebKit");
 
   await assertSourceFailureRecovery(webkitBrowser, server.origin, "WebKit");
 
