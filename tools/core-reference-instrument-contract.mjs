@@ -1573,9 +1573,15 @@ async function recoveryAtlasPath(browser, origin, route) {
   const noticeTimerContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   try {
     const noticeTimerPage = await noticeTimerContext.newPage();
-    await noticeTimerPage.clock.install({ time: new Date("2026-01-01T00:00:00Z") });
+    const noticeTimerEpoch = Date.parse("2026-01-01T00:00:00Z");
+    const noticeDurationMs = 5500;
+    const replacementLeadTimeMs = 1000;
+    const originalDeadlineCrossingMs = replacementLeadTimeMs + 1;
+    const replacementDeadlineRemainderMs = noticeDurationMs - originalDeadlineCrossingMs;
+    await noticeTimerPage.clock.install({ time: noticeTimerEpoch });
     await noticeTimerPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
-    await noticeTimerPage.clock.pauseAt(await noticeTimerPage.evaluate(() => Date.now()));
+    // Use a fixed future instant so navigation and protocol work complete before pauseAt advances the clock.
+    await noticeTimerPage.clock.pauseAt(noticeTimerEpoch + 2 * 60 * 60 * 1000);
     await revealControl(noticeTimerPage, "#importText");
 
     const notice = noticeTimerPage.locator("#importNotice");
@@ -1597,16 +1603,16 @@ async function recoveryAtlasPath(browser, origin, route) {
     await submitImport(accepted);
     await assertVisibleNotice(noticeTimerPage, "#importNotice", /updated|imported/i);
 
-    await noticeTimerPage.clock.runFor(4500);
+    await noticeTimerPage.clock.runFor(noticeDurationMs - replacementLeadTimeMs);
     const rejected = structuredClone(accepted);
     rejected.geometries = [null];
     await submitImport(rejected);
     await assertVisibleNotice(noticeTimerPage, "#importNotice", /working recovery routing atlas retained|working state retained/i);
 
-    await noticeTimerPage.clock.runFor(1001);
+    await noticeTimerPage.clock.runFor(originalDeadlineCrossingMs);
     await assertVisibleNotice(noticeTimerPage, "#importNotice", /working recovery routing atlas retained|working state retained/i);
 
-    await noticeTimerPage.clock.runFor(4499);
+    await noticeTimerPage.clock.runFor(replacementDeadlineRemainderMs);
     assert.equal(await notice.evaluate(element => element.hidden), true, "#importNotice should hide on the latest notice deadline");
   } finally {
     await noticeTimerContext.close();

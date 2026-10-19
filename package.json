@@ -117,7 +117,26 @@
     "test:suites:plan": "node tools/test-suite-plan.mjs",
     "test:suites:unit": "node --test tests/suites/planner.test.mjs",
     "test:tables:python": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all",
-    "test:tables:python:entry": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v"
+    "test:tables:python:entry": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v",
+    "test:debrief-reading-layout-browser": "node --test tests/context-canvas/debrief-reading-layout.browser.mjs",
+    "playwright:install:debrief-reading": "playwright install chromium firefox webkit",
+    "test:ai-systems-reading-layout-browser": "node --test tests/context-canvas/ai-systems-reading-layout.browser.mjs",
+    "test:technology-fit-layout-browser": "node --test tests/context-canvas/technology-fit-layout.browser.mjs",
+    "test:ai-entry-cascade-browser": "node --test tests/context-canvas/ai-entry-cascade.browser.mjs",
+    "test:atlas-cascade-browser": "node --test tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs",
+    "test:debrief-reference-figures-browser": "node --test tests/context-canvas/debrief-reference-figures.browser.mjs",
+    "test:fmi-reading-room-browser": "node --test tests/context-canvas/fmi-reading-room.browser.mjs",
+    "test:fmi-reading-rail-browser": "node --test tests/context-canvas/fmi-reading-rail.browser.mjs",
+    "test:debrief-prose-code-room-browser": "node --test tests/context-canvas/debrief-prose-code-room.browser.mjs",
+    "test:debrief-evidence-room-browser": "node --test tests/context-canvas/debrief-evidence-room.browser.mjs",
+    "test:debrief-ordered-room-browser": "node --test tests/context-canvas/debrief-ordered-room.browser.mjs",
+    "test:debrief-companion-spacing-browser": "node --test tests/context-canvas/debrief-companion-spacing.browser.mjs",
+    "test:site-navigation-browser": "node --test tests/context-canvas/site-navigation.browser.mjs",
+    "test:debrief-card-measure-browser": "node --test tests/context-canvas/debrief-card-measure.browser.mjs",
+    "test:debrief-hero-colors-browser": "node --test tests/context-canvas/debrief-hero-colors.browser.mjs",
+    "test:debrief-link-cues-browser": "node --test tests/context-canvas/debrief-link-cues.browser.mjs",
+    "test:debrief-hero-wrapping-browser": "node --test tests/context-canvas/debrief-hero-wrapping.browser.mjs",
+    "test:debrief-caption-colors-browser": "node --test tests/context-canvas/debrief-caption-colors.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

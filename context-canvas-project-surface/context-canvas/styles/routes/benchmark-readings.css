@@ -6,6 +6,16 @@
    ai-systems.css, this file, then canvas-shell.css. Shared navigation and
    attribution remain outside this route bundle. */
 
+/* The catalog header keeps one solid reading plane; the shared AI-family
+   typography and print treatment retain their existing owners. */
+@media screen {
+    .benchmark-reading-page .ai-systems-hero {
+        --debrief-hero-background: #1f2421;
+        background: var(--debrief-hero-background);
+    }
+}
+
+
 .benchmark-reading-page {
     --benchmark-cobalt: #2855f3;
     --benchmark-ink: #17345f;
@@ -135,6 +145,7 @@
     border: .125rem solid var(--benchmark-ink);
     border-inline-start: .55rem solid var(--benchmark-cobalt);
     padding: clamp(1rem, 2.5vw, 1.5rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.5vw, 1.5rem);
 }
 
 .benchmark-reading-page .benchmark-boundary > :first-child {

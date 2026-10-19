@@ -27,9 +27,17 @@ description: Selects proportionate visual and browser evidence for Context Canva
 
 Use the source or browser state that can establish the claim. Static rules can prove token values, owner pairs, and media placement. Browser checks can prove computed cascade, focus visibility, target geometry, clipping, and printed presentation. A screenshot of a resting page leaves hover, focus, visited history, and alternate media unspecified.
 
+### Rule: Regression assertions distinguish the material fault
+
+A persisted browser assertion names the visitor behavior, a plausible fault, the observable distinction, and its consequence. Confirm that the intended state passes and an observed baseline or controlled perturbation creates the claimed failure in the declared environment. Fragment geometry, visible paint, semantic order, and page containment retain distinct evidence roles. A perturbation that leaves the material state unchanged records an unexercised fault; the positive behavior check can remain valid within its own scope. Restore the source state before the next comparison.
+
 ### Rule: Coverage expands with consequence
 
 One affected route and one standing viewport often suffice for a localized repair. Use the affected family when shared ownership changes. Use the complete route reference when a broadly loaded source or system-wide role changes. Add Firefox or WebKit when the mechanism, prior evidence, or acceptance boundary makes engine variation plausible.
+
+### Rule: A closure candidate binds the final evidence
+
+The agreed route set, source and projection owners, consequential states, and intended assertions define one coherent closure candidate. Focused observations resolve named uncertainties during discovery and repair. Final acceptance checks use the fitting scope and run after the last relevant behavior change. A later finding names its source owner and the evidence it reopens; still-applicable observations keep their source and coverage boundaries. Mandatory checks and current task authority continue to govern acceptance. A new family, shared dependency, environment, or material assertion reopens the fitting coverage rather than silently inheriting an earlier pass.
 
 ### Rule: Breakpoint evidence brackets the source seam
 
@@ -40,6 +48,10 @@ Measure the outer frame, its visible paint extent, and any fixed or sticky neigh
 ### Rule: Fingerprint and regression remain distinct
 
 A route's palette, rhythm, density, asymmetry, negative space, and art direction can vary while its semantic and interaction contracts hold. Compare hierarchy, containment, content presence, ordering, reachability, and intended state before treating raster difference as regression.
+
+### Rule: Useful distribution has its own observable result
+
+When a repair changes how content occupies a broad region, the observation names the units meant to share a row, the heading that introduces them, their usable container width, and the reading order at narrow widths. Prose measure and container distribution remain separate: a readable paragraph can occupy one bounded part of a useful multi-group composition. Geometry and screenshots establish the intended relationship at its responsive seam and a representative wider width. Measure the actual paragraphs, list items, or records as well as their outer container: a full-width list can still pack every item into one narrow lane. Page or local scrollbar containment establishes reachability and leaves that distribution claim open. A restored layout fault should detect the lost relationship; raw space-fill ratios alone leave semantic fit and intentional negative space unspecified.
 
 ### Rule: State evidence retains its limits
 
@@ -99,6 +111,18 @@ Existing commands are starting points rather than required ceremony. A new helpe
 - And its owned border, outline, and shadow paint remain clear of that rail
 - And any wider table content remains available through its named local scroll region
 - And one representative width inside the affected interval establishes whether the condition persists beyond the seam
+
+### Scenario: A broad companion gains adjacent content groups
+
+- Given a companion's explanation and onward routes share one heading
+- When its responsive composition gives both groups usable reading space
+- Then the wide observation establishes their adjacent placement beneath that heading
+- And the narrow observation establishes their complete authored sequence and reachable links
+- And restoring the former single-column constraint breaks the distribution assertion even when scrollbar containment still passes
+
+## Conditional context
+
+Load [references/behavior-oracles-and-verification-scope.md](references/behavior-oracles-and-verification-scope.md) when touch, keyboard, and pointer sequences diverge, text fragments and paint disagree, an existing visual check misses a plausible failure, a perturbation behaves differently across engines, or late findings make focused versus family-wide verification unclear.
 
 ## Completion
 

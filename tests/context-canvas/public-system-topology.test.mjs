@@ -143,14 +143,23 @@ test("the AI Systems reading order follows the visitor's decision path", async (
     "amplified production reach directly precedes the hiring translation",
   );
   assert.ok(
-    position("Four introductory instruments routed by cognitive move, use, changed ability, and Evidence Boundary")
-      < position('aria-label="Central operating principle"'),
-    "the operating principle follows the introductory instrument comparison",
+    position('<p class="architecture-pair__label">Opportunity</p>')
+      < position('aria-label="Central operating principle"')
+      && position('aria-label="Central operating principle"')
+        < position('§c The Intervention — Expectation, Focalization, and Opportunity Become Shared Artifacts'),
+    "the operating principle completes the Solution Architecture card group before the intervention",
   );
   assert.ok(
     position('id="implementation-title"')
       < position('id="lims-eln-constellation-title"'),
     "the LIMS/ELN source constellation belongs to Implementation Architecture",
+  );
+  assert.ok(
+    position('id="implementation-title"')
+      < position('id="public-system-topology-title"')
+      && position('id="public-system-topology-title"')
+        < position('id="registry-readings-title"'),
+    "the public topology follows Implementation Architecture and precedes the Registry reading set",
   );
   assert.ok(
     position('id="population-title"')

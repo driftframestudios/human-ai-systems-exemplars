@@ -1,6 +1,8 @@
 # Context Canvas Field Inspection pilot
 
-This pilot prepares one bounded public reading for Cloudflare Workers Static Assets. It preserves the repository's path topology and gives the team a small, observable delivery surface before it chooses a broader runtime.
+**Status: superseded.** The accepted production carrier owns current Context Canvas delivery. This directory preserves the earlier 14-file proof until Issue #428 coordinates its complete removal.
+
+This pilot prepared one bounded public reading for Cloudflare Workers Static Assets. It preserves the repository's path topology and gives collaborators a reproducible record of the smaller delivery surface that preceded the broader runtime.
 
 The public closure contains 14 files: 12 allowlisted Context Canvas assets and two delivery-owned files in `source/`. The builder copies only those files into ignored `dist/`; `--check` rejects missing, changed, symlinked, or extra public files.
 

@@ -143,8 +143,10 @@ jobs:
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
     runs-on: ubuntu-24.04
-    # The explicit all-plus-browser route exercises Chromium and WebKit across every carrier family.
-    timeout-minutes: 20
+    # The explicit all-plus-browser route exercises Chromium, Firefox, and WebKit
+    # across every carrier family in sequence. Thirty minutes keeps that release
+    # proof bounded while preserving headroom for the complete declared route.
+    timeout-minutes: 30
 
     steps:
       - name: Check out the candidate source
@@ -175,6 +177,10 @@ jobs:
       - name: Install WebKit for the Context Canvas image-delivery contract
         if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && (inputs.suite == 'all' || inputs.suite == 'iframe')) }}
         run: npm exec -- playwright install --with-deps webkit
+
+      - name: Install Firefox for the all-family Debrief reading contracts
+        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && inputs.suite == 'all') }}
+        run: npm exec -- playwright install --with-deps firefox
 
       - name: Exercise the selected source contracts
         env:
@@ -218,6 +224,12 @@ jobs:
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:about-media-browser
                 npm run test:debrief-catalog-preview-browser
+                npm run test:debrief-reading-layout-browser
+                npm run test:debrief-reference-figures-browser
+                npm run test:debrief-caption-colors-browser
+                npm run test:ai-systems-reading-layout-browser
+                npm run test:site-navigation-browser
+                npm run test:debrief-link-cues-browser
                 npm run test:context-canvas-image-delivery-browser
                 npm run test:who-to-believe-system-graph-browser
                 npm run test:prod-css-projection-browser

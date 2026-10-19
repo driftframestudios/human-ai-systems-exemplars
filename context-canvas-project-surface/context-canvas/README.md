@@ -19,7 +19,310 @@ Each public page remains useful when enhancement is unavailable. Embedded protot
 
 The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/SKILL.md) skills provide compact collaboration routes into this terrain.
 
-The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the matching `schemas.vik.guru` parity and activation cycle.
+The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 `schemas.vik.guru` publication and signed-out receipt.
+
+## Primary navigation
+
+Forty top-level routes share the three native destination links owned by
+`styles/components/site-navigation.css`. Complete labels determine the flex
+rows; remaining space is shared within each row. The sticky header participates
+in document flow, so its actual height places the initial reading. The body
+provides the full scroll range, and the header retains a viewport-wide limit
+when a route has a larger minimum body width. Narrow link padding scales with
+text while every destination keeps a 44px minimum touch target. The existing
+fragment and rail clearance follows the active text size and clears the observed
+one-, two-, and three-row arrangements; `main` itself receives the same
+skip-target clearance as its descendants.
+HTML continues to own labels, destinations, and current-page or current-location
+semantics. Route palettes and the generated or authored reading rails retain
+their separate owners.
+
+`npm run test:site-navigation-browser` inventories all forty consumers in
+Chromium and exercises entry, catalog, AI, Debrief, authored-rail, and historical
+shells across Chromium, Firefox, and Playwright WebKit. Label fragments,
+text-dependent row transitions, the foundation and rail seams, enlarged text,
+keyboard and touch navigation with scripting unavailable, skip and fragment
+clearance, alternate media, and a restored equal-cell fault provide the
+focused regression evidence. The full route reference retains the broader
+composition comparison.
+
+## Debrief hero color
+
+The twenty-three catalog readings use solid header planes. Genomic Viewer,
+Field Inspection, and Who To Believe opt into `debrief-hero--palette` in
+`styles/components/debrief-reading.css`. The component pairs background,
+title, tagline, lead, kicker, accent border, and active link roles. Genomic
+Viewer and Field Inspection use the shared night, cream, and field palette;
+their existing route sheets retain the rose and coral borders. Who To Believe
+assigns its local slate, warm cream, teal, pale blue, and coral palette in its
+page-owned style. Print resets the complete palette to dark text on white;
+forced colors preserve system adjustment.
+
+Distributed Inspection, the NEG Atlas, Benchmark Orientation, MAPS
+Evaluations, and Readable Tables retain their existing typography and color
+families on solid planes through their own style owners. The shared AI-family
+hero remains available to its other readers. FMI LIMS/ELN keeps its existing
+deep-blue header. Who To Believe's Solution field uses a solid rose plane;
+authored line-grid textures inside other reading fields retain their role.
+
+`tests/context-canvas/debrief-hero-colors.browser.mjs` inventories the catalog
+and checks the opted-in palettes at narrow, desktop, wide, and enlarged-text
+states in Chromium, Firefox, and Playwright WebKit. It also exercises inherited
+native link roles, focus paint, print, forced colors, and restored gradient and
+dark-foreground faults. Caption emphasis has a separate painted-owner boundary;
+the hero contract leaves caption and embedded-artifact interiors with their
+existing owners.
+
+## Debrief hero word containment
+
+`styles/components/debrief-reading.css` gives the twenty-two shared Debrief
+heroes an emergency break inside an oversized title, tagline, lead, or kicker
+word. Ordinary word breaks, authored wording, font sizes, and header gutters
+retain their existing owners. The independent NEG Atlas hero keeps its local
+composition and participates as a containment control.
+
+`tests/context-canvas/debrief-hero-wrapping.browser.mjs` measures actual text
+fragments against each role, the header content region, and the viewport across
+all twenty-three catalog readings. Chromium, Firefox, and Playwright WebKit
+cover 320px and 390px with ordinary and doubled root text, ordinary desktop and
+wide composition, print, and forced colors. Restoring ordinary wrapping exposes
+the original EHR pharmacogenomic lead and Prompt-Side Collaboration title
+strain; recovery re-establishes the complete reading. At ordinary desktop and
+wide widths, the same comparison preserves text geometry and palette. Header
+containment leaves body-content and embedded-artifact layout with their owners.
+
+## Debrief captions on mixed fields
+
+`styles/routes/genomic-viewer.css` owns the Genomic dark-field caption role,
+`--genomic-caption-ink`. Strong text, sources, and caveats inherit the resolved
+caption foreground; weight retains emphasis. This follows the existing proxy
+figure convention while shared table defaults and other route palettes keep
+their separate scopes. The five existing light-inset families reset the role
+at their painted boundary and retain their shared light link pairs. Print
+sets the field role and caption foreground to black; native forced-color
+adjustment remains available.
+
+`tests/context-canvas/debrief-caption-colors.browser.mjs` inventories all
+23 catalog routes, including media-linked descriptions and their emphasis,
+code, links, and disclosure content. The three-engine checks cover the two
+repaired captions at narrow, laptop, wide, and enlarged-text widths; actual
+light insets; a caption extension inside each inset family; keyboard focus,
+hover and active links; print and forced colors; and restored descendant-ink
+and inherited-role faults. Contrast uses composited ancestor paint and a
+conservative bound for existing linear textures. Declared visited roles
+receive source and resolved-palette checks; actual browser history paint and
+embedded-document interiors retain their separate observation boundaries.
+
+## Links to other reading contexts
+
+The twenty-three catalog readings and their parent retain ordinary native link
+behavior. Authored links to another website or repository companion document
+carry the shared square-arrow SVG, an accessible “outside Context Canvas”
+qualifier, and a matching hover title. The seventeen FMI method companions keep
+their explicit “opens in a new tab” cue and authored tab choice. Nearby footer
+sentences name the external destinations directly. Full-size images, supplied
+movie files, and local Canvas routes retain their existing explicit labels.
+
+`canvas-shell.css` owns the opt-in `canvas-link-icon` paint; authored HTML owns
+its destination and accessible meaning. Each SVG declares matching em dimensions
+so its initial inline size participates in WebKit column balancing. The icon follows the link foreground,
+text size, wrapping, focus, print, and forced-color modes. Public-reference
+materialization resolves Registry URLs while preserving this authored meaning.
+`test:debrief-link-cues-browser` inventories every catalog reading, checks
+representative cross-engine paint and accessible names, and exercises a missing
+cue before restoring the intended state.
+
+## Movement headers and reading regions
+
+Seventeen catalog readings use `.reading-flow`: the sixteen Full
+Debriefs and Initiative Costing. Each direct `.beat-title`, section title,
+and existing full-width evidence field stands between continuous
+`.prose-flow` runs. Headings visibly precede both columns, and wide evidence
+keeps its authored position. Column-local figures retain their place within
+prose. Ordinary internal headings keep their existing rhythm.
+
+Fourteen of these routes also use `.debrief-movement` to group an authored
+track label and `h2` in `.debrief-movement__header` before the reading body.
+Genomic Viewer, FMI Clinical Trial Coordination, the five EHR readings,
+Humatics, Spatial Capture, Multilingual Clinical Vocabulary Practice,
+Recoverable Enterprise Forms, FMI LIMS/ELN, Field Inspection, and Distributed
+Inspection retain their own labels. Who To Believe, Three-Way Comparative
+& The Return, and Initiative Costing keep their title-only orientation.
+FMI LIMS/ELN's Implementation constellation, Field Inspection's Assurance
+and Population fields, and the other independent panels retain their
+block/grid composition. The LIMS/ELN rail reserves its own width, so its
+column transition follows the remaining reading container. Its short
+orientation promise remains an ordinary block before the first beat, keeping
+the promise and its border together. Initiative Costing keeps its short,
+single-paragraph principles in ordinary block flow; the longer multi-element
+reading retains continuous columns.
+
+`styles/components/debrief-reading.css` owns Debrief movement-header containment.
+`styles/components/reading-flow.css` owns the shared direct beat-heading
+break grouping and first-heading spacing. It loads after `expanded.css` and,
+on Debrief consumers, after `debrief-reading.css`, before route bundles.
+Core foundation owns responsive columns within each prose run;
+headings and wide evidence remain in ordinary block flow at every width.
+Route or composition styles own palette and readable foregrounds through
+the wrappers. Keep labels and heading IDs in document order and keep wide
+evidence between prose runs so subsequent content follows it in both source
+order and browser paint.
+
+The browser contract, `npm run test:debrief-reading-layout-browser`, covers
+all twenty-three catalog readings. The seventeen consumers exercise the
+heading-first relation; the six other readings preserve their independent
+composition. One Figure, Several Readings keeps labels outside its prose,
+Readable Tables keeps one pure prose run between its heading and figure,
+and the NEG Atlas, Prompt-Side Practice, Benchmark Orientation, and MAPS
+Evaluations retain their block/grid layouts. Native-browser confirmation
+and verification of the actually deployed source remain separate receiving
+observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
+holds the family extension and deployment-status boundary.
+
+Twelve direct-child orientation callouts participate in continuous prose as
+one atomic painted object. Their statement and footer remain together inside
+the same visible boundary as the reading changes between one and two columns.
+The three-engine layout contract inventories this family, checks child and
+visible-text containment across the standing viewport seams, and exercises the
+ordinary fragmenting state before restoring the accepted component contract.
+
+AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
+Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
+`.reading-flow` boundary in thirteen reading regions. Their metadata,
+section and beat headings, and full-width evidence occupy ordinary blocks.
+Isolated orientation and continuation paragraphs stay in block flow; longer
+multi-element passages retain continuous columns. Grammar's specimen section,
+PODA's second section title, and independently composed asides keep their
+authored position. These routes load the neutral component directly after
+`expanded.css`; their route bundles continue to own color, measure, and rhythm.
+
+`npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
+AI Systems / Shared Machinery primary and directly linked example readings,
+plus the Debriefs parent, in Chromium, Firefox, and Playwright WebKit. The
+route population distinguishes authored reading links from global navigation,
+external references, and embedded instrument interiors. Shared Machinery and
+the other block/grid readings retain their existing composition.
+[Issue #498](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/498)
+records the inventory, paint-sensitive observations, and acceptance boundary;
+[Issue #499](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/499)
+receives the separate Technology Fit instrument header repair.
+
+The Debrief reading component also owns the dense reference-interface figure
+frames used by Genomic Viewer, FMI Clinical Trial Coordination, FMI LIMS/ELN,
+Humatics, and Who To Believe. Their 35 figures keep source-size links and
+HTML-owned image identities. Landscape frames keep a 56rem reading canvas
+inside a named keyboard-scrollable region; portrait frames fit within 42rem.
+The component preserves the shared figure's full-width behavior through 64rem;
+the later shell and route rules retain their rail and composition overrides.
+Print releases the local scrolling frame into the page's reading width. Two
+extended visuals opt into a centered caption boundary so their readable text
+stays with the local painted field while the media keeps its wider geometry.
+
+`npm run test:debrief-reference-figures-browser` checks the figure family and
+its width seams across Chromium, Firefox, and Playwright WebKit, including
+keyboard access, portrait fit, bounded-caption geometry and text containment,
+unchanged media width, alternate media, and restored cascade faults.
+The existing image-alternatives source contract retains semantic and image
+identity coverage. [Issue #51](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/51)
+receives the bounded extraction while keeping broader legacy ownership open.
+
+FMI LIMS/ELN's six companion panels keep their headings above the body.
+`fmi-lims-eln-replatforming.css` gives five longer bodies up to two continuous
+columns when two useful measures fit; the short Context Tree note uses a
+compact panel. Available width includes the reading rail's reserve, so the
+column count can decrease when the rail first appears. Print returns these
+bodies to one continuous reading. The shared Debrief component supplies
+explicit borders and three repeating accents to the sixteen canonical
+six-beat scans; Genomic Viewer and Field Inspection retain their later palette
+rules. Beat names and borders convey grouping alongside color.
+
+The authored FMI navigation uses `fmi-reading-rail.js` and
+`styles/routes/fmi-reading-rail-state.css`, loaded after the shell owners.
+“Reading” tracks the section crossing the reading line; “Selected” retains
+the recognized URL destination. Native links, fragment history, and keyboard
+focus remain browser-owned. Compact rail labels expose a viewport-contained
+preview during deliberate keyboard or pointer inspection. Activation and resumed
+page scrolling dismiss that preview while the horizontal current marker remains
+slightly enlarged. Touch navigation keeps the reading field clear; the selected
+URL destination retains its separate outline and accessible state. The page's
+method companion links intentionally
+open full-view tools in new tabs, with visible icons and accessible cues.
+
+`npm run test:fmi-reading-room-browser` observes actual text fragments,
+heading order, responsive seams, canonical scan borders, alternate media,
+and method-link closure. `npm run test:fmi-reading-rail-browser` exercises
+state transitions, history, reflow, compact-label inspection and dismissal across
+input modalities, and scriptless behavior.
+Both include restored faults and Chromium, Firefox, and Playwright WebKit
+observations. [Issue #506](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/506)
+holds this receiving boundary and the related Debrief room audit.
+
+The shared Debrief reading component also offers opt-in companion bodies.
+`debrief-companion-reading` gives sustained prose at most two continuous
+columns when two 26rem measures fit. `debrief-companion-regions` places a
+quotation and its onward references in adjacent, intact reading regions.
+Their headings remain outside the distributed body. Available container width
+and enlarged text determine when these bodies return to one lane. The explicit
+`debrief-companion-frame` opt-in reserves the rail’s current side of the
+reading field and allows long words to wrap inside the frame. Screen frames
+use a 2.5rem total narrow reserve and the shell’s 10rem desktop evidence-field
+reserve; compact notes and the Python example retain their smaller useful
+measures through `--debrief-companion-measure`.
+
+The same opt-in frames set a screen-only `--debrief-companion-inline-floor`
+for narrow reading. Each existing padding owner consumes this lower bound
+while retaining its own fluid growth, maximum, vertical spacing, and print
+fallback. The owners remain `expanded.css`, the Debrief composition contract,
+the Benchmark readings route, the Prompt-Side and Field Inspection styles,
+and Distributed Inspection's local style. Native list gutters retain their
+numbering space; visitor text size and the outer reading-rail reserve keep
+their separate owners. `npm run test:debrief-companion-spacing-browser` checks
+all thirty-eight frames across fifteen routes at ordinary and enlarged text,
+with desktop, wide, print, native-marker, focus, and restored-spacing controls.
+
+Code companions pair explanation with a labelled keyboard-scrollable code
+region when the example's useful line width and a 26rem explanation both fit.
+The JavaScript and HTML examples keep their own measured code widths; the
+longer Python example retains its introduction, code, and return in a bounded
+vertical panel. Code bytes and source order remain with the authored example.
+Print wraps code into the available page width.
+
+`npm run test:debrief-prose-code-room-browser` checks all twelve opted-in
+panels across seven routes in Chromium, Firefox, and Playwright WebKit.
+Actual text fragments, responsive transitions, keyboard-reachable code line
+endings, disclosures, enlarged text, alternate media, and restored layout
+faults establish the receiving behavior. The ordinary Debrief layout, catalog,
+and reference-figure suites retain their separate contracts.
+
+Short evidence and operating notes use `debrief-companion--compact` to keep
+their painted frame near a readable paragraph measure. The cap scales with
+text and retains space beside the selected narrow rail marker; long words
+wrap within the frame as text grows. All seventeen
+opted-in notes preserve their complete source qualifications and destinations;
+Field Inspection's sampling prompt remains an intact native disclosure, and
+its four-card prospective ledger keeps its wide comparison layout.
+
+`npm run test:debrief-evidence-room-browser` observes these notes across nine
+routes, including the selected rail marker's paint, source-adjacent widths,
+enlarged text, print, forced colors, onward-link focus, both disclosure states,
+and restored frame or gutter faults. The Field Inspection delivery check
+retains its source-to-pilot parity role.
+
+Ordered companion bodies retain two distinct reading sequences. Six visual
+descriptions use `debrief-ordered-reading` for continuous chronological columns;
+whole native numbered items travel together. Two procedures use
+`debrief-procedure` and `debrief-ordered-steps` for rowwise pairs when their
+containers provide two useful lanes. The short menu-detour description retains
+one compact frame. Introductions, headings, and consequences keep their authored
+positions around those lists; media `aria-details` retains its exact receiver.
+
+`npm run test:debrief-ordered-room-browser` checks all nine panels across five
+routes, including actual item and marker geometry, column-start alignment,
+chronological or rowwise sequence, responsive seams, narrow/enlarged states,
+print, forced colors, accessible relationships, and restored layout faults.
+The prose/code and ordered suites share a frame/heading/rail paint observation;
+each suite retains its own content behavior. The compact-note suite also checks
+enlarged desktop text because its measure scales with the text.
 
 ## Source and public route map
 
@@ -31,7 +334,7 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 | Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
 | Progressive video | Selected native-video carriers resolve through the same-origin `https://vik.guru/v1-cdn/video/` Worker route. The [bounded video-publication manifest](../../planning/media-publication/video-publication-manifest.v0.1.json) records accepted public identities and open page-release states while R2 retains the media bytes. |
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
-| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` and `schemas.vik.guru` are observed retrieval surfaces for the accepted v0.3 closure; completed Issue #406 carries the Worker activation and exact-version live checks. |
+| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` and `schemas.vik.guru` are observed retrieval surfaces for the accepted v0.3.1 closure; completed Issue #406 preserves the v0.3 delivery lineage, and completed Issue #531 carries the current Worker publication and exact-version live checks. |
 
 The project-level [`asset-inventory.json`](../asset-inventory.json) supplies the
 semantic family, visitor job, accessibility owner, provenance, and recovery
@@ -41,6 +344,17 @@ manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
 ## Debrief reading modes
+
+The nineteen catalog card slugs use their card's available width, owned by
+`.debrief-catalog__card .project--slug` in `styles/routes/debriefs.css`.
+Floated media then shapes the text's actual line room; the foundation's
+balanced wrapping remains active. The shared `--canvas-heading-measure`
+continues to supply the 32ch limit for ordinary headings across Context
+Canvas. `npm run test:debrief-card-measure-browser` checks actual title
+fragments, float clearance, responsive seams, enlarged text, reading modes,
+and a restored 32ch fault across three browser engines. The repair gives
+these short orientation headings the room their cards already provide;
+font choice and title wording continue to determine individual line breaks.
 
 [`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
 Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
@@ -89,8 +403,11 @@ complete reading. Chromium and WebKit also open the page directly from the
 local filesystem so this bounded projection stays independent of sibling-page
 requests.
 
-The five Debrief working-system and visual-comparison families retain their accepted,
-unsuffixed WebPs as full-size inspection targets. Catalog-specific canonical
+The five Debrief project-reference families retain their accepted, unsuffixed
+WebPs as full-size inspection targets. The Boolean Building Blocks and Queue
+families combine working-system screenshots with current Core Architecture
+examples shared by their Debriefs and the relevant AI Systems readings; the
+captions and surrounding prose distinguish those roles. Catalog-specific canonical
 WebPs remain source-only when the page needs only their smaller public carriers.
 Run `npm run build:debrief-image-derivatives` after replacing an accepted source.
 The repository-owned generator applies named source profiles: full-Debrief
@@ -175,30 +492,42 @@ styles follow those shared owners and precede `canvas-shell.css` when their
 cascade depends on the shared layer. About is the first route whose complete
 first-paint graph leaves `expanded.css` behind.
 
+`npm run test:ai-entry-cascade-browser` checks the five entry bridges across
+Chromium, Firefox, and Playwright WebKit. It observes the accepted cyan field,
+every border side, the inclusive 30rem shadow seam, and print/forced-color
+behavior. Controlled palette and shadow faults demonstrate the oracle.
+
+`npm run test:atlas-cascade-browser` checks the Atlas route's moved style
+seams in the same three engines. The existing gallery contract owns full
+selection, recovery, and export behavior. Its companion article retains its
+independent Debrief composition and essay checks.
+
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
 | --- | --- | --- |
 | [`styles/core/tokens.css`](styles/core/tokens.css) | 40 top-level routes | Stable palette and link roles, measures, spacing, and shared table dimensions; first source in the shared core graph. |
 | [`styles/core/foundation.css`](styles/core/foundation.css) | 40 top-level routes | Box sizing, document type, semantic normalization, links, lists, images, figures, the established type scale, and shared reading-container and prose-flow composition. |
-| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 40 top-level routes | Shared three-destination navigation, page offset, route state, and canonical `5rem` in-page anchor clearance. |
+| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 40 top-level routes | Shared three-destination navigation, page offset, route state, and one text-scaled clearance contract for fragments and compact reading rails. |
 | [`styles/components/tables.css`](styles/components/tables.css) | 38 routes with semantic tables or shared table wrappers | Table structure, responsive containment, focus, state, forced-color, and print behavior. |
 | [`styles/components/route-card-grid.css`](styles/components/route-card-grid.css) | [`index.html`](index.html), [`prompt-side-conditions-practice.html`](prompt-side-conditions-practice.html) | Shared two-column route collection and its narrow and reduced-motion behavior. |
 | [`expanded.css`](expanded.css) | 39 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
 | [`canvas-shell.css`](canvas-shell.css) | 41 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
-| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
+| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Seventeen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, project-reference figure, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
-| [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
+| [`styles/routes/visualization-fidelity-atlas.css`](styles/routes/visualization-fidelity-atlas.css) | [`visualization-fidelity-atlas.html`](visualization-fidelity-atlas.html) | Flat references, local table/SVG reading canvases, gallery controls, hidden states, and print disclosures; loads directly after the AI Systems family and before the shell. One Figure, Several Readings retains its Debrief composition styles. |
+| [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, and Goal Fidelity tables after the shared AI Systems route bundle. The bridge group follows lab declarations so the conditioning bridge retains its accepted border, cyan field, responsive shadow, and alternate-media treatment. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-index-landing.html`](exemplar-index-landing.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty-three Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, orientation-reading placement, opt-in movement headers, canonical six-beat scan borders, and dense reference-interface figure frames, loaded directly after `expanded.css`. The figure rules serve five routes; later palette, rail, and composition owners remain explicit. |
+| [`styles/components/reading-flow.css`](styles/components/reading-flow.css) | Seventeen composed catalog readings and six AI Systems readings | Direct beat-heading break grouping and first-heading spacing around continuous prose runs; follows `expanded.css` and optional `debrief-reading.css`, before route bundles. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
-| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Ten composed Debriefs, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
+| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Twelve composed Debriefs and reading exemplars, including [`The Photographs Were a Proxy`](spatial-capture-collaborative-memory.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
@@ -352,8 +681,9 @@ collaboration instruments, and other repository-owned resources above this
 subtree. The production assembler owns that explicit dependency closure and
 calls the same materialization logic while creating the disjoint primary and
 iframe outputs described in [`deployment/cpanel/`](../../deployment/cpanel/README.md).
-The Field Inspection pilot retains its separate authored-byte parity and
-no-index proving role.
+The Field Inspection pilot retains historical authored-byte parity until Issue
+#428 removes that superseded proof. The production assembler and exact iframe
+families own current publication.
 
 Before a generated subtree enters that publication-assembler handoff, give the
 exact ignored artifact its named secret-material observation:
@@ -379,6 +709,7 @@ npm run test:context-canvas
 npm run check:debrief-case-briefs
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:debrief-reading-layout-browser
 npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
@@ -426,11 +757,11 @@ Missing, unpaired, malformed-route, wrong-host, and differently caused failures
 remain observations. Capture success and observation review remain separate:
 inspect the generated `summary.json` before interpreting a passing exit status.
 
-## Cloudflare proving surface
+## Historical Cloudflare proving surface
 
-[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) owns the bounded Field Inspection Static Assets pilot. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. The pilot keeps ordinary assets on Cloudflare's asset-first path and reserves Worker execution, storage, and contextual composition for a demonstrated runtime need.
+[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) preserves the bounded Field Inspection Static Assets proof that preceded the accepted production carrier. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. Issue #428 coordinates complete retirement of this superseded source.
 
-The pilot measures delivery behavior. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
+The production assembler and exact iframe families now own Context Canvas delivery. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
 
 ## Public evidence boundary
 

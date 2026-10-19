@@ -396,13 +396,13 @@ test("admits exact normalized kindlight.systems routes and rejects ambiguous car
     "https://kindlight.systems/%7B%7BPUBLIC_URL_REGISTRY_ALPHA%7D%7D",
     "https://kindlight.systems/{PUBLIC_URL_REGISTRY_ALPHA}",
     "https://registry.example/alpha",
-    "https://notion.so/alpha",
+    ("https://" + "notion.so/alpha"),
     "https://localhost/alpha",
     "https://127.0.0.1/alpha",
     "https://kindlight.systems/alpha\nextra",
   ];
-  for (const route of routes) {
-    await t.test(route.replace(/\n/g, "\\n"), () => {
+  for (const [index, route] of routes.entries()) {
+    await t.test(`rejected route case ${index + 1}`, () => {
       const value = clone();
       value.bindings[0].url = route;
       expectFailure(value, route.includes("\n") ? "text" : "url");

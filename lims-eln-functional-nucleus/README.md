@@ -59,6 +59,25 @@ Compose for the repository's synthetic local proof; use the Terraform route to
 inspect architecture and recovery posture. The standalone Enterprise source
 owns current prerequisites, checks, and adoption decisions.
 
+### Follow one query into a runnable public example
+
+The Registry's [PostgreSQL pending-outbox query · 0.1.0](https://kindlight.io/snippets/postgresql-pending-outbox-query/0.1.0/)
+offers a smaller encounter with tenant-scoped counts, relational constraints,
+and a matching partial index. Its package carries readable SQL, synthetic
+fixtures, an independent count oracle, an owned PostgreSQL 17 runner, deliberate
+predicate failures, and normalized plans. Start with its query meaning, then
+use its documented proof when that mechanism answers the receiving question.
+
+This separately versioned adaptation names its Enterprise source and license.
+The nucleus members above retain their captured revisions; the example follows
+its own accepted source and evidence. Equal query results support comparison
+of the observed database work. Application authorization, full-response cost,
+deployment workload, and recovery acceptance stay with the receiving system.
+HASE's [relational execution review](../.agents/skills/relational-execution-review/SKILL.md)
+provides the corresponding source-review route, and the
+[scientific skill ladder](../.agents/skills/README.md#continue-into-a-scientific-or-database-example)
+routes figure-specific questions to optional public packages.
+
 ## One useful vertical slice
 
 `SCN-GOLDEN-SPECIMEN-001` is the smallest complete thread through the nucleus:

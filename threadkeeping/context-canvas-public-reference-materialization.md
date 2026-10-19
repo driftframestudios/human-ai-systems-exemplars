@@ -117,9 +117,9 @@ After acceptance:
    focused receiver for configuration injection, pre-upload materialization,
    complete asset closure, and delivery evidence.
 
-The standing Field Inspection pilot keeps its authored-byte parity. Its first
-real shared delivery can select materialize-then-assemble or
-assemble-then-materialize as one explicit composition seam.
+The historical Field Inspection pilot keeps its authored-byte parity until
+Issue #428 coordinates complete retirement. The accepted production assembler
+owns the materialize-then-assemble composition seam for current shared delivery.
 
 ## Skill return
 
