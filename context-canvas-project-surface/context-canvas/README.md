@@ -206,11 +206,14 @@ HTML-owned image identities. Landscape frames keep a 56rem reading canvas
 inside a named keyboard-scrollable region; portrait frames fit within 42rem.
 The component preserves the shared figure's full-width behavior through 64rem;
 the later shell and route rules retain their rail and composition overrides.
-Print releases the local scrolling frame into the page's reading width.
+Print releases the local scrolling frame into the page's reading width. Two
+extended visuals opt into a centered caption boundary so their readable text
+stays with the local painted field while the media keeps its wider geometry.
 
 `npm run test:debrief-reference-figures-browser` checks the figure family and
 its width seams across Chromium, Firefox, and Playwright WebKit, including
-keyboard access, portrait fit, alternate media, and restored cascade faults.
+keyboard access, portrait fit, bounded-caption geometry and text containment,
+unchanged media width, alternate media, and restored cascade faults.
 The existing image-alternatives source contract retains semantic and image
 identity coverage. [Issue #51](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/51)
 receives the bounded extraction while keeping broader legacy ownership open.
