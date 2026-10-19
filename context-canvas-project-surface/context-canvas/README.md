@@ -195,7 +195,7 @@ PODA's second section title, and independently composed asides keep their
 authored position. These routes load the neutral component directly after
 `expanded.css`; their route bundles continue to own color, measure, and rhythm.
 
-`npm run test:ai-systems-reading-layout-browser` exercises the twenty-four
+`npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
 AI Systems / Shared Machinery primary and directly linked example readings,
 plus the Debriefs parent, in Chromium, Firefox, and Playwright WebKit. The
 route population distinguishes authored reading links from global navigation,
