@@ -145,7 +145,11 @@ export async function observeReading(page, { includeOrdinary = false, allHeading
         const next = heading.nextElementSibling;
         const paragraph = next?.matches("p") ? next
           : next?.matches(".prose-flow") && next.children.length === 1 && next.firstElementChild.matches("p") ? next.firstElementChild : null;
-        return paragraph ? [{ text: paragraph.textContent.trim(), fragments: [...paragraph.getClientRects()].map(rect).filter(positive) }] : [];
+        return paragraph ? [{
+          text: paragraph.textContent.trim(),
+          direct: paragraph.parentElement === heading.parentElement,
+          fragments: [...paragraph.getClientRects()].map(rect).filter(positive),
+        }] : [];
       }),
       promises: [...document.querySelectorAll(".reading-flow .fmi-track-promise")].map(promise => ({
         fragments: [...promise.getClientRects()].map(rect).filter(positive),
@@ -209,8 +213,27 @@ export function assertColumnActivation(reading, route) {
 }
 
 export async function settleColumns(page) {
-  await expect.poll(async () => {
-    const reading = await observeReading(page);
-    return reading.flows.every(flow => flow.columns === (flow.containerWidth >= flow.columnThreshold ? 2 : 1));
-  }, { timeout: 3000, message: "responsive columns settle at the actual container boundary" }).toBe(true);
+  // Font-size and viewport changes invalidate both the container query and
+  // multicolumn layout. Yield through the render boundary, then poll only the
+  // state this synchronization helper owns; the complete geometry observer
+  // runs once after settlement. This keeps CI load from consuming the poll
+  // budget while preserving actionable mismatch data for every engine.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await expect.poll(() => page.evaluate(() => {
+    const rootFont = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const flows = [...document.querySelectorAll(".reading-flow > .prose-flow")].map((flow, index) => {
+      const container = flow.closest(".content");
+      const style = getComputedStyle(container);
+      const containerWidth = container.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
+      const columns = Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1;
+      const columnThreshold = 80 * rootFont;
+      const expected = containerWidth >= columnThreshold ? 2 : 1;
+      return { index, columns, expected, containerWidth, columnThreshold };
+    });
+    if (!flows.length) return [{ issue: "continuous prose flow is absent" }];
+    return flows.filter(flow => flow.columns !== flow.expected);
+  }), {
+    timeout: 7000,
+    message: "responsive columns settle at the actual container boundary",
+  }).toEqual([]);
 }

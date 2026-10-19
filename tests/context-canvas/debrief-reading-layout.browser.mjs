@@ -224,6 +224,8 @@ function assertReading(reading, route, options = {}) {
   }
   if (route === "initiative-costing.html") {
     assert.equal(reading.principles.length, 8, "all short costing principles remain observable");
+    assert.ok(reading.principles.every(principle => principle.direct),
+      "short costing principles remain direct heading continuations");
     assert.ok(reading.principles.every(principle => principle.fragments.length === 1),
       "short costing principles remain single readings without an isolated column continuation");
   }
@@ -556,7 +558,8 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           run.append(paragraph);
         });
         const splitPrinciple = await observeReading(session.page);
-        assert.throws(() => assertReading(splitPrinciple, "initiative-costing.html"), /short costing principles remain single readings/u);
+        assert.throws(() => assertReading(splitPrinciple, "initiative-costing.html"),
+          /short costing principles remain direct heading continuations/u);
       } finally { await session.close(); }
       const lims = await openPage(browser, "fmi-lims-eln-replatforming.html", { viewport: { width: 2560, height: 1440 } });
       try {
