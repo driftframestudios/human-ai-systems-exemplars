@@ -225,10 +225,23 @@ export async function settleColumns(page) {
       const container = flow.closest(".content");
       const style = getComputedStyle(container);
       const containerWidth = container.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
+      // Read the dependent formatting context before its computed column
+      // state. Gecko may otherwise retain an offscreen multicol value after a
+      // dynamic root-font transition even though the query container settled.
+      const flowWidth = flow.getBoundingClientRect().width;
       const columns = Number.parseInt(getComputedStyle(flow).columnCount, 10) || 1;
       const columnThreshold = 80 * rootFont;
       const expected = containerWidth >= columnThreshold ? 2 : 1;
-      return { index, columns, expected, containerWidth, columnThreshold };
+      return {
+        index,
+        owner: flow.closest(".reading-flow")?.getAttribute("aria-labelledby") || "unnamed-reading-flow",
+        columns,
+        expected,
+        flowWidth,
+        containerWidth,
+        columnThreshold,
+        rootFont,
+      };
     });
     if (!flows.length) return [{ issue: "continuous prose flow is absent" }];
     return flows.filter(flow => flow.columns !== flow.expected);

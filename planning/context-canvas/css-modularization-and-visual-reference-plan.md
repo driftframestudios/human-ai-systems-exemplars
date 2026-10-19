@@ -294,7 +294,7 @@ The repository remains implementation authority and can diverge usefully from ad
 - **Soft Color Blocking** is carried here as a complete local explanation: composition-led variation can remain recognizable as one system.
 - [Source-Native Timeline Rail](../../visual-fidelity-contracts/cobalt-temporal-field.md) supplies the stable temporal grammar carried by Cobalt Temporal Field.
 
-`grammar-family.html` contributes the wider Cloudflare design field: portable assets, contextual delivery, coordinated rooms, durable undertakings, and visitor-owned surfaces. The existing Field Inspection Static Assets pilot supplies the bounded implementation proof. The CSS wave keeps those roles connected while stable CDN bundles wait for stable source ownership.
+`grammar-family.html` contributes the wider Cloudflare design field: portable assets, contextual delivery, coordinated rooms, durable undertakings, and visitor-owned surfaces. The superseded Field Inspection Static Assets pilot supplied the first bounded implementation proof; the accepted production carrier and About CSS projection now carry that learning into the active delivery path. The CSS wave keeps those roles connected while additional generated consumers wait for stable source ownership and measured value.
 
 ## Extraction waves
 
@@ -388,9 +388,9 @@ Critical CSS follows actual LCP evidence. Aggressive restructuring follows repea
 - `404.html` is part of the all-page set even though it is a recovery route. Its standing should remain visible in the catalog.
 - The six pages with inline style blocks belong in the visual baseline while their extraction remains a later CSP/cache wave.
 - Active visitor issues can change the baseline. The cutoff commit and family-specific recapture keep CSS comparison distinct from concurrent content movement.
-- The Cloudflare Field Inspection pilot remains a valid independent direct-view proof. Hashed immutable CSS and broader CDN policy follow stable bundle boundaries.
+- The Cloudflare Field Inspection pilot remains a valid historical direct-view proof. The accepted production carrier owns current delivery, and Issue #428 coordinates complete pilot retirement. Additional hashed CSS consumers and broader CDN policy follow stable bundle boundaries and measured value.
 - Repository naming remains an independent identity decision.
-- GitHub Actions remains disabled at the $0 resting state. The visual reference and CSS waves use local tools and ordinary review.
+- Local tools and ordinary review remain the standing visual-reference and CSS loop. Path-bound pull-request checks and confirmation-gated manual proofs add hosted evidence when a receiving decision benefits from it.
 
 ## Re-entry
 

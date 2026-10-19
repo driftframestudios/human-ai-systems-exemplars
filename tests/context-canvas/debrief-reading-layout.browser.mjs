@@ -396,10 +396,23 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
             viewport: { width: route === extendedFamily[0] ? 1800 : 1440, height: 1000 },
           });
           try {
-            let enlargement;
+            let priorRootFont;
             if (mode === "print") await session.page.emulateMedia({ media: "print" });
             if (mode === "enlarged-long-label") {
-              enlargement = await session.page.addStyleTag({ content: "html { font-size: 200%; }" });
+              // The contract owns one root-font mutation, so change that
+              // property directly and retain its complete inline state. This
+              // gives every engine the same style-invalidation boundary and
+              // keeps stylesheet attachment/removal outside the responsive-
+              // column behavior under observation.
+              priorRootFont = await session.page.evaluate(() => {
+                const root = document.documentElement;
+                const prior = {
+                  value: root.style.getPropertyValue("font-size"),
+                  priority: root.style.getPropertyPriority("font-size"),
+                };
+                root.style.setProperty("font-size", "200%", "important");
+                return prior;
+              });
               await session.page.locator(".debrief-movement__header > p:first-child, .reading-flow > h2").evaluateAll(labels => {
                 for (const label of labels) label.append(document.createTextNode(
                   " · Extended movement orientation names the receiving people, retained responsibility, and next observable decision.",
@@ -420,8 +433,12 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
               assert.ok(reading.flows.every(flow => flow.columns === 1),
                 `${route}: enlarged text exits the multicolumn reading state`);
             }
-            if (enlargement) {
-              await enlargement.evaluate(node => node.remove());
+            if (priorRootFont) {
+              await session.page.evaluate(prior => {
+                const root = document.documentElement;
+                if (prior.value) root.style.setProperty("font-size", prior.value, prior.priority);
+                else root.style.removeProperty("font-size");
+              }, priorRootFont);
               await settleColumns(session.page);
               const restored = await observeReading(session.page);
               assertReading(restored, route);

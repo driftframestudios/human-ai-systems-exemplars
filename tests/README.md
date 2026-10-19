@@ -208,8 +208,9 @@ focused alternate-mode, long-label, enlarged-text, and scripting-disabled
 observations according to the route-owned mode plan. Controlled regressions
 exercise the same behavioral assertions. The costing-principle control keeps
 direct heading ownership distinct from painted fragmentation, and dynamic
-container checks synchronize on the computed column state after a render
-update. Browser geometry supports the focused paint comparisons; native Safari
+container checks mutate and restore the owned root-font property directly,
+then synchronize on the computed column state after a render update. Browser
+geometry supports the focused paint comparisons; native Safari
 and DuckDuckGo confirmation retains its own environment record.
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The

@@ -2,7 +2,7 @@
 
 ## Hydration record
 
-The Context Canvas is already a sophisticated visitor system: semantic HTML, CSS, accessible SVG, and small dependency-free JavaScript form the runtime; embedded collaborative prototypes carry inspectable state, schema, and richer interaction. Its first delivery slice is now equally deliberate: route-owned CSS, repaired public metadata and recovery paths, and a bounded Cloudflare Static Assets pilot preserve the visual contracts and dependency-free runtime.
+The Context Canvas is already a sophisticated visitor system: semantic HTML, CSS, accessible SVG, and small dependency-free JavaScript form the runtime; embedded collaborative prototypes carry inspectable state, schema, and richer interaction. Its delivery system now combines route-owned CSS, repaired public metadata and recovery paths, an accepted production carrier, exact iframe delivery, a tagged Pages projection, and a schema Worker while preserving the visual contracts and dependency-free runtime.
 
 This program asks how the repository can become:
 
@@ -42,7 +42,7 @@ This program asks how the repository can become:
 - The [Notion Registry link handoff](notion-registry-link-handoff.md) coordinates public-facing Enterprise Registry destinations for the workspace identities referenced by Context Canvas. Registry-scoped semantic keys remain in tracked HTML; the reviewed binding now maps their live set to exact current Atlas identities and public routes, while ignored external configuration carries only the professional-profile destination. The one-time migration counts remain historical observations rather than recurring thresholds. Exact retired locators and re-entry conditions remain in the private resolver; Registry ancestry, reader-facing content standing, signed-out availability, Atlas observation, and mechanical materialization remain distinct receipts.
 - Repository-wide source settlement extends the accepted Context Canvas HTML receipt through every tracked source family. The final A3 receipt maps **20 locator shapes across 9 files** to the established `SRC-A3` and `SRC-ATLAS` private-lineage keys; the expanded prototype renders those records as semantic labels while public evidence remains linked. The candidate also carries 15 readable revision-link first forms across two files. Issue work:repository-locator-disposition returns both receipts to work:public-baseline-rehearsal, where the named **Public-baseline revision-link settlement** binds those routes to the accepted additive-snapshot revision.
 - The [public-history rehearsal](../locator-free-public-history-rehearsal.md) accounts for refs, Pages, schema receivers, commit metadata, adjacent GitHub prose, and recovery. The initialized cross-slug successor and two-commit additive sequence are selected. Technical-collaboration replay proceeds as an independent learning surface, while cutoff refresh, recovery preparation, and revision-link pinning return through Issue work:public-baseline-rehearsal. Remote commits, merge, and publication settings retain their human-cued boundary.
-- A 14-file Field Inspection pilot now proves deterministic, allowlisted Cloudflare Static Assets packaging and `wrangler deploy --dry-run` without publishing. GitHub Pages remains an available broader-origin option; an explicitly authorized Cloudflare deployment can precede it when the bounded reading is the better next observation.
+- The historical 14-file Field Inspection pilot established deterministic, allowlisted Static Assets packaging and a Wrangler dry-run. The accepted production carrier and specialized Pages, iframe, schema, and media receivers now own delivery; the collaboration team uses Issue #428 to coordinate complete pilot retirement.
 - Caddy is the preferred local proving surface for real origin separation and local HTTPS. Hosts-file edits remain a short-lived diagnostic technique rather than architecture.
 - The future `@driftframe` constellation can own shared schemas and registries. The Context Canvas can consume those contracts through versioned references on an independent migration timeline.
 
@@ -52,8 +52,8 @@ This program asks how the repository can become:
 - Every top-level Context Canvas page follows one narrow, desktop, and wide capture path. The current 42-route inventory has exact family assignments; historical cutoffs stay bound to their source revisions.
 - Readable `core/`, `components/`, `contracts/`, and `routes/` owners are active, while `expanded.css` remains the named legacy remainder. About is the first complete first-paint path to leave that remainder.
 - The Context Canvas now has a section `README.md`, an authored `404.html`, repaired manifest and browser metadata, explicit stewardship text, and an updated root metadata surface. The historical `404.shtml` and server error log have left the public source path.
-- `cloudflare/context-canvas-field-pilot/` builds and checks an exact 14-file public closure, supplies source-owned response headers and a pilot 404, and supports a deterministic Wrangler dry-run.
-- The pilot is a direct-view, no-index surface with `frame-ancestors 'none'`. Cross-origin iframe delivery now has separate manifest-owned Core and Canvas families beneath `https://iframes.vik.guru/v1/`; accepted current bytes, response policy, and deployed-parent behavior remain with Issues #72 and #102.
+- `cloudflare/context-canvas-field-pilot/` retains the historical 14-file proof until Issue #428 removes the superseded delivery source as one bounded undertaking.
+- Cross-origin iframe delivery has separate manifest-owned Core and Canvas families beneath `https://iframes.vik.guru/v1/`; accepted bytes, response policy, and deployed-parent behavior retain independent package and live-verification receipts.
 
 ## Planning influences
 
@@ -78,7 +78,7 @@ The settled foundation hands forward small, separately reviewable continuations:
 - Prototype capability manifest and cross-origin protocol
 - Versioned schema and semantic-twin publishing contract
 - Locator-free Notion Registry handoff, family route ledger, Registry-scoped semantic keys, dependency-free build-time materialization, and private source-to-public-target resolution
-- Explicit cross-origin Cloudflare/Caddy header contract; the current direct-view pilot keeps framing closed
+- Explicit cross-origin Cloudflare/Caddy header contracts for each active receiver; the historical direct-view pilot stays outside current authority while Issue #428 coordinates retirement
 - Performance budgets based on measured routes
 - A lightweight GitHub Issue form and label vocabulary for bounded Context Canvas work, introduced once two or three real issues demonstrate the fields that matter
 

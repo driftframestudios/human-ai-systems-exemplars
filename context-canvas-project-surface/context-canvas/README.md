@@ -680,8 +680,9 @@ collaboration instruments, and other repository-owned resources above this
 subtree. The production assembler owns that explicit dependency closure and
 calls the same materialization logic while creating the disjoint primary and
 iframe outputs described in [`deployment/cpanel/`](../../deployment/cpanel/README.md).
-The Field Inspection pilot retains its separate authored-byte parity and
-no-index proving role.
+The Field Inspection pilot retains historical authored-byte parity until Issue
+#428 removes that superseded proof. The production assembler and exact iframe
+families own current publication.
 
 Before a generated subtree enters that publication-assembler handoff, give the
 exact ignored artifact its named secret-material observation:
@@ -755,11 +756,11 @@ Missing, unpaired, malformed-route, wrong-host, and differently caused failures
 remain observations. Capture success and observation review remain separate:
 inspect the generated `summary.json` before interpreting a passing exit status.
 
-## Cloudflare proving surface
+## Historical Cloudflare proving surface
 
-[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) owns the bounded Field Inspection Static Assets pilot. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. The pilot keeps ordinary assets on Cloudflare's asset-first path and reserves Worker execution, storage, and contextual composition for a demonstrated runtime need.
+[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) preserves the bounded Field Inspection Static Assets proof that preceded the accepted production carrier. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. Issue #428 coordinates complete retirement of this superseded source.
 
-The pilot measures delivery behavior. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
+The production assembler and exact iframe families now own Context Canvas delivery. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
 
 ## Public evidence boundary
 

@@ -285,7 +285,7 @@ setup, source-owned work, evidence, delivery, and an exact continuation.
 | [`.github/`](.github/AUTOMATION.md) | Hosted automation, Actions policy, environments, and pull-request writing guidance |
 | [`cloudflare/r2-video-delivery/`](cloudflare/r2-video-delivery/README.md) | The exact same-origin `/v1-cdn/video/` Worker contract for versioned R2 media, cached byte ranges, passive companion carriers, and bounded live verification |
 | [`planning/media-publication/`](planning/media-publication/README.md) | Provider-neutral media preparation, accepted-byte poster selection, accessible visitor frames, bounded video descriptors, R2 progressive delivery, and the retained Cloudflare Stream migration path |
-| [`cloudflare/context-canvas-field-pilot/`](cloudflare/context-canvas-field-pilot/README.md) | A bounded Static Assets build and dry-run path for a future Context Canvas delivery receiver |
+| [`cloudflare/context-canvas-field-pilot/`](cloudflare/context-canvas-field-pilot/README.md) | The retained, superseded 14-file Static Assets proof; Issue #428 coordinates complete retirement, while current delivery lives under `deployment/cpanel/` and `iframe-route-families/` |
 | [`planning/`](planning/README.md) | Prospective design and implementation terrain |
 | [`threadkeeping/`](threadkeeping/README.md) | Settled rationale, collaboration accounts, promotion receipts, and re-entry |
 

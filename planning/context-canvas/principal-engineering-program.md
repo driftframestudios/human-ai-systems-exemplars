@@ -14,9 +14,9 @@ planning_surface:
 
 ## Executive readout
 
-The Context Canvas is already principal-level in product reasoning, accessibility intent, visual-system specificity, and HTML/CSS/SVG-first expression. A first delivery-engineering slice has now landed: route-owned CSS, repaired public metadata and recovery paths, an allowlisted Static Assets build, and a deterministic deployment dry-run. Broader publication authority, cross-origin embedding, and the remaining CSS ownership map stay deliberate next choices.
+The Context Canvas now carries route-owned CSS, repaired public metadata and recovery paths, an accepted production carrier, exact iframe delivery, and a deterministic About CSS projection. The collaboration team uses Issue #260 to record deployed transfer measurements and Issue #428 to coordinate retirement of the earlier Static Assets pilot; remaining CSS ownership evolves through consumer-grounded source work.
 
-The complete visual runner and first shared-core ownership graph are now active. At source `2d8e708`, the next move is to continue consumer-grounded extraction from the 39-route legacy remainder and let Issue #401 test deterministic production-only bundling after readable source boundaries settle. The program keeps readable source primary, makes visual contracts easy to locate, preserves route-level creative authority, and lets the existing bounded Cloudflare proof continue on its independent delivery path.
+The complete visual runner and first shared-core ownership graph are active. At source `2d8e708`, 39 routes retain the named legacy remainder. Work tracked in Issue #401 completed the deterministic About production projection; the collaboration team uses Issue #260 to record deployed transfer and cache measurements before another route family enters that delivery path. Consumer-grounded source extraction can continue when a larger demonstrated owner forms, while the team uses Issue #428 to retire the superseded Field Inspection Static Assets pilot as one bounded undertaking. The program keeps readable source primary, makes visual contracts easy to locate, and preserves route-level creative authority.
 
 ## Request and source boundary
 
@@ -90,17 +90,17 @@ Consequences:
 
 ### Remote compute is an investment
 
-GitHub Actions rests disabled in repository settings at a **$0** budget. Local verification is the standing operating surface. The existing reference workflow preserves a future human-cued route through repository enablement, `ENABLE_GITHUB_ACTIONS=true`, explicit confirmation, bounded manual dispatch, and an intentional return to the resting state.
+Local verification remains the standing operating surface. GitHub Actions now supplies path-bound pull-request checks and explicit, confirmation-gated manual proofs. Release-candidate review uses the manually dispatched `all + browser` route so its receipt stays bound to the exact candidate SHA; workflow permissions, timeouts, concurrency, and artifacts remain bounded by the receiving workflow.
 
 ### The future edge is controlled
 
-The human controls the relevant domains and subdomains. A Cloudflare Static Assets pilot now packages one bounded reading, while WAF, broader CDN policy, and cross-origin framing remain later choices. Caddy is installed locally. The `@driftframe` npm namespace is secured, and the constellation repository now contains the five-repository LIMS/ELN functional nucleus.
+The human controls the relevant domains and subdomains. The accepted production carrier, exact iframe bundle, schema Worker, and versioned media route now form the operating edge. The earlier Field Inspection Static Assets pilot supplied a useful bounded proof and is superseded; the collaboration team uses Issue #428 to coordinate its complete retirement. WAF expansion and broader edge-policy changes remain evidence-led choices. Caddy is installed locally. The `@driftframe` npm namespace is secured, and the constellation repository now contains the five-repository LIMS/ELN functional nucleus.
 
 Consequences:
 
-- Cloudflare Static Assets now provides the first bounded direct-view packaging proof; deployment still requires a named human cue.
-- GitHub Pages remains a plausible broader publication substrate without becoming the permanent architecture.
-- Cloudflare can later add an exact cross-origin frame policy, WAF, cache rules, and origin segmentation when a visitor route earns them.
+- The accepted production carrier provides the primary visitor-surface delivery unit; protected promotion and production activation retain explicit human review.
+- GitHub Pages provides a separately tagged public projection for schemas, skills, and portable examples.
+- The iframe route bundle preserves exact parent/child policy and byte identity; future WAF, cache, and origin changes require a named receiver and an observable benefit.
 - Caddy can rehearse the future origin model locally before DNS or production hosting changes.
 - Shared schemas and registries can eventually move into a constellation-owned package or site without forcing a present-day Context Canvas repository migration.
 
@@ -108,7 +108,7 @@ Consequences:
 
 Publishing the repository root would expose threadkeeping, planning, internal-reference prototypes, source packs, ZIP snapshots, research material, and any future file accidentally committed beside them. Publishing only `context-canvas-project-surface/context-canvas/` would break declared dependencies in `collaboration/` and top-level exemplar packs.
 
-The first bounded distribution now exists as a 14-file Cloudflare Static Assets closure for the Field Inspection reading. Its explicit allowlist preserves the required repository-relative topology without asking a registry to solve a one-route problem. A broader distribution can adopt an allowlisted graph and publication registry when a second or larger closure makes shared authority useful.
+The historical first bounded distribution was a 14-file Cloudflare Static Assets closure for the Field Inspection reading. Its explicit allowlist established the repository's first deterministic direct-view proof. The accepted production carrier now owns the broader Context Canvas closure, while the tagged Pages projection, schema Worker, iframe bundle, and media route retain separate release authority.
 
 The registry should declare:
 
@@ -142,10 +142,10 @@ The HTML bodies remain authored HTML. A publication registry does not require a 
 - `browserconfig.xml` uses local tile paths, `humans.txt` names stewardship and publication authority, and the section `README.md` explains the runtime and delivery contracts.
 - The historical server `error_log` has left the repository surface.
 - The root page's canonical, description, social metadata, theme, and manifest link now form one deliberate identity surface.
-- The Field Inspection pilot packages only its 14 declared public files. Planning, threadkeeping, private source material, and unrelated drafting routes remain outside that closure.
-- Broader canonical-route health, route-by-route direct-view metadata, and the audience for the complete Canvas remain publication-time observations.
+- The production projection selects its declared visitor files while planning, threadkeeping, private source material, and unrelated drafting routes remain outside the carrier.
+- Canonical-route health, route-by-route metadata, exact carrier closure, and receiver behavior are verified at their named release coordinates.
 
-The pilot's builder verifies exact membership and byte parity, and its Wrangler configuration completes an asset-only dry-run. GitHub Pages custom deployment and a broader Cloudflare origin remain available replacement states when the team chooses a larger public closure. Either route should consume an already verified artifact, name the source revision, serialize deployment, and preserve a known return path.
+The production builder verifies exact membership, byte parity, source revision, and recovery metadata before carrier formation. Pages and Cloudflare receivers consume separately verified artifacts, serialize activation, and preserve known return paths. The earlier pilot remains historical evidence until Issue #428 removes its superseded source.
 
 ## Verification with resource economy
 
@@ -176,21 +176,20 @@ The existing focused checks remain the standing evidence path. A reproduced visi
 - Supports fast parse, local links, changed-file checks, and focused browser inspection.
 - Emits a small receipt containing source SHA, command version, scope, and result.
 
-Repository Actions remains disabled in settings with a **$0** budget. Automatic push and pull-request runs remain outside the resting state.
+Local commands remain the ordinary development loop. Path-bound pull-request checks and explicitly dispatched release proofs add hosted evidence when their receiving change or release decision benefits from it.
 
-#### 2. Manual remote proof — available after a human cue
+#### 2. Manual remote proof — available by explicit dispatch
 
-- A named human enables Actions in repository settings for the allocated proof.
-- `ENABLE_GITHUB_ACTIONS=true` and explicit dispatch confirmation form the second and third gates.
+- A named operator selects the workflow, contract family, candidate ref, and confirmation input.
+- Release-candidate proof uses the explicit `all + browser` route and records the workflow's exact `headSha`.
 - Read-only permissions, bounded timeouts, and opt-in one-day artifacts keep the proof proportionate.
-- Returning the variable and repository setting to disabled restores the $0 resting state.
+- Local verification resumes as the ordinary loop after the bounded hosted proof completes.
 
-#### 3. Publication proof — explicit and route-sized
+#### 3. Publication proof — explicit and receiver-sized
 
-- The current Field Inspection route builds and checks its exact 14-file closure locally.
-- Wrangler dry-run validates the Static Assets package without publishing it.
-- A named steward may authorize one deployment and the audience it serves.
-- A broader release proof can grow from the same pattern when a broader route set exists.
+- The production projection, tagged Pages projection, schema Worker, iframe package, and media route each build and check their own exact closure.
+- A named steward authorizes protected promotion or deployment activation after the candidate receipt passes.
+- Receiver verification records the accepted source, artifact identity, route behavior, and recovery coordinate.
 
 #### 4. Broader deployment — retained option
 
@@ -201,7 +200,7 @@ Repository Actions remains disabled in settings with a **$0** budget. Automatic 
 
 ### Hosted-check boundary
 
-The repository currently has no automatic push/pull-request workflow and no required hosted check. Ordinary collaboration therefore stays on the local proof path without a skip convention.
+The repository now carries path-bound pull-request workflows and manually dispatched release proofs. Ordinary collaboration still starts locally; release acceptance names the hosted proof that its consequence requires.
 
 If automatic triggers later return, their replacement state should be explicit: name the event that earns the run, its budget, whether it becomes required, the local receipt that remains useful, and the operation that restores a mergeable resting state. Publication proof and optional review proof remain distinct decisions.
 
@@ -425,19 +424,19 @@ Service workers remain out of scope until offline collaboration is a real visito
 
 ```text
 repository source
-  → explicit 14-file Field Inspection allowlist
-  → deterministic build and exact-file check
-  → Cloudflare Static Assets dry-run
-  → named human deployment cue and audience decision
+  → deterministic production projection and exact-file check
+  → reviewed release, staging, and production promotion coordinates
+  → immutable production carrier and receipt
+  → named human extraction, upload, and receiver verification
 ```
 
-The pilot keeps Worker execution, storage, indexing, and framing closed while it proves direct-view asset delivery. Its `_headers` file establishes the present browser posture; `frame-ancestors 'none'` remains load-bearing until a later change names the exact parent origin and the child capabilities that earn embedding.
+The iframe bundle follows a separate exact-byte route with its own frame-ancestry policy and live receiver checks. The Pages projection, schema Worker, and media Worker likewise retain separate artifacts and activation receipts. This separation keeps each receiver's permissions, headers, cache behavior, and recovery path inspectable.
 
 ### Broader topology range
 
 GitHub Pages remains a useful static substrate, Cloudflare can own a direct custom origin or edge policy, and the controlled domain can become durable public authority when its audience is ready. Git continues to retain revision, review, build, and recovery value whichever hosting route is selected.
 
-The current pilot already makes response headers and file membership inspectable. A broader Cloudflare route can add these policies as the relevant visitor need appears:
+The current receivers make response headers and file membership inspectable. Future Cloudflare changes can add or refine these policies as a relevant visitor need appears:
 
 - versioned security and framing headers;
 - route-class cache behavior for mutable HTML, immutable assets, versioned schemas, and downloads;
@@ -557,33 +556,33 @@ Useful next probe families include:
 - Dependency updates and action pins need a cadence even when runtime dependencies remain zero.
 - A rollback is not real until an earlier source revision can recreate and redeploy the same artifact.
 
-## Recommended chain from the landed foundation
+## Historical chain from the landed foundation
 
-The collaboration topology, public metadata repair, section README, authored 404, first route-owned stylesheet, $0 automation boundary, and 14-file Static Assets build/dry-run now form the settled base. The useful chain begins there:
+The following chain records the original planning sequence. Its source and CSS steps have landed; the production carrier, iframe delivery, Pages projection, schema Worker, and media route now supersede its pilot-era publication assumptions.
 
 1. **Capture the complete visual cutoff.** Use one route inventory for the initial visitor state of all 39 top-level pages at narrow, desktop, and wide dimensions; bind the ignored local set to the exact pre-extraction commit.
 2. **Make contracts and ownership easy to find.** Link the Visual Fidelity Contracts, add the compact contract-to-module-to-page map, and place short ownership headers in the first receiving CSS files.
 3. **Extract About.** Preserve selectors and authored order while moving its coherent family to a direct route bundle.
 4. **Continue through Shared Machinery, AI Systems, Hiring, and Debriefs.** Promote only demonstrated shared rules into the core, keep uncertain consumers in a named legacy remainder, move the source-specific three-movement Debrief namespace to neutral CSS owners, and retain the corrected Reading types badge height as a known-answer cascade probe.
 5. **Stabilize distribution.** Emit direct core-plus-route bundles, then add conservative minification and content-hashed CDN assets.
-6. **Use the Field Inspection pilot independently.** Rebuild and dry-run its exact closure; a steward can authorize one direct-view deployment when the URL answers a real visitor or delivery question.
+6. **Retire the superseded Field Inspection pilot through Issue #428.** Preserve its historical receipt while removing its independent delivery source as one bounded undertaking.
 7. **Introduce shared publication authority when reuse appears.** A second or broader public closure can earn a compact registry, route parity, and common recovery receipt.
 8. **Declare and open prototype capabilities from use.** Keep iframe sandbox, outward navigation, static equivalents, and future message shapes visible; an exact receiving origin earns a cross-origin framing change.
 9. **Advance schemas, performance, and edge policy from evidence.** Publish stable identifiers, measure real route costs, and add WAF, cache, purge, observability, or critical CSS when the observed surface benefits.
 
-## First operating version
+## Historical first operating version
 
-The source-level first version is operating now:
+The source-level first version established these capabilities at its original planning cutoff:
 
 - another collaborator can find the larger plan, relevant rationale, runtime README, and receiving source without a private transcript;
-- local verification is the standing proof path while Actions remains disabled at a $0 budget;
-- the Field Inspection route builds as an exact 14-file public closure and completes a Wrangler dry-run;
+- local verification supplied the standing proof path;
+- the Field Inspection route built as an exact 14-file public closure and completed a Wrangler dry-run;
 - root identity, browser metadata, stewardship, and 404 recovery form one coherent direct-view surface;
 - `field-inspection.css` owns one route family while readable shared CSS remains intact;
-- the pilot's no-index, closed-framing headers state its present audience and capability posture; and
+- the pilot's no-index, closed-framing headers stated its bounded audience and capability posture; and
 - the visitor runtime remains authored HTML, CSS, SVG, and small dependency-free enhancement.
 
-An authorized deployment adds the next operating receipt: public URL, observed headers and 404 behavior, source revision, and a tested return route. Broader Canvas publication, cross-origin embedding, schema origins, CSS distribution, and edge policy remain independent extensions rather than prerequisites for this bounded proof.
+The accepted production carrier and specialized receivers now add public routes, observed headers, exact source revisions, and tested return paths. Broader edge policy remains an independent, evidence-led extension.
 
 ## Open questions
 

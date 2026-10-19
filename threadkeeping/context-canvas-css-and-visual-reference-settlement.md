@@ -9,7 +9,7 @@ threadkeeping:
   visual_reference_issue: work:context-visual-reference
   css_modularization_issue: work:context-css-modularization
   debrief_badge_issue: work:debrief-badge-height
-  next: "bind the verified About projection to the accepted v0.3 carrier, then observe deployed transfer and cache behavior before admitting another route family"
+  next: "use Issue #260 to record deployed transfer and cache behavior for the accepted About projection before admitting another route family; use Issue #428 to coordinate independent retirement of the superseded Field Inspection Static Assets pilot"
 ```
 
 ## Decision
@@ -171,7 +171,7 @@ The two-rule `.debrief-sequence` seam remains in `expanded.css`. Genomic Viewer 
 - **Broad selector renaming and utility redesign:** stable route ownership precedes this work. The source-specific three-movement Debrief namespace is the explicit early exception.
 - **Inline-style extraction:** a focused CSP or cacheability change receives it.
 - **Critical CSS and aggressive minification:** measured LCP and repeated conservative equivalence receive these later optimizations.
-- **Cloudflare CDN CSS:** hashed immutable outputs follow stable core and route boundaries. The existing Field Inspection direct-view pilot continues independently.
+- **Cloudflare CDN CSS:** the accepted About projection now supplies hashed immutable output. The collaboration team uses Issue #260 to record deployed transfer and cache measurements before another family enters that path, and Issue #428 to coordinate complete retirement of the superseded Field Inspection direct-view pilot.
 - **LIMS/ELN long tail:** the constellation's earlier pull requests return after this Context Canvas collaboration wave settles, through their dedicated issue.
 
 ## Re-entry
