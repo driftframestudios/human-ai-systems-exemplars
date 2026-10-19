@@ -396,23 +396,44 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
             viewport: { width: route === extendedFamily[0] ? 1800 : 1440, height: 1000 },
           });
           try {
-            let priorRootFont;
+            let scaleProbe;
             if (mode === "print") await session.page.emulateMedia({ media: "print" });
             if (mode === "enlarged-long-label") {
-              // The contract owns one root-font mutation, so change that
-              // property directly and retain its complete inline state. This
-              // gives every engine the same style-invalidation boundary and
-              // keeps stylesheet attachment/removal outside the responsive-
-              // column behavior under observation.
-              priorRootFont = await session.page.evaluate(() => {
+              // Keep one test stylesheet attached while a root attribute
+              // selects the prior and enlarged states. The stable selector
+              // boundary mirrors an authored preference or application-state
+              // change and gives every engine one explicit invalidation path;
+              // stylesheet attachment and removal stay outside the behavior
+              // under observation.
+              scaleProbe = await session.page.evaluate(() => {
                 const root = document.documentElement;
                 const prior = {
                   value: root.style.getPropertyValue("font-size"),
                   priority: root.style.getPropertyPriority("font-size"),
                   computed: getComputedStyle(root).fontSize,
+                  scaleAttribute: root.getAttribute("data-reading-layout-test-scale"),
                 };
-                root.style.setProperty("font-size", "200%", "important");
+                if (!/^\d+(?:\.\d+)?px$/u.test(prior.computed)) {
+                  throw new Error(`Expected a pixel root font size, received ${prior.computed}`);
+                }
+                if (document.querySelector('style[data-reading-layout-test-scale="true"]')) {
+                  throw new Error("Reading-layout scale probe already exists");
+                }
+                const style = document.createElement("style");
+                style.dataset.readingLayoutTestScale = "true";
+                style.textContent = `
+                  :root[data-reading-layout-test-scale="prior"] { font-size: ${prior.computed} !important; }
+                  :root[data-reading-layout-test-scale="enlarged"] { font-size: 200% !important; }
+                `;
+                document.head.append(style);
+                root.setAttribute("data-reading-layout-test-scale", "prior");
                 return prior;
+              });
+              // Register the prior selector state before crossing the same
+              // 80rem container boundary through text enlargement.
+              await settleColumns(session.page);
+              await session.page.evaluate(() => {
+                document.documentElement.setAttribute("data-reading-layout-test-scale", "enlarged");
               });
               await session.page.locator(".debrief-movement__header > p:first-child, .reading-flow > h2").evaluateAll(labels => {
                 for (const label of labels) label.append(document.createTextNode(
@@ -435,31 +456,31 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
               assert.ok(reading.flows.every(flow => flow.columns === 1),
                 `${route}: enlarged text exits the multicolumn reading state`);
             }
-            if (priorRootFont) {
+            if (scaleProbe) {
               try {
-                // Assert the effective 32px -> prior-size transition through
-                // the same owned property. Removing an otherwise absent
-                // declaration can leave a subset of Gecko's descendant
-                // container-query matches stale even after the root's
-                // computed size changes. An explicit prior value exercises
-                // visitor-visible reflow; exact inline state is restored as
-                // test cleanup below.
-                await session.page.evaluate(prior => {
-                  document.documentElement.style.setProperty("font-size", prior.computed, "important");
-                }, priorRootFont);
+                // Assert the effective 32px -> prior-size transition by
+                // changing only selector state. Keeping both declarations in
+                // one attached sheet avoids making stylesheet lifecycle an
+                // accidental part of the responsive-reading contract.
+                await session.page.evaluate(() => {
+                  document.documentElement.setAttribute("data-reading-layout-test-scale", "prior");
+                });
                 await settleColumns(session.page);
                 const restored = await observeReading(session.page);
                 assertReading(restored, route);
-                assert.equal(restored.rootFont, Number.parseFloat(priorRootFont.computed),
+                assert.equal(restored.rootFont, Number.parseFloat(scaleProbe.computed),
                   `${route}: restores the prior effective root text size`);
                 assert.ok(restored.flows.every(flow => flow.columns === 2),
                   `${route}: restoring text size returns to two readable columns without reloading`);
               } finally {
                 await session.page.evaluate(prior => {
                   const root = document.documentElement;
+                  document.querySelector('style[data-reading-layout-test-scale="true"]')?.remove();
+                  if (prior.scaleAttribute === null) root.removeAttribute("data-reading-layout-test-scale");
+                  else root.setAttribute("data-reading-layout-test-scale", prior.scaleAttribute);
                   if (prior.value) root.style.setProperty("font-size", prior.value, prior.priority);
                   else root.style.removeProperty("font-size");
-                }, priorRootFont);
+                }, scaleProbe);
               }
             }
             if (mode === "print" || mode === "forced-colors") {

@@ -209,11 +209,11 @@ observations according to the route-owned mode plan. Controlled regressions
 exercise the same behavioral assertions. The costing-principle control keeps
 direct heading ownership distinct from painted fragmentation. Dynamic
 container checks capture the effective root-font size and complete inline
-state, assert one explicit enlarged-to-prior-size transition, then restore
-the exact inline state as cleanup. They synchronize on the computed column
-state after a render update. Browser geometry supports the focused paint
-comparisons; native Safari
-and DuckDuckGo confirmation retains its own environment record.
+state, keep one test stylesheet attached while a root attribute selects the
+prior and enlarged states, then restore the exact source state as cleanup.
+They synchronize on the computed column state after a render update. Browser
+geometry supports the focused paint comparisons; native Safari and DuckDuckGo
+confirmation retains its own environment record.
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
 Case Brief carrier check is dependency-free and verifies that every generated
