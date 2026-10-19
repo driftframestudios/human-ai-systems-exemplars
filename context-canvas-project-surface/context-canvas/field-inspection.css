@@ -20,10 +20,7 @@
 }
 
 .field-inspection-hero {
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .38rem, transparent .42rem),
-        linear-gradient(135deg, #17345f 0%, #0f2147 66%, #1f2421 100%);
-    border-block-end: .6rem solid var(--inspection-coral);
+    --debrief-hero-border: var(--inspection-coral);
 }
 
 .field-inspection-page .debrief-at-glance {
@@ -168,7 +165,8 @@
     color: var(--inspection-warm-white);
 }
 
-.field-inspection-implementation-field .content > article > :is(h2, h3, p) {
+.field-inspection-implementation-field .content > article > :is(h2, h3, p),
+.field-inspection-implementation-field :is(.debrief-movement__header, .reading-flow, .reading-flow > .prose-flow) > :is(h2, h3, p) {
     color: var(--inspection-warm-white);
 }
 
@@ -228,6 +226,10 @@
     border-inline-start: .55rem solid var(--inspection-cobalt);
     border-radius: .65rem;
     box-shadow: .42rem .42rem 0 var(--inspection-ink);
+}
+
+.field-inspection-sampling-aside {
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.125em), 3vw, 1.125em);
 }
 
 .field-inspection-sampling-aside details {
@@ -335,6 +337,7 @@
     color: var(--inspection-ink);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.1rem, 3vw, 1.8rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.1rem), 3vw, 1.8rem);
 }
 
 .field-inspection-evidence-boundary :is(h3, p),

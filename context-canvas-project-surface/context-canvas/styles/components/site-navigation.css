@@ -1,28 +1,27 @@
 /* Context Canvas component: site navigation --------------------------------
    Consumers: top-level routes with the shared three-destination navigation.
-   Owns: navigation clearing and columns, fixed top placement, route-state
-   treatment, page offset, and in-page anchor clearance.
+   Owns: content-sized destination rows, in-flow sticky placement, route-state
+   treatment, and in-page anchor clearance.
    Load order: after the shared core and before route bundles.
    Extension: route identity remains in body classes and anchor class names. */
 
-.nav__container::after {
-    clear: both;
-    content: "";
-    display: table;
-}
-
 .nav__container a {
+    align-items: center;
     border-right: 1px solid #999;
-    display: block;
+    block-size: 100%;
+    display: flex;
+    justify-content: center;
+    min-block-size: 44px;
+    overflow-wrap: anywhere;
     font-size: 1em;
     font-weight: 700;
     padding: 14px;
 }
 
 .nav__container > li {
-    float: left;
+    flex: 1 1 max-content;
     margin-bottom: 0;
-    width: 33%;
+    min-inline-size: 0;
 }
 
 .nav__container li:last-child a {
@@ -30,22 +29,33 @@
 }
 
 .nav__container {
+    display: flex;
+    flex-wrap: wrap;
     margin: 0;
     text-align: center;
 }
 
+/* The body supplies the full sticky travel range; the header owns its flow
+   height, so initial content follows wrapping and text enlargement directly. */
 .page__container {
+    /* The shared header and both reading-rail owners use one text-scaled
+       clearance contract. The narrow override below covers three complete
+       destination rows while wider layouts retain the established reserve. */
+    --site-navigation-block-clearance: 5rem;
+    height: auto;
+    min-block-size: 100%;
     margin-bottom: 5%;
-    padding-top: 5%;
+    padding-top: 0;
 }
 
 .nav__top--sticky {
     background: var(--canvas-night);
     height: auto;
     left: 0;
-    position: fixed;
+    position: sticky;
     top: 0;
-    width: 100%;
+    /* About retains its route-owned minimum body width. */
+    width: min(100%, 100vw);
     z-index: 31;
 }
 
@@ -59,8 +69,14 @@
     text-decoration: none;
 }
 
+.nav__top--sticky .nav__container a:focus-visible {
+    outline: .2rem solid var(--canvas-accent);
+    outline-offset: -.2rem;
+}
+
 .about .anchor_ai_systems,
 .index-page .anchor_index,
+.nav__top--sticky a[aria-current="page"],
 .nav__top--sticky a:active,
 .nav__top--sticky a:hover,
 .projects .anchor_core_architectures,
@@ -71,12 +87,31 @@
     text-decoration: none;
 }
 
+main[id],
 main [id] {
-    scroll-margin-block-start: 5rem;
+    scroll-margin-block-start: var(--site-navigation-block-clearance, 5rem);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 770px) {
     .page__container {
-        padding-top: 10%;
+        --site-navigation-block-clearance: 6.75rem;
+    }
+
+    .nav__container a {
+        /* Padding follows the active text size; intrinsic labels can occupy
+           as many as three complete rows in the supported reflow matrix. */
+        padding-block: .45em;
+    }
+}
+
+@media print {
+    .nav__top--sticky {
+        background: #fff;
+        position: static;
+    }
+
+    .nav__top--sticky .nav__container a {
+        background: transparent;
+        color: #000;
     }
 }

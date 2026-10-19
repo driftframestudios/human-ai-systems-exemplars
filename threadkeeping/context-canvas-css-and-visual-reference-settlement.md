@@ -4,19 +4,19 @@
 threadkeeping:
   id: "context-canvas.css-and-visual-reference-settlement.v0.1"
   settled_on: "2026-08-23"
-  updated_on: "2026-10-12"
+  updated_on: "2026-10-18"
   planning_surface: "planning/context-canvas/css-modularization-and-visual-reference-plan.md"
   visual_reference_issue: work:context-visual-reference
   css_modularization_issue: work:context-css-modularization
   debrief_badge_issue: work:debrief-badge-height
-  next: "bind the verified About projection to the accepted v0.3 carrier, then observe deployed transfer and cache behavior before admitting another route family"
+  next: "use Issue #260 to record deployed transfer and cache behavior for the accepted About projection before admitting another route family; use Issue #428 to coordinate independent retirement of the superseded Field Inspection Static Assets pilot"
 ```
 
 ## Decision
 
-The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Twenty routes now share the Debrief reading component, and ten composed Debriefs place their opt-in composition layer under a contract-specific source owner.
+The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Twenty-three routes now share the Debrief reading component, and twelve composed Debriefs place their opt-in composition layer under a contract-specific source owner.
 
-The general utility now discovers all 46 top-level Context Canvas HTML files and requires each route to belong to exactly one family. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
+The general utility now discovers all 42 top-level Context Canvas HTML files and requires each route to belong to exactly one family. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
 
 The [focused plan](../planning/context-canvas/css-modularization-and-visual-reference-plan.md) receives three implementation outcomes:
 
@@ -26,13 +26,13 @@ The [focused plan](../planning/context-canvas/css-modularization-and-visual-refe
 
 ## About first-paint ownership return
 
-About now owns a complete direct source graph and leaves `expanded.css` outside its first paint. Its order is `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`; the no-script source remains media-gated. Forty-three adjacent routes continue to load the legacy remainder after their direct shared-core and component dependencies.
+About now owns a complete direct source graph and leaves `expanded.css` outside its first paint. Its order is `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`; the no-script source remains media-gated. Thirty-nine adjacent routes continue to load the legacy remainder after their direct shared-core and component dependencies.
 
 The core separates tokens and foundation from demonstrated multi-consumer components. Foundation owns the responsive heading scale; navigation owns the three-destination shell, route state, and canonical `5rem` anchor clearance; tables and route cards carry their complete responsive, print, forced-color, and reduced-motion groups. Each declaration family has one authored owner, and the extraction retains the pre-existing cascade rather than introducing `@layer` alongside unlayered route inputs.
 
-The ordinary About path falls from 122,737 to 76,213 raw bytes, from 24,514 to 17,555 gzip-9 bytes, and from 20,937 to 14,736 Brotli-11 bytes. The compressed values sum the seven independently modeled responses. The separate authored request count moves from three to seven. This source-first tradeoff remains explicit: production can recover request boundaries without replacing readable source authority.
+At source `2d8e708`, the ordinary About path falls from 122,737 to 78,460 raw bytes, from 24,514 to 18,215 gzip-9 bytes, and from 20,937 to 15,243 Brotli-11 bytes. The compressed values sum the seven independently modeled responses. The separate authored request count moves from three to seven. This source-first tradeoff remains explicit: production can recover request boundaries while readable source retains authority.
 
-Enhanced and no-script computed-style and geometry comparisons match at narrow, desktop, and wide viewports, as well as print, forced-colors, and reduced-motion states. Focused tests assert the exact About order, all 43 legacy consumer graphs, complete component opt-in, and single-owner boundaries. The legacy deep-blue selector remains unchanged in this tranche; a separate observed visual defect and affected-family proof can receive any selector repair.
+Enhanced and no-script computed-style and geometry comparisons match at narrow, desktop, and wide viewports, as well as print, forced-colors, and reduced-motion states. Focused tests assert the exact About order, all 39 legacy consumer graphs, complete component opt-in, and single-owner boundaries. The legacy deep-blue selector remains unchanged in this tranche; a separate observed visual defect and affected-family proof can receive any selector repair.
 
 ## About production CSS projection
 
@@ -55,16 +55,16 @@ digest, and recovery route. Generated CSS carries no public source map because
 the readable repository sources and bounded manifest lineage already serve that
 job.
 
-For the current source graph, the enhanced path moves from seven stylesheets
-and 77,081 raw bytes to two stylesheets and 55,814 raw bytes. The independently
-compressed sums move from 17,674 to 11,914 gzip-9 bytes and from 14,823 to
-10,536 Brotli-11 bytes. The scriptless path moves from eight stylesheets and
-77,489 raw bytes to three stylesheets and 56,111 raw bytes; gzip-9 moves from
-17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. The generated
+At source `2d8e708`, the enhanced path moves from seven stylesheets
+and 78,460 raw bytes to two stylesheets and 56,443 raw bytes. The independently
+compressed sums move from 18,215 to 12,069 gzip-9 bytes and from 15,243 to
+10,679 Brotli-11 bytes. The scriptless path moves from eight stylesheets and
+78,868 raw bytes to three stylesheets and 56,740 raw bytes; gzip-9 moves from
+18,418 to 12,214 bytes and Brotli-11 from 15,404 to 10,786 bytes. The generated
 base, no-script, and shell outputs are respectively
-`f7f4d4dc899f49ff2154b047bbf3f3a384874fa8c0b17ea0d46955fcdd4c85eb.css`,
+`81bdebdee4407e026c49388460f4d1f5a0445fdb853c706c0f83cec9db730d4c.css`,
 `b2bfbc13f2342874a4896ff3a8351a0d839aff8bbfc3a09073ce3690bbaeba30.css`,
-and `8276346d7f30d88387aef91cd85e896d243f8c9a9d6b6ff64fa2a3763a2adc9b.css`.
+and `dae3652fc9d5542fef127b47c486f9cc8bfceb1cb8baddadcf25e6a715c8e621.css`.
 These are source-side projection observations. The final carrier binds them to
 its exact source coordinate, while the deployed receiver owns response headers,
 cache behavior, and transferred-byte evidence.
@@ -112,7 +112,7 @@ Generated images remain under ignored `.visual-runs/` for this collaboration cyc
 
 The second extraction wave now has a stable ownership graph:
 
-- `styles/routes/ai-systems.css` carries shared family grammar for thirteen routes;
+- `styles/routes/ai-systems.css` carries shared family grammar for seventeen routes;
 - `styles/components/instrument-atlas.css` carries the reusable AI Systems and Shared Machinery atlas;
 - `styles/routes/ai-systems-entry.css` carries entry-only bridges, labs, and tables;
 - `styles/routes/hiring-surfaces.css` carries the complete Hiring palette, density, tables, and late anchors.
@@ -147,7 +147,7 @@ The enterprise-reading family produced 24 of 24 final captures with zero browser
 
 ## Career and regulatory slide component return
 
-`styles/components/career-regulatory-slide.css` now owns the split accent-and-content geometry used by the ideal Debrief, index-landing, and maximal Debrief exemplars. The component keeps its accent cards, career sections, regulatory accent variant, viewport and container stacking, entrance keyframes, and reduced-motion response together. All three routes load it directly between `expanded.css` and `canvas-shell.css`.
+`styles/components/career-regulatory-slide.css` owns the split accent-and-content geometry retained by the index-landing exemplar. The component keeps its accent cards, career sections, regulatory accent variant, viewport and container stacking, entrance keyframes, and reduced-motion response together. The current consumer loads it directly between `expanded.css` and `canvas-shell.css`; the earlier three-consumer extraction remains preserved in the commit-bound receipt below.
 
 The 362-line component body preserves every selector, declaration, comment, and conditional container from its former shared-sheet rules. The global abbreviation treatment and both mixed prose-flow declarations retain their shared owner. On source base `51016ee`, `expanded.css` falls by 7,446 bytes and 365 lines including released separators; the receiving component carries 8,123 bytes and 373 lines with its ownership header. The independent reading-component extension composes without a selector overlap and establishes the combined 66,154-byte, 3,102-line shared sheet.
 
@@ -155,9 +155,9 @@ This cycle uses the human-directed focused proof boundary: source-body parity, c
 
 ## Debrief reading and composition return
 
-The reading-component extension brought FMI Clinical Trial Coordination and Who to Believe into the shared component, for fifteen direct consumers, and added orientation-reading placement to that owner. The earlier thirteen-consumer receipt above remains accurate for its source cutoff; fifteen describes the merged source.
+The reading-component extension brought FMI Clinical Trial Coordination and Who to Believe into the shared component, for fifteen direct consumers, and added orientation-reading placement to that owner. At source `2d8e708`, later Debrief and enterprise-reading work brings the component to twenty-three direct consumers. The earlier thirteen- and fifteen-consumer receipts remain accurate for their source cutoffs.
 
-The seven `.debrief-composition-page` consumers now load `styles/contracts/debrief-composition.css` at the same cascade position they used before the path move. The source header names its contract responsibility and related visual-fidelity contract. The routes retain their own palette, rhythm, density, source basis, and local composition.
+The twelve `.debrief-composition-page` consumers now load `styles/contracts/debrief-composition.css` at the same cascade position they used before the path move. The source header names its contract responsibility and related visual-fidelity contract. The routes retain their own palette, rhythm, density, source basis, and local composition.
 
 The two-rule `.debrief-sequence` seam remains in `expanded.css`. Genomic Viewer and FMI LIMS/ELN both use it, while their present source graphs differ. A new request or a wider reading-component responsibility would outweigh the ownership gain from moving those two rules today. Re-entry begins when a larger shared sequence or composition family demonstrates a coherent receiving owner.
 
@@ -171,7 +171,7 @@ The two-rule `.debrief-sequence` seam remains in `expanded.css`. Genomic Viewer 
 - **Broad selector renaming and utility redesign:** stable route ownership precedes this work. The source-specific three-movement Debrief namespace is the explicit early exception.
 - **Inline-style extraction:** a focused CSP or cacheability change receives it.
 - **Critical CSS and aggressive minification:** measured LCP and repeated conservative equivalence receive these later optimizations.
-- **Cloudflare CDN CSS:** hashed immutable outputs follow stable core and route boundaries. The existing Field Inspection direct-view pilot continues independently.
+- **Cloudflare CDN CSS:** the accepted About projection now supplies hashed immutable output. The collaboration team uses Issue #260 to record deployed transfer and cache measurements before another family enters that path, and Issue #428 to coordinate complete retirement of the superseded Field Inspection direct-view pilot.
 - **LIMS/ELN long tail:** the constellation's earlier pull requests return after this Context Canvas collaboration wave settles, through their dedicated issue.
 
 ## Re-entry

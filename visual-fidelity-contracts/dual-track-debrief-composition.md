@@ -66,6 +66,17 @@ Maximal pages may separate each five-beat section into its own field. Lean pages
 
 ## Written track labels
 
+Movement labels and main headings share a full-width header outside the
+fragmented prose body. A beat heading opens its reading region above both
+columns, while ordinary internal headings keep their local rhythm. The
+`.debrief-movement`, `.debrief-movement__header`, and `.debrief-reading-flow`
+classes express these relationships. Each beat heading and full-width
+evidence field stands between continuous `.prose-flow` runs, preserving
+source order in the rendered reading. The shared reading component owns
+header containment and beat spacing; core foundation owns the responsive
+columns within each run. Palette, reading measure, and route topology retain
+their existing owners.
+
 Every movement begins with a compact label before its main heading. A useful label contains:
 
 - ordinal or movement name;
@@ -172,7 +183,7 @@ Distinct readings receive distinct diagrams when reusing an atlas image would er
 
 ## CSS and repository posture
 
-The family now exposes five readable ownership layers. `styles/components/debrief-reading.css` carries shared reading-route and source-basis components. `styles/routes/debriefs.css` carries the catalog experience, including its Debrief-card badges and metadata. `styles/routes/three-movement-debrief.css` carries the source-native three-movement route through neutral structural names. `styles/routes/genomic-viewer.css` carries the maximal paired Rose Quartz and dark Cobalt route, including its narrow, forced-color, print, and shared-component cascade seams. `styles/contracts/debrief-composition.css` remains the reusable movement, field, handoff, outcome, and Evidence Boundary implementation scoped under `.debrief-composition-page`.
+The family now exposes five readable ownership layers. `styles/components/debrief-reading.css` carries shared reading-route and source-basis components, full-width movement headers, and heading-first reading regions. `styles/routes/debriefs.css` carries the catalog experience, including its Debrief-card badges and metadata. `styles/routes/three-movement-debrief.css` carries the source-native three-movement route through neutral structural names. `styles/routes/genomic-viewer.css` carries the maximal paired Rose Quartz and dark Cobalt route, including its narrow, forced-color, print, and shared-component cascade seams. `styles/contracts/debrief-composition.css` remains the reusable movement, field, handoff, outcome, and Evidence Boundary implementation scoped under `.debrief-composition-page`.
 
 Pages link the layers they use in explicit cascade order: `expanded.css`, the shared reading component, an applicable route bundle, `canvas-shell.css`, and then `styles/contracts/debrief-composition.css` for composed readings. The maximal paired reference uses `expanded.css → debrief-reading.css → genomic-viewer.css → canvas-shell.css`. A non-paired page may use the label and boundary components without adopting paired Rose/Cobalt fields. Each route retains its own palette, rhythm, density, topology, and source-earned experiments.
 

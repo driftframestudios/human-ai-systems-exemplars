@@ -60,7 +60,7 @@ const coreArchitectureReceivers = [
     describedBy: "poda-walkthrough-standing poda-walkthrough-caption",
     details: "poda-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/core/poda/",
-    next: '<article class="prose-flow" aria-labelledby="investment-title">',
+    next: '<article class="reading-flow" aria-labelledby="investment-title">',
     sequenceTitle: "Four zones become one inspectable handoff",
   },
   {
@@ -70,7 +70,7 @@ const coreArchitectureReceivers = [
     describedBy: "strategy-canvas-walkthrough-standing strategy-canvas-walkthrough-caption",
     details: "strategy-canvas-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/core/strategy-canvas/",
-    next: '<article class="prose-flow" aria-labelledby="small-multiples-title">',
+    next: '<article class="reading-flow" aria-labelledby="small-multiples-title">',
     sequenceTitle: "Separate readings become a revisable strategy scenario",
   },
   {
@@ -80,7 +80,7 @@ const coreArchitectureReceivers = [
     describedBy: "threadkeeping-walkthrough-standing threadkeeping-walkthrough-caption",
     details: "threadkeeping-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/canvas/threadkeeping-ledger/",
-    next: '<article class="prose-flow" aria-labelledby="scan-contract-title">',
+    next: '<article class="reading-flow" aria-labelledby="scan-contract-title">',
     sequenceTitle: "Two decisions move from Now–Next–Later into a continuity handoff",
   },
 ];

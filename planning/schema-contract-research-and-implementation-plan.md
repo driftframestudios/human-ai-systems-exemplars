@@ -1,5 +1,7 @@
 # Schema contract research and implementation plan
 
+> **Current publication status.** This document preserves the pre-publication plan. Wave B is accepted through `pages-v0.3.1`, Issue #406, and the schemas.vik.guru Worker successor tracked in Issue #531. [`schemas/README.md`](../schemas/README.md) and the current delivery documentation own the active publication state.
+
 ## Settled direction
 
 The first schema wave creates two small authored contracts:
