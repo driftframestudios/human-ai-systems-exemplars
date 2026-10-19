@@ -143,8 +143,10 @@ jobs:
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
     runs-on: ubuntu-24.04
-    # The explicit all-plus-browser route exercises Chromium, Firefox, and WebKit across every carrier family.
-    timeout-minutes: 20
+    # The explicit all-plus-browser route exercises Chromium, Firefox, and WebKit
+    # across every carrier family in sequence. Thirty minutes keeps that release
+    # proof bounded while preserving headroom for the complete declared route.
+    timeout-minutes: 30
 
     steps:
       - name: Check out the candidate source

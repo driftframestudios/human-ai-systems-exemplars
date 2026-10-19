@@ -57,7 +57,7 @@ advisory summary for matching changes while preserving the review path.
 The prototype-unit job has its own resting switch:
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC=false` keeps matching pull-request execution at
 rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
-`narrative`, and `all` selections share one twenty-minute job; manual browser
+`narrative`, and `all` selections share one thirty-minute job; manual browser
 coverage requires `include_browser=true`, while an enabled PR receiver includes
 the selected browser contracts. Chromium supports every browser-enabled
 selection, WebKit joins `iframe` and `all`, and Firefox joins `all`. The
