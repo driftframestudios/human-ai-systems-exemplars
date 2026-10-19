@@ -159,7 +159,7 @@ function matchesFirefoxStaleRestoration(error, route, reading, mismatches, prior
     || reading.rootFont !== 16
     || viewport.width !== 1440
     || reading.viewport !== 1440
-    || reading.flows.length !== 16
+    || reading.flows.length !== 19
     || mismatches.length !== expectedMismatches.length) return false;
   const observedMismatchIndexes = reading.flows.flatMap((flow, index) => {
     const expected = flow.containerWidth >= flow.columnThreshold ? 2 : 1;
@@ -204,7 +204,7 @@ function firefoxRestorationFixture() {
     [14, "implementation-outcome-title"],
     [15, "implementation-outcome-title"],
   ]);
-  const flows = Array.from({ length: 16 }, (_, index) => ({
+  const flows = Array.from({ length: 19 }, (_, index) => ({
     columns: mismatchOwners.has(index) ? 1 : 2,
     containerWidth: 1360,
     columnThreshold: 1280,
