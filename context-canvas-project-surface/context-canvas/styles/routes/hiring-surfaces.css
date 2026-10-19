@@ -1,0 +1,379 @@
+/* Context Canvas route bundle: Hiring Surfaces ---------------------------
+   Consumer: hiring-surfaces-talent-agent-intake.html only.
+   Owns: the two-reader palette, hiring fields and tables, responsive modes,
+   print treatment, and the late anchors that preserve local relationships.
+   Load order: shared core, expanded.css, ai-systems.css, this Hiring bundle,
+   then page-local styles and canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   The family bundle supplies shared grammar; Hiring retains authority over
+   its color relationships, rhythm, density, and new route experiments. */
+
+/* Two readers and talent-agent intake ----------------------------------- */
+
+.hiring-surfaces-page {
+    --hiring-ink: #17345f;
+    --hiring-cobalt: #2855f3;
+    --hiring-cobalt-deep: #153fbe;
+    --hiring-sky: #dbe8ff;
+    --hiring-sea: #d9efea;
+    --hiring-cream: #fff5de;
+    --hiring-blush: #ffe1e6;
+    --hiring-coral: #ff7a66;
+    --hiring-lime: #eff8b8;
+}
+
+.hiring-surfaces-page .ai-systems-hero {
+    border-block-end-color: var(--hiring-lime);
+}
+
+.hiring-surfaces-page .ai-systems-hero .tag-line {
+    color: #f4f7ff;
+}
+
+.hiring-surfaces-page .debrief-quote--operating-principle {
+    background: var(--hiring-lime);
+    box-shadow: .5rem .5rem 0 var(--hiring-coral);
+}
+
+.hiring-surfaces-page .ai-systems-scan > div:nth-child(3n + 1) {
+    border-block-start-color: var(--hiring-cobalt);
+}
+
+.hiring-surfaces-page .ai-systems-scan > div:nth-child(3n + 2) {
+    border-block-start-color: var(--hiring-coral);
+}
+
+.hiring-surfaces-page .ai-systems-scan > div:nth-child(3n) {
+    border-block-start-color: #9aaa35;
+}
+
+.hiring-convergence-field,
+.hiring-posture-field {
+    background: var(--hiring-sea);
+}
+
+.hiring-vocabulary-field {
+    background: var(--hiring-cream);
+}
+
+.hiring-intake-field {
+    background: #eef3fa;
+}
+
+.hiring-constraint-field {
+    background: var(--hiring-sky);
+}
+
+.hiring-language-field {
+    background: #f6f3ed;
+}
+
+.hiring-investment-field {
+    background: #fffdf8;
+}
+
+:where(.hiring-surfaces-page) .architecture-track-title {
+    border-block-end-color: var(--hiring-cobalt-deep);
+}
+
+.hiring-surfaces-page .architecture-pair__label,
+.hiring-surfaces-page .implementation-companion__eyebrow {
+    color: var(--hiring-cobalt-deep);
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-ink);
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article:nth-child(3n + 2) {
+    background: var(--hiring-sky);
+    box-shadow: .5rem .5rem 0 var(--hiring-cobalt);
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article:nth-child(3n) {
+    background: var(--hiring-blush);
+    box-shadow: .5rem .5rem 0 var(--hiring-coral);
+}
+
+.hiring-surfaces-page .blueprint-pop-visual img {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-coral);
+}
+
+.hiring-surfaces-page .prototype-embed--blueprint {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-cobalt);
+}
+
+.hiring-surfaces-page .prototype-embed--blueprint iframe {
+    border-color: var(--hiring-ink);
+    min-block-size: 48rem;
+}
+
+.hiring-surfaces-page .cobalt-operating-field__table,
+.hiring-surfaces-page .goal-fidelity-table-figure {
+    background: #fff;
+    border: .125rem solid var(--hiring-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--hiring-cobalt);
+    padding: clamp(.75rem, 2vw, 1.25rem);
+}
+
+.hiring-surfaces-page :is(
+    .tier-vocabulary-table,
+    .intake-mechanics-table,
+    .hiring-constraint-table,
+    .function-word-table,
+    .hiring-investment-table,
+    .hiring-population-table
+    ) thead th {
+    background: var(--hiring-ink);
+    color: #fff;
+}
+
+.tier-vocabulary-table {
+    min-inline-size: 68rem;
+}
+
+.intake-mechanics-table {
+    min-inline-size: 76rem;
+}
+
+.hiring-constraint-table {
+    min-inline-size: 80rem;
+}
+
+.function-word-table {
+    min-inline-size: 58rem;
+}
+
+.hiring-investment-table,
+:where(.hiring-population-table) {
+    min-inline-size: 78rem;
+}
+
+.hiring-surfaces-page :is(
+    .tier-vocabulary-table,
+    .intake-mechanics-table,
+    .hiring-constraint-table,
+    .function-word-table,
+    .hiring-investment-table,
+    .hiring-population-table
+    ) tbody th {
+    border-inline-start: .3rem solid var(--hiring-cobalt);
+    min-inline-size: 12rem;
+}
+
+.hiring-surfaces-page .function-word-table :is(td:nth-child(2), td:nth-child(3)) {
+    font-variant-numeric: tabular-nums lining-nums;
+    text-align: end;
+}
+
+@media screen and (max-width: 64rem) {
+    .hiring-surfaces-page .prototype-embed--blueprint iframe {
+        min-block-size: 40rem;
+    }
+}
+
+@media screen and (max-width: 30rem) {
+    .hiring-surfaces-page .debrief-quote--operating-principle,
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .blueprint-pop-visual img,
+    .hiring-surfaces-page .prototype-embed--blueprint,
+    .hiring-surfaces-page .cobalt-operating-field__table,
+    .hiring-surfaces-page .goal-fidelity-table-figure {
+        box-shadow: .3rem .3rem 0 var(--hiring-ink, var(--blueprint-ink));
+    }
+}
+
+@media (forced-colors: active) {
+    .hiring-surfaces-page .debrief-quote--operating-principle,
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .prototype-embed--blueprint,
+    .hiring-surfaces-page .cobalt-operating-field__table,
+    .hiring-surfaces-page .goal-fidelity-table-figure {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .hiring-surfaces-page :is(
+        .tier-vocabulary-table,
+        .intake-mechanics-table,
+        .hiring-constraint-table,
+        .function-word-table,
+        .hiring-investment-table,
+        .hiring-population-table
+        ) {
+        min-inline-size: 0;
+    }
+
+    .hiring-surfaces-page .debrief-quote--operating-principle {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .hiring-surfaces-page :is(
+        .tier-vocabulary-table,
+        .intake-mechanics-table,
+        .hiring-constraint-table,
+        .function-word-table,
+        .hiring-investment-table,
+        .hiring-population-table
+        ) thead th {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .blueprint-pop-visual img,
+    .hiring-surfaces-page .prototype-embed--blueprint,
+    .hiring-surfaces-page .cobalt-operating-field__table,
+    .hiring-surfaces-page .goal-fidelity-table-figure {
+        box-shadow: none;
+    }
+}
+
+/* Table-row color carries a stated, inferred, or judgment relationship when
+   the row content declares that meaning; neutral rows keep the paper field. */
+/*.hiring-surfaces-page :is(*/
+/*    .tier-vocabulary-table,*/
+/*    .intake-mechanics-table,*/
+/*    .hiring-constraint-table,*/
+/*    .function-word-table,*/
+/*    .hiring-investment-table,*/
+/*    .hiring-population-table*/
+/*    ) tbody tr:nth-child(3n + 1) > * {*/
+/*    background: color-mix(in srgb, var(--hiring-sky) 38%, #fff 62%);*/
+/*}*/
+
+/*.hiring-surfaces-page :is(*/
+/*    .tier-vocabulary-table,*/
+/*    .intake-mechanics-table,*/
+/*    .hiring-constraint-table,*/
+/*    .function-word-table,*/
+/*    .hiring-investment-table,*/
+/*    .hiring-population-table*/
+/*    ) tbody tr:nth-child(3n + 2) > * {*/
+/*    background: color-mix(in srgb, var(--hiring-blush) 34%, #fff 66%);*/
+/*}*/
+
+/*.hiring-surfaces-page :is(*/
+/*    .tier-vocabulary-table,*/
+/*    .intake-mechanics-table,*/
+/*    .hiring-constraint-table,*/
+/*    .function-word-table,*/
+/*    .hiring-investment-table,*/
+/*    .hiring-population-table*/
+/*    ) tbody tr:nth-child(3n) > * {*/
+/*    background: color-mix(in srgb, var(--hiring-sea) 44%, #fff 56%);*/
+/*}*/
+
+/* Hiring cascade anchors ------------------------------------------------ */
+
+.hiring-surfaces-page .hiring-convergence-field,
+.hiring-surfaces-page .hiring-posture-field {
+    background: var(--hiring-sea);
+}
+
+.hiring-surfaces-page .hiring-vocabulary-field {
+    background: var(--hiring-cream);
+}
+
+.hiring-surfaces-page .hiring-intake-field {
+    background: #eef3fa;
+}
+
+.hiring-surfaces-page .hiring-constraint-field {
+    background: var(--hiring-sky);
+}
+
+.hiring-surfaces-page .hiring-language-field {
+    background: #f6f3ed;
+}
+
+.hiring-surfaces-page .hiring-investment-field {
+    background: #fffdf8;
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-ink);
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article:nth-child(3n + 2) {
+    background: var(--hiring-sky);
+    box-shadow: .5rem .5rem 0 var(--hiring-cobalt);
+}
+
+.hiring-surfaces-page .blueprint-pop-cards article:nth-child(3n) {
+    background: var(--hiring-blush);
+    box-shadow: .5rem .5rem 0 var(--hiring-coral);
+}
+
+.hiring-surfaces-page .blueprint-pop-visual img {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-coral);
+}
+
+.hiring-surfaces-page .prototype-embed--blueprint {
+    background: var(--hiring-cream);
+    border-color: var(--hiring-ink);
+    box-shadow: .5rem .5rem 0 var(--hiring-cobalt);
+}
+
+@media screen and (max-width: 30rem) {
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .blueprint-pop-visual img,
+    .hiring-surfaces-page .prototype-embed--blueprint {
+        box-shadow: .3rem .3rem 0 var(--hiring-ink, var(--blueprint-ink));
+    }
+}
+
+@media (forced-colors: active) {
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .prototype-embed--blueprint {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .hiring-surfaces-page :is(
+        .tier-vocabulary-table,
+        .intake-mechanics-table,
+        .hiring-constraint-table,
+        .function-word-table,
+        .hiring-investment-table,
+        .hiring-population-table
+        ) {
+        min-inline-size: 0;
+    }
+
+    .hiring-surfaces-page :is(
+        .tier-vocabulary-table,
+        .intake-mechanics-table,
+        .hiring-constraint-table,
+        .function-word-table,
+        .hiring-investment-table,
+        .hiring-population-table
+        ) thead th {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .hiring-surfaces-page .blueprint-pop-cards article,
+    .hiring-surfaces-page .blueprint-pop-visual img,
+    .hiring-surfaces-page .prototype-embed--blueprint,
+    .hiring-surfaces-page .cobalt-operating-field__table,
+    .hiring-surfaces-page .goal-fidelity-table-figure {
+        box-shadow: none;
+    }
+}

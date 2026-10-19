@@ -1,0 +1,54 @@
+{
+  "id": "cc.narrative-architectures.semantic-sampling-tableau.local-manifest.v0.1",
+  "title": "Narrative Sampling Tableau — Context Canvas Projection",
+  "version": "0.1",
+  "created": "2026-08-19",
+  "sourceAuthority": {
+    "contractOwner": "@driftframe/narrative-architecture",
+    "implementationOwner": "Context Canvas",
+    "relationship": "context_canvas_owned_experimental_projection"
+  },
+  "pathContract": {
+    "sourcePath": "manifest-directory",
+    "localPath": "repository-root",
+    "entryFile": "localPath",
+    "sourceManifest": "localPath",
+    "usedByPages": "manifest-directory"
+  },
+  "publicationPosture": "repository-local-experimental-projection",
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "a17c532a56767c3de8019de7b1de185bef0d646590167a0750f1a979b63721da"
+  },
+  "canonicalStatus": "context_canvas_owned_experimental_projection",
+  "sourcePath": ".",
+  "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/",
+  "entryFile": "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+  "sourceManifest": "terminology-exploration/narrative-sampling-tableau-manifest-v0.1.json",
+  "localAdaptations": [
+    "Strategy Canvas routes in the registry and inline prototype resolve through the Context-local canonical pack.",
+    "Core Architecture and planning-exemplar hydration use stable public IDs and ordinary reader-facing labels.",
+    "The deterministic local bundle carries the Context-resolved registry and prototype snapshot.",
+    "Prompt Capsule 0.1.0 projects the accepted sampling state into complete plain and skill-assisted Markdown with one state-only fingerprint.",
+    "The plain projection carries success criteria, both boundary sets, per-candidate dimension scores, a baseline comparison, and enabled formal statistical-fit state; material controls keep visible and programmatic bytes synchronized."
+  ],
+  "divergence": {
+    "status": "context_canvas_owned_experimental_projection",
+    "changedPaths": [
+      "terminology-exploration/README.md",
+      "terminology-exploration/core-architecture-routing-registry.v0.1.json",
+      "terminology-exploration/conation-motion-naming-sampling.example.v0.1.json",
+      "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+      "terminology-exploration/narrative-sampling-tableau-manifest-v0.1.json",
+      "terminology-exploration/narrative-sampling-tableau-prototype-addendum-v0.1.md",
+      "terminology-exploration/narrative-sampling-tableau-prototype-profile-v0.1.yaml",
+      "terminology-exploration/narrative-sampling-tableau-state.schema.v0.1.json",
+      "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+    ]
+  },
+  "usedByPages": []
+}

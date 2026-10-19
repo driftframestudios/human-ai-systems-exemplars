@@ -1,0 +1,110 @@
+{
+  "@context": {
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "pp": "https://schemas.driftframestudios.org/pp#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "TechnologyFitSamplingSurface": "na:TechnologyFitSamplingSurface",
+    "NarrativeSamplingSurface": "na:NarrativeSamplingSurface",
+    "AIContextProjection": "na:AIContextProjection",
+    "SamplingRun": "na:SamplingRun",
+    "TechnologyCandidate": "na:TechnologyCandidate",
+    "ProbabilityDefinition": "na:ProbabilityDefinition",
+    "ProbabilityEstimate": "na:ProbabilityEstimate",
+    "FitDimension": "na:FitDimension",
+    "StackLayerPalette": "na:StackLayerPalette",
+    "StackLayer": "na:StackLayer",
+    "LayerChoice": "na:LayerChoice",
+    "LowFidelitySpike": "na:LowFidelitySpike",
+    "GapRecord": "na:GapRecord",
+    "TechnologyDecisionRecord": "na:TechnologyDecisionRecord",
+    "FormalStatisticalFitBoundary": "na:FormalStatisticalFitBoundary",
+    "PractitionerJudgmentProbe": "pp:PractitionerJudgmentProbe",
+    "CoreArchitectureCard": "ca:CoreArchitectureCard",
+    "profileOf": {
+      "@id": "na:profileOf",
+      "@type": "@id"
+    },
+    "promptCapsule": {
+      "@id": "na:promptCapsule",
+      "@type": "@id"
+    },
+    "probabilityObject": {
+      "@id": "na:probabilityObject",
+      "@type": "@id"
+    },
+    "dimension": {
+      "@id": "na:dimension",
+      "@type": "@id"
+    },
+    "run": {
+      "@id": "na:run",
+      "@type": "@id"
+    },
+    "activeRun": {
+      "@id": "na:activeRun",
+      "@type": "@id"
+    },
+    "candidate": {
+      "@id": "na:candidate",
+      "@type": "@id"
+    },
+    "stackLayer": {
+      "@id": "na:stackLayer",
+      "@type": "@id"
+    },
+    "lowFidelitySpike": {
+      "@id": "na:lowFidelitySpike",
+      "@type": "@id"
+    },
+    "gap": {
+      "@id": "na:gap",
+      "@type": "@id"
+    },
+    "probe": {
+      "@id": "pp:probe",
+      "@type": "@id"
+    },
+    "routesTo": {
+      "@id": "ca:routesTo",
+      "@type": "@id"
+    },
+    "decision": {
+      "@id": "na:decision",
+      "@type": "@id"
+    },
+    "selectedCandidate": {
+      "@id": "na:selectedCandidate",
+      "@type": "@id"
+    },
+    "heldCandidate": {
+      "@id": "na:heldCandidate",
+      "@type": "@id"
+    },
+    "defaultLikelihood": "na:defaultLikelihood",
+    "sixMonthFit": "na:sixMonthFit",
+    "estimate": "na:estimate",
+    "intervalLow": "na:intervalLow",
+    "intervalHigh": "na:intervalHigh",
+    "estimateKind": "na:estimateKind",
+    "measurementStatus": "na:measurementStatus",
+    "calibrationState": "na:calibrationState",
+    "candidateSetSemantics": "na:candidateSetSemantics",
+    "otherOrTailMass": "na:otherOrTailMass",
+    "weight": "na:weight",
+    "dimensionScore": "na:dimensionScore",
+    "gapClass": "na:gapClass",
+    "gapType": "na:gapType",
+    "gapUtility": "na:gapUtility",
+    "resolutionState": "na:resolutionState",
+    "sourceBand": "ca:sourceBand",
+    "sourceOfTruthBand": "ca:sourceOfTruthBand",
+    "publicationStatus": "ca:publicationStatus",
+    "valueOrigin": "ca:valueOrigin",
+    "reviewState": "ca:reviewState"
+  }
+}

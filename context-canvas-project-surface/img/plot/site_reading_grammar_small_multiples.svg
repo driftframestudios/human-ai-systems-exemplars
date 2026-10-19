@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160" role="img" aria-labelledby="grammar-title grammar-desc">
+  <title id="grammar-title">Eight Site Reading and Debrief reference forms shown as small multiples</title>
+  <desc id="grammar-desc">Eight cards compare the opening, track arrangement, beat spine, time treatment, spillover, close, and authoring investment of historical Site Reading and Debrief reference forms. Their grammar can guide current work while each example retains its original context.</desc>
+  <defs>
+    <pattern id="grammar-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/></pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.ink{fill:#17345f}.body{fill:#304a71}.muted{fill:#5d6f8b}.white{fill:#fffdf8}.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.8px}.title{font-size:35px;font-weight:780}.lead{font-size:17px}.card-title{font-size:16px;font-weight:760}.card-copy{font-size:13px}.small{font-size:12px}.chip{font-size:11px;font-weight:700;letter-spacing:.6px}.outline{stroke:#17345f;stroke-width:2}.soft{stroke:#6f85a8;stroke-width:1.3}.shadow{fill:#17345f}.spine{stroke:#2855f3;stroke-width:5;stroke-linecap:round}.beat{fill:#fffdf8;stroke:#17345f;stroke-width:1.6}.beat-acid{fill:#f2ff67;stroke:#17345f;stroke-width:1.6}.rail{fill:#cfe7f7;stroke:#17345f;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect width="1600" height="1160" rx="28" fill="#fffaf2"/>
+  <rect width="1600" height="1160" rx="28" fill="url(#grammar-grid)"/>
+  <g role="group" aria-labelledby="grammar-header-title">
+    <title id="grammar-header-title">Composable reading scope</title>
+    <rect x="32" y="30" width="1536" height="154" rx="20" fill="#2855f3"/>
+    <text x="72" y="72" class="mono eyebrow white">COMPOSABLE SITE READINGS + DEBRIEFS</text>
+    <text x="72" y="120" class="sans title white">Choose structure by the reading burden it must carry.</text>
+    <text x="72" y="154" class="sans lead white">Eight reference forms preserve distinct openings, tracks, time treatments, depth routes, and closes.</text>
+    <rect x="1280" y="66" width="230" height="52" rx="26" fill="#f2ff67" class="outline"/>
+    <text x="1395" y="98" text-anchor="middle" class="mono chip ink">STRUCTURE TRANSFERS</text>
+  </g>
+
+  <g role="group" aria-labelledby="grammar-site-reading-title">
+    <title id="grammar-site-reading-title">Site Reading reference forms</title>
+    <text x="56" y="226" class="mono eyebrow ink">SITE READING FORMS</text>
+
+    <rect x="64" y="264" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="56" y="256" width="354" height="324" rx="17" fill="#fff5de" class="outline"/>
+    <text x="80" y="292" class="sans card-title ink">Exemplar — Simple Site Reading</text>
+    <text x="80" y="318" class="mono small muted">SINGLE-TRACK · MINIMAL</text>
+    <rect x="80" y="342" width="306" height="40" rx="10" fill="#ffd3d0" class="soft"/>
+    <text x="96" y="367" class="mono chip ink">OPEN · POV</text>
+    <line x1="92" y1="423" x2="374" y2="423" class="spine"/>
+    <circle cx="102" cy="423" r="11" class="beat-acid"/><circle cx="168" cy="423" r="11" class="beat"/><circle cx="234" cy="423" r="11" class="beat"/><circle cx="300" cy="423" r="11" class="beat"/><circle cx="364" cy="423" r="11" class="beat-acid"/>
+    <text x="80" y="463" class="sans card-copy body">Snag · Read · Move · Cure · Guidance</text>
+    <text x="80" y="490" class="sans card-copy body">Present + retrospective; no paired rail.</text>
+    <rect x="80" y="520" width="112" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="136" y="540" text-anchor="middle" class="mono chip ink">COMPACT</text>
+
+    <rect x="450" y="264" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="442" y="256" width="354" height="324" rx="17" fill="#e7efff" class="outline"/>
+    <text x="466" y="292" class="sans card-title ink">Exemplar — Maximal Site Reading</text>
+    <text x="466" y="318" class="mono small muted">DUAL-TRACK · REALIZED BEAT PAGES</text>
+    <rect x="466" y="342" width="306" height="40" rx="10" fill="#cfe7f7" class="soft"/>
+    <text x="482" y="367" class="mono chip ink">OPEN · NAMING + SCAN + POV</text>
+    <line x1="478" y1="417" x2="760" y2="417" class="spine"/>
+    <rect x="482" y="402" width="42" height="30" rx="7" class="beat-acid"/><rect x="538" y="402" width="42" height="30" rx="7" class="beat"/><rect x="594" y="402" width="42" height="30" rx="7" class="beat"/><rect x="650" y="402" width="42" height="30" rx="7" class="beat"/><rect x="706" y="402" width="42" height="30" rx="7" class="beat-acid"/>
+    <text x="503" y="422" text-anchor="middle" class="mono chip ink">§a</text><text x="559" y="422" text-anchor="middle" class="mono chip ink">§b</text><text x="615" y="422" text-anchor="middle" class="mono chip ink">§c</text><text x="671" y="422" text-anchor="middle" class="mono chip ink">§d</text><text x="727" y="422" text-anchor="middle" class="mono chip ink">§e</text>
+    <rect x="478" y="450" width="282" height="24" rx="8" class="rail"/><text x="619" y="467" text-anchor="middle" class="mono chip ink">THEN ↔ NOW · BEAT PAGES + APPENDIX</text>
+    <text x="466" y="502" class="sans card-copy body">Closes with Repeatability + provenance/folding.</text>
+    <rect x="466" y="520" width="126" height="30" rx="15" fill="#ffd3d0" class="soft"/>
+    <text x="529" y="540" text-anchor="middle" class="mono chip ink">MULTI-PAGE</text>
+
+    <rect x="836" y="264" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="828" y="256" width="354" height="324" rx="17" fill="#d9efea" class="outline"/>
+    <text x="852" y="286" class="sans card-title ink"><tspan x="852">Exemplar — Parallel</tspan><tspan x="852" dy="20">Then-vs-Now</tspan></text>
+    <text x="852" y="326" class="mono small muted">TWO COORDINATORS · DUAL-TRACK</text>
+    <rect x="852" y="342" width="306" height="40" rx="10" fill="#f2ff67" class="soft"/>
+    <text x="868" y="367" class="mono chip ink">OPEN · POV TABLE</text>
+    <rect x="852" y="403" width="306" height="32" rx="8" fill="#cfe7f7" class="soft"/><text x="1005" y="424" text-anchor="middle" class="mono chip ink">NARRATIVE · FIVE BEATS</text>
+    <rect x="852" y="447" width="306" height="32" rx="8" fill="#ffd3d0" class="soft"/><text x="1005" y="468" text-anchor="middle" class="mono chip ink">IMPLEMENTATION · EIGHT HEADINGS</text>
+    <text x="852" y="505" class="sans card-copy body">Then / Now per beat; heavy beats route to pages.</text>
+    <rect x="852" y="520" width="132" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="918" y="540" text-anchor="middle" class="mono chip ink">COORDINATED</text>
+
+    <rect x="1222" y="264" width="330" height="324" rx="17" class="shadow"/>
+    <rect x="1214" y="256" width="330" height="324" rx="17" fill="#fffdf8" class="outline"/>
+    <text x="1238" y="300" class="sans card-title ink">Quick Use + Recipe</text>
+    <text x="1238" y="326" class="mono small muted">INTERNAL FAST PATH</text>
+    <rect x="1238" y="342" width="282" height="40" rx="10" fill="#ffd3d0" class="soft"/>
+    <text x="1254" y="367" class="mono chip ink">OPEN · QUICK USE</text>
+    <rect x="1238" y="403" width="282" height="76" rx="10" fill="#fff5de" class="soft"/>
+    <text x="1256" y="430" class="mono chip ink">RECIPE CHECKLIST</text>
+    <text x="1256" y="457" class="sans card-copy body">Internal fast path → hands-to routes</text>
+    <text x="1238" y="505" class="sans card-copy body">No time rail or spillover layer.</text>
+    <rect x="1238" y="520" width="112" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="1294" y="540" text-anchor="middle" class="mono chip ink">COMPACT</text>
+  </g>
+
+  <g role="group" aria-labelledby="grammar-debrief-title">
+    <title id="grammar-debrief-title">Debrief reference forms</title>
+    <text x="56" y="640" class="mono eyebrow ink">DEBRIEF FORMS</text>
+
+    <rect x="64" y="678" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="56" y="670" width="354" height="324" rx="17" fill="#fffdf8" class="outline"/>
+    <text x="80" y="706" class="sans card-title ink">Exemplar — Pure Debrief</text>
+    <text x="80" y="732" class="mono small muted">FIVE-BEAT · UNLABELED</text>
+    <rect x="80" y="756" width="306" height="40" rx="10" fill="#e7efff" class="soft"/>
+    <text x="96" y="781" class="mono chip ink">OPEN · NONE</text>
+    <line x1="92" y1="837" x2="374" y2="837" class="spine"/>
+    <circle cx="102" cy="837" r="11" class="beat"/><circle cx="168" cy="837" r="11" class="beat"/><circle cx="234" cy="837" r="11" class="beat"/><circle cx="300" cy="837" r="11" class="beat"/><circle cx="364" cy="837" r="11" class="beat-acid"/>
+    <text x="80" y="877" class="sans card-copy body">Terse; five unnumbered beats.</text>
+    <text x="80" y="904" class="sans card-copy body">Close · one-line Guidance</text>
+    <rect x="80" y="934" width="112" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="136" y="954" text-anchor="middle" class="mono chip ink">COMPACT</text>
+
+    <rect x="450" y="678" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="442" y="670" width="354" height="324" rx="17" fill="#e7efff" class="outline"/>
+    <text x="466" y="706" class="sans card-title ink">Exemplar — Maximal Debrief</text>
+    <text x="466" y="732" class="mono small muted">FULL SOLUTION-ARCHITECTURE DEPTH</text>
+    <rect x="466" y="756" width="306" height="40" rx="10" fill="#cfe7f7" class="soft"/>
+    <text x="482" y="781" class="mono chip ink">OPEN · DEBRIEF + EXECUTIVE SUMMARY</text>
+    <line x1="478" y1="837" x2="760" y2="837" class="spine"/>
+    <circle cx="486" cy="837" r="10" class="beat"/><circle cx="540" cy="837" r="10" class="beat"/><circle cx="594" cy="837" r="10" class="beat"/><circle cx="648" cy="837" r="10" class="beat"/><circle cx="702" cy="837" r="10" class="beat"/><circle cx="756" cy="837" r="10" class="beat-acid"/>
+    <text x="466" y="877" class="sans card-copy body">I–VI; retrospective + prospective.</text>
+    <text x="466" y="904" class="sans card-copy body">Solution Architecture appendix + lesson/folding.</text>
+    <rect x="466" y="934" width="118" height="30" rx="15" fill="#ffd3d0" class="soft"/>
+    <text x="525" y="954" text-anchor="middle" class="mono chip ink">EXPANDED</text>
+
+    <rect x="836" y="678" width="354" height="324" rx="17" class="shadow"/>
+    <rect x="828" y="670" width="354" height="324" rx="17" fill="#fff5de" class="outline"/>
+    <text x="852" y="706" class="sans card-title ink">Exemplar — Explanatory Debrief</text>
+    <text x="852" y="732" class="mono small muted">CONCLUSION FIRST · I–V</text>
+    <rect x="852" y="756" width="306" height="40" rx="10" fill="#ffd3d0" class="soft"/>
+    <text x="868" y="781" class="mono chip ink">OPEN · DEBRIEF + EXECUTIVE SUMMARY</text>
+    <line x1="864" y1="837" x2="1146" y2="837" class="spine"/>
+    <circle cx="874" cy="837" r="11" class="beat-acid"/><circle cx="940" cy="837" r="11" class="beat"/><circle cx="1006" cy="837" r="11" class="beat"/><circle cx="1072" cy="837" r="11" class="beat"/><circle cx="1136" cy="837" r="11" class="beat-acid"/>
+    <text x="852" y="877" class="sans card-copy body">No time rail or spillover.</text>
+    <text x="852" y="904" class="sans card-copy body">Close · Cure; Guidance folded into summary.</text>
+    <rect x="852" y="934" width="118" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="911" y="954" text-anchor="middle" class="mono chip ink">EXPANDED</text>
+
+    <rect x="1222" y="678" width="330" height="324" rx="17" class="shadow"/>
+    <rect x="1214" y="670" width="330" height="324" rx="17" fill="#d9efea" class="outline"/>
+    <text x="1238" y="706" class="sans card-title ink">Exemplar — Guidance Debrief</text>
+    <text x="1238" y="732" class="mono small muted">GUIDED · I–V</text>
+    <rect x="1238" y="756" width="282" height="40" rx="10" fill="#f2ff67" class="soft"/>
+    <text x="1254" y="781" class="mono chip ink">OPEN · DEBRIEF</text>
+    <line x1="1250" y1="837" x2="1508" y2="837" class="spine"/>
+    <circle cx="1260" cy="837" r="11" class="beat"/><circle cx="1320" cy="837" r="11" class="beat"/><circle cx="1380" cy="837" r="11" class="beat"/><circle cx="1440" cy="837" r="11" class="beat"/><circle cx="1500" cy="837" r="11" class="beat-acid"/>
+    <text x="1238" y="877" class="sans card-copy body">No time rail or spillover.</text>
+    <text x="1238" y="904" class="sans card-copy body">Close · Guidance</text>
+    <rect x="1238" y="934" width="112" height="30" rx="15" fill="#f2ff67" class="soft"/>
+    <text x="1294" y="954" text-anchor="middle" class="mono chip ink">COMPACT</text>
+  </g>
+
+  <g role="group" aria-labelledby="grammar-footer-title">
+    <title id="grammar-footer-title">Transfer boundary</title>
+    <rect x="56" y="1040" width="1488" height="72" rx="16" fill="#153fbe"/>
+    <text x="80" y="1083" class="sans card-copy white">Transfer opening, track, beat spine, time treatment, spillover, and close. Current claims require their own sources.</text>
+  </g>
+</svg>

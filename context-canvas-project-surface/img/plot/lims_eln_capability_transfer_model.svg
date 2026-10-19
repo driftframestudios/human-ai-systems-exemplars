@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="lims-transfer-title lims-transfer-desc">
+  <title id="lims-transfer-title">Laboratory capability transfer from a shared model of the work to production authority</title>
+  <desc id="lims-transfer-desc">A four-state stacked-cube model begins with a fragmented laboratory operating baseline, records participant correction around samples, plates, workflows, and continuous processes, carries one shared scenario library into vendor demonstrations and a bespoke build spike, rates every vendor with the System Usability Scale and a weighted matrix, and ends with the completed production authority transfer to the selected LIMS and ELN a couple of business quarters later.</desc>
+  <defs>
+    <clipPath id="lims-transfer-frame-clip"><rect x="18" y="18" width="1564" height="1084" rx="28"/></clipPath>
+    <pattern id="lims-transfer-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" fill="none" stroke="#2855f3" stroke-width="1" opacity=".08"/>
+      <circle cx="1" cy="1" r="1" fill="#2855f3" opacity=".1"/>
+    </pattern>
+    <pattern id="lims-transfer-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="9" r="1" fill="#17345f" opacity=".1"/>
+      <circle cx="29" cy="25" r=".8" fill="#2855f3" opacity=".1"/>
+    </pattern>
+    <style>
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.paper{fill:#fffaf2}.grid{fill:url(#lims-transfer-grid)}.grain{fill:url(#lims-transfer-speckle)}
+      .header{fill:#2855f3}.shadow{fill:#17345f}.stage{fill:#fffdf8;stroke:#17345f;stroke-width:2}.stage-warm{fill:#fff5de;stroke:#17345f;stroke-width:2}.stage-sea{fill:#d9efea;stroke:#17345f;stroke-width:2}.stage-blue{fill:#e7efff;stroke:#17345f;stroke-width:2}
+      .stage-cap{fill:#17345f}.stage-cap-blue{fill:#2855f3}.stage-cap-sea{fill:#2f6668}.stage-cap-coral{fill:#fa7065}
+      .cube-front{fill:#fffdf8;stroke:#17345f;stroke-width:2}.cube-front-blue{fill:#e7efff;stroke:#17345f;stroke-width:2}.cube-front-sea{fill:#d9efea;stroke:#17345f;stroke-width:2}.cube-front-warm{fill:#fff5de;stroke:#17345f;stroke-width:2}
+      .cube-top{fill:#cfe7f7;stroke:#17345f;stroke-width:2}.cube-side{fill:#7893bc;stroke:#17345f;stroke-width:2}.cube-top-warm{fill:#ffd3d0;stroke:#17345f;stroke-width:2}.cube-side-warm{fill:#fa7065;stroke:#17345f;stroke-width:2}.cube-top-sea{fill:#b8dcd6;stroke:#17345f;stroke-width:2}.cube-side-sea{fill:#3f7775;stroke:#17345f;stroke-width:2}
+      .arrow{fill:#2855f3}.rail{fill:#17345f}.rail-note{fill:#fff5de;stroke:#17345f;stroke-width:2}.status{fill:#f2ff67;stroke:#17345f;stroke-width:1.5}.status-coral{fill:#ffd3d0;stroke:#17345f;stroke-width:1.5}
+      .eyebrow{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.55px;fill:#5d6f8b}.eyebrow-on{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.55px;fill:#f2ff67}
+      .title{font:780 35px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}.subtitle{font:520 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .stage-number{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.2px;fill:#dbe7ff}.stage-title{font:760 20px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}.stage-subtitle{font:600 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .cube-label{font:730 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}.cube-detail{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .micro{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#5d6f8b}.note{font:560 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}.note-strong{font:690 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .rail-title{font:740 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}.rail-body{font:540 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e7efff}.status-text{font:740 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#17345f}
+    </style>
+  </defs>
+
+  <g clip-path="url(#lims-transfer-frame-clip)">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="grid" x="18" y="18" width="1564" height="1084"/>
+    <rect class="grain" x="18" y="18" width="1564" height="1084"/>
+    <rect class="header" x="18" y="18" width="1564" height="146"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <g role="group" aria-labelledby="lims-transfer-heading-title">
+    <title id="lims-transfer-heading-title">Capability transfer model heading</title>
+    <text class="eyebrow-on" x="54" y="56">LIMS / ELN · SHARED GRAMMAR · PRODUCTION AUTHORITY</text>
+    <text class="title" x="54" y="99">From a shared model of lab work to production authority</text>
+    <text class="subtitle" x="54" y="132">One scenario travels through correction, vendor demonstrations, selection, implementation, and operating handoff.</text>
+    <rect class="status" x="1274" y="50" width="258" height="32" rx="7"/>
+    <text class="status-text" x="1293" y="71">HISTORICAL RESULT · COMPLETE</text>
+    <rect class="status-coral" x="1274" y="92" width="258" height="27" rx="7"/>
+    <text class="status-text" x="1293" y="111">STATE 04 · OBSERVED OUTCOME</text>
+  </g>
+
+  <g role="group" aria-labelledby="lims-transfer-states-title">
+    <title id="lims-transfer-states-title">Four states of a bounded laboratory capability transfer</title>
+
+    <g transform="translate(46 196)" role="group" aria-labelledby="lims-transfer-state-one-title">
+      <title id="lims-transfer-state-one-title">State one: fragmented operating authority</title>
+      <rect class="shadow" x="8" y="8" width="350" height="708" rx="20"/>
+      <rect class="stage-warm" width="350" height="708" rx="20"/>
+      <path class="stage-cap" d="M0 20A20 20 0 0 1 20 0h310a20 20 0 0 1 20 20v88H0Z"/>
+      <text class="stage-number" x="22" y="34">01 · OBSERVED BASELINE</text>
+      <text class="stage-title" x="22" y="66">Fragmented authority</text>
+      <text class="stage-subtitle" x="22" y="137"><tspan x="22">People reconstructed the work across</tspan><tspan x="22" dy="20">systems, messages, folders, and memory.</tspan></text>
+
+      <g transform="translate(24 224)">
+        <polygon class="cube-top-warm" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-warm" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-warm" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Sample identity + location</text><text class="cube-detail" x="18" y="61">LIMS · Sample Monitor · local knowledge</text>
+      </g>
+      <g transform="translate(24 316)">
+        <polygon class="cube-top-warm" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-warm" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-warm" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Plate + workflow state</text><text class="cube-detail" x="18" y="61">EBR · instruments · spreadsheets</text>
+      </g>
+      <g transform="translate(24 408)">
+        <polygon class="cube-top-warm" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-warm" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-warm" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Approval + recovery</text><text class="cube-detail" x="18" y="61">QA · tickets · email · human routines</text>
+      </g>
+      <rect class="status-coral" x="24" y="526" width="302" height="34" rx="8"/>
+      <text class="status-text" x="42" y="548">CURRENT SYSTEMS REMAIN AUTHORITATIVE</text>
+      <text class="micro" x="24" y="600">QUESTION MADE VISIBLE</text>
+      <text class="note-strong" x="24" y="627"><tspan x="24">Where is the sample, what is its state,</tspan><tspan x="24" dy="21">and who approved the connected work?</tspan></text>
+    </g>
+
+    <path class="arrow" aria-hidden="true" d="M396 528H420V516L448 542L420 568V556H396Z"/>
+
+    <g transform="translate(448 196)" role="group" aria-labelledby="lims-transfer-state-two-title">
+      <title id="lims-transfer-state-two-title">State two: participant correction reveals stable laboratory units</title>
+      <rect class="shadow" x="8" y="8" width="350" height="708" rx="20"/>
+      <rect class="stage-sea" width="350" height="708" rx="20"/>
+      <path class="stage-cap-sea" d="M0 20A20 20 0 0 1 20 0h310a20 20 0 0 1 20 20v88H0Z"/>
+      <text class="stage-number" x="22" y="34">02 · PARTICIPANT CORRECTION</text>
+      <text class="stage-title" x="22" y="66">Stable units emerge</text>
+      <text class="stage-subtitle" x="22" y="137"><tspan x="22">Lab teams corrected a people-first view</tspan><tspan x="22" dy="20">around the work that keeps moving.</tspan></text>
+
+      <g transform="translate(24 224)">
+        <polygon class="cube-top-sea" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-sea" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-sea" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Samples + plates</text><text class="cube-detail" x="18" y="61">identity · custody · position · lineage</text>
+      </g>
+      <g transform="translate(24 316)">
+        <polygon class="cube-top-sea" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-sea" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-sea" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Workflows + processes</text><text class="cube-detail" x="18" y="61">continuous work across changing rotas</text>
+      </g>
+      <g transform="translate(24 408)">
+        <polygon class="cube-top-sea" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side-sea" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-sea" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">People + teams</text><text class="cube-detail" x="18" y="61">contributors whose assignments change</text>
+      </g>
+      <rect class="status" x="24" y="526" width="302" height="34" rx="8"/>
+      <text class="status-text" x="42" y="548">PROTOTYPE MAKES BUILD SCOPE VISIBLE</text>
+      <text class="micro" x="24" y="600">CHANGED ABILITY</text>
+      <text class="note-strong" x="24" y="627"><tspan x="24">Participants correct the account while</tspan><tspan x="24" dy="21">engineers see bespoke build work early.</tspan></text>
+    </g>
+
+    <path class="arrow" aria-hidden="true" d="M798 528H822V516L850 542L822 568V556H798Z"/>
+
+    <g transform="translate(850 196)" role="group" aria-labelledby="lims-transfer-state-three-title">
+      <title id="lims-transfer-state-three-title">State three: shared scenarios support vendor demonstrations and selection</title>
+      <rect class="shadow" x="8" y="8" width="350" height="708" rx="20"/>
+      <rect class="stage-blue" width="350" height="708" rx="20"/>
+      <path class="stage-cap-blue" d="M0 20A20 20 0 0 1 20 0h310a20 20 0 0 1 20 20v88H0Z"/>
+      <text class="stage-number" x="22" y="34">03 · DEMO + SELECTION</text>
+      <text class="stage-title" x="22" y="66">One grammar selects</text>
+      <text class="stage-subtitle" x="22" y="137"><tspan x="22">Scenarios frame demos; SUS and a</tspan><tspan x="22" dy="20">weighted matrix rate every candidate.</tspan></text>
+
+      <g transform="translate(24 224)">
+        <polygon class="cube-top" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-blue" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Scenario library</text><text class="cube-detail" x="18" y="61">state · exception · owner · recovery</text>
+      </g>
+      <g transform="translate(24 316)">
+        <polygon class="cube-top" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-blue" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">Vendor demo + build spike</text><text class="cube-detail" x="18" y="61">API fit · pagination · exception behavior</text>
+      </g>
+      <g transform="translate(24 408)">
+        <polygon class="cube-top" points="0,14 16,0 302,0 286,14"/>
+        <polygon class="cube-side" points="286,14 302,0 302,62 286,76"/>
+        <rect class="cube-front-blue" x="0" y="14" width="286" height="62"/>
+        <text class="cube-label" x="18" y="41">SUS + weighted matrix</text><text class="cube-detail" x="18" y="61">all candidates rated · vendor selected</text>
+      </g>
+      <rect class="status" x="24" y="526" width="302" height="34" rx="8"/>
+      <text class="status-text" x="42" y="548">VENDOR SELECTED FOR IMPLEMENTATION</text>
+      <text class="micro" x="24" y="600">DECISION CREATED</text>
+      <text class="note-strong" x="24" y="627"><tspan x="24">Every candidate faces the same lab</tspan><tspan x="24" dy="21">grammar, usability, and recovery questions.</tspan></text>
+    </g>
+
+    <path class="arrow" aria-hidden="true" d="M1200 528H1224V516L1252 542L1224 568V556H1200Z"/>
+
+    <g transform="translate(1252 196)" role="group" aria-labelledby="lims-transfer-state-four-title">
+      <title id="lims-transfer-state-four-title">State four: completed production authority transfer</title>
+      <rect class="shadow" x="8" y="8" width="302" height="708" rx="20"/>
+      <rect class="stage" width="302" height="708" rx="20"/>
+      <path class="stage-cap-coral" d="M0 20A20 20 0 0 1 20 0h262a20 20 0 0 1 20 20v88H0Z"/>
+      <text class="stage-number" x="22" y="34">04 · COMPLETED TRANSFER</text>
+      <text class="stage-title" x="22" y="66">Production authority moves</text>
+      <text class="stage-subtitle" x="22" y="137"><tspan x="22">A couple of business quarters later,</tspan><tspan x="22" dy="20">the new LIMS / ELN carries production.</tspan></text>
+
+      <g transform="translate(20 224)">
+        <polygon class="cube-top-warm" points="0,14 16,0 258,0 242,14"/>
+        <polygon class="cube-side-warm" points="242,14 258,0 258,62 242,76"/>
+        <rect class="cube-front" x="0" y="14" width="242" height="62"/>
+        <text class="cube-label" x="16" y="41">Representative migration</text><text class="cube-detail" x="16" y="61">reconciled identity + history</text>
+      </g>
+      <g transform="translate(20 316)">
+        <polygon class="cube-top-warm" points="0,14 16,0 258,0 242,14"/>
+        <polygon class="cube-side-warm" points="242,14 258,0 258,62 242,76"/>
+        <rect class="cube-front" x="0" y="14" width="242" height="62"/>
+        <text class="cube-label" x="16" y="41">Lifecycle + recovery tests</text><text class="cube-detail" x="16" y="61">exceptions · replay · rollback</text>
+      </g>
+      <g transform="translate(20 408)">
+        <polygon class="cube-top-warm" points="0,14 16,0 258,0 242,14"/>
+        <polygon class="cube-side-warm" points="242,14 258,0 258,62 242,76"/>
+        <rect class="cube-front" x="0" y="14" width="242" height="62"/>
+        <text class="cube-label" x="16" y="41">People + quality readiness</text><text class="cube-detail" x="16" y="61">review · training · SOP · support</text>
+      </g>
+      <rect class="status-coral" x="20" y="526" width="258" height="34" rx="8"/>
+      <text class="status-text" x="35" y="548">NEW LIMS / ELN · PRODUCTION</text>
+      <text class="micro" x="20" y="600">OPERATING OUTCOME</text>
+      <text class="note-strong" x="20" y="627"><tspan x="20">Implementation, qualification, training,</tspan><tspan x="20" dy="21">and the operating handoff are complete.</tspan></text>
+    </g>
+  </g>
+
+  <g transform="translate(46 936)" role="group" aria-labelledby="lims-transfer-rail-title">
+    <title id="lims-transfer-rail-title">Scenario continuity and historical boundary</title>
+    <rect class="shadow" x="8" y="8" width="1508" height="124" rx="18"/>
+    <rect class="rail" width="1508" height="124" rx="18"/>
+    <text class="eyebrow-on" x="24" y="31">ONE SCENARIO · FOUR USES</text>
+    <text class="rail-title" x="24" y="60">Participant correction → vendor demos + SUS → selected implementation → production authority transfer</text>
+    <text class="rail-body" x="24" y="86"><tspan x="24">The demonstration window slipped while urgent defects remained active; all candidates were later rated,</tspan><tspan x="24" dy="21">a vendor was selected, and the new LIMS / ELN assumed production authority a couple of business quarters later.</tspan></text>
+    <rect class="rail-note" x="1120" y="22" width="360" height="78" rx="13"/>
+    <text class="micro" x="1140" y="46">RECOVERY STAYS IN VIEW</text>
+    <text class="note-strong" x="1140" y="70"><tspan x="1140">Shared objects, scenarios, and usability</tspan><tspan x="1140" dy="20">criteria travel through the handoff.</tspan></text>
+  </g>
+</svg>

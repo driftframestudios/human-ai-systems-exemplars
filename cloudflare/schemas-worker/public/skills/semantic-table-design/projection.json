@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/semantic-table-design/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "semantic-table-design",
+  "description": "Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.",
+  "semanticAuthorityRef": "../source/.agents/skills/semantic-table-design/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/22",
+  "contract": {
+    "what": "A source-owned table contract that preserves the reader's operation, native header relationships, precise values and locally complete meaning across visual, interactive and extracted forms.",
+    "when": [
+      "A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning."
+    ],
+    "boundaries": [
+      "Authored semantics and the owning generator establish meaning; native HTML carries baseline relationships and custom attributes serve named receivers. Literal names, language, units and technical notation retain their identity. Geometry, extraction and source parity establish separate claims. Accessibility conformance, arbitrary model or ATS ingestion, parser adoption and publication retain their own evidence and authority."
+    ],
+    "result": "One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation."
+  },
+  "receivingUse": {
+    "job": "A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.",
+    "materialResult": "One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/semantic-table-design/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

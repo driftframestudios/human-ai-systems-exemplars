@@ -1,0 +1,1709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>LIMS / ELN Program Constellation</title>
+  <meta name="description" content="A standalone visual map of the LIMS and ELN program hierarchy, nine capability contracts, representative scenarios, execution stacks, and open environment-observed acceptance surfaces.">
+  <style>
+    :root {
+      --cof-field: #fffaf2;
+      --cof-panel: #fffdf8;
+      --cof-cobalt: #2855f3;
+      --cof-cobalt-deep: #153fbe;
+      --cof-ink: #17345f;
+      --cof-body: #304a71;
+      --cof-muted: #5d6f8b;
+      --cof-line: #7893bc;
+      --cof-line-soft: #9aacc8;
+      --cof-cobalt-pale: #e7efff;
+      --cof-powder: #cfe7f7;
+      --cof-sea: #d9efea;
+      --cof-cream: #fff5de;
+      --cof-blush: #ffd3d0;
+      --cof-coral: #fa7065;
+      --cof-acid: #f2ff67;
+      --cof-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --cof-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --cof-radius-frame: 1.75rem;
+      --cof-radius-panel: 1.0625rem;
+      --cof-radius-card: 0.75rem;
+      --cof-radius-chip: 999px;
+      --cof-border-panel: 2px solid var(--cof-ink);
+      --cof-shadow-x: 0.5rem;
+      --cof-shadow-y: 0.5rem;
+      --cof-hard-shadow: var(--cof-shadow-x) var(--cof-shadow-y) 0 var(--cof-ink);
+      --cof-focus-ring: 3px solid var(--cof-cobalt);
+      --cof-focus-offset: 4px;
+
+      --paper: var(--cof-field);
+      --paper-bright: var(--cof-panel);
+      --paper-muted: var(--cof-cream);
+      --ink: var(--cof-ink);
+      --navy: var(--cof-ink);
+      --cobalt: var(--cof-cobalt);
+      --cobalt-deep: var(--cof-cobalt-deep);
+      --cobalt-pale: var(--cof-cobalt-pale);
+      --cyan: var(--cof-acid);
+      --cyan-pale: var(--cof-sea);
+      --coral: var(--cof-coral);
+      --coral-pale: var(--cof-blush);
+      --gold: var(--cof-acid);
+      --gold-pale: var(--cof-cream);
+      --violet: var(--cof-cobalt-deep);
+      --violet-pale: var(--cof-powder);
+      --green: var(--cof-ink);
+      --green-pale: var(--cof-sea);
+      --white: var(--cof-panel);
+      --frame: var(--cof-border-panel);
+      --shadow: var(--cof-hard-shadow);
+      --shadow-small: 5px 5px 0 var(--cof-ink);
+      --radius: var(--cof-radius-panel);
+      --radius-card: var(--cof-radius-card);
+      --sans: var(--cof-font-sans);
+      --mono: var(--cof-font-mono);
+      --serif: var(--cof-font-sans);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 0;
+      color: var(--cof-body);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(40, 85, 243, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 85, 243, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      font-family: var(--sans);
+      font-size: 1rem;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a:focus-visible,
+    [tabindex]:focus-visible {
+      outline: var(--cof-focus-ring);
+      outline-offset: var(--cof-focus-offset);
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.65rem 0.9rem;
+      color: var(--white);
+      background: var(--navy);
+      border: 2px solid var(--white);
+      transform: translateY(-160%);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page-shell {
+      width: min(calc(100% - 2rem), 2020px);
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
+    }
+
+    .site-header,
+    .site-nav,
+    .panel {
+      border: var(--frame);
+      border-radius: var(--cof-radius-panel);
+      box-shadow: var(--shadow);
+    }
+
+    .site-header,
+    .panel {
+      border-radius: var(--cof-radius-frame);
+    }
+
+    .site-header {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(1.25rem, 3vw, 3rem);
+      color: var(--white);
+      background: var(--cobalt-deep);
+    }
+
+    .site-header::after {
+      position: absolute;
+      z-index: -1;
+      top: -5rem;
+      right: -3rem;
+      width: 22rem;
+      height: 22rem;
+      content: "";
+      background:
+        repeating-linear-gradient(
+          135deg,
+          transparent 0 16px,
+          rgba(242, 255, 103, 0.22) 16px 20px
+        );
+      border: 2px solid rgba(255, 253, 248, 0.45);
+      transform: rotate(9deg);
+    }
+
+    .brand-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: fit-content;
+      margin: 0 0 1.5rem;
+      padding: 0.4rem 0.7rem;
+      color: var(--cyan);
+      background: rgba(23, 52, 95, 0.25);
+      border: 2px solid currentColor;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 1.8rem;
+      height: 1.8rem;
+      flex: 0 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.55rem;
+      color: var(--cobalt-deep);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .site-header .eyebrow {
+      color: var(--cyan);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 18ch;
+      margin-bottom: 0.8rem;
+      font-family: var(--serif);
+      font-size: clamp(2.35rem, 6vw, 5.8rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 0.94;
+    }
+
+    h2 {
+      margin-bottom: 0.6rem;
+      color: var(--navy);
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 3.5vw, 3.4rem);
+      letter-spacing: -0.035em;
+      line-height: 1;
+    }
+
+    h3 {
+      margin-bottom: 0.55rem;
+      color: var(--navy);
+      font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+      line-height: 1.18;
+    }
+
+    h4 {
+      margin-bottom: 0.45rem;
+      color: var(--navy);
+      font-size: 0.98rem;
+      line-height: 1.25;
+    }
+
+    .dek {
+      max-width: 78ch;
+      margin-bottom: 1.5rem;
+      color: var(--cof-panel);
+      font-size: clamp(1.02rem, 1.7vw, 1.3rem);
+    }
+
+    .boundary-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 72rem;
+      background: var(--paper-bright);
+      border: 2px solid var(--white);
+      box-shadow: 6px 6px 0 var(--cyan);
+    }
+
+    .boundary-state {
+      min-width: 0;
+      padding: 0.9rem 1rem;
+      color: var(--navy);
+    }
+
+    .boundary-state + .boundary-state {
+      border-left: 2px solid var(--navy);
+    }
+
+    .boundary-state__label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .boundary-state strong {
+      display: block;
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    }
+
+    .boundary-state--simulated {
+      background: var(--cyan-pale);
+    }
+
+    .boundary-state--observed {
+      background: var(--gold-pale);
+    }
+
+    .site-nav {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: var(--paper-bright);
+    }
+
+    .site-nav ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .site-nav a {
+      display: block;
+      padding: 0.55rem 0.75rem;
+      color: var(--navy);
+      background: var(--cobalt-pale);
+      border: 2px solid var(--navy);
+      border-radius: var(--cof-radius-chip);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .site-nav a:hover {
+      color: var(--white);
+      background: var(--cobalt);
+    }
+
+    main {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .panel {
+      min-width: 0;
+      padding: clamp(1rem, 2.6vw, 2.5rem);
+      background: var(--paper-bright);
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.7fr);
+      gap: 1.5rem;
+      align-items: end;
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .section-header > * {
+      min-width: 0;
+    }
+
+    .section-header p:last-child {
+      margin-bottom: 0;
+    }
+
+    .flow-map {
+      max-width: 1500px;
+      margin-inline: auto;
+    }
+
+    .provenance-note {
+      display: grid;
+      grid-template-columns: minmax(10rem, 0.32fr) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: center;
+      max-width: 1500px;
+      margin: 0 auto 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--coral-pale);
+      border: var(--frame);
+      border-radius: var(--radius-card);
+    }
+
+    .provenance-note strong {
+      color: var(--navy);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .provenance-note p {
+      margin: 0;
+    }
+
+    .origin-grid,
+    .branch-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1rem, 3vw, 3rem);
+      align-items: stretch;
+    }
+
+    .flow-card,
+    .capability-card,
+    .acceptance-card,
+    .stack-card,
+    .reading-order {
+      min-width: 0;
+      background: var(--white);
+      border: var(--frame);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-small);
+    }
+
+    .flow-card {
+      padding: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .flow-card p:last-child,
+    .flow-card ul:last-child,
+    .acceptance-card p:last-child,
+    .capability-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .flow-card--origin-a {
+      background: var(--gold-pale);
+    }
+
+    .flow-card--origin-b {
+      background: var(--cyan-pale);
+    }
+
+    .flow-card--program {
+      width: min(100%, 62rem);
+      margin-inline: auto;
+      color: var(--white);
+      background: var(--cobalt-deep);
+      box-shadow: 8px 8px 0 var(--coral);
+    }
+
+    .flow-card--program h3,
+    .flow-card--program .operating-note {
+      color: var(--white);
+    }
+
+    .flow-card--program .node-label {
+      color: var(--cyan);
+    }
+
+    .program-state {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .program-state li {
+      padding: 0.3rem 0.55rem;
+      color: var(--navy);
+      background: var(--cyan);
+      border: 2px solid var(--navy);
+      border-radius: var(--cof-radius-chip);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 850;
+    }
+
+    .flow-card--observed {
+      background: var(--green-pale);
+    }
+
+    .flow-card--simulated {
+      background: var(--violet-pale);
+    }
+
+    .flow-card--comparison {
+      width: min(100%, 74rem);
+      margin-inline: auto;
+      background: var(--coral-pale);
+      box-shadow: 8px 8px 0 var(--cobalt);
+    }
+
+    .node-label,
+    .operating-note,
+    .stable-id,
+    .tier-label,
+    .status-chip,
+    .role-chip {
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+
+    .node-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--cobalt-deep);
+      font-size: 0.72rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .operating-note {
+      display: block;
+      margin-top: 0.75rem;
+      color: var(--cof-muted);
+      font-size: 0.76rem;
+    }
+
+    .object-list,
+    .compact-list,
+    .stack-list,
+    .reading-order ol {
+      margin-bottom: 0;
+      padding-left: 1.25rem;
+    }
+
+    .object-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem 1rem;
+    }
+
+    .object-list li::marker,
+    .compact-list li::marker,
+    .stack-list li::marker,
+    .reading-order li::marker {
+      color: var(--cobalt);
+      font-weight: 900;
+    }
+
+    .flow-svg {
+      display: block;
+      width: 100%;
+      height: 92px;
+      overflow: visible;
+    }
+
+    .flow-svg .cof-arrow {
+      fill: var(--cobalt);
+    }
+
+    .mobile-connector {
+      display: none;
+      width: 2rem;
+      height: 3rem;
+      margin-inline: auto;
+      background: var(--cobalt);
+      clip-path: polygon(40% 0, 60% 0, 60% 68%, 100% 68%, 50% 100%, 0 68%, 40% 68%);
+    }
+
+    .governance-rail {
+      width: min(100%, 68rem);
+      margin: 0 auto;
+      padding: 0.65rem 1rem;
+      color: var(--white);
+      background: var(--navy);
+      border: 2px solid var(--navy);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .governance-rail strong {
+      color: var(--cyan);
+    }
+
+    .acceptance-title {
+      margin: 0 0 1rem;
+      text-align: center;
+    }
+
+    .acceptance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .acceptance-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      background: var(--cobalt-pale);
+    }
+
+    .acceptance-card:nth-child(2) {
+      background: var(--cyan-pale);
+    }
+
+    .acceptance-card:nth-child(3) {
+      background: var(--gold-pale);
+    }
+
+    .acceptance-card:nth-child(4) {
+      background: var(--violet-pale);
+    }
+
+    .acceptance-id {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--cobalt-deep);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
+    .status-pair {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+      padding-top: 0.8rem;
+    }
+
+    .status-chip {
+      padding: 0.25rem 0.4rem;
+      border: 2px solid var(--navy);
+      border-radius: var(--cof-radius-chip);
+      font-size: 0.64rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-chip--closed {
+      background: var(--cyan-pale);
+    }
+
+    .status-chip--open {
+      background: var(--gold-pale);
+    }
+
+    .reading-order {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--paper-muted);
+    }
+
+    .reading-order h3 {
+      font-size: 1rem;
+    }
+
+    .reading-order ol {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem 1.5rem;
+    }
+
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: capability;
+    }
+
+    .capability-grid > li {
+      min-width: 0;
+      counter-increment: capability;
+    }
+
+    .capability-card {
+      position: relative;
+      height: 100%;
+      padding: 1rem 1rem 1.1rem;
+      background: var(--white);
+    }
+
+    .capability-card::before {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      min-width: 2.4rem;
+      padding: 0.25rem 0.45rem;
+      content: counter(capability, decimal-leading-zero);
+      color: var(--white);
+      background: var(--navy);
+      border: 2px solid var(--navy);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .capability-card--truth {
+      border-top: 10px solid var(--cyan);
+    }
+
+    .capability-card--platform {
+      border-top: 10px solid var(--cobalt);
+    }
+
+    .capability-card--operation {
+      border-top: 10px solid var(--gold);
+    }
+
+    .capability-card--authority {
+      border-top: 10px solid var(--coral);
+    }
+
+    .stable-id {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      padding: 0.22rem 0.4rem;
+      color: var(--white);
+      background: var(--cobalt-deep);
+      border: 2px solid var(--navy);
+      font-size: 0.72rem;
+    }
+
+    .tier-label {
+      display: block;
+      margin-top: 0.8rem;
+      color: var(--cobalt-deep);
+      font-size: 0.67rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .table-shell {
+      width: 100%;
+      overflow: hidden;
+      background: var(--white);
+      border: var(--frame);
+      box-shadow: var(--shadow-small);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    caption {
+      padding: 0.9rem 1rem;
+      color: var(--white);
+      background: var(--navy);
+      font-weight: 750;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 0.85rem;
+      border-right: 1px solid rgba(23, 52, 95, 0.4);
+      border-bottom: 1px solid rgba(23, 52, 95, 0.4);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tr > :last-child {
+      border-right: 0;
+    }
+
+    tbody tr:last-child > * {
+      border-bottom: 0;
+    }
+
+    thead th {
+      color: var(--navy);
+      background: var(--cobalt-pale);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    tbody th {
+      background: var(--paper-muted);
+    }
+
+    tbody tr:nth-child(even) td {
+      background: var(--cof-field);
+    }
+
+    .scenario-id {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--cobalt-deep);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 850;
+    }
+
+    .role-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .role-chip {
+      display: inline-block;
+      padding: 0.2rem 0.35rem;
+      color: var(--navy);
+      background: var(--cyan-pale);
+      border: 1px solid var(--navy);
+      border-radius: var(--cof-radius-chip);
+      font-size: 0.67rem;
+    }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1rem, 3vw, 3rem);
+      align-items: stretch;
+    }
+
+    .stack-card {
+      position: relative;
+      padding: clamp(1rem, 2.4vw, 1.75rem);
+    }
+
+    .stack-card--specification {
+      background: var(--cobalt-pale);
+    }
+
+    .stack-card--runtime {
+      background: var(--violet-pale);
+    }
+
+    .stack-card--specification::after {
+      position: absolute;
+      z-index: 2;
+      top: calc(50% - 1rem);
+      right: calc(clamp(1rem, 3vw, 3rem) * -1 - 1rem);
+      width: calc(clamp(1rem, 3vw, 3rem) + 2rem);
+      height: 2rem;
+      content: "";
+      background: var(--cobalt);
+      clip-path: polygon(0 40%, 70% 40%, 70% 0, 100% 50%, 70% 100%, 70% 60%, 0 60%);
+    }
+
+    .stack-card--runtime::before {
+      content: none;
+    }
+
+    .stack-list {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .stack-group + .stack-group {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid var(--navy);
+    }
+
+    .boundary-callout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      color: var(--white);
+      background: var(--navy);
+      border: 2px solid var(--navy);
+      box-shadow: 7px 7px 0 var(--coral);
+    }
+
+    .boundary-callout strong {
+      color: var(--cyan);
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2.5vw, 2.2rem);
+      line-height: 1.05;
+    }
+
+    .boundary-callout p {
+      margin: 0;
+    }
+
+    .site-footer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      color: var(--white);
+      background: var(--navy);
+      border: var(--frame);
+      box-shadow: var(--shadow-small);
+    }
+
+    .site-footer p {
+      margin: 0;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (max-width: 1120px) {
+      .section-header {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+      }
+
+      .acceptance-grid,
+      .reading-order ol {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .capability-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(calc(100% - 1rem), 2020px);
+        padding-top: 0.5rem;
+      }
+
+      .site-header,
+      .site-nav,
+      .panel {
+        box-shadow: 4px 4px 0 var(--navy);
+      }
+
+      .site-header {
+        padding: 1.1rem;
+      }
+
+      .site-header::after {
+        opacity: 0.45;
+      }
+
+      .boundary-strip,
+      .provenance-note,
+      .origin-grid,
+      .branch-grid,
+      .acceptance-grid,
+      .capability-grid,
+      .stack-grid,
+      .boundary-callout,
+      .reading-order ol {
+        grid-template-columns: 1fr;
+      }
+
+      .boundary-state + .boundary-state {
+        border-top: 2px solid var(--navy);
+        border-left: 0;
+      }
+
+      .flow-svg {
+        display: none;
+      }
+
+      .mobile-connector {
+        display: block;
+      }
+
+      .origin-grid,
+      .branch-grid {
+        gap: 1rem;
+      }
+
+      .origin-grid .flow-card + .flow-card,
+      .branch-grid .flow-card + .flow-card {
+        margin-top: 1.2rem;
+      }
+
+      .object-list {
+        grid-template-columns: 1fr;
+      }
+
+      .stack-card--specification::after,
+      .stack-card--runtime::before {
+        display: none;
+      }
+
+      .stack-card--specification {
+        margin-bottom: 2.5rem;
+      }
+
+      .stack-card--specification::after {
+        display: block;
+        position: absolute;
+        top: auto;
+        right: auto;
+        bottom: -2.35rem;
+        left: calc(50% - 1rem);
+        width: 2rem;
+        height: 2.2rem;
+        content: "";
+        background: var(--cobalt);
+        clip-path: polygon(40% 0, 60% 0, 60% 68%, 100% 68%, 50% 100%, 0 68%, 40% 68%);
+      }
+
+      .table-shell {
+        overflow: visible;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+
+      table,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      caption {
+        border: var(--frame);
+      }
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+
+      tbody {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      tbody tr {
+        background: var(--white);
+        border: var(--frame);
+        box-shadow: var(--shadow-small);
+      }
+
+      tbody th,
+      tbody td,
+      tbody tr:last-child > * {
+        padding: 0.75rem;
+        background: var(--white);
+        border: 0;
+        border-bottom: 1px solid rgba(23, 52, 95, 0.45);
+      }
+
+      tbody th {
+        background: var(--paper-muted);
+      }
+
+      tbody tr > :last-child {
+        border-bottom: 0;
+      }
+
+      tbody td::before {
+        display: block;
+        margin-bottom: 0.35rem;
+        content: attr(data-label);
+        color: var(--cobalt-deep);
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .boundary-callout {
+        box-shadow: 4px 4px 0 var(--coral);
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        font-size: 0.95rem;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 14vw, 3.35rem);
+      }
+
+      .site-nav ol,
+      .status-pair {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .site-nav a,
+      .status-chip {
+        width: 100%;
+      }
+
+      .brand-line {
+        max-width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (forced-colors: active) {
+      *,
+      *::before,
+      *::after {
+        box-shadow: none !important;
+        forced-color-adjust: auto;
+      }
+
+      body,
+      .site-header,
+      .site-nav,
+      .panel,
+      .flow-card,
+      .capability-card,
+      .acceptance-card,
+      .stack-card,
+      .reading-order,
+      .boundary-state,
+      .governance-rail,
+      .boundary-callout,
+      .site-footer {
+        color: CanvasText;
+        background: Canvas;
+        border-color: CanvasText;
+      }
+
+      .flow-svg .cof-arrow {
+        fill: CanvasText;
+      }
+
+      .stable-id,
+      .status-chip,
+      .role-chip,
+      .site-nav a {
+        color: LinkText;
+        background: Canvas;
+        border-color: CanvasText;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 12mm;
+      }
+
+      body {
+        color: #000;
+        background: #fff;
+        font-size: 9.5pt;
+      }
+
+      .page-shell {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+      }
+
+      .skip-link,
+      .site-nav {
+        display: none;
+      }
+
+      .site-header,
+      .panel,
+      .flow-card,
+      .capability-card,
+      .acceptance-card,
+      .stack-card,
+      .reading-order,
+      .site-footer,
+      .table-shell,
+      .boundary-callout {
+        color: #000;
+        background: #fff;
+        border-color: #000;
+        box-shadow: none;
+      }
+
+      .site-header::after,
+      .stack-card--specification::after,
+      .stack-card--runtime::before {
+        display: none;
+      }
+
+      .site-header .eyebrow,
+      .site-header .dek,
+      .flow-card--program h3,
+      .flow-card--program .operating-note,
+      .boundary-callout strong,
+      .site-footer {
+        color: #000;
+      }
+
+      .panel,
+      .flow-card,
+      .capability-card,
+      .acceptance-card,
+      .stack-card,
+      .reading-order,
+      tr {
+        break-inside: avoid;
+      }
+
+      .panel {
+        margin-top: 8mm;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to the constellation</a>
+
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="brand-line">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect>
+          <path d="M5 17h5l3-8 5 16 3-8h6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+        </svg>
+        Laboratory operating map · program constellation
+      </div>
+      <p class="eyebrow">Laboratory information management · electronic laboratory notebook</p>
+      <h1>LIMS / ELN Program Constellation</h1>
+      <p class="dek">
+        Trace intended use and shared laboratory meaning into environment-observed work, an executable simulation,
+        a useful comparison, and four accountable acceptance surfaces.
+      </p>
+      <div class="boundary-strip" aria-label="Current operating boundary">
+        <div class="boundary-state boundary-state--simulated">
+          <span class="boundary-state__label">Selected simulated reality</span>
+          <strong>Closed in simulation</strong>
+        </div>
+        <div class="boundary-state boundary-state--observed">
+          <span class="boundary-state__label">Configured environments and accountable adoption</span>
+          <strong>Environment-observed state open</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="site-nav" aria-label="Program constellation sections">
+      <ol>
+        <li><a href="#constellation">01 · Constellation</a></li>
+        <li><a href="#capabilities">02 · Capabilities</a></li>
+        <li><a href="#scenarios">03 · Scenarios</a></li>
+        <li><a href="#stacks">04 · Stacks &amp; boundary</a></li>
+      </ol>
+    </nav>
+
+    <main id="main-content">
+      <section id="constellation" class="panel" aria-labelledby="constellation-title">
+        <header class="section-header">
+          <div>
+            <p class="eyebrow">01 · Program hierarchy and decision boundary</p>
+            <h2 id="constellation-title">Shared meaning moves through two implementation realities</h2>
+          </div>
+          <p>
+            Intended use and shared scientific meaning shape both branches. Their differences direct changed work,
+            recovery investment, and accountable acceptance without collapsing unlike realities.
+          </p>
+        </header>
+
+        <aside class="provenance-note" aria-label="Source and release boundary">
+          <strong>Source boundary</strong>
+          <p>
+            The 2021–2022 FMI Site Reading supplies the historical provenance seed. The later program stands as an
+            independent teaching specification; candidate spec-v0.3.0 release coordinates remain pending.
+          </p>
+        </aside>
+
+        <div class="flow-map" aria-label="LIMS and ELN operating constellation">
+          <div class="origin-grid">
+            <article class="flow-card flow-card--origin-a">
+              <span class="node-label">Independent teaching specification</span>
+              <h3>Intended use</h3>
+              <p>
+                Name the scientific work, the receiving populations, the consequential decision, the recoverable
+                failure, and the authority that accepts each material effect.
+              </p>
+              <span class="operating-note">Decision use · what changes, who acts, where recovery starts, and who accepts the effect.</span>
+            </article>
+
+            <article class="flow-card flow-card--origin-b">
+              <span class="node-label">Historical provenance seed · 2021–2022 FMI Site Reading</span>
+              <h3>Shared-object grammar</h3>
+              <ul class="object-list">
+                <li>Sample</li>
+                <li>Plate</li>
+                <li>Reagent</li>
+                <li>Run / worklist</li>
+                <li>Sign-off / approval</li>
+                <li>Identity · state · provenance · recovery</li>
+              </ul>
+              <span class="operating-note">Identity, state, provenance, and recovery travel with every shared object.</span>
+            </article>
+          </div>
+
+          <svg class="flow-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+            <path class="cof-arrow" d="M241 0H249V24H496V64H484L500 96L516 64H504V16H241Z"></path>
+            <path class="cof-arrow" d="M751 0H759V16H504V64H516L500 96L484 64H496V24H751Z"></path>
+          </svg>
+          <div class="mobile-connector" aria-hidden="true"></div>
+
+          <article class="flow-card flow-card--program">
+            <span class="node-label">Program decision contract</span>
+            <h3>Program specification</h3>
+            <p>
+              Versioned capabilities, invariants, representative scenarios, and accountable roles turn intended use
+              and shared objects into a comparable target for both realities.
+            </p>
+            <span class="operating-note">Nine capabilities · six executable scenarios · four acceptance surfaces.</span>
+            <ul class="program-state" aria-label="Candidate specification boundary">
+              <li>Candidate · spec-v0.3.0; release coordinates pending</li>
+              <li>Current material · nine capabilities + six scenarios</li>
+              <li>Current use · independent teaching specification</li>
+              <li>Environment work · configured execution + accountable adoption</li>
+            </ul>
+          </article>
+
+          <div class="governance-rail">
+            <strong>Operating language carried across branches:</strong> shared-object identity, state vocabulary,
+            environment label, recovery route, and accountable role boundary.
+          </div>
+
+          <svg class="flow-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+            <path class="cof-arrow" d="M496 0H504V24H249V64H261L245 96L229 64H241V16H496Z"></path>
+            <path class="cof-arrow" d="M496 0H504V16H759V64H771L755 96L739 64H751V24H496Z"></path>
+          </svg>
+          <div class="mobile-connector" aria-hidden="true"></div>
+
+          <div class="branch-grid">
+            <article class="flow-card flow-card--observed">
+              <span class="node-label">Environment branch</span>
+              <h3>Observed implementation</h3>
+              <p>
+                Active code, infrastructure, migrations, configured-environment results, and adoption advance here.
+                Each result retains its environment, version, limitations, and accountable owner.
+              </p>
+              <span class="operating-note">Receives vendor conformance, migration, restore, security, observability, and adoption work.</span>
+            </article>
+
+            <article class="flow-card flow-card--simulated">
+              <span class="node-label">Selected simulation branch</span>
+              <h3>Executable simulation</h3>
+              <p>
+                An executable counterfactual carries synthetic environments, phase artifacts, measures, and role-bound
+                decisions. Its selected reality can close while environment-observed acceptance remains open.
+              </p>
+              <span class="operating-note">Provides a repeatable rehearsal space for failure, recovery, migration, and acceptance decisions.</span>
+            </article>
+          </div>
+
+          <svg class="flow-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+            <path class="cof-arrow" d="M241 0H249V24H496V64H484L500 96L516 64H504V16H241Z"></path>
+            <path class="cof-arrow" d="M751 0H759V16H504V64H516L500 96L484 64H496V24H751Z"></path>
+          </svg>
+          <div class="mobile-connector" aria-hidden="true"></div>
+
+          <article class="flow-card flow-card--comparison">
+            <span class="node-label">Decision surface</span>
+            <h3>Comparative difference</h3>
+            <p>
+              The same capability and scenario are read side by side. Comparable meanings stay aligned while the
+              interpretation names convergence, useful divergence, an implementation gap, a simulation correction,
+              a context change, or an open environment question.
+            </p>
+            <span class="operating-note">Changed work · direct the next investment to implementation, simulation, shared meaning, or local context.</span>
+          </article>
+
+          <div class="mobile-connector" aria-hidden="true"></div>
+          <svg class="flow-svg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+            <path class="cof-arrow" d="M496 0H504V64H516L500 96L484 64H496Z"></path>
+          </svg>
+
+          <h3 class="acceptance-title">Four environment acceptance surfaces</h3>
+          <div class="acceptance-grid">
+            <article class="acceptance-card">
+              <span class="acceptance-id">configured_vendor_environments</span>
+              <h4>Configured vendor conformance</h4>
+              <p>Version-pinned Sapio, Benchling, and LabKey environments; service identity; fixtures; operation; readback; limitations.</p>
+              <div class="status-pair" aria-label="Acceptance state">
+                <span class="status-chip status-chip--closed">Simulation · closed</span>
+                <span class="status-chip status-chip--open">Observed · open</span>
+              </div>
+            </article>
+
+            <article class="acceptance-card">
+              <span class="acceptance-id">representative_migration_and_restore</span>
+              <h4>Migration, restore, and data exit</h4>
+              <p>Representative corpus; rollback; clean restore; continuity; neutral-reader reconstruction; accountable exception decisions.</p>
+              <div class="status-pair" aria-label="Acceptance state">
+                <span class="status-chip status-chip--closed">Simulation · closed</span>
+                <span class="status-chip status-chip--open">Observed · open</span>
+              </div>
+            </article>
+
+            <article class="acceptance-card">
+              <span class="acceptance-id">production_security_and_observability</span>
+              <h4>Production-bound security and observability</h4>
+              <p>Identity; tenant isolation; configuration; credential lifecycle; privacy; telemetry; support; incident recovery.</p>
+              <div class="status-pair" aria-label="Acceptance state">
+                <span class="status-chip status-chip--closed">Simulation · closed</span>
+                <span class="status-chip status-chip--open">Observed · open</span>
+              </div>
+            </article>
+
+            <article class="acceptance-card">
+              <span class="acceptance-id">scientific_quality_regulatory_acceptance</span>
+              <h4>Scientific, Quality, and Regulatory acceptance</h4>
+              <p>Distinct role-bound decisions over one immutable basis, with residual risks and requalification triggers preserved.</p>
+              <div class="status-pair" aria-label="Acceptance state">
+                <span class="status-chip status-chip--closed">Simulation · closed</span>
+                <span class="status-chip status-chip--open">Observed · open</span>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <aside class="reading-order" aria-labelledby="reading-order-title">
+          <h3 id="reading-order-title">Text reading of the hierarchy</h3>
+          <ol>
+            <li>Intended use and shared objects establish the operating target.</li>
+            <li>Nine capabilities and six scenarios give both branches the same consequential paths.</li>
+            <li>Comparison directs changed work while preserving the boundary between simulated and observed results.</li>
+            <li>Each environment acceptance surface advances through its own accountable decision.</li>
+          </ol>
+        </aside>
+      </section>
+
+      <section id="capabilities" class="panel" aria-labelledby="capabilities-title">
+        <header class="section-header">
+          <div>
+            <p class="eyebrow">02 · Nine stable capability contracts</p>
+            <h2 id="capabilities-title">A capability hierarchy for durable laboratory meaning</h2>
+          </div>
+          <p>
+            Stable identifiers keep scientific truth, platform fit, reversible operation, and accountable effect
+            aligned across implementations, simulations, scenarios, and acceptance decisions.
+          </p>
+        </header>
+
+        <ol class="capability-grid">
+          <li>
+            <article id="spec-life-001" class="capability-card capability-card--truth">
+              <span class="stable-id">SPEC-LIFE-001</span>
+              <h3>Attributable specimen lifecycle</h3>
+              <p>Scientists see one current state while the complete decision record remains reconstructable.</p>
+              <span class="tier-label">Shared scientific truth</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-cust-001" class="capability-card capability-card--truth">
+              <span class="stable-id">SPEC-CUST-001</span>
+              <h3>Versioned custody transfer</h3>
+              <p>Laboratory operations can locate a specimen and resolve concurrent movement safely.</p>
+              <span class="tier-label">Shared scientific truth</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-inst-001" class="capability-card capability-card--truth">
+              <span class="stable-id">SPEC-INST-001</span>
+              <h3>Raw-artifact-preserving instrument ingress</h3>
+              <p>A scientific reviewer can connect a reported observation to the exact received bytes.</p>
+              <span class="tier-label">Shared scientific truth</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-vend-001" class="capability-card capability-card--platform">
+              <span class="stable-id">SPEC-VEND-001</span>
+              <h3>Configured vendor conformance</h3>
+              <p>Evaluators can distinguish configured platform compatibility from adapter plausibility.</p>
+              <span class="tier-label">Platform conformance</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-migr-001" class="capability-card capability-card--operation">
+              <span class="stable-id">SPEC-MIGR-001</span>
+              <h3>Meaning-preserving migration and recovery</h3>
+              <p>Records move and recover while identity, meaning, lineage, signatures, and artifacts remain intact.</p>
+              <span class="tier-label">Reversible operation</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-seco-001" class="capability-card capability-card--operation">
+              <span class="stable-id">SPEC-SECO-001</span>
+              <h3>Tenant security and observable operation</h3>
+              <p>Owners operate with attributable access, protected telemetry, and measurable recovery.</p>
+              <span class="tier-label">Reversible operation</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-secr-001" class="capability-card capability-card--operation">
+              <span class="stable-id">SPEC-SECR-001</span>
+              <h3>Workload-bound configuration and secret lifecycle</h3>
+              <p>Operators rotate credentials and change non-secret configuration through governed runtime stores while audit events and credential-rotation records retain references or redacted metadata.</p>
+              <span class="tier-label">Reversible operation</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-acpt-001" class="capability-card capability-card--authority">
+              <span class="stable-id">SPEC-ACPT-001</span>
+              <h3>Accountable multidomain acceptance</h3>
+              <p>Scientific, Quality, and Regulatory decisions remain distinct, bounded, and reviewable.</p>
+              <span class="tier-label">Accountable effect</span>
+            </article>
+          </li>
+          <li>
+            <article id="spec-call-001" class="capability-card capability-card--authority">
+              <span class="stable-id">SPEC-CALL-001</span>
+              <h3>Bounded tool-operation caller</h3>
+              <p>A person, service, workflow, or bounded generative AI tool caller selects a released operation while the service establishes identity, authority, scope, effect, evidence, and recovery.</p>
+              <span class="tier-label">Accountable effect</span>
+            </article>
+          </li>
+        </ol>
+      </section>
+
+      <section id="scenarios" class="panel" aria-labelledby="scenarios-title">
+        <header class="section-header">
+          <div>
+            <p class="eyebrow">03 · Representative scenarios</p>
+            <h2 id="scenarios-title">Six consequential paths through the contract</h2>
+          </div>
+          <p id="scenario-intro">
+            Each scenario carries a stable identity, a shared-object connection, a failure-and-recovery route, and the
+            accountable roles that decide whether the result is acceptable.
+          </p>
+        </header>
+
+        <div class="table-shell">
+          <table data-label="Representative scenarios, recovery paths, and accountable roles" aria-describedby="scenario-intro">
+            <caption>Representative scenarios, recovery paths, and accountable roles</caption>
+            <colgroup>
+              <col style="width: 22%">
+              <col style="width: 22%">
+              <col style="width: 34%">
+              <col style="width: 22%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th data-label="Scenario" scope="col">Scenario</th>
+                <th data-label="Shared-object connection" scope="col">Shared-object connection</th>
+                <th data-label="Failure and recovery" scope="col">Failure and recovery</th>
+                <th data-label="Accountable roles" scope="col">Accountable roles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-LIFE-001 Released result correction preserves the original" id="scn-life-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-LIFE-001</span>Released result correction preserves the original</th>
+                <td data-label="Shared-object connection">Result, review, revision, and sign-off.</td>
+                <td data-label="Failure and recovery">A missing reason or reviewer authority routes the correction to accountable review with the original evidence intact.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Scientific owner</span></li>
+                    <li><span class="role-chip">Quality owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-CUST-001 Concurrent custody transfer reloads current position" id="scn-cust-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-CUST-001</span>Concurrent custody transfer reloads current position</th>
+                <td data-label="Shared-object connection">Specimen location, custody, and versioned state.</td>
+                <td data-label="Failure and recovery">Competing transfers at the same revision reload current custody and construct a new attributable transfer.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Laboratory operations owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-INST-001 Partial instrument artifact enters quarantine" id="scn-inst-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-INST-001</span>Partial instrument artifact enters quarantine</th>
+                <td data-label="Shared-object connection">Instrument ingress, artifact identity, raw bytes, digest, and disposition.</td>
+                <td data-label="Failure and recovery">Divergent or replayed bytes enter quarantine; recovery requests a complete transfer and reconciles against the preserved receipt.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Scientific owner</span></li>
+                    <li><span class="role-chip">Instrument-integration owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-IDEM-001 Ambiguous vendor write reconciles before resubmission" id="scn-idem-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-IDEM-001</span>Ambiguous vendor write reconciles before resubmission</th>
+                <td data-label="Shared-object connection">Stable request identity and one scientific effect.</td>
+                <td data-label="Failure and recovery">Reused identity with changed content preserves both digests for review; an ambiguous timeout resolves through readback before retry.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Platform owner</span></li>
+                    <li><span class="role-chip">Scientific-data owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-MIGR-001 Representative migration preserves meaning" id="scn-migr-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-MIGR-001</span>Representative migration preserves meaning</th>
+                <td data-label="Shared-object connection">Identity, content, relationships, audit, signatures, and artifacts.</td>
+                <td data-label="Failure and recovery">A divergent attachment digest or signature relationship closes the cutover gate and resumes from the last accepted checkpoint.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Data-migration owner</span></li>
+                    <li><span class="role-chip">Business-process owner</span></li>
+                    <li><span class="role-chip">Quality owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-ACPT-001 Accountable release records distinct decisions" id="scn-acpt-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-ACPT-001</span>Accountable release records distinct decisions</th>
+                <td data-label="Shared-object connection">Review and sign-off across the complete shared-object evidence bundle.</td>
+                <td data-label="Failure and recovery">A pending domain preserves qualification-ready state and routes the open decision to its named owner.</td>
+                <td data-label="Accountable roles">
+                  <ul class="role-list">
+                    <li><span class="role-chip">Scientific owner</span></li>
+                    <li><span class="role-chip">Quality owner</span></li>
+                    <li><span class="role-chip">Regulatory owner</span></li>
+                    <li><span class="role-chip">Security owner</span></li>
+                    <li><span class="role-chip">Operations owner</span></li>
+                    <li><span class="role-chip">Business owner</span></li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="stacks" class="panel" aria-labelledby="stacks-title">
+        <header class="section-header">
+          <div>
+            <p class="eyebrow">04 · Technical surfaces and current operating boundary</p>
+            <h2 id="stacks-title">Specification and validation stack → selected simulated runtime</h2>
+          </div>
+          <p>
+            The left surface establishes inspectable contracts. The right surface names one selected simulated
+            execution environment. Environment-observed qualification advances separately through the four acceptance surfaces.
+          </p>
+        </header>
+
+        <div class="stack-grid">
+          <article class="stack-card stack-card--specification">
+            <span class="node-label">Specification and validation</span>
+            <h3>Specification and validation stack</h3>
+            <ul class="stack-list">
+              <li>Versioned JSON, YAML, and Markdown contracts</li>
+              <li>Python 3.12+ contract validation</li>
+              <li>Python 3.12 / 3.13 compatibility checks</li>
+              <li>GitHub Actions · Ubuntu 24.04</li>
+              <li>Stable identifiers · trace links · finite JSON · unique-key validation</li>
+              <li>Specification-by-example and failure-twin scenarios</li>
+            </ul>
+          </article>
+
+          <article class="stack-card stack-card--runtime">
+            <span class="node-label">Selected simulation</span>
+            <h3>Selected simulated runtime</h3>
+            <div class="stack-group">
+              <h4>Scientific state and platform seams</h4>
+              <ul class="stack-list">
+                <li>Durable PostgreSQL · idempotency · unit of work · outbox · inbox · audit</li>
+                <li>Configured vendor surfaces · Sapio · Benchling · LabKey</li>
+                <li>Canonical readback and reconciliation</li>
+                <li>Tenant-scoped authorization</li>
+              </ul>
+            </div>
+            <div class="stack-group">
+              <h4>Runtime control and observable operation</h4>
+              <ul class="stack-list">
+                <li>Multi-AZ AWS production analogue</li>
+                <li>Environment-scoped workload identity</li>
+                <li>AWS Systems Manager Parameter Store</li>
+                <li>AWS Secrets Manager · customer-managed KMS · bounded runtime credential cache</li>
+                <li>OpenTelemetry · traces · metrics · structured logs</li>
+                <li>Privacy-preserving telemetry collectors</li>
+              </ul>
+            </div>
+            <div class="stack-group">
+              <h4>Continuity</h4>
+              <ul class="stack-list">
+                <li>Migration · rollback · clean restore · neutral-reader data exit</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <aside class="boundary-callout" aria-label="Current boundary">
+          <strong>Closed in simulation / environment-observed state open</strong>
+          <p>
+            The selected simulated branch carries a complete simulated result for its named reality. Configured vendor
+            tenants, representative migration and restore, production-bound controls, and accountable acceptance advance
+            through environment-specific evidence and human decisions.
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Stable capability and scenario identities let collaborators refer to the same scientific, technical, and
+        accountable boundary directly from this standalone page.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

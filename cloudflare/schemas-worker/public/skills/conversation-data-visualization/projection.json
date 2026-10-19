@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/conversation-data-visualization/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "conversation-data-visualization",
+  "description": "Produces bounded exploratory data visuals with recoverable values and calibrated interpretation in a conversation. Applies when a human and AI are examining data together and a figure can change the next question or decision.",
+  "semanticAuthorityRef": "../source/.agents/skills/conversation-data-visualization/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/8",
+  "contract": {
+    "what": "A compact exploratory visual and evidence companion suited to the current conversational question.",
+    "when": [
+      "A shared data exploration needs a pattern, comparison, distribution, uncertainty, or relationship made visible before committing to a durable publication."
+    ],
+    "boundaries": [
+      "The human's delivery preference and available tools govern the carrier. Data access grants analysis within the task, while external upload, hosting, publication, and new persistent services retain their own authority. A conversational figure's polish remains separate from evidentiary standing."
+    ],
+    "result": "A useful figure or simpler alternative, a concise interpretation, and enough source/value context to continue or correct the exploration."
+  },
+  "receivingUse": {
+    "job": "A shared data exploration needs a pattern, comparison, distribution, uncertainty, or relationship made visible before committing to a durable publication.",
+    "materialResult": "A useful figure or simpler alternative, a concise interpretation, and enough source/value context to continue or correct the exploration.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/conversation-data-visualization/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

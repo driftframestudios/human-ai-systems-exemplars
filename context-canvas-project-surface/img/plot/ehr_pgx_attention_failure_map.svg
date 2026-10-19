@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="pgx-title pgx-desc">
+  <title id="pgx-title">The alert was correct and the intervention still failed</title>
+  <desc id="pgx-desc">A source-period pharmacogenomics decision-support path moves from an Epic medication-prescribe action through CDS Hooks 1.x to an interruptive card and SMART on FHIR detail. A second rail shows the scarce clinician attention budget, habitual override, failed adoption, and lower-interruption order-set and pharmacist receiving surfaces. The investment band names the governance and cross-functional work required before build.</desc>
+
+  <defs>
+    <pattern id="pgx-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .field { fill: #fffaf2; }
+    .grid { fill: url(#pgx-grid); }
+    .frame { fill: none; stroke: #17345f; stroke-width: 2; }
+    .header { fill: #2855f3; }
+    .panel { fill: #fffdf8; stroke: #17345f; stroke-width: 2; }
+    .shadow { fill: #17345f; }
+    .card { fill: #fffdf8; stroke: #7893bc; stroke-width: 1.5; }
+    .powder { fill: #cfe7f7; }
+    .sea { fill: #d9efea; }
+    .cream { fill: #fff5de; }
+    .pale { fill: #e7efff; }
+    .blush { fill: #ffd3d0; }
+    .acid { fill: #f2ff67; }
+    .coral { fill: #fa7065; }
+    .ink-fill { fill: #17345f; }
+    .cobalt-fill { fill: #2855f3; }
+    .title { fill: #fffdf8; font: 750 35px/1.1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .subtitle { fill: #e7efff; font: 500 15px/1.35 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .eyebrow-on { fill: #f2ff67; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.4px; }
+    .eyebrow { fill: #5d6f8b; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.1px; }
+    .section { fill: #17345f; font: 750 20px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .card-title { fill: #17345f; font: 750 16px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body { fill: #304a71; font: 500 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body-strong { fill: #17345f; font: 700 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .mono { fill: #304a71; font: 650 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .mono-on { fill: #fffdf8; font: 700 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: .4px; }
+    .chip { fill: #fffdf8; stroke: #17345f; stroke-width: 1.5; }
+    .chip-text { fill: #17345f; font: 700 12px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .rule { stroke: #9aacc8; stroke-width: 1; }
+    .arrow { fill: #2855f3; }
+    .arrow-coral { fill: #fa7065; }
+  </style>
+
+  <rect class="field" width="1600" height="1120"/>
+  <rect class="grid" x="20" y="20" width="1560" height="1080" rx="28"/>
+  <rect class="frame" x="20" y="20" width="1560" height="1080" rx="28"/>
+
+  <g role="group" aria-labelledby="pgx-heading-title">
+    <title id="pgx-heading-title">Pharmacogenomics attention map heading</title>
+    <path class="header" d="M20 48a28 28 0 0 1 28-28h1504a28 28 0 0 1 28 28v116H20Z"/>
+    <text class="eyebrow-on" x="54" y="58">PHARMACOGENOMICS CDS · TECHNICAL DELIVERY + CLINICAL ADOPTION</text>
+    <text class="title" x="54" y="103">The alert was correct. The intervention still failed.</text>
+    <text class="subtitle" x="54" y="134">Conformance delivers the card · attention governance determines whether the clinical work changes</text>
+  </g>
+
+  <g role="group" aria-labelledby="pgx-scope-title">
+    <title id="pgx-scope-title">Scope and outcome of the pharmacogenomics intervention</title>
+    <text class="eyebrow" x="54" y="196">OPERATING SCOPE</text>
+    <rect class="chip" x="54" y="210" width="164" height="34" rx="17"/>
+    <text class="chip-text" x="76" y="232">Epic prescribing</text>
+    <rect class="chip" x="232" y="210" width="184" height="34" rx="17"/>
+    <text class="chip-text" x="254" y="232">SMART on FHIR</text>
+    <rect class="chip" x="430" y="210" width="160" height="34" rx="17"/>
+    <text class="chip-text" x="452" y="232">CDS Hooks 1.x</text>
+    <rect class="chip sea" x="604" y="210" width="210" height="34" rx="17"/>
+    <text class="chip-text" x="626" y="232">Conformance · passed</text>
+    <rect class="chip blush" x="828" y="210" width="190" height="34" rx="17"/>
+    <text class="chip-text" x="850" y="232">Adoption · failed</text>
+  </g>
+
+  <g role="group" aria-labelledby="pgx-delivery-title">
+    <title id="pgx-delivery-title">Technically conformant delivery path</title>
+    <rect class="panel pale" x="54" y="274" width="1492" height="218" rx="17"/>
+    <text class="eyebrow" x="76" y="304">TECHNICAL DELIVERY · CONFORMANCE PASSES</text>
+
+    <rect class="card" x="76" y="326" width="298" height="138" rx="11"/>
+    <rect class="powder" x="76" y="326" width="298" height="38" rx="10"/>
+    <text class="eyebrow" x="94" y="351">01 · PRESCRIBE ACTION</text>
+    <text class="card-title" x="94" y="390">Epic begins a medication order</text>
+    <text class="body" x="94" y="412">Patient, medication, and</text>
+    <text class="body" x="94" y="433">encounter context enter the</text>
+    <text class="body" x="94" y="454">decision-support call.</text>
+
+    <path class="arrow" aria-hidden="true" d="M382 378H400V366L424 390L400 414V402H382Z"/>
+
+    <rect class="card" x="432" y="326" width="298" height="138" rx="11"/>
+    <rect class="sea" x="432" y="326" width="298" height="38" rx="10"/>
+    <text class="eyebrow" x="450" y="351">02 · CDS HOOKS SERVICE</text>
+    <text class="card-title" x="450" y="390">medication-prescribe</text>
+    <text class="body" x="450" y="417">The service evaluates patient-specific</text>
+    <text class="body" x="450" y="438">drug-gene guidance.</text>
+
+    <path class="arrow" aria-hidden="true" d="M738 378H756V366L780 390L756 414V402H738Z"/>
+
+    <rect class="card" x="788" y="326" width="298" height="138" rx="11"/>
+    <rect class="cream" x="788" y="326" width="298" height="38" rx="10"/>
+    <text class="eyebrow" x="806" y="351">03 · INTERRUPTIVE CARD</text>
+    <text class="card-title" x="806" y="390">Specific caution + suggestion</text>
+    <text class="body" x="806" y="412">The EHR renders clinically</text>
+    <text class="body" x="806" y="433">relevant guidance with a link</text>
+    <text class="body" x="806" y="454">to supporting detail.</text>
+
+    <path class="arrow" aria-hidden="true" d="M1094 378H1112V366L1136 390L1112 414V402H1094Z"/>
+
+    <rect class="card" x="1144" y="326" width="378" height="138" rx="11"/>
+    <rect class="powder" x="1144" y="326" width="378" height="38" rx="10"/>
+    <text class="eyebrow" x="1162" y="351">04 · SMART DETAIL</text>
+    <text class="card-title" x="1162" y="390">Patient-scoped supporting context</text>
+    <text class="body" x="1162" y="417">OAuth2 + PKCE launch with least-privilege</text>
+    <text class="mono" x="1162" y="441">patient/Observation.read</text>
+  </g>
+
+  <g role="group" aria-labelledby="pgx-adoption-title">
+    <title id="pgx-adoption-title">Clinical attention path and adoption outcome</title>
+    <rect class="shadow" x="62" y="534" width="368" height="284" rx="17"/>
+    <rect class="panel" x="54" y="526" width="368" height="284" rx="17"/>
+    <path class="powder" d="M71 526h334a17 17 0 0 1 17 17v58H54v-58a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="76" y="554">CLINICIAN ATTENTION</text>
+    <text class="section" x="76" y="584">The scarce operating resource</text>
+    <rect class="card pale" x="76" y="622" width="324" height="74" rx="11"/>
+    <text class="body-strong" x="94" y="650">A correct signal enters a saturated channel.</text>
+    <text class="body" x="94" y="674">Its clinical value now competes for focus.</text>
+    <rect class="card blush" x="76" y="712" width="324" height="72" rx="11"/>
+    <text class="eyebrow" x="94" y="738">ATTENTION CONTRACT</text>
+    <text class="body" x="94" y="762">Severity · cardinality · adoption measure</text>
+
+    <path class="arrow-coral" aria-hidden="true" d="M438 640H466V626L494 654L466 682V668H438Z"/>
+
+    <rect class="shadow" x="502" y="554" width="304" height="234" rx="17"/>
+    <rect class="panel blush" x="494" y="546" width="304" height="234" rx="17"/>
+    <text class="eyebrow" x="518" y="577">HABITUAL RESPONSE</text>
+    <text class="section" x="518" y="611">Override becomes reflexive</text>
+    <text class="body" x="518" y="640">The card remains clinically correct.</text>
+    <text class="body" x="518" y="661">Its interruption joins an existing</text>
+    <text class="body" x="518" y="682">stream.</text>
+    <line class="rule" x1="518" y1="700" x2="774" y2="700"/>
+    <text class="body-strong" x="518" y="726">Delivery succeeded.</text>
+    <text class="body-strong" x="518" y="751">Clinical behavior stayed the same.</text>
+
+    <path class="arrow-coral" aria-hidden="true" d="M814 640H842V626L870 654L842 682V668H814Z"/>
+
+    <rect class="shadow" x="878" y="554" width="292" height="234" rx="17"/>
+    <rect class="panel coral" x="870" y="546" width="292" height="234" rx="17"/>
+    <text class="mono-on" x="894" y="577">OPERATING OUTCOME</text>
+    <text class="title" x="894" y="616" style="font-size:23px">Adoption failed</text>
+    <text class="mono-on" x="894" y="650">CONFORMANCE · PASS</text>
+    <text class="mono-on" x="894" y="675">CARD DELIVERY · PASS</text>
+    <text class="mono-on" x="894" y="700">CLINICAL USE · FAILED</text>
+    <line x1="894" y1="720" x2="1138" y2="720" stroke="#17345f" stroke-opacity=".45"/>
+    <text class="body-strong" x="894" y="750">The CMIO office mutes the card.</text>
+
+    <path class="arrow" aria-hidden="true" d="M1178 640H1206V626L1234 654L1206 682V668H1178Z"/>
+
+    <rect class="shadow" x="1242" y="534" width="304" height="284" rx="17"/>
+    <rect class="panel" x="1234" y="526" width="304" height="284" rx="17"/>
+    <path class="sea" d="M1251 526h270a17 17 0 0 1 17 17v58h-304v-58a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="1258" y="554">LOWER-INTERRUPTION SURFACES</text>
+    <text class="section" x="1258" y="584">Move guidance into work</text>
+    <rect class="card acid" x="1258" y="622" width="256" height="72" rx="11"/>
+    <text class="card-title" x="1278" y="650">Order-set defaults</text>
+    <text class="body" x="1278" y="671">Shape the choice before</text>
+    <text class="body" x="1278" y="689">interruptive work begins.</text>
+    <rect class="card sea" x="1258" y="710" width="256" height="72" rx="11"/>
+    <text class="card-title" x="1278" y="738">Pharmacist review queue</text>
+    <text class="body" x="1278" y="759">Route interpretation to</text>
+    <text class="body" x="1278" y="777">a staffed role.</text>
+  </g>
+
+  <g role="group" aria-labelledby="pgx-investment-title">
+    <title id="pgx-investment-title">Changed work and sustained investment</title>
+    <rect class="cobalt-fill" x="54" y="850" width="1492" height="62" rx="12"/>
+    <text class="mono-on" x="78" y="878">CHANGED WORK + INVESTMENT</text>
+    <text class="title" x="78" y="904" style="font-size:19px">Govern attention, cardinality, and adoption before engineering commits the surface.</text>
+
+    <rect class="card pale" x="54" y="928" width="278" height="138" rx="11"/>
+    <text class="eyebrow" x="74" y="953">CMIO + CLINICAL INFORMATICS</text>
+    <text class="body-strong" x="74" y="980">Set severity and interruption</text>
+    <text class="body-strong" x="74" y="1000">thresholds.</text>
+    <text class="body" x="74" y="1028">Own the alert lifecycle and</text>
+    <text class="body" x="74" y="1048">retirement decision.</text>
+
+    <rect class="card cream" x="348" y="928" width="278" height="138" rx="11"/>
+    <text class="eyebrow" x="368" y="953">PRESCRIBER + PHARMACY</text>
+    <text class="body-strong" x="368" y="980">Co-design the moment and</text>
+    <text class="body-strong" x="368" y="1000">receiving role.</text>
+    <text class="body" x="368" y="1028">Keep guidance close to the</text>
+    <text class="body" x="368" y="1048">work it can change.</text>
+
+    <rect class="card blush" x="642" y="928" width="278" height="138" rx="11"/>
+    <text class="eyebrow" x="662" y="953">PRODUCT DESIGN</text>
+    <text class="body-strong" x="662" y="980">Treat attention as a bounded</text>
+    <text class="body-strong" x="662" y="1000">clinical resource.</text>
+    <text class="body" x="662" y="1028">Prefer the receiving surface</text>
+    <text class="body" x="662" y="1048">that fits the decision.</text>
+
+    <rect class="card sea" x="936" y="928" width="278" height="138" rx="11"/>
+    <text class="eyebrow" x="956" y="953">ADOPTION ANALYTICS</text>
+    <text class="body-strong" x="956" y="980">Define behavior and safety</text>
+    <text class="body-strong" x="956" y="1000">signals before launch.</text>
+    <text class="body" x="956" y="1028">Separate a delivered card</text>
+    <text class="body" x="956" y="1048">from a changed outcome.</text>
+
+    <rect class="card acid" x="1230" y="928" width="316" height="138" rx="11"/>
+    <text class="eyebrow" x="1250" y="953">SERVICE ENGINEERING</text>
+    <text class="body-strong" x="1250" y="980">Maintain CDS Hooks, SMART</text>
+    <text class="body-strong" x="1250" y="1000">launch, and auditability.</text>
+    <text class="body" x="1250" y="1028">Keep technical reliability aligned</text>
+    <text class="body" x="1250" y="1048">with the governed use case.</text>
+  </g>
+</svg>

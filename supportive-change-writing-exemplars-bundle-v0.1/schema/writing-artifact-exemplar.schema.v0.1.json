@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Writing Artifact Exemplar",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band",
+    "collection_ref",
+    "branch_id",
+    "branch_context_ref",
+    "reference_set_ref",
+    "tone_goal_refs",
+    "aesthetic_prompt_capsule_ref",
+    "essay_mode",
+    "editorial_selection_assessment",
+    "sequence",
+    "purpose",
+    "population_context",
+    "evidence_profile",
+    "concepts",
+    "structural_counterweights",
+    "fidelity_anchors",
+    "contextual_relation_ids",
+    "rendered_artifact_ids",
+    "latent_framework_assessment"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "essay_exemplar"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "collection_ref": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "branch_context_ref": {
+      "type": "string"
+    },
+    "reference_set_ref": {
+      "type": "string"
+    },
+    "tone_goal_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aesthetic_prompt_capsule_ref": {
+      "type": "string"
+    },
+    "essay_mode": {
+      "enum": [
+        "integrative",
+        "critical_systems",
+        "human_horizon"
+      ]
+    },
+    "editorial_selection_assessment": {
+      "type": "object",
+      "required": [
+        "referent",
+        "probability",
+        "assessment_status"
+      ],
+      "properties": {
+        "referent": {
+          "type": "string"
+        },
+        "probability": {
+          "type": "number"
+        },
+        "assessment_status": {
+          "const": "editorial_estimate"
+        }
+      }
+    },
+    "sequence": {
+      "type": "integer"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "population_context": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_profile": {
+      "type": "object",
+      "required": [
+        "posture",
+        "citation_style",
+        "reference_set"
+      ],
+      "properties": {
+        "posture": {
+          "type": "string"
+        },
+        "citation_style": {
+          "const": "author_year"
+        },
+        "reference_set": {
+          "type": "string"
+        }
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "structural_counterweights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fidelity_anchors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contextual_relation_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rendered_artifact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "latent_framework_assessment": {
+      "type": "object",
+      "required": [
+        "referent",
+        "probability",
+        "assessment_status",
+        "qualities"
+      ],
+      "properties": {
+        "referent": {
+          "const": "Likelihood that a blind reviewer recognizes reliable support, resourceful adaptation, reciprocal communication, practical inclusion, and realistic incremental hope."
+        },
+        "probability": {
+          "type": "number"
+        },
+        "assessment_status": {
+          "const": "editorial_estimate"
+        },
+        "qualities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "reliable_support_and_belonging",
+              "resourceful_adaptation",
+              "reciprocal_communication",
+              "practical_inclusion",
+              "realistic_incremental_hope"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

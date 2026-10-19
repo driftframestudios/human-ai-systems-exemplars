@@ -1,0 +1,2710 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Context Tree — Cross-role context and architecture handoffs</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ui-page: #f3efe8;
+      --ui-surface: #fffdf9;
+      --ui-ink: #24231f;
+      --ui-muted: #6d665d;
+      --ui-line: #d8d0c4;
+      --ui-line-strong: #a79d8e;
+      --ui-active: #155c63;
+      --ui-active-ink: #ffffff;
+      --ui-focus: #bd7419;
+      --ui-shadow: 0 12px 32px rgba(50, 44, 37, .09);
+
+      /* Warm Editorial */
+      --warm-paper: #fbfaf7;
+      --warm-field: #f4f1eb;
+      --warm-ink: #25231f;
+      --warm-muted: #5f594f;
+      --warm-line: #a79d8e;
+      --warm-line-soft: #d8d0c4;
+      --warm-edge: #8d8477;
+      --warm-route: #155c63;
+      --warm-goal: #fff0cf;
+      --warm-actor: #e7f0f0;
+      --warm-impact: #f0ede7;
+      --warm-discoverable: #edf3de;
+
+      /* High-contrast evidence */
+      --cobalt-field: #f4f7fd;
+      --cobalt-paper: #fffdf7;
+      --cobalt-goal: #dbe9ff;
+      --cobalt-actor: #edf4ff;
+      --cobalt-impact: #fffdf7;
+      --cobalt-discoverable: #f7faff;
+      --cobalt-line: #215fbb;
+      --cobalt-line-soft: #8aaee9;
+      --cobalt-ink: #16345e;
+      --cobalt-muted: #4c678d;
+      --cobalt-shadow: #c3d2ea;
+
+      /* Soft Color Blocking */
+      --soft-blush-field: #ffd3d0;
+      --soft-blush-paper-01: #fdebe9;
+      --soft-blush-paper-02: #feeae9;
+      --soft-cobalt-01: #2855f3;
+      --soft-cobalt-02: #2955f4;
+      --soft-acid-lime: #f2ff67;
+      --soft-coral: #fa7065;
+      --soft-sand: #e9cf9e;
+      --soft-ink: #183a78;
+      --soft-warm-white: #fff7f4;
+
+      /* Context Ledger */
+      --ledger-canvas: #f1e9d2;
+      --ledger-card: #f8f1d9;
+      --ledger-info: #d3e4f2;
+      --ledger-context: #ebe3d1;
+      --ledger-route: #dde9e8;
+      --ledger-cream-shadow: #ece5d4;
+      --ledger-neutral: #d2cdc2;
+      --ledger-ink: #213252;
+      --ledger-ink-strong: #1f325b;
+      --ledger-blue-muted: #556788;
+      --ledger-slate: #4c5e75;
+      --ledger-warm-ink: #5e5023;
+      --ledger-warm-muted: #887c57;
+      --ledger-teal-ink: #274444;
+
+      /* Calm review */
+      --sea-glass-mist: #f1f9f9;
+      --sea-glass-foam: #dbf0f0;
+      --sea-glass-glass: #bddbdb;
+      --sea-glass-tide: #afc8c8;
+      --sea-glass-silt: #cdd7d7;
+      --sea-glass-stone: #888b8b;
+      --sea-glass-line: #717676;
+      --sea-glass-ink: #555959;
+      --sea-glass-deep-ink: #263f42;
+
+      /* Dark review */
+      --night-field: #00375b;
+      --night-panel: #092160;
+      --night-midnight: #141c5b;
+      --night-trace: #f2ff67;
+      --night-line: #4a6de5;
+      --night-glow: #3057e1;
+      --night-ink: #f8fbff;
+      --night-muted: #aebdea;
+      --night-cream: #ced8f7;
+
+      /* Bold blueprint */
+      --pop-page: #ffd3d0;
+      --pop-panel: #fdebe9;
+      --pop-ink: #141c5b;
+      --pop-blue: #2855f3;
+      --pop-lime: #f2ff67;
+      --pop-coral: #fa7065;
+      --pop-sand: #e9cf9e;
+      --pop-mint: #d3e4cb;
+      --pop-lilac: #e4d1dc;
+      --pop-periwinkle: #ced8f7;
+
+      /* Stage–Layer Blueprint */
+      --blueprint-page: #eef5f2;
+      --blueprint-header: #e9e5df;
+      --blueprint-front: #e6f4f2;
+      --blueprint-back: #f1eadc;
+      --blueprint-ai: #e9e5f4;
+      --blueprint-system: #e8edf5;
+      --blueprint-data: #efe6d5;
+      --blueprint-gov: #f1dfde;
+      --blueprint-handoff: #e7ebdd;
+      --blueprint-signal: #e8eff0;
+      --blueprint-ink: #24233b;
+      --blueprint-muted: #57556c;
+
+      /* Route accents */
+      --route-service: #2855f3;
+      --route-ai: #6f63c7;
+      --route-software: #42745a;
+      --route-specification: #c35149;
+      --route-heart: #b15f18;
+      --route-participatory: #247483;
+      --route-cross-channel: #8c731f;
+
+      --font-sans: "Arial Nova", "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ui-page);
+      color: var(--ui-ink);
+      font-family: var(--font-sans);
+      line-height: 1.45;
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .42; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid #091b36;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 6px #fffdf9;
+    }
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: .75rem;
+      left: .75rem;
+      transform: translateY(-200%);
+      padding: .65rem .85rem;
+      border-radius: .55rem;
+      background: var(--ui-ink);
+      color: white;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .app-shell { min-height: 100vh; }
+    .masthead {
+      display: grid;
+      gap: .8rem;
+      padding: clamp(1.4rem, 3vw, 3rem) clamp(1rem, 2vw, 2.25rem) 1.35rem;
+      border-bottom: 1px solid var(--ui-line);
+      background:
+        radial-gradient(circle at 92% 8%, rgba(49, 87, 237, .08), transparent 24rem),
+        linear-gradient(135deg, #fffaf2, #eee8df);
+    }
+    .eyebrow, .control-label, .facet-label, .meta-label, .posture-label, .layer-code {
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      font-weight: 780;
+      letter-spacing: .095em;
+      text-transform: uppercase;
+    }
+    .eyebrow { color: var(--ui-active); }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5.9rem);
+      line-height: .88;
+      letter-spacing: -.065em;
+    }
+    .masthead-copy {
+      max-width: 64rem;
+      margin: 0;
+      color: var(--ui-muted);
+      font-size: clamp(1rem, 1.55vw, 1.3rem);
+    }
+    .outcome-anchor {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: .75rem 1rem;
+      align-items: baseline;
+      width: min(100%, 78rem);
+      padding-top: .65rem;
+      border-top: 1px solid var(--ui-line);
+    }
+    .outcome-anchor span {
+      color: var(--ui-active);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .outcome-anchor strong { font-size: clamp(.95rem, 1.4vw, 1.14rem); }
+    main { padding: 0 clamp(.65rem, 1.35vw, 1.35rem) 3rem; }
+    .control-deck {
+      position: sticky;
+      z-index: 30;
+      top: 0;
+      display: grid;
+      gap: .7rem;
+      margin: 0 -.1rem 1rem;
+      padding: .85rem .1rem .95rem;
+      border-bottom: 1px solid var(--ui-line);
+      background: color-mix(in srgb, var(--ui-page) 94%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .control-row {
+      display: grid;
+      grid-template-columns: 7.4rem minmax(0, 1fr);
+      gap: .65rem;
+      align-items: start;
+    }
+    .control-label {
+      padding-top: .46rem;
+      color: var(--ui-muted);
+    }
+    .control-group, .action-group, .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+    .control-button, .action-button, .filter-chip, .icon-button {
+      min-height: 2.25rem;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: .65rem;
+      background: var(--ui-surface);
+      color: var(--ui-ink);
+      font-size: .82rem;
+      font-weight: 600;
+    }
+    .control-button, .action-button, .filter-chip { padding: .46rem .7rem; }
+    .icon-button {
+      display: inline-grid;
+      width: 2.4rem;
+      place-items: center;
+      padding: 0;
+      font-family: var(--font-mono);
+    }
+    .control-button[aria-pressed="true"], .filter-chip[aria-pressed="true"], .icon-button[aria-pressed="true"],
+    [role="radio"][aria-checked="true"] {
+      border-color: var(--ui-active);
+      background: var(--ui-active);
+      color: var(--ui-active-ink);
+    }
+    .action-button { border-color: color-mix(in srgb, var(--ui-active) 42%, var(--ui-line)); }
+    .action-button.primary { background: var(--ui-active); color: white; border-color: var(--ui-active); }
+    .filter-rails {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: .9rem;
+      margin-bottom: 1rem;
+      padding: .9rem 1rem;
+      border: 1px solid var(--ui-line);
+      border-radius: 1rem;
+      background: var(--ui-surface);
+    }
+    .filter-rail { display: grid; gap: .45rem; align-content: start; }
+    .filter-chip {
+      border-color: #274b77;
+      border-radius: .72rem;
+      color: #213b62;
+      font-size: .78rem;
+    }
+    .filter-chip[aria-pressed="true"] {
+      background: #213b62;
+      color: #fffdf7;
+      border-color: #213b62;
+    }
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .map-shell {
+      --surface-field: var(--warm-paper);
+      --surface-panel: var(--warm-field);
+      --surface-ink: var(--warm-ink);
+      --surface-muted: var(--warm-muted);
+      --surface-line: var(--warm-line);
+      --surface-line-soft: var(--warm-line-soft);
+      --surface-accent: var(--warm-route);
+      --surface-goal: var(--warm-goal);
+      --surface-group: var(--warm-actor);
+      --surface-context: var(--warm-impact);
+      --surface-discoverable: var(--warm-discoverable);
+      --surface-shadow: transparent;
+      --pattern-line: var(--warm-line);
+      --pattern-glow: #ffffff;
+      --pattern-opacity: .13;
+      position: relative;
+      isolation: isolate;
+      min-height: 68rem;
+      overflow: hidden;
+      border: 1px solid var(--surface-line-soft);
+      border-radius: 1.3rem;
+      background: var(--surface-field);
+      color: var(--surface-ink);
+      box-shadow: var(--ui-shadow);
+    }
+    .map-shell::before, .map-shell::after {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+    }
+    .visual-surface { position: relative; z-index: 1; min-height: 68rem; padding: clamp(.8rem, 1.7vw, 1.6rem); }
+    .surface-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) max-content;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1.15rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--surface-line-soft);
+    }
+    .surface-heading h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.6vw, 2.3rem);
+      letter-spacing: -.04em;
+    }
+    .surface-heading p { max-width: 42rem; margin: .25rem 0 0; color: var(--surface-muted); }
+    .surface-count { color: var(--surface-muted); font-family: var(--font-mono); font-size: .76rem; }
+    .inspector {
+      position: static;
+      display: grid;
+      gap: .9rem;
+      max-height: calc(100vh - 13.5rem);
+      overflow: auto;
+      padding: 1rem;
+      border: 1px solid var(--ui-line);
+      border-radius: 1rem;
+      background: var(--ui-surface);
+      box-shadow: var(--ui-shadow);
+    }
+    .inspector h2, .inspector h3 { margin: 0; line-height: 1.12; }
+    .inspector h2 { font-size: 1.28rem; letter-spacing: -.025em; }
+    .inspector p { margin: 0; }
+    .inspector-empty {
+      display: grid;
+      gap: .8rem;
+      color: var(--ui-muted);
+    }
+    .inspector-meta { display: grid; gap: .65rem; }
+    .meta-pair {
+      display: grid;
+      grid-template-columns: 7.3rem minmax(0, 1fr);
+      gap: .65rem;
+      align-items: start;
+      padding-top: .55rem;
+      border-top: 1px solid var(--ui-line);
+    }
+    .meta-label { color: var(--ui-muted); }
+    .inspector-actions { display: flex; flex-wrap: wrap; gap: .45rem; padding-top: .25rem; }
+    .inspector-actions button {
+      padding: .48rem .65rem;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: .6rem;
+      background: var(--ui-surface);
+      color: var(--ui-ink);
+      font-size: .78rem;
+      font-weight: 780;
+    }
+    .inspector-actions button.primary { background: var(--ui-active); color: white; border-color: var(--ui-active); }
+
+    /* Treatment aliases */
+    .app-shell[data-treatment="warm"] .map-shell {
+      --surface-field: var(--warm-paper); --surface-panel: var(--warm-field);
+      --surface-ink: var(--warm-ink); --surface-muted: var(--warm-muted);
+      --surface-line: var(--warm-line); --surface-line-soft: var(--warm-line-soft);
+      --surface-accent: var(--warm-route); --surface-goal: var(--warm-goal);
+      --surface-group: var(--warm-actor); --surface-context: var(--warm-impact);
+      --surface-discoverable: var(--warm-discoverable); --pattern-line: var(--warm-line);
+    }
+    .app-shell[data-treatment="cobalt"] .map-shell {
+      --surface-field: var(--cobalt-field); --surface-panel: var(--cobalt-paper);
+      --surface-ink: var(--cobalt-ink); --surface-muted: var(--cobalt-muted);
+      --surface-line: var(--cobalt-line); --surface-line-soft: var(--cobalt-line-soft);
+      --surface-accent: var(--cobalt-line); --surface-goal: var(--cobalt-goal);
+      --surface-group: var(--cobalt-actor); --surface-context: var(--cobalt-impact);
+      --surface-discoverable: var(--cobalt-discoverable); --surface-shadow: var(--cobalt-shadow);
+      --pattern-line: var(--cobalt-line-soft); --pattern-opacity: .16;
+    }
+    .app-shell[data-treatment="soft"] .map-shell {
+      --surface-field: var(--soft-blush-field); --surface-panel: var(--soft-blush-paper-01);
+      --surface-ink: var(--soft-ink); --surface-muted: var(--soft-ink);
+      --surface-line: var(--soft-cobalt-01); --surface-line-soft: var(--soft-cobalt-02);
+      --surface-accent: var(--soft-cobalt-01); --surface-goal: var(--soft-acid-lime);
+      --surface-group: var(--soft-warm-white); --surface-context: var(--soft-blush-paper-02);
+      --surface-discoverable: var(--soft-sand); --surface-shadow: var(--soft-cobalt-01);
+      --pattern-line: var(--soft-cobalt-01); --pattern-glow: var(--soft-warm-white); --pattern-opacity: .17;
+    }
+    .app-shell[data-treatment="ledger"] .map-shell {
+      --surface-field: var(--ledger-canvas); --surface-panel: var(--ledger-card);
+      --surface-ink: var(--ledger-ink); --surface-muted: var(--ledger-slate);
+      --surface-line: var(--ledger-ink-strong); --surface-line-soft: var(--ledger-blue-muted);
+      --surface-accent: var(--ledger-teal-ink); --surface-goal: var(--ledger-card);
+      --surface-group: var(--ledger-info); --surface-context: var(--ledger-context);
+      --surface-discoverable: var(--ledger-route); --surface-shadow: var(--ledger-ink-strong);
+      --pattern-line: var(--ledger-blue-muted); --pattern-glow: var(--ledger-card); --pattern-opacity: .14;
+    }
+    .app-shell[data-treatment="sea"] .map-shell {
+      --surface-field: var(--sea-glass-mist); --surface-panel: var(--sea-glass-foam);
+      --surface-ink: var(--sea-glass-deep-ink); --surface-muted: var(--sea-glass-ink);
+      --surface-line: var(--sea-glass-line); --surface-line-soft: var(--sea-glass-tide);
+      --surface-accent: var(--sea-glass-deep-ink); --surface-goal: var(--sea-glass-glass);
+      --surface-group: var(--sea-glass-foam); --surface-context: var(--sea-glass-mist);
+      --surface-discoverable: var(--sea-glass-silt); --pattern-line: var(--sea-glass-tide); --pattern-opacity: .18;
+    }
+    .app-shell[data-treatment="night"] .map-shell {
+      --surface-field: var(--night-field); --surface-panel: var(--night-panel);
+      --surface-ink: var(--night-ink); --surface-muted: var(--night-muted);
+      --surface-line: var(--night-line); --surface-line-soft: color-mix(in srgb, var(--night-line) 64%, transparent);
+      --surface-accent: var(--night-trace); --surface-goal: var(--night-panel);
+      --surface-group: var(--night-midnight); --surface-context: var(--night-panel);
+      --surface-discoverable: var(--night-field); --surface-shadow: var(--night-glow);
+      --pattern-line: var(--night-line); --pattern-glow: var(--night-glow); --pattern-opacity: .28;
+    }
+    .app-shell[data-treatment="pop"] .map-shell {
+      --surface-field: var(--pop-page); --surface-panel: var(--pop-panel);
+      --surface-ink: var(--pop-ink); --surface-muted: var(--pop-ink);
+      --surface-line: var(--pop-ink); --surface-line-soft: color-mix(in srgb, var(--pop-ink) 45%, transparent);
+      --surface-accent: var(--pop-blue); --surface-goal: var(--pop-lime);
+      --surface-group: var(--pop-blue); --surface-context: var(--pop-periwinkle);
+      --surface-discoverable: var(--pop-sand); --surface-shadow: var(--pop-ink);
+      --pattern-line: var(--pop-ink); --pattern-glow: var(--pop-panel); --pattern-opacity: .18;
+    }
+
+    /* Background fields */
+    .app-shell[data-pattern="plain"] .map-shell::before { opacity: 0; }
+    .app-shell[data-pattern="quintile"] .map-shell::before {
+      opacity: var(--pattern-opacity);
+      background-image:
+        linear-gradient(var(--pattern-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pattern-line) 1px, transparent 1px);
+      background-size: 20% 5rem, 20% 5rem;
+    }
+    .app-shell[data-pattern="sheen"] .map-shell::before {
+      opacity: .64;
+      background:
+        radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--pattern-glow) 55%, transparent), transparent 25rem),
+        linear-gradient(112deg, transparent 10%, color-mix(in srgb, var(--pattern-line) 18%, transparent) 45%, transparent 68%);
+    }
+    .app-shell[data-pattern="columns"] .map-shell::before {
+      opacity: var(--pattern-opacity);
+      background: repeating-linear-gradient(90deg, var(--pattern-line) 0 1px, transparent 1px 20%, color-mix(in srgb, var(--pattern-line) 16%, transparent) 20% 40%);
+    }
+    .app-shell[data-pattern="speckles"] .map-shell::before {
+      opacity: calc(var(--pattern-opacity) * 1.25);
+      background-image:
+        radial-gradient(circle, var(--pattern-line) 0 1px, transparent 1.5px),
+        radial-gradient(circle, var(--pattern-line) 0 1.5px, transparent 2px),
+        radial-gradient(circle, var(--pattern-line) 0 .8px, transparent 1.3px);
+      background-position: 0 0, 31px 19px, 73px 48px;
+      background-size: 83px 73px, 109px 97px, 131px 113px;
+    }
+    .app-shell[data-pattern="topography"] .map-shell::before {
+      opacity: var(--pattern-opacity);
+      background: var(--pattern-line);
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='360' viewBox='0 0 520 360'%3E%3Cg fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M-30 104 C72 24 181 22 246 79 S389 163 550 59'/%3E%3Cpath d='M-26 133 C68 55 173 50 240 104 S390 190 548 89'/%3E%3Cpath d='M-22 164 C58 92 160 80 232 132 S391 218 546 122'/%3E%3Cpath d='M-20 202 C59 133 145 116 220 160 S380 252 544 161'/%3E%3Cpath d='M-18 246 C69 176 159 154 232 194 S388 280 542 205'/%3E%3Cpath d='M-12 292 C76 231 178 205 253 236 S411 311 538 252'/%3E%3C/g%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='360' viewBox='0 0 520 360'%3E%3Cg fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M-30 104 C72 24 181 22 246 79 S389 163 550 59'/%3E%3Cpath d='M-26 133 C68 55 173 50 240 104 S390 190 548 89'/%3E%3Cpath d='M-22 164 C58 92 160 80 232 132 S391 218 546 122'/%3E%3Cpath d='M-20 202 C59 133 145 116 220 160 S380 252 544 161'/%3E%3Cpath d='M-18 246 C69 176 159 154 232 194 S388 280 542 205'/%3E%3Cpath d='M-12 292 C76 231 178 205 253 236 S411 311 538 252'/%3E%3C/g%3E%3C/svg%3E");
+      -webkit-mask-size: 520px 360px;
+      mask-size: 520px 360px;
+    }
+    .app-shell[data-pattern="drafting"] .map-shell::before {
+      opacity: var(--pattern-opacity);
+      background-image:
+        linear-gradient(var(--pattern-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pattern-line) 1px, transparent 1px);
+      background-size: 2rem 2rem;
+    }
+    .app-shell[data-pattern="drafting"] .map-shell::after {
+      inset: .8rem;
+      border: 1px solid var(--pattern-line);
+      opacity: calc(var(--pattern-opacity) * 2.4);
+      background:
+        repeating-linear-gradient(90deg, var(--pattern-line) 0 1px, transparent 1px 12px) top / 100% 24px no-repeat,
+        linear-gradient(var(--pattern-line), var(--pattern-line)) 0 3.3rem / 100% 1px no-repeat,
+        linear-gradient(90deg, transparent 24.8%, var(--pattern-line) 25%, transparent 25.2%, transparent 49.8%, var(--pattern-line) 50%, transparent 50.2%, transparent 74.8%, var(--pattern-line) 75%, transparent 75.2%) top / 100% 3.3rem no-repeat;
+    }
+
+    /* Shared node language */
+    .goal-node, .group-node, .context-card, .assembly-card, .shared-node, .route-node {
+      position: relative;
+      border: 1.5px solid var(--surface-line);
+      background: var(--surface-panel);
+      color: var(--surface-ink);
+    }
+    .goal-node { background: var(--surface-goal); }
+    .group-node { background: var(--surface-group); }
+    .context-card { background: var(--surface-context); }
+    .assembly-card, .shared-node, .route-node { background: var(--surface-discoverable); }
+    .app-shell[data-treatment="cobalt"] :is(.goal-node, .group-node, .context-card, .assembly-card, .shared-node, .route-node) {
+      box-shadow: 5px 5px 0 color-mix(in srgb, var(--surface-shadow) 72%, transparent);
+    }
+    .app-shell[data-treatment="ledger"] :is(.goal-node, .group-node, .context-card, .assembly-card, .shared-node, .route-node) {
+      box-shadow: 8px 8px 0 var(--surface-shadow);
+    }
+    .app-shell[data-treatment="soft"] :is(.goal-node, .group-node, .context-card, .assembly-card, .shared-node, .route-node) {
+      border-width: 2px;
+    }
+    .app-shell[data-treatment="soft"] .context-card:nth-child(5n+2),
+    .app-shell[data-treatment="soft"] .assembly-card:nth-child(5n+2) {
+      background: color-mix(in srgb, var(--soft-coral) 58%, var(--soft-blush-paper-02));
+    }
+    .app-shell[data-treatment="night"] :is(.goal-node, .group-node, .context-card, .assembly-card, .shared-node, .route-node) {
+      border-color: var(--surface-line);
+      box-shadow: 0 0 0 1px rgba(74, 109, 229, .18);
+    }
+    .app-shell[data-treatment="pop"] .group-node { color: #ffffff; }
+    .app-shell[data-treatment="pop"] :is(.context-card, .assembly-card)[data-color-slot="0"] { background: var(--pop-coral); }
+    .app-shell[data-treatment="pop"] :is(.context-card, .assembly-card)[data-color-slot="1"] { background: var(--pop-sand); }
+    .app-shell[data-treatment="pop"] :is(.context-card, .assembly-card)[data-color-slot="2"] { background: var(--pop-mint); }
+    .app-shell[data-treatment="pop"] :is(.context-card, .assembly-card)[data-color-slot="3"] { background: var(--pop-lilac); }
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="participant"] td,
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="frontstage"] td { background: color-mix(in srgb, var(--soft-blush-paper-01) 72%, var(--soft-acid-lime)); }
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="backstage"] td,
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="data"] td { background: color-mix(in srgb, var(--soft-blush-paper-01) 72%, var(--soft-sand)); }
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="ai"] td,
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="system"] td { background: color-mix(in srgb, var(--soft-blush-paper-01) 80%, var(--soft-cobalt-01)); }
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="governance"] td,
+    .app-shell[data-treatment="soft"] .blueprint-table tbody tr[data-layer="handoff"] td { background: color-mix(in srgb, var(--soft-blush-paper-01) 75%, var(--soft-coral)); }
+    .selected-card {
+      outline: 4px solid color-mix(in srgb, var(--surface-accent) 70%, transparent);
+      outline-offset: 3px;
+    }
+    .proposal-card {
+      border-style: dashed !important;
+      background-image: repeating-linear-gradient(135deg, transparent 0 8px, color-mix(in srgb, var(--surface-accent) 12%, transparent) 8px 16px);
+    }
+    .proposal-flag, .status-chip, .posture-chip, .route-chip, .trace-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 820;
+      line-height: 1.2;
+    }
+    .proposal-flag, .status-chip, .posture-chip, .trace-chip { padding: .23rem .46rem; }
+    .proposal-flag {
+      border: 1px dashed var(--surface-accent);
+      color: var(--surface-accent);
+      font-family: var(--font-mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .status-chip {
+      border: 1px solid color-mix(in srgb, var(--surface-line) 72%, transparent);
+      background: color-mix(in srgb, var(--surface-panel) 78%, transparent);
+      color: var(--surface-ink);
+    }
+    .posture-chip { background: color-mix(in srgb, var(--surface-accent) 13%, var(--surface-panel)); color: var(--surface-ink); }
+    .route-chip {
+      gap: .25rem;
+      padding: .27rem .46rem;
+      border-left: 4px solid var(--route-color, var(--surface-accent));
+      border-radius: .3rem;
+      background: color-mix(in srgb, var(--surface-panel) 78%, transparent);
+      color: var(--surface-ink);
+    }
+    .trace-chip { border: 1px solid var(--surface-accent); color: var(--surface-accent); }
+    .card-button {
+      display: block;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+    }
+    .card-copy { margin: 0; font-size: .88rem; line-height: 1.36; }
+    .card-meta { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .55rem; }
+    .facet-label, .posture-label { color: var(--surface-muted); }
+    h3.facet-label { margin: 0; font-size: .74rem; }
+    .empty-invitation { color: var(--surface-muted); font-style: italic; }
+
+    /* Role–Knowledge Matrix */
+    .matrix-wrap, .blueprint-wrap, .ledger-wrap { overflow: auto; border: 1px solid var(--surface-line-soft); border-radius: 1rem; }
+    .context-matrix, .handoff-table, .blueprint-table, .semantic-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .context-matrix { min-width: 68rem; }
+    .context-matrix th, .context-matrix td,
+    .handoff-table th, .handoff-table td,
+    .blueprint-table th, .blueprint-table td,
+    .semantic-table th, .semantic-table td {
+      border-right: 1px solid var(--surface-line-soft);
+      border-bottom: 1px solid var(--surface-line-soft);
+      text-align: left;
+      vertical-align: top;
+    }
+    .context-matrix th, .context-matrix td { padding: .6rem; }
+    .context-matrix tbody th {
+      position: sticky;
+      z-index: 4;
+      left: 0;
+      width: 13rem;
+      background: var(--surface-panel);
+    }
+    .context-matrix th {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      min-width: 15rem;
+      background: var(--surface-panel);
+    }
+    .context-matrix th:first-child {
+      z-index: 7;
+      left: 0;
+      min-width: 13rem;
+      width: 13rem;
+    }
+    .matrix-group-button, .matrix-question-button {
+      border: 0;
+      background: transparent;
+      color: var(--surface-ink);
+      font-weight: 820;
+      text-align: left;
+    }
+    .matrix-group-button small, .matrix-question-button small {
+      display: block;
+      margin-top: .25rem;
+      color: var(--surface-muted);
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      font-weight: 600;
+    }
+    .matrix-cell { display: grid; gap: .45rem; min-height: 8.2rem; }
+    .matrix-cell .context-card { border-radius: .7rem; }
+    .matrix-cell .card-button { padding: .6rem; }
+
+    /* Actor Context Board */
+    .actor-board {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: .4rem .35rem 1.2rem;
+      scroll-snap-type: x proximity;
+    }
+    .actor-column {
+      flex: 0 0 min(23.5rem, calc(100vw - 5rem));
+      min-height: 48rem;
+      padding: 1rem;
+      border: 2px solid var(--surface-line);
+      border-radius: 1.4rem;
+      background: var(--surface-panel);
+      box-shadow: 8px 8px 0 var(--surface-shadow);
+      scroll-snap-align: start;
+    }
+    .actor-column + .actor-column { margin-left: .5rem; }
+    .actor-column-header { display: grid; gap: .35rem; margin-bottom: .85rem; }
+    .actor-column-header button {
+      border: 0;
+      background: transparent;
+      color: var(--surface-ink);
+      font-size: 1.22rem;
+      font-weight: 850;
+      text-align: left;
+    }
+    .actor-slug { color: var(--surface-muted); font-family: var(--font-mono); font-size: .72rem; }
+    .actor-impact {
+      margin: .55rem 0 0;
+      padding-top: .55rem;
+      border-top: 1px solid var(--surface-line-soft);
+      color: var(--surface-muted);
+      font-size: .8rem;
+    }
+    .actor-facets { display: grid; gap: .65rem; }
+    .actor-facet {
+      display: grid;
+      gap: .45rem;
+      padding: .78rem;
+      border-radius: .85rem;
+      background: var(--surface-context);
+    }
+    .actor-facet[data-question-kind="identity"],
+    .actor-facet[data-question-kind="collaboration"],
+    .actor-facet[data-question-kind="knowledge_need"] { background: var(--surface-group); }
+    .actor-facet[data-question-kind="handoff_route"] { background: var(--surface-discoverable); }
+    .actor-facet .context-card { border-radius: .55rem; }
+    .actor-facet .card-button { padding: .55rem; }
+
+    /* Context Assembly */
+    .assembly-root {
+      position: relative;
+      width: min(100%, 44rem);
+      margin: .25rem auto 2.7rem;
+      padding: 1rem 1.15rem;
+      border-radius: 1rem;
+      text-align: center;
+    }
+    .assembly-root::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 1px;
+      height: 2.7rem;
+      background: var(--surface-line);
+      content: "";
+    }
+    .assembly-columns {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(14rem, 1fr));
+      gap: .8rem;
+      min-width: 76rem;
+    }
+    .assembly-columns::before {
+      position: absolute;
+      top: -1.35rem;
+      right: 10%;
+      left: 10%;
+      height: 1px;
+      background: var(--surface-line);
+      content: "";
+    }
+    .assembly-scroll { overflow-x: auto; padding: 0 .2rem 1rem; }
+    .assembly-column {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: .6rem;
+      padding: .8rem;
+      border: 1px solid var(--surface-line-soft);
+      border-radius: 1rem;
+      background: color-mix(in srgb, var(--surface-panel) 72%, transparent);
+    }
+    .assembly-column::before {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      width: 1px;
+      height: 1.35rem;
+      background: var(--surface-line);
+      content: "";
+    }
+    .assembly-column h3 { margin: 0; font-size: 1rem; }
+    .assembly-column > p { margin: 0 0 .2rem; color: var(--surface-muted); font-size: .76rem; }
+    .assembly-card { border-radius: .72rem; }
+    .assembly-card .card-button { padding: .68rem; }
+    .assembly-address { color: var(--surface-muted); font-family: var(--font-mono); font-size: .66rem; }
+    .assembly-card[data-posture="absent_on_purpose"] {
+      border-style: dashed;
+      background: color-mix(in srgb, var(--surface-field) 72%, transparent);
+    }
+
+    /* Shared Context */
+    .shared-graph {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(14rem, .8fr) minmax(18rem, 1.15fr) minmax(14rem, .8fr);
+      gap: clamp(3.5rem, 7vw, 7rem);
+      min-width: 65rem;
+      padding: 1.3rem;
+    }
+    .shared-scroll { overflow-x: auto; }
+    .graph-column {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      align-content: start;
+      gap: .7rem;
+    }
+    .graph-column h3 {
+      margin: 0 0 .25rem;
+      color: var(--surface-muted);
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .group-node, .shared-node, .route-node { border-radius: .8rem; }
+    .group-node button, .shared-node button, .route-node button { padding: .8rem; }
+    .group-node strong, .shared-node strong, .route-node strong { display: block; }
+    .group-node small, .shared-node small, .route-node small {
+      display: block;
+      margin-top: .3rem;
+      color: var(--surface-muted);
+      font-size: .72rem;
+    }
+    .shared-connections {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .app-shell[data-reading-relationships="false"] .shared-connections { display: none; }
+    .app-shell[data-reading-statuses="false"] .status-chip { display: none; }
+    :is(.context-card, .assembly-card, .blueprint-item) { position: relative; }
+    .app-shell[data-reading-routes="true"] :is(.context-card, .assembly-card, .blueprint-item)[data-has-route="true"]::after {
+      position: absolute;
+      z-index: 3;
+      inset: 3px;
+      border: 2px solid var(--route-color, var(--surface-accent));
+      border-radius: calc(.45rem - 1px);
+      content: "";
+      pointer-events: none;
+    }
+    .app-shell[data-reading-relationships="true"] :is(.context-card, .assembly-card, .blueprint-item)[data-shared-context="true"]::before {
+      position: absolute;
+      z-index: 4;
+      inset-block: .42rem;
+      inset-inline-start: 2px;
+      width: 4px;
+      border-radius: 999px;
+      background: var(--surface-accent);
+      content: "";
+      pointer-events: none;
+    }
+
+    /* Handoff Ledger */
+    .handoff-table { min-width: 72rem; }
+    .handoff-table th, .handoff-table td { padding: .72rem; }
+    .handoff-table th {
+      position: sticky;
+      z-index: 3;
+      top: 0;
+      background: var(--surface-panel);
+      color: var(--surface-muted);
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .handoff-table tr[data-route-highlight="true"] td {
+      background: color-mix(in srgb, var(--route-row-color) 9%, var(--surface-panel));
+    }
+    .handoff-context-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--surface-ink);
+      font-weight: 720;
+      text-align: left;
+    }
+
+    /* Stage–Layer Blueprint */
+    .blueprint-field {
+      --blueprint-view-ink: var(--surface-ink);
+      --blueprint-view-muted: var(--surface-muted);
+      margin: -.4rem;
+      padding: .8rem;
+      border-radius: 1rem;
+      background: var(--surface-field);
+      color: var(--blueprint-view-ink);
+    }
+    .blueprint-table { min-width: 82rem; }
+    .blueprint-table th, .blueprint-table td {
+      min-width: 12.6rem;
+      height: 10.2rem;
+      padding: .75rem;
+      border-color: color-mix(in srgb, var(--surface-line) 36%, transparent);
+    }
+    .blueprint-table thead th {
+      position: sticky;
+      z-index: 6;
+      top: 0;
+      height: auto;
+      background: var(--surface-panel);
+      color: var(--blueprint-view-ink);
+    }
+    .blueprint-table thead th:first-child {
+      z-index: 8;
+      left: 0;
+      min-width: 13.5rem;
+    }
+    .blueprint-table tbody th {
+      position: sticky;
+      z-index: 5;
+      left: 0;
+      min-width: 13.5rem;
+      background: var(--surface-panel);
+      color: var(--blueprint-view-ink);
+    }
+    .blueprint-table tbody tr[data-layer="participant"] td,
+    .blueprint-table tbody tr[data-layer="frontstage"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-front)); }
+    .blueprint-table tbody tr[data-layer="backstage"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-back)); }
+    .blueprint-table tbody tr[data-layer="ai"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-ai)); }
+    .blueprint-table tbody tr[data-layer="system"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-system)); }
+    .blueprint-table tbody tr[data-layer="data"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-data)); }
+    .blueprint-table tbody tr[data-layer="governance"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-gov)); }
+    .blueprint-table tbody tr[data-layer="handoff"] td { background: color-mix(in srgb, var(--surface-panel) 72%, var(--blueprint-handoff)); }
+    .blueprint-cell { display: grid; gap: .45rem; align-content: start; min-height: 8.4rem; }
+    .blueprint-item {
+      padding: .52rem;
+      border: 1px solid color-mix(in srgb, var(--surface-line) 36%, transparent);
+      border-radius: .45rem;
+      background: color-mix(in srgb, var(--surface-panel) 88%, var(--surface-field));
+      color: var(--blueprint-view-ink);
+      text-align: left;
+    }
+    .blueprint-item strong { display: block; font-size: .78rem; line-height: 1.32; }
+    .blueprint-item small { display: block; margin-top: .3rem; color: var(--blueprint-view-muted); }
+    .blueprint-invitation { color: var(--blueprint-view-muted); font-size: .78rem; font-style: italic; }
+    .layer-code { display: block; margin-top: .3rem; color: var(--blueprint-view-muted); font-size: .66rem; }
+
+    /* Semantic equivalent */
+    .semantic-equivalent {
+      margin-top: 1rem;
+      border: 1px solid var(--ui-line);
+      border-radius: 1rem;
+      background: var(--ui-surface);
+    }
+    .semantic-equivalent summary { padding: .85rem 1rem; cursor: pointer; font-weight: 820; }
+    .semantic-table-wrap { overflow: auto; padding: 0 1rem 1rem; }
+    .semantic-table { min-width: 70rem; font-size: .8rem; }
+    .semantic-table th, .semantic-table td { padding: .55rem; border-color: var(--ui-line); }
+    .semantic-table th { background: #f5f1ea; color: var(--ui-muted); }
+
+    /* Dialogs and live feedback */
+    dialog {
+      width: min(92vw, 42rem);
+      max-height: 90vh;
+      overflow: auto;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: 1rem;
+      background: var(--ui-surface);
+      color: var(--ui-ink);
+      box-shadow: 0 24px 80px rgba(28, 25, 22, .28);
+    }
+    dialog::backdrop { background: rgba(28, 25, 22, .48); backdrop-filter: blur(3px); }
+    .dialog-form { display: grid; gap: .9rem; }
+    .dialog-form h2 { margin: 0; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .field { display: grid; gap: .32rem; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: var(--ui-muted); font-size: .78rem; font-weight: 780; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: .6rem;
+      background: #fffefa;
+      color: var(--ui-ink);
+      padding: .65rem .7rem;
+    }
+    .field textarea { min-height: 7rem; resize: vertical; }
+    .dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; padding-top: .3rem; }
+    .dialog-actions button {
+      padding: .55rem .78rem;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: .6rem;
+      background: var(--ui-surface);
+      color: var(--ui-ink);
+      font-weight: 780;
+    }
+    .dialog-actions .primary { background: var(--ui-active); color: white; border-color: var(--ui-active); }
+    .toast {
+      position: fixed;
+      z-index: 80;
+      right: 1rem;
+      bottom: 1rem;
+      display: none;
+      align-items: center;
+      gap: .8rem;
+      max-width: min(90vw, 32rem);
+      padding: .72rem .85rem;
+      border: 1px solid var(--ui-line-strong);
+      border-radius: .8rem;
+      background: var(--ui-ink);
+      color: white;
+      box-shadow: var(--ui-shadow);
+    }
+    .toast[data-visible="true"] { display: flex; }
+    .toast button {
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: .45rem;
+      background: transparent;
+      color: white;
+      font-weight: 800;
+      padding: .34rem .52rem;
+    }
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (max-width: 1120px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+      .inspector { position: static; max-height: none; }
+      .map-shell, .visual-surface { min-height: 56rem; }
+    }
+    @media (max-width: 780px) {
+      body { overflow-x: hidden; }
+      .masthead { overflow: hidden; }
+      .control-deck { position: static; }
+      .control-row { grid-template-columns: 1fr; gap: .25rem; }
+      .control-label { padding-top: 0; }
+      .control-group, .action-group, .filter-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .control-button, .action-button, .filter-chip {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        white-space: normal;
+      }
+      .icon-button { width: 100%; }
+      .filter-rails, .form-grid { grid-template-columns: 1fr; }
+      .outcome-anchor { grid-template-columns: 1fr; gap: .25rem; }
+      .surface-heading { grid-template-columns: 1fr; }
+      .surface-count { justify-self: start; }
+      .map-shell { border-radius: .9rem; }
+      .visual-surface { padding: .75rem; }
+    }
+    @media (max-width: 430px) {
+      .control-group, .action-group, .filter-group { grid-template-columns: minmax(0, 1fr); }
+      .control-group > *, .action-group > *, .filter-group > * { max-width: calc(100vw - 1.3rem); }
+      .control-group:has(.icon-button) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .masthead, main { min-width: 0; }
+      .masthead-copy, .outcome-anchor strong, .control-group, .action-group, .filter-group { overflow-wrap: anywhere; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; }
+    }
+    @media (forced-colors: active) {
+      .control-button[aria-pressed="true"], .filter-chip[aria-pressed="true"], .icon-button[aria-pressed="true"],
+      [role="radio"][aria-checked="true"],
+      .selected-card { outline: 3px solid Highlight; outline-offset: 2px; }
+      .proposal-card, .assembly-card[data-posture="absent_on_purpose"] { border: 2px dashed CanvasText !important; }
+      .route-chip { border-left: 5px double CanvasText; }
+      .app-shell[data-reading-routes="true"] :is(.context-card, .assembly-card, .blueprint-item)[data-has-route="true"]::after { border-color: CanvasText; }
+      .app-shell[data-reading-relationships="true"] :is(.context-card, .assembly-card, .blueprint-item)[data-shared-context="true"]::before { background: CanvasText; }
+      .shared-connections path { fill: CanvasText !important; stroke: CanvasText !important; }
+    }
+    @media print {
+      body { background: white; }
+      .control-deck, .filter-rails, .workspace-grid, .inspector, .toast, dialog { display: none !important; }
+      main { padding: 0; }
+      .semantic-equivalent { display: block !important; }
+      .semantic-equivalent > :not(summary) { display: block !important; }
+      .semantic-table { min-width: 0; font-size: 8pt; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#visual-surface">Skip to Context Tree</a>
+  <div class="app-shell" id="context-tree-app" data-treatment="warm" data-pattern="plain" data-view="matrix">
+    <header class="masthead">
+      <div class="eyebrow">Core Architecture · Orientation and Tracing</div>
+      <h1>Context Tree</h1>
+      <p class="masthead-copy">See what each collaborator needs to decide and act, where context crosses boundaries, and which questions are ready to enter a more precise architecture.</p>
+      <div class="outcome-anchor">
+        <span>Shared outcome</span>
+        <strong>Improve confidence, traceability, and review quality in variant interpretation workflows.</strong>
+      </div>
+    </header>
+
+    <main>
+      <section class="control-deck" aria-label="Context Tree controls">
+        <div class="control-row">
+          <div class="control-label" id="view-controls-label">View</div>
+          <div class="control-group" id="view-controls" role="radiogroup" aria-labelledby="view-controls-label">
+            <button class="control-button" type="button" role="radio" data-set-view="matrix" aria-checked="true" tabindex="0">Role–Knowledge Matrix</button>
+            <button class="control-button" type="button" role="radio" data-set-view="board" aria-checked="false" tabindex="-1">Actor Context Board</button>
+            <button class="control-button" type="button" role="radio" data-set-view="assembly" aria-checked="false" tabindex="-1">Context Assembly</button>
+            <button class="control-button" type="button" role="radio" data-set-view="shared" aria-checked="false" tabindex="-1">Shared Context</button>
+            <button class="control-button" type="button" role="radio" data-set-view="handoff" aria-checked="false" tabindex="-1">Handoff Ledger</button>
+            <button class="control-button" type="button" role="radio" data-set-view="blueprint" aria-checked="false" tabindex="-1">Stage–Layer Blueprint</button>
+          </div>
+        </div>
+        <div class="control-row">
+          <div class="control-label" id="treatment-controls-label">Visual language</div>
+          <div class="control-group" id="treatment-controls" role="radiogroup" aria-labelledby="treatment-controls-label">
+            <button class="control-button" type="button" role="radio" data-set-treatment="warm" aria-checked="true" tabindex="0">Warm Editorial</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="cobalt" aria-checked="false" tabindex="-1">High-contrast evidence</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="soft" aria-checked="false" tabindex="-1">Soft Color Blocking</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="ledger" aria-checked="false" tabindex="-1">Structured ledger</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="sea" aria-checked="false" tabindex="-1">Calm review</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="night" aria-checked="false" tabindex="-1">Dark review</button>
+            <button class="control-button" type="button" role="radio" data-set-treatment="pop" aria-checked="false" tabindex="-1">Bold blueprint</button>
+          </div>
+        </div>
+        <div class="control-row">
+          <div class="control-label" id="pattern-controls-label">Background</div>
+          <div class="control-group" id="pattern-controls" role="radiogroup" aria-labelledby="pattern-controls-label">
+            <button class="icon-button" type="button" role="radio" data-set-pattern="plain" aria-checked="true" tabindex="0" aria-label="Plain background" title="Plain background">○</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="quintile" aria-checked="false" tabindex="-1" aria-label="Quintile grid" title="Quintile grid">▦</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="sheen" aria-checked="false" tabindex="-1" aria-label="Luminous sheen" title="Luminous sheen">◒</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="columns" aria-checked="false" tabindex="-1" aria-label="Column bands" title="Column bands">▥</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="speckles" aria-checked="false" tabindex="-1" aria-label="Fine speckles" title="Fine speckles">⠿</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="topography" aria-checked="false" tabindex="-1" aria-label="Sparse topography" title="Sparse topography">≋</button>
+            <button class="icon-button" type="button" role="radio" data-set-pattern="drafting" aria-checked="false" tabindex="-1" aria-label="Technical drafting frame" title="Technical drafting frame">⌗</button>
+          </div>
+        </div>
+        <div class="control-row">
+          <div class="control-label" id="reading-controls-label">Signal overlays</div>
+          <div class="control-group" id="reading-controls" role="group" aria-labelledby="reading-controls-label">
+            <button class="control-button" type="button" data-toggle-reading="routes" aria-pressed="false">Route Trace</button>
+            <button class="control-button" type="button" data-toggle-reading="statuses" aria-pressed="true">Evidence &amp; readiness</button>
+            <button class="control-button" type="button" data-toggle-reading="relationships" aria-pressed="true">Shared-context paths</button>
+          </div>
+        </div>
+        <div class="control-row">
+          <div class="control-label" id="shape-controls-label">Shape the map</div>
+          <div class="action-group" role="group" aria-labelledby="shape-controls-label">
+            <button class="action-button primary" type="button" data-open-dialog="context-dialog">Add context</button>
+            <button class="action-button" type="button" data-open-dialog="group-dialog">Add group</button>
+            <button class="action-button" type="button" data-open-dialog="question-dialog">Add question</button>
+            <button class="action-button" id="ai-extension-button" type="button" data-action="ai-extension">AI · Propose adjacent context</button>
+            <button class="action-button" type="button" data-action="restore-example">Load genomic review example</button>
+            <button class="action-button" id="persistent-undo" type="button" data-action="undo" disabled>Undo last map change</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="filter-rails" aria-label="Visible map dimensions">
+        <div class="filter-rail">
+          <div class="control-label" id="group-filters-label">Groups</div>
+          <div class="filter-group" id="group-filters" role="group" aria-labelledby="group-filters-label"></div>
+        </div>
+        <div class="filter-rail">
+          <div class="control-label" id="question-filters-label">Questions</div>
+          <div class="filter-group" id="question-filters" role="group" aria-labelledby="question-filters-label"></div>
+        </div>
+      </section>
+
+      <div class="workspace-grid">
+        <section class="map-shell" id="map-shell" aria-labelledby="current-view-title">
+          <div class="visual-surface" id="visual-surface" tabindex="-1"></div>
+        </section>
+        <aside class="inspector" id="inspector" aria-label="Selected context"></aside>
+      </div>
+
+      <details class="semantic-equivalent">
+        <summary>Inspect the complete Context Tree as a table</summary>
+        <div class="semantic-table-wrap" id="semantic-table"></div>
+      </details>
+      <noscript>
+        <section class="semantic-equivalent" aria-labelledby="static-context-title">
+          <h2 id="static-context-title" style="padding:1rem 1rem 0">Genomic review context</h2>
+          <div class="semantic-table-wrap">
+<table data-label="Genomic review context" aria-labelledby="static-context-title" class="semantic-table">
+              <thead><tr><th data-label="Group" scope="col">Group</th><th data-label="Change supported" scope="col">Change supported</th><th data-label="Context that improves the next decision" scope="col">Context that improves the next decision</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th></tr></thead>
+              <tbody>
+                <tr data-label="Genomic review context: Molecular pathologist"><td data-label="Group">Molecular pathologist</td><td data-label="Change supported">Provenance, source scope, and assumptions remain visible at the point of judgment.</td><td data-label="Context that improves the next decision">Evidence source, classification history, review state, and the transformations applied before evidence reached review.</td><td data-label="Receiving architecture">Service-design Blueprint · AI Systems Service Blueprint</td></tr>
+                <tr data-label="Genomic review context: Bioinformatics analyst"><td data-label="Group">Bioinformatics analyst</td><td data-label="Change supported">Filtering, classification, and prioritization assumptions remain inspectable downstream.</td><td data-label="Context that improves the next decision">Pipeline assumptions, filtering logic, sample-metadata quality, reference version, and the human judgment that completes interpretation.</td><td data-label="Receiving architecture">Software Architecture Views</td></tr>
+                <tr data-label="Genomic review context: Research coordinator"><td data-label="Group">Research coordinator</td><td data-label="Change supported">Sample, consent, and study-state exceptions surface early enough to preserve review flow.</td><td data-label="Context that improves the next decision">Consent version, sample identity, study state, exception routes, and review-entry criteria.</td><td data-label="Receiving architecture">Service-design Blueprint · Specification-by-Example</td></tr>
+                <tr data-label="Genomic review context: Data steward"><td data-label="Group">Data steward</td><td data-label="Change supported">Provenance, auditability, and dataset readiness remain coherent across review states.</td><td data-label="Context that improves the next decision">Metadata completeness, lineage, audit events, retention state, and shared assets.</td><td data-label="Receiving architecture">Cross-channel Blueprint · Software Architecture Views</td></tr>
+                <tr data-label="Genomic review context: AI assistance surface"><td data-label="Group">AI assistance surface</td><td data-label="Change supported">Generated summaries stay source-linked, scope-visible, and connected to completing human judgment.</td><td data-label="Context that improves the next decision">Source materials in scope, provenance display, uncertainty expression, and the human judgment that completes each claim.</td><td data-label="Receiving architecture">AI Systems Service Blueprint</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </noscript>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span id="toast-message"></span>
+    </div>
+
+    <dialog id="group-dialog" aria-labelledby="group-dialog-title">
+      <form class="dialog-form" id="group-form" method="dialog">
+        <h2 id="group-dialog-title">Add a collaborating group</h2>
+        <div class="form-grid">
+          <div class="field"><label for="group-name">Group or role</label><input id="group-name" name="name" required></div>
+          <div class="field"><label for="group-organization">Organization, domain, or service</label><input id="group-organization" name="organization" required></div>
+          <div class="field full"><label for="group-impact">Change this group helps create</label><textarea id="group-impact" name="impact" required></textarea></div>
+          <div class="field"><label for="group-kind">Collaborator kind</label><select id="group-kind" name="kind"><option value="human">Human role or team</option><option value="partner">External partner</option><option value="ai">AI assistance surface</option><option value="system">System surface</option></select></div>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" data-close-dialog="group-dialog">Return to map</button>
+          <button class="primary" type="submit">Add group</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="question-dialog" aria-labelledby="question-dialog-title">
+      <form class="dialog-form" id="question-form" method="dialog">
+        <h2 id="question-dialog-title">Add a context question</h2>
+        <div class="form-grid">
+          <div class="field full"><label for="question-label">Question collaborators will answer</label><input id="question-label" name="label" required></div>
+          <div class="field"><label for="question-kind">Question kind</label><select id="question-kind" name="kind"><option value="identity">Role / group definition</option><option value="collaboration">Working relationships</option><option value="knowledge_need">Knowledge needed to act</option><option value="context_to_surface">Context to surface</option><option value="handoff_route">Architecture handoff</option><option value="custom">Local context question</option></select></div>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" data-close-dialog="question-dialog">Return to map</button>
+          <button class="primary" type="submit">Add question</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="context-dialog" aria-labelledby="context-dialog-title">
+      <form class="dialog-form" id="context-form" method="dialog">
+        <h2 id="context-dialog-title">Add context</h2>
+        <input type="hidden" name="itemId" id="context-item-id">
+        <div class="form-grid">
+          <div class="field"><label for="context-group">Group or role</label><select id="context-group" name="groupId" required></select></div>
+          <div class="field"><label for="context-question">Context question</label><select id="context-question" name="questionId" required></select></div>
+          <div class="field full"><label for="context-text">Context that will improve the next decision</label><textarea id="context-text" name="text" required></textarea></div>
+          <div class="field"><label for="context-status">Evidence / readiness state</label><select id="context-status" name="status"></select></div>
+          <div class="field"><label for="context-posture">Role this context plays</label><select id="context-posture" name="posture"></select></div>
+          <div class="field"><label for="context-route">Receiving architecture</label><select id="context-route" name="route"></select></div>
+          <div class="field"><label for="context-secondary-route">Additional receiving architecture</label><select id="context-secondary-route" name="secondaryRoute"></select></div>
+          <div class="field"><label for="context-shared-key">Cross-group context key</label><input id="context-shared-key" name="sharedKey" placeholder="e.g. Consent and study state"></div>
+          <div class="field full"><label for="context-decision-use">Decision this context makes easier</label><input id="context-decision-use" name="decisionUse"></div>
+          <div class="field"><label for="context-stage">Service stage</label><select id="context-stage" name="stage"></select></div>
+          <div class="field"><label for="context-layer">Service layer</label><select id="context-layer" name="layer"></select></div>
+          <div class="field full"><label for="context-expiry">Condition that refreshes this context</label><input id="context-expiry" name="expiry" placeholder="e.g. A new consent version takes effect"></div>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" data-close-dialog="context-dialog">Return to map</button>
+          <button class="primary" type="submit">Save context</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="visually-hidden" id="screen-reader-status" aria-live="polite"></div>
+  </div>
+  <script>
+  (() => {
+    "use strict";
+
+    const app = document.getElementById("context-tree-app");
+    const visualSurface = document.getElementById("visual-surface");
+    const inspector = document.getElementById("inspector");
+    const semanticTable = document.getElementById("semantic-table");
+    const groupFilters = document.getElementById("group-filters");
+    const questionFilters = document.getElementById("question-filters");
+    const toast = document.getElementById("toast");
+    const toastMessage = document.getElementById("toast-message");
+    const screenReaderStatus = document.getElementById("screen-reader-status");
+
+    const STATUS_OPTIONS = [
+      { id: "known", label: "Established here", meaning: "Supported strongly enough for current use." },
+      { id: "assumed", label: "Working assumption", meaning: "Shapes current work and remains revisable." },
+      { id: "needs_to_surface", label: "Needs to surface", meaning: "Material context ready to become visible." },
+      { id: "disputed", label: "Competing readings", meaning: "Several scoped readings remain active and travel together." },
+      { id: "ready_to_route", label: "Ready to route", meaning: "The question is precise enough to enter a receiving architecture." }
+    ];
+
+    const POSTURE_OPTIONS = [
+      { id: "load_bearing", label: "Load-bearing", meaning: "Changes the next action or interpretation." },
+      { id: "background", label: "Background", meaning: "Orients the collaborator and improves interpretation." },
+      { id: "provisional", label: "Provisional", meaning: "Guides current work and remains open to revision." },
+      { id: "expiring", label: "Expiring", meaning: "Holds until a named time, release, or condition." },
+      { id: "absent_on_purpose", label: "Intentionally absent", meaning: "A deliberate omission that protects focus, privacy, or role boundaries." }
+    ];
+
+    const ROUTES = [
+      { id: "poda", label: "PODA", family: "Orientation and Tracing", color: "var(--route-participatory)" },
+      { id: "alignment-worksheet", label: "Alignment Worksheet", family: "Orientation and Tracing", color: "var(--route-service)" },
+      { id: "impact-map", label: "Impact Map", family: "Orientation and Tracing", color: "var(--route-heart)" },
+      { id: "context-tree", label: "Context Tree", family: "Orientation and Tracing", color: "var(--route-ai)" },
+      { id: "strategy-canvas", label: "Strategy Canvas", family: "Comparison and Threshold", color: "var(--route-cross-channel)" },
+      { id: "first-responsible-version-matrix", label: "First Responsible Version Matrix", family: "Comparison and Threshold", color: "var(--route-specification)" },
+      { id: "specification-by-example", label: "Specification-by-Example", family: "Participatory Elicitation and Specification", color: "var(--route-specification)" },
+      { id: "heart-chart", label: "HEART Chart", family: "Measurement, Reflection, and Judgment", color: "var(--route-heart)" },
+      { id: "software-architecture-views", label: "Software Architecture Views", family: "Shared Surfaces and Topology", color: "var(--route-software)" },
+      { id: "service-design-blueprint", label: "Service-design Blueprint", family: "Shared Surfaces and Topology", color: "var(--route-service)" },
+      { id: "participatory-design-kit", label: "Participatory Design Kit", family: "Participatory Elicitation and Specification", color: "var(--route-participatory)" },
+      { id: "cross-channel-blueprint", label: "Cross-channel Blueprint", family: "Shared Surfaces and Topology", color: "var(--route-cross-channel)" },
+      { id: "ai-systems-service-blueprint", label: "AI Systems Service Blueprint", family: "Shared Surfaces and Topology", color: "var(--route-ai)" },
+      { id: "plus-delta", label: "Plus / Delta", family: "Measurement, Reflection, and Judgment", color: "var(--route-heart)" },
+      { id: "practitioner-judgment-probes", label: "Practitioner Judgment Probes", family: "Measurement, Reflection, and Judgment", color: "var(--route-ai)" },
+      { id: "pattern-problem-surface-matrix", label: "Pattern–Problem Surface Matrix", family: "Pattern Fit and Behavior Protection", color: "var(--route-participatory)" },
+      { id: "jobs-to-be-done-treemap", label: "Jobs-to-be-Done Treemap", family: "Pattern Fit and Behavior Protection", color: "var(--route-software)" },
+      { id: "unit-test-first-design", label: "Unit-test-first Design", family: "Pattern Fit and Behavior Protection", color: "var(--route-specification)" },
+      { id: "upstream-revision-loop", label: "Upstream Revision Loop", family: "Recovery Routing and Revision", color: "var(--route-cross-channel)" },
+      { id: "recovery-routing-atlas", label: "Recovery Routing Atlas", family: "Recovery Routing and Revision", color: "var(--route-heart)" }
+    ];
+
+    const STAGES = [
+      { id: "sample-intake", label: "Sample & study intake" },
+      { id: "pipeline-preparation", label: "Pipeline preparation" },
+      { id: "review-preparation", label: "Review preparation" },
+      { id: "human-review", label: "Human variant review" },
+      { id: "exception-routing", label: "Exception routing" },
+      { id: "report-preparation", label: "Report preparation" },
+      { id: "archive-audit", label: "Archive & audit" }
+    ];
+
+    const LAYERS = [
+      { id: "participant", label: "Participant action", code: "participant" },
+      { id: "frontstage", label: "Visible frontstage", code: "frontstage" },
+      { id: "backstage", label: "Backstage human work", code: "backstage" },
+      { id: "ai", label: "AI / agent", code: "ai" },
+      { id: "system", label: "System behavior", code: "system" },
+      { id: "data", label: "Data & evidence", code: "data" },
+      { id: "governance", label: "Governance / review", code: "governance" },
+      { id: "handoff", label: "Handoff / dependency", code: "handoff" }
+    ];
+
+    const SHARED_CONTEXT_LABELS = {
+      "decision-provenance": {
+        label: "Decision-critical provenance",
+        meaning: "Evidence source, pipeline transformation, review state, and audit record remain coherent across the handoff."
+      },
+      "human-judgment-point": {
+        label: "Human judgment point",
+        meaning: "Generated assertions carry their source, model contribution, and review state into the judgment that completes them."
+      },
+      "consent-study-state": {
+        label: "Consent and study state",
+        meaning: "The current consent version, study state, and relevant exception travel together."
+      },
+      "pipeline-assumptions": {
+        label: "Pipeline assumptions",
+        meaning: "Filtering, classification, reference, and threshold assumptions remain inspectable downstream."
+      },
+      "review-readiness": {
+        label: "Review readiness",
+        meaning: "Sample, metadata, evidence, and exception state become visible before interpretation begins."
+      }
+    };
+
+    const VIEW_COPY = {
+      matrix: {
+        title: "Role–Knowledge Matrix",
+        description: "Compare the same questions across collaborators while each role retains its own context."
+      },
+      board: {
+        title: "Actor Context Board",
+        description: "Read each collaborator’s working context as a complete vertical thread."
+      },
+      assembly: {
+        title: "Context Assembly",
+        description: "See how load-bearing, background, provisional, expiring, and intentionally absent context compose the decision."
+      },
+      shared: {
+        title: "Shared Context",
+        description: "Trace context several groups depend on and preserve its meaning across handoffs."
+      },
+      handoff: {
+        title: "Handoff Ledger",
+        description: "See which questions are precise enough to become inputs to another architecture."
+      },
+      blueprint: {
+        title: "Stage–Layer Blueprint",
+        description: "Place context at the service moment and layer where it changes action."
+      }
+    };
+
+    function createInitialModel() {
+      const groups = [
+        {
+          id: "group-molecular-pathologist",
+          label: "Molecular pathologist",
+          organization: "Variant interpretation",
+          kind: "human",
+          impact: "Reviews variant evidence with provenance, source scope, and assumptions visible at the point of judgment.",
+          collaborators: ["group-bioinformatics-analyst", "group-research-coordinator", "group-data-steward", "group-ai-assistance-surface"],
+          sourceRef: "impact-map:actor-molecular-pathologist"
+        },
+        {
+          id: "group-bioinformatics-analyst",
+          label: "Bioinformatics analyst",
+          organization: "Bioinformatics platform",
+          kind: "human",
+          impact: "Preserves and communicates assumptions behind filtering, classification, and prioritization.",
+          collaborators: ["group-molecular-pathologist", "group-data-steward", "group-ai-assistance-surface"],
+          sourceRef: "impact-map:actor-bioinformatics-analyst"
+        },
+        {
+          id: "group-research-coordinator",
+          label: "Research coordinator",
+          organization: "Study operations",
+          kind: "human",
+          impact: "Surfaces sample, consent, and study-state exceptions early enough to preserve review flow.",
+          collaborators: ["group-molecular-pathologist", "group-data-steward", "group-ai-assistance-surface"],
+          sourceRef: "impact-map:actor-research-coordinator"
+        },
+        {
+          id: "group-data-steward",
+          label: "Data steward",
+          organization: "Data stewardship",
+          kind: "human",
+          impact: "Maintains provenance, auditability, and dataset readiness across review states.",
+          collaborators: ["group-molecular-pathologist", "group-bioinformatics-analyst", "group-research-coordinator", "group-ai-assistance-surface"],
+          sourceRef: "impact-map:actor-data-steward"
+        },
+        {
+          id: "group-ai-assistance-surface",
+          label: "AI assistance surface",
+          organization: "Human–AI review surface",
+          kind: "ai",
+          impact: "Keeps generated summaries source-linked, scope-visible, and connected to the human judgment that completes them.",
+          collaborators: ["group-molecular-pathologist", "group-bioinformatics-analyst", "group-research-coordinator", "group-data-steward"],
+          sourceRef: "context-tree:ai-assistance-surface"
+        }
+      ];
+
+      const questions = [
+        { id: "question-identity", label: "Who are we talking about?", kind: "identity", sourceRef: "context-tree:required-row-identity" },
+        { id: "question-collaboration", label: "Who do they work with?", kind: "collaboration", sourceRef: "context-tree:required-row-collaboration" },
+        { id: "question-knowledge", label: "What knowledge do they need?", kind: "knowledge_need", sourceRef: "context-tree:required-row-knowledge" },
+        { id: "question-context", label: "What context still needs to surface?", kind: "context_to_surface", sourceRef: "context-tree:required-row-context" },
+        { id: "question-route", label: "Which architecture should this route to?", kind: "handoff_route", sourceRef: "context-tree:optional-row-route" }
+      ];
+
+      const items = [];
+      const add = (id, groupId, questionId, text, options = {}) => {
+        const routes = options.routes || (options.route ? [options.route] : []);
+        items.push({
+          id,
+          groupId,
+          questionId,
+          text,
+          status: options.status || "known",
+          posture: options.posture || "background",
+          route: routes[0] || "",
+          routes: routes,
+          sharedKey: options.sharedKey || "",
+          decisionUse: options.decisionUse || "",
+          stage: options.stage || "",
+          layer: options.layer || "",
+          expiry: options.expiry || "",
+          sourceRef: options.sourceRef || "",
+          proposal: Boolean(options.proposal)
+        });
+      };
+
+      add("context-pathologist-identity", "group-molecular-pathologist", "question-identity",
+        "Board-certified pathologist reviewing variant evidence and signing out classifications or research interpretations.",
+        { posture: "load_bearing", stage: "human-review", layer: "frontstage", sourceRef: "context-tree-v0.1.3:cell-who-molecular-pathologist" });
+      add("context-analyst-identity", "group-bioinformatics-analyst", "question-identity",
+        "Analyst maintaining pipelines, filtering variants, and preparing evidence for review.",
+        { posture: "load_bearing", stage: "pipeline-preparation", layer: "backstage", sourceRef: "context-tree-v0.1.3:cell-who-bioinformatics-analyst" });
+      add("context-coordinator-identity", "group-research-coordinator", "question-identity",
+        "Coordinator carrying study context, consent state, sample movement, and participant-related exceptions.",
+        { posture: "load_bearing", stage: "sample-intake", layer: "backstage", sourceRef: "context-tree-v0.1.3:cell-who-research-coordinator" });
+      add("context-steward-identity", "group-data-steward", "question-identity",
+        "Steward maintaining metadata quality, provenance, auditability, and dataset readiness.",
+        { posture: "load_bearing", stage: "archive-audit", layer: "data", sourceRef: "context-tree-v0.1.3:cell-who-data-steward" });
+      add("context-ai-identity", "group-ai-assistance-surface", "question-identity",
+        "Source-linked summarization, triage, explanation, and discrepancy detection inside human review.",
+        { status: "assumed", posture: "provisional", route: "AI Systems Service Blueprint", stage: "review-preparation", layer: "ai", sourceRef: "context-tree-v0.1.3:cell-who-ai-assistance-surface" });
+
+      add("context-pathologist-collaboration", "group-molecular-pathologist", "question-collaboration",
+        "Bioinformatics analysts, research coordinators, data stewards, clinical teams, and the AI assistance surface.",
+        { posture: "background", stage: "human-review", layer: "handoff", sharedKey: "review-readiness", decisionUse: "Clarifies who can resolve uncertainty and what context they need." });
+      add("context-analyst-collaboration", "group-bioinformatics-analyst", "question-collaboration",
+        "Molecular pathologists, data stewards, pipeline maintainers, and the AI assistance surface.",
+        { posture: "background", stage: "pipeline-preparation", layer: "handoff", sharedKey: "pipeline-assumptions", decisionUse: "Keeps pipeline changes connected to their reviewing population." });
+      add("context-coordinator-collaboration", "group-research-coordinator", "question-collaboration",
+        "Participants, study teams, laboratory teams, molecular pathologists, and data stewards.",
+        { posture: "background", stage: "sample-intake", layer: "participant", sharedKey: "consent-study-state", decisionUse: "Connects participant state with sample and review coordination." });
+      add("context-steward-collaboration", "group-data-steward", "question-collaboration",
+        "Bioinformatics analysts, research coordinators, reviewers, governance partners, and system maintainers.",
+        { posture: "background", stage: "archive-audit", layer: "handoff", sharedKey: "decision-provenance", decisionUse: "Makes the receiving context for records and audit events explicit." });
+      add("context-ai-collaboration", "group-ai-assistance-surface", "question-collaboration",
+        "Human reviewers, source repositories, audit systems, permission state, and consent-state services.",
+        { status: "assumed", posture: "provisional", route: "AI Systems Service Blueprint", stage: "review-preparation", layer: "ai", sharedKey: "human-judgment-point", decisionUse: "Locates generation inside the human and service relationships that give it meaning." });
+
+      add("context-pathologist-knowledge-provenance", "group-molecular-pathologist", "question-knowledge",
+        "Evidence source, variant-classification history, review state, and the transformations applied before evidence reached the review surface.",
+        { posture: "load_bearing", route: "HEART Chart", stage: "human-review", layer: "data", sharedKey: "decision-provenance", decisionUse: "Supports an interpretation grounded in inspectable evidence lineage." });
+      add("context-pathologist-knowledge-boundary", "group-molecular-pathologist", "question-knowledge",
+        "Generated text distinguishes cited evidence, local interpretation, and the point where human confirmation completes the review.",
+        { status: "assumed", posture: "provisional", route: "AI Systems Service Blueprint", stage: "human-review", layer: "ai", sharedKey: "human-judgment-point", decisionUse: "Makes the claim boundary readable at the moment of interpretation." });
+      add("context-analyst-knowledge", "group-bioinformatics-analyst", "question-knowledge",
+        "Pipeline assumptions, filtering logic, sample-metadata quality, reference version, and the human judgment that completes output interpretation.",
+        { status: "assumed", posture: "load_bearing", route: "Software Architecture Views", stage: "pipeline-preparation", layer: "system", sharedKey: "pipeline-assumptions", decisionUse: "Makes downstream review consequences visible before a pipeline change advances." });
+      add("context-analyst-release-window", "group-bioinformatics-analyst", "question-knowledge",
+        "The current assay and reference-genome assumptions remain applicable until pipeline release v4.3 enters review preparation.",
+        { status: "assumed", posture: "expiring", route: "Software Architecture Views", stage: "pipeline-preparation", layer: "data", sharedKey: "pipeline-assumptions", decisionUse: "Keeps time-bounded assumptions attached to their pipeline release.", expiry: "Refresh when pipeline release v4.3 enters review preparation." });
+      add("context-coordinator-knowledge", "group-research-coordinator", "question-knowledge",
+        "Consent version, sample identity, study state, scheduling constraints, exception routes, and review-entry criteria.",
+        { posture: "load_bearing", route: "Service-design Blueprint", stage: "sample-intake", layer: "governance", sharedKey: "consent-study-state", decisionUse: "Moves consent and study-state exceptions into coordination before interpretation." });
+      add("context-steward-knowledge", "group-data-steward", "question-knowledge",
+        "Metadata completeness, lineage, audit events, retention state, and shared assets across review and reporting workflows.",
+        { posture: "load_bearing", route: "Cross-channel Blueprint", stage: "archive-audit", layer: "data", sharedKey: "decision-provenance", decisionUse: "Keeps the record supporting a decision coherent across surfaces." });
+      add("context-ai-knowledge", "group-ai-assistance-surface", "question-knowledge",
+        "Source materials in scope, provenance display, uncertainty expression, the human judgment that completes each claim, and a route for summaries that need more context.",
+        { status: "needs_to_surface", posture: "provisional", route: "AI Systems Service Blueprint", stage: "review-preparation", layer: "ai", sharedKey: "human-judgment-point", decisionUse: "Makes the context package for human review explicit." });
+
+      add("context-pathologist-surface-provenance", "group-molecular-pathologist", "question-context",
+        "Which provenance fields establish a reviewable variant claim at the point of judgment?",
+        { status: "needs_to_surface", posture: "load_bearing", route: "Service-design Blueprint", stage: "human-review", layer: "frontstage", sharedKey: "decision-provenance", decisionUse: "Determines the smallest visible evidence packet that supports review.", sourceRef: "impact-map:discoverable-provenance-fields" });
+      add("context-pathologist-surface-ai", "group-molecular-pathologist", "question-context",
+        "Where should generated text show source boundaries, model contribution, and reviewer state?",
+        { status: "needs_to_surface", posture: "provisional", route: "AI Systems Service Blueprint", stage: "human-review", layer: "ai", sharedKey: "human-judgment-point", decisionUse: "Makes the origin and review state of generated claims inspectable.", sourceRef: "impact-map:discoverable-ai-source-boundaries" });
+      add("context-analyst-surface", "group-bioinformatics-analyst", "question-context",
+        "Which pipeline assumptions need to remain inspectable for downstream reviewers?",
+        { status: "needs_to_surface", posture: "load_bearing", route: "Software Architecture Views", stage: "review-preparation", layer: "data", sharedKey: "pipeline-assumptions", decisionUse: "Identifies the assumptions that travel with pipeline output.", sourceRef: "impact-map:discoverable-pipeline-assumptions" });
+      add("context-coordinator-surface-consent", "group-research-coordinator", "question-context",
+        "Where do consent-state changes enter the review workflow?",
+        { status: "needs_to_surface", posture: "load_bearing", route: "Service-design Blueprint", stage: "exception-routing", layer: "governance", sharedKey: "consent-study-state", decisionUse: "Places consent changes where coordination can act before sign-out.", sourceRef: "impact-map:discoverable-consent-state" });
+      add("context-coordinator-surface-exception", "group-research-coordinator", "question-context",
+        "Which exception types need coordinator-visible status and a clear receiving action?",
+        { status: "needs_to_surface", posture: "load_bearing", route: "Specification-by-Example", stage: "exception-routing", layer: "handoff", sharedKey: "review-readiness", decisionUse: "Turns exception categories into observable coordination behavior.", sourceRef: "impact-map:discoverable-exception-status" });
+      add("context-coordinator-privacy-boundary", "group-research-coordinator", "question-context",
+        "Consent state and study context remain visible; direct participant identifiers stay outside the review packet.",
+        { status: "known", posture: "absent_on_purpose", route: "Service-design Blueprint", stage: "human-review", layer: "governance", sharedKey: "consent-study-state", decisionUse: "Keeps the review packet useful while preserving the participant boundary." });
+      add("context-steward-surface-audit", "group-data-steward", "question-context",
+        "Which audit events establish a trace from pipeline preparation through sign-out?",
+        { status: "known", posture: "load_bearing", route: "Software Architecture Views", stage: "archive-audit", layer: "data", sharedKey: "decision-provenance", decisionUse: "Connects the signed interpretation with its decision history.", sourceRef: "impact-map:discoverable-audit-events" });
+      add("context-steward-surface-shared", "group-data-steward", "question-context",
+        "Which shared data assets support review preparation, interpretation, reporting, and archive?",
+        { status: "needs_to_surface", posture: "background", route: "Cross-channel Blueprint", stage: "review-preparation", layer: "data", sharedKey: "review-readiness", decisionUse: "Reveals assets whose quality affects several workflow surfaces.", sourceRef: "impact-map:discoverable-shared-assets" });
+      add("context-ai-surface-confirmation", "group-ai-assistance-surface", "question-context",
+        "Where does human judgment complete each AI-supported claim that shapes a reported interpretation?",
+        { status: "needs_to_surface", posture: "provisional", route: "AI Systems Service Blueprint", stage: "human-review", layer: "ai", sharedKey: "human-judgment-point", decisionUse: "Locates human judgment at the claim level." });
+      add("context-ai-surface-context-package", "group-ai-assistance-surface", "question-context",
+        "Which source-linked context package carries provenance, pipeline, consent, and review state into each summary?",
+        { status: "assumed", posture: "provisional", route: "AI Systems Service Blueprint", stage: "review-preparation", layer: "ai", sharedKey: "review-readiness", decisionUse: "Makes the context packet explicit before generation begins." });
+
+      add("context-pathologist-route", "group-molecular-pathologist", "question-route",
+        "Route claim-boundary behavior into Specification-by-Example and reviewer-confidence signals into HEART Chart.",
+        { status: "ready_to_route", posture: "background", routes: ["Specification-by-Example", "HEART Chart"], stage: "human-review", layer: "handoff", decisionUse: "Converts review questions into behavior examples and observable signals." });
+      add("context-analyst-route", "group-bioinformatics-analyst", "question-route",
+        "Route pipeline, data, and dependency questions into Software Architecture Views.",
+        { status: "ready_to_route", posture: "background", route: "Software Architecture Views", stage: "pipeline-preparation", layer: "handoff", decisionUse: "Places pipeline assumptions beside the components and data relationships they affect." });
+      add("context-coordinator-route", "group-research-coordinator", "question-route",
+        "Route consent and exception transitions into Service-design Blueprint and Specification-by-Example.",
+        { status: "ready_to_route", posture: "background", routes: ["Service-design Blueprint", "Specification-by-Example"], stage: "exception-routing", layer: "handoff", decisionUse: "Places coordination context in the service moments where it changes action." });
+      add("context-steward-route", "group-data-steward", "question-route",
+        "Route shared assets into Cross-channel Blueprint and lineage dependencies into Software Architecture Views.",
+        { status: "ready_to_route", posture: "background", routes: ["Cross-channel Blueprint", "Software Architecture Views"], stage: "archive-audit", layer: "handoff", decisionUse: "Keeps shared objects and technical dependencies visible in their fitting architecture." });
+      add("context-ai-route", "group-ai-assistance-surface", "question-route",
+        "Route source, model, review-state, and human-judgment relationships into AI Systems Service Blueprint.",
+        { status: "ready_to_route", posture: "background", route: "AI Systems Service Blueprint", stage: "review-preparation", layer: "handoff", decisionUse: "Expands the assistance surface into its source, runtime, evaluation, and human-review relationships." });
+
+      return {
+        id: "context-tree-genomics-collaboration-001",
+        title: "Context Tree",
+        subtitle: "Role–Knowledge Context Map",
+        outcome: "Improve confidence, traceability, and review quality in variant interpretation workflows.",
+        groups: groups,
+        questions: questions,
+        items: items,
+        stages: structuredClone(STAGES),
+        layers: structuredClone(LAYERS)
+      };
+    }
+
+    const initialModel = createInitialModel();
+    const state = {
+      model: structuredClone(initialModel),
+      view: "matrix",
+      treatment: "warm",
+      pattern: "plain",
+      readings: { routes: false, statuses: true, relationships: true },
+      visibleGroupIds: initialModel.groups.map(group => group.id),
+      visibleQuestionIds: initialModel.questions.map(question => question.id),
+      visibleStageIds: initialModel.stages.map(stage => stage.id),
+      visibleLayerIds: initialModel.layers.map(layer => layer.id),
+      selection: null,
+      lastMutation: null,
+      toastTimer: 0
+    };
+
+    const initialParameters = new URLSearchParams(window.location.search);
+    const requestedView = initialParameters.get("view");
+    const requestedTreatment = initialParameters.get("treatment");
+    const requestedPattern = initialParameters.get("pattern");
+    if (Object.hasOwn(VIEW_COPY, requestedView)) state.view = requestedView;
+    if (["warm", "cobalt", "soft", "ledger", "sea", "night", "pop"].includes(requestedTreatment)) state.treatment = requestedTreatment;
+    if (["plain", "quintile", "sheen", "columns", "speckles", "topography", "drafting"].includes(requestedPattern)) state.pattern = requestedPattern;
+
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+    const escapeAttribute = escapeHtml;
+    const clone = value => structuredClone(value);
+    const byId = (collection, id) => collection.find(entry => entry.id === id);
+    const groupById = id => byId(state.model.groups, id);
+    const questionById = id => byId(state.model.questions, id);
+    const itemById = id => byId(state.model.items, id);
+    const routeByLabel = label => ROUTES.find(route => route.label === label);
+    const statusById = id => byId(STATUS_OPTIONS, id) || STATUS_OPTIONS[2];
+    const postureById = id => byId(POSTURE_OPTIONS, id) || POSTURE_OPTIONS[1];
+    const stageById = id => byId(state.model.stages, id);
+    const layerById = id => byId(state.model.layers, id);
+    const slug = value => String(value).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const createId = prefix => prefix + "-" + (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2));
+    const includes = (collection, id) => collection.includes(id);
+    const visibleGroups = () => state.model.groups.filter(group => includes(state.visibleGroupIds, group.id));
+    const visibleQuestions = () => state.model.questions.filter(question => includes(state.visibleQuestionIds, question.id));
+    const visibleStages = () => state.model.stages.filter(stage => includes(state.visibleStageIds, stage.id));
+    const visibleLayers = () => state.model.layers.filter(layer => includes(state.visibleLayerIds, layer.id));
+    const itemsForCell = (groupId, questionId) => state.model.items.filter(item => item.groupId === groupId && item.questionId === questionId);
+    const visibleItems = () => state.model.items.filter(item => includes(state.visibleGroupIds, item.groupId) && includes(state.visibleQuestionIds, item.questionId));
+
+    function sourceLabel(sourceRef) {
+      if (!sourceRef) return "Locally authored context";
+      if (sourceRef.startsWith("impact-map:")) return "Impact Map discoverable";
+      if (sourceRef.startsWith("context-tree-v0.1.3:")) return "Human-authored context baseline";
+      if (sourceRef.startsWith("ai-collaboration:") || sourceRef.includes("ai-working-proposal")) return "AI working proposal";
+      return "Locally authored context";
+    }
+
+    function announce(message) {
+      screenReaderStatus.textContent = "";
+      requestAnimationFrame(() => { screenReaderStatus.textContent = message; });
+    }
+
+    function saveMutation(label) {
+      state.lastMutation = {
+        label: label,
+        model: clone(state.model),
+        visibleGroupIds: [...state.visibleGroupIds],
+        visibleQuestionIds: [...state.visibleQuestionIds],
+        visibleStageIds: [...state.visibleStageIds],
+        visibleLayerIds: [...state.visibleLayerIds],
+        selection: state.selection ? { ...state.selection } : null
+      };
+    }
+
+    function showToast(message) {
+      clearTimeout(state.toastTimer);
+      toastMessage.textContent = message;
+      toast.dataset.visible = "true";
+      const focusedInsideToast = toast.contains(document.activeElement);
+      state.toastTimer = window.setTimeout(() => {
+        if (!toast.contains(document.activeElement) && !focusedInsideToast) toast.dataset.visible = "false";
+      }, 7200);
+    }
+
+    function mutate(label, mutation, message = label) {
+      saveMutation(label);
+      mutation();
+      normalizeState();
+      render();
+      showToast(message);
+      announce(message);
+    }
+
+    function undoMutation() {
+      const snapshot = state.lastMutation;
+      if (!snapshot) return;
+      state.model = snapshot.model;
+      state.visibleGroupIds = snapshot.visibleGroupIds;
+      state.visibleQuestionIds = snapshot.visibleQuestionIds;
+      state.visibleStageIds = snapshot.visibleStageIds;
+      state.visibleLayerIds = snapshot.visibleLayerIds;
+      state.selection = snapshot.selection;
+      state.lastMutation = null;
+      normalizeState();
+      render();
+      toast.dataset.visible = "false";
+      announce("The previous map state is active.");
+    }
+
+    function normalizeState() {
+      const groupIds = new Set(state.model.groups.map(group => group.id));
+      const questionIds = new Set(state.model.questions.map(question => question.id));
+      const stageIds = new Set(state.model.stages.map(stage => stage.id));
+      const layerIds = new Set(state.model.layers.map(layer => layer.id));
+      state.visibleGroupIds = state.visibleGroupIds.filter(id => groupIds.has(id));
+      state.visibleQuestionIds = state.visibleQuestionIds.filter(id => questionIds.has(id));
+      state.visibleStageIds = state.visibleStageIds.filter(id => stageIds.has(id));
+      state.visibleLayerIds = state.visibleLayerIds.filter(id => layerIds.has(id));
+      state.model.items = state.model.items.filter(item => groupIds.has(item.groupId) && questionIds.has(item.questionId));
+      state.model.items.forEach(item => {
+        item.routes = [...new Set((Array.isArray(item.routes) && item.routes.length ? item.routes : [item.route]).filter(Boolean))];
+        item.route = item.routes[0] || "";
+      });
+      if (state.selection?.type === "item" && !itemById(state.selection.id)) state.selection = null;
+      if (state.selection?.type === "group" && !groupById(state.selection.id)) state.selection = null;
+      if (state.selection?.type === "question" && !questionById(state.selection.id)) state.selection = null;
+    }
+
+    const scrollPositions = new Map();
+    const titleCase = value => String(value || "")
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, character => character.toUpperCase());
+    const shortText = (value, length = 62) => {
+      const text = String(value || "").trim();
+      return text.length > length ? text.slice(0, length - 1).trimEnd() + "…" : text;
+    };
+    const selected = (type, id) => state.selection?.type === type && state.selection.id === id;
+    const selectionClass = (type, id) => selected(type, id) ? " selected-card" : "";
+    const proposalClass = item => item.proposal ? " proposal-card" : "";
+    const routeStyle = routeLabel => {
+      const route = routeByLabel(routeLabel);
+      return route ? ` style="--route-color:${route.color}"` : "";
+    };
+    const sharedDefinition = key => SHARED_CONTEXT_LABELS[key] || {
+      label: titleCase(key),
+      meaning: "Shared context keeps its meaning while several collaborators use it."
+    };
+    const routeLabelsFor = item => [...new Set((Array.isArray(item.routes) && item.routes.length ? item.routes : [item.route]).filter(Boolean))];
+    const routeChipsFor = item => routeLabelsFor(item).map(routeChip).join("");
+
+    function statusChip(statusId) {
+      const status = statusById(statusId);
+      return `<span class="status-chip" data-status="${escapeAttribute(status.id)}" title="${escapeAttribute(status.meaning)}">${escapeHtml(status.label)}</span>`;
+    }
+
+    function postureChip(postureId) {
+      const posture = postureById(postureId);
+      return `<span class="posture-chip" data-posture="${escapeAttribute(posture.id)}" title="${escapeAttribute(posture.meaning)}">${escapeHtml(posture.label)}</span>`;
+    }
+
+    function routeChip(routeLabel) {
+      if (!routeLabel) return "";
+      return `<span class="route-chip"${routeStyle(routeLabel)}>→ ${escapeHtml(routeLabel)}</span>`;
+    }
+
+    function contextCard(item, options = {}) {
+      const compact = Boolean(options.compact);
+      const classes = `context-card${selectionClass("item", item.id)}${proposalClass(item)}`;
+      const source = sourceLabel(item.sourceRef);
+      const colorSlot = Math.abs([...item.id].reduce((total, character) => total + character.codePointAt(0), 0)) % 4;
+      return `<article class="${classes}" data-context-id="${escapeAttribute(item.id)}" data-color-slot="${colorSlot}" data-has-route="${routeLabelsFor(item).length ? "true" : "false"}" data-shared-context="${item.sharedKey ? "true" : "false"}"${routeStyle(routeLabelsFor(item)[0])}>
+        <button class="card-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}" aria-label="Inspect ${escapeAttribute(shortText(item.text, 110))}">
+          ${item.proposal ? '<span class="proposal-flag">AI proposal · working assumption</span>' : ""}
+          <span class="card-copy">${escapeHtml(item.text)}</span>
+          <span class="card-meta">
+            ${state.readings.statuses ? statusChip(item.status) : ""}
+            ${compact ? "" : postureChip(item.posture)}
+            ${state.readings.routes ? routeChipsFor(item) : ""}
+            ${compact ? "" : `<span class="trace-chip">${escapeHtml(source)}</span>`}
+          </span>
+        </button>
+      </article>`;
+    }
+
+    function emptyInvitation(copy = "What context would sharpen this decision?") {
+      return `<p class="empty-invitation">${escapeHtml(copy)}</p>`;
+    }
+
+    function surfaceHeading(viewId, countLabel) {
+      const copy = VIEW_COPY[viewId];
+      return `<header class="surface-heading">
+        <div><h2 id="current-view-title">${escapeHtml(copy.title)}</h2><p>${escapeHtml(copy.description)}</p></div>
+        <span class="surface-count">${escapeHtml(countLabel)}</span>
+      </header>`;
+    }
+
+    function captureScrollPosition() {
+      const scroller = visualSurface.querySelector("[data-scroll-key]");
+      if (!scroller) return;
+      scrollPositions.set(scroller.dataset.scrollKey, { left: scroller.scrollLeft, top: scroller.scrollTop });
+    }
+
+    function restoreScrollPosition() {
+      const scroller = visualSurface.querySelector("[data-scroll-key]");
+      if (!scroller) return;
+      const point = scrollPositions.get(scroller.dataset.scrollKey);
+      if (!point) return;
+      scroller.scrollLeft = point.left;
+      scroller.scrollTop = point.top;
+    }
+
+    function renderMatrix() {
+      const groups = visibleGroups();
+      const questions = visibleQuestions();
+      const head = groups.map(group => `<th data-label="${escapeAttribute(group.label)}" scope="col">
+        <button class="matrix-group-button" type="button" data-select-type="group" data-select-id="${escapeAttribute(group.id)}">
+          ${escapeHtml(group.label)}<small>${escapeHtml(group.organization)}</small>
+        </button>
+      </th>`).join("");
+      const body = questions.map(question => {
+        const cells = groups.map(group => {
+          const items = itemsForCell(group.id, question.id);
+          return `<td data-label="${escapeAttribute(group.label)}"><div class="matrix-cell">${items.length ? items.map(item => contextCard(item, { compact: true })).join("") : emptyInvitation()}</div></td>`;
+        }).join("");
+        return `<tr data-label="Context questions answered across visible collaborators: ${escapeAttribute(question.label)}"><th data-label="Context question" scope="row">
+          <button class="matrix-question-button" type="button" data-select-type="question" data-select-id="${escapeAttribute(question.id)}">
+            ${escapeHtml(question.label)}<small>${escapeHtml(titleCase(question.kind))}</small>
+          </button>
+        </th>${cells}</tr>`;
+      }).join("");
+      const table = groups.length && questions.length
+        ? `<div class="matrix-wrap" data-scroll-key="matrix"><table data-label="Context questions answered across visible collaborators" class="context-matrix">
+            <caption class="visually-hidden">Context questions answered across visible collaborators</caption>
+            <thead><tr><th data-label="Context question" scope="col">Context question</th>${head}</tr></thead><tbody>${body}</tbody>
+          </table></div>`
+        : emptyInvitation("Choose the groups and questions that matter to this reading.");
+      return surfaceHeading("matrix", `${visibleItems().length} context items · ${groups.length} groups`) + table;
+    }
+
+    function renderBoard() {
+      const groups = visibleGroups();
+      const questions = visibleQuestions();
+      const columns = groups.map(group => {
+        const facets = questions.map(question => {
+          const items = itemsForCell(group.id, question.id);
+          const facetHeadingId = `facet-${slug(group.id)}-${slug(question.id)}`;
+          return `<section class="actor-facet" data-question-kind="${escapeAttribute(question.kind)}" aria-labelledby="${escapeAttribute(facetHeadingId)}">
+            <h3 class="facet-label" id="${escapeAttribute(facetHeadingId)}">${escapeHtml(question.label)}</h3>
+            ${items.length ? items.map(item => contextCard(item, { compact: false })).join("") : emptyInvitation()}
+          </section>`;
+        }).join("");
+        return `<article class="actor-column${selectionClass("group", group.id)}">
+          <header class="actor-column-header">
+            <button type="button" data-select-type="group" data-select-id="${escapeAttribute(group.id)}">${escapeHtml(group.label)}</button>
+            <span class="actor-slug">${escapeHtml(group.organization)} · ${escapeHtml(group.kind)}</span>
+            <p class="actor-impact">${escapeHtml(group.impact)}</p>
+          </header>
+          <div class="actor-facets">${facets}</div>
+        </article>`;
+      }).join("");
+      return surfaceHeading("board", `${visibleItems().length} context items · ${groups.length} collaborator threads`) +
+        (groups.length ? `<div class="actor-board" data-scroll-key="board">${columns}</div>` : emptyInvitation("Bring the collaborators whose working context shapes this decision into view."));
+    }
+
+    function renderAssembly() {
+      const items = visibleItems();
+      const columns = POSTURE_OPTIONS.map(posture => {
+        const postureItems = items.filter(item => item.posture === posture.id);
+        return `<section class="assembly-column">
+          <h3>${escapeHtml(posture.label)}</h3>
+          <p>${escapeHtml(posture.meaning)}</p>
+          ${postureItems.length ? postureItems.map(item => `<article class="assembly-card${selectionClass("item", item.id)}${proposalClass(item)}" data-posture="${escapeAttribute(item.posture)}" data-color-slot="${Math.abs([...item.id].reduce((total, character) => total + character.codePointAt(0), 0)) % 4}" data-has-route="${routeLabelsFor(item).length ? "true" : "false"}" data-shared-context="${item.sharedKey ? "true" : "false"}"${routeStyle(routeLabelsFor(item)[0])}>
+            <button class="card-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">
+              ${item.proposal ? '<span class="proposal-flag">AI proposal · working assumption</span>' : ""}
+              <span class="card-copy">${escapeHtml(item.text)}</span>
+              <span class="card-meta">${state.readings.statuses ? statusChip(item.status) : ""}${state.readings.routes ? routeChipsFor(item) : ""}</span>
+              <span class="assembly-address">${escapeHtml(groupById(item.groupId)?.label || "Context")}</span>
+            </button>
+          </article>`).join("") : emptyInvitation("Choose the role this context plays in the decision.")}
+        </section>`;
+      }).join("");
+      return surfaceHeading("assembly", `${items.length} context items · ${POSTURE_OPTIONS.length} decision roles`) +
+        `<div class="assembly-root goal-node"><strong>${escapeHtml(state.model.outcome)}</strong></div>
+         <div class="assembly-scroll" data-scroll-key="assembly"><div class="assembly-columns">${columns}</div></div>`;
+    }
+
+    function renderShared() {
+      const items = visibleItems().filter(item => item.sharedKey);
+      const sharedKeys = [...new Set(items.map(item => item.sharedKey))]
+        .sort((left, right) => sharedDefinition(left).label.localeCompare(sharedDefinition(right).label));
+      const participatingGroupIds = new Set(items.map(item => item.groupId));
+      const groups = visibleGroups().filter(group => participatingGroupIds.has(group.id));
+      const routeLabels = [...new Set(items.flatMap(routeLabelsFor))]
+        .sort((left, right) => left.localeCompare(right));
+
+      if (!items.length) {
+        return surfaceHeading("shared", "Cross-group context becomes visible here") +
+          emptyInvitation("Apply the same cross-group key wherever one context shapes several roles.");
+      }
+
+      const groupNodes = groups.map(group => {
+        const count = items.filter(item => item.groupId === group.id).length;
+        return `<article class="group-node${selectionClass("group", group.id)}" data-node-kind="group" data-node-id="${escapeAttribute(group.id)}">
+          <button class="card-button" type="button" data-select-type="group" data-select-id="${escapeAttribute(group.id)}">
+            <strong>${escapeHtml(group.label)}</strong><small>${count} shared ${count === 1 ? "context item" : "context items"}</small>
+          </button>
+        </article>`;
+      }).join("");
+
+      const sharedNodes = sharedKeys.map(key => {
+        const definition = sharedDefinition(key);
+        const keyItems = items.filter(item => item.sharedKey === key);
+        const groupCount = new Set(keyItems.map(item => item.groupId)).size;
+        return `<article class="shared-node${selectionClass("shared", key)}" data-node-kind="shared" data-node-id="${escapeAttribute(key)}">
+          <button class="card-button" type="button" data-select-type="shared" data-select-id="${escapeAttribute(key)}">
+            <strong>${escapeHtml(definition.label)}</strong>
+            <small>${escapeHtml(definition.meaning)}</small>
+            <span class="card-meta"><span class="trace-chip">${groupCount} ${groupCount === 1 ? "group" : "groups"}</span><span class="trace-chip">${keyItems.length} uses</span></span>
+          </button>
+        </article>`;
+      }).join("");
+
+      const routeNodes = routeLabels.map(label => {
+        const route = routeByLabel(label);
+        const count = items.filter(item => routeLabelsFor(item).includes(label)).length;
+        return `<article class="route-node${selectionClass("route", label)}" data-node-kind="route" data-node-id="${escapeAttribute(label)}"${routeStyle(label)}>
+          <button class="card-button" type="button" data-select-type="route" data-select-id="${escapeAttribute(label)}">
+            <strong>${escapeHtml(label)}</strong><small>${escapeHtml(route?.family || "Receiving architecture")} · ${count} ${count === 1 ? "handoff" : "handoffs"}</small>
+          </button>
+        </article>`;
+      }).join("");
+
+      return surfaceHeading("shared", `${sharedKeys.length} shared contexts · ${groups.length} groups · ${routeLabels.length} routes`) +
+        `<div class="shared-scroll" data-scroll-key="shared">
+          <div class="shared-graph" id="shared-graph">
+            <svg class="shared-connections" id="shared-connections" aria-hidden="true"></svg>
+            <section class="graph-column"><h3>Collaborators</h3>${groupNodes}</section>
+            <section class="graph-column"><h3>Context carried across boundaries</h3>${sharedNodes}</section>
+            <section class="graph-column"><h3>Receiving architectures</h3>${routeNodes}</section>
+          </div>
+        </div>`;
+    }
+
+    function renderHandoff() {
+      const items = visibleItems().filter(item => routeLabelsFor(item).length);
+      const rows = items.map(item => {
+        const group = groupById(item.groupId);
+        const question = questionById(item.questionId);
+        const routes = routeLabelsFor(item);
+        const route = routeByLabel(routes[0]);
+        const highlight = state.readings.routes || routes.some(label => selected("route", label)) || selected("item", item.id);
+        return `<tr data-label="Context entering each receiving architecture: ${escapeAttribute(item.text)}; ${escapeAttribute(group?.label || "Context group")}; ${escapeAttribute(question?.label || "Context question")}" data-route-highlight="${highlight}" style="--route-row-color:${route?.color || "var(--surface-accent)"}">
+          <td data-label="Context entering a handoff"><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
+          <td data-label="Collaborator">${escapeHtml(group?.label || "Context group")}</td>
+          <td data-label="Question">${escapeHtml(question?.label || "Context question")}</td>
+          <td data-label="Evidence / readiness">${state.readings.statuses ? statusChip(item.status) : escapeHtml(statusById(item.status).label)}</td>
+          <td data-label="Receiving architecture">${routes.map(routeChip).join("")}<div class="layer-code">${escapeHtml([...new Set(routes.map(label => routeByLabel(label)?.family || "Receiving architecture"))].join(" · "))}</div></td>
+          <td data-label="Decision made easier">${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
+          <td data-label="Service position">${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
+        </tr>`;
+      }).join("");
+      const table = items.length ? `<div class="ledger-wrap" data-scroll-key="handoff"><table data-label="Context entering each receiving architecture" class="handoff-table">
+        <caption class="visually-hidden">Context entering each receiving architecture</caption>
+        <thead><tr><th data-label="Context entering a handoff" scope="col">Context entering a handoff</th><th data-label="Collaborator" scope="col">Collaborator</th><th data-label="Question" scope="col">Question</th><th data-label="Evidence / readiness" scope="col">Evidence / readiness</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th><th data-label="Decision made easier" scope="col">Decision made easier</th><th data-label="Service position" scope="col">Service position</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>` : emptyInvitation("Connect a context item to the architecture that can make it inspectable.");
+      return surfaceHeading("handoff", `${items.length} routed context items · ${new Set(items.flatMap(routeLabelsFor)).size} architectures`) + table;
+    }
+
+    function renderBlueprint() {
+      const stages = visibleStages();
+      const layers = visibleLayers();
+      const items = state.model.items;
+      const head = stages.map(stage => `<th data-label="${escapeAttribute(stage.label)}" scope="col">${escapeHtml(stage.label)}</th>`).join("");
+      const body = layers.map(layer => {
+        const cells = stages.map(stage => {
+          const cellItems = items.filter(item => item.stage === stage.id && item.layer === layer.id);
+          return `<td data-label="${escapeAttribute(stage.label)}"><div class="blueprint-cell">${cellItems.length ? cellItems.map(item => `<button class="blueprint-item${selected("item", item.id) ? " selected-card" : ""}" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}" data-has-route="${routeLabelsFor(item).length ? "true" : "false"}" data-shared-context="${item.sharedKey ? "true" : "false"}"${routeStyle(routeLabelsFor(item)[0])}>
+            <strong>${escapeHtml(item.text)}</strong>
+            <small>${escapeHtml(groupById(item.groupId)?.label || "Context")}${state.readings.statuses ? ` · ${escapeHtml(statusById(item.status).label)}` : ""}</small>
+            ${state.readings.routes ? `<span class="card-meta">${routeChipsFor(item)}</span>` : ""}
+          </button>`).join("") : '<span class="blueprint-invitation">What context makes work reliable at this stage and layer?</span>'}</div></td>`;
+        }).join("");
+        return `<tr data-label="Context positioned by service stage and working layer: ${escapeAttribute(layer.label)}" data-layer="${escapeAttribute(layer.id)}"><th data-label="Layer / stage" scope="row">${escapeHtml(layer.label)}<span class="layer-code">${escapeHtml(layer.code)}</span></th>${cells}</tr>`;
+      }).join("");
+      const table = stages.length && layers.length
+        ? `<div class="blueprint-field"><div class="blueprint-wrap" data-scroll-key="blueprint"><table data-label="Context positioned by service stage and working layer" class="blueprint-table">
+            <caption class="visually-hidden">Context positioned by service stage and working layer</caption>
+            <thead><tr><th data-label="Layer / stage" scope="col">Layer / stage</th>${head}</tr></thead><tbody>${body}</tbody>
+          </table></div></div>`
+        : emptyInvitation("Choose the service stages and working layers that matter to this reading.");
+      return surfaceHeading("blueprint", `${items.filter(item => includes(state.visibleStageIds, item.stage) && includes(state.visibleLayerIds, item.layer)).length} placed context items · ${stages.length} stages · ${layers.length} layers`) + table;
+    }
+
+    function closedArrowPath(start, end, thickness = 1.8, headLength = 9) {
+      const horizontal = Math.max(28, end.x - start.x);
+      const neckX = Math.max(start.x + 12, end.x - headLength);
+      const controlOne = start.x + horizontal * .42;
+      const controlTwo = neckX - horizontal * .24;
+      const half = thickness / 2;
+      const wing = Math.max(4.5, thickness * 2.7);
+      return [
+        `M ${start.x.toFixed(2)} ${(start.y - half).toFixed(2)}`,
+        `C ${controlOne.toFixed(2)} ${(start.y - half).toFixed(2)} ${controlTwo.toFixed(2)} ${(end.y - half).toFixed(2)} ${neckX.toFixed(2)} ${(end.y - half).toFixed(2)}`,
+        `L ${neckX.toFixed(2)} ${(end.y - wing).toFixed(2)}`,
+        `L ${end.x.toFixed(2)} ${end.y.toFixed(2)}`,
+        `L ${neckX.toFixed(2)} ${(end.y + wing).toFixed(2)}`,
+        `L ${neckX.toFixed(2)} ${(end.y + half).toFixed(2)}`,
+        `C ${controlTwo.toFixed(2)} ${(end.y + half).toFixed(2)} ${controlOne.toFixed(2)} ${(start.y + half).toFixed(2)} ${start.x.toFixed(2)} ${(start.y + half).toFixed(2)}`,
+        "Z"
+      ].join(" ");
+    }
+
+    function drawSharedConnections() {
+      const graph = document.getElementById("shared-graph");
+      const svg = document.getElementById("shared-connections");
+      if (!graph || !svg || !state.readings.relationships) return;
+      const graphRect = graph.getBoundingClientRect();
+      const width = Math.max(1, graph.scrollWidth);
+      const height = Math.max(1, graph.scrollHeight);
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("preserveAspectRatio", "none");
+      const nodes = new Map();
+      graph.querySelectorAll("[data-node-kind][data-node-id]").forEach(node => {
+        nodes.set(`${node.dataset.nodeKind}:${node.dataset.nodeId}`, node);
+      });
+      const visibleSharedItems = visibleItems().filter(item => item.sharedKey);
+      const edges = new Map();
+      visibleSharedItems.forEach(item => {
+        edges.set(`group:${item.groupId}|shared:${item.sharedKey}`, {
+          source: `group:${item.groupId}`,
+          target: `shared:${item.sharedKey}`,
+          route: false,
+          active: selected("item", item.id) || selected("group", item.groupId) || selected("shared", item.sharedKey)
+        });
+        routeLabelsFor(item).forEach(routeLabel => {
+          const key = `shared:${item.sharedKey}|route:${routeLabel}`;
+          const previous = edges.get(key);
+          edges.set(key, {
+            source: `shared:${item.sharedKey}`,
+            target: `route:${routeLabel}`,
+            route: true,
+            active: Boolean(previous?.active || selected("item", item.id) || selected("shared", item.sharedKey) || selected("route", routeLabel))
+          });
+        });
+      });
+      const paths = [];
+      edges.forEach(edge => {
+        const sourceNode = nodes.get(edge.source);
+        const targetNode = nodes.get(edge.target);
+        if (!sourceNode || !targetNode) return;
+        const sourceRect = sourceNode.getBoundingClientRect();
+        const targetRect = targetNode.getBoundingClientRect();
+        const start = {
+          x: sourceRect.right - graphRect.left + graph.scrollLeft,
+          y: sourceRect.top - graphRect.top + graph.scrollTop + sourceRect.height / 2
+        };
+        const end = {
+          x: targetRect.left - graphRect.left + graph.scrollLeft,
+          y: targetRect.top - graphRect.top + graph.scrollTop + targetRect.height / 2
+        };
+        const emphasized = edge.active || (edge.route && state.readings.routes);
+        paths.push(`<path d="${closedArrowPath(start, end, emphasized ? 2.7 : 1.55, emphasized ? 11 : 8)}" fill="${emphasized ? "var(--surface-accent)" : "var(--surface-line)"}" opacity="${emphasized ? ".82" : ".34"}"/>`);
+      });
+      svg.innerHTML = paths.join("");
+    }
+
+    function inspectorActions(actions) {
+      return `<div class="inspector-actions">${actions.map(action => `<button class="${action.primary ? "primary" : ""}" type="button" data-action="${escapeAttribute(action.action)}"${action.id ? ` data-target-id="${escapeAttribute(action.id)}"` : ""}>${escapeHtml(action.label)}</button>`).join("")}</div>`;
+    }
+
+    function renderItemInspector(item) {
+      const group = groupById(item.groupId);
+      const question = questionById(item.questionId);
+      const shared = item.sharedKey ? sharedDefinition(item.sharedKey) : null;
+      const stage = stageById(item.stage);
+      const layer = layerById(item.layer);
+      const routes = routeLabelsFor(item);
+      const actions = item.proposal ? [
+        { action: "accept-proposal", id: item.id, label: "Add as working assumption", primary: true },
+        { action: "edit-context", id: item.id, label: "Shape and add" },
+        { action: "dismiss-proposal", id: item.id, label: "Clear proposal" }
+      ] : [
+        { action: "edit-context", id: item.id, label: "Edit context", primary: true },
+        { action: "copy-context", id: item.id, label: "Copy context packet" },
+        { action: "remove-context", id: item.id, label: "Remove context" }
+      ];
+      inspector.innerHTML = `<div>
+        ${item.proposal ? '<span class="proposal-flag">AI proposal · working assumption</span>' : '<span class="meta-label">Selected context</span>'}
+        <h2>${escapeHtml(group?.label || "Context")}</h2>
+        <p>${escapeHtml(question?.label || "Context question")}</p>
+      </div>
+      <p>${escapeHtml(item.text)}</p>
+      <div class="card-meta">${statusChip(item.status)}${postureChip(item.posture)}</div>
+      <div class="inspector-meta">
+        <div class="meta-pair"><span class="meta-label">Decision use</span><span>${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</span></div>
+        <div class="meta-pair"><span class="meta-label">Shared context</span><span>${shared ? `<strong>${escapeHtml(shared.label)}</strong><br>${escapeHtml(shared.meaning)}` : "Local to this collaborator and question."}</span></div>
+        <div class="meta-pair"><span class="meta-label">Service position</span><span>${escapeHtml(stage?.label || "Stage still to locate")} · ${escapeHtml(layer?.label || "Layer still to locate")}</span></div>
+        <div class="meta-pair"><span class="meta-label">Receiving architecture</span><span>${routes.length ? routes.map(routeChip).join("") : "Route still to locate."}</span></div>
+        ${item.expiry ? `<div class="meta-pair"><span class="meta-label">Refresh when</span><span>${escapeHtml(item.expiry)}</span></div>` : ""}
+        <div class="meta-pair"><span class="meta-label">Context source</span><span>${escapeHtml(sourceLabel(item.sourceRef))}</span></div>
+      </div>
+      ${inspectorActions(actions)}`;
+    }
+
+    function renderGroupInspector(group) {
+      const items = state.model.items.filter(item => item.groupId === group.id);
+      const collaborationQuestionIds = new Set(state.model.questions.filter(question => question.kind === "collaboration").map(question => question.id));
+      const collaborationContext = items.filter(item => collaborationQuestionIds.has(item.questionId)).map(item => item.text);
+      inspector.innerHTML = `<div><span class="meta-label">Collaborator</span><h2>${escapeHtml(group.label)}</h2><p>${escapeHtml(group.organization)} · ${escapeHtml(titleCase(group.kind))}</p></div>
+        <p>${escapeHtml(group.impact)}</p>
+        <div class="inspector-meta">
+          <div class="meta-pair"><span class="meta-label">Works with</span><span>${collaborationContext.length ? collaborationContext.map(escapeHtml).join(" ") : "Add the collaborators who exchange context with this group."}</span></div>
+          <div class="meta-pair"><span class="meta-label">Context surface</span><span>${items.length} ${items.length === 1 ? "item" : "items"} across ${new Set(items.map(item => item.questionId)).size} questions.</span></div>
+        </div>
+        ${inspectorActions([
+          { action: "add-context-for-group", id: group.id, label: "Add context", primary: true },
+          { action: "edit-group", id: group.id, label: "Edit collaborator" },
+          { action: "remove-group", id: group.id, label: "Remove collaborator" }
+        ])}`;
+    }
+
+    function renderQuestionInspector(question) {
+      const items = state.model.items.filter(item => item.questionId === question.id);
+      const groups = new Set(items.map(item => item.groupId));
+      inspector.innerHTML = `<div><span class="meta-label">Context question</span><h2>${escapeHtml(question.label)}</h2><p>${escapeHtml(titleCase(question.kind))}</p></div>
+        <p>${items.length} ${items.length === 1 ? "context item answers" : "context items answer"} this question across ${groups.size} ${groups.size === 1 ? "collaborator" : "collaborators"}.</p>
+        ${inspectorActions([
+          { action: "add-context-for-question", id: question.id, label: "Add context", primary: true },
+          { action: "edit-question", id: question.id, label: "Edit question" },
+          { action: "remove-question", id: question.id, label: "Remove question" }
+        ])}`;
+    }
+
+    function renderSharedInspector(key) {
+      const definition = sharedDefinition(key);
+      const items = visibleItems().filter(item => item.sharedKey === key);
+      const groups = [...new Set(items.map(item => groupById(item.groupId)?.label).filter(Boolean))];
+      const routes = [...new Set(items.flatMap(routeLabelsFor))];
+      inspector.innerHTML = `<div><span class="meta-label">Shared context</span><h2>${escapeHtml(definition.label)}</h2></div>
+        <p>${escapeHtml(definition.meaning)}</p>
+        <div class="inspector-meta">
+          <div class="meta-pair"><span class="meta-label">Used by</span><span>${groups.map(escapeHtml).join(", ")}</span></div>
+          <div class="meta-pair"><span class="meta-label">Receiving architecture</span><span>${routes.length ? routes.map(routeChip).join("") : "Route still to locate."}</span></div>
+          <div class="meta-pair"><span class="meta-label">Connected placements</span><span>${items.length} connected ${items.length === 1 ? "item" : "items"}.</span></div>
+        </div>`;
+    }
+
+    function renderRouteInspector(label) {
+      const route = routeByLabel(label);
+      const items = visibleItems().filter(item => routeLabelsFor(item).includes(label));
+      const groups = [...new Set(items.map(item => groupById(item.groupId)?.label).filter(Boolean))];
+      inspector.innerHTML = `<div><span class="meta-label">Receiving architecture</span><h2>${escapeHtml(label)}</h2><p>${escapeHtml(route?.family || "Core Architecture")}</p></div>
+        <p>${items.length} ${items.length === 1 ? "context item is" : "context items are"} precise enough to become an input here.</p>
+        <div class="inspector-meta"><div class="meta-pair"><span class="meta-label">Contributors</span><span>${groups.map(escapeHtml).join(", ")}</span></div></div>`;
+    }
+
+    function renderInspector() {
+      const selection = state.selection;
+      if (!selection) {
+        inspector.innerHTML = `<div class="inspector-empty">
+          <span class="meta-label">Inspect context</span>
+          <h2>Follow one context item across every view.</h2>
+          <p>Choose a context item to trace who uses it, the decision it supports, where it travels next, and when it refreshes.</p>
+          <p>${state.model.items.length} context items connect ${state.model.groups.length} collaborators through ${state.model.questions.length} questions.</p>
+        </div>`;
+        return;
+      }
+      if (selection.type === "item") return renderItemInspector(itemById(selection.id));
+      if (selection.type === "group") return renderGroupInspector(groupById(selection.id));
+      if (selection.type === "question") return renderQuestionInspector(questionById(selection.id));
+      if (selection.type === "shared") return renderSharedInspector(selection.id);
+      if (selection.type === "route") return renderRouteInspector(selection.id);
+    }
+
+    function filterChip(domain, entry, active) {
+      return `<button class="filter-chip" type="button" data-filter-domain="${escapeAttribute(domain)}" data-filter-id="${escapeAttribute(entry.id)}" aria-pressed="${active}">● ${escapeHtml(entry.label)}</button>`;
+    }
+
+    function renderFilterRails() {
+      const labels = document.querySelectorAll(".filter-rail > .control-label");
+      const rails = document.querySelector(".filter-rails");
+      if (state.view === "blueprint") {
+        if (labels[0]) labels[0].textContent = "Stages";
+        if (labels[1]) labels[1].textContent = "Layers";
+        if (rails) rails.setAttribute("aria-label", "Visible service stages and working layers");
+        groupFilters.innerHTML = state.model.stages.map(stage => filterChip("stage", stage, includes(state.visibleStageIds, stage.id))).join("");
+        questionFilters.innerHTML = state.model.layers.map(layer => filterChip("layer", layer, includes(state.visibleLayerIds, layer.id))).join("");
+        return;
+      }
+      if (labels[0]) labels[0].textContent = "Groups";
+      if (labels[1]) labels[1].textContent = "Questions";
+      if (rails) rails.setAttribute("aria-label", "Visible collaborator groups and context questions");
+      groupFilters.innerHTML = state.model.groups.map(group => filterChip("group", group, includes(state.visibleGroupIds, group.id))).join("");
+      questionFilters.innerHTML = state.model.questions.map(question => filterChip("question", question, includes(state.visibleQuestionIds, question.id))).join("");
+    }
+
+    function renderSemanticTable() {
+      const items = state.model.items;
+      const rows = items.map(item => {
+        const visibleHere = state.view === "blueprint"
+          ? includes(state.visibleStageIds, item.stage) && includes(state.visibleLayerIds, item.layer)
+          : includes(state.visibleGroupIds, item.groupId) && includes(state.visibleQuestionIds, item.questionId);
+        return `<tr data-label="Complete Context Tree: ${escapeAttribute(item.text)}; ${escapeAttribute(groupById(item.groupId)?.label || "Context group")}; ${escapeAttribute(questionById(item.questionId)?.label || "Context question")}">
+        <td data-label="Context"><button class="handoff-context-button" type="button" data-select-type="item" data-select-id="${escapeAttribute(item.id)}">${escapeHtml(item.text)}</button></td>
+        <td data-label="Collaborator">${escapeHtml(groupById(item.groupId)?.label || "Context group")}</td>
+        <td data-label="Question">${escapeHtml(questionById(item.questionId)?.label || "Context question")}</td>
+        <td data-label="Evidence / readiness">${escapeHtml(statusById(item.status).label)}</td>
+        <td data-label="Decision role">${escapeHtml(postureById(item.posture).label)}</td>
+        <td data-label="Receiving architecture">${routeLabelsFor(item).length ? routeLabelsFor(item).map(routeChip).join("") : "Route still to locate."}</td>
+        <td data-label="Service position">${escapeHtml(stageById(item.stage)?.label || "Stage still to locate")} · ${escapeHtml(layerById(item.layer)?.label || "Layer still to locate")}</td>
+        <td data-label="Decision made easier">${escapeHtml(item.decisionUse || "Name the decision this context changes.")}</td>
+        <td data-label="Current reading">${visibleHere ? "Visible in the current reading" : "Available in the complete Context Tree"}</td>
+      </tr>`;
+      }).join("");
+      semanticTable.innerHTML = `<table data-label="Complete Context Tree data across every collaborator and context question" class="semantic-table">
+        <caption class="visually-hidden">Complete Context Tree data across every collaborator and context question</caption>
+        <thead><tr><th data-label="Context" scope="col">Context</th><th data-label="Collaborator" scope="col">Collaborator</th><th data-label="Question" scope="col">Question</th><th data-label="Evidence / readiness" scope="col">Evidence / readiness</th><th data-label="Decision role" scope="col">Decision role</th><th data-label="Receiving architecture" scope="col">Receiving architecture</th><th data-label="Service position" scope="col">Service position</th><th data-label="Decision made easier" scope="col">Decision made easier</th><th data-label="Current reading" scope="col">Current reading</th></tr></thead>
+        <tbody>${rows || '<tr data-label="Complete Context Tree: no context items"><td data-label="Complete Context Tree availability" colspan="9">Bring context into view to read its complete semantic equivalent.</td></tr>'}</tbody>
+      </table>`;
+    }
+
+    function optionMarkup(entries, selectedValue, valueKey = "id", labelKey = "label", includeBlank = false, blankLabel = "Choose") {
+      const blank = includeBlank ? `<option value="">${escapeHtml(blankLabel)}</option>` : "";
+      return blank + entries.map(entry => {
+        const value = entry[valueKey];
+        return `<option value="${escapeAttribute(value)}"${value === selectedValue ? " selected" : ""}>${escapeHtml(entry[labelKey])}</option>`;
+      }).join("");
+    }
+
+    function openGroupDialog(group = null) {
+      const dialog = document.getElementById("group-dialog");
+      const form = document.getElementById("group-form");
+      form.reset();
+      form.dataset.editId = group?.id || "";
+      document.getElementById("group-dialog-title").textContent = group ? "Shape this collaborator" : "Add a collaborating group";
+      form.querySelector('button[type="submit"]').textContent = group ? "Save collaborator" : "Add group";
+      form.elements.name.value = group?.label || "";
+      form.elements.organization.value = group?.organization || "";
+      form.elements.impact.value = group?.impact || "";
+      form.elements.kind.value = group?.kind || "human";
+      dialog.showModal();
+      form.elements.name.focus();
+    }
+
+    function openQuestionDialog(question = null) {
+      const dialog = document.getElementById("question-dialog");
+      const form = document.getElementById("question-form");
+      form.reset();
+      form.dataset.editId = question?.id || "";
+      document.getElementById("question-dialog-title").textContent = question ? "Shape this context question" : "Add a context question";
+      form.querySelector('button[type="submit"]').textContent = question ? "Save question" : "Add question";
+      form.elements.label.value = question?.label || "";
+      form.elements.kind.value = question?.kind || "custom";
+      dialog.showModal();
+      form.elements.label.focus();
+    }
+
+    function openContextDialog(item = null, defaults = {}) {
+      const dialog = document.getElementById("context-dialog");
+      const form = document.getElementById("context-form");
+      form.reset();
+      const groupId = item?.groupId || defaults.groupId || visibleGroups()[0]?.id || state.model.groups[0]?.id || "";
+      const questionId = item?.questionId || defaults.questionId || visibleQuestions()[0]?.id || state.model.questions[0]?.id || "";
+      const routes = item ? routeLabelsFor(item) : [];
+      document.getElementById("context-dialog-title").textContent = item ? (item.proposal ? "Shape this proposed context" : "Shape this context") : "Add context";
+      form.querySelector('button[type="submit"]').textContent = item?.proposal ? "Shape and add" : (item ? "Save context" : "Add context");
+      document.getElementById("context-item-id").value = item?.id || "";
+      form.dataset.originalRoutes = JSON.stringify(routes);
+      form.elements.groupId.innerHTML = optionMarkup(state.model.groups, groupId);
+      form.elements.questionId.innerHTML = optionMarkup(state.model.questions, questionId);
+      form.elements.status.innerHTML = optionMarkup(STATUS_OPTIONS, item?.status || "known");
+      form.elements.posture.innerHTML = optionMarkup(POSTURE_OPTIONS, item?.posture || "background");
+      form.elements.route.innerHTML = optionMarkup(ROUTES, routes[0] || "", "label", "label", true, "Route still to locate");
+      form.elements.secondaryRoute.innerHTML = optionMarkup(ROUTES, routes[1] || "", "label", "label", true, "One receiving architecture is enough");
+      form.elements.stage.innerHTML = optionMarkup(state.model.stages, item?.stage || "", "id", "label", true, "Stage still to locate");
+      form.elements.layer.innerHTML = optionMarkup(state.model.layers, item?.layer || "", "id", "label", true, "Layer still to locate");
+      form.elements.groupId.value = groupId;
+      form.elements.questionId.value = questionId;
+      form.elements.text.value = item?.text || "";
+      form.elements.status.value = item?.status || "known";
+      form.elements.posture.value = item?.posture || "background";
+      form.elements.route.value = routes[0] || "";
+      form.elements.secondaryRoute.value = routes[1] || "";
+      form.elements.sharedKey.value = item?.sharedKey || "";
+      form.elements.decisionUse.value = item?.decisionUse || "";
+      form.elements.stage.value = item?.stage || "";
+      form.elements.layer.value = item?.layer || "";
+      form.elements.expiry.value = item?.expiry || "";
+      dialog.showModal();
+      form.elements.text.focus();
+    }
+
+    function closeDialog(id) {
+      const dialog = document.getElementById(id);
+      if (dialog?.open) dialog.close();
+    }
+
+    function submitGroupForm(form) {
+      const fields = new FormData(form);
+      const editId = form.dataset.editId;
+      const label = String(fields.get("name") || "").trim();
+      const organization = String(fields.get("organization") || "").trim();
+      const impact = String(fields.get("impact") || "").trim();
+      const kind = String(fields.get("kind") || "human");
+      if (!label || !organization || !impact) return;
+      if (editId && groupById(editId)) {
+        mutate("Collaborator updated", () => {
+          Object.assign(groupById(editId), { label, organization, impact, kind });
+        }, `${label} now carries its current organizational context and intended change.`);
+      } else {
+        const id = createId(`group-${slug(label) || "collaborator"}`);
+        mutate("Collaborator added", () => {
+          state.model.groups.push({ id, label, organization, impact, kind, collaborators: [], sourceRef: "context-tree:local-collaborator" });
+          state.visibleGroupIds.push(id);
+          state.selection = { type: "group", id };
+        }, `${label} is now part of the Context Tree.`);
+      }
+      closeDialog("group-dialog");
+    }
+
+    function submitQuestionForm(form) {
+      const fields = new FormData(form);
+      const editId = form.dataset.editId;
+      const label = String(fields.get("label") || "").trim();
+      const kind = String(fields.get("kind") || "custom");
+      if (!label) return;
+      if (editId && questionById(editId)) {
+        mutate("Question updated", () => {
+          Object.assign(questionById(editId), { label, kind });
+        }, `“${shortText(label)}” now frames its context more precisely.`);
+      } else {
+        const id = createId(`question-${slug(label) || "context"}`);
+        mutate("Question added", () => {
+          state.model.questions.push({ id, label, kind, sourceRef: "context-tree:local-question" });
+          state.visibleQuestionIds.push(id);
+          state.selection = { type: "question", id };
+        }, `“${shortText(label)}” now has a place across collaborators.`);
+      }
+      closeDialog("question-dialog");
+    }
+
+    function submitContextForm(form) {
+      const fields = new FormData(form);
+      const itemId = String(fields.get("itemId") || "");
+      const existing = itemById(itemId);
+      const groupId = String(fields.get("groupId") || "");
+      const questionId = String(fields.get("questionId") || "");
+      const text = String(fields.get("text") || "").trim();
+      const selectedRoute = String(fields.get("route") || "");
+      const selectedSecondaryRoute = String(fields.get("secondaryRoute") || "");
+      const originalRoutes = JSON.parse(form.dataset.originalRoutes || "[]");
+      const authoredRoutes = [...new Set([selectedRoute, selectedSecondaryRoute].filter(Boolean))];
+      const routes = existing && selectedRoute === originalRoutes[0] && selectedSecondaryRoute === (originalRoutes[1] || "")
+        ? originalRoutes
+        : authoredRoutes;
+      if (!groupId || !questionId || !text) return;
+      const next = {
+        groupId,
+        questionId,
+        text,
+        status: String(fields.get("status") || "known"),
+        posture: String(fields.get("posture") || "background"),
+        route: routes[0] || "",
+        routes,
+        sharedKey: slug(String(fields.get("sharedKey") || "")),
+        decisionUse: String(fields.get("decisionUse") || "").trim(),
+        stage: String(fields.get("stage") || ""),
+        layer: String(fields.get("layer") || ""),
+        expiry: String(fields.get("expiry") || "").trim(),
+        proposal: false
+      };
+      const group = groupById(groupId);
+      if (existing) {
+        mutate("Context updated", () => {
+          Object.assign(existing, next);
+          state.selection = { type: "item", id: existing.id };
+        }, `Context updated for ${group?.label || "this collaborator"}: “${shortText(text)}”.`);
+      } else {
+        const id = createId("context");
+        mutate("Context added", () => {
+          state.model.items.push({ id, ...next, sourceRef: "context-tree:local-context" });
+          state.selection = { type: "item", id };
+        }, `Context now supports ${group?.label || "this collaborator"}: “${shortText(text)}”.`);
+      }
+      closeDialog("context-dialog");
+    }
+
+    function removeContext(id) {
+      const item = itemById(id);
+      if (!item) return;
+      const group = groupById(item.groupId);
+      mutate("Context removed", () => {
+        state.model.items = state.model.items.filter(entry => entry.id !== id);
+        state.selection = null;
+      }, `“${shortText(item.text)}” removed from ${group?.label || "the Context Tree"}.`);
+    }
+
+    function removeGroup(id) {
+      const group = groupById(id);
+      if (!group) return;
+      mutate("Collaborator removed", () => {
+        state.model.groups = state.model.groups.filter(entry => entry.id !== id);
+        state.model.groups.forEach(entry => { entry.collaborators = (entry.collaborators || []).filter(collaboratorId => collaboratorId !== id); });
+        state.model.items = state.model.items.filter(item => item.groupId !== id);
+        state.visibleGroupIds = state.visibleGroupIds.filter(groupId => groupId !== id);
+        state.selection = null;
+      }, `${group.label} and its local context are now outside this map. Undo restores the complete thread.`);
+    }
+
+    function removeQuestion(id) {
+      const question = questionById(id);
+      if (!question) return;
+      mutate("Question removed", () => {
+        state.model.questions = state.model.questions.filter(entry => entry.id !== id);
+        state.model.items = state.model.items.filter(item => item.questionId !== id);
+        state.visibleQuestionIds = state.visibleQuestionIds.filter(questionId => questionId !== id);
+        state.selection = null;
+      }, `“${shortText(question.label)}” and its answers are now outside this map. Undo restores them together.`);
+    }
+
+    const AI_PROPOSALS = {
+      "group-molecular-pathologist": {
+        text: "Input source, model version, and reviewer state travel with every generated assertion.",
+        sharedKey: "human-judgment-point",
+        route: "AI Systems Service Blueprint",
+        decisionUse: "Keeps claim origin and completing human judgment visible together.",
+        stage: "human-review",
+        layer: "ai"
+      },
+      "group-bioinformatics-analyst": {
+        text: "A pipeline-change summary links each altered threshold to the variants and reviewing population it can change.",
+        sharedKey: "pipeline-assumptions",
+        route: "Software Architecture Views",
+        decisionUse: "Connects a technical change with its interpretation consequence.",
+        stage: "pipeline-preparation",
+        layer: "system"
+      },
+      "group-research-coordinator": {
+        text: "A consent-state event carries the participant-safe study context, receiving action, and review-readiness consequence.",
+        sharedKey: "consent-study-state",
+        route: "Service-design Blueprint",
+        decisionUse: "Links a consent change to the coordination action it creates.",
+        stage: "exception-routing",
+        layer: "governance"
+      },
+      "group-data-steward": {
+        text: "One decision-provenance packet connects source evidence, pipeline release, classification change, and sign-out.",
+        sharedKey: "decision-provenance",
+        route: "Cross-channel Blueprint",
+        decisionUse: "Makes a decision trace portable across review, reporting, and archive.",
+        stage: "archive-audit",
+        layer: "data"
+      },
+      "group-ai-assistance-surface": {
+        text: "A generated summary carries source citations, local inference, uncertainty, and the human judgment that completes it.",
+        sharedKey: "human-judgment-point",
+        route: "AI Systems Service Blueprint",
+        decisionUse: "Preserves the claim boundary throughout review.",
+        stage: "review-preparation",
+        layer: "ai"
+      }
+    };
+
+    function proposeAdjacentContext() {
+      const selectedItem = state.selection?.type === "item" ? itemById(state.selection.id) : null;
+      const groupId = state.selection?.type === "group" ? state.selection.id : (selectedItem?.groupId || "group-ai-assistance-surface");
+      const group = groupById(groupId) || state.model.groups[0];
+      if (!group) return;
+      const proposal = AI_PROPOSALS[group.id] || AI_PROPOSALS["group-ai-assistance-surface"];
+      const id = createId("context-ai-proposal");
+      const questionId = state.model.questions.find(question => question.kind === "context_to_surface")?.id || state.model.questions[0]?.id;
+      if (!questionId) return;
+      mutate("AI proposal surfaced", () => {
+        state.model.items.push({
+          id,
+          groupId: group.id,
+          questionId,
+          text: proposal.text,
+          status: "assumed",
+          posture: "provisional",
+          route: proposal.route,
+          routes: [proposal.route],
+          sharedKey: proposal.sharedKey,
+          decisionUse: proposal.decisionUse,
+          stage: proposal.stage,
+          layer: proposal.layer,
+          expiry: "",
+          sourceRef: "context-tree:ai-working-proposal",
+          proposal: true
+        });
+        if (!includes(state.visibleGroupIds, group.id)) state.visibleGroupIds.push(group.id);
+        if (!includes(state.visibleQuestionIds, questionId)) state.visibleQuestionIds.push(questionId);
+        state.selection = { type: "item", id };
+      }, `AI proposed adjacent context for ${group.label}. Shape it, add it as a working assumption, or clear it.`);
+    }
+
+    function acceptProposal(id) {
+      const item = itemById(id);
+      if (!item) return;
+      mutate("Proposal added", () => {
+        item.proposal = false;
+        state.selection = { type: "item", id };
+      }, `“${shortText(item.text)}” is now a working assumption in the map.`);
+    }
+
+    function restoreExample() {
+      const next = createInitialModel();
+      saveMutation("Genomic review example restored");
+      state.model = clone(next);
+      state.visibleGroupIds = next.groups.map(group => group.id);
+      state.visibleQuestionIds = next.questions.map(question => question.id);
+      state.visibleStageIds = next.stages.map(stage => stage.id);
+      state.visibleLayerIds = next.layers.map(layer => layer.id);
+      state.selection = null;
+      render();
+      showToast("The genomic review example is active. Undo returns to the map you were shaping.");
+      announce("The genomic review example is active.");
+    }
+
+    function copyContextPacket(id) {
+      const item = itemById(id);
+      if (!item) return;
+      const group = groupById(item.groupId);
+      const question = questionById(item.questionId);
+      const packet = [
+        `Collaborator: ${group?.label || "Context group"}`,
+        `Context question: ${question?.label || "Context question"}`,
+        `Context: ${item.text}`,
+        `Evidence / readiness: ${statusById(item.status).label}`,
+        `Role in this decision: ${postureById(item.posture).label}`,
+        `Decision made easier: ${item.decisionUse || "Still to name"}`,
+        `Receiving architecture: ${routeLabelsFor(item).join(", ") || "Still to locate"}`
+      ].join("\n");
+      if (!navigator.clipboard?.writeText) {
+        showToast("Select the text in the inspector to carry this context forward.");
+        return;
+      }
+      navigator.clipboard.writeText(packet).then(() => {
+        showToast("Context packet copied with its collaborator, question, evidence / readiness, decision use, and route.");
+      }).catch(() => {
+        showToast("Select the text in the inspector to carry this context forward.");
+      });
+    }
+
+    function toggleFilter(domain, id) {
+      const map = {
+        group: "visibleGroupIds",
+        question: "visibleQuestionIds",
+        stage: "visibleStageIds",
+        layer: "visibleLayerIds"
+      };
+      const key = map[domain];
+      if (!key) return;
+      const collection = state[key];
+      const active = includes(collection, id);
+      if (active && collection.length === 1) {
+        announce(`Keep one ${domain} visible to preserve a readable map.`);
+        return;
+      }
+      state[key] = active ? collection.filter(entry => entry !== id) : [...collection, id];
+      render();
+    }
+
+    function setExclusiveButtonState(selector, dataKey, value) {
+      const buttons = [...document.querySelectorAll(selector)];
+      buttons.forEach(button => {
+        const active = button.dataset[dataKey] === value;
+        button.removeAttribute("aria-pressed");
+        button.setAttribute("aria-checked", String(active));
+        button.tabIndex = active ? 0 : -1;
+        button.setAttribute("role", "radio");
+      });
+    }
+
+    function updateControlState() {
+      app.dataset.view = state.view;
+      app.dataset.treatment = state.treatment;
+      app.dataset.pattern = state.pattern;
+      app.dataset.readingRoutes = String(state.readings.routes);
+      app.dataset.readingStatuses = String(state.readings.statuses);
+      app.dataset.readingRelationships = String(state.readings.relationships);
+      setExclusiveButtonState("[data-set-view]", "setView", state.view);
+      setExclusiveButtonState("[data-set-treatment]", "setTreatment", state.treatment);
+      setExclusiveButtonState("[data-set-pattern]", "setPattern", state.pattern);
+      document.querySelectorAll("[data-toggle-reading]").forEach(button => {
+        button.setAttribute("aria-pressed", String(Boolean(state.readings[button.dataset.toggleReading])));
+      });
+      const persistentUndo = document.getElementById("persistent-undo");
+      if (persistentUndo) persistentUndo.disabled = !state.lastMutation;
+    }
+
+    function focusKeyFor(element) {
+      if (!element) return null;
+      const attributes = ["setView", "setTreatment", "setPattern", "toggleReading", "filterDomain", "filterId", "selectType", "selectId"];
+      const key = attributes.map(name => element.dataset?.[name] || "").join("|");
+      return key.replaceAll("|", "") ? key : null;
+    }
+
+    function restoreInteractionFocus(key) {
+      if (!key) return;
+      const values = key.split("|");
+      const attributes = ["set-view", "set-treatment", "set-pattern", "toggle-reading", "filter-domain", "filter-id", "select-type", "select-id"];
+      const selector = values.map((value, index) => value ? `[data-${attributes[index]}="${CSS.escape(value)}"]` : "").join("");
+      const target = selector ? document.querySelector(selector) : null;
+      target?.focus({ preventScroll: true });
+    }
+
+    function render() {
+      captureScrollPosition();
+      updateControlState();
+      renderFilterRails();
+      const renderers = {
+        matrix: renderMatrix,
+        board: renderBoard,
+        assembly: renderAssembly,
+        shared: renderShared,
+        handoff: renderHandoff,
+        blueprint: renderBlueprint
+      };
+      visualSurface.innerHTML = (renderers[state.view] || renderMatrix)();
+      renderInspector();
+      renderSemanticTable();
+      restoreScrollPosition();
+      if (state.view === "shared") requestAnimationFrame(drawSharedConnections);
+    }
+
+    function moveRadioFocus(button, direction) {
+      const group = button.closest('[role="radiogroup"]');
+      if (!group) return;
+      const buttons = [...group.querySelectorAll('[role="radio"]')];
+      const index = buttons.indexOf(button);
+      if (index < 0) return;
+      const next = buttons[(index + direction + buttons.length) % buttons.length];
+      next.focus();
+      next.click();
+    }
+
+    document.addEventListener("keydown", event => {
+      const button = event.target.closest?.('[role="radio"]');
+      if (!button) return;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        moveRadioFocus(button, 1);
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        moveRadioFocus(button, -1);
+      } else if (event.key === " " || event.key === "Enter") {
+        event.preventDefault();
+        button.click();
+      }
+    });
+
+    document.addEventListener("click", event => {
+      const target = event.target.closest("button");
+      if (!target) return;
+      if (target.dataset.setView) {
+        captureScrollPosition();
+        const focusKey = focusKeyFor(target);
+        state.view = target.dataset.setView;
+        render();
+        restoreInteractionFocus(focusKey);
+        announce(`${VIEW_COPY[state.view].title} is active.`);
+        return;
+      }
+      if (target.dataset.setTreatment) {
+        state.treatment = target.dataset.setTreatment;
+        render();
+        announce(`${target.textContent.trim()} is active. The context and selection remain in place.`);
+        return;
+      }
+      if (target.dataset.setPattern) {
+        state.pattern = target.dataset.setPattern;
+        render();
+        announce(`${target.getAttribute("aria-label") || target.title} is active.`);
+        return;
+      }
+      if (target.dataset.toggleReading) {
+        const key = target.dataset.toggleReading;
+        state.readings[key] = !state.readings[key];
+        render();
+        announce(`${target.textContent.trim()} ${state.readings[key] ? "is visible" : "is resting"}.`);
+        return;
+      }
+      if (target.dataset.filterDomain) {
+        const focusKey = focusKeyFor(target);
+        toggleFilter(target.dataset.filterDomain, target.dataset.filterId);
+        restoreInteractionFocus(focusKey);
+        return;
+      }
+      if (target.dataset.selectType) {
+        const focusKey = focusKeyFor(target);
+        state.selection = { type: target.dataset.selectType, id: target.dataset.selectId };
+        render();
+        restoreInteractionFocus(focusKey);
+        announce("Selected context is available in the inspector.");
+        return;
+      }
+      if (target.dataset.openDialog) {
+        if (target.dataset.openDialog === "context-dialog") openContextDialog();
+        if (target.dataset.openDialog === "group-dialog") openGroupDialog();
+        if (target.dataset.openDialog === "question-dialog") openQuestionDialog();
+        return;
+      }
+      if (target.dataset.closeDialog) {
+        closeDialog(target.dataset.closeDialog);
+        return;
+      }
+
+      const id = target.dataset.targetId;
+      const actions = {
+        undo: undoMutation,
+        "ai-extension": proposeAdjacentContext,
+        "restore-example": restoreExample,
+        "accept-proposal": () => acceptProposal(id),
+        "dismiss-proposal": () => removeContext(id),
+        "edit-context": () => openContextDialog(itemById(id)),
+        "remove-context": () => removeContext(id),
+        "add-context-for-group": () => openContextDialog(null, { groupId: id }),
+        "add-context-for-question": () => openContextDialog(null, { questionId: id }),
+        "edit-group": () => openGroupDialog(groupById(id)),
+        "remove-group": () => removeGroup(id),
+        "edit-question": () => openQuestionDialog(questionById(id)),
+        "remove-question": () => removeQuestion(id),
+        "copy-context": () => copyContextPacket(id)
+      };
+      if (target.dataset.action && actions[target.dataset.action]) actions[target.dataset.action]();
+    });
+
+    document.getElementById("group-form").addEventListener("submit", event => {
+      event.preventDefault();
+      submitGroupForm(event.currentTarget);
+    });
+    document.getElementById("question-form").addEventListener("submit", event => {
+      event.preventDefault();
+      submitQuestionForm(event.currentTarget);
+    });
+    document.getElementById("context-form").addEventListener("submit", event => {
+      event.preventDefault();
+      submitContextForm(event.currentTarget);
+    });
+    window.addEventListener("resize", () => {
+      if (state.view === "shared") requestAnimationFrame(drawSharedConnections);
+    }, { passive: true });
+
+    render();
+  })();
+  </script>

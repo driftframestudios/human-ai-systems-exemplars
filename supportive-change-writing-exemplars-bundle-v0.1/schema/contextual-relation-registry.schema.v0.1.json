@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Contextual Relation Registry",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "registry_id",
+    "registry_type",
+    "version",
+    "purpose",
+    "semantic_attractor_contract",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "registry_id": {
+      "type": "string"
+    },
+    "registry_type": {
+      "const": "contextual_relations"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "subject_ref",
+          "relation_type",
+          "object_ref",
+          "rationale"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "subject_ref": {
+            "type": "string"
+          },
+          "relation_type": {
+            "enum": [
+              "cross_branch_bridge",
+              "scales_toward_practice",
+              "structural_companion",
+              "human_scale_echo",
+              "practice_companion"
+            ]
+          },
+          "object_ref": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

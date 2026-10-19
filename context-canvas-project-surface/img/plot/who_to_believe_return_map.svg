@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1180" role="img" aria-labelledby="return-title return-desc">
+  <title id="return-title">Who To Believe platform return and durable UX diagnostic</title>
+  <desc id="return-desc">An implementation-and-recovery map shows Symfony with Doctrine ORM and Spring Data JPA with Hibernate ORM writing to the United States database, Doctrine schema diff and Flyway migration history describing schema state, a Symfony-only United Kingdom database, a reconciliation report, later adapter and ETL layers, a phantom hamburger symptom, heatmap and recording diagnosis, email as a navigation workaround, and the durable UX diagnostic that survived the implementation.</desc>
+  <defs>
+    <clipPath id="return-frame-clip">
+      <rect x="18" y="18" width="1564" height="1144" rx="28"/>
+    </clipPath>
+    <pattern id="return-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#8aaee9" stroke-width=".8" opacity=".18"/>
+      <circle cx="0" cy="0" r="1.2" fill="#215fbb" opacity=".16"/>
+    </pattern>
+    <style>
+      .frame{fill:none;stroke:#215fbb;stroke-width:3}.field{fill:#f4f7fd}.grid{fill:url(#return-grid)}
+      .paper{fill:#fffdf7;stroke:#8aaee9;stroke-width:1.6}.paper-blue{fill:#f4f8ff;stroke:#8aaee9;stroke-width:1.6}
+      .cobalt{fill:#215fbb;stroke:#16345e;stroke-width:1.8}.cobalt-soft{fill:#dbe9ff;stroke:#215fbb;stroke-width:2}
+      .sea{fill:#dbf0f0;stroke:#263f42;stroke-width:1.7}.sea-soft{fill:#f1f9f9;stroke:#afc8c8;stroke-width:1.5}
+      .warm{fill:#fff0cf;stroke:#765a20;stroke-width:1.8}.rose{fill:#f5d6cf;stroke:#9f493e;stroke-width:1.8}
+      .db-top{fill:#edf4ff;stroke:#215fbb;stroke-width:2}.db-body{fill:#dbe9ff;stroke:#215fbb;stroke-width:2}
+      .arrow{fill:#215fbb}.arrow-soft{fill:#8aaee9}.arrow-sea{fill:#4f7f82}.arrow-warm{fill:#9f6b1e}
+      .eyebrow{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.6px;fill:#4c678d}
+      .title{font:760 32px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#16345e}
+      .subtitle{font:500 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#4c678d}
+      .section{font:760 20px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#16345e}
+      .card-title{font:760 19px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#16345e}
+      .body{font:500 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#263f42}
+      .small{font:500 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#4c678d}
+      .micro{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.7px;fill:#4c678d}
+      .on-cobalt{fill:#fffdf7}.on-cobalt-muted{fill:#dbe9ff}
+      .stack{font:760 17px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#16345e}
+      .db-label{font:760 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#16345e;text-anchor:middle}
+      .db-meta{font:500 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#4c678d;text-anchor:middle}
+      .step{font:780 24px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#16345e}
+      .diagnostic{font:760 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#173f42}
+      .diagnostic-on{font:760 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf7}
+    </style>
+  </defs>
+
+  <g clip-path="url(#return-frame-clip)">
+    <rect class="field" x="18" y="18" width="1564" height="1144"/>
+    <rect class="grid" x="18" y="18" width="1564" height="1144"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1144" rx="28"/>
+
+  <text class="eyebrow" x="50" y="62">WHO TO BELIEVE · PLATFORM RETURN MAP</text>
+  <text class="title" x="50" y="101">Persistence compromise and navigation return expose what diagnostics can outlive</text>
+  <text class="subtitle" x="50" y="132">The reconciliation service kept regional work moving. Later adapters, a phantom menu, and user recovery behavior created a second diagnostic problem.</text>
+
+  <text class="eyebrow" x="50" y="170">2017–2020 · TWO APPLICATION PATHS, DIVIDED SCHEMA-CHANGE OWNERSHIP</text>
+
+  <g aria-label="United States dual-writer estate">
+    <rect class="paper-blue" x="50" y="188" width="980" height="374" rx="22"/>
+    <rect class="cobalt" x="50" y="188" width="980" height="48" rx="22"/>
+    <rect x="50" y="214" width="980" height="22" fill="#215fbb"/>
+    <text class="micro on-cobalt" x="74" y="219">UNITED STATES ESTATE · DUAL WRITERS</text>
+
+    <rect class="paper" x="78" y="264" width="266" height="112" rx="16"/>
+    <text class="micro" x="98" y="292">WRITER A · ORIGINAL MONOLITH</text>
+    <text class="stack" x="98" y="323">Symfony + Twig</text>
+    <text class="stack" x="98" y="350">Doctrine ORM</text>
+
+    <rect class="cobalt-soft" x="78" y="408" width="266" height="124" rx="16"/>
+    <text class="micro" x="98" y="436">WRITER B · LAYERED IN 2018</text>
+    <text class="stack" x="98" y="467">Spring Data JPA</text>
+    <text class="stack" x="98" y="494">Hibernate ORM</text>
+    <text class="small" x="98" y="516">Flyway tracks the Spring migration line.</text>
+
+    <!-- Two integrated arrows terminate cleanly at the database cylinder. -->
+    <path class="arrow" d="M344 314 H448 V304 L472 320 L448 336 V326 H344 Z"/>
+    <path class="arrow" d="M344 462 H388 V420 H448 V410 L472 426 L448 442 V432 H400 V474 H344 Z"/>
+
+    <g aria-label="United States database">
+      <rect class="db-body" x="472" y="296" width="240" height="164"/>
+      <ellipse class="db-top" cx="592" cy="296" rx="120" ry="28"/>
+      <ellipse class="db-body" cx="592" cy="460" rx="120" ry="28"/>
+      <text class="db-label" x="592" y="352">US DATABASE</text>
+      <text class="db-meta" x="592" y="378">Doctrine + Hibernate writes</text>
+      <text class="db-meta" x="592" y="401">shared tables · shared consequences</text>
+    </g>
+
+    <path class="arrow-warm" d="M712 366 H748 V356 L772 372 L748 388 V378 H712 Z"/>
+    <rect class="warm" x="772" y="272" width="230" height="196" rx="18"/>
+    <text class="micro" x="794" y="301">RECONCILIATION SERVICE</text>
+    <text class="card-title" x="794" y="333">The shim became</text>
+    <text class="card-title" x="794" y="357">the operating standard</text>
+    <text class="body" x="794" y="391">
+      <tspan x="794">Compare Doctrine schema</tspan>
+      <tspan x="794" dy="21">with Flyway history;</tspan>
+      <tspan x="794" dy="21">emit a drift report;</tspan>
+      <tspan x="794" dy="21">link planned fixes.</tspan>
+    </text>
+    <rect class="rose" x="772" y="486" width="230" height="46" rx="12"/>
+    <text class="micro" x="792" y="505">COST OF COEXISTENCE</text>
+    <text class="small" x="792" y="523">nightly interpretation + repair</text>
+  </g>
+
+  <g aria-label="United Kingdom Symfony-only estate">
+    <rect class="sea-soft" x="1050" y="188" width="500" height="374" rx="22"/>
+    <rect class="sea" x="1050" y="188" width="500" height="48" rx="22"/>
+    <rect x="1050" y="214" width="500" height="22" fill="#dbf0f0"/>
+    <text class="micro" x="1074" y="219">UNITED KINGDOM ESTATE · ONE WRITER</text>
+
+    <rect class="paper" x="1080" y="272" width="196" height="122" rx="16"/>
+    <text class="micro" x="1100" y="300">REGIONAL STACK</text>
+    <text class="stack" x="1100" y="333">Symfony</text>
+    <text class="stack" x="1100" y="360">Doctrine ORM</text>
+    <text class="small" x="1100" y="382">Symfony remained the sole UK stack.</text>
+
+    <path class="arrow-sea" d="M1276 326 H1320 V316 L1344 332 L1320 348 V338 H1276 Z"/>
+    <g aria-label="United Kingdom database">
+      <rect class="db-body" x="1344" y="280" width="170" height="138"/>
+      <ellipse class="db-top" cx="1429" cy="280" rx="85" ry="24"/>
+      <ellipse class="db-body" cx="1429" cy="418" rx="85" ry="24"/>
+      <text class="db-label" x="1429" y="334">UK DATABASE</text>
+      <text class="db-meta" x="1429" y="359">Doctrine writes</text>
+      <text class="db-meta" x="1429" y="381">regional residency</text>
+    </g>
+
+    <rect class="sea" x="1080" y="468" width="434" height="64" rx="16"/>
+    <text class="micro" x="1100" y="493">INTENDED NEXT MOVE</text>
+    <text class="body" x="1100" y="516">Bring Spring to the UK; retire Symfony after feature parity.</text>
+  </g>
+
+  <path class="arrow-soft" d="M314 562 V584 H294 L320 610 L346 584 H326 V562 Z"/>
+  <path class="arrow-soft" d="M1288 562 V584 H1268 L1294 610 L1320 584 H1300 V562 Z"/>
+  <rect class="paper" x="50" y="604" width="1500" height="64" rx="18"/>
+  <text class="micro" x="74" y="630">CONVERGENCE PLAN</text>
+  <text class="body" x="224" y="632">one Spring persistence line across both regions</text>
+  <path class="arrow" d="M552 626 H662 V618 L680 632 L662 646 V638 H552 Z"/>
+  <text class="body" x="704" y="632">Symfony retirement after observed feature parity</text>
+  <path class="arrow" d="M1074 626 H1184 V618 L1202 632 L1184 646 V638 H1074 Z"/>
+  <text class="body" x="1226" y="632">one migration vocabulary</text>
+
+  <text class="eyebrow" x="50" y="710">THE RETURN · ADDED INTEGRATION LAYERS MADE A LOCAL UX DECISION BEHAVE DIFFERENTLY</text>
+
+  <g aria-label="Post-acquisition return sequence">
+    <rect class="paper-blue" x="50" y="728" width="1500" height="300" rx="22"/>
+
+    <rect class="cobalt" x="76" y="768" width="212" height="112" rx="16"/>
+    <text class="micro on-cobalt-muted" x="96" y="795">01 · ENCLOSING SURFACE</text>
+    <text class="card-title on-cobalt" x="96" y="828">Acquirer product</text>
+    <text class="body on-cobalt" x="96" y="854">Cross-product navigation</text>
+    <text class="body on-cobalt" x="96" y="875">and account conventions</text>
+
+    <path class="arrow" d="M288 818 H328 V808 L350 824 L328 840 V830 H288 Z"/>
+    <rect class="cobalt-soft" x="350" y="768" width="212" height="112" rx="16"/>
+    <text class="micro" x="370" y="795">02 · NEW LAYERS</text>
+    <text class="card-title" x="370" y="828">Adapters + ETL</text>
+    <text class="body" x="370" y="854">Request/render adapters</text>
+    <text class="body" x="370" y="875">Product-data ETL</text>
+
+    <path class="arrow" d="M562 818 H602 V808 L624 824 L602 840 V830 H562 Z"/>
+    <rect class="warm" x="624" y="768" width="232" height="112" rx="16"/>
+    <text class="micro" x="644" y="795">03 · CONTESTED RENDER STATE</text>
+    <text class="card-title" x="644" y="828">Fallback surfaces</text>
+    <text class="body" x="644" y="854">Old and new semantics meet</text>
+    <text class="body" x="644" y="875">under live load</text>
+
+    <path class="arrow-warm" d="M856 818 H896 V808 L918 824 L896 840 V830 H856 Z"/>
+    <rect class="rose" x="918" y="756" width="246" height="136" rx="16"/>
+    <text class="micro" x="938" y="783">04 · PHANTOM HAMBURGER</text>
+    <text class="card-title" x="938" y="816">≡  →  blank  →  ≡</text>
+    <text class="body" x="938" y="846">Navigation appears, disappears,</text>
+    <text class="body" x="938" y="867">and returns during use.</text>
+
+    <path class="arrow" d="M1164 818 H1204 V808 L1226 824 L1204 840 V830 H1164 Z"/>
+    <rect class="sea" x="1226" y="756" width="298" height="136" rx="16"/>
+    <text class="micro" x="1246" y="783">05 · USER RECOVERY PATH</text>
+    <text class="card-title" x="1246" y="816">Email reopens</text>
+    <text class="body" x="1246" y="846"><tspan x="1246">Direct links reach a specific page</tspan><tspan x="1246" dy="21">around unreliable navigation.</tspan></text>
+
+    <path class="arrow-soft" d="M1040 892 V914 H1030 L1046 932 L1062 914 H1052 V892 Z"/>
+    <rect class="paper" x="624" y="918" width="540" height="84" rx="16"/>
+    <text class="micro" x="644" y="943">DIAGNOSIS · TWO COMPLEMENTARY SIGNALS</text>
+    <text class="body" x="644" y="970">Click heatmap · empty-space cluster where navigation vanished</text>
+    <text class="body" x="644" y="992">Recordings · brief render → disappear loop</text>
+
+    <path class="arrow-sea" d="M1226 940 H1204 V932 L1184 948 L1204 964 V956 H1226 Z"/>
+    <rect class="sea-soft" x="76" y="914" width="510" height="94" rx="16"/>
+    <text class="micro" x="96" y="940">OBSERVED BEHAVIOR</text>
+    <text class="body" x="96" y="963"><tspan x="96">Empty-space clicks + repeated email opens</tspan><tspan x="96" dy="18">identify a navigation recovery loop.</tspan><tspan x="96" dy="18">The precise implementation mechanism remains open.</tspan></text>
+  </g>
+
+  <g aria-label="Durable UX diagnostic">
+    <rect class="cobalt" x="50" y="1052" width="1500" height="82" rx="20"/>
+    <text class="micro on-cobalt-muted" x="74" y="1080">DURABLE UX DIAGNOSTIC</text>
+    <text class="diagnostic-on" x="74" y="1111">A convention earns its place by solving a current problem. Re-run the question when architecture or scope changes.</text>
+    <rect x="1302" y="1071" width="220" height="42" rx="21" fill="#16345e"/>
+    <text class="micro on-cobalt" x="1322" y="1097">diagnostic travels farther</text>
+  </g>
+</svg>

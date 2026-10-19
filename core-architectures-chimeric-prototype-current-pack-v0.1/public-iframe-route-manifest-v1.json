@@ -1,0 +1,612 @@
+{
+  "id": "core-architectures.public-iframe-routes.v1",
+  "version": "1",
+  "host": "iframes.vik.guru",
+  "base_path": "/v1/core/",
+  "source_manifest": "core-architectures-chimeric-prototype-manifest-v0.1.json",
+  "source_authority": "The current-pack manifest indexes the 21 Core prototype identities and versions. A supplemental route declares its repository-bounded source owner directly. Each HTML artifact remains the authority for its runtime behavior.",
+  "projection_contract": {
+    "entry_file": "index.html",
+    "hub_source_manifest_file": "manifest.json",
+    "route_receipt_file": "route-manifest.json",
+    "html_closure": "single_file",
+    "package_coupled_media": "inline_or_package_local",
+    "package_file_allowlist": "Optional route.package_files entries bind a regular source file to a route-local target and explicit content type.",
+    "static_scan_boundary": "Markup, CSS and selected JavaScript network primitives are checked during packaging; browser request-graph, projected exit behavior, and delivery-policy evidence remain live-delivery verification requirements.",
+    "navigation_posture": "Declared repository-local exits first resolve to the primary visitor surface. Every generated iframe prototype then opens user-activated exits in a separate top-level tab with a severed opener; fragment links, downloads, the standalone pack hub, and canonical source behavior remain unchanged.",
+    "receiver_standing_posture": "Receiver standing describes the route's relationship to a receiving Context Canvas expression; it does not determine package membership.",
+    "activation_standing_posture": "Every route declared in routes is eligible for package publication. Actionable copy, parity, provenance, navigation, and reader-job reviews stay with their owning Issues; package eligibility does not assert live delivery.",
+    "activation_owner": "The route manifest owns package publication; Issue #72 and human review own live delivery.",
+    "neighboring_path_posture": "unmatched"
+  },
+  "carrier_contract": {
+    "title": "context_specific_non_empty",
+    "loading": "lazy",
+    "referrer_policy": "no-referrer",
+    "sandbox_posture": "exact_per_route_allowlist",
+    "permissions_policy_posture": "exact_per_route_allowlist",
+    "held_capability_posture": "Every current route resolves source-visible capability holds before iframe packaging; a publication-eligible route cannot retain a hold.",
+    "full_view_posture": "A visitor carrier sends its iframe to the approved public alias while its adjacent full-view link keeps the repository-local Context Canvas prototype."
+  },
+  "standing_values": {
+    "receiver": [
+      "byte_identical",
+      "context_adapted",
+      "reserve"
+    ],
+    "activation": [
+      "eligible"
+    ]
+  },
+  "routes": [
+    {
+      "id": "core-architectures-pack",
+      "display_name": "Core Architectures Pack",
+      "kind": "hub",
+      "source_file": "core-architectures-chimeric-prototype-pack-index-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "reader_job": "Navigate the current Core Architectures pack and its exact sibling routes."
+    },
+    {
+      "id": "poda",
+      "display_name": "PODA",
+      "kind": "prototype",
+      "source_file": "poda-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/poda/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "navigation_rewrites": [
+        {
+          "source_reference": "../context-canvas-project-surface/context-canvas/poda.html",
+          "public_reference": "https://vik.guru/poda.html"
+        }
+      ],
+      "reader_job": "Trace purpose, objectives, discoverables, and activities in one editable orientation."
+    },
+    {
+      "id": "alignment-worksheet",
+      "display_name": "Alignment Worksheet",
+      "kind": "prototype",
+      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/alignment-worksheet/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Compare forward and backward premises before selecting an option."
+    },
+    {
+      "id": "impact-map",
+      "display_name": "Impact Map",
+      "kind": "prototype",
+      "source_file": "impact-map-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/impact-map/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Trace actors, desired impacts, and discoverables through a directed graph."
+    },
+    {
+      "id": "context-tree",
+      "display_name": "Context Tree",
+      "kind": "prototype",
+      "source_file": "context-tree-chimeric-prototype-v0.1.7.html",
+      "source_version": "0.1.7",
+      "public_alias": "/v1/core/context-tree/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Map role-specific knowledge and context before a consequential decision."
+    },
+    {
+      "id": "strategy-canvas",
+      "display_name": "Strategy Canvas",
+      "kind": "prototype",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.2.5.html",
+      "source_version": "0.2.5",
+      "expression": "canonical",
+      "public_alias": "/v1/core/strategy-canvas/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "package_files": [
+        {
+          "source_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+          "target_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+          "content_type": "application/schema+json"
+        },
+        {
+          "source_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+          "target_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+          "content_type": "application/json"
+        }
+      ],
+      "reader_job": "Compare several options across anchored dimensions in the canonical worksheet."
+    },
+    {
+      "id": "first-responsible-version-matrix",
+      "display_name": "First Responsible Version Matrix",
+      "kind": "prototype",
+      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/first-responsible-version-matrix/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Make the first responsible delivery threshold inspectable."
+    },
+    {
+      "id": "cross-channel-blueprint",
+      "display_name": "Cross-channel Blueprint",
+      "kind": "prototype",
+      "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/cross-channel-blueprint/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Compare shared surfaces and channel-specific responsibilities across a service topology."
+    },
+    {
+      "id": "service-design-blueprint",
+      "display_name": "Service-design Blueprint",
+      "kind": "prototype",
+      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.6.html",
+      "source_version": "0.2.6",
+      "public_alias": "/v1/core/service-design-blueprint/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Inspect a layered service topology and its visible and supporting work."
+    },
+    {
+      "id": "ai-systems-service-blueprint",
+      "display_name": "AI Systems Service Blueprint",
+      "kind": "prototype",
+      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/ai-systems-service-blueprint/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Inspect runtime, knowledge, and infrastructure responsibilities across an AI system."
+    },
+    {
+      "id": "software-architecture-views",
+      "display_name": "Software Architecture Views",
+      "kind": "prototype",
+      "source_file": "software-architecture-views-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/software-architecture-views/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Compare feature instantiation and dependency shape across several architecture views."
+    },
+    {
+      "id": "participatory-design-kit",
+      "display_name": "Participatory Design Kit",
+      "kind": "prototype",
+      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/participatory-design-kit/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Elicit tacit workflow knowledge through participatory activities and evidence fragments."
+    },
+    {
+      "id": "specification-by-example",
+      "display_name": "Specification-by-Example",
+      "kind": "prototype",
+      "source_file": "specification-by-example-chimeric-prototype-v0.1.7.html",
+      "source_version": "0.1.7",
+      "public_alias": "/v1/core/specification-by-example/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Connect business rules to concrete behavior examples and protected outcomes."
+    },
+    {
+      "id": "heart-chart",
+      "display_name": "HEART Chart",
+      "kind": "prototype",
+      "source_file": "heart-chart-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
+      "public_alias": "/v1/core/heart-chart/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Calibrate goals, signals, and metrics without collapsing them into one proxy."
+    },
+    {
+      "id": "plus-delta",
+      "display_name": "Plus / Delta",
+      "kind": "prototype",
+      "source_file": "plus-delta-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/plus-delta/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Separate practices worth preserving from changes worth exploring."
+    },
+    {
+      "id": "practitioner-judgment-probes",
+      "display_name": "Practitioner Judgment Probes",
+      "kind": "prototype",
+      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/practitioner-judgment-probes/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Use interview questions as evidence-bearing propensities rather than answer keys."
+    },
+    {
+      "id": "pattern-problem-surface-matrix",
+      "display_name": "Pattern–Problem Surface Matrix",
+      "kind": "prototype",
+      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/pattern-problem-surface-matrix/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Compare experience-design patterns by the problem surfaces they address."
+    },
+    {
+      "id": "jobs-to-be-done-treemap",
+      "display_name": "Jobs-to-be-Done Treemap",
+      "kind": "prototype",
+      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "public_alias": "/v1/core/jobs-to-be-done-treemap/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Compare jobs by purpose, weight, and relation to a decision."
+    },
+    {
+      "id": "unit-test-first-design",
+      "display_name": "Unit-test-first Design",
+      "kind": "prototype",
+      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/unit-test-first-design/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Protect business rules by connecting them to focused executable examples."
+    },
+    {
+      "id": "upstream-revision-loop",
+      "display_name": "Upstream Revision Loop",
+      "kind": "prototype",
+      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/upstream-revision-loop/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Carry downstream evidence back to the solution artifact that can absorb it."
+    },
+    {
+      "id": "recovery-routing-atlas",
+      "display_name": "Recovery Routing Atlas",
+      "kind": "prototype",
+      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "public_alias": "/v1/core/recovery-routing-atlas/",
+      "receiver_standing": "reserve",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "reader_job": "Recognize a strain cue and select the smallest fitting recovery route."
+    },
+    {
+      "id": "core-architecture-family-index",
+      "display_name": "Core Architecture Family Index",
+      "kind": "prototype",
+      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
+      "public_alias": "/v1/core/core-architecture-family-index/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "navigation_rewrites": [
+        {
+          "source_reference": "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+          "public_reference": "https://vik.guru/core-architectures-orientation-index.html"
+        }
+      ],
+      "reader_job": "Browse the full family and select a fitting cognitive move."
+    },
+    {
+      "id": "conditioning-field",
+      "display_name": "Conditioning Field",
+      "kind": "supplemental_instrument",
+      "source_root": "context-canvas-project-surface/context-canvas",
+      "source_file": "conditioning-field.html",
+      "source_version": "unversioned-current",
+      "projection": "embedded_single_file",
+      "public_alias": "/v1/core/conditioning-field/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "navigation_rewrites": [
+        {
+          "source_reference": "conditioning-field.html",
+          "public_reference": "https://vik.guru/conditioning-field.html"
+        },
+        {
+          "source_reference": "prompt-side-conditions-practice.html#sources-title",
+          "public_reference": "https://vik.guru/prompt-side-conditions-practice.html#sources-title"
+        }
+      ],
+      "reader_job": "Shape task, desired state, human referents, evidence horizon, uncertainty, and authority before an AI collaboration converges."
+    }
+  ],
+  "compatibility_aliases": [
+    {
+      "id": "strategy-canvas-v0.1.1",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "proposed_alias": "/v1/core/strategy-canvas/v0.1.1/",
+      "standing": "resting_optional_migration_alias",
+      "generated": false
+    }
+  ],
+  "runtime_exclusions": [
+    "strategy-canvas-system-v0.2/canonical.template.html",
+    "strategy-canvas-system-v0.2/compatibility-v0.1.1.html"
+  ]
+}

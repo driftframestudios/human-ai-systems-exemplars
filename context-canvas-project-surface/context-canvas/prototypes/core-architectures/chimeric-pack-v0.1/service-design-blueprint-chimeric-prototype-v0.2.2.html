@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="Vikrant Varun Kudesia">
+<link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Service-design Blueprint · Service Topology Map · Chimeric Prototype v0.2.2</title>
+<style>
+  :root {
+    --paper: #fffdf8;
+    --ink: #25231f;
+    --muted: #686258;
+    --line: #d7d0c1;
+    --line-strong: #bcb3a2;
+    --soft: #f6f1e8;
+    --soft-2: #ece6da;
+    --accent: #dfecec;
+    --accent-strong: #bfd0d0;
+    --accent-ink: #335a61;
+    --front: #e6f4f2;
+    --back: #f1eadc;
+    --ai: #e9e5f4;
+    --system: #e8edf5;
+    --data: #efe6d5;
+    --gov: #f1dfde;
+    --handoff: #e7ebdd;
+    --signal: #e8eff0;
+    --shadow: 0 14px 38px rgba(36, 31, 25, 0.08);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f8f6f1;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  header { background: linear-gradient(135deg, #fffaf0, #eef7f7); border-bottom: 1px solid var(--line); }
+  .wrap { width: min(1360px, calc(100vw - 28px)); margin: 0 auto; }
+  .hero { padding: 28px 0 22px; }
+  h1, h2, h3 { line-height: 1.08; margin: 0 0 12px; }
+  h1 { font-size: clamp(2rem, 4vw, 4.2rem); letter-spacing: -0.055em; }
+  h2 { font-size: clamp(1.35rem, 2vw, 2rem); letter-spacing: -0.035em; }
+  h3 { font-size: 1.06rem; letter-spacing: -0.015em; }
+  p { margin: 0 0 12px; }
+  .subtitle { color: var(--accent-ink); font-size: clamp(1.05rem, 1.7vw, 1.45rem); font-weight: 760; }
+  .deck { max-width: 1060px; color: var(--muted); font-size: 1rem; }
+  main { padding: 18px 0 48px; }
+  section, .panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    margin: 0 0 18px;
+  }
+  .soft { background: var(--soft); box-shadow: none; }
+  .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .wrap > *, .grid-2 > *, .grid-3 > *, section, .panel { min-width: 0; }
+  @media (max-width: 980px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  label { display: block; font-weight: 780; margin-bottom: 6px; }
+  input, textarea, select, button { font: inherit; }
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%; border: 1px solid var(--line-strong); background: #fffefb; border-radius: 12px;
+    padding: 9px 10px; color: var(--ink);
+  }
+  textarea { min-height: 84px; resize: vertical; }
+  button, .button-label {
+    border: 1px solid var(--line-strong); background: #fffaf0; color: var(--ink); border-radius: 12px;
+    padding: 8px 11px; font-weight: 780; cursor: pointer; box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  }
+  button:hover, .button-label:hover { background: #fff3d7; }
+  button.secondary { background: #f6f1e8; }
+  button.danger { background: #fff3f0; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .tiny, .small-note { color: var(--muted); font-size: .88rem; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .pill, .status-pill, .route-pill, .layer-pill, .asset-pill, .stage-pill {
+    display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-strong); background: var(--soft);
+    border-radius: 999px; padding: 5px 9px; font-weight: 760; color: var(--ink); white-space: nowrap;
+  }
+  .route-pill { background: var(--accent); color: var(--accent-ink); border-color: var(--accent-strong); border-radius: 5px; padding: 8px; white-space: normal; }
+  .asset-pill { background: #ead8b7; border-color: #c7a879; border-radius: 10px; white-space: normal; }
+  .stage-pill { background: #eaf5f4; color: var(--accent-ink); border-color: var(--accent-strong); border-radius: 10px; }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink); display: inline-block; flex: none; }
+  .known .status-dot { background: #dcebd9; }
+  .assumed .status-dot { background: #fff1be; border-style: dashed; }
+  .needs_to_surface .status-dot { background: #f6efe3; border-radius: 3px; }
+  .disputed .status-dot { background: #f0d7d7; }
+  .ready_to_route .status-dot { background: #dfecec; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 14px; }
+  .summary-card { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: #fffefb; }
+  .summary-card strong { display: block; font-size: .88rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .wide-area { width: calc(100vw - 32px); margin-left: 50%; transform: translateX(-50%); }
+  .diagram-panel { padding: 16px; }
+  .svg-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: #fffefb; padding: 10px; }
+  svg { display: block; max-width: none; }
+  .matrix-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: #fffefb; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 980px; }
+  th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; }
+  th { background: #faf4e8; text-align: left; font-weight: 860; position: sticky; top: 0; z-index: 2; }
+  th:first-child, td:first-child { position: sticky; left: 0; z-index: 1; background: #fffaf0; min-width: 220px; }
+  th:first-child { z-index: 3; }
+  .layer-label { display: grid; gap: 6px; }
+  .layer-label .kind { color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+  .cell-button {
+    width: 100%; border: 0; background: transparent; text-align: left; padding: 0; box-shadow: none; cursor: pointer; font-weight: 500;
+  }
+  .cell-card { min-height: 105px; display: grid; gap: 8px; align-content: start; }
+  .cell-card.selected { outline: 3px solid rgba(51, 90, 97, .28); border-radius: 12px; }
+  .cell-preview {
+    color: var(--ink); font-size: .95rem;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .cell-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .controls-list { display: grid; gap: 10px; }
+  .control-row { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 12px; align-items: start; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: #fffefb; }
+  .controls-list, .control-row, .control-row > * { min-width: 0; max-width: 100%; }
+  .control-row .mono { overflow-wrap: anywhere; word-break: break-word; }
+  .control-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+  @media (max-width: 520px) {
+    .control-row { grid-template-columns: minmax(0, 1fr); }
+    .control-actions { justify-content: flex-start; }
+    .control-row .stage-pill,
+    .control-row .layer-pill,
+    .hidden-panel .stage-pill,
+    .hidden-panel .layer-pill { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  }
+  .hidden-panel { margin-top: 12px; border: 1px dashed var(--line-strong); border-radius: 14px; padding: 10px; background: #fffaf0; }
+  .inspector-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  @media (max-width: 840px) { .inspector-grid { grid-template-columns: 1fr; } }
+  .field-row { margin-bottom: 12px; }
+  .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+  .checkbox-line { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: #fffefb; }
+  .export-box, pre {
+    white-space: pre-wrap; word-break: break-word; background: #1f2628; color: #f7f3ea; border-radius: 14px; padding: 14px; max-height: 430px; overflow: auto; font-size: .9rem;
+  }
+  .prompt-box { background: #fffefb; color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 14px; white-space: pre-wrap; max-height: 560px; overflow: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; }
+  .layer-participant { background: #f7fffe; }
+  .layer-frontstage { background: #f0fbfa; }
+  .layer-backstage { background: #fff8ec; }
+  .layer-ai { background: #f5f2ff; }
+  .layer-system { background: #f3f6fb; }
+  .layer-data { background: #fff8eb; }
+  .layer-governance { background: #fff1ef; }
+  .layer-handoff { background: #f6faee; }
+  .layer-signal { background: #f3fafb; }
+  .split-line { height: 1px; background: var(--line); margin: 14px 0; }
+  details { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: #fffefb; }
+  details + details { margin-top: 10px; }
+  summary { cursor: pointer; font-weight: 820; }
+  .identity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+  .identity-card { border: 1px solid var(--line); border-radius: 14px; padding: 10px; background: #fffefb; }
+  .identity-card code { font-size: .82rem; }
+  @media (max-width: 520px) {
+    .identity-grid, .checkbox-grid { grid-template-columns: minmax(0, 1fr); }
+    .identity-card, .checkbox-line { min-width: 0; }
+  }
+  .focus-note { border-left: 4px solid var(--accent-strong); padding: 8px 10px; background: #f4fafa; border-radius: 10px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  .artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .artifact-attribution__notice { color: CanvasText; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hero">
+    <p class="subtitle">Core Architecture Chimeric Prototype v0.2.2</p>
+    <h1 id="pageTitle">Service-design Blueprint</h1>
+    <p class="subtitle" id="pageSubtitle">Service Topology Map</p>
+    <p class="deck">A layered service map that shows visible experience, backstage work, AI or agent participation, system behavior, data and evidence, governance surfaces, and handoffs across a service journey. The HTML table is the reading and editing surface; the SVG is a compact visual companion generated from the same stable IDs.</p>
+    <div class="summary-grid" id="quickSummary"></div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="soft">
+    <h2>Quick Use</h2>
+    <div class="grid-3">
+      <div><h3>Use this when</h3><p>A team needs to see how visible experience, backstage work, AI or agent behavior, systems, data stores, policies, evidence, and handoffs fit together across a service journey.</p></div>
+      <div><h3>This restores</h3><p>Layered service visibility.</p></div>
+      <div><h3>Good next question</h3><p>Which visible step depends on which backstage work, AI or agent behavior, system action, data surface, and governance condition?</p></div>
+    </div>
+  </section>
+
+  <section class="wide-area diagram-panel">
+    <div class="wrap" style="width:100%; max-width:1680px;">
+      <h2>SVG Service Topology View</h2>
+      <p class="small-note">This SVG is generated from visible stages and visible layers. Hidden stages and layers remain in the source data, JSON, and JSON-LD.</p>
+      <div class="svg-wrap"><svg id="blueprintSvg" role="img" aria-label="Service-design Blueprint SVG view"></svg></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Service Blueprint Setup</h2>
+    <div class="grid-2">
+      <div>
+        <label for="artifactName">Display name</label>
+        <input id="artifactName" type="text" />
+      </div>
+      <div>
+        <label for="artifactSubtitle">Subtitle</label>
+        <input id="artifactSubtitle" type="text" />
+      </div>
+    </div>
+    <div class="split-line"></div>
+    <div class="grid-2">
+      <div>
+        <h3>Service stages</h3>
+        <p class="small-note">Stages are semantic sequence columns. For v0.2.2 they can be hidden for focus, but not reordered casually.</p>
+        <div class="toolbar" style="margin:10px 0;"><button id="addStage">Add stage</button><button id="showAllStages" class="secondary">Show all stages</button></div>
+        <div id="stageControls" class="controls-list"></div>
+        <div id="hiddenStages" class="hidden-panel"></div>
+      </div>
+      <div>
+        <h3>Service layers</h3>
+        <p class="small-note">Layers are a semantic stack. Hide/display is focus state, not deletion or redaction.</p>
+        <div class="toolbar" style="margin:10px 0;"><button id="addLayer">Add layer</button><button id="showAllLayers" class="secondary">Show all layers</button></div>
+        <div id="layerControls" class="controls-list"></div>
+        <div id="hiddenLayers" class="hidden-panel"></div>
+      </div>
+    </div>
+    <p id="removalNotice" class="focus-note" role="status" aria-live="polite" aria-atomic="true"></p>
+  </section>
+
+  <section class="wide-area">
+    <div class="wrap" style="width:100%; max-width:1680px;">
+      <h2>Text / Table Equivalent</h2>
+      <p class="small-note">Select a cell to reveal and edit the full text, routes, linked shared assets, and stable IDs. Long text remains preserved in the data model even when previewed compactly.</p>
+      <div class="legend" style="margin:10px 0;" id="statusLegend"></div>
+      <div class="matrix-wrap"><table id="serviceTable" aria-label="Editable Service-design Blueprint table"></table></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Selected Cell Inspector</h2>
+    <div id="cellInspector" class="panel soft" style="box-shadow:none;"></div>
+  </section>
+
+  <section>
+    <h2>Shared Assets</h2>
+    <p class="small-note">Shared assets are routeable support surfaces that may have arrived from the Shared Surface Priority Map. They can be linked from service cells.</p>
+    <div class="toolbar" style="margin:10px 0;"><button id="addAsset">Add shared asset</button><button id="showAllAssets" class="secondary">Show all assets</button></div>
+    <div id="assetList" class="controls-list"></div>
+    <div id="hiddenAssets" class="hidden-panel"></div>
+  </section>
+
+  <section>
+    <h2>Selected Asset Inspector</h2>
+    <div id="assetInspector" class="panel soft" style="box-shadow:none;"></div>
+  </section>
+
+  <section>
+    <h2>Import / Export</h2>
+    <div class="grid-2">
+      <div>
+        <h3>Export</h3>
+        <div class="toolbar" style="margin-bottom:10px;"><button id="copyJson">Copy JSON</button><button id="copyJsonLd">Copy JSON-LD</button><button id="copyPrompt">Copy AI prompt</button></div>
+        <label for="jsonOut">Plain JSON export</label>
+        <pre id="jsonOut" class="export-box"></pre>
+      </div>
+      <div>
+        <h3>Import</h3>
+        <p class="small-note">Paste a JSON export or choose a JSON file. Older data without view state receives a default focus view.</p>
+        <label for="jsonIn">Paste JSON</label>
+        <textarea id="jsonIn" style="min-height:160px;"></textarea>
+        <div class="toolbar" style="margin-top:10px;"><button id="importJson">Import JSON</button><label class="button-label" for="jsonFile">Choose JSON file</label><input id="jsonFile" class="sr-only" type="file" accept="application/json,.json" /></div>
+        <p id="importNotice" class="small-note" style="margin-top:10px;"></p>
+        <label for="jsonLdOut" style="margin-top:16px;">JSON-LD</label>
+        <pre id="jsonLdOut" class="export-box"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>AI Collaboration Prompt Capsule</h2>
+    <p class="small-note">This prompt remains visible for direct manual copy. It includes visible and hidden scope so a screenshot is not mistaken for the full source artifact.</p>
+    <div id="promptOut" class="prompt-box"></div>
+  </section>
+
+  <section>
+    <h2>Advanced Identity Registry</h2>
+    <p class="small-note">Stable IDs remain semantic identity. Visibility and order are focus-view state.</p>
+    <div id="identityRegistry" class="identity-grid"></div>
+  </section>
+
+  <section>
+    <h2>Semantic Locality, Recovery, and Source Note</h2>
+    <details open><summary>Semantic locality</summary><div id="semanticPanel"></div></details>
+    <details><summary>Recovery calibration</summary><div id="recoveryPanel"></div></details>
+    <details><summary>Source note</summary><div id="sourcePanel"></div></details>
+  </section>
+</main>
+
+<script>
+'use strict';
+
+const routeRegistry = [
+  {id:'poda', label:'PODA', family:'Orientation and Tracing'},
+  {id:'alignment-worksheet', label:'Alignment Worksheet', family:'Orientation and Tracing'},
+  {id:'impact-map', label:'Impact Map', family:'Orientation and Tracing'},
+  {id:'context-tree', label:'Context Tree', family:'Orientation and Tracing'},
+  {id:'strategy-canvas', label:'Strategy Canvas', family:'Comparison and Threshold'},
+  {id:'first-responsible-version-matrix', label:'First Responsible Version Matrix', family:'Comparison and Threshold'},
+  {id:'cross-channel-blueprint', label:'Cross-channel Blueprint', family:'Shared Surfaces and Topology'},
+  {id:'service-design-blueprint', label:'Service-design Blueprint', family:'Shared Surfaces and Topology'},
+  {id:'ai-systems-service-blueprint', label:'AI Systems Service Blueprint', family:'Shared Surfaces and Topology'},
+  {id:'software-architecture-views', label:'Software Architecture Views', family:'Shared Surfaces and Topology'},
+  {id:'participatory-design-kit', label:'Participatory Design Kit', family:'Participatory Elicitation and Specification'},
+  {id:'specification-by-example', label:'Specification-by-Example', family:'Participatory Elicitation and Specification'},
+  {id:'heart-chart', label:'HEART Chart', family:'Measurement, Reflection, and Judgment'},
+  {id:'plus-delta', label:'Plus / Delta', family:'Measurement, Reflection, and Judgment'},
+  {id:'practitioner-judgment-probes', label:'Practitioner Judgment Probes', family:'Measurement, Reflection, and Judgment'},
+  {id:'pattern-problem-surface-matrix', label:'Pattern–Problem Surface Matrix', family:'Pattern Fit and Behavior Protection'},
+  {id:'jobs-to-be-done-treemap', label:'Jobs-to-be-Done Treemap', family:'Pattern Fit and Behavior Protection'},
+  {id:'unit-test-first-design', label:'Unit-test-first Design', family:'Pattern Fit and Behavior Protection'},
+  {id:'upstream-revision-loop', label:'Upstream Revision Loop', family:'Recovery Routing and Revision'},
+  {id:'recovery-routing-atlas', label:'Recovery Routing Atlas', family:'Recovery Routing and Revision'},
+  {id:'custom', label:'Custom route…', family:'Custom route'}
+];
+const routeById = Object.fromEntries(routeRegistry.map(r => [r.id, r]));
+
+const statusOptions = [
+  {id:'known', label:'known'},
+  {id:'assumed', label:'assumed'},
+  {id:'needs_to_surface', label:'needs-to-surface'},
+  {id:'disputed', label:'disputed'},
+  {id:'ready_to_route', label:'ready-to-route'}
+];
+const statusById = Object.fromEntries(statusOptions.map(s => [s.id, s]));
+
+const layerKinds = [
+  {id:'participant', label:'Participant / actor action'},
+  {id:'frontstage', label:'Visible frontstage'},
+  {id:'backstage', label:'Backstage human work'},
+  {id:'ai', label:'AI / agent participation'},
+  {id:'system', label:'System behavior'},
+  {id:'data', label:'Data and evidence'},
+  {id:'governance', label:'Governance / review / escalation'},
+  {id:'handoff', label:'Handoff or dependency'},
+  {id:'signal', label:'Signal or metric candidate'},
+  {id:'custom', label:'Custom layer'}
+];
+const layerKindById = Object.fromEntries(layerKinds.map(k => [k.id, k]));
+
+function slugify(value) {
+  return String(value || 'item').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
+}
+function uid(prefix) { return `${prefix}-${Math.random().toString(36).slice(2, 8)}`; }
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+}
+function truncate(value, length=160) {
+  const text = String(value || '');
+  return text.length > length ? text.slice(0, length - 1).trimEnd() + '…' : text;
+}
+function wrapSvgText(text, maxChars, maxLines) {
+  const words = String(text || '').split(/\s+/).filter(Boolean);
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const candidate = current ? current + ' ' + word : word;
+    if (candidate.length <= maxChars) current = candidate;
+    else {
+      if (current) lines.push(current);
+      current = word.length > maxChars ? word.slice(0, maxChars - 1) + '…' : word;
+    }
+    if (lines.length >= maxLines) break;
+  }
+  if (lines.length < maxLines && current) lines.push(current);
+  if (words.join(' ').length > lines.join(' ').length && lines.length) {
+    lines[lines.length - 1] = lines[lines.length - 1].replace(/…?$/, '…');
+  }
+  return lines.slice(0, maxLines);
+}
+function routeLabel(routeId, customRoute='') {
+  if (routeId === 'custom') return customRoute || 'Custom route';
+  return routeById[routeId]?.label || routeId || 'No route';
+}
+function routeFamily(routeId) {
+  return routeById[routeId]?.family || (routeId ? 'Custom route' : 'No route');
+}
+function statusLabel(id) { return statusById[id]?.label || id || 'assumed'; }
+
+const state = {
+  artifact_identity: {
+    id: 'ca-artifact-service-design-blueprint-genomics-001',
+    display_name: 'Topology',
+    subtitle: 'Service Design Blueprint',
+    version: '0.2.2',
+    family: 'Shared Surfaces and Topology',
+    placement: 'Bridge Architecture',
+    primary_cognitive_move: 'multi-layer service topology mapping',
+    source_band: ['inherited_method','author_adapted_method','bridge_capable_artifact']
+  },
+  stages: [
+    {id:'stage-intake', label:'Sample and study context intake', canonical_order:1},
+    {id:'stage-pipeline', label:'Pipeline output preparation', canonical_order:2},
+    {id:'stage-review-prep', label:'Review preparation', canonical_order:3},
+    {id:'stage-human-review', label:'Human variant review', canonical_order:4},
+    {id:'stage-exception-routing', label:'Exception routing', canonical_order:5},
+    {id:'stage-report', label:'Report preparation', canonical_order:6},
+    {id:'stage-archive', label:'Archive and audit', canonical_order:7}
+  ],
+  layers: [
+    {id:'layer-participant', label:'Participant / actor action', kind:'participant', required:true, canonical_order:1},
+    {id:'layer-frontstage', label:'Visible frontstage', kind:'frontstage', required:true, canonical_order:2},
+    {id:'layer-backstage', label:'Backstage human work', kind:'backstage', required:true, canonical_order:3},
+    {id:'layer-ai', label:'AI / agent participation', kind:'ai', required:false, canonical_order:4},
+    {id:'layer-system', label:'System behavior', kind:'system', required:false, canonical_order:5},
+    {id:'layer-data', label:'Data and evidence', kind:'data', required:true, canonical_order:6},
+    {id:'layer-governance', label:'Governance / review / escalation', kind:'governance', required:true, canonical_order:7},
+    {id:'layer-handoff', label:'Handoff or dependency', kind:'handoff', required:false, canonical_order:8},
+    {id:'layer-signal', label:'Signal or metric candidate', kind:'signal', required:false, canonical_order:9}
+  ],
+  shared_assets: [
+    {id:'asset-consent-state', label:'Consent state', asset_type:'governance / data', description:'Consent status and consent-change effects used across intake, review, reporting, and exception routing.', evidence_status:'known', owner:'Research coordination / governance', handoff:'service-design-blueprint', custom_handoff:'', reason:'Consent state should appear as a service topology layer and handoff condition.', review_trigger:'Revisit when consent-state behavior or report-sensitive actions change.', canonical_order:1},
+    {id:'asset-sample-metadata', label:'Sample metadata', asset_type:'data / readiness', description:'Sample identity, metadata completeness, and readiness signals used before analysis and review.', evidence_status:'assumed', owner:'Data stewardship', handoff:'software-architecture-views', custom_handoff:'', reason:'Sample metadata touches data stores, review queues, and metadata readiness checks.', review_trigger:'Revisit after metadata correction signals are calibrated.', canonical_order:2},
+    {id:'asset-source-provenance', label:'Source provenance', asset_type:'evidence', description:'Source references, provenance records, and evidence traceability that support variant review and AI-generated summaries.', evidence_status:'known', owner:'Data stewardship / review team', handoff:'ai-systems-service-blueprint', custom_handoff:'', reason:'Provenance supports AI knowledge-layer and review-boundary topology.', review_trigger:'Revisit when new evidence sources are introduced.', canonical_order:3},
+    {id:'asset-claim-source-map', label:'Claim-source map', asset_type:'AI evidence boundary', description:'Mapping between generated summary claims and approved evidence sources.', evidence_status:'needs_to_surface', owner:'AI systems / review team', handoff:'specification-by-example', custom_handoff:'', reason:'Claim-source behavior needs observable examples and review routing.', review_trigger:'Revisit after unsupported-claim examples are accepted.', canonical_order:4},
+    {id:'asset-audit-trail', label:'Audit trail', asset_type:'governance / evidence', description:'Review actions, state changes, user, timestamp, source, and final audit record.', evidence_status:'known', owner:'Data stewardship / system maintainers', handoff:'unit-test-first-design', custom_handoff:'', reason:'Audit trail behavior should be protected as a vital business rule.', review_trigger:'Revisit when review-state transitions change.', canonical_order:5}
+  ],
+  cells: [],
+  view_state: {
+    active_view_id: 'view-default',
+    views: [{
+      id: 'view-default',
+      name: 'Default focus view',
+      stage_order: ['stage-intake','stage-pipeline','stage-review-prep','stage-human-review','stage-exception-routing','stage-report','stage-archive'],
+      hidden_stage_ids: [],
+      layer_order: ['layer-participant','layer-frontstage','layer-backstage','layer-ai','layer-system','layer-data','layer-governance','layer-handoff','layer-signal'],
+      hidden_layer_ids: [],
+      hidden_asset_ids: [],
+      text_mode: 'preview_with_reveal',
+      selected_cell_id: 'cell-frontstage__human-review',
+      selected_asset_id: 'asset-source-provenance'
+    }]
+  },
+  semantic_locality: {
+    preferred_phrasing: [
+      'Which visible step depends on which support layer?',
+      'Where does AI assist, suggest, route, or require review?',
+      'Which source boundary or human review boundary should be visible?',
+      'Which data or evidence surface supports this stage?',
+      'Which governance condition applies here?',
+      'Which service transition should become a behavior example?',
+      'Which dependency should move into Software Architecture Views?'
+    ],
+    replacement_state_guidance: [
+      {common_phrase:'Add AI to this workflow.', stronger_phrase:'Place AI participation where its source boundary, review boundary, data surface, and escalation path are visible.'},
+      {common_phrase:'The backend handles it.', stronger_phrase:'Which backstage, system, data, or governance layer supports this visible step?'},
+      {common_phrase:'This is just an implementation detail.', stronger_phrase:'This service layer may carry a dependency that deserves visible placement.'},
+      {common_phrase:'The process breaks here.', stronger_phrase:'This stage is showing a handoff or support layer that needs clearer routing.'},
+      {common_phrase:'Who owns this?', stronger_phrase:'Which collaborator, system, data surface, or governance boundary supports this stage?'}
+    ],
+    avoid_or_translate: [
+      {source_term:'customer', local_term:'participant, actor, reviewer, collaborator, operator, maintainer, coordinator, or affected group'},
+      {source_term:'customer journey', local_term:'service journey, participant journey, reviewer journey, or collaborator journey'},
+      {source_term:'props', local_term:'evidence, artifacts, records, screens, documents, interfaces, logs, or data surfaces'},
+      {source_term:'backend', local_term:'backstage human work, system behavior, data layer, governance layer, or implementation dependency'},
+      {source_term:'failure point', local_term:'strain cue, handoff cue, routing cue, or service-layer cue'}
+    ]
+  },
+  recovery_calibration: {
+    strain_cues: [
+      'visible workflow is clear but support layers remain soft',
+      'AI participation is described without source, review, or escalation boundaries',
+      'data stores appear late in implementation',
+      'governance is treated as a later addition',
+      'frontstage promises exceed backstage support',
+      'service handoffs cross groups without a shared map'
+    ],
+    stabilizing_read: 'The collaboration needs layered service visibility. The visible experience can be mapped with backstage work, AI and agent participation, systems, data, evidence, governance, and handoff dependencies so the service can be discussed as a whole.',
+    restored_state: [
+      'service layers are visible',
+      'AI and agent participation has context',
+      'data, evidence, audit, and provenance surfaces are easier to inspect',
+      'handoffs and dependencies can route into adjacent architectures',
+      'service transitions can become behavior examples',
+      'governance and review boundaries are part of the service topology'
+    ],
+    named_failure_geometries: ['Service-Layer Invisibility','Shared-Surface Opacity','Tacit Workflow Mismatch','Attachment Obscurity','Verbal Agreement Thinness','Signal / Metric Collapse','Upstream Revision Hesitancy']
+  }
+};
+
+const seedCellData = {
+  'layer-participant': {
+    'stage-intake': {text:'Research coordinator confirms study context and sample identity.', status:'known', handoff:'context-tree', asset_ids:['asset-consent-state','asset-sample-metadata']},
+    'stage-pipeline': {text:'Bioinformatics analyst reviews pipeline output readiness.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Data steward checks metadata completeness and provenance readiness.', status:'assumed', handoff:'unit-test-first-design', asset_ids:['asset-sample-metadata','asset-source-provenance']},
+    'stage-human-review': {text:'Molecular pathologist reviews variant evidence and AI-supported summary.', status:'known', handoff:'specification-by-example', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'Coordinator or reviewer routes consent, metadata, or source-boundary exceptions.', status:'needs_to_surface', handoff:'service-design-blueprint', asset_ids:['asset-consent-state','asset-claim-source-map']},
+    'stage-report': {text:'Reviewer prepares interpretation for report context.', status:'assumed', handoff:'first-responsible-version-matrix', asset_ids:['asset-consent-state','asset-audit-trail']},
+    'stage-archive': {text:'Data steward confirms audit and provenance records.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-audit-trail','asset-source-provenance']}
+  },
+  'layer-frontstage': {
+    'stage-intake': {text:'Study and sample status panel.', status:'assumed', handoff:'pattern-problem-surface-matrix', asset_ids:['asset-consent-state','asset-sample-metadata']},
+    'stage-pipeline': {text:'Pipeline readiness summary.', status:'assumed', handoff:'heart-chart', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Review queue with metadata readiness indicators.', status:'known', handoff:'pattern-problem-surface-matrix', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Variant review page with provenance panel and AI summary boundary labels.', status:'known', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'Exception status and review path.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-consent-state','asset-claim-source-map']},
+    'stage-report': {text:'Report-preparation workspace.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']},
+    'stage-archive': {text:'Review history and audit trail view.', status:'known', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
+  },
+  'layer-backstage': {
+    'stage-intake': {text:'Coordinator reconciles study status and consent records.', status:'known', handoff:'context-tree', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'Analyst verifies pipeline run assumptions.', status:'assumed', handoff:'participatory-design-kit', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Data steward resolves missing metadata fields.', status:'needs_to_surface', handoff:'participatory-design-kit', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Review team compares evidence, classification notes, and prior interpretations.', status:'known', handoff:'heart-chart', asset_ids:['asset-source-provenance']},
+    'stage-exception-routing': {text:'Coordinator and data steward review exception ownership.', status:'needs_to_surface', handoff:'service-design-blueprint', asset_ids:['asset-consent-state']},
+    'stage-report': {text:'Reviewer confirms final interpretation context.', status:'assumed', handoff:'specification-by-example', asset_ids:['asset-audit-trail']},
+    'stage-archive': {text:'Data steward verifies retention and audit requirements.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']}
+  },
+  'layer-ai': {
+    'stage-intake': {text:'Agent detects study-status inconsistencies for review.', status:'needs_to_surface', handoff:'ai-systems-service-blueprint', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'AI summarizes pipeline-readiness notes with source links.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance']},
+    'stage-review-prep': {text:'AI flags metadata fields that may affect review.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'AI suggests variant evidence summary with source boundaries and human-confirmation status.', status:'known', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'Agent routes unsupported summary claims to review queue.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-claim-source-map']},
+    'stage-report': {text:'AI drafts report-support notes from accepted review evidence.', status:'assumed', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-audit-trail']},
+    'stage-archive': {text:'Agent checks that audit events are complete.', status:'assumed', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
+  },
+  'layer-system': {
+    'stage-intake': {text:'System links sample, study, and consent-state records.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-consent-state','asset-sample-metadata']},
+    'stage-pipeline': {text:'System imports pipeline outputs and readiness metadata.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'System places ready items into review queue.', status:'assumed', handoff:'specification-by-example', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'System updates review state and displays provenance.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-source-provenance','asset-audit-trail']},
+    'stage-exception-routing': {text:'System assigns exception status and route.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-consent-state']},
+    'stage-report': {text:'System creates report-preparation state.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']},
+    'stage-archive': {text:'System records final state and audit trail.', status:'known', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
+  },
+  'layer-data': {
+    'stage-intake': {text:'Study record, sample metadata, and consent state are read and reconciled.', status:'known', handoff:'software-architecture-views', asset_ids:['asset-consent-state','asset-sample-metadata']},
+    'stage-pipeline': {text:'Pipeline output, run metadata, and filter assumptions are prepared.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Metadata completeness checks and review readiness indicators are displayed.', status:'known', handoff:'heart-chart', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Variant evidence, provenance records, and AI summary source references are read and displayed.', status:'known', handoff:'ai-systems-service-blueprint', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'Exception notes and review-route history are written.', status:'needs_to_surface', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']},
+    'stage-report': {text:'Accepted interpretation evidence and report-support notes are used.', status:'assumed', handoff:'unit-test-first-design', asset_ids:['asset-source-provenance','asset-audit-trail']},
+    'stage-archive': {text:'Audit log, review history, and provenance archive are preserved.', status:'known', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail','asset-source-provenance']}
+  },
+  'layer-governance': {
+    'stage-intake': {text:'Consent-state review condition applies.', status:'known', handoff:'first-responsible-version-matrix', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'Pipeline quality review supports readiness.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Metadata readiness threshold applies before review.', status:'known', handoff:'unit-test-first-design', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Human confirmation required for AI-generated summary use.', status:'known', handoff:'specification-by-example', asset_ids:['asset-claim-source-map']},
+    'stage-exception-routing': {text:'Consent, metadata, or unsupported-claim escalation path applies.', status:'needs_to_surface', handoff:'specification-by-example', asset_ids:['asset-consent-state','asset-claim-source-map']},
+    'stage-report': {text:'Final human review boundary applies before report-sensitive use.', status:'known', handoff:'first-responsible-version-matrix', asset_ids:['asset-consent-state','asset-audit-trail']},
+    'stage-archive': {text:'Audit completeness and retention policy apply.', status:'known', handoff:'unit-test-first-design', asset_ids:['asset-audit-trail']}
+  },
+  'layer-handoff': {
+    'stage-intake': {text:'Study and consent context hands to pipeline preparation.', status:'assumed', handoff:'service-design-blueprint', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'Pipeline readiness hands to review preparation.', status:'assumed', handoff:'service-design-blueprint', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Metadata readiness hands to human review queue.', status:'assumed', handoff:'specification-by-example', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Review decisions hand to exception routing or report preparation.', status:'known', handoff:'specification-by-example', asset_ids:['asset-audit-trail']},
+    'stage-exception-routing': {text:'Exception resolution hands back to review or forward to reporting.', status:'needs_to_surface', handoff:'participatory-design-kit', asset_ids:['asset-consent-state']},
+    'stage-report': {text:'Accepted interpretation hands to archive and audit.', status:'assumed', handoff:'software-architecture-views', asset_ids:['asset-audit-trail']},
+    'stage-archive': {text:'Audit and provenance records support future review.', status:'known', handoff:'upstream-revision-loop', asset_ids:['asset-audit-trail']}
+  },
+  'layer-signal': {
+    'stage-intake': {text:'Fewer consent-state clarification loops.', status:'assumed', handoff:'heart-chart', asset_ids:['asset-consent-state']},
+    'stage-pipeline': {text:'Pipeline readiness confidence and fewer downstream corrections.', status:'assumed', handoff:'heart-chart', asset_ids:['asset-sample-metadata']},
+    'stage-review-prep': {text:'Metadata exception reduction.', status:'known', handoff:'heart-chart', asset_ids:['asset-sample-metadata']},
+    'stage-human-review': {text:'Reviewer confidence, source-boundary comprehension, and unsupported-claim routing.', status:'known', handoff:'heart-chart', asset_ids:['asset-source-provenance','asset-claim-source-map']},
+    'stage-exception-routing': {text:'Clearer exception ownership and routing time.', status:'needs_to_surface', handoff:'heart-chart', asset_ids:['asset-consent-state']},
+    'stage-report': {text:'Report-preparation confidence and audit completeness.', status:'assumed', handoff:'heart-chart', asset_ids:['asset-audit-trail']},
+    'stage-archive': {text:'Traceability across review history and provenance archive.', status:'known', handoff:'heart-chart', asset_ids:['asset-audit-trail','asset-source-provenance']}
+  }
+};
+
+function initializeCells() {
+  state.cells = [];
+  for (const layer of state.layers) {
+    for (const stage of state.stages) {
+      const seed = (seedCellData[layer.id] && seedCellData[layer.id][stage.id]) || {};
+      state.cells.push({
+        id: `cell-${layer.id.replace('layer-', '')}__${stage.id.replace('stage-', '')}`,
+        layer_id: layer.id,
+        stage_id: stage.id,
+        text: seed.text || '',
+        status: seed.status || 'assumed',
+        handoff: seed.handoff || '',
+        custom_handoff: '',
+        reason: seed.reason || `Route this ${layer.label.toLowerCase()} item if it needs deeper inspection.`,
+        asset_ids: seed.asset_ids || []
+      });
+    }
+  }
+}
+initializeCells();
+
+function activeView() { return state.view_state.views.find(v => v.id === state.view_state.active_view_id) || state.view_state.views[0]; }
+function stageById(id) { return state.stages.find(s => s.id === id); }
+function layerById(id) { return state.layers.find(l => l.id === id); }
+function assetById(id) { return state.shared_assets.find(a => a.id === id); }
+function cellById(id) { return state.cells.find(c => c.id === id); }
+function cellFor(layerId, stageId) { return state.cells.find(c => c.layer_id === layerId && c.stage_id === stageId); }
+
+function normalizeView() {
+  const view = activeView();
+  const stageIds = state.stages.map(s => s.id);
+  view.stage_order = (view.stage_order || []).filter(id => stageIds.includes(id));
+  for (const id of stageIds) if (!view.stage_order.includes(id)) view.stage_order.push(id);
+  view.hidden_stage_ids = (view.hidden_stage_ids || []).filter(id => stageIds.includes(id));
+
+  const layerIds = state.layers.map(l => l.id);
+  view.layer_order = (view.layer_order || []).filter(id => layerIds.includes(id));
+  for (const id of layerIds) if (!view.layer_order.includes(id)) view.layer_order.push(id);
+  view.hidden_layer_ids = (view.hidden_layer_ids || []).filter(id => layerIds.includes(id));
+
+  const assetIds = state.shared_assets.map(a => a.id);
+  view.hidden_asset_ids = (view.hidden_asset_ids || []).filter(id => assetIds.includes(id));
+  if (!view.text_mode) view.text_mode = 'preview_with_reveal';
+
+  for (const layer of state.layers) {
+    for (const stage of state.stages) {
+      if (!cellFor(layer.id, stage.id)) {
+        state.cells.push({
+          id:`cell-${layer.id.replace('layer-', '')}__${stage.id.replace('stage-', '')}`,
+          layer_id: layer.id,
+          stage_id: stage.id,
+          text:'', status:'assumed', handoff:'', custom_handoff:'', reason:'', asset_ids: []
+        });
+      }
+    }
+  }
+}
+function orderedStages() { normalizeView(); return activeView().stage_order.map(stageById).filter(Boolean); }
+function visibleStages() { const view = activeView(); return orderedStages().filter(s => !view.hidden_stage_ids.includes(s.id)); }
+function orderedLayers() { normalizeView(); return activeView().layer_order.map(layerById).filter(Boolean); }
+function visibleLayers() { const view = activeView(); return orderedLayers().filter(l => !view.hidden_layer_ids.includes(l.id)); }
+function visibleAssets() { const view = activeView(); return state.shared_assets.filter(a => !view.hidden_asset_ids.includes(a.id)).sort((a,b)=> (a.canonical_order||0)-(b.canonical_order||0)); }
+function isStageVisible(id) { return visibleStages().some(s => s.id === id); }
+function isLayerVisible(id) { return visibleLayers().some(l => l.id === id); }
+function isAssetVisible(id) { return visibleAssets().some(a => a.id === id); }
+
+function selectCell(cellId) {
+  const view = activeView();
+  const c = cellById(cellId);
+  if (!c || !isStageVisible(c.stage_id) || !isLayerVisible(c.layer_id)) {
+    view.selected_cell_id = '';
+    renderAll('Selection cleared because the selected cell is hidden in the current focus view.');
+    return;
+  }
+  view.selected_cell_id = cellId;
+  view.selected_asset_id = '';
+  renderAll();
+}
+function selectAsset(assetId) {
+  const view = activeView();
+  if (!assetById(assetId) || !isAssetVisible(assetId)) {
+    view.selected_asset_id = '';
+    renderAll('Selection cleared because the selected shared asset is hidden in the current focus view.');
+    return;
+  }
+  view.selected_asset_id = assetId;
+  view.selected_cell_id = '';
+  renderAll();
+}
+
+function renderSummary() {
+  document.getElementById('pageTitle').textContent = state.artifact_identity.display_name;
+  document.getElementById('pageSubtitle').textContent = state.artifact_identity.subtitle;
+  const visibleStageLabels = visibleStages().map(s => s.label);
+  const hiddenStageLabels = orderedStages().filter(s => !isStageVisible(s.id)).map(s => s.label);
+  const visibleLayerLabels = visibleLayers().map(l => l.label);
+  const hiddenLayerLabels = orderedLayers().filter(l => !isLayerVisible(l.id)).map(l => l.label);
+  const cards = [
+    ['Visible stages', visibleStageLabels.join(', ') || 'None'],
+    ['Hidden stages', hiddenStageLabels.join(', ') || 'None'],
+    ['Visible layers', visibleLayerLabels.length + ' layers'],
+    ['Hidden layers', hiddenLayerLabels.join(', ') || 'None'],
+    ['Stable identity', 'Stage, layer, cell, and asset IDs remain stable.'],
+    ['Focus view', 'Hide/display is not redaction.']
+  ];
+  document.getElementById('quickSummary').innerHTML = cards.map(([k,v]) => `<div class="summary-card"><strong>${escapeHtml(k)}</strong>${escapeHtml(v)}</div>`).join('');
+}
+
+function renderLegend() {
+  document.getElementById('statusLegend').innerHTML = statusOptions.map(s => `<span class="status-pill ${s.id}"><span class="status-dot"></span>${escapeHtml(s.label)}</span>`).join('');
+}
+
+function renderControls() {
+  const view = activeView();
+  document.getElementById('stageControls').innerHTML = orderedStages().filter(s => isStageVisible(s.id)).map(s => `
+    <div class="control-row">
+      <div><span class="stage-pill">${escapeHtml(s.label)}</span><div class="tiny mono">${escapeHtml(s.id)} · canonical order ${s.canonical_order}</div></div>
+      <div class="control-actions"><button data-action="hide-stage" data-id="${s.id}">Hide</button><button class="danger" data-action="remove-stage" data-id="${s.id}">Remove</button></div>
+    </div>`).join('');
+  const hiddenStages = orderedStages().filter(s => !isStageVisible(s.id));
+  document.getElementById('hiddenStages').innerHTML = hiddenStages.length ? `<strong>Hidden stages</strong>${hiddenStages.map(s => `<div class="toolbar" style="margin-top:8px;"><span class="stage-pill">${escapeHtml(s.label)}</span><button data-action="show-stage" data-id="${s.id}">Show</button></div>`).join('')}` : '<span class="small-note">No hidden stages.</span>';
+
+  document.getElementById('layerControls').innerHTML = orderedLayers().filter(l => isLayerVisible(l.id)).map(l => `
+    <div class="control-row">
+      <div><span class="layer-pill layer-${l.kind}">${escapeHtml(l.label)}</span><div class="tiny mono">${escapeHtml(l.id)} · ${escapeHtml(layerKindById[l.kind]?.label || l.kind)} · canonical order ${l.canonical_order}</div></div>
+      <div class="control-actions"><button data-action="hide-layer" data-id="${l.id}">Hide</button><button class="danger" data-action="remove-layer" data-id="${l.id}" ${l.required ? 'disabled title="Required layer"' : ''}>Remove</button></div>
+    </div>`).join('');
+  const hiddenLayers = orderedLayers().filter(l => !isLayerVisible(l.id));
+  document.getElementById('hiddenLayers').innerHTML = hiddenLayers.length ? `<strong>Hidden layers</strong>${hiddenLayers.map(l => `<div class="toolbar" style="margin-top:8px;"><span class="layer-pill layer-${l.kind}">${escapeHtml(l.label)}</span><button data-action="show-layer" data-id="${l.id}">Show</button></div>`).join('')}` : '<span class="small-note">No hidden layers.</span>';
+}
+
+function layerClass(kind) { return `layer-${kind || 'custom'}`; }
+
+function renderTable() {
+  const stages = visibleStages();
+  const layers = visibleLayers();
+  const view = activeView();
+  let html = '<thead><tr><th>Layer / Stage</th>';
+  for (const stage of stages) html += `<th><span class="stage-pill">${escapeHtml(stage.label)}</span><div class="tiny mono">${escapeHtml(stage.id)}</div></th>`;
+  html += '</tr></thead><tbody>';
+  for (const layer of layers) {
+    html += `<tr><td class="${layerClass(layer.kind)}"><div class="layer-label"><strong>${escapeHtml(layer.label)}</strong><span class="kind">${escapeHtml(layerKindById[layer.kind]?.label || layer.kind)}</span><span class="tiny mono">${escapeHtml(layer.id)}</span></div></td>`;
+    for (const stage of stages) {
+      const cell = cellFor(layer.id, stage.id);
+      const selected = view.selected_cell_id === cell.id;
+      const assets = (cell.asset_ids || []).map(assetById).filter(Boolean).map(a => a.label).slice(0,2);
+      html += `<td class="${layerClass(layer.kind)}"><button class="cell-button" data-action="select-cell" data-id="${cell.id}"><div class="cell-card ${selected ? 'selected' : ''}"><div class="cell-preview">${escapeHtml(cell.text || 'Add service detail…')}</div><div class="cell-meta"><span class="status-pill ${cell.status}"><span class="status-dot"></span>${escapeHtml(statusLabel(cell.status))}</span>${cell.handoff ? `<span class="route-pill">${escapeHtml(routeLabel(cell.handoff, cell.custom_handoff))}</span>` : ''}${assets.length ? `<span class="asset-pill">${escapeHtml(assets.join(', '))}${(cell.asset_ids||[]).length>2?'…':''}</span>` : ''}</div><div class="tiny mono">${escapeHtml(cell.id)}</div></div></button></td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  document.getElementById('serviceTable').innerHTML = html;
+}
+
+function renderSvg() {
+  const stages = visibleStages();
+  const layers = visibleLayers();
+  const view = activeView();
+  const leftW = 260;
+  const colW = 230;
+  const headerH = 84;
+  const rowH = 110;
+  const width = leftW + Math.max(1, stages.length) * colW + 36;
+  const height = headerH + Math.max(1, layers.length) * rowH + 34;
+  const svg = document.getElementById('blueprintSvg');
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  function add(tag, attrs={}, text='') {
+    const el = document.createElementNS(ns, tag);
+    for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+    if (text) el.textContent = text;
+    svg.appendChild(el);
+    return el;
+  }
+  add('rect', {x:0,y:0,width,height,fill:'#fffefb'});
+  add('text', {x:18,y:30,'font-size':22,'font-weight':850,fill:'#25231f'}, state.artifact_identity.display_name);
+  add('text', {x:18,y:54,'font-size':14,'font-weight':650,fill:'#335a61'}, 'Stages × layers · focus view');
+  stages.forEach((stage, idx) => {
+    const x = leftW + idx*colW;
+    add('rect', {x, y:12, width:colW-8, height:58, rx:8, fill: idx%2 ? '#eff8f8' : '#e4f3f2', stroke:'#bfd0d0'});
+    wrapSvgText(stage.label, 24, 2).forEach((line, li) => add('text', {x:x+12,y:34+li*17,'font-size':13,'font-weight':800,fill:'#335a61'}, line));
+  });
+  layers.forEach((layer, rIdx) => {
+    const y = headerH + rIdx*rowH;
+    add('rect', {x:10,y,width:width-20,height:rowH-4,fill:layerColor(layer.kind),stroke:'#d7d0c1'});
+    add('text', {x:18,y:y+26,'font-size':14,'font-weight':850,fill:'#25231f'}, layer.label);
+    add('text', {x:18,y:y+46,'font-size':11,'font-weight':650,fill:'#686258'}, layerKindById[layer.kind]?.label || layer.kind);
+    add('text', {x:18,y:y+65,'font-size':10,fill:'#686258'}, layer.id);
+    stages.forEach((stage, cIdx) => {
+      const x = leftW + cIdx*colW;
+      const cell = cellFor(layer.id, stage.id);
+      const selected = view.selected_cell_id === cell.id;
+      add('rect', {x:x+2,y:y+4,width:colW-12,height:rowH-12,rx:8,fill:selected?'#dfecec':'rgba(255,255,255,.62)',stroke:selected?'#335a61':'#d7d0c1','stroke-width':selected?3:1});
+      const title = document.createElementNS(ns, 'title');
+      title.textContent = `${layer.label} × ${stage.label}: ${cell.text}`;
+      svg.lastChild.appendChild(title);
+      wrapSvgText(cell.text || 'Add service detail…', 29, 3).forEach((line, li) => add('text', {x:x+12,y:y+28+li*16,'font-size':12,'font-weight':li===0?650:500,fill:'#25231f'}, line));
+      add('text', {x:x+12,y:y+84,'font-size':10,'font-weight':700,fill:'#335a61'}, statusLabel(cell.status));
+      if (cell.handoff) add('text', {x:x+12,y:y+99,'font-size':10,fill:'#335a61'}, truncate(routeLabel(cell.handoff, cell.custom_handoff), 26));
+    });
+  });
+  // separating lines inspired by service blueprint convention
+  const frontstageIndex = layers.findIndex(l => l.kind === 'frontstage');
+  const backstageIndex = layers.findIndex(l => l.kind === 'backstage');
+  const governanceIndex = layers.findIndex(l => l.kind === 'governance');
+  const separators = [];
+  if (frontstageIndex >= 0) separators.push({y: headerH + (frontstageIndex+1)*rowH - 3, label:'line of visibility'});
+  if (backstageIndex >= 0) separators.push({y: headerH + (backstageIndex+1)*rowH - 3, label:'internal support'});
+  if (governanceIndex >= 0) separators.push({y: headerH + governanceIndex*rowH - 3, label:'review / governance layer'});
+  separators.forEach(sep => {
+    add('line', {x1:10,y1:sep.y,x2:width-18,y2:sep.y,stroke:'#8fa9ac','stroke-width':1.5,'stroke-dasharray':'8 7'});
+    add('text', {x:18,y:sep.y-6,'font-size':10,'font-weight':800,fill:'#557074'}, sep.label);
+  });
+}
+function layerColor(kind) {
+  return ({participant:'#fbfffe', frontstage:'#eefafa', backstage:'#fff9ec', ai:'#f6f2ff', system:'#f4f6fb', data:'#fff7e8', governance:'#fff0ee', handoff:'#f7fbef', signal:'#f3fbfc'}[kind] || '#fffefb');
+}
+
+function renderCellInspector(message='') {
+  const view = activeView();
+  const cell = cellById(view.selected_cell_id);
+  const el = document.getElementById('cellInspector');
+  if (!cell) {
+    el.innerHTML = `<p class="small-note">${escapeHtml(message || 'Select a visible service cell from the table or SVG to inspect and edit it.')}</p>`;
+    return;
+  }
+  const stage = stageById(cell.stage_id);
+  const layer = layerById(cell.layer_id);
+  const routeOptions = routeRegistry.map(r => `<option value="${r.id}" ${cell.handoff===r.id?'selected':''}>${escapeHtml(r.family)} · ${escapeHtml(r.label)}</option>`).join('');
+  const statusOptionsHtml = statusOptions.map(s => `<option value="${s.id}" ${cell.status===s.id?'selected':''}>${escapeHtml(s.label)}</option>`).join('');
+  const assetChecks = state.shared_assets.map(asset => `<label class="checkbox-line"><input type="checkbox" data-field="asset-link" data-id="${asset.id}" ${(cell.asset_ids||[]).includes(asset.id)?'checked':''} /> <span><strong>${escapeHtml(asset.label)}</strong><br><span class="tiny">${escapeHtml(asset.asset_type)}</span></span></label>`).join('');
+  el.innerHTML = `
+    <div class="focus-note"><strong>${escapeHtml(layer.label)}</strong> × <strong>${escapeHtml(stage.label)}</strong><br><span class="tiny mono">${escapeHtml(cell.id)}</span></div>
+    <div class="inspector-grid" style="margin-top:12px;">
+      <div>
+        <div class="field-row"><label for="cellText">Cell text</label><textarea id="cellText">${escapeHtml(cell.text)}</textarea></div>
+        <div class="field-row"><label for="cellStatus">Status</label><select id="cellStatus">${statusOptionsHtml}</select></div>
+        <div class="field-row"><label for="cellRoute">Handoff route</label><select id="cellRoute"><option value="">No route yet</option>${routeOptions}</select></div>
+        <div class="field-row" id="customRouteWrap" style="display:${cell.handoff==='custom'?'block':'none'}"><label for="cellCustomRoute">Custom route</label><input id="cellCustomRoute" type="text" value="${escapeHtml(cell.custom_handoff || '')}" /></div>
+        <div class="field-row"><label for="cellReason">Route reason</label><textarea id="cellReason">${escapeHtml(cell.reason || '')}</textarea></div>
+      </div>
+      <div>
+        <label>Linked shared assets</label>
+        <div class="checkbox-grid">${assetChecks}</div>
+        <div class="split-line"></div>
+        <p><strong>Route family:</strong> ${escapeHtml(routeFamily(cell.handoff))}</p>
+        <p><strong>Visible in active view:</strong> ${isStageVisible(cell.stage_id) && isLayerVisible(cell.layer_id) ? 'yes' : 'no'}</p>
+        <p class="tiny mono">stage_id: ${escapeHtml(cell.stage_id)}<br>layer_id: ${escapeHtml(cell.layer_id)}</p>
+      </div>
+    </div>`;
+  document.getElementById('cellText').addEventListener('input', e => { cell.text = e.target.value; updateExportsOnly(); });
+  document.getElementById('cellText').addEventListener('blur', () => renderAll());
+  document.getElementById('cellStatus').addEventListener('change', e => { cell.status = e.target.value; renderAll(); });
+  document.getElementById('cellRoute').addEventListener('change', e => { cell.handoff = e.target.value; renderAll(); });
+  const custom = document.getElementById('cellCustomRoute');
+  if (custom) custom.addEventListener('input', e => { cell.custom_handoff = e.target.value; updateExportsOnly(); });
+  const reason = document.getElementById('cellReason');
+  reason.addEventListener('input', e => { cell.reason = e.target.value; updateExportsOnly(); });
+  reason.addEventListener('blur', () => renderAll());
+  el.querySelectorAll('[data-field="asset-link"]').forEach(input => {
+    input.addEventListener('change', e => {
+      const id = e.target.dataset.id;
+      cell.asset_ids = cell.asset_ids || [];
+      if (e.target.checked && !cell.asset_ids.includes(id)) cell.asset_ids.push(id);
+      if (!e.target.checked) cell.asset_ids = cell.asset_ids.filter(x => x !== id);
+      renderAll();
+    });
+  });
+}
+
+function renderAssets() {
+  const view = activeView();
+  const visible = visibleAssets();
+  document.getElementById('assetList').innerHTML = visible.map(asset => `
+    <div class="control-row">
+      <div><button class="cell-button" data-action="select-asset" data-id="${asset.id}"><span class="asset-pill">${escapeHtml(asset.label)}</span></button><div class="tiny">${escapeHtml(asset.asset_type)} · ${escapeHtml(asset.evidence_status)}</div><div class="tiny mono">${escapeHtml(asset.id)}</div></div>
+      <div class="control-actions"><button data-action="hide-asset" data-id="${asset.id}">Hide</button><button class="danger" data-action="remove-asset" data-id="${asset.id}">Remove</button></div>
+    </div>`).join('');
+  const hidden = state.shared_assets.filter(a => view.hidden_asset_ids.includes(a.id));
+  document.getElementById('hiddenAssets').innerHTML = hidden.length ? `<strong>Hidden shared assets</strong>${hidden.map(a => `<div class="toolbar" style="margin-top:8px;"><span class="asset-pill">${escapeHtml(a.label)}</span><button data-action="show-asset" data-id="${a.id}">Show</button></div>`).join('')}` : '<span class="small-note">No hidden shared assets.</span>';
+}
+
+function renderAssetInspector() {
+  const view = activeView();
+  const asset = assetById(view.selected_asset_id);
+  const el = document.getElementById('assetInspector');
+  if (!asset) {
+    el.innerHTML = '<p class="small-note">Select a visible shared asset to inspect and edit it.</p>';
+    return;
+  }
+  const routeOptions = routeRegistry.map(r => `<option value="${r.id}" ${asset.handoff===r.id?'selected':''}>${escapeHtml(r.family)} · ${escapeHtml(r.label)}</option>`).join('');
+  const statusOptionsHtml = statusOptions.map(s => `<option value="${s.id}" ${asset.evidence_status===s.id?'selected':''}>${escapeHtml(s.label)}</option>`).join('');
+  const linkedCells = state.cells.filter(c => (c.asset_ids || []).includes(asset.id));
+  el.innerHTML = `
+    <div class="focus-note"><strong>${escapeHtml(asset.label)}</strong><br><span class="tiny mono">${escapeHtml(asset.id)}</span></div>
+    <div class="inspector-grid" style="margin-top:12px;">
+      <div>
+        <div class="field-row"><label for="assetLabel">Asset label</label><input id="assetLabel" type="text" value="${escapeHtml(asset.label)}" /></div>
+        <div class="field-row"><label for="assetType">Asset type</label><input id="assetType" type="text" value="${escapeHtml(asset.asset_type)}" /></div>
+        <div class="field-row"><label for="assetDescription">Description</label><textarea id="assetDescription">${escapeHtml(asset.description || '')}</textarea></div>
+        <div class="field-row"><label for="assetOwner">Owner / steward</label><input id="assetOwner" type="text" value="${escapeHtml(asset.owner || '')}" /></div>
+      </div>
+      <div>
+        <div class="field-row"><label for="assetStatus">Evidence status</label><select id="assetStatus">${statusOptionsHtml}</select></div>
+        <div class="field-row"><label for="assetRoute">Handoff route</label><select id="assetRoute"><option value="">No route yet</option>${routeOptions}</select></div>
+        <div class="field-row" id="assetCustomWrap" style="display:${asset.handoff==='custom'?'block':'none'}"><label for="assetCustomRoute">Custom route</label><input id="assetCustomRoute" type="text" value="${escapeHtml(asset.custom_handoff || '')}" /></div>
+        <div class="field-row"><label for="assetReason">Route reason</label><textarea id="assetReason">${escapeHtml(asset.reason || '')}</textarea></div>
+        <div class="field-row"><label for="assetReviewTrigger">Review trigger</label><textarea id="assetReviewTrigger">${escapeHtml(asset.review_trigger || '')}</textarea></div>
+        <p class="small-note"><strong>Linked visible cells:</strong> ${linkedCells.filter(c => isStageVisible(c.stage_id) && isLayerVisible(c.layer_id)).length} / ${linkedCells.length}</p>
+      </div>
+    </div>`;
+  const bindInput = (id, field) => { const node = document.getElementById(id); node.addEventListener('input', e => { asset[field] = e.target.value; updateExportsOnly(); }); node.addEventListener('blur', () => renderAll()); };
+  bindInput('assetLabel','label'); bindInput('assetType','asset_type'); bindInput('assetDescription','description'); bindInput('assetOwner','owner'); bindInput('assetReason','reason'); bindInput('assetReviewTrigger','review_trigger');
+  document.getElementById('assetStatus').addEventListener('change', e => { asset.evidence_status = e.target.value; renderAll(); });
+  document.getElementById('assetRoute').addEventListener('change', e => { asset.handoff = e.target.value; renderAll(); });
+  const custom = document.getElementById('assetCustomRoute');
+  if (custom) custom.addEventListener('input', e => { asset.custom_handoff = e.target.value; updateExportsOnly(); });
+}
+
+function renderIdentityRegistry() {
+  const view = activeView();
+  const stageOrder = orderedStages().map((s, i) => [s.id, i+1]);
+  const layerOrder = orderedLayers().map((l, i) => [l.id, i+1]);
+  const visibleStageOrder = visibleStages().map((s, i) => [s.id, i+1]);
+  const visibleLayerOrder = visibleLayers().map((l, i) => [l.id, i+1]);
+  const stageMap = Object.fromEntries(stageOrder), layerMap = Object.fromEntries(layerOrder), visStageMap = Object.fromEntries(visibleStageOrder), visLayerMap = Object.fromEntries(visibleLayerOrder);
+  const cards = [];
+  for (const s of state.stages) cards.push(`<div class="identity-card"><strong>Stage</strong><br>${escapeHtml(s.label)}<br><code>${escapeHtml(s.id)}</code><br><span class="tiny">canonical: ${s.canonical_order} · display: ${stageMap[s.id] || '—'} · visible: ${visStageMap[s.id] || 'hidden'}</span></div>`);
+  for (const l of state.layers) cards.push(`<div class="identity-card"><strong>Layer</strong><br>${escapeHtml(l.label)}<br><code>${escapeHtml(l.id)}</code><br><span class="tiny">canonical: ${l.canonical_order} · display: ${layerMap[l.id] || '—'} · visible: ${visLayerMap[l.id] || 'hidden'} · kind: ${escapeHtml(l.kind)}</span></div>`);
+  for (const a of state.shared_assets) cards.push(`<div class="identity-card"><strong>Shared asset</strong><br>${escapeHtml(a.label)}<br><code>${escapeHtml(a.id)}</code><br><span class="tiny">canonical: ${a.canonical_order} · visible: ${isAssetVisible(a.id) ? 'yes' : 'hidden'} · type: ${escapeHtml(a.asset_type)}</span></div>`);
+  document.getElementById('identityRegistry').innerHTML = cards.join('');
+}
+
+function artifactJson() {
+  normalizeView();
+  const view = activeView();
+  const visibleStageIds = visibleStages().map(s => s.id);
+  const visibleLayerIds = visibleLayers().map(l => l.id);
+  return {
+    artifact_identity: state.artifact_identity,
+    quick_use: {
+      use_when: ['the team needs to see how visible experience, backstage work, AI or agent behavior, systems, data stores, policies, evidence, and handoffs fit together'],
+      restores: ['layered service visibility'],
+      good_next_question: 'Which visible step depends on which support layer?',
+      usually_hands_to: ['Specification-by-Example','Software Architecture Views','Unit-test-first Design','HEART Chart','Cross-channel Blueprint','Upstream Revision Loop'],
+      strain_cues: state.recovery_calibration.strain_cues
+    },
+    service_blueprint: {
+      stages: state.stages,
+      layers: state.layers,
+      cells: state.cells.map(c => ({
+        ...c,
+        stage_label: stageById(c.stage_id)?.label || '',
+        layer_label: layerById(c.layer_id)?.label || '',
+        visible_in_active_view: visibleStageIds.includes(c.stage_id) && visibleLayerIds.includes(c.layer_id)
+      })),
+      shared_assets: state.shared_assets.map(a => ({
+        ...a,
+        visible_in_active_view: isAssetVisible(a.id),
+        supported_cell_ids: state.cells.filter(c => (c.asset_ids || []).includes(a.id)).map(c => c.id),
+        supported_stage_ids: Array.from(new Set(state.cells.filter(c => (c.asset_ids || []).includes(a.id)).map(c => c.stage_id))),
+        supported_layer_ids: Array.from(new Set(state.cells.filter(c => (c.asset_ids || []).includes(a.id)).map(c => c.layer_id)))
+      }))
+    },
+    view_state: state.view_state,
+    text_handling: {
+      full_text_preserved: true,
+      table_surface: 'compact preview + selected cell inspector full text',
+      svg_surface: 'fixed dimensions with wrapped preview; full text remains in data',
+      hide_display_policy: 'focus view only; not deletion, not redaction'
+    },
+    route_registry: routeRegistry,
+    semantic_locality: state.semantic_locality,
+    recovery_calibration: state.recovery_calibration
+  };
+}
+
+function jsonLd() {
+  const data = artifactJson();
+  const view = activeView();
+  const graph = [];
+  graph.push({
+    '@id': `#${data.artifact_identity.id}`,
+    '@type': ['ca:CoreArchitectureArtifact','ca:ServiceDesignBlueprint','schema:CreativeWork'],
+    'name': data.artifact_identity.display_name,
+    'schema:description': 'Layered service topology map with participant, frontstage, backstage, AI, system, data, governance, handoff, and signal layers.',
+    'ca:version': data.artifact_identity.version,
+    'ca:family': data.artifact_identity.family,
+    'ca:placement': data.artifact_identity.placement,
+    'ca:primaryCognitiveMove': data.artifact_identity.primary_cognitive_move,
+    'ca:activeView': {'@id': `#${view.id}`},
+    'ca:hasStage': state.stages.map(s => ({'@id': `#${s.id}`})),
+    'ca:hasLayer': state.layers.map(l => ({'@id': `#${l.id}`})),
+    'ca:hasSharedAsset': state.shared_assets.map(a => ({'@id': `#${a.id}`}))
+  });
+  graph.push({
+    '@id': `#${view.id}`,
+    '@type': 'ca:ViewConfiguration',
+    'name': view.name,
+    'ca:stageOrder': view.stage_order,
+    'ca:hiddenStage': view.hidden_stage_ids,
+    'ca:layerOrder': view.layer_order,
+    'ca:hiddenLayer': view.hidden_layer_ids,
+    'ca:hiddenSharedAsset': view.hidden_asset_ids,
+    'ca:textMode': view.text_mode
+  });
+  for (const s of state.stages) graph.push({'@id':`#${s.id}`,'@type':'ca:ServiceStage','name':s.label,'ca:canonicalOrder':s.canonical_order,'ca:visibleInActiveView':isStageVisible(s.id)});
+  for (const l of state.layers) graph.push({'@id':`#${l.id}`,'@type':'ca:ServiceLayer','name':l.label,'ca:kind':l.kind,'ca:canonicalOrder':l.canonical_order,'ca:required':l.required,'ca:visibleInActiveView':isLayerVisible(l.id)});
+  for (const a of state.shared_assets) graph.push({'@id':`#${a.id}`,'@type':'ca:SharedAsset','name':a.label,'schema:description':a.description,'ca:assetType':a.asset_type,'ca:evidenceStatus':a.evidence_status,'ca:ownerOrSteward':a.owner,'ca:visibleInActiveView':isAssetVisible(a.id),'ca:handsTo': a.handoff ? {'@type':'ca:HandoffRoute','name':routeLabel(a.handoff,a.custom_handoff),'ca:reason':a.reason} : undefined});
+  for (const c of state.cells) graph.push({'@id':`#${c.id}`,'@type':'ca:ServiceCell','name':`${layerById(c.layer_id)?.label || ''} × ${stageById(c.stage_id)?.label || ''}`,'schema:text':c.text,'ca:status':c.status,'ca:belongsToStage':{'@id':`#${c.stage_id}`},'ca:belongsToLayer':{'@id':`#${c.layer_id}`},'ca:linksSharedAsset':(c.asset_ids||[]).map(id=>({'@id':`#${id}`})),'ca:visibleInActiveView':isStageVisible(c.stage_id)&&isLayerVisible(c.layer_id),'ca:handsTo': c.handoff ? {'@type':'ca:HandoffRoute','name':routeLabel(c.handoff,c.custom_handoff),'ca:reason':c.reason} : undefined});
+  return {
+    '@context': {
+      'ca': 'https://example.org/core-architectures#',
+      'schema': 'https://schema.org/',
+      'id': '@id', 'type': '@type', 'name': 'schema:name',
+      'ServiceDesignBlueprint': 'ca:ServiceDesignBlueprint',
+      'ServiceStage': 'ca:ServiceStage',
+      'ServiceLayer': 'ca:ServiceLayer',
+      'ServiceCell': 'ca:ServiceCell',
+      'SharedAsset': 'ca:SharedAsset',
+      'ViewConfiguration': 'ca:ViewConfiguration',
+      'HandoffRoute': 'ca:HandoffRoute'
+    },
+    '@graph': graph
+  };
+}
+
+function aiPrompt() {
+  const data = artifactJson();
+  const visibleStageLabels = visibleStages().map(s => s.label);
+  const hiddenStageLabels = orderedStages().filter(s => !isStageVisible(s.id)).map(s => s.label);
+  const visibleLayerLabels = visibleLayers().map(l => l.label);
+  const hiddenLayerLabels = orderedLayers().filter(l => !isLayerVisible(l.id)).map(l => l.label);
+  const hiddenAssets = state.shared_assets.filter(a => !isAssetVisible(a.id)).map(a => a.label);
+  const visibleCells = state.cells.filter(c => isStageVisible(c.stage_id) && isLayerVisible(c.layer_id));
+  return `Use this Service-design Blueprint as the current Core Architecture context.
+
+Artifact: ${state.artifact_identity.display_name} — ${state.artifact_identity.subtitle}
+Version: ${state.artifact_identity.version}
+Primary cognitive move: ${state.artifact_identity.primary_cognitive_move}
+
+Preserve:
+- layered service visibility
+- participant/frontstage/backstage separation
+- AI or agent participation as a visible service layer when it shapes the work
+- system behavior separated from data and evidence
+- governance / review / escalation as first-class service context
+- stable semantic IDs even when the focus view changes
+- hide/display as focus view only, not deletion or redaction
+- negation-aware replacement-state phrasing
+
+Visible focus scope:
+Visible stages: ${visibleStageLabels.join(', ') || 'None'}
+Hidden stages: ${hiddenStageLabels.join(', ') || 'None'}
+Visible layers: ${visibleLayerLabels.join(', ') || 'None'}
+Hidden layers: ${hiddenLayerLabels.join(', ') || 'None'}
+Hidden shared assets: ${hiddenAssets.join(', ') || 'None'}
+
+Hidden stages, hidden layers, and hidden assets remain in the source artifact and JSON export. They are not deleted or redacted. If hidden context may matter, ask to inspect the full artifact data before assuming a screenshot is complete.
+
+Visible service cells:
+${visibleCells.map(c => `- ${layerById(c.layer_id)?.label} × ${stageById(c.stage_id)?.label}: ${c.text || '(empty)'} [status: ${statusLabel(c.status)}; route: ${routeLabel(c.handoff, c.custom_handoff)}]`).join('\n')}
+
+Help make the next decision inspectable:
+Which service transitions should route into Specification-by-Example? Which data, audit, permission, AI, or system dependencies should route into Software Architecture Views or AI Systems Service Blueprint? Which service-stage outcomes should become HEART signals?
+
+When proposing options, state probability of what before assigning probabilities.`;
+}
+
+function updateExportsOnly() {
+  document.getElementById('jsonOut').textContent = JSON.stringify(artifactJson(), null, 2);
+  document.getElementById('jsonLdOut').textContent = JSON.stringify(jsonLd(), null, 2);
+  document.getElementById('promptOut').textContent = aiPrompt();
+}
+
+function renderPanels() {
+  document.getElementById('semanticPanel').innerHTML = `
+    <h3>Preferred phrasing</h3><ul>${state.semantic_locality.preferred_phrasing.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
+    <h3>Replacement-state guidance</h3>${state.semantic_locality.replacement_state_guidance.map(x=>`<p><strong>${escapeHtml(x.common_phrase)}</strong> → ${escapeHtml(x.stronger_phrase)}</p>`).join('')}
+    <h3>Terms to translate</h3>${state.semantic_locality.avoid_or_translate.map(x=>`<p><strong>${escapeHtml(x.source_term)}</strong> → ${escapeHtml(x.local_term)}</p>`).join('')}`;
+  document.getElementById('recoveryPanel').innerHTML = `
+    <h3>Strain cues</h3><ul>${state.recovery_calibration.strain_cues.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
+    <h3>Stabilizing read</h3><p>${escapeHtml(state.recovery_calibration.stabilizing_read)}</p>
+    <h3>Restored state</h3><ul>${state.recovery_calibration.restored_state.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
+    <h3>Named Failure Geometries</h3><p>${state.recovery_calibration.named_failure_geometries.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join(' ')}</p>`;
+  document.getElementById('sourcePanel').innerHTML = `
+    <p><strong>Source band:</strong> inherited method + author-adapted method + bridge-capable artifact.</p>
+    <p><strong>Public lineage:</strong> service blueprinting; frontstage / backstage / evidence / process language.</p>
+    <p><strong>Local adaptation:</strong> Service Topology Map extends the inherited service-blueprint structure with AI / agent, system behavior, data and evidence, governance, audit, provenance, human review, escalation, and implementation handoff layers.</p>
+    <p><strong>Reference-image policy:</strong> any in-session visual references used for layout calibration are not included in the artifact attribution or AI prompt capsule. This artifact’s source note focuses on service-blueprint lineage and local Core Architecture adaptation.</p>`;
+}
+
+function renderAll(message='') {
+  normalizeView();
+  renderSummary();
+  renderLegend();
+  renderControls();
+  renderTable();
+  renderSvg();
+  renderCellInspector(message);
+  renderAssets();
+  renderAssetInspector();
+  renderIdentityRegistry();
+  renderPanels();
+  updateExportsOnly();
+}
+
+function addStage() {
+  const n = state.stages.length + 1;
+  const id = uid('stage-custom');
+  state.stages.push({id, label:`New service stage ${n}`, canonical_order:n});
+  activeView().stage_order.push(id);
+  renderAll();
+}
+function addLayer() {
+  const n = state.layers.length + 1;
+  const id = uid('layer-custom');
+  state.layers.push({id, label:`New service layer ${n}`, kind:'custom', required:false, canonical_order:n});
+  activeView().layer_order.push(id);
+  renderAll();
+}
+function addAsset() {
+  const n = state.shared_assets.length + 1;
+  const id = uid('asset-custom');
+  state.shared_assets.push({id, label:`New shared asset ${n}`, asset_type:'support surface', description:'', evidence_status:'assumed', owner:'', handoff:'', custom_handoff:'', reason:'', review_trigger:'', canonical_order:n});
+  activeView().selected_asset_id = id;
+  activeView().selected_cell_id = '';
+  renderAll();
+}
+let pendingRemoval = null;
+function clearPendingRemoval(announce=true) {
+  if (!pendingRemoval) return;
+  const {button,label,describedBy}=pendingRemoval; pendingRemoval=null;
+  if (button.isConnected) { button.textContent=label; button.removeAttribute('aria-pressed'); if (describedBy===null) button.removeAttribute('aria-describedby'); else button.setAttribute('aria-describedby',describedBy); }
+  if (announce) document.getElementById('removalNotice').textContent='Removal confirmation cleared. The current service stages, layers, and shared assets remain available.';
+}
+function requestRemoval(button,key,message) {
+  if (pendingRemoval && pendingRemoval.key===key) { pendingRemoval=null; return true; }
+  clearPendingRemoval(false); pendingRemoval={key,button,label:button.textContent,describedBy:button.getAttribute('aria-describedby')};
+  button.textContent='Confirm removal'; button.setAttribute('aria-pressed','true'); button.setAttribute('aria-describedby','removalNotice');
+  document.getElementById('removalNotice').textContent=message+' Select Confirm removal to continue; choose another action to keep it.'; button.focus(); return false;
+}
+function removeStage(id,button) {
+  const stage=stageById(id);
+  if (!stage || !requestRemoval(button,'stage:'+id,'Remove '+stage.label+' and its service cells? Hiding is usually preferable for focus views.')) return;
+  state.stages = state.stages.filter(s => s.id !== id);
+  state.cells = state.cells.filter(c => c.stage_id !== id);
+  const view = activeView();
+  view.stage_order = view.stage_order.filter(x => x !== id);
+  view.hidden_stage_ids = view.hidden_stage_ids.filter(x => x !== id);
+  if (view.selected_cell_id && !cellById(view.selected_cell_id)) view.selected_cell_id = '';
+  renderAll();
+  document.getElementById('removalNotice').textContent=stage.label+' removed. The service blueprint exports now reflect the current source data.';
+  document.getElementById('addStage').focus();
+}
+function removeLayer(id,button) {
+  const layer = layerById(id);
+  if (layer?.required) return;
+  if (!layer || !requestRemoval(button,'layer:'+id,'Remove '+layer.label+' and its service cells? Hiding is usually preferable for focus views.')) return;
+  state.layers = state.layers.filter(l => l.id !== id);
+  state.cells = state.cells.filter(c => c.layer_id !== id);
+  const view = activeView();
+  view.layer_order = view.layer_order.filter(x => x !== id);
+  view.hidden_layer_ids = view.hidden_layer_ids.filter(x => x !== id);
+  if (view.selected_cell_id && !cellById(view.selected_cell_id)) view.selected_cell_id = '';
+  renderAll();
+  document.getElementById('removalNotice').textContent=layer.label+' removed. The service blueprint exports now reflect the current source data.';
+  document.getElementById('addLayer').focus();
+}
+function removeAsset(id,button) {
+  const asset=assetById(id);
+  if (!asset || !requestRemoval(button,'asset:'+id,'Remove '+asset.label+'? Hiding is usually preferable for focus views.')) return;
+  state.shared_assets = state.shared_assets.filter(a => a.id !== id);
+  state.cells.forEach(c => { c.asset_ids = (c.asset_ids || []).filter(x => x !== id); });
+  const view = activeView();
+  view.hidden_asset_ids = view.hidden_asset_ids.filter(x => x !== id);
+  if (view.selected_asset_id === id) view.selected_asset_id = '';
+  renderAll();
+  document.getElementById('removalNotice').textContent=asset.label+' removed. The service blueprint exports now reflect the current source data.';
+  document.getElementById('addAsset').focus();
+}
+function hideStage(id) { const view = activeView(); if (!view.hidden_stage_ids.includes(id)) view.hidden_stage_ids.push(id); if (view.selected_cell_id && cellById(view.selected_cell_id)?.stage_id === id) view.selected_cell_id = ''; renderAll('Selection cleared because the selected cell is hidden in the current focus view.'); }
+function showStage(id) { activeView().hidden_stage_ids = activeView().hidden_stage_ids.filter(x => x !== id); renderAll(); }
+function hideLayer(id) { const view = activeView(); if (!view.hidden_layer_ids.includes(id)) view.hidden_layer_ids.push(id); if (view.selected_cell_id && cellById(view.selected_cell_id)?.layer_id === id) view.selected_cell_id = ''; renderAll('Selection cleared because the selected cell is hidden in the current focus view.'); }
+function showLayer(id) { activeView().hidden_layer_ids = activeView().hidden_layer_ids.filter(x => x !== id); renderAll(); }
+function hideAsset(id) { const view = activeView(); if (!view.hidden_asset_ids.includes(id)) view.hidden_asset_ids.push(id); if (view.selected_asset_id === id) view.selected_asset_id = ''; renderAll('Selection cleared because the selected shared asset is hidden in the current focus view.'); }
+function showAsset(id) { activeView().hidden_asset_ids = activeView().hidden_asset_ids.filter(x => x !== id); renderAll(); }
+
+function copyText(text) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+}
+function serviceBlueprintCandidate(raw) {
+  const imported = JSON.parse(raw);
+  if (!imported || typeof imported !== 'object' || Array.isArray(imported)) throw new Error('The candidate needs to be a JSON object.');
+  const source = imported.service_blueprint;
+  if (!source || typeof source !== 'object' || Array.isArray(source)) throw new Error('service_blueprint is required.');
+  for (const field of ['stages','layers','cells','shared_assets']) if (!Array.isArray(source[field])) throw new Error(`service_blueprint.${field} needs to be an array.`);
+  const candidate = structuredClone(state);
+  if (imported.artifact_identity) {
+    if (typeof imported.artifact_identity !== 'object' || Array.isArray(imported.artifact_identity) || typeof imported.artifact_identity.id !== 'string' || !imported.artifact_identity.id.trim()) throw new Error('artifact_identity needs a stable id.');
+    candidate.artifact_identity = {...candidate.artifact_identity, ...structuredClone(imported.artifact_identity)};
+  }
+  const stableIds = (items, label) => {
+    const ids = new Set();
+    items.forEach((item, index) => {
+      if (!item || typeof item !== 'object' || Array.isArray(item) || typeof item.id !== 'string' || !item.id.trim()) throw new Error(`${label} ${index + 1} needs a stable id.`);
+      if (ids.has(item.id)) throw new Error(`${label} id ${item.id} is repeated.`);
+      ids.add(item.id);
+    });
+    return ids;
+  };
+  const stageIds = stableIds(source.stages, 'Stage');
+  const layerIds = stableIds(source.layers, 'Layer');
+  const assetIds = stableIds(source.shared_assets, 'Shared asset');
+  stableIds(source.cells, 'Cell');
+  const cellPairs = new Set();
+  source.cells.forEach(cell => {
+    if (!stageIds.has(cell.stage_id) || !layerIds.has(cell.layer_id)) throw new Error(`Cell ${cell.id} needs a current stage and layer.`);
+    const pair = `${cell.layer_id}::${cell.stage_id}`;
+    if (cellPairs.has(pair)) throw new Error(`Stage × layer pair ${pair} has more than one cell.`);
+    cellPairs.add(pair);
+    const links = cell.asset_ids || cell.linked_shared_asset_ids || [];
+    if (!Array.isArray(links) || links.some(id => !assetIds.has(id))) throw new Error(`Cell ${cell.id} needs current shared-asset links.`);
+  });
+  candidate.stages = source.stages.map((stage,index)=>({id:stage.id, label:typeof stage.label === 'string' ? stage.label : `Stage ${index+1}`, canonical_order:Number(stage.canonical_order)||index+1}));
+  candidate.layers = source.layers.map((layer,index)=>({id:layer.id, label:typeof layer.label === 'string' ? layer.label : `Layer ${index+1}`, kind:layer.kind||'custom', required:!!layer.required, canonical_order:Number(layer.canonical_order)||index+1}));
+  candidate.shared_assets = source.shared_assets.map((asset,index)=>({id:asset.id, label:asset.label||`Shared asset ${index+1}`, asset_type:asset.asset_type||'support surface', description:asset.description||'', evidence_status:asset.evidence_status||asset.status||'assumed', owner:asset.owner||asset.owner_or_steward||'', handoff:asset.handoff||'', custom_handoff:asset.custom_handoff||'', reason:asset.reason||'', review_trigger:asset.review_trigger||'', canonical_order:Number(asset.canonical_order)||index+1}));
+  candidate.cells = source.cells.map(cell=>({id:cell.id, layer_id:cell.layer_id, stage_id:cell.stage_id, text:cell.text||'', status:cell.status||'assumed', handoff:cell.handoff||'', custom_handoff:cell.custom_handoff||'', reason:cell.reason||'', asset_ids:structuredClone(cell.asset_ids||cell.linked_shared_asset_ids||[])}));
+  candidate.view_state = imported.view_state ? structuredClone(imported.view_state) : {active_view_id:'view-default', views:[{id:'view-default', name:'Default focus view', stage_order:candidate.stages.map(stage=>stage.id), hidden_stage_ids:[], layer_order:candidate.layers.map(layer=>layer.id), hidden_layer_ids:[], hidden_asset_ids:[], text_mode:'preview_with_reveal', selected_cell_id:'', selected_asset_id:''}]};
+  if (!candidate.view_state || !Array.isArray(candidate.view_state.views) || candidate.view_state.views.length === 0) throw new Error('view_state needs at least one focus view.');
+  if (!candidate.view_state.views.some(view => view && view.id === candidate.view_state.active_view_id)) throw new Error('view_state.active_view_id needs a current focus view.');
+  for (const view of candidate.view_state.views) {
+    if (!view || typeof view.id !== 'string' || !view.id.trim()) throw new Error('Every focus view needs a stable id.');
+    for (const field of ['stage_order','hidden_stage_ids','layer_order','hidden_layer_ids','hidden_asset_ids']) if (view[field] !== undefined && !Array.isArray(view[field])) throw new Error(`Focus view ${view.id} needs an array for ${field}.`);
+  }
+  return candidate;
+}
+function importData(raw) {
+  const notice = document.getElementById('importNotice');
+  try {
+    const candidate = serviceBlueprintCandidate(raw);
+    Object.keys(state).forEach(key => delete state[key]);
+    Object.assign(state, candidate);
+    normalizeView();
+    renderAll();
+    notice.textContent = 'Service-design Blueprint imported. Complete cells, stable IDs, shared-asset links, and focus state are available.';
+  } catch (error) {
+    notice.textContent = `The current Service-design Blueprint remains available. Supply a complete blueprint export to continue: ${error.message}`;
+  }
+}
+
+// Event delegation
+document.addEventListener('click',e=>{if(pendingRemoval&&e.target.closest('button')!==pendingRemoval.button)clearPendingRemoval();},true);
+document.addEventListener('input',()=>clearPendingRemoval(),true);
+document.addEventListener('change',()=>clearPendingRemoval(),true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')clearPendingRemoval();});
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id = btn.dataset.id;
+  if (action === 'select-cell') selectCell(id);
+  if (action === 'select-asset') selectAsset(id);
+  if (action === 'hide-stage') hideStage(id);
+  if (action === 'show-stage') showStage(id);
+  if (action === 'remove-stage') removeStage(id,btn);
+  if (action === 'hide-layer') hideLayer(id);
+  if (action === 'show-layer') showLayer(id);
+  if (action === 'remove-layer') removeLayer(id,btn);
+  if (action === 'hide-asset') hideAsset(id);
+  if (action === 'show-asset') showAsset(id);
+  if (action === 'remove-asset') removeAsset(id,btn);
+});
+
+document.getElementById('artifactName').addEventListener('input', e => { state.artifact_identity.display_name = e.target.value; renderSummary(); updateExportsOnly(); });
+document.getElementById('artifactSubtitle').addEventListener('input', e => { state.artifact_identity.subtitle = e.target.value; renderSummary(); updateExportsOnly(); });
+document.getElementById('addStage').addEventListener('click', addStage);
+document.getElementById('addLayer').addEventListener('click', addLayer);
+document.getElementById('addAsset').addEventListener('click', addAsset);
+document.getElementById('showAllStages').addEventListener('click', () => { activeView().hidden_stage_ids = []; renderAll(); });
+document.getElementById('showAllLayers').addEventListener('click', () => { activeView().hidden_layer_ids = []; renderAll(); });
+document.getElementById('showAllAssets').addEventListener('click', () => { activeView().hidden_asset_ids = []; renderAll(); });
+document.getElementById('copyJson').addEventListener('click', () => copyText(JSON.stringify(artifactJson(), null, 2)));
+document.getElementById('copyJsonLd').addEventListener('click', () => copyText(JSON.stringify(jsonLd(), null, 2)));
+document.getElementById('copyPrompt').addEventListener('click', () => copyText(aiPrompt()));
+document.getElementById('importJson').addEventListener('click', () => importData(document.getElementById('jsonIn').value));
+document.getElementById('jsonFile').addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => importData(String(reader.result || ''));
+  reader.readAsText(file);
+});
+
+document.getElementById('artifactName').value = state.artifact_identity.display_name;
+document.getElementById('artifactSubtitle').value = state.artifact_identity.subtitle;
+renderAll();
+</script>
+  <footer class="artifact-attribution">
+    <p class="artifact-attribution__notice">© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
+  </footer>
+</body>
+</html>

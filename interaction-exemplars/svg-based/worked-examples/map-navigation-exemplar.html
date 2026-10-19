@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Regional briefing — HTML and CSS navigation exemplar</title>
+  <style>
+    @layer reset, tokens, base, navigation, story, states, enhancements;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body, h1, h2, p, figure { margin: 0; }
+      ul { margin: 0; padding: 0; list-style: none; }
+      svg { display: block; max-inline-size: 100%; }
+    }
+
+    @layer tokens {
+      :root {
+        --ink: #17201d;
+        --muted: #59655f;
+        --paper: #f4f6f1;
+        --surface: #ffffff;
+        --line: #c9d2cc;
+        --accent: #155b4f;
+        --accent-soft: #dff0e8;
+        --water: #d8edf2;
+        --land: #e6e9dc;
+        --focus: #8a3ffc;
+        --radius: 1rem;
+        --header-offset: 1.25rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #eef4ef;
+          --muted: #b8c5bd;
+          --paper: #111613;
+          --surface: #19211d;
+          --line: #3c4942;
+          --accent: #8ed4c1;
+          --accent-soft: #203e35;
+          --water: #1d3840;
+          --land: #30382e;
+          --focus: #d5b6ff;
+        }
+      }
+    }
+
+    @layer base {
+      html {
+        scroll-behavior: auto;
+        scroll-padding-block-start: var(--header-offset);
+        scroll-snap-type: block proximity;
+      }
+
+      body {
+        min-block-size: 100svh;
+        color: var(--ink);
+        background: var(--paper);
+        line-height: 1.55;
+        padding-inline-start: max(1rem, env(safe-area-inset-left, 0px));
+        padding-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+      }
+
+      a { color: var(--accent); }
+      :focus-visible { outline: 0.2rem solid var(--focus); outline-offset: 0.2rem; }
+
+      .skip-link {
+        position: fixed;
+        inset-block-start: calc(0.75rem + env(safe-area-inset-top, 0px));
+        inset-inline-start: calc(0.75rem + env(safe-area-inset-left, 0px));
+        z-index: 20;
+        translate: 0 -180%;
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.5rem;
+        color: var(--surface);
+        background: var(--ink);
+      }
+      .skip-link:focus { translate: 0; }
+
+      header, .story-shell {
+        inline-size: min(76rem, 100%);
+        margin-inline: auto;
+      }
+
+      header { padding-block: clamp(2.5rem, 8vw, 6rem) 2rem; }
+      header p { max-inline-size: 68ch; margin-block-start: 1rem; color: var(--muted); }
+      h1 { max-inline-size: 15ch; font-size: clamp(2.2rem, 6vw, 4.8rem); line-height: 0.98; letter-spacing: -0.04em; }
+
+      .progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 30;
+        block-size: 0.28rem;
+        transform: scaleX(0);
+        transform-origin: left;
+        background: var(--accent);
+      }
+    }
+
+    @layer navigation {
+      .story-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-inline-size: 0;
+        gap: 1.25rem;
+        padding-block-end: 5rem;
+      }
+
+      .story-nav {
+        z-index: 5;
+        min-inline-size: 0;
+        padding: 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+        backdrop-filter: blur(0.65rem);
+      }
+
+      .story-nav p { padding-inline: 0.6rem; color: var(--muted); font-size: 0.85rem; }
+      .story-nav ul { display: flex; max-inline-size: 100%; gap: 0.45rem; overflow-x: auto; padding: 0.35rem; scrollbar-width: thin; }
+      .story-nav li { flex: 0 0 auto; }
+
+      .story-nav a {
+        display: block;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid transparent;
+        border-radius: 0.65rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .story-nav a:hover { border-color: var(--line); background: var(--surface); }
+
+      @media (min-width: 52rem) {
+        .story-shell { grid-template-columns: minmax(13rem, 0.32fr) minmax(0, 1fr); align-items: start; }
+        .story-nav {
+          position: sticky;
+          inset-block-start: calc(1rem + env(safe-area-inset-top, 0px));
+          max-block-size: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+          overflow: auto;
+        }
+        .story-nav ul { display: grid; overflow: visible; }
+      }
+    }
+
+    @layer story {
+      main { min-inline-size: 0; }
+
+      .story-section {
+        min-block-size: min(44rem, 76svh);
+        padding: clamp(1rem, 4vw, 2.25rem);
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 0.25rem);
+        background: var(--surface);
+        scroll-margin-block-start: var(--header-offset);
+        scroll-snap-align: start;
+      }
+
+      .story-section + .story-section { margin-block-start: 1.25rem; }
+      .story-section h2 { max-inline-size: 22ch; font-size: clamp(1.65rem, 4vw, 2.8rem); line-height: 1.08; }
+      .story-section > p { max-inline-size: 64ch; margin-block-start: 0.8rem; color: var(--muted); }
+
+      .map-figure { margin-block-start: 1.25rem; }
+      .map-frame { border: 1px solid var(--line); border-radius: 0.85rem; overflow: hidden; background: var(--water); }
+      .map-frame > svg { display: block; inline-size: 100%; block-size: auto; }
+      .land { fill: var(--land); stroke: var(--line); stroke-width: 2; }
+      .route { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 7; opacity: 0.55; }
+      .site { fill: var(--surface); stroke: var(--muted); stroke-width: 3; }
+      .site-current { fill: var(--accent); stroke: var(--surface); stroke-width: 5; }
+      .map-label { fill: var(--ink); font: 700 16px ui-sans-serif, system-ui, sans-serif; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+      figcaption { margin-block-start: 0.6rem; color: var(--muted); font-size: 0.9rem; }
+
+      .brief-list { display: grid; gap: 0.6rem; margin-block-start: 1rem; }
+      .brief-list li { padding: 0.75rem; border-inline-start: 0.22rem solid var(--accent); background: var(--accent-soft); }
+      .section-return { display: inline-block; margin-block-start: 1.25rem; }
+    }
+
+    @layer states {
+      /*
+        TARGET: anchor links create durable fragment routes. Sections retain a
+        readable source order, offsets preserve visible headings, and proximity
+        snapping remains advisory.
+
+        TARGET: anchor links own navigation. The durable fragment destination and
+        the section crossing the viewport remain distinct state surfaces.
+
+        GUARD: programmatic current-state announcements receive a server or script
+        owner. Limited-availability viewport tracking stays inside feature queries.
+      */
+      .story-section:target {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.22rem var(--accent-soft);
+      }
+
+      body:not(:has(.story-section:target)) .story-nav a[href="#overview"],
+      body:has(#overview:target) .story-nav a[href="#overview"],
+      body:has(#north-river:target) .story-nav a[href="#north-river"],
+      body:has(#civic-core:target) .story-nav a[href="#civic-core"],
+      body:has(#harbor-edge:target) .story-nav a[href="#harbor-edge"] {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        font-weight: 750;
+      }
+    }
+
+    @layer enhancements {
+      @supports (scroll-target-group: auto) and selector(a:target-current) {
+        .story-nav ul { scroll-target-group: auto; }
+        .story-nav a:not(:target-current) {
+          color: var(--ink);
+          border-color: transparent;
+          background: transparent;
+          font-weight: 400;
+        }
+        .story-nav a:not(:target-current):hover,
+        .story-nav a:not(:target-current):focus-visible {
+          border-color: var(--line);
+          background: var(--surface);
+        }
+        .story-nav a:target-current {
+          color: var(--accent);
+          border-color: var(--accent);
+          background: var(--accent-soft);
+          font-weight: 750;
+        }
+      }
+
+      @supports (animation-timeline: scroll()) {
+        .progress {
+          animation: reading-progress 1ms linear both;
+          animation-timeline: scroll(root block);
+        }
+        @keyframes reading-progress { to { transform: scaleX(1); } }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        html { scroll-behavior: smooth; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .progress { display: none; }
+      }
+
+      @media (forced-colors: active) {
+        .site, .site-current { fill: Canvas; stroke: CanvasText; }
+        .map-label { fill: CanvasText; stroke: Canvas; }
+      }
+
+      @media print {
+        html { scroll-snap-type: none; }
+        body { background: white; color: black; padding: 0; }
+        .progress { display: none; }
+        .story-shell { display: block; inline-size: 100%; }
+        .story-nav { position: static; max-block-size: none; margin-block-end: 1rem; border-color: #777; background: white; }
+        .story-nav ul { flex-wrap: wrap; overflow: visible; }
+        .story-section { min-block-size: 0; break-inside: avoid; border-color: #777; background: white; }
+      }
+    }
+  </style>
+</head>
+<body id="page-top">
+  <div class="progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#map-story">Skip to map briefing</a>
+
+  <header>
+    <p>Standalone practitioner exemplar · fragment navigation with CSS enhancement</p>
+    <h1>Regional response briefing</h1>
+    <p>Each navigation item is a link to a real section. The URL preserves the selected destination; normal document flow preserves the complete briefing.</p>
+  </header>
+
+  <div class="story-shell">
+    <nav class="story-nav" aria-label="Regional briefing sections">
+      <p>Briefing sections</p>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#north-river">North River</a></li>
+        <li><a href="#civic-core">Civic Core</a></li>
+        <li><a href="#harbor-edge">Harbor Edge</a></li>
+      </ul>
+    </nav>
+
+    <main id="map-story">
+      <section class="story-section" id="overview" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">Overview: three operating contexts</h2>
+        <p>The briefing starts with the whole service area. Subsequent links move to durable section targets while preserving headings, context, and browser history.</p>
+        <figure class="map-figure">
+          <div class="map-frame">
+            <svg viewBox="0 0 680 400" width="680" height="400" role="img" aria-labelledby="overview-map-title overview-map-desc">
+              <title id="overview-map-title">Regional overview map</title>
+              <desc id="overview-map-desc">North River, Civic Core, and Harbor Edge are marked across a schematic service area.</desc>
+              <path class="land" d="M54 77 190 28 342 56 502 25 625 112 597 247 648 355 505 381 345 359 221 387 83 335 38 205Z"/>
+              <path class="route" d="M84 285 C210 198 321 249 425 145 S563 88 610 119"/>
+              <circle class="site" cx="180" cy="105" r="12"/><text class="map-label" x="202" y="111">North River</text>
+              <circle class="site" cx="350" cy="210" r="12"/><text class="map-label" x="372" y="216">Civic Core</text>
+              <circle class="site" cx="515" cy="316" r="12"/><text class="map-label" x="392" y="348">Harbor Edge</text>
+            </svg>
+          </div>
+          <figcaption>The map supplies visual orientation; the headings and lists carry the briefing route.</figcaption>
+        </figure>
+        <ul class="brief-list">
+          <li>North River: coordinated flood and wind readiness.</li>
+          <li>Civic Core: heat response and public-service continuity.</li>
+          <li>Harbor Edge: access routes and tide-sensitive operations.</li>
+        </ul>
+      </section>
+
+      <section class="story-section" id="north-river" aria-labelledby="north-heading">
+        <h2 id="north-heading">North River: protect the transfer points</h2>
+        <p>The river crossing and transit exchange form one service chain. The section target remains shareable and returns through browser history.</p>
+        <figure class="map-figure">
+          <div class="map-frame">
+            <svg viewBox="0 0 680 400" width="680" height="400" role="img" aria-labelledby="north-map-title north-map-desc">
+              <title id="north-map-title">North River focus map</title>
+              <desc id="north-map-desc">North River is emphasized in the northwest of the service area.</desc>
+              <path class="land" d="M54 77 190 28 342 56 502 25 625 112 597 247 648 355 505 381 345 359 221 387 83 335 38 205Z"/>
+              <path class="route" d="M84 285 C210 198 321 249 425 145 S563 88 610 119"/>
+              <circle class="site-current" cx="180" cy="105" r="14"/><text class="map-label" x="204" y="111">North River</text>
+              <circle class="site" cx="350" cy="210" r="9"/><circle class="site" cx="515" cy="316" r="9"/>
+            </svg>
+          </div>
+          <figcaption>North River receives emphasis while the other locations preserve spatial context.</figcaption>
+        </figure>
+        <ul class="brief-list">
+          <li>Keep the crossing, bus exchange, and shelter route in one operating picture.</li>
+          <li>Preserve a text route that carries conditions in every presentation.</li>
+        </ul>
+        <a class="section-return" href="#page-top">Return to briefing start</a>
+      </section>
+
+      <section class="story-section" id="civic-core" aria-labelledby="civic-heading">
+        <h2 id="civic-heading">Civic Core: keep services legible</h2>
+        <p>The central district has the highest density of public-facing services. The section remains intrinsically sized so zoom and translated content can expand in normal flow.</p>
+        <figure class="map-figure">
+          <div class="map-frame">
+            <svg viewBox="0 0 680 400" width="680" height="400" role="img" aria-labelledby="civic-map-title civic-map-desc">
+              <title id="civic-map-title">Civic Core focus map</title>
+              <desc id="civic-map-desc">Civic Core is emphasized near the center of the service area.</desc>
+              <path class="land" d="M54 77 190 28 342 56 502 25 625 112 597 247 648 355 505 381 345 359 221 387 83 335 38 205Z"/>
+              <path class="route" d="M84 285 C210 198 321 249 425 145 S563 88 610 119"/>
+              <circle class="site" cx="180" cy="105" r="9"/><circle class="site-current" cx="350" cy="210" r="14"/><text class="map-label" x="374" y="216">Civic Core</text>
+              <circle class="site" cx="515" cy="316" r="9"/>
+            </svg>
+          </div>
+          <figcaption>Civic Core receives emphasis while preserving the surrounding geography.</figcaption>
+        </figure>
+        <ul class="brief-list">
+          <li>Place hours, cooling locations, and transit changes in the same reading sequence.</li>
+          <li>Let headings and fragment links carry navigation before adding viewport tracking.</li>
+        </ul>
+        <a class="section-return" href="#page-top">Return to briefing start</a>
+      </section>
+
+      <section class="story-section" id="harbor-edge" aria-labelledby="harbor-heading">
+        <h2 id="harbor-heading">Harbor Edge: preserve route alternatives</h2>
+        <p>The final section closes the route with tide-sensitive access and an explicit way back. Proximity snapping offers orientation while free scrolling remains available.</p>
+        <figure class="map-figure">
+          <div class="map-frame">
+            <svg viewBox="0 0 680 400" width="680" height="400" role="img" aria-labelledby="harbor-map-title harbor-map-desc">
+              <title id="harbor-map-title">Harbor Edge focus map</title>
+              <desc id="harbor-map-desc">Harbor Edge is emphasized in the southeast of the service area.</desc>
+              <path class="land" d="M54 77 190 28 342 56 502 25 625 112 597 247 648 355 505 381 345 359 221 387 83 335 38 205Z"/>
+              <path class="route" d="M84 285 C210 198 321 249 425 145 S563 88 610 119"/>
+              <circle class="site" cx="180" cy="105" r="9"/><circle class="site" cx="350" cy="210" r="9"/>
+              <circle class="site-current" cx="515" cy="316" r="14"/><text class="map-label" x="392" y="350">Harbor Edge</text>
+            </svg>
+          </div>
+          <figcaption>Harbor Edge receives emphasis; the page route remains complete in source order.</figcaption>
+        </figure>
+        <ul class="brief-list">
+          <li>Keep primary and alternate access routes adjacent in the briefing.</li>
+          <li>Pair the destination link with a visible heading and a recovery route.</li>
+        </ul>
+        <a class="section-return" href="#page-top">Return to briefing start</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

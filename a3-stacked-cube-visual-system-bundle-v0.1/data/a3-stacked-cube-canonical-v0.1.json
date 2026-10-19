@@ -1,0 +1,742 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_identity": {
+    "id": "A3-CUBE-MANIFEST",
+    "display_name": "Evidence-Guided Capability Transfer Model",
+    "subtitle": "Bounded Authority, Evidence, and Recovery Model",
+    "version": "0.1.0",
+    "family": "Shared Surfaces and Topology / Recovery Routing and Revision",
+    "placement": "A3 Appendix / Visual Production Extension",
+    "primary_cognitive_move": "show which bounded capability may change authority, under what evidence, while retained and unknown work stays visible",
+    "visual_preset": "flat_cobalt_evidence_blueprint_bringhurst_v1.0",
+    "source_band": [
+      "a3_source_assertion",
+      "repository_prototype_grammar",
+      "coordinator_adaptation"
+    ]
+  },
+  "source_revision": {
+    "source_key": "SRC-A3",
+    "a3_page_id": "SRC-A3",
+    "a3_page_version": "0.1.0",
+    "a3_page_url": "urn:source-key:SRC-A3",
+    "repository": "urn:source-key:prototype-exemplars",
+    "repository_commit": "e029455bb1ec0d41616f08e52123363cd0876c92",
+    "repository_path": "core-architectures-chimeric-prototype-current-pack-v0.1/",
+    "verified_on": "2026-07-24"
+  },
+  "semantic_contract": {
+    "cube_means": "a bounded software capability or service dependency; never a team, screen, or human activity merely because it appears in a workflow",
+    "position_means": "current execution or decision authority only; position does not encode value, maturity, effort, safety, or priority",
+    "migration_means": "a reversible routing and authority change through an explicit boundary, validation gate, and rollback route; it is not a copy animation",
+    "coupling_rule": "visible gaps imply verified separability; coupled or unknown items remain banded, linked, or retained",
+    "human_work_rule": "curator activities remain a human-workflow ribbon unless a bounded software capability has been separately evidenced",
+    "unknown_rule": "UNKNOWN is a durable state that stays visible; it is never rendered as an empty or negative state",
+    "historical_anchor": "the operational and assignment layer is the first safe, high-value candidate; scientific and regulatory business logic remains legacy unless evidence clears the gate",
+    "color_rule": "color is paired with text, shape, hatch, and line style; color never carries authority state alone"
+  },
+  "storyboard_frames": [
+    {
+      "id": "F0",
+      "sequence": 0,
+      "label": "Current authority",
+      "short_label": "Coupled legacy",
+      "annotation": "Most capabilities remain under legacy or human authority. Coupling and unknowns are explicit.",
+      "cognitive_move": "locate current authority and uncertainty"
+    },
+    {
+      "id": "F1",
+      "sequence": 1,
+      "label": "Boundary identified",
+      "short_label": "No move yet",
+      "annotation": "The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes.",
+      "cognitive_move": "distinguish a candidate boundary from a completed transfer"
+    },
+    {
+      "id": "F2",
+      "sequence": 2,
+      "label": "Shadow / dual-run",
+      "short_label": "Selective routing",
+      "annotation": "The candidate mirrors or receives bounded traffic while legacy remains authoritative and rollback stays available.",
+      "cognitive_move": "show coexistence, evidence collection, and reversibility"
+    },
+    {
+      "id": "F3",
+      "sequence": 3,
+      "label": "Validated authority",
+      "short_label": "Cut over or retain",
+      "annotation": "Authority transfers only for the validated capability. Risky, coupled, human, and unknown work remains deliberately visible.",
+      "cognitive_move": "show evidence-authorized transfer without implying wholesale retirement"
+    }
+  ],
+  "authority_states": [
+    {
+      "id": "legacy",
+      "label": "Legacy authority",
+      "visual": "solid block"
+    },
+    {
+      "id": "seam",
+      "label": "Boundary identified",
+      "visual": "outlined block"
+    },
+    {
+      "id": "shadow",
+      "label": "Shadow / dual-run",
+      "visual": "hatched split block"
+    },
+    {
+      "id": "new",
+      "label": "New authority",
+      "visual": "solid alternate block"
+    },
+    {
+      "id": "retained_legacy",
+      "label": "Retained legacy",
+      "visual": "anchored block"
+    },
+    {
+      "id": "human",
+      "label": "Human workflow authority",
+      "visual": "workflow ribbon"
+    },
+    {
+      "id": "unknown",
+      "label": "UNKNOWN / unbounded",
+      "visual": "dashed block"
+    }
+  ],
+  "gates": [
+    {
+      "id": "GATE-OP-ASSIGN",
+      "label": "Operational / assignment authority gate",
+      "status": "historically_cleared_for_first_candidate",
+      "criteria": [
+        "bounded capability and stable semantic identity",
+        "known dependencies and system of record",
+        "observable parity scenarios",
+        "rollback route exercised",
+        "audit and permission behavior preserved",
+        "human review of residual risk"
+      ],
+      "protected_behavior_ids": [
+        "permissions-remain-least-privilege",
+        "case-assignment-remains-auditable",
+        "legacy-fallback-remains-available"
+      ],
+      "review_trigger": "reopen when authority, permission semantics, case routing, or audit expectations change"
+    }
+  ],
+  "capability_cubes": [
+    {
+      "id": "CAP-OP-ASSIGN",
+      "label": "Profiles, permissions & case assignment",
+      "short_label": "Operational / assignment",
+      "kind": "software_capability",
+      "family": "operational_bridge",
+      "canonical_order": 1,
+      "system_of_record": "legacy viewer before validated cutover",
+      "coupling": "bounded_candidate",
+      "evidence_status": "historical_source_assertion",
+      "migration_state": "first_candidate",
+      "gate_id": "GATE-OP-ASSIGN",
+      "rollback_route": "return routing and authority to the legacy operational layer",
+      "regulatory_risk": "bounded but permission and audit semantics remain material",
+      "source_refs": [
+        "A3: Which cubes moved"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "seam",
+        "F2": "shadow",
+        "F3": "new"
+      }
+    },
+    {
+      "id": "CAP-SEARCH",
+      "label": "Standard and advanced search",
+      "short_label": "Search",
+      "kind": "software_capability",
+      "family": "viewer_surface",
+      "canonical_order": 2,
+      "system_of_record": "legacy viewer",
+      "coupling": "potentially_bounded_not_demonstrated_here",
+      "evidence_status": "candidate_only",
+      "migration_state": "potential_future_seam",
+      "gate_id": null,
+      "rollback_route": "retain legacy search",
+      "regulatory_risk": "unknown until result parity and access behavior are validated",
+      "source_refs": [
+        "A3: Storyboard 1",
+        "A3: accessible Strangler Fig description"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "legacy",
+        "F2": "legacy",
+        "F3": "legacy"
+      }
+    },
+    {
+      "id": "CAP-SPECIMEN",
+      "label": "Specimen details and overview",
+      "short_label": "Specimen overview",
+      "kind": "software_capability",
+      "family": "viewer_surface",
+      "canonical_order": 3,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_pending_evidence",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "scientific and workflow context may be material",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-SOP-NOTES",
+      "label": "SOPs, notes, and comments",
+      "short_label": "SOPs / notes",
+      "kind": "software_capability",
+      "family": "viewer_surface",
+      "canonical_order": 4,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_pending_evidence",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "procedural and audit context may be material",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-VARIANT",
+      "label": "Variant detail views and status rules",
+      "short_label": "Variant details",
+      "kind": "software_capability",
+      "family": "scientific_business_logic",
+      "canonical_order": 5,
+      "system_of_record": "legacy viewer",
+      "coupling": "deeply_coupled",
+      "evidence_status": "explicit_risk",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high; diagnostic and under-documented rules",
+      "source_refs": [
+        "A3: What the Strangler Fig is",
+        "A3: Which cubes moved"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-QC",
+      "label": "Quality control",
+      "short_label": "Quality control",
+      "kind": "software_capability",
+      "family": "scientific_business_logic",
+      "canonical_order": 6,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown_or_coupled",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high until quality behavior is specified and validated",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-BIOMARKER",
+      "label": "Biomarkers",
+      "short_label": "Biomarkers",
+      "kind": "software_capability",
+      "family": "scientific_business_logic",
+      "canonical_order": 7,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown_or_coupled",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high until scientific behavior is specified and validated",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-NON-HUMAN",
+      "label": "Non-human workflows",
+      "short_label": "Non-human",
+      "kind": "unknown",
+      "family": "viewer_surface",
+      "canonical_order": 8,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown",
+      "evidence_status": "unknown",
+      "migration_state": "unknown",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "unknown",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "unknown",
+        "F1": "unknown",
+        "F2": "unknown",
+        "F3": "unknown"
+      }
+    },
+    {
+      "id": "CAP-PGX",
+      "label": "Pharmacogenomics",
+      "short_label": "Pharmacogenomics",
+      "kind": "software_capability",
+      "family": "scientific_business_logic",
+      "canonical_order": 9,
+      "system_of_record": "legacy viewer",
+      "coupling": "unknown_or_coupled",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high until scientific behavior is specified and validated",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "CAP-PLUGINS",
+      "label": "Plugins and arbitrary code",
+      "short_label": "Plugins / arbitrary code",
+      "kind": "service_dependency",
+      "family": "viewer_surface",
+      "canonical_order": 10,
+      "system_of_record": "legacy codebase",
+      "coupling": "deeply_coupled",
+      "evidence_status": "explicit_risk",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high; arbitrary code and hidden coupling",
+      "source_refs": [
+        "A3: Storyboard 1"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "SVC-IAM",
+      "label": "Identity and access management",
+      "short_label": "IAM",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 11,
+      "system_of_record": "legacy and surrounding services",
+      "coupling": "material_dependency",
+      "evidence_status": "listed_dependency",
+      "migration_state": "dependency_of_first_candidate",
+      "gate_id": "GATE-OP-ASSIGN",
+      "rollback_route": "restore legacy authorization path",
+      "regulatory_risk": "high if least privilege, logout, or obscuring behavior changes",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "seam",
+        "F2": "shadow",
+        "F3": "new"
+      }
+    },
+    {
+      "id": "SVC-NOTIFY",
+      "label": "Notifications and realtime transport",
+      "short_label": "Notifications",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 12,
+      "system_of_record": "legacy and surrounding services",
+      "coupling": "unknown",
+      "evidence_status": "listed_not_bounded",
+      "migration_state": "retained_pending_evidence",
+      "gate_id": null,
+      "rollback_route": "retain legacy transport",
+      "regulatory_risk": "unknown until delivery and failure semantics are specified",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "SVC-API",
+      "label": "API and service layer",
+      "short_label": "API / service layer",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 13,
+      "system_of_record": "mixed legacy and surrounding services",
+      "coupling": "material_dependency",
+      "evidence_status": "listed_dependency",
+      "migration_state": "contract_surface",
+      "gate_id": "GATE-OP-ASSIGN",
+      "rollback_route": "route to legacy endpoints",
+      "regulatory_risk": "material if data or authorization contracts change",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "seam",
+        "F2": "shadow",
+        "F3": "new"
+      }
+    },
+    {
+      "id": "SVC-MVC",
+      "label": "MVC factories and visitor patterns",
+      "short_label": "MVC factories / visitors",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 14,
+      "system_of_record": "legacy codebase",
+      "coupling": "deeply_coupled",
+      "evidence_status": "listed_dependency",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "indirect; hidden framework behavior may affect correctness",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "SVC-SPRING",
+      "label": "Framework-handled serialization",
+      "short_label": "Spring serialization",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 15,
+      "system_of_record": "legacy framework",
+      "coupling": "deeply_coupled",
+      "evidence_status": "listed_dependency",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "material if serialized data changes",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "SVC-ERROR",
+      "label": "Error handling and HTTP responses",
+      "short_label": "Error / HTTP behavior",
+      "kind": "service_dependency",
+      "family": "service_underpinning",
+      "canonical_order": 16,
+      "system_of_record": "legacy framework and services",
+      "coupling": "material_dependency",
+      "evidence_status": "listed_dependency",
+      "migration_state": "retained_pending_evidence",
+      "gate_id": null,
+      "rollback_route": "retain legacy error path",
+      "regulatory_risk": "material if failure behavior obscures data or blocks audit",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    },
+    {
+      "id": "SVC-REG",
+      "label": "Regulatory-grade logout and data obscuring",
+      "short_label": "Regulatory constraints",
+      "kind": "service_dependency",
+      "family": "regulatory_control",
+      "canonical_order": 17,
+      "system_of_record": "legacy and security services",
+      "coupling": "deeply_coupled",
+      "evidence_status": "explicit_control",
+      "migration_state": "retained_legacy",
+      "gate_id": null,
+      "rollback_route": "remain legacy",
+      "regulatory_risk": "high",
+      "source_refs": [
+        "A3: Storyboard 2"
+      ],
+      "frame_states": {
+        "F0": "legacy",
+        "F1": "retained_legacy",
+        "F2": "retained_legacy",
+        "F3": "retained_legacy"
+      }
+    }
+  ],
+  "human_workflows": [
+    {
+      "id": "HUM-CAPACITY",
+      "label": "Report daily capacity",
+      "canonical_order": 1,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-QA-LAB",
+      "label": "Quality assessments and lab-operations communications",
+      "canonical_order": 2,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-NCR-CAPA",
+      "label": "File NCRs and handle CAPA",
+      "canonical_order": 3,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-INTERFERENCE",
+      "label": "Run interference for business units",
+      "canonical_order": 4,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-STATUS",
+      "label": "Respond to sample and order-status queries",
+      "canonical_order": 5,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-CDX",
+      "label": "Assist validation and companion diagnostics workflows",
+      "canonical_order": 6,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-BAIT",
+      "label": "Assist new bait sets",
+      "canonical_order": 7,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-RERUN",
+      "label": "Re-run and re-queue samples",
+      "canonical_order": 8,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-TRIALS",
+      "label": "Support clinical-trial and biopharma-partner studies",
+      "canonical_order": 9,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-VARIANT",
+      "label": "Variant review and contamination investigations",
+      "canonical_order": 10,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-ARTIFACT",
+      "label": "Sequencing-artifact analysis",
+      "canonical_order": 11,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-NOVEL",
+      "label": "Novel variant and biomarker calling",
+      "canonical_order": 12,
+      "evidence_status": "listed_human_activity"
+    },
+    {
+      "id": "HUM-TOOLS",
+      "label": "Operational tooling, scripts, and SQL",
+      "canonical_order": 13,
+      "evidence_status": "listed_human_activity"
+    }
+  ],
+  "typed_connectors": [
+    {
+      "id": "CON-OP-API",
+      "from": "CAP-OP-ASSIGN",
+      "to": "SVC-API",
+      "type": "depends_on",
+      "label": "contract",
+      "status": "material"
+    },
+    {
+      "id": "CON-OP-IAM",
+      "from": "CAP-OP-ASSIGN",
+      "to": "SVC-IAM",
+      "type": "depends_on",
+      "label": "authorizes",
+      "status": "material"
+    },
+    {
+      "id": "CON-SHADOW",
+      "from": "legacy",
+      "to": "shadow",
+      "type": "mirrors",
+      "label": "bounded shadow traffic",
+      "status": "F2_only"
+    },
+    {
+      "id": "CON-ROUTE",
+      "from": "shadow",
+      "to": "new",
+      "type": "routes",
+      "label": "authority after gate",
+      "status": "F3_only"
+    },
+    {
+      "id": "CON-ROLLBACK",
+      "from": "new",
+      "to": "legacy",
+      "type": "rolls_back",
+      "label": "reversible fallback",
+      "status": "always_available"
+    }
+  ],
+  "view_state": {
+    "active_view_id": "view-default",
+    "views": [
+      {
+        "id": "view-default",
+        "name": "First-responsible capability focus",
+        "active_frame_id": "F0",
+        "cube_order": [
+          "CAP-OP-ASSIGN",
+          "SVC-IAM",
+          "SVC-API",
+          "CAP-SEARCH",
+          "CAP-SPECIMEN",
+          "CAP-VARIANT",
+          "CAP-QC",
+          "CAP-PLUGINS",
+          "CAP-NON-HUMAN"
+        ],
+        "hidden_cube_ids": [
+          "CAP-SOP-NOTES",
+          "CAP-BIOMARKER",
+          "CAP-PGX",
+          "SVC-NOTIFY",
+          "SVC-MVC",
+          "SVC-SPRING",
+          "SVC-ERROR",
+          "SVC-REG"
+        ],
+        "selected_cube_id": "CAP-OP-ASSIGN",
+        "text_mode": "selected_detail_plus_complete_table"
+      }
+    ]
+  },
+  "semantic_locality": {
+    "preferred_phrasing": [
+      "candidate boundary",
+      "legacy authority",
+      "shadow / dual-run",
+      "validated authority",
+      "retained legacy",
+      "human workflow",
+      "UNKNOWN / unbounded",
+      "evidence gate",
+      "rollback route"
+    ],
+    "replacement_state_guidance": [
+      "replace safe with bounded candidate under named evidence",
+      "replace moved with authority routed after validation",
+      "replace old versus new with current authority versus validated authority",
+      "replace migration complete with one capability transferred while retained work remains visible"
+    ]
+  },
+  "recovery_calibration": {
+    "strain_cues": [
+      "a gap visually implies separability without evidence",
+      "an arrow conflates mirroring, routing, authorization, and authority transfer",
+      "human curator activity is rendered as a software cube",
+      "legacy disappears before retirement prerequisites are satisfied",
+      "UNKNOWN is rendered as empty or negative",
+      "a format-specific edit diverges from the canonical registry"
+    ],
+    "stabilizing_read": "return to the nearest stable semantic unit and regenerate every derivative from the canonical model",
+    "restored_state": "authority, coupling, evidence, human work, and rollback remain inspectable across static, interactive, and motion outputs",
+    "recovery_moves": [
+      "freeze the last verified baseline",
+      "restate the semantic contract",
+      "reopen the affected decision",
+      "revise the smallest useful field",
+      "regenerate derivatives",
+      "rerun parity and accessibility checks"
+    ],
+    "named_failure_geometries": [
+      "parallax_gap",
+      "step_function",
+      "shear_plane",
+      "gridlock"
+    ]
+  }
+}

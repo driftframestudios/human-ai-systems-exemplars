@@ -1,0 +1,85 @@
+{
+  "$schema": "../schema/foundation-profile.schema.v0.1.json",
+  "schemaVersion": "0.1",
+  "artifactType": "repository_handoff_foundation_profile",
+  "key": "source-awaiting",
+  "title": "Source-awaiting owner-operable foundation",
+  "foundationManifest": "foundation.manifest.json",
+  "sourceStanding": "source_awaiting",
+  "selectedModules": [
+    "orientation",
+    "concept-nursery",
+    "threadkeeping",
+    "references"
+  ],
+  "selectedEntryKeys": [
+    "orientation.readme",
+    "orientation.agents",
+    "concept-nursery.readme",
+    "threadkeeping.readme",
+    "references.readme",
+    "references.public-readme",
+    "references.local-ignore"
+  ],
+  "selectedIssueSeedKeys": [
+    "source-awaiting-owner-operable-route"
+  ],
+  "heldDecisions": [
+    {
+      "key": "source-acceptance",
+      "owner": "preparing-owner",
+      "state": "held",
+      "decision": "Select and accept the site source that will become maintained repository source.",
+      "availableRoute": "Prepare the neutral foundation and keep the source-intake Issue current.",
+      "releaseEvent": "The preparing owner supplies or accepts a named source coordinate for intake."
+    },
+    {
+      "key": "repository-identity-and-rights",
+      "owner": "receiving-owner",
+      "state": "held",
+      "decision": "Choose the receiving repository identity, rights, visibility, and collaborator access.",
+      "availableRoute": "Prepare source, Issues, orientation, and an owner-readable settings checklist while account state remains with its current owner.",
+      "releaseEvent": "The receiving owner records the chosen repository identity and access posture."
+    },
+    {
+      "key": "credentials-and-account-settings",
+      "owner": "account-owner",
+      "state": "held",
+      "decision": "Supply credentials and approve account-level repository settings through the authorized platform route.",
+      "availableRoute": "Record declared secret names, observable settings, and the exact owner action while values stay in their authorized systems.",
+      "releaseEvent": "The account owner completes or explicitly authorizes the named settings action."
+    },
+    {
+      "key": "transfer-acceptance",
+      "owner": "human-owners",
+      "state": "held",
+      "decision": "Review and accept any repository ownership transfer.",
+      "availableRoute": "Prepare the useful repository, recovery coordinate, live Issue route, and pre-transfer receipt.",
+      "releaseEvent": "The preparing and receiving owners accept and complete or explicitly authorize the transfer."
+    },
+    {
+      "key": "publication-and-domains",
+      "owner": "receiving-owner",
+      "state": "held",
+      "decision": "Choose public visibility, publication timing, hosting route, and domain configuration.",
+      "availableRoute": "Keep a private, inspectable repository and prepare source-grounded publication options after intake.",
+      "releaseEvent": "The receiving owner selects a publication route and grants its preparation or activation."
+    },
+    {
+      "key": "license-attribution-and-destructive-recovery",
+      "owner": "repository-owner",
+      "state": "held",
+      "decision": "Accept license and attribution carriers and authorize any destructive recovery action.",
+      "availableRoute": "Preserve incoming notices and the last known-good coordinate while preparing a reviewed decision.",
+      "releaseEvent": "The repository owner accepts the named carriers or explicitly authorizes the exact recovery action."
+    }
+  ],
+  "nextOwnerAction": "Supply or accept the site source coordinate, then begin the source-intake Issue before selecting application tooling.",
+  "projection": {
+    "authority": "json",
+    "jsonSource": "profiles/source-awaiting.profile.json",
+    "yamlTarget": "profiles/source-awaiting.profile.yaml",
+    "mode": "exact_json_bytes",
+    "derivationNote": "The YAML companion is a byte-for-byte copy of this authoritative JSON document; JSON syntax is valid YAML 1.2."
+  }
+}

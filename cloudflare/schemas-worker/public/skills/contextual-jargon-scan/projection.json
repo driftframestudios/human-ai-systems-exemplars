@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/contextual-jargon-scan/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "contextual-jargon-scan",
+  "description": "Classifies potentially specialist or inside wording within a bounded corpus and revises replaceable shorthand into ordinary language. Applies when public, visitor-facing, or cross-team prose may rely on context its reader does not share, including an in-stride review of material already receiving substantive change.",
+  "semanticAuthorityRef": "../source/.agents/skills/contextual-jargon-scan/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/7",
+  "contract": {
+    "what": "A context-aware language review that distinguishes useful precision from shorthand a reader must decode.",
+    "when": [
+      "A bounded public, visitor-facing, cross-team, or durable collaboration surface may carry terms whose meaning depends on local practice."
+    ],
+    "boundaries": [
+      "Literal language, exact technical terms, quotations, citations, code, identifiers, governed vocabulary, accessibility meaning, and useful compact metaphors retain their source fidelity. The scan stays within the receiving task and leaves vocabulary governance and publication decisions with their established owners. Search and lint tools identify candidates; contextual reading decides disposition."
+    ],
+    "result": "A scoped occurrence map with targeted revisions, intentional retentions, deferred receivers, and a verification signal tied to the changed prose."
+  },
+  "receivingUse": {
+    "job": "A bounded public, visitor-facing, cross-team, or durable collaboration surface may carry terms whose meaning depends on local practice.",
+    "materialResult": "A scoped occurrence map with targeted revisions, intentional retentions, deferred receivers, and a verification signal tied to the changed prose.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/contextual-jargon-scan/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 950" width="1600" height="950" role="img" aria-labelledby="companion-title companion-desc" id="ai-legible-viewlet-method-companion-v2" data-role="decision-handoff" data-state="observed|context-active|review-needed|human-review|recoverable" data-color-token="cobalt-tiffany-acid" data-provenance="atlas-derived-context-canvas-composite" data-active-cue="context-in-view" data-anomaly-cue="look-here">
+  <title id="companion-title">AI-legible state modeling carries evidence into an accountable decision handoff</title>
+  <desc id="companion-desc">Five atlas-derived viewlets move from an event log through a component heatmap, a paced attention route, a human and AI handoff, and an audit trail with a retry checkpoint. The handoff carries signal, limits, evidence, affected population, boundary, named receiver, and a review and recovery route. Every state is written as well as colored.</desc>
+  <metadata id="companion-metadata" type="application/json"><![CDATA[
+    {
+      "viewlet_id": "ai-legible-viewlet-method-companion-v2",
+      "title": "AI-legible state modeling carries evidence into an accountable decision handoff",
+      "role": "decision-handoff",
+      "source_vocabulary": "AI-Legible Viewlet Atlas",
+      "source_viewlets": ["viewlet-event-log-v1", "viewlet-component-heatmap-v1", "viewlet-anomaly-alert-v1", "viewlet-attention-route-v1", "viewlet-human-ai-v1", "viewlet-audit-trail-v1", "viewlet-retry-checkpoint-v1"],
+      "state_model": ["observed", "context-active", "review-needed", "human-review", "recoverable"],
+      "active_cue": "context-in-view",
+      "anomaly_cue": "look-here",
+      "handoff_fields": ["signal", "limits", "evidence", "affected-population", "boundary", "named-receiver", "review-and-recovery-route"],
+      "provenance": "Atlas-derived composite retokenized for the Context Canvas method shelf"
+    }
+  ]]></metadata>
+
+  <defs>
+    <pattern id="field-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-width="1" stroke-opacity=".09"/>
+    </pattern>
+    <pattern id="quiet-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M0 0V8" stroke="#17345f" stroke-width="2" stroke-opacity=".18"/>
+    </pattern>
+    <style>
+      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17345f; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 780; letter-spacing: 1.4px; }
+      .eyebrow { font-size: 16px; font-weight: 850; letter-spacing: 2px; }
+      .headline { font-size: 43px; font-weight: 880; letter-spacing: -1.4px; }
+      .dek { font-size: 19px; font-weight: 590; }
+      .card { stroke: #17345f; stroke-width: 2.5; }
+      .card-head { fill: #153fbe; }
+      .stage { font-size: 18px; font-weight: 900; letter-spacing: 1.2px; }
+      .stage-sub { font-size: 13px; font-weight: 680; letter-spacing: .8px; }
+      .mini { fill: #fffdf8; stroke: #17345f; stroke-width: 1.8; }
+      .mini-line { fill: none; stroke: #17345f; stroke-width: 1.6; stroke-linecap: round; }
+      .state { fill: #fffdf8; stroke: #17345f; stroke-width: 1.6; }
+      .state-label { font-size: 13px; font-weight: 880; letter-spacing: .7px; }
+      .carry-label { font-size: 12px; font-weight: 850; letter-spacing: 1.4px; }
+      .carry-value { font-size: 19px; font-weight: 850; }
+      .card-note { font-size: 13px; font-weight: 620; }
+      .route-base { fill: none; stroke: #17345f; stroke-width: 3; stroke-linecap: round; }
+      .route-stem { fill: none; stroke: #7893bc; stroke-width: 2; stroke-dasharray: 5 6; }
+      .attention-trace { fill: none; stroke: #65d8ff; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 84 916; stroke-dashoffset: 1000; animation: attention-route 12s linear infinite; }
+      .route-label { font-size: 14px; font-weight: 850; letter-spacing: 1.25px; }
+      .packet-title { font-size: 27px; font-weight: 880; }
+      .packet-copy { font-size: 16px; font-weight: 610; }
+      .field-name { font-size: 14px; font-weight: 880; letter-spacing: .6px; }
+      .contract-label { font-size: 13px; font-weight: 850; letter-spacing: 1.2px; }
+      .contract-copy { font-size: 15px; font-weight: 650; }
+      .source { font-size: 13px; font-weight: 690; letter-spacing: .45px; }
+      .white { fill: #fffdf8; }
+      .ink { fill: #17345f; }
+      .cobalt { fill: #2855f3; }
+      .tiffany { fill: #65d8ff; }
+      .acid { fill: #f2ff67; }
+      * { vector-effect: non-scaling-stroke; }
+      @keyframes attention-route { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+      @media (prefers-reduced-motion: reduce) { .attention-trace { animation: none; opacity: 0; } }
+      @media (forced-colors: active) {
+        .surface, .card, .mini, .state, .packet, .contract, .field-chip { fill: Canvas; stroke: CanvasText; }
+        .card-head, .header-field { fill: Highlight; stroke: CanvasText; }
+        .card-head text, .header-field text { fill: HighlightText; }
+        text { fill: CanvasText; }
+        .route-base, .route-stem { stroke: CanvasText; }
+        .attention-trace { animation: none; stroke: Highlight; stroke-dasharray: 18 12; stroke-dashoffset: 0; }
+        .integrated-arrow, .status-shape { fill: CanvasText; stroke: CanvasText; }
+      }
+    </style>
+  </defs>
+
+  <rect class="surface" width="1600" height="950" fill="#fffaf2"/>
+  <rect x="20" y="20" width="1560" height="910" rx="34" fill="url(#field-grid)" stroke="#17345f" stroke-width="3"/>
+
+  <g role="group" aria-labelledby="orientation-title">
+    <title id="orientation-title">Orientation: an interface should carry the decision handoff, not just display a result</title>
+    <rect class="header-field" x="50" y="48" width="1500" height="125" rx="26" fill="#153fbe" stroke="#17345f" stroke-width="2.5"/>
+    <text class="mono eyebrow tiffany" x="84" y="82">ATLAS-DERIVED METHOD COMPANION · STATE → ATTENTION → ACCOUNTABILITY</text>
+    <text class="headline white" x="84" y="126">When an interface carries the handoff</text>
+    <text class="dek white" x="84" y="155">AI-legible state keeps the evidence, limits, affected people, and recovery route attached to the decision.</text>
+    <rect x="1270" y="75" width="238" height="68" rx="15" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+    <text class="mono ink" x="1389" y="102" text-anchor="middle" font-size="15">STATE NAMES CONTEXT</text>
+    <text class="ink" x="1389" y="128" text-anchor="middle" font-size="16" font-weight="850">written beside every cue</text>
+  </g>
+
+  <g role="group" aria-labelledby="attention-route-title">
+    <title id="attention-route-title">A paced attention route connects five fixed evidence surfaces without obscuring them</title>
+    <path class="route-stem" d="M187 553V588M488 553V588M789 553V588M1090 553V588M1391 553V588"/>
+    <path class="route-base" d="M78 588H1510"/>
+    <path class="attention-trace" pathLength="1000" d="M78 588H1510"/>
+    <path class="integrated-arrow" d="M1508 576L1533 588 1508 600Z" fill="#17345f" aria-hidden="true"/>
+    <text class="mono route-label" x="78" y="616">ATTENTION ROUTE · OBSERVE → CONTEXTUALIZE → ROUTE → HAND OFF → REVIEW / RECOVER</text>
+  </g>
+
+  <g transform="translate(52 195)" role="group" aria-labelledby="observe-title">
+    <title id="observe-title">Stage one, Observe: an event log carries the signal and its evidence record</title>
+    <rect class="card" width="270" height="358" rx="20" fill="#e7efff"/>
+    <path class="card-head" d="M20 0H250A20 20 0 0 1 270 20V60H0V20A20 20 0 0 1 20 0Z"/>
+    <text class="mono stage white" x="20" y="27">01 · OBSERVE</text>
+    <text class="stage-sub white" x="20" y="49">EVENT LOG · EVIDENCE</text>
+    <g aria-hidden="true">
+      <rect class="mini" x="22" y="80" width="226" height="116" rx="10"/>
+      <path class="mini-line" d="M22 104H248" opacity=".55"/>
+      <circle cx="35" cy="92" r="3" fill="#2855f3"/><circle cx="47" cy="92" r="3" fill="#65d8ff" stroke="#17345f"/><circle cx="59" cy="92" r="3" fill="#f2ff67" stroke="#17345f"/>
+      <rect x="36" y="116" width="18" height="11" rx="3" fill="#65d8ff" stroke="#17345f"/><path class="mini-line" d="M66 120H218M66 126H174"/>
+      <rect x="36" y="139" width="18" height="11" rx="3" fill="url(#quiet-hatch)" stroke="#17345f"/><path class="mini-line" d="M66 143H204M66 149H158"/>
+      <rect x="36" y="162" width="18" height="11" rx="3" fill="#f2ff67" stroke="#17345f"/><path class="mini-line" d="M66 166H226M66 172H186"/>
+      <rect x="36" y="185" width="18" height="6" rx="3" fill="#2855f3"/><path class="mini-line" d="M66 188H192"/>
+    </g>
+    <rect class="state" x="22" y="210" width="226" height="36" rx="18"/>
+    <circle class="status-shape" cx="43" cy="228" r="8" fill="#65d8ff" stroke="#17345f"/>
+    <text class="mono state-label" x="60" y="233">STATE: OBSERVED</text>
+    <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
+    <text class="carry-value" x="22" y="298">Signal + evidence</text>
+    <text class="card-note" x="22" y="324">What happened, when, and which</text>
+    <text class="card-note" x="22" y="343">evidence record remains attached.</text>
+  </g>
+
+  <g transform="translate(353 195)" role="group" aria-labelledby="context-title">
+    <title id="context-title">Stage two, Contextualize: a component heatmap locates the pattern and affected population in view</title>
+    <rect class="card" width="270" height="358" rx="20" fill="#d9efea"/>
+    <path class="card-head" d="M20 0H250A20 20 0 0 1 270 20V60H0V20A20 20 0 0 1 20 0Z"/>
+    <text class="mono stage white" x="20" y="27">02 · CONTEXTUALIZE</text>
+    <text class="stage-sub white" x="20" y="49">COMPONENT HEATMAP</text>
+    <g aria-hidden="true">
+      <rect class="mini" x="22" y="80" width="226" height="116" rx="10"/>
+      <path class="mini-line" d="M22 104H248" opacity=".55"/>
+      <circle cx="35" cy="92" r="3" fill="#2855f3"/><circle cx="47" cy="92" r="3" fill="#65d8ff" stroke="#17345f"/><circle cx="59" cy="92" r="3" fill="#f2ff67" stroke="#17345f"/>
+      <g stroke="#17345f" stroke-width=".8">
+        <rect x="36" y="115" width="25" height="15" rx="2" fill="#e7efff"/><rect x="69" y="115" width="25" height="15" rx="2" fill="#65d8ff"/><rect x="102" y="115" width="25" height="15" rx="2" fill="url(#quiet-hatch)"/><rect x="135" y="115" width="25" height="15" rx="2" fill="#f2ff67"/><rect x="168" y="115" width="25" height="15" rx="2" fill="#e7efff"/><rect x="201" y="115" width="25" height="15" rx="2" fill="#65d8ff"/>
+        <rect x="36" y="138" width="25" height="15" rx="2" fill="#65d8ff"/><rect x="69" y="138" width="25" height="15" rx="2" fill="#f2ff67"/><rect x="102" y="138" width="25" height="15" rx="2" fill="#e7efff"/><rect x="135" y="138" width="25" height="15" rx="2" fill="#65d8ff"/><rect x="168" y="138" width="25" height="15" rx="2" fill="url(#quiet-hatch)"/><rect x="201" y="138" width="25" height="15" rx="2" fill="#e7efff"/>
+        <rect x="36" y="161" width="25" height="15" rx="2" fill="url(#quiet-hatch)"/><rect x="69" y="161" width="25" height="15" rx="2" fill="#e7efff"/><rect x="102" y="161" width="25" height="15" rx="2" fill="#65d8ff"/><rect x="135" y="161" width="25" height="15" rx="2" fill="#f2ff67"/><rect x="168" y="161" width="25" height="15" rx="2" fill="#65d8ff"/><rect x="201" y="161" width="25" height="15" rx="2" fill="url(#quiet-hatch)"/>
+      </g>
+      <text class="mono" x="135" y="190" text-anchor="middle" font-size="10">ACTIVE = CONTEXT IN VIEW</text>
+    </g>
+    <rect class="state" x="22" y="210" width="226" height="36" rx="18"/>
+    <rect class="status-shape" x="35" y="220" width="16" height="16" rx="3" fill="#65d8ff" stroke="#17345f"/>
+    <text class="mono state-label" x="60" y="233">STATE: CONTEXT ACTIVE</text>
+    <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
+    <text class="carry-value" x="22" y="298">Pattern + population</text>
+    <text class="card-note" x="22" y="324">Where attention gathers and which</text>
+    <text class="card-note" x="22" y="343">people or components are affected.</text>
+  </g>
+
+  <g transform="translate(654 195)" role="group" aria-labelledby="route-stage-title">
+    <title id="route-stage-title">Stage three, Route: an anomaly alert marks where to look and carries limits and decision boundaries</title>
+    <rect class="card" width="270" height="358" rx="20" fill="#fff5c7"/>
+    <path class="card-head" d="M20 0H250A20 20 0 0 1 270 20V60H0V20A20 20 0 0 1 20 0Z"/>
+    <text class="mono stage white" x="20" y="27">03 · ROUTE</text>
+    <text class="stage-sub white" x="20" y="49">ANOMALY · LOOK HERE</text>
+    <g aria-hidden="true">
+      <rect class="mini" x="22" y="80" width="226" height="116" rx="10"/>
+      <path d="M79 112L112 169H46Z" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <text class="mono" x="79" y="147" text-anchor="middle" font-size="12">LOOK</text>
+      <rect x="135" y="107" width="88" height="25" rx="12.5" fill="#e7efff" stroke="#17345f"/>
+      <text class="mono" x="179" y="124" text-anchor="middle" font-size="10">NOTICE</text>
+      <path class="mini-line" d="M179 132V146"/>
+      <path class="integrated-arrow" d="M173 144H185L179 154Z" fill="#17345f"/>
+      <rect x="135" y="154" width="88" height="25" rx="12.5" fill="#65d8ff" stroke="#17345f"/>
+      <text class="mono" x="179" y="171" text-anchor="middle" font-size="10">ROUTE</text>
+      <text class="mono" x="79" y="188" text-anchor="middle" font-size="9">LOOK HERE</text>
+    </g>
+    <rect class="state" x="22" y="210" width="226" height="36" rx="18"/>
+    <path class="status-shape" d="M43 219L52 235H34Z" fill="#f2ff67" stroke="#17345f"/>
+    <text class="mono state-label" x="60" y="233">STATE: REVIEW NEEDED</text>
+    <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
+    <text class="carry-value" x="22" y="298">Limits + boundary</text>
+    <text class="card-note" x="22" y="324">Signal opens inquiry: look here.</text>
+    <text class="card-note" x="22" y="343">A named owner decides.</text>
+  </g>
+
+  <g transform="translate(955 195)" role="group" aria-labelledby="handoff-title">
+    <title id="handoff-title">Stage four, Hand off: the human and AI collaboration surface names the accountable receiver</title>
+    <rect class="card" width="270" height="358" rx="20" fill="#cfe7f7"/>
+    <path class="card-head" d="M20 0H250A20 20 0 0 1 270 20V60H0V20A20 20 0 0 1 20 0Z"/>
+    <text class="mono stage white" x="20" y="27">04 · HAND OFF</text>
+    <text class="stage-sub white" x="20" y="49">HUMAN + AI COLLABORATION</text>
+    <g aria-hidden="true">
+      <rect class="mini" x="22" y="80" width="226" height="116" rx="10"/>
+      <circle cx="76" cy="132" r="29" fill="#65d8ff" stroke="#17345f" stroke-width="2"/>
+      <text class="mono" x="76" y="138" text-anchor="middle" font-size="15">AI</text>
+      <circle cx="192" cy="132" r="29" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <text class="mono" x="192" y="137" text-anchor="middle" font-size="10">HUMAN</text>
+      <path class="integrated-arrow" d="M108 124H155V114L175 132 155 150V140H108Z" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+      <rect x="48" y="174" width="172" height="15" rx="7.5" fill="#e7efff" stroke="#17345f"/>
+      <text class="mono" x="134" y="185" text-anchor="middle" font-size="9">RECEIVER · RELEASE STEWARD</text>
+    </g>
+    <rect class="state" x="22" y="210" width="226" height="36" rx="18"/>
+    <circle class="status-shape" cx="43" cy="225" r="7" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path class="mini-line" d="M36 237Q43 229 50 237"/>
+    <text class="mono state-label" x="60" y="233">STATE: HUMAN REVIEW</text>
+    <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
+    <text class="carry-value" x="22" y="298">Receiver + decision</text>
+    <text class="card-note" x="22" y="324">System prepares; named steward</text>
+    <text class="card-note" x="22" y="343">inspects, compares, and authorizes.</text>
+  </g>
+
+  <g transform="translate(1256 195)" role="group" aria-labelledby="recover-title">
+    <title id="recover-title">Stage five, Review and recover: an audit trail preserves the route and a retry checkpoint enables a bounded return</title>
+    <rect class="card" width="270" height="358" rx="20" fill="#e7efff"/>
+    <path class="card-head" d="M20 0H250A20 20 0 0 1 270 20V60H0V20A20 20 0 0 1 20 0Z"/>
+    <text class="mono stage white" x="20" y="27">05 · REMEMBER</text>
+    <text class="stage-sub white" x="20" y="49">AUDIT TRAIL · CHECKPOINT</text>
+    <g aria-hidden="true">
+      <rect class="mini" x="22" y="80" width="226" height="116" rx="10"/>
+      <path class="mini-line" d="M22 104H248" opacity=".55"/>
+      <circle cx="35" cy="92" r="3" fill="#2855f3"/><circle cx="47" cy="92" r="3" fill="#65d8ff" stroke="#17345f"/><circle cx="59" cy="92" r="3" fill="#f2ff67" stroke="#17345f"/>
+      <path class="mini-line" d="M48 119V169M48 124H130M48 145H118M48 166H142"/>
+      <circle cx="48" cy="124" r="6" fill="#65d8ff" stroke="#17345f"/><circle cx="48" cy="145" r="6" fill="#fffdf8" stroke="#17345f"/><circle cx="48" cy="166" r="6" fill="#f2ff67" stroke="#17345f"/>
+      <rect x="154" y="118" width="70" height="15" rx="4" fill="#fffdf8" stroke="#17345f"/>
+      <rect x="154" y="118" width="43" height="15" rx="4" fill="#65d8ff" stroke="#17345f"/>
+      <path d="M188 146a20 20 0 1 0 16 8" fill="none" stroke="#17345f" stroke-width="2"/>
+      <path class="integrated-arrow" d="M199 148L214 147 208 161Z" fill="#17345f"/>
+      <text class="mono" x="188" y="181" text-anchor="middle" font-size="9">RESUME</text>
+    </g>
+    <rect class="state" x="22" y="210" width="226" height="36" rx="18"/>
+    <path class="status-shape" d="M35 228L41 234 52 220" fill="none" stroke="#17345f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="mono state-label" x="60" y="233">STATE: RECOVERABLE</text>
+    <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
+    <text class="carry-value" x="22" y="298">Review + recovery</text>
+    <text class="card-note" x="22" y="324">Trace, return, and resume at a</text>
+    <text class="card-note" x="22" y="343">named, inspectable checkpoint.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="integrated-arrow" d="M327 364H342V355L352 374 342 393V384H327Z" fill="#17345f"/>
+    <path class="integrated-arrow" d="M628 364H643V355L653 374 643 393V384H628Z" fill="#17345f"/>
+    <path class="integrated-arrow" d="M929 364H944V355L954 374 944 393V384H929Z" fill="#17345f"/>
+    <path class="integrated-arrow" d="M1230 364H1245V355L1255 374 1245 393V384H1230Z" fill="#17345f"/>
+  </g>
+
+  <g role="group" aria-labelledby="packet-title">
+    <title id="packet-title">The portable handoff packet preserves seven named fields and an inspectable data contract</title>
+    <rect class="packet" x="50" y="642" width="1500" height="247" rx="26" fill="#fffdf8" stroke="#17345f" stroke-width="2.5"/>
+    <text class="mono eyebrow cobalt" x="82" y="678">PORTABLE HANDOFF PACKET · NO CONTEXT LEFT BEHIND</text>
+    <text class="packet-title" x="82" y="711">The decision arrives with what the named human reviewer needs to inspect it.</text>
+    <text class="packet-copy" x="82" y="737">Color supports the scan; written labels preserve meaning in every mode.</text>
+
+    <g role="group" aria-labelledby="handoff-fields-title">
+      <title id="handoff-fields-title">Seven required handoff fields: signal, limits, evidence, affected population, boundary, named receiver, and review plus recovery</title>
+      <rect class="field-chip" x="82" y="756" width="140" height="42" rx="11" fill="#e7efff" stroke="#17345f"/>
+      <text class="mono field-name" x="152" y="783" text-anchor="middle">SIGNAL</text>
+      <rect class="field-chip" x="232" y="756" width="140" height="42" rx="11" fill="#fffdf8" stroke="#17345f" stroke-dasharray="6 4"/>
+      <text class="mono field-name" x="302" y="783" text-anchor="middle">LIMITS</text>
+      <rect class="field-chip" x="382" y="756" width="160" height="42" rx="11" fill="#d9efea" stroke="#17345f"/>
+      <text class="mono field-name" x="462" y="783" text-anchor="middle">EVIDENCE</text>
+      <rect class="field-chip" x="552" y="756" width="230" height="42" rx="11" fill="#65d8ff" stroke="#17345f"/>
+      <text class="mono field-name" x="667" y="783" text-anchor="middle">AFFECTED POPULATION</text>
+      <rect class="field-chip" x="792" y="756" width="160" height="42" rx="11" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <text class="mono field-name" x="872" y="783" text-anchor="middle">BOUNDARY</text>
+      <rect class="field-chip" x="962" y="756" width="190" height="42" rx="11" fill="#e7efff" stroke="#17345f"/>
+      <text class="mono field-name" x="1057" y="783" text-anchor="middle">NAMED RECEIVER</text>
+      <rect class="field-chip" x="1162" y="756" width="306" height="42" rx="11" fill="#f2ff67" stroke="#17345f"/>
+      <text class="mono field-name" x="1315" y="783" text-anchor="middle">REVIEW + RECOVERY ROUTE</text>
+    </g>
+
+    <g role="group" aria-labelledby="contract-title">
+      <title id="contract-title">Each viewlet declares a stable identity, semantic role, accessible description, written state, and source</title>
+      <rect class="contract" x="82" y="817" width="850" height="49" rx="12" fill="#e7efff" stroke="#17345f"/>
+      <text class="mono contract-label cobalt" x="100" y="838">EACH VIEWLET DECLARES</text>
+      <text class="contract-copy" x="100" y="858">stable ID · semantic role · title + description · written state · source</text>
+    </g>
+    <g role="group" aria-labelledby="authority-title">
+      <title id="authority-title">The named receiver can inspect, compare, authorize, or return the packet to its checkpoint</title>
+      <rect class="contract" x="950" y="817" width="518" height="49" rx="12" fill="#153fbe" stroke="#17345f"/>
+      <text class="mono contract-label tiffany" x="970" y="838">NAMED RECEIVER</text>
+      <text class="contract-copy white" x="970" y="858">inspect · compare · authorize · return to checkpoint</text>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="source-title">
+    <title id="source-title">Provenance: geometry and state semantics are adapted from the AI-Legible Viewlet Atlas</title>
+    <text class="mono source" x="50" y="916">SOURCE VOCABULARY · AI-LEGIBLE VIEWLET ATLAS · CANONICAL GEOMETRY + STATE SEMANTICS · RETOKENIZED FOR CONTEXT CANVAS</text>
+    <text class="source" x="1550" y="916" text-anchor="end">Written state names the context · anomalies mean look here.</text>
+  </g>
+</svg>

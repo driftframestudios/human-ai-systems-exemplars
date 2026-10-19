@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1320" role="img" aria-labelledby="title desc">
+  <title id="title">Turn a map pin into recoverable field work</title>
+  <desc id="desc">A site map and textual pin list share authority with a sequenced conversation. Offline reconciliation, browser execution decisions, and cross-functional investment appear below as bounded operating contracts.</desc>
+  <defs>
+    <pattern id="draft-grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#8aaee9" stroke-width="1" opacity="0.20"/>
+      <circle cx="1" cy="1" r="1.2" fill="#215fbb" opacity="0.14"/>
+    </pattern>
+    <pattern id="topo" width="150" height="100" patternUnits="userSpaceOnUse">
+      <path d="M-20 38C10 17 46 14 76 36s63 27 97 5M-21 58C11 35 47 34 76 54s62 28 100 6M-14 78C20 55 48 54 80 73s65 22 100 2" fill="none" stroke="#717676" stroke-width="1.3" opacity="0.13"/>
+    </pattern>
+    <clipPath id="map-clip"><rect x="72" y="168" width="888" height="552" rx="24"/></clipPath>
+    <clipPath id="journal-clip"><rect x="72" y="758" width="1456" height="164" rx="22"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#15335b}.blue{fill:#215fbb}.muted{fill:#4c678d}.paper{fill:#fffdf7}.deep{fill:#263f42}
+      .title{font-size:39px;font-weight:820;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:820;letter-spacing:1.5px}.panel-title{font-size:22px;font-weight:800}
+      .body{font-size:16px;font-weight:560}.small{font-size:14px;font-weight:620}.tiny{font-size:12px;font-weight:740}
+      .line{stroke:#215fbb;stroke-width:2;fill:none}.soft-line{stroke:#8aaee9;stroke-width:1.5;fill:none}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1320" fill="#f4f7fd"/>
+  <rect width="1600" height="1320" fill="url(#draft-grid)"/>
+  <rect x="30" y="30" width="1540" height="1260" rx="34" fill="#fffdf7" stroke="#215fbb" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="91" class="title ink">Turn a map pin into recoverable field work</text>
+    <text x="72" y="126" class="subtitle muted">Geometry, conversation, and compute placement keep separate authorities while sharing one site view.</text>
+
+    <g clip-path="url(#map-clip)" aria-label="Field map, installation zone, and textual pin list">
+      <rect x="72" y="168" width="888" height="552" rx="24" fill="#dbf0f0" stroke="#215fbb" stroke-width="2"/>
+      <rect x="72" y="168" width="888" height="552" rx="24" fill="url(#topo)"/>
+      <text x="96" y="208" class="eyebrow blue">SITE VIEW · INSTALLATION AREA</text>
+      <text x="936" y="208" text-anchor="end" class="mono tiny muted">frame site-local-enu-v1 · rev 7</text>
+
+      <path d="M125 565L230 285L559 239L876 385L818 615L402 670Z" fill="#bddbdb" stroke="#263f42" stroke-width="3"/>
+      <path d="M202 539L276 334L542 298L793 410L746 559L423 613Z" fill="#f1f9f9" stroke="#717676" stroke-width="2" stroke-dasharray="9 7"/>
+      <text x="484" y="470" text-anchor="middle" class="eyebrow deep">AUTHORIZED INSTALLATION ZONE</text>
+
+      <circle cx="302" cy="388" r="84" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.28"/>
+      <circle cx="302" cy="388" r="50" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.44"/>
+      <circle cx="302" cy="388" r="10" fill="#215fbb"/>
+      <text x="252" y="286" class="tiny blue">BEACON A · RANGE</text>
+      <circle cx="704" cy="481" r="92" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.28"/>
+      <circle cx="704" cy="481" r="54" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.44"/>
+      <circle cx="704" cy="481" r="10" fill="#215fbb"/>
+      <text x="736" y="584" class="tiny blue">BEACON B · RANGE</text>
+
+      <path d="M483 342c0-27 22-49 49-49s49 22 49 49c0 36-49 82-49 82s-49-46-49-82Z" fill="#f2ff67" stroke="#16345e" stroke-width="4"/>
+      <circle cx="532" cy="342" r="13" fill="#16345e"/>
+      <path d="M580 350H625V344L642 353L625 362V356H580Z" fill="#215fbb"/>
+      <rect x="642" y="301" width="264" height="108" rx="16" fill="#fff0cf" stroke="#215fbb" stroke-width="2"/>
+      <text x="662" y="330" class="eyebrow blue">BEFORE THE CLIMB</text>
+      <text x="662" y="359" class="small ink"><tspan x="662">Bracket clearance · lift access</tspan><tspan x="662" dy="22">beacon orientation · open exceptions</tspan></text>
+      <text x="662" y="394" class="tiny muted">MAKE THE INFORMATION AVAILABLE AT GROUND LEVEL</text>
+
+      <rect x="96" y="634" width="840" height="64" rx="13" fill="#fffdf7" stroke="#215fbb" stroke-width="2"/>
+      <text x="116" y="660" class="eyebrow blue">TEXTUAL PIN LIST</text>
+      <text x="116" y="685" class="mono small ink">PIN-22 | x 12,450 · y 8,300 · z 2,700 mm | pending | A. Lee | 10:02 site time</text>
+    </g>
+
+    <g aria-label="Sequenced pin conversation" transform="translate(1000 168)">
+      <rect width="528" height="552" rx="24" fill="#f4f8ff" stroke="#215fbb" stroke-width="2"/>
+      <text x="24" y="40" class="eyebrow blue">PIN-22 · DURABLE CONVERSATION</text>
+      <text x="504" y="40" text-anchor="end" class="mono tiny muted">authoritative version 12</text>
+
+      <rect x="24" y="64" width="480" height="112" rx="16" fill="#dbe9ff" stroke="#8aaee9" stroke-width="2"/>
+      <text x="44" y="91" class="eyebrow blue">PLANNING · A. LEE</text>
+      <text x="44" y="121" class="body ink"><tspan x="44">Confirm bracket clearance before</tspan><tspan x="44" dy="23">the lift arrives.</tspan></text>
+      <text x="44" y="161" class="mono tiny muted">seq 104 · accepted · 09:54 site time</text>
+
+      <rect x="66" y="194" width="438" height="122" rx="16" fill="#fff0cf" stroke="#8aaee9" stroke-width="2"/>
+      <text x="86" y="221" class="eyebrow blue">FIELD TECHNICIAN</text>
+      <text x="86" y="251" class="body ink"><tspan x="86">32 mm clearance confirmed.</tspan><tspan x="86" dy="23">Photo queued offline.</tspan></text>
+      <rect x="86" y="283" width="128" height="23" rx="11" fill="#ded575"/>
+      <text x="150" y="299" text-anchor="middle" class="mono tiny ink">seq 105 · pending</text>
+
+      <rect x="24" y="336" width="480" height="138" rx="16" fill="#f7d7d4" stroke="#fa7065" stroke-width="3"/>
+      <text x="44" y="365" class="eyebrow" fill="#a53a33">REVISION CONFLICT</text>
+      <text x="44" y="395" class="body ink"><tspan x="44">The zone changed while the device</tspan><tspan x="44" dy="23">was offline. Compare revisions 11 and 12.</tspan></text>
+      <path d="M44 437H317V431L334 440L317 449V443H44Z" fill="#fa7065"/>
+      <text x="350" y="445" class="tiny ink">COMPARE + RESOLVE</text>
+
+      <text x="24" y="512" class="small muted">Sequence and tenant-scoped client event IDs</text>
+      <text x="24" y="534" class="small muted">keep retries and replay inside the site boundary.</text>
+    </g>
+
+    <g clip-path="url(#journal-clip)" aria-label="Offline reconciliation states">
+      <rect x="72" y="758" width="1456" height="164" rx="22" fill="#16345e"/>
+      <text x="94" y="792" class="eyebrow paper">OFFLINE COMMAND JOURNAL · SERVER-RESOLVED RECEIPTS</text>
+
+      <rect x="94" y="813" width="142" height="54" rx="14" fill="#ded575"/>
+      <text x="165" y="846" text-anchor="middle" class="eyebrow ink">PENDING</text>
+      <path d="M236 837H262V831L278 840L262 849V843H236Z" fill="#8aaee9"/>
+      <rect x="278" y="813" width="142" height="54" rx="14" fill="#edf4ff"/>
+      <text x="349" y="846" text-anchor="middle" class="eyebrow ink">SENDING</text>
+      <path d="M420 837H446V831L462 840L446 849V843H420Z" fill="#8aaee9"/>
+      <rect x="462" y="813" width="160" height="54" rx="14" fill="#f2ff67"/>
+      <text x="542" y="846" text-anchor="middle" class="eyebrow ink">ACCEPTED</text>
+      <text x="654" y="834" class="tiny paper">DUPLICATE</text>
+      <text x="654" y="854" class="tiny" fill="#bddbdb">settles as accepted</text>
+
+      <rect x="814" y="813" width="154" height="54" rx="14" fill="#fff0cf"/>
+      <text x="891" y="846" text-anchor="middle" class="eyebrow ink">RETRYABLE</text>
+      <path d="M814 880H265V886L247 877L265 868V874H814Z" fill="#8aaee9"/>
+      <text x="530" y="901" text-anchor="middle" class="tiny paper">BOUNDED DELAY → PENDING</text>
+
+      <rect x="1008" y="813" width="206" height="54" rx="14" fill="#fa7065"/>
+      <text x="1111" y="837" text-anchor="middle" class="eyebrow ink">CONFLICT / REJECTED</text>
+      <text x="1111" y="856" text-anchor="middle" class="tiny ink">visible resolution state</text>
+      <path d="M1214 837H1240V831L1256 840L1240 849V843H1214Z" fill="#8aaee9"/>
+      <rect x="1256" y="813" width="244" height="54" rx="14" fill="#dbf0f0"/>
+      <text x="1378" y="846" text-anchor="middle" class="eyebrow ink">COMPARE + RESOLVE</text>
+
+      <text x="94" y="905" class="tiny" fill="#bddbdb">RESTART: SENDING → PENDING</text>
+      <text x="1500" y="905" text-anchor="end" class="tiny" fill="#bddbdb">RECEIPTS REMAIN TENANT / SITE SCOPED</text>
+    </g>
+
+    <g aria-label="Browser execution decision" transform="translate(72 952)">
+      <rect width="1456" height="188" rx="22" fill="#f4f8ff" stroke="#215fbb" stroke-width="2"/>
+      <text x="22" y="34" class="eyebrow blue">BOUNDED EDGE COMPUTE · DECLARE THE TASK BEFORE CHOOSING THE RUNTIME</text>
+
+      <rect x="22" y="54" width="520" height="108" rx="15" fill="#fffdf7" stroke="#8aaee9" stroke-width="2"/>
+      <text x="42" y="80" class="eyebrow blue">TASK ENVELOPE</text>
+      <text x="42" y="109" class="mono tiny ink">operation · input bytes · working set · Worker · WASM</text>
+      <text x="42" y="132" class="mono tiny ink">isolation · device memory · may leave device</text>
+      <text x="42" y="154" class="tiny muted">Queue bounded by count · bytes · concurrency · timeout</text>
+
+      <path d="M542 104H580V98L596 107L580 116V110H542Z" fill="#215fbb"/>
+      <rect x="596" y="54" width="250" height="108" rx="15" fill="#f2ff67" stroke="#215fbb" stroke-width="2"/>
+      <text x="616" y="82" class="eyebrow ink">BROWSER</text>
+      <text x="616" y="111" class="small ink"><tspan x="616">Approved capabilities</tspan><tspan x="616" dy="21">and bounds</tspan></text>
+
+      <path d="M846 104H876V98L892 107L876 116V110H846Z" fill="#215fbb"/>
+      <rect x="892" y="54" width="250" height="108" rx="15" fill="#dbf0f0" stroke="#215fbb" stroke-width="2"/>
+      <text x="912" y="82" class="eyebrow ink">SERVER</text>
+      <text x="912" y="109" class="small ink"><tspan x="912">Task may leave device;</tspan><tspan x="912" dy="21">a browser bound fails</tspan></text>
+
+      <path d="M1142 104H1172V98L1188 107L1172 116V110H1142Z" fill="#215fbb"/>
+      <rect x="1188" y="54" width="246" height="108" rx="15" fill="#f7d7d4" stroke="#215fbb" stroke-width="2"/>
+      <text x="1208" y="82" class="eyebrow ink">DEFER</text>
+      <text x="1208" y="109" class="small ink"><tspan x="1208">Server execution falls</tspan><tspan x="1208" dy="21">outside task policy</tspan></text>
+    </g>
+
+    <g aria-label="Cross-functional investment" transform="translate(72 1174)">
+      <rect width="1456" height="104" rx="22" fill="#16345e"/>
+      <text x="22" y="30" class="eyebrow paper">CROSS-FUNCTIONAL INVESTMENT</text>
+      <g class="tiny paper">
+        <text x="22" y="57">CALIBRATION + FIELD RESEARCH</text><text x="22" y="79" fill="#bddbdb">protects geometry quality</text>
+        <text x="382" y="57">OFFLINE + REPLAY ENGINEERING</text><text x="382" y="79" fill="#bddbdb">preserves recoverable work</text>
+        <text x="758" y="57">DEVICE / BROWSER MATRIX</text><text x="758" y="79" fill="#bddbdb">bounds client compute</text>
+        <text x="1082" y="57">SUPPORT + SITE OPERATIONS</text><text x="1082" y="79" fill="#bddbdb">grounds failure modes</text>
+      </g>
+      <text x="1434" y="96" text-anchor="end" class="tiny" fill="#f2ff67">FUND THE BOUNDARY THAT CARRIES FIELD CONSEQUENCE.</text>
+    </g>
+  </g>
+</svg>

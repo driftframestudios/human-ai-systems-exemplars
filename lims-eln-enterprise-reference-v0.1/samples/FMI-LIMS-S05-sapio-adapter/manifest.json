@@ -1,0 +1,32 @@
+{
+  "sampleId": "FMI-LIMS-S05",
+  "title": "Sapio compatibility gate, record graph, and managed ELN boundary",
+  "temporalClass": "current_2026",
+  "evidenceClass": "illustrative",
+  "executionClass": "tested_excerpt",
+  "executionScope": "vendor_shaped_fake_gateway",
+  "qualificationStage": "tenant_open",
+  "codePaths": ["src/lims_eln_reference/adapters/sapio.py"],
+  "testPaths": ["tests/test_vendor_adapters.py"],
+  "trustBoundaries": [
+    "A tenant-approved platform and SDK pair opens the adapter.",
+    "Atomic record-graph intent and managed ELN specification cross through an injected gateway."
+  ],
+  "failureModes": [
+    "Compatibility mismatch and ELN shape drift close rollout.",
+    "Transport timeout requires request-ID read-back before another mutation."
+  ],
+  "receipts": [
+    "receipts/validation-report.json",
+    "provenance/vendor-source-register.json"
+  ],
+  "affectedPopulations": [
+    "scientist",
+    "quality",
+    "engineer",
+    "security",
+    "operations"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

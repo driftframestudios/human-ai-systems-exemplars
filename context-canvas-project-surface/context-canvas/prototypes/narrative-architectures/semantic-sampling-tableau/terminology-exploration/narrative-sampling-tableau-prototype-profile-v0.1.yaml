@@ -1,0 +1,162 @@
+prototype:
+  id: "na:narrative-sampling-tableau/chimeric-prototype/v0.1"
+  canonicalType: "NarrativeSamplingSurface"
+  displayName: "Narrative Sampling Tableau"
+  methodRef: "na:verbalized-sampling"
+  version: "0.1"
+  status: "working_chimeric_prototype"
+
+purpose:
+  primaryMove:
+    "Fan out materially distinct possibilities, preserve their probability objects and dimensional fit, compare runs, expose methodological gaps, and route the terrain into the next collaboration surface."
+
+  adaptationBoundary:
+    researchTechnique:
+      "Verbalized Sampling elicits several responses and a model-verbalized distribution to broaden generative diversity."
+    collaborationExtension:
+      "The Tableau adds stable identities, decision state, dimensional fit, methodological gaps, shift hypotheses, Core Architecture routing, and human/machine twins."
+    rule:
+      "Model-verbalized and planning probabilities remain attributed estimates until an appropriate calibration process supports a stronger status."
+
+sourceHydration:
+  researchAnchor:
+    id: "arxiv:2510.01171"
+    title: "Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity"
+  coreArchitectureReference:
+    id: "ca-artifact-core-architecture-family-index-001"
+    title: "Core Architecture Family Index"
+    role:
+      "Raw canonical route and cognitive-move hydration."
+  planningExemplars:
+    - "na:indeterminate-slot-map-planning-proposal/v0.1"
+    - "na:terminological-registry-planning-proposal/v0.1"
+    - "na:conation-motion-naming-exemplar/v0.1"
+
+invariantRegions:
+  - "Quick Use"
+  - "Sampling Contract"
+  - "Probability of What"
+  - "Scope and Candidate-Set Semantics"
+  - "AI Prompt Capsule"
+  - "Prompt Capsule Markdown views and Related loops"
+  - "Prompt Capsule success criteria, boundary sets, dimension scores, baseline comparison, and formal statistical-fit state"
+  - "Run and Variant Strip"
+  - "Possibility Fan-Out"
+  - "Common-Scale Probability / Interval Plot"
+  - "Dimension Matrix"
+  - "Open Tail and Missing Modes"
+  - "Methodological and Technical Gaps"
+  - "Statistical-Fit Boundary"
+  - "Version Comparison"
+  - "Probability-Shift Hypotheses"
+  - "Decision Record"
+  - "Core Architecture Routing"
+  - "Text / Table Equivalent"
+  - "JSON / JSON-LD Twins"
+  - "Source Note"
+
+controls:
+  - "edit decision and probability outcome"
+  - "select candidate-set semantics"
+  - "edit scope, conditions, exclusions, and success criteria"
+  - "construct, view, copy, and download a complete Prompt Capsule in plain or skill-assisted Markdown"
+  - "inspect condition-bound collaboration loops without changing represented sampling state"
+  - "refresh Prompt Capsule bytes when comparison, probability-role, or formal statistical-fit controls change"
+  - "switch, duplicate, and compare sampling runs"
+  - "add, remove, select, hold, and decline candidates"
+  - "blend checked candidates into a new composed candidate"
+  - "normalize an exclusive distribution"
+  - "edit probability, intervals, confidence, basis, and calibration state"
+  - "add, remove, weight, and score dimensions"
+  - "edit tail mass and missing-mode classes"
+  - "record methodological gaps"
+  - "declare formal statistical fit only when named data and methods exist"
+  - "record probability-shift hypotheses and falsifiers"
+  - "record a decision, dissent, and update triggers"
+  - "route to Core Architectures and adjacent research or stewardship flows"
+  - "import or export JSON"
+  - "require every imported candidate to provide a finite zero-to-ten score for every declared dimension"
+  - "export JSON-LD and copy the AI context projection"
+
+visualContract:
+  preferredForms:
+    - "sorted aligned bars"
+    - "dot and interval plot on a common scale"
+    - "difference bars centered on zero"
+    - "dimension matrix with numeric values"
+    - "ranked tables"
+    - "small-multiple route cards"
+  boundary:
+    - "Probability and comparison use common scales."
+    - "Color remains redundant to labels, values, and position."
+    - "Pie and radar forms remain outside the default serious-comparison contract."
+    - "Every visual has a table or full-text equivalent."
+  viewStateRule:
+    "Sorting, filtering, selecting, and visual order preserve stable run, candidate, dimension, gap, decision, and route identities."
+
+seedScenario:
+  title: "Conation Motion naming architecture"
+  probabilityOf:
+    "Probability that the selected naming arrangement remains semantically adequate, human-legible, AI-legible, and resistant to material drift for 18 months."
+  baseline:
+    "One term must serve canonical, technical, and reader-facing roles."
+  comparisonVariant:
+    "Canonical, technical, display, and authored labels may remain separate."
+  estimateStatus:
+    "Uncalibrated planning judgments, uncalibrated and explicitly non-empirical."
+
+routingContract:
+  registryFile: "core-architecture-routing-registry.v0.1.json"
+  familyCount: 7
+  coreArchitectureCount: 20
+  routeRule:
+    "Route by cognitive move and active gap; S/I/R distributions describe primary cognitive origin rather than fixed identity."
+  recoveryRule:
+    "Recovery Routing and Revision is a full family that also operates as a cross-system routing layer."
+
+accessibility:
+  keyboard:
+    "All actions use native buttons, inputs, selects, tables, details, and focus-visible states."
+  reducedMotion:
+    "Transitions and smooth scrolling are disabled under prefers-reduced-motion."
+  textEquivalent:
+    "Candidates, dimensions, gaps, comparisons, decisions, and routes have structured table equivalents."
+  charts:
+    "SVG plots include titles, descriptions, direct labels, values, common scales, and table twins."
+  targetSize:
+    "Primary interactive controls use comfortable pointer targets."
+  cognitiveAccessibility:
+    "Sections remain named by task, probability concepts remain separated, and diagnostic warnings carry replacement actions."
+
+workingScope:
+  included:
+    - "one probability-outcome composer"
+    - "one open or closed possibility set"
+    - "candidate editing and blending"
+    - "probability, interval, confidence, and calibration separation"
+    - "dimension matrix and weighted fit"
+    - "tail and missing-mode records"
+    - "methodological gaps"
+    - "formal-statistical-fit boundary"
+    - "two-run comparison"
+    - "probability-shift hypotheses"
+    - "decision state"
+    - "seven-family / twenty-card Core Architecture route registry"
+    - "research and stewardship routes"
+    - "table, JSON, JSON-LD, and AI prompt twins"
+  later:
+    - "live model execution"
+    - "multi-model batch sampling"
+    - "empirical calibration dashboard"
+    - "collaborative voting"
+    - "formal sensitivity-analysis engine"
+    - "research-source retrieval"
+    - "receipt and return records from actual target artifacts"
+
+files:
+  html: "narrative-sampling-tableau-chimeric-prototype-v0.1.html"
+  schema: "narrative-sampling-tableau-state.schema.v0.1.json"
+  context: "narrative-sampling-tableau.context.v0.1.jsonld"
+  routingRegistry: "core-architecture-routing-registry.v0.1.json"
+  example: "conation-motion-naming-sampling.example.v0.1.json"
+  addendum: "narrative-sampling-tableau-prototype-addendum-v0.1.md"

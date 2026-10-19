@@ -1,0 +1,1244 @@
+{
+  "id": "prod-projection.asset-inventory.v1",
+  "version": "1",
+  "scope": "primary_and_iframe_selected_images",
+  "families": [
+    {
+      "id": "a3-stacked-cube.visual-derivative",
+      "selector": {
+        "prefix": "a3-stacked-cube-visual-system-bundle-v0.1/assets/"
+      },
+      "semantic_owner": "Evidence-Guided Capability Transfer Model visual-system bundle",
+      "roles": [
+        {
+          "id": "prototype_visual_derivative",
+          "visitor_job": "Offer a portable view of the evidence-guided capability-transfer state model.",
+          "accessibility_text_owner": "The referring carrier and the SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "manifest_declared_derivative",
+        "canonical_source_path": "a3-stacked-cube-visual-system-bundle-v0.1/data/a3-stacked-cube-canonical-v0.1.json",
+        "relationship_owner_path": "a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-manifest-v0.1.json",
+        "profile_standing": "The bundle names these SVGs as static visual derivatives of its canonical model; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted bundle source and manifest, then rebuild the production projection.",
+      "semantic_authority_path": "a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-manifest-v0.1.json"
+    },
+    {
+      "id": "context-canvas.about-portrait",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg"
+        ]
+      },
+      "semantic_owner": "Context Canvas About surface",
+      "roles": [
+        {
+          "id": "visible_author_identity",
+          "visitor_job": "Humanize and contextualize the About surface while the work remains the visual focus.",
+          "accessibility_text_owner": "The About HTML image alternative."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Identify the About surface when a platform presents its link preview.",
+          "accessibility_text_owner": "The About HTML social and structured metadata."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted portrait blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.about-visual-sequence",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/media/"
+      },
+      "semantic_owner": "Context Canvas About visual sequence",
+      "roles": [
+        {
+          "id": "visitor_controlled_visual_sequence",
+          "visitor_job": "Alternate problem-shaping artifacts with working system examples after a visitor requests motion.",
+          "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Regenerate the accepted derivatives from the digest-verified source frames and versioned sequence manifest, then rebuild the production projection. Refresh the repository-rendered frames only after an intentional source-page change.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.legacy-preview",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/form-challenge.png",
+          "context-canvas-project-surface/context-canvas/forms_upfront.png",
+          "context-canvas-project-surface/context-canvas/langwhich_upfront.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas project readings",
+      "roles": [
+        {
+          "id": "interface_preview",
+          "visitor_job": "Show an authored interface example beside its related project reading.",
+          "accessibility_text_owner": "The referring HTML image alternative and surrounding caption."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted preview blob and rebuild the production projection.",
+      "semantic_authority_path": null
+    },
+    {
+      "id": "context-canvas.debrief-media.multilingual-clinical-vocabulary",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/"
+      },
+      "semantic_owner": "Multilingual clinical vocabulary Debrief",
+      "roles": [
+        {
+          "id": "debrief_source_artifact",
+          "visitor_job": "Keep historical research, prototype, and learner-situation evidence readable beside the contemporary Debrief.",
+          "accessibility_text_owner": "The multilingual clinical vocabulary Debrief image alternative and surrounding caption."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained historical JPG and PNG masters plus the reviewed learner-situation PNG renderings. Full-view and responsive thumbnail names preserve each source relationship; a repository-owned generator is not recorded."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from their retained source masters, compare their visible text and photographs, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.recoverable-enterprise-forms",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/"
+      },
+      "semantic_owner": "Recoverable enterprise forms Debrief",
+      "roles": [
+        {
+          "id": "debrief_visual_evidence",
+          "visitor_job": "Keep the historical form references and contemporary PAN explanation readable beside the form-contract Debrief.",
+          "accessibility_text_owner": "The recoverable enterprise forms Debrief image alternatives, captions, and the PAN SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained form-challenge and payment-step PNG masters. The authored PAN SVG is distinguished by its path-specific override."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from their retained PNG masters, restore the authored PAN SVG, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.spatial-capture",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/spatial-capture/"
+      },
+      "semantic_owner": "Spatial capture collaborative memory Debrief",
+      "roles": [
+        {
+          "id": "debrief_source_artifact",
+          "visitor_job": "Keep the historical discovery field and film-production storyboard readable beside the spatial-capture Debrief.",
+          "accessibility_text_owner": "The spatial-capture Debrief image alternatives and surrounding captions."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
+        "lineage_standing": "The accepted WebP family carries the September 2026 spatial-discovery and production-storyboard deliveries alongside the 2026 IP-free 3D scan used for catalog orientation. The source-only 3D scan is 2160 by 1802 pixels with SHA-256 415675935c936bf69ee822e4e6608dd5d05c780c0c2d4b033782f8a4d1484766; its path-specific records connect it to 480, 960, and 1920 pixel responsive derivatives."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from the retained full-resolution source masters, compare the visible result, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.boolean-building-blocks",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/"
+      },
+      "semantic_owner": "Clinical trial coordination Debrief, AI Systems reading, and Core Architectures Orientation Index",
+      "roles": [
+        {
+          "id": "project_reference_visual",
+          "visitor_job": "Show how clinical-trial rules, cohorts, consent, evidence review, and environment posture operate in a working, IP-free 2026 proxy system, and how current Core Architecture diagrams help teams compare context, strategy, situations, and specifications.",
+          "accessibility_text_owner": "The clinical trial coordination Debrief, AI Systems reading, and Core Architectures Orientation Index image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html",
+        "lineage_standing": "The family combines accepted screenshots of a working, IP-free 2026 proxy system using synthetic data with 2026 Figma Make diagrams derived from kindlight.systems architecture definitions. The accepted originals are clinical-trial-context-tree.webp at SHA-256 56898a1a192e5e029d3f64c551bff8ca9b4ebd97e7f6b7228bdcfc4d70f0ef8d, clinical-trial-situation-model-player-cards.webp at SHA-256 4b60295084fdcda1ae0ee705811a6619dcf1fdee69dc2d0cdd5091d25875b7fa, clinical-trial-specification-suite.webp at SHA-256 8ae40ccc6d93e622c00f9be4515616bd91b348b0c7c50c0bcd0b931f51f98443, and clinical-trial-strategy-canvas.webp at SHA-256 fe16e7d8b3b642929230ebee10f294107e102b4224f56db493b3d8cf138b1918. These diagrams carry current research inputs for review. The -960 and -1920 WebPs are deterministic responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+      },
+      "recovery_condition": "Restore the accepted source visuals, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.choose-your-player",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/choose-your-player/"
+      },
+      "semantic_owner": "Choose Your Player Humatics Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show role posture, site setup, field state, spatial files, and pin-linked conversation in a working, company-neutral, IP-free 2026 proxy system.",
+          "accessibility_text_owner": "The Choose Your Player Humatics Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.queue-secretly-status-machine",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/"
+      },
+      "semantic_owner": "Genomic viewer replatforming Debrief, AI Systems reading, and Core Architectures Orientation Index",
+      "roles": [
+        {
+          "id": "project_reference_visual",
+          "visitor_job": "Show specimen state, authorization, quality gates, connection recovery, and reversible genomic work in working, IP-free 2026 SoT Cartography software, and show how current situation, specification, and strategy diagrams help teams shape the work.",
+          "accessibility_text_owner": "The genomic viewer replatforming Debrief, AI Systems reading, and Core Architectures Orientation Index image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+        "lineage_standing": "The family combines accepted screenshots of working, IP-free 2026 SoT Cartography software using synthetic data with 2026 Figma Make diagrams derived from kindlight.systems architecture definitions. The accepted originals are genomics-situation-model-player-cards.webp at SHA-256 53d948f1bfc26ef002fb61db169fd2f9ec36ace6a9ae1b7faa17dc4c1035cfb1 and genomics-specification-suite-strategy-canvas.webp at SHA-256 55d880f4b54d5a50ee579ed32244260be0dd86f36a7a33477958bcf5b9078dd6. These diagrams carry current research inputs for review. The -960 and -1920 WebPs are deterministic responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography remains planned for a future open-source release."
+      },
+      "recovery_condition": "Restore the accepted source visuals, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.sample-noone-could-find",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/"
+      },
+      "semantic_owner": "LIMS and ELN replatforming Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show laboratory process corridors, source relationships, environment posture, instruction analysis, and failure recovery in working, IP-free 2026 SoT Cartography software.",
+          "accessibility_text_owner": "The LIMS and ELN replatforming Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.who-to-believe",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/who-to-believe/"
+      },
+      "semantic_owner": "Who To Believe Debrief media family; referring HTML owns each asset's specific use",
+      "roles": [
+        {
+          "id": "debrief_visual_comparison",
+          "visitor_job": "Compare the member experience, redesign concepts, and service model that shaped a pharma-adjacent reviews platform.",
+          "accessibility_text_owner": "The Who To Believe reviews-platform Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides."
+      },
+      "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html"
+    },
+    {
+      "id": "context-canvas.document-head-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/favicon-32x32.png",
+          "context-canvas-project-surface/context-canvas/favicon.ico",
+          "context-canvas-project-surface/context-canvas/safari-pinned-tab.svg"
+        ]
+      },
+      "semantic_owner": "Context Canvas document-head metadata",
+      "roles": [
+        {
+          "id": "document_head_icon",
+          "visitor_job": "Identify the visitor surface in browser tabs, bookmarks, and pinned-tab chrome.",
+          "accessibility_text_owner": "The document-head metadata and browser chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted document-head icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.installed-site-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/android-chrome-144x144.png",
+          "context-canvas-project-surface/context-canvas/android-chrome-192x192.png",
+          "context-canvas-project-surface/context-canvas/apple-touch-icon.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas installed-site manifest",
+      "roles": [
+        {
+          "id": "installed_site_icon",
+          "visitor_job": "Identify the visitor surface when a browser presents or installs the site as an application.",
+          "accessibility_text_owner": "The installed-site manifest and platform chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted installed-site icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/manifest.json"
+    },
+    {
+      "id": "context-canvas.windows-tile-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/mstile-150x150.png",
+          "context-canvas-project-surface/context-canvas/mstile-310x150.png",
+          "context-canvas-project-surface/context-canvas/mstile-310x310.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas Windows tile metadata",
+      "roles": [
+        {
+          "id": "windows_tile_icon",
+          "visitor_job": "Identify the visitor surface when Windows presents a pinned site tile.",
+          "accessibility_text_owner": "The browser configuration and platform chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted Windows tile icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/browserconfig.xml"
+    },
+    {
+      "id": "context-canvas.shared-background",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/bgr/"
+      },
+      "semantic_owner": "Context Canvas shared visual fields",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set a route's visual field or carry an informative comparison chosen by the referring surface.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier; an informative SVG also owns its title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted shared visual-field blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/expanded.css"
+    },
+    {
+      "id": "context-canvas.shared-plot",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/plot/"
+      },
+      "semantic_owner": "Context Canvas visual explanations",
+      "roles": [
+        {
+          "id": "shared_visual_explanation",
+          "visitor_job": "Explain one relationship, decision route, or operating pattern beside the surrounding reading.",
+          "accessibility_text_owner": "The referring carrier and the SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted visual-explanation blob and rebuild the production projection.",
+      "semantic_authority_path": null
+    },
+    {
+      "id": "context-canvas.social-sprite",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/img/social_icons.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas shared footer and network links",
+      "roles": [
+        {
+          "id": "network_link_sprite",
+          "visitor_job": "Provide recognizable visual marks for the shared network-link controls.",
+          "accessibility_text_owner": "The referring link labels in the visitor carrier."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted sprite blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/expanded.css"
+    },
+    {
+      "id": "site-reading.viewlet-atlas",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg"
+        ]
+      },
+      "semantic_owner": "AI-legible viewlet atlas reading",
+      "roles": [
+        {
+          "id": "source_atlas",
+          "visitor_job": "Present the complete viewlet atlas as a readable source artifact.",
+          "accessibility_text_owner": "The referring link label and surrounding gallery explanation."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_library_notes.md",
+        "lineage_standing": "The source records a generated atlas shaped by the accepted visual language; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted atlas and its source manifest, then rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_library_notes.md"
+    },
+    {
+      "id": "site-reading.viewlet-library",
+      "selector": {
+        "prefix": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/"
+      },
+      "semantic_owner": "AI-legible viewlet SVG library",
+      "roles": [
+        {
+          "id": "reusable_viewlet",
+          "visitor_job": "Provide one reusable visual unit for inspecting a system relationship or state.",
+          "accessibility_text_owner": "The referring carrier and the viewlet SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+        "lineage_standing": "The manifest records in-session generation from the accepted visual language; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted viewlet and its library manifest, then rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json"
+    }
+  ],
+  "variant_groups": [
+    {
+      "id": "assessment-plan-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted assessment-plan members from the same source coordinate."
+    },
+    {
+      "id": "about-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_about.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_about415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_about770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; filename suffixes do not establish intrinsic size or generation lineage.",
+      "recovery_condition": "Restore all three accepted About-background members from the same source coordinate."
+    },
+    {
+      "id": "case-study-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_casestudy.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_casestudy415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted case-study members from the same source coordinate."
+    },
+    {
+      "id": "forms-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_forms.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_forms415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_forms770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted forms members from the same source coordinate."
+    },
+    {
+      "id": "language-reading-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted language-reading members from the same source coordinate."
+    },
+    {
+      "id": "multilingual-learner-situation-model",
+      "members": [
+        "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+        "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp"
+      ],
+      "profile_standing": "The accepted desktop and mobile renderings present the same reviewed learner situation model for their respective reading widths; a reproducible generator profile is not recorded.",
+      "recovery_condition": "Restore both accepted learner-situation renderings from the reviewed source coordinate and rebuild the production projection."
+    },
+    {
+      "id": "occipital-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted Occipital members from the same source coordinate."
+    },
+    {
+      "id": "occipital-storyboard-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted storyboard members from the same source coordinate."
+    },
+    {
+      "id": "occipital-whiteboarding-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted whiteboarding members from the same source coordinate."
+    },
+    {
+      "id": "sprint-plan-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted sprint-plan members from the same source coordinate."
+    }
+  ],
+  "overrides": [
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-480.webp",
+      "semantic_key": "context-canvas.debrief-media.choose-your-player.catalog-orientation.width-480",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the role-selection interface before a visitor opens the Choose Your Player Debrief.",
+          "accessibility_text_owner": "The Choose Your Player card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-960.webp",
+      "semantic_key": "context-canvas.debrief-media.choose-your-player.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the role-selection interface before a visitor opens the Choose Your Player Debrief.",
+          "accessibility_text_owner": "The Choose Your Player card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.choose-your-player.catalog-orientation.width-1920",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the role-selection interface before a visitor opens the Choose Your Player Debrief.",
+          "accessibility_text_owner": "The Choose Your Player card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/choose-your-player/robotics-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-480.webp",
+      "semantic_key": "context-canvas.debrief-media.sample-noone-could-find.catalog-preview.width-480",
+      "roles": [
+        {
+          "id": "catalog_preview",
+          "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
+          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-preview-width-480-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-960.webp",
+      "semantic_key": "context-canvas.debrief-media.sample-noone-could-find.catalog-preview.width-960",
+      "roles": [
+        {
+          "id": "catalog_preview",
+          "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
+          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-preview-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.sample-noone-could-find.catalog-preview.width-1920",
+      "roles": [
+        {
+          "id": "catalog_preview",
+          "visitor_job": "Preview how biomarker, consent, coverage, variant, and quality rules shape an actionable specimen cohort.",
+          "accessibility_text_owner": "The Sample Nobody Could Find catalog preview."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/clinical-trial-coordination-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-preview-width-1920-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-480.webp",
+      "semantic_key": "context-canvas.debrief-media.spatial-capture.catalog-orientation.width-480",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the spatial-capture work through a 3D scan displayed in its modeling workspace.",
+          "accessibility_text_owner": "The Photographs Were a Proxy card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-960.webp",
+      "semantic_key": "context-canvas.debrief-media.spatial-capture.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the spatial-capture work through a 3D scan displayed in its modeling workspace.",
+          "accessibility_text_owner": "The Photographs Were a Proxy card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.spatial-capture.catalog-orientation.width-1920",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the spatial-capture work through a 3D scan displayed in its modeling workspace.",
+          "accessibility_text_owner": "The Photographs Were a Proxy card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/3d-modeling-scan.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.catalog-orientation.full",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the participant journey, assistance model, guided review sequence, and next-step states before opening the Who To Believe Debrief.",
+          "accessibility_text_owner": "The Who To Believe card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/debriefs.html",
+        "lineage_standing": "The accepted 1728 by 2356 WebP is the curated full-size catalog-orientation image. Its inspected bytes carry no WebP metadata features."
+      },
+      "recovery_condition": "Restore the accepted full-size catalog image, inspect its dimensions and metadata, regenerate the responsive derivative, compare the Debrief catalog card, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the participant journey, assistance model, guided review sequence, and next-step states before opening the Who To Believe Debrief.",
+          "accessibility_text_owner": "The Who To Believe card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Debrief catalog card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.full",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html",
+        "lineage_standing": "The accepted full-size WebP preserves the former static system graph as a soft-color-blocking technical-diagram example."
+      },
+      "recovery_condition": "Restore the accepted full-size graph image, compare its labels and connection states in the Visual Fidelity Atlas, regenerate its responsive derivatives, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-960.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.width-960",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at narrow viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.width-1920",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-1920-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "semantic_key": "context-canvas.debrief-media.recoverable-enterprise-forms.pan-identifier-validation-flow",
+      "roles": [
+        {
+          "id": "pan_identifier_explanation",
+          "visitor_job": "Distinguish text capture, account-range suggestion, Luhn screening, provider tokenization, and issuer authorization.",
+          "accessibility_text_owner": "The SVG title and description plus the recoverable enterprise forms Debrief alternative and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the authored accessible SVG and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg",
+      "semantic_key": "context-canvas.about.author-portrait",
+      "roles": [
+        {
+          "id": "visible_author_identity",
+          "visitor_job": "Humanize and contextualize the About surface while the work remains the visual focus.",
+          "accessibility_text_owner": "The About HTML image alternative."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Identify the About surface when a platform presents its link preview.",
+          "accessibility_text_owner": "The About HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted portrait blob and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg",
+      "semantic_key": "context-canvas.shared-background.case-study-social-preview",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set the case-study reading's visual field.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Represent the case-study reading when a platform presents its link preview.",
+          "accessibility_text_owner": "The referring HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted case-study variant set and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
+      "semantic_key": "context-canvas.shared-background.occipital-social-preview",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set the Occipital reading's visual field.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Represent the Occipital reading when a platform presents its link preview.",
+          "accessibility_text_owner": "The referring HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted Occipital variant set and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "semantic_key": "context-canvas.shared-plot.multilingual-learner-situation-model.desktop",
+      "roles": [
+        {
+          "id": "learner_situation_model",
+          "visitor_job": "Show how learner agency, clinical language, practice, work, and qualified human support meet across one multilingual learning situation.",
+          "accessibility_text_owner": "The multilingual clinical vocabulary Debrief image alternative and surrounding caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+        "lineage_standing": "The Debrief carries this reviewed static rendering from the canonical public-possible Site Reading; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted desktop rendering from its reviewed source coordinate and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
+      "semantic_key": "context-canvas.shared-plot.multilingual-learner-situation-model.mobile",
+      "roles": [
+        {
+          "id": "learner_situation_model",
+          "visitor_job": "Show how learner agency, clinical language, practice, work, and qualified human support meet across one multilingual learning situation.",
+          "accessibility_text_owner": "The multilingual clinical vocabulary Debrief image alternative and surrounding caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+        "lineage_standing": "The Debrief carries this reviewed static rendering from the canonical public-possible Site Reading; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted mobile rendering from its reviewed source coordinate and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/v3b2_columns_pale_coral_viewlets.svg",
+      "semantic_key": "context-canvas.shared-plot.v3b2-columns-pale-coral-viewlets.svg",
+      "roles": [
+        {
+          "id": "decorative_background_pattern",
+          "visitor_job": "Provide a quiet visual field while the referring page carries the complete meaning.",
+          "accessibility_text_owner": "The referring HTML carries the content relationship; the CSS background is decorative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted background-pattern blob and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/lims_eln_capability_transfer_model.svg",
+      "semantic_key": "context-canvas.shared-plot.lims-eln-capability-transfer-model",
+      "roles": [
+        {
+          "id": "capability_transfer_model",
+          "visitor_job": "Show the laboratory capability transfer from observed work through participant correction and vendor selection to completed production authority.",
+          "accessibility_text_owner": "The SVG title and description and the referring LIMS and ELN Debrief image alternative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted LIMS and ELN capability-transfer SVG and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/three_way_market_decision_map.svg",
+      "semantic_key": "context-canvas.shared-plot.three-way-market-decision-map",
+      "roles": [
+        {
+          "id": "comparative_market_decision_map",
+          "visitor_job": "Compare three industry-specific value paths and the distinct evidence each path carries into a shared investment decision.",
+          "accessibility_text_owner": "The SVG title and description and the referring comparative-return Debrief image alternative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted three-way market decision SVG and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
+      "semantic_key": "context-canvas.about.visual-sequence.motion",
+      "roles": [
+        {
+          "id": "visitor_controlled_motion",
+          "visitor_job": "Provide a local, visitor-selected route through eleven alternating problem, solution, and implementation views.",
+          "accessibility_text_owner": "The About HTML video name, caption, visible visual description, and fallback link."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
+        "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+        "profile": "960x540-56-color-per-frame-eleven-view-16.4-second-one-shot-assembly-relay"
+      },
+      "recovery_condition": "Run the named build script from the repository root and review the complete About sequence. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
+      "semantic_key": "context-canvas.about.visual-sequence.still",
+      "roles": [
+        {
+          "id": "still_first_view",
+          "visitor_job": "Open on the finished genomics plate interface and provide the durable local poster for the About visual sequence.",
+          "accessibility_text_owner": "The About HTML video name, caption, and visible visual description."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
+        "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+        "profile": "1280x720-plate-first-frame-progressive-jpeg"
+      },
+      "recovery_condition": "Run the named build script from the repository root and review the About still. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",
+      "semantic_key": "context-canvas.shared-plot.secom-rate-volume-reference",
+      "roles": [
+        {
+          "id": "rate_and_volume_comparison",
+          "visitor_job": "Compare observed failure rates with failed and tested counts across four recorded monthly windows.",
+          "accessibility_text_owner": "The SVG title, description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/secom-labels.data",
+        "generator_path": "tools/build-atlas-reference.mjs",
+        "profile": "secom-calendar-months-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned label records and run node tools/build-atlas-reference.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_public_research.svg",
+      "semantic_key": "context-canvas.shared-plot.public-research-topic-memberships",
+      "roles": [
+        {
+          "id": "editorial_topic_memberships",
+          "visitor_job": "Compare editorial topic memberships within the selected public bibliography while distinguishing source kinds from evidence strength and organizational application.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native topic table and source-record list."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
+        "generator_path": "tools/build-atlas-research-view.mjs",
+        "profile": "public-research-topic-memberships-v1"
+      },
+      "recovery_condition": "Restore the admitted public research extract, run node tools/atlas-research-data.mjs --write and node tools/build-atlas-research-view.mjs, then rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_rate.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-rate",
+      "roles": [
+        {
+          "id": "product_type_frequency",
+          "visitor_job": "Compare published Machine failure labels per 100 records across product types while retaining each denominator.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-rate-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_count.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-count",
+      "roles": [
+        {
+          "id": "product_type_label_count",
+          "visitor_job": "Compare published Machine failure label counts across product types alongside their unequal record counts.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-count-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_reconciliation.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-reconciliation",
+      "roles": [
+        {
+          "id": "label_mode_reconciliation",
+          "visitor_job": "Account for every record across the four exclusive combinations of the published failure label and any mode flag.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-reconciliation-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_conditions.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-conditions",
+      "roles": [
+        {
+          "id": "speed_torque_conditions",
+          "visitor_job": "Compare failure-label rates across fixed speed and torque bins with support counts, unavailable cells, and out-of-range records retained.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-conditions-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    }
+  ]
+}

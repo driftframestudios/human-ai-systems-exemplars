@@ -1,0 +1,33 @@
+{
+  "$schema": "../schema/prompt-capsule-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "prompt-capsule-registry:supportive-change:v0.1",
+  "registry_type": "prompt_capsules",
+  "version": "0.1.0",
+  "purpose": "Connect prompt capsules with the writing and design contexts they describe.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can recover the writing context and material design character through two registered capsules.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "prompt-capsule:essay-context:v0.1",
+      "title": "Evidence-Aware Comparative Essay Context",
+      "capsule_type": "essay_context",
+      "path": "../prompt-capsules/essay-context-capsule.v0.1.md",
+      "schema_ref": "../schema/essay-context-capsule.schema.v0.1.json"
+    },
+    {
+      "id": "prompt-capsule:minimal-editorial-reader:v0.1",
+      "title": "Minimal Editorial Reader Aesthetic",
+      "capsule_type": "aesthetic",
+      "path": "../prompt-capsules/minimal-editorial-reader.aesthetic-capsule.v0.1.md",
+      "schema_ref": "../schema/aesthetic-prompt-capsule.schema.v0.1.json"
+    }
+  ]
+}

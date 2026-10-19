@@ -1,0 +1,375 @@
+/* Context Canvas component: career and regulatory slides ----------------
+   Consumers: career and regulatory fields on the three exemplar routes
+   named in the Context Canvas stylesheet-ownership map.
+   Owns: split accent-and-content geometry, stat cards, content sections,
+   component-width stacking, viewport fallback, entrance motion, and the
+   reduced-motion response.
+   Load order: shared core, expanded.css, this component, then canvas-shell.css.
+   Contract relationship: the source-established split-to-stack composition
+   works within the shared Context Canvas reading measure. Receiving routes
+   retain authority over surrounding prose, identity, rhythm, and extension. */
+
+/* Main slide container */
+.career-slide {
+    --career-card-ink: #17345f;
+    --career-copper-ink: #986532;
+    max-width: 900px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 0;
+    background: var(--canvas-paper);
+    position: relative;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    overflow: hidden;
+}
+
+/* Left panel: accent stripe */
+.career-slide__accent {
+    background: var(--canvas-field);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative geometric element */
+.career-slide__accent::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.08) 10px,
+            rgba(255, 255, 255, 0.08) 20px
+    );
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Left panel: accent stripe */
+.regulatory-slide__accent {
+    background: linear-gradient(180deg, #DC8650 0%, #DC8650 50%, #DC8650 100%);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative geometric element */
+.regulatory-slide__accent::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.08) 10px,
+            rgba(255, 255, 255, 0.08) 20px
+    );
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Self-contained stat cards in left panel */
+.accent-card {
+    position: relative;
+    z-index: 1;
+    padding: 1.25rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.accent-card--primary {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 1.75rem 1.25rem;
+}
+
+.accent-card--secondary {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    color: var(--career-card-ink);
+}
+
+/* Badge in primary card */
+.accent-card__badge {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+/* Years stat container */
+.accent-card__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* Large number styling */
+.accent-card__number {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--career-copper-ink);
+    line-height: 1;
+}
+
+.accent-card__number--small {
+    font-size: 1.5rem;
+    color: inherit;
+    margin-bottom: 0.25rem;
+}
+
+/* Labels */
+.accent-card__label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.accent-card__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 0.25rem;
+}
+
+.accent-card__subtitle {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    opacity: 1;
+    margin-bottom: 0.25rem;
+}
+
+.accent-card__content {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+/* Right panel: main content */
+.career-slide__content {
+    padding: 3rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background:
+            linear-gradient(to bottom, var(--canvas-paper), var(--canvas-paper-soft)),
+            radial-gradient(
+                    circle at 24px 24px,
+                    transparent 24px,
+                    var(--canvas-paper) 24px
+            );
+    background-size: 100% 100%, 48px 48px;
+    background-position: 0 0, 0 -24px;
+    background-repeat: no-repeat, repeat-x;
+    border-top: 3px solid #d4af37;
+    border-left: 1px solid #e0e0e0;
+}
+
+/* Scalloped decoration */
+.career-slide__content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: radial-gradient(circle at 24px -8px, transparent 24px, transparent 24px);
+    background-size: 48px 48px;
+    background-repeat: repeat-x;
+    border-bottom: 2px dashed #e8d5c4;
+    opacity: 0.6;
+}
+
+/* Main heading */
+.career-slide__content h3 {
+    font-size: 2rem;
+    color: #1a1a2e;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-top: 1rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.career-slide__content h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #d4a574, #c9956f);
+    border-radius: 2px;
+}
+
+/* Roles section */
+.career-roles {
+    background: antiquewhite;
+    padding: 1.5rem;
+    /*border: 2px inset #e8d5c4;*/
+    border-radius: 6px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.career-roles h4 {
+    font-size: 0.9rem;
+    color: #1a1a2e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.career-roles ul {
+    display: flex;
+    flex-direction: column;
+    /*gap: 0.75rem;*/
+}
+
+.career-roles li {
+    font-size: 0.9rem;
+    color: #2a2a2a;
+    /*padding-left: 1.5rem;*/
+    position: relative;
+    line-height: 1.25;
+}
+
+/*.career-roles li::before {*/
+/*    content: '→';*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    color: #d4a574;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/* Content sections */
+.career-section {
+    display: flex;
+    flex-direction: column;
+    /*gap: 0.75rem;*/
+}
+
+.career-section h4 {
+    font-size: 0.95rem;
+    color: #1a1a2e;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.career-section p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.career-section--highlighted {
+    background: #f2f2f2;
+    padding: 1.5rem;
+    border-left: 4px solid #d4a574;
+    border-radius: 0 4px 4px 0;
+    margin-top: 0.5rem;
+}
+
+.career-section--highlighted p {
+    color: #444;
+    font-style: italic;
+}
+
+/* Abbreviations */
+.regulatory-slide__accent abbr {
+    text-decoration: underline dotted #2a2a2a;
+    cursor: help;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .career-slide {
+        grid-template-columns: 1fr;
+    }
+
+    .career-slide__accent {
+        padding: 1.5rem;
+        border-bottom: 3px solid #d4a574;
+    }
+
+    .accent-card {
+        padding: 1rem;
+    }
+
+    .career-slide__content {
+        border-top: none;
+        border-left: none;
+        padding: 2rem;
+        gap: 1.5rem;
+    }
+
+    .career-slide__content h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Component-width response for slides embedded in wider canvas layouts. */
+@container canvas-reading (max-width: 42rem) {
+    .career-slide {
+        grid-template-columns: 1fr;
+    }
+
+    .career-slide__accent {
+        border-bottom: 3px solid #d4a574;
+        padding: 1.5rem;
+    }
+
+    .career-slide__content {
+        border-left: 0;
+        border-top: 0;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+}
+
+/* Animation */
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.career-slide {
+    animation: slide-in 0.8s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .career-slide {
+        animation: none;
+    }
+}

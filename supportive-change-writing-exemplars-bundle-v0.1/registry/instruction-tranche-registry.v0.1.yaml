@@ -1,0 +1,68 @@
+{
+  "$schema": "../schema/instruction-tranche-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "instruction-tranche-registry:supportive-change:v0.1",
+  "registry_type": "instruction_tranches",
+  "version": "0.1.0",
+  "purpose": "Connect instruction-engineering tranches with their associated surfaces.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can select precise tone and reasoning goals through stable tranche IDs.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "instruction-tranche:t01:v0.1",
+      "tranche_id": "T01",
+      "title": "Warm, steady register",
+      "path": "../instruction-tranches/T01-warm-steady-register.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t02:v0.1",
+      "tranche_id": "T02",
+      "title": "Adult learning and practical translation",
+      "path": "../instruction-tranches/T02-adult-learning-and-practical-translation.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t03:v0.1",
+      "tranche_id": "T03",
+      "title": "Relational support and practical inclusion",
+      "path": "../instruction-tranches/T03-relational-support-and-practical-inclusion.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t04:v0.1",
+      "tranche_id": "T04",
+      "title": "Evidence-aware change and cognitive psychology",
+      "path": "../instruction-tranches/T04-evidence-aware-change-and-cognitive-psychology.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t05:v0.1",
+      "tranche_id": "T05",
+      "title": "Power, capacity, and structural conditions",
+      "path": "../instruction-tranches/T05-power-capacity-and-structural-conditions.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t06:v0.1",
+      "tranche_id": "T06",
+      "title": "Comparative essay postures",
+      "path": "../instruction-tranches/T06-comparative-essay-postures.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    },
+    {
+      "id": "instruction-tranche:t07:v0.1",
+      "tranche_id": "T07",
+      "title": "Semantic attractor revision",
+      "path": "../instruction-tranches/T07-semantic-attractor-revision.v0.1.md",
+      "schema_ref": "../schema/instruction-tranche.schema.v0.1.json"
+    }
+  ]
+}

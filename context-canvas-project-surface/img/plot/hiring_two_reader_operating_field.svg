@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="htr-title htr-desc">
+  <title id="htr-title">One body of work meets two readers</title>
+  <desc id="htr-desc">An operating field shows four candidate-authored surfaces—hero, resume, body of work, and public surface—feeding one specificity spine. The spine carries named role, scale, tradeoff, outcome, and voice into two distinct local readings. A senior human reads for judgment, shaped problems, tradeoffs, influence, stewardship, and the presence of a person. A parser or talent-agent system extracts standard role titles, named skills, explicit scale, working artifact links, and extractable text. Stated and inferred signals remain distinct, and employment judgment remains with named people. An investment band names the sustained work of the candidate or author, content design, talent operations, engineering, human reviewers, and legal or EEO governance. Specificity improves legibility; fairness, fit, and capability require separate evidence and accountable human judgment.</desc>
+
+  <defs>
+    <pattern id="htr-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" fill="none" stroke="#cfe7f7" stroke-width="1" opacity="0.5"/>
+    </pattern>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .eyebrow { font-size: 13px; font-weight: 850; letter-spacing: 1.7px; }
+      .title { font-size: 42px; font-weight: 830; letter-spacing: -1px; }
+      .lead { font-size: 16px; font-weight: 650; }
+      .section { font-size: 18px; font-weight: 850; }
+      .card-title { font-size: 15px; font-weight: 850; }
+      .card-copy { font-size: 13.5px; font-weight: 620; }
+      .small { font-size: 12px; font-weight: 650; }
+      .micro { font-size: 11px; font-weight: 800; letter-spacing: .72px; }
+      .ink { fill: #17345f; }
+      .body { fill: #304a71; }
+      .muted { fill: #5d6f8b; }
+      .white { fill: #fffdf8; }
+      .cobalt { fill: #2855f3; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1552" height="1072" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1552" height="1072" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1550" height="1070" rx="27" fill="url(#htr-grid)" opacity="0.58"/>
+
+  <g id="htr-question" role="group" aria-labelledby="htr-question-title">
+    <title id="htr-question-title">The two-reader question</title>
+    <path d="M20 48Q20 20 48 20H1544Q1572 20 1572 48V180H20Z" fill="#2855f3"/>
+    <text x="56" y="58" class="sans eyebrow white">HIRING SURFACES · TWO-READER FAMILY</text>
+    <text x="56" y="109" class="sans title white">One body of work meets two readers</text>
+    <text x="56" y="145" class="sans lead" fill="#e7efff">A stable spine supports distinct local readings when role, scale, tradeoff, outcome, and voice stay specific.</text>
+    <rect x="1180" y="48" width="349" height="101" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="1192" y="60" width="8" height="77" rx="4" fill="#f2ff67"/>
+    <text x="1218" y="81" class="mono micro cobalt">BOUNDARY OBJECT</text>
+    <text x="1218" y="105" class="sans card-copy ink">One shared structure.</text>
+    <text x="1218" y="126" class="sans card-copy ink">Different local readings.</text>
+  </g>
+
+  <g id="htr-populations" role="group" aria-labelledby="htr-populations-title">
+    <title id="htr-populations-title">Populations reading and sustaining the surface</title>
+    <g class="sans micro ink">
+      <rect x="54" y="202" width="286" height="42" rx="10" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="197" y="228" text-anchor="middle">CANDIDATE + AUTHOR</text>
+      <rect x="352" y="202" width="286" height="42" rx="10" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <text x="495" y="228" text-anchor="middle">SENIOR HUMAN READER</text>
+      <rect x="650" y="202" width="286" height="42" rx="10" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <text x="793" y="228" text-anchor="middle">PARSER + TALENT AGENT</text>
+      <rect x="948" y="202" width="286" height="42" rx="10" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+      <text x="1091" y="228" text-anchor="middle">RECRUITING OPERATIONS</text>
+      <rect x="1246" y="202" width="286" height="42" rx="10" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+      <text x="1389" y="228" text-anchor="middle">REVIEW + EEO GOVERNANCE</text>
+    </g>
+  </g>
+
+  <g id="htr-authored-surfaces" role="group" aria-labelledby="htr-surfaces-title">
+    <title id="htr-surfaces-title">Candidate-authored surfaces</title>
+    <rect x="62" y="278" width="402" height="514" rx="17" fill="#17345f"/>
+    <rect x="54" y="270" width="402" height="514" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <text x="78" y="303" class="mono eyebrow cobalt">AUTHORED SURFACES</text>
+    <text x="78" y="331" class="sans section ink">The shared spine begins here.</text>
+
+    <g id="htr-hero" role="group" aria-labelledby="htr-hero-title">
+      <title id="htr-hero-title">Hero surface</title>
+      <rect x="78" y="354" width="354" height="86" rx="11" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+      <text x="96" y="379" class="mono micro cobalt">01 · HERO</text>
+      <text x="96" y="404" class="sans card-title ink">Strongest claim · specific voice</text>
+      <text x="96" y="424" class="sans small body">The outcome arrives before the process account.</text>
+    </g>
+    <path d="M432 379H445V370L461 397L445 424V415H432Z" fill="#2855f3" aria-hidden="true"/>
+
+    <g id="htr-resume" role="group" aria-labelledby="htr-resume-title">
+      <title id="htr-resume-title">Resume surface</title>
+      <rect x="78" y="458" width="354" height="86" rx="11" fill="#cfe7f7" stroke="#17345f" stroke-width="1.5"/>
+      <text x="96" y="483" class="mono micro cobalt">02 · RESUME</text>
+      <text x="96" y="508" class="sans card-title ink">Standard title · extractable text</text>
+      <text x="96" y="528" class="sans small body">Scale travels with a number and its denominator.</text>
+    </g>
+    <path d="M432 483H445V474L461 501L445 528V519H432Z" fill="#2855f3" aria-hidden="true"/>
+
+    <g id="htr-body-work" role="group" aria-labelledby="htr-body-work-title">
+      <title id="htr-body-work-title">Body of work surface</title>
+      <rect x="78" y="562" width="354" height="98" rx="11" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+      <text x="96" y="587" class="mono micro cobalt">03 · BODY OF WORK</text>
+      <text x="96" y="612" class="sans card-title ink">Few deep pieces · visible depth boundary</text>
+      <text x="96" y="632" class="sans small body">Shaped problem · bets · tradeoffs · partial outcomes</text>
+      <text x="96" y="649" class="sans small body">Hero → outcome → context → optional deep dive</text>
+    </g>
+    <path d="M432 592H445V583L461 611L445 639V630H432Z" fill="#2855f3" aria-hidden="true"/>
+
+    <g id="htr-public" role="group" aria-labelledby="htr-public-title">
+      <title id="htr-public-title">Public surface</title>
+      <rect x="78" y="678" width="354" height="82" rx="11" fill="#ffd3d0" stroke="#17345f" stroke-width="1.5"/>
+      <text x="96" y="703" class="mono micro cobalt">04 · PUBLIC SURFACE</text>
+      <text x="96" y="728" class="sans card-title ink">Working talks · writing · code · profile URLs</text>
+      <text x="96" y="748" class="sans small body">Retrieval begins with what a system can find.</text>
+    </g>
+    <path d="M432 701H445V692L461 719L445 746V737H432Z" fill="#2855f3" aria-hidden="true"/>
+  </g>
+
+  <g id="htr-specificity-spine" role="group" aria-labelledby="htr-spine-title">
+    <title id="htr-spine-title">Specificity spine</title>
+    <rect x="498" y="278" width="424" height="514" rx="17" fill="#17345f"/>
+    <rect x="490" y="270" width="424" height="514" rx="17" fill="#153fbe" stroke="#17345f" stroke-width="2"/>
+    <text x="514" y="303" class="mono eyebrow" fill="#f2ff67">SHARED SPINE</text>
+    <text x="514" y="334" class="sans section white">Specificity is where the readings agree.</text>
+    <text x="514" y="358" class="sans small" fill="#cfe7f7">Each signal carries its source surface and standing.</text>
+
+    <g class="sans">
+      <rect x="522" y="384" width="360" height="55" rx="27.5" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <text x="548" y="418" class="card-title ink">NAMED ROLE</text>
+      <text x="850" y="418" text-anchor="end" class="mono micro ink">STANDARD TAXONOMY</text>
+
+      <rect x="522" y="455" width="360" height="55" rx="27.5" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <text x="548" y="489" class="card-title ink">NAMED SCALE</text>
+      <text x="850" y="489" text-anchor="end" class="mono micro cobalt">NUMBER + DENOMINATOR</text>
+
+      <rect x="522" y="526" width="360" height="55" rx="27.5" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="548" y="560" class="card-title ink">NAMED TRADEOFF</text>
+      <text x="850" y="560" text-anchor="end" class="mono micro cobalt">BET + CONSTRAINT</text>
+
+      <rect x="522" y="597" width="360" height="55" rx="27.5" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <text x="548" y="631" class="card-title ink">NAMED OUTCOME</text>
+      <text x="850" y="631" text-anchor="end" class="mono micro cobalt">CHANGE + BOUNDARY</text>
+
+      <rect x="522" y="668" width="360" height="55" rx="27.5" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+      <text x="548" y="694" class="card-title ink">ONE PERSON'S VOICE</text>
+      <text x="548" y="713" class="mono micro cobalt">JUDGMENT + STEWARDSHIP</text>
+    </g>
+    <rect x="522" y="739" width="360" height="25" rx="12.5" fill="#17345f" stroke="#f2ff67" stroke-width="1.5"/>
+    <text x="702" y="756" text-anchor="middle" class="mono micro white">STATED · NORMALIZED · INFERRED · UNRESOLVED</text>
+  </g>
+
+  <path d="M930 510H951V494L980 527L951 560V544H930Z" fill="#2855f3" aria-hidden="true"/>
+
+  <g id="htr-reader-lanes" role="group" aria-labelledby="htr-readers-title">
+    <title id="htr-readers-title">Two local readings</title>
+    <rect x="1006" y="278" width="548" height="514" rx="17" fill="#17345f"/>
+    <rect x="998" y="270" width="548" height="514" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+
+    <g id="htr-human-reading" role="group" aria-labelledby="htr-human-title">
+      <title id="htr-human-title">Senior human reading</title>
+      <rect x="1022" y="294" width="500" height="211" rx="13" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="1046" y="322" class="mono eyebrow cobalt">SENIOR HUMAN</text>
+      <text x="1046" y="351" class="sans section ink">Can this person hold the level?</text>
+      <text x="1046" y="381" class="sans card-copy body">Narrative judgment · shaped problem · specific bets</text>
+      <text x="1046" y="404" class="sans card-copy body">Tradeoffs and politics · influence and stewardship</text>
+      <text x="1046" y="427" class="sans card-copy body">Claim strength sized to evidence · a person stays audible</text>
+      <rect x="1046" y="451" width="447" height="33" rx="16.5" fill="#17345f"/>
+      <text x="1270" y="473" text-anchor="middle" class="mono micro white">JUDGMENT RECEIVES CONTEXT, CONSEQUENCE, AND VOICE</text>
+    </g>
+
+    <g id="htr-parser-reading" role="group" aria-labelledby="htr-parser-title">
+      <title id="htr-parser-title">Parser and talent-agent system processing</title>
+      <rect x="1022" y="523" width="500" height="211" rx="13" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <text x="1046" y="551" class="mono eyebrow cobalt">PARSER + TALENT AGENT</text>
+      <text x="1046" y="580" class="sans section ink">Can this profile enter and survive retrieval?</text>
+      <text x="1046" y="610" class="sans card-copy body">Standard role title · named skills · explicit scale</text>
+      <text x="1046" y="633" class="sans card-copy body">Working artifact URLs · extractable text layer</text>
+      <text x="1046" y="656" class="sans card-copy body">Search match · normalized signal · inferred adjacency</text>
+      <rect x="1046" y="680" width="447" height="33" rx="16.5" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="1270" y="702" text-anchor="middle" class="mono micro ink">STATED AND INFERRED SIGNALS KEEP DISTINCT STANDING</text>
+    </g>
+
+    <rect x="1022" y="748" width="500" height="20" rx="10" fill="#fa7065"/>
+    <text x="1272" y="763" text-anchor="middle" class="mono micro ink">EMPLOYMENT JUDGMENT REMAINS WITH NAMED PEOPLE</text>
+  </g>
+
+  <g id="htr-investment" role="group" aria-labelledby="htr-investment-title">
+    <title id="htr-investment-title">Changed work and sustained investment</title>
+    <rect x="62" y="824" width="1492" height="164" rx="17" fill="#17345f"/>
+    <rect x="54" y="816" width="1492" height="164" rx="17" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <text x="76" y="847" class="mono eyebrow ink">CHANGED WORK + INVESTMENT</text>
+    <g class="sans">
+      <rect x="76" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="91" y="885" class="micro cobalt">CANDIDATE + AUTHOR</text>
+      <text x="91" y="908" class="small body"><tspan x="91">Current artifacts, precise claims,</tspan><tspan x="91" dy="17">and one stable spine.</tspan></text>
+
+      <rect x="319" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="334" y="885" class="micro cobalt">CONTENT + PORTFOLIO DESIGN</text>
+      <text x="334" y="908" class="small body"><tspan x="334">Visible depth boundary and</tspan><tspan x="334" dy="17">self-contained, quotable units.</tspan></text>
+
+      <rect x="562" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="577" y="885" class="micro cobalt">TALENT OPERATIONS</text>
+      <text x="577" y="908" class="small body"><tspan x="577">Taxonomy, skills graph, query,</tspan><tspan x="577" dy="17">and rubric stewardship.</tspan></text>
+
+      <rect x="805" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="820" y="885" class="micro cobalt">ENGINEERING + DATA</text>
+      <text x="820" y="908" class="small body"><tspan x="820">Extraction, signal provenance,</tspan><tspan x="820" dy="17">versioning, and correction state.</tspan></text>
+
+      <rect x="1048" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="1063" y="885" class="micro cobalt">HUMAN REVIEWER</text>
+      <text x="1063" y="908" class="small body"><tspan x="1063">Tier judgment, context, and</tspan><tspan x="1063" dy="17">consequential decision.</tspan></text>
+
+      <rect x="1291" y="862" width="231" height="94" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="1306" y="885" class="micro cobalt">LEGAL + EEO GOVERNANCE</text>
+      <text x="1306" y="908" class="small body"><tspan x="1306">Applicability, audit, oversight,</tspan><tspan x="1306" dy="17">and contestable correction.</tspan></text>
+    </g>
+  </g>
+
+  <g id="htr-boundary" role="group" aria-labelledby="htr-boundary-title">
+    <title id="htr-boundary-title">Evidence and authority boundary</title>
+    <rect x="62" y="1010" width="1492" height="58" rx="14" fill="#17345f"/>
+    <rect x="54" y="1002" width="1492" height="58" rx="14" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <rect x="54" y="1002" width="14" height="58" rx="7" fill="#fa7065"/>
+    <text x="88" y="1025" class="mono micro ink">EVIDENCE + AUTHORITY BOUNDARY</text>
+    <text x="88" y="1048" class="sans small body">Specificity improves legibility; fairness, fit, and capability require separate evidence and accountable human judgment.</text>
+    <rect x="1204" y="1016" width="314" height="28" rx="14" fill="#17345f"/>
+    <text x="1361" y="1035" text-anchor="middle" class="mono micro white">TIER DISTINCTIONS REMAIN DISTINCT</text>
+  </g>
+</svg>

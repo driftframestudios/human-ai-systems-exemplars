@@ -1,0 +1,313 @@
+{
+  "$schema": "../schema/contextual-relation-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "contextual-relation-registry:supportive-change:v0.1",
+  "registry_type": "contextual_relations",
+  "version": "0.1.0",
+  "purpose": "Connect essays through meaningful contextual relationships and concise rationales.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can move among essays through explicit conceptual relationships and rationales.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "relation:executive-culture:01:to:cross-functional-collaboration:01",
+      "subject_ref": "essay:executive-culture:culture-as-a-coordination-system:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:cross-functional-collaboration:the-work-between-functions:v0.1",
+      "rationale": "Both essays treat coordination as visible interdependence and shared interpretation."
+    },
+    {
+      "id": "relation:executive-culture:01:to:frontline-teams:01",
+      "subject_ref": "essay:executive-culture:culture-as-a-coordination-system:v0.1",
+      "relation_type": "scales_toward_practice",
+      "object_ref": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "rationale": "Team reliability makes the coordination argument observable near the work."
+    },
+    {
+      "id": "relation:executive-culture:02:to:cross-functional-collaboration:02",
+      "subject_ref": "essay:executive-culture:power-capacity-and-a-fair-settlement:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "rationale": "Both essays connect participation to authority, capacity, and institutional design."
+    },
+    {
+      "id": "relation:executive-culture:02:to:sustainable-well-being:02",
+      "subject_ref": "essay:executive-culture:power-capacity-and-a-fair-settlement:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "rationale": "Recovery design makes the distribution of transformation costs concrete."
+    },
+    {
+      "id": "relation:executive-culture:03:to:customer-community-service:01",
+      "subject_ref": "essay:executive-culture:executive-attention-as-a-form-of-stewardship:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "rationale": "Each essay treats attention as an organizational sensing capacity."
+    },
+    {
+      "id": "relation:executive-culture:03:to:small-business-leadership:03",
+      "subject_ref": "essay:executive-culture:executive-attention-as-a-form-of-stewardship:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:small-business-leadership:stewardship-and-the-next-viable-move:v0.1",
+      "rationale": "Both frame leadership as responsible movement across several timescales."
+    },
+    {
+      "id": "relation:frontline-teams:01:to:customer-community-service:01",
+      "subject_ref": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "rationale": "Both depend on information traveling from the point of experience to consequential action."
+    },
+    {
+      "id": "relation:frontline-teams:01:to:cross-functional-collaboration:03",
+      "subject_ref": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "relation_type": "practice_companion",
+      "object_ref": "essay:cross-functional-collaboration:the-handoff-as-a-place-of-learning:v0.1",
+      "rationale": "The handoff makes socially distributed reliability visible in one recurring practice."
+    },
+    {
+      "id": "relation:frontline-teams:02:to:sustainable-well-being:02",
+      "subject_ref": "essay:frontline-teams:capacity-turns-ingenuity-into-reliable-work:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "rationale": "Both place workload, staffing, and recovery beside personal resourcefulness."
+    },
+    {
+      "id": "relation:frontline-teams:02:to:small-business-leadership:02",
+      "subject_ref": "essay:frontline-teams:capacity-turns-ingenuity-into-reliable-work:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:small-business-leadership:viability-beyond-endurance:v0.1",
+      "rationale": "Each distinguishes adaptive effort from a business model built on continuous sacrifice."
+    },
+    {
+      "id": "relation:frontline-teams:03:to:sustainable-well-being:03",
+      "subject_ref": "essay:frontline-teams:the-pause-that-keeps-a-team-adaptive:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:sustainable-well-being:small-openings-in-a-demanding-day:v0.1",
+      "rationale": "Each finds learning capacity in a bounded pause that restores options to attention."
+    },
+    {
+      "id": "relation:frontline-teams:03:to:personal-work-transitions:01",
+      "subject_ref": "essay:frontline-teams:the-pause-that-keeps-a-team-adaptive:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "rationale": "Both connect pacing and support with renewed participation."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:01:to:executive-culture:01",
+      "subject_ref": "essay:cross-functional-collaboration:the-work-between-functions:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:executive-culture:culture-as-a-coordination-system:v0.1",
+      "rationale": "Both essays frame shared interpretation as part of execution."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:01:to:customer-community-service:01",
+      "subject_ref": "essay:cross-functional-collaboration:the-work-between-functions:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "rationale": "Customer-facing information gains value through coordinated interpretation across functions."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:02:to:executive-culture:02",
+      "subject_ref": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:executive-culture:power-capacity-and-a-fair-settlement:v0.1",
+      "rationale": "Each places decision rights and distributive fairness inside the collaboration problem."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:02:to:personal-work-transitions:02",
+      "subject_ref": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:adjustment-as-a-shared-organizational-capacity:v0.1",
+      "rationale": "Both make adaptation a property of systems and relationships."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:03:to:frontline-teams:01",
+      "subject_ref": "essay:cross-functional-collaboration:the-handoff-as-a-place-of-learning:v0.1",
+      "relation_type": "practice_companion",
+      "object_ref": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "rationale": "The handoff is one recurring site where relational reliability becomes observable."
+    },
+    {
+      "id": "relation:cross-functional-collaboration:03:to:customer-community-service:03",
+      "subject_ref": "essay:cross-functional-collaboration:the-handoff-as-a-place-of-learning:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:customer-community-service:the-quiet-need-at-the-counter:v0.1",
+      "rationale": "Both value subtle cues, reciprocal clarification, and dignified response."
+    },
+    {
+      "id": "relation:sustainable-well-being:01:to:frontline-teams:02",
+      "subject_ref": "essay:sustainable-well-being:well-being-that-can-survive-the-work:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:frontline-teams:capacity-turns-ingenuity-into-reliable-work:v0.1",
+      "rationale": "Both align human capacity with the demands and resources of the work."
+    },
+    {
+      "id": "relation:sustainable-well-being:01:to:personal-work-transitions:01",
+      "subject_ref": "essay:sustainable-well-being:well-being-that-can-survive-the-work:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "rationale": "Each treats well-being as an evolving relationship between a person and a setting."
+    },
+    {
+      "id": "relation:sustainable-well-being:02:to:executive-culture:02",
+      "subject_ref": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:executive-culture:power-capacity-and-a-fair-settlement:v0.1",
+      "rationale": "Both surface who carries the costs of organizational choices."
+    },
+    {
+      "id": "relation:sustainable-well-being:02:to:small-business-leadership:02",
+      "subject_ref": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:small-business-leadership:viability-beyond-endurance:v0.1",
+      "rationale": "Both make recovery part of sustainable operating capacity."
+    },
+    {
+      "id": "relation:sustainable-well-being:03:to:frontline-teams:03",
+      "subject_ref": "essay:sustainable-well-being:small-openings-in-a-demanding-day:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:frontline-teams:the-pause-that-keeps-a-team-adaptive:v0.1",
+      "rationale": "Each uses a bounded pause to support attention, reflection, and learning."
+    },
+    {
+      "id": "relation:sustainable-well-being:03:to:personal-work-transitions:03",
+      "subject_ref": "essay:sustainable-well-being:small-openings-in-a-demanding-day:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:personal-work-transitions:the-provisional-self-at-work:v0.1",
+      "rationale": "Both create room for partial progress and revisable action."
+    },
+    {
+      "id": "relation:customer-community-service:01:to:frontline-teams:01",
+      "subject_ref": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "rationale": "Both turn local observations into shared operational intelligence."
+    },
+    {
+      "id": "relation:customer-community-service:01:to:cross-functional-collaboration:01",
+      "subject_ref": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:cross-functional-collaboration:the-work-between-functions:v0.1",
+      "rationale": "Both depend on information traveling across functional boundaries with context intact."
+    },
+    {
+      "id": "relation:customer-community-service:02:to:cross-functional-collaboration:02",
+      "subject_ref": "essay:customer-community-service:fair-systems-make-courtesy-consequential:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "rationale": "Each links respectful interaction with authority, process, and resources."
+    },
+    {
+      "id": "relation:customer-community-service:02:to:personal-work-transitions:02",
+      "subject_ref": "essay:customer-community-service:fair-systems-make-courtesy-consequential:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:adjustment-as-a-shared-organizational-capacity:v0.1",
+      "rationale": "Both translate care into changes a system can sustain."
+    },
+    {
+      "id": "relation:customer-community-service:03:to:cross-functional-collaboration:03",
+      "subject_ref": "essay:customer-community-service:the-quiet-need-at-the-counter:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:cross-functional-collaboration:the-handoff-as-a-place-of-learning:v0.1",
+      "rationale": "Both attend to subtle information and the dignity of responsive clarification."
+    },
+    {
+      "id": "relation:customer-community-service:03:to:personal-work-transitions:01",
+      "subject_ref": "essay:customer-community-service:the-quiet-need-at-the-counter:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "rationale": "Each shows how dependable support can widen participation during uncertainty."
+    },
+    {
+      "id": "relation:small-business-leadership:01:to:personal-work-transitions:01",
+      "subject_ref": "essay:small-business-leadership:resourcefulness-with-a-full-cost-view-of-scarcity:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "rationale": "Both treat available relationships and resources as part of adaptive capacity."
+    },
+    {
+      "id": "relation:small-business-leadership:01:to:sustainable-well-being:01",
+      "subject_ref": "essay:small-business-leadership:resourcefulness-with-a-full-cost-view-of-scarcity:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:sustainable-well-being:well-being-that-can-survive-the-work:v0.1",
+      "rationale": "Each records the human cost of work design alongside visible output."
+    },
+    {
+      "id": "relation:small-business-leadership:02:to:sustainable-well-being:02",
+      "subject_ref": "essay:small-business-leadership:viability-beyond-endurance:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "rationale": "Both place renewal and recovery inside the operating model."
+    },
+    {
+      "id": "relation:small-business-leadership:02:to:frontline-teams:02",
+      "subject_ref": "essay:small-business-leadership:viability-beyond-endurance:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:frontline-teams:capacity-turns-ingenuity-into-reliable-work:v0.1",
+      "rationale": "Each distinguishes reliable capacity from repeated heroic compensation."
+    },
+    {
+      "id": "relation:small-business-leadership:03:to:executive-culture:03",
+      "subject_ref": "essay:small-business-leadership:stewardship-and-the-next-viable-move:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:executive-culture:executive-attention-as-a-form-of-stewardship:v0.1",
+      "rationale": "Both pair direction with revisability and responsibility across time."
+    },
+    {
+      "id": "relation:small-business-leadership:03:to:personal-work-transitions:03",
+      "subject_ref": "essay:small-business-leadership:stewardship-and-the-next-viable-move:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:personal-work-transitions:the-provisional-self-at-work:v0.1",
+      "rationale": "Both treat the next step as a bounded, informative commitment."
+    },
+    {
+      "id": "relation:personal-work-transitions:01:to:sustainable-well-being:01",
+      "subject_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:sustainable-well-being:well-being-that-can-survive-the-work:v0.1",
+      "rationale": "Both join personal agency with material resources and humane work design."
+    },
+    {
+      "id": "relation:personal-work-transitions:01:to:small-business-leadership:01",
+      "subject_ref": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:small-business-leadership:resourcefulness-with-a-full-cost-view-of-scarcity:v0.1",
+      "rationale": "Each makes support networks and resource conditions visible in adaptation."
+    },
+    {
+      "id": "relation:personal-work-transitions:02:to:cross-functional-collaboration:02",
+      "subject_ref": "essay:personal-work-transitions:adjustment-as-a-shared-organizational-capacity:v0.1",
+      "relation_type": "structural_companion",
+      "object_ref": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "rationale": "Both locate adaptation in roles, authority, resources, and reciprocal communication."
+    },
+    {
+      "id": "relation:personal-work-transitions:02:to:customer-community-service:02",
+      "subject_ref": "essay:personal-work-transitions:adjustment-as-a-shared-organizational-capacity:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:customer-community-service:fair-systems-make-courtesy-consequential:v0.1",
+      "rationale": "Each turns inclusion into observable institutional response."
+    },
+    {
+      "id": "relation:personal-work-transitions:03:to:sustainable-well-being:03",
+      "subject_ref": "essay:personal-work-transitions:the-provisional-self-at-work:v0.1",
+      "relation_type": "human_scale_echo",
+      "object_ref": "essay:sustainable-well-being:small-openings-in-a-demanding-day:v0.1",
+      "rationale": "Both support revisable action through modest, meaningful experiments."
+    },
+    {
+      "id": "relation:personal-work-transitions:03:to:small-business-leadership:03",
+      "subject_ref": "essay:personal-work-transitions:the-provisional-self-at-work:v0.1",
+      "relation_type": "cross_branch_bridge",
+      "object_ref": "essay:small-business-leadership:stewardship-and-the-next-viable-move:v0.1",
+      "rationale": "Each treats a viable move as a source of learning and grounded hope."
+    }
+  ]
+}

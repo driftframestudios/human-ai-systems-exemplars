@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" role="img" aria-labelledby="flow-title flow-desc">
+  <title id="flow-title">The inspection record carries field work into downstream decisions</title>
+  <desc id="flow-desc">Three lanes separated by eight pixels show the technician edge, the platform core, and downstream use. Intake becomes guided capture, human-confirmed optical reads, a durable local inspection record, and a signed sync envelope. The platform validates the envelope, assists a human-owned condition grade, preserves content-hashed media, and publishes an event stream. One accepted record then feeds valuation, listing with media, and arbitration.</desc>
+  <defs>
+    <pattern id="warm-speckle" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="7" r="1.2" fill="#b78946" opacity="0.16"/>
+      <circle cx="25" cy="19" r="1" fill="#b78946" opacity="0.12"/>
+      <circle cx="13" cy="30" r="0.9" fill="#b78946" opacity="0.1"/>
+    </pattern>
+    <pattern id="sea-topography" width="128" height="88" patternUnits="userSpaceOnUse">
+      <path d="M-18 64C18 38 52 38 86 56s62 20 84-7M-22 82C14 56 50 56 82 73s60 18 91-7" fill="none" stroke="#376d70" stroke-width="1.4" opacity="0.13"/>
+    </pattern>
+    <pattern id="cobalt-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#79a2df" stroke-width="1" opacity="0.2"/>
+      <circle cx="1" cy="1" r="1" fill="#215fbb" opacity="0.14"/>
+    </pattern>
+    <clipPath id="edge-clip"><rect x="72" y="188" width="456" height="752" rx="24"/></clipPath>
+    <clipPath id="core-clip"><rect x="536" y="188" width="456" height="752" rx="24"/></clipPath>
+    <clipPath id="downstream-clip"><rect x="1000" y="188" width="528" height="752" rx="24"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#17345e}.muted{fill:#506b8b}.cobalt{fill:#215fbb}.sea{fill:#2f6668}.paper{fill:#fffdf7}
+      .title{font-size:38px;font-weight:820;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:820;letter-spacing:1.55px}.lane-title{font-size:23px;font-weight:820}
+      .card-title{font-size:21px;font-weight:800}.body{font-size:16px;font-weight:560}.small{font-size:14px;font-weight:620}.tiny{font-size:12px;font-weight:760;letter-spacing:.4px}
+      .card{fill:#fffdf7;stroke:#17345e;stroke-width:2}.card-sea{fill:#e6f4f1;stroke:#2f6668;stroke-width:2}.card-sand{fill:#fff0cf;stroke:#17345e;stroke-width:2}
+      .arrow{fill:#215fbb}.arrow-sea{fill:#2f6668}.soft-rule{stroke:#8aaee9;stroke-width:1.5}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" fill="#f4ead8"/>
+  <rect x="30" y="30" width="1540" height="1060" rx="34" fill="#fffdf7" stroke="#17345e" stroke-width="2"/>
+
+  <g class="sans">
+    <text id="diagram-heading" x="72" y="91" class="title ink">The inspection record carries field work into downstream decisions</text>
+    <text x="72" y="126" class="subtitle muted">A stable record identity preserves human judgment, offline durability, media provenance, and downstream use.</text>
+    <g transform="translate(1316 67)" aria-label="Proposed teaching status">
+      <rect width="212" height="58" rx="16" fill="#e6f4f1" stroke="#2f6668" stroke-width="2"/>
+      <text x="106" y="24" text-anchor="middle" class="eyebrow sea">PROPOSED DESIGN</text>
+      <text x="106" y="45" text-anchor="middle" class="tiny muted">TEACHING EXEMPLAR · v0.1</text>
+    </g>
+
+    <g aria-label="Technician edge lane">
+      <rect x="72" y="188" width="456" height="752" rx="24" fill="#fff7e8" stroke="#17345e" stroke-width="2"/>
+      <g clip-path="url(#edge-clip)"><rect x="72" y="188" width="456" height="752" fill="url(#warm-speckle)"/></g>
+      <text x="100" y="225" class="eyebrow cobalt">LANE 01</text>
+      <text x="100" y="258" class="lane-title ink">Technician edge</text>
+
+      <g aria-label="Intake channel">
+        <rect class="card" x="102" y="292" width="396" height="92" rx="16"/>
+        <text x="124" y="323" class="eyebrow cobalt">ARRIVAL</text>
+        <text x="124" y="354" class="card-title ink">Intake channel</text>
+        <text x="124" y="375" class="small muted">Off-lease · repossession · trade-in · consignment</text>
+      </g>
+      <path class="arrow" d="M296 384H304V403H314L300 421L286 403H296Z"/>
+
+      <g aria-label="Guided capture">
+        <rect class="card" x="102" y="421" width="396" height="112" rx="16"/>
+        <text x="124" y="452" class="eyebrow cobalt">CAPTURE</text>
+        <text x="124" y="483" class="card-title ink">Guided inspection</text>
+        <text x="124" y="509" class="body ink">Consistent sections and beauty-shot sequence</text>
+      </g>
+      <path class="arrow" d="M296 533H304V552H314L300 570L286 552H296Z"/>
+
+      <g aria-label="Human confirmed optical reads">
+        <rect class="card-sand" x="102" y="570" width="396" height="118" rx="16"/>
+        <text x="124" y="601" class="eyebrow cobalt">HUMAN CONFIRMATION</text>
+        <text x="124" y="632" class="card-title ink">Optical assist</text>
+        <text x="124" y="659" class="body ink">VIN · odometer · tire codes</text>
+        <text x="124" y="680" class="small muted">Machine reads prefill; the technician commits.</text>
+      </g>
+      <path class="arrow" d="M296 688H304V707H314L300 725L286 707H296Z"/>
+
+      <g aria-label="Durable inspection record and sync envelope">
+        <rect class="card" x="102" y="725" width="396" height="158" rx="16"/>
+        <text x="124" y="756" class="eyebrow cobalt">DURABLE LOCAL STATE</text>
+        <text x="124" y="787" class="card-title ink">Inspection record</text>
+        <text x="124" y="814" class="body ink">Stable client ID · SQLite write-ahead log</text>
+        <line x1="124" y1="832" x2="476" y2="832" class="soft-rule"/>
+        <text x="124" y="857" class="eyebrow cobalt">SIGNED SYNC ENVELOPE</text>
+        <text x="124" y="877" class="small muted">Ordered · resumable · parked for review</text>
+      </g>
+    </g>
+
+    <g aria-label="Platform core lane">
+      <rect x="536" y="188" width="456" height="752" rx="24" fill="#e6f4f1" stroke="#2f6668" stroke-width="2"/>
+      <g clip-path="url(#core-clip)"><rect x="536" y="188" width="456" height="752" fill="url(#sea-topography)"/></g>
+      <text x="566" y="225" class="eyebrow sea">LANE 02</text>
+      <text x="566" y="258" class="lane-title ink">Platform core</text>
+
+      <g aria-label="Ingest and validation">
+        <rect class="card" x="566" y="292" width="396" height="92" rx="16"/>
+        <text x="588" y="323" class="eyebrow sea">INGEST</text>
+        <text x="588" y="354" class="card-title ink">Validate + acknowledge</text>
+        <text x="588" y="375" class="small muted">Identity + server de-duplication converge retries.</text>
+      </g>
+      <path class="arrow-sea" d="M760 384H768V403H778L764 421L750 403H760Z"/>
+
+      <g aria-label="Condition grade rollup">
+        <rect class="card-sand" x="566" y="421" width="396" height="112" rx="16"/>
+        <text x="588" y="452" class="eyebrow sea">ASSISTED ROLLUP</text>
+        <text x="588" y="483" class="card-title ink">Condition grade 0–5</text>
+        <text x="588" y="509" class="body ink">Human-owned result · system-owned trail</text>
+      </g>
+      <path class="arrow-sea" d="M760 533H768V552H778L764 570L750 552H760Z"/>
+
+      <g aria-label="Content hashed canonical media">
+        <rect class="card-sea" x="566" y="570" width="396" height="118" rx="16"/>
+        <text x="588" y="601" class="eyebrow sea">CANONICAL MEDIA</text>
+        <text x="588" y="632" class="card-title ink">Content-hashed objects</text>
+        <text x="588" y="659" class="body ink">De-duplicated storage · signed delivery</text>
+        <text x="588" y="680" class="small muted">Media remains addressed to its inspection record.</text>
+      </g>
+      <path class="arrow-sea" d="M760 688H768V707H778L764 725L750 707H760Z"/>
+
+      <g aria-label="Inspection event stream">
+        <rect x="566" y="725" width="396" height="158" rx="16" fill="#2f6668" stroke="#17345e" stroke-width="2"/>
+        <text x="588" y="756" class="eyebrow paper">ACCEPTED DOMAIN EVENT</text>
+        <text x="588" y="790" class="card-title paper">Inspection published</text>
+        <text x="588" y="820" class="body paper">One accepted record carries grade, media,</text>
+        <text x="588" y="844" class="body paper">timestamps, and traceable corrections.</text>
+        <text x="588" y="870" class="tiny" fill="#cfe8e5">inspection.accepted · stable record ID</text>
+      </g>
+    </g>
+
+    <path class="arrow" aria-label="The sync envelope crosses into platform ingest" d="M498 798H532V303H550V295L570 307L550 319V311H524V806H498Z"/>
+
+    <g aria-label="Downstream decisions lane">
+      <rect x="1000" y="188" width="528" height="752" rx="24" fill="#edf4ff" stroke="#215fbb" stroke-width="2"/>
+      <g clip-path="url(#downstream-clip)"><rect x="1000" y="188" width="528" height="752" fill="url(#cobalt-grid)"/></g>
+      <text x="1030" y="225" class="eyebrow cobalt">LANE 03</text>
+      <text x="1030" y="258" class="lane-title ink">Downstream use</text>
+
+      <g aria-label="Accepted inspection record">
+        <rect x="1030" y="292" width="468" height="92" rx="16" fill="#215fbb" stroke="#17345e" stroke-width="2"/>
+        <text x="1052" y="323" class="eyebrow" fill="#dbe9ff">ONE ACCEPTED RECORD</text>
+        <text x="1052" y="355" class="card-title paper">Stable identity across every consumer</text>
+        <text x="1052" y="376" class="small" fill="#dbe9ff">Grade · media · correction history · event time</text>
+      </g>
+
+      <path class="arrow" d="M1056 384H1064V421H1056Z"/>
+      <rect x="1056" y="421" width="8" height="430" rx="4" fill="#215fbb" aria-hidden="true"/>
+      <text x="1088" y="421" class="eyebrow cobalt">EVENT FAN-OUT</text>
+
+      <path class="arrow" d="M1064 475H1088V467L1108 479L1088 491V483H1064Z"/>
+      <g aria-label="Valuation">
+        <rect class="card" x="1108" y="435" width="360" height="88" rx="16"/>
+        <text x="1130" y="466" class="eyebrow cobalt">VALUE</text>
+        <text x="1130" y="497" class="card-title ink">Valuation</text>
+        <text x="1130" y="516" class="small muted">Condition evidence informs the estimate.</text>
+      </g>
+
+      <path class="arrow" d="M1064 623H1088V615L1108 627L1088 639V631H1064Z"/>
+      <g aria-label="Listing and media">
+        <rect class="card" x="1108" y="583" width="360" height="88" rx="16"/>
+        <text x="1130" y="614" class="eyebrow cobalt">PRESENT</text>
+        <text x="1130" y="645" class="card-title ink">Listing + media</text>
+        <text x="1130" y="664" class="small muted">The selected record and images travel together.</text>
+      </g>
+
+      <path class="arrow" d="M1064 771H1088V763L1108 775L1088 787V779H1064Z"/>
+      <g aria-label="Arbitration window">
+        <rect class="card-sand" x="1108" y="731" width="360" height="88" rx="16"/>
+        <text x="1130" y="762" class="eyebrow cobalt">REVIEW</text>
+        <text x="1130" y="793" class="card-title ink">Arbitration window</text>
+        <text x="1130" y="812" class="small muted">The trail supports a condition dispute.</text>
+      </g>
+
+      <g transform="translate(1030 858)" aria-label="Record reconstruction question">
+        <rect width="468" height="54" rx="14" fill="#fffdf7" stroke="#8aaee9" stroke-width="1.5"/>
+        <text x="18" y="23" class="tiny cobalt">RECONSTRUCTION QUESTION</text>
+        <text x="18" y="44" class="small ink">Can each consumer trace the same accepted inspection?</text>
+      </g>
+    </g>
+
+    <path class="arrow" aria-label="The accepted inspection crosses into downstream use" d="M962 798H996V303H1014V295L1034 307L1014 319V311H988V806H962Z"/>
+
+    <g transform="translate(72 982)" aria-label="Operating contract summary">
+      <rect width="1456" height="82" rx="20" fill="#17345e"/>
+      <text x="22" y="30" class="eyebrow" fill="#dbe9ff">OPERATING CONTRACT</text>
+      <text x="22" y="58" class="body paper">The technician commits the observations and final grade. The platform preserves durable state, ordered transfer, accepted identity, and the audit trail. Downstream systems consume one reconstructable record.</text>
+    </g>
+  </g>
+</svg>

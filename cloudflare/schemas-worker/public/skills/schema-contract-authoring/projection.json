@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/schema-contract-authoring/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "schema-contract-authoring",
+  "description": "Authors or revises repository schema families as bounded, legible contracts with distinct identity, authority, retrieval, examples, semantic context, dependency closure, and proportional material-use checks. Applies when a schema root, versioned contract, JSON-LD context, example family, publication route, or cross-repository schema projection enters scope.",
+  "semanticAuthorityRef": "../source/.agents/skills/schema-contract-authoring/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/20",
+  "contract": {
+    "what": "A portable method for shaping a schema family around the objects collaborators need to understand, exchange, validate, and recover.",
+    "when": [
+      "A repository adds or revises a schema root, family version, semantic context, example set, publication route, or linked projection from another authority."
+    ],
+    "boundaries": [
+      "Meaning, schema, content, instance, and publication authority remain explicit. Existing family schemas retain their local authority. Validation stays proportional to a material use, and publication activation follows the named human decision boundary."
+    ],
+    "result": "A versioned contract whose identity, source, retrieval paths, dependency closure, examples, and intended extension points are easy to find."
+  },
+  "receivingUse": {
+    "job": "A repository adds or revises a schema root, family version, semantic context, example set, publication route, or linked projection from another authority.",
+    "materialResult": "A versioned contract whose identity, source, retrieval paths, dependency closure, examples, and intended extension points are easy to find.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/schema-contract-authoring/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

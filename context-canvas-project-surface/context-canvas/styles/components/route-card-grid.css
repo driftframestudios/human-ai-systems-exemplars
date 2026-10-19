@@ -1,0 +1,55 @@
+/* Context Canvas component: route-card grid ---------------------------------
+   Consumers: index.html and prompt-side-conditions-practice.html.
+   Owns: the shared two-column route collection and its reduced-motion seam.
+   Load order: after core and navigation, before each consuming route bundle.
+   Extension: route owners supply the --about-* treatment tokens. */
+
+.about-route-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-block-start: 2rem;
+}
+
+.about-route-grid a,
+.about-route-grid a:visited {
+    background: var(--about-paper);
+    border: .125rem solid var(--about-cobalt);
+    border-radius: .55rem;
+    box-shadow: .55rem .55rem 0 var(--about-cobalt);
+    color: var(--about-ink);
+    display: grid;
+    gap: .55rem;
+    grid-template-columns: 1.6rem 1fr;
+    padding: 1rem;
+}
+
+.about-route-grid svg {
+    inline-size: 1.4rem;
+}
+
+.about-route-grid strong,
+.about-route-grid span {
+    grid-column: 2;
+}
+
+.about-route-grid span {
+    color: var(--about-muted);
+    font-size: .82rem;
+}
+
+.about-route-grid a:hover {
+    translate: -.2rem -.2rem;
+}
+
+@media screen and (max-width: 48rem) {
+    .about-route-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-route-grid a:hover {
+        translate: 0;
+    }
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artifact Registry",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "registry_id",
+    "registry_type",
+    "version",
+    "purpose",
+    "semantic_attractor_contract",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "registry_id": {
+      "type": "string"
+    },
+    "registry_type": {
+      "const": "rendered_artifacts"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "path",
+          "media_type",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "media_type": {
+            "const": "application/pdf"
+          },
+          "role": {
+            "const": "rendered_reader"
+          }
+        }
+      }
+    }
+  }
+}

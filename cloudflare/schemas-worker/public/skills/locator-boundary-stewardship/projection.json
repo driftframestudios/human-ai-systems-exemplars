@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/locator-boundary-stewardship/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "locator-boundary-stewardship",
+  "description": "Produces locator-safe public collaboration records while exact gated lineage remains recoverable through stable semantic keys and an authorized resolver. Applies when Issues, pull requests, Threadkeeping, handoffs, or public-history preparation cross publication boundaries.",
+  "semanticAuthorityRef": "../source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/15",
+  "contract": {
+    "what": "A publication-boundary projection that keeps collaboration meaning complete in a public record while exact gated coordinates remain recoverable through an authorized resolver.",
+    "when": [
+      "A durable Issue, pull request, review, comment, commit message, Threadkeeping record, handoff, or public-history packet carries locators whose retrieval standing differs from the receiving surface."
+    ],
+    "boundaries": [
+      "Current user intent, source standing, repository evidence, and granted tool authority govern every placement decision. The skill's scope is record placement. Privacy assurance, publication choice, history operations, and permission changes retain their separate owners. Exact gated coordinates stay within their authorized resolver."
+    ],
+    "result": "A locator-safe public record with semantic receivers, stable source keys where needed, complete rationale, an explicit cutoff, and a workable re-entry route."
+  },
+  "receivingUse": {
+    "job": "A durable Issue, pull request, review, comment, commit message, Threadkeeping record, handoff, or public-history packet carries locators whose retrieval standing differs from the receiving surface.",
+    "materialResult": "A locator-safe public record with semantic receivers, stable source keys where needed, complete rationale, an explicit cutoff, and a workable re-entry route.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/locator-boundary-stewardship/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

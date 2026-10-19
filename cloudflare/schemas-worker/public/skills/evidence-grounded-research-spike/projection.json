@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/evidence-grounded-research-spike/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "evidence-grounded-research-spike",
+  "description": "Converts current expert writing, official documentation, standards, and practiced experience into a bounded repository decision. Applies when contemporary evidence should change a plan, instruction, architecture boundary, or collaboration method.",
+  "semanticAuthorityRef": "../source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/13",
+  "contract": {
+    "what": "A decision-oriented synthesis with direct evidence routes, claim classes, transfer limits, and instruction delta.",
+    "when": [
+      "A technical or collaboration decision depends on contemporary external evidence."
+    ],
+    "boundaries": [
+      "Primary and official sources ground factual technical claims. External workspaces supply research input while the repository retains durable operating guidance."
+    ],
+    "result": "Supported or bounded decision, remaining uncertainty, and a clear receiving surface."
+  },
+  "receivingUse": {
+    "job": "A technical or collaboration decision depends on contemporary external evidence.",
+    "materialResult": "Supported or bounded decision, remaining uncertainty, and a clear receiving surface.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/evidence-grounded-research-spike/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

@@ -1,0 +1,194 @@
+{
+  "$schema": "../schema/issue-route-seed.schema.v0.1.json",
+  "schemaVersion": "0.1",
+  "artifactType": "repository_handoff_issue_route_seed",
+  "key": "source-awaiting-owner-operable-route",
+  "title": "Source-awaiting owner-operable repository route",
+  "currentFrontKey": "source-intake",
+  "materializationPolicy": {
+    "liveIssueAuthorityAfterMaterialization": true,
+    "existingIssuePolicy": "preserve_and_report",
+    "linkResolution": "two_pass"
+  },
+  "labels": [
+    {
+      "key": "source-intake",
+      "name": "area:source-intake",
+      "color": "1D76DB",
+      "description": "Received source, technology facts, and reproducible commands"
+    },
+    {
+      "key": "foundation",
+      "name": "area:foundation",
+      "color": "0E8A16",
+      "description": "Repository orientation, collaboration routes, and handoff readiness"
+    },
+    {
+      "key": "source-authority",
+      "name": "source authority",
+      "color": "0075CA",
+      "description": "Source ownership, meaning authority, provenance, and recovery"
+    },
+    {
+      "key": "owner-review",
+      "name": "owner review",
+      "color": "FBCA04",
+      "description": "A named human decision or account action remains active"
+    }
+  ],
+  "milestones": [
+    {
+      "key": "source-intake",
+      "title": "1 — Receive and understand the site",
+      "description": "Receive the actual source, establish its authority and technology facts, and identify reproducible commands."
+    },
+    {
+      "key": "owner-operable-foundation",
+      "title": "2 — Prepare the owner-operable foundation",
+      "description": "Reconcile repository guidance, references, resting concepts, re-entry, and the next owner action with observed source."
+    }
+  ],
+  "relationTypes": [
+    {
+      "key": "prepares",
+      "inverseType": "receives",
+      "description": "The first Issue establishes evidence or repository state the second Issue can use."
+    },
+    {
+      "key": "receives",
+      "inverseType": "prepares",
+      "description": "The Issue uses evidence or repository state established by its paired preparing relation."
+    }
+  ],
+  "issues": [
+    {
+      "key": "source-intake",
+      "title": "Receive and characterize the actual site source",
+      "bodySource": "issue-route/bodies/source-intake.md",
+      "bodySha256": "8421b966595965e868216826ac6a101f9559ed4c899d84908b72133285433557",
+      "labels": [
+        "source-intake",
+        "source-authority",
+        "owner-review"
+      ],
+      "milestoneKey": "source-intake",
+      "acceptance": [
+        {
+          "key": "source-coordinate-recorded",
+          "statement": "The source origin, observed revision or date, and relationship to maintained source are recorded."
+        },
+        {
+          "key": "technology-facts-recorded",
+          "statement": "Runtime, package manager, lockfile, routes, assets, styles, fonts, manifests, and external-service boundaries are recorded from source."
+        },
+        {
+          "key": "reproducible-command-observed",
+          "statement": "A clean preview or build command succeeds, or the exact missing capability and its receiver are named."
+        },
+        {
+          "key": "collisions-preserved",
+          "statement": "Foundation collisions preserve both inputs and have a reviewed reconciliation route."
+        }
+      ],
+      "authority": [
+        {
+          "key": "source-observation",
+          "owner": "authorized-ai-collaborator",
+          "state": "active",
+          "statement": "The collaborator may inspect accepted source and record bounded technology and behavior observations within the current grant."
+        },
+        {
+          "key": "source-acceptance",
+          "owner": "preparing-owner",
+          "state": "held",
+          "statement": "The preparing owner selects and accepts the source coordinate that becomes maintained repository source."
+        },
+        {
+          "key": "secret-values",
+          "owner": "account-owner",
+          "state": "held",
+          "statement": "Secret values stay in their authorized systems; repository intake records only declared names, observed dependencies, and exact owner actions."
+        }
+      ],
+      "nextReceiver": {
+        "type": "issue",
+        "key": "foundation-reconciliation",
+        "condition": "The source coordinate and technology facts are accepted, and reproducibility or its exact blocker is recorded."
+      }
+    },
+    {
+      "key": "foundation-reconciliation",
+      "title": "Reconcile the owner-operable repository foundation",
+      "bodySource": "issue-route/bodies/foundation-reconciliation.md",
+      "bodySha256": "b505a4ffa747d500afb7ca8ac683dd0b994a5e6e75a135e59be4c37785fb9e89",
+      "labels": [
+        "foundation",
+        "source-authority",
+        "owner-review"
+      ],
+      "milestoneKey": "owner-operable-foundation",
+      "acceptance": [
+        {
+          "key": "orientation-agrees-with-source",
+          "statement": "Root orientation and collaboration guidance agree with current source and the live Issue route."
+        },
+        {
+          "key": "resting-and-reference-routes-owned",
+          "statement": "The Concept Nursery, public and local reference lanes, and threadkeeping route each have a plain owner and receiving use."
+        },
+        {
+          "key": "current-front-visible",
+          "statement": "A cold collaborator can identify the current front, typed relations, acceptance, held decisions, and next receiver from repository-held context."
+        },
+        {
+          "key": "owner-continuation-ready",
+          "statement": "One owner-readable continuation names the recovery coordinate, held decisions, and next owner action."
+        }
+      ],
+      "authority": [
+        {
+          "key": "foundation-reconciliation",
+          "owner": "authorized-ai-collaborator",
+          "state": "active",
+          "statement": "The collaborator may reconcile selected foundation modules and report collisions within the current Issue and task grant."
+        },
+        {
+          "key": "repository-and-publication-decisions",
+          "owner": "receiving-owner",
+          "state": "held",
+          "statement": "Repository identity, rights, visibility, transfer acceptance, publication, domains, and destructive recovery remain receiving-owner decisions."
+        }
+      ],
+      "nextReceiver": {
+        "type": "owner",
+        "key": "receiving-owner",
+        "condition": "The structural check passes, the live Issue route is legible, and the handoff names one exact owner decision or action."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "key": "source-intake-prepares-foundation",
+      "fromIssueKey": "source-intake",
+      "type": "prepares",
+      "toIssueKey": "foundation-reconciliation",
+      "condition": "Accepted source facts can select the fitting foundation reconciliation and checks.",
+      "inverseRelationKey": "foundation-receives-source-intake"
+    },
+    {
+      "key": "foundation-receives-source-intake",
+      "fromIssueKey": "foundation-reconciliation",
+      "type": "receives",
+      "toIssueKey": "source-intake",
+      "condition": "Foundation reconciliation uses the accepted source coordinate, technology facts, and collision record.",
+      "inverseRelationKey": "source-intake-prepares-foundation"
+    }
+  ],
+  "projection": {
+    "authority": "json",
+    "jsonSource": "issue-route/source-awaiting.seed.example.json",
+    "yamlTarget": "issue-route/source-awaiting.seed.example.yaml",
+    "mode": "exact_json_bytes",
+    "derivationNote": "The YAML companion is a byte-for-byte copy of this authoritative JSON document; JSON syntax is valid YAML 1.2."
+  }
+}

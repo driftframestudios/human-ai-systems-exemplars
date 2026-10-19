@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" role="img" aria-labelledby="practice-title practice-desc" focusable="false">
+  <title id="practice-title">Prompt collaboration service loop</title>
+  <desc id="practice-desc">A butterfly-shaped service loop carries four kinds of conditions from an intake field through a compact working prompt capsule to a receiving collaboration. Human collaboration, artifact and packet, model and tool participation, and evidence and authority remain visible as parallel lanes. A lower evidence path returns the receiver's review to the earliest condition that needs revision.</desc>
+  <defs>
+    <pattern id="practice-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path class="grid-line" d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" stroke-opacity=".09"/>
+      <circle class="grid-dot" cx="0" cy="0" r="1.2" fill="#f1b88e" fill-opacity=".24"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",ui-monospace,monospace}
+      .eyebrow{font-size:14px;font-weight:850;letter-spacing:1.9px}
+      .display{font-size:42px;font-weight:850;letter-spacing:-1.1px}
+      .lead{font-size:18px;font-weight:620}
+      .lane-label{font-size:13px;font-weight:900;letter-spacing:1.25px}
+      .wing-kicker{font-size:12px;font-weight:900;letter-spacing:1.1px}
+      .wing-title{font-size:21px;font-weight:850}
+      .wing-copy{font-size:15px;font-weight:620}
+      .capsule-kicker{font-size:13px;font-weight:900;letter-spacing:1.45px}
+      .capsule-title{font-size:30px;font-weight:850;letter-spacing:-.45px}
+      .capsule-copy{font-size:15px;font-weight:620}
+      .move-number{font-size:11px;font-weight:900;letter-spacing:.8px}
+      .move-label{font-size:13px;font-weight:850}
+      .return-title{font-size:19px;font-weight:850}
+      .return-copy{font-size:14px;font-weight:620}
+      .footer{font-size:13px;font-weight:680}
+      .ink{fill:#17345f}
+      .body{fill:#304a71}
+      .white{fill:#fffdf8}
+      .muted{fill:#5d6f8b}
+      .surface{stroke:#17345f;stroke-width:2.5}
+      .wing{stroke:#17345f;stroke-width:2.5;stroke-linejoin:round}
+      .route{fill:#65d8d0;stroke:#17345f;stroke-width:2;stroke-linejoin:round}
+      @media (forced-colors:active){
+        .paper,.lane-ground,.wing,.capsule,.move,.return-card{fill:Canvas;stroke:CanvasText}
+        .header,.return-field,.route,.badge{fill:Highlight;stroke:CanvasText}
+        .shadow{fill:CanvasText}
+        .grid-line{stroke:CanvasText;stroke-opacity:.22}
+        .grid-dot{fill:CanvasText;fill-opacity:.25}
+        text{fill:CanvasText!important}
+        .on-accent{fill:HighlightText!important}
+      }
+    </style>
+  </defs>
+
+  <rect class="paper" width="1600" height="1120" fill="#fffaf2"/>
+  <rect width="1600" height="1120" fill="url(#practice-grid)" aria-hidden="true"/>
+
+  <g id="service-loop-orientation" role="group" aria-labelledby="orientation-title">
+    <title id="orientation-title">Orientation: conditions travel through a prompt and return through review</title>
+    <path class="shadow" d="M60 30H1516L1550 64V190H50V40Z" fill="#17345f" transform="translate(10 10)" aria-hidden="true"/>
+    <path class="header" d="M60 30H1516L1550 64V190H50V40Z" fill="#2855f3" stroke="#17345f" stroke-width="3"/>
+    <path d="M1516 30V64H1550Z" fill="#f2ff67" stroke="#17345f" stroke-width="3" aria-hidden="true"/>
+    <text x="84" y="70" class="mono eyebrow on-accent" fill="#65d8d0">PROMPT-SIDE PRACTICE · COLLABORATION SERVICE LOOP</text>
+    <text x="84" y="120" class="sans display white on-accent">A prompt becomes a loop when conditions can return.</text>
+    <text x="84" y="158" class="sans lead on-accent" fill="#e7efff">Compose the working packet, inspect the landing, then revise the earliest condition that changes the work.</text>
+    <text x="1490" y="159" class="mono eyebrow on-accent" fill="#f2ff67" text-anchor="end">INTAKE → CAPSULE → RECEIVER ↩</text>
+  </g>
+
+  <g id="human-collaboration-lane" role="group" aria-labelledby="human-lane-title">
+    <title id="human-lane-title">Human collaboration lane: name the work and return it to a named receiver</title>
+    <rect class="lane-ground" x="50" y="222" width="1500" height="116" rx="22" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+    <rect x="68" y="244" width="124" height="72" rx="12" fill="#17345f"/>
+    <text x="130" y="272" text-anchor="middle" class="mono lane-label on-accent" fill="#65d8d0"><tspan x="130">HUMAN</tspan><tspan x="130" dy="18">COLLABORATION</tspan></text>
+    <path class="shadow" d="M210 238H522L620 280L522 322H210Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M210 238H522L620 280L522 322H210Z" fill="#cfe7f7"/>
+    <text x="236" y="267" class="mono wing-kicker" fill="#153fbe">INTAKE · NAME THE WORK</text>
+    <text x="236" y="295" class="sans wing-title ink">Task + desired state</text>
+    <text x="236" y="316" class="sans wing-copy body">Name who receives the desired state.</text>
+    <path class="shadow" d="M980 238H1318L1396 280L1318 322H980Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M980 238H1318L1396 280L1318 322H980Z" fill="#d9efea"/>
+    <text x="1022" y="267" class="mono wing-kicker" fill="#153fbe">RECEIVE · REVIEW TOGETHER</text>
+    <text x="1022" y="295" class="sans wing-title ink">Named receiver + return</text>
+    <text x="1022" y="316" class="sans wing-copy body">A named human receiver inspects and revises.</text>
+  </g>
+
+  <g id="artifact-packet-lane" role="group" aria-labelledby="artifact-lane-title">
+    <title id="artifact-lane-title">Artifact and packet lane: label source standing and carry a compact packet</title>
+    <rect class="lane-ground" x="50" y="350" width="1500" height="116" rx="22" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <rect x="68" y="372" width="124" height="72" rx="12" fill="#17345f"/>
+    <text x="130" y="400" text-anchor="middle" class="mono lane-label on-accent" fill="#f2ff67"><tspan x="130">ARTIFACT</tspan><tspan x="130" dy="18">+ PACKET</tspan></text>
+    <path class="shadow" d="M210 366H522L620 408L522 450H210Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M210 366H522L620 408L522 450H210Z" fill="#fff5de"/>
+    <text x="236" y="395" class="mono wing-kicker" fill="#153fbe">INTAKE · LABEL THE SOURCES</text>
+    <text x="236" y="423" class="sans wing-title ink">Standing + useful exposure</text>
+    <text x="236" y="444" class="sans wing-copy body">Carry provenance and the useful minimum.</text>
+    <path class="shadow" d="M980 366H1318L1396 408L1318 450H980Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M980 366H1318L1396 408L1318 450H980Z" fill="#f2ff67"/>
+    <text x="1022" y="395" class="mono wing-kicker" fill="#153fbe">RECEIVE · CARRY THE PACKET</text>
+    <text x="1022" y="423" class="sans wing-title ink">Output shape + source receipt</text>
+    <text x="1022" y="444" class="sans wing-copy body">Preserve what shaped the result.</text>
+  </g>
+
+  <g id="model-tool-participation-lane" role="group" aria-labelledby="participation-lane-title">
+    <title id="participation-lane-title">Model and tool participation lane: state the allowed transformation and keep roles legible</title>
+    <rect class="lane-ground" x="50" y="478" width="1500" height="116" rx="22" fill="#f6f2ff" stroke="#17345f" stroke-width="1.5"/>
+    <rect x="68" y="500" width="124" height="72" rx="12" fill="#17345f"/>
+    <text x="130" y="528" text-anchor="middle" class="mono lane-label on-accent" fill="#ffd3d0"><tspan x="130">MODEL + TOOL</tspan><tspan x="130" dy="18">PARTICIPATION</tspan></text>
+    <path class="shadow" d="M210 494H522L620 536L522 578H210Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M210 494H522L620 536L522 578H210Z" fill="#ffd3d0"/>
+    <text x="236" y="523" class="mono wing-kicker" fill="#153fbe">INTAKE · SET PARTICIPATION</text>
+    <text x="236" y="551" class="sans wing-title ink">Register + transformation</text>
+    <text x="236" y="572" class="sans wing-copy body">Distinguish analysis, drafting, and action.</text>
+    <path class="shadow" d="M980 494H1318L1396 536L1318 578H980Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M980 494H1318L1396 536L1318 578H980Z" fill="#cfe7f7"/>
+    <text x="1022" y="523" class="mono wing-kicker" fill="#153fbe">RECEIVE · KEEP ROLES LEGIBLE</text>
+    <text x="1022" y="551" class="sans wing-title ink">Proposal + authorized action</text>
+    <text x="1022" y="572" class="sans wing-copy body">Suggestions and effects keep distinct standing.</text>
+  </g>
+
+  <g id="evidence-authority-lane" role="group" aria-labelledby="evidence-lane-title">
+    <title id="evidence-lane-title">Evidence and authority lane: anchor consequential references and inspect the landing</title>
+    <rect class="lane-ground" x="50" y="606" width="1500" height="144" rx="22" fill="#fff0ee" stroke="#17345f" stroke-width="1.5"/>
+    <rect x="68" y="632" width="124" height="90" rx="12" fill="#17345f"/>
+    <text x="130" y="666" text-anchor="middle" class="mono lane-label on-accent" fill="#65d8d0"><tspan x="130">EVIDENCE</tspan><tspan x="130" dy="18">+ AUTHORITY</tspan></text>
+    <path class="shadow" d="M210 622H522L620 676L522 730H210Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M210 622H522L620 676L522 730H210Z" fill="#d9efea"/>
+    <text x="236" y="655" class="mono wing-kicker" fill="#153fbe">INTAKE · ANCHOR WHAT MATTERS</text>
+    <text x="236" y="685" class="sans wing-title ink">Reference + bounded purpose</text>
+    <text x="236" y="709" class="sans wing-copy body"><tspan x="236">Name the person, group, and source job;</tspan><tspan x="236" dy="19">carry the boundary that changes the work.</tspan></text>
+    <path class="shadow" d="M980 622H1318L1396 676L1318 730H980Z" fill="#17345f" transform="translate(7 7)" aria-hidden="true"/>
+    <path class="wing" d="M980 622H1318L1396 676L1318 730H980Z" fill="#ffd3d0"/>
+    <text x="1022" y="655" class="mono wing-kicker" fill="#153fbe">RECEIVE · INSPECT THE LANDING</text>
+    <text x="1022" y="685" class="sans wing-title ink">Evidence + uncertainty + fit</text>
+    <text x="1022" y="709" class="sans wing-copy body"><tspan x="1022">Review attribution, boundaries, usefulness,</tspan><tspan x="1022" dy="19">and the route for recovery or revision.</tspan></text>
+  </g>
+
+  <g id="working-prompt-capsule" role="group" aria-labelledby="capsule-title">
+    <title id="capsule-title">The central working prompt capsule keeps nine equal-weight moves together</title>
+    <path class="shadow" d="M642 210H958L986 238V718L958 746H642L614 718V238Z" fill="#17345f" transform="translate(9 9)" aria-hidden="true"/>
+    <path class="capsule" d="M642 210H958L986 238V718L958 746H642L614 718V238Z" fill="#fffdf8" stroke="#17345f" stroke-width="3"/>
+    <path d="M958 210V238H986Z" fill="#65d8d0" stroke="#17345f" stroke-width="3" aria-hidden="true"/>
+    <rect x="642" y="236" width="316" height="32" rx="16" fill="#2855f3"/>
+    <text x="800" y="257" text-anchor="middle" class="mono capsule-kicker white on-accent">WORKING PROMPT CAPSULE</text>
+    <text x="800" y="306" text-anchor="middle" class="sans capsule-title ink"><tspan x="800">Conditions</tspan><tspan x="800" dy="34">travel together.</tspan></text>
+    <text x="800" y="371" text-anchor="middle" class="sans capsule-copy body">Equal weight · one inspectable packet</text>
+
+    <g aria-hidden="true">
+      <rect class="move" x="642" y="397" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="752" y="397" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="862" y="397" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="642" y="472" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="752" y="472" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="862" y="472" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="642" y="547" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="752" y="547" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+      <rect class="move" x="862" y="547" width="96" height="62" rx="11" fill="#e7efff" stroke="#17345f" stroke-width="1.5"/>
+    </g>
+    <g class="mono ink" text-anchor="middle">
+      <text x="690" y="419" class="move-number">01</text><text x="690" y="443" class="move-label">TASK</text>
+      <text x="800" y="419" class="move-number">02</text><text x="800" y="443" class="move-label">SOURCE</text>
+      <text x="910" y="419" class="move-number">03</text><text x="910" y="443" class="move-label">EXPOSURE</text>
+      <text x="690" y="494" class="move-number">04</text><text x="690" y="518" class="move-label">REFERENCE</text>
+      <text x="800" y="494" class="move-number">05</text><text x="800" y="518" class="move-label">QUOTE</text>
+      <text x="910" y="494" class="move-number">06</text><text x="910" y="518" class="move-label">ACTION</text>
+      <text x="690" y="569" class="move-number">07</text><text x="690" y="593" class="move-label">PURPOSE</text>
+      <text x="800" y="569" class="move-number">08</text><text x="800" y="593" class="move-label">LAYERS</text>
+      <text x="910" y="569" class="move-number">09</text><text x="910" y="593" class="move-label">RECEIVER</text>
+    </g>
+    <rect x="649" y="631" width="302" height="62" rx="14" fill="#17345f"/>
+    <text x="800" y="657" text-anchor="middle" class="mono wing-kicker on-accent" fill="#f2ff67">SOURCE → TASK → ARTIFACT → RETURN</text>
+    <text x="800" y="680" text-anchor="middle" class="sans capsule-copy on-accent" fill="#e7efff">Recoverable · revisable · receiver-bound</text>
+    <path class="route" d="M785 746H815V778H835L800 808L765 778H785Z" aria-hidden="true"/>
+  </g>
+
+  <g id="evidence-revision-return-path" role="group" aria-labelledby="return-path-title">
+    <title id="return-path-title">Evidence and revision return path: the receiver reviews, carries evidence, and revises upstream</title>
+    <path class="shadow" d="M50 812H1518L1550 844V1038H50Z" fill="#17345f" transform="translate(9 9)" aria-hidden="true"/>
+    <path class="return-field" d="M50 812H1518L1550 844V1038H50Z" fill="#17345f" stroke="#17345f" stroke-width="3"/>
+    <path d="M1518 812V844H1550Z" fill="#f2ff67" stroke="#17345f" stroke-width="3" aria-hidden="true"/>
+    <text x="82" y="850" class="mono eyebrow on-accent" fill="#65d8d0">EVIDENCE + REVISION RETURN PATH · READ FROM THE RECEIVER BACK TO INTAKE</text>
+
+    <rect class="return-card" x="92" y="872" width="396" height="92" rx="15" fill="#d9efea" stroke="#fffdf8" stroke-width="2"/>
+    <text x="116" y="903" class="mono wing-kicker ink">REVISE UPSTREAM</text>
+    <text x="116" y="931" class="sans return-title ink">Change the earliest live condition.</text>
+    <text x="116" y="952" class="sans return-copy body">The next packet preserves the reason for the change.</text>
+
+    <rect class="return-card" x="602" y="872" width="396" height="92" rx="15" fill="#fff5de" stroke="#fffdf8" stroke-width="2"/>
+    <text x="626" y="903" class="mono wing-kicker ink">CARRY EVIDENCE</text>
+    <text x="626" y="931" class="sans return-title ink">Record the observed landing.</text>
+    <text x="626" y="952" class="sans return-copy body">Source standing, uncertainty, and outcome remain visible.</text>
+
+    <rect class="return-card" x="1112" y="872" width="396" height="92" rx="15" fill="#ffd3d0" stroke="#fffdf8" stroke-width="2"/>
+    <text x="1136" y="903" class="mono wing-kicker ink">RECEIVER REVIEWS</text>
+    <text x="1136" y="931" class="sans return-title ink">Inspect fit, boundaries, and use.</text>
+    <text x="1136" y="952" class="sans return-copy body">Named authority selects the next responsible move.</text>
+
+    <path class="route" d="M1382 980H1408C1408 1010 1375 1021 1320 1021H308V1034L250 1005L308 976V989H1320C1354 989 1382 988 1382 980Z" aria-hidden="true"/>
+    <text x="800" y="1015" text-anchor="middle" class="mono wing-kicker ink on-accent">OBSERVED LANDING → EVIDENCE RECEIPT → EARLIEST LIVE CONDITION</text>
+  </g>
+
+  <text x="50" y="1087" class="mono footer muted">Structured text below the figure carries the full nine-move method. This map keeps the collaboration system visible at a glance.</text>
+</svg>

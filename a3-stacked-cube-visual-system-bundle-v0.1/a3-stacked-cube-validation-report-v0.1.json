@@ -1,0 +1,102 @@
+{
+  "report_version": "0.1.0",
+  "artifact_family": "A3-CUBE-VISUAL-SYSTEM",
+  "validated_on": "2026-09-30",
+  "overall_status": "passed",
+  "subject": {
+    "prototype": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+    "canonical_example": "data/a3-stacked-cube-canonical-v0.1.json",
+    "state_schema": "schema/a3-stacked-cube-state-schema-v0.1.json",
+    "jsonld_context": "schema/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+    "static_derivatives": [
+      "assets/a3-stacked-cube-triptych-v0.1.svg",
+      "assets/a3-stacked-cube-four-state-v0.1.svg"
+    ]
+  },
+  "model_counts": {
+    "storyboard_frames": 4,
+    "authority_states": 7,
+    "gates": 1,
+    "capability_cubes": 17,
+    "human_workflows": 13,
+    "typed_connectors": 5,
+    "views": 1
+  },
+  "checks": [
+    {
+      "id": "JSON-SYNTAX",
+      "status": "passed",
+      "detail": "Canonical example, Draft 2020-12 schema, and JSON-LD context parse as JSON."
+    },
+    {
+      "id": "SCHEMA-INSTANCE",
+      "status": "passed",
+      "detail": "The canonical example validates against every Draft 2020-12 keyword used by the state schema, including references, composition, object closure, required fields, constants, enums, patterns, formats, ordered prefix items, item closure, uniqueness, and cardinality."
+    },
+    {
+      "id": "FRAME-ORDER",
+      "status": "passed",
+      "detail": "Storyboard frames are ordered F0, F1, F2, and F3."
+    },
+    {
+      "id": "STABLE-ID-UNIQUENESS",
+      "status": "passed",
+      "detail": "Capability, human-workflow, and gate identifiers are unique across the canonical model."
+    },
+    {
+      "id": "EMBEDDED-MODEL-PARITY",
+      "status": "passed",
+      "detail": "The prototype's embedded MODEL value is structurally identical to the packaged canonical JSON."
+    },
+    {
+      "id": "OFFLINE-RUNTIME",
+      "status": "passed",
+      "detail": "The primary HTML contains no external script or stylesheet reference; its interface, styles, model, and behavior are inline."
+    },
+    {
+      "id": "SVG-XML",
+      "status": "passed",
+      "detail": "Both static SVG derivatives parse as XML."
+    },
+    {
+      "id": "SVG-GEOMETRY",
+      "status": "passed",
+      "detail": "Both generated SVG derivatives preserve their public viewBoxes, keep text inside those coordinate spaces, and express every directional route as one closed body-and-head path without a detached marker."
+    },
+    {
+      "id": "ACCESSIBLE-NAMES",
+      "status": "passed",
+      "detail": "Both static SVGs include title and description elements; the interactive SVG uses an aria-labelledby title/description pair."
+    },
+    {
+      "id": "STATIC-SEMANTICS",
+      "status": "passed",
+      "detail": "Both static SVGs expose named phase groups without inactive button or tab-stop semantics; F3 renders one transferred capability and a distinct fallback-route block rather than a duplicate authority cube."
+    },
+    {
+      "id": "HUMAN-WORK-PROGRESSION",
+      "status": "passed",
+      "detail": "Interactive and static views distinguish workflow discovery, design review and sprint-closure presentations, training during validation and procedure drafting, and procedure-supported use after launch."
+    },
+    {
+      "id": "MOTION-PREFERENCE",
+      "status": "passed",
+      "detail": "The standalone prototype includes a prefers-reduced-motion treatment."
+    },
+    {
+      "id": "BROWSER-SMOKE",
+      "status": "passed",
+      "detail": "Headless Chrome initialized the generator API and exercised F0–F3 at 1440, 736, 390, and 320 CSS pixels with no console errors, page errors, or remote runtime requests."
+    },
+    {
+      "id": "RESPONSIVE-OVERFLOW",
+      "status": "passed",
+      "detail": "Document scroll width matched client width at 1440, 736, 390, and 320 CSS pixels."
+    }
+  ],
+  "limitations": [
+    "This receipt does not replace assistive-technology testing in representative browser and screen-reader combinations.",
+    "Cross-file referential integrity is checked procedurally because JSON Schema cannot express every registry reference constraint.",
+    "Pixel-level visual regression screenshots and representative screen-reader sessions are outside this package-level validation receipt."
+  ]
+}

@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Evidence-Guided Capability Transfer Model</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #062c56;
+      --foreground: #eef7ff;
+      --card: #0b3a67;
+      --border: #7aa6c9;
+      --muted: #184f7a;
+      --muted-foreground: #b7d2e8;
+      --ring: #9adce4;
+      --viz-series-1: #5aa6e6;
+      --viz-series-2: #65ccda;
+      --viz-series-3: #9adce4;
+      --viz-series-4: #6f8da8;
+      --font-size-base: 16px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: var(--font-size-base);
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 20rem;
+      background:
+        linear-gradient(rgb(122 166 201 / 8%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(122 166 201 / 8%) 1px, transparent 1px),
+        var(--background);
+      background-size: 24px 24px;
+      color: var(--foreground);
+      line-height: 1.5;
+    }
+
+    .prototype-shell {
+      width: min(100% - 2rem, 92rem);
+      margin-inline: auto;
+      padding-block: clamp(1.5rem, 4vw, 4rem);
+    }
+
+    .prototype-header {
+      max-width: 76ch;
+      margin-block-end: clamp(1.5rem, 3vw, 2.75rem);
+    }
+
+    .prototype-kicker {
+      margin: 0 0 0.55rem;
+      color: var(--viz-series-3);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 24ch;
+      font-size: clamp(2rem, 5vw, 4.25rem);
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    .prototype-deck {
+      max-width: 64ch;
+      margin: 1rem 0 0;
+      color: var(--muted-foreground);
+      font-size: clamp(1rem, 1.4vw, 1.2rem);
+    }
+
+    .viz-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 0.35rem;
+      padding: 0.58rem 0.78rem;
+      background: var(--card);
+      color: var(--foreground);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .btn:hover { border-color: var(--viz-series-3); }
+    .btn-primary { background: #2f78b7; border-color: #9adce4; }
+    .btn-ghost { background: transparent; }
+    .btn:focus-visible,
+    summary:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+
+    .viz-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.22rem 0.58rem;
+      background: var(--card);
+      color: var(--foreground);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--card);
+      box-shadow: 0 1rem 2.5rem rgb(0 12 28 / 22%);
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .table th,
+    .table td {
+      border-block-end: 1px solid rgb(122 166 201 / 45%);
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .table th {
+      color: var(--viz-series-3);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .table-sm { font-size: 0.88rem; }
+    button, summary { touch-action: manipulation; }
+
+    @media (max-width: 44rem) {
+      .prototype-shell { width: min(100% - 1rem, 92rem); }
+      .btn { flex: 1 1 12rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+      :root { color-scheme: light; }
+      body { background: #fff; color: #102b44; }
+      .prototype-shell { width: 100%; padding: 0; }
+      .viz-controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+<main class="prototype-shell">
+  <header class="prototype-header">
+    <p class="prototype-kicker">A3 appendix · authority, evidence, and recovery</p>
+    <h1>Evidence-Guided Capability Transfer Model</h1>
+    <p class="prototype-deck">A reversible capability-transfer storyboard showing where authority resides, what evidence supports a routing change, and which legacy, human, or unknown work remains visible.</p>
+  </header>
+
+<div id="a3-stacked-cube-viz">
+  <div class="viz-controls" aria-label="Storyboard controls">
+    <button type="button" class="btn btn-primary" data-frame="F0" aria-pressed="true">1 · Current authority</button>
+    <button type="button" class="btn" data-frame="F1" aria-pressed="false">2 · Boundary identified</button>
+    <button type="button" class="btn" data-frame="F2" aria-pressed="false">3 · Shadow / dual-run</button>
+    <button type="button" class="btn" data-frame="F3" aria-pressed="false">4 · Validated authority</button>
+    <button type="button" class="btn btn-ghost" id="a3-play">Play sequence</button>
+  </div>
+
+  <div class="a3-frame-note" aria-live="polite">
+    <span class="viz-badge" id="a3-frame-label">Current authority</span>
+    <span id="a3-frame-annotation"></span>
+  </div>
+
+  <div class="a3-diagram">
+    <svg id="a3-cube-diagram" class="a3-svg" role="img" aria-labelledby="a3-svg-title a3-svg-desc"></svg>
+  </div>
+
+  <div class="a3-legend" aria-label="Authority state legend">
+    <span><i class="a3-swatch legacy" aria-hidden="true"></i>Legacy authority</span>
+    <span><i class="a3-swatch seam" aria-hidden="true"></i>Boundary only</span>
+    <span><i class="a3-swatch shadow" aria-hidden="true"></i>Shadow / dual-run</span>
+    <span><i class="a3-swatch new" aria-hidden="true"></i>New authority</span>
+    <span><i class="a3-swatch retained" aria-hidden="true"></i>Retained legacy</span>
+    <span><i class="a3-swatch unknown" aria-hidden="true"></i>UNKNOWN</span>
+  </div>
+
+  <div class="card a3-selection" id="a3-selection" aria-live="polite"></div>
+
+  <details class="a3-details">
+    <summary>Text equivalent, complete registry, and exports</summary>
+    <p id="a3-text-equivalent"></p>
+    <div class="viz-controls">
+      <button type="button" class="btn" id="a3-copy-json">Copy canonical JSON</button>
+      <button type="button" class="btn" id="a3-copy-jsonld">Copy JSON-LD</button>
+      <button type="button" class="btn" id="a3-download-svg">Download current SVG</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Kind</th>
+            <th>Coupling</th>
+            <th>Frame state</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody id="a3-registry-body"></tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<style>
+#a3-stacked-cube-viz {
+  --a3-legacy: color-mix(in srgb, var(--muted) 74%, transparent);
+  --a3-legacy-line: var(--muted-foreground);
+  --a3-seam: color-mix(in srgb, var(--viz-series-2) 12%, transparent);
+  --a3-shadow: color-mix(in srgb, var(--viz-series-2) 30%, transparent);
+  --a3-new: color-mix(in srgb, var(--viz-series-1) 42%, transparent);
+  --a3-retained: color-mix(in srgb, var(--viz-series-4) 24%, var(--card));
+  --a3-human: color-mix(in srgb, var(--viz-series-3) 18%, transparent);
+  color: var(--foreground);
+  width: 100%;
+}
+#a3-stacked-cube-viz .a3-frame-note,
+#a3-stacked-cube-viz .a3-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-block: 0.75rem;
+}
+#a3-stacked-cube-viz .a3-diagram {
+  width: 100%;
+}
+#a3-stacked-cube-viz .a3-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--foreground);
+}
+#a3-stacked-cube-viz .a3-svg text {
+  fill: var(--foreground);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 400;
+}
+#a3-stacked-cube-viz .a3-svg .a3-strong {
+  font-weight: 500;
+}
+#a3-stacked-cube-viz .a3-svg .a3-secondary {
+  fill: var(--muted-foreground);
+}
+#a3-stacked-cube-viz .a3-svg .a3-zone-line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+#a3-stacked-cube-viz .a3-svg .a3-route {
+  fill: currentColor;
+  color: var(--foreground);
+}
+#a3-stacked-cube-viz .a3-svg .a3-route.secondary {
+  color: var(--muted-foreground);
+}
+#a3-stacked-cube-viz .a3-svg .a3-cube {
+  cursor: pointer;
+  outline: none;
+}
+#a3-stacked-cube-viz .a3-svg .a3-cube:focus-visible .a3-front,
+#a3-stacked-cube-viz .a3-svg .a3-cube.is-selected .a3-front {
+  stroke: var(--ring);
+  stroke-width: 4;
+}
+#a3-stacked-cube-viz .a3-svg .a3-front,
+#a3-stacked-cube-viz .a3-svg .a3-top,
+#a3-stacked-cube-viz .a3-svg .a3-side {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+#a3-stacked-cube-viz .a3-svg .state-legacy .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-legacy .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-legacy .a3-side {
+  fill: var(--a3-legacy);
+  stroke: var(--a3-legacy-line);
+}
+#a3-stacked-cube-viz .a3-svg .state-seam .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-seam .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-seam .a3-side {
+  fill: var(--a3-seam);
+  stroke: var(--viz-series-2);
+  stroke-dasharray: 6 5;
+}
+#a3-stacked-cube-viz .a3-svg .state-shadow .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-shadow .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-shadow .a3-side {
+  fill: url(#a3-hatch);
+  stroke: var(--viz-series-2);
+}
+#a3-stacked-cube-viz .a3-svg .state-new .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-new .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-new .a3-side {
+  fill: var(--a3-new);
+  stroke: var(--viz-series-1);
+}
+#a3-stacked-cube-viz .a3-svg .state-retained_legacy .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-retained_legacy .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-retained_legacy .a3-side {
+  fill: var(--a3-retained);
+  stroke: var(--viz-series-4);
+}
+#a3-stacked-cube-viz .a3-svg .state-unknown .a3-front,
+#a3-stacked-cube-viz .a3-svg .state-unknown .a3-top,
+#a3-stacked-cube-viz .a3-svg .state-unknown .a3-side {
+  fill: var(--background);
+  stroke: var(--muted-foreground);
+  stroke-dasharray: 5 5;
+}
+#a3-stacked-cube-viz .a3-svg .a3-gate {
+  fill: var(--a3-seam);
+  stroke: var(--viz-series-2);
+  stroke-width: 2;
+}
+#a3-stacked-cube-viz .a3-svg .a3-human {
+  fill: var(--a3-human);
+  stroke: var(--viz-series-3);
+  stroke-width: 1;
+}
+#a3-stacked-cube-viz .a3-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+#a3-stacked-cube-viz .a3-swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--border);
+}
+#a3-stacked-cube-viz .a3-swatch.legacy { background: var(--a3-legacy); }
+#a3-stacked-cube-viz .a3-swatch.seam { background: var(--a3-seam); border-style: dashed; border-color: var(--viz-series-2); }
+#a3-stacked-cube-viz .a3-swatch.shadow {
+  background: repeating-linear-gradient(135deg, var(--a3-shadow), var(--a3-shadow) 3px, transparent 3px, transparent 6px);
+}
+#a3-stacked-cube-viz .a3-swatch.new { background: var(--a3-new); border-color: var(--viz-series-1); }
+#a3-stacked-cube-viz .a3-swatch.retained { background: var(--a3-retained); border-color: var(--viz-series-4); }
+#a3-stacked-cube-viz .a3-swatch.unknown { background: var(--background); border-style: dashed; }
+#a3-stacked-cube-viz .a3-selection {
+  margin-top: 0.75rem;
+}
+#a3-stacked-cube-viz .a3-selection p {
+  margin: 0;
+}
+#a3-stacked-cube-viz .a3-selection strong {
+  font-weight: 500;
+}
+#a3-stacked-cube-viz .a3-details {
+  margin-top: 0.75rem;
+}
+#a3-stacked-cube-viz .a3-details > summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+@media (prefers-reduced-motion: reduce) {
+  #a3-stacked-cube-viz .a3-svg * {
+    transition: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const MODEL = {"schema_version":"0.1.0","artifact_identity":{"id":"A3-CUBE-MANIFEST","display_name":"Evidence-Guided Capability Transfer Model","subtitle":"Bounded Authority, Evidence, and Recovery Model","version":"0.1.0","family":"Shared Surfaces and Topology / Recovery Routing and Revision","placement":"A3 Appendix / Visual Production Extension","primary_cognitive_move":"show which bounded capability may change authority, under what evidence, while retained and unknown work stays visible","visual_preset":"flat_cobalt_evidence_blueprint_bringhurst_v1.0","source_band":["a3_source_assertion","repository_prototype_grammar","coordinator_adaptation"]},"source_revision":{"source_key":"SRC-A3","a3_page_id":"SRC-A3","a3_page_version":"0.1.0","a3_page_url":"urn:source-key:SRC-A3","repository":"urn:source-key:prototype-exemplars","repository_commit":"e029455bb1ec0d41616f08e52123363cd0876c92","repository_path":"core-architectures-chimeric-prototype-current-pack-v0.1/","verified_on":"2026-07-24"},"semantic_contract":{"cube_means":"a bounded software capability or service dependency; never a team, screen, or human activity merely because it appears in a workflow","position_means":"current execution or decision authority only; position does not encode value, maturity, effort, safety, or priority","migration_means":"a reversible routing and authority change through an explicit boundary, validation gate, and rollback route; it is not a copy animation","coupling_rule":"visible gaps imply verified separability; coupled or unknown items remain banded, linked, or retained","human_work_rule":"curator activities remain a human-workflow ribbon unless a bounded software capability has been separately evidenced","unknown_rule":"UNKNOWN is a durable state that stays visible; it is never rendered as an empty or negative state","historical_anchor":"the operational and assignment layer is the first safe, high-value candidate; scientific and regulatory business logic remains legacy unless evidence clears the gate","color_rule":"color is paired with text, shape, hatch, and line style; color never carries authority state alone"},"storyboard_frames":[{"id":"F0","sequence":0,"label":"Current authority","short_label":"Coupled legacy","annotation":"Most capabilities remain under legacy or human authority. Coupling and unknowns are explicit.","cognitive_move":"locate current authority and uncertainty"},{"id":"F1","sequence":1,"label":"Boundary identified","short_label":"No move yet","annotation":"The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes.","cognitive_move":"distinguish a candidate boundary from a completed transfer"},{"id":"F2","sequence":2,"label":"Shadow / dual-run","short_label":"Selective routing","annotation":"The candidate mirrors or receives bounded traffic while legacy remains authoritative and rollback stays available.","cognitive_move":"show coexistence, evidence collection, and reversibility"},{"id":"F3","sequence":3,"label":"Validated authority","short_label":"Cut over or retain","annotation":"Authority transfers only for the validated capability. Risky, coupled, human, and unknown work remains deliberately visible.","cognitive_move":"show evidence-authorized transfer without implying wholesale retirement"}],"authority_states":[{"id":"legacy","label":"Legacy authority","visual":"solid block"},{"id":"seam","label":"Boundary identified","visual":"outlined block"},{"id":"shadow","label":"Shadow / dual-run","visual":"hatched split block"},{"id":"new","label":"New authority","visual":"solid alternate block"},{"id":"retained_legacy","label":"Retained legacy","visual":"anchored block"},{"id":"human","label":"Human workflow authority","visual":"workflow ribbon"},{"id":"unknown","label":"UNKNOWN / unbounded","visual":"dashed block"}],"gates":[{"id":"GATE-OP-ASSIGN","label":"Operational / assignment authority gate","status":"historically_cleared_for_first_candidate","criteria":["bounded capability and stable semantic identity","known dependencies and system of record","observable parity scenarios","rollback route exercised","audit and permission behavior preserved","human review of residual risk"],"protected_behavior_ids":["permissions-remain-least-privilege","case-assignment-remains-auditable","legacy-fallback-remains-available"],"review_trigger":"reopen when authority, permission semantics, case routing, or audit expectations change"}],"capability_cubes":[{"id":"CAP-OP-ASSIGN","label":"Profiles, permissions & case assignment","short_label":"Operational / assignment","kind":"software_capability","family":"operational_bridge","canonical_order":1,"system_of_record":"legacy viewer before validated cutover","coupling":"bounded_candidate","evidence_status":"historical_source_assertion","migration_state":"first_candidate","gate_id":"GATE-OP-ASSIGN","rollback_route":"return routing and authority to the legacy operational layer","regulatory_risk":"bounded but permission and audit semantics remain material","source_refs":["A3: Which cubes moved"],"frame_states":{"F0":"legacy","F1":"seam","F2":"shadow","F3":"new"}},{"id":"CAP-SEARCH","label":"Standard and advanced search","short_label":"Search","kind":"software_capability","family":"viewer_surface","canonical_order":2,"system_of_record":"legacy viewer","coupling":"potentially_bounded_not_demonstrated_here","evidence_status":"candidate_only","migration_state":"potential_future_seam","gate_id":null,"rollback_route":"retain legacy search","regulatory_risk":"unknown until result parity and access behavior are validated","source_refs":["A3: Storyboard 1","A3: accessible Strangler Fig description"],"frame_states":{"F0":"legacy","F1":"legacy","F2":"legacy","F3":"legacy"}},{"id":"CAP-SPECIMEN","label":"Specimen details and overview","short_label":"Specimen overview","kind":"software_capability","family":"viewer_surface","canonical_order":3,"system_of_record":"legacy viewer","coupling":"unknown","evidence_status":"listed_not_bounded","migration_state":"retained_pending_evidence","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"scientific and workflow context may be material","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-SOP-NOTES","label":"SOPs, notes, and comments","short_label":"SOPs / notes","kind":"software_capability","family":"viewer_surface","canonical_order":4,"system_of_record":"legacy viewer","coupling":"unknown","evidence_status":"listed_not_bounded","migration_state":"retained_pending_evidence","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"procedural and audit context may be material","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-VARIANT","label":"Variant detail views and status rules","short_label":"Variant details","kind":"software_capability","family":"scientific_business_logic","canonical_order":5,"system_of_record":"legacy viewer","coupling":"deeply_coupled","evidence_status":"explicit_risk","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high; diagnostic and under-documented rules","source_refs":["A3: What the Strangler Fig is","A3: Which cubes moved"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-QC","label":"Quality control","short_label":"Quality control","kind":"software_capability","family":"scientific_business_logic","canonical_order":6,"system_of_record":"legacy viewer","coupling":"unknown_or_coupled","evidence_status":"listed_not_bounded","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high until quality behavior is specified and validated","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-BIOMARKER","label":"Biomarkers","short_label":"Biomarkers","kind":"software_capability","family":"scientific_business_logic","canonical_order":7,"system_of_record":"legacy viewer","coupling":"unknown_or_coupled","evidence_status":"listed_not_bounded","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high until scientific behavior is specified and validated","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-NON-HUMAN","label":"Non-human workflows","short_label":"Non-human","kind":"unknown","family":"viewer_surface","canonical_order":8,"system_of_record":"legacy viewer","coupling":"unknown","evidence_status":"unknown","migration_state":"unknown","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"unknown","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"unknown","F1":"unknown","F2":"unknown","F3":"unknown"}},{"id":"CAP-PGX","label":"Pharmacogenomics","short_label":"Pharmacogenomics","kind":"software_capability","family":"scientific_business_logic","canonical_order":9,"system_of_record":"legacy viewer","coupling":"unknown_or_coupled","evidence_status":"listed_not_bounded","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high until scientific behavior is specified and validated","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"CAP-PLUGINS","label":"Plugins and arbitrary code","short_label":"Plugins / arbitrary code","kind":"service_dependency","family":"viewer_surface","canonical_order":10,"system_of_record":"legacy codebase","coupling":"deeply_coupled","evidence_status":"explicit_risk","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high; arbitrary code and hidden coupling","source_refs":["A3: Storyboard 1"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"SVC-IAM","label":"Identity and access management","short_label":"IAM","kind":"service_dependency","family":"service_underpinning","canonical_order":11,"system_of_record":"legacy and surrounding services","coupling":"material_dependency","evidence_status":"listed_dependency","migration_state":"dependency_of_first_candidate","gate_id":"GATE-OP-ASSIGN","rollback_route":"restore legacy authorization path","regulatory_risk":"high if least privilege, logout, or obscuring behavior changes","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"seam","F2":"shadow","F3":"new"}},{"id":"SVC-NOTIFY","label":"Notifications and realtime transport","short_label":"Notifications","kind":"service_dependency","family":"service_underpinning","canonical_order":12,"system_of_record":"legacy and surrounding services","coupling":"unknown","evidence_status":"listed_not_bounded","migration_state":"retained_pending_evidence","gate_id":null,"rollback_route":"retain legacy transport","regulatory_risk":"unknown until delivery and failure semantics are specified","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"SVC-API","label":"API and service layer","short_label":"API / service layer","kind":"service_dependency","family":"service_underpinning","canonical_order":13,"system_of_record":"mixed legacy and surrounding services","coupling":"material_dependency","evidence_status":"listed_dependency","migration_state":"contract_surface","gate_id":"GATE-OP-ASSIGN","rollback_route":"route to legacy endpoints","regulatory_risk":"material if data or authorization contracts change","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"seam","F2":"shadow","F3":"new"}},{"id":"SVC-MVC","label":"MVC factories and visitor patterns","short_label":"MVC factories / visitors","kind":"service_dependency","family":"service_underpinning","canonical_order":14,"system_of_record":"legacy codebase","coupling":"deeply_coupled","evidence_status":"listed_dependency","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"indirect; hidden framework behavior may affect correctness","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"SVC-SPRING","label":"Framework-handled serialization","short_label":"Spring serialization","kind":"service_dependency","family":"service_underpinning","canonical_order":15,"system_of_record":"legacy framework","coupling":"deeply_coupled","evidence_status":"listed_dependency","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"material if serialized data changes","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"SVC-ERROR","label":"Error handling and HTTP responses","short_label":"Error / HTTP behavior","kind":"service_dependency","family":"service_underpinning","canonical_order":16,"system_of_record":"legacy framework and services","coupling":"material_dependency","evidence_status":"listed_dependency","migration_state":"retained_pending_evidence","gate_id":null,"rollback_route":"retain legacy error path","regulatory_risk":"material if failure behavior obscures data or blocks audit","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}},{"id":"SVC-REG","label":"Regulatory-grade logout and data obscuring","short_label":"Regulatory constraints","kind":"service_dependency","family":"regulatory_control","canonical_order":17,"system_of_record":"legacy and security services","coupling":"deeply_coupled","evidence_status":"explicit_control","migration_state":"retained_legacy","gate_id":null,"rollback_route":"remain legacy","regulatory_risk":"high","source_refs":["A3: Storyboard 2"],"frame_states":{"F0":"legacy","F1":"retained_legacy","F2":"retained_legacy","F3":"retained_legacy"}}],"human_workflows":[{"id":"HUM-CAPACITY","label":"Report daily capacity","canonical_order":1,"evidence_status":"listed_human_activity"},{"id":"HUM-QA-LAB","label":"Quality assessments and lab-operations communications","canonical_order":2,"evidence_status":"listed_human_activity"},{"id":"HUM-NCR-CAPA","label":"File NCRs and handle CAPA","canonical_order":3,"evidence_status":"listed_human_activity"},{"id":"HUM-INTERFERENCE","label":"Run interference for business units","canonical_order":4,"evidence_status":"listed_human_activity"},{"id":"HUM-STATUS","label":"Respond to sample and order-status queries","canonical_order":5,"evidence_status":"listed_human_activity"},{"id":"HUM-CDX","label":"Assist validation and companion diagnostics workflows","canonical_order":6,"evidence_status":"listed_human_activity"},{"id":"HUM-BAIT","label":"Assist new bait sets","canonical_order":7,"evidence_status":"listed_human_activity"},{"id":"HUM-RERUN","label":"Re-run and re-queue samples","canonical_order":8,"evidence_status":"listed_human_activity"},{"id":"HUM-TRIALS","label":"Support clinical-trial and biopharma-partner studies","canonical_order":9,"evidence_status":"listed_human_activity"},{"id":"HUM-VARIANT","label":"Variant review and contamination investigations","canonical_order":10,"evidence_status":"listed_human_activity"},{"id":"HUM-ARTIFACT","label":"Sequencing-artifact analysis","canonical_order":11,"evidence_status":"listed_human_activity"},{"id":"HUM-NOVEL","label":"Novel variant and biomarker calling","canonical_order":12,"evidence_status":"listed_human_activity"},{"id":"HUM-TOOLS","label":"Operational tooling, scripts, and SQL","canonical_order":13,"evidence_status":"listed_human_activity"}],"typed_connectors":[{"id":"CON-OP-API","from":"CAP-OP-ASSIGN","to":"SVC-API","type":"depends_on","label":"contract","status":"material"},{"id":"CON-OP-IAM","from":"CAP-OP-ASSIGN","to":"SVC-IAM","type":"depends_on","label":"authorizes","status":"material"},{"id":"CON-SHADOW","from":"legacy","to":"shadow","type":"mirrors","label":"bounded shadow traffic","status":"F2_only"},{"id":"CON-ROUTE","from":"shadow","to":"new","type":"routes","label":"authority after gate","status":"F3_only"},{"id":"CON-ROLLBACK","from":"new","to":"legacy","type":"rolls_back","label":"reversible fallback","status":"always_available"}],"view_state":{"active_view_id":"view-default","views":[{"id":"view-default","name":"First-responsible capability focus","active_frame_id":"F0","cube_order":["CAP-OP-ASSIGN","SVC-IAM","SVC-API","CAP-SEARCH","CAP-SPECIMEN","CAP-VARIANT","CAP-QC","CAP-PLUGINS","CAP-NON-HUMAN"],"hidden_cube_ids":["CAP-SOP-NOTES","CAP-BIOMARKER","CAP-PGX","SVC-NOTIFY","SVC-MVC","SVC-SPRING","SVC-ERROR","SVC-REG"],"selected_cube_id":"CAP-OP-ASSIGN","text_mode":"selected_detail_plus_complete_table"}]},"semantic_locality":{"preferred_phrasing":["candidate boundary","legacy authority","shadow / dual-run","validated authority","retained legacy","human workflow","UNKNOWN / unbounded","evidence gate","rollback route"],"replacement_state_guidance":["replace safe with bounded candidate under named evidence","replace moved with authority routed after validation","replace old versus new with current authority versus validated authority","replace migration complete with one capability transferred while retained work remains visible"]},"recovery_calibration":{"strain_cues":["a gap visually implies separability without evidence","an arrow conflates mirroring, routing, authorization, and authority transfer","human curator activity is rendered as a software cube","legacy disappears before retirement prerequisites are satisfied","UNKNOWN is rendered as empty or negative","a format-specific edit diverges from the canonical registry"],"stabilizing_read":"return to the nearest stable semantic unit and regenerate every derivative from the canonical model","restored_state":"authority, coupling, evidence, human work, and rollback remain inspectable across static, interactive, and motion outputs","recovery_moves":["freeze the last verified baseline","restate the semantic contract","reopen the affected decision","revise the smallest useful field","regenerate derivatives","rerun parity and accessibility checks"],"named_failure_geometries":["parallax_gap","step_function","shear_plane","gridlock"]}};
+  let activeFrame = 'F0';
+  let selectedId = 'CAP-OP-ASSIGN';
+  let playTimer = null;
+  let compactLayout = null;
+
+  const frameById = id => MODEL.storyboard_frames.find(frame => frame.id === id);
+  const cubeById = id => MODEL.capability_cubes.find(cube => cube.id === id);
+  const focusIds = MODEL.view_state.views[0].cube_order;
+  const focusCubes = () => focusIds.map(cubeById).filter(Boolean);
+  const root = document.getElementById('a3-stacked-cube-viz');
+  const svg = document.getElementById('a3-cube-diagram');
+  const label = document.getElementById('a3-frame-label');
+  const annotation = document.getElementById('a3-frame-annotation');
+  const textEquivalent = document.getElementById('a3-text-equivalent');
+  const selection = document.getElementById('a3-selection');
+  const registryBody = document.getElementById('a3-registry-body');
+  const playButton = document.getElementById('a3-play');
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function wrap(text, max = 24, lines = 2) {
+    const words = String(text).split(/\s+/);
+    const result = [];
+    let current = '';
+    for (const word of words) {
+      const next = current ? `${current} ${word}` : word;
+      if (next.length > max && current) {
+        result.push(current);
+        current = word;
+      } else {
+        current = next;
+      }
+    }
+    if (current) result.push(current);
+    const shown = result.slice(0, lines);
+    if (result.length > lines) shown[lines - 1] = `${shown[lines - 1].replace(/.{0,3}$/, '')}…`;
+    return shown;
+  }
+
+  function textLines(x, y, text, max = 24, className = '') {
+    return `<text x="${x}" y="${y}" class="${className}">${
+      wrap(text, max).map((line, index) =>
+        `<tspan x="${x}" dy="${index ? '1.25em' : '0'}">${escapeHtml(line)}</tspan>`
+      ).join('')
+    }</text>`;
+  }
+
+  function defs() {
+    return `<defs>
+      <pattern id="a3-hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+        <rect width="9" height="9" fill="var(--a3-shadow)"></rect>
+        <line x1="0" y1="0" x2="0" y2="9" stroke="var(--viz-series-2)" stroke-width="2"></line>
+      </pattern>
+    </defs>`;
+  }
+
+  function cubeMarkup(cube, state, x, y, width = 230, height = 52, selected = false, interactive = true) {
+    const depth = Math.max(10, Math.round(height * 0.22));
+    const statusLabel = MODEL.authority_states.find(item => item.id === state)?.label || state;
+    const labelText = cube.short_label || cube.label;
+    const semantics = interactive
+      ? `role="button" tabindex="0" aria-label="${escapeHtml(`${labelText}; ${statusLabel}`)}"`
+      : `role="group" aria-label="${escapeHtml(`${labelText}; ${statusLabel}`)}"`;
+    return `<g class="a3-cube state-${escapeHtml(state)}${selected ? ' is-selected' : ''}" data-cube-id="${escapeHtml(cube.id)}"
+      ${semantics}>
+      <title>${escapeHtml(`${cube.label} — ${statusLabel}`)}</title>
+      <polygon class="a3-top" points="${x},${y} ${x + depth},${y - depth} ${x + width + depth},${y - depth} ${x + width},${y}"></polygon>
+      <polygon class="a3-side" points="${x + width},${y} ${x + width + depth},${y - depth} ${x + width + depth},${y + height - depth} ${x + width},${y + height}"></polygon>
+      <rect class="a3-front" x="${x}" y="${y}" width="${width}" height="${height}" rx="5"></rect>
+      ${textLines(x + 12, y + 22, labelText, width <= 200 ? 20 : 25, 'a3-strong')}
+    </g>`;
+  }
+
+  function fallbackMarkup(x, y, width, height = 84) {
+    const compact = width < 170;
+    const detail = compact ? 'Prior route retained' : 'Prior implementation retained';
+    return `<g class="a3-fallback" role="group" aria-label="Fallback route; prior implementation retained for recovery">
+      <title>Fallback route — prior implementation retained for recovery</title>
+      <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="6"></rect>
+      ${textLines(x + 12, y + 26, 'FALLBACK ROUTE', compact ? 16 : 20, 'a3-strong')}
+      ${textLines(x + 12, y + 50, detail, compact ? 18 : 24, 'a3-secondary')}
+    </g>`;
+  }
+
+  function directionalArrowPath(x1, y1, x2, y2, className = '', shaftWidth = 4, headLength = 12, headWidth = 13) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const length = Math.hypot(dx, dy);
+    if (length <= headLength) return '';
+    const ux = dx / length;
+    const uy = dy / length;
+    const px = -uy;
+    const py = ux;
+    const shoulderX = x2 - ux * headLength;
+    const shoulderY = y2 - uy * headLength;
+    const points = [
+      [x1 + px * shaftWidth / 2, y1 + py * shaftWidth / 2],
+      [shoulderX + px * shaftWidth / 2, shoulderY + py * shaftWidth / 2],
+      [shoulderX + px * headWidth / 2, shoulderY + py * headWidth / 2],
+      [x2, y2],
+      [shoulderX - px * headWidth / 2, shoulderY - py * headWidth / 2],
+      [shoulderX - px * shaftWidth / 2, shoulderY - py * shaftWidth / 2],
+      [x1 - px * shaftWidth / 2, y1 - py * shaftWidth / 2]
+    ];
+    const path = points.map(([x, y], index) => `${index ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
+    return `<path class="a3-route ${className}" d="${path} Z" aria-hidden="true"></path>`;
+  }
+
+  function gateMarkup(x, y, width, compact = false) {
+    const gate = MODEL.gates[0];
+    return `<g>
+      <rect class="a3-gate" x="${x}" y="${y}" width="${width}" height="${compact ? 96 : 100}" rx="6"></rect>
+      ${textLines(x + 12, y + 26, gate.label, compact ? 31 : 27, 'a3-strong')}
+      ${textLines(x + 12, y + 68, 'Parity · audit · rollback · human review', compact ? 38 : 30, 'a3-secondary')}
+    </g>`;
+  }
+
+  function humanRibbon(x, y, width, frameId, compact = false) {
+    const phaseNotes = {
+      F0: 'Curators surface workflow needs and operational evidence.',
+      F1: 'Curators shape design in reviews and sprint-close presentations.',
+      F2: 'Curators train as QA validates and SOP sections are drafted.',
+      F3: 'Curators use launched portions under approved SOPs; rollback stays.'
+    };
+    const heading = compact
+      ? 'HUMAN WORKFLOW AUTHORITY'
+      : 'HUMAN WORKFLOW AUTHORITY — remains separate from software capability blocks';
+    return `<g>
+      <rect class="a3-human" x="${x}" y="${y}" width="${width}" height="${compact ? 112 : 108}" rx="6"></rect>
+      ${textLines(x + 14, y + 27, heading, compact ? 30 : 100, 'a3-strong')}
+      ${textLines(x + 14, y + 70, phaseNotes[frameId], compact ? 38 : 100, 'a3-secondary')}
+    </g>`;
+  }
+
+  function candidateState(frameId) {
+    return cubeById('CAP-OP-ASSIGN').frame_states[frameId];
+  }
+
+  function retainedCubes() {
+    return focusCubes().filter(cube => !['CAP-OP-ASSIGN', 'SVC-IAM', 'SVC-API'].includes(cube.id));
+  }
+
+  function wideDiagram(frameId) {
+    const frame = frameById(frameId);
+    const candidate = cubeById('CAP-OP-ASSIGN');
+    const legacyX = 34;
+    const seamX = 386;
+    const newX = 738;
+    const cubeW = 252;
+    const startY = 98;
+    const stepY = 63;
+    const retained = retainedCubes().slice(0, 6);
+    let body = `${defs()}
+      <title id="a3-svg-title">${escapeHtml(frame.label)}</title>
+      <desc id="a3-svg-desc">${escapeHtml(frame.annotation)} Position encodes authority only. Human workflows remain a separate ribbon.</desc>
+      <line class="a3-zone-line" x1="348" y1="52" x2="348" y2="488"></line>
+      <line class="a3-zone-line" x1="700" y1="52" x2="700" y2="488"></line>
+      ${textLines(legacyX, 30, 'LEGACY AUTHORITY', 24, 'a3-strong')}
+      ${textLines(seamX, 30, 'TRANSFER BOUNDARY', 24, 'a3-strong')}
+      ${textLines(newX, 30, 'NEW AUTHORITY', 24, 'a3-strong')}`;
+
+    retained.forEach((cube, index) => {
+      const state = frameId === 'F0' ? cube.frame_states.F0 : cube.frame_states[frameId];
+      body += cubeMarkup(cube, state, legacyX, startY + index * stepY, cubeW, 48, selectedId === cube.id);
+    });
+
+    if (frameId === 'F0') {
+      body += cubeMarkup(candidate, 'legacy', legacyX, 52, cubeW, 48, selectedId === candidate.id);
+      body += textLines(seamX + 42, 208, 'No verified boundary', 24, 'a3-secondary');
+      body += textLines(newX + 48, 208, 'No authority transfer', 22, 'a3-secondary');
+    }
+
+    if (frameId === 'F1') {
+      body += cubeMarkup(candidate, 'legacy', legacyX, 52, cubeW, 48, selectedId === candidate.id);
+      body += gateMarkup(seamX, 108, cubeW);
+      body += textLines(seamX + 12, 240, 'Contract specimen only — legacy remains authoritative', 31, 'a3-secondary');
+      body += directionalArrowPath(legacyX + cubeW + 12, 76, seamX - 10, 150, 'secondary');
+      body += textLines(legacyX + cubeW + 30, 64, 'describes', 14, 'a3-secondary');
+    }
+
+    if (frameId === 'F2') {
+      body += cubeMarkup(candidate, 'legacy', legacyX, 52, cubeW, 48, selectedId === candidate.id);
+      body += cubeMarkup(candidate, 'shadow', seamX, 58, cubeW, 48, selectedId === candidate.id);
+      body += gateMarkup(seamX, 158, cubeW);
+      body += directionalArrowPath(legacyX + cubeW + 12, 76, seamX - 10, 82, 'secondary');
+      body += textLines(legacyX + cubeW + 25, 62, 'mirrors', 12, 'a3-secondary');
+      body += textLines(newX + 30, 208, 'Authority has not transferred', 28, 'a3-secondary');
+    }
+
+    if (frameId === 'F3') {
+      body += cubeMarkup(candidate, 'new', newX, 58, cubeW, 48, selectedId === candidate.id);
+      body += gateMarkup(seamX, 122, cubeW);
+      body += directionalArrowPath(seamX + cubeW + 12, 82, newX - 10, 82);
+      body += textLines(seamX + cubeW + 27, 62, 'authorizes', 14, 'a3-secondary');
+      body += directionalArrowPath(newX - 20, 432, legacyX + cubeW + 20, 432, 'secondary');
+      body += textLines(442, 414, 'rollback remains available', 27, 'a3-secondary');
+      body += textLines(legacyX, 476, 'Retained legacy remains visible; wholesale retirement is not claimed.', 66, 'a3-secondary');
+    }
+
+    body += humanRibbon(34, 510, 956, frameId);
+    return { viewBox: '0 0 1030 636', body };
+  }
+
+  function compactDiagram(frameId) {
+    const frame = frameById(frameId);
+    const candidate = cubeById('CAP-OP-ASSIGN');
+    const retained = retainedCubes().slice(0, 3);
+    let body = `${defs()}
+      <title id="a3-svg-title">${escapeHtml(frame.label)}</title>
+      <desc id="a3-svg-desc">${escapeHtml(frame.annotation)} Position encodes authority only. Human workflows remain a separate ribbon.</desc>
+      ${textLines(16, 28, 'LEGACY AUTHORITY', 30, 'a3-strong')}`;
+
+    let y = 58;
+    retained.forEach(cube => {
+      body += cubeMarkup(cube, frameId === 'F0' ? cube.frame_states.F0 : cube.frame_states[frameId], 16, y, 292, 52, selectedId === cube.id);
+      y += 66;
+    });
+
+    if (frameId === 'F0' || frameId === 'F1' || frameId === 'F2') {
+      body += cubeMarkup(candidate, 'legacy', 16, y, 292, 52, selectedId === candidate.id);
+      y += 78;
+    }
+
+    body += `<line class="a3-zone-line" x1="16" y1="${y}" x2="308" y2="${y}"></line>`;
+    y += 34;
+    body += textLines(16, y, 'TRANSFER BOUNDARY', 30, 'a3-strong');
+    y += 30;
+
+    if (frameId === 'F0') {
+      body += textLines(16, y + 35, 'No verified boundary', 30, 'a3-secondary');
+      y += 98;
+    } else if (frameId === 'F1') {
+      body += gateMarkup(16, y, 292, true);
+      y += 124;
+    } else if (frameId === 'F2') {
+      body += cubeMarkup(candidate, 'shadow', 16, y, 292, 52, selectedId === candidate.id);
+      y += 70;
+      body += gateMarkup(16, y, 292, true);
+      y += 122;
+      body += textLines(16, y, 'mirrors · legacy still authoritative', 35, 'a3-secondary');
+      y += 44;
+    } else {
+      body += gateMarkup(16, y, 292, true);
+      y += 124;
+    }
+
+    body += `<line class="a3-zone-line" x1="16" y1="${y}" x2="308" y2="${y}"></line>`;
+    y += 34;
+    body += textLines(16, y, 'NEW AUTHORITY', 30, 'a3-strong');
+    y += 30;
+    if (frameId === 'F3') {
+      body += cubeMarkup(candidate, 'new', 16, y, 292, 52, selectedId === candidate.id);
+      y += 72;
+      body += textLines(16, y, 'Validated transfer · rollback available', 37, 'a3-secondary');
+      y += 46;
+    } else {
+      body += textLines(16, y + 35, 'No authority transfer', 30, 'a3-secondary');
+      y += 98;
+    }
+
+    body += humanRibbon(16, y, 292, frameId, true);
+    y += 132;
+    return { viewBox: `0 0 324 ${y}`, body };
+  }
+
+  function bindCubeEvents() {
+    svg.querySelectorAll('[data-cube-id]').forEach(node => {
+      const select = () => {
+        selectedId = node.dataset.cubeId;
+        render();
+        const replacement = [...svg.querySelectorAll('[data-cube-id]')]
+          .find(candidate => candidate.dataset.cubeId === selectedId);
+        replacement?.focus();
+      };
+      node.addEventListener('click', select);
+      node.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          select();
+        }
+      });
+    });
+  }
+
+  function selectedSummary() {
+    const cube = cubeById(selectedId) || cubeById('CAP-OP-ASSIGN');
+    const state = cube.frame_states[activeFrame];
+    const stateLabel = MODEL.authority_states.find(item => item.id === state)?.label || state;
+    selection.innerHTML = `<p><strong>${escapeHtml(cube.label)}</strong> · ${escapeHtml(stateLabel)} · Coupling: ${escapeHtml(cube.coupling)} · Evidence: ${escapeHtml(cube.evidence_status)}.</p>
+      <p class="text-muted">${escapeHtml(cube.rollback_route)}. ${escapeHtml(cube.regulatory_risk)}.</p>`;
+  }
+
+  function renderTable() {
+    registryBody.innerHTML = MODEL.capability_cubes.map(cube => {
+      const state = cube.frame_states[activeFrame];
+      const stateLabel = MODEL.authority_states.find(item => item.id === state)?.label || state;
+      return `<tr>
+        <td><button type="button" class="btn btn-ghost" data-table-cube="${escapeHtml(cube.id)}">${escapeHtml(cube.label)}</button></td>
+        <td>${escapeHtml(cube.kind)}</td>
+        <td>${escapeHtml(cube.coupling)}</td>
+        <td>${escapeHtml(stateLabel)}</td>
+        <td>${escapeHtml(cube.evidence_status)}</td>
+      </tr>`;
+    }).join('');
+    registryBody.querySelectorAll('[data-table-cube]').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedId = button.dataset.tableCube;
+        render();
+      });
+    });
+  }
+
+  function textForFrame(frameId) {
+    const frame = frameById(frameId);
+    const candidate = cubeById('CAP-OP-ASSIGN');
+    const state = MODEL.authority_states.find(item => item.id === candidate.frame_states[frameId])?.label;
+    return `${frame.label}. ${frame.annotation} The operational and assignment capability is ${state.toLowerCase()}. Variant, quality-control, biomarker, plugin, and regulatory logic remains legacy or unknown. Curator activities remain human workflows rather than implied software cubes.`;
+  }
+
+  function render() {
+    const frame = frameById(activeFrame);
+    const compact = root.getBoundingClientRect().width < 560;
+    compactLayout = compact;
+    const drawing = compact ? compactDiagram(activeFrame) : wideDiagram(activeFrame);
+    svg.setAttribute('viewBox', drawing.viewBox);
+    svg.innerHTML = drawing.body;
+    label.textContent = frame.label;
+    annotation.textContent = frame.annotation;
+    textEquivalent.textContent = textForFrame(activeFrame);
+    root.querySelectorAll('[data-frame]').forEach(button => {
+      const active = button.dataset.frame === activeFrame;
+      button.setAttribute('aria-pressed', String(active));
+      button.classList.toggle('btn-primary', active);
+    });
+    selectedSummary();
+    renderTable();
+    bindCubeEvents();
+  }
+
+  function setFrame(frameId) {
+    if (!frameById(frameId)) return;
+    activeFrame = frameId;
+    MODEL.view_state.views[0].active_frame_id = frameId;
+    render();
+  }
+
+  function stopPlay() {
+    if (playTimer) window.clearInterval(playTimer);
+    playTimer = null;
+    playButton.textContent = 'Play sequence';
+  }
+
+  root.querySelectorAll('[data-frame]').forEach(button => {
+    button.addEventListener('click', () => {
+      stopPlay();
+      setFrame(button.dataset.frame);
+    });
+  });
+
+  playButton.addEventListener('click', () => {
+    if (playTimer) {
+      stopPlay();
+      return;
+    }
+    const order = MODEL.storyboard_frames.map(frame => frame.id);
+    let index = order.indexOf(activeFrame);
+    playButton.textContent = 'Pause sequence';
+    playTimer = window.setInterval(() => {
+      index = (index + 1) % order.length;
+      setFrame(order[index]);
+      if (index === order.length - 1) {
+        window.setTimeout(stopPlay, 1700);
+      }
+    }, 1700);
+  });
+
+  const observer = new ResizeObserver(() => {
+    const nextCompact = root.getBoundingClientRect().width < 560;
+    if (nextCompact !== compactLayout) render();
+  });
+  observer.observe(root);
+
+  function jsonLd() {
+    return {
+      '@context': {
+        schema: 'https://schema.org/',
+        a3: 'https://driftframe.studio/a3#',
+        id: '@id',
+        type: '@type',
+        name: 'schema:name'
+      },
+      '@graph': [
+        {
+          id: '#a3-stacked-cube-visual-system',
+          type: ['schema:CreativeWork', 'a3:StranglerFigStoryboard'],
+          name: MODEL.artifact_identity.display_name,
+          'a3:version': MODEL.artifact_identity.version,
+          'a3:sourceRevision': MODEL.source_revision,
+          'a3:hasFrame': MODEL.storyboard_frames.map(frame => `#${frame.id}`),
+          'a3:hasCapability': MODEL.capability_cubes.map(cube => `#${cube.id}`)
+        },
+        ...MODEL.storyboard_frames.map(frame => ({
+          id: `#${frame.id}`,
+          type: 'a3:StoryboardFrame',
+          name: frame.label,
+          'a3:sequence': frame.sequence,
+          'a3:annotation': frame.annotation
+        })),
+        ...MODEL.capability_cubes.map(cube => ({
+          id: `#${cube.id}`,
+          type: `a3:${cube.kind}`,
+          name: cube.label,
+          'a3:family': cube.family,
+          'a3:coupling': cube.coupling,
+          'a3:evidenceStatus': cube.evidence_status,
+          'a3:frameStates': cube.frame_states
+        }))
+      ]
+    };
+  }
+
+  async function copy(value) {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = value;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+  }
+
+  document.getElementById('a3-copy-json').addEventListener('click', () => copy(JSON.stringify(MODEL, null, 2)));
+  document.getElementById('a3-copy-jsonld').addEventListener('click', () => copy(JSON.stringify(jsonLd(), null, 2)));
+  document.getElementById('a3-download-svg').addEventListener('click', () => {
+    const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `a3-stacked-cube-${activeFrame.toLowerCase()}.svg`;
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+
+  function triptychSvg() {
+    const panels = [
+      {
+        frame: 'F0',
+        label: '1 · CURRENT AUTHORITY',
+        note: 'Current authority, coupling, and uncertainty stay explicit.',
+        humanNote: 'Curators surface workflow needs and operational evidence from daily work.'
+      },
+      {
+        frame: 'F2',
+        label: '2 · BOUNDED EVIDENCE PERIOD',
+        note: 'Bounded traffic builds evidence while legacy authority and rollback remain.',
+        humanNote: 'Curators shape the design through continual review and sprint-closure presentations.'
+      },
+      {
+        frame: 'F3',
+        label: '3 · VALIDATED AUTHORITY',
+        note: 'Only an evidenced capability transfers; retained work and rollback stay visible.',
+        humanNote: 'Curators train on each validated portion while launch SOPs are written and reviewed.'
+      }
+    ];
+    const panelWidth = 450;
+    const retained = retainedCubes().slice(0, 3);
+    const candidate = cubeById('CAP-OP-ASSIGN');
+    const chunks = panels.map((panel, index) => {
+      const x = index * panelWidth;
+      const localCube = (cube, state, lx, ly, width = 190) => cubeMarkup(cube, state, x + lx, ly, width, 62, false, false);
+      let content = `<g id="triptych-${panel.frame.toLowerCase()}" data-phase="${panel.frame}" role="group" aria-label="${escapeHtml(panel.label)}">
+        <title>${escapeHtml(panel.label)}</title>
+        <rect x="${x + 8}" y="8" width="${panelWidth - 16}" height="742" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
+        ${textLines(x + 28, 42, panel.label, 34, 'a3-strong')}
+        ${textLines(x + 28, 82, panel.note, 46, 'a3-secondary')}
+        ${textLines(x + 28, 155, 'LEGACY', 18, 'a3-strong')}
+        ${textLines(x + 238, 155, 'BOUNDARY / NEW', 24, 'a3-strong')}`;
+      retained.forEach((cube, cubeIndex) => {
+        content += localCube(cube, panel.frame === 'F0' ? cube.frame_states.F0 : cube.frame_states[panel.frame], 28, 188 + cubeIndex * 76);
+      });
+      if (panel.frame === 'F0') {
+        content += localCube(candidate, 'legacy', 28, 416);
+        content += textLines(x + 240, 276, 'No verified boundary', 24, 'a3-secondary');
+      } else if (panel.frame === 'F2') {
+        content += localCube(candidate, 'legacy', 28, 416);
+        content += localCube(candidate, 'shadow', 238, 204);
+        content += directionalArrowPath(x + 224, 408, x + 224, 278, 'secondary');
+        content += textLines(x + 238, 294, 'mirrors · no transfer yet', 26, 'a3-secondary');
+        content += `<rect class="a3-gate" x="${x + 232}" y="326" width="188" height="92" rx="6"></rect>`;
+        content += textLines(x + 246, 356, 'GATE + ROLLBACK', 21, 'a3-strong');
+        content += textLines(x + 246, 386, 'parity · audit · recovery path', 25, 'a3-secondary');
+      } else {
+        content += fallbackMarkup(x + 28, 416, 190);
+        content += localCube(candidate, 'new', 238, 204);
+        content += `<rect class="a3-gate" x="${x + 232}" y="326" width="188" height="92" rx="6"></rect>`;
+        content += textLines(x + 246, 356, 'VALIDATED GATE', 21, 'a3-strong');
+        content += textLines(x + 246, 386, 'protected behavior verified', 24, 'a3-secondary');
+        content += directionalArrowPath(x + 238, 278, x + 218, 418, 'secondary');
+        content += textLines(x + 238, 294, 'validated transfer · rollback stays', 28, 'a3-secondary');
+      }
+      content += `<rect class="a3-human" x="${x + 28}" y="590" width="${panelWidth - 56}" height="132" rx="6"></rect>`;
+      content += textLines(x + 42, 626, 'HUMAN WORKFLOW AUTHORITY', 36, 'a3-strong');
+      content += textLines(x + 42, 664, panel.humanNote, 46, 'a3-secondary');
+      content += `</g>`;
+      return content;
+    }).join('');
+    const triptychDefs = defs()
+      .replaceAll('var(--a3-shadow)', '#164f78')
+      .replaceAll('var(--viz-series-2)', '#65ccda');
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="a3-svg" viewBox="0 0 ${panelWidth * 3} 760" role="img" aria-labelledby="triptych-title triptych-desc" style="color:#eef7ff">
+      ${triptychDefs}
+      <title id="triptych-title">Evidence-Guided Capability Transfer Model — three-phase storyboard</title>
+      <desc id="triptych-desc">Current legacy authority, a bounded evidence period with shadow routing and no transfer, and selective validated authority transfer with retained legacy and rollback. Curators contribute workflow evidence, shape the design in reviews, then train while launch procedures are written.</desc>
+      <style>
+        text{font-family:Inter,system-ui,sans-serif;font-size:16px;fill:#eef7ff}
+        .a3-strong{font-weight:600}.a3-secondary{fill:#b7d2e8}
+        .a3-front,.a3-top,.a3-side{stroke:#7aa6c9;stroke-width:1}
+        .state-legacy .a3-front,.state-legacy .a3-top,.state-legacy .a3-side{fill:#184f7a}
+        .state-retained_legacy .a3-front,.state-retained_legacy .a3-top,.state-retained_legacy .a3-side{fill:#213e5a;stroke:#a8bfd2}
+        .state-shadow .a3-front,.state-shadow .a3-top,.state-shadow .a3-side{fill:url(#a3-hatch);stroke:#65ccda}
+        .state-new .a3-front,.state-new .a3-top,.state-new .a3-side{fill:#2f78b7;stroke:#9adce4;stroke-width:2}
+        .a3-gate{fill:#0f3d66;stroke:#65ccda;stroke-width:2}
+        .a3-fallback rect{fill:#213e5a;stroke:#a8bfd2;stroke-width:2;stroke-dasharray:7 5}
+        .a3-human{fill:#163756;stroke:#91b7d6}
+        .a3-route{fill:currentColor;color:#eef7ff}
+        .a3-route.secondary{color:#b7d2e8}
+      </style>
+      <rect width="1350" height="760" fill="#062c56"></rect>
+      ${chunks}
+    </svg>`;
+  }
+
+  function fourStateSvg() {
+    const panels = MODEL.storyboard_frames;
+    const notes = {
+      F0: 'Most work stays legacy or human. Unknown coupling remains visible.',
+      F1: 'The boundary is defined. No execution or decision authority moves.',
+      F2: 'Shadow traffic collects evidence. Legacy remains authoritative.',
+      F3: 'Validated capability transfers. Retained work and rollback remain.'
+    };
+    const humanNotes = {
+      F0: 'Curators surface workflow needs and operational evidence.',
+      F1: 'Curators shape the design in review and sprint-close presentations.',
+      F2: 'Curators train while QA validates and SOP sections are drafted.',
+      F3: 'Curators use launched portions under approved SOPs; rollback remains.'
+    };
+    const panelWidth = 340;
+    const candidate = cubeById('CAP-OP-ASSIGN');
+    const retained = retainedCubes().slice(0, 2);
+    const triptychDefs = defs()
+      .replaceAll('var(--a3-shadow)', '#164f78')
+      .replaceAll('var(--viz-series-2)', '#65ccda');
+    const chunks = panels.map((panel, index) => {
+      const x = index * panelWidth;
+      const localCube = (cube, state, lx, ly, width = 132) =>
+        cubeMarkup(cube, state, x + lx, ly, width, 45, false, false);
+      let content = `<g id="four-state-${panel.id.toLowerCase()}" data-phase="${panel.id}" role="group" aria-label="${escapeHtml(`${panel.sequence + 1} · ${panel.label}`)}">
+        <title>${escapeHtml(`${panel.sequence + 1} · ${panel.label}`)}</title>
+        <rect x="${x + 7}" y="7" width="${panelWidth - 14}" height="646" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
+        ${textLines(x + 22, 40, `${panel.sequence + 1} · ${panel.label.toUpperCase()}`, 28, 'a3-strong')}
+        ${textLines(x + 22, 82, notes[panel.id], 39, 'a3-secondary')}
+        ${textLines(x + 22, 168, 'LEGACY', 14, 'a3-strong')}
+        ${textLines(x + 180, 168, 'BOUNDARY / NEW', 19, 'a3-strong')}`;
+      retained.forEach((cube, cubeIndex) => {
+        content += localCube(cube, panel.frame_states?.[panel.id] || cube.frame_states[panel.id], 22, 195 + cubeIndex * 62);
+      });
+      if (panel.id !== 'F3') {
+        content += localCube(candidate, 'legacy', 22, 325);
+      }
+      if (panel.id === 'F0') {
+        content += textLines(x + 180, 238, 'No verified boundary', 22, 'a3-secondary');
+      }
+      if (panel.id === 'F1') {
+        content += localCube(candidate, 'seam', 180, 195);
+        content += `<rect class="a3-gate" x="${x + 180}" y="325" width="132" height="84" rx="6"></rect>`;
+        content += textLines(x + 192, 353, 'BOUNDARY', 15, 'a3-strong');
+        content += textLines(x + 192, 381, 'No move yet', 16, 'a3-secondary');
+      }
+      if (panel.id === 'F2') {
+        content += localCube(candidate, 'shadow', 180, 195);
+        content += `<rect class="a3-gate" x="${x + 180}" y="325" width="132" height="84" rx="6"></rect>`;
+        content += textLines(x + 192, 353, 'EVIDENCE GATE', 17, 'a3-strong');
+        content += textLines(x + 192, 381, 'dual-run', 15, 'a3-secondary');
+      }
+      if (panel.id === 'F3') {
+        content += fallbackMarkup(x + 22, 325, 132, 84);
+        content += localCube(candidate, 'new', 180, 195);
+        content += `<rect class="a3-gate" x="${x + 180}" y="325" width="132" height="84" rx="6"></rect>`;
+        content += textLines(x + 192, 353, 'GATE PASSED', 16, 'a3-strong');
+        content += textLines(x + 192, 381, 'rollback stays', 16, 'a3-secondary');
+        content += directionalArrowPath(x + 188, 260, x + 157, 319, 'secondary');
+      }
+      content += `<rect class="a3-human" x="${x + 22}" y="520" width="${panelWidth - 44}" height="96" rx="6"></rect>`;
+      content += textLines(x + 36, 550, 'HUMAN WORKFLOW AUTHORITY', 31, 'a3-strong');
+      content += textLines(x + 36, 584, humanNotes[panel.id], 38, 'a3-secondary');
+      content += `</g>`;
+      return content;
+    }).join('');
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${panelWidth * 4} 660" role="img" aria-labelledby="four-state-title four-state-desc" style="color:#eef7ff">
+      ${triptychDefs}
+      <title id="four-state-title">Evidence-Guided Capability Transfer Model — four-state reference strip</title>
+      <desc id="four-state-desc">Current authority, an identified boundary with no move, shadow dual-run with legacy authority, and validated selective transfer with rollback. Curator participation advances from workflow evidence to design review, training, and procedure-supported use.</desc>
+      <style>
+        text{font-family:Inter,system-ui,sans-serif;font-size:15px;fill:#eef7ff}
+        .a3-strong{font-weight:600}.a3-secondary{fill:#b7d2e8}
+        .a3-front,.a3-top,.a3-side{stroke:#7aa6c9;stroke-width:1}
+        .state-legacy .a3-front,.state-legacy .a3-top,.state-legacy .a3-side{fill:#184f7a}
+        .state-retained_legacy .a3-front,.state-retained_legacy .a3-top,.state-retained_legacy .a3-side{fill:#213e5a;stroke:#a8bfd2}
+        .state-seam .a3-front,.state-seam .a3-top,.state-seam .a3-side{fill:#082f57;stroke:#65ccda;stroke-width:2;stroke-dasharray:6 5}
+        .state-shadow .a3-front,.state-shadow .a3-top,.state-shadow .a3-side{fill:url(#a3-hatch);stroke:#65ccda}
+        .state-new .a3-front,.state-new .a3-top,.state-new .a3-side{fill:#2f78b7;stroke:#9adce4;stroke-width:2}
+        .a3-gate{fill:#0f3d66;stroke:#65ccda;stroke-width:2}
+        .a3-fallback rect{fill:#213e5a;stroke:#a8bfd2;stroke-width:2;stroke-dasharray:7 5}
+        .a3-human{fill:#163756;stroke:#91b7d6}
+        .a3-route{fill:currentColor;color:#eef7ff}
+        .a3-route.secondary{color:#b7d2e8}
+      </style>
+      <rect width="${panelWidth * 4}" height="660" fill="#062c56"></rect>
+      ${chunks}
+    </svg>`;
+  }
+
+  window.a3VisualSystem = {
+    model: MODEL,
+    setFrame,
+    get activeFrame() { return activeFrame; },
+    currentSvg: () => svg.outerHTML,
+    triptychSvg,
+    fourStateSvg,
+    jsonLd,
+    textForFrame
+  };
+
+  render();
+})();
+</script>
+</main>
+</body>
+</html>

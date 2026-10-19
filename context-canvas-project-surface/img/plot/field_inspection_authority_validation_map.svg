@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" role="img" aria-labelledby="authority-map-title authority-map-desc">
+  <title id="authority-map-title">Field inspection authority and validation map</title>
+  <desc id="authority-map-desc">A proposed authority-and-recovery map shows five written handoffs: inspector observation, durable local capture, replay-safe platform acknowledgement, human review, and controlled release. Three authority panels name field ownership, platform custody, and quality and operational release. A recovery rail preserves local work, quarantines failed media, retains Clappia until handoff, and allows optional assistance to be disabled. Release gates include zero lost acknowledged captures across a bounded corpus, tenant-isolation denial tests, record and media reconciliation, restore within agreed recovery objectives, and named evidence owners.</desc>
+  <defs>
+    <pattern id="authority-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".07"/>
+      <circle cx="1" cy="1" r="1" fill="#2855f3" opacity=".09"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#17345f}.body-ink{fill:#304a71}.muted{fill:#5d6f8b}.paper{fill:#fffdf8}.acid{fill:#f2ff67}.cobalt{fill:#2855f3}.coral{fill:#fa7065}
+      .title{font-size:37px;font-weight:840;letter-spacing:-.65px}.subtitle{font-size:17px;font-weight:570}
+      .eyebrow{font-size:12.5px;font-weight:820;letter-spacing:1.45px}.region-title{font-size:23px;font-weight:840}.card-title{font-size:18px;font-weight:820}
+      .body{font-size:14.5px;font-weight:570}.small{font-size:12.5px;font-weight:650}.tiny{font-size:11px;font-weight:760;letter-spacing:.32px}
+      .outline{stroke:#17345f;stroke-width:2}.rule{stroke:#88a6d6;stroke-width:1.4}.rule-coral{stroke:#fa7065;stroke-width:3}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="#17345f"/>
+  <rect x="28" y="28" width="1544" height="1044" rx="30" fill="#fffaf2" stroke="#cfe7f7" stroke-width="2"/>
+  <rect x="28" y="28" width="1544" height="1044" rx="30" fill="url(#authority-grid)" aria-hidden="true"/>
+
+  <g class="sans">
+    <g role="group" aria-labelledby="authority-header-title">
+      <title id="authority-header-title">Proposed authority and release orientation</title>
+      <text x="72" y="84" class="title ink">Authority follows the object; release follows bounded evidence</text>
+      <text x="72" y="118" class="subtitle body-ink">Observation stays field-owned, durable state stays inspectable, and consequential decisions remain human-owned.</text>
+      <g transform="translate(1300 58)">
+        <rect x="8" y="8" width="220" height="66" rx="15" fill="#17345f" aria-hidden="true"/>
+        <rect width="220" height="66" rx="15" fill="#d9efea" class="outline"/>
+        <text x="110" y="27" text-anchor="middle" class="eyebrow ink">PROPOSED CONTRACT</text>
+        <text x="110" y="49" text-anchor="middle" class="tiny body-ink">IMPLEMENTATION-GATED · v0.1</text>
+      </g>
+      <g transform="translate(72 148)" aria-label="Visual key">
+        <text x="0" y="14" class="eyebrow body-ink">KEY</text>
+        <rect x="56" y="0" width="20" height="20" rx="4" fill="#e7efff" class="outline"/>
+        <text x="86" y="15" class="small ink">numbered card = authority handoff</text>
+        <line x1="330" y1="10" x2="374" y2="10" stroke="#fa7065" stroke-width="3" stroke-dasharray="8 5"/>
+        <text x="386" y="15" class="small ink">dashed rail = recovery route</text>
+        <rect x="630" y="0" width="20" height="20" rx="4" fill="#f2ff67" stroke="#17345f" stroke-width="4"/>
+        <text x="662" y="15" class="small ink">double frame = human release authority</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="authority-chain-title">
+      <title id="authority-chain-title">Five-step authority chain from observation to release</title>
+      <text x="72" y="212" class="eyebrow cobalt">AUTHORITY CHAIN · EACH HANDOFF NAMES A STATE AND OWNER</text>
+
+      <g transform="translate(72 236)">
+        <rect x="7" y="7" width="268" height="144" rx="18" fill="#17345f" aria-hidden="true"/>
+        <rect width="268" height="144" rx="18" fill="#fff5de" class="outline"/>
+        <text x="18" y="29" class="eyebrow ink">01 · FIELD OWNED</text>
+        <text x="18" y="59" class="card-title ink">Observe</text>
+        <text x="18" y="84" class="body body-ink">Inspector records the vehicle,</text>
+        <text x="18" y="105" class="body body-ink">condition, and source image.</text>
+        <text x="18" y="128" class="tiny ink">STATE · OBSERVED LOCALLY</text>
+      </g>
+      <path d="M340 290H362V279L389 308L362 337V326H340Z" fill="#2855f3" aria-hidden="true"/>
+
+      <g transform="translate(389 236)">
+        <rect x="7" y="7" width="268" height="144" rx="18" fill="#17345f" aria-hidden="true"/>
+        <rect width="268" height="144" rx="18" fill="#e7efff" class="outline"/>
+        <text x="18" y="29" class="eyebrow cobalt">02 · DEVICE CUSTODY</text>
+        <text x="18" y="59" class="card-title ink">Persist</text>
+        <text x="18" y="84" class="body body-ink">Local write completes before</text>
+        <text x="18" y="105" class="body body-ink">network work or inference.</text>
+        <text x="18" y="128" class="tiny ink">STATE · DURABLE + QUEUED</text>
+      </g>
+      <path d="M657 290H679V279L706 308L679 337V326H657Z" fill="#2855f3" aria-hidden="true"/>
+
+      <g transform="translate(706 236)">
+        <rect x="7" y="7" width="268" height="144" rx="18" fill="#17345f" aria-hidden="true"/>
+        <rect width="268" height="144" rx="18" fill="#2855f3" class="outline"/>
+        <text x="18" y="29" class="eyebrow" fill="#dbe7ff">03 · PLATFORM CUSTODY</text>
+        <text x="18" y="59" class="card-title paper">Acknowledge</text>
+        <text x="18" y="84" class="body paper">Apply once; retain operation,</text>
+        <text x="18" y="105" class="body paper">version, actor, and evidence.</text>
+        <text x="18" y="128" class="tiny" fill="#dbe7ff">STATE · ACCEPTED OR EXCEPTION</text>
+      </g>
+      <path d="M974 290H996V279L1023 308L996 337V326H974Z" fill="#fa7065" aria-hidden="true"/>
+
+      <g transform="translate(1023 236)">
+        <rect x="7" y="7" width="238" height="144" rx="18" fill="#17345f" aria-hidden="true"/>
+        <rect width="238" height="144" rx="18" fill="#ffd3d0" class="outline"/>
+        <text x="18" y="29" class="eyebrow ink">04 · HUMAN OWNED</text>
+        <text x="18" y="59" class="card-title ink">Review</text>
+        <text x="18" y="84" class="body body-ink">Confirm, reject, supersede,</text>
+        <text x="18" y="105" class="body body-ink">or record UNKNOWN.</text>
+        <text x="18" y="128" class="tiny ink">STATE · DECIDED WITH REASON</text>
+      </g>
+      <path d="M1261 290H1283V279L1310 308L1283 337V326H1261Z" fill="#fa7065" aria-hidden="true"/>
+
+      <g transform="translate(1310 236)">
+        <rect x="7" y="7" width="218" height="144" rx="18" fill="#17345f" aria-hidden="true"/>
+        <rect width="218" height="144" rx="18" fill="#f2ff67" stroke="#17345f" stroke-width="4"/>
+        <text x="18" y="29" class="eyebrow ink">05 · NAMED SIGN-OFF</text>
+        <text x="18" y="59" class="card-title ink">Release</text>
+        <text x="18" y="84" class="body body-ink">Quality + operations accept</text>
+        <text x="18" y="105" class="body body-ink">the bounded evidence packet.</text>
+        <text x="18" y="128" class="tiny ink">STATE · CONTROLLED COHORT</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="authority-regions-title">
+      <title id="authority-regions-title">Three authority regions with validation responsibilities</title>
+      <text x="72" y="424" class="eyebrow cobalt">AUTHORITY REGIONS · THE CONTROL MOVES WITH THE CONSEQUENCE</text>
+
+      <g transform="translate(72 448)">
+        <rect x="8" y="8" width="430" height="268" rx="20" fill="#17345f" aria-hidden="true"/>
+        <rect width="430" height="268" rx="20" fill="#fff5de" class="outline"/>
+        <text x="22" y="34" class="eyebrow ink">FIELD AUTHORITY</text>
+        <text x="22" y="69" class="region-title ink">The observation is not inferred away</text>
+        <line x1="22" y1="87" x2="408" y2="87" class="rule"/>
+        <text x="22" y="118" class="body ink">• guided sequence remains skippable</text>
+        <text x="22" y="145" class="body ink">• capture survives signal loss and restart</text>
+        <text x="22" y="172" class="body ink">• local, queued, syncing, and acknowledged are written</text>
+        <text x="22" y="199" class="body ink">• detection or network failure preserves manual completion</text>
+        <rect x="22" y="220" width="386" height="28" rx="8" fill="#ffd3d0" stroke="#17345f" stroke-width="1.5"/>
+        <text x="215" y="239" text-anchor="middle" class="tiny ink">PROOF · LOW-END DEVICE + EIGHT-HOUR OFFLINE SHIFT</text>
+      </g>
+
+      <g transform="translate(526 448)">
+        <rect x="8" y="8" width="500" height="268" rx="20" fill="#17345f" aria-hidden="true"/>
+        <rect width="500" height="268" rx="20" fill="#e7efff" class="outline"/>
+        <text x="22" y="34" class="eyebrow cobalt">PLATFORM CUSTODY</text>
+        <text x="22" y="69" class="region-title ink">Accepted state stays replayable</text>
+        <line x1="22" y1="87" x2="478" y2="87" class="rule"/>
+        <text x="22" y="118" class="body ink">• idempotent operation + durable acknowledgement</text>
+        <text x="22" y="145" class="body ink">• structured records and media keep independent queues</text>
+        <text x="22" y="172" class="body ink">• checksum precedes attachment; quarantine remains visible</text>
+        <text x="22" y="199" class="body ink">• tenant policy, tombstones, lineage, and audit are explicit</text>
+        <rect x="22" y="220" width="456" height="28" rx="8" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+        <text x="250" y="239" text-anchor="middle" class="tiny ink">PROOF · ZERO LOST ACKNOWLEDGED CAPTURES IN NAMED CORPUS</text>
+      </g>
+
+      <g transform="translate(1050 448)">
+        <rect x="8" y="8" width="478" height="268" rx="20" fill="#17345f" aria-hidden="true"/>
+        <rect width="478" height="268" rx="20" fill="#ffd3d0" class="outline"/>
+        <text x="22" y="34" class="eyebrow ink">REVIEW + RELEASE AUTHORITY</text>
+        <text x="22" y="69" class="region-title ink">Consequential state has a signatory</text>
+        <line x1="22" y1="87" x2="456" y2="87" class="rule"/>
+        <text x="22" y="118" class="body ink">• grade and market evidence retain reviewer + reason</text>
+        <text x="22" y="145" class="body ink">• earlier decisions remain in supersession lineage</text>
+        <text x="22" y="172" class="body ink">• quality, security, accessibility, and policy review join</text>
+        <text x="22" y="199" class="body ink">• support owner, second maintainer, runbooks, and restore exist</text>
+        <rect x="22" y="220" width="434" height="28" rx="8" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+        <text x="239" y="239" text-anchor="middle" class="tiny ink">PROOF · NAMED OWNERS SIGN THE STAGE 0 EVIDENCE PACKET</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="recovery-rail-title">
+      <title id="recovery-rail-title">Recovery rail preserving operability when a gate does not pass</title>
+      <rect x="72" y="754" width="1456" height="174" rx="22" fill="#17345f"/>
+      <text x="96" y="786" class="eyebrow" fill="#cfe7f7">RECOVERY RAIL · AN OPEN GATE RETAINS A USEFUL OPERATING PATH</text>
+      <line x1="96" y1="813" x2="1504" y2="813" stroke="#fa7065" stroke-width="3" stroke-dasharray="10 7" aria-hidden="true"/>
+
+      <g transform="translate(96 830)">
+        <rect width="322" height="72" rx="13" fill="#fff5de" stroke="#cfe7f7" stroke-width="1.5"/>
+        <text x="16" y="25" class="eyebrow ink">LOCAL WORK</text>
+        <text x="16" y="47" class="small ink"><tspan x="16">resume from durable state · replay</tspan><tspan x="16" dy="17">unacknowledged only</tspan></text>
+      </g>
+      <g transform="translate(438 830)">
+        <rect width="322" height="72" rx="13" fill="#d9efea" stroke="#cfe7f7" stroke-width="1.5"/>
+        <text x="16" y="25" class="eyebrow ink">MEDIA EXCEPTION</text>
+        <text x="16" y="47" class="small ink"><tspan x="16">retry with cause · quarantine and</tspan><tspan x="16" dy="17">review remain visible</tspan></text>
+      </g>
+      <g transform="translate(780 830)">
+        <rect width="342" height="72" rx="13" fill="#e7efff" stroke="#cfe7f7" stroke-width="1.5"/>
+        <text x="16" y="25" class="eyebrow ink">PROGRAM CONTINUITY</text>
+        <text x="16" y="47" class="small ink"><tspan x="16">retain Clappia · rollback cohort</tspan><tspan x="16" dy="17">restore and reconcile</tspan></text>
+      </g>
+      <g transform="translate(1142 830)">
+        <rect width="362" height="72" rx="13" fill="#ffd3d0" stroke="#cfe7f7" stroke-width="1.5"/>
+        <text x="16" y="25" class="eyebrow ink">ASSISTANCE BOUNDARY</text>
+        <text x="16" y="47" class="small ink"><tspan x="16">disable assist · keep source capture</tspan><tspan x="16" dy="17">+ human review</tspan></text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="release-gates-title">
+      <title id="release-gates-title">Minimum release gates and evidence boundary</title>
+      <text x="72" y="968" class="eyebrow cobalt">RELEASE GATES · BOUNDED CORPUS + NAMED OWNER + RECOVERY BEHAVIOR</text>
+      <text x="72" y="998" class="body ink">Tenant denial tests · record/media reconciliation · restore inside agreed RPO/RTO · correction lineage · canary + rollback · support ownership</text>
+      <rect x="72" y="1020" width="1456" height="34" rx="10" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+      <text x="800" y="1042" text-anchor="middle" class="small ink">EVIDENCE BOUNDARY · candidate targets become release criteria only after the signed Stage 0 packet establishes corpus, matrix, window, owner, and threshold.</text>
+    </g>
+  </g>
+</svg>

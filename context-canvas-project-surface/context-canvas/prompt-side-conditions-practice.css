@@ -1,0 +1,508 @@
+.prompt-side-practice-page {
+    --practice-cobalt: #2855f3;
+    --practice-cobalt-deep: #153fbe;
+    --practice-ink: #17345f;
+    --practice-sky: #cfe7f7;
+    --practice-sea: #d9efea;
+    --practice-cream: #fff5de;
+    --practice-lime: #f2ff67;
+}
+
+.prompt-referent-field {
+    background:
+        linear-gradient(135deg, rgb(40 85 243 / 7%) 0 18rem, transparent 18rem),
+        #eef3fa;
+}
+
+.prompt-comparison,
+.referent-register-grid,
+.source-register-grid {
+    display: grid;
+    gap: clamp(1rem, 2.4vw, 1.6rem);
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.prompt-comparison article,
+.referent-register-grid article {
+    background: var(--canvas-paper, #fffaf2);
+    border: .125rem solid var(--practice-ink);
+    border-radius: .75rem;
+    box-shadow: .45rem .45rem 0 var(--practice-ink);
+    min-inline-size: 0;
+    padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.prompt-comparison article:nth-child(2) {
+    background: var(--practice-sky);
+}
+
+.prompt-comparison article:nth-child(3) {
+    background: var(--practice-sea);
+}
+
+.prompt-comparison article > :first-child,
+.prompt-comparison article > :last-child,
+.referent-register-grid article > :first-child,
+.referent-register-grid article > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.prompt-comparison blockquote {
+    border-inline-start: .3rem solid var(--practice-cobalt);
+    color: var(--practice-ink);
+    font-weight: 700;
+    margin: 1rem 0;
+    padding: .75rem 0 .75rem 1rem;
+}
+
+.prompt-condition-label {
+    color: var(--practice-cobalt-deep);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .075em;
+    line-height: 1.45;
+    text-transform: uppercase;
+}
+
+.referent-register-grid article {
+    border-block-start: .5rem solid var(--practice-cobalt);
+    box-shadow: none;
+}
+
+.referent-register-grid article:nth-child(2) {
+    border-block-start-color: var(--practice-ink);
+}
+
+.referent-register-grid article:nth-child(3) {
+    border-block-start-color: #5b8f91;
+}
+
+.persona-distinction,
+.benchmark-posture {
+    border: .125rem solid var(--practice-ink);
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+    padding: clamp(1.1rem, 2.8vw, 1.8rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.1rem), 2.8vw, 1.8rem);
+}
+
+.persona-distinction {
+    background: var(--practice-cream);
+    box-shadow: .5rem .5rem 0 var(--practice-cobalt);
+}
+
+.persona-distinction > :first-child,
+.persona-distinction > :last-child,
+.benchmark-posture > :first-child,
+.benchmark-posture > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.persona-distinction dl {
+    display: grid;
+    gap: .65rem;
+    margin-block: 1.25rem;
+}
+
+.persona-distinction dl > div {
+    background: rgb(255 255 255 / 68%);
+    border: 1px solid var(--canvas-rule-strong, #7893bc);
+    padding: .85rem 1rem;
+}
+
+.persona-distinction dt {
+    color: var(--practice-cobalt-deep);
+    font-weight: 850;
+}
+
+.persona-distinction dd {
+    margin: .25rem 0 0;
+}
+
+.persona-distinction dd > a,
+.benchmark-posture p > a {
+    font-size: .8em;
+    font-weight: 850;
+    margin-inline-start: .15rem;
+    vertical-align: super;
+}
+
+.benchmark-posture {
+    background: var(--practice-cobalt-deep);
+    border-inline-start: .75rem double var(--practice-lime);
+    color: #fffdf8;
+}
+
+.benchmark-posture :is(h3, p, a),
+.benchmark-posture .implementation-companion__eyebrow {
+    color: inherit;
+}
+
+.source-register-grid > section {
+    background: var(--canvas-paper, #fffaf2);
+    border: 1px solid var(--canvas-rule-strong, #7893bc);
+    min-inline-size: 0;
+    padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.source-register-grid > section > :first-child,
+.source-register-grid > section > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.practice-bibliography {
+    display: grid;
+    gap: 1rem;
+    padding-inline-start: 1.4rem;
+}
+
+.practice-bibliography li {
+    border-block-start: 1px solid var(--canvas-rule, #bdc8d8);
+    padding-block-start: .8rem;
+}
+
+.practice-bibliography li:target {
+    background: var(--practice-lime);
+    color: var(--practice-ink);
+    outline: .2rem solid var(--practice-cobalt);
+    outline-offset: .25rem;
+}
+
+.new-tab-note {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .74em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.prompt-side-practice-page p.source-basis {
+    display: block;
+}
+
+.lesson-field-host {
+    background:
+        linear-gradient(112deg, rgb(40 85 243 / 8%) 0 24rem, transparent 24rem),
+        linear-gradient(transparent 95%, rgb(23 52 95 / 8%) 95%),
+        var(--practice-sea);
+    background-size: auto, 100% 2rem, auto;
+}
+
+.lesson-field-orientation {
+    display: grid;
+    gap: .8rem;
+    margin-block: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.lesson-capsule-intro {
+    background: var(--practice-cream);
+    border: .125rem solid var(--practice-ink);
+    border-inline-start: .75rem double var(--practice-cobalt);
+    margin-block: clamp(1.5rem, 3vw, 2.25rem);
+    padding: clamp(1rem, 2.6vw, 1.75rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.6vw, 1.75rem);
+}
+
+.lesson-capsule-intro > :first-child,
+.lesson-capsule-intro > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.lesson-field-first-run {
+    margin-block: 1.25rem 0;
+}
+
+.lesson-field-first-run li {
+    padding-inline-start: .25rem;
+}
+
+.lesson-field-orientation > div {
+    background: rgb(255 253 248 / 88%);
+    border: .125rem solid var(--practice-ink);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.lesson-field-orientation dt {
+    color: var(--practice-cobalt-deep);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .78rem;
+    font-weight: 850;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.lesson-field-orientation dd {
+    margin: .35rem 0 0;
+}
+
+.lesson-field-embed {
+    min-inline-size: 0;
+}
+
+.lesson-field-embed iframe {
+    block-size: clamp(52rem, 84vh, 72rem);
+    max-inline-size: 100%;
+}
+
+.lesson-class-size-panel,
+.lesson-field-readback,
+.referent-deep-dive-intro {
+    border: .125rem solid var(--practice-ink);
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+    min-inline-size: 0;
+    padding: clamp(1rem, 2.6vw, 1.75rem);
+}
+
+.lesson-class-size-panel {
+    background:
+        linear-gradient(90deg, transparent 0 2.9rem, rgb(40 85 243 / 15%) 2.9rem 3rem, transparent 3rem),
+        repeating-linear-gradient(0deg, transparent 0 1.95rem, rgb(23 52 95 / 10%) 1.95rem 2rem),
+        var(--practice-cream);
+    box-shadow: .5rem .5rem 0 var(--practice-ink);
+}
+
+.lesson-class-size-panel > :first-child,
+.lesson-class-size-panel > :last-child,
+.lesson-field-readback > :first-child,
+.lesson-field-readback > :last-child,
+.referent-deep-dive-intro > :first-child,
+.referent-deep-dive-intro > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.lesson-class-size-list {
+    display: grid;
+    gap: .65rem 1.25rem;
+    margin-block: 1.25rem;
+    padding-inline-start: 1.35rem;
+}
+
+.lesson-class-size-list li {
+    break-inside: avoid;
+    padding-inline-start: .2rem;
+}
+
+.lesson-class-size-chain {
+    background: var(--practice-lime);
+    border: .125rem solid var(--practice-ink);
+    color: var(--practice-ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding: .9rem 1rem;
+}
+
+.lesson-field-readback {
+    background: var(--practice-cobalt-deep);
+    border-inline-start: .75rem double var(--practice-lime);
+    color: #fffdf8;
+}
+
+.lesson-field-readback :is(h3, h4, p) {
+    color: inherit;
+}
+
+.lesson-field-readback .prompt-condition-label {
+    color: var(--practice-lime);
+}
+
+.lesson-field-readback-grid {
+    display: grid;
+    gap: .8rem;
+    margin-block-start: 1.25rem;
+}
+
+.lesson-field-readback-grid article {
+    background: rgb(255 255 255 / 9%);
+    border: 1px solid rgb(255 255 255 / 55%);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.lesson-field-readback-grid article > :first-child,
+.lesson-field-readback-grid article > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.referent-deep-dive-intro {
+    background:
+        linear-gradient(135deg, rgb(40 85 243 / 11%) 0 12rem, transparent 12rem),
+        var(--canvas-paper, #fffaf2);
+    border-block-start: .6rem solid var(--practice-cobalt);
+}
+
+.lesson-field-static-equivalent,
+.lesson-field-boundary {
+    background: var(--canvas-paper, #fffaf2);
+    border: .125rem solid var(--practice-ink);
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+    min-inline-size: 0;
+    padding: clamp(1rem, 2.6vw, 1.75rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.6vw, 1.75rem);
+}
+
+.lesson-field-static-equivalent {
+    box-shadow: .5rem .5rem 0 var(--practice-cobalt);
+}
+
+.lesson-field-static-equivalent > :first-child,
+.lesson-field-static-equivalent > :last-child,
+.lesson-field-boundary > :first-child,
+.lesson-field-boundary > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.lesson-field-static-equivalent .table-figure {
+    margin-block-end: 0;
+}
+
+.lesson-field-boundary {
+    background: var(--practice-cobalt-deep);
+    border-inline-start: .75rem double var(--practice-lime);
+    color: #fffdf8;
+}
+
+.lesson-field-boundary :is(h3, p),
+.lesson-field-boundary .implementation-companion__eyebrow {
+    color: inherit;
+}
+
+.lesson-field-noscript {
+    background: var(--practice-cream);
+    border-inline-start: .35rem solid var(--practice-cobalt);
+    padding: .9rem 1rem;
+}
+
+@media (min-width: 48rem) {
+    .referent-register-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .persona-distinction dl {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lesson-field-orientation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lesson-class-size-list,
+    .lesson-field-readback-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 72rem) {
+    .prompt-comparison {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .source-register-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (forced-colors: active) {
+    .prompt-comparison article,
+    .referent-register-grid article,
+    .persona-distinction,
+    .benchmark-posture,
+    .source-register-grid > section {
+        box-shadow: none;
+        forced-color-adjust: auto;
+    }
+
+    .benchmark-posture {
+        border-inline-start-style: double;
+    }
+
+    .lesson-field-orientation > div,
+    .lesson-capsule-intro,
+    .lesson-field-embed,
+    .lesson-class-size-panel,
+    .lesson-field-readback,
+    .referent-deep-dive-intro,
+    .lesson-field-static-equivalent,
+    .lesson-field-boundary {
+        box-shadow: none;
+        forced-color-adjust: auto;
+    }
+
+    .lesson-field-boundary,
+    .lesson-field-readback {
+        border-inline-start-style: double;
+    }
+}
+
+@media screen and (max-width: 40rem) {
+    .lesson-field-embed {
+        margin-inline: 0;
+        padding: .5rem;
+    }
+
+    .lesson-field-embed iframe {
+        block-size: 48rem;
+    }
+}
+
+@media print {
+    .prompt-referent-field {
+        background: #fff;
+    }
+
+    .prompt-comparison,
+    .referent-register-grid,
+    .persona-distinction,
+    .benchmark-posture,
+    .source-register-grid,
+    .practice-bibliography li {
+        break-inside: avoid;
+    }
+
+    .prompt-comparison article,
+    .persona-distinction,
+    .benchmark-posture {
+        box-shadow: none;
+    }
+
+    .benchmark-posture {
+        background: #fff;
+        color: #000;
+    }
+
+    .lesson-field-host {
+        background: #fff;
+    }
+
+    .lesson-field-embed,
+    .lesson-field-noscript {
+        display: none;
+    }
+
+    .lesson-field-orientation,
+    .lesson-capsule-intro,
+    .lesson-class-size-panel,
+    .lesson-field-readback,
+    .referent-deep-dive-intro,
+    .lesson-field-static-equivalent,
+    .lesson-field-boundary,
+    .lesson-field-static-equivalent tr {
+        break-inside: avoid;
+    }
+
+    .lesson-capsule-intro,
+    .lesson-class-size-panel,
+    .lesson-field-readback,
+    .referent-deep-dive-intro,
+    .lesson-field-static-equivalent,
+    .lesson-field-boundary {
+        background: #fff;
+        box-shadow: none;
+        color: #000;
+    }
+}

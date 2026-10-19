@@ -1,0 +1,209 @@
+{
+  "id": "driftframe.lims_eln.functional_nucleus.v1",
+  "title": "LIMS/ELN Functional Nucleus",
+  "manifest_version": "1.0.0",
+  "nucleus_version": "0.3.1",
+  "captured_on": "2026-08-22",
+  "surface_kind": "integrated_exact_head_encounter",
+  "authority_posture": {
+    "standalone_repositories": "source_history_release_and_issue_authority",
+    "integrated_directory": "cross_repository_prototype_and_validation_encounter",
+    "production_authorization_effect": "none"
+  },
+  "shared_profiles": {
+    "control_plane_profile": "0.3.0",
+    "governance_schema": "2.0.1",
+    "shared_contract_nucleus": "1.0.0",
+    "golden_scenario_id": "SCN-GOLDEN-SPECIMEN-001",
+    "observation_envelope_schema": "1.0.0",
+    "observation_envelope_schema_scope": "shared_compatibility_projection",
+    "comparator_operational_observation_envelope_schema": "1.2.0"
+  },
+  "automation_posture": {
+    "nucleus_root_workflows": [],
+    "nucleus_root_dependabot_configuration": null,
+    "nested_github_material": "preserved_dormant_source_repository_context",
+    "enclosing_repository_workflows": [
+      "../.github/workflows/lims-eln-enterprise-reference.yml",
+      "../.github/workflows/lims-eln-functional-nucleus.yml"
+    ],
+    "enclosing_repository_workflow_trigger_posture": "manual_dispatch_with_explicit_run_gates",
+    "enclosing_repository_canonical_dependabot_configuration": null,
+    "enclosing_repository_dormant_dependabot_template": "../.github/dependabot.manual.yml",
+    "enclosing_repository_dormant_dependency_ecosystems": [
+      "npm",
+      "github-actions",
+      "pip"
+    ],
+    "enclosing_repository_actions_state": "disabled",
+    "enclosing_repository_actions_budget_posture": "zero_usd_at_rest",
+    "enclosing_repository_actions_state_record": "../.github/AUTOMATION.md",
+    "standing_validation_path": "local",
+    "hosted_required_check_ruleset_change": "approved_applied_and_verified_for_five_source_repositories",
+    "hosted_ruleset_mutation_in_this_snapshot": "external_repository_settings_change_recorded_only",
+    "protected_delivery_ruleset_record": {
+      "ruleset_name": "Control Plane Protected Delivery",
+      "enforcement": "active",
+      "source_repositories": [
+        "urn:source-key:lims-eln-program-specification",
+        "urn:source-key:lims-eln-enterprise-implementation",
+        "urn:source-key:lims-eln-simulated-final-state",
+        "urn:source-key:lims-eln-comparative-evidence",
+        "urn:source-key:site-reading-governance"
+      ],
+      "removed_rule_type": "required_status_checks",
+      "retained_rule_types": [
+        "deletion",
+        "non_fast_forward",
+        "pull_request"
+      ],
+      "retained_pull_request_parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "require_code_owner_review": true,
+        "require_extra_approval_for_unattributed_changes": true,
+        "require_last_push_approval": true,
+        "required_review_thread_resolution": true,
+        "allowed_merge_methods": [
+          "merge",
+          "squash",
+          "rebase"
+        ]
+      }
+    },
+    "automation_record_authority": "operating_posture_only_no_source_or_production_authority",
+    "copy_receipt_verification_scope": "source_files_only"
+  },
+  "repositories": [
+    {
+      "directory": "site-reading-governance",
+      "repository_role": "site_reading_governance",
+      "role_summary": "Shared evidence, authority, decision, comparison, and invalidation grammar",
+      "component_version": "2.0.1",
+      "version_kind": "governance_schema_release",
+      "source_repository": "urn:source-key:site-reading-governance",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_base_branch": "develop",
+      "source_head": "95869386681d4d5502ed5abf4949638cf007b7ad",
+      "capture_state": "exact_clean_head",
+      "source_status_entries": 0,
+      "orientation": "site-reading-governance/README.md",
+      "validation_entrypoint": "site-reading-governance/tools/validate_governance.py"
+    },
+    {
+      "directory": "lims-eln-program-specification",
+      "repository_role": "program_specification",
+      "role_summary": "Requirements, acceptance semantics, versioned operations, shared contracts, and executable scenarios",
+      "component_version": "0.3.1",
+      "version_kind": "repository_release",
+      "source_repository": "urn:source-key:lims-eln-program-specification",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_base_branch": "develop",
+      "source_head": "23e6ea973f6bd5cc5caa46de10aed589816af9b5",
+      "capture_state": "exact_clean_head",
+      "source_status_entries": 0,
+      "role_record": "lims-eln-program-specification/release/repository-role.json",
+      "orientation": "lims-eln-program-specification/README.md",
+      "runtime_entrypoint": "lims-eln-program-specification/src/lims_eln_contracts",
+      "validation_entrypoint": "lims-eln-program-specification/scripts/validate_program.py"
+    },
+    {
+      "directory": "lims-eln-simulated-final-state",
+      "repository_role": "simulated_final_state",
+      "role_summary": "Executable selected-future behavior, assumptions, and simulated observations",
+      "component_version": "0.3.1",
+      "version_kind": "repository_release",
+      "source_repository": "urn:source-key:lims-eln-simulated-final-state",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_base_branch": "develop",
+      "source_head": "ead7b137ab3b38bcd38b88aa2b517ad83b1f4792",
+      "capture_state": "exact_clean_head",
+      "source_status_entries": 0,
+      "role_record": "lims-eln-simulated-final-state/release/repository-role.json",
+      "orientation": "lims-eln-simulated-final-state/README.md",
+      "runtime_entrypoint": "lims-eln-simulated-final-state/src/lims_eln_sim/cli.py"
+    },
+    {
+      "directory": "lims-eln-enterprise-implementation",
+      "repository_role": "enterprise_implementation",
+      "role_summary": "Domain services, adapters, persistence shapes, and the Golden Specimen Workbench",
+      "component_version": "0.3.1",
+      "version_kind": "repository_release",
+      "source_repository": "urn:source-key:lims-eln-enterprise-implementation",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_base_branch": "develop",
+      "source_head": "ac33876eba2dff1ad803d9a7175c1e956036c226",
+      "capture_state": "exact_clean_head",
+      "source_status_entries": 0,
+      "role_record": "lims-eln-enterprise-implementation/release/repository-role.json",
+      "orientation": "lims-eln-enterprise-implementation/README.md",
+      "runtime_entrypoint": "lims-eln-enterprise-implementation/src/lims_eln_implementation/workbench/cli.py",
+      "validation_entrypoint": "lims-eln-enterprise-implementation/scripts/validate_repository.py"
+    },
+    {
+      "directory": "lims-eln-comparative-evidence",
+      "repository_role": "comparative_evidence",
+      "role_summary": "Independent evidence admission, normalization, comparison, and adjudication",
+      "component_version": "0.3.1",
+      "version_kind": "repository_release",
+      "source_repository": "urn:source-key:lims-eln-comparative-evidence",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_base_branch": "develop",
+      "source_head": "0fdc17766cd0b9d8148f01293bd324f2d4c360b5",
+      "capture_state": "exact_clean_head",
+      "source_status_entries": 0,
+      "role_record": "lims-eln-comparative-evidence/release/repository-role.json",
+      "orientation": "lims-eln-comparative-evidence/README.md",
+      "runtime_entrypoint": "lims-eln-comparative-evidence/src/comparative_evidence/cli.py"
+    }
+  ],
+  "copy_policy": {
+    "included": "All current working-tree source and repository metadata outside the declared generated-output exclusions",
+    "preserved_metadata": [
+      "licenses",
+      "notices",
+      "governance records",
+      "release role records",
+      "security and contribution guidance",
+      "dormant nested .github references"
+    ],
+    "excluded_directory_names": [
+      ".git",
+      ".venv",
+      "venv",
+      "env",
+      "ENV",
+      "build",
+      "dist",
+      "__pycache__",
+      ".pytest_cache",
+      ".mypy_cache",
+      ".ruff_cache",
+      ".tox",
+      ".nox",
+      ".hypothesis",
+      ".cache",
+      "htmlcov",
+      "node_modules",
+      "*.egg-info",
+      ".eggs",
+      "wheels"
+    ],
+    "excluded_file_names": [
+      "*.pyc",
+      "*.pyo",
+      "*.pyd",
+      "*.whl",
+      ".coverage",
+      ".coverage.*",
+      "coverage.xml",
+      "nosetests.xml",
+      ".DS_Store",
+      "pip-log.txt",
+      "npm-debug.log",
+      "yarn-debug.log*",
+      "yarn-error.log*"
+    ],
+    "receipt": "copy-receipt.json"
+  }
+}

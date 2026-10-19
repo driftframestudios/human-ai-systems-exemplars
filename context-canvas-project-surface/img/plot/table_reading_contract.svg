@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+  <title id="title">Three agreements keep a comparison intact</title>
+  <desc id="desc">Meaning joins the caption, row identity, column heading and value. Space separates the parent page, embedded viewport and locally scrollable table. Evidence joins the source, intended behavior and observation. These are design relationships rather than measured quantities.</desc>
+  <defs>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#17345f" stroke-opacity=".06"/></pattern>
+  </defs>
+  <style>
+    text { fill: #17345f; font-family: Futura, 'Trebuchet MS', sans-serif; }
+    .title { font-size: 42px; font-weight: 700; }
+    .heading { font-size: 29px; font-weight: 700; }
+    .body { font-size: 24px; }
+    .label { font: 700 19px 'Courier New', monospace; letter-spacing: 1px; }
+    .small { font-size: 21px; }
+    .card { stroke: #17345f; stroke-width: 2; }
+  </style>
+  <rect width="1440" height="840" rx="28" fill="#fff5de"/>
+  <rect width="1440" height="840" rx="28" fill="url(#grid)" aria-hidden="true"/>
+  <text x="52" y="64" class="label">READABLE TABLES / A RELATIONSHIP MAP</text>
+  <text x="52" y="123" class="title">Give the comparison room.</text>
+  <text x="52" y="166" class="body">Meaning, available space and evidence each keep a distinct job.</text>
+  <g role="group" aria-labelledby="meaning-title">
+    <title id="meaning-title">Meaning: recover the complete record</title>
+    <rect x="60" y="220" width="420" height="518" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="52" y="212" width="420" height="518" rx="17" fill="#fffdf8" class="card"/>
+    <text x="80" y="258" class="label">01 / MEANING</text>
+    <text x="80" y="305" class="heading">Recover the record</text>
+    <rect x="80" y="340" width="364" height="48" fill="#cfe7f7" class="card"/>
+    <text x="99" y="372" class="small">Caption: comparison topic</text>
+    <rect x="80" y="388" width="130" height="112" fill="#d9efea" class="card"/>
+    <rect x="210" y="388" width="234" height="48" fill="#cfe7f7" class="card"/>
+    <rect x="210" y="436" width="234" height="64" fill="#fffdf8" class="card"/>
+    <text x="97" y="428" class="small">Row</text><text x="97" y="458" class="small">identity</text>
+    <text x="229" y="420" class="small">Column heading</text><text x="229" y="477" class="small">Value and unit</text>
+    <text x="80" y="551" class="body">Native headers carry</text><text x="80" y="584" class="body">the relationship.</text>
+    <text x="80" y="636" class="small">Supplemental labels preserve</text><text x="80" y="665" class="small">context in selected extracts.</text>
+  </g>
+  <g role="group" aria-labelledby="space-title">
+    <title id="space-title">Space: measure the actual receiving viewport</title>
+    <rect x="514" y="220" width="420" height="518" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="506" y="212" width="420" height="518" rx="17" fill="#d9efea" class="card"/>
+    <text x="534" y="258" class="label">02 / SPACE</text>
+    <text x="534" y="305" class="heading">Measure the frame</text>
+    <rect x="534" y="340" width="364" height="162" rx="10" fill="#fffdf8" class="card"/>
+    <text x="553" y="373" class="small">Parent page</text>
+    <rect x="560" y="391" width="310" height="90" rx="6" fill="#cfe7f7" class="card"/>
+    <text x="577" y="423" class="small">Embedded viewport</text>
+    <path d="M577 452H839M577 447V457M839 447V457" fill="none" stroke="#17345f" stroke-width="3"/>
+    <text x="534" y="551" class="body">Readable columns keep</text><text x="534" y="584" class="body">a local scroll route.</text>
+    <text x="534" y="636" class="small">Keyboard entry, both edges,</text><text x="534" y="665" class="small">focus and exit stay reachable.</text>
+  </g>
+  <g role="group" aria-labelledby="evidence-title">
+    <title id="evidence-title">Evidence: bind an observation to its claim</title>
+    <rect x="968" y="220" width="420" height="518" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="960" y="212" width="420" height="518" rx="17" fill="#cfe7f7" class="card"/>
+    <text x="988" y="258" class="label">03 / EVIDENCE</text>
+    <text x="988" y="305" class="heading">Carry the observation</text>
+    <rect x="988" y="340" width="364" height="48" rx="6" fill="#fffdf8" class="card"/>
+    <text x="1007" y="372" class="small">Source and intended behavior</text>
+    <path d="M1161 396H1179V409H1188L1170 429L1152 409H1161Z" fill="#2855f3" aria-hidden="true"/>
+    <rect x="988" y="438" width="364" height="64" rx="6" fill="#fffdf8" class="card"/>
+    <text x="1007" y="477" class="small">Named case and result</text>
+    <text x="988" y="551" class="body">A relevant change reopens</text><text x="988" y="584" class="body">its dependent cases.</text>
+    <text x="988" y="636" class="small">Retained evidence keeps its</text><text x="988" y="665" class="small">original scope and revision.</text>
+  </g>
+  <text x="52" y="789" class="small">Design relationships, not measurements. The adjacent article supplies the examples, source basis and limits.</text>
+</svg>
