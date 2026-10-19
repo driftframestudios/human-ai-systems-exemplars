@@ -82,7 +82,14 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}.split-note{display:g
 @media(max-width:780px){.hero{grid-template-columns:1fr}.grid-3,.grid-4,.comp-grid,.split-note{grid-template-columns:1fr}.field.inline{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}.panel{padding:13px}.hero-card{padding:21px}h1{font-size:clamp(2.3rem,13vw,4rem)}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
-.pill select{max-width:190px;min-width:0}.panel-header .pill{overflow:hidden}
+.pill select{max-width:190px;min-width:0}.panel-header .pill{flex-wrap:wrap;overflow-wrap:anywhere}
+/* Native select text stays within its closed control; the menu retains its options. */
+.panel-header select{overflow:hidden}
+/* Narrow headers keep orientation above controls and complete status text. */
+@media(max-width:780px){
+  .panel-header{flex-direction:column}
+  .panel-header .toolbar{width:100%}
+}
 </style>
 <style>
 .artifact-attribution{position:static;box-sizing:border-box;width:100%;overflow-wrap:anywhere}.artifact-attribution__notice{box-sizing:border-box;width:100%;max-width:82rem;margin:clamp(1.5rem,4vw,3rem) auto 0;padding:1rem clamp(1rem,3vw,1.75rem) 1.5rem;color:var(--muted,currentColor);font-size:.78rem;line-height:1.55;text-align:center}@media print{.artifact-attribution__notice{color:#000}}@media(forced-colors:active){.artifact-attribution__notice{color:CanvasText}}

@@ -45,10 +45,13 @@
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <link rel="stylesheet" href="styles/components/reading-flow.css">
     <link rel="stylesheet" href="fmi-lims-eln-replatforming.css">
     <link rel="stylesheet" href="canvas-shell.css">
+    <link rel="stylesheet" href="styles/routes/fmi-reading-rail-state.css">
   <script src="visitor-boundary-contract.js" defer></script>
   <script src="canvas-shell.js" defer></script>
+  <script src="fmi-reading-rail.js" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -111,27 +114,17 @@
           research was quality, and the loudest, most repeated concern was location and provenance: where is this
           sample, what is its status, what work is connected, and who signed off, and when?
         </p>
-        <ol class="fmi-track-key" aria-label="Two-track reading structure">
-          <li>
-            <strong>01 · Solution</strong>
-            <span>The 2021–2022 engagement, its people, reframing, shared objects, vendor selection, and later production transfer.</span>
-          </li>
-          <li>
-            <strong>02 · Implementation</strong>
-            <span>The 2021–2022 systems beside a 2025–2026 reference implementation, with failures and recovery kept visible.</span>
-          </li>
-        </ol>
       </header>
 
-      <nav class="fmi-reading-rail" data-canvas-page-rail aria-label="On this FMI LIMS and ELN reading">
-        <p class="fmi-reading-rail__label">On this reading</p>
+      <nav class="fmi-reading-rail" data-canvas-page-rail aria-label="In this FMI LIMS and ELN reading">
+        <p class="fmi-reading-rail__label">In this reading</p>
         <ol>
           <li><a href="#genomics-sequencing-process-walkthrough" aria-label="Demonstration"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Demonstration</span></a></li>
           <li><a href="#solution-architecture-title" aria-label="Solution"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Solution</span></a></li>
           <li><a href="#shared-grammar-title" aria-label="Shared grammar"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Shared grammar</span></a></li>
           <li><a href="#solution-outcomes-title" aria-label="Outcome"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Outcome</span></a></li>
           <li><a href="#implementation-architecture-title" aria-label="Implementation"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Implementation</span></a></li>
-          <li><a href="#implementation-intervention-title" aria-label="Technical moves"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Technical moves</span></a></li>
+          <li><a href="#implementation-intervention-title" aria-label="System changes"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">System changes</span></a></li>
           <li><a href="#program-constellation-title" aria-label="Constellation"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Constellation</span></a></li>
           <li><a href="#architecture-carriers-title" aria-label="Architecture carriers"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Architecture carriers</span></a></li>
           <li><a href="#population-cartography-title" aria-label="Population fit"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Population fit</span></a></li>
@@ -197,6 +190,7 @@
             <aside id="genomics-sequencing-process-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-sequencing-process-transcript-title">
               <p class="implementation-companion__eyebrow">Visual description</p>
               <h3 id="genomics-sequencing-process-transcript-title" class="txt-h3">Several views keep one sequencing process in discussion</h3>
+              <div class="fmi-companion-reading">
               <ol>
                 <li>The demonstration opens on axonometric laboratory lanes that organize sequencing stages, samples, and current status.</li>
                 <li>A plate and well view brings quality-control state to the individual well while preserving the plate-level pattern.</li>
@@ -204,6 +198,7 @@
                 <li>Camera and selected-record panels add visual context and detailed sample information where participants inspect an exception.</li>
                 <li>Moving among the views preserves the shared process identity, giving laboratory teams several precise ways to identify a mismatch and revise the model.</li>
               </ol>
+              </div>
             </aside>
           </section>
         </div>
@@ -211,49 +206,55 @@
 
       <div class="content__container bg__adjust--canvas-paper fmi-solution-field fmi-solution-field--paper">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-architecture-title">
-            <p class="fmi-track-marker"><span>Track 01</span> Solution narrative · purpose and changed work</p>
-            <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">Solution Architecture</h2>
-            <p class="fmi-track-promise">I describe the people, disagreement, shared-object reframe, and changed work from the 2021–2022 engagement. The later technical reference extends those ideas while preserving that history.</p>
-            <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — The Engagement and Its Stakes</h3>
-            <p>
-              Foundation Medicine provides genomic profiling and related decision-support services used by oncology teams,
-              researchers, and biopharma partners. The visible product may be a report or research result; the work behind it
-              begins with a patient specimen and depends on hundreds of laboratory practitioners keeping identity, custody,
-              processing state, quality review, and scientific meaning coherent across the journey. Ordering physicians,
-              researchers, nurse practitioners, genomic counselors, and ultimately patients rely on that chain holding.
-            </p>
-            <p>
-              In 2021 the Lab Systems Transformation team began re-platforming the regulated lab-execution environment — the
-              LIMS and ELN that, together with eight-to-twelve mission-critical applications, supported operations that
-              included CLIA-certified laboratories and FDA-regulated activities across multiple sites; applicability varied
-              by site, assay, record, and intended use, including a US East Coast lab and a German lab. Participants described
-              the failure of any one of those applications as critical. A late-Q4 2021 or early-Q1 2022 target gave the research
-              and pilot design one or two business quarters before approval, build, integration, and a pilot that could guide
-              the full implementation.<sup><a href="#source-solution">1</a></sup>
-            </p>
-            <p>
-              The engagement carried a scar. A prior <em>big-bang</em> refresh of the LIMS had failed and been reverted to the
-              legacy system for missing functionality. Lab personnel felt the replacement was unrecognizable; technology teams
-              felt they had consulted adjacent units. Both accounts could be true. The rollback remained a sensitive, lived
-              memory and made participation a delivery concern rather than a ceremonial research step.
-            </p>
-            <blockquote class="debrief-quote">
-              <p>“Behind every sample is a patient.”</p>
-              <p>“Always trying to figure out where is this sample.”</p>
-              <cite>A recurring signal across laboratory interviews</cite>
-            </blockquote>
-            <p>
-              Other phrases gave that question its emotional and operational weight: “System is unforgiving. Painful to undo.
-              High-maintenance.” “New products require tons of changes.” One participant summarized the loss of agency more
-              simply: “Technology sort of happens to us.” Hundreds of lab personnel relied on these systems to do their jobs;
-              involving them throughout made experimentation safer, more legible, and less disruptive. COVID separated people
-              who would ordinarily share physical context, so tablet views and explicit handoffs became especially important.
-              Third-shift participants described needing to be “in three places at once” and a single failure creating a
-              “domino effect”; tickets carried stress because the queue continued while support and shared context thinned.
-              “Where is this sample?” carried several questions at once: physical location, processing state, connected work,
-              responsible actor, and the context behind the latest sign-off.
-            </p>
+          <article class="debrief-movement" aria-labelledby="solution-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="fmi-track-marker"><span>Track 01</span> Solution narrative · purpose and changed work</p>
+              <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">Solution Architecture</h2>
+            </header>
+            <div class="reading-flow">
+              <p class="fmi-track-promise">I describe the people, disagreement, shared-object reframe, and changed work from the 2021–2022 engagement. The later technical reference extends those ideas while preserving that history.</p>
+              <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — The Engagement and Its Stakes</h3>
+              <div class="prose-flow">
+                <p>
+                  Foundation Medicine provides genomic profiling and related decision-support services used by oncology teams,
+                  researchers, and biopharma partners. The visible product may be a report or research result; the work behind it
+                  begins with a patient specimen and depends on hundreds of laboratory practitioners keeping identity, custody,
+                  processing state, quality review, and scientific meaning coherent across the journey. Ordering physicians,
+                  researchers, nurse practitioners, genomic counselors, and ultimately patients rely on that chain holding.
+                </p>
+                <p>
+                  In 2021 the Lab Systems Transformation team began re-platforming the regulated lab-execution environment — the
+                  LIMS and ELN that, together with eight-to-twelve mission-critical applications, supported operations that
+                  included CLIA-certified laboratories and FDA-regulated activities across multiple sites; applicability varied
+                  by site, assay, record, and intended use, including a US East Coast lab and a German lab. Participants described
+                  the failure of any one of those applications as critical. A late-Q4 2021 or early-Q1 2022 target gave the research
+                  and pilot design one or two business quarters before approval, build, integration, and a pilot that could guide
+                  the full implementation.<sup><a href="#source-solution">1</a></sup>
+                </p>
+                <p>
+                  The engagement carried a scar. A prior <em>big-bang</em> refresh of the LIMS had failed and been reverted to the
+                  legacy system for missing functionality. Lab personnel felt the replacement was unrecognizable; technology teams
+                  felt they had consulted adjacent units. Both accounts could be true. The rollback remained a sensitive, lived
+                  memory and made participation a delivery concern rather than a ceremonial research step.
+                </p>
+                <blockquote class="debrief-quote">
+                  <p>“Behind every sample is a patient.”</p>
+                  <p>“Always trying to figure out where is this sample.”</p>
+                  <cite>A recurring signal across laboratory interviews</cite>
+                </blockquote>
+                <p>
+                  Other phrases gave that question its emotional and operational weight: “System is unforgiving. Painful to undo.
+                  High-maintenance.” “New products require tons of changes.” One participant summarized the loss of agency more
+                  simply: “Technology sort of happens to us.” Hundreds of lab personnel relied on these systems to do their jobs;
+                  involving them throughout made experimentation safer, more legible, and less disruptive. COVID separated people
+                  who would ordinarily share physical context, so tablet views and explicit handoffs became especially important.
+                  Third-shift participants described needing to be “in three places at once” and a single failure creating a
+                  “domino effect”; tickets carried stress because the queue continued while support and shared context thinned.
+                  “Where is this sample?” carried several questions at once: physical location, processing state, connected work,
+                  responsible actor, and the context behind the latest sign-off.
+                </p>
+              </div>
+            </div>
           </article>
         </div>
       </div>
@@ -261,37 +262,39 @@
       <div class="content__container bg__adjust--canvas-paper fmi-solution-field fmi-solution-field--quiet">
         <div class="content content--editorial">
           <section aria-labelledby="shared-grammar-title">
-            <article class="prose-flow" aria-labelledby="shared-grammar-title">
+            <article class="reading-flow" aria-labelledby="shared-grammar-title">
               <h3 id="shared-grammar-title" class="txt-h3 beat-title">§b The Bottleneck — Where the Shared Grammar Was Missing</h3>
-              <p class="debrief-lead">
-                On its face this was a build-or-buy vendor decision. Underneath, six-plus teams and jurisdictions had quietly
-                forked their own workarounds, and a wide, deep communication web of triggered emails, Slack messages, and
-                tickets had grown up to compensate for the gaps between systems.
-              </p>
-              <p>
-                The real diagnosis: a <strong>shared grammar</strong> for the objects every system edited — <em>sample, plate,
-                reagent, run, sign-off</em> — carried the foundational need, together with their states and acceptable ranges.
-                Tooling fit followed from that naming move: define the shared
-                objects and states, then evaluate how each system supports the grammar, workflow, and review requirements.
-              </p>
-              <p>
-                The binding constraint lived in the communication layer. Eight-plus teams described the same underlying
-                objects in mutually unintelligible terms, so <strong>feedback was expensive to gather and hard to act on</strong>, and each
-                approval pathway had accreted its own defensive checks. Expensive feedback plus defensive approvals compounded
-                into slow, costly change on regulated work — a tax on every project, including this one.<sup><a href="#source-implementation">2</a></sup>
-              </p>
-              <blockquote class="debrief-quote">
-                <p>“What we do in many workflows is not so unique that we need our own special solution.”</p>
-                <cite>A laboratory participant locating the common grammar beneath local variation</cite>
-              </blockquote>
-              <p>
-                That observation shifted the question from “Which vendor has every feature?” to “Which option represents the
-                shared objects, local variation, and consequential exceptions clearly enough for the work?” The Context Tree
-                also exposed relationships that some participants assumed were generated automatically or owned elsewhere.
-                Sample Monitor and LIMS could disagree about yield, step state, or location; the German lab quietly reassigned
-                jurisdiction-restricted cases overnight so US teams arrived to a usable queue. These were connected design
-                facts; the complete chain crossed several systems and teams.
-              </p>
+              <div class="prose-flow">
+                <p class="debrief-lead">
+                  On its face this was a build-or-buy vendor decision. Underneath, six-plus teams and jurisdictions had quietly
+                  forked their own workarounds, and a wide, deep communication web of triggered emails, Slack messages, and
+                  tickets had grown up to compensate for the gaps between systems.
+                </p>
+                <p>
+                  The real diagnosis: a <strong>shared grammar</strong> for the objects every system edited — <em>sample, plate,
+                  reagent, run, sign-off</em> — carried the foundational need, together with their states and acceptable ranges.
+                  Tooling fit followed from that naming move: define the shared
+                  objects and states, then evaluate how each system supports the grammar, workflow, and review requirements.
+                </p>
+                <p>
+                  The binding constraint lived in the communication layer. Eight-plus teams described the same underlying
+                  objects in mutually unintelligible terms, so <strong>feedback was expensive to gather and hard to act on</strong>, and each
+                  approval pathway had accreted its own defensive checks. Expensive feedback plus defensive approvals compounded
+                  into slow, costly change on regulated work — a tax on every project, including this one.<sup><a href="#source-implementation">2</a></sup>
+                </p>
+                <blockquote class="debrief-quote">
+                  <p>“What we do in many workflows is not so unique that we need our own special solution.”</p>
+                  <cite>A laboratory participant locating the common grammar beneath local variation</cite>
+                </blockquote>
+                <p>
+                  That observation shifted the question from “Which vendor has every feature?” to “Which option represents the
+                  shared objects, local variation, and consequential exceptions clearly enough for the work?” The Context Tree
+                  also exposed relationships that some participants assumed were generated automatically or owned elsewhere.
+                  Sample Monitor and LIMS could disagree about yield, step state, or location; the German lab quietly reassigned
+                  jurisdiction-restricted cases overnight so US teams arrived to a usable queue. These were connected design
+                  facts; the complete chain crossed several systems and teams.
+                </p>
+              </div>
             </article>
 
             <aside class="interpretive-aside" aria-labelledby="boundary-object-title">
@@ -417,123 +420,126 @@
 
       <div class="content__container bg__adjust--rose-pink fmi-solution-field fmi-solution-field--rose">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-intervention-title">
+          <article class="reading-flow" aria-labelledby="solution-intervention-title">
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — Naming the Grammar</h3>
-            <p>
-              The method was <strong>make things to learn</strong>. Research was time-boxed and breadth-over-depth,
-              chasing the most dangerous assumptions and the absolute deal-breakers first.
-            </p>
-            <p>
-              My first masonry view organized the laboratory around individual technologists, people, and teams. When I
-              placed it in front of scientists, molecular technologists, and assay-development specialists, the arrangement
-              obscured how they understood the work. I asked them to walk me through what felt incongruent and what they
-              expected to see. Their rota changed constantly: people took days off, teams trained across processes, and the
-              sequencers kept running. They needed the stable organizing units to be samples, plates, workflows, and continuous
-              processes, with staffing shown as a changing contributor.
-            </p>
-            <p>
-              I rebuilt the views around those durable objects and processes. <strong>The wrong design got me to the right
-              one</strong> because it made disagreement concrete early enough to use. Every design and engineering proposal is
-              an experiment: the practitioner is saying, “I believe this arrangement can produce a useful result.” The
-              working goal is a version people can point at, challenge, and reshape together. A reviewable version preserves
-              the correction and lets the next conversation begin from what the team learned.
-            </p>
-            <h4 class="txt-h4">The group corrected the artifact — and then the medium</h4>
-            <p>
-              I began with small combined interview-and-design sessions, changing masonry and schedule views while one expert
-              explained the work. Participatory reach accumulated to roughly n≈70–100+ across later sessions. A larger board
-              connected Plus/Delta prompts, Jobs-to-be-Done phrases, current-system screenshots,
-              working specifications, and the evolving usability and vendor matrix. People returned between meetings and added
-              detail when a forgotten exception or dependency surfaced. The specification accreted through use.
-            </p>
-            <blockquote class="debrief-quote">
-              <p>“I am not understanding what this is connected to.”</p>
-              <p>“Okay, and how does this connect to a decision we need to make?”</p>
-              <cite>Core-working-group feedback during the early presentations</cite>
-            </blockquote>
-            <p>
-              Those questions were fair. The core working group lived in Excel, took meeting notes in Excel, and evaluated
-              options through spreadsheets. My Senior Product Strategist partner and I first tried to meet that habit directly,
-              then learned that the spreadsheet-shaped synthesis still asked the group to assemble too much of the story for
-              themselves. For the next review we moved the same analysis into a concise presentation, paired it with direct
-              words from laboratory personnel, and made the decision connection explicit on every section. That meeting became
-              the first clear turning point: the group praised the approach, agreed with the recommendations, and carried the
-              shared language into later decisions. The work stayed the same; the receiving format finally fit the group.
-            </p>
-            <h4 class="txt-h4">The engagement shape</h4>
-            <ol class="debrief-sequence">
-              <li>Identify working groups, process owners, subject-matter experts, physical lab spaces, and jurisdictions; stand up JIRA boards, epics, and communication cadences. The core lab group’s existing wiki supported an optional PODA, a Context Tree, and an alignment worksheet where those frames helped the work.</li>
-              <li>Short-list vendors and split parallel technical tracks: product and application experience through service and middleware, and AWS and infrastructure, coordinated through a Shared Surface Priority Map.</li>
-              <li>Introduce the System Usability Scale and a weighted vendor-evaluation matrix; give sentiment markers and usability signals structure through a HEART Chart.</li>
-              <li>Wrap sketches around draft scenarios using familiar interface patterns through a Gantt chart, Masonry Layout, Specification Suite, and Pattern Problem Surface Matrix.</li>
-              <li>Run participatory design and research sessions that upgrade draft scenarios with deal-breaker functionality through an Impact Map, Plus/Delta, Specification by Example, and Situation-Model-style personas.</li>
-              <li>Prototype specific patterns for Lab R&amp;D, Clinical Development, and Decision Sciences; account for edge and corner cases; deploy team-wide surveys; aggregate and weight needs through a Jobs-to-be-Done Treemap.</li>
-              <li>Replace sketches with the interface patterns available from each solution, weighting vendors by how cleanly they replace the pattern, timed to vendor demonstrations.</li>
-              <li>Examine API mappings, capabilities, maintenance schedules, dependencies, and developer experience; run spikes implementing real scenarios with their failure geometries and recovery routing through Unit Test-First Design and an Upstream Revision Loop.</li>
-              <li>Estimate task count, known unknowns, and complexity per specification; distinguish comprehensive specifications from stubs that act as semantic attractors and sprint-board markers.</li>
-              <li>Fan the specifications into proposed sprints, estimate velocity from recent quarters, and cost development, integration, training, downtime, validation, and SOP rewrites against time saved and reduced error rates.</li>
-            </ol>
-            <p>
-              After several rounds with different participant groups, the prototypes and session materials became shared
-              artifacts that people could enrich asynchronously. Participants returned between sessions to add detail as they remembered it.
-              Because every interface control implied data primitives and acceptable ranges across states, the LIMS Systems
-              teams extended them with data objects, API calls, and storage considerations. These cross-sections, the Context
-              Tree, and the personas folded into a Service Design Blueprint.
-            </p>
-            <aside class="discovery-callout" aria-labelledby="automation-alliance-title">
-              <h4 id="automation-alliance-title" class="txt-h4">“I need this.” — one format began serving several teams</h4>
+            <div class="prose-flow">
               <p>
-                An Automation Developer saw the Specification Suite and immediately recognized a missing bridge. They already
-                held per-instrument and per-assay physical actions in spreadsheets; I held participant-tested scenarios and a
-                repeatable specification form. “If you can get as many of these as possible,” they told me, “I can apply that
-                format to all these supply requirements per scenario per instrument for each assay or product.” We worked
-                together outside the main meetings. The same scenarios became pilot specifications, open-source build-spike
-                cases, vendor-demo requests, and unit-test inputs. Each group gained something it already needed, and the
-                alliance created momentum through the work already in motion.
+                The method was <strong>make things to learn</strong>. Research was time-boxed and breadth-over-depth,
+                chasing the most dangerous assumptions and the absolute deal-breakers first.
               </p>
-            </aside>
-            <h4 class="txt-h4">Barriers to Adoption</h4>
-            <p>
-              Resource pressure was real and visible. The initiative lead said they would be “ruthless to get rid of blockers”
-              and pressed for a comprehensive specification suite. My team had two quarters, a pilot to define, and research
-              across several working groups. I committed to a deeply worked pilot subset and specification stubs for the wider
-              field. That kept the first-draft fee focused on the decision the organization could actually make.
-            </p>
-            <p>
-              The tension sharpened when my Senior Product Strategist partner felt repeatedly cut off and dismissed. I told my
-              Associate Director that I intended to address it directly and might need their support afterward. In the meeting,
-              I named the behavior, explained why constraining participant feedback to what the working group already considered
-              “in scope” would weaken the research, and then placed the participants’ own words in front of the group. We zoomed
-              out from a long feature list to the recurring questions: where is the sample, what state is it in, who signed off,
-              and how is the work connected?
-            </p>
-            <blockquote class="debrief-quote">
-              <p>“Our minds are blown that these are the main problems.”</p>
-              <cite>The core working group after the shared-object reframing</cite>
-            </blockquote>
-            <p>
-              That meeting changed the work. The lead acknowledged the resource pressure, the group began reducing approval
-              pathways that affected SOPs and work instructions, and vendor evaluation shifted toward scenario-driven demos:
-              each candidate would show how its product handled the most critical, well-developed laboratory situations.
-              Capability already existed across the organization; the shared signal gave people a reason to spend political
-              capital together.<sup><a href="#source-implementation">2</a></sup>
-            </p>
-            <aside class="discovery-callout" aria-labelledby="cognitive-labor-title">
-              <h4 id="cognitive-labor-title" class="txt-h4">The system began carrying work people had held in memory</h4>
               <p>
-                Laboratory personnel had been reconstructing sample state, hidden skips, recovery steps, and approval
-                context across LIMS, Sample Monitor, EBR, email, tickets, and personal memory. Naming the shared objects
-                made more of that coordination work available to the system, the team, and the next shift.
+                My first masonry view organized the laboratory around individual technologists, people, and teams. When I
+                placed it in front of scientists, molecular technologists, and assay-development specialists, the arrangement
+                obscured how they understood the work. I asked them to walk me through what felt incongruent and what they
+                expected to see. Their rota changed constantly: people took days off, teams trained across processes, and the
+                sequencers kept running. They needed the stable organizing units to be samples, plates, workflows, and continuous
+                processes, with staffing shown as a changing contributor.
               </p>
-            </aside>
-            <p>
-              The human work also crossed jurisdictions and schedules. German laboratory personnel curated restricted cases
-              and reassigned them overnight so US teammates arrived to the correct work; their automated run-start email later
-              became useful across the company. An R&amp;D executive used the cross-lab findings to say, “This is more than just
-              an R&amp;D lab issue.” Weekly open office hours gave anyone a place to inspect prototypes, ask questions, or add
-              context. As I moved into Computational Biology Engineering, I transferred those sessions to a director-level
-              process owner so questions and decisions still had a durable home.
-            </p>
+              <p>
+                I rebuilt the views around those durable objects and processes. <strong>The wrong design got me to the right
+                one</strong> because it made disagreement concrete early enough to use. Every design and engineering proposal is
+                an experiment: the practitioner is saying, “I believe this arrangement can produce a useful result.” The
+                working goal is a version people can point at, challenge, and reshape together. A reviewable version preserves
+                the correction and lets the next conversation begin from what the team learned.
+              </p>
+              <h4 class="txt-h4">The group corrected the artifact — and then the medium</h4>
+              <p>
+                I began with small combined interview-and-design sessions, changing masonry and schedule views while one expert
+                explained the work. Participatory reach accumulated to roughly n≈70–100+ across later sessions. A larger board
+                connected Plus/Delta prompts, Jobs-to-be-Done phrases, current-system screenshots,
+                working specifications, and the evolving usability and vendor matrix. People returned between meetings and added
+                detail when a forgotten exception or dependency surfaced. The specification accreted through use.
+              </p>
+              <blockquote class="debrief-quote">
+                <p>“I am not understanding what this is connected to.”</p>
+                <p>“Okay, and how does this connect to a decision we need to make?”</p>
+                <cite>Core-working-group feedback during the early presentations</cite>
+              </blockquote>
+              <p>
+                Those questions were fair. The core working group lived in Excel, took meeting notes in Excel, and evaluated
+                options through spreadsheets. My Senior Product Strategist partner and I first tried to meet that habit directly,
+                then learned that the spreadsheet-shaped synthesis still asked the group to assemble too much of the story for
+                themselves. For the next review we moved the same analysis into a concise presentation, paired it with direct
+                words from laboratory personnel, and made the decision connection explicit on every section. That meeting became
+                the first clear turning point: the group praised the approach, agreed with the recommendations, and carried the
+                shared language into later decisions. The work stayed the same; the receiving format finally fit the group.
+              </p>
+              <h4 class="txt-h4">The engagement shape</h4>
+              <p class="fmi-method-note">The linked tools are present-day companions for exploring the methods in this historical account. Each opens in a new tab; the Specification by Example companion supplies the current example form for the historical Specification Suite.</p>
+              <ol class="debrief-sequence">
+                <li>Identify working groups, process owners, subject-matter experts, physical lab spaces, and jurisdictions; stand up JIRA boards, epics, and communication cadences. The core lab group’s existing wiki supported an optional <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">PODA<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html" target="_blank" rel="noopener noreferrer">Context Tree<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, and an <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/alignment-worksheet-chimeric-prototype-v0.1.4.html" target="_blank" rel="noopener noreferrer">alignment worksheet<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a> where those frames helped the work.</li>
+                <li>Short-list vendors and split parallel technical tracks: product and application experience through service and middleware, and AWS and infrastructure, coordinated through a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/shared-surface-priority-map-chimeric-prototype-v0.1.4.html" target="_blank" rel="noopener noreferrer">Shared Surface Priority Map<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.</li>
+                <li>Introduce the System Usability Scale and a weighted vendor-evaluation matrix; give sentiment markers and usability signals structure through a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.6.html" target="_blank" rel="noopener noreferrer">HEART Chart<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.</li>
+                <li>Wrap sketches around draft scenarios using familiar interface patterns through a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.4.html" target="_blank" rel="noopener noreferrer">Gantt chart<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.4.html" target="_blank" rel="noopener noreferrer">Masonry Layout<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.7.html" target="_blank" rel="noopener noreferrer">Specification Suite<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, and <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">Pattern Problem Surface Matrix<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.</li>
+                <li>Run participatory design and research sessions that upgrade draft scenarios with deal-breaker functionality through an <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/impact-map-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">Impact Map<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">Plus/Delta<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.7.html" target="_blank" rel="noopener noreferrer">Specification by Example<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>, and <a class="fmi-method-link" href="https://archive.uie.com/brainsparks/2014/08/08/kim-goodwin-silo-busting-scenario-driven-design/" target="_blank" rel="noopener noreferrer">Situation-Model-style personas<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a><sup><a href="#source-goodwin">3</a></sup>.</li>
+                <li>Prototype specific patterns for Lab R&amp;D, Clinical Development, and Decision Sciences; account for edge and corner cases; deploy team-wide surveys; aggregate and weight needs through a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html" target="_blank" rel="noopener noreferrer">Jobs-to-be-Done Treemap<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.</li>
+                <li>Replace sketches with the interface patterns available from each solution, weighting vendors by how cleanly they replace the pattern, timed to vendor demonstrations.</li>
+                <li>Examine API mappings, capabilities, maintenance schedules, dependencies, and developer experience; run spikes implementing real scenarios with their failure geometries and recovery routing through <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">Unit Test-First Design<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a> and an <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.5.html" target="_blank" rel="noopener noreferrer">Upstream Revision Loop<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.</li>
+                <li>Estimate task count, known unknowns, and complexity per specification; distinguish comprehensive specifications from stubs that act as semantic attractors and sprint-board markers.</li>
+                <li>Fan the specifications into proposed sprints, estimate velocity from recent quarters, and cost development, integration, training, downtime, validation, and SOP rewrites against time saved and reduced error rates.</li>
+              </ol>
+              <p>
+                After several rounds with different participant groups, the prototypes and session materials became shared
+                artifacts that people could enrich asynchronously. Participants returned between sessions to add detail as they remembered it.
+                Because every interface control implied data primitives and acceptable ranges across states, the LIMS Systems
+                teams extended them with data objects, API calls, and storage considerations. These cross-sections, the Context
+                Tree, and the personas folded into a <a class="fmi-method-link" href="prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.6.html" target="_blank" rel="noopener noreferrer">Service Design Blueprint<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="fmi-link-cue"> (opens in a new tab)</span></a>.
+              </p>
+              <aside class="discovery-callout" aria-labelledby="automation-alliance-title">
+                <h4 id="automation-alliance-title" class="txt-h4">“I need this.” — one format began serving several teams</h4>
+                <p>
+                  An Automation Developer saw the Specification Suite and immediately recognized a missing bridge. They already
+                  held per-instrument and per-assay physical actions in spreadsheets; I held participant-tested scenarios and a
+                  repeatable specification form. “If you can get as many of these as possible,” they told me, “I can apply that
+                  format to all these supply requirements per scenario per instrument for each assay or product.” We worked
+                  together outside the main meetings. The same scenarios became pilot specifications, open-source build-spike
+                  cases, vendor-demo requests, and unit-test inputs. Each group gained something it already needed, and the
+                  alliance created momentum through the work already in motion.
+                </p>
+              </aside>
+              <h4 class="txt-h4">Barriers to Adoption</h4>
+              <p>
+                Resource pressure was real and visible. The initiative lead said they would be “ruthless to get rid of blockers”
+                and pressed for a comprehensive specification suite. My team had two quarters, a pilot to define, and research
+                across several working groups. I committed to a deeply worked pilot subset and specification stubs for the wider
+                field. That kept the first-draft fee focused on the decision the organization could actually make.
+              </p>
+              <p>
+                The tension sharpened when my Senior Product Strategist partner felt repeatedly cut off and dismissed. I told my
+                Associate Director that I intended to address it directly and might need their support afterward. In the meeting,
+                I named the behavior, explained why constraining participant feedback to what the working group already considered
+                “in scope” would weaken the research, and then placed the participants’ own words in front of the group. We zoomed
+                out from a long feature list to the recurring questions: where is the sample, what state is it in, who signed off,
+                and how is the work connected?
+              </p>
+              <blockquote class="debrief-quote">
+                <p>“Our minds are blown that these are the main problems.”</p>
+                <cite>The core working group after the shared-object reframing</cite>
+              </blockquote>
+              <p>
+                That meeting changed the work. The lead acknowledged the resource pressure, the group began reducing approval
+                pathways that affected SOPs and work instructions, and vendor evaluation shifted toward scenario-driven demos:
+                each candidate would show how its product handled the most critical, well-developed laboratory situations.
+                Capability already existed across the organization; the shared signal gave people a reason to spend political
+                capital together.<sup><a href="#source-implementation">2</a></sup>
+              </p>
+              <aside class="discovery-callout" aria-labelledby="cognitive-labor-title">
+                <h4 id="cognitive-labor-title" class="txt-h4">The system began carrying work people had held in memory</h4>
+                <p>
+                  Laboratory personnel had been reconstructing sample state, hidden skips, recovery steps, and approval
+                  context across LIMS, Sample Monitor, EBR, email, tickets, and personal memory. Naming the shared objects
+                  made more of that coordination work available to the system, the team, and the next shift.
+                </p>
+              </aside>
+              <p>
+                The human work also crossed jurisdictions and schedules. German laboratory personnel curated restricted cases
+                and reassigned them overnight so US teammates arrived to the correct work; their automated run-start email later
+                became useful across the company. An R&amp;D executive used the cross-lab findings to say, “This is more than just
+                an R&amp;D lab issue.” Weekly open office hours gave anyone a place to inspect prototypes, ask questions, or add
+                context. As I moved into Computational Biology Engineering, I transferred those sessions to a director-level
+                process owner so questions and decisions still had a durable home.
+              </p>
+            </div>
           </article>
         </div>
       </div>
@@ -680,27 +686,29 @@
 
       <div class="content__container bg__adjust--pale-lavender fmi-solution-field fmi-solution-field--quiet">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-repeatability-title">
+          <article class="reading-flow" aria-labelledby="solution-repeatability-title">
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — The Portable Practice</h3>
-            <h4 class="txt-h4">Portable</h4>
-            <ul>
-              <li>Name the shared objects before choosing the system; define the shared vocabulary before local variants harden.</li>
-              <li>Use prototypes to learn together; make disagreement inexpensive, visible, and referable, and let participants add detail between sessions.</li>
-              <li>Change the carrier until the audience can use the work; preserve the analysis while fitting its receiving context.</li>
-              <li>Time-box breadth-over-depth research around dangerous assumptions and deal-breakers.</li>
-              <li>Translate scenarios into unit tests, so one artifact serves the pilot, vendor demonstrations, and automation.</li>
-              <li>Use specification stubs as semantic attractors and sprint markers, expanding them where implementation needs depth.</li>
-              <li>Cost migration and validation as first-class lines; keep failures first-class so selection and migration carry the remaining work.</li>
-            </ul>
-            <h4 class="txt-h4">Specific to this engagement</h4>
-            <p>These limits keep the transferable method distinct from FMI-specific details.</p>
-            <ul>
-              <li>The vendor shortlist belongs to its market moment; a future team repeats the fit criteria against its contemporary field.</li>
-              <li>The historical preliminary initiative estimate — approximately $500K–$750K, plus separately stated integration — belongs to FMI’s scale and regulatory setting; its reusable value is the set of cost lines.</li>
-              <li>The personalities and territorial dynamics belong to this organization; the reconciliation move transfers through shared objects and operating consequences.</li>
-              <li>Folder-move data loss is the specific defect; atomic movement, lineage continuity, and recoverable state are the transferable design obligations.</li>
-            </ul>
-            <p>A future reader can carry the method forward while leaving FMI’s particulars with this engagement.</p>
+            <div class="prose-flow">
+              <h4 class="txt-h4">Portable</h4>
+              <ul>
+                <li>Name the shared objects before choosing the system; define the shared vocabulary before local variants harden.</li>
+                <li>Use prototypes to learn together; make disagreement inexpensive, visible, and referable, and let participants add detail between sessions.</li>
+                <li>Change the carrier until the audience can use the work; preserve the analysis while fitting its receiving context.</li>
+                <li>Time-box breadth-over-depth research around dangerous assumptions and deal-breakers.</li>
+                <li>Translate scenarios into unit tests, so one artifact serves the pilot, vendor demonstrations, and automation.</li>
+                <li>Use specification stubs as semantic attractors and sprint markers, expanding them where implementation needs depth.</li>
+                <li>Cost migration and validation as first-class lines; keep failures first-class so selection and migration carry the remaining work.</li>
+              </ul>
+              <h4 class="txt-h4">Specific to this engagement</h4>
+              <p>These limits keep the transferable method distinct from FMI-specific details.</p>
+              <ul>
+                <li>The vendor shortlist belongs to its market moment; a future team repeats the fit criteria against its contemporary field.</li>
+                <li>The historical preliminary initiative estimate — approximately $500K–$750K, plus separately stated integration — belongs to FMI’s scale and regulatory setting; its reusable value is the set of cost lines.</li>
+                <li>The personalities and territorial dynamics belong to this organization; the reconciliation move transfers through shared objects and operating consequences.</li>
+                <li>Folder-move data loss is the specific defect; atomic movement, lineage continuity, and recoverable state are the transferable design obligations.</li>
+              </ul>
+              <p>A future reader can carry the method forward while leaving FMI’s particulars with this engagement.</p>
+            </div>
           </article>
         </div>
       </div>
@@ -710,7 +718,7 @@
           <section aria-labelledby="implementation-architecture-title">
             <p class="fmi-track-marker fmi-track-marker--implementation"><span>Track 02</span> Implementation reference · state, authority, and recovery</p>
             <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">Implementation Architecture</h2>
-            <p class="fmi-track-promise fmi-track-promise--implementation">Read this movement for system boundaries, state, recovery, decision authority, and investment. The 2025–2026 design is a reference implementation and qualification agenda presented separately from the 2021–2022 production systems.</p>
+            <p class="fmi-track-promise fmi-track-promise--implementation">Read this section for system boundaries, state, recovery, decision authority, and investment. The 2025–2026 design is a reference implementation and qualification agenda presented separately from the 2021–2022 production systems.</p>
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — Stack of the Moment ↔ Stack of Today</h3>
             <p id="implementation-debrief-lead" class="debrief-lead">
               The implementation track compares the historical system landscape with the reference architecture this same
@@ -743,6 +751,7 @@
             <aside class="implementation-companion" aria-labelledby="lims-proxy-standing-title">
               <p class="implementation-companion__eyebrow">How to read the interface views</p>
               <h4 id="lims-proxy-standing-title" class="txt-h4">Historical work, translated into a working reference system</h4>
+              <div class="fmi-companion-reading">
               <p>
                 These figures show SoT Cartography—Source of Truth Cartography—a working, IP-free system I designed and built in 2026 to help research teams visualize and organize complex workflows across domains.
               </p>
@@ -757,6 +766,7 @@
                 environment posture and wet-lab work through source mapping, instruction and failure analysis, and the complete
                 laboratory process.
               </p>
+              </div>
             </aside>
             <figure id="lims-environment-posture" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable infrastructure-environment reference interface">
@@ -891,6 +901,7 @@
             </figure>
             <aside class="implementation-companion" aria-labelledby="ebr-interruption-title">
               <h4 id="ebr-interruption-title" class="txt-h4">A slow screen interrupted the research — and improved the model</h4>
+              <div class="fmi-companion-reading">
               <p>
                 During one feedback presentation, participants stopped on an Electronic Batch Record screen and said it
                 “takes forever” to load. The comment surprised the core working group and redirected the session. That moment
@@ -899,6 +910,7 @@
                 handling belonged in the same scenario. The interruption supplied the requirement more clearly than a generic
                 performance score could.
               </p>
+              </div>
             </aside>
             <p>
               The process map below returns the shared-object question to its technical consequences. A specimen carries its
@@ -939,7 +951,7 @@
       <div class="content__container bg__adjust--rose-pink fmi-implementation-field fmi-implementation-field--ink">
         <div class="content content--wide">
           <section aria-labelledby="implementation-intervention-title">
-            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — Targeted Technical Moves (Then ↔ Now)</h3>
+            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — System Changes (Then ↔ Now)</h3>
             <p class="debrief-lead">
               Each move responds to a consequential failure in the historical systems with a current implementation approach. I
               describe the 2021–2022 organization and operating context. The linked Gist Registry examples
@@ -1029,7 +1041,7 @@ def test_exact_transfer_replay_has_no_second_effect(self):
                   For one runnable custody move, the versioned Registry example exercises tenant scope, exact replay,
                   stale-state handling, changed-command reconciliation, and one process-local custody, event, replay, and
                   outbox publication.
-                  <a href="https://kindlight.io/snippets/specimen-custody-outbox/0.1.0/">Inspect specimen custody and transactional outbox behavior</a>.
+                  <a href="https://kindlight.io/snippets/specimen-custody-outbox/0.1.0/" aria-label="Inspect specimen custody and transactional outbox behavior (outside Context Canvas)" title="Outside Context Canvas">Inspect specimen custody and transactional outbox behavior<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>.
                 </p>
               </article>
 
@@ -1043,7 +1055,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                   Within one running process, the versioned Registry example keeps exact source bytes linked to each result
                   while transport delivery, logical acquisition, scientific normalization, replay, and quarantine retain
                   distinct identities.
-                  <a href="https://kindlight.io/snippets/instrument-ingress-integrity/0.1.0/">Inspect instrument-ingress integrity and reviewable quarantine</a>.
+                  <a href="https://kindlight.io/snippets/instrument-ingress-integrity/0.1.0/" aria-label="Inspect instrument-ingress integrity and reviewable quarantine (outside Context Canvas)" title="Outside Context Canvas">Inspect instrument-ingress integrity and reviewable quarantine<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>.
                 </p>
               </article>
 
@@ -1096,14 +1108,16 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
               </figcaption>
             </figure>
 
-            <aside class="implementation-companion" aria-labelledby="context-tree-title">
+            <aside class="implementation-companion fmi-companion--brief" aria-labelledby="context-tree-title">
               <p class="implementation-companion__eyebrow">Context Tree companion</p>
               <h4 id="context-tree-title" class="txt-h4">Who carries each piece of context?</h4>
+              <div class="fmi-companion-reading">
               <p>
                 Paginated rows can extend this reading with FMI groups, their local knowledge, collaboration paths, and
                 unresolved context whenever a role-local view extends the shared-object matrix.
               </p>
               <p><a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html">Inspect the standalone Context Tree grammar</a></p>
+              </div>
             </aside>
           </section>
         </div>
@@ -1176,6 +1190,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
             <aside class="implementation-companion cobalt-operating-field__aside" aria-labelledby="program-constellation-title">
               <p class="implementation-companion__eyebrow">Related enterprise constellation</p>
               <h4 id="program-constellation-title" class="txt-h4">The shared-object grammar becomes an inspectable decision contract</h4>
+              <div class="fmi-companion-reading">
               <p>
                 The historical engagement named sample, plate, reagent, run or worklist, and sign-off or approval so
                 collaborators could compare platforms through work and consequence. A later, independent teaching program carries that
@@ -1189,11 +1204,12 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 change, or a question that remains open.
               </p>
               <p>
-                Three public sites keep the roles legible: <a href="https://cometspectrum.ai/">semantic contracts and schema
-                signals</a>, <a href="https://cometspectrum.io/">comparative implementation evidence</a>, and the
-                <a href="https://cometspectrum.org/">program specification</a>. They belong to one constellation while each
+                Three public sites keep the roles legible: <a href="https://cometspectrum.ai/" aria-label="semantic contracts and schema signals (outside Context Canvas)" title="Outside Context Canvas">semantic contracts and schema
+                signals<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>, <a href="https://cometspectrum.io/" aria-label="comparative implementation evidence (outside Context Canvas)" title="Outside Context Canvas">comparative implementation evidence<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>, and the
+                <a href="https://cometspectrum.org/" aria-label="program specification (outside Context Canvas)" title="Outside Context Canvas">program specification<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>. They belong to one constellation while each
                 answers a different question.
               </p>
+              </div>
             </aside>
 
             <section class="fmi-evidence-planes" aria-labelledby="program-evidence-boundary-title">
@@ -1230,7 +1246,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 </div>
               </dl>
               <p class="fmi-evidence-planes__sources">
-                Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/the-sample-nobody-could-find-naming-shared-objects-before-choosing-the-limseln-20212022">The Sample Nobody Could Find</a> to see how naming shared objects and sample states ahead of platform selection changed the LIMS/ELN decision. The same source collection also carries the solution reading, then-and-now implementation reading, outcome reading, and enterprise evidence contract.
+                Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/the-sample-nobody-could-find-naming-shared-objects-before-choosing-the-limseln-20212022" aria-label="The Sample Nobody Could Find (outside Context Canvas)" title="Outside Context Canvas">The Sample Nobody Could Find<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> to see how naming shared objects and sample states ahead of platform selection changed the LIMS/ELN decision. The same source collection also carries the solution reading, then-and-now implementation reading, outcome reading, and enterprise evidence contract.
               </p>
             </section>
 
@@ -1256,7 +1272,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 Trace the hierarchy from intended use and shared objects through two execution branches, nine stable
                 capability contracts, six consequential scenarios, four enterprise decision areas, and the selected
                 simulated runtime. Each capability retains its recovery route, responsible roles, and operating boundary.
-                <span class="prototype-embed__action"><a href="collaboration/lims-eln-program-constellation/index.html">Open the complete program view</a></span>
+                <span class="prototype-embed__action"><a href="collaboration/lims-eln-program-constellation/index.html" aria-label="Open the complete program view (outside Context Canvas)" title="Outside Context Canvas">Open the complete program view<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></span>
               </figcaption>
             </figure>
 
@@ -1351,7 +1367,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                         decision when the people whose work they represent provide the evidence behind them and review the
                         result. JSON state remains visible and copyable inside the browser.
                         <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html">Open the Strategy Canvas workbench</a></span>
-                        Method sources and evidence: <a data-strategy-canvas-host-source href="https://www.blueoceanstrategy.com/tools/strategy-canvas/">official Strategy Canvas description</a>, <a data-strategy-canvas-host-source href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested">INSEAD book record</a>, and <a data-strategy-canvas-host-source href="core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json">machine-readable evidence record</a>.
+                        Method sources and evidence: <a data-strategy-canvas-host-source href="https://www.blueoceanstrategy.com/tools/strategy-canvas/" aria-label="official Strategy Canvas description (outside Context Canvas)" title="Outside Context Canvas">official Strategy Canvas description<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>, <a data-strategy-canvas-host-source href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested" aria-label="INSEAD book record (outside Context Canvas)" title="Outside Context Canvas">INSEAD book record<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>, and <a data-strategy-canvas-host-source href="core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json" aria-label="machine-readable evidence record (outside Context Canvas)" title="Outside Context Canvas">machine-readable evidence record<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>.
                       </figcaption>
                     </figure>
                   </details>
@@ -1385,6 +1401,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
             <aside class="implementation-companion cobalt-operating-field__aside" aria-labelledby="enterprise-reference-title">
               <p class="implementation-companion__eyebrow">Executable enterprise reference</p>
               <h4 id="enterprise-reference-title" class="txt-h4">Nine samples connect the contract to runnable laboratory behavior</h4>
+              <div class="fmi-companion-reading">
               <p>
                 The companion pack organizes specimen lifecycle, custody and transactional outbox, instrument ingress and
                 quarantine, a portable LIMS port, three vendor adapters, reversible migration, and tenant-scoped evidence
@@ -1395,7 +1412,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 For a smaller runnable cutover boundary, a versioned Registry example compares matching, missing, changed,
                 and extra records, checks supplied restore evidence, and binds one exact cutover request to a distinct
                 approver before activation.
-                <a href="https://kindlight.io/snippets/migration-reconciliation-cutover/0.1.0/">Inspect migration reconciliation and approval-bound cutover</a>.
+                <a href="https://kindlight.io/snippets/migration-reconciliation-cutover/0.1.0/" aria-label="Inspect migration reconciliation and approval-bound cutover (outside Context Canvas)" title="Outside Context Canvas">Inspect migration reconciliation and approval-bound cutover<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>.
               </p>
               <p>
                 The checked validation report documents local synthetic execution. Configured vendor tenants, a representative
@@ -1403,12 +1420,13 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 Regulatory, Security, Operations, and business decisions remain environment-bound.
               </p>
               <ul>
-                <li><a href="lims-eln-enterprise-reference-v0.1/samples/README.md">Inspect the nine-sample capability index</a></li>
-                <li><a href="lims-eln-enterprise-reference-v0.1/receipts/validation-report.json">Read the checked local validation report</a></li>
-                <li><a href="lims-eln-enterprise-reference-v0.1/docs/architecture.md">Trace architecture and decision rights</a></li>
-                <li><a href="lims-eln-enterprise-reference-v0.1/docs/data-contract.md">Inspect the PostgreSQL data contract</a></li>
-                <li><a href="lims-eln-enterprise-reference-v0.1/docs/operations-runbook.md">Follow cutover, quarantine, retry, restore, and data-exit operations</a></li>
+                <li><a href="lims-eln-enterprise-reference-v0.1/samples/README.md" aria-label="Inspect the nine-sample capability index (outside Context Canvas)" title="Outside Context Canvas">Inspect the nine-sample capability index<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
+                <li><a href="lims-eln-enterprise-reference-v0.1/receipts/validation-report.json" aria-label="Read the checked local validation report (outside Context Canvas)" title="Outside Context Canvas">Read the checked local validation report<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
+                <li><a href="lims-eln-enterprise-reference-v0.1/docs/architecture.md" aria-label="Trace architecture and decision rights (outside Context Canvas)" title="Outside Context Canvas">Trace architecture and decision rights<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
+                <li><a href="lims-eln-enterprise-reference-v0.1/docs/data-contract.md" aria-label="Inspect the PostgreSQL data contract (outside Context Canvas)" title="Outside Context Canvas">Inspect the PostgreSQL data contract<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
+                <li><a href="lims-eln-enterprise-reference-v0.1/docs/operations-runbook.md" aria-label="Follow cutover, quarantine, retry, restore, and data-exit operations (outside Context Canvas)" title="Outside Context Canvas">Follow cutover, quarantine, retry, restore, and data-exit operations<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></li>
               </ul>
+              </div>
             </aside>
           </section>
         </div>
@@ -1521,13 +1539,14 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                   <cite id="source-site-reading">Site Reading Material: On Re-platforming FMI Labs for Better Product Outcomes</cite>;
                   <cite>Implementation Architecture (Then-and-Now) — Re-platforming a Regulated LIMS/ELN Mid-Flight: A Parallel Five-Beat for Technical Visitors and Evaluators (2021–2022 ↔ 2025–2026)</cite>;
                   <cite>The Sample Nobody Could Find — Re-platforming FMI's Regulated Lab, Read by Its Outcomes</cite>.
+                  Method reference: <cite id="source-goodwin"><a href="https://archive.uie.com/brainsparks/2014/08/08/kim-goodwin-silo-busting-scenario-driven-design/" aria-label="Kim Goodwin with Jared Spool, “Silo-busting, Scenario-driven Design,” UIE/SpoolCast, 8 August 2014 (outside Context Canvas)" title="Outside Context Canvas">Kim Goodwin with Jared Spool, “Silo-busting, Scenario-driven Design,” UIE/SpoolCast, 8 August 2014<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite>. Goodwin explains how research-grounded personas and scenarios help teams examine a person’s end-to-end situation and refine design across organizational boundaries. This source informs the scenario practice described above; the Situation Model wording belongs to this account.
                   Related technical sources:
-                  <cite><a href="https://cometspectrum.ai/">Comet Spectrum semantic contracts</a></cite>,
-                  <cite><a href="https://cometspectrum.io/">LIMS / ELN comparative evidence</a></cite>, and
-                  <cite><a href="https://cometspectrum.org/">LIMS / ELN Program Specification</a></cite>.
+                  <cite><a href="https://cometspectrum.ai/" aria-label="Comet Spectrum semantic contracts (outside Context Canvas)" title="Outside Context Canvas">Comet Spectrum semantic contracts<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite>,
+                  <cite><a href="https://cometspectrum.io/" aria-label="LIMS / ELN comparative evidence (outside Context Canvas)" title="Outside Context Canvas">LIMS / ELN comparative evidence<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite>, and
+                  <cite><a href="https://cometspectrum.org/" aria-label="LIMS / ELN Program Specification (outside Context Canvas)" title="Outside Context Canvas">LIMS / ELN Program Specification<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite>.
                   Contemporary operating evidence:
-                  <cite><a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report">DORA 2025 · State of AI-Assisted Software Development</a></cite> and
-                  <cite><a href="https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization">Microsoft 2026 Work Trend Index</a></cite>.
+                  <cite><a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report" aria-label="DORA 2025 · State of AI-Assisted Software Development (outside Context Canvas)" title="Outside Context Canvas">DORA 2025 · State of AI-Assisted Software Development<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite> and
+                  <cite><a href="https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization" aria-label="Microsoft 2026 Work Trend Index (outside Context Canvas)" title="Outside Context Canvas">Microsoft 2026 Work Trend Index<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></cite>.
                 </span>
               </figcaption>
             </figure>

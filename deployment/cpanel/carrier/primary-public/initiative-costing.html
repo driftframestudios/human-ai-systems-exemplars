@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <link rel="stylesheet" href="styles/components/reading-flow.css">
     <link rel="stylesheet" href="canvas-shell.css">
   <script src="visitor-boundary-contract.js" defer></script>
   <script src="canvas-shell.js" defer></script>
@@ -177,12 +178,13 @@
               <figcaption>
                 Eight keyboard-operable method views share one worked-example initiative state. The complete method table on
                 this page remains the full reading when scripting is unavailable.
-                <a class="story-visual__open" href="collaboration/cross-functional-investment-model-studio/index.html">Open the Studio at full size</a>
+                <a class="story-visual__open" href="collaboration/cross-functional-investment-model-studio/index.html" aria-label="Open the Studio at full size (outside Context Canvas)" title="Outside Context Canvas">Open the Studio at full size<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>
               </figcaption>
             </figure>
-            <aside class="interpretive-aside cobalt-operating-field__aside" aria-labelledby="costing-prompt-packet-title">
+            <aside class="debrief-companion-frame interpretive-aside cobalt-operating-field__aside" aria-labelledby="costing-prompt-packet-title">
               <p class="architecture-pair__label">Prompt-Side Conditions correspondence</p>
               <h3 id="costing-prompt-packet-title" class="txt-h3"><code>prompt_packet</code> ↔ costing brief</h3>
+              <div class="debrief-companion-reading">
               <p>
                 A useful costing brief is already a compact prompt packet: it names the decision, initiative boundary,
                 participating populations, source figures, horizon, assumptions, exclusions with replacement states,
@@ -194,26 +196,29 @@
                 one, and return the planning band beside the human-owned quote, staffing, and funding decision.
                 <a href="prompt-side-conditions-practice.html">Use the Prompt-Side Conditions practice guide to prepare the packet.</a>
               </p>
-            </aside>
+              </div>
+              </aside>
           </section>
         </div>
       </div>
 
       <div class="content__container bg__adjust--tiffany-ice">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="route-title">
+          <article class="reading-flow" aria-labelledby="route-title">
             <h2 id="route-title" class="txt-h2 architecture-track-title">I. Route the question before estimating</h2>
-            <p>
-              Costing starts with the decision boundary. A delivery team needs line-item accountability. A sponsor needs a
-              commitment range and its movement drivers. An architecture group comparing buy, build, and hybrid routes needs
-              one common basis and horizon. An operating owner needs whole-life and per-unit cost. A funding committee needs
-              those readings compressed into an ask whose timing and consequences remain inspectable.
-            </p>
-            <p>
-              One initiative can therefore carry several linked methods. The resource-loaded work breakdown supplies the base;
-              the risk register supplies the reserve; whole-life and unit-cost views expose the operating curve; the value case
-              prices the current state; and the executive readout draws from each source while the underlying readings remain intact.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Costing starts with the decision boundary. A delivery team needs line-item accountability. A sponsor needs a
+                commitment range and its movement drivers. An architecture group comparing buy, build, and hybrid routes needs
+                one common basis and horizon. An operating owner needs whole-life and per-unit cost. A funding committee needs
+                those readings compressed into an ask whose timing and consequences remain inspectable.
+              </p>
+              <p>
+                One initiative can therefore carry several linked methods. The resource-loaded work breakdown supplies the base;
+                the risk register supplies the reserve; whole-life and unit-cost views expose the operating curve; the value case
+                prices the current state; and the executive readout draws from each source while the underlying readings remain intact.
+              </p>
+            </div>
             <figure class="story-visual table-span-all">
               <img src="img/plot/initiative_costing_method_map.svg" width="1600" height="1050" loading="eager" alt="A clockwise cycle of eight numbered stations. Each station moves from a decision question to a costing method and then to a decision-ready output; the routes cover base estimates, reserves, ranges, option comparisons, lifecycle totals, unit-cost curves, value cases, and committee readouts.">
               <figcaption class="table-note">
@@ -308,7 +313,7 @@
 
       <div class="content__container bg__adjust--tiffany-ice">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="doctrines-title">
+          <article class="reading-flow" aria-labelledby="doctrines-title">
             <h2 id="doctrines-title" class="txt-h2 architecture-track-title">III. Costing principles — preserve what makes the number useful</h2>
 
             <h3 class="txt-h3 beat-title">Base and reserve stay separate</h3>
@@ -336,16 +341,18 @@
             </p>
 
             <h3 class="txt-h3 beat-title">The status quo is a priced option</h3>
-            <p>
-              Delay, rework, failure demand, duplicate entry, reconciliation, incident response, and opportunity cost make the
-              current state economically comparable with a proposed route.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Delay, rework, failure demand, duplicate entry, reconciliation, incident response, and opportunity cost make the
+                current state economically comparable with a proposed route.
+              </p>
 
-            <blockquote class="debrief-quote cornerstone-definition" data-term-id="speculation">
-              <p><dfn>Speculation</dfn> — How a market carries what it cannot yet price with confidence.</p>
-              <footer>Working definition · capital under uncertainty</footer>
-            </blockquote>
-            <p class="cornerstone-consequence">Here, the sponsor carries timing, delivery, and opportunity risk while each bounded tranche buys evidence that can revise the next price and authorization.</p>
+              <blockquote class="debrief-quote cornerstone-definition" data-term-id="speculation">
+                <p><dfn>Speculation</dfn> — How a market carries what it cannot yet price with confidence.</p>
+                <footer>Working definition · capital under uncertainty</footer>
+              </blockquote>
+              <p class="cornerstone-consequence">Here, the sponsor carries timing, delivery, and opportunity risk while each bounded tranche buys evidence that can revise the next price and authorization.</p>
+            </div>
 
             <h3 class="txt-h3 beat-title">Capital follows useful capability</h3>
             <p>
@@ -551,7 +558,7 @@
             </p>
             <ul class="source-basis">
               <li><a href="distributed-inspection-harness.html#costing-title">Distributed Inspection Harness — cost and consequence</a> — worked program frame, costing principles, staged-capital example, and proposed-use boundary.</li>
-              <li>Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/initiative-costing-eight-methods-for-evidence-bearing-platform-decisions">Initiative Costing — Eight Methods for Evidence-Bearing Platform Decisions</a> to compare eight complementary costing methods and see how each changes the evidence and decision frame.</li>
+              <li>Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/initiative-costing-eight-methods-for-evidence-bearing-platform-decisions" aria-label="Initiative Costing — Eight Methods for Evidence-Bearing Platform Decisions (outside Context Canvas)" title="Outside Context Canvas">Initiative Costing — Eight Methods for Evidence-Bearing Platform Decisions<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> to compare eight complementary costing methods and see how each changes the evidence and decision frame.</li>
             </ul>
           </section>
         </div>

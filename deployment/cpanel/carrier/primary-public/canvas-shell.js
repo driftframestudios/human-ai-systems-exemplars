@@ -156,6 +156,7 @@
         ),
       );
     }
+    network.appendChild(document.createTextNode(" These destinations are outside the Context Canvas."));
     if (!contact) contact = element("p", "super-footer__contact", "contact@vik.guru");
     contact.classList.add("super-footer__contact");
     contact.setAttribute("data-context-canvas-contact", "");

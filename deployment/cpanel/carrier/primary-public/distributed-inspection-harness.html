@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <link rel="stylesheet" href="styles/components/reading-flow.css">
     <style>
       .distributed-inspection-page .table--ledger time { white-space: nowrap; }
       .distributed-inspection-page {
@@ -63,9 +64,7 @@
       }
 
       .distributed-inspection-page .inspection-teaching-hero {
-        background:
-          radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .18) 0 .38rem, transparent .42rem),
-          linear-gradient(135deg, #141c5b 0%, #0f2147 66%, #1f2421 100%);
+        background: var(--inspection-iron);
         border-block-end: .6rem solid var(--inspection-rose);
       }
 
@@ -326,6 +325,7 @@
         color: var(--inspection-blue-ink);
         margin-block: 1.5rem;
         padding: 1rem 1.25rem;
+        padding-inline: clamp(var(--debrief-companion-inline-floor, 1.25rem), 3vw, 1.25rem);
       }
 
       .inspection-interpretive-aside > :first-child { margin-block-start: 0; }
@@ -525,14 +525,16 @@
 
       <div class="content__container bg__adjust--tiffany">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="scenario-title">
+          <article class="reading-flow" aria-labelledby="scenario-title">
             <h2 id="scenario-title" class="txt-h2 architecture-track-title">I. Scenario + ontology — One record, several operating contexts</h2>
-            <p>
-              Vehicles arrive through off-lease returns, repossessions, trade-ins, and consignments. A technician establishes
-              condition on site, often beyond dependable network coverage, and records exterior, interior, mechanical,
-              frame, tire, damage, and photographic evidence. The accepted record then supports a condition grade,
-              valuation, listing, and a later arbitration window.
-            </p>
+            <div class="prose-flow">
+              <p>
+                Vehicles arrive through off-lease returns, repossessions, trade-ins, and consignments. A technician establishes
+                condition on site, often beyond dependable network coverage, and records exterior, interior, mechanical,
+                frame, tire, damage, and photographic evidence. The accepted record then supports a condition grade,
+                valuation, listing, and a later arbitration window.
+              </p>
+            </div>
 
             <figure class="table-figure table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Distributed inspection harness vocabulary">
@@ -618,10 +620,12 @@
               </article>
             </div>
 
-            <aside class="debrief-quote debrief-quote--orientation" aria-label="Working design hypothesis for the ongoing field-inspection program">
-              <p>The inspection record is the shared unit that keeps human judgment, offline work, media, synchronization, and downstream use coherent.</p>
-              <footer>Working design hypothesis for the ongoing field-inspection program</footer>
-            </aside>
+            <div class="prose-flow">
+              <aside class="debrief-quote debrief-quote--orientation" aria-label="Working design hypothesis for the ongoing field-inspection program">
+                <p>The inspection record is the shared unit that keeps human judgment, offline work, media, synchronization, and downstream use coherent.</p>
+                <footer>Working design hypothesis for the ongoing field-inspection program</footer>
+              </aside>
+            </div>
 
             <h2 id="changed-work-title" class="txt-h2 architecture-track-title">II. Then → Now — Changed work at a glance</h2>
             <figure class="table-figure table-figure--wide table-span-all">
@@ -692,93 +696,99 @@
 
       <div class="content__container inspection-solution-field inspection-solution-field--rose">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-title">
-            <p class="inspection-track-label"><span>S · Solution Architecture</span> Operating intent and changed work</p>
-            <h2 id="solution-title" class="txt-h2 architecture-track-title">III. Solution Architecture — Why the harness takes this shape</h2>
-            <p>
-              The solution reading stays independent of a particular stack. It names the capabilities, boundaries, and
-              integral decisions that make field work durable and downstream use coherent.
-            </p>
-
-            <figure class="table-figure table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="Solution architecture capability map">
-                <table class="table--reading table--comfortable">
-                  <caption>Capabilities the solution must carry</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-label="Capability">Capability</th>
-                      <th scope="col" data-label="Responsibility">Responsibility</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="Capabilities the solution must carry: Guided capture"><th scope="row" data-label="Capability">Guided capture</th><td data-label="Responsibility">Walk a technician through a consistent inspection regardless of intake channel.</td></tr>
-                    <tr data-label="Capabilities the solution must carry: Optical assist"><th scope="row" data-label="Capability">Optical assist</th><td data-label="Responsibility">Read VIN, odometer, and tire codes, always with human confirmation.</td></tr>
-                    <tr data-label="Capabilities the solution must carry: Offline durability"><th scope="row" data-label="Capability">Offline durability</th><td data-label="Responsibility">Preserve the record while the network is unavailable.</td></tr>
-                    <tr data-label="Capabilities the solution must carry: Ordered sync"><th scope="row" data-label="Capability">Ordered sync</th><td data-label="Responsibility">Upload records and media in a resumable, tamper-evident order.</td></tr>
-                    <tr data-label="Capabilities the solution must carry: Grade rollup"><th scope="row" data-label="Capability">Grade rollup</th><td data-label="Responsibility">Derive a defensible 0–5 grade with an audit trail.</td></tr>
-                    <tr data-label="Capabilities the solution must carry: Downstream fan-out"><th scope="row" data-label="Capability">Downstream fan-out</th><td data-label="Responsibility">Feed valuation, listing, and arbitration from one accepted source.</td></tr>
-                  </tbody>
-                </table>
+          <article class="debrief-movement" aria-labelledby="solution-title">
+            <header class="debrief-movement__header">
+              <p class="inspection-track-label"><span>S · Solution Architecture</span> Operating intent and changed work</p>
+              <h2 id="solution-title" class="txt-h2 architecture-track-title">III. Solution Architecture — Why the harness takes this shape</h2>
+            </header>
+            <div class="reading-flow">
+              <div class="prose-flow">
+                <p>
+                  The solution reading stays independent of a particular stack. It names the capabilities, boundaries, and
+                  integral decisions that make field work durable and downstream use coherent.
+                </p>
               </div>
-              <figcaption class="table-note">Table 4. Six solution capabilities establish the operating contract before a stack is selected.</figcaption>
-            </figure>
 
-            <h3 id="solution-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
-            <div class="inspection-beat-grid table-span-all" aria-labelledby="solution-beats-title">
-              <article id="solution-beat-situation" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S1</span><h4 class="txt-h3">Situation · make capture a domain concern</h4></div>
-                <dl>
-                  <dt>Then · assembled tools</dt>
-                  <dd>A form builder and spreadsheet can collect rows, yet the vehicle, one inspection event, its photographs, its grade, and its correction history remain only loosely related. Each handoff asks people to reconstruct which artifacts belong together.</dd>
-                  <dt>Now · purpose-built harness</dt>
-                  <dd>The inspection becomes a first-class domain object with a stable identity. Guided sections, optical suggestions, committed observations, media references, grade, and sync state all address the same record. Intake channel remains explicit while capture grammar stays consistent.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Boundary to validate.</strong> The record model must fit off-lease, repossession, trade-in, and consignment work while preserving channel-specific evidence.</p>
-              </article>
+              <figure class="table-figure table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Solution architecture capability map">
+                  <table class="table--reading table--comfortable">
+                    <caption>Capabilities the solution must carry</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col" data-label="Capability">Capability</th>
+                        <th scope="col" data-label="Responsibility">Responsibility</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="Capabilities the solution must carry: Guided capture"><th scope="row" data-label="Capability">Guided capture</th><td data-label="Responsibility">Walk a technician through a consistent inspection regardless of intake channel.</td></tr>
+                      <tr data-label="Capabilities the solution must carry: Optical assist"><th scope="row" data-label="Capability">Optical assist</th><td data-label="Responsibility">Read VIN, odometer, and tire codes, always with human confirmation.</td></tr>
+                      <tr data-label="Capabilities the solution must carry: Offline durability"><th scope="row" data-label="Capability">Offline durability</th><td data-label="Responsibility">Preserve the record while the network is unavailable.</td></tr>
+                      <tr data-label="Capabilities the solution must carry: Ordered sync"><th scope="row" data-label="Capability">Ordered sync</th><td data-label="Responsibility">Upload records and media in a resumable, tamper-evident order.</td></tr>
+                      <tr data-label="Capabilities the solution must carry: Grade rollup"><th scope="row" data-label="Capability">Grade rollup</th><td data-label="Responsibility">Derive a defensible 0–5 grade with an audit trail.</td></tr>
+                      <tr data-label="Capabilities the solution must carry: Downstream fan-out"><th scope="row" data-label="Capability">Downstream fan-out</th><td data-label="Responsibility">Feed valuation, listing, and arbitration from one accepted source.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <figcaption class="table-note">Table 4. Six solution capabilities establish the operating contract before a stack is selected.</figcaption>
+              </figure>
 
-              <article id="solution-beat-tension" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S2</span><h4 class="txt-h3">Tension · keep field work durable</h4></div>
-                <dl>
-                  <dt>Then · operational fracture</dt>
-                  <dd>Connectivity gaps interrupt capture, re-keying adds labor, ad hoc photographs lose their place, and variable application of grading criteria creates dispute exposure. The technician must carry too much system state in memory.</dd>
-                  <dt>Now · explicit assistance and state</dt>
-                  <dd>Offline-first capture treats the network as intermittent. Optical reads prefill VIN, odometer, and tire values for human confirmation. The grade remains human-owned while the system preserves the scoring inputs and correction trail.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Authority.</strong> Assistance proposes; the technician commits. A reviewer can later distinguish the machine suggestion, the accepted value, and the final human-owned grade.</p>
-              </article>
+              <h3 id="solution-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
+              <div class="inspection-beat-grid table-span-all" aria-labelledby="solution-beats-title">
+                <article id="solution-beat-situation" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S1</span><h4 class="txt-h3">Situation · make capture a domain concern</h4></div>
+                  <dl>
+                    <dt>Then · assembled tools</dt>
+                    <dd>A form builder and spreadsheet can collect rows, yet the vehicle, one inspection event, its photographs, its grade, and its correction history remain only loosely related. Each handoff asks people to reconstruct which artifacts belong together.</dd>
+                    <dt>Now · purpose-built harness</dt>
+                    <dd>The inspection becomes a first-class domain object with a stable identity. Guided sections, optical suggestions, committed observations, media references, grade, and sync state all address the same record. Intake channel remains explicit while capture grammar stays consistent.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Boundary to validate.</strong> The record model must fit off-lease, repossession, trade-in, and consignment work while preserving channel-specific evidence.</p>
+                </article>
 
-              <article id="solution-beat-turn" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S3</span><h4 class="txt-h3">Turn · organize around one shared unit</h4></div>
-                <dl>
-                  <dt>Then · accumulated fixes</dt>
-                  <dd>Each repair bolts another tool onto the stack: one place for data entry, another for photographs, another for retry, and new copy-paste paths for every downstream consumer. Local improvements create additional seams.</dd>
-                  <dt>Now · compounding contract</dt>
-                  <dd>The inspection record becomes the unit of capture, synchronization, review, and publication. New capabilities strengthen the same contract: media hashes address the record, sync envelopes carry it, and versioned events publish its accepted state.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>First responsible version.</strong> Offline capture, optical confirmation, ordered sync, and grade rollup enter first. Automated damage detection, multi-language capture, and a buyer self-serve view remain deferred.</p>
-              </article>
+                <article id="solution-beat-tension" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S2</span><h4 class="txt-h3">Tension · keep field work durable</h4></div>
+                  <dl>
+                    <dt>Then · operational fracture</dt>
+                    <dd>Connectivity gaps interrupt capture, re-keying adds labor, ad hoc photographs lose their place, and variable application of grading criteria creates dispute exposure. The technician must carry too much system state in memory.</dd>
+                    <dt>Now · explicit assistance and state</dt>
+                    <dd>Offline-first capture treats the network as intermittent. Optical reads prefill VIN, odometer, and tire values for human confirmation. The grade remains human-owned while the system preserves the scoring inputs and correction trail.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Authority.</strong> Assistance proposes; the technician commits. A reviewer can later distinguish the machine suggestion, the accepted value, and the final human-owned grade.</p>
+                </article>
 
-              <article id="solution-beat-resolution" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S4</span><h4 class="txt-h3">Resolution · make review an exception route</h4></div>
-                <dl>
-                  <dt>Then · review as compensation</dt>
-                  <dd>The operation responds to uncertain identity, transfer, and grading by adding broad manual review. Reviewers spend attention rediscovering ordinary state before they can examine consequential exceptions.</dd>
-                  <dt>Now · inspectable ordinary path</dt>
-                  <dd>Signed, ordered envelopes make transfer state visible. A grade trail keeps rollup and override reasons together. Acknowledged records settle through the ordinary path; exhausted retries and questionable records park in an explicit human-review queue.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Expectation.</strong> The technician needs reassurance that work is safe; the reviewer needs a defensible exception; the arbiter needs a reconstructable trail.</p>
-              </article>
+                <article id="solution-beat-turn" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S3</span><h4 class="txt-h3">Turn · organize around one shared unit</h4></div>
+                  <dl>
+                    <dt>Then · accumulated fixes</dt>
+                    <dd>Each repair bolts another tool onto the stack: one place for data entry, another for photographs, another for retry, and new copy-paste paths for every downstream consumer. Local improvements create additional seams.</dd>
+                    <dt>Now · compounding contract</dt>
+                    <dd>The inspection record becomes the unit of capture, synchronization, review, and publication. New capabilities strengthen the same contract: media hashes address the record, sync envelopes carry it, and versioned events publish its accepted state.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>First responsible version.</strong> Offline capture, optical confirmation, ordered sync, and grade rollup enter first. Automated damage detection, multi-language capture, and a buyer self-serve view remain deferred.</p>
+                </article>
 
-              <article id="solution-beat-consequence" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S5</span><h4 class="txt-h3">Consequence · turn scale into a measured question</h4></div>
-                <dl>
-                  <dt>Then · scale multiplies seams</dt>
-                  <dd>Additional inspections multiply entry labor, media handling, review, bespoke integrations, and the number of places where a condition dispute can lose its evidence trail.</dd>
-                  <dt>Now · shared capability creates leverage</dt>
-                  <dd>A durable record and common fan-out create the conditions for lower marginal inspection cost, faster time-to-sale, trusted listings, lower arbitration cost, and a structured condition-data asset. These remain opportunity hypotheses until field observations establish the outcomes.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Measurement boundary.</strong> Field throughput, dispute rate, review rate, time-to-sale, post-sale mismatch, and per-inspection cost establish whether the proposed consequence appears.</p>
-              </article>
+                <article id="solution-beat-resolution" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S4</span><h4 class="txt-h3">Resolution · make review an exception route</h4></div>
+                  <dl>
+                    <dt>Then · review as compensation</dt>
+                    <dd>The operation responds to uncertain identity, transfer, and grading by adding broad manual review. Reviewers spend attention rediscovering ordinary state before they can examine consequential exceptions.</dd>
+                    <dt>Now · inspectable ordinary path</dt>
+                    <dd>Signed, ordered envelopes make transfer state visible. A grade trail keeps rollup and override reasons together. Acknowledged records settle through the ordinary path; exhausted retries and questionable records park in an explicit human-review queue.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Expectation.</strong> The technician needs reassurance that work is safe; the reviewer needs a defensible exception; the arbiter needs a reconstructable trail.</p>
+                </article>
+
+                <article id="solution-beat-consequence" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S5</span><h4 class="txt-h3">Consequence · turn scale into a measured question</h4></div>
+                  <dl>
+                    <dt>Then · scale multiplies seams</dt>
+                    <dd>Additional inspections multiply entry labor, media handling, review, bespoke integrations, and the number of places where a condition dispute can lose its evidence trail.</dd>
+                    <dt>Now · shared capability creates leverage</dt>
+                    <dd>A durable record and common fan-out create the conditions for lower marginal inspection cost, faster time-to-sale, trusted listings, lower arbitration cost, and a structured condition-data asset. These remain opportunity hypotheses until field observations establish the outcomes.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Measurement boundary.</strong> Field throughput, dispute rate, review rate, time-to-sale, post-sale mismatch, and per-inspection cost establish whether the proposed consequence appears.</p>
+                </article>
+              </div>
             </div>
 
           </article>
@@ -787,43 +797,48 @@
 
       <div class="content__container inspection-implementation-field inspection-implementation-field--iron">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="implementation-title">
-            <p class="inspection-track-label inspection-track-label--dark"><span>I · Implementation Architecture</span> State, recovery, and local decision authority</p>
-            <h2 id="implementation-title" class="txt-h2 architecture-track-title">IV. Implementation Architecture — How the shape becomes buildable</h2>
-            <p>
-              The implementation reading makes the data model, local persistence, transfer protocol, media route, and access
-              boundaries concrete. Each technology choice serves an operating contract named above.
-            </p>
-
-            <figure class="table-figure table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="Reference implementation shape">
-                <table class="table--reading table--comfortable">
-                  <caption>A proposed reference stack for the Now track</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-label="Layer">Layer</th>
-                      <th scope="col" data-label="Choice">Choice</th>
-                      <th scope="col" data-label="Reason">Reason</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="A proposed reference stack for the Now track: Mobile"><th scope="row" data-label="Layer">Mobile</th><td data-label="Choice">React Native with a thin Swift camera and OCR module.</td><td class="table-ability" data-label="Reason">Shared application code with native optics where it matters.</td></tr>
-                    <tr data-label="A proposed reference stack for the Now track: Local store"><th scope="row" data-label="Layer">Local store</th><td data-label="Choice">SQLite with a write-ahead log.</td><td class="table-ability" data-label="Reason">Durable offline capture.</td></tr>
-                    <tr data-label="A proposed reference stack for the Now track: Sync"><th scope="row" data-label="Layer">Sync</th><td data-label="Choice">Signed, ordered envelopes over HTTPS with resumable upload.</td><td class="table-ability" data-label="Reason">Tamper-evident and connectivity-tolerant transfer.</td></tr>
-                    <tr data-label="A proposed reference stack for the Now track: Ingest"><th scope="row" data-label="Layer">Ingest</th><td data-label="Choice">Stateless API behind a queue.</td><td class="table-ability" data-label="Reason">Returning technicians can create a burst while acknowledged work remains durable.</td></tr>
-                    <tr data-label="A proposed reference stack for the Now track: Media"><th scope="row" data-label="Layer">Media</th><td data-label="Choice">Content-hashed object storage plus CDN.</td><td class="table-ability" data-label="Reason">De-duplicated storage and fast signed delivery.</td></tr>
-                    <tr data-label="A proposed reference stack for the Now track: Access"><th scope="row" data-label="Layer">Access</th><td data-label="Choice">Role-based access control.</td><td class="table-ability" data-label="Reason">Technician, reviewer, and arbiter responsibilities remain distinct.</td></tr>
-                  </tbody>
-                </table>
+          <article class="debrief-movement" aria-labelledby="implementation-title">
+            <header class="debrief-movement__header">
+              <p class="inspection-track-label inspection-track-label--dark"><span>I · Implementation Architecture</span> State, recovery, and local decision authority</p>
+              <h2 id="implementation-title" class="txt-h2 architecture-track-title">IV. Implementation Architecture — How the shape becomes buildable</h2>
+            </header>
+            <div class="reading-flow">
+              <div class="prose-flow">
+                <p>
+                  The implementation reading makes the data model, local persistence, transfer protocol, media route, and access
+                  boundaries concrete. Each technology choice serves an operating contract named above.
+                </p>
               </div>
-              <figcaption class="table-note">Table 5. Each reference-stack choice is accountable to a named field, recovery, media, or authority requirement.</figcaption>
-            </figure>
 
-            <div class="inspection-card-grid table-span-all" aria-label="Implementation contracts in code-shaped form">
-              <article>
-                <p class="inspection-field-label">Inspectable state · record contract</p>
-                <h3 class="txt-h3">The record names committed human judgment</h3>
-                <pre tabindex="0"><code>type InspectionRecord = {
+              <figure class="table-figure table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Reference implementation shape">
+                  <table class="table--reading table--comfortable">
+                    <caption>A proposed reference stack for the Now track</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col" data-label="Layer">Layer</th>
+                        <th scope="col" data-label="Choice">Choice</th>
+                        <th scope="col" data-label="Reason">Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="A proposed reference stack for the Now track: Mobile"><th scope="row" data-label="Layer">Mobile</th><td data-label="Choice">React Native with a thin Swift camera and OCR module.</td><td class="table-ability" data-label="Reason">Shared application code with native optics where it matters.</td></tr>
+                      <tr data-label="A proposed reference stack for the Now track: Local store"><th scope="row" data-label="Layer">Local store</th><td data-label="Choice">SQLite with a write-ahead log.</td><td class="table-ability" data-label="Reason">Durable offline capture.</td></tr>
+                      <tr data-label="A proposed reference stack for the Now track: Sync"><th scope="row" data-label="Layer">Sync</th><td data-label="Choice">Signed, ordered envelopes over HTTPS with resumable upload.</td><td class="table-ability" data-label="Reason">Tamper-evident and connectivity-tolerant transfer.</td></tr>
+                      <tr data-label="A proposed reference stack for the Now track: Ingest"><th scope="row" data-label="Layer">Ingest</th><td data-label="Choice">Stateless API behind a queue.</td><td class="table-ability" data-label="Reason">Returning technicians can create a burst while acknowledged work remains durable.</td></tr>
+                      <tr data-label="A proposed reference stack for the Now track: Media"><th scope="row" data-label="Layer">Media</th><td data-label="Choice">Content-hashed object storage plus CDN.</td><td class="table-ability" data-label="Reason">De-duplicated storage and fast signed delivery.</td></tr>
+                      <tr data-label="A proposed reference stack for the Now track: Access"><th scope="row" data-label="Layer">Access</th><td data-label="Choice">Role-based access control.</td><td class="table-ability" data-label="Reason">Technician, reviewer, and arbiter responsibilities remain distinct.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <figcaption class="table-note">Table 5. Each reference-stack choice is accountable to a named field, recovery, media, or authority requirement.</figcaption>
+              </figure>
+
+              <div class="inspection-card-grid table-span-all" aria-label="Implementation contracts in code-shaped form">
+                <article>
+                  <p class="inspection-field-label">Inspectable state · record contract</p>
+                  <h3 class="txt-h3">The record names committed human judgment</h3>
+                  <pre tabindex="0"><code>type InspectionRecord = {
   id: string
   channel: "off_lease" | "repossession" |
            "trade_in" | "consignment"
@@ -841,13 +856,13 @@
   mediaHashes: string[]
   syncState: "local" | "queued" | "acked"
 }</code></pre>
-                <p>The client-generated ID stays stable across retry. Raw optical suggestions and human confirmation state remain distinguishable. The grade is a human-owned summary whose inputs remain available for review.</p>
-              </article>
+                  <p>The client-generated ID stays stable across retry. Raw optical suggestions and human confirmation state remain distinguishable. The grade is a human-owned summary whose inputs remain available for review.</p>
+                </article>
 
-              <article>
-                <p class="inspection-field-label">Recovery contract · ordered envelope</p>
-                <h3 class="txt-h3">Retry has a bounded path and a human landing place</h3>
-                <pre tabindex="0"><code>for attempt in 1..6:
+                <article>
+                  <p class="inspection-field-label">Recovery contract · ordered envelope</p>
+                  <h3 class="txt-h3">Retry has a bounded path and a human landing place</h3>
+                  <pre tabindex="0"><code>for attempt in 1..6:
   upload ordered envelope resumably
   if acknowledged:
     mark envelope acked
@@ -856,66 +871,67 @@
   wait exponential backoff + full jitter
 
 park exhausted envelope for manual review</code></pre>
-                <p>The queue absorbs returning-device bursts. Record identity lets ingest recognize retries. Bounded backoff shapes demand and gives each exhausted envelope a visible review state.</p>
-              </article>
-            </div>
+                  <p>The queue absorbs returning-device bursts. Record identity lets ingest recognize retries. Bounded backoff shapes demand and gives each exhausted envelope a visible review state.</p>
+                </article>
+              </div>
 
-            <h3 id="implementation-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
-            <div class="inspection-beat-grid table-span-all" aria-labelledby="implementation-beats-title">
-              <article id="implementation-beat-situation" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I1</span><h4 class="txt-h3">Situation · give every inspection stable identity</h4></div>
-                <dl>
-                  <dt>Then · manually keyed rows</dt>
-                  <dd>Spreadsheet rows depend on hand-entered keys and positional context. A retry, copied row, or renamed photograph can create multiple plausible identities for the same inspection.</dd>
-                  <dt>Now · typed record</dt>
-                  <dd>A client-generated identifier exists before network contact and remains stable across synchronization. A typed record constrains intake channel, optical reads, section scores, grade, media hashes, and sync state into one addressable object.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Validation.</strong> Duplicate delivery must resolve to the same record identity while later corrections remain explicit supersessions.</p>
-              </article>
+              <h3 id="implementation-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
+              <div class="inspection-beat-grid table-span-all" aria-labelledby="implementation-beats-title">
+                <article id="implementation-beat-situation" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I1</span><h4 class="txt-h3">Situation · give every inspection stable identity</h4></div>
+                  <dl>
+                    <dt>Then · manually keyed rows</dt>
+                    <dd>Spreadsheet rows depend on hand-entered keys and positional context. A retry, copied row, or renamed photograph can create multiple plausible identities for the same inspection.</dd>
+                    <dt>Now · typed record</dt>
+                    <dd>A client-generated identifier exists before network contact and remains stable across synchronization. A typed record constrains intake channel, optical reads, section scores, grade, media hashes, and sync state into one addressable object.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Validation.</strong> Duplicate delivery must resolve to the same record identity while later corrections remain explicit supersessions.</p>
+                </article>
 
-              <article id="implementation-beat-tension" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I2</span><h4 class="txt-h3">Tension · persist before transfer</h4></div>
-                <dl>
-                  <dt>Then · connection-coupled work</dt>
-                  <dd>A lost signal interrupts capture and can force the technician to reconstruct work. “Saved” and “received by the platform” collapse into one ambiguous state.</dd>
-                  <dt>Now · local write-ahead log</dt>
-                  <dd>SQLite with a write-ahead log commits field work locally. A queued sync envelope separates local durability from platform acknowledgement, allowing the interface to state local, queued, and acknowledged conditions in words and status markers.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Field drill.</strong> A forced-offline inspection should retain every committed field and media reference and return with an explicit queued state.</p>
-              </article>
+                <article id="implementation-beat-tension" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I2</span><h4 class="txt-h3">Tension · persist before transfer</h4></div>
+                  <dl>
+                    <dt>Then · connection-coupled work</dt>
+                    <dd>A lost signal interrupts capture and can force the technician to reconstruct work. “Saved” and “received by the platform” collapse into one ambiguous state.</dd>
+                    <dt>Now · local write-ahead log</dt>
+                    <dd>SQLite with a write-ahead log commits field work locally. A queued sync envelope separates local durability from platform acknowledgement, allowing the interface to state local, queued, and acknowledged conditions in words and status markers.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Field drill.</strong> A forced-offline inspection should retain every committed field and media reference and return with an explicit queued state.</p>
+                </article>
 
-              <article id="implementation-beat-turn" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I3</span><h4 class="txt-h3">Turn · address media by content</h4></div>
-                <dl>
-                  <dt>Then · duplicate photographs</dt>
-                  <dd>Ad hoc gallery images rely on filenames and folders. Repeat capture and repeat transfer bloat storage, and the relationship between an image, its required view, and its inspection can drift.</dd>
-                  <dt>Now · content-hashed objects</dt>
-                  <dd>The edge computes media hashes, the platform de-duplicates objects, and required beauty-shot positions remain named. Object storage plus a content delivery network serves canonical media while the inspection record retains the references.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Validation.</strong> Repeat upload of the same content should preserve one canonical object and retain the record’s ordered view references.</p>
-              </article>
+                <article id="implementation-beat-turn" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I3</span><h4 class="txt-h3">Turn · address media by content</h4></div>
+                  <dl>
+                    <dt>Then · duplicate photographs</dt>
+                    <dd>Ad hoc gallery images rely on filenames and folders. Repeat capture and repeat transfer bloat storage, and the relationship between an image, its required view, and its inspection can drift.</dd>
+                    <dt>Now · content-hashed objects</dt>
+                    <dd>The edge computes media hashes, the platform de-duplicates objects, and required beauty-shot positions remain named. Object storage plus a content delivery network serves canonical media while the inspection record retains the references.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Validation.</strong> Repeat upload of the same content should preserve one canonical object and retain the record’s ordered view references.</p>
+                </article>
 
-              <article id="implementation-beat-resolution" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I4</span><h4 class="txt-h3">Resolution · shape retry and expose exhaustion</h4></div>
-                <dl>
-                  <dt>Then · synchronized retry surge</dt>
-                  <dd>Returning technicians and recovering devices can retry together, hammering ingest at the moment connectivity resumes. A generic failure message leaves the recovery object unnamed.</dd>
-                  <dt>Now · backoff, jitter, and parking</dt>
-                  <dd>Signed, ordered envelopes upload resumably. Exponential backoff with full jitter distributes retries. Server-side de-duplication uses record identity. After the bounded retry path, the envelope parks for manual review with its record and error context intact.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Quality authority.</strong> The reviewer resolves a named envelope; the system preserves attempt and acknowledgement state.</p>
-              </article>
+                <article id="implementation-beat-resolution" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I4</span><h4 class="txt-h3">Resolution · shape retry and expose exhaustion</h4></div>
+                  <dl>
+                    <dt>Then · synchronized retry surge</dt>
+                    <dd>Returning technicians and recovering devices can retry together, hammering ingest at the moment connectivity resumes. A generic failure message leaves the recovery object unnamed.</dd>
+                    <dt>Now · backoff, jitter, and parking</dt>
+                    <dd>Signed, ordered envelopes upload resumably. Exponential backoff with full jitter distributes retries. Server-side de-duplication uses record identity. After the bounded retry path, the envelope parks for manual review with its record and error context intact.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Quality authority.</strong> The reviewer resolves a named envelope; the system preserves attempt and acknowledgement state.</p>
+                </article>
 
-              <article id="implementation-beat-consequence" class="inspection-beat">
-                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I5</span><h4 class="txt-h3">Consequence · publish one accepted event</h4></div>
-                <dl>
-                  <dt>Then · bespoke integrations</dt>
-                  <dd>Valuation, listing, and arbitration each receive hand-translated data. Their copies can disagree about grade, media, event time, or whether a later correction superseded the first record.</dd>
-                  <dt>Now · versioned fan-out</dt>
-                  <dd>A stateless ingest path validates and acknowledges the envelope, the human-owned grade remains traceable to inputs, and one accepted inspection event carries stable identity, canonical media, timestamps, and corrections to downstream consumers.</dd>
-                </dl>
-                <p class="inspection-beat__boundary"><strong>Validation.</strong> Each consumer must trace the same accepted record and identify a later supersession directly from versioned event history.</p>
-              </article>
+                <article id="implementation-beat-consequence" class="inspection-beat">
+                  <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I5</span><h4 class="txt-h3">Consequence · publish one accepted event</h4></div>
+                  <dl>
+                    <dt>Then · bespoke integrations</dt>
+                    <dd>Valuation, listing, and arbitration each receive hand-translated data. Their copies can disagree about grade, media, event time, or whether a later correction superseded the first record.</dd>
+                    <dt>Now · versioned fan-out</dt>
+                    <dd>A stateless ingest path validates and acknowledges the envelope, the human-owned grade remains traceable to inputs, and one accepted inspection event carries stable identity, canonical media, timestamps, and corrections to downstream consumers.</dd>
+                  </dl>
+                  <p class="inspection-beat__boundary"><strong>Validation.</strong> Each consumer must trace the same accepted record and identify a later supersession directly from versioned event history.</p>
+                </article>
+              </div>
             </div>
           </article>
         </div>
@@ -1103,7 +1119,7 @@ park exhausted envelope for manual review</code></pre>
               </article>
             </div>
 
-            <aside class="inspection-interpretive-aside" aria-labelledby="sampling-decision-title">
+            <aside class="debrief-companion--compact inspection-interpretive-aside" aria-labelledby="sampling-decision-title">
               <p class="inspection-field-label">Interpretive aside · option space before commitment</p>
               <h3 id="sampling-decision-title" class="txt-h3">The two plans earn a Verbalized Sampling decision</h3>
               <p>
@@ -1158,7 +1174,7 @@ park exhausted envelope for manual review</code></pre>
               page is the canonical orientation for the nine supporting readings. The collection remains at
               version 0.1.0 with the reserved standing “exemplar in progress, developing toward convergence.”
             </p>
-            <p>Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/distributed-inspection-harness-an-offline-first-field-operations-teaching-exemplar">Distributed Inspection Harness — An Offline-First Field-Operations Teaching Exemplar</a> to explore expectation, focalization, opportunity, costing, and cross-platform collaboration through one connected architecture reading.</p>
+            <p>Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/distributed-inspection-harness-an-offline-first-field-operations-teaching-exemplar" aria-label="Distributed Inspection Harness — An Offline-First Field-Operations Teaching Exemplar (outside Context Canvas)" title="Outside Context Canvas">Distributed Inspection Harness — An Offline-First Field-Operations Teaching Exemplar<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> to explore expectation, focalization, opportunity, costing, and cross-platform collaboration through one connected architecture reading.</p>
 
             <div class="inspection-source-docket">
               <p class="inspection-field-label">Canonical reading order · ten pages</p>
