@@ -407,6 +407,56 @@ and a fail-closed host installer for the two closures. Exact cPanel paths,
 credentials, the first legacy-site backup, activation, cache behavior, and live
 route observations remain with their separately authorized receiver.
 
+## Current exercised response posture
+
+The `production-v0.4.0` signed-out receipt supersedes the earlier v0.3.0
+primary-host assumptions while preserving that release as the immediate
+historical recovery identity. The active receiver establishes:
+
+- release-bound carrier bytes at the origin, with live HTML differences
+  classified against the active managed edge transformations;
+- the Cloudflare-managed `robots.txt` preamble as an intentional Bot Preference
+  Sync projection around the reviewed authored body;
+- `X-Content-Type-Options: nosniff` and `Referrer-Policy: no-referrer` on every
+  manifest route;
+- manifest-declared types for seven Markdown files, the root web manifest, and
+  the exact Strategy Canvas schema route;
+- a permanent edge redirect from `www.vik.guru` to the apex with path and query
+  preserved; and
+- Standard response-body inspection on root, `.html`, and canonical directory
+  responses so the selected edge protections can operate.
+
+Bot Preference Sync and Email Address Obfuscation remain active. The reviewed
+source keeps the public collaboration address readable; the edge rewrite adds
+proportionate friction for mechanical harvesting while preserving the visible
+address for human visitors. Capable search agents can still recover this
+intentionally public contact route. The 2026-10-19 acceptance pass recovered
+the exact authored bytes from all 84 HTML responses after reversing only the
+declared Cloudflare transformations. All 351 remaining primary routes were
+inspected directly: 350 matched byte for byte, while `robots.txt` carried the
+intentional managed preamble. Chromium and WebKit exposed the public address as
+visible accessibility text on representative About, AI Systems, and Debrief
+routes. AI Labyrinth remains off after the v0.4.0 byte-preservation diagnostic.
+These are named receiver decisions rather than source-file transformations,
+and live byte receipts classify both managed edge projections explicitly.
+
+Email Address Obfuscation also recognizes 26 `artifact@version` coordinates as
+email-shaped text. Chromium exposed all 26 inspected coordinates in the
+rendered document, while raw-HTML and script-free readers receive the
+edge-obfuscated form. Two self-contained prototypes retain content-security
+policies that decline the injected email decoder and JavaScript Detections
+scripts. Keep global public-address protection, then use Cloudflare's
+`email_off` boundary or a narrowly scoped configuration rule for technical
+coordinates and exercise raw-parser plus CSP behavior before claiming parser
+parity.
+
+The retained primary-root host policy owns the remaining authored 404 route.
+Configure Apache with `ErrorDocument 404 /404.html` so an unknown path keeps
+status `404` while serving the manifest-owned page. Use either the active edge
+canonical redirect or an origin redirect; one layer owns canonicalization at a
+time. Cache classes, HSTS, and CSP remain explicit follow-up decisions whose
+exercise and rollback evidence belong in the current release Issue.
+
 ## cPanel references
 
 - [First pull-model enrollment and cutover](FIRST-CUTOVER.md)
