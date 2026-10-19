@@ -88,7 +88,9 @@
       "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
-      "dependencies": []
+      "dependencies": [
+        ".agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md"
+      ]
     },
     {
       "name": "contextual-jargon-scan",

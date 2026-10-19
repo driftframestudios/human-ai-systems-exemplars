@@ -95,6 +95,10 @@ async function assertDescriptionPrint(page, engineLabel) {
     assert.ok(presentation.list.width > 0 && presentation.list.height > 0, `${engineLabel}: print gives the visual-description list geometry`);
     assert.notEqual(presentation.firstItem.display, "none", `${engineLabel}: print renders visual-description items`);
     assert.ok(presentation.firstItem.height > 0, `${engineLabel}: print gives visual-description items geometry`);
+    // Print can activate same-origin resources inside otherwise collapsed details.
+    // Let those accepted requests settle before restoring screen media so the
+    // transition cannot cancel a valid asset and register a false failure.
+    await page.waitForLoadState("networkidle");
   } finally {
     await page.emulateMedia({ media: "screen" });
   }

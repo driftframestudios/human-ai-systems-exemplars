@@ -145,12 +145,12 @@ portable-path collision stop projection formation. The loading-graph parser
 uses source spans and HTML data-state boundaries; comments and raw or inert
 regions cannot supply stylesheet owners.
 
-For the current source graph, an enhanced screen moves from seven stylesheet
-requests and 77,081 raw bytes to two requests and 55,814 raw bytes; the
-independently compressed sums move from 17,674 to 11,914 gzip-9 bytes and from
-14,823 to 10,536 Brotli-11 bytes. The scriptless path moves from eight requests
-and 77,489 raw bytes to three requests and 56,111 raw bytes; gzip-9 moves from
-17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. These are
+At source `2d8e708`, an enhanced screen moves from seven stylesheet
+requests and 78,460 raw bytes to two requests and 56,443 raw bytes; the
+independently compressed sums move from 18,215 to 12,069 gzip-9 bytes and from
+15,243 to 10,679 Brotli-11 bytes. The scriptless path moves from eight requests
+and 78,868 raw bytes to three requests and 56,740 raw bytes; gzip-9 moves from
+18,418 to 12,214 bytes and Brotli-11 from 15,404 to 10,786 bytes. These are
 repository-side distribution observations. The final carrier manifest binds
 the generated filenames and digests; deployed transfer claims begin with the
 signed-out receiver observation.

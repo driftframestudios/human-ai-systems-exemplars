@@ -3,7 +3,7 @@
 ```yaml
 planning_surface:
   id: "prototype-exemplars.context-canvas.principal-engineering-program.v0.1"
-  as_of: "2026-08-23"
+  as_of: "2026-10-18"
   posture: "continual planning"
   runtime_authority: "visitor and prototype source"
   release_authority: "Git, human review, local receipts, and explicitly authorized deployed artifact"
@@ -16,7 +16,7 @@ planning_surface:
 
 The Context Canvas is already principal-level in product reasoning, accessibility intent, visual-system specificity, and HTML/CSS/SVG-first expression. A first delivery-engineering slice has now landed: route-owned CSS, repaired public metadata and recovery paths, an allowlisted Static Assets build, and a deterministic deployment dry-run. Broader publication authority, cross-origin embedding, and the remaining CSS ownership map stay deliberate next choices.
 
-The complete visual runner and first shared-core ownership graph are now active. The next move is to continue consumer-grounded extraction from the 43-route legacy remainder and let Issue #401 test deterministic production-only bundling after readable source boundaries settle. The program keeps readable source primary, makes visual contracts easy to locate, preserves route-level creative authority, and lets the existing bounded Cloudflare proof continue on its independent delivery path.
+The complete visual runner and first shared-core ownership graph are now active. At source `2d8e708`, the next move is to continue consumer-grounded extraction from the 39-route legacy remainder and let Issue #401 test deterministic production-only bundling after readable source boundaries settle. The program keeps readable source primary, makes visual contracts easy to locate, preserves route-level creative authority, and lets the existing bounded Cloudflare proof continue on its independent delivery path.
 
 ## Request and source boundary
 
@@ -226,14 +226,14 @@ The settled sequence, route inventory, five-plan probability model, visual cutof
 
 Historical first-extraction baseline, retained as the starting coordinate:
 
-| Measure | Current observation |
+| Measure | Recorded observation |
 | --- | ---: |
 | `expanded.css` after the first extraction | 145,667 bytes; 6,373 lines |
 | `field-inspection.css` | 12,715 bytes; 421 lines |
 | Combined authored source across that seam | 158,382 bytes; 6,794 lines |
 | Field Inspection load order | `expanded.css` → `field-inspection.css` → `canvas-shell.css` |
 
-The current ownership return is recorded in the CSS modularization plan: `expanded.css` is now 47,404 bytes across 2,069 lines, while tokens, foundation, navigation, tables, and route cards have direct shared owners. The extraction prioritizes first-paint ownership and collaboration legibility rather than compression. The remaining systemic concern is that 43 routes still parse unrelated page-family styles and source order remains an active dependency contract.
+The current ownership return is recorded in the CSS modularization plan: at source `2d8e708`, `expanded.css` carries 46,854 bytes across 2,030 lines, while tokens, foundation, navigation, tables, and route cards have direct shared owners. The extraction prioritizes first-paint ownership and collaboration legibility rather than compression. The remaining systemic concern is that 39 routes still parse unrelated page-family styles and source order remains an active dependency contract.
 
 ### First extraction result
 
@@ -553,7 +553,7 @@ Useful next probe families include:
 - Optimization output without readable source and provenance weakens future human-AI collaboration.
 - Remote-proof configuration consumes collaboration attention and should remain smaller than the evidence it produces.
 - Artifact retention, cache duration, log retention, and screenshot volume are cost decisions as well as technical settings.
-- Existing local full-page images average about 1.87 MiB, so the current 46-route, three-viewport phase may approach 258 MiB. That volume remains manageable under ignored `.visual-runs/` for this cycle. Portable storage returns after the human calculates likely Cloudflare transformations and explicitly reopens the decision.
+- Existing local full-page images average about 1.87 MiB, so the current 42-route, three-viewport phase may approach 236 MiB. That volume remains manageable under ignored `.visual-runs/` for this cycle. Portable storage returns after the human calculates likely Cloudflare transformations and explicitly reopens the decision.
 - Dependency updates and action pins need a cadence even when runtime dependencies remain zero.
 - A rollback is not real until an earlier source revision can recreate and redeploy the same artifact.
 
