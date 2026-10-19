@@ -409,6 +409,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
                 const prior = {
                   value: root.style.getPropertyValue("font-size"),
                   priority: root.style.getPropertyPriority("font-size"),
+                  computed: getComputedStyle(root).fontSize,
                 };
                 root.style.setProperty("font-size", "200%", "important");
                 return prior;
@@ -418,6 +419,7 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
                   " · Extended movement orientation names the receiving people, retained responsibility, and next observable decision.",
                 ));
               });
+              await settleColumns(session.page);
             }
             const reading = await observeReading(session.page);
             assertReading(reading, route, { rails: mode !== "no-script", media: mode === "print" ? "print" : "screen" });
@@ -434,16 +436,31 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
                 `${route}: enlarged text exits the multicolumn reading state`);
             }
             if (priorRootFont) {
-              await session.page.evaluate(prior => {
-                const root = document.documentElement;
-                if (prior.value) root.style.setProperty("font-size", prior.value, prior.priority);
-                else root.style.removeProperty("font-size");
-              }, priorRootFont);
-              await settleColumns(session.page);
-              const restored = await observeReading(session.page);
-              assertReading(restored, route);
-              assert.ok(restored.flows.every(flow => flow.columns === 2),
-                `${route}: restoring text size returns to two readable columns without reloading`);
+              try {
+                // Assert the effective 32px -> prior-size transition through
+                // the same owned property. Removing an otherwise absent
+                // declaration can leave a subset of Gecko's descendant
+                // container-query matches stale even after the root's
+                // computed size changes. An explicit prior value exercises
+                // visitor-visible reflow; exact inline state is restored as
+                // test cleanup below.
+                await session.page.evaluate(prior => {
+                  document.documentElement.style.setProperty("font-size", prior.computed, "important");
+                }, priorRootFont);
+                await settleColumns(session.page);
+                const restored = await observeReading(session.page);
+                assertReading(restored, route);
+                assert.equal(restored.rootFont, Number.parseFloat(priorRootFont.computed),
+                  `${route}: restores the prior effective root text size`);
+                assert.ok(restored.flows.every(flow => flow.columns === 2),
+                  `${route}: restoring text size returns to two readable columns without reloading`);
+              } finally {
+                await session.page.evaluate(prior => {
+                  const root = document.documentElement;
+                  if (prior.value) root.style.setProperty("font-size", prior.value, prior.priority);
+                  else root.style.removeProperty("font-size");
+                }, priorRootFont);
+              }
             }
             if (mode === "print" || mode === "forced-colors") {
               await captureOpenings(session.page, `${engine}-${route}-${mode}`);
