@@ -195,6 +195,15 @@
     max-inline-size: var(--canvas-reading-measure);
 }
 
+/* An orientation callout is one painted object inside continuous prose.
+   The atomic inline block keeps WebKit from carrying its footer into the
+   next column while the direct-child scope leaves other quote layouts free. */
+.prose-flow > .debrief-quote--orientation {
+    break-inside: avoid;
+    display: inline-block;
+    inline-size: 100%;
+}
+
 /* Compact notes set their useful measure; the shared screen frame below
    also accounts for the rail's current side and text-scaled paint reserve.
    Palette, padding, and the paragraph measure remain with existing owners. */
