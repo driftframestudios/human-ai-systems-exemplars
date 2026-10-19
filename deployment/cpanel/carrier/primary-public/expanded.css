@@ -1619,6 +1619,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-block: 1px solid var(--canvas-rule-strong);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.2rem, 3vw, 2rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.2rem), 3vw, 2rem);
     break-inside: avoid;
 }
 
@@ -1834,6 +1835,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-inline-start: .35rem solid var(--canvas-ink-strong);
     margin-block: clamp(1.75rem, 4vw, 3rem);
     padding: clamp(1.2rem, 3vw, 2rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1.2rem), 3vw, 2rem);
 }
 
 .implementation-companion > :first-child {
@@ -1851,6 +1853,12 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     transform: translateX(-50%);
 }
 
+/* Opt-in captions share the wide visual's center while keeping their existing
+   reading measure. The figure continues to own the extended media field. */
+.story-visual--bounded-caption > figcaption.table-note {
+    margin-inline: auto;
+}
+
 .story-visual :is(img, video) {
     background: #f8f1e2;
     border: 1px solid var(--canvas-rule-strong);
@@ -1863,54 +1871,6 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     color: inherit;
     display: block;
     text-decoration: none;
-}
-
-/*
- * Dense reference-interface proxies keep a laptop-sized inspection canvas.
- * Narrow readers receive a labelled, keyboard-scrollable region and the
- * source-size link remains available for exact text inspection.
- */
-.debrief-proxy-figure {
-    inline-size: min(92vw, 78rem);
-}
-
-.debrief-proxy-frame {
-    inline-size: 100%;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scrollbar-gutter: stable;
-}
-
-.debrief-proxy-frame:focus-visible {
-    outline: .2rem solid currentColor;
-    outline-offset: .25rem;
-}
-
-.debrief-proxy-frame .story-visual__open {
-    inline-size: max(100%, 56rem);
-}
-
-.debrief-proxy-frame--portrait {
-    inline-size: min(100%, 42rem);
-    margin-inline: auto;
-}
-
-.debrief-proxy-frame--portrait .story-visual__open {
-    inline-size: 100%;
-}
-
-.debrief-proxy-figure .table-note strong {
-    color: inherit;
-}
-
-@media print {
-    .debrief-proxy-figure,
-    .debrief-proxy-frame,
-    .debrief-proxy-frame .story-visual__open {
-        inline-size: 100%;
-        min-inline-size: 0;
-        overflow: visible;
-    }
 }
 
 .cobalt-operating-field__visual img {
@@ -1929,6 +1889,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     border-radius: .75rem;
     box-shadow: .5rem .5rem 0 var(--operating-field-ink, #17345f);
     padding: clamp(1rem, 2.4vw, 1.5rem);
+    padding-inline: clamp(var(--debrief-companion-inline-floor, 1rem), 2.4vw, 1.5rem);
 }
 
 .cobalt-operating-field__table .table-scroll {

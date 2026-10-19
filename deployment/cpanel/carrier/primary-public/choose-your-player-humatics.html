@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="styles/components/tables.css">
     <link rel="stylesheet" href="expanded.css">
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <link rel="stylesheet" href="styles/components/reading-flow.css">
     <link rel="stylesheet" href="styles/routes/three-movement-debrief.css">
     <link rel="stylesheet" href="canvas-shell.css">
     <link rel="stylesheet" href="styles/contracts/debrief-composition.css">
@@ -189,10 +190,10 @@
               </video>
               <figcaption id="choose-your-player-interface-caption" class="table-note"><strong>Choose Your Player role-based interface demonstration.</strong> The 21.5-second sequence moves from four role previews into a Field Installation Engineer&rsquo;s mapped warehouse setup, a shared site-management view, and geographic site setup. A person&rsquo;s working posture changes the first view while the site, state, and handoffs remain shared. <a href="https://vik.guru/v1-cdn/video/choose-your-player/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
             </figure>
-            <aside id="choose-your-player-interface-transcript" class="implementation-companion table-span-all" aria-labelledby="choose-your-player-interface-transcript-title">
+            <aside id="choose-your-player-interface-transcript" class="debrief-companion-frame implementation-companion table-span-all" aria-labelledby="choose-your-player-interface-transcript-title">
               <p class="implementation-companion__eyebrow">Visual description</p>
               <h3 id="choose-your-player-interface-transcript-title" class="txt-h3">Four role cards lead into one shared site model</h3>
-              <ol>
+              <ol class="debrief-ordered-reading">
                 <li>The demonstration opens on Field Installation Engineer, Site Administrator, Client Coordinator, and Computer Vision Calibrator cards. Moving among them previews distinct responsibilities, presented capabilities, and starting actions. The selector orients the work; authenticated identity, active tenant membership, and entitlements govern access.</li>
                 <li>Selecting Field Installation Engineer triggers a short &ldquo;Get Ready&rdquo; transition.</li>
                 <li>An industrial warehouse floor plan then presents beacon and field-pin positions, a setup checklist, and a brief pin-linked conversation.</li>
@@ -216,483 +217,531 @@
 
       <div class="content__container bg__adjust--tiffany debrief-track debrief-track--narrative">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="narrative-architecture-title">
-            <p class="debrief-track-label"><span>Movement I</span><strong>Narrative Architecture · Evidence and Consequence</strong><small>Follow the near-miss, inquiry route, and changed product frame.</small></p>
-            <h2 id="narrative-architecture-title" class="txt-h2 architecture-track-title">I. Narrative Architecture — Choose Your Player</h2>
+          <article class="debrief-movement" aria-labelledby="narrative-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="debrief-track-label"><span>Movement I</span><strong>Narrative Architecture · Evidence and Consequence</strong><small>Follow the near-miss, inquiry route, and changed product frame.</small></p>
+              <h2 id="narrative-architecture-title" class="txt-h2 architecture-track-title">I. Narrative Architecture — Choose Your Player</h2>
+            </header>
+            <div class="reading-flow">
 
-            <h3 id="narrative-debrief-title" class="txt-h3 beat-title">I.a Debrief — A product story under pressure</h3>
-            <p>
-              Humatics builds microlocation technology: radio-based hardware and software that produce highly precise,
-              real-time position data for robots, tools, and other high-value equipment, then make that data available to
-              control systems for three-dimensional visibility and coordination.<sup><a href="#source-humatics-product">source</a></sup>
-              Manufacturing and customer-operations teams depend on that shared spatial picture as equipment moves from
-              setup into production.
-            </p>
-            <p>
-              That value depends on more than a precise reading. System integrators connect the location stream to robotics
-              and controls; Field Installation Engineers place and calibrate equipment at each site; support teams diagnose
-              exceptions; and operators need to understand what is live and what needs attention. The product experience had
-              to keep one site legible across those handoffs, so the people installing, supporting, and running the system
-              could work from the same operating picture.
-            </p>
-            <p>
-              About a day after joining the Boston software consultancy Janeiro Digital as Senior Product Designer and Lead, I was
-              assigned to Humatics, a high-priority client account with trade-show demonstrations, a tight timeline, and a financing
-              cycle in motion. I was the client project&rsquo;s principal designer and mentored two junior designers. By roughly my third
-              day, I was expected to lead a client presentation. The office itself felt like a 1990s hacker lab crossed with a startup: breadboards and
-              equipment, whiteboards and sticky notes, and a small R2-D2-shaped hospitality robot carrying drinks for visitors.
-            </p>
-            <p>
-              The work I inherited was substantial and real. A responsive design library, beacon ranges, site maps, and drawer-based
-              controls were already connected to a robot demonstration rather than stopping at a clickable prototype. My initial
-              assignment focused on concrete browser concerns: a Mac-based team still had to support Windows and Internet
-              Explorer, and the available
-              remote-device testing carried latency and unreliable sessions. The larger product story carried hardware, beacons,
-              site configuration, robot zones, calibration, telemetry, and operating handoff; it still needed one role-aware operating model.
-            </p>
+              <h3 id="narrative-debrief-title" class="txt-h3 beat-title">I.a Debrief — A product story under pressure</h3>
+              <div class="prose-flow">
+                <p>
+                  Humatics builds microlocation technology: radio-based hardware and software that produce highly precise,
+                  real-time position data for robots, tools, and other high-value equipment, then make that data available to
+                  control systems for three-dimensional visibility and coordination.<sup><a href="#source-humatics-product">source</a></sup>
+                  Manufacturing and customer-operations teams depend on that shared spatial picture as equipment moves from
+                  setup into production.
+                </p>
+                <p>
+                  That value depends on more than a precise reading. System integrators connect the location stream to robotics
+                  and controls; Field Installation Engineers place and calibrate equipment at each site; support teams diagnose
+                  exceptions; and operators need to understand what is live and what needs attention. The product experience had
+                  to keep one site legible across those handoffs, so the people installing, supporting, and running the system
+                  could work from the same operating picture.
+                </p>
+                <p>
+                  About a day after joining the Boston software consultancy Janeiro Digital as Senior Product Designer and Lead, I was
+                  assigned to Humatics, a high-priority client account with trade-show demonstrations, a tight timeline, and a financing
+                  cycle in motion. I was the client project&rsquo;s principal designer and mentored two junior designers. By roughly my third
+                  day, I was expected to lead a client presentation. The office itself felt like a 1990s hacker lab crossed with a startup: breadboards and
+                  equipment, whiteboards and sticky notes, and a small R2-D2-shaped hospitality robot carrying drinks for visitors.
+                </p>
+                <p>
+                  The work I inherited was substantial and real. A responsive design library, beacon ranges, site maps, and drawer-based
+                  controls were already connected to a robot demonstration rather than stopping at a clickable prototype. My initial
+                  assignment focused on concrete browser concerns: a Mac-based team still had to support Windows and Internet
+                  Explorer, and the available
+                  remote-device testing carried latency and unreliable sessions. The larger product story carried hardware, beacons,
+                  site configuration, robot zones, calibration, telemetry, and operating handoff; it still needed one role-aware operating model.
+                </p>
+                </div>
 
-            <h3 id="narrative-bottleneck-title" class="txt-h3 beat-title">I.b The Bottleneck — The meeting changed the altitude</h3>
-            <p>
-              At the first meeting, I presented preliminary additions to polished screens with a reasonable expectation that the
-              presentation would land. Our meeting group was small: one of the junior designers I mentored, a project manager, and me, newly arrived but
-              leading the presentation. I introduced what I understood, named where my understanding was still forming, and invited
-              the Humatics Project Manager to interrupt whenever the work departed from their expectations.
-            </p>
-            <p>
-              The Humatics Project Manager looked away from the gradients and fades and asked, in substance, how the system would
-              manage sites and distinguish the views needed by Field Installation Engineers and Humatics personnel. I had a partial
-              answer, so I changed how we worked in the meeting. I opened the PRD, showed the role and permission terms that my
-              local text analysis had surfaced, asked what the PM expected, and wrote <a href="https://kindlight.systems/core-architectures-orientation-index/specification-by-example">GIVEN&ndash;WHEN&ndash;THEN statements</a> as the answers
-              arrived. The junior designer whiteboarded emerging views; our project manager turned decisions into action items;
-              the team&rsquo;s phones lit up as the decisions became assigned work.
-            </p>
-            <p>
-              That recovery made listening visible and changed the altitude of the work. Tactical compatibility still mattered.
-              The governing questions were now user multiplicity, onboarding, client and site hierarchy, and the handoff between
-              Humatics specialists and customer teams. I had two days to turn those questions into a product model the client could inspect.
-            </p>
+              <h3 id="narrative-bottleneck-title" class="txt-h3 beat-title">I.b The Bottleneck — The meeting changed the altitude</h3>
+              <div class="prose-flow">
+                <p>
+                  At the first meeting, I presented preliminary additions to polished screens with a reasonable expectation that the
+                  presentation would land. Our meeting group was small: one of the junior designers I mentored, a project manager, and me, newly arrived but
+                  leading the presentation. I introduced what I understood, named where my understanding was still forming, and invited
+                  the Humatics Project Manager to interrupt whenever the work departed from their expectations.
+                </p>
+                <p>
+                  The Humatics Project Manager looked away from the gradients and fades and asked, in substance, how the system would
+                  manage sites and distinguish the views needed by Field Installation Engineers and Humatics personnel. I had a partial
+                  answer, so I changed how we worked in the meeting. I opened the PRD, showed the role and permission terms that my
+                  local text analysis had surfaced, asked what the PM expected, and wrote <a href="https://kindlight.systems/core-architectures-orientation-index/specification-by-example" aria-label="GIVEN–WHEN–THEN statements (outside Context Canvas)" title="Outside Context Canvas">GIVEN&ndash;WHEN&ndash;THEN statements<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> as the answers
+                  arrived. The junior designer whiteboarded emerging views; our project manager turned decisions into action items;
+                  the team&rsquo;s phones lit up as the decisions became assigned work.
+                </p>
+                <p>
+                  That recovery made listening visible and changed the altitude of the work. Tactical compatibility still mattered.
+                  The governing questions were now user multiplicity, onboarding, client and site hierarchy, and the handoff between
+                  Humatics specialists and customer teams. I had two days to turn those questions into a product model the client could inspect.
+                </p>
+                </div>
 
-            <h4 id="field-inquiry-title" class="txt-h4 beat-title">I.b.i Field inquiry through an available route</h4>
-            <p>
-              I asked how much direct access the team had received to Field Installation Engineers; the answer was none. I requested
-              time with them and explained the activities, intervals, and outputs involved. The Humatics Project Manager&rsquo;s hesitation
-              reflected a real operating cost: the company needed its engineers engineering. We agreed that I would supply tightly
-              scoped questions and the PM would conduct focused sessions, then bring the answers back to the agency team.
-            </p>
-            <p>
-              One question opened the physical work: “What are you actually doing when you install, physically?” Field Installation
-              Engineers described mounting beacons and transmitters from booms, cherry pickers, and tall scaffolding. They needed
-              site, placement, calibration, conversation, and exception information before the lift left the floor; juggling a
-              laptop and phone dozens of feet in the air was an unsafe and impractical fallback.
-            </p>
-            <aside class="interpretive-aside" aria-labelledby="field-learning-title">
-              <h4 id="field-learning-title" class="txt-h4">A mediated route produced materially specific field constraints</h4>
-              <p>
-                The negotiated research route respected Field Installation Engineer time and returned designable constraints.
-                It covered a focused slice of field work: people working at height needed site, placement, calibration,
-                conversation, and exception information before they climbed.
-              </p>
-            </aside>
+              <h4 id="field-inquiry-title" class="txt-h4 beat-title">I.b.i Field inquiry through an available route</h4>
+              <div class="prose-flow">
+                <p>
+                  I asked how much direct access the team had received to Field Installation Engineers; the answer was none. I requested
+                  time with them and explained the activities, intervals, and outputs involved. The Humatics Project Manager&rsquo;s hesitation
+                  reflected a real operating cost: the company needed its engineers engineering. We agreed that I would supply tightly
+                  scoped questions and the PM would conduct focused sessions, then bring the answers back to the agency team.
+                </p>
+                <p>
+                  One question opened the physical work: “What are you actually doing when you install, physically?” Field Installation
+                  Engineers described mounting beacons and transmitters from booms, cherry pickers, and tall scaffolding. They needed
+                  site, placement, calibration, conversation, and exception information before the lift left the floor; juggling a
+                  laptop and phone dozens of feet in the air was an unsafe and impractical fallback.
+                </p>
+                <aside class="interpretive-aside" aria-labelledby="field-learning-title">
+                  <h4 id="field-learning-title" class="txt-h4">A mediated route produced materially specific field constraints</h4>
+                  <p>
+                    The negotiated research route respected Field Installation Engineer time and returned designable constraints.
+                    It covered a focused slice of field work: people working at height needed site, placement, calibration,
+                    conversation, and exception information before they climbed.
+                  </p>
+                </aside>
+                </div>
 
-            <h3 id="narrative-intervention-title" class="txt-h3 beat-title">I.c The Intervention — Four connected moves</h3>
-            <p>
-              The two-day pivot displaced nearly complete agency line items while I carried other client work and the distributed
-              engineering team waited for approved designs. Geography still held open questions, and Windows / Internet Explorer
-              testing through remote devices was slow and unreliable. I concentrated the product story around onboarding and a
-              shared dashboard; one of the junior designers I mentored developed much of the geographic setup; together we extended an existing
-              pin pattern with conversation history and kept feedback visible inside the live design files.
-            </p>
-            <p>
-              <strong><a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/choose-your-player-making-an-industrial-robotics-product-legible-across-roles-sites-and-field-handoffs-20182019-20252026">Choose Your Player</a></strong> was the welcome interface that made the reframe tangible. Five high-energy,
-              anime-inspired horizontal panels represented project administration, planning, deployment, support, and operations.
-              Selecting a panel moved the others aside and revealed role-relevant onboarding or a resumable dashboard over the
-              same client, site, installation, beacon, and zone hierarchy. The illustration style set an expressive direction;
-              the interaction gave the client a concrete way to discuss people, work, and handoffs.
-            </p>
-            <ol class="clean-list numbered-moves">
-              <li><strong>I read the PRD as a concern map.</strong> Repeated role, site, view, installation, support, and status language showed where the organization needed shared structure.</li>
-              <li><strong>I turned five roles into working postures.</strong> Project administration, planning, deployment, support, and operations became clear entrances into one product.</li>
-              <li><strong>I made the site hierarchy visible.</strong> Client, site, installation, beacon, and zone became stable shared objects rather than screen-specific labels.</li>
-              <li><strong>I let the map carry conversation.</strong> Pins, zones, coordinates, site evidence, and discussion moved into one field workspace that could survive handoff and reconnection.</li>
-            </ol>
+              <h3 id="narrative-intervention-title" class="txt-h3 beat-title">I.c The Intervention — Four connected moves</h3>
+              <div class="prose-flow">
+                <p>
+                  The two-day pivot displaced nearly complete agency line items while I carried other client work and the distributed
+                  engineering team waited for approved designs. Geography still held open questions, and Windows / Internet Explorer
+                  testing through remote devices was slow and unreliable. I concentrated the product story around onboarding and a
+                  shared dashboard; one of the junior designers I mentored developed much of the geographic setup; together we extended an existing
+                  pin pattern with conversation history and kept feedback visible inside the live design files.
+                </p>
+                <p>
+                  <strong><a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/choose-your-player-making-an-industrial-robotics-product-legible-across-roles-sites-and-field-handoffs-20182019-20252026" aria-label="Choose Your Player (outside Context Canvas)" title="Outside Context Canvas">Choose Your Player<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a></strong> was the welcome interface that made the reframe tangible. Five high-energy,
+                  anime-inspired horizontal panels represented project administration, planning, deployment, support, and operations.
+                  Selecting a panel moved the others aside and revealed role-relevant onboarding or a resumable dashboard over the
+                  same client, site, installation, beacon, and zone hierarchy. The illustration style set an expressive direction;
+                  the interaction gave the client a concrete way to discuss people, work, and handoffs.
+                </p>
+                </div>
+              <ol class="clean-list numbered-moves">
+                <li><strong>I read the PRD as a concern map.</strong> Repeated role, site, view, installation, support, and status language showed where the organization needed shared structure.</li>
+                <li><strong>I turned five roles into working postures.</strong> Project administration, planning, deployment, support, and operations became clear entrances into one product.</li>
+                <li><strong>I made the site hierarchy visible.</strong> Client, site, installation, beacon, and zone became stable shared objects rather than screen-specific labels.</li>
+                <li><strong>I let the map carry conversation.</strong> Pins, zones, coordinates, site evidence, and discussion moved into one field workspace that could survive handoff and reconnection.</li>
+              </ol>
 
-            <figure class="table-figure table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="PRD concern frequency panel">
-                <table class="table--reading table--comfortable" data-label="The PRD terms that pulled the product toward a role and site architecture">
-                  <caption>The PRD terms that pulled the product toward a role and site architecture</caption>
-                  <thead>
-                    <tr data-label="The PRD terms that pulled the product toward a role and site architecture: column headings">
-                      <th scope="col" data-label="Concern cluster">Concern cluster</th>
-                      <th scope="col" data-label="Repeated language">Repeated language</th>
-                      <th scope="col" data-label="Design response">Design response</th>
-                      <th scope="col" data-label="Ability gained">Ability gained</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="The PRD terms that pulled the product toward a role and site architecture: People and responsibility">
-                      <th scope="row" data-label="Concern cluster">People and responsibility</th>
-                      <td data-label="Repeated language">Administrator · Planning Engineer · Deployment Engineer · Support Engineer · Operations Manager</td>
-                      <td data-label="Design response">Choose Your Player</td>
-                      <td class="table-ability" data-label="Ability gained">A collaborator can enter through the work they are trying to accomplish.</td>
-                    </tr>
-                    <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Place and equipment">
-                      <th scope="row" data-label="Concern cluster">Place and equipment</th>
-                      <td data-label="Repeated language">Client · site · installation · beacon · zone</td>
-                      <td data-label="Design response">Shared site hierarchy</td>
-                      <td class="table-ability" data-label="Ability gained">Teams can discuss one operating model across views.</td>
-                    </tr>
-                    <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Field state">
-                      <th scope="row" data-label="Concern cluster">Field state</th>
-                      <td data-label="Repeated language">Status · calibration · coverage · location · exception</td>
-                      <td data-label="Design response">Site dashboard and map</td>
-                      <td class="table-ability" data-label="Ability gained">A technician can see the condition that changes the next move.</td>
-                    </tr>
-                    <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Coordination">
-                      <th scope="row" data-label="Concern cluster">Coordination</th>
-                      <td data-label="Repeated language">Assign · configure · install · support · monitor</td>
-                      <td data-label="Design response">Handoff-aware journeys</td>
-                      <td class="table-ability" data-label="Ability gained">Ownership can change while the shared objects retain continuity.</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <figure class="table-figure table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="PRD concern frequency panel">
+                  <table class="table--reading table--comfortable" data-label="The PRD terms that pulled the product toward a role and site architecture">
+                    <caption>The PRD terms that pulled the product toward a role and site architecture</caption>
+                    <thead>
+                      <tr data-label="The PRD terms that pulled the product toward a role and site architecture: column headings">
+                        <th scope="col" data-label="Concern cluster">Concern cluster</th>
+                        <th scope="col" data-label="Repeated language">Repeated language</th>
+                        <th scope="col" data-label="Design response">Design response</th>
+                        <th scope="col" data-label="Ability gained">Ability gained</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="The PRD terms that pulled the product toward a role and site architecture: People and responsibility">
+                        <th scope="row" data-label="Concern cluster">People and responsibility</th>
+                        <td data-label="Repeated language">Administrator · Planning Engineer · Deployment Engineer · Support Engineer · Operations Manager</td>
+                        <td data-label="Design response">Choose Your Player</td>
+                        <td class="table-ability" data-label="Ability gained">A collaborator can enter through the work they are trying to accomplish.</td>
+                      </tr>
+                      <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Place and equipment">
+                        <th scope="row" data-label="Concern cluster">Place and equipment</th>
+                        <td data-label="Repeated language">Client · site · installation · beacon · zone</td>
+                        <td data-label="Design response">Shared site hierarchy</td>
+                        <td class="table-ability" data-label="Ability gained">Teams can discuss one operating model across views.</td>
+                      </tr>
+                      <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Field state">
+                        <th scope="row" data-label="Concern cluster">Field state</th>
+                        <td data-label="Repeated language">Status · calibration · coverage · location · exception</td>
+                        <td data-label="Design response">Site dashboard and map</td>
+                        <td class="table-ability" data-label="Ability gained">A technician can see the condition that changes the next move.</td>
+                      </tr>
+                      <tr data-label="The PRD terms that pulled the product toward a role and site architecture: Coordination">
+                        <th scope="row" data-label="Concern cluster">Coordination</th>
+                        <td data-label="Repeated language">Assign · configure · install · support · monitor</td>
+                        <td data-label="Design response">Handoff-aware journeys</td>
+                        <td class="table-ability" data-label="Ability gained">Ownership can change while the shared objects retain continuity.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <figcaption class="table-note">The panel reconstructs the historical organizing language, its qualitative concentration, and the design move it informed.<sup><a href="#source-humatics-registry-account">source</a></sup></figcaption>
+              </figure>
+
+              <div class="prose-flow">
+                <aside class="debrief-quote debrief-quote--orientation" aria-label="What the two-day reframe established">
+                  <p>The breakthrough was a shared entrance into the work: one site model, several working postures, and explicit recovery in the field.</p>
+                  <footer>Conclusion from the 2018–2019 client project and its current implementation examples</footer>
+                </aside>
+                </div>
+
+              <h3 id="narrative-outcomes-title" class="txt-h3 beat-title">I.d Outcomes — A working prototype restored trust</h3>
+              <div class="prose-flow">
+                <p>
+                  The second presentation opened with Choose Your Player. The Humatics Project Manager responded with visible excitement
+                  to its energy, and I clarified that the literal anime artwork could evolve while the five-posture interaction carried
+                  the product model. We followed a new Field Installation Engineer into the shared site hierarchy, then I handed the
+                  presentation to the junior designer for geographic setup. We alternated between presenting the pin-linked conversation
+                  pattern and recording client feedback directly in the design file.
+                </p>
+                <p>
+                  The meeting produced a green light, approved design specifications, excitement, and renewed trust. Back at the agency,
+                  we onboarded engineering to the change set; the live design library had given them an early view, and the scope still
+                  prompted understandable apprehension. The team later separated address search from latitude-and-longitude entry, giving
+                  irregular industrial and construction sites two explicit setup paths.
+                </p>
+                <p>
+                  My product strategy and working prototypes contributed to Humatics&rsquo;s $28 million Series A1 financing effort by
+                  making the software experience and its field-operating model tangible. Humatics&rsquo;s January 2019 announcement described
+                  a broader company result shaped by its technology, acquisitions, commercial progress, market demand, team, and investors.
+                </p>
+                </div>
+
+              <h3 id="narrative-repeatability-title" class="txt-h3 beat-title">I.e Repeatability — Use the smallest interaction that reveals the operating model</h3>
+              <div class="prose-flow">
+                <ul>
+                  <li><strong>Read repeated nouns as shared-object candidates.</strong> A dense requirements document can reveal the objects an organization is already trying to coordinate.</li>
+                  <li><strong>Read repeated roles as projection needs.</strong> A role-specific entrance can simplify a complex product while shared access authority remains stable.</li>
+                  <li><strong>Ask a physical question.</strong> “What must be known before the climb?” can reveal the field boundary faster than another screen inventory.</li>
+                  <li><strong>Prototype the decision.</strong> A working choice surface makes the organization’s current model inspectable and revisable.</li>
+                </ul>
+                <aside class="debrief-evidence-boundary" aria-labelledby="humatics-narrative-evidence-title">
+                  <p class="debrief-evidence-boundary__label">What this establishes</p>
+                  <h3 id="humatics-narrative-evidence-title">The completed designs and working prototypes show my contribution; Humatics&rsquo;s announcement documents the financing event.</h3>
+                  <p>I recovered the first meeting, negotiated PM-mediated inquiry, completed the two-day reframe, earned client approval, and restored trust through working prototypes. Humatics&rsquo;s announcement records the January 7, 2019 date, $28 million amount, Series A1 designation, investors, acquisitions, and commercial context.</p>
+                </aside>
+                </div>
               </div>
-              <figcaption class="table-note">The panel reconstructs the historical organizing language, its qualitative concentration, and the design move it informed.<sup><a href="#source-humatics-registry-account">source</a></sup></figcaption>
-            </figure>
-
-            <aside class="debrief-quote debrief-quote--orientation" aria-label="What the two-day reframe established">
-              <p>The breakthrough was a shared entrance into the work: one site model, several working postures, and explicit recovery in the field.</p>
-              <footer>Conclusion from the 2018–2019 client project and its current implementation examples</footer>
-            </aside>
-
-            <h3 id="narrative-outcomes-title" class="txt-h3 beat-title">I.d Outcomes — A working prototype restored trust</h3>
-            <p>
-              The second presentation opened with Choose Your Player. The Humatics Project Manager responded with visible excitement
-              to its energy, and I clarified that the literal anime artwork could evolve while the five-posture interaction carried
-              the product model. We followed a new Field Installation Engineer into the shared site hierarchy, then I handed the
-              presentation to the junior designer for geographic setup. We alternated between presenting the pin-linked conversation
-              pattern and recording client feedback directly in the design file.
-            </p>
-            <p>
-              The meeting produced a green light, approved design specifications, excitement, and renewed trust. Back at the agency,
-              we onboarded engineering to the change set; the live design library had given them an early view, and the scope still
-              prompted understandable apprehension. The team later separated address search from latitude-and-longitude entry, giving
-              irregular industrial and construction sites two explicit setup paths.
-            </p>
-            <p>
-              My product strategy and working prototypes contributed to Humatics&rsquo;s $28 million Series A1 financing effort by
-              making the software experience and its field-operating model tangible. Humatics&rsquo;s January 2019 announcement described
-              a broader company result shaped by its technology, acquisitions, commercial progress, market demand, team, and investors.
-            </p>
-
-            <h3 id="narrative-repeatability-title" class="txt-h3 beat-title">I.e Repeatability — Use the smallest interaction that reveals the operating model</h3>
-            <ul>
-              <li><strong>Read repeated nouns as shared-object candidates.</strong> A dense requirements document can reveal the objects an organization is already trying to coordinate.</li>
-              <li><strong>Read repeated roles as projection needs.</strong> A role-specific entrance can simplify a complex product while shared access authority remains stable.</li>
-              <li><strong>Ask a physical question.</strong> “What must be known before the climb?” can reveal the field boundary faster than another screen inventory.</li>
-              <li><strong>Prototype the decision.</strong> A working choice surface makes the organization’s current model inspectable and revisable.</li>
-            </ul>
-            <aside class="debrief-evidence-boundary" aria-labelledby="humatics-narrative-evidence-title">
-              <p class="debrief-evidence-boundary__label">What this establishes</p>
-              <h3 id="humatics-narrative-evidence-title">The completed designs and working prototypes show my contribution; Humatics&rsquo;s announcement documents the financing event.</h3>
-              <p>I recovered the first meeting, negotiated PM-mediated inquiry, completed the two-day reframe, earned client approval, and restored trust through working prototypes. Humatics&rsquo;s announcement records the January 7, 2019 date, $28 million amount, Series A1 designation, investors, acquisitions, and commercial context.</p>
-            </aside>
           </article>
         </div>
       </div>
 
       <div class="content__container debrief-track debrief-track--solution-neutral">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="solution-architecture-title">
-            <p class="debrief-track-label"><span>Movement II</span><strong>Solution Architecture · Working Posture and Access</strong><small>Separate working posture from access authority and keep site truth continuous.</small></p>
-            <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">II. Solution Architecture — From player posture to site operating model</h2>
+          <article class="debrief-movement" aria-labelledby="solution-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="debrief-track-label"><span>Movement II</span><strong>Solution Architecture · Working Posture and Access</strong><small>Separate working posture from access authority and keep site truth continuous.</small></p>
+              <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">II. Solution Architecture — From player posture to site operating model</h2>
+            </header>
+            <div class="reading-flow">
 
-            <h3 id="solution-debrief-title" class="txt-h3 beat-title">II.a Debrief — One product, several working entrances</h3>
-            <p>
-              I turned five recurring roles into presentation postures: the work a person is trying to do now. Authenticated
-              identity, active tenant membership, and entitlements remain the access authority. This separation lets the
-              interface orient people while the permission system remains grounded in established access state.
-            </p>
-            <div class="posture-cards table-span-all">
-              <article><h4 class="txt-h4">Project administration</h4><p>Organize clients, sites, assignments, and the commercial frame.</p></article>
-              <article><h4 class="txt-h4">Planning</h4><p>Define installation intent, site constraints, geometry, and zones.</p></article>
-              <article><h4 class="txt-h4">Deployment</h4><p>Place, calibrate, commission, and hand over equipment.</p></article>
-              <article><h4 class="txt-h4">Support</h4><p>Inspect evidence, conversation, anomalies, and recovery.</p></article>
-              <article><h4 class="txt-h4">Operations</h4><p>Monitor the live site and act on current status.</p></article>
-            </div>
+              <h3 id="solution-debrief-title" class="txt-h3 beat-title">II.a Debrief — One product, several working entrances</h3>
+              <div class="prose-flow">
+                <p>
+                  I turned five recurring roles into presentation postures: the work a person is trying to do now. Authenticated
+                  identity, active tenant membership, and entitlements remain the access authority. This separation lets the
+                  interface orient people while the permission system remains grounded in established access state.
+                </p>
+                </div>
+              <div class="posture-cards table-span-all">
+                <article><h4 class="txt-h4">Project administration</h4><p>Organize clients, sites, assignments, and the commercial frame.</p></article>
+                <article><h4 class="txt-h4">Planning</h4><p>Define installation intent, site constraints, geometry, and zones.</p></article>
+                <article><h4 class="txt-h4">Deployment</h4><p>Place, calibrate, commission, and hand over equipment.</p></article>
+                <article><h4 class="txt-h4">Support</h4><p>Inspect evidence, conversation, anomalies, and recovery.</p></article>
+                <article><h4 class="txt-h4">Operations</h4><p>Monitor the live site and act on current status.</p></article>
+              </div>
 
-            <h4 id="humatics-proxy-operations-title" class="txt-h4">Working proxy system — the Operations projection across sites</h4>
-            <p>
-              These figures show a working, company-neutral, IP-free system I made in 2026 to explore how field teams coordinate
-              site setup, spatial files, beacon placement, device state, and handoffs. Its sites, files, locations, telemetry,
-              and safety values are synthetic. My project materials support the 2018–2019 Humatics account and outcomes; the
-              cited public Registry reading documents that retrospective. These screenshots make the operating model concrete for present-day readers.
-              Figures 1–5 follow that model from portfolio awareness through site setup, spatial artifacts, and field handoff.
-            </p>
-            <p>
-              Comparable site and field views give Field Installation Engineers, calibrators, Site Administrators, product,
-              and engineering one shared object to correct. These rapid prototypes are conversation instruments: I put the design
-              in view early so a person can point to a beacon,
-              coordinate, source file, safety condition, or handoff, describe what would make field work easier and more
-              dependable, and return to the version that incorporated the change. That visible revision path supports quick,
-              thoughtful decisions across interruptions and role changes.
-            </p>
-            <figure id="humatics-site-management" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame debrief-proxy-frame--portrait">
-                <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-site-management.webp" aria-label="Open the synthetic global site-management dashboard at full size">
-                  <img src="img/debriefs/choose-your-player/robotics-site-management.webp" srcset="img/debriefs/choose-your-player/robotics-site-management-960.webp 960w, img/debriefs/choose-your-player/robotics-site-management-1920.webp 1920w, img/debriefs/choose-your-player/robotics-site-management.webp 2866w" sizes="(max-width: 48rem) calc(100vw - 2rem), 42rem" width="2866" height="3850" loading="lazy" decoding="async" alt="Synthetic global site-management dashboard with cross-site availability, calibration, safety, project phase, ownership, maintenance, collaboration, and event-log summaries.">
+              <div class="prose-flow">
+                <h4 id="humatics-proxy-operations-title" class="txt-h4">Working proxy system — the Operations projection across sites</h4>
+                <p>
+                  These figures show a working, company-neutral, IP-free system I made in 2026 to explore how field teams coordinate
+                  site setup, spatial files, beacon placement, device state, and handoffs. Its sites, files, locations, telemetry,
+                  and safety values are synthetic. My project materials support the 2018–2019 Humatics account and outcomes; the
+                  cited public Registry reading documents that retrospective. These screenshots make the operating model concrete for present-day readers.
+                  Figures 1–5 follow that model from portfolio awareness through site setup, spatial artifacts, and field handoff.
+                </p>
+                <p>
+                  Comparable site and field views give Field Installation Engineers, calibrators, Site Administrators, product,
+                  and engineering one shared object to correct. These rapid prototypes are conversation instruments: I put the design
+                  in view early so a person can point to a beacon,
+                  coordinate, source file, safety condition, or handoff, describe what would make field work easier and more
+                  dependable, and return to the version that incorporated the change. That visible revision path supports quick,
+                  thoughtful decisions across interruptions and role changes.
+                </p>
+                </div>
+              <figure id="humatics-site-management" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame debrief-proxy-frame--portrait">
+                  <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-site-management.webp" aria-label="Open the synthetic global site-management dashboard at full size">
+                    <img src="img/debriefs/choose-your-player/robotics-site-management.webp" srcset="img/debriefs/choose-your-player/robotics-site-management-960.webp 960w, img/debriefs/choose-your-player/robotics-site-management-1920.webp 1920w, img/debriefs/choose-your-player/robotics-site-management.webp 2866w" sizes="(max-width: 48rem) calc(100vw - 2rem), 42rem" width="2866" height="3850" loading="lazy" decoding="async" alt="Synthetic global site-management dashboard with cross-site availability, calibration, safety, project phase, ownership, maintenance, collaboration, and event-log summaries.">
+                  </a>
+                </div>
+                <figcaption class="table-note"><strong>Figure 1.</strong> The global site-management dashboard connects fleet-wide uptime, calibration, safety, and open field pins to individual project phases, owners, beacon counts, and recent events. It carries the Operations posture from portfolio awareness to the next site-level action.</figcaption>
+              </figure>
+              <div class="prose-flow">
+                <p>
+                  The hub answered the Project Manager&rsquo;s need for one coherent view across Humatics teams, Field Installation
+                  Engineers, and Site Administrators. Phase, owner, activity, and open field work sit together so a person can resume
+                  an interrupted setup from the latest shared state and point directly to the item that needs another team&rsquo;s response.
+                </p>
+                </div>
+
+              <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">II.b The Bottleneck — Working posture and access authority require separate contracts</h3>
+              <div class="prose-flow">
+                <p>
+                  A trustworthy role switch changes the presentation while authenticated identity, tenant membership, and
+                  entitlements continue to govern access. One shared domain model keeps site objects coherent across the five
+                  working projections. Each task-specific projection remains recoverable, and security decisions stay in the
+                  access model.
+                </p>
+                </div>
+
+              <h3 id="solution-intervention-title" class="txt-h3 beat-title">II.c The Intervention — Make the handoff part of the model</h3>
+              <div class="prose-flow">
+                <p>
+                  I connected player selection to one shared hierarchy for client, site, installation, beacon, and zone, then used
+                  geography and pin-linked conversation to carry the work from planning through deployment, support, and customer
+                  operation. Each view could answer a different task while the underlying site retained continuity.
+                </p>
+                </div>
+              <figure class="story-visual table-span-all">
+                <a class="story-visual__open" href="img/plot/humatics_role_handoff_map.svg" aria-label="Open the Humatics role and handoff map at full size">
+                  <img src="img/plot/humatics_role_handoff_map.svg" width="1600" height="1200" loading="eager" alt="Five player postures sit above separate identity, tenant, entitlement, and presentation rails. One shared site-object model carries the handoff from Humatics specialists to customer technicians and names the cross-functional investment.">
                 </a>
-              </div>
-              <figcaption class="table-note"><strong>Figure 1.</strong> The global site-management dashboard connects fleet-wide uptime, calibration, safety, and open field pins to individual project phases, owners, beacon counts, and recent events. It carries the Operations posture from portfolio awareness to the next site-level action.</figcaption>
-            </figure>
-            <p>
-              The hub answered the Project Manager&rsquo;s need for one coherent view across Humatics teams, Field Installation
-              Engineers, and Site Administrators. Phase, owner, activity, and open field work sit together so a person can resume
-              an interrupted setup from the latest shared state and point directly to the item that needs another team&rsquo;s response.
-            </p>
+                <figcaption class="table-note">
+                  The selector changes the working projection. Identity, tenant membership, and entitlements preserve access
+                  authority. Client, site, installation, beacon, and zone retain continuity as planning passes through deployment,
+                  support, and live operations.
+                </figcaption>
+              </figure>
 
-            <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">II.b The Bottleneck — Working posture and access authority require separate contracts</h3>
-            <p>
-              A trustworthy role switch changes the presentation while authenticated identity, tenant membership, and
-              entitlements continue to govern access. One shared domain model keeps site objects coherent across the five
-              working projections. Each task-specific projection remains recoverable, and security decisions stay in the
-              access model.
-            </p>
+              <h3 id="solution-field-title" class="txt-h3 beat-title">II.d The site coordinate model — Local truth first, interchange through a calibrated transform</h3>
+              <div class="prose-flow">
+                <p>
+                  Industrial placement begins in the site’s engineering frame: millimeters, axes, handedness, origin, revision, and
+                  calibration. Geographic coordinates are a derived interchange and display view. Address entry and coordinate
+                  entry remain separate inputs because they answer different questions. The transform between them carries the
+                  provenance required to reconstruct a point.
+                </p>
+                <p>
+                  Time needs the same clarity. Device observation, service receipt, and durable commit are three events. Storage in
+                  UTC, wire exchange in ISO 8601 UTC, and display in an explicit site timezone are three representations. Late
+                  arrival preserves the original event time and sequence while making the gap visible.
+                </p>
+                <h4 id="humatics-proxy-site-sequence-title" class="txt-h4">Working proxy system — locate the site, then inspect its local operating state</h4>
+                <p>
+                  Figures 2 and 3 continue the same synthetic 2026 system from geographic setup into a site-local engineering
+                  drawing. The geographic setup directly answers the Project Manager&rsquo;s question about where site definition begins;
+                  its separate address, coordinates, footprint, entrance, and exclusion tools invite field teams to correct the
+                  proposed authority and transform. The beacon list then asks which live position, zone, battery, signal, and mount
+                  conditions should drive action. The contract diagram that follows names the calibration and safety authority those
+                  views require.
+                </p>
+                </div>
+              <figure id="humatics-map-setup" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic geographic site-setup map. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
+                  <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-map-setup.webp" aria-label="Open the synthetic geographic site-setup map at full size">
+                    <img src="img/debriefs/choose-your-player/robotics-map-setup.webp" srcset="img/debriefs/choose-your-player/robotics-map-setup-960.webp 960w, img/debriefs/choose-your-player/robotics-map-setup-1920.webp 1920w, img/debriefs/choose-your-player/robotics-map-setup.webp 5110w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5110" height="2708" loading="lazy" decoding="async" alt="Synthetic site-setup map with address and coordinates, a drawn warehouse footprint, and tools for an entrance and no-beacon zones around a heat-handling site.">
+                  </a>
+                </div>
+                <figcaption class="table-note"><strong>Figure 2.</strong> Geographic site setup for a heat-handling warehouse keeps the address, coordinates, footprint, entrance, and no-beacon zones as distinct inputs. It makes the handoff from site identity to engineering setup visible.</figcaption>
+              </figure>
 
-            <h3 id="solution-intervention-title" class="txt-h3 beat-title">II.c The Intervention — Make the handoff part of the model</h3>
-            <p>
-              I connected player selection to one shared hierarchy for client, site, installation, beacon, and zone, then used
-              geography and pin-linked conversation to carry the work from planning through deployment, support, and customer
-              operation. Each view could answer a different task while the underlying site retained continuity.
-            </p>
-            <figure class="story-visual table-span-all">
-              <a class="story-visual__open" href="img/plot/humatics_role_handoff_map.svg" aria-label="Open the Humatics role and handoff map at full size">
-                <img src="img/plot/humatics_role_handoff_map.svg" width="1600" height="1200" loading="eager" alt="Five player postures sit above separate identity, tenant, entitlement, and presentation rails. One shared site-object model carries the handoff from Humatics specialists to customer technicians and names the cross-functional investment.">
-              </a>
-              <figcaption class="table-note">
-                The selector changes the working projection. Identity, tenant membership, and entitlements preserve access
-                authority. Client, site, installation, beacon, and zone retain continuity as planning passes through deployment,
-                support, and live operations.
-              </figcaption>
-            </figure>
-
-            <h3 id="solution-field-title" class="txt-h3 beat-title">II.d The site coordinate model — Local truth first, interchange through a calibrated transform</h3>
-            <p>
-              Industrial placement begins in the site’s engineering frame: millimeters, axes, handedness, origin, revision, and
-              calibration. Geographic coordinates are a derived interchange and display view. Address entry and coordinate
-              entry remain separate inputs because they answer different questions. The transform between them carries the
-              provenance required to reconstruct a point.
-            </p>
-            <p>
-              Time needs the same clarity. Device observation, service receipt, and durable commit are three events. Storage in
-              UTC, wire exchange in ISO 8601 UTC, and display in an explicit site timezone are three representations. Late
-              arrival preserves the original event time and sequence while making the gap visible.
-            </p>
-            <h4 id="humatics-proxy-site-sequence-title" class="txt-h4">Working proxy system — locate the site, then inspect its local operating state</h4>
-            <p>
-              Figures 2 and 3 continue the same synthetic 2026 system from geographic setup into a site-local engineering
-              drawing. The geographic setup directly answers the Project Manager&rsquo;s question about where site definition begins;
-              its separate address, coordinates, footprint, entrance, and exclusion tools invite field teams to correct the
-              proposed authority and transform. The beacon list then asks which live position, zone, battery, signal, and mount
-              conditions should drive action. The contract diagram that follows names the calibration and safety authority those
-              views require.
-            </p>
-            <figure id="humatics-map-setup" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic geographic site-setup map. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
-                <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-map-setup.webp" aria-label="Open the synthetic geographic site-setup map at full size">
-                  <img src="img/debriefs/choose-your-player/robotics-map-setup.webp" srcset="img/debriefs/choose-your-player/robotics-map-setup-960.webp 960w, img/debriefs/choose-your-player/robotics-map-setup-1920.webp 1920w, img/debriefs/choose-your-player/robotics-map-setup.webp 5110w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5110" height="2708" loading="lazy" decoding="async" alt="Synthetic site-setup map with address and coordinates, a drawn warehouse footprint, and tools for an entrance and no-beacon zones around a heat-handling site.">
+              <figure id="humatics-beacon-inspector" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic industrial floorplan and beacon-state inspector. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
+                  <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-beacon-list.webp" aria-label="Open the synthetic beacon-state inspector at full size">
+                    <img src="img/debriefs/choose-your-player/robotics-beacon-list.webp" srcset="img/debriefs/choose-your-player/robotics-beacon-list-960.webp 960w, img/debriefs/choose-your-player/robotics-beacon-list-1920.webp 1920w, img/debriefs/choose-your-player/robotics-beacon-list.webp 5112w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5112" height="2706" loading="lazy" decoding="async" alt="Synthetic industrial floorplan with beacon markers, a selected beacon&rsquo;s zone, battery, signal, position, and height, plus a list of 22 beacon states.">
+                  </a>
+                </div>
+                <figcaption class="table-note"><strong>Figure 3.</strong> The beacon workspace places a selected device&rsquo;s local position, mount height, battery, and signal beside the condition of 22 devices. Field placement and support can inspect the same site drawing.</figcaption>
+              </figure>
+              <div class="prose-flow">
+                <p>
+                  Placing the selected beacon beside the full list makes live field state discussable at two scales. A Field
+                  Installation Engineer can identify the physical device in question while support and engineering decide how
+                  telemetry freshness, degraded signal, battery state, and concurrent updates should appear and recover.
+                </p>
+                </div>
+              <figure class="story-visual table-span-all">
+                <a class="story-visual__open" href="img/plot/humatics_site_truth_and_time_map.svg" aria-label="Open the Humatics site truth and time map at full size">
+                  <img src="img/plot/humatics_site_truth_and_time_map.svg" width="1600" height="1200" loading="lazy" alt="A site-local engineering point passes through a calibrated transform into a derived geographic view. Authority fields and a three-event, three-layer time contract preserve provenance.">
                 </a>
-              </div>
-              <figcaption class="table-note"><strong>Figure 2.</strong> Geographic site setup for a heat-handling warehouse keeps the address, coordinates, footprint, entrance, and no-beacon zones as distinct inputs. It makes the handoff from site identity to engineering setup visible.</figcaption>
-            </figure>
+                <figcaption class="table-note">
+                  The minimum useful spatial contract carries tenant, site, frame, revision, unit, calibration, and uncertainty.
+                  The minimum useful time contract distinguishes observed, received, and committed events from storage, wire,
+                  and display representations.
+                </figcaption>
+              </figure>
 
-            <figure id="humatics-beacon-inspector" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic industrial floorplan and beacon-state inspector. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
-                <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-beacon-list.webp" aria-label="Open the synthetic beacon-state inspector at full size">
-                  <img src="img/debriefs/choose-your-player/robotics-beacon-list.webp" srcset="img/debriefs/choose-your-player/robotics-beacon-list-960.webp 960w, img/debriefs/choose-your-player/robotics-beacon-list-1920.webp 1920w, img/debriefs/choose-your-player/robotics-beacon-list.webp 5112w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5112" height="2706" loading="lazy" decoding="async" alt="Synthetic industrial floorplan with beacon markers, a selected beacon&rsquo;s zone, battery, signal, position, and height, plus a list of 22 beacon states.">
-                </a>
+              <h3 id="solution-outcomes-title" class="txt-h3 beat-title">II.e Cross-functional investment and operating return</h3>
+              <figure class="table-figure table-figure--wide table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Cross-functional investment and operating consequence table">
+                  <table class="table--comparison table--comfortable" data-label="Where each function invested, and what the shared model protected">
+                    <caption>Where each function invested, and what the shared model protected</caption>
+                    <thead>
+                      <tr data-label="Where each function invested, and what the shared model protected: column headings">
+                        <th scope="col" data-label="Population">Population</th>
+                        <th scope="col" data-label="Investment">Investment</th>
+                        <th scope="col" data-label="Changed work">Changed work</th>
+                        <th scope="col" data-label="Enterprise consequence">Enterprise consequence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="Where each function invested, and what the shared model protected: Product">
+                        <th scope="row" data-label="Population">Product</th>
+                        <td data-label="Investment">Name shared objects, journeys, and player postures.</td>
+                        <td data-label="Changed work">Plan one product through several task projections.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Roadmap decisions can preserve the domain across screens.</td>
+                      </tr>
+                      <tr data-label="Where each function invested, and what the shared model protected: Field engineering">
+                        <th scope="row" data-label="Population">Field engineering</th>
+                        <td data-label="Investment">Define coordinate, calibration, commissioning, and acceptance truth.</td>
+                        <td data-label="Changed work">Capture conditions once and carry them through handoff.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Placement and coverage remain reconstructable.</td>
+                      </tr>
+                      <tr data-label="Where each function invested, and what the shared model protected: Design">
+                        <th scope="row" data-label="Population">Design</th>
+                        <td data-label="Investment">Make role, status, and recovery visible.</td>
+                        <td data-label="Changed work">Orient the collaborator before exposing product breadth.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Complexity becomes navigable while one domain model remains intact.</td>
+                      </tr>
+                      <tr data-label="Where each function invested, and what the shared model protected: Platform engineering">
+                        <th scope="row" data-label="Population">Platform engineering</th>
+                        <td data-label="Investment">Enforce tenant, entitlement, event, and artifact boundaries.</td>
+                        <td data-label="Changed work">Serve multiple clients from explicit contracts.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Presentation changes while access and provenance remain coherent.</td>
+                      </tr>
+                      <tr data-label="Where each function invested, and what the shared model protected: Customer operations">
+                        <th scope="row" data-label="Population">Customer operations</th>
+                        <td data-label="Investment">Validate ownership, evidence, and acceptance after handoff.</td>
+                        <td data-label="Changed work">Operate and recover the site using the same shared objects.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">The customer can inherit a working system rather than a project memory.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+              <div class="prose-flow">
+                <aside class="debrief-evidence-boundary" aria-labelledby="humatics-solution-evidence-title">
+                  <p class="debrief-evidence-boundary__label">What this establishes</p>
+                  <h3 id="humatics-solution-evidence-title">I connected the operating model in the historical design; current extensions make its contracts inspectable.</h3>
+                  <p>I connected player postures, shared site objects, PM-mediated field inquiry, maps, and handoff concerns in the historical design. Posture-versus-authorization separation, coordinate authority, and the three-layer time contract are contemporary expressions. The interface images in this movement are explicitly labeled company-neutral working, IP-free 2026 proxy systems; historical production behavior requires dated repository or deployment evidence.</p>
+                </aside>
+                </div>
               </div>
-              <figcaption class="table-note"><strong>Figure 3.</strong> The beacon workspace places a selected device&rsquo;s local position, mount height, battery, and signal beside the condition of 22 devices. Field placement and support can inspect the same site drawing.</figcaption>
-            </figure>
-            <p>
-              Placing the selected beacon beside the full list makes live field state discussable at two scales. A Field
-              Installation Engineer can identify the physical device in question while support and engineering decide how
-              telemetry freshness, degraded signal, battery state, and concurrent updates should appear and recover.
-            </p>
-            <figure class="story-visual table-span-all">
-              <a class="story-visual__open" href="img/plot/humatics_site_truth_and_time_map.svg" aria-label="Open the Humatics site truth and time map at full size">
-                <img src="img/plot/humatics_site_truth_and_time_map.svg" width="1600" height="1200" loading="lazy" alt="A site-local engineering point passes through a calibrated transform into a derived geographic view. Authority fields and a three-event, three-layer time contract preserve provenance.">
-              </a>
-              <figcaption class="table-note">
-                The minimum useful spatial contract carries tenant, site, frame, revision, unit, calibration, and uncertainty.
-                The minimum useful time contract distinguishes observed, received, and committed events from storage, wire,
-                and display representations.
-              </figcaption>
-            </figure>
-
-            <h3 id="solution-outcomes-title" class="txt-h3 beat-title">II.e Cross-functional investment and operating return</h3>
-            <figure class="table-figure table-figure--wide table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="Cross-functional investment and operating consequence table">
-                <table class="table--comparison table--comfortable" data-label="Where each function invested, and what the shared model protected">
-                  <caption>Where each function invested, and what the shared model protected</caption>
-                  <thead>
-                    <tr data-label="Where each function invested, and what the shared model protected: column headings">
-                      <th scope="col" data-label="Population">Population</th>
-                      <th scope="col" data-label="Investment">Investment</th>
-                      <th scope="col" data-label="Changed work">Changed work</th>
-                      <th scope="col" data-label="Enterprise consequence">Enterprise consequence</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="Where each function invested, and what the shared model protected: Product">
-                      <th scope="row" data-label="Population">Product</th>
-                      <td data-label="Investment">Name shared objects, journeys, and player postures.</td>
-                      <td data-label="Changed work">Plan one product through several task projections.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Roadmap decisions can preserve the domain across screens.</td>
-                    </tr>
-                    <tr data-label="Where each function invested, and what the shared model protected: Field engineering">
-                      <th scope="row" data-label="Population">Field engineering</th>
-                      <td data-label="Investment">Define coordinate, calibration, commissioning, and acceptance truth.</td>
-                      <td data-label="Changed work">Capture conditions once and carry them through handoff.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Placement and coverage remain reconstructable.</td>
-                    </tr>
-                    <tr data-label="Where each function invested, and what the shared model protected: Design">
-                      <th scope="row" data-label="Population">Design</th>
-                      <td data-label="Investment">Make role, status, and recovery visible.</td>
-                      <td data-label="Changed work">Orient the collaborator before exposing product breadth.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Complexity becomes navigable while one domain model remains intact.</td>
-                    </tr>
-                    <tr data-label="Where each function invested, and what the shared model protected: Platform engineering">
-                      <th scope="row" data-label="Population">Platform engineering</th>
-                      <td data-label="Investment">Enforce tenant, entitlement, event, and artifact boundaries.</td>
-                      <td data-label="Changed work">Serve multiple clients from explicit contracts.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Presentation changes while access and provenance remain coherent.</td>
-                    </tr>
-                    <tr data-label="Where each function invested, and what the shared model protected: Customer operations">
-                      <th scope="row" data-label="Population">Customer operations</th>
-                      <td data-label="Investment">Validate ownership, evidence, and acceptance after handoff.</td>
-                      <td data-label="Changed work">Operate and recover the site using the same shared objects.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">The customer can inherit a working system rather than a project memory.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </figure>
-            <aside class="debrief-evidence-boundary" aria-labelledby="humatics-solution-evidence-title">
-              <p class="debrief-evidence-boundary__label">What this establishes</p>
-              <h3 id="humatics-solution-evidence-title">I connected the operating model in the historical design; current extensions make its contracts inspectable.</h3>
-              <p>I connected player postures, shared site objects, PM-mediated field inquiry, maps, and handoff concerns in the historical design. Posture-versus-authorization separation, coordinate authority, and the three-layer time contract are contemporary expressions. The interface images in this movement are explicitly labeled company-neutral working, IP-free 2026 proxy systems; historical production behavior requires dated repository or deployment evidence.</p>
-            </aside>
           </article>
         </div>
       </div>
 
       <div class="content__container bg__adjust--tiffany debrief-track debrief-track--implementation">
         <div class="content content--editorial">
-          <article class="prose-flow" aria-labelledby="implementation-architecture-title">
-            <p class="debrief-track-label"><span>Movement III</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Keep historical reconstruction and current executable contracts in distinct evidence classes.</small></p>
-            <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">III. Implementation Architecture — Then and Now</h2>
+          <article class="debrief-movement" aria-labelledby="implementation-architecture-title">
+            <header class="debrief-movement__header">
+              <p class="debrief-track-label"><span>Movement III</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Keep historical reconstruction and current executable contracts in distinct evidence classes.</small></p>
+              <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">III. Implementation Architecture — Then and Now</h2>
+            </header>
+            <div class="reading-flow">
 
-            <h3 id="implementation-debrief-title" class="txt-h3 beat-title">III.a Debrief — Contracts that persist across a changed stack</h3>
-            <p>
-              I designed within a Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, connected-device,
-              and field-network environment.<sup><a href="#source-humatics-registry-account">source</a></sup> The current implementation examples translate the recurring
-              operating concerns—role clarity, site truth, offline recovery, spatial collaboration, and bounded browser
-              compute—into explicit state, command, and recovery contracts.
-            </p>
-            <div class="then-now-contracts table-span-all">
-              <article>
-                <p class="implementation-companion__eyebrow">Presentation posture</p>
-                <h4 class="txt-h4">Choose a working view and recover it safely</h4>
-                <p class="contract-shift"><span>Then · welcome-screen role</span><strong aria-hidden="true">→</strong><span>Now · tenant-scoped selection state with checkpoint recovery</span></p>
-              </article>
-              <article>
-                <p class="implementation-companion__eyebrow">Site truth</p>
-                <h4 class="txt-h4">Carry coordinates with their authority</h4>
-                <p class="contract-shift"><span>Then · site drawing and lat/lon fallback</span><strong aria-hidden="true">→</strong><span>Now · frame, unit, calibration, revision, and uncertainty contract</span></p>
-              </article>
-              <article>
-                <p class="implementation-companion__eyebrow">Field collaboration</p>
-                <h4 class="txt-h4">Make a pin a durable thread</h4>
-                <p class="contract-shift"><span>Then · map annotation and chat</span><strong aria-hidden="true">→</strong><span>Now · tenant/site-scoped event sequence with compare-and-resolve</span></p>
-              </article>
-              <article>
-                <p class="implementation-companion__eyebrow">Offline work</p>
-                <h4 class="txt-h4">Treat reconnection as a state transition</h4>
-                <p class="contract-shift"><span>Then · standalone server and later synchronization</span><strong aria-hidden="true">→</strong><span>Now · pending, sending, accepted, retryable, conflict, and rejected states</span></p>
-              </article>
-              <article>
-                <p class="implementation-companion__eyebrow">Browser compute</p>
-                <h4 class="txt-h4">Place compute where the task can run safely</h4>
-                <p class="contract-shift"><span>Then · worker-style client processing</span><strong aria-hidden="true">→</strong><span>Now · browser, server, or defer from capability and policy bounds</span></p>
-              </article>
-              <article>
-                <p class="implementation-companion__eyebrow">Spatial artifacts</p>
-                <h4 class="txt-h4">Make large-file delivery a recoverable lifecycle</h4>
-                <p class="contract-shift"><span>Then · CAD and site documents</span><strong aria-hidden="true">→</strong><span>Now · resumable upload, quarantine, validation, conversion, and progressive delivery</span></p>
-              </article>
-            </div>
-
-            <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">III.b The Bottleneck — Field consequence crosses every boundary</h3>
-            <p>
-              A stale site revision can misplace a beacon. A lost offline comment can strand a lift crew. An ambiguous timezone
-              can shift a maintenance window. A browser that accepts an unbounded artifact can exhaust a field device. The
-              implementation boundary is therefore operational: each contract must preserve enough context for the next person
-              or service to recover the work.
-            </p>
-
-            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">III.c The Intervention — Six inspectable contracts</h3>
-            <div class="implementation-moves table-span-all">
-              <article aria-labelledby="implementation-player-title">
-                <p class="implementation-companion__eyebrow">§c.1 · Player selection</p>
-                <h4 id="implementation-player-title" class="txt-h4">Recover a working posture within established access</h4>
-                <p>Native radio semantics, URL-safe stable IDs, tenant-scoped checkpoints, stale-response handling, and explicit idle, editing, submitting, failed, and committed phases make selection inspectable.</p>
-              </article>
-              <article aria-labelledby="implementation-dashboard-title">
-                <p class="implementation-companion__eyebrow">§c.2 · Dashboard boundary</p>
-                <h4 id="implementation-dashboard-title" class="txt-h4">Preserve tenant-safe freshness and theme state</h4>
-                <p>A bounded dashboard contract separates data-transfer shape, tenant-safe read scope, source freshness, and visual preference so a dashboard can explain what it knows and when it changed.</p>
-              </article>
-              <article aria-labelledby="implementation-geometry-title">
-                <p class="implementation-companion__eyebrow">§c.3 · Geometry authority</p>
-                <h4 id="implementation-geometry-title" class="txt-h4">Apply site-local commands with revision and idempotency</h4>
-                <p>Tenant, site, actor, geometry, frame, and expected revision travel with each command. A duplicate returns the original receipt; a conflicting revision returns a condition a collaborator can resolve.</p>
-              </article>
-              <article aria-labelledby="implementation-offline-title">
-                <p class="implementation-companion__eyebrow">§c.4 · Offline journal</p>
-                <h4 id="implementation-offline-title" class="txt-h4">Keep local work recoverable through interruption</h4>
-                <p>Pending, sending, accepted, retryable, conflict, and rejected states preserve intent. Restart returns interrupted sends to pending; compare-and-resolve retains human judgment at a real conflict.</p>
-              </article>
-              <article aria-labelledby="implementation-browser-title">
-                <p class="implementation-companion__eyebrow">§c.5 · Browser edge compute</p>
-                <h4 id="implementation-browser-title" class="txt-h4">Choose browser, server, or defer from the task envelope</h4>
-                <p>Operation, bytes, working set, worker and WASM support, isolation, device memory, permission to leave the device, concurrency, and timeout determine placement.</p>
-              </article>
-              <article aria-labelledby="implementation-artifact-title">
-                <p class="implementation-companion__eyebrow">§c.6 · Spatial artifact lifecycle</p>
-                <h4 id="implementation-artifact-title" class="txt-h4">Deliver large site files through staged states</h4>
-                <p>Resumable upload, quarantine, validation, conversion, progressive delivery, and cost assumptions make CAD handling an operating lifecycle rather than a single request.</p>
-              </article>
-            </div>
-
-            <h4 id="humatics-proxy-artifact-title" class="txt-h4">Working proxy system — the artifact inventory that requires a lifecycle</h4>
-            <p>
-              Figure 4 continues the same synthetic 2026 system into artifact management. A DXF drawing, a survey PDF, a
-              photo archive, and an operating-procedure PDF make the contract&rsquo;s inputs concrete. Their lifecycle still needs
-              explicit source, checksum, quarantine, validation, conversion, revision, and recovery standing.
-            </p>
-            <figure id="humatics-calibration-files" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic site drawing and spatial-file inventory. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
-                <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-calibration-files.webp" aria-label="Open the synthetic spatial-file inventory at full size">
-                  <img src="img/debriefs/choose-your-player/robotics-calibration-files.webp" srcset="img/debriefs/choose-your-player/robotics-calibration-files-960.webp 960w, img/debriefs/choose-your-player/robotics-calibration-files-1920.webp 1920w, img/debriefs/choose-your-player/robotics-calibration-files.webp 5110w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5110" height="2706" loading="lazy" decoding="async" alt="Synthetic industrial floorplan with a Files drawer listing a DXF drawing, survey PDF, photo archive, and operating-procedure PDF.">
-                </a>
+              <h3 id="implementation-debrief-title" class="txt-h3 beat-title">III.a Debrief — Contracts that persist across a changed stack</h3>
+              <div class="prose-flow">
+                <p>
+                  I designed within a Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, connected-device,
+                  and field-network environment.<sup><a href="#source-humatics-registry-account">source</a></sup> The current implementation examples translate the recurring
+                  operating concerns—role clarity, site truth, offline recovery, spatial collaboration, and bounded browser
+                  compute—into explicit state, command, and recovery contracts.
+                </p>
+                </div>
+              <div class="then-now-contracts table-span-all">
+                <article>
+                  <p class="implementation-companion__eyebrow">Presentation posture</p>
+                  <h4 class="txt-h4">Choose a working view and recover it safely</h4>
+                  <p class="contract-shift"><span>Then · welcome-screen role</span><strong aria-hidden="true">→</strong><span>Now · tenant-scoped selection state with checkpoint recovery</span></p>
+                </article>
+                <article>
+                  <p class="implementation-companion__eyebrow">Site truth</p>
+                  <h4 class="txt-h4">Carry coordinates with their authority</h4>
+                  <p class="contract-shift"><span>Then · site drawing and lat/lon fallback</span><strong aria-hidden="true">→</strong><span>Now · frame, unit, calibration, revision, and uncertainty contract</span></p>
+                </article>
+                <article>
+                  <p class="implementation-companion__eyebrow">Field collaboration</p>
+                  <h4 class="txt-h4">Make a pin a durable thread</h4>
+                  <p class="contract-shift"><span>Then · map annotation and chat</span><strong aria-hidden="true">→</strong><span>Now · tenant/site-scoped event sequence with compare-and-resolve</span></p>
+                </article>
+                <article>
+                  <p class="implementation-companion__eyebrow">Offline work</p>
+                  <h4 class="txt-h4">Treat reconnection as a state transition</h4>
+                  <p class="contract-shift"><span>Then · standalone server and later synchronization</span><strong aria-hidden="true">→</strong><span>Now · pending, sending, accepted, retryable, conflict, and rejected states</span></p>
+                </article>
+                <article>
+                  <p class="implementation-companion__eyebrow">Browser compute</p>
+                  <h4 class="txt-h4">Place compute where the task can run safely</h4>
+                  <p class="contract-shift"><span>Then · worker-style client processing</span><strong aria-hidden="true">→</strong><span>Now · browser, server, or defer from capability and policy bounds</span></p>
+                </article>
+                <article>
+                  <p class="implementation-companion__eyebrow">Spatial artifacts</p>
+                  <h4 class="txt-h4">Make large-file delivery a recoverable lifecycle</h4>
+                  <p class="contract-shift"><span>Then · CAD and site documents</span><strong aria-hidden="true">→</strong><span>Now · resumable upload, quarantine, validation, conversion, and progressive delivery</span></p>
+                </article>
               </div>
-              <figcaption class="table-note"><strong>Figure 4.</strong> A site drawing and its source-file drawer bring together DXF linework, a survey PDF, field photographs, and an operating procedure. The view makes the source-file set and its lifecycle boundary visible; checksum, validation, conversion, revision, and recovery still require explicit implementation.</figcaption>
-            </figure>
 
-            <aside class="implementation-companion table-span-all" aria-labelledby="player-selection-transition-title">
-              <p class="implementation-companion__eyebrow">HUMA-C13-S04 · Working transition · player-selection state</p>
-              <h4 id="player-selection-transition-title" class="txt-h4">The transition makes interruption an ordinary state</h4>
-              <pre><code>if (event.type === "submit") {
+              <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">III.b The Bottleneck — Field consequence crosses every boundary</h3>
+              <div class="prose-flow">
+                <p>
+                  A stale site revision can misplace a beacon. A lost offline comment can strand a lift crew. An ambiguous timezone
+                  can shift a maintenance window. A browser that accepts an unbounded artifact can exhaust a field device. The
+                  implementation boundary is therefore operational: each contract must preserve enough context for the next person
+                  or service to recover the work.
+                </p>
+                </div>
+
+              <h3 id="implementation-intervention-title" class="txt-h3 beat-title">III.c The Intervention — Six inspectable contracts</h3>
+              <div class="implementation-moves table-span-all">
+                <article aria-labelledby="implementation-player-title">
+                  <p class="implementation-companion__eyebrow">§c.1 · Player selection</p>
+                  <h4 id="implementation-player-title" class="txt-h4">Recover a working posture within established access</h4>
+                  <p>Native radio semantics, URL-safe stable IDs, tenant-scoped checkpoints, stale-response handling, and explicit idle, editing, submitting, failed, and committed phases make selection inspectable.</p>
+                </article>
+                <article aria-labelledby="implementation-dashboard-title">
+                  <p class="implementation-companion__eyebrow">§c.2 · Dashboard boundary</p>
+                  <h4 id="implementation-dashboard-title" class="txt-h4">Preserve tenant-safe freshness and theme state</h4>
+                  <p>A bounded dashboard contract separates data-transfer shape, tenant-safe read scope, source freshness, and visual preference so a dashboard can explain what it knows and when it changed.</p>
+                </article>
+                <article aria-labelledby="implementation-geometry-title">
+                  <p class="implementation-companion__eyebrow">§c.3 · Geometry authority</p>
+                  <h4 id="implementation-geometry-title" class="txt-h4">Apply site-local commands with revision and idempotency</h4>
+                  <p>Tenant, site, actor, geometry, frame, and expected revision travel with each command. A duplicate returns the original receipt; a conflicting revision returns a condition a collaborator can resolve.</p>
+                </article>
+                <article aria-labelledby="implementation-offline-title">
+                  <p class="implementation-companion__eyebrow">§c.4 · Offline journal</p>
+                  <h4 id="implementation-offline-title" class="txt-h4">Keep local work recoverable through interruption</h4>
+                  <p>Pending, sending, accepted, retryable, conflict, and rejected states preserve intent. Restart returns interrupted sends to pending; compare-and-resolve retains human judgment at a real conflict.</p>
+                </article>
+                <article aria-labelledby="implementation-browser-title">
+                  <p class="implementation-companion__eyebrow">§c.5 · Browser edge compute</p>
+                  <h4 id="implementation-browser-title" class="txt-h4">Choose browser, server, or defer from the task envelope</h4>
+                  <p>Operation, bytes, working set, worker and WASM support, isolation, device memory, permission to leave the device, concurrency, and timeout determine placement.</p>
+                </article>
+                <article aria-labelledby="implementation-artifact-title">
+                  <p class="implementation-companion__eyebrow">§c.6 · Spatial artifact lifecycle</p>
+                  <h4 id="implementation-artifact-title" class="txt-h4">Deliver large site files through staged states</h4>
+                  <p>Resumable upload, quarantine, validation, conversion, progressive delivery, and cost assumptions make CAD handling an operating lifecycle rather than a single request.</p>
+                </article>
+              </div>
+
+              <div class="prose-flow">
+                <h4 id="humatics-proxy-artifact-title" class="txt-h4">Working proxy system — the artifact inventory that requires a lifecycle</h4>
+                <p>
+                  Figure 4 continues the same synthetic 2026 system into artifact management. A DXF drawing, a survey PDF, a
+                  photo archive, and an operating-procedure PDF make the contract&rsquo;s inputs concrete. Their lifecycle still needs
+                  explicit source, checksum, quarantine, validation, conversion, revision, and recovery standing.
+                </p>
+                </div>
+              <figure id="humatics-calibration-files" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic site drawing and spatial-file inventory. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
+                  <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-calibration-files.webp" aria-label="Open the synthetic spatial-file inventory at full size">
+                    <img src="img/debriefs/choose-your-player/robotics-calibration-files.webp" srcset="img/debriefs/choose-your-player/robotics-calibration-files-960.webp 960w, img/debriefs/choose-your-player/robotics-calibration-files-1920.webp 1920w, img/debriefs/choose-your-player/robotics-calibration-files.webp 5110w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5110" height="2706" loading="lazy" decoding="async" alt="Synthetic industrial floorplan with a Files drawer listing a DXF drawing, survey PDF, photo archive, and operating-procedure PDF.">
+                  </a>
+                </div>
+                <figcaption class="table-note"><strong>Figure 4.</strong> A site drawing and its source-file drawer bring together DXF linework, a survey PDF, field photographs, and an operating procedure. The view makes the source-file set and its lifecycle boundary visible; checksum, validation, conversion, revision, and recovery still require explicit implementation.</figcaption>
+              </figure>
+
+              <aside class="debrief-companion-frame implementation-companion table-span-all" aria-labelledby="player-selection-transition-title">
+                <p class="implementation-companion__eyebrow">HUMA-C13-S04 · Working transition · player-selection state</p>
+                <h4 id="player-selection-transition-title" class="txt-h4">The transition makes interruption an ordinary state</h4>
+                <div class="debrief-code-companion debrief-code-companion--transition">
+                <pre class="debrief-code-window" role="region" tabindex="0" aria-labelledby="player-selection-transition-title"><code>if (event.type === "submit") {
   if (!state.selectedPlayerId) throw new Error("a player must be selected");
   if (!["editing", "failed"].includes(state.phase)) {
     throw new Error(`cannot submit while ${state.phase}`);
@@ -705,158 +754,164 @@
     errorCode: null
   });
 }</code></pre>
-              <p>
-                This compact example makes the selection and recovery transition inspectable as a current implementation contract
-                expression. Dated artifacts remain the basis for historical production behavior.
-              </p>
-            </aside>
+                <p>
+                  This compact example makes the selection and recovery transition inspectable as a current implementation contract
+                  expression. Dated artifacts remain the basis for historical production behavior.
+                </p>
+                </div>
+              </aside>
 
-            <aside class="implementation-companion table-span-all" aria-labelledby="document-evidence-workflow-title">
-              <p class="implementation-companion__eyebrow">Candidate artifact · document-evidence-extraction@0.1.0 · Python 3.12</p>
-              <h4 id="document-evidence-workflow-title" class="txt-h4">Carry reviewed document evidence from capture to recoverable orientation</h4>
-              <p>
-                A representative reconstruction based on the project conditions I observed keeps four stages inspectable: digest-bearing OCR
-                capture and review standing; stop-word normalization that retains negation; one corpus-wide TF-IDF fit with
-                deterministic ordering; and a seeded word-cloud orientation rendered through a staged, explicitly authorized
-                replacement path.
-              </p>
-              <pre><code>capture_bytes = capture_path.read_bytes()
+              <aside class="debrief-companion-frame implementation-companion table-span-all debrief-code-panel--sequence" aria-labelledby="document-evidence-workflow-title">
+                <p class="implementation-companion__eyebrow">Candidate artifact · document-evidence-extraction@0.1.0 · Python 3.12</p>
+                <h4 id="document-evidence-workflow-title" class="txt-h4">Carry reviewed document evidence from capture to recoverable orientation</h4>
+                <p>
+                  A representative reconstruction based on the project conditions I observed keeps four stages inspectable: digest-bearing OCR
+                  capture and review standing; stop-word normalization that retains negation; one corpus-wide TF-IDF fit with
+                  deterministic ordering; and a seeded word-cloud orientation rendered through a staged, explicitly authorized
+                  replacement path.
+                </p>
+                <pre class="debrief-code-window" role="region" tabindex="0" aria-labelledby="document-evidence-workflow-title"><code>capture_bytes = capture_path.read_bytes()
 documents = _validate_capture(json.loads(capture_bytes.decode("utf-8")))
 stopwords, stopwords_digest = load_stopwords(stopwords_path)
 by_era, combined, normalized = extract_term_weights(documents, stopwords, top_n=top_n)
 
 write_json(staged / "term-weights.json", term_record)
 render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code></pre>
-              <p>
-                Ordered JSON remains the primary evidence carrier; the image supports orientation. The
-                <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/">complete exact-version artifact</a>
-                carries the runnable source, realistic synthetic fixture, dependency lock, commands, tests, expected results,
-                and recovery behavior.
-              </p>
-            </aside>
+                <p>
+                  Ordered JSON remains the primary evidence carrier; the image supports orientation. The
+                  <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/" aria-label="complete exact-version artifact (outside Context Canvas)" title="Outside Context Canvas">complete exact-version artifact<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a>
+                  carries the runnable source, realistic synthetic fixture, dependency lock, commands, tests, expected results,
+                  and recovery behavior.
+                </p>
+              </aside>
 
-            <h3 id="implementation-field-title" class="txt-h3 beat-title">III.d Outcomes — A map pin becomes recoverable field work</h3>
-            <p>
-              Figure 5 continues the same synthetic 2026 system into field coordination. A pin joins local geometry, dimensions,
-              photographs, an unfinished checklist, and a cross-role conversation in one view. It makes the intended handoff
-              visible; interruption, duplicate delivery, stale revision, and crew-change behavior remain implementation
-              contracts to exercise directly. The pin and scrolling minimap are deliberate conversation prompts: field crews can
-              orient the issue in the larger site while Humatics teams and Site Administrators discuss responsive service against
-              the same location, photographs, measurements, and thread.
-            </p>
-            <figure id="humatics-site-conversation" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic field pin and engineer-calibrator conversation. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
-                <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-site-communication.webp" aria-label="Open the synthetic field-pin conversation at full size">
-                  <img src="img/debriefs/choose-your-player/robotics-site-communication.webp" srcset="img/debriefs/choose-your-player/robotics-site-communication-960.webp 960w, img/debriefs/choose-your-player/robotics-site-communication-1920.webp 1920w, img/debriefs/choose-your-player/robotics-site-communication.webp 5120w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5120" height="2702" loading="lazy" decoding="async" alt="Synthetic floorplan workspace showing a field pin at Column C-14 with coordinates, dimensions, photos, a four-message engineer-calibrator thread, and a setup checklist with unfinished safety and scale tasks.">
+              <h3 id="implementation-field-title" class="txt-h3 beat-title">III.d Outcomes — A map pin becomes recoverable field work</h3>
+              <div class="prose-flow">
+                <p>
+                  Figure 5 continues the same synthetic 2026 system into field coordination. A pin joins local geometry, dimensions,
+                  photographs, an unfinished checklist, and a cross-role conversation in one view. It makes the intended handoff
+                  visible; interruption, duplicate delivery, stale revision, and crew-change behavior remain implementation
+                  contracts to exercise directly. The pin and scrolling minimap are deliberate conversation prompts: field crews can
+                  orient the issue in the larger site while Humatics teams and Site Administrators discuss responsive service against
+                  the same location, photographs, measurements, and thread.
+                </p>
+                </div>
+              <figure id="humatics-site-conversation" class="story-visual debrief-proxy-figure table-span-all">
+                <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic field pin and engineer-calibrator conversation. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
+                  <a class="story-visual__open" href="img/debriefs/choose-your-player/robotics-site-communication.webp" aria-label="Open the synthetic field-pin conversation at full size">
+                    <img src="img/debriefs/choose-your-player/robotics-site-communication.webp" srcset="img/debriefs/choose-your-player/robotics-site-communication-960.webp 960w, img/debriefs/choose-your-player/robotics-site-communication-1920.webp 1920w, img/debriefs/choose-your-player/robotics-site-communication.webp 5120w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="5120" height="2702" loading="lazy" decoding="async" alt="Synthetic floorplan workspace showing a field pin at Column C-14 with coordinates, dimensions, photos, a four-message engineer-calibrator thread, and a setup checklist with unfinished safety and scale tasks.">
+                  </a>
+                </div>
+                <figcaption class="table-note"><strong>Figure 5.</strong> A field pin at Column C-14 joins a mounting constraint, local coordinates, dimensions, photographs, a Field Installation Engineer–calibrator conversation, and an unfinished setup checklist. One spatial object carries the cross-role handoff.</figcaption>
+              </figure>
+              <figure class="story-visual table-span-all">
+                <a class="story-visual__open" href="img/plot/humatics_field_collaboration_operating_map.svg" aria-label="Open the Humatics field collaboration operating map at full size">
+                  <img src="img/plot/humatics_field_collaboration_operating_map.svg" width="1600" height="1320" loading="lazy" alt="A site pin connects field work at height to a durable conversation, offline reconciliation states, bounded browser or server compute, and the cross-functional investment that carries field consequence.">
                 </a>
-              </div>
-              <figcaption class="table-note"><strong>Figure 5.</strong> A field pin at Column C-14 joins a mounting constraint, local coordinates, dimensions, photographs, a Field Installation Engineer–calibrator conversation, and an unfinished setup checklist. One spatial object carries the cross-role handoff.</figcaption>
-            </figure>
-            <figure class="story-visual table-span-all">
-              <a class="story-visual__open" href="img/plot/humatics_field_collaboration_operating_map.svg" aria-label="Open the Humatics field collaboration operating map at full size">
-                <img src="img/plot/humatics_field_collaboration_operating_map.svg" width="1600" height="1320" loading="lazy" alt="A site pin connects field work at height to a durable conversation, offline reconciliation states, bounded browser or server compute, and the cross-functional investment that carries field consequence.">
-              </a>
-              <figcaption class="table-note">
-                A site pin becomes durable field work when geometry, conversation, offline edits, reconciliation state, and
-                compute placement remain addressable across interruption and reconnection.
-              </figcaption>
-            </figure>
+                <figcaption class="table-note">
+                  A site pin becomes durable field work when geometry, conversation, offline edits, reconciliation state, and
+                  compute placement remain addressable across interruption and reconnection.
+                </figcaption>
+              </figure>
 
-            <figure class="table-figure table-figure--wide table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="Implementation outcome and consequence table">
-                <table class="table--reading table--comfortable" data-label="What the historical work established, and what the current implementation examples make inspectable">
-                  <caption>What the historical work established, and what the current implementation examples make inspectable</caption>
-                  <thead>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: column headings">
-                      <th scope="col" data-label="Architecture move">Architecture move</th>
-                      <th scope="col" data-label="2018–2019 design or implementation expression">2018–2019 design or implementation expression</th>
-                      <th scope="col" data-label="Current inspectable form">Current inspectable form</th>
-                      <th scope="col" data-label="Enterprise consequence">Enterprise consequence</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Choose Your Player">
-                      <th scope="row" data-label="Architecture move">Choose Your Player</th>
-                      <td data-label="2018–2019 design or implementation expression">Made product breadth legible through five working postures.</td>
-                      <td data-label="Current inspectable form">Recoverable selection state separated from tenant and entitlement.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Orientation can change while access authority stays established.</td>
-                    </tr>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Site hierarchy and drawing">
-                      <th scope="row" data-label="Architecture move">Site hierarchy and drawing</th>
-                      <td data-label="2018–2019 design or implementation expression">Connected client, site, installation, beacon, and zone.</td>
-                      <td data-label="Current inspectable form">Revisioned local geometry with calibrated geographic derivation.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Spatial truth survives display, edit, handoff, and replay.</td>
-                    </tr>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Offline field work">
-                      <th scope="row" data-label="Architecture move">Offline field work</th>
-                      <td data-label="2018–2019 design or implementation expression">Designed continued site work for intermittent connectivity.</td>
-                      <td data-label="Current inspectable form">Explicit journal, receipt, retry, conflict, and restart semantics.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Interruption becomes recoverable operating state.</td>
-                    </tr>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Pin conversation">
-                      <th scope="row" data-label="Architecture move">Pin conversation</th>
-                      <td data-label="2018–2019 design or implementation expression">Attached coordination to a location on the site.</td>
-                      <td data-label="Current inspectable form">Tenant/site-scoped sequence and durable compare-and-resolve.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">The next crew can reconstruct what changed and why.</td>
-                    </tr>
-                    <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Browser edge work">
-                      <th scope="row" data-label="Architecture move">Browser edge work</th>
-                      <td data-label="2018–2019 design or implementation expression">Framed client-side processing around field and artifact constraints.</td>
-                      <td data-label="Current inspectable form">Capability, privacy, memory, byte, concurrency, and timeout envelope.</td>
-                      <td class="table-ability" data-label="Enterprise consequence">Compute placement follows the consequence of the task.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </figure>
+              <figure class="table-figure table-figure--wide table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Implementation outcome and consequence table">
+                  <table class="table--reading table--comfortable" data-label="What the historical work established, and what the current implementation examples make inspectable">
+                    <caption>What the historical work established, and what the current implementation examples make inspectable</caption>
+                    <thead>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: column headings">
+                        <th scope="col" data-label="Architecture move">Architecture move</th>
+                        <th scope="col" data-label="2018–2019 design or implementation expression">2018–2019 design or implementation expression</th>
+                        <th scope="col" data-label="Current inspectable form">Current inspectable form</th>
+                        <th scope="col" data-label="Enterprise consequence">Enterprise consequence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Choose Your Player">
+                        <th scope="row" data-label="Architecture move">Choose Your Player</th>
+                        <td data-label="2018–2019 design or implementation expression">Made product breadth legible through five working postures.</td>
+                        <td data-label="Current inspectable form">Recoverable selection state separated from tenant and entitlement.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Orientation can change while access authority stays established.</td>
+                      </tr>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Site hierarchy and drawing">
+                        <th scope="row" data-label="Architecture move">Site hierarchy and drawing</th>
+                        <td data-label="2018–2019 design or implementation expression">Connected client, site, installation, beacon, and zone.</td>
+                        <td data-label="Current inspectable form">Revisioned local geometry with calibrated geographic derivation.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Spatial truth survives display, edit, handoff, and replay.</td>
+                      </tr>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Offline field work">
+                        <th scope="row" data-label="Architecture move">Offline field work</th>
+                        <td data-label="2018–2019 design or implementation expression">Designed continued site work for intermittent connectivity.</td>
+                        <td data-label="Current inspectable form">Explicit journal, receipt, retry, conflict, and restart semantics.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Interruption becomes recoverable operating state.</td>
+                      </tr>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Pin conversation">
+                        <th scope="row" data-label="Architecture move">Pin conversation</th>
+                        <td data-label="2018–2019 design or implementation expression">Attached coordination to a location on the site.</td>
+                        <td data-label="Current inspectable form">Tenant/site-scoped sequence and durable compare-and-resolve.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">The next crew can reconstruct what changed and why.</td>
+                      </tr>
+                      <tr data-label="What the historical work established, and what the current implementation examples make inspectable: Browser edge work">
+                        <th scope="row" data-label="Architecture move">Browser edge work</th>
+                        <td data-label="2018–2019 design or implementation expression">Framed client-side processing around field and artifact constraints.</td>
+                        <td data-label="Current inspectable form">Capability, privacy, memory, byte, concurrency, and timeout envelope.</td>
+                        <td class="table-ability" data-label="Enterprise consequence">Compute placement follows the consequence of the task.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
 
-            <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">III.e Repeatability — Transfer conditions</h3>
-            <figure class="table-figure table-span-all">
-              <div class="table-scroll" role="region" tabindex="0" aria-label="Humatics transfer conditions table">
-                <table class="table--comparison table--comfortable" data-label="When another team can carry these moves">
-                  <caption>When another team can carry these moves</caption>
-                  <thead>
-                    <tr data-label="When another team can carry these moves: column headings">
-                      <th scope="col" data-label="Local condition">Local condition</th>
-                      <th scope="col" data-label="Replacement state">Replacement state</th>
-                      <th scope="col" data-label="Useful first move">Useful first move</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-label="When another team can carry these moves: Several roles act on one domain">
-                      <th scope="row" data-label="Local condition">Several roles act on one domain</th>
-                      <td data-label="Replacement state">Shared objects plus task-specific projections and one access model.</td>
-                      <td class="table-ability" data-label="Useful first move">Map roles to work, then test the smallest choice surface.</td>
-                    </tr>
-                    <tr data-label="When another team can carry these moves: Field work crosses connectivity states">
-                      <th scope="row" data-label="Local condition">Field work crosses connectivity states</th>
-                      <td data-label="Replacement state">A local journal with explicit receipt, retry, conflict, and recovery semantics.</td>
-                      <td class="table-ability" data-label="Useful first move">Write the interrupted path before selecting synchronization technology.</td>
-                    </tr>
-                    <tr data-label="When another team can carry these moves: Engineering and geographic coordinates coexist">
-                      <th scope="row" data-label="Local condition">Engineering and geographic coordinates coexist</th>
-                      <td data-label="Replacement state">One authoritative local frame and a calibrated, versioned transform.</td>
-                      <td class="table-ability" data-label="Useful first move">Name frame, unit, revision, calibration, and uncertainty at ingestion.</td>
-                    </tr>
-                    <tr data-label="When another team can carry these moves: A map carries operational conversation">
-                      <th scope="row" data-label="Local condition">A map carries operational conversation</th>
-                      <td data-label="Replacement state">Durable threads addressed to stable geometry and site state.</td>
-                      <td class="table-ability" data-label="Useful first move">Give each pin an identity, owner, sequence, and resolution state.</td>
-                    </tr>
-                    <tr data-label="When another team can carry these moves: Client compute may protect time or data">
-                      <th scope="row" data-label="Local condition">Client compute may protect time or data</th>
-                      <td data-label="Replacement state">A bounded task envelope that can choose browser, server, or defer.</td>
-                      <td class="table-ability" data-label="Useful first move">Measure bytes, working set, device capability, privacy, concurrency, and timeout.</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">III.e Repeatability — Transfer conditions</h3>
+              <figure class="table-figure table-span-all">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Humatics transfer conditions table">
+                  <table class="table--comparison table--comfortable" data-label="When another team can carry these moves">
+                    <caption>When another team can carry these moves</caption>
+                    <thead>
+                      <tr data-label="When another team can carry these moves: column headings">
+                        <th scope="col" data-label="Local condition">Local condition</th>
+                        <th scope="col" data-label="Replacement state">Replacement state</th>
+                        <th scope="col" data-label="Useful first move">Useful first move</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-label="When another team can carry these moves: Several roles act on one domain">
+                        <th scope="row" data-label="Local condition">Several roles act on one domain</th>
+                        <td data-label="Replacement state">Shared objects plus task-specific projections and one access model.</td>
+                        <td class="table-ability" data-label="Useful first move">Map roles to work, then test the smallest choice surface.</td>
+                      </tr>
+                      <tr data-label="When another team can carry these moves: Field work crosses connectivity states">
+                        <th scope="row" data-label="Local condition">Field work crosses connectivity states</th>
+                        <td data-label="Replacement state">A local journal with explicit receipt, retry, conflict, and recovery semantics.</td>
+                        <td class="table-ability" data-label="Useful first move">Write the interrupted path before selecting synchronization technology.</td>
+                      </tr>
+                      <tr data-label="When another team can carry these moves: Engineering and geographic coordinates coexist">
+                        <th scope="row" data-label="Local condition">Engineering and geographic coordinates coexist</th>
+                        <td data-label="Replacement state">One authoritative local frame and a calibrated, versioned transform.</td>
+                        <td class="table-ability" data-label="Useful first move">Name frame, unit, revision, calibration, and uncertainty at ingestion.</td>
+                      </tr>
+                      <tr data-label="When another team can carry these moves: A map carries operational conversation">
+                        <th scope="row" data-label="Local condition">A map carries operational conversation</th>
+                        <td data-label="Replacement state">Durable threads addressed to stable geometry and site state.</td>
+                        <td class="table-ability" data-label="Useful first move">Give each pin an identity, owner, sequence, and resolution state.</td>
+                      </tr>
+                      <tr data-label="When another team can carry these moves: Client compute may protect time or data">
+                        <th scope="row" data-label="Local condition">Client compute may protect time or data</th>
+                        <td data-label="Replacement state">A bounded task envelope that can choose browser, server, or defer.</td>
+                        <td class="table-ability" data-label="Useful first move">Measure bytes, working set, device capability, privacy, concurrency, and timeout.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+              <div class="prose-flow">
+                <aside class="debrief-evidence-boundary" aria-labelledby="humatics-implementation-evidence-title">
+                  <p class="debrief-evidence-boundary__label">What this establishes</p>
+                  <h3 id="humatics-implementation-evidence-title">Current implementation contracts establish inspectable behavior; dated artifacts establish historical production reach.</h3>
+                  <p>This reading makes state, geometry, offline, browser-compute, and artifact boundaries inspectable as design and implementation contracts. The document-evidence artifact establishes current behavior with a realistic synthetic fixture and a representative reconstruction of the project conditions I observed. The interface images are screenshots of working, company-neutral, IP-free 2026 proxy systems with synthetic sites, metrics, tolerances, and status values. Dated repositories or deployment artifacts establish historical production reach; physical-system safety and regulatory compliance depend on the installed system and jurisdiction.</p>
+                </aside>
+                </div>
               </div>
-            </figure>
-            <aside class="debrief-evidence-boundary" aria-labelledby="humatics-implementation-evidence-title">
-              <p class="debrief-evidence-boundary__label">What this establishes</p>
-              <h3 id="humatics-implementation-evidence-title">Current implementation contracts establish inspectable behavior; dated artifacts establish historical production reach.</h3>
-              <p>This reading makes state, geometry, offline, browser-compute, and artifact boundaries inspectable as design and implementation contracts. The document-evidence artifact establishes current behavior with a realistic synthetic fixture and a representative reconstruction of the project conditions I observed. The interface images are screenshots of working, company-neutral, IP-free 2026 proxy systems with synthetic sites, metrics, tolerances, and status values. Dated repositories or deployment artifacts establish historical production reach; physical-system safety and regulatory compliance depend on the installed system and jurisdiction.</p>
-            </aside>
           </article>
         </div>
       </div>
@@ -935,11 +990,11 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
               implementation evidence.
             </p>
             <ol class="source-basis">
-              <li id="source-humatics-product">Read <a href="https://humatics.com/microlocation_solutions">Humatics&rsquo;s Microlocation Solutions</a> for the company&rsquo;s description of its radio-frequency system, the real-time position data it produces, and how control systems can use that data for three-dimensional visibility and coordination.</li>
-              <li id="source-humatics-registry-account">Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/choose-your-player-making-an-industrial-robotics-product-legible-across-roles-sites-and-field-handoffs-20182019-20252026">Choose Your Player</a> for the canonical public Registry reading on the five player postures, shared-site contract, field operations, engagement history, and current implementation examples.</li>
-              <li id="source-humatics-financing">Read <a href="https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html">Humatics&rsquo;s January 2019 announcement</a> for the company-named Series A1 round, amount, participating investors, acquisitions, and commercial context.</li>
-              <li id="source-specification-by-example">Read <a href="https://kindlight.systems/core-architectures-orientation-index/specification-by-example">Specification-by-Example</a> for the public Core Architecture that turns participant understanding into concrete scenarios, acceptance examples, executable checks, and revisable specifications.</li>
-              <li id="source-document-evidence-artifact">Inspect <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/">Document evidence extraction 0.1.0</a> for the complete representative-reconstruction source, deterministic analysis route, current checks, and transfer boundary.</li>
+              <li id="source-humatics-product">Read <a href="https://humatics.com/microlocation_solutions" aria-label="Humatics’s Microlocation Solutions (outside Context Canvas)" title="Outside Context Canvas">Humatics&rsquo;s Microlocation Solutions<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the company&rsquo;s description of its radio-frequency system, the real-time position data it produces, and how control systems can use that data for three-dimensional visibility and coordination.</li>
+              <li id="source-humatics-registry-account">Read <a href="https://kindlight.systems/context-canvas-site-readings-enterprise-systems-change-human-judgment-and-recoverable-practice/choose-your-player-making-an-industrial-robotics-product-legible-across-roles-sites-and-field-handoffs-20182019-20252026" aria-label="Choose Your Player (outside Context Canvas)" title="Outside Context Canvas">Choose Your Player<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the canonical public Registry reading on the five player postures, shared-site contract, field operations, engagement history, and current implementation examples.</li>
+              <li id="source-humatics-financing">Read <a href="https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html" aria-label="Humatics’s January 2019 announcement (outside Context Canvas)" title="Outside Context Canvas">Humatics&rsquo;s January 2019 announcement<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the company-named Series A1 round, amount, participating investors, acquisitions, and commercial context.</li>
+              <li id="source-specification-by-example">Read <a href="https://kindlight.systems/core-architectures-orientation-index/specification-by-example" aria-label="Specification-by-Example (outside Context Canvas)" title="Outside Context Canvas">Specification-by-Example<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the public Core Architecture that turns participant understanding into concrete scenarios, acceptance examples, executable checks, and revisable specifications.</li>
+              <li id="source-document-evidence-artifact">Inspect <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/" aria-label="Document evidence extraction 0.1.0 (outside Context Canvas)" title="Outside Context Canvas">Document evidence extraction 0.1.0<svg class="canvas-link-icon" width=".85em" height=".85em" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3l-11 11M10 5H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></a> for the complete representative-reconstruction source, deterministic analysis route, current checks, and transfer boundary.</li>
             </ol>
           </section>
         </div>

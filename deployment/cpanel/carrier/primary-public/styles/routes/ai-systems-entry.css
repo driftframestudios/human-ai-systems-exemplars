@@ -4,46 +4,11 @@
    treatment, entry embeds, and their responsive and alternate modes.
    Load order: shared core, expanded.css, styles/components/instrument-atlas.css,
    ai-systems.css, this entry bundle, then canvas-shell.css.
+   The page-scoped bridge rules own the accepted cyan field and each
+   alternate-media state at one site; shared companion rules own spacing.
    Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
    The family bundle supplies shared grammar; this entry retains authority
    over its lab rhythm, table density, route bridges, and new experiments. */
-
-/* Entry route bridges ---------------------------------------------------- */
-
-.ai-systems-family-route {
-    background: var(--blueprint-lime, #eff8b8);
-    border: .125rem solid var(--blueprint-ink);
-    border-radius: .75rem;
-    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
-}
-
-:where(.ai-systems-family-route) {
-    margin-block: clamp(2rem, 4vw, 3.5rem);
-}
-
-.ai-systems-family-route a {
-    color: var(--blueprint-cobalt-deep);
-    font-weight: 750;
-}
-
-@media screen and (max-width: 30rem) {
-    .ai-systems-family-route {
-        box-shadow: .3rem .3rem 0 var(--hiring-ink, var(--blueprint-ink));
-    }
-}
-
-@media (forced-colors: active) {
-    .ai-systems-family-route {
-        border-color: CanvasText;
-        box-shadow: none;
-    }
-}
-
-@media print {
-    .ai-systems-family-route {
-        box-shadow: none;
-    }
-}
 
 /* Entry labs and Goal Fidelity tables ----------------------------------- */
 
@@ -129,20 +94,6 @@
     }
 }
 
-/*.goal-fidelity-table tbody tr:nth-child(3n + 1) > * {*/
-/*    background: color-mix(in srgb, var(--blueprint-sky) 42%, #fff 58%);*/
-/*}*/
-
-/*.goal-fidelity-table tbody tr:nth-child(3n + 2) > * {*/
-/*    background: color-mix(in srgb, #ffe0e6 42%, #fff 58%);*/
-/*}*/
-
-/*.goal-fidelity-table tbody tr:nth-child(3n) > * {*/
-/*    background: color-mix(in srgb, var(--blueprint-sea) 52%, #fff 48%);*/
-/*}*/
-
-/* Entry table and route cascade anchors --------------------------------- */
-
 @media print {
     .ai-systems-page .goal-fidelity-table {
         min-inline-size: 0;
@@ -154,11 +105,24 @@
     }
 }
 
+/* Entry route bridges ----------------------------------------------------
+   Keep this group after lab declarations: the bridge border also owns the
+   conditioning lab's top edge. */
+
 .ai-systems-page .ai-systems-family-route {
-    background: #E6F5F5;
+    background: #e6f5f5;
     border: .125rem solid var(--blueprint-ink);
     border-radius: .75rem;
     box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+:where(.ai-systems-family-route) {
+    margin-block: clamp(2rem, 4vw, 3.5rem);
+}
+
+.ai-systems-family-route a {
+    color: var(--blueprint-cobalt-deep);
+    font-weight: 750;
 }
 
 @media screen and (max-width: 30rem) {
