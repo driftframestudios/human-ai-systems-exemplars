@@ -1249,7 +1249,14 @@ async function exerciseThreadkeeping({ carrierPage, page }) {
   assert.equal(candidateAfter.count, candidateBefore.count - 1);
   assert.equal(candidateAfter.retainedDeletedId, false);
   assert.equal(candidateAfter.retainedReferences, false);
-  assert.match(await page.locator("#ledgerActionStatus").textContent(), /Next candidate .* deleted/u);
+  // The live region clears and repopulates on the next animation frame so
+  // assistive technology can announce repeated action shapes. Observe that
+  // settled frame instead of coupling this contract to runner timing.
+  const ledgerActionStatus = page.locator("#ledgerActionStatus");
+  await ledgerActionStatus.filter({ hasText: /Next candidate .* deleted/u }).waitFor();
+  assert.match(await ledgerActionStatus.textContent(), /Next candidate .* deleted/u);
+  await page.waitForFunction(() =>
+    Boolean(document.activeElement?.matches('[data-edit-candidate], #addCandidateBtn')));
   assert.equal(
     await page.evaluate(() => Boolean(document.activeElement?.matches('[data-edit-candidate], #addCandidateBtn'))),
     true,
@@ -1321,7 +1328,10 @@ async function exerciseThreadkeeping({ carrierPage, page }) {
   assert.equal(entryAfter.count, entryBefore.count - 1);
   assert.equal(entryAfter.retainedDeletedId, false);
   assert.equal(entryAfter.retainedReferences, false);
-  assert.match(await page.locator("#ledgerActionStatus").textContent(), /Entry .* deleted/u);
+  await ledgerActionStatus.filter({ hasText: /Entry .* deleted/u }).waitFor();
+  assert.match(await ledgerActionStatus.textContent(), /Entry .* deleted/u);
+  await page.waitForFunction(() =>
+    Boolean(document.activeElement?.matches('#selectedInspector [data-entry-field]')));
   assert.equal(
     await page.locator("#selectedInspector [data-entry-field]").first().evaluate((element) => document.activeElement === element),
     true,
