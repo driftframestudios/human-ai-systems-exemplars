@@ -72,7 +72,7 @@ https://schemas.radiantnull.com/context-canvas/1.0.0/context-canvas.schema.json
 ```
 
 The Radiant Null mirror and Vik Guru Worker are active, HTTPS-enforced, and
-observed against the accepted repository bytes. Completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the Worker publication and signed-out byte comparison for its registry and exact-version schema routes. The canonical Vik Guru identifier remains stable across both retrieval observations.
+observed against the accepted repository bytes. Completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the v0.3 delivery lineage; completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 Worker publication and signed-out byte comparison for its registry and exact-version schema routes. The canonical Vik Guru identifier remains stable across both retrieval observations.
 
 Both exact-version routes return the accepted identical bytes with the canonical
 `$id` unchanged. `main` discovery currently prefers Radiant Null as an explicit
@@ -82,7 +82,8 @@ schema meaning remain invariant.
 
 The schema and examples are active repository source and published contracts.
 The seven selected pages use the released relationship; completed Issue #406
-retains the signed-out comparison for the Vik Guru routes within Issue #18's
+preserves the v0.3 lineage, and completed Issue #531 retains the accepted
+v0.3.1 signed-out comparison for the Vik Guru routes within Issue #18's
 delivery family.
 
 ## Alternate projections
