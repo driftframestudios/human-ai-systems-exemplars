@@ -251,7 +251,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       // overlay-scrollbar engines do not. Observe the browser-clamped end and
       // content edge instead of counting native scrollbar paint as travel.
       assert.ok(end.left > 0, 'The local reading retains a travelled horizontal position.');
-      near(end.afterExtraPixel, end.left, 'The local reading reaches its browser-clamped horizontal end');
+      assert.equal(end.afterExtraPixel, end.left, 'The local reading reaches its browser-clamped horizontal end.');
       assert.ok(end.visible >= -1, 'The final image edge is reachable inside the local window.');
       await page.emulateMedia({ forcedColors: 'active' });
       assert.equal(await page.evaluate(() => matchMedia('(forced-colors: active)').matches), true);
