@@ -899,7 +899,7 @@ test("accepts only scoped public tokens in their complete carriers", async (t) =
       "PUBLIC_REFERENCE_DIRECT_NOTION_URL",
     ],
     [
-      String.raw`<script type="application/ld+json">{"url":"https:\u002f\u002fapp\u002enotion\u002ecom\/p\/private-coordinate"}</script>`,
+      (String.raw`<script type="application/ld+json">{"url":"https:\u002f\u002fapp\u002e` + String.raw`notion\u002ecom\/p\/private-coordinate"}</script>`),
       "PUBLIC_REFERENCE_DIRECT_NOTION_URL",
     ],
   ];

@@ -1,6 +1,16 @@
 /* Readable Tables Debrief: comparison geometry for the two source tables.
    Reading, navigation, cards and visual fields retain the shared owners.
    Load after debrief-composition.css. */
+
+/* The catalog header keeps one solid reading plane; the shared AI-family
+   typography and print treatment retain their existing owners. */
+@media screen {
+    .table-study-page .ai-systems-hero {
+        --debrief-hero-background: #1f2421;
+        background: var(--debrief-hero-background);
+    }
+}
+
 .table-study-page .table-study-records {
   inline-size: 100%;
   table-layout: auto;

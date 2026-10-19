@@ -9,12 +9,13 @@ immutable, prebuilt transfer envelope—an archive plus its external receipt;
 signed-out observations establish the bytes and response behavior visitors
 receive.
 
-[Issue #464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+[Issue #540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
 owns the current production source, carrier, tag, shell-free activation, live
-assessment, and recovery sequence. Issues #118, #250, #251, and #253 preserve
-the accepted `production-v0.2.0` implementation and receipt as historical
-precedent. The reusable procedure below always begins with one explicitly
-selected annotated `production-vMAJOR.MINOR.PATCH` tag.
+assessment, and recovery sequence. Issue #464 preserves the immutable
+`production-v0.3.0` receipt; Issues #118, #250, #251, and #253 preserve the
+accepted `production-v0.2.0` implementation and receipt. The reusable procedure
+below always begins with one explicitly selected annotated
+`production-vMAJOR.MINOR.PATCH` tag.
 
 ## Reusable route and historical worked decision
 
@@ -264,7 +265,7 @@ archive integrity and live-host evidence.
 The upload/download verification round trip establishes the staged archive bytes;
 File Manager name and shape observations provide a bounded extraction check.
 The current interface does not establish every extracted file's SHA-256. The
-trusted pre-upload carrier check and #464's complete signed-out byte comparison
+trusted pre-upload carrier check and #540's complete signed-out byte comparison
 bracket that gap.
 
 ## Activate the two roots
@@ -345,7 +346,7 @@ npm run verify:iframe-ancestry:live
 The all-route commands establish bytes and response policy. The focused
 ancestry command uses the fixed PODA carrier to require a live HTTP 200 with
 the exact parent policy, refusal from a loopback parent, and successful loading
-from its `https://vik.guru` parent. Then complete #464's primary manifest sweep,
+from its `https://vik.guru` parent. Then complete #540's primary manifest sweep,
 apex and `www` behavior, robots, sitemap, cache, policy, intentional 404, and
 remaining parent-child viewport observations.
 

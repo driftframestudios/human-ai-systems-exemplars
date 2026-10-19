@@ -437,6 +437,8 @@
 
 .debrief-catalog__card .project--slug {
     color: var(--debrief-cobalt-deep);
+    /* Card width supplies the measure before floated media shapes each line. */
+    max-inline-size: 100%;
 }
 
 .debrief-catalog__card .article__summary {

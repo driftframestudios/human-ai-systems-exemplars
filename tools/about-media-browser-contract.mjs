@@ -13,6 +13,10 @@ import {
 const route = "context-canvas-project-surface/context-canvas/index.html";
 const stillName = "impact-map-style-cycle-poster.jpg";
 const gifName = "impact-map-style-cycle-calm.gif";
+const promptConditionsMapName = "about_prompt_conditions_cartography.svg";
+const promptConditionsMapPath = `context-canvas-project-surface/img/plot/${promptConditionsMapName}`;
+const promptConditionsMapSource = `../img/plot/${promptConditionsMapName}`;
+const webkitObjectReplacementErrors = new Set(["cancelled", "Load request cancelled"]);
 const videoUrl = "https://vik.guru/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/movie.mp4";
 const videoPosterUrl = "https://vik.guru/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/poster.webp";
 
@@ -57,13 +61,59 @@ async function assertDescriptionDisclosure(page, engineLabel) {
   assert.equal(await details.evaluate(element => element.open), false, `${engineLabel}: keyboard closes the visual description`);
 }
 
-async function assertDescriptionPrint(page, engineLabel) {
-  const details = page.locator("details#about-media-sequence");
-  await details.evaluate(element => {
-    element.open = false;
-  });
-  await page.emulateMedia({ media: "print" });
+async function assertPromptConditionsMapAvailable(context, origin, engineLabel) {
+  const response = await context.request.get(`${origin}/${promptConditionsMapPath}`);
   try {
+    assert.equal(response.status(), 200, `${engineLabel}: the prompt-conditions map route responds`);
+    assert.match(
+      response.headers()["content-type"] || "",
+      /^image\/svg\+xml\b/u,
+      `${engineLabel}: the prompt-conditions map route serves SVG bytes`,
+    );
+    assert.match(
+      await response.text(),
+      /<svg(?:\s|>)/u,
+      `${engineLabel}: the prompt-conditions map response contains an SVG root`,
+    );
+  } finally {
+    await response.dispose();
+  }
+}
+
+async function assertPageTelemetry(telemetry, context, origin, engineLabel) {
+  if (engineLabel === "WebKit") {
+    await assertPromptConditionsMapAvailable(context, origin, engineLabel);
+  }
+  const requestFailures = [...telemetry.requestFailures];
+  if (engineLabel === "WebKit") {
+    // WebKit may replace one nested same-origin object while composing a
+    // collapsed or print presentation. A direct SVG response establishes the
+    // asset contract before this assertion classifies that lifecycle event.
+    const promptMapRequestPrefix = `GET ${origin}/${promptConditionsMapPath} · `;
+    const replacementIndices = requestFailures.flatMap((failure, index) => {
+      const errorText = failure.startsWith(promptMapRequestPrefix)
+        ? failure.slice(promptMapRequestPrefix.length)
+        : "";
+      return webkitObjectReplacementErrors.has(errorText) ? [index] : [];
+    });
+    assert.ok(
+      replacementIndices.length <= 1,
+      `${engineLabel}: at most one prompt-map object replacement is accepted`,
+    );
+    if (replacementIndices.length === 1) {
+      requestFailures.splice(replacementIndices[0], 1);
+    }
+  }
+  assertTelemetry({ ...telemetry, requestFailures });
+}
+
+async function assertDescriptionPrint(browser, origin, engineLabel) {
+  // Load alternate presentations in their own stable page state. Switching one
+  // live page between screen and print can make WebKit cancel and recreate an
+  // otherwise valid embedded resource.
+  const printed = await openPage(browser, origin, { media: "print" });
+  try {
+    const details = printed.page.locator("details#about-media-sequence");
     const presentation = await details.evaluate(element => {
       const summary = element.querySelector("summary");
       const list = element.querySelector("ol");
@@ -83,6 +133,15 @@ async function assertDescriptionPrint(page, engineLabel) {
         summary: serialize(summary),
         list: serialize(list),
         firstItem: serialize(firstItem),
+        promptMap: (() => {
+          const object = document.querySelector(".about-prompt-static object");
+          return {
+            ...serialize(object),
+            data: object?.getAttribute("data") || "",
+            type: object?.getAttribute("type") || "",
+            fallback: object?.querySelector("a")?.getAttribute("href") || "",
+          };
+        })(),
       };
     });
 
@@ -95,8 +154,16 @@ async function assertDescriptionPrint(page, engineLabel) {
     assert.ok(presentation.list.width > 0 && presentation.list.height > 0, `${engineLabel}: print gives the visual-description list geometry`);
     assert.notEqual(presentation.firstItem.display, "none", `${engineLabel}: print renders visual-description items`);
     assert.ok(presentation.firstItem.height > 0, `${engineLabel}: print gives visual-description items geometry`);
+    assert.ok(
+      presentation.promptMap.width > 0 && presentation.promptMap.height > 0,
+      `${engineLabel}: print gives the prompt-conditions map geometry`,
+    );
+    assert.equal(presentation.promptMap.data, promptConditionsMapSource);
+    assert.equal(presentation.promptMap.type, "image/svg+xml");
+    assert.equal(presentation.promptMap.fallback, promptConditionsMapSource);
+    await assertPageTelemetry(printed.telemetry, printed.context, origin, engineLabel);
   } finally {
-    await page.emulateMedia({ media: "screen" });
+    await printed.context.close();
   }
 }
 
@@ -155,7 +222,7 @@ function assertContained(layout, viewportWidth, label) {
 async function openPage(
   browser,
   origin,
-  { contextOptions = {}, failVideoRequest = false } = {},
+  { contextOptions = {}, failVideoRequest = false, media = "screen" } = {},
 ) {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
@@ -171,6 +238,7 @@ async function openPage(
   }
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
+  await page.emulateMedia({ media });
   const telemetry = monitor(page);
   const videoRequests = [];
   const gifRequests = [];
@@ -178,7 +246,9 @@ async function openPage(
     if (request.url() === videoUrl) videoRequests.push(request.url());
     if (request.url().endsWith(gifName)) gifRequests.push(request.url());
   });
-  await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+  // The load boundary includes the page's same-origin SVG object. Telemetry is
+  // therefore asserted after embedded resources settle in the selected medium.
+  await page.goto(`${origin}/${route}`, { waitUntil: "load" });
   return { context, page, telemetry, videoRequests, gifRequests };
 }
 
@@ -238,12 +308,12 @@ try {
   assert.match(normalState.visualDescriptionText, /decision space/u);
   await assertFooterContact(normal.page, "Chromium");
   await assertDescriptionDisclosure(normal.page, "Chromium");
-  await assertDescriptionPrint(normal.page, "Chromium");
   assertContained(await mediaLayout(normal.page), 1440, "desktop");
   assert.equal(normal.gifRequests.length, 0, "the initial reading leaves fallback motion unloaded");
 
   assertTelemetry(normal.telemetry);
   await normal.context.close();
+  await assertDescriptionPrint(browser, server.origin, "Chromium");
 
   await assertSourceFailureRecovery(browser, server.origin, "Chromium");
 
@@ -308,12 +378,12 @@ try {
   assert.equal(webkitState.paused, true, "WebKit begins on the passive poster");
   await assertFooterContact(webkitNormal.page, "WebKit");
   await assertDescriptionDisclosure(webkitNormal.page, "WebKit");
-  await assertDescriptionPrint(webkitNormal.page, "WebKit");
   assertContained(await mediaLayout(webkitNormal.page), 1440, "WebKit desktop");
   // The HTML preload value is an author hint that a user agent may ignore.
   // Playback state and controls own the cross-browser visitor-control contract.
-  assertTelemetry(webkitNormal.telemetry);
+  await assertPageTelemetry(webkitNormal.telemetry, webkitNormal.context, server.origin, "WebKit");
   await webkitNormal.context.close();
+  await assertDescriptionPrint(webkitBrowser, server.origin, "WebKit");
 
   await assertSourceFailureRecovery(webkitBrowser, server.origin, "WebKit");
 

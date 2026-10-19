@@ -157,6 +157,23 @@ the live schema and skill routes. Issue
 retains the accepted source, workflow, live observation, Worker version, and
 recovery receipt.
 
+## Pages v0.3.1 schema activation · 2026-10-18
+
+PR #536 merged accepted production source
+`a2545cb03e2e3767cfa5abd167f017944498dcd7` while both deployment gates remained
+at rest. The initial push completed the schema contract while deployment
+retained its documented resting state. Following explicit human authorization,
+an operator opened the bounded activation window; run `39166814705` attempt 2
+rechecked the same production SHA and ref, then admitted the deployment job. The
+operator restored both gates to their documented resting states while the
+admitted job completed: the receiver list was `[]`, and the dependency-gate
+variable was unset. Signed-out receiver and browser checks established all 160
+allowlisted routes, exact selected bytes, named response policies, and the
+JavaScript-disabled catalog at 390 px and 1280 px. Issue
+[#531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531)
+retains the accepted source, workflow, active Worker version, immediate recovery
+coordinate, and live observations.
+
 ## Sources
 
 - [GitHub deployments and environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)

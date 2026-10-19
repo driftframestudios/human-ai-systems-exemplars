@@ -8,7 +8,7 @@ import { startStaticServer } from "../../tools/core-architecture-browser-helper.
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const routes = [
   { label: "About", path: "index.html", imageCount: 1, expectsLazyImage: false },
-  { label: "AI Systems", path: "ai-systems.html", imageCount: 13, expectsLazyImage: true },
+  { label: "AI Systems", path: "ai-systems.html", imageCount: 15, expectsLazyImage: true },
   { label: "Debriefs", path: "debriefs.html", imageCount: 20, expectsLazyImage: true },
 ];
 const engines = [
