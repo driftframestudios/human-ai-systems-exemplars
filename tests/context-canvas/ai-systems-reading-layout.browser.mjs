@@ -222,7 +222,11 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
           const seam = first ? Math.round(1440 + first.columnThreshold - first.containerWidth) : 1360;
           for (const width of [seam - 1, seam, seam + 1, seam - 1]) {
             await session.page.setViewportSize({ width, height: 1000 });
-            await settleColumns(session.page);
+            // Some repaired readings intentionally keep their concise prose in
+            // the outer reading block, so they own no multicolumn formatting
+            // context. The shared seam still exercises their heading geometry;
+            // column settlement belongs only to pages that authored a flow.
+            if (first) await settleColumns(session.page);
             const reading = await assertPage(session.page, route);
             if (first) {
               assertColumnActivation(reading, route);
@@ -249,8 +253,13 @@ for (const [engine, browserType] of Object.entries({ chromium, firefox, webkit }
               const enlarged = await observeReading(session.page);
               assert.ok(enlarged.flows.every(flow => flow.columns === 1), `${route}: enlarged text enters one-column reading`);
               await session.page.evaluate(() => document.documentElement.style.removeProperty("font-size"));
-              await settleColumns(session.page);
+              // A short reading can preserve ordinary block composition at
+              // every text size. Poll the multicolumn state only when this
+              // source route actually owns one of those formatting contexts.
+              if (enlarged.flows.length) await settleColumns(session.page);
               const restored = await assertPage(session.page, route);
+              assert.equal(restored.flows.length, enlarged.flows.length,
+                `${route}: text-size restoration preserves the source-owned flow composition`);
               if (restored.flows.length) assertColumnActivation(restored, route);
             }
           } finally { await session.close(); }

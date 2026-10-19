@@ -84,8 +84,10 @@ their separate owners.
 
 ## Existing direct Core consumers
 
-These 18 entries retain their imports and case ownership. This disposition
-does not claim a new audit or execution of all their assertions.
+These 41 current direct browser entry points retain their imports and case
+ownership. The executable selections remain owned by
+`tests/suites/catalog.json`; this table records the broader source inventory
+and does not claim a new execution of every assertion.
 
 | Entry | Retained receiving responsibility |
 | --- | --- |
@@ -94,6 +96,7 @@ does not claim a new audit or execution of all their assertions.
 | `tests/context-canvas/video-receivers.browser.mjs` | Native-video receiver containment, passive poster requests, and accessible relationships across the selected Debrief and AI Systems pages. |
 | `tests/context-canvas/who-to-believe-system-graph.browser.mjs` | Who To Believe source-authentic graph admission, malformed-data fallback and repaired remount, mount-local identity, direct local-file initialization, architecture comparison, concern emphasis, direct node and incoming/outgoing-neighbor traversal, focus and status, the 75rem reading-container seam observed at the current 1280-pixel viewport boundary, viewport containment, forced colors, reduced motion, print, and scriptless recovery. |
 | `tools/canvas-iframe-route-browser-contract.mjs` | Iframe route and carrier behavior. |
+| `tools/iframe-visual-media-browser-contract.mjs` | Generated iframe visual-media delivery, media geometry, alternative text, and route-owned browser observations. |
 | `tools/core-decision-canvas-contract.mjs` | Decision-canvas family assertions and artifacts. |
 | `tools/core-iframe-carrier-contract.mjs` | Core carrier assertions and delivery roots. |
 | `tools/core-planning-instrument-contract.mjs` | Planning-instrument family assertions and artifacts. |
@@ -107,6 +110,8 @@ does not claim a new audit or execution of all their assertions.
 | `tests/tables/core-followthrough/browser.mjs` | Core follow-through table behavior and checkpoints. |
 | `tests/tables/hiring-schema-print.browser.mjs` | Hiring/schema table and print behavior. |
 | `tests/context-canvas/fmi-reading-room.browser.mjs` | FMI companion text distribution, rail-aware column seams, compact notes, canonical six-beat borders, alternate media, and prototype-link closure; restored layout faults distinguish the repaired behavior. |
+| `tests/context-canvas/debrief-catalog-preview.browser.mjs` | Catalog preview replacement plus sixteen Case Brief projections, thirty-two independent collapsed track disclosures, state-aware labels, responsive geometry, atomic fallback, forced colors, print, and HTTP/direct-file behavior in Chromium and Playwright WebKit. |
+| `tests/context-canvas/debrief-reading-layout.browser.mjs` | Movement-header completeness, headings above column prose, wide evidence between prose runs, direct principle-to-heading ownership, and state-based container settlement across seventeen reading consumers and six independent catalog controls in Chromium, Firefox, and Playwright WebKit, including alternate modes and controlled layout regressions. |
 | `tests/context-canvas/debrief-caption-colors.browser.mjs` | Caption foreground inheritance across dark fields and light insets; catalog inventory, link and alternate-media paint, bounded texture observation, and fault recovery. |
 | `tests/context-canvas/debrief-hero-wrapping.browser.mjs` | Twenty-three catalog title and introductory text regions, including the independent NEG lead: narrow ordinary and enlarged containment, desktop and wide composition parity, print and forced colors, scriptless named controls, and restored oversized-word faults across three engines. |
 | `tests/context-canvas/debrief-link-cues.browser.mjs` | Twenty-three Debriefs and their catalog: complete outgoing-link inventory, visible and accessible destination cues, preserved native tab choice, SVG sizing and first-load columns, Registry materialization, alternate media, and restored cue or initialization faults. |
@@ -120,9 +125,13 @@ does not claim a new audit or execution of all their assertions.
 | `tests/context-canvas/fmi-reading-rail.browser.mjs` | Authored FMI rail current versus selected state, native navigation/history, compact label reachability, reflow, scriptless recovery, and restored state/clipping faults across three engines. |
 | `tests/context-canvas/debrief-reference-figures.browser.mjs` | Thirty-five-figure cascade, local keyboard scrolling, portrait fit, scriptless width boundary, two opt-in bounded captions, painted-owner and text-fragment containment, unchanged media geometry, alternate media, and restored faults across three engines. |
 | `tests/context-canvas/ai-entry-cascade.browser.mjs` | Five entry bridges, accepted cascade, 30rem shadow seam, print and forced-color treatment, controlled faults and restoration across three engines. |
+| `tests/context-canvas/ai-systems-reading-layout.browser.mjs` | Twenty-six AI Systems and Shared Machinery readings plus the Debriefs parent across three engines and narrow, desktop, and wide dimensions; repaired reading owners, container seams, text containment, local overflow, alternate presentations, controlled faults, and restoration. |
+| `tests/context-canvas/technology-fit-layout.browser.mjs` | Technology Fit Sampling Tableau header and comparison-toolbar layout across three engines and source-adjacent dimensions, including complete controls, local overflow, comparison state, enlarged text, and controlled historical faults. |
+| `tests/context-canvas/prompt-side-figure.browser.mjs` | The Prompt-Side article's linked SVG overview, keyboard and pointer journey, static reading, and print at narrow and desktop widths. |
 | `tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs` | Atlas CSS cascade, local table/SVG canvases, hidden states, closed print disclosures, forced colors, static reading, and restored faults across three engines. |
 | `tests/visualization-fidelity-atlas/atlas-essay.browser.mjs` | Essay figure/table checks and context modes. |
 | `tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs` | Gallery selection, recovery, export, and context modes. |
+| `tests/visualization-fidelity-atlas/atlas-research.browser.mjs` | The research example's native table, linked SVG, source disclosure, keyboard scrolling, and print reading at narrow and desktop widths. |
 
 ## Remaining non-HTTP or external-receiver routes
 

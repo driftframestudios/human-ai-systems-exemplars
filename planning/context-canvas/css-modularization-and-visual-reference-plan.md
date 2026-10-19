@@ -3,7 +3,7 @@
 ```yaml
 planning_surface:
   id: "prototype-exemplars.context-canvas.css-and-visual-reference.v0.1"
-  as_of: "2026-10-07"
+  as_of: "2026-10-18"
   status: "active implementation; the visual cutoff is retained, About has a complete consumer-owned first-paint path, and expanded.css remains a named legacy remainder for adjacent routes"
   visual_reference_receiver: "all-page visual reference utility"
   css_modularization_receiver: "readable core and route-family source"
@@ -41,20 +41,20 @@ That return is complete. The About extraction landed next, followed by the indep
 
 ## Implementation return — About first-paint ownership
 
-About now loads an explicit, shallow source graph: `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`. The static fallback remains media-gated beside the route owner. `expanded.css` is absent from the About document and retains the unresolved legacy terrain used by 43 adjacent routes.
+About now loads an explicit, shallow source graph: `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`. The static fallback remains media-gated beside the route owner. `expanded.css` is absent from the About document and retains the unresolved legacy terrain used by 39 adjacent routes.
 
 The extraction gives shared responsibilities one authored source rather than copying declarations into a route bundle:
 
 | Source | Responsibility | Direct consumers |
 | --- | --- | ---: |
-| `styles/core/tokens.css` | shared custom-property vocabulary | 44 |
-| `styles/core/foundation.css` | reset, base typography, reading primitives, responsive type scale | 44 |
-| `styles/components/site-navigation.css` | three-destination navigation, sticky placement, route state, anchor clearance | 44 |
-| `styles/components/tables.css` | complete semantic-table family with responsive, print, and forced-color states | 39 |
+| `styles/core/tokens.css` | shared custom-property vocabulary | 40 |
+| `styles/core/foundation.css` | reset, base typography, reading primitives, responsive type scale | 40 |
+| `styles/components/site-navigation.css` | three-destination navigation, sticky placement, route state, anchor clearance | 40 |
+| `styles/components/tables.css` | complete semantic-table family with responsive, print, and forced-color states | 38 |
 | `styles/components/route-card-grid.css` | route-card layout and its responsive/reduced-motion states | 2 |
-| `expanded.css` | named legacy remainder | 43 |
+| `expanded.css` | named legacy remainder | 39 |
 
-The current ordinary About path carries 75,986 raw bytes, 17,470 gzip-9 bytes, and 14,676 Brotli-11 bytes across seven authored first-paint files. The immediately preceding `expanded.css + about.css + canvas-shell.css` path carried 122,737 raw bytes, 24,514 gzip bytes, and 20,937 Brotli bytes. The route therefore removes 46,751 raw bytes (38.1%), 7,044 gzip bytes (28.7%), and 6,261 Brotli bytes (29.9%) while increasing the ordinary authored request boundary from three files to seven. A later deterministic production bundle can recover that request boundary after source ownership stabilizes; runtime imports and a second source tree remain outside the design.
+At source `2d8e708`, the ordinary About path carries 78,460 raw bytes, 18,215 gzip-9 bytes, and 15,243 Brotli-11 bytes across seven authored first-paint files. The immediately preceding `expanded.css + about.css + canvas-shell.css` path carried 122,737 raw bytes, 24,514 gzip bytes, and 20,937 Brotli bytes. The route therefore removes 44,277 raw bytes (36.1%), 6,299 gzip bytes (25.7%), and 5,694 Brotli bytes (27.2%) while increasing the ordinary authored request boundary from three files to seven. A later deterministic production bundle can recover that request boundary after source ownership stabilizes; runtime imports and a second source tree remain outside the design.
 
 Computed-style and geometry comparison covers enhanced and no-script About at narrow (`390 × 844`), desktop (`1440 × 1000`), and wide (`2560 × 1440`) viewports, plus print, forced-colors, and reduced-motion states. All compared elements and document metrics match the pre-extraction source. Focused source checks keep the exact load order, the single-owner families, the canonical `5rem` in-page anchor clearance, and every legacy consumer's direct dependency graph visible.
 
@@ -125,39 +125,39 @@ The ownership map keeps two demonstrated seams in place. The mixed `.prose-flow`
 
 ## Implementation return — Debrief reading orientation and composition contract
 
-The shared-reading extension brings the component to fifteen direct consumers and gives orientation-reading placement the same component owner. The current source count is fifteen: the earlier thirteen routes plus FMI Clinical Trial Coordination and Who to Believe. This is the current ownership state; the thirteen-consumer figures in the first Debriefs return above remain the historical receipt for that earlier tranche.
+The shared-reading extension originally brought the component to fifteen direct consumers and gave orientation-reading placement the same component owner. At source `2d8e708`, the component serves twenty-three Debrief and enterprise-reading routes. The thirteen-consumer figures in the first Debriefs return above remain the historical receipt for that earlier tranche.
 
-The seven composed Debriefs now load `styles/contracts/debrief-composition.css` from a contract-specific source path. The rule body, selector scope, and established position after route and shell sources remain intact. Its header names the composed movement and evidence surfaces it owns, the opt-in consumer posture, and the related Dual-Track Debrief Composition contract. This move establishes `styles/contracts/` without turning a visual contract into a global template: routes continue to own palette, rhythm, density, source basis, and local composition.
+Twelve composed Debriefs now load `styles/contracts/debrief-composition.css` from a contract-specific source path. The rule body, selector scope, and established position after route and shell sources remain intact. Its header names the composed movement and evidence surfaces it owns, the opt-in consumer posture, and the related Dual-Track Debrief Composition contract. This move establishes `styles/contracts/` while routes continue to own palette, rhythm, density, source basis, and local composition.
 
 The remaining `.debrief-sequence` rules stay in `expanded.css`. They form a two-rule seam shared by Genomic Viewer and FMI LIMS/ELN, whose current bundle graphs differ. Moving them into the reading component would widen that component beyond demonstrated ownership; creating a dedicated source would add a request for too little independent responsibility. A larger shared sequence or composition boundary can invite that move later.
 
 ## Present CSS terrain
 
-The table retains historical cutoffs and adds the current About-first-paint state so earlier receipts remain interpretable:
+The table retains historical cutoffs and binds each current observation to source `2d8e708` so earlier receipts remain interpretable:
 
 | Measure | Observation |
 | --- | ---: |
-| Top-level Context Canvas HTML pages, current | 46 |
-| Pages that load `canvas-shell.css`, current | 45 |
-| Pages that load the shared core, current | 44 |
-| Pages that load `expanded.css`, current legacy remainder | 43 |
+| Top-level Context Canvas HTML pages, current | 42 |
+| Pages that load `canvas-shell.css`, current | 41 |
+| Pages that load the shared core, current | 40 |
+| Pages that load `expanded.css`, current legacy remainder | 39 |
 | `expanded.css` baseline | 145,667 bytes · 6,373 lines |
 | `expanded.css` after the Genomic Viewer extraction | 74,085 bytes · 3,483 lines |
 | `expanded.css` after the career/regulatory component extraction on `51016ee` | 66,639 bytes · 3,118 lines |
 | `expanded.css` after the component and shared-reading extension | 66,154 bytes · 3,102 lines |
-| `expanded.css` after the About first-paint extraction, current | 47,404 bytes · 2,069 lines |
-| shared core and extracted About components, current | 22,940 bytes · 1,121 lines |
+| `expanded.css` after the About first-paint extraction, current | 46,854 bytes · 2,030 lines |
+| shared core and extracted About components, current | 24,476 bytes · 1,156 lines |
 | `styles/routes/about.css` | 36,568 bytes · 1,601 lines |
-| `styles/routes/about.css`, current | 40,854 bytes · 1,799 lines |
-| AI Systems family route, component, entry, and Hiring modules | 33,562 bytes · 1,188 lines |
-| Debriefs reading component, catalog route, and three-movement route | 21,001 bytes · 861 lines |
-| `styles/routes/genomic-viewer.css` | 11,214 bytes · 402 lines |
-| `styles/components/career-regulatory-slide.css` | 8,123 bytes · 373 lines |
-| `styles/contracts/debrief-composition.css` | 15,688 bytes · 508 lines |
+| `styles/routes/about.css`, current | 41,722 bytes · 1,837 lines |
+| AI Systems family route, component, entry, and Hiring modules, current | 34,590 bytes · 1,208 lines |
+| Debriefs reading component, catalog route, and three-movement route, current | 44,664 bytes · 1,685 lines |
+| `styles/routes/genomic-viewer.css`, current | 12,818 bytes · 453 lines |
+| `styles/components/career-regulatory-slide.css`, current | 8,238 bytes · 375 lines |
+| `styles/contracts/debrief-composition.css`, current | 16,830 bytes · 549 lines |
 | `expanded.css` baseline over gzip | 25,957 bytes |
 | `expanded.css` baseline over Brotli | 21,015 bytes |
-| `field-inspection.css` | 12,715 bytes · 421 lines |
-| `canvas-shell.css`, current | 12,192 bytes · 463 lines |
+| `field-inspection.css`, current | 13,457 bytes · 431 lines |
+| `canvas-shell.css`, current | 12,770 bytes · 479 lines |
 
 The transfer size is modest. The larger cost is architectural: most pages parse unrelated route-family rules, source order carries an implicit API, and collaborators search one long file whose name understates its responsibilities. File movement produces a first-paint gain only when HTML loads a small core and its relevant route bundle directly. A runtime `@import` chain retains the blocking dependency path and therefore sits outside the target.
 
@@ -187,7 +187,7 @@ This is change-modeling terrain rather than a mechanical file split. Consumer tr
 
 ### Capture every top-level page
 
-The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. The current sitemap has 34 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path. Discovery now requires exactly one family assignment, so a new or duplicate route classification fails visibly instead of entering an ambiguous group.
+The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. At source `2d8e708`, the sitemap has 40 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path. Discovery now requires exactly one family assignment, so a new or duplicate route classification fails visibly instead of entering an ambiguous group.
 
 | Review family | Routes |
 | --- | --- |
@@ -294,7 +294,7 @@ The repository remains implementation authority and can diverge usefully from ad
 - **Soft Color Blocking** is carried here as a complete local explanation: composition-led variation can remain recognizable as one system.
 - [Source-Native Timeline Rail](../../visual-fidelity-contracts/cobalt-temporal-field.md) supplies the stable temporal grammar carried by Cobalt Temporal Field.
 
-`grammar-family.html` contributes the wider Cloudflare design field: portable assets, contextual delivery, coordinated rooms, durable undertakings, and visitor-owned surfaces. The existing Field Inspection Static Assets pilot supplies the bounded implementation proof. The CSS wave keeps those roles connected while stable CDN bundles wait for stable source ownership.
+`grammar-family.html` contributes the wider Cloudflare design field: portable assets, contextual delivery, coordinated rooms, durable undertakings, and visitor-owned surfaces. The superseded Field Inspection Static Assets pilot supplied the first bounded implementation proof; the accepted production carrier and About CSS projection now carry that learning into the active delivery path. The CSS wave keeps those roles connected while additional generated consumers wait for stable source ownership and measured value.
 
 ## Extraction waves
 
@@ -388,9 +388,9 @@ Critical CSS follows actual LCP evidence. Aggressive restructuring follows repea
 - `404.html` is part of the all-page set even though it is a recovery route. Its standing should remain visible in the catalog.
 - The six pages with inline style blocks belong in the visual baseline while their extraction remains a later CSP/cache wave.
 - Active visitor issues can change the baseline. The cutoff commit and family-specific recapture keep CSS comparison distinct from concurrent content movement.
-- The Cloudflare Field Inspection pilot remains a valid independent direct-view proof. Hashed immutable CSS and broader CDN policy follow stable bundle boundaries.
+- The Cloudflare Field Inspection pilot remains a valid historical direct-view proof. The accepted production carrier owns current delivery, and Issue #428 coordinates complete pilot retirement. Additional hashed CSS consumers and broader CDN policy follow stable bundle boundaries and measured value.
 - Repository naming remains an independent identity decision.
-- GitHub Actions remains disabled at the $0 resting state. The visual reference and CSS waves use local tools and ordinary review.
+- Local tools and ordinary review remain the standing visual-reference and CSS loop. Path-bound pull-request checks and confirmation-gated manual proofs add hosted evidence when a receiving decision benefits from it.
 
 ## Re-entry
 

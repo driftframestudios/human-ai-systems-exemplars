@@ -30,8 +30,9 @@ in document flow, so its actual height places the initial reading. The body
 provides the full scroll range, and the header retains a viewport-wide limit
 when a route has a larger minimum body width. Narrow link padding scales with
 text while every destination keeps a 44px minimum touch target. The existing
-fragment and rail reserves clear the observed one- and two-row arrangements;
-`main` itself receives the same skip-target clearance as its descendants.
+fragment and rail clearance follows the active text size and clears the observed
+one-, two-, and three-row arrangements; `main` itself receives the same
+skip-target clearance as its descendants.
 HTML continues to own labels, destinations, and current-page or current-location
 semantics. Route palettes and the generated or authored reading rails retain
 their separate owners.
@@ -195,7 +196,7 @@ PODA's second section title, and independently composed asides keep their
 authored position. These routes load the neutral component directly after
 `expanded.css`; their route bundles continue to own color, measure, and rhythm.
 
-`npm run test:ai-systems-reading-layout-browser` exercises the twenty-four
+`npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
 AI Systems / Shared Machinery primary and directly linked example readings,
 plus the Debriefs parent, in Chromium, Firefox, and Playwright WebKit. The
 route population distinguishes authored reading links from global navigation,
@@ -507,7 +508,7 @@ Current high-signal ownership:
 | --- | --- | --- |
 | [`styles/core/tokens.css`](styles/core/tokens.css) | 40 top-level routes | Stable palette and link roles, measures, spacing, and shared table dimensions; first source in the shared core graph. |
 | [`styles/core/foundation.css`](styles/core/foundation.css) | 40 top-level routes | Box sizing, document type, semantic normalization, links, lists, images, figures, the established type scale, and shared reading-container and prose-flow composition. |
-| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 40 top-level routes | Shared three-destination navigation, page offset, route state, and canonical `5rem` in-page anchor clearance. |
+| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 40 top-level routes | Shared three-destination navigation, page offset, route state, and one text-scaled clearance contract for fragments and compact reading rails. |
 | [`styles/components/tables.css`](styles/components/tables.css) | 38 routes with semantic tables or shared table wrappers | Table structure, responsive containment, focus, state, forced-color, and print behavior. |
 | [`styles/components/route-card-grid.css`](styles/components/route-card-grid.css) | [`index.html`](index.html), [`prompt-side-conditions-practice.html`](prompt-side-conditions-practice.html) | Shared two-column route collection and its narrow and reduced-motion behavior. |
 | [`expanded.css`](expanded.css) | 39 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
@@ -680,8 +681,9 @@ collaboration instruments, and other repository-owned resources above this
 subtree. The production assembler owns that explicit dependency closure and
 calls the same materialization logic while creating the disjoint primary and
 iframe outputs described in [`deployment/cpanel/`](../../deployment/cpanel/README.md).
-The Field Inspection pilot retains its separate authored-byte parity and
-no-index proving role.
+The Field Inspection pilot retains historical authored-byte parity until Issue
+#428 removes that superseded proof. The production assembler and exact iframe
+families own current publication.
 
 Before a generated subtree enters that publication-assembler handoff, give the
 exact ignored artifact its named secret-material observation:
@@ -755,11 +757,11 @@ Missing, unpaired, malformed-route, wrong-host, and differently caused failures
 remain observations. Capture success and observation review remain separate:
 inspect the generated `summary.json` before interpreting a passing exit status.
 
-## Cloudflare proving surface
+## Historical Cloudflare proving surface
 
-[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) owns the bounded Field Inspection Static Assets pilot. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. The pilot keeps ordinary assets on Cloudflare's asset-first path and reserves Worker execution, storage, and contextual composition for a demonstrated runtime need.
+[`cloudflare/context-canvas-field-pilot`](../../cloudflare/context-canvas-field-pilot/README.md) preserves the bounded Field Inspection Static Assets proof that preceded the accepted production carrier. Its deterministic builder copies an explicit public dependency closure into ignored `dist/`; `--check` confirms byte parity and rejects extra files. Issue #428 coordinates complete retirement of this superseded source.
 
-The pilot measures delivery behavior. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
+The production assembler and exact iframe families now own Context Canvas delivery. The broader Cloudflare delivery architecture in `grammar-family.html` remains design terrain for later composed readings, coordinated rooms, durable undertakings, and visitor-owned surfaces.
 
 ## Public evidence boundary
 
