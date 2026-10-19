@@ -378,13 +378,51 @@ carrier lands:
 - apply #102's iframe MIME, UTF-8, `nosniff`, referrer, ancestry, CORS, and
   revalidation contract;
 - preserve genuine missing-route and 404 behavior;
-- keep delivery-layer HTML rewriting outside the accepted carrier path; and
+- classify delivery-layer HTML rewriting separately from the accepted carrier
+  path; and
 - purge only the affected primary and iframe cache scope after the complete
   update.
 
 Cloudflare features such as email-address rewriting can change served HTML
-bytes. Byte-preserving delivery keeps the reviewed carrier and live verifier
-in agreement.
+bytes. Carrier verification establishes the installed source, and the live
+verifier admits only named, exercised edge transformations.
+
+The exercised `production-v0.4.0` receiver currently assigns canonicalization
+to a Cloudflare Single Redirect and preserves path and query. Primary response
+rules set `nosniff`, `no-referrer`, the seven Markdown types, the root web
+manifest type, and the exact Strategy Canvas schema type. A scoped rule gives
+root, `.html`, and canonical directory responses Standard response-body
+inspection. Bot Preference Sync and Email Address Obfuscation stay active; AI
+Labyrinth stays off after the diagnostic. The live receipt classifies the
+managed `robots.txt` preamble and email-address rewrite separately from
+carrier-controlled byte drift.
+
+The 2026-10-19 acceptance pass recovered exact authored bytes from every one of
+the 84 HTML responses after reversing only declared `data-cfemail` anchors,
+the `email-decode.min.js` decoder, and the request-dependent JavaScript
+Detections script. All 351 remaining primary routes were inspected directly:
+350 matched byte for byte, while `robots.txt` carried the intentional managed
+preamble. Chromium and WebKit kept the public address visible to the
+accessibility tree on representative About, AI Systems, and Debrief routes.
+Record the request-dependent `jsd/main.js` or `precursor/main.js` variant as an
+edge projection rather than carrier drift.
+
+Cloudflare also interprets some `artifact@version` coordinates as email-shaped
+text. Chromium exposed all 26 inspected coordinates in the rendered document,
+while raw-HTML and script-free readers receive the edge-obfuscated form. Two
+self-contained prototypes retain CSPs that decline the injected email decoder
+and JavaScript Detections scripts. Keep the public-address protection,
+mark technical coordinates with an `email_off` boundary or a narrowly scoped
+configuration rule, reconcile those two CSPs deliberately, and repeat the
+raw-parser checks before claiming parser parity.
+
+Keep the origin policy complementary to those edge rules. Add
+`ErrorDocument 404 /404.html` to the retained primary-root `.htaccess` so an
+unknown route serves the authored page with status `404`. Select reviewed cache
+classes and HSTS/CSP behavior through their own signed-out exercise. HTML
+routes that use Email Address Obfuscation keep response inspection available;
+any later `Cache-Control: no-transform` proposal receives a separate exercise
+because it suppresses that edge rewrite.
 
 ## 11. Verify the signed-out receivers
 
