@@ -38,6 +38,10 @@
 /* The body supplies the full sticky travel range; the header owns its flow
    height, so initial content follows wrapping and text enlargement directly. */
 .page__container {
+    /* The shared header and both reading-rail owners use one text-scaled
+       clearance contract. The narrow override below covers three complete
+       destination rows while wider layouts retain the established reserve. */
+    --site-navigation-block-clearance: 5rem;
     height: auto;
     min-block-size: 100%;
     margin-bottom: 5%;
@@ -85,12 +89,17 @@
 
 main[id],
 main [id] {
-    scroll-margin-block-start: 5rem;
+    scroll-margin-block-start: var(--site-navigation-block-clearance, 5rem);
 }
 
 @media screen and (max-width: 770px) {
+    .page__container {
+        --site-navigation-block-clearance: 6.75rem;
+    }
+
     .nav__container a {
-        /* Two text-sized rows fit the compact rail's established top reserve. */
+        /* Padding follows the active text size; intrinsic labels can occupy
+           as many as three complete rows in the supported reflow matrix. */
         padding-block: .45em;
     }
 }

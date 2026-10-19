@@ -543,7 +543,7 @@
         background: transparent;
         border: 0;
         box-shadow: none;
-        inset-block: max(4.5rem, calc(env(safe-area-inset-top) + 3.75rem)) max(.75rem, env(safe-area-inset-bottom));
+        inset-block: max(var(--site-navigation-block-clearance, 6.75rem), calc(env(safe-area-inset-top) + 3.75rem)) max(.75rem, env(safe-area-inset-bottom));
         inset-inline: env(safe-area-inset-left) auto;
         max-block-size: none;
         overflow: visible;

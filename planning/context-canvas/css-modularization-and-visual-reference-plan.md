@@ -146,7 +146,7 @@ The table retains historical cutoffs and binds each current observation to sourc
 | `expanded.css` after the career/regulatory component extraction on `51016ee` | 66,639 bytes · 3,118 lines |
 | `expanded.css` after the component and shared-reading extension | 66,154 bytes · 3,102 lines |
 | `expanded.css` after the About first-paint extraction, current | 46,854 bytes · 2,030 lines |
-| shared core and extracted About components, current | 24,009 bytes · 1,147 lines |
+| shared core and extracted About components, current | 24,476 bytes · 1,156 lines |
 | `styles/routes/about.css` | 36,568 bytes · 1,601 lines |
 | `styles/routes/about.css`, current | 41,722 bytes · 1,837 lines |
 | AI Systems family route, component, entry, and Hiring modules, current | 34,590 bytes · 1,208 lines |
@@ -157,7 +157,7 @@ The table retains historical cutoffs and binds each current observation to sourc
 | `expanded.css` baseline over gzip | 25,957 bytes |
 | `expanded.css` baseline over Brotli | 21,015 bytes |
 | `field-inspection.css`, current | 13,457 bytes · 431 lines |
-| `canvas-shell.css`, current | 12,729 bytes · 479 lines |
+| `canvas-shell.css`, current | 12,770 bytes · 479 lines |
 
 The transfer size is modest. The larger cost is architectural: most pages parse unrelated route-family rules, source order carries an implicit API, and collaborators search one long file whose name understates its responsibilities. File movement produces a first-paint gain only when HTML loads a small core and its relevant route bundle directly. A runtime `@import` chain retains the blocking dependency path and therefore sits outside the target.
 
