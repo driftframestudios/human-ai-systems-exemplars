@@ -88,7 +88,9 @@
       "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
-      "dependencies": []
+      "dependencies": [
+        ".agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md"
+      ]
     },
     {
       "name": "contextual-jargon-scan",
@@ -221,6 +223,14 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": []
+    },
+    {
+      "name": "relational-execution-review",
+      "sourcePath": ".agents/skills/relational-execution-review/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Provisional instruction-only contract under Issue #486. First-use review and independent challenge establish bounded receiving evidence; public packaging and broader effectiveness retain their separate review."
     },
     {
       "name": "repository-attribution-stewardship",

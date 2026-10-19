@@ -19,7 +19,7 @@
     },
     {
       "id": "browser",
-      "runtime": "Node >=22, repository Playwright, real Chromium, and suite-selected Playwright WebKit",
+      "runtime": "Node >=22, repository Playwright, and the Chromium, Firefox or WebKit engines named by the selected suite",
       "prerequisites": [
         "Root npm dependencies and the browser engines named by the selected suite installed.",
         "Existing harness prerequisites, source packages and explicit local execution authority."
@@ -1024,6 +1024,72 @@
       "scope": "Rendered catalog preview replacement plus sixteen Case Brief projections, thirty-two independent collapsed track disclosures, state-aware labels, responsive geometry, atomic fallback, forced-colors and print presentation, and HTTP/direct-file behavior in Chromium and Playwright WebKit.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-reading-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-reading-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Movement-header completeness, headings above column prose, and wide evidence between prose runs across seventeen reading consumers and six independent catalog controls in Chromium, Firefox and Playwright WebKit; actual container seams, alternate modes, long labels, enlarged text, scriptless reading, unaffected controls and controlled layout regressions. Native-browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:debrief-reading-layout-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.technology-fit-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/technology-fit-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Technology Fit Sampling Tableau header and comparison-toolbar layout in Chromium, Firefox and Playwright WebKit at narrow, desktop, wide and source-adjacent breakpoint dimensions; complete pill text and native controls, local SVG/table overflow, comparison state changes, enlarged text and controlled historical faults. Parent reading, native browser presentation and deployed delivery retain separate observations.",
+      "aliases": [
+        "test:technology-fit-layout-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.ai-systems-reading-layout",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-systems-reading-layout.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-six AI Systems and Shared Machinery readings plus the Debriefs parent across Chromium, Firefox and Playwright WebKit at narrow, desktop and wide dimensions; repaired reading owners, actual container seams, metadata and heading text containment, local table overflow, representative print, forced colors, enlarged text, scriptless reading and controlled faults with restoration. Embedded-document behavior, native browsers and deployed publication retain separate observations.",
+      "aliases": [
+        "test:ai-systems-reading-layout-browser"
       ]
     },
     {
@@ -2076,6 +2142,336 @@
       "owner": "context-canvas-project-surface/data/visualization-fidelity/research/README.md",
       "scope": "The research example's native table, linked SVG, source disclosure, keyboard scrolling and print reading at narrow and desktop widths; the separately owned instrument uses a local substitute.",
       "aliases": []
+    },
+    {
+      "id": "browser.context-canvas.ai-entry-cascade",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-entry-cascade.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Five AI Systems entry bridges across Chromium, Firefox and Playwright WebKit: accepted cyan palette, all border sides, inclusive 30rem shadow seam, print table width, forced colors, controlled faults and restoration. Native browsers and publication retain separate observations.",
+      "aliases": [
+        "test:ai-entry-cascade-browser"
+      ]
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-cascade.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Atlas reference and gallery cascade across Chromium, Firefox and Playwright WebKit: flat reference treatment, native control layout, hidden-state precedence, local table/SVG reading canvases, closed print disclosures, forced colors, static reading, and controlled faults with restoration. Native print and deployed delivery retain separate observations.",
+      "aliases": [
+        "test:atlas-cascade-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-reference-figures",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-reference-figures.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty-five dense reference-interface figures on five Debriefs, plus two opt-in bounded captions, across Chromium, Firefox and Playwright WebKit: current cascade winners and rail seams, scriptless 64rem boundary, landscape keyboard scrolling, portrait fit, centered caption geometry, painted-owner containment, visible text fragments, focus, print, forced colors, and controlled faults with restoration. Native applications and publication retain separate observations.",
+      "aliases": [
+        "test:debrief-reference-figures-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.fmi-reading-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/fmi-reading-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Sixteen canonical six-beat scans and FMI companion text distribution, explicit borders, variant palettes, method-link disclosure and production closure, enlarged text, print/forced colors, and restored distribution/border faults.",
+      "aliases": [
+        "test:fmi-reading-room-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.fmi-reading-rail",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/fmi-reading-rail.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "FMI native hash-selected destinations and viewport-current sections across three engines, compact label paint, keyboard/pointer/history and responsive states, scriptless anchors, restored state/clipping faults, and bounded initialization.",
+      "aliases": [
+        "test:fmi-reading-rail-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-prose-code-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-prose-code-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nine sustained prose/evidence companions and three code examples: content-derived columns or regions, code-line reachability, heading-first source order, disclosure states, enlarged text, alternate media, three browser engines, and restored layout faults.",
+      "aliases": [
+        "test:debrief-prose-code-room-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-evidence-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-evidence-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Seventeen compact evidence and operating notes across nine routes: frame and text geometry, painted rail clearance, source order and links, sampling disclosure, enlarged text, alternate media, positive ledger control, and restored frame faults.",
+      "aliases": [
+        "test:debrief-evidence-room-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-ordered-room",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-ordered-room.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nine visual-description and procedure panels: actual ordered-item geometry, marker and source sequence, retained media description relationships, compact menu note, responsive seams, enlarged text, alternate media, and restored ordering or distribution faults.",
+      "aliases": [
+        "test:debrief-ordered-room-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-companion-spacing",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-companion-spacing.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty-eight opted-in companion frames across fifteen routes: useful narrow reading width, restored-padding comparisons, native multi-digit markers, focused long links, fluid-padding seams, retained wide and print geometry, and three browser engines.",
+      "aliases": [
+        "test:debrief-companion-spacing-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.site-navigation",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/site-navigation.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Shared primary navigation: complete labels, intrinsic wrapping, flow height, touch and keyboard targets, sticky fragments, focus paint, text enlargement, print, and forced colors across the existing consumer population.",
+      "aliases": [
+        "test:site-navigation-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-card-measure",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-card-measure.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Nineteen catalog card titles: actual available width beside floated media, laptop line endings, responsive seams, enlarged text, filter and reading modes, alternate media, and restored-measure faults across three engines.",
+      "aliases": [
+        "test:debrief-card-measure-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-hero-colors",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-hero-colors.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three catalog headers for solid paint; three opt-in route palettes for contrast, viewport and text containment, link states, and alternate media; held FMI LIMS hero and restored gradient or foreground faults.",
+      "aliases": [
+        "test:debrief-hero-colors-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-link-cues",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-link-cues.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three Debriefs and their catalog: complete outgoing-link inventory, visible and accessible destination cues, preserved native tab choice, SVG sizing and first-load columns, Registry materialization, alternate media, and restored cue or initialization faults.",
+      "aliases": [
+        "test:debrief-link-cues-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-hero-wrapping",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-hero-wrapping.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-three catalog title and introductory text regions, including the independent NEG lead: narrow ordinary and enlarged containment, desktop and wide composition parity, print and forced colors, scriptless named controls, and restored oversized-word faults across three engines.",
+      "aliases": [
+        "test:debrief-hero-wrapping-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-caption-colors",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-caption-colors.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Caption foreground inheritance across dark fields and light insets; catalog inventory, link and alternate-media paint, bounded texture observation, and fault recovery.",
+      "aliases": [
+        "test:debrief-caption-colors-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2143,6 +2539,7 @@
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
+        "browser.context-canvas.debrief-reading-layout",
         "browser.context-canvas.visitor-image-delivery",
         "browser.context-canvas.video-receivers",
         "browser.context-canvas.who-to-believe-system-graph",
@@ -2163,7 +2560,24 @@
         "browser.table-reading",
         "worker.browser",
         "browser.context-canvas.prompt-side-figure",
-        "browser.visualization-fidelity-atlas.atlas-research.browser"
+        "browser.visualization-fidelity-atlas.atlas-research.browser",
+        "browser.context-canvas.ai-systems-reading-layout",
+        "browser.context-canvas.technology-fit-layout",
+        "browser.context-canvas.ai-entry-cascade",
+        "browser.visualization-fidelity-atlas.atlas-cascade.browser",
+        "browser.context-canvas.debrief-reference-figures",
+        "browser.context-canvas.fmi-reading-room",
+        "browser.context-canvas.fmi-reading-rail",
+        "browser.context-canvas.debrief-prose-code-room",
+        "browser.context-canvas.debrief-evidence-room",
+        "browser.context-canvas.debrief-ordered-room",
+        "browser.context-canvas.debrief-companion-spacing",
+        "browser.context-canvas.site-navigation",
+        "browser.context-canvas.debrief-card-measure",
+        "browser.context-canvas.debrief-hero-colors",
+        "browser.context-canvas.debrief-link-cues",
+        "browser.context-canvas.debrief-hero-wrapping",
+        "browser.context-canvas.debrief-caption-colors"
       ]
     },
     {
@@ -2176,7 +2590,20 @@
         "visual.context-canvas-visual-reference",
         "visual.requested-surface",
         "browser.context-canvas.prompt-side-figure",
-        "browser.visualization-fidelity-atlas.atlas-research.browser"
+        "browser.visualization-fidelity-atlas.atlas-research.browser",
+        "browser.context-canvas.debrief-reference-figures",
+        "browser.context-canvas.fmi-reading-room",
+        "browser.context-canvas.fmi-reading-rail",
+        "browser.context-canvas.debrief-prose-code-room",
+        "browser.context-canvas.debrief-evidence-room",
+        "browser.context-canvas.debrief-ordered-room",
+        "browser.context-canvas.debrief-companion-spacing",
+        "browser.context-canvas.site-navigation",
+        "browser.context-canvas.debrief-card-measure",
+        "browser.context-canvas.debrief-hero-colors",
+        "browser.context-canvas.debrief-link-cues",
+        "browser.context-canvas.debrief-hero-wrapping",
+        "browser.context-canvas.debrief-caption-colors"
       ]
     },
     {
@@ -2421,7 +2848,8 @@
     "browserSupport": [
       "tools/core-architecture-browser-helper.mjs",
       "tools/table-reading-observer.mjs",
-      "tools/table-focused-acceptance.mjs"
+      "tools/table-focused-acceptance.mjs",
+      "tests/context-canvas/reading-layout-helper.mjs"
     ],
     "evidenceSupport": [
       "tools/evidence-campaign.mjs",

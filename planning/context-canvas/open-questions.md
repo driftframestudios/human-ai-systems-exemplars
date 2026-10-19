@@ -2,9 +2,11 @@
 
 This is a continual planning surface. The original twenty-one questions remain intact so future collaborators can recover the terrain that produced the current responses. A working response narrows a question while leaving room for use, evidence, and later collaboration to change the answer. Questions surfaced by the changed situation begin at 22.
 
+The dated posture and working responses below preserve the route that led to the current system. The accepted production carrier, exact iframe delivery, tagged Pages projection, schema Worker, and media Worker now supersede their pilot-era delivery assumptions. Current release authority lives in the deployment runbooks, active receiver contracts, Git coordinates, and reviewed release receipts.
+
 These questions are kept to be heard. They act as collaboration handles; immediate resolution arises when a receiving activity needs it.
 
-## Current collaboration posture — 2026-08-31
+## Historical collaboration posture — 2026-08-31
 
 - `vik.guru` is the intended human-facing origin. `iframes.vik.guru` has successfully served the About surface from the mirrored repository structure through Cloudflare-backed DNS and the current server. The successful iframe used `allow-scripts` and `allow-popups`; further permissions should be earned by a prototype capability.
 - The GitHub repository and its `main` branch remain the portable, locally usable source. The server can mirror that directory structure so local, GitHub-hosted, and CDN-fronted routes retain a legible relationship.

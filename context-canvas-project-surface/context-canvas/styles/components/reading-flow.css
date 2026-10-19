@@ -1,0 +1,20 @@
+/* Context Canvas component: heading-first reading regions ----------------
+   Consumers: composed Debriefs and AI Systems readings using .reading-flow.
+   Owns: direct beat-heading break grouping and first-heading spacing.
+   Load order: core, expanded.css, optional debrief-reading.css, this component,
+   route bundles, then canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
+   Ordinary block headings and evidence delimit continuous .prose-flow runs;
+   core foundation owns their responsive columns. Routes retain palette,
+   measure, rhythm, and independent panel composition. */
+
+/* Headings and wide evidence keep their authored order as ordinary blocks.
+   Core foundation owns the responsive columns inside each prose run. */
+.reading-flow > .beat-title {
+    break-inside: avoid;
+    break-after: avoid;
+}
+
+.reading-flow > .beat-title:first-child {
+    margin-block-start: 0;
+}

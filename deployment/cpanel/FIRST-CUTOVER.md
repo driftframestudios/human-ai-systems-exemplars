@@ -1,22 +1,26 @@
 # cPanel pull-model enrollment and first cutover
 
 > **Current GoDaddy account route — 2026-09-24:** the provider-confirmed plan
-> keeps SSH and Terminal outside the account. This pull guide remains the
-> reviewed route for a future shell-capable host. The current first cutover
-> follows [shell-free cPanel artifact delivery](SHELL-FREE-ARTIFACT-DELIVERY.md).
-> [Issue #464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+> keeps SSH and Terminal outside the account. The first production cutover
+> completed through
+> [shell-free cPanel artifact delivery](SHELL-FREE-ARTIFACT-DELIVERY.md), which
+> remains the current receiver route. This pull guide remains available for a
+> future shell-capable host.
+> [Issue #540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
 > owns the current production source, carrier, tag, activation, and recovery
-> sequence. Issues #118, #250, #251, and #253 preserve the immutable v0.2
-> implementation and receipt as historical precedent.
+> sequence. Issue #464 preserves the immutable v0.3.0 release receipt; Issues
+> #118, #250, #251, and #253 preserve the immutable v0.2 implementation and
+> receipt as historical precedent.
 
 This guide is the human-operated route for connecting the private
 `driftframestudios/human-ai-systems-exemplars` repository to cPanel, selecting
-the reviewed `prod` carrier, and performing the first two-origin cutover.
+the reviewed `prod` carrier, and performing an initial or successor two-origin
+cutover.
 GitHub remains the working source of truth. cPanel receives reviewed,
 prebuilt carrier bytes and installs them into the primary and iframe document
 roots.
 
-Issue [#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+Issue [#540](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/540)
 owns the current activation coordinate, human-confirmed tag decision, and
 signed-out production result. Read its accepted-coordinate table immediately
 before acting. Historical release Issues remain evidence rather than current
@@ -66,7 +70,7 @@ simulating cPanel Git deployment with a public web script.
 ## 2. Freeze the release coordinate
 
 From a trusted working checkout, refresh the remote view and compare it with
-the exact coordinates in #464:
+the exact coordinates in #540:
 
 ```sh
 git fetch --prune --tags origin
@@ -83,7 +87,7 @@ routes come from the tracked binding at the accepted source coordinate. The
 private receiver stays on its authorized release workstation; the cPanel
 installer reads the already-built carrier.
 
-Complete #464's human-confirmed tag decision or explicitly reconfirm exact `R`
+Complete #540's human-confirmed tag decision or explicitly reconfirm exact `R`
 immediately before deployment. A moving `prod` branch requires a fresh
 coordinate check.
 
@@ -205,7 +209,7 @@ Open **cPanel → Files → Git Version Control → Create**:
 
 GitHub's default branch is `main`. After the clone completes, open **Manage →
 Basic Information**, select `prod` as the checked-out branch, and choose
-**Update**. Confirm that the displayed HEAD equals exact `R` from #464.
+**Update**. Confirm that the displayed HEAD equals exact `R` from #540.
 
 cPanel updates managed repositories with fast-forward-only behavior. A clean
 clone supports that model. Repository edits, generated files, commits, and
@@ -322,7 +326,7 @@ receiver are ready:
    managed tree is clean.
 4. Select **Deploy HEAD Commit** once.
 5. Read the task result and cPanel's **Last Deployment Information**.
-6. Preserve the normalized release SHA and completion state in #464. Raw
+6. Preserve the normalized release SHA and completion state in #540. Raw
    logs, account paths, and protected configuration stay with the host owner.
 
 The checked-in `.cpanel.yml` invokes only:
@@ -396,7 +400,7 @@ npm run verify:iframe-ancestry:live
 The all-route verifiers establish bytes and response policy. The focused
 ancestry verifier uses the fixed PODA carrier to require a live HTTP 200 with
 the exact parent policy, refusal from a loopback parent, and successful loading
-from its `https://vik.guru` parent. Then complete #464's primary manifest sweep,
+from its `https://vik.guru` parent. Then complete #540's primary manifest sweep,
 apex/`www`, robots, sitemap, cache, policy, intentional 404, and remaining
 parent-child viewport observations. A
 passing repository check establishes the carrier it exercised; the signed-out
@@ -467,7 +471,8 @@ guide and the existing publication runbook.
 Future source work continues through `main`. The accepted source moves through
 the reviewed promotion path to `prod` as `S`; a carrier-only pull request then
 forms `R`. cPanel performs **Update from Remote** followed by **Deploy HEAD
-Commit**, and #464's fitting receiver check establishes live standing.
+Commit**, and the active production Issue's receiver check establishes live
+standing.
 
 The managed clone remains a disposable receiver of GitHub state. Authored
 changes, carrier generation, tags, and review stay in the source repository;

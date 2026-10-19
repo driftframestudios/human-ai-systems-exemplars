@@ -21,10 +21,10 @@ const publishingCompany = {
 
 const placements = new Map([
   ["ai-systems.html", {
-    sectionId: "instrument-title",
+    sectionId: "solution-title",
     after: {
-      tag: "figure",
-      marker: "data-label=\"Four introductory instruments routed by cognitive move, use, changed ability, and Evidence Boundary\"",
+      tag: "article",
+      marker: "<p class=\"architecture-pair__label\">Opportunity</p>",
     },
     label: "Central operating principle",
     text: "A collaborative artifact earns its place when it changes a decision, preserves authority, or makes recovery easier.",

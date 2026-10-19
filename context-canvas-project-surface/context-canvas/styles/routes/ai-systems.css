@@ -1,5 +1,5 @@
 /* Context Canvas route bundle: AI Systems family -------------------------
-   Consumers: all sixteen top-level pages carrying .ai-systems-page.
+   Consumers: top-level AI Systems reading-family pages carrying .ai-systems-page.
    Owns: shared AI Systems tokens, scan/field/card/reading-path grammar,
    ten-instrument safeguards, multi-route tables and static equivalents, and
    the small Shared Machinery hub seam.
@@ -9,7 +9,8 @@
    and canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
    Entry-only labs and Goal Fidelity tables belong to ai-systems-entry.css;
-   Hiring density and late anchors belong to hiring-surfaces.css. Each route
+   Hiring density and late anchors belong to hiring-surfaces.css. Visualization
+   references and gallery states belong to visualization-fidelity-atlas.css. Each route
    retains authority over color, rhythm, density, layout, and new experiments. */
 
 /* Shared Machinery hub and instrument-family safeguards ----------------- */
@@ -108,6 +109,13 @@
     color: var(--blueprint-ink);
 }
 
+/* The operating principle participates as the fourth card in the Solution field. */
+.ai-systems-solution-field .blueprint-pop-cards > .debrief-quote--operating-principle {
+    margin: 0;
+    max-inline-size: none;
+    min-inline-size: 0;
+}
+
 .ai-systems-page .anchor_ai_systems,
 .ai-systems-page .anchor_ai_systems:visited {
     background: rgba(0, 0, 0, .6);
@@ -155,6 +163,33 @@
 
 .blueprint-pop-cards .architecture-pair__label {
     color: var(--blueprint-cobalt-deep);
+}
+
+/* Project-reference figures stay bounded by their architecture card at every width. */
+.architecture-example__figure {
+    margin: 1rem 0 0;
+    min-inline-size: 0;
+}
+
+.architecture-example__figure .story-visual__open {
+    display: block;
+}
+
+.architecture-example__figure img {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+}
+
+.architecture-example__figure--portrait img {
+    margin-inline: auto;
+    max-inline-size: 28rem;
+}
+
+.architecture-example__figure figcaption {
+    margin-block-start: .75rem;
 }
 
 .blueprint-pop-visual img {
@@ -378,59 +413,4 @@
     .ai-systems-page .blueprint-pop-cards article {
         box-shadow: none;
     }
-}
-/* Flat reference comparison. Consumers: the Atlas static reference and its
-   companion article. Loaded after the route's image/card defaults; the scoped
-   treatment adapts Cobalt Operating Field without changing other consumers. */
-.ai-systems-page .atlas-reference .story-visual,
-.ai-systems-page .atlas-reference .story-visual__open,
-.ai-systems-page .atlas-reference .story-visual img {
-  box-shadow: none;
-  filter: none;
-}
-
-.ai-systems-page .atlas-reference .story-visual img {
-  background: #fffcf5;
-}
-
-@media screen {
-  .atlas-reference .table-scroll table { min-width: 42rem; }
-}
-
-/* Coordinated Atlas gallery: native controls and locally scrollable SVGs.
-   Consumer: visualization-fidelity-atlas.html. Extends the existing flat
-   atlas-reference and table-scroll owners; other route figures stay unchanged. */
-.atlas-gallery .atlas-gallery-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  gap: 1rem;
-  margin-block: 1.5rem;
-  padding: 1rem;
-  border: 1px solid var(--blueprint-ink);
-  background: var(--blueprint-cream);
-}
-.atlas-gallery .atlas-gallery-controls label { display: grid; gap: .4rem; }
-.atlas-gallery .atlas-gallery-controls select {
-  min-inline-size: 0;
-  max-inline-size: 100%;
-  min-block-size: 2.75rem;
-  padding: .5rem;
-  color: var(--blueprint-ink);
-  background: #fffcf5;
-  border: 1px solid currentColor;
-  font: inherit;
-}
-.atlas-gallery .story-visual { inline-size: 100%; margin-inline: 0; transform: none; }
-.atlas-gallery .atlas-gallery-figure svg,
-.atlas-gallery .atlas-gallery-figure img { display: block; inline-size: 100%; block-size: auto; }
-.atlas-gallery [hidden] { display: none !important; }
-@media screen {
-  .atlas-gallery .atlas-gallery-figure svg,
-  .atlas-gallery .atlas-gallery-figure img { min-inline-size: 60rem; }
-}
-@media print {
-  .atlas-gallery .atlas-gallery-controls,
-  .atlas-gallery [data-gallery-live] { display: none !important; }
-  .atlas-gallery .atlas-gallery-figure { break-inside: avoid; }
-  .atlas-gallery details::details-content { content-visibility: visible; }
 }

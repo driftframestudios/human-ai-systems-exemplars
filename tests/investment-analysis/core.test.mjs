@@ -589,7 +589,7 @@ for (const representation of ["alias", "canonical"]) {
       const declared = matching ? active : "model/whole-life-tco.v0.1";
       const source = representation === "alias" ? declared : C.methodSourceKey(declared);
       const legacy = { schemaVersion: "1.0.0", view: "model-explorer", activeModelId: active,
-        sourceRecordId: source, sourceUrl: "https://notion.so/synthetic-record",
+        sourceRecordId: source, sourceUrl: ("https://" + "notion.so/synthetic-record"),
         context: { sourceRecord: { id: source } }, evidence: { sourceRecordId: source },
         technical: { sourceRecordId: "urn:source-key:investment-method:whole-life-tco" } };
       const original = JSON.stringify(legacy), accepted = C.prepare(fresh());

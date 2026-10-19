@@ -1,10 +1,10 @@
 /*
  * Contract owner: composed Debrief movement and evidence surfaces.
  *
- * Seven Debriefs opt into this layer after their foundation, component, route,
- * and shell sources. It composes solution, implementation, temporal,
- * and cross-system languages while each route retains its palette, rhythm,
- * density, source basis, and local composition.
+ * Composed Debriefs and focused reading exemplars opt into this layer after
+ * their foundation, component, route, and shell sources. It composes solution,
+ * implementation, temporal, and cross-system languages while each route
+ * retains its palette, rhythm, density, source basis, and local composition.
  *
  * Related visual contract:
  * ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md
@@ -253,8 +253,7 @@
 }
 
 .debrief-composition-page .debrief-track--implementation .debrief-track-label,
-.debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
-.debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote) {
+.debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote) {
   color: var(--debrief-paper);
 }
 
@@ -266,11 +265,6 @@
 
 .debrief-composition-page .debrief-track--implementation .architecture-track-title {
   border-block-end-color: var(--debrief-acid);
-}
-
-.debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(ul, ol),
-.debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(ul, ol) {
-  color: var(--debrief-paper);
 }
 
 .debrief-composition-page .debrief-track--implementation :is(
@@ -323,6 +317,7 @@
   break-inside: avoid;
   margin-block: clamp(2rem, 4vw, 3.25rem) 0;
   padding: clamp(1.15rem, 2.8vw, 1.75rem);
+  padding-inline: clamp(var(--debrief-companion-inline-floor, 1.15rem), 2.8vw, 1.75rem);
 }
 
 .debrief-composition-page .debrief-evidence-boundary > :first-child,
@@ -478,8 +473,7 @@
     color: CanvasText;
   }
 
-  .debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
-  .debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
   .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label) {
     color: CanvasText;
   }
@@ -509,8 +503,7 @@
     color: #000 !important;
   }
 
-  .debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
-  .debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(.prose-flow, .debrief-movement__header, .reading-flow) > :is(h2, h3, h4, p, ul, ol, blockquote),
   .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label),
   .debrief-composition-page .debrief-track--implementation .story-visual figcaption {
     color: #000 !important;

@@ -25,8 +25,7 @@
 }
 
 .genomic-viewer-hero {
-    background: var(--genomic-ink);
-    border-block-end: .6rem solid var(--genomic-rose);
+    --debrief-hero-border: var(--genomic-rose);
 }
 
 .genomic-viewer-page .debrief-at-glance {
@@ -236,6 +235,7 @@
 }
 
 .genomic-implementation-field {
+    --genomic-caption-ink: #dbe7f6;
     --canvas-link-color: var(--canvas-link-on-dark);
     --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
 }
@@ -252,7 +252,8 @@
     background: #0f2147;
 }
 
-.genomic-implementation-field .content > section > :is(h2, h3, h4, p, blockquote) {
+.genomic-implementation-field .content > section > :is(h2, h3, h4, p, blockquote),
+.genomic-implementation-field :is(.debrief-movement__header, .reading-flow, .reading-flow > .prose-flow) > :is(h2, h3, h4, p, blockquote) {
     color: var(--genomic-warm-white);
 }
 
@@ -278,7 +279,25 @@
 }
 
 .genomic-implementation-field .story-visual figcaption {
-    color: #dbe7f6;
+    color: var(--genomic-caption-ink);
+}
+
+/* Existing light islands restore the caption role at the painted boundary.
+   Their shared component owners already supply both light link roles. */
+.genomic-implementation-field :is(
+    .architecture-pair article,
+    .repeatability-cards article,
+    .implementation-companion,
+    .cobalt-operating-field__aside,
+    .cobalt-operating-field__table
+    ) {
+    --genomic-caption-ink: var(--canvas-ink);
+}
+
+/* Caption emphasis follows its resolved field color, including the black
+   print foreground. Table-cell and light-inset ink retain their own owners. */
+.genomic-implementation-field .story-visual .table-note :where(strong, .table-source, .table-caveat) {
+    color: inherit;
 }
 
 .genomic-implementation-field :is(.cobalt-operating-field-cards, .repeatability-cards) :is(h4, p) {
@@ -331,6 +350,7 @@
         .genomic-solution-field,
         .genomic-implementation-field
         ) {
+        --genomic-caption-ink: #000;
         --canvas-link-color: var(--canvas-link-on-light);
         --canvas-link-visited-color: var(--canvas-link-visited-on-light);
         background: #fff !important;
