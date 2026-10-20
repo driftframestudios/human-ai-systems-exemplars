@@ -79,6 +79,11 @@ test('component CSS carries bounded responsive and focus behavior', () => {
   assert.match(css, /@media print/u);
   assert.match(css, /background-position: right \.75rem center/u);
   assert.match(css, /\.panel--intent select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
+  assert.match(css, /\.panel--intent form \{[^}]*grid-template-columns: minmax\(0, 1fr\);/u);
+  assert.match(css, /\.panel--intent input, \.panel--intent select \{[^}]*min-width: 0;/u);
+  assert.match(css, /\.panel--intent select \{[^}]*overflow: hidden;/u);
+  assert.match(css, /\.price-row \{[^}]*flex-wrap: wrap;/u);
+  assert.match(css, /\.live-status, \.status-banner \{[^}]*overflow-wrap: anywhere;/u);
   assert.match(css, /\.panel--intent select \{ appearance: auto;[^}]*background-image: none;/u);
   assert.match(css, /\[data-component-js-state="enhanced"\] \[data-component-submit\]:disabled/u);
 });

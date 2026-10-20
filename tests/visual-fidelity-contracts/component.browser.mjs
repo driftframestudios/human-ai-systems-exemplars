@@ -42,7 +42,7 @@ async function openLab(t, engine, { width = 1280, javaScriptEnabled = true } = {
 
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: selection, disclosure, dialog focus, and candidate recovery retain continuity`, async t => {
-    const { page, telemetry } = await openLab(t, engine, { width: 390 });
+    const { page, telemetry } = await openLab(t, engine, { width: 320 });
     await assertBidirectionalSelectContract(
       page,
       ['#component-authorization'],
@@ -82,6 +82,29 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
 
     const width = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
     assert.ok(width.scroll <= width.client + 1, `${engine} keeps page-level overflow bounded: ${JSON.stringify(width)}`);
+
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    assertLabelsLeadControls(
+      await inspectLabelControlLayout(page, ['#component-email', '#component-quantity', '#component-authorization']),
+      `${engine} component lab at 320px and 200% text`,
+    );
+    const enlarged = await page.evaluate(() => {
+      const form = document.querySelector('.panel--intent form');
+      const formRect = form.getBoundingClientRect();
+      const controls = ['#component-email', '#component-quantity', '#component-authorization'].map(selector => {
+        const control = document.querySelector(selector);
+        const rect = control.getBoundingClientRect();
+        return { selector, left: rect.left, right: rect.right };
+      });
+      return {
+        root: { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth },
+        form: { scroll: form.scrollWidth, client: form.clientWidth, left: formRect.left, right: formRect.right },
+        controls,
+      };
+    });
+    assert.ok(enlarged.root.scroll <= enlarged.root.client + 1, `${engine} enlarged root remains bounded: ${JSON.stringify(enlarged)}`);
+    assert.ok(enlarged.form.scroll <= enlarged.form.client + 1, `${engine} enlarged form owns its inline geometry: ${JSON.stringify(enlarged)}`);
+    assert.ok(enlarged.controls.every(control => control.left >= enlarged.form.left - 1 && control.right <= enlarged.form.right + 1), `${engine} enlarged controls remain inside the form: ${JSON.stringify(enlarged)}`);
     assertTelemetry(telemetry);
   });
 }

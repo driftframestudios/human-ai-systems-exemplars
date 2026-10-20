@@ -78,6 +78,7 @@ for (const family of families) {
 
 test("Industrial Ink specimen exposes sixteen distinct matrix states", async () => {
   const specimen = await read("visual-fidelity-contracts/contracts/industrial-ink/specimen.html");
+  assert.match(specimen, /h1, h2, h3 \{ overflow-wrap: anywhere; \}/u);
   const cells = specimen.match(/data-matrix-cell/gmu) ?? [];
   const values = [...specimen.matchAll(/name="material-state" value="([^"]+)"/gmu)].map((match) => match[1]);
   assert.equal(cells.length, 16);
