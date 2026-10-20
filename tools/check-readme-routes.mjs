@@ -318,6 +318,34 @@ function markdownAnchors(source) {
   return anchors;
 }
 
+function markdownH2SectionState(source, title) {
+  const structuralLines = stripFencedAndInlineCode(source, { preserveInlineMarkup: true })
+    .split(/\r?\n/u);
+  const contentLines = source
+    .replace(/<!--[\s\S]*?-->/gu, (comment) => comment.replace(/[^\r\n]/gu, ""))
+    .split(/\r?\n/u);
+  let found = false;
+
+  for (let index = 0; index < structuralLines.length; index += 1) {
+    const normalized = markdownContainer(structuralLines[index]).content;
+    const heading = /^ {0,3}(#{1,6})\s+(.+?)\s*#*\s*$/u.exec(normalized);
+    if (heading) {
+      if (!found && heading[1] === "##" && heading[2].trim().toLocaleLowerCase("en-US") === title.toLocaleLowerCase("en-US")) {
+        found = true;
+        continue;
+      }
+      if (found && heading[1].length <= 2) return { found, hasContent: false };
+      if (found) continue;
+    }
+
+    if (found && /[\p{L}\p{N}]/u.test(contentLines[index] ?? "")) {
+      return { found, hasContent: true };
+    }
+  }
+
+  return { found, hasContent: false };
+}
+
 function htmlAnchors(source) {
   return new Set([...source.matchAll(/\b(?:id|name)=["']([^"']+)["']/gu)].map((match) => match[1]));
 }
@@ -601,6 +629,41 @@ export async function checkReadmeRoutes(root, { publicationSurfaces = defaultPub
     }
     if (!skillState.stat?.isFile()) continue;
     activeSkills.push(entry.name);
+
+    const overviewPath = join(skillDirectory, "README.md");
+    const overviewState = await inspectContained(overviewPath, canonicalRepositoryRoot);
+    if (overviewState.outside) {
+      findings.push({
+        kind: "outside-repository",
+        source: skillDirectory,
+        destination: "README.md",
+      });
+      continue;
+    }
+    if (!overviewState.stat?.isFile()) {
+      findings.push({
+        kind: "missing-skill-overview",
+        source: skillDirectory,
+        destination: "README.md",
+      });
+      continue;
+    }
+
+    const overview = await readFile(overviewPath, "utf8");
+    const concreteExample = markdownH2SectionState(overview, "Concrete example");
+    if (!concreteExample.found) {
+      findings.push({
+        kind: "missing-skill-concrete-example",
+        source: overviewPath,
+        destination: "## Concrete example",
+      });
+    } else if (!concreteExample.hasContent) {
+      findings.push({
+        kind: "empty-skill-concrete-example",
+        source: overviewPath,
+        destination: "## Concrete example",
+      });
+    }
   }
 
   const catalogState = skillsRootState.outside
@@ -627,14 +690,25 @@ export async function checkReadmeRoutes(root, { publicationSurfaces = defaultPub
     const catalog = await readFile(skillsCatalog, "utf8");
     const catalogLinks = markdownLinks(catalog);
     for (const skill of activeSkills) {
-      const route = `${skill}/SKILL.md`;
-      const occurrences = catalogLinks.filter((destination) => destination === route).length;
-      if (occurrences !== 1) {
+      const contractRoute = `${skill}/SKILL.md`;
+      const contractOccurrences = catalogLinks.filter((destination) => destination === contractRoute).length;
+      if (contractOccurrences !== 1) {
         findings.push({
           kind: "skill-catalog-membership",
           source: skillsCatalog,
-          destination: `${skill}/SKILL.md`,
-          occurrences,
+          destination: contractRoute,
+          occurrences: contractOccurrences,
+        });
+      }
+
+      const overviewRoute = `${skill}/README.md`;
+      const overviewOccurrences = catalogLinks.filter((destination) => destination === overviewRoute).length;
+      if (overviewOccurrences !== 1) {
+        findings.push({
+          kind: "skill-catalog-overview-membership",
+          source: skillsCatalog,
+          destination: overviewRoute,
+          occurrences: overviewOccurrences,
         });
       }
     }

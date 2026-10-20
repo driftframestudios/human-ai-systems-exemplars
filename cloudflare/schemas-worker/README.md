@@ -13,6 +13,12 @@ package remains a portable static adapter and supplies shared source templates
 and response policy. Production delivery of `schemas.vik.guru` flows through
 this Worker and the repository-owned GitHub Actions receiver.
 
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| A question about what the Worker currently serves | [Publication boundary](#publication-boundary) | Exact schema, skill, companion, and route membership |
+| A source change ready for verification | [Prepare and check](#prepare-and-check) | Local preparation, byte checks, and dry-run behavior |
+| A production or rollback decision | [Production owner and activation gate](#production-owner-and-activation-gate) | Human-held activation, receiver evidence, and recovery coordinates |
+
 ## Accepted peer-release coordinate
 
 The selected publication is bound to the reviewed Pages release:

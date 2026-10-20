@@ -23,11 +23,17 @@ confined to the carrier root, and exact agreement among the manifest, the
 Bash-readable index, and every carried file. This two-coordinate form avoids
 asking a commit to contain its own identifier.
 
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| An accepted production tag that needs a shell-free carrier | [Quick entry](#quick-entry-prepare-a-shell-free-cpanel-carrier) | A deterministic archive, external receipt, and verification route |
+| New source ready for promotion | [Accepted release sequence](#accepted-release-sequence) | Source and carrier coordinates, review boundaries, tags, and recovery |
+| A live receiver question | [Current exercised response posture](#current-exercised-response-posture) | The latest bounded production observation and its supersession relation |
+
 ## Quick entry: prepare a shell-free cPanel carrier
 
-Start with the receiving job and one approved production coordinate. An AI
-collaborator can prepare the local transfer envelope; the authorized host
-operator owns staging, root placement, and recovery.
+Start with the receiving job and one approved production coordinate. A
+tool-supported workflow can prepare the local transfer envelope; the authorized
+host operator owns staging, root placement, and recovery.
 
 | Receiving job | Source of payload bytes | Route |
 | --- | --- | --- |
@@ -129,8 +135,8 @@ About's stylesheet order from the tracked consumer rather than restating that
 order in configuration. Six contiguous enhanced owners become one file, the
 stylesheet inside `<noscript>` remains its own execution context, and the later
 `canvas-shell.css` link remains a separate file. Each generated filename carries
-its full SHA-256 digest beneath `assets/css/`; generated files never replace the
-readable repository owners.
+its full SHA-256 digest beneath `assets/css/`; the readable repository owners
+remain intact.
 
 Before CSSO runs, repository-local CSS references resolve from each original
 source location to the generated output location. Query strings and fragments
