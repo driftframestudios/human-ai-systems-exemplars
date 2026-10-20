@@ -187,6 +187,17 @@ and verification of the actually deployed source remain separate receiving
 observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
 holds the family extension and deployment-status boundary.
 
+Eight operating-field comparison grids across the five EHR readings, Spatial
+Capture, and Multilingual Clinical Vocabulary stand between continuous prose
+runs. Each comparison uses the ordinary reading width, preserving its authored
+article order and the existing one- or two-column grid. This HTML boundary
+keeps the grid outside prose fragmentation; shared card palette, borders, and
+shadows retain their existing CSS owners. `test:debrief-architecture-cards-browser`
+checks each card fragment, its text and paint, both responsive seams, alternate
+modes, and a fresh-document restoration of the former nested composition.
+[Issue #566](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/566)
+connects the collection observation with the native-browser receiving checks.
+
 Twelve direct-child orientation callouts participate in continuous prose as
 one atomic painted object. Their statement and footer remain together inside
 the same visible boundary as the reading changes between one and two columns.
@@ -203,6 +214,14 @@ multi-element passages retain continuous columns. Grammar's specimen section,
 PODA's second section title, and independently composed asides keep their
 authored position. These routes load the neutral component directly after
 `expanded.css`; their route bundles continue to own color, measure, and rhythm.
+
+The AI Systems family also receives a combined narrow-width and enlarged-text
+observation through `npm run test:ai-narrow-reading-browser`. Family-owned
+wrapping preserves the selected type scale while headings and navigation-card
+copy fit their available width. Deliberate code and table scroll regions retain
+their local owners. [Issue #567](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/567)
+records the source scope and the distinction between automated engine evidence
+and native-browser confirmation.
 
 `npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
 AI Systems / Shared Machinery primary and directly linked example readings,
