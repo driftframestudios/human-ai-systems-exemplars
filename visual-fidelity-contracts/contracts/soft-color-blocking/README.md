@@ -66,6 +66,11 @@ keep the operating sequence clear.
 The palette is closed for interface chrome. Authentic source imagery retains its
 documentary colors inside a labeled figure.
 
+The [design-token pipeline foundation](../../foundations/design-token-pipeline.md)
+shows how this primitive, semantic, and component-state vocabulary can enter a
+reviewed DTCG subset, generated artifacts, and a receiving UI while semantic
+owners retain meaning authority.
+
 | Role | Token | Value | Use |
 | --- | --- | --- | --- |
 | Blush field | `--scb-blush` | `#f8cbc7` | page field and orientation region |

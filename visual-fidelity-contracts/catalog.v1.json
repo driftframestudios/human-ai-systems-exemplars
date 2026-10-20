@@ -272,6 +272,16 @@
       ]
     },
     {
+      "id": "vfc-resource:design-token-pipeline-probes",
+      "title": "Design-token pipeline and programmatic-styling probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/design-token-pipelines/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence",
+      "tests": ["tests/visual-fidelity-contracts/design-token-pipeline.test.mjs"]
+    },
+    {
       "id": "vfc-resource:pattern-library",
       "title": "Visual Fidelity pattern library",
       "kind": "example_collection",

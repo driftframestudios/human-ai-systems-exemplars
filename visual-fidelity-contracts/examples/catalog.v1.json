@@ -96,7 +96,7 @@
             "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js",
             "visual-fidelity-contracts/labs/service-boundary-lab/styles.css"
           ],
-          "sha256": "6616f9e2729050d4b54e4fd0cc8e83347394f8668d816fb89999f9ea0b725b0a"
+          "sha256": "526de5686a2c41bd31dea794d4f269c37a839637330e25c789f8b308a4a78c29"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -425,7 +425,7 @@
             "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css"
           ],
-          "sha256": "1648f8d8daa9e4ac05cb7da8bfb099ecd80fb919967f32531f14b3fa81abfe32"
+          "sha256": "9380ba1bcd762b1bb64737e33b9f6fff28526b50734e32fe74d2043e00945b7b"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -597,7 +597,7 @@
             "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css"
           ],
-          "sha256": "a6a8a94408c560f1a0b501030a17486d62e78dc4835f2bd3af9883c39979222d"
+          "sha256": "57dca82b9d854a0a25e54e79b88ccf2f8ac042c6b285e44e49e76742b197835b"
         },
         "metadataInspection": {
           "standing": "passed",

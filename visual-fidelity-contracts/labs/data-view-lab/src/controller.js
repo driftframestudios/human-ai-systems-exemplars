@@ -82,8 +82,8 @@ export function enhanceDataViewLab(root, initialFixture, browser = globalThis) {
   }
 
   function bindListeners() {
-    listenerOwner = new browser.AbortController();
-    const options = { signal: listenerOwner.signal };
+    const candidateListenerOwner = new browser.AbortController();
+    const options = { signal: candidateListenerOwner.signal };
     try {
       root.addEventListener('change', (event) => {
         if (!ownsRoot()) return;
@@ -106,10 +106,10 @@ export function enhanceDataViewLab(root, initialFixture, browser = globalThis) {
         if (state.disclosure.standing !== standing) apply({ type: 'disclosure.changed', standing });
       }, options);
     } catch (error) {
-      listenerOwner.abort();
-      listenerOwner = null;
+      candidateListenerOwner.abort();
       throw error;
     }
+    return candidateListenerOwner;
   }
 
   api = Object.freeze({
@@ -117,12 +117,32 @@ export function enhanceDataViewLab(root, initialFixture, browser = globalThis) {
     snapshot: () => JSON.parse(JSON.stringify(state)),
     replaceOwner(ownerId) {
       if (state.ownership.standing === 'released') return { state, applied: false, reason: 'owner-released' };
-      const result = apply({ type: 'owner.replaced', ownerId });
+      const result = reduceDataViewState(state, { type: 'owner.replaced', ownerId });
       if (!result.applied) return result;
+
+      // Prove the successor listener set before changing the accepted owner.
+      // A partially acquired candidate cleans up through its own abort signal.
+      const candidateListenerOwner = bindListeners();
+      const incumbentState = state;
+      try {
+        state = result.state;
+        present();
+      } catch (error) {
+        state = incumbentState;
+        candidateListenerOwner.abort();
+        try {
+          present();
+        } catch (recoveryError) {
+          throw new AggregateError([error, recoveryError], 'Data-view owner replacement paused with recovery failures.');
+        }
+        throw error;
+      }
+
+      const incumbentListenerOwner = listenerOwner;
+      listenerOwner = candidateListenerOwner;
+      incumbentListenerOwner?.abort();
       requestController?.abort();
       requestController = null;
-      listenerOwner?.abort();
-      bindListeners();
       return result;
     },
     destroy(releaseMode) {
@@ -142,7 +162,7 @@ export function enhanceDataViewLab(root, initialFixture, browser = globalThis) {
   try {
     // The successor proves resource and live projection admission while the
     // incumbent remains the recovery owner. Promotion follows a complete paint.
-    bindListeners();
+    listenerOwner = bindListeners();
     present();
   } catch (error) {
     listenerOwner?.abort();

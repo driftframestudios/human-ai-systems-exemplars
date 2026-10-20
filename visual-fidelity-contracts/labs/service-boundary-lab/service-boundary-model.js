@@ -32,6 +32,9 @@ const COMMAND_FIELDS = Object.freeze([
   'idempotencyKey',
   'proposedStatus',
 ]);
+const ACCEPTED_RECORD_FIELDS = Object.freeze([
+  'id', 'revision', 'status', 'owner', 'nextAction', 'sourceId',
+]);
 
 const MAX_TEXT = 160;
 const OUTBOX_EVENT_PREFIX = 'event-';
@@ -43,6 +46,7 @@ const MAX_EVENT_SUMMARY = (MAX_TEXT * 2) + 96;
 const MAX_CACHE_KEY = (MAX_TEXT + String(MAX_TEXT).length + 1) * 8 + 24;
 const MAX_EVENTS = 80;
 const MAX_RECEIPTS = 24;
+export const MAX_PAGE_RECORDS = 1_000;
 const SAFE_TEXT = /^[\p{L}\p{N} .,:;_@/+\-()]+$/u;
 const SECRET_SHAPED_TEXT = Object.freeze([
   /\b(?:api[ _-]?key|password|secret|token)\s*:\s*\S+/iu,
@@ -85,6 +89,17 @@ const EVENT_FIELDS = Object.freeze({
 // JSON Schema maxLength counts Unicode code points. Use the same unit at the
 // runtime boundary so every public string receives the published limit.
 const codePointLength = value => Array.from(value).length;
+const SAFE_FIELD_NAME = /^[A-Za-z][A-Za-z0-9_-]{0,63}$/u;
+
+// Treat property names as untrusted input too. Symbols and unusually shaped
+// names receive stable public labels so an admission error remains typed and
+// avoids copying arbitrary source text into diagnostics.
+function publicFieldList(fields) {
+  return fields.map(field => {
+    if (typeof field === 'symbol') return '[symbol field]';
+    return SAFE_FIELD_NAME.test(field) ? field : '[bounded field]';
+  }).join(', ');
+}
 
 export class LabStateError extends Error {
   constructor(code, message, options = {}) {
@@ -97,14 +112,33 @@ export class LabStateError extends Error {
 }
 function ownRecord(value, label) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-    throw new LabStateError('INVALID_RECORD', `${label} must be an object.`, { stage: 'admission' });
+    throw new LabStateError('INVALID_RECORD', `${label} must be a plain record.`, { stage: 'admission' });
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new LabStateError(
+      'INVALID_RECORD',
+      `${label} must use the Object or null prototype reserved for admitted records.`,
+      { stage: 'admission' },
+    );
+  }
+}
+
+function requireOwnFields(value, fields, label) {
+  const missing = fields.filter(field => !Object.hasOwn(value, field));
+  if (missing.length > 0) {
+    throw new LabStateError(
+      'INVALID_RECORD_SHAPE',
+      `${label} requires own fields: ${missing.join(', ')}.`,
+      { stage: 'admission' },
+    );
   }
 }
 
 function rejectUnknownFields(value, fields, label) {
   const unknown = Reflect.ownKeys(value).filter(field => !fields.includes(field));
   if (unknown.length > 0) {
-    throw new LabStateError('INVALID_RECORD_SHAPE', `${label} contains unsupported fields: ${unknown.join(', ')}.`, { stage: 'admission' });
+    throw new LabStateError('INVALID_RECORD_SHAPE', `${label} contains unsupported fields: ${publicFieldList(unknown)}.`, { stage: 'admission' });
   }
 }
 
@@ -146,6 +180,7 @@ function safeInteger(value, label, minimum = 0, maximum = Number.MAX_SAFE_INTEGE
 
 function copyAccepted(value) {
   ownRecord(value, 'Accepted record');
+  requireOwnFields(value, ACCEPTED_RECORD_FIELDS, 'Accepted record');
   const record = {
     id: boundedText(value.id, 'Accepted record id'),
     revision: safeInteger(value.revision, 'Accepted revision', 1),
@@ -165,7 +200,7 @@ function copyDimensions(value = {}) {
   ownRecord(value, 'Dimensions');
   const unknown = Reflect.ownKeys(value).filter(name => !DIMENSION_FIELDS.includes(name));
   if (unknown.length > 0) {
-    throw new LabStateError('INVALID_DIMENSION_SHAPE', `Dimensions contain unsupported fields: ${unknown.join(', ')}.`, { stage: 'admission' });
+    throw new LabStateError('INVALID_DIMENSION_SHAPE', `Dimensions contain unsupported fields: ${publicFieldList(unknown)}.`, { stage: 'admission' });
   }
   const dimensions = Object.fromEntries(DIMENSION_FIELDS.map(name => [name, value[name] ?? defaults[name]]));
   for (const [name, accepted] of Object.entries(DIMENSION_VALUES)) {
@@ -309,7 +344,15 @@ function copyConnection(value = {}) {
   ownRecord(value, 'Connection');
   rejectUnknownFields(value, ['owner', 'released'], 'Connection');
   const owner = value.owner === null || value.owner === undefined ? null : boundedText(value.owner, 'Connection owner');
-  return Object.freeze({ owner, released: Boolean(value.released ?? true) });
+  const released = Object.hasOwn(value, 'released') ? value.released : true;
+  if (typeof released !== 'boolean') {
+    throw new LabStateError(
+      'INVALID_CONNECTION_RELEASED',
+      'Connection released must be a boolean when supplied; omit it to use the released default.',
+      { stage: 'admission' },
+    );
+  }
+  return Object.freeze({ owner, released });
 }
 
 function copyOutbox(value = {}) {
@@ -1195,10 +1238,22 @@ export function transition(state, event) {
 /**
  * Produce a snapshot-bounded page. Records created after the snapshot enter
  * the next read cycle, preserving active-walk order during concurrent inserts.
+ *
+ * The collection ceiling is checked in O(1) time before any record is read.
+ * For admitted input size n, record projection, validation, identity indexing,
+ * and filtering use O(n) time and space; ordering uses O(n log n) time. The
+ * ceiling keeps that caller-owned snapshot work bounded inside this lab.
  */
 export function paginateStable(records, { cursor = null, limit = 2, snapshotRevision = null }) {
   if (!Array.isArray(records)) {
     throw new LabStateError('INVALID_COLLECTION', 'Pagination requires an array of records.', { stage: 'admission' });
+  }
+  if (records.length > MAX_PAGE_RECORDS) {
+    throw new LabStateError(
+      'PAGE_RECORD_LIMIT',
+      `Snapshot pagination accepts at most ${MAX_PAGE_RECORDS} records; partition a larger source collection before admission.`,
+      { stage: 'admission' },
+    );
   }
   safeInteger(limit, 'Page limit', 1, 50);
   let activeSnapshot = snapshotRevision;
@@ -1217,6 +1272,15 @@ export function paginateStable(records, { cursor = null, limit = 2, snapshotRevi
     activeSnapshot = cursor.snapshotRevision;
   }
   safeInteger(activeSnapshot, 'Snapshot revision', 1);
+  for (let index = 0; index < records.length; index += 1) {
+    if (!Object.hasOwn(records, index)) {
+      throw new LabStateError(
+        'INVALID_PAGE_RECORD',
+        'Page records require one own record at every admitted array index.',
+        { stage: 'admission' },
+      );
+    }
+  }
   const admitted = records.map(record => {
     ownRecord(record, 'Page record');
     if (Reflect.ownKeys(record).length !== 4

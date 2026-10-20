@@ -66,6 +66,8 @@
     background-repeat: no-repeat;
     background-size: 1rem .625rem;
   }
+  /* The authored indicator follows the logical inline end in either writing direction. */
+  select:dir(rtl) { background-position: left .75rem center; }
   button { cursor: pointer; }
   button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible, svg[tabindex="0"]:focus-visible {
     outline: 4px solid #ff5f78;

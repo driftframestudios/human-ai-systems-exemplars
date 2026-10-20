@@ -74,6 +74,8 @@ test('data-view layout bounds dense views locally and retains narrow labels', ()
   assert.match(css, /@media \(forced-colors: active\)/u);
   assert.match(css, /@media print/u);
   assert.match(css, /background-position: right \.75rem center/u);
+  assert.match(css, /\.controls select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
+  assert.match(css, /padding-inline-end: 2\.75rem/u);
   assert.match(css, /\.controls select \{ appearance: auto;[^}]*background-image: none;/u);
 });
 

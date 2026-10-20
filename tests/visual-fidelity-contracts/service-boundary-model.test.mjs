@@ -4,6 +4,7 @@ import test from 'node:test';
 import Ajv2020 from 'ajv/dist/2020.js';
 import {
   LabStateError,
+  MAX_PAGE_RECORDS,
   cacheKeyFor,
   commandFingerprint,
   createInitialState,
@@ -153,6 +154,24 @@ test('schemas admit the closed command, checkpoint, receipt, projection, issue, 
 
   const surplus = { ...fixture, hidden: 'outside the closed contract' };
   assert.equal(validateCommand(surplus), false);
+});
+
+test('record admission reports symbol and unbounded keys through typed public diagnostics', () => {
+  const symbolField = Symbol('private source description');
+  const initial = createInitialState(accepted);
+  for (const candidate of [
+    { ...initial, dimensions: { ...initial.dimensions, [symbolField]: 'outside the closed contract' } },
+    { ...initial, connection: { ...initial.connection, ['field-name-that-is-far-beyond-the-public-diagnostic-boundary-and-carries-source-detail']: 'outside' } },
+  ]) {
+    assert.throws(
+      () => inspectableState(candidate),
+      error => error instanceof LabStateError
+        && ['INVALID_DIMENSION_SHAPE', 'INVALID_RECORD_SHAPE'].includes(error.code)
+        && error.stage === 'admission'
+        && !error.message.includes('private source description')
+        && !error.message.includes('carries-source-detail'),
+    );
+  }
 });
 
 test('commit, outbox publication, and replay create one durable effect', () => {
@@ -528,6 +547,65 @@ test('owned fields detach from callers and surplus getters remain unread', () =>
   assert.ok(Object.isFrozen(state.accepted));
 });
 
+test('accepted record admission requires a plain record with own authority and state fields', () => {
+  const inheritedAuthority = Object.assign(Object.create({
+    status: accepted.status,
+    owner: accepted.owner,
+  }), {
+    id: accepted.id,
+    revision: accepted.revision,
+    nextAction: accepted.nextAction,
+    sourceId: accepted.sourceId,
+  });
+  assert.throws(() => createInitialState(inheritedAuthority), error => {
+    assert.equal(error.code, 'INVALID_RECORD');
+    assert.equal(error.stage, 'admission');
+    return true;
+  });
+
+  const missingAuthority = { ...accepted };
+  delete missingAuthority.owner;
+  assert.throws(() => createInitialState(missingAuthority), error => {
+    assert.equal(error.code, 'INVALID_RECORD_SHAPE');
+    assert.equal(error.stage, 'admission');
+    return true;
+  });
+
+  const projected = createInitialState({ ...accepted, sourceNote: 'Retained by the source owner' });
+  assert.deepEqual(projected.accepted, accepted);
+  assert.equal(Object.hasOwn(projected.accepted, 'sourceNote'), false);
+});
+
+test('persisted connection admission preserves booleans and defaults only an omitted release field', () => {
+  const released = createInitialState(accepted);
+  const explicit = transition({ ...released, connection: { owner: null, released: true } }, {
+    type: 'SET_DISCLOSURE', value: 'expanded',
+  });
+  assert.equal(explicit.connection.released, true);
+
+  const omitted = transition({ ...released, connection: { owner: null } }, {
+    type: 'SET_DISCLOSURE', value: 'expanded',
+  });
+  assert.equal(omitted.connection.released, true);
+
+  const active = begin(authorize(createInitialState(accepted)));
+  const owned = transition({ ...active, connection: { owner: fixture.id, released: false } }, {
+    type: 'SET_DISCLOSURE', value: 'expanded',
+  });
+  assert.equal(owned.connection.released, false);
+
+  for (const supplied of ['false', 0, null, undefined]) {
+    assert.throws(() => transition({
+      ...released,
+      connection: { owner: null, released: supplied },
+    }, { type: 'SET_DISCLOSURE', value: 'expanded' }), error => {
+      assert.equal(error.code, 'INVALID_CONNECTION_RELEASED');
+      assert.equal(error.stage, 'admission');
+      return true;
+    });
+  }
+});
+
 test('authorization changes release active ownership and a second begin stays outside it', () => {
   let active = checkpoint(begin(authorize(createInitialState(accepted))));
   assert.throws(() => transition(active, { type: 'BEGIN', command: fixture }), error => {
@@ -850,6 +928,70 @@ test('snapshot pagination stays stable under concurrent inserts', () => {
     assert.equal(error.code, 'CURSOR_SNAPSHOT_MISMATCH');
     return true;
   });
+});
+
+test('snapshot pagination admits the declared ceiling and rejects the first record beyond it before record work', () => {
+  const atCeiling = Array.from({ length: MAX_PAGE_RECORDS }, (_, index) => ({
+    id: `record-${index}`,
+    sortKey: `sort-${String(index).padStart(4, '0')}`,
+    createdRevision: 7,
+    label: `Record ${index}`,
+  }));
+  const page = paginateStable(atCeiling, { snapshotRevision: 7, limit: 50 });
+  assert.equal(page.items.length, 50);
+  assert.equal(page.nextCursor.snapshotRevision, 7);
+
+  const unreadRecord = {
+    get id() { throw new Error('Record projection began before the collection ceiling check.'); },
+    sortKey: 'unread',
+    createdRevision: 7,
+    label: 'Unread record',
+  };
+  const firstOverCeiling = Array.from({ length: MAX_PAGE_RECORDS + 1 }, () => unreadRecord);
+  assert.throws(() => paginateStable(firstOverCeiling, {
+    snapshotRevision: 7,
+    limit: 50,
+  }), error => {
+    assert.equal(error.code, 'PAGE_RECORD_LIMIT');
+    assert.equal(error.stage, 'admission');
+    return true;
+  });
+});
+
+test('snapshot pagination rejects sparse and inherited array entries as typed admission failures', () => {
+  const sparse = [];
+  sparse.length = 1;
+  assert.throws(() => paginateStable(sparse, {
+    snapshotRevision: 7,
+    limit: 1,
+  }), error => {
+    assert.equal(error.code, 'INVALID_PAGE_RECORD');
+    assert.equal(error.stage, 'admission');
+    return true;
+  });
+
+  let inheritedEntryRead = false;
+  const inherited = [];
+  inherited.length = 1;
+  const inheritedPrototype = Object.create(Array.prototype);
+  Object.defineProperty(inheritedPrototype, '0', {
+    configurable: true,
+    get() {
+      inheritedEntryRead = true;
+      return { id: 'inherited', sortKey: '01', createdRevision: 7, label: 'Inherited' };
+    },
+  });
+  Object.setPrototypeOf(inherited, inheritedPrototype);
+
+  assert.throws(() => paginateStable(inherited, {
+    snapshotRevision: 7,
+    limit: 1,
+  }), error => {
+    assert.equal(error.code, 'INVALID_PAGE_RECORD');
+    assert.equal(error.stage, 'admission');
+    return true;
+  });
+  assert.equal(inheritedEntryRead, false, 'admission rejects inherited entries before property access');
 });
 
 test('authorization binds the allowed outcome to one exact command context', () => {

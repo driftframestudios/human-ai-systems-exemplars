@@ -53,6 +53,8 @@ h1 { max-width: 22ch; font-size: clamp(2rem, 5vw, 4.6rem); }
   background-repeat: no-repeat;
   background-size: 1rem .625rem;
 }
+/* The authored indicator follows the logical inline end in either writing direction. */
+.panel--intent select:dir(rtl) { background-position: left .75rem center; }
 [aria-invalid="true"] { outline: .25rem solid var(--rose); outline-offset: .1rem; }
 .issue-list { margin: 0; padding: .75rem .75rem .75rem 2rem; background: white; border-left: .5rem solid var(--rose); }
 .price-row { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; padding-top: .75rem; border-top: 1px solid var(--line); }

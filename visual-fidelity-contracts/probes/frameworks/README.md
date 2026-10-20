@@ -55,6 +55,15 @@ The platform adapters make each mechanism executable with a small implementation
 
 **Transfer receipt:** framework and router versions; rendering mode; cache policy; package and semantic version; server contract; client contract; navigation event; compatibility result.
 
+## Continue into programmatic styling
+
+When a framework package also receives generated design values, use the
+[design-token pipeline probes](../design-token-pipelines/README.md). That family
+separates React Stately state ownership, React Aria behavior, React Spectrum v3
+theming, Spectrum 2 styling, Figma adaptation, and Style Dictionary compilation
+while explicit token and publication authority remain alongside package
+compatibility.
+
 ## Evidence boundary
 
 The [browser and framework lifecycle lab](../../labs/lifecycle-lab/) supplies executable platform evidence, deterministic mechanism models, and two React 19.2.0 browser adapters. Those adapters establish the named StrictMode and external-store behavior through React DOM 19.2.0. Each additional framework result gains runtime standing when its named adapter runs these probes and records the corresponding receipt.

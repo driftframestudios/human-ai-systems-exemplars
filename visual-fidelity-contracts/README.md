@@ -18,6 +18,7 @@ executable, versioned contract material listed here.
 | A consequential chronology | [Cobalt Temporal Field](./cobalt-temporal-field.md) | Source-supported intervals, returns, recurrence, and changed meaning |
 | A source-led account followed by an implementation reading | [Dual-Track Debrief Composition](./dual-track-debrief-composition.md) | Selection guidance for paired, program, comparative, temporal, and single-field readings |
 | A question about state ownership, contrast, reflow, print, or publication | [Shared foundations](#use-the-shared-foundations) | Reusable implementation and verification rules |
+| A Figma, DTCG, compiler, or component-token integration | [Design-token pipeline](./foundations/design-token-pipeline.md) | Source authority, compatibility, generated artifacts, runtime adapters, recovery, and receipts |
 | A need to inspect state, failure, or recovery | [Run a lab](#run-a-lab) | Public interactive references and their technical probes |
 
 ### Compare the two art-direction systems
@@ -104,6 +105,7 @@ bounded instruction yield.
 | Components, data views, errors, and recovery | [Component and data probes](./probes/components-and-data/README.md) | [Visual Fidelity in Execution](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-in-execution-component-ownership-errors-recovery) |
 | Browser semantics, CSS, SVG, and JavaScript | [Browser probes](./probes/browser/README.md) | [Browser Semantics, CSS, SVG & JavaScript](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-browser-semantics-css-svg-javascript) |
 | Framework lifecycles and stateful composition | [Framework probes](./probes/frameworks/README.md) | [Framework Lifecycles & Stateful Composition](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-framework-lifecycles-stateful-composition) |
+| Figma, DTCG, Style Dictionary, and Adobe UI integration | [Design-token pipeline probes](./probes/design-token-pipelines/README.md) | [Layered Practitioner Probes](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence) |
 | Client middleware, backends for frontends, and service contracts | [Middleware probes](./probes/middleware/README.md) | [Client Middleware, BFFs & Service Contracts](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-client-middleware-bffs-service-contracts) |
 | Back-end runtimes, transactions, and framework boundaries | [Back-end probes](./probes/backend/README.md) | [Back-End Runtime, Transactions & Framework Boundaries](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-back-end-runtime-transactions-framework-boundaries) |
 | AI-supported calls, disclosure, and recovery | [Bounded-caller probes](./probes/ai/README.md) | [Visual Fidelity with AI](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-with-ai-bounded-callers-disclosure-recovery-probes) |
@@ -129,6 +131,7 @@ behavior authority for every preview.
 | [Semantic state and ownership](./foundations/semantic-state-and-ownership.md) | Which layer owns draft, accepted, failure, recovery, and authority state |
 | [Color, contrast, and forced colors](./foundations/color-contrast-and-forced-colors.md) | Which tested pairs and alternate-color behaviors carry meaning |
 | [Typography and reading measure](./foundations/typography-reading-measure.md) | How prose, labels, metadata, and dense instruments remain legible |
+| [Design-token pipelines and programmatic styling](./foundations/design-token-pipeline.md) | How authored visual meaning moves through Figma, DTCG, a compiler, generated artifacts, and receiving UI layers |
 | [Responsive overflow and print](./foundations/responsive-overflow-and-print.md) | How reflow, local two-dimensional inspection, text resize, and print stay coherent |
 | [SVG and media accessibility](./foundations/svg-and-media-accessibility.md) | How a visual receives a name, description, semantic companion, and full-size route |
 | [Evidence, authority, and publication](./foundations/evidence-authority-and-publication.md) | How source meaning, schema, publication, delivery, and receiving authority remain distinct |

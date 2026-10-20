@@ -16,6 +16,7 @@ import { runStagedArtifactTransaction } from '../../tools/build-visual-fidelity-
 const ROOT = new URL('../../visual-fidelity-contracts/examples/', import.meta.url);
 const catalog = JSON.parse(await readFile(new URL('catalog.v1.json', ROOT), 'utf8'));
 const gallery = await readFile(new URL('index.html', ROOT), 'utf8');
+const galleryStyles = await readFile(new URL('styles.css', ROOT), 'utf8');
 const definitions = JSON.parse(await readFile(new URL('source/example-definitions.v1.json', ROOT), 'utf8'));
 const visualFidelityCatalog = JSON.parse(
   await readFile(new URL('../../visual-fidelity-contracts/catalog.v1.json', import.meta.url), 'utf8')
@@ -246,6 +247,7 @@ test('responsive derivatives carry exact dimensions, checksums, and stripped des
 });
 
 test('gallery markup carries intrinsic dimensions, responsive candidates, captions, and semantic companions', () => {
+  assert.doesNotMatch(gallery, /[\t ]+$/gmu, 'Generated gallery lines end with content or a newline.');
   assert.equal((gallery.match(/<figure\b/gu) ?? []).length, 4);
   assert.equal((gallery.match(/srcset=/gu) ?? []).length, 4);
   assert.equal((gallery.match(/sizes=/gu) ?? []).length, 4);
@@ -257,6 +259,21 @@ test('gallery markup carries intrinsic dimensions, responsive candidates, captio
     assert.match(gallery, new RegExp(`width="${example.responsiveImage.intrinsicWidth}"`, 'u'));
     assert.match(gallery, new RegExp(`height="${example.responsiveImage.intrinsicHeight}"`, 'u'));
     assert.match(gallery, new RegExp(example.alt.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'u'));
+  }
+});
+
+test('gallery CSS resolves each custom-property reference through a local declaration or explicit fallback', () => {
+  const declarations = new Set(
+    [...galleryStyles.matchAll(/(--[a-z0-9-]+)\s*:/giu)].map(match => match[1])
+  );
+  const references = [...galleryStyles.matchAll(/var\(\s*(--[a-z0-9-]+)(\s*,[^)]*)?\)/giu)];
+
+  assert.ok(references.length > 0, 'The gallery declares custom-property consumers.');
+  for (const [, name, fallback] of references) {
+    assert.ok(
+      declarations.has(name) || Boolean(fallback),
+      `${name} resolves through a gallery declaration or an explicit fallback.`
+    );
   }
 });
 

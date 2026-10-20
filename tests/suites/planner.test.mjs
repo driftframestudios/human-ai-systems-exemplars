@@ -65,6 +65,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/visual-fidelity-contracts/data-view-browser.test.mjs',
   'tests/visual-fidelity-contracts/data-view-model.test.mjs',
   'tests/visual-fidelity-contracts/data-view-page.test.mjs',
+  'tests/visual-fidelity-contracts/design-token-pipeline.test.mjs',
   'tests/visual-fidelity-contracts/foundation-contracts.test.mjs',
   'tests/visual-fidelity-contracts/lifecycle-browser.test.mjs',
   'tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs',
@@ -216,6 +217,24 @@ test('Context Canvas source-suite membership follows every on-disk unit module',
     .map(path => `tests/context-canvas/${path}`)
     .sort();
   assert.deepEqual([...suite.members].sort(), onDisk);
+});
+
+test('Visual Fidelity source ownership stays identical in package and suite routes', async () => {
+  const [catalog, pkg] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+  ]);
+  const suite = catalog.suites.find(candidate => candidate.id === 'node.visual-fidelity-contracts');
+  const prefix = 'node --test ';
+  const command = pkg.scripts['test:visual-fidelity-contracts:source'];
+  assert.ok(command.startsWith(prefix), 'source alias retains a literal node --test boundary');
+  const aliasMembers = command.slice(prefix.length).split(' ');
+  assert.deepEqual(suite.members, aliasMembers);
+  assert.deepEqual(
+    catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:visual-fidelity-contracts:source'],
+    aliasMembers,
+  );
+  for (const member of suite.members) await access(resolve(ROOT, member));
 });
 
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {

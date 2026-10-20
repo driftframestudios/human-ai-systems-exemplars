@@ -71,6 +71,11 @@ The palette is closed for interface chrome. Authentic scientific or documentary
 imagery keeps its source colors, and a written legend explains the relationship
 between the image and the interface.
 
+The [design-token pipeline foundation](../../foundations/design-token-pipeline.md)
+shows how this primitive, semantic, and component-state vocabulary can enter a
+reviewed DTCG subset, generated artifacts, and a receiving UI while semantic
+owners retain meaning authority.
+
 | Role | Token | Value | Use |
 | --- | --- | --- | --- |
 | Deep ink | `--ii-ink-950` | `#0b0f12` | page and primary structural plane |

@@ -245,10 +245,11 @@ test("catalog has unique IDs and complete path closure", async () => {
   assert.equal(new Set(ids).size, ids.length, "contract IDs must be unique");
   assert.ok(ids.includes("vfc:industrial-ink"));
   assert.ok(ids.includes("vfc:soft-color-blocking"));
-  assert.equal(catalog.resources.length, 11, "catalog should inventory labs, probes, and the example collection");
+  assert.equal(catalog.resources.length, 12, "catalog should inventory labs, probes, and the example collection");
   assert.equal(new Set(resourceIds).size, resourceIds.length, "resource IDs must be unique");
   assert.ok(resourceIds.includes("vfc-resource:service-boundary-lab"));
   assert.ok(resourceIds.includes("vfc-resource:components-and-data-probes"));
+  assert.ok(resourceIds.includes("vfc-resource:design-token-pipeline-probes"));
   assert.ok(resourceIds.includes("vfc-resource:pattern-library"));
 
   for (const entry of catalog.contracts) {
@@ -372,7 +373,8 @@ test("foundation directory contains the declared decision routes", async () => {
     "typography-reading-measure.md",
     "responsive-overflow-and-print.md",
     "svg-and-media-accessibility.md",
-    "evidence-authority-and-publication.md"
+    "evidence-authority-and-publication.md",
+    "design-token-pipeline.md"
   ];
   for (const name of names) {
     const source = await readFile(path.join(familyRoot, "foundations", name), "utf8");
@@ -394,7 +396,8 @@ test("foundation and contract Markdown links resolve locally", async () => {
       "typography-reading-measure.md",
       "responsive-overflow-and-print.md",
       "svg-and-media-accessibility.md",
-      "evidence-authority-and-publication.md"
+      "evidence-authority-and-publication.md",
+      "design-token-pipeline.md"
     ].map((name) => `visual-fidelity-contracts/foundations/${name}`)
   ];
 

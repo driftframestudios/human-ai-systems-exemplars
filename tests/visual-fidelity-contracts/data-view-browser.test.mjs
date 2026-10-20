@@ -3,6 +3,7 @@ import { after, before, test } from 'node:test';
 import { chromium, expect, firefox, webkit } from '@playwright/test';
 
 import {
+  assertBidirectionalSelectContract,
   assertCustomSelectPresentation,
   assertForcedColorsSelectPresentation,
   assertLabelsLeadControls,
@@ -46,6 +47,11 @@ async function openLab(t, engine, { width = 1280, javaScriptEnabled = true } = {
 for (const engine of Object.keys(engines)) {
   test(`${engine}: accepted parity, disclosure, rejection, and narrow containment remain stable`, async t => {
     const { page, telemetry } = await openLab(t, engine, { width: 320 });
+    await assertBidirectionalSelectContract(
+      page,
+      ['#data-decision-need', '#data-authorization'],
+      `${engine} data-view lab selects and labels`,
+    );
     const machine = JSON.parse(await page.locator('[data-data-machine-twin]').textContent());
     const visible = await page.locator('[data-data-table] tbody tr').evaluateAll(rows => rows.map(row => ({
       id: row.dataset.recordId,
@@ -284,6 +290,57 @@ test('Chromium: data-view listener and live-render admission failures preserve o
   await expect(page.locator('[data-data-revision]')).toHaveText('cohort-r2-partial');
   assert.equal(partialRequests.length, 1, 'failed candidates release every listener before the incumbent handles the action');
   assert.equal(await page.evaluate(() => window.__dataViewLab.snapshot().ownership.standing), 'active');
+  assertTelemetry(telemetry);
+});
+
+test('Chromium: data-view owner replacement admits listeners before releasing the incumbent', async t => {
+  const { page, telemetry } = await openLab(t, 'chromium');
+  const partialRequests = [];
+  page.on('request', request => {
+    if (request.url().endsWith('/fixtures/valid/partial.json')) partialRequests.push(request.url());
+  });
+
+  const rejected = await page.evaluate(() => {
+    const root = document.querySelector('[data-data-view-lab]');
+    const disclosure = root.querySelector('[data-data-disclosure]');
+    const active = window.__dataViewLab;
+    const before = active.snapshot();
+    const nativeAddEventListener = disclosure.addEventListener;
+    let message = '';
+    disclosure.addEventListener = function addEventListenerWithInjectedFailure(type, listener, options) {
+      if (type === 'toggle') throw new Error('injected data-view owner-bind failure');
+      return nativeAddEventListener.call(this, type, listener, options);
+    };
+    try {
+      active.replaceOwner('data-view-owner-b');
+    } catch (error) {
+      message = error instanceof Error ? error.message : String(error);
+    } finally {
+      disclosure.addEventListener = nativeAddEventListener;
+    }
+    return { message, before: before.ownership, after: active.snapshot().ownership };
+  });
+
+  assert.equal(rejected.message, 'injected data-view owner-bind failure');
+  assert.deepEqual(rejected.after, rejected.before);
+  assert.deepEqual(rejected.after, {
+    standing: 'active', ownerId: 'data-view-lab-controller', generation: 1,
+  });
+
+  await page.locator('[data-fixture="partial"]').click();
+  await expect(page.locator('[data-data-revision]')).toHaveText('cohort-r2-partial');
+  assert.equal(partialRequests.length, 1, 'the rejected candidate releases every partially bound listener');
+
+  const accepted = await page.evaluate(() => {
+    const result = window.__dataViewLab.replaceOwner('data-view-owner-b');
+    return { applied: result.applied, ownership: window.__dataViewLab.snapshot().ownership };
+  });
+  assert.equal(accepted.applied, true);
+  assert.deepEqual(accepted.ownership, { standing: 'active', ownerId: 'data-view-owner-b', generation: 2 });
+
+  await page.locator('[data-fixture="partial"]').click();
+  await expect(page.locator('[data-data-revision]')).toHaveText('cohort-r2-partial');
+  assert.equal(partialRequests.length, 2, 'the accepted replacement leaves exactly one click listener active');
   assertTelemetry(telemetry);
 });
 

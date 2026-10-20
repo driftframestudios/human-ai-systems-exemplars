@@ -3,6 +3,7 @@ import { after, before, test } from 'node:test';
 import { chromium, expect, firefox, webkit } from '@playwright/test';
 
 import {
+  assertBidirectionalSelectContract,
   assertCustomSelectPresentation,
   assertForcedColorsSelectPresentation,
   assertLabelsLeadControls,
@@ -42,6 +43,11 @@ async function openLab(t, engine, { width = 1280, javaScriptEnabled = true } = {
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: selection, disclosure, dialog focus, and candidate recovery retain continuity`, async t => {
     const { page, telemetry } = await openLab(t, engine, { width: 390 });
+    await assertBidirectionalSelectContract(
+      page,
+      ['#component-authorization'],
+      `${engine} component lab select and label`,
+    );
 
     await expect(page.locator('[data-component-lab]')).toHaveAttribute('data-component-js-state', 'enhanced');
     const firstChoice = page.locator('input[value="field-notebook"]');
@@ -370,6 +376,63 @@ test('Chromium: component listener and live-render admission failures preserve o
   await expect(page.locator('[data-component-live]')).toContainText('Candidate revision rejected');
   assert.equal(invalidRequests.length, 1, 'failed candidates release every listener before the incumbent handles the action');
   assert.equal(await page.evaluate(() => window.__componentLab.snapshot().ownership.standing), 'active');
+  assertTelemetry(telemetry);
+});
+
+test('Chromium: component owner replacement admits listeners before releasing incumbent work', async t => {
+  const { page, telemetry } = await openLab(t, 'chromium');
+  const invalidRequests = [];
+  page.on('request', request => {
+    if (request.url().endsWith('/fixtures/invalid/missing-lineage.json')) invalidRequests.push(request.url());
+  });
+
+  await page.locator('#component-email').fill('owner-recovery@example.org');
+  await page.locator('#component-authorization').selectOption('allowed');
+  await page.locator('[data-component-submit]').click();
+  await expect(page.locator('[data-component-receipt-standing]')).toHaveText('provisional');
+
+  const rejected = await page.evaluate(() => {
+    const root = document.querySelector('[data-component-lab]');
+    const dialog = root.querySelector('[data-component-dialog]');
+    const active = window.__componentLab;
+    const before = active.snapshot();
+    const nativeAddEventListener = dialog.addEventListener;
+    let message = '';
+    dialog.addEventListener = function addEventListenerWithInjectedFailure(type, listener, options) {
+      if (type === 'close') throw new Error('injected component owner-bind failure');
+      return nativeAddEventListener.call(this, type, listener, options);
+    };
+    try {
+      active.replaceOwner('component-owner-b');
+    } catch (error) {
+      message = error instanceof Error ? error.message : String(error);
+    } finally {
+      dialog.addEventListener = nativeAddEventListener;
+    }
+    return { message, before: before.ownership, after: active.snapshot().ownership };
+  });
+
+  assert.equal(rejected.message, 'injected component owner-bind failure');
+  assert.deepEqual(rejected.after, rejected.before);
+  assert.deepEqual(rejected.after, {
+    standing: 'active', ownerId: 'component-lab-controller', generation: 1,
+  });
+  await expect(page.locator('[data-component-receipt-standing]')).toHaveText('accepted', { timeout: 3000 });
+
+  await page.locator('[data-component-action="load-invalid"]').click();
+  await expect(page.locator('[data-component-live]')).toContainText('Candidate revision rejected');
+  assert.equal(invalidRequests.length, 1, 'the rejected candidate releases every partially bound listener');
+
+  const accepted = await page.evaluate(() => {
+    const result = window.__componentLab.replaceOwner('component-owner-b');
+    return { applied: result.applied, ownership: window.__componentLab.snapshot().ownership };
+  });
+  assert.equal(accepted.applied, true);
+  assert.deepEqual(accepted.ownership, { standing: 'active', ownerId: 'component-owner-b', generation: 2 });
+
+  await page.locator('[data-component-action="load-invalid"]').click();
+  await expect(page.locator('[data-component-live]')).toContainText('Candidate revision rejected');
+  assert.equal(invalidRequests.length, 2, 'the accepted replacement leaves exactly one click listener active');
   assertTelemetry(telemetry);
 });
 

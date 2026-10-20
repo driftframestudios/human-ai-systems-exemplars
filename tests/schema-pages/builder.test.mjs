@@ -647,6 +647,7 @@ test("the private selection ledger classifies the complete repository skill fami
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
+    "design-token-pipeline-stewardship",
     "relational-execution-review",
     "repository-collaboration-cycle",
     "repository-handoff-readiness",

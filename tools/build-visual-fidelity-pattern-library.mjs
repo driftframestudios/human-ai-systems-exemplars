@@ -410,8 +410,7 @@ function renderExample(example) {
   const derivatives = example.responsiveImage.derivatives;
   const largest = derivatives.at(-1);
   const srcset = derivatives.map(item => `./${item.path} ${item.width}w`).join(', ');
-  return `
-      <article class="pattern" id="${escapeHtml(example.slug)}">
+  return `      <article class="pattern" id="${escapeHtml(example.slug)}">
         <header class="pattern__header">
           <p class="pattern__ordinal">0${example.ordinal} · ${escapeHtml(example.category.replaceAll('-', ' '))}</p>
           <h2>${escapeHtml(example.title)}</h2>
@@ -476,7 +475,7 @@ function renderGallery(catalog) {
     </nav>
   </header>
   <main id="patterns" class="patterns">
-    ${catalog.examples.map(renderExample).join('\n')}
+${catalog.examples.map(renderExample).join('\n')}
     <section class="evidence-boundary" aria-labelledby="evidence-title">
       <p class="eyebrow">Evidence and authority</p>
       <h2 id="evidence-title">The image orients; the source carries the behavior</h2>

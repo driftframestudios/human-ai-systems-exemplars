@@ -78,6 +78,7 @@ test('component CSS carries bounded responsive and focus behavior', () => {
   assert.match(css, /forced-colors: active/u);
   assert.match(css, /@media print/u);
   assert.match(css, /background-position: right \.75rem center/u);
+  assert.match(css, /\.panel--intent select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
   assert.match(css, /\.panel--intent select \{ appearance: auto;[^}]*background-image: none;/u);
   assert.match(css, /\[data-component-js-state="enhanced"\] \[data-component-submit\]:disabled/u);
 });

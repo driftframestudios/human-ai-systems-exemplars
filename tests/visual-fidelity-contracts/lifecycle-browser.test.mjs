@@ -5,6 +5,7 @@ import { after, before, test } from 'node:test';
 import { chromium, expect, firefox, webkit } from '@playwright/test';
 
 import {
+  assertBidirectionalSelectContract,
   assertCustomSelectPresentation,
   assertForcedColorsSelectPresentation,
   assertLabelsLeadControls,
@@ -58,6 +59,11 @@ async function runScenario(page, scenario, injectFault = false) {
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: cancellation, reset, focus return, and history restoration remain observable`, async t => {
     const { page, telemetry } = await openLab(t, engine);
+    await assertBidirectionalSelectContract(
+      page,
+      ['#lifecycle-scenario'],
+      `${engine} lifecycle lab select and label`,
+    );
     await runScenario(page, 'entity-replacement');
     await expect(page.locator('[data-accepted-identity]')).toHaveText('entity-b');
     await expect(page.locator('[data-accepted-revision]')).toHaveText('2');

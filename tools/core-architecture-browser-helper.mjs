@@ -150,11 +150,24 @@ export async function inspectSelectPresentation(page, selectSelectors) {
     if (!(select instanceof HTMLSelectElement)) return { selector, present: false };
     const style = getComputedStyle(select);
     const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const insetMatch = style.backgroundPositionX.match(/calc\(100%\s*-\s*([\d.]+)px\)/u)
-      ?? style.backgroundPositionX.match(/right\s+([\d.]+)px/u);
+    const direction = style.direction;
+    const inlineEndPatterns = direction === 'rtl'
+      ? [
+          /^([\d.]+)px$/u,
+          /left\s+([\d.]+)px/u,
+          /calc\(0%\s*\+\s*([\d.]+)px\)/u,
+        ]
+      : [
+          /calc\(100%\s*-\s*([\d.]+)px\)/u,
+          /right\s+([\d.]+)px/u,
+        ];
+    const insetMatch = inlineEndPatterns
+      .map(pattern => style.backgroundPositionX.match(pattern))
+      .find(Boolean);
     return {
       selector,
       present: true,
+      direction,
       appearance: style.appearance,
       backgroundImage: style.backgroundImage,
       backgroundPosition: style.backgroundPosition,
@@ -166,15 +179,45 @@ export async function inspectSelectPresentation(page, selectSelectors) {
   }), selectSelectors);
 }
 
-export function assertCustomSelectPresentation(observations, context) {
+export function assertCustomSelectPresentation(observations, context, { expectedDirection = 'ltr' } = {}) {
   for (const observation of observations) {
     const prefix = `${context} ${observation.selector}`;
     assert.equal(observation.present, true, `${prefix} select is present`);
+    assert.equal(observation.direction, expectedDirection, `${prefix} resolves the expected writing direction`);
     assert.equal(observation.appearance, 'none', `${prefix} uses the authored select indicator in ordinary colors`);
     assert.notEqual(observation.backgroundImage, 'none', `${prefix} exposes the authored select indicator`);
     assert.ok(observation.inlineEndInset !== null, `${prefix} exposes a measurable inline-end indicator inset (${observation.backgroundPositionX})`);
     assert.ok(Math.abs(observation.inlineEndInset - observation.expectedInlineEndInset) <= 0.01,
       `${prefix} resolves the indicator to 0.75rem at the current root size (${JSON.stringify(observation)})`);
+  }
+}
+
+export async function assertBidirectionalSelectContract(page, selectSelectors, context) {
+  const initialDirection = await page.evaluate(() => ({
+    attribute: document.documentElement.getAttribute('dir'),
+    computed: getComputedStyle(document.documentElement).direction,
+  }));
+  try {
+    for (const direction of ['ltr', 'rtl']) {
+      await page.evaluate(value => { document.documentElement.dir = value; }, direction);
+      assertCustomSelectPresentation(
+        await inspectSelectPresentation(page, selectSelectors),
+        `${context} in ${direction.toUpperCase()}`,
+        { expectedDirection: direction },
+      );
+      assertLabelsLeadControls(
+        await inspectLabelControlLayout(page, selectSelectors),
+        `${context} in ${direction.toUpperCase()}`,
+      );
+    }
+  } finally {
+    await page.evaluate(({ attribute, computed }) => {
+      if (attribute === null) document.documentElement.removeAttribute('dir');
+      else document.documentElement.dir = attribute;
+      if (getComputedStyle(document.documentElement).direction !== computed) {
+        throw new Error('The document writing direction did not return to its initial state');
+      }
+    }, initialDirection);
   }
 }
 

@@ -148,20 +148,23 @@ export function enhanceComponentLab(root, initialFixture, browser = globalThis) 
   };
 
   function bindListeners() {
-    listenerOwner = new browser.AbortController();
-    const options = { signal: listenerOwner.signal };
+    const candidateListenerOwner = new browser.AbortController();
+    const options = { signal: candidateListenerOwner.signal };
     try {
-      root.addEventListener('change', handleChange, options);
-      root.addEventListener('input', handleInput, options);
-      root.addEventListener('submit', handleSubmit, options);
-      root.addEventListener('click', handleClick, options);
-      root.querySelector('[data-component-disclosure]')?.addEventListener('toggle', handleDisclosure, options);
-      dialog?.addEventListener('close', returnDialogFocus, options);
+      // Fresh wrappers keep candidate registrations distinct from the active
+      // set. EventTarget otherwise de-duplicates the same callback identity,
+      // leaving the apparent candidate owned by the incumbent abort signal.
+      root.addEventListener('change', event => handleChange(event), options);
+      root.addEventListener('input', event => handleInput(event), options);
+      root.addEventListener('submit', event => handleSubmit(event), options);
+      root.addEventListener('click', event => handleClick(event), options);
+      root.querySelector('[data-component-disclosure]')?.addEventListener('toggle', event => handleDisclosure(event), options);
+      dialog?.addEventListener('close', () => returnDialogFocus(), options);
     } catch (error) {
-      listenerOwner.abort();
-      listenerOwner = null;
+      candidateListenerOwner.abort();
       throw error;
     }
+    return candidateListenerOwner;
   }
 
   api = Object.freeze({
@@ -172,14 +175,36 @@ export function enhanceComponentLab(root, initialFixture, browser = globalThis) 
       if (state.ownership.standing === 'released') return inactive('owner-released');
       if (typeof ownerId !== 'string' || ownerId.trim() === '') throw new TypeError('ownerId must be a non-empty string.');
       if (ownerId === state.ownership.ownerId) return inactive('owner-unchanged');
+      const replaced = reduceComponentState(state, { type: 'owner.replaced', ownerId });
+      if (!replaced.applied) return replaced;
+
+      // Acquire the complete successor listener set while the incumbent still
+      // owns state, async work, and recovery. Admission failure releases only
+      // the candidate resources and leaves the working owner untouched.
+      const candidateListenerOwner = bindListeners();
+      const incumbentState = state;
+      try {
+        state = replaced.state;
+        present();
+      } catch (error) {
+        state = incumbentState;
+        candidateListenerOwner.abort();
+        try {
+          present();
+        } catch (recoveryError) {
+          throw new AggregateError([error, recoveryError], 'Component owner replacement paused with recovery failures.');
+        }
+        throw error;
+      }
+
+      const incumbentListenerOwner = listenerOwner;
+      listenerOwner = candidateListenerOwner;
+      incumbentListenerOwner?.abort();
       requestController?.abort();
       requestController = null;
       if (reconcileTimer !== null) browser.clearTimeout(reconcileTimer);
       reconcileTimer = null;
       if (dialog?.open) dialog.close();
-      listenerOwner?.abort();
-      const replaced = apply({ type: 'owner.replaced', ownerId });
-      if (replaced.applied) bindListeners();
       return replaced;
     },
     destroy(releaseMode) {
@@ -203,7 +228,7 @@ export function enhanceComponentLab(root, initialFixture, browser = globalThis) 
     // Candidate resources and the live projection enter while the incumbent
     // still owns recovery. A failed listener or render admission therefore
     // rolls back without retiring the working controller.
-    bindListeners();
+    listenerOwner = bindListeners();
     present();
   } catch (error) {
     listenerOwner?.abort();

@@ -38,6 +38,7 @@ test('CSS names cascade, containment, overflow, and alternate-media owners', asy
     assert.ok(css.includes(token), `CSS retains ${token}`);
   }
   assert.match(css, /background-position: right \.75rem center/u);
+  assert.match(css, /select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
   assert.match(css, /select \{ appearance: auto;[^}]*background-image: none;/u);
 });
 
