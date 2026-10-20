@@ -1,7 +1,7 @@
 # uv-backed Python execution
 
 Run a repository's named Python check with the interpreter and dependencies it
-declares while leaving the host Python installation unchanged. This skill makes
+declares while the host Python installation remains intact. This skill makes
 the runtime coordinates and evidence boundary clear enough to interpret the
 result or resume from one owned environment problem.
 
@@ -22,15 +22,15 @@ validation runtime unclear.
 - `uv`, Python, and materially relevant dependency versions;
 - whether dependencies came from a checked lock or this run's resolution;
 - tracked source state before and after; and
-- one owned recovery action when the environment cannot complete the check.
+- one owned recovery action when an environment constraint stops the check.
 
 ## Concrete example
 
 | Part | Example |
 | --- | --- |
-| Situation | macOS supplies Python 3.9, the repository requires Python 3.12, carries a current `uv.lock`, and the default cache cannot receive writes. |
+| Situation | macOS supplies Python 3.9, the repository requires Python 3.12, carries a current `uv.lock`, and the default cache is read-only in this context. |
 | Use | Select Python 3.12 through `uv run --managed-python --locked`, place cache and managed interpreter state in authorized temporary locations, and run the named test. |
-| Observable return | The test result is bound to the uv-managed Python and checked lock, the system Python stays unchanged, source state is recorded, and the return names operating systems or optional groups left unobserved. |
+| Observable return | The test result is bound to the uv-managed Python and checked lock, all runtime changes stay inside the authorized uv-managed locations, source state is recorded, and the return names covered and pending operating systems or optional groups. |
 
 ## Command shapes
 
@@ -40,7 +40,7 @@ Use the repository's exact paths, Python version, and named check.
 uv run --project <repository-root> --locked --python <version> -- <named-check>
 ```
 
-For an authorized buildable project without a lock:
+For an authorized buildable project that resolves dependencies for this run:
 
 ```sh
 uv run --isolated --no-project \
@@ -51,7 +51,7 @@ uv run --isolated --no-project \
 ```
 
 The second route records the dependency versions resolved for that run. It
-establishes observed behavior rather than dependency-byte reproducibility.
+establishes observed behavior; dependency-byte reproducibility requires a checked lock.
 
 ## Working route
 

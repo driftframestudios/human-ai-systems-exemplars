@@ -13,9 +13,9 @@ Use this skill to decide what a working observation should change: create a skil
 
 **Situation:** A responsive-layout repair reveals that source-adjacent breakpoint checks consistently catch a fault that familiar device widths miss. The visual-verification skill already owns breakpoint evidence.
 
-**Use:** Route the observation to `iterate_now` rather than creating a second skill. Record the natural-use evidence, the instruction that should change, and the next materially similar use that can test the revision.
+**Use:** Route the observation through the existing skill’s `iterate_now` path. Record the natural-use evidence, the instruction that should change, and the next materially similar use that can test the revision.
 
-**Observable return:** The existing skill gains one focused breakpoint rule or example, the collaboration account names why the change matters, and the implementation work resumes. No parallel ledger or duplicate skill is created.
+**Observable return:** The existing skill gains one focused breakpoint rule or example, the collaboration account names why the change matters, and the implementation work resumes. The existing collaboration account remains the single ledger, and the existing skill remains the method owner.
 
 ## Supporting material
 
@@ -24,6 +24,6 @@ Use this skill to decide what a working observation should change: create a skil
 
 ## Boundaries
 
-Situated observations remain field evidence rather than collaborator profiles or universal effectiveness claims. Recurrence, polish, and self-authored examples can guide routing; they do not establish authority, permission, or effectiveness on their own.
+Scope each situated observation to its material use. Recurrence, polish, and self-authored examples can guide routing. Explicit grants establish authority and permission; evidence from materially similar receiving tasks supports claims of broader effectiveness.
 
 [Return to the repository skill collection](../README.md).

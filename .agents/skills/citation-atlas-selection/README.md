@@ -25,6 +25,6 @@ python3 .agents/skills/citation-atlas-selection/scripts/lookup.py \
 
 ## Helper behavior
 
-The dependency-free helper performs a bounded, read-only, restartable lookup. It emits deterministic JSON and distinct exit codes for arguments, file access, JSON decoding, Atlas contract failures, missing records, and ambiguous exact selectors. It does not retrieve URLs, execute Atlas content, or authorize publication.
+The dependency-free helper reads the supplied local Atlas through a bounded, read-only, restartable lookup. It emits deterministic JSON and distinct exit codes for arguments, file access, JSON decoding, Atlas contract failures, missing records, and ambiguous exact selectors. The helper returns local selection data only. URL retrieval, any execution requested by Atlas content, and publication each require separate authorization from the receiving workflow.
 
 [Return to the repository skill collection](../README.md).

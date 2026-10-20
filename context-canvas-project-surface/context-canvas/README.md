@@ -648,9 +648,9 @@ testable in tracked HTML before publication.
 
 The accepted Notion boundary is concise: the Enterprise Human-AI Practitioner
 Registry root and its descendants form the eligible source family for public
-bindings. A key name expresses that scope but cannot prove ancestry, content
-standing, or anonymous availability. The authorized resolver and human review
-establish those facts before a destination enters the tracked binding.
+bindings. The authorized resolver and human review establish ancestry, content
+standing, and anonymous availability before a destination enters the tracked
+binding. A key name then provides its stable public reference.
 
 From the repository root:
 
@@ -661,14 +661,14 @@ npm run build:public-references
 npm run test:public-references
 ```
 
+The tracked binding remains the Registry configuration authority while active.
 An explicit process-environment value can override the professional-profile
 entry, which keeps the same build seam available to a later delivery receiver.
-Registry settings in either external receiver are rejected while the tracked
-binding is active. The materializer never prints destination values. It
-requires exact source-discovered Registry-token coverage and rejects malformed,
-non-HTTPS, userinfo-bearing, credential-shaped, ambiguous, duplicate, or
-unsupported settings before replacing an accepted generation. Authored source
-continues to define the required key set; the reviewed binding supplies its
+The materializer keeps destination values out of logs and terminal output. It
+verifies exact source-discovered Registry-token coverage and accepts one
+unambiguous HTTPS destination per required key, with credential-free authority,
+path, and query components, before atomically replacing an accepted generation.
+Authored source defines the required key set; the reviewed binding supplies its
 Registry destinations.
 
 The ignored output is

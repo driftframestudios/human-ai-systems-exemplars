@@ -19,7 +19,7 @@ Use this skill to turn a settled, repeatable multi-phase procedure into a versio
 ## A useful runbook shape
 
 1. Desired receiving state and completion signal
-2. Entry conditions and safe non-entry behavior
+2. Entry conditions and their safe hold state
 3. Current owners and granted authority
 4. Ordered phases with checks and recovery
 5. Stop condition and handback

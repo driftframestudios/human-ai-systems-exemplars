@@ -30,7 +30,7 @@ meaning for a named reader or receiving tool.
 | --- | --- |
 | Situation | A responsive comparison table adds `data-label` values so a receiving tool can interpret one row away from its page, but the unit and period appear only in the caption. |
 | Use | Trace the row to its semantic owner, preserve native `th` relationships, and give the detached record its topic, identity, unit, period, and qualification. |
-| Observable return | Visual readers retain two-dimensional comparison, the extracted row remains locally meaningful, and a focused check proves the added context without rewriting literal values. |
+| Observable return | Visual readers retain two-dimensional comparison, the extracted row remains locally meaningful, and a focused check proves the added context while literal values retain source fidelity. |
 
 ## Working route
 
@@ -39,7 +39,7 @@ meaning for a named reader or receiving tool.
 3. Map representative cells to every applicable header and qualification.
 4. Reuse the smallest fitting table, scroll, and supplemental-context pattern.
 5. Observe the exact semantic, extraction, state, geometry, or interaction claim that changed.
-6. Return the table disposition, evidence boundary, and next owner for any unresolved meaning.
+6. Return the table disposition, evidence boundary, and next owner for any open meaning.
 
 ## Supporting material
 

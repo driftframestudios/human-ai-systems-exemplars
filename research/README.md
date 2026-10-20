@@ -63,8 +63,8 @@ flowchart LR
     class H rest;
 ```
 
-*Research branch decision route.* The diagram shows a working path; maturity
-and ranking stay outside its meaning. A pull request can revise the experiment, send a selected
+*Research branch decision route.* The diagram shows a working path; separate
+assessments carry maturity and ranking. A pull request can revise the experiment, send a selected
 change to accepted source, or preserve a useful resting result. Production
 promotion follows its own reviewed branch contract.
 
@@ -172,9 +172,10 @@ research/<study-slug>/
 ```
 
 The smallest fitting structure wins. A prose-only inquiry can remain a
-well-bounded document. A repeatable measurement should carry machine-readable
+well-bounded document. A repeatable measurement carries machine-readable
 parameters, focused assertions, and a normalized result that another
-collaborator can inspect without replaying every raw log.
+collaborator can inspect directly. The diagnostic owner retains any raw logs
+required for deeper investigation.
 
 ### Study README contract
 
@@ -191,26 +192,26 @@ Lead with the practical question and current standing. Then provide:
 9. **Results** — observed values, missingness, uncertainty, anomalies, and claim class.
 10. **Return** — selected change, resting record, follow-up question, Issue, pull request, and re-entry condition.
 
-## Evidence should change the next decision
+## Evidence informs the next decision
 
 A research observation earns its place when it can alter implementation,
-verification, adoption, rest, or a later experiment. Measurement volume alone
-does not establish usefulness.
+verification, adoption, rest, or a later experiment. The receiving decision
+gives the measurement its consequence; volume describes its scale.
 
 | Evidence form | What it can establish | Boundary to keep visible |
 | --- | --- | --- |
 | Source reading | Current declared behavior, relationships, and owned constraints | Runtime behavior needs its fitting execution or observation. |
-| Unit or contract check | The named cases satisfy their assertions at the tested revision | Uncalled paths and unasserted behavior remain unspecified. |
+| Unit or contract check | The named invoked cases satisfy their assertions at the tested revision | The claim covers the invoked, asserted cases; consequential adjacent paths receive their own observation. |
 | Browser observation | The named interaction, engine, viewport, and media condition behave as observed | Other engines, states, assistive routes, and network conditions need their own evidence when consequential. |
 | Simulation | Behavior of the declared model under its inputs and assumptions | A simulated result remains separate from production incidence and causal effect. |
 | Comparative run | Difference between named treatments under one protocol | Generalization depends on population, regime, measurement, and transfer conditions. |
-| Practitioner observation | A situated pattern worth testing or preserving | Experience supplies a hypothesis or local warrant rather than universal prevalence. |
+| Practitioner observation | A situated pattern worth testing or preserving | Experience supplies a scoped hypothesis or local warrant; representative sampling and a stated inference boundary support a prevalence claim. |
 | Accepted pull request | A reviewer selected the exact source change for its target branch | Merge acceptance and wider operational effectiveness remain distinct claims. |
 
 Lead with what a signal establishes. Place its transfer or coverage boundary
-beside it. Missing measurements remain visibly missing, and an indeterminate
-result remains a valid research outcome. This preserves the difference between
-uncertainty and failure while keeping both actionable.
+beside it. Record unmeasured quantities explicitly, and treat an indeterminate
+result as a valid research outcome. Separate uncertainty from failure and give
+each one a fitting next action.
 
 ### Keep units and comparison logic explicit
 
@@ -224,7 +225,7 @@ uncertainty and failure while keeping both actionable.
 - Label priors, thresholds, and scenario parameters as assumptions until data
   supports estimation.
 - Keep causal language with designs that can support a causal claim.
-- Report changed protocols as new epochs rather than silently joining regimes.
+- Start a new epoch when the protocol changes and retain the regimes as separate records.
 
 ## Reproduction creates a usable handoff
 
@@ -244,9 +245,9 @@ understand exactly why a replay remains bounded. A reproducible record names:
 
 Repository-managed dependencies and existing runners lead. New packages,
 harnesses, and workflows earn adoption by answering a material question or
-reducing demonstrated repetition. An independent implementation can provide a
-useful numerical or contract cross-check when it exercises the complete result
-shape rather than mirroring the same code path.
+reducing demonstrated repetition. An independent implementation earns
+cross-check value by exercising the complete result shape through a distinct
+code path.
 
 ### Protect interruption and partial progress
 
@@ -315,7 +316,7 @@ receiving pull request names:
 - the exact research coordinate;
 - selected files, claims, and behavior;
 - fitting checks and what they establish;
-- unresolved or intentionally resting material;
+- open or intentionally resting material;
 - retained history, license, and attribution;
 - recovery or rollback route; and
 - the next human, branch, service, or publication decision.

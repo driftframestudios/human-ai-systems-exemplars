@@ -14,7 +14,7 @@ enhancement adds interaction.
 
 Use this skill when a web visualization's delivery mode, responsive behavior,
 view state, table companion, or export affects interpretation. Use a lighter
-conversation figure or PDF visualization route when the web page is not the
+conversation figure or PDF visualization route when that format is the
 receiving artifact.
 
 ## What it returns

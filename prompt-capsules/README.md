@@ -2,8 +2,8 @@
 
 Prompt Capsules package accepted artifact state into readable, versioned
 Markdown. A person or tool-supported workflow can inspect that state, return a
-bounded result, and recover the authoritative source without treating the
-projection as the source itself.
+bounded result, and recover the authoritative source while that source retains
+semantic ownership.
 
 ## At a glance
 
@@ -52,8 +52,8 @@ The same sequence in text:
 4. A receiver inspects the capsule and completes the named return.
 5. The source owner accepts, revises, or recovers the result.
 
-The diagram expresses sequence and authority rather than quantity, rank, or
-maturity. The ordered text remains the semantic companion.
+The diagram expresses sequence and authority. Separate assessments carry
+quantity, rank, and maturity. The ordered text remains the semantic companion.
 
 ## What every capsule carries
 

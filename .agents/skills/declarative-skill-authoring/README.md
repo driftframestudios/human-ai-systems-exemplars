@@ -30,9 +30,10 @@ with less navigation.
 that preserves useful rationale while gated coordinates stay with an authorized
 resolver.
 
-**Use:** Confirm that standing guidance lacks this receiving result, write a
-third-person description, define the What/When/Boundaries/Result contract, add
-the rules that preserve semantic identity, and retain one boundary scenario.
+**Use:** Compare the requested receiving result with standing guidance. When
+the result is new, write a third-person description, define the
+What/When/Boundaries/Result contract, add the rules that preserve semantic
+identity, and retain one boundary scenario.
 
 **Observable return:** A fresh-context collaborator can recognize a fitting
 task, create the two coordinated records, identify completion, and route a
@@ -45,7 +46,7 @@ resolver mismatch back to its owner.
 3. Add rules and a sequence where order changes the result.
 4. Keep only examples that distinguish an important branch.
 5. Move uncommon detail into directly linked references.
-6. Inspect routing language, authority, completion, and the next outside signal.
+6. Inspect routing language, authority, completion, and the next signal from an adjacent owner.
 
 ## Authoring reference
 

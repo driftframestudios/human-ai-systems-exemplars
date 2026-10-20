@@ -15,7 +15,7 @@ Use this skill to connect an implementation concern to the full call-path cost, 
 
 **Use:** Express the visible work as `O(R × A + R × K log K + S)` under the stated lookup assumptions. Trace whether the caller-owned array can be observed elsewhere. Reuse an existing admission helper only when its contract and lifecycle fit; otherwise return an invocation-local owned result.
 
-**Observable return:** The review names the cost variables and caps, distinguishes allocation volume from peak live memory, identifies the state-aliasing boundary, and proposes a bounded repair. Focused parity and immutability tests establish accepted output and caller-state preservation without claiming wall-clock improvement.
+**Observable return:** The review names the cost variables and caps, distinguishes allocation volume from peak live memory, identifies the state-aliasing boundary, and proposes a bounded repair. Focused parity and immutability tests establish accepted output and caller-state preservation; wall-clock improvement remains a separately measured claim.
 
 ## Supporting material
 

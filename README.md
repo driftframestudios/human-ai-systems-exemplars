@@ -77,8 +77,8 @@ Additional direct entries keep other collaboration questions close:
   synthetic or open data.
 - [Talent Intake Retrieval Field](collaboration/hiring-surfaces-talent-agent-intake/index.html)
   traces fictional authored material through parse, normalize, project,
-  retrieve, correct, and named human review without converting retrievability
-  into a judgment about a person.
+  retrieve, correct, and named human review. Retrieval remains a discoverability
+  function; named human reviewers make judgments about a person.
 - [Supportive Change Writing Exemplars](supportive-change-writing-exemplars-bundle-v0.1/README.md)
   make desired-state language, evidence posture, tone goals, reader forms, and
   structural conditions reusable.
@@ -177,7 +177,8 @@ flowchart LR
 ```
 
 *Source, evidence, and acceptance relationship map.* Arrows show working
-handoffs and returns without implying quantity, rank, or maturity. Unheaded
+handoffs and returns; separate assessments carry quantity, rank, and maturity.
+Unheaded
 dotted lines keep schemas, planning, and re-entry records visible as context.
 Written labels and distinct shapes preserve every role, and the ordered source
 table in Layer 2 supplies the compact semantic companion.
@@ -301,8 +302,7 @@ setup, source-owned work, evidence, delivery, and an exact continuation.
 
 ### Prototype and iframe behavior has a proportional executable baseline
 
-The direct unit baseline protects dependency-free seams that can run without a
-browser:
+The direct unit baseline exercises dependency-free seams in Node:
 
 ```sh
 npm run test:prototype-units
@@ -349,8 +349,8 @@ human acceptance retain their own observations and decision holders.
 
 Skills are portable instructions for recurring work. They become active when
 their trigger fits; current user intent, repository evidence, and granted tool
-authority continue to govern every use. Direct reasoning remains the smallest
-adequate route when no skill is needed.
+authority continue to govern every use. Direct reasoning is the fitting route
+when one local action completes the job.
 
 | Working need | Catalog route |
 | --- | --- |
@@ -375,7 +375,7 @@ remain its authority.
 
 | Concern | Human collaborator | AI-supported work | Shared return |
 | --- | --- | --- | --- |
-| Purpose and consequence | Names the undertaking, affected people, acceptable consequence, and held decisions | Reconstructs current truth, identifies implications, and identifies missing evidence | One bounded question and its receiving artifact or decision |
+| Purpose and consequence | Names the undertaking, affected people, acceptable consequence, and held decisions | Reconstructs current truth, identifies implications, and identifies evidence gaps | One bounded question and its receiving artifact or decision |
 | Source and identity | Confirms semantic ownership where identity or lineage is consequential | Traces source, projection, delivery, and receiving use from repository evidence | A source-authority map or nearest-manifest update |
 | Change | Selects material direction and authorizes consequential outward actions | Implements within granted scope, preserves unrelated work, and keeps extension seams visible | Reviewable source change with a recovery path |
 | Evidence | Decides what confidence is sufficient for the receiving use | Runs the smallest fitting observation and states what it establishes | Repository-defined check or sanitized command shape, public revision when needed, normalized result, coverage boundary, and controlled repository-relative artifact reference when useful |
@@ -390,16 +390,15 @@ their explicit human cue. When evidence is incomplete, the useful result is a
 bounded statement plus the smallest next observation; this is more useful than
 a generalized readiness judgment.
 
-One public-safe receiving record is sufficient. Link an existing pull-request
-body, workflow summary, task response, or Issue comment instead of duplicating
-the result. Raw diagnostics, protected coordinates, inline values, browser
-state, and user-specific paths remain local or with an existing
-access-controlled owner.
+One public-safe receiving record is sufficient. Reuse or link an existing
+pull-request body, workflow summary, task response, or Issue comment. Raw
+diagnostics, protected coordinates, inline values, browser state, and
+user-specific paths remain local or with an existing access-controlled owner.
 
 ### Source, projection, and delivery retain separate ownership
 
-An iframe, snapshot, mirror, or hosted copy can expose an artifact without
-moving its semantic ownership. Promotion occurs when a receiver intentionally
+The source retains semantic ownership when an iframe, snapshot, mirror, or
+hosted copy presents the artifact. Promotion occurs when a receiver intentionally
 accepts stewardship.
 
 | Repository or delivery system | Source and present use | Receiving relation |
@@ -453,8 +452,8 @@ boundary.
 ### Stable semantic keys resolve approved public references
 
 Authored Context Canvas source uses stable `PUBLIC_URL_REGISTRY_*` semantic
-keys for public Registry destinations and carries no direct Notion
-page coordinate. The shared footer uses the separate
+keys for public Registry destinations. The authorized resolver retains exact
+Notion page coordinates. The shared footer uses the separate
 `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key. A tracked, reviewed
 [Registry binding](deployment/public-references/README.md) resolves every
 Registry key to one exact current Atlas identity and public route. Ignored
@@ -511,7 +510,8 @@ the named deployment step still govern carrier formation and live behavior.
 The repository pins Betterleaks 1.8.1 by checksum and proves each requested
 scan with a fresh, non-issued canary before interpreting the selected scope.
 The aggregate route covers the working tree, exact proposed index, locally
-available ref history, and named artifacts without persisting raw findings.
+available ref history, and named artifacts while raw findings remain transient
+and private.
 
 ```sh
 npm run security:secrets:install
@@ -522,7 +522,7 @@ npm run security:secrets
 Use `security:secrets:staged` for a proposed commit and
 `security:secrets:artifact -- path/inside/repository` for a named delivery.
 Embedded metadata, including image XMP fields, remains part of artifact review
-even when it does not resemble a credential. [The durable account](threadkeeping/repository-secret-material-boundary.md),
+as its own data-leakage scope. [The durable account](threadkeeping/repository-secret-material-boundary.md),
 the [`secret-boundary-inspection` skill](.agents/skills/secret-boundary-inspection/SKILL.md),
 and [`tests/README.md`](tests/README.md#secret-material-inspection) carry the full
 scope, coverage limits, private-finding route, and recovery order.

@@ -183,7 +183,7 @@ reference. Preserve meaningful differences in length and layering.
 | Repair | Stateful artifact behavior | Admitted candidates commit; incompatible candidates preserve accepted state. Conditional fault-phase reference. |
 | Refine | Cost and ownership | Separate admission, canonical projection and nested detachment; bound surplus-copy cost. |
 | Reconcile | CSS ownership | Use the visual-verification owner for proportionate evidence; CSS reduction follows the actual task. |
-| Retain | Other 25 skills in the audited cohort | Their core contracts showed no source-grounded need for a uniform rewrite. Natural-use evidence can reopen a specific layer. |
+| Retain | Other 25 skills in the audited cohort | In this audit, the other 25 core contracts continue to fit their named jobs. Natural-use evidence can reopen a specific layer. |
 | Draft | [Evidence-bearing test design](draft-skills/evidence-bearing-test-design/SKILL.md) | Independent oracle, plausible fault, observation layer and explicit evidence limit. |
 | Draft | [Test-suite composition](draft-skills/test-suite-composition/SKILL.md) | Owned membership, selection, prerequisites, runner coordination and trustworthy reruns. |
 

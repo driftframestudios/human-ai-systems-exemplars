@@ -26,7 +26,7 @@ with the receiving objects and decisions before selecting fields.
 
 | Part | Example |
 | --- | --- |
-| Situation | A schema is served from a canonical host and a GitHub-backed mirror, and a local consumer needs an exact version without network resolution. |
+| Situation | A schema is served from a canonical host and a GitHub-backed mirror, and a local consumer needs an offline exact version with complete dependency closure. |
 | Use | Preserve one `$id`, separate both retrieval routes from identity, carry dependency closure in the distribution, and validate a representative instance. |
 | Observable return | Both routes deliver the same identity-bearing version, the local consumer resolves every dependency, and the validation record names the exercised instance and validator posture. |
 

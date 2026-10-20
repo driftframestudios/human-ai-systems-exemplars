@@ -39,7 +39,7 @@ and which event invites activation review.
 2. Name the end state and explain why one Issue is current.
 3. Type only relationships supported by repository or human evidence.
 4. Separate blockers, held decisions, optional work, and parallel work.
-5. Reuse one sufficient transition return or write the smallest missing one.
+5. Reuse one sufficient transition return or write the smallest return the chain still needs.
 6. Release the chain when the next receiver accepts the handoff.
 
 The reusable Markdown capsule and complete coordination sequence live in

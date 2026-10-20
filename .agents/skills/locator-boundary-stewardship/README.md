@@ -15,7 +15,7 @@ gated coordinates remain recoverable through an authorized resolver.
 | Reader need | Fitting form |
 | --- | --- |
 | The same job has an accepted public destination | Accepted public receiver |
-| Exact gated lineage remains useful to an authorized collaborator | A stable public key whose value reveals no gated coordinate—an operator-blind source key—plus resolver mapping |
+| Exact gated lineage remains useful to an authorized collaborator | An operator-blind public source key plus an authorized resolver that retains the exact gated coordinate |
 | The useful meaning fits directly in the record | Local explanation |
 | The complete artifact lives in the same repository | Repository-relative source link |
 
@@ -26,8 +26,7 @@ rationale materially affects future re-entry.
 
 **Use:** Preserve the page’s public-safe title, role, contribution, evidence
 standing, and re-entry condition in the pull request. Assign a stable public
-key whose value reveals no gated coordinate—an operator-blind source key—and place the exact coordinate, access boundary, observation date,
-and mapping state in the authorized resolver.
+operator-blind public source key, and place the exact coordinate, access boundary, observation date, and mapping state in the authorized resolver.
 
 **Observable return:** A public collaborator can understand and continue the
 work from the pull request, while an authorized collaborator can recover the

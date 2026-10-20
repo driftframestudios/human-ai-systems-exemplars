@@ -29,7 +29,7 @@ A single wording correction or broken link can proceed through direct editing.
 | --- | --- |
 | Situation | A root README lists every directory before explaining what can be used today, while a nested README repeats an outdated release coordinate. |
 | Use | Identify reader jobs, trace the release claim to its manifest, lead with practical starting points, and link the nested README back to its owner. |
-| Observable return | A cold reader can reach the current example, source authority, verification command, and return path without treating duplicated prose as release truth. |
+| Observable return | A cold reader can reach the current example, source authority, verification command, and return path while the named manifest or source continues to govern release truth. |
 
 ## Working route
 

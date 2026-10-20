@@ -1,6 +1,6 @@
 # Agency and action writing
 
-Use this skill to make prose say who acted, what they did, what changed, and why the change mattered. It restores clear agency without forcing first-person voice or replacing precise technical language.
+Use this skill to make prose say who acted, what they did, what changed, and why the change mattered. It restores clear agency while preserving flexible voice and precise technical language.
 
 ## Start here
 
@@ -14,7 +14,7 @@ Use this skill to make prose say who acted, what they did, what changed, and why
 
 **Use:** Identify the actor, action, object, and consequence. Replace the self-reference with the supported action: “I redesigned the assignment workflow and eliminated the recurring assignment-error pattern.”
 
-**Observable return:** A reader can recover the author’s contribution and the changed condition in one pass. The revision adds no claim beyond the source.
+**Observable return:** A reader can recover the author’s contribution and the changed condition in one pass. The source supports every claim in the revision.
 
 ## Supporting material
 

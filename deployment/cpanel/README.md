@@ -135,8 +135,8 @@ About's stylesheet order from the tracked consumer rather than restating that
 order in configuration. Six contiguous enhanced owners become one file, the
 stylesheet inside `<noscript>` remains its own execution context, and the later
 `canvas-shell.css` link remains a separate file. Each generated filename carries
-its full SHA-256 digest beneath `assets/css/`; generated files never replace the
-readable repository owners.
+its full SHA-256 digest beneath `assets/css/`; the readable repository owners
+remain intact.
 
 Before CSSO runs, repository-local CSS references resolve from each original
 source location to the generated output location. Query strings and fragments

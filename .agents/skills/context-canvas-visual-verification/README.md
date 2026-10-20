@@ -15,7 +15,7 @@ Use this skill to select the smallest browser or source observation that can ans
 
 **Use:** Observe the route at `700px` and `701px`, then at one representative width inside the affected interval. Measure the outer figure, caption, visible paint, and any fixed neighbor. Confirm the intended state and reproduce the material fault through the observed baseline or a controlled perturbation before restoring source state.
 
-**Observable return:** The focused check identifies whether the threshold introduces overflow or a changed containing block, records the passing and failing widths, and states the browser and geometry limits. A repair can target the actual owner instead of relying on a desktop screenshot.
+**Observable return:** The focused check identifies whether the threshold introduces overflow or a changed containing block, records the passing and failing widths, and states the browser and geometry limits. Geometry evidence directs the repair to its actual owner; the desktop screenshot remains supporting context.
 
 ## Available observations
 
@@ -28,6 +28,6 @@ Use [behavior oracles and verification scope](references/behavior-oracles-and-ve
 
 ## Boundaries
 
-Screenshots support comparison rather than pixel approval. A resting capture leaves hover, focus, visited history, print, forced colors, and other interaction states open. Parent carriers and embedded documents retain separate source owners.
+Screenshots support visible-state comparison; acceptance criteria and receiver review establish approval. Hover, focus, visited history, print, forced colors, and other interaction states receive their own fitting observations. Parent carriers and embedded documents retain separate source owners.
 
 [Return to the repository skill collection](../README.md).

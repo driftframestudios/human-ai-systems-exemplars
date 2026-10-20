@@ -38,7 +38,7 @@ direct test owner.
 1. Map semantic owners, source state, schemas, transformations, twins, identity, and recovery.
 2. Choose the smallest journey that could reveal a material defect.
 3. Place each assertion with its owning unit, schema, browser family, or serialized boundary.
-4. Distinguish a source defect from an absent protection before retaining a new expectation.
+4. Distinguish a source defect from a protection gap before retaining a new expectation.
 5. Exercise accepted state, roundtrip, minimum state, twin agreement, and recovery that the journey crosses.
 6. Return the focused evidence and the boundary left for another owner.
 
@@ -47,4 +47,4 @@ direct test owner.
 - [Owned state and resource faults](references/owned-state-and-resource-faults.md) covers snapshots, partial acquisition, retry, publication failure, and lifecycle cleanup.
 
 The smallest meaningful test layer carries each check. A broader campaign
-enters only when the smaller owner cannot observe the consequential behavior.
+begins when the consequential behavior spans the smaller owner’s observation boundary.

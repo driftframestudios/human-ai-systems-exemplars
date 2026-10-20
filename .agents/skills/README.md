@@ -4,10 +4,10 @@ Choose a recurring method by the result the work needs. Each skill overview
 starts with its everyday use and a concrete example; its `SKILL.md` carries the
 authoritative contract, boundaries, operating sequence, and completion state.
 
-Current user intent, repository evidence, and granted tool authority govern
-every activation. A skill supplies a reusable method rather than additional
-permission or a separate source of truth. Direct reasoning remains the
-smallest adequate route when one local action completes the job.
+Current user intent and granted tool authority govern each action; repository
+evidence governs factual claims. A skill contributes a reusable method within
+those authorities. Direct reasoning is the fitting route when one local action
+completes the job.
 
 ## Start with the reader job
 
@@ -43,13 +43,13 @@ smallest adequate route when one local action completes the job.
 | [`context-canvas-css-ownership`](context-canvas-css-ownership/README.md) · [contract](context-canvas-css-ownership/SKILL.md) | Cascade, selector migration, route bundles, or style ownership changes | Legible CSS ownership and a focused comparison |
 | [`context-canvas-visual-verification`](context-canvas-visual-verification/README.md) · [contract](context-canvas-visual-verification/SKILL.md) | Layout, interaction, alternate media, or a visible regression needs evidence | Proportionate visual evidence with limits and a next receiver |
 | [`audit-anthropomorphic-cues`](audit-anthropomorphic-cues/README.md) · [contract](audit-anthropomorphic-cues/SKILL.md) | Bundled person-like cues may affect reliance, authority, or recovery | A cue-bundle ledger and proportionate disposition |
-| [`contextual-jargon-scan`](contextual-jargon-scan/README.md) · [contract](contextual-jargon-scan/SKILL.md) | Public or cross-team prose may rely on context its reader does not share | Targeted revisions, intentional retentions, and receiver-owned verification |
+| [`contextual-jargon-scan`](contextual-jargon-scan/README.md) · [contract](contextual-jargon-scan/SKILL.md) | Public or cross-team prose needs enough context to connect wording with its concrete object, action, relationship, or consequence | Targeted revisions, intentional retentions, and receiver-owned verification |
 
 ### Research, probe, and write
 
 | Skill | Use it when | Result |
 | --- | --- | --- |
-| [`practitioner-probe`](practitioner-probe/README.md) · [contract](practitioner-probe/SKILL.md) | A plausible concern lacks a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
+| [`practitioner-probe`](practitioner-probe/README.md) · [contract](practitioner-probe/SKILL.md) | A plausible concern needs a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
 | [`cost-and-ownership-analysis`](cost-and-ownership-analysis/README.md) · [contract](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
 | [`relational-execution-review`](relational-execution-review/README.md) · [contract](relational-execution-review/SKILL.md) | SQL, relationships, roles, objects, query plans, or restart claims need source-bound review | Localized findings and independently reviewed repairs with exact execution and recovery evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/README.md) · [contract](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and a direct account of what the evidence changes |
@@ -78,7 +78,8 @@ smallest adequate route when one local action completes the job.
 These four portable contracts share one data-and-evidence foundation. Select the
 destination owner for the receiving artifact; the foundation supplies meaning
 and form-selection decisions. The ladder describes progressive disclosure and
-composition, rather than a requirement to activate four skills in sequence.
+composition. Select each skill independently and combine the subset fitted to
+the receiving result.
 
 | Skill | Receiving result |
 | --- | --- |

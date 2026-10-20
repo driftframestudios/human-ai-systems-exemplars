@@ -41,5 +41,5 @@ mistaken for one another.
 5. Choose the smallest link, adaptation, snapshot, promotion, deferral, or steward question.
 6. Preserve a source pointer, accepted coordinate, relation, evidence limit, and re-entry condition.
 
-The map ends at a receiving decision rather than growing into a general
-inventory of every platform involved.
+The map ends at the receiving decision and includes the platforms relevant to
+that decision.

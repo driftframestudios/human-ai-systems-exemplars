@@ -13,7 +13,7 @@ Use this skill to make one live data question easier to inspect through a bounde
 
 **Situation:** A small population has the highest incident rate while a larger population has the highest incident count. A team asks where incidents are concentrated.
 
-**Use:** Plot rate and count as separate, aligned views; retain each denominator and exact value; label omitted records and the counting period. Describe the two questions rather than choosing one view as the winner.
+**Use:** Plot rate and count as separate, aligned views; retain each denominator and exact value; label the admitted population, counted subset, and counting period. Describe both questions and leave prioritization with the receiving decision owner.
 
 **Observable return:** The figure shows that relative frequency and total operational volume identify different populations. A nearby table preserves values and denominators, and the interpretation leaves prioritization to the receiving decision owner.
 
@@ -25,6 +25,6 @@ Use this skill to make one live data question easier to inspect through a bounde
 
 ## Boundaries
 
-A conversational figure supports exploration rather than publication by default. External upload, hosting, public release, and durable application integration retain their destination owners. Numeric marks come from admitted values and deterministic geometry.
+A conversational figure is an exploratory artifact by default. External upload, hosting, public release, and durable application integration retain their destination owners. Numeric marks come from admitted values and deterministic geometry.
 
 [Return to the repository skill collection](../README.md).

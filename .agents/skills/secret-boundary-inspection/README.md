@@ -2,8 +2,8 @@
 
 Prove the repository's secret detector with a fresh synthetic canary, then
 inspect the exact material preparing to cross a handoff or publication
-boundary. The resulting record stays useful without carrying candidate values
-or raw scanner output into durable collaboration records.
+boundary. The resulting record carries allowlisted scope and outcome while
+candidate values and raw scanner output stay with their private triage owner.
 
 ## Start here
 
@@ -36,7 +36,7 @@ or a named artifact.
 1. Bind the source coordinate, receiver, requested scopes, and repository-owned implementation.
 2. Verify the pinned engine and reviewed configuration.
 3. Generate a fresh provider-shaped canary and require detection plus redaction to succeed.
-4. Observe each named scope without allowing one clean result to stand in for another.
+4. Give each named scope its own observation; one clean result establishes only that scope.
 5. Keep raw findings private; return only the allowlisted scope and outcome.
 6. Ask the receiving repository to repeat the observation after assembly.
 

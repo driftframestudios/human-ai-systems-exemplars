@@ -2,7 +2,7 @@
 
 Write changes so the desired state, responsible actor, evidence, boundary, and
 next revisable action are easy to find. This skill supports warm, direct prose
-without flattening technical precision, human variation, or necessary safety
+while preserving technical precision, human variation, and necessary safety
 and compatibility constraints.
 
 ## Start here

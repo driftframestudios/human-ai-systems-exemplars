@@ -3,7 +3,8 @@
 Runbooks sequence existing owners through a known, multi-phase repository job.
 They let a cold or returning collaborator identify the entry condition, act
 within granted authority, verify the changed boundary, recover from a named
-failure, and hand the work back without reconstructing the procedure.
+failure through its recorded route, and hand the work back through an
+immediately resumable record.
 
 ## Choose the right instruction form
 
