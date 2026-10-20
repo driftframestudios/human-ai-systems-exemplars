@@ -16,7 +16,7 @@ async function source(name) {
 }
 
 test('source HTML keeps the complete reading available before enhancement', async () => {
-  const html = await source('index.html');
+  const [html, sandbox] = await Promise.all([source('index.html'), source('sandbox-specimen.html')]);
   assert.match(html, /<noscript>/u);
   assert.match(html, /data-static-reading/u);
   assert.equal((html.match(/<details/gu) || []).length, 8);
@@ -28,6 +28,8 @@ test('source HTML keeps the complete reading available before enhancement', asyn
   assert.match(html, /<label for="lifecycle-scenario">Lifecycle scenario<\/label>\s*<select id="lifecycle-scenario"/u);
   assert.match(html, /data-retirement-recovery role="status" hidden/u);
   assert.doesNotMatch(html, /<script(?! type="module" src="lifecycle-lab\.js")/u);
+  assert.match(sandbox, /default-src 'none'/u);
+  assert.doesNotMatch(sandbox, /<script\b/iu);
 });
 
 test('CSS names cascade, containment, overflow, and alternate-media owners', async () => {

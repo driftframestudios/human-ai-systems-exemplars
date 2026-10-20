@@ -57,12 +57,12 @@ async function runScenario(page, scenario, injectFault = false) {
 }
 
 function assertSandboxBoundaryTelemetry(telemetry) {
-  const sandboxRefusal = /^Blocked script execution in '.+\/sandbox-specimen\.html' because the document's frame is sandboxed and the 'allow-scripts' permission is not set\.$/u;
-  const policyEvidence = telemetry.consoleErrors.filter(message => sandboxRefusal.test(message));
+  const sandboxRefusal = `Blocked script execution in '${server.origin}${ROUTE}sandbox-specimen.html' because the document's frame is sandboxed and the 'allow-scripts' permission is not set.`;
+  const policyEvidence = telemetry.consoleErrors.filter(message => message === sandboxRefusal);
   assert.ok(policyEvidence.length <= 1, `The browser reported one bounded sandbox refusal at most: ${JSON.stringify(policyEvidence)}`);
   assertTelemetry({
     ...telemetry,
-    consoleErrors: telemetry.consoleErrors.filter(message => !sandboxRefusal.test(message)),
+    consoleErrors: telemetry.consoleErrors.filter(message => message !== sandboxRefusal),
   });
 }
 

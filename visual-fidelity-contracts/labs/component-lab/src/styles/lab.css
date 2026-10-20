@@ -44,7 +44,7 @@ h1 { max-width: 22ch; font-size: clamp(2rem, 5vw, 4.6rem); }
 .panel--intent form { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: .65rem; }
 .form-field { display: grid; min-width: 0; gap: .35rem; }
 .panel--intent label { font-weight: 800; }
-.panel--intent input, .panel--intent select { width: 100%; min-width: 0; max-width: 100%; min-height: 2.75rem; padding: .55rem .65rem; border: 2px solid var(--line); background: white; color: var(--ink); }
+.panel--intent input, .panel--intent select { width: 100%; min-width: 0; max-width: 100%; max-inline-size: 100%; min-height: 2.75rem; padding: .55rem .65rem; border: 2px solid var(--line); background: white; color: var(--ink); }
 .panel--intent select {
   appearance: none;
   padding-inline-end: 2.75rem;
