@@ -41,10 +41,11 @@ Checkboxes and radio controls retain the familiar label beside the control.
 
 The HTML `label` uses an exact `for` and `id` association. Instructions and
 errors connect through `aria-describedby` when they add information beyond the
-label. A custom select indicator keeps a `0.75rem` inset—12 pixels at the
-default root size—from the inline end, with enough control padding to keep
-values and the indicator separate. Forced-colors mode restores the
-browser-owned select indicator.
+label. A custom select indicator keeps a `12px` inset inside the 8–16 pixel
+visual-control range and mirrors that inset at the inline end in either reading
+direction. Pixel-capped indicator chrome leaves enlarged option text more of
+the available field width. Forced-colors mode restores the browser-owned select
+indicator.
 
 This default follows the [W3C WAI form-label guidance](https://www.w3.org/WAI/tutorials/forms/labels/),
 which describes the narrow-width and low-vision benefit of labels above fields,

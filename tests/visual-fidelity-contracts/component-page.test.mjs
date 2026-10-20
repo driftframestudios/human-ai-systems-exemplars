@@ -77,11 +77,13 @@ test('component CSS carries bounded responsive and focus behavior', () => {
   assert.match(css, /prefers-reduced-motion/u);
   assert.match(css, /forced-colors: active/u);
   assert.match(css, /@media print/u);
-  assert.match(css, /background-position: right \.75rem center/u);
-  assert.match(css, /\.panel--intent select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
+  assert.match(css, /padding-inline-end: 44px/u);
+  assert.match(css, /background-position: right 12px center/u);
+  assert.match(css, /\.panel--intent select:dir\(rtl\) \{ background-position: left 12px center; \}/u);
   assert.match(css, /\.panel--intent form \{[^}]*grid-template-columns: minmax\(0, 1fr\);/u);
-  assert.match(css, /\.panel--intent input, \.panel--intent select \{[^}]*min-width: 0;[^}]*max-width: 100%;[^}]*max-inline-size: 100%;/u);
-  assert.match(css, /\.panel--intent select \{[^}]*overflow: hidden;/u);
+  assert.match(css, /\.panel \{[^}]*padding: clamp\(16px, 3vw, 2rem\);/u);
+  assert.match(css, /\.panel--intent input, \.panel--intent select \{[^}]*min-width: 0;[^}]*min-inline-size: 0;[^}]*max-width: 100%;[^}]*max-inline-size: 100%;/u);
+  assert.match(css, /\.panel--intent select \{[^}]*display: block;[^}]*inline-size: 100%;[^}]*contain: inline-size;[^}]*overflow: hidden;[^}]*text-overflow: ellipsis;[^}]*white-space: nowrap;/u);
   assert.match(css, /\.price-row \{[^}]*flex-wrap: wrap;/u);
   assert.match(css, /\.live-status, \.status-banner \{[^}]*overflow-wrap: anywhere;/u);
   assert.match(css, /\.panel--intent select \{ appearance: auto;[^}]*background-image: none;/u);

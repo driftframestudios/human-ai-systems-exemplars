@@ -39,8 +39,9 @@ test('CSS names cascade, containment, overflow, and alternate-media owners', asy
     '@media (prefers-reduced-motion: no-preference)', '@media (prefers-color-scheme: dark)', 'overflow-x: auto']) {
     assert.ok(css.includes(token), `CSS retains ${token}`);
   }
-  assert.match(css, /background-position: right \.75rem center/u);
-  assert.match(css, /select:dir\(rtl\) \{ background-position: left \.75rem center; \}/u);
+  assert.match(css, /padding-inline-end: 44px/u);
+  assert.match(css, /background-position: right 12px center/u);
+  assert.match(css, /select:dir\(rtl\) \{ background-position: left 12px center; \}/u);
   assert.match(css, /select \{ appearance: auto;[^}]*background-image: none;/u);
 });
 

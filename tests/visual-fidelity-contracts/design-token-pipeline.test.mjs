@@ -222,11 +222,11 @@ test("form controls retain the researched scan path and caret inset", async () =
   ]);
 
   assert.match(typography, /persistent visible label directly\s+above the field by default/u);
-  assert.match(typography, /custom select indicator keeps a `0\.75rem` inset/u);
+  assert.match(typography, /custom select indicator keeps a `12px` inset/u);
 
   for (const css of [componentCss, dataCss, lifecycleCss]) {
-    assert.match(css, /background-position:\s*right \.75rem center/u);
-    assert.match(css, /:dir\(rtl\)\s*\{\s*background-position:\s*left \.75rem center/u);
+    assert.match(css, /background-position:\s*right 12px center/u);
+    assert.match(css, /:dir\(rtl\)\s*\{\s*background-position:\s*left 12px center/u);
     assert.match(css, /@media \(forced-colors: active\)/u);
     assert.match(css, /appearance:\s*auto/u);
     assert.match(css, /background-image:\s*none/u);

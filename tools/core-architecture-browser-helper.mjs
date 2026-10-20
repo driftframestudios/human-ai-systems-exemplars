@@ -173,7 +173,7 @@ export async function inspectSelectPresentation(page, selectSelectors) {
       backgroundPosition: style.backgroundPosition,
       backgroundPositionX: style.backgroundPositionX,
       inlineEndInset: insetMatch ? Number.parseFloat(insetMatch[1]) : null,
-      expectedInlineEndInset: rootFontSize * 0.75,
+      expectedInlineEndInset: 12,
       rootFontSize,
     };
   }), selectSelectors);
@@ -188,7 +188,7 @@ export function assertCustomSelectPresentation(observations, context, { expected
     assert.notEqual(observation.backgroundImage, 'none', `${prefix} exposes the authored select indicator`);
     assert.ok(observation.inlineEndInset !== null, `${prefix} exposes a measurable inline-end indicator inset (${observation.backgroundPositionX})`);
     assert.ok(Math.abs(observation.inlineEndInset - observation.expectedInlineEndInset) <= 0.01,
-      `${prefix} resolves the indicator to 0.75rem at the current root size (${JSON.stringify(observation)})`);
+      `${prefix} resolves the indicator to the 12-pixel visual-control inset (${JSON.stringify(observation)})`);
   }
 }
 

@@ -71,14 +71,19 @@ nav ul {
   list-style: none;
 }
 
+nav li { min-inline-size: 0; }
+
 nav a, .pattern__routes a {
   display: inline-flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   min-height: 2.75rem;
   align-items: center;
   padding: 0.55rem 0.8rem;
   border: 0.12rem solid currentColor;
   background: var(--paper);
   font-weight: 750;
+  overflow-wrap: anywhere;
 }
 
 .patterns { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-block-end: 4rem; }
@@ -128,8 +133,10 @@ th { width: 14rem; }
 
 @media (max-width: 30rem) {
   .hero, .patterns { width: min(100% - 1rem, 90rem); }
-  .hero { box-shadow: 0.35rem 0.35rem 0 var(--cobalt); }
-  .pattern { box-shadow: 0.25rem 0.25rem 0 var(--quiet); }
+  /* Pixel-capped decorative offsets preserve the shadow while enlarged root text stays inside the viewport. */
+  .hero { box-shadow: 4px 4px 0 var(--cobalt); }
+  .pattern { box-shadow: 4px 4px 0 var(--quiet); }
+  nav li { flex: 1 1 100%; }
   nav a, .pattern__routes a { width: 100%; }
   .table-region { max-width: 100%; }
 }

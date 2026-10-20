@@ -425,7 +425,7 @@
             "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css"
           ],
-          "sha256": "62ea07618fddf5688dae54881b7b5a9ac35147cc655dffb04b363e8bc699205a"
+          "sha256": "439dab918c0828bcf60fa9d1e2c6f3cdd6da788344b9d1744660698a53a2d8a2"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -597,7 +597,7 @@
             "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css"
           ],
-          "sha256": "8f22d76fe543405a97e5c168e297226b579477a9c6469e1218ef9dc6d7a2aabd"
+          "sha256": "a6a04f8eb5f9b42307b979d4d65c2c245a505acafd3f7cafc990cbd7f62967c7"
         },
         "metadataInspection": {
           "standing": "passed",

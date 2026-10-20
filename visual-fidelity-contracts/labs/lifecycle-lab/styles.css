@@ -60,14 +60,14 @@
   }
   select {
     appearance: none;
-    padding-inline-end: 2.75rem;
+    padding-inline-end: 44px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='m2 2 6 6 6-6' fill='none' stroke='%23102b5b' stroke-width='2.5'/%3E%3C/svg%3E");
-    background-position: right .75rem center;
+    background-position: right 12px center;
     background-repeat: no-repeat;
-    background-size: 1rem .625rem;
+    background-size: 16px 10px;
   }
   /* The authored indicator follows the logical inline end in either writing direction. */
-  select:dir(rtl) { background-position: left .75rem center; }
+  select:dir(rtl) { background-position: left 12px center; }
   button { cursor: pointer; }
   button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible, svg[tabindex="0"]:focus-visible {
     outline: 4px solid #ff5f78;

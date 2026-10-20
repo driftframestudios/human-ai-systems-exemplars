@@ -277,9 +277,12 @@ test('gallery CSS resolves each custom-property reference through a local declar
   }
   assert.match(
     galleryStyles,
-    /@media \(max-width: 30rem\) \{[\s\S]*?\.pattern \{ box-shadow: 0\.25rem 0\.25rem 0 var\(--quiet\); \}/u,
+    /@media \(max-width: 30rem\) \{[\s\S]*?\.hero \{ box-shadow: 4px 4px 0 var\(--cobalt\); \}[\s\S]*?\.pattern \{ box-shadow: 4px 4px 0 var\(--quiet\); \}/u,
     'The narrow gallery keeps each decorative card shadow inside its viewport allowance.'
   );
+  assert.match(galleryStyles, /nav li \{ min-inline-size: 0; \}/u);
+  assert.match(galleryStyles, /nav a, \.pattern__routes a \{[^}]*min-inline-size: 0;[^}]*max-inline-size: 100%;[^}]*overflow-wrap: anywhere;/u);
+  assert.match(galleryStyles, /@media \(max-width: 30rem\) \{[\s\S]*?nav li \{ flex: 1 1 100%; \}/u);
 });
 
 test('public pattern records stay locator-safe and carry desired-state language', async () => {
