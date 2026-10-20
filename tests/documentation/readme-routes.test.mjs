@@ -357,6 +357,35 @@ test("requires an overview with a concrete example for every active skill", asyn
     assert.deepEqual(result.findings.map(({ kind }) => kind), ["missing-skill-concrete-example"]);
   });
 
+  await t.test("empty concrete example", async () => {
+    const root = await fixture();
+    await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
+    await writeFile(join(root, "README.md"), "# Root\n");
+    await writeFile(join(root, ".agents", "skills", "README.md"), [
+      "# Skills",
+      "",
+      "[Overview](example/README.md)",
+      "[Contract](example/SKILL.md)",
+    ].join("\n"));
+    await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+    await writeFile(join(root, ".agents", "skills", "example", "README.md"), [
+      "# Example",
+      "",
+      "## Concrete example",
+      "",
+      "<!-- Example pending. -->",
+      "",
+      "### Placeholder",
+      "",
+      "## Boundaries",
+      "",
+      "A boundary.",
+    ].join("\n"));
+
+    const result = await checkReadmeRoutes(root);
+    assert.deepEqual(result.findings.map(({ kind }) => kind), ["empty-skill-concrete-example"]);
+  });
+
   await t.test("overview omitted from catalog", async () => {
     const root = await fixture();
     await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });

@@ -133,7 +133,7 @@ git fetch --prune origin
 git rev-parse origin/main origin/research
 git rev-list --left-right --count origin/main...origin/research
 git log --left-right --cherry-pick --oneline origin/main...origin/research
-git diff --stat origin/main...origin/research
+git diff --stat origin/main origin/research
 ```
 
 These commands establish branch coordinates, unique history, and the scale of
@@ -307,9 +307,10 @@ environment configuration remain with the owners named in
 | The result remains indeterminate | Keep the study at rest with the exact evidence or authority change that would reopen it. |
 | Several features form one target future | Assemble the epic receipt; a named human supplies the explicit outward merge cue. |
 
-Promotion selects the evidence and implementation that a receiver can use;
-research history keeps the complete experiment available. The receiving pull
-request names:
+Promotion selects the evidence and implementation that a receiver can use.
+Research history keeps the reviewed, repository-held experiment record
+available; raw or access-controlled evidence remains with its named owner. The
+receiving pull request names:
 
 - the exact research coordinate;
 - selected files, claims, and behavior;
