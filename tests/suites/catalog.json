@@ -2516,6 +2516,28 @@
       "aliases": [
         "test:ai-narrow-reading-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.card-rail-clearance",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/card-rail-clearance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty generated-rail routes preserve card text, borders and hard shadows within the available reading frame, separately from persistent rail markers and keyboard focus paint. Source-adjacent widths, enlarged text, narrow touch, alternate modes, authored-rail and scriptless controls, and restored paint intersection receive three-engine observations. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:card-rail-clearance-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2623,7 +2645,8 @@
         "browser.context-canvas.debrief-hero-wrapping",
         "browser.context-canvas.debrief-caption-colors",
         "browser.context-canvas.debrief-architecture-cards",
-        "browser.context-canvas.ai-narrow-reading"
+        "browser.context-canvas.ai-narrow-reading",
+        "browser.context-canvas.card-rail-clearance"
       ]
     },
     {

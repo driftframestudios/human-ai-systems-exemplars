@@ -286,15 +286,25 @@
 
 /*
  * The generated rail owns the right-side medium-viewport gutter. Shared wide
- * evidence fields stay centered while their border box and common .5rem hard
- * shadow end before the rail; tables and diagrams keep any two-dimensional
- * overflow inside that frame.
+ * evidence fields and card groups share the available frame. Their border,
+ * common .5rem hard shadow, and the rail's focus paint occupy separate intervals.
+ * Tables and diagrams keep any two-dimensional overflow inside that frame;
+ * card groups retain the smaller of their local owner and the available frame.
  */
 @media screen and (min-width: 56.0625rem) {
+    .page-section-rail + main {
+        --page-section-rail-frame-inline-size: calc(100vw - 10rem);
+    }
+
     .page-section-rail + main :is(.table-figure--wide, .story-visual) {
-        inline-size: min(calc(100vw - 10rem), var(--canvas-editorial-measure));
+        inline-size: min(var(--page-section-rail-frame-inline-size), var(--canvas-editorial-measure));
         margin-inline: 50%;
         transform: translateX(-50%);
+    }
+
+    .page-section-rail + main :is(.architecture-pair, .repeatability-cards, .implementation-moves) {
+        max-inline-size: min(100%, var(--page-section-rail-frame-inline-size));
+        margin-inline: auto;
     }
 }
 
