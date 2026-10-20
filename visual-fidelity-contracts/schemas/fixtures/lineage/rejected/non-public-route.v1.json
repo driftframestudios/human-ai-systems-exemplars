@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:public-lineage",
+  "reviewedOn": "2026-10-20",
+  "records": [
+    {
+      "contractId": "vfc:fixture-direction",
+      "repositorySource": "visual-fidelity-contracts/README.md",
+      "publicRoute": "https://example.invalid/visual-fidelity-contracts",
+      "relationship": "projects",
+      "semanticOwner": "Visual Fidelity maintainers",
+      "publicationOwner": "Named publication receiver",
+      "standing": "publication_candidate",
+      "privateLineagePolicy": "Public records carry public routes maintained by their repository owner.",
+      "reentry": ["A changed source or public route reopens lineage review."]
+    }
+  ]
+}

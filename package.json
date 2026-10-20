@@ -106,6 +106,11 @@
     "visual:open-lesson-field": "node tools/visual-check.mjs collaboration/open-lesson-field/index.html --name open-lesson-field --selector \"#scatterplot\" --http --wide --readable-control-selector \"#grade\" --readable-control-selector \"#learners\" --readable-control-selector \"#minutes\" --readable-control-selector \"#request-input\" --readable-control-selector \"#proxy\" --readable-control-selector \"#receiver\"",
     "visual:prompt-side-practice": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html --name prompt-side-practice --selector .prompt-comparison --http --wide --iframe-selector \"iframe[title='Open Lesson Field educator collaboration instrument']\" --iframe-content-selector \"#main\"",
     "visual:initiative-costing": "node tools/visual-check.mjs collaboration/initiative-costing-calculator/index.html --name initiative-costing-ledger --selector .workspace --readable-control-selector \".ledger-row input[data-field='name']\"",
+    "build:visual-fidelity-pattern-library": "node tools/build-visual-fidelity-pattern-library.mjs",
+    "check:visual-fidelity-pattern-library": "node tools/build-visual-fidelity-pattern-library.mjs --check",
+    "test:visual-fidelity-contracts:source": "node --test tests/visual-fidelity-contracts/component-model.test.mjs tests/visual-fidelity-contracts/component-page.test.mjs tests/visual-fidelity-contracts/component-probes.test.mjs tests/visual-fidelity-contracts/contract-art-directions.test.mjs tests/visual-fidelity-contracts/data-view-model.test.mjs tests/visual-fidelity-contracts/data-view-page.test.mjs tests/visual-fidelity-contracts/foundation-contracts.test.mjs tests/visual-fidelity-contracts/lifecycle-model.test.mjs tests/visual-fidelity-contracts/lifecycle-source.test.mjs tests/visual-fidelity-contracts/pattern-library.test.mjs tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
+    "test:visual-fidelity-contracts:browser": "node --test tests/visual-fidelity-contracts/component.browser.mjs tests/visual-fidelity-contracts/contract-art-directions.browser.mjs tests/visual-fidelity-contracts/data-view-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs tests/visual-fidelity-contracts/pattern-library.browser.mjs tests/visual-fidelity-contracts/service-boundary.browser.mjs",
+    "test:visual-fidelity-contracts": "npm run test:visual-fidelity-contracts:source && npm run check:visual-fidelity-pattern-library && npm run test:visual-fidelity-contracts:browser",
     "visual:rail-labels": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/conditioning-field.html --name context-canvas-rail-labels --selector .page-section-rail --rail-label-check",
     "visual:debriefs-rail": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/debriefs.html --name debriefs-source-rail --selector .page-section-rail --rail-label-check --http",
     "visual:strategy-canvas-canonical": "node tools/visual-check.mjs core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html --name strategy-canvas-canonical --selector \"#strategy-canvas-chart\" --http --wide",
@@ -145,6 +150,10 @@
     "@playwright/test": "^1.62.1",
     "ajv": "^8.20.0",
     "csso": "5.0.5",
+    "esbuild": "0.28.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "sharp": "^0.35.5",
     "wrangler": "4.149.0"
   }
 }

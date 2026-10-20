@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+  "title": "Visual Fidelity service-boundary checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "modelVersion", "checkpoint"],
+  "properties": {
+    "schema": { "const": "visual-fidelity.service-boundary-checkpoint.v1" },
+    "modelVersion": { "const": "1.2.0" },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "acceptedRevision", "command", "createdAtStep"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "acceptedRevision": { "type": "integer", "minimum": 1 },
+        "command": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json" },
+        "createdAtStep": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

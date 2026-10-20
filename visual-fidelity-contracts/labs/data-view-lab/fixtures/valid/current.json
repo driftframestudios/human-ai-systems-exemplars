@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "dataViewLabId": "visual-fidelity-data-view-lab",
+  "revision": "cohort-r1",
+  "lineage": { "source": "bundled-fixture", "parentRevision": null },
+  "decisionNeed": "compare",
+  "dataStanding": "current",
+  "scope": "Cross-functional review stages",
+  "unit": "cases",
+  "denominator": "per weekly review",
+  "records": [
+    { "id": "intake", "label": "Intake", "order": 0, "value": 28, "standing": "known", "group": "coordination", "observedAt": "2026-10-01", "position": { "x": 8, "y": 18 } },
+    { "id": "triage", "label": "Triage", "order": 1, "value": 24, "standing": "known", "group": "coordination", "observedAt": "2026-10-02", "position": { "x": 24, "y": 18 } },
+    { "id": "consent", "label": "Consent", "order": 2, "value": 21, "standing": "known", "group": "governance", "observedAt": "2026-10-03", "position": { "x": 40, "y": 18 } },
+    { "id": "accession", "label": "Accession", "order": 3, "value": 20, "standing": "known", "group": "laboratory", "observedAt": "2026-10-04", "position": { "x": 56, "y": 18 } },
+    { "id": "extraction", "label": "Extraction", "order": 4, "value": 18, "standing": "known", "group": "laboratory", "observedAt": "2026-10-05", "position": { "x": 72, "y": 18 } },
+    { "id": "sequencing", "label": "Sequencing", "order": 5, "value": 17, "standing": "known", "group": "laboratory", "observedAt": "2026-10-06", "position": { "x": 88, "y": 18 } },
+    { "id": "analysis", "label": "Analysis", "order": 6, "value": 15, "standing": "estimated", "group": "computation", "observedAt": "2026-10-07", "position": { "x": 88, "y": 62 } },
+    { "id": "review", "label": "Review", "order": 7, "value": 13, "standing": "known", "group": "interpretation", "observedAt": "2026-10-08", "position": { "x": 72, "y": 62 } },
+    { "id": "board", "label": "Tumor board", "order": 8, "value": null, "standing": "unknown", "group": "interpretation", "observedAt": null, "position": { "x": 56, "y": 62 } },
+    { "id": "report", "label": "Report", "order": 9, "value": 11, "standing": "known", "group": "release", "observedAt": "2026-10-10", "position": { "x": 40, "y": 62 } },
+    { "id": "billing", "label": "Billing", "order": 10, "value": null, "standing": "redacted", "group": "operations", "observedAt": null, "position": { "x": 24, "y": 62 } },
+    { "id": "follow-up", "label": "Follow-up", "order": 11, "value": null, "standing": "absent", "group": "operations", "observedAt": null, "position": { "x": 8, "y": 62 } }
+  ],
+  "relationships": [
+    { "id": "intake-to-triage", "sourceId": "intake", "targetId": "triage", "label": "hands accepted intake to triage" },
+    { "id": "triage-to-consent", "sourceId": "triage", "targetId": "consent", "label": "routes a qualifying case to consent review" },
+    { "id": "consent-to-accession", "sourceId": "consent", "targetId": "accession", "label": "releases the consented case to accession" },
+    { "id": "accession-to-extraction", "sourceId": "accession", "targetId": "extraction", "label": "hands accession state to extraction" },
+    { "id": "extraction-to-sequencing", "sourceId": "extraction", "targetId": "sequencing", "label": "routes extracted material to sequencing" },
+    { "id": "sequencing-to-analysis", "sourceId": "sequencing", "targetId": "analysis", "label": "routes sequence output to analysis" },
+    { "id": "analysis-to-review", "sourceId": "analysis", "targetId": "review", "label": "routes interpreted results to review" },
+    { "id": "review-to-board", "sourceId": "review", "targetId": "board", "label": "prepares reviewed results for tumor board" },
+    { "id": "board-to-report", "sourceId": "board", "targetId": "report", "label": "routes an accepted interpretation to reporting" },
+    { "id": "report-to-billing", "sourceId": "report", "targetId": "billing", "label": "records report release for operations" },
+    { "id": "report-to-follow-up", "sourceId": "report", "targetId": "follow-up", "label": "opens the follow-up route" }
+  ]
+}

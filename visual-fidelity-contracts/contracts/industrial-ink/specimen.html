@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <title>Industrial Ink technical-workbench specimen</title>
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    * { box-sizing: border-box; }
+    html { background: var(--ii-canvas); }
+    body {
+      min-width: 0;
+      margin: 0;
+      background: var(--ii-canvas);
+      color: var(--ii-text);
+      font: var(--ii-text-body) / var(--ii-leading) var(--ii-font-sans);
+    }
+    a { color: var(--ii-signal); text-underline-offset: .2em; }
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      inset: .5rem auto auto .5rem;
+      translate: 0 -200%;
+      padding: .65rem .8rem;
+      background: var(--ii-signal);
+      color: var(--ii-ink-950);
+    }
+    .skip-link:focus { translate: 0; }
+    .shell {
+      width: min(100% - 1rem, 92rem);
+      margin-inline: auto;
+      padding-block: clamp(1rem, 3vw, 3rem);
+    }
+    .instrument-header,
+    .bench,
+    .material-stack,
+    .register,
+    .evidence-boundary { padding: clamp(1rem, 2vw, 1.5rem); }
+    .instrument-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      border-block-end: .25rem solid var(--ii-signal);
+    }
+    .eyebrow,
+    .revision,
+    dt,
+    th { font-family: var(--ii-font-mono); }
+    .eyebrow {
+      margin: 0 0 .5rem;
+      color: var(--ii-signal);
+      font-size: var(--ii-text-meta);
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-block-start: 0; }
+    h1 { margin-block-end: .5rem; font-size: clamp(2rem, 6vw, 4.75rem); line-height: .92; overflow-wrap: anywhere; }
+    .lede { max-width: var(--ii-measure); margin-block-end: 0; color: var(--ii-ash-100); }
+    .revision { align-self: start; margin: 0; color: var(--ii-text-muted); font-size: var(--ii-text-meta); }
+    .eyebrow,
+    .revision { overflow-wrap: anywhere; }
+    .workbench {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, .55fr);
+      min-width: 0;
+      gap: var(--ii-space-4);
+      margin-block-start: var(--ii-space-4);
+    }
+    .workbench > * { min-width: 0; }
+    .bench { min-width: 0; }
+    fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
+    legend { max-width: 46rem; padding: 0; font-size: 1.2rem; font-weight: 800; }
+    .matrix-scroll {
+      max-width: 100%;
+      margin-block-start: 1rem;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      border: var(--ii-rule) solid var(--ii-boundary);
+    }
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(9.5rem, 1fr));
+      min-width: 40rem;
+      gap: var(--ii-rule);
+      background: var(--ii-boundary);
+    }
+    .matrix label {
+      position: relative;
+      display: grid;
+      min-height: 8.5rem;
+      padding: .9rem;
+      background: var(--ii-panel);
+      cursor: pointer;
+    }
+    .matrix label:has(input:checked) {
+      background: var(--ii-signal);
+      color: var(--ii-ink-950);
+    }
+    .matrix label:has(input:focus-visible) {
+      z-index: 1;
+      outline: .1875rem solid var(--ii-focus-outer);
+      outline-offset: -.25rem;
+    }
+    .matrix input { position: absolute; inline-size: 1px; block-size: 1px; opacity: .001; }
+    .matrix-code { font: 800 .72rem / 1.2 var(--ii-font-mono); letter-spacing: .08em; }
+    .matrix-name { align-self: end; font-weight: 800; }
+    .matrix-state { font-size: .83rem; }
+    .detail {
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+      border-block-start: .25rem solid var(--ii-instrument);
+    }
+    .detail dl { display: grid; grid-template-columns: max-content 1fr; gap: .35rem .75rem; margin: 0; }
+    .detail dt { color: var(--ii-text-muted); font-size: var(--ii-text-meta); text-transform: uppercase; }
+    .detail dd { margin: 0; }
+    .status-output { min-height: 1.5em; color: var(--ii-instrument); font-weight: 800; }
+    .material-stack,
+    .register { margin-block-start: var(--ii-space-4); }
+    .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+    .swatch { min-height: 7rem; padding: .75rem; border: var(--ii-rule) solid var(--ii-boundary); color: var(--ii-ink-950); }
+    .swatch strong { display: block; }
+    .swatch--substrate { background: var(--ii-ash-100); }
+    .swatch--binder { background: var(--ii-instrument); }
+    .swatch--finish { background: var(--ii-signal); }
+    .swatch--assembly { background: var(--ii-oxide-pale); }
+    .state-register { width: 100%; border-collapse: collapse; }
+    .register-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+    }
+    .state-register :is(th, td) { padding: .65rem; border: var(--ii-rule) solid var(--ii-boundary); text-align: start; vertical-align: top; }
+    .state-register th { color: var(--ii-text-muted); font-size: var(--ii-text-meta); text-transform: uppercase; }
+    .evidence-boundary {
+      max-width: var(--ii-measure);
+      margin-block: var(--ii-space-4) 0;
+      border-inline-start: .5rem solid var(--ii-oxide-pale);
+      background: var(--ii-oxide);
+      color: var(--ii-ash-50);
+    }
+    .evidence-boundary strong { color: var(--ii-signal); }
+    noscript p { padding: .75rem; border: var(--ii-rule) solid var(--ii-signal); }
+    @media (max-width: 54rem) {
+      .instrument-header,
+      .workbench { grid-template-columns: minmax(0, 1fr); }
+      .revision { justify-self: start; }
+      .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 28rem) {
+      .shell { width: 100%; padding: .5rem; }
+      .detail dl { grid-template-columns: minmax(0, 1fr); }
+      .swatches { grid-template-columns: 1fr; }
+      .state-register { min-width: 40rem; }
+    }
+    @media (forced-colors: active) {
+      .matrix label,
+      .swatch,
+      .evidence-boundary { border-color: CanvasText; background: Canvas; color: CanvasText; forced-color-adjust: auto; }
+      .matrix label:has(input:checked) { border: .25rem solid Highlight; background: Highlight; color: HighlightText; forced-color-adjust: none; }
+    }
+    @media print {
+      body, .matrix, .matrix label, .evidence-boundary { background: #fff; color: #000; }
+      .shell { width: 100%; }
+      .workbench { display: block; }
+      .matrix-scroll { overflow: visible; }
+      .matrix { grid-template-columns: repeat(4, 1fr); min-width: 0; }
+      .detail, .material-stack, .register, .evidence-boundary { break-inside: avoid; margin-block-start: 1rem; }
+      .skip-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#matrix-title">Skip to the matrix</a>
+  <main class="shell" id="main">
+    <header class="instrument-header ii-panel">
+      <div>
+        <p class="eyebrow">Industrial Ink · synthetic qualification bench</p>
+        <h1>Composite review instrument</h1>
+        <p class="lede">Inspect sixteen material-and-decision states, then read the selected state beside its accepted revision and evidence owner.</p>
+      </div>
+      <p class="revision">REV II-2026-10 · LOCAL SYNTHETIC DATA</p>
+    </header>
+
+    <div class="workbench">
+      <section class="bench ii-panel" aria-labelledby="matrix-title">
+        <fieldset>
+          <legend id="matrix-title">Sixteen-state material matrix</legend>
+          <p id="matrix-help">Use Tab to enter the group and arrow keys to move among states. The complete state register follows the visual instrument.</p>
+          <div class="matrix-scroll" role="region" aria-label="Material state matrix; scroll horizontally when needed" aria-describedby="matrix-help" tabindex="0">
+            <div class="matrix">
+              <label data-matrix-cell><input type="radio" name="material-state" value="substrate-reference" data-family="Substrate" data-state="Reference" data-measurement="2.40 mm source specimen" data-evidence="Supplier certificate · synthetic"><span class="matrix-code">S01 · REFERENCE</span><span class="matrix-name">Substrate</span><span class="matrix-state">Source specimen</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="substrate-selected" data-family="Substrate" data-state="Selected" data-measurement="2.40 mm comparison target" data-evidence="Bench selection · draft"><span class="matrix-code">S02 · SELECTED</span><span class="matrix-name">Substrate</span><span class="matrix-state">Comparison target</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="substrate-hold" data-family="Substrate" data-state="Hold" data-measurement="2.58 mm measured" data-evidence="Thickness review · materials lead"><span class="matrix-code">S03 · HOLD</span><span class="matrix-name">Substrate</span><span class="matrix-state">Thickness review</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="substrate-accepted" data-family="Substrate" data-state="Accepted" data-measurement="2.42 mm accepted baseline" data-evidence="Review receipt II-A01 · synthetic"><span class="matrix-code">S04 · ACCEPTED</span><span class="matrix-name">Substrate</span><span class="matrix-state">Baseline accepted</span></label>
+
+              <label data-matrix-cell><input type="radio" name="material-state" value="binder-reference" data-family="Binder" data-state="Reference" data-measurement="100:8 source ratio" data-evidence="Supplier recipe · synthetic"><span class="matrix-code">B01 · REFERENCE</span><span class="matrix-name">Binder</span><span class="matrix-state">Source ratio</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="binder-selected" data-family="Binder" data-state="Selected" data-measurement="100:8 comparison ratio" data-evidence="Bench selection · draft" checked><span class="matrix-code">B02 · SELECTED</span><span class="matrix-name">Binder</span><span class="matrix-state">Ratio selected</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="binder-hold" data-family="Binder" data-state="Hold" data-measurement="32 minute cure interval" data-evidence="Cure evidence hold · process owner"><span class="matrix-code">B03 · HOLD</span><span class="matrix-name">Binder</span><span class="matrix-state">Cure evidence hold</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="binder-accepted" data-family="Binder" data-state="Accepted" data-measurement="100:8 accepted ratio" data-evidence="Review receipt II-A02 · synthetic"><span class="matrix-code">B04 · ACCEPTED</span><span class="matrix-name">Binder</span><span class="matrix-state">Ratio accepted</span></label>
+
+              <label data-matrix-cell><input type="radio" name="material-state" value="finish-reference" data-family="Finish" data-state="Reference" data-measurement="12 μm source finish" data-evidence="Finish record · synthetic"><span class="matrix-code">F01 · REFERENCE</span><span class="matrix-name">Finish</span><span class="matrix-state">Source finish</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="finish-selected" data-family="Finish" data-state="Selected" data-measurement="12 μm comparison finish" data-evidence="Bench selection · draft"><span class="matrix-code">F02 · SELECTED</span><span class="matrix-name">Finish</span><span class="matrix-state">Finish selected</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="finish-hold" data-family="Finish" data-state="Hold" data-measurement="Abrasion cycle 180" data-evidence="Abrasion hold · quality owner"><span class="matrix-code">F03 · HOLD</span><span class="matrix-name">Finish</span><span class="matrix-state">Abrasion hold</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="finish-accepted" data-family="Finish" data-state="Accepted" data-measurement="12 μm accepted finish" data-evidence="Review receipt II-A03 · synthetic"><span class="matrix-code">F04 · ACCEPTED</span><span class="matrix-name">Finish</span><span class="matrix-state">Finish accepted</span></label>
+
+              <label data-matrix-cell><input type="radio" name="material-state" value="assembly-reference" data-family="Assembly" data-state="Reference" data-measurement="0.30 mm source joint gap" data-evidence="Assembly drawing · synthetic"><span class="matrix-code">A01 · REFERENCE</span><span class="matrix-name">Assembly</span><span class="matrix-state">Source joint</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="assembly-selected" data-family="Assembly" data-state="Selected" data-measurement="0.30 mm comparison joint" data-evidence="Bench selection · draft"><span class="matrix-code">A02 · SELECTED</span><span class="matrix-name">Assembly</span><span class="matrix-state">Joint selected</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="assembly-hold" data-family="Assembly" data-state="Hold" data-measurement="0.46 mm measured gap" data-evidence="Fit review · assembly owner"><span class="matrix-code">A03 · HOLD</span><span class="matrix-name">Assembly</span><span class="matrix-state">Fit review</span></label>
+              <label data-matrix-cell><input type="radio" name="material-state" value="assembly-accepted" data-family="Assembly" data-state="Accepted" data-measurement="0.31 mm accepted joint" data-evidence="Review receipt II-A04 · synthetic"><span class="matrix-code">A04 · ACCEPTED</span><span class="matrix-name">Assembly</span><span class="matrix-state">Assembly accepted</span></label>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+
+      <aside class="detail ii-panel" aria-labelledby="detail-title">
+        <p class="ii-label">Selected state</p>
+        <h2 id="detail-title" data-detail-title>Binder · Selected</h2>
+        <dl>
+          <dt>Measurement</dt><dd data-detail-measurement>100:8 comparison ratio</dd>
+          <dt>Evidence</dt><dd data-detail-evidence>Bench selection · draft</dd>
+          <dt>Accepted revision</dt><dd>II-A02 remains available</dd>
+          <dt>Authority</dt><dd>Materials lead accepts qualification</dd>
+        </dl>
+        <p class="status-output" aria-live="polite" aria-atomic="true" data-status-output>Binder selected for comparison.</p>
+        <p><a href="#state-register">Read every state in the semantic register</a></p>
+      </aside>
+    </div>
+
+    <section class="material-stack ii-panel" aria-labelledby="stack-title">
+      <h2 id="stack-title">Composited layer reference</h2>
+      <div class="swatches" aria-label="Four material swatches">
+        <div class="swatch swatch--substrate"><strong>Substrate</strong>2.42 mm · accepted baseline</div>
+        <div class="swatch swatch--binder"><strong>Binder</strong>100:8 · accepted ratio</div>
+        <div class="swatch swatch--finish"><strong>Finish</strong>12 μm · accepted finish</div>
+        <div class="swatch swatch--assembly"><strong>Assembly</strong>0.31 mm · accepted joint</div>
+      </div>
+    </section>
+
+    <section class="register ii-panel" id="state-register" aria-labelledby="register-title">
+      <h2 id="register-title">State and recovery register</h2>
+      <div class="register-scroll" role="region" aria-label="State and recovery table; scroll horizontally when needed" tabindex="0">
+        <table class="state-register">
+          <thead><tr><th scope="col">State</th><th scope="col">Visible behavior</th><th scope="col">Recovery or next action</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Accepted</th><td>Revision, values, owner, and receipt stay visible.</td><td>Continue from the accepted revision.</td></tr>
+            <tr><th scope="row">Draft</th><td>Edited values carry a written draft label.</td><td>Review, revise, or restore accepted work.</td></tr>
+            <tr><th scope="row">Loading</th><td>Accepted values remain visible beside pending status.</td><td>Wait, cancel, or return to the accepted revision.</td></tr>
+            <tr><th scope="row">Partial</th><td>Available measurements and pending sources are named separately.</td><td>Supply the named source or continue within the bounded partial view.</td></tr>
+            <tr><th scope="row">Stale</th><td>The last accepted timestamp and revision stay visible.</td><td>Refresh or continue with the declared stale boundary.</td></tr>
+            <tr><th scope="row">Invalid</th><td>The responsible field carries a message while the draft remains.</td><td>Edit the field or restore accepted work.</td></tr>
+            <tr><th scope="row">Error</th><td>The failed request and retained accepted state remain distinct.</td><td>Retry or contact the named service owner.</td></tr>
+            <tr><th scope="row">Hold</th><td>Owner, reason, affected object, and release evidence are written.</td><td>Return with the named evidence for owner review.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="evidence-boundary">
+      <p><strong>Evidence boundary.</strong> This synthetic specimen demonstrates Industrial Ink structure, the sixteen-state selection instrument, semantic state labels, and accepted-state continuity. The receiving materials team owns scientific qualification and release; the receiving application owns authorization, transactions, and durable receipts.</p>
+    </aside>
+
+    <noscript><p>The matrix and state register carry the complete reading. Selection detail stays on the default Binder state while scripting is unavailable.</p></noscript>
+  </main>
+  <script>
+    (() => {
+      const controls = Array.from(document.querySelectorAll('input[name="material-state"]'));
+      const title = document.querySelector('[data-detail-title]');
+      const measurement = document.querySelector('[data-detail-measurement]');
+      const evidence = document.querySelector('[data-detail-evidence]');
+      const status = document.querySelector('[data-status-output]');
+
+      const render = (control, announce) => {
+        const { family, state, measurement: value, evidence: source } = control.dataset;
+        title.textContent = `${family} · ${state}`;
+        measurement.textContent = value;
+        evidence.textContent = source;
+        if (announce) status.textContent = `${family} ${state.toLowerCase()} state selected.`;
+      };
+
+      controls.forEach((control) => control.addEventListener('change', () => render(control, true)));
+      const initial = controls.find((control) => control.checked);
+      if (initial) render(initial, false);
+    })();
+  </script>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

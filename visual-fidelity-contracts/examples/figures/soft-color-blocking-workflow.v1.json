@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.0.0",
+  "exampleId": "vfp:soft-color-blocking:workflow",
+  "title": "Soft Color Blocking workflow",
+  "description": "Broad fields give orientation, comparison, review, and recovery distinct places while labels carry the selected state and the next useful action.",
+  "alt": "Warm pink and cream workflow with four square state blocks for Orient, Compare, Review, and Recover, followed by selected-state details and a state register.",
+  "caption": "Figure 2. Soft Color Blocking makes a four-stage workflow approachable while written labels, geometry, and status text preserve its operating meaning.",
+  "summary": "Four written workflow states lead to a selected detail and an explicit next action.",
+  "relationships": [
+    {
+      "relationship": "Sequence",
+      "reading": "Orient → Compare → Review → Recover"
+    },
+    {
+      "relationship": "Selected state",
+      "reading": "Review is held with its object and next action visible"
+    },
+    {
+      "relationship": "Redundant meaning",
+      "reading": "Labels, source order, borders, and status text reinforce the color fields"
+    },
+    {
+      "relationship": "Recovery",
+      "reading": "The accepted revision and continuation action stay explicit"
+    }
+  ],
+  "source": {
+    "path": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+    "selector": "main.shell",
+    "state": "review",
+    "type": "contract-specimen",
+    "identity": "soft-color-blocking-specimen@1.0.0",
+    "files": [
+      "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+      "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
+    ]
+  },
+  "contract": {
+    "id": "vfc:soft-color-blocking",
+    "version": "1.0.0",
+    "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+    "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+  },
+  "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+  "rights": {
+    "license": "Apache-2.0",
+    "copyrightHoldersSource": "AUTHORS",
+    "copyrightHolders": [
+      "Vikrant Varun Kudesia",
+      "Driftframe Studios, Limited Liability Company"
+    ],
+    "publisher": "Driftframe Studios, Limited Liability Company",
+    "standing": "Documentation derivative of synthetic source maintained in this repository"
+  },
+  "publicationReceipt": {
+    "sourceAuthority": "Declared repository source set",
+    "publicationAuthority": {
+      "standing": "held",
+      "receiver": "Vikrant Varun Kudesia — named human publication receiver",
+      "activationEvent": "Explicit human approval of the publication receiver"
+    },
+    "method": "Playwright Chromium element capture → Sharp WebP derivative",
+    "reviewedOn": "2026-10-20",
+    "sourceClosure": {
+      "algorithm": "sha256",
+      "files": [
+        "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+        "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
+      ],
+      "sha256": "206994b9915558bcb275ce7bf47044cca70d736cbcb8363a0f6b6d2916bcc8ce"
+    },
+    "metadataInspection": {
+      "standing": "passed",
+      "derivativeCount": 3,
+      "fields": [
+        "EXIF absent",
+        "XMP absent",
+        "IPTC absent",
+        "orientation absent"
+      ]
+    },
+    "locatorInspection": {
+      "standing": "passed",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "secretInspection": {
+      "standing": "passed",
+      "method": "Bounded secret-shaped lexical admission scan",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "pixelInspection": {
+      "standing": "reviewed",
+      "reviewedOn": "2026-10-20",
+      "derivativeSha256": "53631af48305729219089dfd5826bec071027f404f21811dc3959236921b04f0",
+      "scope": "1600-pixel derivative inspected at original resolution"
+    }
+  },
+  "tests": [
+    "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+    "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs"
+  ]
+}

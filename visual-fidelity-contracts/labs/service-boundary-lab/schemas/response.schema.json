@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-response.v1.schema.json",
+  "title": "Visual Fidelity service-boundary response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "standing", "projection", "receipt", "issue"],
+  "properties": {
+    "schema": { "const": "visual-fidelity.service-boundary-response.v1" },
+    "standing": { "enum": ["accepted", "held", "rejected"] },
+    "projection": { "oneOf": [{ "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json" }, { "type": "null" }] },
+    "receipt": { "oneOf": [{ "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json" }, { "type": "null" }] },
+    "issue": { "oneOf": [{ "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json" }, { "type": "null" }] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "standing": { "const": "accepted" } } },
+      "then": {
+        "properties": {
+          "projection": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json" },
+          "receipt": {
+            "allOf": [
+              { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json" },
+              { "type": "object", "properties": { "outcome": { "const": "committed" } } }
+            ]
+          },
+          "issue": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "standing": { "const": "held" } } },
+      "then": {
+        "properties": {
+          "projection": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json" },
+          "receipt": { "type": "null" },
+          "issue": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "standing": { "const": "rejected" } } },
+      "then": {
+        "properties": {
+          "receipt": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "allOf": [
+                  { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json" },
+                  { "type": "object", "properties": { "outcome": { "enum": ["rolled_back", "held"] } } }
+                ]
+              }
+            ]
+          },
+          "issue": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json" }
+        }
+      }
+    }
+  ]
+}
