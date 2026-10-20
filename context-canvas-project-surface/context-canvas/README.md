@@ -2,7 +2,13 @@
 
 Context Canvas is a static, progressively enhanced enterprise reading system. HTML, CSS, SVG, and semantic state carry the complete reading; small JavaScript modules add shared navigation and bounded instruments. The pages themselves are the primary design inputs: preserve their evidence boundaries, visual contracts, reading order, and role-specific agency as the system develops.
 
-## Start with the reading surface
+## Start with the visitor pages
+
+Choose the page that matches the work or decision in front of you. The opening
+description uses everyday language; the linked page then introduces its exact
+contracts, source owners, and verification routes. This keeps the collection
+useful to a first-time reader while preserving the technical depth needed by a
+practitioner, domain reviewer, executive evaluator, or maintainer.
 
 - [`index.html`](index.html) introduces the technology leadership portfolio and the Context Canvas method.
 - [`ai-systems.html`](ai-systems.html) gathers methods, contracts, and working software for accountable decisions, explicit human authority, and recoverable work.
@@ -15,9 +21,11 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 - [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) demonstrates an ongoing, implementation-gated enterprise program with proposed architecture, current planning estimates, and explicit pilot proof gates.
 - [`prototypes/index.html`](prototypes/index.html) exposes the local prototype library and its source-aware manifests.
 
-Each public page remains useful when enhancement is unavailable. Embedded prototypes pair their interactive surface with a semantic orientation or static equivalent in the parent page.
+Each public page carries a complete static reading. Embedded prototypes pair
+their interaction with a semantic orientation or static equivalent in the
+parent page, and JavaScript adds bounded enhancement.
 
-The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/SKILL.md) skills provide compact collaboration routes into this terrain.
+The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas reading](../../.agents/skills/context-canvas-surface-reading/README.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/README.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/README.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/README.md) overviews provide compact collaboration entries and link to their authoritative skill contracts.
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 `schemas.vik.guru` publication and signed-out receipt.
 
@@ -638,11 +646,11 @@ an explicitly late-bound future receiver. Current manifest-owned iframe
 carriers use literal `src` values, so their routes remain inspectable and
 testable in tracked HTML before publication.
 
-The accepted Notion boundary is concise: only the Enterprise Human-AI
-Practitioner Registry root and its descendants are public-possible. A key name
-expresses that scope but cannot prove ancestry, content standing, or anonymous
-availability. The authorized resolver and human review establish those facts
-before a destination enters the tracked binding.
+The accepted Notion boundary is concise: the Enterprise Human-AI Practitioner
+Registry root and its descendants form the eligible source family for public
+bindings. A key name expresses that scope but cannot prove ancestry, content
+standing, or anonymous availability. The authorized resolver and human review
+establish those facts before a destination enters the tracked binding.
 
 From the repository root:
 

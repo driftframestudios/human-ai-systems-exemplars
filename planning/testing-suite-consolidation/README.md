@@ -170,8 +170,9 @@ observations. This source audit supplies their hypotheses and boundaries.
 
 ## Skill collection disposition
 
-All 30 active skills carry the repository's What / When / Boundaries / Result
-contract. The audit covered all 30 core files. This establishes native
+At the time of this audit, all 30 active skills carried the repository's What /
+When / Boundaries / Result contract. The audit covered that 30-skill cohort.
+This establishes native
 organization, not uniform efficacy or exhaustive review of every supporting
 reference. Preserve meaningful differences in length and layering.
 
@@ -182,7 +183,7 @@ reference. Preserve meaningful differences in length and layering.
 | Repair | Stateful artifact behavior | Admitted candidates commit; incompatible candidates preserve accepted state. Conditional fault-phase reference. |
 | Refine | Cost and ownership | Separate admission, canonical projection and nested detachment; bound surplus-copy cost. |
 | Reconcile | CSS ownership | Use the visual-verification owner for proportionate evidence; CSS reduction follows the actual task. |
-| Retain | Other 25 active skills | Their core contracts showed no source-grounded need for a uniform rewrite. Natural-use evidence can reopen a specific layer. |
+| Retain | Other 25 skills in the audited cohort | Their core contracts showed no source-grounded need for a uniform rewrite. Natural-use evidence can reopen a specific layer. |
 | Draft | [Evidence-bearing test design](draft-skills/evidence-bearing-test-design/SKILL.md) | Independent oracle, plausible fault, observation layer and explicit evidence limit. |
 | Draft | [Test-suite composition](draft-skills/test-suite-composition/SKILL.md) | Owned membership, selection, prerequisites, runner coordination and trustworthy reruns. |
 
@@ -192,9 +193,9 @@ a future fresh-receiver transfer exercise. Their current disposition is focused
 refinement; #58 remains the collection's receiving Issue. Resource-fault guidance belongs with the existing
 stateful skill instead of adding another overlapping portable skill.
 
-Publication selection lists all 30 active skills. The four visualization skills
-remain repository-only, public-possible entries with dependency review pending.
-The separately held tagged public-carrier decision retains its existing owner. Newly linked public-ready
+The reviewed publication selection now lists all 34 active skills, including
+the four visualization skills and their declared dependency closure. Accepted
+site and Worker release records own current publication status. Newly linked public-ready
 references receive explicit dependency entries; publication execution retains
 its existing closure checks.
 

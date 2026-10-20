@@ -601,6 +601,34 @@ export async function checkReadmeRoutes(root, { publicationSurfaces = defaultPub
     }
     if (!skillState.stat?.isFile()) continue;
     activeSkills.push(entry.name);
+
+    const overviewPath = join(skillDirectory, "README.md");
+    const overviewState = await inspectContained(overviewPath, canonicalRepositoryRoot);
+    if (overviewState.outside) {
+      findings.push({
+        kind: "outside-repository",
+        source: skillDirectory,
+        destination: "README.md",
+      });
+      continue;
+    }
+    if (!overviewState.stat?.isFile()) {
+      findings.push({
+        kind: "missing-skill-overview",
+        source: skillDirectory,
+        destination: "README.md",
+      });
+      continue;
+    }
+
+    const overview = stripFencedAndInlineCode(await readFile(overviewPath, "utf8"));
+    if (!/^ {0,3}##\s+Concrete example\s*#*\s*$/imu.test(overview)) {
+      findings.push({
+        kind: "missing-skill-concrete-example",
+        source: overviewPath,
+        destination: "## Concrete example",
+      });
+    }
   }
 
   const catalogState = skillsRootState.outside
@@ -627,14 +655,25 @@ export async function checkReadmeRoutes(root, { publicationSurfaces = defaultPub
     const catalog = await readFile(skillsCatalog, "utf8");
     const catalogLinks = markdownLinks(catalog);
     for (const skill of activeSkills) {
-      const route = `${skill}/SKILL.md`;
-      const occurrences = catalogLinks.filter((destination) => destination === route).length;
-      if (occurrences !== 1) {
+      const contractRoute = `${skill}/SKILL.md`;
+      const contractOccurrences = catalogLinks.filter((destination) => destination === contractRoute).length;
+      if (contractOccurrences !== 1) {
         findings.push({
           kind: "skill-catalog-membership",
           source: skillsCatalog,
-          destination: `${skill}/SKILL.md`,
-          occurrences,
+          destination: contractRoute,
+          occurrences: contractOccurrences,
+        });
+      }
+
+      const overviewRoute = `${skill}/README.md`;
+      const overviewOccurrences = catalogLinks.filter((destination) => destination === overviewRoute).length;
+      if (overviewOccurrences !== 1) {
+        findings.push({
+          kind: "skill-catalog-overview-membership",
+          source: skillsCatalog,
+          destination: overviewRoute,
+          occurrences: overviewOccurrences,
         });
       }
     }

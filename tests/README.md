@@ -1,5 +1,16 @@
 # Repository checks
 
+Use this directory to choose the smallest existing observation that can answer
+a source, projection, browser, deployment, or recovery question. The source
+artifact and its nearest contract own meaning; each check establishes only the
+behavior and revision it exercises.
+
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| An unfamiliar check family | [Owned suite catalog](suites/README.md) | Source owner, prerequisites, command, and suite membership |
+| One changed behavior | [Smallest fitting observation](#choose-the-smallest-fitting-observation) | A focused command and explicit evidence boundary |
+| A handoff result | [Hand back the result](#hand-back-the-result) | Normalized outcome, coverage boundary, and next receiver |
+
 ## Repository-wide discovery
 
 Start with the [owned suite catalog and plan-only commands](suites/README.md).
@@ -35,10 +46,12 @@ forms: inline and used reference links in ordinary, quoted, and list prose;
 ATX headings and explicit HTML identifiers; and fenced or inline code kept at
 rest. It rejects repository and symlink escapes, checks local targets and
 fragments, follows directory-to-README routes, and requires exact live-link
-membership for every active skill in the skill catalog. A publication-template
-README can also resolve through an exact declared receiver and its checked-in
-runtime manifest; the target must remain a contained, present publication
-asset, and an undeclared, stale, or incomplete receiver still fails:
+membership for every active skill contract and overview in the skill catalog.
+Each active skill also carries a contained `README.md` with a concrete example.
+A publication-template README can resolve through an exact declared receiver
+and its checked-in runtime manifest; the target must remain a contained,
+present publication asset, and an undeclared, stale, or incomplete receiver
+still fails:
 
 ```sh
 npm run check:readme-routes

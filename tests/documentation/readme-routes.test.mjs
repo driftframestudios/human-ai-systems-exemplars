@@ -292,18 +292,21 @@ test("ends an unclosed fence when its blockquote or list container ends", async 
   ]);
 });
 
-test("requires every active skill to appear exactly once in the skill catalog", async () => {
+test("requires every active skill contract and overview to appear exactly once in the skill catalog", async () => {
   const root = await fixture();
   await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
   await writeFile(join(root, "README.md"), "# Root\n");
   await writeFile(join(root, ".agents", "skills", "README.md"), [
     "# Skills",
     "",
+    "[Example overview](example/README.md)",
+    "",
     "```md",
     "[Example](example/SKILL.md)",
     "```",
   ].join("\n"));
   await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+  await writeFile(join(root, ".agents", "skills", "example", "README.md"), "# Example\n\n## Concrete example\n\nA result.\n");
 
   const result = await checkReadmeRoutes(root);
   assert.equal(result.findings.length, 1);
@@ -316,9 +319,55 @@ test("requires a skill catalog when active skills exist", async () => {
   await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
   await writeFile(join(root, "README.md"), "# Root\n");
   await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+  await writeFile(join(root, ".agents", "skills", "example", "README.md"), "# Example\n\n## Concrete example\n\nA result.\n");
 
   const result = await checkReadmeRoutes(root);
   assert.deepEqual(result.findings.map(({ kind }) => kind), ["missing-skill-catalog"]);
+});
+
+test("requires an overview with a concrete example for every active skill", async (t) => {
+  await t.test("missing overview", async () => {
+    const root = await fixture();
+    await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
+    await writeFile(join(root, "README.md"), "# Root\n");
+    await writeFile(join(root, ".agents", "skills", "README.md"), "# Skills\n\n[Contract](example/SKILL.md)\n");
+    await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+
+    const result = await checkReadmeRoutes(root);
+    assert.deepEqual(result.findings.map(({ kind }) => kind), [
+      "missing-skill-overview",
+      "skill-catalog-overview-membership",
+    ]);
+  });
+
+  await t.test("missing concrete example", async () => {
+    const root = await fixture();
+    await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
+    await writeFile(join(root, "README.md"), "# Root\n");
+    await writeFile(join(root, ".agents", "skills", "README.md"), [
+      "# Skills",
+      "",
+      "[Overview](example/README.md)",
+      "[Contract](example/SKILL.md)",
+    ].join("\n"));
+    await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+    await writeFile(join(root, ".agents", "skills", "example", "README.md"), "# Example\n\n## Start here\n\nA result.\n");
+
+    const result = await checkReadmeRoutes(root);
+    assert.deepEqual(result.findings.map(({ kind }) => kind), ["missing-skill-concrete-example"]);
+  });
+
+  await t.test("overview omitted from catalog", async () => {
+    const root = await fixture();
+    await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
+    await writeFile(join(root, "README.md"), "# Root\n");
+    await writeFile(join(root, ".agents", "skills", "README.md"), "# Skills\n\n[Contract](example/SKILL.md)\n");
+    await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
+    await writeFile(join(root, ".agents", "skills", "example", "README.md"), "# Example\n\n## Concrete example\n\nA result.\n");
+
+    const result = await checkReadmeRoutes(root);
+    assert.deepEqual(result.findings.map(({ kind }) => kind), ["skill-catalog-overview-membership"]);
+  });
 });
 
 test("rejects skill root, catalog, and contract symlinks that escape the repository", async (t) => {
@@ -342,7 +391,8 @@ test("rejects skill root, catalog, and contract symlinks that escape the reposit
     await mkdir(join(root, ".agents", "skills", "example"), { recursive: true });
     await writeFile(join(root, "README.md"), "# Root\n");
     await writeFile(join(root, ".agents", "skills", "example", "SKILL.md"), "---\nname: example\n---\n");
-    await writeFile(join(external, "README.md"), "# Skills\n\n[Example](example/SKILL.md)\n");
+    await writeFile(join(root, ".agents", "skills", "example", "README.md"), "# Example\n\n## Concrete example\n\nA result.\n");
+    await writeFile(join(external, "README.md"), "# Skills\n\n[Example](example/SKILL.md)\n[Overview](example/README.md)\n");
     await symlink(join(external, "README.md"), join(root, ".agents", "skills", "README.md"));
 
     const result = await checkReadmeRoutes(root);

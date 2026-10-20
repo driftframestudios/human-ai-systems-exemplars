@@ -1,6 +1,21 @@
 # Visual Fidelity Contracts
 
-These compact contracts let a collaborator reproduce a visual language while adapting the subject, composition, and level of detail to the decision surface at hand.
+These compact contracts let a collaborator reproduce a visual language while
+adapting the subject, composition, and level of detail to the page, diagram,
+prototype, or decision setting at hand.
+
+| Arriving with | Begin here | What becomes available |
+| --- | --- | --- |
+| A visual form that needs continuity with existing work | [Available contracts](#available-contracts) | Palette, typography, geometry, composition, and state guidance |
+| A question about readable width or wide artifacts | [Shared reading measure](#shared-reading-measure) | Prose and two-dimensional layout guidance |
+| A need to inspect working applications | [Reference implementations](#reference-implementations) | Source-owned HTML, CSS, SVG, and interactive examples |
+
+The public [Visual Fidelity
+Contracts](https://kindlight.systems/visual-fidelity-contracts) collection
+supplies the wider orientation. [Visual Fidelity Practitioner
+Probes](https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence)
+adds questions for extending a contract while preserving layered judgment and
+evidence.
 
 ## Available contracts
 
