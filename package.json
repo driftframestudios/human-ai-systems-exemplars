@@ -139,7 +139,8 @@
     "test:debrief-caption-colors-browser": "node --test tests/context-canvas/debrief-caption-colors.browser.mjs",
     "test:debrief-architecture-cards-browser": "node --test tests/context-canvas/debrief-architecture-cards.browser.mjs",
     "test:ai-narrow-reading-browser": "node --test tests/context-canvas/ai-narrow-reading.browser.mjs",
-    "test:card-rail-clearance-browser": "node --test tests/context-canvas/card-rail-clearance.browser.mjs"
+    "test:card-rail-clearance-browser": "node --test tests/context-canvas/card-rail-clearance.browser.mjs",
+    "test:linked-reading-containment-browser": "node --test tests/context-canvas/linked-reading-containment.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

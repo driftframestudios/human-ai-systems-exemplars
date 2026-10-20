@@ -3,6 +3,7 @@ import { after, before, test } from 'node:test';
 import { mkdir, readFile, readdir } from 'node:fs/promises';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
+import { open, reading, resize, settledReading, assertReading } from './reading-containment.helper.mjs';
 
 const visitorRoot = '/context-canvas-project-surface/context-canvas/';
 const sourceRoot = new URL(`../..${visitorRoot}`, import.meta.url);
@@ -29,107 +30,6 @@ before(async () => {
 });
 after(async () => server?.close());
 
-async function open(browser, route, options = {}) {
-  const context = await browser.newContext({
-    viewport: { width: 320, height: 844 }, reducedMotion: 'reduce', ...options,
-  });
-  await context.route('**/*', request => {
-    const url = new URL(request.request().url());
-    return url.origin === server.origin && !url.pathname.startsWith('/v1-cdn/')
-      ? request.continue()
-      : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Embedded owner</title>' });
-  });
-  const page = await context.newPage();
-  await page.goto(`${server.origin}${visitorRoot}${route}`, { waitUntil: 'load' });
-  // Driver polling also settles pages with enhancement disabled.
-  await page.waitForFunction(() => document.fonts.status === 'loaded', null, { polling: 100, timeout: 7000 });
-  return { page, close: () => context.close() };
-}
-
-async function reading(page) {
-  return page.evaluate(() => {
-    const viewport = document.documentElement.clientWidth;
-    const text = [];
-    const walker = document.createTreeWalker(document.querySelector('main'), NodeFilter.SHOW_TEXT);
-    let node;
-    while ((node = walker.nextNode())) {
-      if (!node.textContent.trim()) continue;
-      const parent = node.parentElement;
-      if (parent.closest('script, style, svg, math, pre, textarea, select, .sr-only, .visually-hidden, .wtb-system-graph__sr-only')) continue;
-      let localScroll = false;
-      let hidden = false;
-      for (let ancestor = parent; ancestor; ancestor = ancestor.parentElement) {
-        const style = getComputedStyle(ancestor);
-        if (style.visibility === 'hidden' || style.display === 'none' || style.opacity === '0') hidden = true;
-        if (['auto', 'scroll'].includes(style.overflowX) && ancestor.scrollWidth > ancestor.clientWidth + 2) localScroll = true;
-      }
-      if (hidden || localScroll) continue;
-      let owner = parent;
-      while (owner.parentElement && getComputedStyle(owner).display === 'inline') owner = owner.parentElement;
-      const box = owner.getBoundingClientRect();
-      if (!box.width || !box.height) continue;
-      const range = document.createRange();
-      range.setStart(node, node.textContent.search(/\S/u));
-      range.setEnd(node, node.textContent.search(/\s*$/u));
-      const fragments = [...range.getClientRects()].filter(rect => rect.width && rect.height)
-        .map(rect => ({ left: rect.left, right: rect.right }));
-      if (fragments.length) text.push({
-        value: node.textContent.trim().slice(0, 90),
-        owner: owner.tagName, left: Math.max(0, box.left), right: Math.min(viewport, box.right),
-        font: getComputedStyle(parent).fontSize, color: getComputedStyle(parent).color,
-        fragments,
-      });
-    }
-    return {
-      viewport, width: document.documentElement.scrollWidth, text,
-      cards: [...document.querySelectorAll('.instrument-atlas-card')].map(card => ({
-        width: card.clientWidth, scroll: card.scrollWidth,
-        left: card.getBoundingClientRect().left, right: card.getBoundingClientRect().right,
-      })),
-      scrollers: [...document.querySelectorAll('main .table-scroll, main pre')].map(node => ({
-        width: node.clientWidth, scroll: node.scrollWidth, overflow: getComputedStyle(node).overflowX,
-      })),
-    };
-  });
-}
-
-function assertReading(value, label) {
-  assert.ok(value.width <= value.viewport + 2, `${label}: the document fits its viewport (${value.width}/${value.viewport})`);
-  assert.ok(value.text.length > 20, `${label}: the authored reading is observed`);
-  for (const text of value.text) assert.ok(text.fragments.every(fragment => (
-    fragment.left >= text.left - 2 && fragment.right <= text.right + 2
-  )), `${label}: complete text stays inside its reading owner (${text.owner}: ${text.value})`);
-  for (const card of value.cards) {
-    assert.ok(card.left >= -2 && card.right <= value.viewport + 2, `${label}: the atlas card fits the visitor field`);
-    assert.ok(card.scroll <= card.width + 2, `${label}: the atlas card contains its own text track`);
-  }
-  for (const scroll of value.scrollers.filter(scroll => scroll.scroll > scroll.width + 2)) {
-    assert.ok(['auto', 'scroll'].includes(scroll.overflow), `${label}: wide evidence retains its local scroll owner`);
-  }
-}
-
-async function resize(page, width, enlarged) {
-  await page.setViewportSize({ width, height: 844 });
-  await page.evaluate(async enlarged => {
-    document.documentElement.style.fontSize = enlarged ? '200%' : '';
-    await document.fonts.ready;
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  }, enlarged);
-  await settledReading(page);
-}
-
-async function settledReading(page) {
-  let previous;
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    const value = await reading(page);
-    const serialized = JSON.stringify(value);
-    if (serialized === previous) return value;
-    previous = serialized;
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
-  assert.fail('The reading reaches stable geometry within the bounded observation window');
-}
-
 test('AI narrow reading binds seventeen family owners and nine linked controls', async () => {
   assert.equal(family.length, 17);
   assert.equal(new Set([...family, ...controls]).size, 26);
@@ -145,7 +45,7 @@ for (const [engine, type] of Object.entries({ chromium, firefox, webkit })) {
     t.after(() => browser.close());
     for (const route of family) {
       await t.test(route, async () => {
-        const session = await open(browser, route);
+        const session = await open(browser, server, route);
         try {
           for (const width of [320, 390]) for (const enlarged of [false, true]) {
             await resize(session.page, width, enlarged);
@@ -164,7 +64,7 @@ for (const [engine, type] of Object.entries({ chromium, firefox, webkit })) {
     }
     for (const route of controls) {
       await t.test(`${route}: independent normal-size control`, async () => {
-        const session = await open(browser, route);
+        const session = await open(browser, server, route);
         try {
           for (const width of [320, 390]) {
             await resize(session.page, width, false);
@@ -175,7 +75,7 @@ for (const [engine, type] of Object.entries({ chromium, firefox, webkit })) {
       });
     }
     await t.test('ordinary wrapping restores the reported heading and card overflow', async () => {
-      const session = await open(browser, 'ai-systems.html');
+      const session = await open(browser, server, 'ai-systems.html');
       try {
         await resize(session.page, 320, true);
         const accepted = await reading(session.page);
@@ -192,7 +92,7 @@ for (const [engine, type] of Object.entries({ chromium, firefox, webkit })) {
       } finally { await session.close(); }
     });
     await t.test('Atlas native controls remain reachable in their bounded label tracks', async () => {
-      const session = await open(browser, 'visualization-fidelity-atlas.html');
+      const session = await open(browser, server, 'visualization-fidelity-atlas.html');
       try {
         await resize(session.page, 320, true);
         const selector = session.page.locator('.atlas-gallery-controls select[name="view"]');
@@ -243,7 +143,7 @@ for (const [engine, type] of Object.entries({ chromium, firefox, webkit })) {
     });
     for (const mode of ['forced-colors', 'print', 'no-script']) {
       await t.test(`AI Systems: ${mode} keeps the reading available`, async () => {
-        const session = await open(browser, 'ai-systems.html', {
+        const session = await open(browser, server, 'ai-systems.html', {
           javaScriptEnabled: mode !== 'no-script', forcedColors: mode === 'forced-colors' ? 'active' : 'none',
         });
         try {
