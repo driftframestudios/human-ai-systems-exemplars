@@ -2472,6 +2472,50 @@
       "aliases": [
         "test:debrief-caption-colors-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-architecture-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-architecture-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eight comparison grids across seven Debriefs retain contiguous card fragments, local text, shadows, source order and useful full-width distribution across Chromium, Firefox and Playwright WebKit; grid/prose seams, alternate modes and a before-parse restoration of the original nesting. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:debrief-architecture-cards-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.ai-narrow-reading",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-narrow-reading.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "AI Systems family reading at narrow widths with enlarged text: complete heading and navigation-card content, local scroll ownership, normal-size controls and fault restoration across Chromium, Firefox and Playwright WebKit. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:ai-narrow-reading-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2577,7 +2621,9 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.debrief-architecture-cards",
+        "browser.context-canvas.ai-narrow-reading"
       ]
     },
     {
