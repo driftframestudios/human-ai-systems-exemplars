@@ -275,6 +275,11 @@ test('gallery CSS resolves each custom-property reference through a local declar
       `${name} resolves through a gallery declaration or an explicit fallback.`
     );
   }
+  assert.match(
+    galleryStyles,
+    /@media \(max-width: 30rem\) \{[\s\S]*?\.pattern \{ box-shadow: 0\.25rem 0\.25rem 0 var\(--quiet\); \}/u,
+    'The narrow gallery keeps each decorative card shadow inside its viewport allowance.'
+  );
 });
 
 test('public pattern records stay locator-safe and carry desired-state language', async () => {

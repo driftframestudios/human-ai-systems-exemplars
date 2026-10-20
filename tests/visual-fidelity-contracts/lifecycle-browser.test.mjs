@@ -56,6 +56,16 @@ async function runScenario(page, scenario, injectFault = false) {
   await expect(page.locator('[data-status]')).toContainText(injectFault ? 'controlled fault observed' : 'expected behavior observed');
 }
 
+function assertSandboxBoundaryTelemetry(telemetry) {
+  const sandboxRefusal = /^Blocked script execution in '.+\/sandbox-specimen\.html' because the document's frame is sandboxed and the 'allow-scripts' permission is not set\.$/u;
+  const policyEvidence = telemetry.consoleErrors.filter(message => sandboxRefusal.test(message));
+  assert.ok(policyEvidence.length <= 1, `The browser reported one bounded sandbox refusal at most: ${JSON.stringify(policyEvidence)}`);
+  assertTelemetry({
+    ...telemetry,
+    consoleErrors: telemetry.consoleErrors.filter(message => !sandboxRefusal.test(message)),
+  });
+}
+
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   test(`${engine}: cancellation, reset, focus return, and history restoration remain observable`, async t => {
     const { page, telemetry } = await openLab(t, engine);
@@ -140,7 +150,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     const frame = page.frameLocator('iframe[title="Sandboxed lifecycle reading specimen"]');
     await expect(frame.locator('strong')).toHaveText('Embedded reading boundary.');
     assert.equal(await page.locator('iframe').getAttribute('sandbox'), '');
-    assertTelemetry(telemetry);
+    assertSandboxBoundaryTelemetry(telemetry);
   });
 
   test(`${engine}: script-independent reading remains complete at a narrow viewport`, async t => {

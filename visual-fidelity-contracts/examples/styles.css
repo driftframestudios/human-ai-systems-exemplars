@@ -129,6 +129,7 @@ th { width: 14rem; }
 @media (max-width: 30rem) {
   .hero, .patterns { width: min(100% - 1rem, 90rem); }
   .hero { box-shadow: 0.35rem 0.35rem 0 var(--cobalt); }
+  .pattern { box-shadow: 0.25rem 0.25rem 0 var(--quiet); }
   nav a, .pattern__routes a { width: 100%; }
   .table-region { max-width: 100%; }
 }
