@@ -35,10 +35,12 @@ a { color: inherit; }
 .skip-link {
   position: fixed;
   inset: .75rem auto auto .75rem;
+  max-inline-size: calc(100% - 1.5rem);
   z-index: 10;
   padding: .75rem 1rem;
   color: #101418;
   background: var(--signal);
+  overflow-wrap: anywhere;
   transform: translateY(-160%);
 }
 

@@ -27,10 +27,12 @@ a:focus-visible, summary:focus-visible { outline: 0.2rem solid var(--coral); out
   position: absolute;
   inset-block-start: 0.5rem;
   inset-inline-start: 0.5rem;
+  max-inline-size: calc(100% - 1rem);
   z-index: 3;
   padding: 0.7rem 1rem;
   background: var(--signal);
   color: var(--ink);
+  overflow-wrap: anywhere;
   transform: translateY(-180%);
 }
 

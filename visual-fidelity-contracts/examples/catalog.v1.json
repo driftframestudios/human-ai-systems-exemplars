@@ -96,7 +96,7 @@
             "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js",
             "visual-fidelity-contracts/labs/service-boundary-lab/styles.css"
           ],
-          "sha256": "526de5686a2c41bd31dea794d4f269c37a839637330e25c789f8b308a4a78c29"
+          "sha256": "32c5485447e0a4cdec5b93cfd333050fb7edee73b740f8687a18b4b09ad364c0"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -255,7 +255,7 @@
             "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
             "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
           ],
-          "sha256": "206994b9915558bcb275ce7bf47044cca70d736cbcb8363a0f6b6d2916bcc8ce"
+          "sha256": "63988288e15af2e77d36aefdafd8bcfde23f38faedb7d41dee4539d1bfe30402"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -425,7 +425,7 @@
             "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css"
           ],
-          "sha256": "9380ba1bcd762b1bb64737e33b9f6fff28526b50734e32fe74d2043e00945b7b"
+          "sha256": "cef69fb6cc3ee89a94626cc41edf2332eca632a351c0b4b978483ffafc4cb833"
         },
         "metadataInspection": {
           "standing": "passed",
@@ -597,7 +597,7 @@
             "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
             "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css"
           ],
-          "sha256": "57dca82b9d854a0a25e54e79b88ccf2f8ac042c6b285e44e49e76742b197835b"
+          "sha256": "8f22d76fe543405a97e5c168e297226b579477a9c6469e1218ef9dc6d7a2aabd"
         },
         "metadataInspection": {
           "standing": "passed",

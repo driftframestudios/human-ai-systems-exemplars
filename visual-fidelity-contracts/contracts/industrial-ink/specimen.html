@@ -23,10 +23,12 @@
       position: fixed;
       z-index: 100;
       inset: .5rem auto auto .5rem;
+      max-inline-size: calc(100% - 1rem);
       translate: 0 -200%;
       padding: .65rem .8rem;
       background: var(--ii-signal);
       color: var(--ii-ink-950);
+      overflow-wrap: anywhere;
     }
     .skip-link:focus { translate: 0; }
     .shell {

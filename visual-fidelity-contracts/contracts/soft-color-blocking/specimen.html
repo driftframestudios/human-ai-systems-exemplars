@@ -13,7 +13,7 @@
     html { background: var(--scb-canvas); }
     body { margin: 0; background: var(--scb-canvas); color: var(--scb-text); font: var(--scb-text-body) / var(--scb-leading) var(--scb-font-body); }
     a { color: var(--scb-cobalt); text-underline-offset: .2em; }
-    .skip-link { position: fixed; z-index: 100; inset: .5rem auto auto .5rem; translate: 0 -200%; padding: .65rem .8rem; background: var(--scb-chartreuse); color: var(--scb-ink); }
+    .skip-link { position: fixed; z-index: 100; inset: .5rem auto auto .5rem; max-inline-size: calc(100% - 1rem); translate: 0 -200%; padding: .65rem .8rem; background: var(--scb-chartreuse); color: var(--scb-ink); overflow-wrap: anywhere; }
     .skip-link:focus { translate: 0; }
     .shell { width: min(100% - 1rem, 86rem); margin-inline: auto; padding-block: clamp(1rem, 3vw, 3rem); }
     .hero, .workflow, .detail, .state-register, .evidence-boundary { padding: clamp(1rem, 2.5vw, 2rem); }

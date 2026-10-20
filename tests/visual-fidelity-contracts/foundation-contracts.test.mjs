@@ -310,6 +310,24 @@ test("standalone HTML artifacts carry the shared public attribution contract", a
   }
 });
 
+test("off-canvas skip links retain a viewport-bounded focus target at enlarged text", async () => {
+  const styleOwners = [
+    "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
+    "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+    "visual-fidelity-contracts/examples/styles.css",
+    "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css",
+    "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css",
+    "visual-fidelity-contracts/labs/lifecycle-lab/styles.css",
+    "visual-fidelity-contracts/labs/service-boundary-lab/styles.css"
+  ];
+  const boundedSkipLink = /\.skip-link\s*\{[^}]*max-inline-size:\s*calc\(100% - [^)]+\);[^}]*overflow-wrap:\s*anywhere;[^}]*\}/u;
+
+  for (const relativePath of styleOwners) {
+    const source = await readFile(path.join(repositoryRoot, relativePath), "utf8");
+    assert.match(source, boundedSkipLink, `${relativePath}: bounded skip-link focus target`);
+  }
+});
+
 test("example catalog validates the rendered pattern collection", async () => {
   const catalog = await readJson("visual-fidelity-contracts/examples/catalog.v1.json");
   const validate = strictAjv().compile(await readJson(schemaPaths.exampleCatalog));

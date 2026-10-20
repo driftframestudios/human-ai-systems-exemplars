@@ -77,7 +77,7 @@
         "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
         "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css"
       ],
-      "sha256": "9380ba1bcd762b1bb64737e33b9f6fff28526b50734e32fe74d2043e00945b7b"
+      "sha256": "cef69fb6cc3ee89a94626cc41edf2332eca632a351c0b4b978483ffafc4cb833"
     },
     "metadataInspection": {
       "standing": "passed",
