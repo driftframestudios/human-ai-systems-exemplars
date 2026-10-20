@@ -1,0 +1,54 @@
+{
+  "id": "na:narrative-sampling-tableau/validation-report/v0.1",
+  "version": "0.1",
+  "status": "passed",
+  "checks": {
+    "yaml_parse": "passed",
+    "json_parse": "passed",
+    "json_schema_meta_validation": "passed",
+    "example_schema_validation": "passed",
+    "jsonld_rdf_parse": {
+      "status": "passed",
+      "triples": 237
+    },
+    "browser_smoke": {
+      "status": "passed",
+      "seed_runs": 2,
+      "seed_candidates_in_active_run": 5,
+      "core_architecture_routes": 20,
+      "tested_actions": [
+        "add candidate",
+        "duplicate run",
+        "blend two candidates",
+        "normalize open-exclusive distribution",
+        "filter route family",
+        "prepare route",
+        "parse UI JSON export",
+        "parse UI JSON-LD export"
+      ],
+      "console_errors": 0,
+      "page_errors": 0
+    },
+    "responsive_layout": {
+      "status": "passed",
+      "viewports": [
+        390,
+        768,
+        1280
+      ],
+      "document_overflow": false
+    },
+    "accessibility_structure": {
+      "status": "working_pass",
+      "features": [
+        "native form controls",
+        "focus-visible indicators",
+        "reduced-motion accommodation",
+        "SVG title and description",
+        "direct labels and common scales",
+        "structured table equivalents",
+        "aria-live status regions"
+      ]
+    }
+  }
+}

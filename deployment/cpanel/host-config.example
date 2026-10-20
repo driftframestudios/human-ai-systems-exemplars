@@ -1,0 +1,20 @@
+# Copy this file to the private path beside the repository checkout:
+#   .human-ai-systems-exemplars-cpanel.conf
+#
+# Values are data. The installer parses this file without executing it.
+# Every directory must already exist as a regular directory. The state root
+# belongs outside the checkout and both document roots. It holds one lock,
+# private transaction storage, one current-release pointer, and at most one
+# transient pending-release marker; it does not accumulate release history.
+
+EXPECTED_BRANCH=prod
+PRIMARY_DOCUMENT_ROOT=/absolute/path/to/primary-document-root
+IFRAME_DOCUMENT_ROOT=/absolute/path/to/iframe-document-root
+STATE_ROOT=/absolute/path/to/private-deployment-state
+
+# A first cutover proceeds when each document root is empty. These optional
+# comma-separated, root-relative entries preserve named host-owned files or
+# directory trees. A trailing slash admits that directory and its descendants.
+# Keep the values empty when no host-owned entries are present.
+PRIMARY_FIRST_CUTOVER_ALLOWLIST=
+IFRAME_FIRST_CUTOVER_ALLOWLIST=

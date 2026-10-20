@@ -1,0 +1,1323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Regional readiness collection — bounded HTML, CSS, and SVG pagination exemplar</title>
+  <style>
+    @layer reset, tokens, base, controls, results, states, responsive, motion;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body, h1, h2, h3, p, figure, fieldset, legend, dl, dd { margin: 0; }
+      ol, ul { margin: 0; padding: 0; list-style: none; }
+      button, input { font: inherit; }
+      button { color: inherit; }
+      svg { display: block; max-inline-size: 100%; }
+    }
+
+    @layer tokens {
+      :root {
+        --ink: #17211d;
+        --muted: #58665f;
+        --paper: #f4f6f1;
+        --surface: #ffffff;
+        --surface-soft: #edf2ec;
+        --line: #c4d0c7;
+        --accent: #155b4f;
+        --accent-strong: #0b463c;
+        --accent-soft: #dcefe7;
+        --water: #dceff2;
+        --land: #e4e8d8;
+        --marker: #176f8c;
+        --current: #aa4c23;
+        --focus: #7133c7;
+        --shadow: 0 1rem 3rem rgb(25 56 44 / 0.12);
+        --radius: 1rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #edf4ef;
+          --muted: #b5c2ba;
+          --paper: #111713;
+          --surface: #19221d;
+          --surface-soft: #202b25;
+          --line: #3b4941;
+          --accent: #8ed4c1;
+          --accent-strong: #b8eadc;
+          --accent-soft: #203d34;
+          --water: #1b3941;
+          --land: #30382d;
+          --marker: #78c4dd;
+          --current: #f09b72;
+          --focus: #d3b4ff;
+          --shadow: 0 1rem 3rem rgb(0 0 0 / 0.3);
+        }
+      }
+    }
+
+    @layer base {
+      html {
+        scroll-behavior: auto;
+        scroll-padding-block-end: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+      }
+
+      body {
+        min-block-size: 100svh;
+        padding-inline-start: max(1rem, env(safe-area-inset-left, 0px));
+        padding-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+        padding-block-end: calc(6rem + env(safe-area-inset-bottom, 0px));
+        color: var(--ink);
+        background-color: var(--paper);
+        background-image: radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--water) 80%, transparent), transparent 30rem);
+        line-height: 1.55;
+      }
+
+      a { color: var(--accent-strong); }
+
+      :focus-visible {
+        outline: 0.2rem solid var(--focus);
+        outline-offset: 0.2rem;
+      }
+
+      .skip-link {
+        position: fixed;
+        inset-block-start: calc(0.75rem + env(safe-area-inset-top, 0px));
+        inset-inline-start: calc(0.75rem + env(safe-area-inset-left, 0px));
+        z-index: 70;
+        translate: 0 -180%;
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.55rem;
+        color: var(--surface);
+        background: var(--ink);
+      }
+
+      .skip-link:focus { translate: 0; }
+
+      .visually-hidden,
+      .svg-definitions {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .page-header,
+      .collection-explorer,
+      .page-footer {
+        inline-size: min(82rem, 100%);
+        margin-inline: auto;
+      }
+
+      .page-header { padding-block: clamp(2.5rem, 8vw, 6rem) 2rem; }
+
+      .eyebrow {
+        color: var(--accent-strong);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-inline-size: 17ch;
+        margin-block-start: 0.55rem;
+        font-size: clamp(2.2rem, 6vw, 5rem);
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      .page-header > p:last-child {
+        max-inline-size: 76ch;
+        margin-block-start: 1rem;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+      }
+
+      h2 { font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.18; }
+      h3 { font-size: 1.05rem; }
+
+      .page-footer {
+        padding-block: 1.5rem 1rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    }
+
+    @layer controls {
+      .collection-explorer {
+        container: explorer / inline-size;
+        padding: clamp(0.85rem, 2.5vw, 1.5rem);
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 0.45rem);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .control-panel {
+        scroll-margin-block-start: 1rem;
+        padding: clamp(0.9rem, 2.5vw, 1.25rem);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .control-heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .control-heading p {
+        max-inline-size: 70ch;
+        color: var(--muted);
+      }
+
+      .interactive-controls { display: none; margin-block-start: 1rem; }
+      .control-groups { display: grid; gap: 0.8rem; }
+      .control-group { min-inline-size: 0; padding: 0; border: 0; }
+      .control-group legend { margin-block-end: 0.35rem; font-weight: 800; }
+
+      .select-field {
+        display: grid;
+        align-content: start;
+        gap: 0.35rem;
+        min-inline-size: 0;
+      }
+
+      .select-field label { font-weight: 800; }
+
+      .select-field select {
+        inline-size: 100%;
+        min-block-size: 2.75rem;
+        padding: 0.55rem 2rem 0.55rem 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        color: var(--ink);
+        background: var(--surface);
+      }
+
+      .choice-row {
+        display: flex;
+        gap: 0.4rem;
+        max-inline-size: 100%;
+        overflow-x: auto;
+        padding: 0.22rem;
+        scrollbar-width: thin;
+      }
+
+      .choice {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-block-size: 2.75rem;
+        padding: 0.5rem 0.72rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        background: var(--surface);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .choice input {
+        inline-size: 1rem;
+        block-size: 1rem;
+        margin: 0;
+        accent-color: var(--accent);
+      }
+
+      .choice:has(input:checked) {
+        border-color: var(--accent);
+        color: var(--accent-strong);
+        background: var(--accent-soft);
+        font-weight: 800;
+      }
+
+      .control-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem;
+        margin-block-start: 0.9rem;
+      }
+
+      .reset-button,
+      .action-link,
+      .popover-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: 2.75rem;
+        padding: 0.58rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        color: var(--ink);
+        background: var(--surface);
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .reset-button:hover,
+      .action-link:hover,
+      .popover-button:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+      .control-contract {
+        max-inline-size: 78ch;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .compatibility-note {
+        margin-block-start: 1rem;
+        padding: 0.8rem;
+        border-inline-start: 0.3rem solid var(--current);
+        background: var(--surface);
+      }
+
+      @supports selector(.collection-explorer:has(option:checked)) {
+        .interactive-controls { display: grid; }
+        .compatibility-note { display: none; }
+      }
+    }
+
+    @layer results {
+      .explorer-layout {
+        display: grid;
+        gap: 1rem;
+        margin-block-start: 1rem;
+        align-items: start;
+      }
+
+      .result-region { min-inline-size: 0; }
+
+      .collection-state { display: none; }
+      .collection-state[data-state="all-name-1"] { display: block; }
+
+      .state-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 0.7rem;
+        padding: 0.2rem 0 0.9rem;
+      }
+
+      .state-position {
+        color: var(--muted);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .state-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.42rem;
+        margin-block-end: 0.8rem;
+      }
+
+      .state-facts li {
+        padding: 0.32rem 0.58rem;
+        border: 1px solid var(--marker);
+        border-radius: 999px;
+        color: var(--accent-strong);
+        background: var(--accent-soft);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .state-display {
+        display: grid;
+        gap: 0.85rem;
+        align-items: start;
+      }
+
+      .state-map {
+        min-inline-size: 0;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .map-frame {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--water);
+      }
+
+      .map-frame svg { inline-size: 100%; block-size: auto; }
+      .land { fill: var(--land); stroke: var(--line); stroke-width: 2; }
+      .road { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 7; opacity: 0.65; }
+      .marker circle { fill: var(--surface); stroke: var(--marker); stroke-width: 4; vector-effect: non-scaling-stroke; }
+      .marker text {
+        fill: var(--ink);
+        font: 750 14px ui-sans-serif, system-ui, sans-serif;
+        paint-order: stroke;
+        stroke: var(--surface);
+        stroke-width: 4px;
+        stroke-linejoin: round;
+      }
+
+      figcaption {
+        margin-block-start: 0.6rem;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .record-panel { min-inline-size: 0; }
+      .range-note { margin-block-end: 0.55rem; color: var(--muted); font-size: 0.9rem; }
+
+      .region-empty-message {
+        display: none;
+        margin-block: 0.8rem;
+        padding: 0.9rem;
+        border-inline-start: 0.3rem solid var(--current);
+        background: var(--surface-soft);
+      }
+
+      .record-list {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.7rem;
+      }
+
+      .record-card {
+        min-inline-size: 0;
+        padding: 0.85rem;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--surface);
+      }
+
+      .record-topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .concerns { color: var(--accent-strong); font-weight: 800; }
+      .record-card h3 { margin-block-start: 0.45rem; }
+      .record-card > p:last-child { margin-block-start: 0.22rem; color: var(--muted); font-size: 0.88rem; }
+
+      .pager {
+        display: none;
+        min-inline-size: 0;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .pager legend { font-weight: 800; }
+      .pager-help { margin-block-start: 0.35rem; color: var(--muted); font-size: 0.82rem; }
+
+      .page-options {
+        display: flex;
+        gap: 0.4rem;
+        max-inline-size: 100%;
+        margin-block-start: 0.65rem;
+        overflow-x: auto;
+        padding: 0.22rem;
+      }
+
+      .page-choice {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-inline-size: 2.75rem;
+        min-block-size: 2.75rem;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        background: var(--surface);
+        cursor: pointer;
+      }
+
+      .page-choice input {
+        inline-size: 1rem;
+        block-size: 1rem;
+        margin: 0;
+        accent-color: var(--current);
+      }
+
+      .page-choice:has(input:checked) {
+        border-color: var(--current);
+        color: var(--surface);
+        background: var(--current);
+        font-weight: 850;
+      }
+
+      @supports selector(.collection-explorer:has(option:checked)) {
+        .pager { display: block; }
+
+        .collection-state[data-state] { display: none; }
+
+        .collection-explorer:has(#filter-select option[value="all"]:checked):has(#sort-select option[value="name"]:checked):has(#page-1:checked) [data-state="all-name-1"],
+        .collection-explorer:has(#filter-select option[value="all"]:checked):has(#sort-select option[value="name"]:checked):has(#page-2:checked) [data-state="all-name-2"],
+        .collection-explorer:has(#filter-select option[value="all"]:checked):has(#sort-select option[value="region"]:checked):has(#page-1:checked) [data-state="all-region-1"],
+        .collection-explorer:has(#filter-select option[value="all"]:checked):has(#sort-select option[value="region"]:checked):has(#page-2:checked) [data-state="all-region-2"],
+        .collection-explorer:has(#filter-select option[value="flood"]:checked):has(#sort-select option[value="name"]:checked):has(#page-1:checked) [data-state="flood-name-1"],
+        .collection-explorer:has(#filter-select option[value="flood"]:checked):has(#sort-select option[value="name"]:checked):has(#page-2:checked) [data-state="flood-name-2"],
+        .collection-explorer:has(#filter-select option[value="flood"]:checked):has(#sort-select option[value="region"]:checked):has(#page-1:checked) [data-state="flood-region-1"],
+        .collection-explorer:has(#filter-select option[value="flood"]:checked):has(#sort-select option[value="region"]:checked):has(#page-2:checked) [data-state="flood-region-2"],
+        .collection-explorer:has(#filter-select option[value="heat"]:checked):has(#sort-select option[value="name"]:checked):has(#page-1:checked) [data-state="heat-name-1"],
+        .collection-explorer:has(#filter-select option[value="heat"]:checked):has(#sort-select option[value="name"]:checked):has(#page-2:checked) [data-state="heat-name-2"],
+        .collection-explorer:has(#filter-select option[value="heat"]:checked):has(#sort-select option[value="region"]:checked):has(#page-1:checked) [data-state="heat-region-1"],
+        .collection-explorer:has(#filter-select option[value="heat"]:checked):has(#sort-select option[value="region"]:checked):has(#page-2:checked) [data-state="heat-region-2"],
+        .collection-explorer:has(#filter-select option[value="wind"]:checked):has(#sort-select option[value="name"]:checked):has(#page-1:checked) [data-state="wind-name-1"],
+        .collection-explorer:has(#filter-select option[value="wind"]:checked):has(#sort-select option[value="name"]:checked):has(#page-2:checked) [data-state="wind-name-2"],
+        .collection-explorer:has(#filter-select option[value="wind"]:checked):has(#sort-select option[value="region"]:checked):has(#page-1:checked) [data-state="wind-region-1"],
+        .collection-explorer:has(#filter-select option[value="wind"]:checked):has(#sort-select option[value="region"]:checked):has(#page-2:checked) [data-state="wind-region-2"] {
+          display: block;
+        }
+
+        .collection-explorer:has(#region-select option[value="north"]:checked) .marker:not([data-region="north"]),
+        .collection-explorer:has(#region-select option[value="north"]:checked) .record-card:not([data-region="north"]),
+        .collection-explorer:has(#region-select option[value="south"]:checked) .marker:not([data-region="south"]),
+        .collection-explorer:has(#region-select option[value="south"]:checked) .record-card:not([data-region="south"]) {
+          display: none;
+        }
+
+        .collection-explorer:has(#region-select option[value="north"]:checked) .collection-state[data-has-north="false"] .state-display,
+        .collection-explorer:has(#region-select option[value="south"]:checked) .collection-state[data-has-south="false"] .state-display {
+          display: none;
+        }
+
+        .collection-explorer:has(#region-select option[value="north"]:checked) .collection-state[data-has-north="false"] .region-empty-message,
+        .collection-explorer:has(#region-select option[value="south"]:checked) .collection-state[data-has-south="false"] .region-empty-message {
+          display: block;
+        }
+
+        .collection-explorer:has(#view-cards:checked) .state-map,
+        .collection-explorer:has(#view-list:checked) .state-map { display: none; }
+
+        .collection-explorer:has(#view-map:checked) .record-panel { display: none; }
+
+        .collection-explorer:has(#view-list:checked) .record-list {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .collection-explorer:has(#view-list:checked) .record-card {
+          display: grid;
+          grid-template-columns: minmax(8rem, 0.55fr) minmax(0, 1fr);
+          gap: 0.25rem 0.8rem;
+          align-items: baseline;
+          border-inline-start: 0.3rem solid var(--accent);
+          border-radius: 0.35rem;
+        }
+
+        .collection-explorer:has(#view-list:checked) .record-topline { grid-column: 1 / -1; }
+        .collection-explorer:has(#view-list:checked) .record-card h3 { margin-block-start: 0.2rem; }
+        .collection-explorer:has(#view-list:checked) .record-card > p:last-child { margin-block-start: 0.2rem; }
+      }
+    }
+
+    @layer states {
+      .fab-link,
+      .fab-button {
+        position: fixed;
+        inset-inline-end: calc(1rem + env(safe-area-inset-right, 0px));
+        inset-block-end: calc(1rem + env(safe-area-inset-bottom, 0px));
+        z-index: 40;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-inline-size: 3rem;
+        min-block-size: 3rem;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        color: var(--surface);
+        background: var(--accent);
+        box-shadow: 0 0.75rem 2rem rgb(15 55 45 / 0.28);
+        font-weight: 850;
+        text-decoration: none;
+      }
+
+      .fab-link { display: inline-flex; }
+      .fab-button { display: none; cursor: pointer; }
+      .fab-link svg, .fab-button svg { inline-size: 1.2rem; block-size: 1.2rem; }
+
+      #collection-actions {
+        inline-size: min(28rem, calc(100% - 2rem));
+        max-block-size: calc(100dvh - 2rem);
+        margin: auto;
+        padding: 1rem;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--ink);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      #collection-actions::backdrop { background: rgb(11 24 18 / 0.48); }
+      #collection-actions h2 { font-size: 1.35rem; }
+      #collection-actions > p { margin-block-start: 0.35rem; color: var(--muted); }
+      .popover-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-block-start: 1rem; }
+
+      @supports selector(:popover-open) {
+        .fab-link { display: none; }
+        .fab-button { display: inline-flex; }
+      }
+    }
+
+    @layer responsive {
+      @container explorer (min-width: 40rem) {
+        .control-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .record-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .state-display { grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.1fr); }
+      }
+
+      @container explorer (min-width: 66rem) {
+        .control-groups { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        .explorer-layout {
+          grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.18fr);
+          grid-template-areas: "results pager";
+        }
+
+        .result-region { grid-area: results; }
+        .pager {
+          grid-area: pager;
+          position: sticky;
+          inset-block-start: calc(1rem + env(safe-area-inset-top, 0px));
+        }
+
+        .page-options {
+          display: grid;
+          overflow: visible;
+        }
+
+        .page-choice {
+          inline-size: 100%;
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 26rem) {
+        .collection-explorer { padding: 0.7rem; }
+        .control-panel, .state-map, .pager { border-radius: 0.72rem; }
+        .control-heading { display: block; }
+        .control-heading p { margin-block-start: 0.35rem; }
+        .collection-explorer:has(#view-list:checked) .record-card {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      @media (forced-colors: active) {
+        .choice:has(input:checked),
+        .page-choice:has(input:checked) { border-width: 0.22rem; }
+        .land { fill: Canvas; stroke: CanvasText; }
+        .marker circle { fill: Canvas; stroke: LinkText; }
+        .marker text { fill: CanvasText; stroke: Canvas; }
+      }
+
+      @media print {
+        body { padding: 0; background: white; color: black; }
+        .collection-explorer { box-shadow: none; }
+        .control-panel, .pager, .fab-link, .fab-button, #collection-actions { display: none; }
+        .state-display { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      }
+    }
+
+    @layer motion {
+      @media (prefers-reduced-motion: no-preference) {
+        html { scroll-behavior: smooth; }
+
+        .choice,
+        .page-choice,
+        .reset-button,
+        .action-link,
+        .popover-button,
+        .fab-link,
+        .fab-button {
+          transition:
+            background-color 150ms ease,
+            border-color 150ms ease,
+            color 150ms ease,
+            transform 150ms ease;
+        }
+
+        .choice:hover,
+        .page-choice:hover,
+        .fab-link:hover,
+        .fab-button:hover { transform: translateY(-1px); }
+
+        @supports selector(.collection-explorer:has(option:checked)) {
+          .collection-state { animation: state-arrive 180ms ease-out both; }
+        }
+
+        @supports selector(:popover-open) {
+          #collection-actions:popover-open { animation: popover-arrive 160ms ease-out both; }
+        }
+
+        @keyframes state-arrive {
+          from { opacity: 0.35; transform: translateY(0.35rem); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popover-arrive {
+          from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      }
+    }
+  </style>
+</head>
+<body id="page-top">
+  <a class="skip-link" href="#results">Skip to the current collection page</a>
+
+  <svg class="svg-definitions" aria-hidden="true" width="0" height="0">
+    <defs>
+      <symbol id="regional-base" viewBox="0 0 760 390">
+        <path class="land" d="M55 78 192 28 347 55 555 29 705 113 675 243 722 334 566 367 391 345 242 377 91 332 40 204Z"/>
+        <path class="road" d="M78 281C205 205 332 249 465 146S635 93 688 121"/>
+        <path class="road" d="M158 52C220 154 214 258 276 360"/>
+        <path class="road" d="M510 52C462 162 527 253 586 351"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="page-header">
+    <p class="eyebrow">Bounded practitioner exemplar · HTML, CSS, and SVG</p>
+    <h1>Paginated collection composition</h1>
+    <p>Choose a readiness concern, region lens, stable ordering, page, and presentation. Each concern, order, and page combination reveals a pre-authored slice of one six-location collection; the region lens narrows cards and markers together or presents an explicit zero-result state.</p>
+  </header>
+
+  <main>
+    <form class="collection-explorer" id="collection-explorer">
+      <section class="control-panel" id="collection-controls" aria-labelledby="controls-heading">
+        <div class="control-heading">
+          <div>
+            <p class="eyebrow">One bounded state owner</p>
+            <h2 id="controls-heading">Compose the collection</h2>
+          </div>
+          <p>Native select and radio controls reveal the matching pre-authored collection state. Restore initial view returns to all concerns, all regions, name order, page 1, and cards with map.</p>
+        </div>
+
+        <div class="interactive-controls">
+          <div class="control-groups">
+            <div class="select-field">
+              <label for="filter-select">Readiness concern</label>
+              <select id="filter-select" name="filter">
+                <option value="all" selected>All concerns</option>
+                <option value="flood">Flood readiness</option>
+                <option value="heat">Heat readiness</option>
+                <option value="wind">Wind readiness</option>
+              </select>
+            </div>
+
+            <div class="select-field">
+              <label for="region-select">Region on current page</label>
+              <select id="region-select" name="region" aria-describedby="region-lens-note">
+                <option value="all" selected>All regions</option>
+                <option value="north">North region</option>
+                <option value="south">South region</option>
+              </select>
+            </div>
+
+            <div class="select-field">
+              <label for="sort-select">Stable ordering</label>
+              <select id="sort-select" name="sort">
+                <option value="name" selected>Name A–Z</option>
+                <option value="region">Region sequence</option>
+              </select>
+            </div>
+
+            <fieldset class="control-group">
+              <legend>Presentation</legend>
+              <div class="choice-row">
+                <label class="choice"><input id="view-split" type="radio" name="view" value="split" checked>Cards + map</label>
+                <label class="choice"><input id="view-cards" type="radio" name="view" value="cards">Cards</label>
+                <label class="choice"><input id="view-map" type="radio" name="view" value="map">Map</label>
+                <label class="choice"><input id="view-list" type="radio" name="view" value="list">Compact list</label>
+              </div>
+            </fieldset>
+
+          </div>
+
+          <div class="control-actions">
+            <button class="reset-button" type="reset">Restore initial view</button>
+            <p class="control-contract" id="region-lens-note">Concern and order choose a pre-authored collection slice. Region is an explicitly within-page lens, so the concern total remains visible while cards and SVG markers narrow together. This local state is ephemeral; a production collection should render page positions as addressable links and let its server or generator own filtering, ordering, totals, slices, canonical URLs, and range recovery.</p>
+          </div>
+        </div>
+
+        <p class="compatibility-note"><strong>Initial slice available.</strong> The browser has presented the complete default page. Interactive state composition activates when the browser supports relational selection with a selected option; the complete default slice remains available as a static reference in earlier engines.</p>
+      </section>
+
+      <div class="explorer-layout">
+        <section class="result-region" id="results" aria-label="Current collection page">
+          <section class="collection-state" data-state="all-name-1" data-has-north="false" data-has-south="true" aria-labelledby="all-name-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">All concerns · Name A–Z</p><h2 id="all-name-1-heading">Locations 1–3 of 6</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: all</li><li>Order: name</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="all-name-1-map-title all-name-1-map-desc">
+                    <title id="all-name-1-map-title">All concerns, name order, page 1 map</title>
+                    <desc id="all-name-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Name order begins with Cedar Exchange and continues through East Market.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="all-name-2" data-has-north="true" data-has-south="true" aria-labelledby="all-name-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">All concerns · Name A–Z</p><h2 id="all-name-2-heading">Locations 4–6 of 6</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: all</li><li>Order: name</li><li>Slice: 4–6</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="all-name-2-map-title all-name-2-map-desc">
+                    <title id="all-name-2-map-title">All concerns, name order, page 2 map</title>
+                    <desc id="all-name-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Name order resumes with Harbor Edge and reaches North Crossing.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="all-region-1" data-has-north="true" data-has-south="false" aria-labelledby="all-region-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">All concerns · Region sequence</p><h2 id="all-region-1-heading">Locations 1–3 of 6</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: all</li><li>Order: Central → East → North → South</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="all-region-1-map-title all-region-1-map-desc">
+                    <title id="all-region-1-map-title">All concerns, region order, page 1 map</title>
+                    <desc id="all-region-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Region sequence begins with Central, then East, then North.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="all-region-2" data-has-north="true" data-has-south="true" aria-labelledby="all-region-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">All concerns · Region sequence</p><h2 id="all-region-2-heading">Locations 4–6 of 6</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: all</li><li>Order: Central → East → North → South</li><li>Slice: 4–6</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="all-region-2-map-title all-region-2-map-desc">
+                    <title id="all-region-2-map-title">All concerns, region order, page 2 map</title>
+                    <desc id="all-region-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">The region tie-breaker remains name plus record ID.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="flood-name-1" data-has-north="false" data-has-south="true" aria-labelledby="flood-name-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Flood readiness · Name A–Z</p><h2 id="flood-name-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: flood</li><li>Order: name</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="flood-name-1-map-title flood-name-1-map-desc">
+                    <title id="flood-name-1-map-title">Flood readiness, name order, page 1 map</title>
+                    <desc id="flood-name-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">The filter selects four flood-ready locations before the page cut.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="flood-name-2" data-has-north="true" data-has-south="false" aria-labelledby="flood-name-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Flood readiness · Name A–Z</p><h2 id="flood-name-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: flood</li><li>Order: name</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="flood-name-2-map-title flood-name-2-map-desc">
+                    <title id="flood-name-2-map-title">Flood readiness, name order, page 2 map</title>
+                    <desc id="flood-name-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">A short final page keeps the accurate total and page position.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="flood-region-1" data-has-north="true" data-has-south="true" aria-labelledby="flood-region-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Flood readiness · Region sequence</p><h2 id="flood-region-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: flood</li><li>Order: region</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="flood-region-1-map-title flood-region-1-map-desc">
+                    <title id="flood-region-1-map-title">Flood readiness, region order, page 1 map</title>
+                    <desc id="flood-region-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">East, North, and South regions lead the filtered order.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="flood-region-2" data-has-north="false" data-has-south="true" aria-labelledby="flood-region-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Flood readiness · Region sequence</p><h2 id="flood-region-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: flood</li><li>Order: region</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="flood-region-2-map-title flood-region-2-map-desc">
+                    <title id="flood-region-2-map-title">Flood readiness, region order, page 2 map</title>
+                    <desc id="flood-region-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Harbor Edge follows Cedar Exchange within the South region.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="heat-name-1" data-has-north="true" data-has-south="true" aria-labelledby="heat-name-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Heat readiness · Name A–Z</p><h2 id="heat-name-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: heat</li><li>Order: name</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="heat-name-1-map-title heat-name-1-map-desc">
+                    <title id="heat-name-1-map-title">Heat readiness, name order, page 1 map</title>
+                    <desc id="heat-name-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">The heat-ready collection contains four stable records.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="heat-name-2" data-has-north="true" data-has-south="false" aria-labelledby="heat-name-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Heat readiness · Name A–Z</p><h2 id="heat-name-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: heat</li><li>Order: name</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="heat-name-2-map-title heat-name-2-map-desc">
+                    <title id="heat-name-2-map-title">Heat readiness, name order, page 2 map</title>
+                    <desc id="heat-name-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">North Crossing completes the name-ordered heat collection.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="heat-region-1" data-has-north="true" data-has-south="false" aria-labelledby="heat-region-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Heat readiness · Region sequence</p><h2 id="heat-region-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: heat</li><li>Order: region</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="heat-region-1-map-title heat-region-1-map-desc">
+                    <title id="heat-region-1-map-title">Heat readiness, region order, page 1 map</title>
+                    <desc id="heat-region-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="north" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Central and North records lead this filtered order.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="north" data-record="lake"><p class="record-topline"><span>Record 05 · North</span><span class="concerns">Flood · Heat</span></p><h3>Lake Plain</h3><p>Shelter access and water distribution.</p></li>
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="heat-region-2" data-has-north="false" data-has-south="true" aria-labelledby="heat-region-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Heat readiness · Region sequence</p><h2 id="heat-region-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: heat</li><li>Order: region</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="heat-region-2-map-title heat-region-2-map-desc">
+                    <title id="heat-region-2-map-title">Heat readiness, region order, page 2 map</title>
+                    <desc id="heat-region-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Cedar Exchange completes the region-ordered heat collection.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="south" data-record="cedar"><p class="record-topline"><span>Record 01 · South</span><span class="concerns">Flood · Heat</span></p><h3>Cedar Exchange</h3><p>Elevated transfer point and alternate bus route.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="wind-name-1" data-has-north="false" data-has-south="true" aria-labelledby="wind-name-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Wind readiness · Name A–Z</p><h2 id="wind-name-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: wind</li><li>Order: name</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="wind-name-1-map-title wind-name-1-map-desc">
+                    <title id="wind-name-1-map-title">Wind readiness, name order, page 1 map</title>
+                    <desc id="wind-name-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">The wind-ready collection contains four stable records.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="wind-name-2" data-has-north="true" data-has-south="false" aria-labelledby="wind-name-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Wind readiness · Name A–Z</p><h2 id="wind-name-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: wind</li><li>Order: name</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="wind-name-2-map-title wind-name-2-map-desc">
+                    <title id="wind-name-2-map-title">Wind readiness, name order, page 2 map</title>
+                    <desc id="wind-name-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">North Crossing completes the name-ordered wind collection.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="wind-region-1" data-has-north="true" data-has-south="false" aria-labelledby="wind-region-1-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Wind readiness · Region sequence</p><h2 id="wind-region-1-heading">Locations 1–3 of 4</h2></div>
+              <p class="state-position">Page 1 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: wind</li><li>Order: region</li><li>Slice: 1–3</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="wind-region-1-map-title wind-region-1-map-desc">
+                    <title id="wind-region-1-map-title">Wind readiness, region order, page 1 map</title>
+                    <desc id="wind-region-1-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="central" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="marker" data-region="east" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                    <g class="marker" data-region="north" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Central, East, and North lead this filtered order.</p>
+                <ol class="record-list">
+                  <li class="record-card" data-region="central" data-record="civic"><p class="record-topline"><span>Record 02 · Central</span><span class="concerns">Heat · Wind</span></p><h3>Civic Core</h3><p>Public-service continuity and shaded dry access.</p></li>
+                  <li class="record-card" data-region="east" data-record="east"><p class="record-topline"><span>Record 03 · East</span><span class="concerns">Flood · Wind</span></p><h3>East Market</h3><p>Supply staging above the local drainage basin.</p></li>
+                  <li class="record-card" data-region="north" data-record="north"><p class="record-topline"><span>Record 06 · North</span><span class="concerns">Heat · Wind</span></p><h3>North Crossing</h3><p>Bridge monitoring and transfer continuity.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="collection-state" data-state="wind-region-2" data-has-north="false" data-has-south="true" aria-labelledby="wind-region-2-heading">
+            <p class="region-empty-message"><strong>Zero locations in this page-region intersection.</strong> Choose All regions or the other page to recover a populated slice.</p>
+            <header class="state-header">
+              <div><p class="eyebrow">Wind readiness · Region sequence</p><h2 id="wind-region-2-heading">Location 4 of 4</h2></div>
+              <p class="state-position">Page 2 of 2</p>
+            </header>
+            <ul class="state-facts" aria-label="Current collection state">
+              <li>Filter: wind</li><li>Order: region</li><li>Short final slice: 4</li>
+            </ul>
+            <div class="state-display">
+              <figure class="state-map">
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="wind-region-2-map-title wind-region-2-map-desc">
+                    <title id="wind-region-2-map-title">Wind readiness, region order, page 2 map</title>
+                    <desc id="wind-region-2-map-desc">Visible markers mirror the records retained by the active collection slice and within-page region lens.</desc>
+                    <use href="#regional-base"/>
+                    <g class="marker" data-region="south" transform="translate(556 305)"><circle r="11"/><text x="-103" y="32">Harbor Edge</text></g>
+                  </svg>
+                </div>
+                <figcaption>Visible markers and visible records share the same region values.</figcaption>
+              </figure>
+              <div class="record-panel">
+                <p class="range-note">Harbor Edge completes the region-ordered wind collection.</p>
+                <ol class="record-list" start="4">
+                  <li class="record-card" data-region="south" data-record="harbor"><p class="record-topline"><span>Record 04 · South</span><span class="concerns">Flood · Wind</span></p><h3>Harbor Edge</h3><p>Tide-sensitive routes and alternate access.</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <fieldset class="pager" aria-describedby="pager-help">
+          <legend>Demonstration page</legend>
+          <p class="pager-help" id="pager-help">Each page control selects a distinct, pre-authored slice. Production pagination should use destination links with preserved query state.</p>
+          <div class="page-options">
+            <label class="page-choice"><input id="page-1" type="radio" name="page" value="1" checked><span>Page 1</span></label>
+            <label class="page-choice"><input id="page-2" type="radio" name="page" value="2"><span>Page 2</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+  </main>
+
+  <button class="fab-button" type="button" popovertarget="collection-actions" aria-label="Open collection actions">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>Collection actions</span>
+  </button>
+
+  <a class="fab-link" href="#collection-controls">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>Collection controls</span>
+  </a>
+
+  <aside id="collection-actions" popover aria-labelledby="collection-actions-heading">
+    <h2 id="collection-actions-heading">Collection actions</h2>
+    <p>Move directly to the state controls or restore the bounded exemplar to its initial selection.</p>
+    <div class="popover-actions">
+      <a class="action-link" href="#collection-controls">Open controls</a>
+      <button class="reset-button" type="reset" form="collection-explorer">Restore initial view</button>
+      <button class="popover-button" type="button" popovertarget="collection-actions" popovertargetaction="hide">Close actions</button>
+    </div>
+  </aside>
+
+  <footer class="page-footer">
+    <p>The complete teaching artifact remains self-contained. Modern relational selectors activate its bounded state matrix; native form reset, SVG text alternatives, responsive reflow, reduced-motion preferences, and a direct floating fallback preserve clear recovery routes.</p>
+  </footer>
+</body>
+</html>

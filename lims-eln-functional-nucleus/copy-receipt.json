@@ -1,0 +1,168 @@
+{
+  "id": "driftframe.lims_eln.functional_nucleus.copy_receipt.2026-08-22.develop-integrated",
+  "title": "LIMS/ELN Functional Nucleus Filtered Exact-Head Copy Receipt",
+  "receipt_version": "1.0.0",
+  "captured_at": "2026-08-22T23:18:31-04:00",
+  "source_workspace": "new-driftframe-constellation/lims-eln-functional-nucleus",
+  "destination": ".",
+  "capture_scope": "five_exact_clean_develop_based_heads_with_declared_generated_output_exclusions",
+  "result": "complete",
+  "totals": {
+    "component_files": 448,
+    "component_bytes": 3255616,
+    "repositories": 5
+  },
+  "integrity": {
+    "copy_mode": "archive_delete_delete_excluded",
+    "parity_method": "checksum_aware_archive_dry_run_with_delete_and_itemized_changes",
+    "parity_expected_output": "empty",
+    "parity_result": "empty_for_all_five_repositories",
+    "source_status_result": "zero_entries_for_all_five_repositories",
+    "target_exclusion_scan": "zero_matching_paths",
+    "content_digest_algorithm": "sha256 over entries ordered by relative_path, each encoded as sha256(file_bytes) plus two spaces plus ./relative_path plus newline",
+    "content_digest_scope": "regular_files_in_each_filtered_component_tree"
+  },
+  "local_validation_receipts": [
+    {
+      "repository": "lims-eln-program-specification",
+      "validators": [
+        "program_valid",
+        "language_valid",
+        "secret_shape_scan_valid",
+        "schemas_current"
+      ],
+      "tests_run": 79,
+      "result": "passed"
+    },
+    {
+      "repository": "lims-eln-simulated-final-state",
+      "validators": [
+        "repository_validator_passed",
+        "shared_contract_conformant"
+      ],
+      "tests_run": 42,
+      "result": "passed"
+    },
+    {
+      "repository": "lims-eln-enterprise-implementation",
+      "validators": [
+        "repository_validator_passed",
+        "shared_contract_workbench_test_exercised",
+        "static_flyway_and_tenant_boundary_proofs_passed"
+      ],
+      "tests_run": 197,
+      "environment_gated_skips": 17,
+      "result": "passed"
+    },
+    {
+      "repository": "lims-eln-comparative-evidence",
+      "validators": [
+        "repository_validator_passed",
+        "shared_contract_conformant"
+      ],
+      "tests_run": 59,
+      "result": "passed"
+    },
+    {
+      "repository": "site-reading-governance",
+      "validators": [
+        "governance_valid",
+        "language_valid",
+        "secret_shape_scan_valid"
+      ],
+      "tests_run": 86,
+      "result": "passed"
+    }
+  ],
+  "repositories": [
+    {
+      "directory": "lims-eln-program-specification",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_head": "23e6ea973f6bd5cc5caa46de10aed589816af9b5",
+      "source_status_entries": 0,
+      "included_files": 99,
+      "included_bytes": 896800,
+      "content_digest": "sha256:a538bed55bf354c96af84eab6e5d57d9f911d4188863cf45b52e3a2adc1ce384",
+      "checksum_parity": "equal"
+    },
+    {
+      "directory": "lims-eln-simulated-final-state",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_head": "ead7b137ab3b38bcd38b88aa2b517ad83b1f4792",
+      "source_status_entries": 0,
+      "included_files": 63,
+      "included_bytes": 350388,
+      "content_digest": "sha256:397a12f142bf221162af5a167aa270436b683b5926e80690c27d7a0c09c28888",
+      "checksum_parity": "equal"
+    },
+    {
+      "directory": "lims-eln-enterprise-implementation",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_head": "ac33876eba2dff1ad803d9a7175c1e956036c226",
+      "source_status_entries": 0,
+      "included_files": 117,
+      "included_bytes": 979766,
+      "content_digest": "sha256:92a03bc34cc5e7f87fb30a7131104377d9aae237fd7692628bbf8792a8a05d09",
+      "checksum_parity": "equal"
+    },
+    {
+      "directory": "lims-eln-comparative-evidence",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_head": "0fdc17766cd0b9d8148f01293bd324f2d4c360b5",
+      "source_status_entries": 0,
+      "included_files": 54,
+      "included_bytes": 334086,
+      "content_digest": "sha256:6aae3b3c30d49d00d9743a539f4577afb2f06180c9adadad215d8d261a2fa858",
+      "checksum_parity": "equal"
+    },
+    {
+      "directory": "site-reading-governance",
+      "source_branch": "source-key:functional-nucleus-integration",
+      "source_head": "95869386681d4d5502ed5abf4949638cf007b7ad",
+      "source_status_entries": 0,
+      "included_files": 115,
+      "included_bytes": 694576,
+      "content_digest": "sha256:9cc470f0dfe0f79e8973ab7a1880903039ed14760cdc5484c261d0e3b89fb690",
+      "checksum_parity": "equal"
+    }
+  ],
+  "resolved_exclusions": [
+    ".DS_Store",
+    "lims-eln-program-specification/.git",
+    "lims-eln-program-specification/scripts/__pycache__",
+    "lims-eln-program-specification/src/lims_eln_contracts/__pycache__",
+    "lims-eln-program-specification/src/lims_eln_program_specification.egg-info",
+    "lims-eln-program-specification/tests/__pycache__",
+    "lims-eln-simulated-final-state/.git",
+    "lims-eln-simulated-final-state/build",
+    "lims-eln-simulated-final-state/src/lims_eln_sim/__pycache__",
+    "lims-eln-simulated-final-state/src/lims_eln_simulated_final_state.egg-info",
+    "lims-eln-simulated-final-state/tests/__pycache__",
+    "lims-eln-simulated-final-state/tools/__pycache__",
+    "lims-eln-enterprise-implementation/.git",
+    "lims-eln-enterprise-implementation/.venv",
+    "lims-eln-enterprise-implementation/scripts/__pycache__",
+    "lims-eln-enterprise-implementation/src/lims_eln_enterprise_implementation.egg-info",
+    "lims-eln-enterprise-implementation/src/lims_eln_implementation/__pycache__",
+    "lims-eln-enterprise-implementation/src/lims_eln_implementation/workbench/__pycache__",
+    "lims-eln-enterprise-implementation/tests/__pycache__",
+    "lims-eln-comparative-evidence/.git",
+    "lims-eln-comparative-evidence/build",
+    "lims-eln-comparative-evidence/src/comparative_evidence/__pycache__",
+    "lims-eln-comparative-evidence/src/lims_eln_comparative_evidence.egg-info",
+    "lims-eln-comparative-evidence/tests/__pycache__",
+    "lims-eln-comparative-evidence/tools/__pycache__",
+    "site-reading-governance/.git",
+    "site-reading-governance/tests/__pycache__",
+    "site-reading-governance/tools/__pycache__"
+  ],
+  "preservation_checks": {
+    "nested_git_state_present": false,
+    "generated_output_present": false,
+    "component_licenses_present": 5,
+    "component_notices_present": 2,
+    "component_github_directories_present": 5,
+    "component_release_role_records_present": 4,
+    "governance_version_record_present": true
+  }
+}

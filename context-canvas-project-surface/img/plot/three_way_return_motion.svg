@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="return-motion-title return-motion-desc">
+  <title id="return-motion-title">Three returns changed meaning at different intervals</title>
+  <desc id="return-motion-desc">A shared 2017 to 2023 time axis introduces three distinct return motions. Humatics reframes a site and Field Installation Engineer question within two days. Who To Believe experiences a post-acquisition navigation recurrence more than one year later; active and archived accounts preserve different mechanisms whose relationship remains unresolved. FMI sees a 2019 phrase return in Q2 2023 and reveals the Boolean interface as an ETL substrate.</desc>
+  <defs>
+    <pattern id="return-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".07"/></pattern>
+    <style>
+      .field{fill:#fffaf2}.panel{fill:#fffdf8}.cream{fill:#fff5de}.powder{fill:#cfe7f7}.sea{fill:#d9efea}.blush{fill:#ffd3d0}.pale{fill:#e7efff}.acid{fill:#f2ff67}.coral{fill:#fa7065}.cobalt{fill:#2855f3}.deep{fill:#153fbe}.ink-fill{fill:#17345f}.shadow{fill:#17345f}.outline{stroke:#17345f;stroke-width:2;fill:none}.soft{stroke:#17345f;stroke-width:1.4}.axis{stroke:#17345f;stroke-width:2}.guide{stroke:#7890b2;stroke-width:1}.title{font:700 34px/1.1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}.subtitle{font:500 16px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#dbe5ff}.lane-title{font:750 18px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}.card-title{font:700 15px/1.25 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}.body{font:500 12.8px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}.micro{font:750 10.5px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:1px;fill:#153fbe}.micro-on{font:750 10.5px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:1px;fill:#fffdf8}.year{font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#17345f}.note{font:650 13px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+    </style>
+  </defs>
+
+  <g aria-hidden="true"><rect class="field" x="18" y="18" width="1564" height="1084"/><rect x="18" y="18" width="1564" height="1084" fill="url(#return-grid)"/><rect class="cobalt" x="18" y="18" width="1564" height="142"/><rect x="18" y="18" width="1564" height="142" fill="url(#return-grid)"/></g>
+  <rect class="outline" x="18" y="18" width="1564" height="1084" rx="28"/>
+  <g role="group" aria-labelledby="return-heading"><title id="return-heading">Return-motion heading</title><text class="micro-on" x="54" y="53">2017–2023 · SHARED TIME AXIS WITH LOCAL INTERVALS</text><text class="title" x="54" y="98">Three returns changed meaning at different intervals</text><text class="subtitle" x="54" y="129">A question returned within two days; a navigation symptom more than a year after acquisition; a phrase four years later.</text></g>
+
+  <g role="group" aria-labelledby="shared-time-title">
+    <title id="shared-time-title">Shared time axis from 2017 through 2023</title>
+    <line class="axis" x1="100" y1="188" x2="1480" y2="188"/>
+    <g aria-hidden="true"><line class="guide" x1="100" y1="177" x2="100" y2="282"/><line class="guide" x1="330" y1="177" x2="330" y2="282"/><line class="guide" x1="560" y1="177" x2="560" y2="282"/><line class="guide" x1="790" y1="177" x2="790" y2="282"/><line class="guide" x1="1020" y1="177" x2="1020" y2="282"/><line class="guide" x1="1250" y1="177" x2="1250" y2="282"/><line class="guide" x1="1480" y1="177" x2="1480" y2="282"/></g>
+    <text class="year" x="100" y="174" text-anchor="middle">2017</text><text class="year" x="330" y="174" text-anchor="middle">2018</text><text class="year" x="560" y="174" text-anchor="middle">2019</text><text class="year" x="790" y="174" text-anchor="middle">2020</text><text class="year" x="1020" y="174" text-anchor="middle">2021</text><text class="year" x="1250" y="174" text-anchor="middle">2022</text><text class="year" x="1480" y="174" text-anchor="middle">2023</text>
+    <text class="micro" x="54" y="216">HUMATICS</text><line class="axis" x1="330" y1="212" x2="560" y2="212"/><circle class="deep" cx="442" cy="212" r="6"/><circle class="acid soft" cx="450" cy="212" r="6"/><text class="year" x="580" y="216">WITHIN TWO DAYS · SHORT INTERVAL MAGNIFIED BELOW</text>
+    <text class="micro" x="54" y="242">WHO TO BELIEVE</text><line class="axis" x1="180" y1="238" x2="790" y2="238"/><rect class="blush soft" x="1010" y="226" width="326" height="24" rx="7"/><text class="year" x="1024" y="243">POST-ACQUISITION · &gt;1 YEAR LATER</text>
+    <text class="micro" x="54" y="268">FMI</text><line class="axis" x1="560" y1="264" x2="1480" y2="264"/><circle class="deep" cx="560" cy="264" r="6"/><circle class="acid soft" cx="1480" cy="264" r="6"/><text class="year" x="1020" y="258" text-anchor="middle">FOUR-YEAR RETURN</text>
+  </g>
+
+  <g role="group" aria-labelledby="humatics-return-title">
+    <title id="humatics-return-title">Humatics two-day reframing</title>
+    <rect class="shadow" x="62" y="312" width="1484" height="202" rx="17"/><rect class="cream soft" x="54" y="304" width="1484" height="202" rx="17"/><text class="micro" x="76" y="333">HUMATICS · SHORT-CYCLE REFRAMING</text>
+    <rect class="panel soft" x="76" y="350" width="286" height="132" rx="10"/><text class="micro" x="96" y="376">FIRST MEETING</text><text class="card-title" x="96" y="400"><tspan x="96">Site + Field Installation</tspan><tspan x="96" dy="18">Engineer question</tspan></text><text class="body" x="96" y="443"><tspan x="96">A polished presentation could not</tspan><tspan x="96" dy="19">yet explain the operating model.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M362 405h50v-9l22 16-22 16v-9h-50z"/><rect class="acid soft" x="369" y="366" width="60" height="29" rx="7"/><text class="year" x="399" y="385" text-anchor="middle">+2 DAYS</text>
+    <rect class="powder soft" x="434" y="350" width="300" height="132" rx="10"/><text class="micro" x="454" y="376">NEXT MEETING</text><text class="card-title" x="454" y="405">Five working postures</text><text class="body" x="454" y="431"><tspan x="454">The question returned as one shared</tspan><tspan x="454" dy="19">site hierarchy and product entrance.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M734 405h34v-9l22 16-22 16v-9h-34z"/>
+    <rect class="sea soft" x="790" y="350" width="330" height="132" rx="10"/><text class="micro" x="810" y="376">CHANGED MEANING</text><text class="card-title" x="810" y="405">Interface polish → operating model</text><text class="body" x="810" y="431"><tspan x="810">Role, site, field constraint, and</tspan><tspan x="810" dy="19">handoff became one product story.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M1120 405h34v-9l22 16-22 16v-9h-34z"/>
+    <rect class="blush soft" x="1176" y="350" width="338" height="132" rx="10"/><text class="micro" x="1196" y="376">CONSEQUENCE + INVESTMENT</text><text class="card-title" x="1196" y="405">Green light, trust, changed work</text><text class="body" x="1196" y="431"><tspan x="1196">Design and engineering absorbed the</tspan><tspan x="1196" dy="19">pivot; field stewardship continued.</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="wtb-return-title">
+    <title id="wtb-return-title">Who To Believe post-acquisition recurrence with unresolved technical trigger</title>
+    <rect class="shadow" x="62" y="548" width="1484" height="270" rx="17"/><rect class="pale soft" x="54" y="540" width="1484" height="270" rx="17"/><text class="micro" x="76" y="569">WHO TO BELIEVE · POST-ACQUISITION RECURRENCE</text>
+    <rect class="blush soft" x="76" y="586" width="270" height="126" rx="10"/><text class="micro" x="96" y="612">&gt;1 YEAR AFTER ACQUISITION</text><text class="card-title" x="96" y="641">Deprecated navigation reappears</text><text class="body" x="96" y="667"><tspan x="96">The observed symptom returns; its</tspan><tspan x="96" dy="19">technical trigger remains open.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M346 635h28v-40h28v-8l20 14-20 14v-8h-16v76h16v-8l20 14-20 14v-8h-28v-40h-28z"/>
+    <rect class="powder soft" x="422" y="586" width="354" height="58" rx="10"/><text class="micro" x="442" y="608">ACTIVE ACCOUNT · CROSS-STACK PATH</text><text class="body" x="442" y="631">Symfony/Spring contention; later adapters and ETL.</text>
+    <rect class="cream soft" x="422" y="654" width="354" height="58" rx="10"/><text class="micro" x="442" y="676">ARCHIVED ACCOUNT · INTENTIONAL REMAP</text><text class="body" x="442" y="699">Enclosing nav; survey and email routes relocate.</text>
+    <rect class="panel soft" x="806" y="586" width="324" height="126" rx="10"/><text class="micro" x="826" y="612">ARCHIVED-ACCOUNT INFERENCE</text><text class="card-title" x="826" y="641">Email reopening as recovery</text><text class="body" x="826" y="667"><tspan x="826">Strong reopening partly reflects a</tspan><tspan x="826" dy="19">working route; relation stays open.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M1130 638h28v-9l22 16-22 16v-9h-28z"/>
+    <rect class="acid soft" x="1180" y="586" width="334" height="126" rx="10"/><text class="micro" x="1200" y="612">DECISION OBLIGATION</text><text class="card-title" x="1200" y="641">Read channel and runtime together</text><text class="body" x="1200" y="667"><tspan x="1200">Keep both accounts available beside</tspan><tspan x="1200" dy="19">support and recovery behavior.</tspan></text>
+    <rect class="blush soft" x="76" y="732" width="1438" height="58" rx="9"/><text class="micro" x="96" y="766">ACTIVE: LEGACY CONTENTION + LATER ADAPTERS / ETL · ARCHIVED: INTENTIONAL NAVIGATION REMAP + SURVEY RELOCATION · RELATIONSHIP OPEN</text>
+  </g>
+
+  <g role="group" aria-labelledby="fmi-return-title">
+    <title id="fmi-return-title">FMI four-year substrate recognition</title>
+    <rect class="shadow" x="62" y="852" width="1484" height="194" rx="17"/><rect class="sea soft" x="54" y="844" width="1484" height="194" rx="17"/><text class="micro" x="76" y="873">FMI · FOUR-YEAR SUBSTRATE RECOGNITION</text>
+    <rect class="panel soft" x="76" y="890" width="300" height="126" rx="10"/><text class="micro" x="96" y="916">2019 · EARLIER MATERIAL</text><text class="card-title" x="96" y="945">Snowflake phrase + Boolean grammar</text><text class="body" x="96" y="971"><tspan x="96">Partner exception pressure shapes a</tspan><tspan x="96" dy="19">visible, recombinable rule surface.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M376 940h50v-9l22 16-22 16v-9h-50z"/><rect class="acid soft" x="379" y="900" width="66" height="29" rx="7"/><text class="year" x="412" y="919" text-anchor="middle">4 YEARS</text>
+    <rect class="powder soft" x="448" y="890" width="300" height="126" rx="10"/><text class="micro" x="468" y="916">Q2 2023 · RETURN</text><text class="card-title" x="468" y="945">The phrase becomes a foreign object</text><text class="body" x="468" y="971"><tspan x="468">Its original speaker now defends the</tspan><tspan x="468" dy="19">earned exceptions it once challenged.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M748 940h34v-9l22 16-22 16v-9h-34z"/>
+    <rect class="cream soft" x="804" y="890" width="330" height="126" rx="10"/><text class="micro" x="824" y="916">SUBSTRATE RECOGNIZED</text><text class="card-title" x="824" y="945">Partner payload → populated rules</text><text class="body" x="824" y="971"><tspan x="824">The interface is recognized as an ETL</tspan><tspan x="824" dy="19">DSL with a participatory wrapper.</tspan></text>
+    <path class="deep" aria-hidden="true" d="M1134 940h34v-9l22 16-22 16v-9h-34z"/>
+    <rect class="acid soft" x="1190" y="890" width="324" height="126" rx="10"/><text class="micro" x="1210" y="916">CHANGED WORK + INVESTMENT</text><text class="card-title" x="1210" y="945">Human edits define the frontier</text><text class="body" x="1210" y="971"><tspan x="1210">Routine mapping can move upstream;</tspan><tspan x="1210" dy="19">qualified exception judgment remains.</tspan></text>
+  </g>
+
+  <text class="micro" x="800" y="1082" text-anchor="middle">EARLIER MATERIAL RETURNS WITH CHANGED WEIGHT · REFRAMING · RECURRENCE · SUBSTRATE RECOGNITION</text>
+</svg>

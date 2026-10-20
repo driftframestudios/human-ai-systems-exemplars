@@ -1,0 +1,124 @@
+{
+  "id": "na:narrative-sampling-tableau/chimeric-prototype-bundle/v0.1",
+  "title": "Narrative Sampling Tableau",
+  "canonicalType": "NarrativeSamplingSurface",
+  "methodRef": "na:verbalized-sampling",
+  "version": "0.1",
+  "status": "working_chimeric_prototype",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2033,
+      "sha256": "0a1ebe925ef374e783d420bcec23d9fe8c626d71747c16cbbe23058191712906"
+    },
+    {
+      "path": "narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+      "bytes": 215771,
+      "sha256": "a17c532a56767c3de8019de7b1de185bef0d646590167a0750f1a979b63721da"
+    },
+    {
+      "path": "narrative-sampling-tableau-prototype-addendum-v0.1.md",
+      "bytes": 6009,
+      "sha256": "6309b7c58339b23657b5dc9e4987b5630defbc3cdc77096cbfafb5b05491e5c0"
+    },
+    {
+      "path": "narrative-sampling-tableau-prototype-profile-v0.1.yaml",
+      "bytes": 7196,
+      "sha256": "7d389d1da82ab81b70772910cc04c0139ece7cbbf3fefff13d7ad2ce820379d3"
+    },
+    {
+      "path": "narrative-sampling-tableau-state.schema.v0.1.json",
+      "bytes": 23983,
+      "sha256": "f311a682f356d351ad690191f8943a556b349020d0e95c21832b7853bec936c4"
+    },
+    {
+      "path": "narrative-sampling-tableau.context.v0.1.jsonld",
+      "bytes": 4396,
+      "sha256": "429c9b84872626dfa8a5d7bbaa47081eb18e6246adb73ec3753284b37fa6a2f0"
+    },
+    {
+      "path": "core-architecture-routing-registry.v0.1.json",
+      "bytes": 22759,
+      "sha256": "b12caaaa8ffc21575b9257274aa6606aeb568647362860826267cb494887ba7e"
+    },
+    {
+      "path": "conation-motion-naming-sampling.example.v0.1.json",
+      "bytes": 39649,
+      "sha256": "8de2c9ff390362fa88759a11d8ba98f550a747077c83dc2af732b38655fb03d0"
+    },
+    {
+      "path": "conation-motion-naming-sampling.example.v0.1.jsonld",
+      "bytes": 18781,
+      "sha256": "deabb8361d8af2847ee209046875078359f3df95c5cb4a29185106dfeb7ba4b6"
+    },
+    {
+      "path": "narrative-sampling-tableau-validation-report-v0.1.json",
+      "bytes": 1372,
+      "sha256": "99e6a1104254fa64e8571d1022a795874f0770c2c241268082cdba6f6f24eea1"
+    }
+  ],
+  "loadBearingDeterminations": [
+    "Verbalized Sampling remains the method name and research anchor.",
+    "Narrative Sampling Surface is the canonical schema type.",
+    "Narrative Sampling Tableau is the human-facing artifact name.",
+    "Every probability remains attached to a fully stated outcome.",
+    "Candidate-set semantics determine normalization behavior.",
+    "Probability, confidence, dimensional fit, statistical fit, desirability, and priority remain distinct.",
+    "Open sets carry explicit tail mass and missing-mode records.",
+    "Probability shifts remain hypotheses until appropriate evidence supports a stronger causal status.",
+    "Routing follows cognitive move and active gaps.",
+    "The route registry preserves seven Core Architecture families and twenty cards.",
+    "S/I/R values describe primary cognitive origin rather than fixed identity.",
+    "Recovery is a full family that also acts as a cross-system routing layer.",
+    "Visual comparison uses common scales and accessible table equivalents.",
+    "Stable identities survive sorting, filtering, blending, and version comparison.",
+    "Public-safe projection excludes private locators, source-local annotation, and unreviewed inference before rendering.",
+    "Prompt Capsule 0.1.0 provides complete plain and skill-assisted Markdown views from the accepted sampling state with one state-only fingerprint.",
+    "Prompt Capsule state includes success criteria, outcome and condition-profile boundary sets, candidate dimension scores, baseline comparison, and the complete formal statistical-fit record when enabled.",
+    "Imported candidates provide a finite zero-to-ten score for every declared dimension, preserving the distinction between absence and a measured zero.",
+    "Material comparison, probability-role, and formal-fit controls refresh the visible and programmatic Prompt Capsule together."
+  ],
+  "researchAnchor": {
+    "id": "arxiv:2510.01171",
+    "title": "Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity",
+    "role": "Canonical grounding for the generative-diversity technique."
+  },
+  "sourceHydration": {
+    "coreArchitecturePage": "ca-artifact-core-architecture-family-index-001",
+    "planningExemplars": [
+      "na:indeterminate-slot-map-planning-proposal/v0.1",
+      "na:terminological-registry-planning-proposal/v0.1",
+      "na:conation-motion-naming-exemplar/v0.1"
+    ]
+  },
+  "promptCapsule": {
+    "contract": "prompt-capsule/0.1.0",
+    "views": [
+      "plain",
+      "skill-assisted"
+    ],
+    "stateAuthority": "narrative-sampling-tableau-state/0.1",
+    "defaultView": "plain",
+    "relatedLoops": [
+      "#skill-from-receiving-use",
+      "#visitor-surface-change"
+    ],
+    "plainProjectionIncludes": [
+      "outcome success criteria",
+      "outcome exclusions",
+      "condition-profile exclusions",
+      "per-candidate dimension scores",
+      "baseline comparison",
+      "formal statistical-fit state when enabled"
+    ],
+    "candidateScoreImportBoundary": "Every imported candidate provides one finite score from zero through ten for every declared dimension.",
+    "materialControlSynchronization": "Comparison, probability-role, and formal statistical-fit controls refresh active visible, copy, download, and API Markdown from the accepted state."
+  },
+  "validationReport": "narrative-sampling-tableau-validation-report-v0.1.json",
+  "nextUse": [
+    "Run the Prompt Capsule across several model contexts and import the results as new runs.",
+    "Route the naming terrain into Strategy Canvas and the Terminological Registry.",
+    "Collect target receipts and return observations.",
+    "Exercise architecture-selection and methodological-gap scenarios."
+  ]
+}

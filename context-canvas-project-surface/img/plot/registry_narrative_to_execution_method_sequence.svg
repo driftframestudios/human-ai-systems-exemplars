@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="ntx-title ntx-desc">
+  <title id="ntx-title">How a public claim becomes a dated, evidence-bearing account</title>
+  <desc id="ntx-desc">An eight-stage sequence numbered consistently from zero through seven: establish the time and ownership world; extract the strategic narrative; read execution through several lenses; form candidate explanations; run a disconfirmation pass; compare with fitting peers; read silence carefully; and present the relationship. The final account keeps alternatives, counterevidence, and currentness visible together.</desc>
+
+  <defs>
+    <pattern id="ntx-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-width="1" opacity="0.5"/>
+    </pattern>
+    <marker id="ntx-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#7893bc"/>
+    </marker>
+    <filter id="ntx-shadow" x="-10%" y="-10%" width="130%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#17345f" flood-opacity="1"/>
+    </filter>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .white { fill: #fffdf8; }
+      .ink { fill: #17345f; }
+      .body { fill: #304a71; }
+      .muted { fill: #5d6f8b; }
+      .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 1.7px; }
+      .headline { font-size: 39px; font-weight: 700; letter-spacing: -0.9px; }
+      .deck { font-size: 18px; font-weight: 500; }
+      .stage-number { font-size: 20px; font-weight: 700; }
+      .stage-title { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; }
+      .stage-copy { font-size: 16px; font-weight: 500; }
+      .stage-kind { font-size: 13px; font-weight: 700; letter-spacing: 0.7px; }
+      .foot { font-size: 15px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1544" height="1044" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1544" height="1044" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1542" height="1042" rx="27" fill="url(#ntx-grid)" opacity="0.62"/>
+
+  <g id="ntx-heading" role="group" aria-labelledby="ntx-heading-title">
+    <title id="ntx-heading-title">Evidence sequence heading</title>
+    <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V190H20Z" fill="#2855f3"/>
+    <text x="58" y="61" class="mono eyebrow white">KEEP CLAIMS, EVIDENCE, AND ALTERNATIVES TOGETHER</text>
+    <text x="58" y="108" class="sans headline white">How does a public claim become a dated account?</text>
+    <text x="58" y="148" class="sans deck white">Follow the sequence while keeping alternatives and counterevidence in view.</text>
+    <rect x="1266" y="50" width="236" height="104" rx="16" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <text x="1295" y="84" class="mono stage-kind ink">READING KEY</text>
+    <text x="1295" y="112" class="sans stage-copy ink">One number, one move.</text>
+    <text x="1295" y="137" class="sans stage-copy body">Zero sets the world.</text>
+  </g>
+
+  <g aria-hidden="true" stroke="#7893bc" stroke-width="3" fill="none" stroke-linecap="round" marker-end="url(#ntx-arrow)">
+    <path d="M144 309V350"/>
+    <path d="M144 407V448"/>
+    <path d="M144 505V546"/>
+    <path d="M144 603V644"/>
+    <path d="M144 701V742"/>
+    <path d="M144 799V840"/>
+    <path d="M144 897V938"/>
+  </g>
+
+  <g id="ntx-stage-0" role="group" aria-labelledby="ntx-stage-0-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-0-title">Stage zero: Establish the time and ownership world</title>
+    <rect x="84" y="226" width="1432" height="83" rx="16" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="267.5" r="29" fill="#17345f"/>
+    <text x="144" y="274.5" text-anchor="middle" class="mono stage-number white">0</text>
+    <text x="198" y="259" class="sans stage-title ink">Establish the time and ownership world</text>
+    <text x="198" y="285" class="sans stage-copy body">Ask what public record can reasonably exist—and whether the conditions have changed.</text>
+    <text x="1472" y="272" text-anchor="end" class="mono stage-kind ink">SET THE WORLD</text>
+  </g>
+
+  <g id="ntx-stage-1" role="group" aria-labelledby="ntx-stage-1-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-1-title">Stage one: Extract the strategic narrative</title>
+    <rect x="84" y="324" width="1432" height="83" rx="16" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="365.5" r="29" fill="#17345f"/>
+    <text x="144" y="372.5" text-anchor="middle" class="mono stage-number white">1</text>
+    <text x="198" y="357" class="sans stage-title ink">Extract the strategic narrative</text>
+    <text x="198" y="383" class="sans stage-copy body">Preserve claims, dates, audiences, promised direction, and changes in language.</text>
+    <text x="1472" y="370" text-anchor="end" class="mono stage-kind ink">PRESERVE THE CLAIM</text>
+  </g>
+
+  <g id="ntx-stage-2" role="group" aria-labelledby="ntx-stage-2-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-2-title">Stage two: Read execution through several lenses</title>
+    <rect x="84" y="422" width="1432" height="83" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="463.5" r="29" fill="#17345f"/>
+    <text x="144" y="470.5" text-anchor="middle" class="mono stage-number white">2</text>
+    <text x="198" y="455" class="sans stage-title ink">Read execution through several lenses</text>
+    <text x="198" y="481" class="sans stage-copy body">Examine resources, people, products, portfolio decisions, and technology movement.</text>
+    <text x="1472" y="468" text-anchor="end" class="mono stage-kind ink">READ THE MOVEMENT</text>
+  </g>
+
+  <g id="ntx-stage-3" role="group" aria-labelledby="ntx-stage-3-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-3-title">Stage three: Form candidate explanations</title>
+    <rect x="84" y="520" width="1432" height="83" rx="16" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="561.5" r="29" fill="#17345f"/>
+    <text x="144" y="568.5" text-anchor="middle" class="mono stage-number white">3</text>
+    <text x="198" y="553" class="sans stage-title ink">Form candidate explanations</text>
+    <text x="198" y="579" class="sans stage-copy body">Keep several plausible accounts—and name what could change each estimate.</text>
+    <text x="1472" y="566" text-anchor="end" class="mono stage-kind ink">KEEP OPTIONS OPEN</text>
+  </g>
+
+  <g id="ntx-stage-4" role="group" aria-labelledby="ntx-stage-4-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-4-title">Stage four: Seek counterevidence through a disconfirmation pass</title>
+    <rect x="84" y="618" width="1432" height="83" rx="16" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="659.5" r="29" fill="#17345f"/>
+    <text x="144" y="666.5" text-anchor="middle" class="mono stage-number white">4</text>
+    <text x="198" y="651" class="sans stage-title ink">Seek counterevidence</text>
+    <text x="198" y="677" class="sans stage-copy body">Seek material that could revise the leading interpretation and support a more fitting account.</text>
+    <text x="1472" y="664" text-anchor="end" class="mono stage-kind ink">TEST THE READING</text>
+  </g>
+
+  <g id="ntx-stage-5" role="group" aria-labelledby="ntx-stage-5-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-5-title">Stage five: Compare with fitting peers</title>
+    <rect x="84" y="716" width="1432" height="83" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="757.5" r="29" fill="#17345f"/>
+    <text x="144" y="764.5" text-anchor="middle" class="mono stage-number white">5</text>
+    <text x="198" y="749" class="sans stage-title ink">Compare with fitting peers</text>
+    <text x="198" y="775" class="sans stage-copy body">Build an expected-gap band for organizations under similar conditions.</text>
+    <text x="1472" y="762" text-anchor="end" class="mono stage-kind ink">SET THE BASELINE</text>
+  </g>
+
+  <g id="ntx-stage-6" role="group" aria-labelledby="ntx-stage-6-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-6-title">Stage six: Read silence carefully</title>
+    <rect x="84" y="814" width="1432" height="83" rx="16" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="855.5" r="29" fill="#17345f"/>
+    <text x="144" y="862.5" text-anchor="middle" class="mono stage-number white">6</text>
+    <text x="198" y="847" class="sans stage-title ink">Read silence carefully</text>
+    <text x="198" y="873" class="sans stage-copy body">Absence becomes a candidate signal when disclosure is expected and fitting peers address it.</text>
+    <text x="1472" y="860" text-anchor="end" class="mono stage-kind ink">INTERPRET ABSENCE</text>
+  </g>
+
+  <g id="ntx-stage-7" role="group" aria-labelledby="ntx-stage-7-title" filter="url(#ntx-shadow)">
+    <title id="ntx-stage-7-title">Stage seven: Present the relationship</title>
+    <rect x="84" y="912" width="1432" height="83" rx="16" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+    <circle cx="144" cy="953.5" r="29" fill="#17345f"/>
+    <text x="144" y="960.5" text-anchor="middle" class="mono stage-number white">7</text>
+    <text x="198" y="945" class="sans stage-title ink">Present the relationship</text>
+    <text x="198" y="971" class="sans stage-copy body">Carry dated claims, evidence, alternatives, counterevidence, and currentness together.</text>
+    <text x="1472" y="958" text-anchor="end" class="mono stage-kind ink">MAKE THE ACCOUNT</text>
+  </g>
+
+  <g id="ntx-footer" role="group" aria-labelledby="ntx-footer-title">
+    <title id="ntx-footer-title">How to read the sequence</title>
+    <text x="84" y="1033" class="sans foot ink">Candidate probabilities express comparative judgments within this analysis.</text>
+    <text x="1516" y="1033" text-anchor="end" class="sans foot body">The result is a dated, comparative account.</text>
+  </g>
+</svg>

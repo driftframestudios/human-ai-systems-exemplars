@@ -1,0 +1,293 @@
+{
+  "alternatives": [
+    {
+      "flows": [
+        0,
+        0,
+        0
+      ],
+      "id": "status-quo",
+      "label": "Status quo",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -120000,
+        70000,
+        75000
+      ],
+      "id": "proceed",
+      "label": "Proceed",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "id": "pilot",
+      "label": "Pilot",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        0,
+        -90000,
+        80000
+      ],
+      "id": "defer",
+      "label": "Defer",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -180000,
+        100000,
+        120000
+      ],
+      "id": "scale",
+      "label": "Scale",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -40000,
+        20000,
+        30000
+      ],
+      "id": "redirect",
+      "label": "Redirect",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -5000,
+        0,
+        0
+      ],
+      "id": "stop",
+      "label": "Stop",
+      "standing": "illustrative"
+    }
+  ],
+  "events": [
+    {
+      "id": "acquire",
+      "kind": "acquisition",
+      "period": 0,
+      "predecessors": [],
+      "standing": "illustrative"
+    },
+    {
+      "id": "onboard",
+      "kind": "onboarding",
+      "period": 1,
+      "predecessors": [
+        "acquire"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "activate",
+      "kind": "activation",
+      "period": 1,
+      "predecessors": [
+        "onboard"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "renew",
+      "kind": "renewal",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "churn",
+      "kind": "churn",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "reactivate",
+      "kind": "reactivation",
+      "period": 3,
+      "predecessors": [
+        "churn"
+      ],
+      "standing": "illustrative"
+    }
+  ],
+  "extensions": {},
+  "inputs": {
+    "acquisitionSpend": 10000,
+    "adoption": 0.3,
+    "asOf": "",
+    "baselineCost": 500,
+    "buyer": "Sponsor / operating team / customer organization",
+    "candidateCost": 650,
+    "capacity": 40,
+    "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
+    "churnCustomers": 10,
+    "churnRevenue": 10000,
+    "cohort": "100 synthetic customers; one year",
+    "comparator": "Current workflow",
+    "contraction": 5000,
+    "contributionMargin": 0.7,
+    "currency": "USD",
+    "discount": 0.1,
+    "discountRate": 0.1,
+    "economicReview": "pending",
+    "eligiblePopulation": 100,
+    "evidenceSource": "",
+    "exhaustive": false,
+    "expansion": 20000,
+    "gate": "open",
+    "implementationCost": 10000,
+    "implementationLag": 1,
+    "implementationState": "Illustrative ramp; one-period lag",
+    "incrementalOutcome": null,
+    "internalInvestment": 100000,
+    "intervention": "Bounded workflow pilot",
+    "label": "Illustrative pilot versus status quo",
+    "listPrice": 1000,
+    "newCustomers": 20,
+    "newRevenue": 20000,
+    "nextEvidence": "Observed workflow and reviewed resource requirements",
+    "openingCustomers": 100,
+    "openingRevenue": 100000,
+    "option": "pilot",
+    "outcomeUnit": "",
+    "owner": "",
+    "period": "year",
+    "perspective": "Illustrative provider budget",
+    "population": "Synthetic population; local eligibility remains to be specified",
+    "priceClass": "Illustrative scenario",
+    "pricingUnit": "One synthetic service unit; implementation separate",
+    "reactivatedCustomers": 5,
+    "reactivationRevenue": 5000,
+    "rebate": 25,
+    "reviewer": "",
+    "revisit": "",
+    "segment": "Synthetic implementation partners",
+    "serviceCost": 100,
+    "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+    "tenure": 1,
+    "trigger": "Review pilot feasibility, evidence, and capacity",
+    "variableCost": 200
+  },
+  "method": "model/activity-based.v0.1",
+  "origin": "illustrative",
+  "outcomes": [
+    {
+      "flows": [
+        -100000,
+        30000,
+        30000
+      ],
+      "id": "constrained",
+      "probability": 0.3
+    },
+    {
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "id": "planned",
+      "probability": 0.5
+    },
+    {
+      "flows": [
+        -100000,
+        90000,
+        90000
+      ],
+      "id": "expanded",
+      "probability": 0.2
+    }
+  ],
+  "scenarioId": "scenario/investment-pilot.v0.1",
+  "schemaVersion": "0.2.0",
+  "serviceOutcomes": [
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Safety",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Quality",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Timeliness",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Patient experience",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Equity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Efficiency",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Burden",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Governance",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Budget capacity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    }
+  ]
+}

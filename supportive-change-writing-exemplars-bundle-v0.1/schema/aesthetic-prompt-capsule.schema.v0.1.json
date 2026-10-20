@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Aesthetic Prompt Capsule",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band",
+    "capsule_type",
+    "applies_to",
+    "format_summary",
+    "content_surface_contract",
+    "page_system",
+    "typography",
+    "composition",
+    "hierarchy",
+    "navigation",
+    "palette",
+    "verification_targets"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "prompt_capsule"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "capsule_type": {
+      "const": "aesthetic"
+    },
+    "applies_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "format_summary": {
+      "type": "string"
+    },
+    "content_surface_contract": {
+      "type": "string"
+    },
+    "page_system": {
+      "type": "object",
+      "required": [
+        "trim_inches",
+        "essay_reader_margins_inches",
+        "blurb_reader_margins_inches"
+      ],
+      "properties": {
+        "trim_inches": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "essay_reader_margins_inches": {
+          "type": "object",
+          "required": [
+            "side",
+            "top",
+            "bottom"
+          ],
+          "properties": {
+            "side": {
+              "type": "number"
+            },
+            "top": {
+              "type": "number"
+            },
+            "bottom": {
+              "type": "number"
+            }
+          }
+        },
+        "blurb_reader_margins_inches": {
+          "type": "object",
+          "required": [
+            "side",
+            "top",
+            "bottom"
+          ],
+          "properties": {
+            "side": {
+              "type": "number"
+            },
+            "top": {
+              "type": "number"
+            },
+            "bottom": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "typography": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "face",
+          "size_leading_pt"
+        ],
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "face": {
+            "type": "string"
+          },
+          "size_leading_pt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "composition": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "hierarchy": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "navigation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "palette": {
+      "type": "object"
+    },
+    "verification_targets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

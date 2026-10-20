@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/source-authority-mapping/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "source-authority-mapping",
+  "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion. Applies when repositories, workspaces, mirrors, snapshots, or publication surfaces make authority and lineage difficult to distinguish.",
+  "semanticAuthorityRef": "../source/.agents/skills/source-authority-mapping/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/23",
+  "contract": {
+    "what": "A portable method for making the authority and receiving path of a claim, artifact, or contract legible across several systems.",
+    "when": [
+      "Source, semantic ownership, schema or contract authority, publication, delivery, snapshotting, or downstream use could be mistaken for one another."
+    ],
+    "boundaries": [
+      "The map records evidenced relations and granted decisions. It leaves private or gated material within its publication boundary, preserves existing licenses and history, and keeps delivery infrastructure separate from semantic ownership."
+    ],
+    "result": "A concise lineage map that identifies the authoritative source, typed projections, current receiver, promotion boundary, and re-entry condition."
+  },
+  "receivingUse": {
+    "job": "Source, semantic ownership, schema or contract authority, publication, delivery, snapshotting, or downstream use could be mistaken for one another.",
+    "materialResult": "A concise lineage map that identifies the authoritative source, typed projections, current receiver, promotion boundary, and re-entry condition.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/source-authority-mapping/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

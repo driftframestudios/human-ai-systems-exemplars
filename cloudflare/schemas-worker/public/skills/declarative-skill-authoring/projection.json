@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/declarative-skill-authoring/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "declarative-skill-authoring",
+  "description": "Authors or revises repository skills as declarative, transferable specifications. Applies when skill metadata, What/When/Boundaries contracts, Rule declarations, optional Given/When/Then examples, conditional context, or experiment-to-helper progression needs definition.",
+  "semanticAuthorityRef": "../source/.agents/skills/declarative-skill-authoring/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/11",
+  "contract": {
+    "what": "A repository skill that combines precise routing, an action-bearing core, and proportionate behavior examples.",
+    "when": [
+      "A recurring collaboration affordance deserves a new skill or an existing skill produces routing or workflow friction."
+    ],
+    "boundaries": [
+      "Capability and transferability lead. Current user intent, available evidence, and granted tool authority govern application. Practitioner history supplies evidence and vocabulary rather than a personal profile. Scenario examples clarify behavior without implying executable coverage unless automation is explicitly present. Direct reasoning remains a valid result when a new skill would add more routing than capability."
+    ],
+    "result": "A conventional `SKILL.md` with declarative third-person metadata, clear completion, and proportionate progressive disclosure."
+  },
+  "receivingUse": {
+    "job": "A recurring collaboration affordance deserves a new skill or an existing skill produces routing or workflow friction.",
+    "materialResult": "A conventional `SKILL.md` with declarative third-person metadata, clear completion, and proportionate progressive disclosure.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/declarative-skill-authoring/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Recovery Routing Atlas preview</title>
+  <desc id="desc">A strain cue flows through a stabilizing read and a primary route into the smallest repair and restored state.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.rose{fill:#ffd3d0}.lime{fill:#efff66}.cream{fill:#fff0cf}.rule{stroke:#16345e;stroke-width:4}.path{stroke:#2855f3;stroke-width:6;fill:none}.cap{font:700 18px ui-monospace,monospace;letter-spacing:.7px}.head{font:700 26px Arial,sans-serif}.small{font:17px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <text x="48" y="56" class="cap ink">FAILURE GEOMETRY → STRAIN CUE → ROUTE → RESTORED STATE</text>
+  <rect x="48" y="92" width="252" height="126" rx="18" class="rose rule"/><text x="74" y="132" class="cap ink">STRAIN CUE</text><text x="74" y="168" class="head ink">Meaning flattens</text><text x="74" y="194" class="small ink">while effort climbs</text>
+  <path d="M300 155H362" class="path"/><path d="M362 155l-24-15v30z" class="cobalt"/>
+  <rect x="362" y="92" width="278" height="126" rx="18" class="cream rule"/><text x="388" y="132" class="cap ink">STABILIZING READ</text><text x="388" y="168" class="head ink">Return to context</text><text x="388" y="194" class="small ink">before adding output</text>
+  <path d="M640 155H702" class="path"/><path d="M702 155l-24-15v30z" class="cobalt"/>
+  <rect x="702" y="92" width="210" height="126" rx="18" class="lime rule"/><text x="728" y="132" class="cap ink">PRIMARY ROUTE</text><text x="728" y="168" class="head ink">Context Tree</text><text x="728" y="194" class="small ink">smallest adequate</text>
+  <path d="M807 218V284H256V316" class="path"/><path d="M256 316l-15-24h30z" class="cobalt"/>
+  <rect x="48" y="316" width="416" height="178" rx="18" class="sea rule"/><text x="76" y="358" class="cap ink">SMALLEST REPAIR</text><text x="76" y="398" class="head ink">Restore the needed role view</text><text x="76" y="435" class="small ink">Preserve valid decisions and source standing.</text><text x="76" y="463" class="small ink">Name the exact layer being revised.</text>
+  <path d="M464 405H526" class="path"/><path d="M526 405l-24-15v30z" class="cobalt"/>
+  <rect x="526" y="316" width="386" height="178" rx="18" class="cobalt rule"/><text x="554" y="358" class="cap" fill="#fff">RESTORED STATE</text><text x="554" y="398" class="head" fill="#fff">Roles can find their context</text><text x="554" y="435" class="small" fill="#fff">A named reader receives the route.</text><text x="554" y="463" class="small" fill="#fff">Re-entry starts from a sound position.</text>
+  <text x="480" y="552" text-anchor="middle" class="cap ink">LOOK HERE · NAME THE CUE · RECOVER THE FITTING LAYER</text>
+</svg>

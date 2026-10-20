@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0.0",
+  "@context": "../context-canvas.context.jsonld",
+  "id": "urn:example:context-canvas:strategy-canvas",
+  "kind": "prototype_surface",
+  "name": "Strategy Canvas collaboration workbench illustrative projection",
+  "description": "A synthetic representation modeled from the Context Canvas projection of a canonical collaboration instrument.",
+  "experienceIntent": {
+    "desiredState": "Participants can compare current, good-enough, and desired positions while keeping human ballots, AI-attributed proposals, evidence, and review authority distinguishable.",
+    "useConditions": [
+      "A team needs a shared view of a decision object across several dimensions.",
+      "Independent elicitation, explicit reveal, reversible shaping, and a reviewed handoff matter."
+    ],
+    "primaryCognitiveMove": "make differences visible and shape a reviewable scenario without collapsing contribution channels",
+    "intendedReaders": [
+      "facilitator",
+      "decision participants",
+      "human reviewer",
+      "AI collaborator"
+    ],
+    "recognitionSignals": [
+      "Human ballots and AI-attributed proposals remain visibly separate.",
+      "A reviewed state carries source, authority, and recovery into the next decision."
+    ],
+    "boundaries": [
+      "The identifiers and public locators in this example are synthetic.",
+      "The canonical instrument owns shared state behavior; Context Canvas owns the art-directed receiving projection."
+    ],
+    "preservedQualities": [
+      "channel distinction",
+      "reversible shaping",
+      "review authority",
+      "static readability"
+    ],
+    "opportunity": {
+      "availableMoves": [
+        "inspect dimensions and anchors",
+        "collect and reveal human ballots",
+        "compare an AI-attributed proposal",
+        "review or restore a scenario"
+      ],
+      "handoffRefs": [
+        "urn:example:surface:strategy-review"
+      ]
+    }
+  },
+  "firstUsePrior": {
+    "probabilityOf": "where the artifact's first useful work usually begins",
+    "solution": 0.1,
+    "implementation": 0.75,
+    "recovery": 0.15,
+    "basis": "Observed interaction places most first useful work in shaping, comparing, and reviewing a concrete decision object.",
+    "reviewTrigger": "Use outside facilitated implementation repeatedly begins with problem framing or recovery from an existing decision state."
+  },
+  "standing": {
+    "claimStatus": "observed",
+    "evidenceClass": "local_interaction_and_rendered_observation",
+    "sourceRefs": [
+      "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "tools/strategy-canvas-contract.mjs",
+      "threadkeeping/strategy-canvas-collaboration-system.md"
+    ],
+    "currentness": {
+      "state": "current",
+      "basis": "The canonical worksheet, Context workbench, shared state contract, and source-owned evidence registry resolve through their current source owners and focused local behavior observations.",
+      "asOf": "2026-09-08",
+      "reviewTrigger": "A manifest advances either expression, the evidence registry changes, or focused interaction behavior changes."
+    },
+    "reviewState": "reviewed",
+    "visibility": "public_safe_summary",
+    "lifecycleStatus": "active"
+  },
+  "authority": {
+    "humanMeaningAuthorityRef": "urn:example:role:strategy-canvas-steward",
+    "schemaAuthorityRef": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+    "contentAuthorityRef": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
+    "decisionAuthorityRole": "named human facilitator and accountable reviewer",
+    "automationRole": "bounded proposal, aggregation support, validation, and state projection",
+    "scope": [
+      "Human participants own ballots, acceptance, review, and consequential continuation.",
+      "AI contributions remain attributed and outside the human aggregate."
+    ]
+  },
+  "representations": [
+    {
+      "kind": "canonical_html",
+      "locator": "https://example.invalid/prototypes/strategy-canvas.html",
+      "mediaType": "text/html",
+      "status": "planned",
+      "sourceRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html",
+      "revision": "0.2.5"
+    },
+    {
+      "kind": "machine_representation",
+      "locator": "https://example.invalid/prototypes/strategy-canvas.schema.json",
+      "mediaType": "application/schema+json",
+      "status": "planned",
+      "sourceRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "revision": "strategy-canvas/2.0"
+    },
+    {
+      "kind": "served_projection",
+      "locator": "https://example.invalid/context-canvas/prototypes/strategy-canvas.html",
+      "mediaType": "text/html",
+      "status": "planned",
+      "sourceRef": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
+      "branch": "main",
+      "environment": "main",
+      "revision": "0.2.3"
+    },
+    {
+      "kind": "static_fallback",
+      "locator": "https://example.invalid/context-canvas/prototypes/strategy-canvas.html#static-reading",
+      "mediaType": "text/html",
+      "status": "planned",
+      "sourceRef": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
+      "revision": "0.2.3"
+    }
+  ],
+  "relations": [
+    {
+      "type": "projects",
+      "targetRef": "urn:example:prototype:strategy-canvas-canonical",
+      "note": "The Context workbench projects the canonical state contract into an art-directed collaboration workbench."
+    },
+    {
+      "type": "hands_to",
+      "targetRef": "urn:example:surface:strategy-review",
+      "note": "A reviewed snapshot can continue into a bounded receiving decision."
+    }
+  ],
+  "contractRefs": [
+    {
+      "type": "interaction",
+      "ref": "tools/strategy-canvas-contract.mjs",
+      "application": "The focused browser contract exercises contribution channels, review, recovery, and static equivalents."
+    },
+    {
+      "type": "source_boundary",
+      "ref": "threadkeeping/strategy-canvas-collaboration-system.md",
+      "application": "The ledger keeps canonical and Context ownership, authority, and handoff boundaries available."
+    },
+    {
+      "type": "related",
+      "ref": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "application": "The source-owned evidence registry connects method origin and local design decisions with their receiving surfaces and evidence limits."
+    }
+  ],
+  "recoveryRoutes": [
+    {
+      "strainCue": "A proposal is difficult to distinguish from revealed human evidence or a reviewed state.",
+      "smallestUsefulMove": "Restore channel labels and return to the last reviewed snapshot before shaping another scenario.",
+      "receivingSurfaceRef": "urn:example:surface:strategy-review",
+      "revisitCondition": "The channel, source, or acceptance authority remains ambiguous after restoration."
+    }
+  ],
+  "extensions": {
+    "urn:example:context-canvas:surface-profile": {
+      "value": "public_prototype_projection"
+    }
+  }
+}

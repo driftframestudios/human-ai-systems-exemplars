@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Collaboration skills as working affordances</title>
+  <desc id="desc">Four distinct forms surround a material receiving result: portable skill contract, task-bound projection, context capsule, and skill candidate. A first-use band names user intent, working context, evidence, and granted tool authority. A lower lifecycle moves from observe through hold, form, use, and settle, with fresh signal reopening the work.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#163f74" stroke-opacity=".08" stroke-width="1"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L10 5 0 10Z" fill="#163f74"/>
+    </marker>
+    <style>
+      .label{font:700 20px ui-sans-serif,system-ui,sans-serif;letter-spacing:2px;fill:#163f74}
+      .title{font:700 35px ui-serif,Georgia,serif;fill:#13243d}
+      .body{font:500 21px ui-sans-serif,system-ui,sans-serif;fill:#243a55}
+      .small{font:600 17px ui-sans-serif,system-ui,sans-serif;fill:#314b68}
+      .node{stroke:#163f74;stroke-width:3}
+      .line{fill:none;stroke:#163f74;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="#f4f1e8"/>
+  <rect width="1600" height="1000" fill="url(#grid)"/>
+  <path d="M70 72H1530V930H70Z" fill="none" stroke="#163f74" stroke-width="3"/>
+  <path d="M70 72H112V114H70M1530 72H1488V114H1530M70 930H112V888H70M1530 930H1488V888H1530" fill="#f4f1e8" stroke="#163f74" stroke-width="4"/>
+
+  <text x="105" y="120" class="label">FIRST USE</text>
+  <text x="105" y="157" class="title">Place the method in current work</text>
+  <g transform="translate(750 101)">
+    <rect class="node" x="0" y="0" width="160" height="68" rx="34" fill="#d7edff"/>
+    <rect class="node" x="178" y="0" width="160" height="68" rx="34" fill="#ffe0e7"/>
+    <rect class="node" x="356" y="0" width="160" height="68" rx="34" fill="#fff0b8"/>
+    <rect class="node" x="534" y="0" width="226" height="68" rx="34" fill="#dcebd8"/>
+    <text x="80" y="42" text-anchor="middle" class="small">user intent</text>
+    <text x="258" y="42" text-anchor="middle" class="small">work context</text>
+    <text x="436" y="42" text-anchor="middle" class="small">evidence</text>
+    <text x="647" y="42" text-anchor="middle" class="small">granted authority</text>
+  </g>
+
+  <g transform="translate(105 225)">
+    <rect class="node" width="300" height="180" rx="20" fill="#d7edff"/>
+    <circle cx="45" cy="45" r="22" fill="#163f74"/>
+    <text x="45" y="52" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">01</text>
+    <text x="28" y="92" class="label">PORTABLE CONTRACT</text>
+    <text x="28" y="128" class="body">Owns one transferable job</text>
+    <text x="28" y="158" class="small">What · When · Boundaries · Result</text>
+  </g>
+  <g transform="translate(465 225)">
+    <rect class="node" width="300" height="180" rx="20" fill="#ffe0e7"/>
+    <circle cx="45" cy="45" r="22" fill="#163f74"/>
+    <text x="45" y="52" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">02</text>
+    <text x="28" y="92" class="label">TASK PROJECTION</text>
+    <text x="28" y="128" class="body">Binds selected behavior</text>
+    <text x="28" y="158" class="small">one task · depth one · exit event</text>
+  </g>
+  <g transform="translate(825 225)">
+    <rect class="node" width="300" height="180" rx="20" fill="#fff0b8"/>
+    <circle cx="45" cy="45" r="22" fill="#163f74"/>
+    <text x="45" y="52" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">03</text>
+    <text x="28" y="92" class="label">CONTEXT CAPSULE</text>
+    <text x="28" y="128" class="body">Carries selected local detail</text>
+    <text x="28" y="158" class="small">direct load · task-local route</text>
+  </g>
+  <g transform="translate(1185 225)">
+    <rect class="node" width="300" height="180" rx="20" fill="#dcebd8"/>
+    <circle cx="45" cy="45" r="22" fill="#163f74"/>
+    <text x="45" y="52" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">04</text>
+    <text x="28" y="92" class="label">SKILL CANDIDATE</text>
+    <text x="28" y="128" class="body">Holds a durable candidate</text>
+    <text x="28" y="158" class="small">awaits a distinct receiving use</text>
+  </g>
+
+  <path class="line" d="M255 405C255 490 470 510 620 550"/>
+  <path class="line" d="M615 405C615 470 690 500 730 534"/>
+  <path class="line" d="M975 405C975 470 900 500 870 534"/>
+  <path class="line" d="M1335 405C1335 490 1120 510 980 550"/>
+  <g>
+    <rect class="node" x="440" y="520" width="720" height="150" rx="75" fill="#163f74"/>
+    <text x="800" y="570" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="19" font-weight="700" letter-spacing="3" fill="#d7edff">MATERIAL RECEIVING RESULT</text>
+    <text x="800" y="616" text-anchor="middle" font-family="ui-serif,Georgia,serif" font-size="31" font-weight="700" fill="#fff">A decision, artifact, or recovery changes</text>
+    <text x="800" y="647" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="18" font-weight="600" fill="#fff0b8">the result supplies evidence; authority stays with the collaboration</text>
+  </g>
+
+  <text x="105" y="737" class="label">WORKING LIFECYCLE</text>
+  <path class="line" marker-end="url(#arrow)" d="M210 825H420"/>
+  <path class="line" marker-end="url(#arrow)" d="M500 825H710"/>
+  <path class="line" marker-end="url(#arrow)" d="M790 825H1000"/>
+  <path class="line" marker-end="url(#arrow)" d="M1080 825H1290"/>
+  <g fill="#f4f1e8" stroke="#163f74" stroke-width="4">
+    <circle cx="170" cy="825" r="48"/><circle cx="460" cy="825" r="48"/><circle cx="750" cy="825" r="48"/><circle cx="1040" cy="825" r="48"/><circle cx="1330" cy="825" r="48"/>
+  </g>
+  <text x="170" y="833" text-anchor="middle" class="small">observe</text>
+  <text x="460" y="833" text-anchor="middle" class="small">hold</text>
+  <text x="750" y="833" text-anchor="middle" class="small">form</text>
+  <text x="1040" y="833" text-anchor="middle" class="small">use</text>
+  <text x="1330" y="833" text-anchor="middle" class="small">settle</text>
+  <path class="line" marker-end="url(#arrow)" d="M1330 878C1300 940 240 940 170 878"/>
+  <text x="800" y="909" text-anchor="middle" class="small">fresh signal reopens the work</text>
+</svg>

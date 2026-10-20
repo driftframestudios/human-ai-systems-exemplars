@@ -1,0 +1,184 @@
+{
+  "id": "pp:front-end-technology-practitioner-probe-registry/v0.1",
+  "title": "Front-end technology decision practitioner probes",
+  "version": "0.1",
+  "status": "working_projection",
+  "sourcePages": [
+    "Start Here — How to use the Probes",
+    "Pattern-Problem Surface for Visual Label Placement",
+    "SVG — Enterprise Front-end Practitioner Probes",
+    "HTML — Enterprise Front-end Practitioner Probes",
+    "CSS — Enterprise Front-end Practitioner Probes",
+    "Javascript - Enterprise Front-end Practitioner Probes",
+    "React.js – Visual Coherence, v18 vs. 19"
+  ],
+  "pageAccessNote": "The page titles are preserved as source-bound route anchors. The prototype records robust, technology-decision probes shaped by the established Practitioner Judgment Probe contract; private page text remains source-owned.",
+  "probeShape": [
+    "question",
+    "whatItReveals",
+    "technicalCore",
+    "edgeCasesAndComplexity",
+    "aiCollaborationDirective",
+    "evidenceNeeded",
+    "abstentionCondition",
+    "routesTo"
+  ],
+  "probes": [
+    {
+      "id": "pp:start-here-technology-decision",
+      "label": "Start Here — decision contract",
+      "sourcePage": "Start Here — How to use the Probes",
+      "question": "Which decision is being made now, which evidence can change it, and what conditions support a responsible abstention or two-spike comparison?",
+      "whatItReveals": "Whether the team has a bounded decision, a declared horizon, and a route for uncertainty.",
+      "technicalCore": "Decision scope, candidate-set contract, probability-of-what, evidence classes, review horizon, and exit criteria.",
+      "edgeCasesAndComplexity": "Different teams may need separate decisions; a styling decision and rendering-framework decision can have different horizons.",
+      "aiCollaborationDirective": "Ask for the decision object, candidate-set semantics, horizon, constraints, and abstention conditions before ranking technologies.",
+      "evidenceNeeded": [
+        "decision owner",
+        "six-month outcome",
+        "candidate set",
+        "review trigger"
+      ],
+      "abstentionCondition": "The outcome or candidate set remains materially undefined.",
+      "routesTo": [
+        "ca:poda",
+        "ca:alignment-worksheet",
+        "ca:practitioner-judgment-probes"
+      ]
+    },
+    {
+      "id": "pp:html-semantic-ownership",
+      "label": "HTML — semantic ownership",
+      "sourcePage": "HTML — Enterprise Front-end Practitioner Probes",
+      "question": "Which interaction semantics belong to native HTML, and which candidate stack preserves those semantics through component abstraction and server or client rendering?",
+      "whatItReveals": "Whether a stack amplifies or obscures semantic structure, form behavior, naming, focus, and progressive enhancement.",
+      "technicalCore": "Native elements, form association, accessible naming, DOM order, hydration boundaries, custom elements, and server-rendered markup.",
+      "edgeCasesAndComplexity": "Portals, shadow DOM, nested interactive controls, streaming markup, and abstraction layers can change ownership of semantics.",
+      "aiCollaborationDirective": "Generate the native semantic baseline first, then show exactly which abstraction layer changes it and how local verification will confirm equivalence.",
+      "evidenceNeeded": [
+        "rendered DOM",
+        "keyboard path",
+        "accessible name computation",
+        "no-JS or degraded-state behavior"
+      ],
+      "abstentionCondition": "The interaction purpose and semantic baseline remain unclear.",
+      "routesTo": [
+        "ca:specification-by-example",
+        "ca:unit-test-first-design",
+        "ca:pattern-problem-surface-matrix"
+      ]
+    },
+    {
+      "id": "pp:css-swapability",
+      "label": "CSS — cascade and replacement path",
+      "sourcePage": "CSS — Enterprise Front-end Practitioner Probes",
+      "question": "How does each styling option distribute cascade, tokens, component boundaries, and override authority, and what would replacing that layer cost after six months?",
+      "whatItReveals": "Whether short-term generation speed produces readable, governable, and swappable styling.",
+      "technicalCore": "Cascade layers, specificity, scoping, design tokens, container queries, utility composition, generated classes, and dead-style removal.",
+      "edgeCasesAndComplexity": "Third-party component styles, shadow DOM, CSS-in-JS ordering, SSR extraction, theme overrides, and utility-class density.",
+      "aiCollaborationDirective": "Describe the cascade and ownership model, show one replacement seam, and estimate migration work by artifact rather than by optimistic line count.",
+      "evidenceNeeded": [
+        "computed-style trace",
+        "token map",
+        "override example",
+        "layer replacement spike"
+      ],
+      "abstentionCondition": "The visual system and override authority remain undeclared.",
+      "routesTo": [
+        "ca:software-architecture-views",
+        "ca:strategy-canvas",
+        "ca:unit-test-first-design"
+      ]
+    },
+    {
+      "id": "pp:svg-coordinate-and-label-fit",
+      "label": "SVG — coordinate, transform, and label fit",
+      "sourcePage": "SVG — Enterprise Front-end Practitioner Probes",
+      "question": "Can the candidate stack preserve SVG coordinate systems, grouping, transforms, label placement, accessible text alternatives, and high-density interaction without framework-specific distortion?",
+      "whatItReveals": "Whether the stack supports diagram and data-visualization work as a first-class surface.",
+      "technicalCore": "viewBox, coordinate transforms, nested groups, pointer and keyboard events, accessible naming, text measurement, collision detection, and responsive redraw.",
+      "edgeCasesAndComplexity": "Zoom/pan, foreignObject, high-DPI rendering, transformed hit targets, label overlap, screen-reader grouping, and large node counts.",
+      "aiCollaborationDirective": "Keep geometry in a framework-neutral model, use grouped transforms, expose a table equivalent, and test one dense label-placement case.",
+      "evidenceNeeded": [
+        "SVG source",
+        "coordinate model",
+        "collision test",
+        "keyboard interaction",
+        "table equivalent"
+      ],
+      "abstentionCondition": "The visualization complexity and label-density envelope remain unknown.",
+      "routesTo": [
+        "ca:pattern-problem-surface-matrix",
+        "ca:software-architecture-views",
+        "ca:specification-by-example"
+      ]
+    },
+    {
+      "id": "pp:javascript-resource-lifetimes",
+      "label": "JavaScript — effects and resource lifetimes",
+      "sourcePage": "Javascript - Enterprise Front-end Practitioner Probes",
+      "question": "How does each option acquire, retain, cancel, and release listeners, subscriptions, observers, workers, timers, fetches, and shared state under navigation and repeated rendering?",
+      "whatItReveals": "Whether the framework and application pattern preserve deterministic cleanup and bounded runtime behavior.",
+      "technicalCore": "AbortController, event-listener identity, subscriptions, observers, timers, worker lifetimes, async races, and idempotent cleanup.",
+      "edgeCasesAndComplexity": "Strict development replays, interrupted rendering, route transitions, cached components, shared workers, and duplicate commits.",
+      "aiCollaborationDirective": "For every acquired resource, name the release path, error path, ownership boundary, and repeat-render behavior.",
+      "evidenceNeeded": [
+        "acquire/release table",
+        "runtime observation",
+        "leak test",
+        "navigation stress case"
+      ],
+      "abstentionCondition": "The runtime and navigation model remain undefined.",
+      "routesTo": [
+        "ca:software-architecture-views",
+        "ca:unit-test-first-design",
+        "ca:practitioner-judgment-probes"
+      ]
+    },
+    {
+      "id": "pp:react-version-coherence",
+      "label": "React — rendering and version coherence",
+      "sourcePage": "React.js – Visual Coherence, v18 vs. 19",
+      "question": "Which rendering, state, external-store, action, and hydration assumptions are version-bound, and what local evidence shows visual coherence under urgent and deferred updates?",
+      "whatItReveals": "Whether a React candidate depends on current-version behavior that the team has named, tested, and can revisit.",
+      "technicalCore": "Concurrent rendering, external-store snapshots, transitions, deferred values, server/client boundaries, actions, hydration, and versioned dependency contracts.",
+      "edgeCasesAndComplexity": "Mixed dependency versions, legacy roots, external stores, streaming, suspense boundaries, third-party component assumptions, and development-only replay behavior.",
+      "aiCollaborationDirective": "State the exact version assumptions, use current official documentation as the source anchor, and provide a local coherence test before recommending architecture.",
+      "evidenceNeeded": [
+        "version manifest",
+        "rendering test",
+        "external-store test",
+        "hydration observation"
+      ],
+      "abstentionCondition": "The exact React and integration versions remain unknown.",
+      "routesTo": [
+        "ca:practitioner-judgment-probes",
+        "ca:unit-test-first-design",
+        "ca:upstream-revision-loop"
+      ]
+    },
+    {
+      "id": "pp:visual-label-placement",
+      "label": "Pattern–Problem Surface — label placement",
+      "sourcePage": "Pattern-Problem Surface for Visual Label Placement",
+      "question": "Which label-placement method fits the geometry, density, motion, priority, and accessibility needs of the intended visualization surface?",
+      "whatItReveals": "Whether labels need a grid, greedy placement, force model, anchor-point rules, constraint solving, or an optimization pass.",
+      "technicalCore": "Anchor candidates, bounding boxes, spatial indexes, collision detection, priority, simulated annealing or other optimization, and stable reflow.",
+      "edgeCasesAndComplexity": "Dense zones, moving points, multilingual labels, variable font metrics, zoom levels, pointer targets, and deterministic export.",
+      "aiCollaborationDirective": "Describe the geometry and density first; compare at least two placement strategies using the same labeled scene and measurable collision criteria.",
+      "evidenceNeeded": [
+        "scene fixture",
+        "collision count",
+        "runtime budget",
+        "label-priority rules",
+        "accessible text map"
+      ],
+      "abstentionCondition": "The geometry, density, and motion envelope remain unspecified.",
+      "routesTo": [
+        "ca:pattern-problem-surface-matrix",
+        "ca:specification-by-example",
+        "ca:software-architecture-views"
+      ]
+    }
+  ]
+}

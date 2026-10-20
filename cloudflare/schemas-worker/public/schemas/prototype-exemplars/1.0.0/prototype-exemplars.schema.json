@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+  "title": "Prototype Exemplars schema collection",
+  "description": "Orientation contract for repository entry points, schema families, divided authority, source location, serving roles, discovery projections, and observed use. Family-specific entities remain with their owning schemas.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "kind",
+    "name",
+    "description",
+    "authority",
+    "source",
+    "entryPoints",
+    "servedProjections",
+    "families",
+    "extensions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "$ref": "#/$defs/schemeQualifiedIdentifier"
+    },
+    "kind": {
+      "const": "prototype_exemplars_collection"
+    },
+    "name": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "entryPoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entryPoint"
+      }
+    },
+    "servedProjections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/servedProjection"
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/family"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemeQualifiedIdentifier": {
+      "type": "string",
+      "description": "A scheme-qualified identifier shape. The URI format remains an annotation in the current local validator.",
+      "format": "uri",
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "humanAuthorityRef",
+        "semanticOwnerRef",
+        "scope"
+      ],
+      "properties": {
+        "humanAuthorityRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semanticOwnerRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scope": {
+          "$ref": "#/$defs/stringList"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "repository",
+        "revision",
+        "path"
+      ],
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "revision": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "entryPoint": {
+      "type": "object",
+      "required": [
+        "name",
+        "role",
+        "path",
+        "useWhen"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "enum": [
+            "repository_orientation",
+            "collaboration_ground",
+            "visitor_surface",
+            "schema_discovery",
+            "planning_surface",
+            "settled_rationale"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "useWhen": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "servedProjection": {
+      "type": "object",
+      "required": [
+        "projectionKind",
+        "status"
+      ],
+      "properties": {
+        "projectionKind": {
+          "enum": [
+            "canonical_identity",
+            "github_pages_mirror",
+            "operator_runtime_mirror",
+            "source_file",
+            "route_alias"
+          ]
+        },
+        "href": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "repositoryPath": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "active",
+            "stale",
+            "superseded",
+            "unreachable"
+          ]
+        },
+        "sourceVersionRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authoritativeSourceRef": {
+          "$ref": "#/$defs/nonEmptyString",
+          "description": "Repository source that defines contract meaning and exact-version bytes for this projection."
+        },
+        "publicationAuthorityRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier",
+          "description": "Actor or system authorized to publish this projection from the authoritative source."
+        },
+        "deliveryAuthorityRef": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier",
+          "description": "Operator responsible for delivering this route."
+        },
+        "branch": {
+          "$ref": "#/$defs/nonEmptyString",
+          "description": "Source branch that publishes or prepares this projection; branch names remain outside canonical schema identity."
+        },
+        "environment": {
+          "$ref": "#/$defs/nonEmptyString",
+          "description": "Named deployment or discovery environment that prefers this route; schema bytes and instance meaning remain invariant."
+        },
+        "revision": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "lastReviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "projectionKind": {
+              "const": "source_file"
+            },
+            "repositoryPath": true,
+            "href": false
+          },
+          "required": [
+            "projectionKind",
+            "repositoryPath"
+          ]
+        },
+        {
+          "properties": {
+            "projectionKind": {
+              "enum": [
+                "canonical_identity",
+                "github_pages_mirror",
+                "operator_runtime_mirror",
+                "route_alias"
+              ]
+            },
+            "href": true,
+            "authoritativeSourceRef": true,
+            "publicationAuthorityRef": true,
+            "deliveryAuthorityRef": true,
+            "repositoryPath": false
+          },
+          "required": [
+            "projectionKind",
+            "href",
+            "authoritativeSourceRef",
+            "publicationAuthorityRef",
+            "deliveryAuthorityRef"
+          ]
+        }
+      ],
+      "dependentRequired": {
+        "branch": [
+          "environment"
+        ],
+        "environment": [
+          "branch"
+        ]
+      },
+      "unevaluatedProperties": false
+    },
+    "relation": {
+      "type": "object",
+      "required": [
+        "type",
+        "targetRef"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "profiles",
+            "projects",
+            "snapshots",
+            "exemplifies",
+            "consumed_by",
+            "hands_to",
+            "supersedes",
+            "references"
+          ]
+        },
+        "targetRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "note": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "usage": {
+      "type": "object",
+      "required": [
+        "artifactRef",
+        "instanceRef",
+        "use",
+        "state"
+      ],
+      "properties": {
+        "artifactRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "instanceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "use": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "state": {
+          "enum": [
+            "planned",
+            "observed",
+            "validated"
+          ]
+        },
+        "validationMechanism": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceBoundary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisitCondition": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "findingRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "family": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "authorityClass",
+        "authority",
+        "canonicalVersion",
+        "lifecycleStatus",
+        "visibility",
+        "reviewState",
+        "source",
+        "representativeSchemaRef",
+        "servedProjections"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/schemeQualifiedIdentifier"
+        },
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authorityClass": {
+          "enum": [
+            "repository_owned_public_contract",
+            "package_owned_contract",
+            "provisional_repository_projection",
+            "standalone_project_contract",
+            "standalone_project_projection",
+            "retained_exemplar",
+            "imported_planning_snapshot",
+            "illustrative_example",
+            "candidate_awaiting_owning_use"
+          ]
+        },
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "canonicalVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "lifecycleStatus": {
+          "enum": [
+            "candidate",
+            "active",
+            "retained",
+            "deprecated",
+            "superseded",
+            "retired"
+          ]
+        },
+        "visibility": {
+          "enum": [
+            "public",
+            "public_safe_summary",
+            "internal",
+            "private"
+          ]
+        },
+        "reviewState": {
+          "enum": [
+            "unreviewed",
+            "working",
+            "reviewed",
+            "revision_due"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "representativeSchemaRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "servedProjections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/servedProjection"
+          }
+        },
+        "sourceBand": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "valueOrigin": {
+          "enum": [
+            "human_declared",
+            "human_ai_collaborative",
+            "mechanically_derived",
+            "imported"
+          ]
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relation"
+          }
+        },
+        "usage": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/usage"
+          }
+        },
+        "intendedReceivingEcosystemRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisitConditions": {
+          "$ref": "#/$defs/stringList"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorityClass": {
+                "const": "provisional_repository_projection"
+              }
+            },
+            "required": [
+              "authorityClass"
+            ]
+          },
+          "then": {
+            "properties": {
+              "intendedReceivingEcosystemRef": true,
+              "usage": true,
+              "revisitConditions": true
+            },
+            "required": [
+              "intendedReceivingEcosystemRef",
+              "usage",
+              "revisitConditions"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Additive values keyed by a scheme-qualified namespace convention.",
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9+.-]*:[!-~]+$": true
+      },
+      "additionalProperties": false
+    }
+  }
+}

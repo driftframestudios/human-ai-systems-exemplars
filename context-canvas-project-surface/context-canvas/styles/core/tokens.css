@@ -1,0 +1,54 @@
+/* Context Canvas core: shared tokens ----------------------------------------
+   Consumers: every top-level route that uses the shared Context Canvas core.
+   Owns: stable palette, link roles, reading measures, spacing, and table
+   dimensions used across route and component bundles.
+   Load order: first stylesheet in the shared core graph.
+   Extension: route and painted-surface owners may set local active link roles
+   and route-specific tokens without changing these stable shared values. */
+
+:root {
+    --canvas-ink: #333;
+    --canvas-ink-strong: #1a1a2e;
+    --canvas-ink-muted: #666;
+    --canvas-info: #92d1c0;
+    --canvas-night: #000;
+    --canvas-on-night: #fff;
+    --canvas-paper: #fafafa;
+    --canvas-paper-soft: #f5f5f5;
+    --canvas-field: #4db8b3;
+    --canvas-accent: #ff7a97;
+    --canvas-footer: #2a312d;
+    --canvas-rule: #c9c9c9;
+    --canvas-cream: #f1e9d2;
+    --canvas-rule-strong: #767676;
+    --canvas-row-tint: rgba(77, 184, 179, .07);
+    --canvas-selection: #fff2b3;
+    --canvas-tiffany:#56d8c9;
+    --canvas-tiffany-ice: #E6F5F5;
+    --canvas-lucky-lobster: #d13a1f;
+    --canvas-sea-glass: #dbf0f0;
+    --canvas-warning: #9a4f00;
+    --canvas-cobalt: #2855f3;
+    /* Palette roles stay fixed; painted surfaces override both active roles. */
+    --canvas-link-on-light: #003f5a;
+    --canvas-link-visited-on-light: #6c0051;
+    --canvas-link-on-dark: #f2ff67;
+    --canvas-link-visited-on-dark: #feeae9;
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    --canvas-rose-pink: #feedf1;
+    --canvas-cool-blue: #e9f0ff;
+    --canvas-mint-green: #e6f5f1;
+    --canvas-soft-apricot: #fff3e8;
+    --canvas-reading-measure: 66ch;
+    --canvas-lead-measure: 58ch;
+    --canvas-heading-measure: 32ch;
+    --canvas-editorial-measure: 96rem;
+    --canvas-wide-measure: 144rem;
+    --canvas-page-gutter: clamp(1.25rem, 3vw, 4rem);
+    --canvas-column-gap: clamp(3rem, 4vw, 5.5rem);
+    --canvas-section-space: clamp(2rem, 4vw, 4rem);
+    --canvas-table-cell-block: .7rem;
+    --canvas-table-cell-inline: .85rem;
+    --canvas-table-cell-compact: .45rem;
+}

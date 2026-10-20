@@ -1,0 +1,877 @@
+{
+  "@context": {
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "pp": "https://schemas.driftframestudios.org/pp#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "TechnologyFitSamplingSurface": "na:TechnologyFitSamplingSurface",
+    "NarrativeSamplingSurface": "na:NarrativeSamplingSurface",
+    "AIContextProjection": "na:AIContextProjection",
+    "SamplingRun": "na:SamplingRun",
+    "TechnologyCandidate": "na:TechnologyCandidate",
+    "ProbabilityDefinition": "na:ProbabilityDefinition",
+    "ProbabilityEstimate": "na:ProbabilityEstimate",
+    "FitDimension": "na:FitDimension",
+    "StackLayerPalette": "na:StackLayerPalette",
+    "StackLayer": "na:StackLayer",
+    "LayerChoice": "na:LayerChoice",
+    "LowFidelitySpike": "na:LowFidelitySpike",
+    "GapRecord": "na:GapRecord",
+    "TechnologyDecisionRecord": "na:TechnologyDecisionRecord",
+    "FormalStatisticalFitBoundary": "na:FormalStatisticalFitBoundary",
+    "PractitionerJudgmentProbe": "pp:PractitionerJudgmentProbe",
+    "CoreArchitectureCard": "ca:CoreArchitectureCard",
+    "profileOf": {
+      "@id": "na:profileOf",
+      "@type": "@id"
+    },
+    "promptCapsule": {
+      "@id": "na:promptCapsule",
+      "@type": "@id"
+    },
+    "probabilityObject": {
+      "@id": "na:probabilityObject",
+      "@type": "@id"
+    },
+    "dimension": {
+      "@id": "na:dimension",
+      "@type": "@id"
+    },
+    "run": {
+      "@id": "na:run",
+      "@type": "@id"
+    },
+    "activeRun": {
+      "@id": "na:activeRun",
+      "@type": "@id"
+    },
+    "candidate": {
+      "@id": "na:candidate",
+      "@type": "@id"
+    },
+    "stackLayer": {
+      "@id": "na:stackLayer",
+      "@type": "@id"
+    },
+    "lowFidelitySpike": {
+      "@id": "na:lowFidelitySpike",
+      "@type": "@id"
+    },
+    "gap": {
+      "@id": "na:gap",
+      "@type": "@id"
+    },
+    "probe": {
+      "@id": "pp:probe",
+      "@type": "@id"
+    },
+    "routesTo": {
+      "@id": "ca:routesTo",
+      "@type": "@id"
+    },
+    "decision": {
+      "@id": "na:decision",
+      "@type": "@id"
+    },
+    "selectedCandidate": {
+      "@id": "na:selectedCandidate",
+      "@type": "@id"
+    },
+    "heldCandidate": {
+      "@id": "na:heldCandidate",
+      "@type": "@id"
+    },
+    "defaultLikelihood": "na:defaultLikelihood",
+    "sixMonthFit": "na:sixMonthFit",
+    "estimate": "na:estimate",
+    "intervalLow": "na:intervalLow",
+    "intervalHigh": "na:intervalHigh",
+    "estimateKind": "na:estimateKind",
+    "measurementStatus": "na:measurementStatus",
+    "calibrationState": "na:calibrationState",
+    "candidateSetSemantics": "na:candidateSetSemantics",
+    "otherOrTailMass": "na:otherOrTailMass",
+    "weight": "na:weight",
+    "dimensionScore": "na:dimensionScore",
+    "gapClass": "na:gapClass",
+    "gapType": "na:gapType",
+    "gapUtility": "na:gapUtility",
+    "resolutionState": "na:resolutionState",
+    "sourceBand": "ca:sourceBand",
+    "sourceOfTruthBand": "ca:sourceOfTruthBand",
+    "publicationStatus": "ca:publicationStatus",
+    "valueOrigin": "ca:valueOrigin",
+    "reviewState": "ca:reviewState"
+  },
+  "@graph": [
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/technology-fit-sampling-tableau-v0.1",
+      "@type": "TechnologyFitSamplingSurface",
+      "name": "Technology Fit Sampling Tableau",
+      "description": "Compare popular defaults and fit-for-purpose front-end compositions through separate probability objects, dimensional fit, equal low-fidelity spikes, explicit gaps, and reversible decision records.",
+      "profileOf": "https://schemas.driftframestudios.org/na#narrative-sampling-tableau",
+      "promptCapsule": "https://schemas.driftframestudios.org/na/examples/technology-fit-prompt-capsule-v0.1",
+      "activeRun": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief",
+      "run": [
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief"
+      ],
+      "dimension": [
+        "https://schemas.driftframestudios.org/na/examples/dimension/human-maintainability",
+        "https://schemas.driftframestudios.org/na/examples/dimension/accessibility-integrity",
+        "https://schemas.driftframestudios.org/na/examples/dimension/swapability",
+        "https://schemas.driftframestudios.org/na/examples/dimension/iteration-speed",
+        "https://schemas.driftframestudios.org/na/examples/dimension/ai-legibility",
+        "https://schemas.driftframestudios.org/na/examples/dimension/svg-control",
+        "https://schemas.driftframestudios.org/na/examples/dimension/testability",
+        "https://schemas.driftframestudios.org/na/examples/dimension/operational-calm"
+      ],
+      "lowFidelitySpike": [
+        "https://schemas.driftframestudios.org/na/examples/spike/spike-semantic-form-feedback",
+        "https://schemas.driftframestudios.org/na/examples/spike/spike-svg-label-placement",
+        "https://schemas.driftframestudios.org/na/examples/spike/spike-responsive-comparison-surface",
+        "https://schemas.driftframestudios.org/na/examples/spike/spike-round-trip-state",
+        "https://schemas.driftframestudios.org/na/examples/spike/spike-layer-replacement"
+      ],
+      "gap": [
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-popularity-frequency-unmeasured",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-fit-commensurability",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-svg-density-envelope",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-at-verification",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-react-version",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-resource-lifetimes",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-maintainer-context",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-static-deployment-boundary",
+        "https://schemas.driftframestudios.org/na/examples/gap/gap-dependency-aging"
+      ],
+      "probe": [
+        "https://schemas.driftframestudios.org/pp#probe/start-here-technology-decision",
+        "https://schemas.driftframestudios.org/pp#probe/html-semantic-ownership",
+        "https://schemas.driftframestudios.org/pp#probe/css-swapability",
+        "https://schemas.driftframestudios.org/pp#probe/svg-coordinate-and-label-fit",
+        "https://schemas.driftframestudios.org/pp#probe/javascript-resource-lifetimes",
+        "https://schemas.driftframestudios.org/pp#probe/react-version-coherence",
+        "https://schemas.driftframestudios.org/pp#probe/visual-label-placement"
+      ],
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#strategy-canvas",
+        "https://schemas.driftframestudios.org/ca#practitioner-judgment-probes",
+        "https://schemas.driftframestudios.org/ca#specification-by-example",
+        "https://schemas.driftframestudios.org/ca#software-architecture-views",
+        "https://schemas.driftframestudios.org/ca#heart-chart",
+        "https://schemas.driftframestudios.org/ca#unit-test-first-design",
+        "https://schemas.driftframestudios.org/ca#service-design-blueprint"
+      ],
+      "decision": "https://schemas.driftframestudios.org/na/examples/technology-decision-record-v0.1",
+      "na:activeComparison": {
+        "@id": "https://schemas.driftframestudios.org/na/examples/technology-fit-sampling-tableau-v0.1/comparison/active"
+      },
+      "sourceBand": [
+        "author_original",
+        "collaboration_stabilized",
+        "sample_state"
+      ],
+      "sourceOfTruthBand": [
+        "human_steward_review",
+        "schema_validation",
+        "runtime_observation_pending",
+        "local_accessibility_verification_pending"
+      ],
+      "publicationStatus": "public_safe"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/technology-fit-prompt-capsule-v0.1",
+      "@type": "AIContextProjection",
+      "name": "Technology fit sampling request",
+      "description": "Choose two front-end stack candidates for equivalent low-fidelity spikes, then preserve evidence and an exit path before a durable stack commitment.",
+      "probabilityObject": [
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/probability-default-likelihood",
+          "@type": "ProbabilityDefinition",
+          "name": "Generic LLM first-recommendation likelihood",
+          "description": "P(generic-LLM-first-recommendation | the named prompt condition): the model-verbalized probability that a candidate appears as the first recommendation under that request.",
+          "candidateSetSemantics": "open_exclusive",
+          "measurementStatus": "uncalibrated_verbalized_sample"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/probability-six-month-fit",
+          "@type": "ProbabilityDefinition",
+          "name": "Six-month collaboration fit",
+          "description": "P(six-month-fit-without-structural-rewrite | declared outcome, team conditions, and current evidence): the contextual planning probability that a candidate supports the selected low-fidelity interaction surfaces for six months while preserving accessibility, semantic readability, maintainability, testability, and a practical replacement path.",
+          "candidateSetSemantics": "independent_events",
+          "measurementStatus": "uncalibrated_planning_estimate"
+        }
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/human-maintainability",
+      "@type": "FitDimension",
+      "name": "Human maintainability",
+      "description": "How readily maintainers can understand ownership, debug behavior, and make local changes after the initial implementation.",
+      "weight": 0.18
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/accessibility-integrity",
+      "@type": "FitDimension",
+      "name": "Accessibility integrity",
+      "description": "How reliably the stack preserves native semantics, keyboard behavior, accessible naming, status feedback, and local assistive-technology verification.",
+      "weight": 0.17
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/swapability",
+      "@type": "FitDimension",
+      "name": "Swapability",
+      "description": "How clearly rendering, styling, components, state, and build layers can be replaced without rewriting unrelated behavior.",
+      "weight": 0.15
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/iteration-speed",
+      "@type": "FitDimension",
+      "name": "Low-fidelity iteration speed",
+      "description": "How quickly collaborators can produce, inspect, and revise credible low-fidelity surfaces.",
+      "weight": 0.12
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/ai-legibility",
+      "@type": "FitDimension",
+      "name": "AI collaboration legibility",
+      "description": "How well code structure, contracts, examples, and failure states support accurate AI modification and explanation.",
+      "weight": 0.11
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/svg-control",
+      "@type": "FitDimension",
+      "name": "SVG and data-visual control",
+      "description": "How directly collaborators can control coordinate systems, grouping, transforms, label placement, interaction, and accessible equivalents.",
+      "weight": 0.1
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/testability",
+      "@type": "FitDimension",
+      "name": "Testability and specification fit",
+      "description": "How easily behavior can be specified independently, tested across layers, and preserved during replacement.",
+      "weight": 0.09
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/dimension/operational-calm",
+      "@type": "FitDimension",
+      "name": "Operational and dependency calm",
+      "description": "How well the stack bounds dependency churn, build complexity, resource lifetimes, static deployment, and observability.",
+      "weight": 0.08
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief",
+      "@type": "SamplingRun",
+      "name": "Run A · sparse default brief",
+      "description": "Underspecified request with no explicit accessibility, SVG, swapability, or six-month horizon.",
+      "candidateSetSemantics": "open_exclusive",
+      "otherOrTailMass": 0.02,
+      "candidate": [
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-tailwind-copied-primitives",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-css-modules-headless",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-integrated-component-system",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/vue-css-modules-headless",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/svelte-component-css",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/lit-web-components-css-layers",
+        "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/vanilla-ts-web-components-css-layers"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-tailwind-copied-primitives",
+      "@type": "TechnologyCandidate",
+      "name": "React + Tailwind + copied component primitives",
+      "description": "A high-frequency LLM default optimized for immediate scaffolding and familiar examples.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.45,
+        "intervalLow": 0.34,
+        "intervalHigh": 0.55,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.59,
+        "intervalLow": 0.42,
+        "intervalHigh": 0.74,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-css-modules-headless",
+      "@type": "TechnologyCandidate",
+      "name": "React + CSS Modules + headless accessible primitives",
+      "description": "A middle-ground React option with local semantic styles and explicit primitive ownership.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.19,
+        "intervalLow": 0.12,
+        "intervalHigh": 0.27,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.67,
+        "intervalLow": 0.5,
+        "intervalHigh": 0.82,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/react-integrated-component-system",
+      "@type": "TechnologyCandidate",
+      "name": "React + integrated component system",
+      "description": "A rapid, accessibility-aware path with theming and component behavior supplied by an integrated system.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.1,
+        "intervalLow": 0.05,
+        "intervalHigh": 0.17,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.62,
+        "intervalLow": 0.45,
+        "intervalHigh": 0.78,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/vue-css-modules-headless",
+      "@type": "TechnologyCandidate",
+      "name": "Vue + CSS Modules + headless primitives",
+      "description": "A component-oriented option with a readable template model and explicit styling and primitive layers.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.09,
+        "intervalLow": 0.04,
+        "intervalHigh": 0.15,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.59,
+        "intervalLow": 0.42,
+        "intervalHigh": 0.75,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/svelte-component-css",
+      "@type": "TechnologyCandidate",
+      "name": "Svelte + component-scoped CSS",
+      "description": "A compact compiler-oriented option with low ceremony and direct component-local markup and styling.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.08,
+        "intervalLow": 0.035,
+        "intervalHigh": 0.14,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.63,
+        "intervalLow": 0.46,
+        "intervalHigh": 0.79,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/lit-web-components-css-layers",
+      "@type": "TechnologyCandidate",
+      "name": "Lit + Web Components + CSS layers",
+      "description": "A standards-oriented component path with explicit custom-element and shadow-boundary contracts.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.04,
+        "intervalLow": 0.015,
+        "intervalHigh": 0.085,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.5,
+        "intervalLow": 0.32,
+        "intervalHigh": 0.69,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief/candidate/vanilla-ts-web-components-css-layers",
+      "@type": "TechnologyCandidate",
+      "name": "Vanilla TypeScript + Web Components + CSS layers",
+      "description": "A platform-first option with minimal framework commitment and maximum explicit ownership.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.03,
+        "intervalLow": 0.01,
+        "intervalHigh": 0.07,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.48,
+        "intervalLow": 0.3,
+        "intervalHigh": 0.67,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "unreviewed"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief",
+      "@type": "SamplingRun",
+      "name": "Run B · evidence-enriched brief",
+      "description": "Outcome, dimensions, gap review, low-fidelity spikes, and technology-layer composition are explicit.",
+      "candidateSetSemantics": "open_exclusive",
+      "otherOrTailMass": 0.02,
+      "candidate": [
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-tailwind-copied-primitives",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-css-modules-headless",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-integrated-component-system",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vue-css-modules-headless",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/svelte-component-css",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/lit-web-components-css-layers",
+        "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vanilla-ts-web-components-css-layers"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-tailwind-copied-primitives",
+      "@type": "TechnologyCandidate",
+      "name": "React + Tailwind + copied component primitives",
+      "description": "A high-frequency LLM default optimized for immediate scaffolding and familiar examples.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.3,
+        "intervalLow": 0.22,
+        "intervalHigh": 0.4,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.52,
+        "intervalLow": 0.36,
+        "intervalHigh": 0.68,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "held"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-css-modules-headless",
+      "@type": "TechnologyCandidate",
+      "name": "React + CSS Modules + headless accessible primitives",
+      "description": "A middle-ground React option with local semantic styles and explicit primitive ownership.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.26,
+        "intervalLow": 0.18,
+        "intervalHigh": 0.36,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.78,
+        "intervalLow": 0.64,
+        "intervalHigh": 0.89,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "selected_for_spike"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-integrated-component-system",
+      "@type": "TechnologyCandidate",
+      "name": "React + integrated component system",
+      "description": "A rapid, accessibility-aware path with theming and component behavior supplied by an integrated system.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.1,
+        "intervalLow": 0.05,
+        "intervalHigh": 0.17,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.64,
+        "intervalLow": 0.48,
+        "intervalHigh": 0.79,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "held"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vue-css-modules-headless",
+      "@type": "TechnologyCandidate",
+      "name": "Vue + CSS Modules + headless primitives",
+      "description": "A component-oriented option with a readable template model and explicit styling and primitive layers.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.11,
+        "intervalLow": 0.055,
+        "intervalHigh": 0.18,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.66,
+        "intervalLow": 0.5,
+        "intervalHigh": 0.81,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "held"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/svelte-component-css",
+      "@type": "TechnologyCandidate",
+      "name": "Svelte + component-scoped CSS",
+      "description": "A compact compiler-oriented option with low ceremony and direct component-local markup and styling.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.11,
+        "intervalLow": 0.055,
+        "intervalHigh": 0.18,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.71,
+        "intervalLow": 0.56,
+        "intervalHigh": 0.85,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "selected_for_spike"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/lit-web-components-css-layers",
+      "@type": "TechnologyCandidate",
+      "name": "Lit + Web Components + CSS layers",
+      "description": "A standards-oriented component path with explicit custom-element and shadow-boundary contracts.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.06,
+        "intervalLow": 0.025,
+        "intervalHigh": 0.11,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.59,
+        "intervalLow": 0.42,
+        "intervalHigh": 0.75,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "held"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vanilla-ts-web-components-css-layers",
+      "@type": "TechnologyCandidate",
+      "name": "Vanilla TypeScript + Web Components + CSS layers",
+      "description": "A platform-first option with minimal framework commitment and maximum explicit ownership.",
+      "defaultLikelihood": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.04,
+        "intervalLow": 0.015,
+        "intervalHigh": 0.085,
+        "estimateKind": "model_verbalized_distribution",
+        "measurementStatus": "uncalibrated_verbalized_sample",
+        "calibrationState": "uncalibrated",
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
+      },
+      "sixMonthFit": {
+        "@type": "ProbabilityEstimate",
+        "estimate": 0.58,
+        "intervalLow": 0.4,
+        "intervalHigh": 0.74,
+        "estimateKind": "planning_probability",
+        "measurementStatus": "uncalibrated_planning_estimate",
+        "calibrationState": "uncalibrated",
+        "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
+      },
+      "na:decisionState": "held"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/technology-fit-sampling-tableau-v0.1/comparison/active",
+      "@type": "na:SamplingRunComparison",
+      "na:baselineRunRef": {
+        "@id": "https://schemas.driftframestudios.org/na/examples/run-sparse-default-brief"
+      },
+      "na:comparisonRunRef": {
+        "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief"
+      }
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/spike/spike-semantic-form-feedback",
+      "@type": "LowFidelitySpike",
+      "name": "Semantic form and status feedback",
+      "description": "Can the candidate preserve native form semantics, committed filtering, status feedback, focus recovery, and zero-results messaging with a clear local verification path?",
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#specification-by-example",
+        "https://schemas.driftframestudios.org/ca#unit-test-first-design",
+        "https://schemas.driftframestudios.org/ca#practitioner-judgment-probes"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/spike/spike-svg-label-placement",
+      "@type": "LowFidelitySpike",
+      "name": "SVG coordinate and label-placement surface",
+      "description": "Can the candidate render, edit, and export a dense SVG scene while preserving groups, transforms, collision rules, stable IDs, keyboard access, and a table equivalent?",
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#pattern-problem-surface-matrix",
+        "https://schemas.driftframestudios.org/ca#software-architecture-views",
+        "https://schemas.driftframestudios.org/ca#specification-by-example"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/spike/spike-responsive-comparison-surface",
+      "@type": "LowFidelitySpike",
+      "name": "Responsive comparison and inspector",
+      "description": "Can the candidate preserve semantic order, keyboard reachability, readable tables, and stable inspector identity across narrow and wide viewports?",
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#participatory-design-kit",
+        "https://schemas.driftframestudios.org/ca#specification-by-example",
+        "https://schemas.driftframestudios.org/ca#heart-chart"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/spike/spike-round-trip-state",
+      "@type": "LowFidelitySpike",
+      "name": "Editable state and JSON / JSON-LD round trip",
+      "description": "Can collaborators edit the surface, export stable state, re-import it, and preserve IDs, value origins, omissions, and source boundaries?",
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#software-architecture-views",
+        "https://schemas.driftframestudios.org/ca#unit-test-first-design",
+        "https://schemas.driftframestudios.org/ca#upstream-revision-loop"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/spike/spike-layer-replacement",
+      "@type": "LowFidelitySpike",
+      "name": "Styling and component-layer replacement",
+      "description": "Can one visual and interaction slice replace its styling or primitive layer while behavior fixtures and domain state remain unchanged?",
+      "routesTo": [
+        "https://schemas.driftframestudios.org/ca#software-architecture-views",
+        "https://schemas.driftframestudios.org/ca#unit-test-first-design",
+        "https://schemas.driftframestudios.org/ca#plus-delta"
+      ]
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-popularity-frequency-unmeasured",
+      "@type": "GapRecord",
+      "name": "Default-likelihood frequency remains unmeasured",
+      "description": "The verbalized default distribution illustrates model priors under two prompts; it is not an empirical benchmark across models or repeated samples.",
+      "gapClass": "methodological",
+      "gapType": "calibration_absent",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#heart-chart"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-fit-commensurability",
+      "@type": "GapRecord",
+      "name": "Six-month fit combines several forms of evidence",
+      "description": "Current fit estimates blend practitioner judgment, design dimensions, and hypothetical spike outcomes without a formal statistical model.",
+      "gapClass": "methodological",
+      "gapType": "runs_not_commensurate",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#strategy-canvas"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-svg-density-envelope",
+      "@type": "GapRecord",
+      "name": "SVG density and label-placement envelope",
+      "description": "The intended scene size, label count, motion pattern, and collision budget remain partially specified.",
+      "gapClass": "technical",
+      "gapType": "technical_veracity_gap",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#pattern-problem-surface-matrix"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-at-verification",
+      "@type": "GapRecord",
+      "name": "Local assistive-technology verification",
+      "description": "Library or framework claims remain source anchors; high-risk primitives still need local keyboard and assistive-technology verification.",
+      "gapClass": "technical",
+      "gapType": "accessibility_gap",
+      "gapUtility": "harmful",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#practitioner-judgment-probes"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-react-version",
+      "@type": "GapRecord",
+      "name": "React version and integration assumptions",
+      "description": "React candidates need exact version, rendering, external-store, component-library, and build assumptions before technical claims can settle.",
+      "gapClass": "technical",
+      "gapType": "model_or_version_unknown",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#practitioner-judgment-probes"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-resource-lifetimes",
+      "@type": "GapRecord",
+      "name": "Effect and resource-lifetime behavior",
+      "description": "Listeners, observers, timers, fetches, and external subscriptions need equal acquire/release review across selected candidates.",
+      "gapClass": "technical",
+      "gapType": "technical_veracity_gap",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#software-architecture-views"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-maintainer-context",
+      "@type": "GapRecord",
+      "name": "Maintainer and collaborator context",
+      "description": "Current estimates assume a team comfortable with TypeScript, semantic HTML, modern CSS, and local verification; actual experience distribution remains unstated.",
+      "gapClass": "organizational",
+      "gapType": "population_undefined",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#context-tree"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-static-deployment-boundary",
+      "@type": "GapRecord",
+      "name": "Static-hosting boundary versus server needs",
+      "description": "The exemplar assumes a static or mostly client-side collaboration surface; authentication, server rendering, or dynamic API needs could change the candidate set.",
+      "gapClass": "boundary",
+      "gapType": "target_model_mismatch",
+      "gapUtility": "generative",
+      "resolutionState": "held_open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#service-design-blueprint"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/gap/gap-dependency-aging",
+      "@type": "GapRecord",
+      "name": "Dependency and six-month aging evidence",
+      "description": "The prototype does not yet contain repeated upgrade, security, or dependency-review observations for the candidate stacks.",
+      "gapClass": "evidence",
+      "gapType": "evidence_stale",
+      "gapUtility": "coordination_gap",
+      "resolutionState": "open",
+      "routesTo": "https://schemas.driftframestudios.org/ca#unit-test-first-design"
+    },
+    {
+      "@id": "https://schemas.driftframestudios.org/na/examples/technology-decision-record-v0.1",
+      "@type": "TechnologyDecisionRecord",
+      "name": "Front-end stack spike decision",
+      "description": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with explicit seams. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
+      "na:selectedCandidateRef": [
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-css-modules-headless"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/svelte-component-css"
+        }
+      ],
+      "na:heldCandidateRef": [
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-tailwind-copied-primitives"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/react-integrated-component-system"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vue-css-modules-headless"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/lit-web-components-css-layers"
+        },
+        {
+          "@id": "https://schemas.driftframestudios.org/na/examples/run-evidence-enriched-brief/candidate/vanilla-ts-web-components-css-layers"
+        }
+      ],
+      "na:declinedCandidateRef": [],
+      "valueOrigin": "author_and_ai_collaborative_working_decision",
+      "reviewState": "working"
+    }
+  ]
+}

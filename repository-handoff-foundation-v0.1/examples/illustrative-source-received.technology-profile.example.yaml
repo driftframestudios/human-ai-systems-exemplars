@@ -1,0 +1,173 @@
+{
+  "$schema": "../schema/technology-profile.schema.v0.1.json",
+  "schemaVersion": "0.1",
+  "artifactType": "repository_handoff_technology_profile",
+  "key": "illustrative-received-site",
+  "version": "0.1.0",
+  "title": "Illustrative received-site technology profile",
+  "source": {
+    "key": "illustrative-site-source",
+    "relationship": "illustrative_fixture",
+    "origin": {
+      "type": "authorized_resolver",
+      "resolverKey": "illustrative-source-fixture"
+    },
+    "revision": {
+      "kind": "observation_key",
+      "value": "illustrative-site-v0.1"
+    },
+    "digest": {
+      "algorithm": "sha256",
+      "scope": "illustrative_fixture_identity",
+      "procedure": "utf8_label_sha256_v1",
+      "procedureInput": "illustrative-site-v0.1",
+      "value": "b579e354239c67a6ff4233d8cf8ec35c0de8c631f3270b9bd7a8e945408e6423"
+    }
+  },
+  "authority": {
+    "sourceAcceptanceOwner": "fixture-owner",
+    "observationOwner": "fixture-observer",
+    "implementationAuthority": "fixture-source-and-live-issues",
+    "credentialOwner": "account-owner",
+    "publicationOwner": "receiving-owner"
+  },
+  "evidence": [
+    {
+      "key": "fixture-declaration",
+      "kind": "fixture_declaration",
+      "basis": "declared",
+      "normalizedResult": "The illustrative fixture declares one editable document, one source manifest, one route, and one stylesheet.",
+      "establishes": "The example demonstrates evidence-linked facts while real-site stack facts remain with their own source intake.",
+      "coverageBoundary": "The fixture establishes contract shape only; source intake establishes facts for a receiving repository."
+    }
+  ],
+  "observations": {
+    "sourceLayout": {
+      "editableSource": [
+        {
+          "key": "fixture-site-document",
+          "path": "site/index.html",
+          "role": "editable_source",
+          "basis": "declared",
+          "evidenceRefs": [
+            "fixture-declaration"
+          ]
+        }
+      ]
+    },
+    "manifests": [
+      {
+        "key": "fixture-source-manifest",
+        "path": "site/source-manifest.json",
+        "role": "source_manifest",
+        "basis": "declared",
+        "evidenceRefs": [
+          "fixture-declaration"
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "key": "fixture-home-route",
+        "pattern": "/",
+        "kind": "document_route",
+        "basis": "declared",
+        "evidenceRefs": [
+          "fixture-declaration"
+        ]
+      }
+    ],
+    "styles": [
+      {
+        "key": "fixture-site-styles",
+        "path": "site/assets/site.css",
+        "role": "authored_stylesheet",
+        "basis": "declared",
+        "evidenceRefs": [
+          "fixture-declaration"
+        ]
+      }
+    ]
+  },
+  "coverage": [
+    {
+      "key": "fixture-layout-observed",
+      "area": "source-layout",
+      "state": "observed",
+      "scope": "The illustrative fixture declaration and its named editable document.",
+      "establishes": "The fixture identifies one editable source path.",
+      "coverageBoundary": "The technical collaborator records every material editable and generated path observed within the accepted intake scope.",
+      "factKeys": [
+        "fixture-site-document"
+      ],
+      "evidenceRefs": [
+        "fixture-declaration"
+      ]
+    },
+    {
+      "key": "fixture-manifest-observed",
+      "area": "manifests",
+      "state": "observed",
+      "scope": "The illustrative fixture declaration and its named source manifest.",
+      "establishes": "The fixture identifies one source manifest path.",
+      "coverageBoundary": "Package, build, and hosting manifests remain open to their own source observations.",
+      "factKeys": [
+        "fixture-source-manifest"
+      ],
+      "evidenceRefs": [
+        "fixture-declaration"
+      ]
+    },
+    {
+      "key": "fixture-environment-scope",
+      "area": "environment-variables",
+      "state": "not_found_in_scope",
+      "scope": "The bounded illustrative fixture declaration.",
+      "establishes": "The inspected fixture scope contains an empty environment-variable-name set.",
+      "coverageBoundary": "Real source intake establishes environment dependencies for its own inspected scope.",
+      "factKeys": [],
+      "evidenceRefs": [
+        "fixture-declaration"
+      ]
+    },
+    {
+      "key": "fixture-package-manager-open",
+      "area": "package-managers",
+      "state": "not_assessed",
+      "scope": "The illustrative fixture leaves dependency tooling unspecified.",
+      "establishes": "Package-manager standing remains open for source evidence.",
+      "coverageBoundary": "A real manifest or lockfile observation can establish the package manager.",
+      "factKeys": [],
+      "evidenceRefs": [],
+      "nextReceiver": "source-intake"
+    },
+    {
+      "key": "fixture-pages-open",
+      "area": "pages-compatibility",
+      "state": "not_assessed",
+      "scope": "Publication compatibility awaits an exercised build or hosting observation.",
+      "establishes": "Publication compatibility remains open.",
+      "coverageBoundary": "A source-native artifact and focused hosting check can establish technical compatibility; the receiving owner retains publication authority.",
+      "factKeys": [],
+      "evidenceRefs": [],
+      "nextReceiver": "receiving-owner"
+    }
+  ],
+  "unresolved": [
+    {
+      "key": "fixture-pages-compatibility",
+      "area": "pages-compatibility",
+      "question": "Can the received source produce an artifact that fits GitHub Pages while retaining required behavior?",
+      "nextReceiver": "source-intake",
+      "releaseEvent": "A source-native build or static-source observation records the artifact shape and behavior boundary.",
+      "evidenceRefs": []
+    }
+  ],
+  "projection": {
+    "authority": "json",
+    "jsonSource": "examples/illustrative-source-received.technology-profile.example.json",
+    "yamlTarget": "examples/illustrative-source-received.technology-profile.example.yaml",
+    "mode": "exact_json_bytes",
+    "derivationNote": "The YAML companion is a byte-for-byte copy of this authoritative JSON example; JSON syntax is valid YAML 1.2."
+  }
+}

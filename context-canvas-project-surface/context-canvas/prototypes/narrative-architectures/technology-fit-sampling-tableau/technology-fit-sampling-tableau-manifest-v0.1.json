@@ -1,0 +1,176 @@
+{
+  "id": "na:technology-fit-sampling-tableau-chimeric-prototype-manifest/v0.1",
+  "title": "Technology Fit Sampling Tableau — Chimeric Prototype",
+  "version": "0.1",
+  "status": "chimeric_prototype",
+  "generatedAt": "2026-08-22T00:00:00Z",
+  "canonicalType": "TechnologyFitSamplingSurface",
+  "profileOf": "na:narrative-sampling-tableau",
+  "method": "Verbalized Sampling",
+  "sourceReference": {
+    "fieldGuidePage": "Internal — Simplicity for Humans vs AI — Framework Fit, Swapability & Specification by Example",
+    "probePages": [
+      "Start Here — How to use the Probes",
+      "Pattern-Problem Surface for Visual Label Placement",
+      "SVG — Enterprise Front-end Practitioner Probes",
+      "HTML — Enterprise Front-end Practitioner Probes",
+      "CSS — Enterprise Front-end Practitioner Probes",
+      "Javascript - Enterprise Front-end Practitioner Probes",
+      "React.js – Visual Coherence, v18 vs. 19"
+    ]
+  },
+  "centralContract": "Compare popular defaults and fit-for-purpose front-end compositions through separate probability objects, dimensional fit, equal low-fidelity spikes, explicit gaps, and reversible decision records.",
+  "loadBearingDeterminations": [
+    "Framework popularity and contextual fit remain separate questions.",
+    "Default-likelihood and six-month-fit probabilities use separate probability objects and set semantics.",
+    "Technical gaps are first-class alongside methodological, organizational, evidence, and boundary gaps.",
+    "A front-end stack is modeled as composable layers rather than one monolithic framework label.",
+    "The first decision selects equal low-fidelity spikes rather than a durable stack mandate.",
+    "Weighted dimensional fit remains separate from probability and formal statistical fit.",
+    "Practitioner Probe records preserve question, what-it-reveals, technical-core, edge-case, and AI-directive fields.",
+    "All twenty Core Architecture cards remain available as routes.",
+    "Target-local edits and AI imports create reviewable successor state.",
+    "The prompt-capsule/0.1.0 projection keeps plain and skill-assisted Markdown on one canonical represented-state fingerprint while view and transient state remain outside it.",
+    "Aligned common-scale charts and structured tables carry consequential comparisons."
+  ],
+  "seedDecision": {
+    "id": "technology-decision-record/v0.1",
+    "decisionState": "prepare_equal_spikes",
+    "selectedCandidateIds": [
+      "react-css-modules-headless",
+      "svelte-component-css"
+    ],
+    "heldCandidateIds": [
+      "react-tailwind-copied-primitives",
+      "react-integrated-component-system",
+      "vue-css-modules-headless",
+      "lit-web-components-css-layers",
+      "vanilla-ts-web-components-css-layers"
+    ],
+    "declinedCandidateIds": [],
+    "decisionRule": "Select two candidates whose combined spike set creates the most information gain across accessibility, SVG control, maintainability, and replacement seams while preserving materially different framework commitments.",
+    "rationale": "React + CSS Modules + headless primitives represents a high-ecosystem middle ground with explicit seams. Svelte + component-scoped CSS provides a lower-ceremony compiler-oriented contrast. Equal fixtures can reveal whether the additional React ecosystem commitment produces material collaboration value for this surface.",
+    "dissentOrMinorityRead": "A platform-first Web Components spike may create stronger long-horizon evidence and should enter the next round when the initial two spikes leave swapability or operational-calm questions unresolved.",
+    "evidenceRequiredBeforeCommitment": [
+      "Semantic form and status-feedback verification",
+      "Dense SVG label-placement comparison",
+      "Responsive and accessible table equivalence",
+      "JSON/JSON-LD round trip",
+      "Styling or component-layer replacement exercise",
+      "Resource-lifetime and dependency review"
+    ],
+    "reviewAfter": "After both equal spikes and a Plus / Delta review",
+    "valueOrigin": "author_and_ai_collaborative_working_decision",
+    "reviewState": "working"
+  },
+  "probabilityObjects": [
+    {
+      "id": "probability-default-likelihood",
+      "label": "Generic LLM first-recommendation likelihood",
+      "statement": "P(generic-LLM-first-recommendation | the named prompt condition): the model-verbalized probability that a candidate appears as the first recommendation under that request.",
+      "candidateSetSemantics": "open_exclusive",
+      "normalizationRule": "Listed candidates plus other/tail mass sum to one.",
+      "measurementStatus": "uncalibrated_verbalized_sample"
+    },
+    {
+      "id": "probability-six-month-fit",
+      "label": "Six-month collaboration fit",
+      "statement": "P(six-month-fit-without-structural-rewrite | declared outcome, team conditions, and current evidence): the contextual planning probability that a candidate supports the selected low-fidelity interaction surfaces for six months while preserving accessibility, semantic readability, maintainability, testability, and a practical replacement path.",
+      "candidateSetSemantics": "independent_events",
+      "normalizationRule": "Candidate estimates are independent and need not sum to one.",
+      "measurementStatus": "uncalibrated_planning_estimate"
+    }
+  ],
+  "gapClasses": [
+    "methodological",
+    "technical",
+    "organizational",
+    "evidence",
+    "boundary"
+  ],
+  "counts": {
+    "seedRuns": 2,
+    "seedCandidatesPerRun": [
+      7,
+      7
+    ],
+    "dimensions": 8,
+    "lowFidelitySpikes": 5,
+    "gaps": 9,
+    "practitionerProbes": 7,
+    "coreArchitectureFamilies": 7,
+    "coreArchitectureCards": 20
+  },
+  "files": [
+    {
+      "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "bytes": 297562,
+      "sha256": "88de50de644f80583ef0a4d714a03930048f74071f4e5588a46384b352e3cba1",
+      "role": "interactive_prototype"
+    },
+    {
+      "name": "technology-fit-sampling-tableau-prototype-addendum-v0.1.md",
+      "bytes": 8817,
+      "sha256": "36e9d0b04a27ed1f6cbadcd941014dd4f02947deab90990e11ebf038733ffc57",
+      "role": "prototype_addendum"
+    },
+    {
+      "name": "technology-fit-sampling-tableau-prototype-profile-v0.1.yaml",
+      "bytes": 5504,
+      "sha256": "08f5b7c7ffd1b1b42f740c762a1295d4527966a8d1565c65e6ec89d7fb8e6627",
+      "role": "prototype_profile"
+    },
+    {
+      "name": "technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "bytes": 22316,
+      "sha256": "636c62c98963a9d772ff1e10677177319b3e632cc1877ce0106d4a9b8a318858",
+      "role": "json_schema"
+    },
+    {
+      "name": "technology-fit-sampling-tableau.context.v0.1.jsonld",
+      "bytes": 3227,
+      "sha256": "2f836252a2524baccb2b8615fb0e821154b7701f793ff53158ed28a24c01f76a",
+      "role": "jsonld_context"
+    },
+    {
+      "name": "technology-decision-routing-registry.v0.1.json",
+      "bytes": 30517,
+      "sha256": "db83b6740719cf955106426e0f55e48cbc3299ff0607e5c095e8f53c76614ad8",
+      "role": "core_architecture_routing_registry"
+    },
+    {
+      "name": "front-end-practitioner-probe-registry.v0.1.json",
+      "bytes": 10899,
+      "sha256": "65e4e3834025efa388e783c638781f3e97c30e7f41af1bd7e3af73621a44141a",
+      "role": "practitioner_probe_registry"
+    },
+    {
+      "name": "front-end-stack-selection.example.v0.1.json",
+      "bytes": 80716,
+      "sha256": "8ad38b4c33e9d6935829417b861eac237bd330fa12248e2aaa999d01075709e0",
+      "role": "example_state"
+    },
+    {
+      "name": "front-end-stack-selection.example.v0.1.jsonld",
+      "bytes": 44207,
+      "sha256": "9f294cdc717f19cad0008a4567663f6a9223f0335e29b926a4965cdad61922af",
+      "role": "example_jsonld"
+    },
+    {
+      "name": "technology-fit-sampling-tableau-validation-report-v0.1.json",
+      "bytes": 4929,
+      "sha256": "fe50a387111c99f60823fbc13ab5744869c9cfe614fdb1d39d2a872f8a1a671f",
+      "role": "validation_report"
+    },
+    {
+      "name": "technology-fit-sampling-tableau-preview-v0.1.png",
+      "bytes": 270373,
+      "sha256": "9d4fe6a543e6db90514c77cd68d9eb1ce1813c59dd8625ebae6969e35d8d955c",
+      "role": "preview_image"
+    }
+  ],
+  "validation": {
+    "report": "technology-fit-sampling-tableau-validation-report-v0.1.json",
+    "result": "pass"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "strategy-canvas/2.0",
+  "meta": {
+    "id": "strategy-canvas-three-channel-example",
+    "title": "Collaboration continuity field",
+    "subtitle": "A reviewed human round, derived group reading, reversible scenario, and attributed AI shadow proposal.",
+    "decisionObject": "Select the next responsible collaboration improvements.",
+    "horizon": "Next two delivery cycles",
+    "revision": 2
+  },
+  "method": {
+    "posture": "internal-collaboration",
+    "scoreMeaning": "Relative level of support under the locally reviewed dimension anchors.",
+    "weightMeaning": "Consequence weight directs attention during review and leaves plotted scores unchanged."
+  },
+  "scale": {
+    "min": 0,
+    "max": 10,
+    "step": 1,
+    "lowLabel": "Emerging support",
+    "middleLabel": "Partial or variable support",
+    "highLabel": "Consistent, inspectable support"
+  },
+  "dimensions": [
+    {
+      "id": "participant-access",
+      "label": "Participant access",
+      "definition": "Participants can enter, operate, understand, and recover the intended collaboration routes.",
+      "anchors": {
+        "low": "Participation depends on exceptional help or an undisclosed workaround.",
+        "middle": "Primary routes work with known gaps and planned assistance.",
+        "high": "Primary and recovery routes are independently usable and verified with relevant participants."
+      },
+      "scores": { "current": 5, "goodEnough": 7, "desired": 9 },
+      "consequenceWeight": 5,
+      "action": "raise",
+      "evidenceBasis": "Review keyboard, touch, assistive-technology, zoom, comprehension, and recovery receipts."
+    },
+    {
+      "id": "evidence-traceability",
+      "label": "Evidence traceability",
+      "definition": "Consequential readings retain a visible route to source, transformation, standing, limits, and review.",
+      "anchors": {
+        "low": "Basis depends on recollection or unlinked material.",
+        "middle": "Principal readings link to partial evidence and named open conditions.",
+        "high": "Source, transformation, counter-signals, and review state remain inspectable together."
+      },
+      "scores": { "current": 4, "goodEnough": 7, "desired": 9 },
+      "consequenceWeight": 5,
+      "action": "create",
+      "evidenceBasis": "Sample material readings and recover each claim, source, interpretation, and review state."
+    }
+  ],
+  "view": {
+    "dimensionOrder": ["participant-access", "evidence-traceability"],
+    "selectedDimensionId": "evidence-traceability",
+    "mode": "working"
+  },
+  "lifecycle": {
+    "status": "working",
+    "reviewedSnapshot": null,
+    "reviewedBy": "",
+    "reviewNote": "The reviewed collaboration snapshot remains available while the attributed AI shadow proposal is inspected.",
+    "reviewedAt": ""
+  },
+  "extensions": {
+    "contextCanvas": {
+      "collaboration": {
+        "session": {
+          "phase": "handoff",
+          "decisionReceipt": "Human readings were collected before reveal. The working scenario remains separate from the group aggregates. Reviewed scope is available for a local AI shadow-round packet.",
+          "includeReviewedStateInAI": true
+        },
+        "participants": [
+          { "id": "participant-alder", "alias": "Alder", "role": "Research" },
+          { "id": "participant-birch", "alias": "Birch", "role": "Operations" }
+        ],
+        "rounds": [
+          {
+            "id": "round-current-one",
+            "label": "Current support — independent reading",
+            "target": "current",
+            "status": "revealed",
+            "participantIds": ["participant-alder", "participant-birch"],
+            "createdAt": "2026-08-21T18:10:00Z",
+            "revealedAt": "2026-08-21T18:20:00Z"
+          }
+        ],
+        "ballots": {
+          "round-current-one": {
+            "participant-alder": {
+              "participantId": "participant-alder",
+              "values": {
+                "participant-access": 4,
+                "evidence-traceability": 3
+              },
+              "status": "submitted",
+              "submittedAt": "2026-08-21T18:14:00Z",
+              "channel": "human-ballot"
+            },
+            "participant-birch": {
+              "participantId": "participant-birch",
+              "values": {
+                "participant-access": 6,
+                "evidence-traceability": 7
+              },
+              "status": "submitted",
+              "submittedAt": "2026-08-21T18:16:00Z",
+              "channel": "human-ballot"
+            }
+          }
+        },
+        "scenarios": [
+          {
+            "id": "scenario-working-one",
+            "label": "Facilitated next-cycle proposal",
+            "target": "desired",
+            "sourceRoundId": "round-current-one",
+            "values": {
+              "participant-access": 7,
+              "evidence-traceability": 7
+            },
+            "status": "working",
+            "createdAt": "2026-08-21T18:25:00Z"
+          }
+        ],
+        "acceptedScenario": {
+          "id": "scenario-working-one",
+          "label": "Facilitated next-cycle proposal",
+          "target": "desired",
+          "sourceRoundId": "round-current-one",
+          "values": {
+            "participant-access": 7,
+            "evidence-traceability": 7
+          },
+          "status": "carried-to-review",
+          "createdAt": "2026-08-21T18:25:00Z",
+          "acceptedAt": "2026-08-21T18:32:00Z",
+          "standing": "facilitated working scenario"
+        },
+        "notes": [
+          {
+            "id": "note-evidence-spread",
+            "dimensionId": "evidence-traceability",
+            "roundId": "round-current-one",
+            "type": "question",
+            "author": "Workshop steward",
+            "body": "Which evidence sources or anchor interpretations explain the wider evidence-traceability spread?",
+            "standing": "human-authored note",
+            "createdAt": "2026-08-21T18:23:00Z"
+          }
+        ],
+        "reviewedSnapshots": [
+          {
+            "id": "collaboration-snapshot-one",
+            "reviewedAt": "2026-08-21T18:34:00Z",
+            "reviewedBy": "Workshop steward",
+            "receipt": "Two human ballots were revealed. The scenario remains a facilitated proposal beside the group distribution.",
+            "dimensionIds": ["participant-access", "evidence-traceability"],
+            "roundId": "round-current-one",
+            "aggregates": {
+              "participant-access": { "count": 2, "mean": 5, "median": 5, "min": 4, "max": 6, "range": 2, "missing": 0, "values": [4, 6] },
+              "evidence-traceability": { "count": 2, "mean": 5, "median": 5, "min": 3, "max": 7, "range": 4, "missing": 0, "values": [3, 7] }
+            },
+            "scenario": {
+              "id": "scenario-working-one",
+              "label": "Facilitated next-cycle proposal",
+              "target": "desired",
+              "sourceRoundId": "round-current-one",
+              "values": {
+                "participant-access": 7,
+                "evidence-traceability": 7
+              },
+              "status": "carried-to-review",
+              "createdAt": "2026-08-21T18:25:00Z",
+              "acceptedAt": "2026-08-21T18:32:00Z",
+              "standing": "facilitated working scenario"
+            },
+            "noteIds": ["note-evidence-spread"]
+          }
+        ],
+        "events": [
+          { "id": "event-round-opened", "type": "round-opened", "at": "2026-08-21T18:10:00Z" },
+          { "id": "event-round-revealed", "type": "round-revealed", "at": "2026-08-21T18:20:00Z" },
+          { "id": "event-scenario-reviewed", "type": "scenario-carried-to-review", "at": "2026-08-21T18:32:00Z" }
+        ]
+      },
+      "aiCollaboration": {
+        "promptPreparedAt": "2026-08-21T18:36:00Z",
+        "posture": "research",
+        "proposals": {
+          "participant-access": 7,
+          "evidence-traceability": 8
+        },
+        "proposalNote": "Imported attributed shadow-round proposal: inspect the wider evidence-traceability spread before accepting the working scenario.",
+        "standing": "AI-attributed proposal",
+        "networkPolicy": "local-only",
+        "consentScope": [
+          "dimensions",
+          "reviewed-scores",
+          "aggregates",
+          "evidence-bases",
+          "scenarios"
+        ],
+        "reviewedRevision": 1
+      }
+    }
+  }
+}

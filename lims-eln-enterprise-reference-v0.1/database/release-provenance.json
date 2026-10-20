@@ -1,0 +1,67 @@
+{
+  "provenanceSchemaVersion": "1.0.0",
+  "releaseId": "lims-eln-database-v0.3.0",
+  "migrationEngine": {
+    "name": "Flyway Community",
+    "version": "13.0.0",
+    "image": "flyway/flyway:13.0.0-alpine",
+    "imageDigest": "sha256:f3c8433401abf859ef9022584c8e6111684363ec490f737e749e9a4705ea32d0",
+    "configuration": [
+      "database/flyway/flyway.conf",
+      "database/flyway/canonical.conf",
+      "database/flyway/legacy-upgrade.conf",
+      "database/flyway/callbacks/afterConnect__bounded_owner_delegation.sql",
+      "database/flyway/legacy-callbacks/afterConnect__legacy_repeatable_read.sql"
+    ]
+  },
+  "databaseEngine": {
+    "family": "PostgreSQL",
+    "minimumMajor": 16,
+    "maximumMajor": 18,
+    "encoding": "UTF8",
+    "sessionTimezone": "UTC"
+  },
+  "baselinePolicy": {
+    "baselineOnMigrate": false,
+    "legacyBaselineVersion": "0",
+    "legacyBaselineId": "v0.1",
+    "catalogAttestationSha256": "2cbc80c55961732a3e6e0e62caa9aabc49c5ee288ee1bfa6ff7ccebf6b0fbf9a"
+  },
+  "artifacts": [
+    {"path": "database/bootstrap/roles.sql", "sha256": "abc0cbe19ab8b85874d1dbe9143fd13b7c3bb7c4fc35bffd92c888efc42597c9", "role": "cluster_bootstrap"},
+    {"path": "database/bootstrap/rehearsal_migration_login.sql", "sha256": "f9ab38f8fe4d3f0d9c2a4295372fa9f27a9e000e7a19fc29c3bde9b860eddbfb", "role": "bounded_migration_login_bootstrap"},
+    {"path": "database/bootstrap/rehearsal_runtime_logins.sql", "sha256": "43e8840602d792d586046520808091f806945c9431610d741b5b8d440e1f8d19", "role": "synthetic_runtime_login_bootstrap"},
+    {"path": "database/flyway/callbacks/afterConnect__bounded_owner_delegation.sql", "sha256": "ba968e5039bf5eaf55df04a11de32f63685351fdefa3a537e6c71e434b598bcc", "role": "flyway_bounded_caller_callback"},
+    {"path": "database/flyway/legacy-callbacks/afterConnect__legacy_repeatable_read.sql", "sha256": "cc89180c34a7d1aeeacd3d749adf3f9f18630616ae8ea93bf09b07da4f1d8ae7", "role": "flyway_legacy_isolation_callback"},
+    {"path": "database/migrations/V001__foundation.sql", "sha256": "9ed7bfe983ffb184abad4169a11e15045cae240d95a5d884cac6fecb93c4c03b", "role": "canonical_migration"},
+    {"path": "database/migrations/V002__laboratory_domain.sql", "sha256": "88aa36496cc5ab87a62e1367b1cc63ae7f5354a7fca3e00feaf21a3a70a73103", "role": "canonical_migration"},
+    {"path": "database/migrations/V003__integration_evidence_and_migration.sql", "sha256": "083662ae259506c026b103f68fb82decbc1602b5f2ba378b7afde47fa57ecb61", "role": "canonical_migration"},
+    {"path": "database/migrations/V004__security_and_write_boundaries.sql", "sha256": "aeb55ec47f95cdedd781dc07b2bfa5cfde7e27cf916b91c3cc45f0c25418ed94", "role": "canonical_migration"},
+    {"path": "database/migrations/V005__operational_indexes_and_catalog.sql", "sha256": "741fb4b620edd4a200523f6e337d1ce4fb75735d9750478c5e14654433edd62a", "role": "canonical_migration"},
+    {"path": "database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql", "sha256": "289fa6d65adbc415e759c9a46db63483c0511b071a62c66ac815b33ae6901920", "role": "canonical_migration"},
+    {"path": "database/migrations/V007__security_definer_resolution_boundary.sql", "sha256": "5b8d0dac32fceb24b7ca1e1e5e1b1ff36eb1c2e133bdabae9dc9235dadd2c049", "role": "canonical_migration"},
+    {"path": "database/migrations/V008__bounded_migration_row_security.sql", "sha256": "8359705e9a6419bec9ccf3cdc88a3fa0c69a862c9ebebc74d59bc57e82ca04be", "role": "canonical_migration"},
+    {"path": "database/legacy/v0.1/001_laboratory_core.sql", "sha256": "9764b615c9f4a6f2f1523779d2e2fec91d5b5616c2596db1707c6234839f837b", "role": "synthetic_legacy_provisioning"},
+    {"path": "database/legacy/v0.1/002_inbox_outbox.sql", "sha256": "98cbe00c26f1c61ed3558fdb3c4280652fd2850db624acd742cb147ff96fd390", "role": "synthetic_legacy_provisioning"},
+    {"path": "database/legacy/v0.1/003_evidence_ledger.sql", "sha256": "68dc4087ff41ac787c91870b5b57c7490e064f64ab74ce9cba53718dacfe1c4c", "role": "synthetic_legacy_provisioning"},
+    {"path": "database/fixtures/legacy_v0_1_representative.sql", "sha256": "e69260d31219018ce76e3797120bb718bba09e9acd0781745b8f17e46c8bffc7", "role": "synthetic_representative_fixture"},
+    {"path": "database/verify/legacy_v0_1_baseline_contract.sql", "sha256": "a2dc56dbe7ce693eb263649dba756c0966d6c1cd4ff1d9160fc1ab3868f819b8", "role": "legacy_catalog_attestation"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V001__expand.sql", "sha256": "5938060f606726e13f664dc7e8eb1032ee795ce5063e1e750df66473e04fdf3f", "role": "legacy_upgrade"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V002__backfill.sql", "sha256": "673719075fd68711d375394d7e82f25949658341245a3e93d517b9e087bdbf58", "role": "legacy_upgrade"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V003__validate.sql", "sha256": "97a9442395604c48f719ccc6d6f581c8e5f9eb5e40cc7deb8336ab14aa270c61", "role": "legacy_upgrade"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V004__cutover.sql", "sha256": "62432077988eb9dbcddd0584df2b3ecae4f8527d48069e22a57c5b62e11672ca", "role": "legacy_upgrade"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V005__security_resolution_head_attestation.sql", "sha256": "249f62d43bd1b66b8af2f9c5f074f810e1a56c642b59a3b07d53e66b59b2485a", "role": "legacy_upgrade"},
+    {"path": "database/fixtures/legacy_v0_1_contract_authorization.sql", "sha256": "bf2b13fd168745a72560b87089f766b66bd26e5eee54ed63a264f1fb0661689a", "role": "synthetic_contract_authorization_fixture"},
+    {"path": "database/upgrades/v0_1_to_v0_2/V006__contract.sql", "sha256": "ee840e71547c0d4a5a3664b4367dd7acd2937d75e67b8919bd9f6d2523332c9f", "role": "receipt_authorized_contract_migration"},
+    {"path": "database/verify/schema_contract.sql", "sha256": "2c7ca19769bff2b708dd008bca62293975f9e10cb202cff3236910ad18202ed9", "role": "post_migrate_schema_proof"},
+    {"path": "database/verify/security_contract.sql", "sha256": "8066e34a9f4a1b66eba14a26dadd986ec658be82aebedab645b606fcd5c8d6f5", "role": "post_migrate_security_proof"},
+    {"path": "database/verify/tenant_and_immutability_contract.sql", "sha256": "253cd4c52137110010ab8d5735101542ed7d544cb39ad565fdb0c2bb9cceaebc", "role": "post_migrate_runtime_proof"}
+  ],
+  "historyPolicy": {
+    "appliedRevisionPolicy": "immutable_forward_fix",
+    "canonicalHistoryTable": "public.flyway_schema_history",
+    "legacyUpgradeHistoryTable": "public.flyway_legacy_upgrade_history",
+    "cryptographicProvenance": "this_release_attestation",
+    "operationalHistory": "flyway_owned"
+  }
+}

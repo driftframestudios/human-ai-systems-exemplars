@@ -1,0 +1,142 @@
+prototype:
+  id: na:technology-fit-sampling-tableau-chimeric-prototype/v0.1
+  displayName: Technology Fit Sampling Tableau
+  canonicalType: TechnologyFitSamplingSurface
+  profileOf: na:narrative-sampling-tableau
+  version: '0.1'
+  status: chimeric_prototype
+  sourcePage: Internal — Simplicity for Humans vs AI — Framework Fit, Swapability
+    & Specification by Example
+  centralContract: Compare popular defaults and fit-for-purpose front-end compositions
+    through separate probability objects, dimensional fit, equal low-fidelity spikes,
+    explicit gaps, and reversible decision records.
+  primaryCoordinationMove: Separate default likelihood from fit, compare composable
+    stack options, surface gaps, and prepare equal spikes before durable commitment.
+probabilityObjects:
+  defaultLikelihood:
+    id: P(generic-LLM-first-recommendation)
+    candidateSetSemantics: open_exclusive
+    normalization: listed candidates + other/tail = 1
+    status: uncalibrated_verbalized_sample
+  sixMonthFit:
+    id: P(six-month-fit-without-structural-rewrite)
+    candidateSetSemantics: independent_events
+    normalization: none
+    status: uncalibrated_planning_estimate
+invariantRegions:
+- Header and Quick Use
+- Technology Decision Contract
+- Prompt Capsule Markdown, View Selector, Related Loops, and Response Intake
+- Run Strip and Possibility Fan-out
+- Common-scale Probability and Fit View
+- Candidate Inspector
+- Composable Stack Layer Palette
+- Dimensional Fit Matrix
+- Formal Statistical Fit Boundary
+- Low-fidelity Spike Matrix
+- Gap Ledger
+- Run Comparison and Shift Hypotheses
+- Practitioner Probe Routes
+- Core Architecture Routes
+- Decision Record
+- Text / Table Equivalent
+- JSON / JSON-LD Twins
+- Source Note and Validation Status
+controls:
+- edit probability-of-what and decision conditions
+- switch between complete plain and skill-assisted Prompt Capsule views
+- copy or download the active Prompt Capsule Markdown exactly
+- import a structured AI response as a successor run
+- switch or duplicate runs
+- add, edit, or remove a candidate
+- adjust both probability estimates and intervals
+- edit dimension weights and scores
+- compose a new stack candidate from independent layers
+- select candidates for equal low-fidelity spikes
+- change spike state and evidence
+- filter and update methodological or technical gaps
+- select Practitioner Probes
+- select Core Architecture routes
+- edit the reversible decision record
+- save and load local state
+- export or import JSON
+- export JSON-LD
+visualizationContract:
+  preferredEncodings:
+  - position on a common scale
+  - aligned interval bars
+  - sorted rows
+  - direct labels
+  - structured tables
+  excludedDefaults:
+  - pie chart
+  - radar chart
+  - decorative polygon profile
+  reason: The surface supports consequential comparison and should keep evidence easy
+    to compare, audit, and translate into accessible text.
+gapModel:
+  baseType: GapRecord
+  classes:
+  - methodological
+  - technical
+  - organizational
+  - evidence
+  - boundary
+  determination: Technical gaps are first-class because framework fit depends on runtime,
+    semantics, accessibility, SVG behavior, resource lifetimes, build boundaries,
+    and replacement seams. Methodological gaps remain first-class for sampling, calibration,
+    commensurability, and candidate coverage.
+probeContract:
+  stableShape:
+  - Question
+  - What it reveals
+  - Technical core
+  - Edge cases & complexity
+  - AI-collaboration directive
+  extensions:
+  - Evidence needed
+  - Abstention condition
+  - Routes to
+accessibility:
+  keyboardOperation: All semantic changes use explicit buttons, inputs, selects, and
+    textareas; drag-and-drop is unnecessary.
+  textEquivalent: Every visual comparison has a structured table and full-text inspector.
+  reducedMotion: Animation is limited and disabled under prefers-reduced-motion.
+  targetSize: Primary controls use a minimum 40px height; compact controls remain
+    at least 32px.
+  semanticOrder: DOM order carries the same narrative sequence as the visual layout.
+  colorIndependence: Status and probability meaning use text, labels, shapes, and
+    numeric values in addition to color.
+  promptCapsule: Native radio controls preserve keyboard focus, live status names
+    view and exchange results, and the complete plain Markdown remains available
+    without JavaScript.
+sourceOfTruth:
+  state: front-end-stack-selection.example.v0.1.json
+  schema: technology-fit-sampling-tableau-state.schema.v0.1.json
+  context: technology-fit-sampling-tableau.context.v0.1.jsonld
+  routeRegistry: technology-decision-routing-registry.v0.1.json
+  probeRegistry: front-end-practitioner-probe-registry.v0.1.json
+  rule: The state object is the semantic source for the prototype; charts and tables
+    are generated views.
+validation:
+- JSON Schema Draft 2020-12 meta-validation
+- example-state schema validation
+- YAML parse
+- JSON-LD parse
+- route registry count and identity checks
+- probe registry count and shape checks
+- Prompt Capsule no-JavaScript baseline, native Related loops disclosure, view,
+  fingerprint, prose escaping, literal code-span identity, exact exchange, and
+  failed-import recovery contracts
+- browser interaction smoke tests
+- responsive body-overflow checks
+- console and page-error checks
+handoffs:
+- ca:strategy-canvas
+- ca:practitioner-judgment-probes
+- ca:specification-by-example
+- ca:software-architecture-views
+- ca:heart-chart
+- ca:unit-test-first-design
+- ca:service-design-blueprint
+- ra:research-atlas

@@ -1,0 +1,1771 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17345f">
+  <title>Career + Quality — visual treatment comparison</title>
+  <meta name="description" content="Five accessible visual treatments for a full-fidelity career and regulatory quality record.">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <style>
+    :root {
+      color-scheme: light;
+      --field: #fffaf2;
+      --paper: #fffdf8;
+      --paper-blue: #f5f8ff;
+      --ink: #17345f;
+      --body: #304a71;
+      --muted: #5d6f8b;
+      --line: #7893bc;
+      --line-soft: #b5c2d5;
+      --cobalt: #2855f3;
+      --cobalt-deep: #153fbe;
+      --cobalt-pale: #e7efff;
+      --powder: #cfe7f7;
+      --tiffany: #9edfd4;
+      --sea: #d9efea;
+      --sea-deep: #234f56;
+      --cream: #fff1cf;
+      --sand: #e9cf9e;
+      --blush: #ffd3d0;
+      --coral: #fa7065;
+      --acid: #f2ff67;
+      --ledger-canvas: #eee4c8;
+      --ledger-paper: #f8f1d9;
+      --ledger-blue: #d3e4f2;
+      --slate-mist: #f1f9f9;
+      --slate-foam: #dbf0f0;
+      --slate-glass: #bddbdb;
+      --slate-line: #6b797a;
+      --slate-ink: #263f42;
+      --shadow: .5rem .5rem 0 var(--ink);
+      --radius-frame: 1.65rem;
+      --radius-panel: 1rem;
+      --radius-card: .7rem;
+      --font-sans: "Arial Nova", "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 0;
+      margin: 0;
+      overflow-wrap: anywhere;
+      background:
+        radial-gradient(circle at 92% 3%, rgba(40, 85, 243, .1), transparent 23rem),
+        var(--field);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.48;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    :focus-visible {
+      outline: 3px solid var(--cobalt-deep);
+      outline-offset: 4px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: .7rem;
+      left: .7rem;
+      transform: translateY(-180%);
+      padding: .65rem .8rem;
+      border: 2px solid var(--ink);
+      border-radius: .5rem;
+      background: var(--acid);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .icon-bank {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    svg.icon {
+      width: 1.05em;
+      height: 1.05em;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .masthead {
+      display: grid;
+      gap: 1rem;
+      padding: clamp(1.35rem, 4vw, 3.7rem) clamp(.9rem, 3.2vw, 3.5rem) clamp(1.4rem, 3vw, 2.6rem);
+      border-bottom: 2px solid var(--ink);
+      background:
+        linear-gradient(90deg, transparent 0 72%, rgba(158, 223, 212, .32) 72% 100%),
+        linear-gradient(135deg, var(--paper), var(--cobalt-pale));
+    }
+
+    .eyebrow, .section-code, .fact-term, .qual-state, .stage-name, .case-domain {
+      font-family: var(--font-mono);
+      font-size: .73rem;
+      font-weight: 800;
+      letter-spacing: .085em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { margin: 0; color: var(--cobalt-deep); }
+
+    h1, h2, h3, h4, p { overflow-wrap: anywhere; }
+
+    h1 {
+      max-width: 13ch;
+      margin: 0;
+      font-size: clamp(2.45rem, 7vw, 6.6rem);
+      line-height: .88;
+      letter-spacing: -.065em;
+    }
+
+    .masthead__deck {
+      max-width: 68rem;
+      margin: 0;
+      color: var(--body);
+      font-size: clamp(1rem, 1.7vw, 1.35rem);
+    }
+
+    .masthead__note {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .7rem;
+      align-items: start;
+      max-width: 62rem;
+      margin: .25rem 0 0;
+      padding-top: .85rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .masthead__note svg { margin-top: .2rem; color: var(--cobalt-deep); }
+
+    main {
+      width: min(100%, 104rem);
+      margin: 0 auto;
+      padding: 0 clamp(.65rem, 2vw, 2rem) 4rem;
+    }
+
+    .treatment-deck {
+      position: sticky;
+      z-index: 40;
+      top: 0;
+      display: grid;
+      gap: .6rem;
+      margin: 0 clamp(-.65rem, -2vw, -2rem) 1.2rem;
+      padding: .75rem clamp(.65rem, 2vw, 2rem) .85rem;
+      border-bottom: 1.5px solid var(--ink);
+      background: color-mix(in srgb, var(--field) 94%, transparent);
+      backdrop-filter: blur(16px);
+    }
+
+    .treatment-deck__label {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem 1rem;
+      align-items: baseline;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .treatment-deck__label strong {
+      color: var(--ink);
+      font-family: var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .treatment-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(8rem, 1fr));
+      gap: .45rem;
+      overflow-x: auto;
+      padding: .18rem .18rem .32rem;
+      scrollbar-width: thin;
+    }
+
+    .treatment-link {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .3rem .55rem;
+      align-items: center;
+      min-width: 8rem;
+      min-height: 3rem;
+      padding: .5rem 1.75rem .5rem .6rem;
+      border: 1.5px solid var(--line);
+      border-radius: .65rem;
+      background: var(--paper);
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .treatment-link__number {
+      grid-row: 1 / 3;
+      color: var(--cobalt-deep);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 850;
+    }
+
+    .treatment-link strong { font-size: .82rem; line-height: 1.1; }
+    .treatment-link small { color: var(--muted); font-size: .74rem; line-height: 1.2; }
+
+    .treatment-link[aria-current="true"] {
+      border-color: var(--ink);
+      background: var(--acid);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .treatment-link[aria-current="true"]::after {
+      position: absolute;
+      top: 50%;
+      right: .55rem;
+      transform: translateY(-50%);
+      content: "✓";
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .treatment-link:hover { border-color: var(--cobalt); }
+
+    .status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .contract-strip {
+      display: grid;
+      grid-template-columns: minmax(12rem, .38fr) minmax(0, .62fr);
+      gap: .8rem 1.2rem;
+      align-items: center;
+      margin: 0 0 1rem;
+      padding: .72rem .85rem;
+      border: 1.5px solid var(--ink);
+      border-radius: .7rem;
+      background: linear-gradient(90deg, var(--tiffany), var(--paper-blue));
+    }
+
+    .contract-strip__count {
+      display: flex;
+      gap: .5rem;
+      align-items: baseline;
+      margin: 0;
+    }
+
+    .contract-strip__count strong {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+    }
+
+    .contract-strip__count span,
+    .contract-strip__message {
+      color: var(--body);
+      font-size: .78rem;
+    }
+
+    .contract-strip__message { margin: 0; }
+    .contract-strip[data-complete="true"] .contract-strip__message::before {
+      margin-right: .45rem;
+      content: "◆";
+      color: var(--sea-deep);
+    }
+
+    .visual-stage { min-width: 0; }
+
+    .treatment {
+      display: grid;
+      gap: clamp(1rem, 2vw, 1.5rem);
+      min-width: 0;
+      padding: clamp(.75rem, 2.2vw, 2rem);
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-frame);
+    }
+
+    .treatment__intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(16rem, .8fr);
+      gap: 1rem 2rem;
+      align-items: end;
+    }
+
+    .treatment__intro h2 {
+      max-width: 22ch;
+      margin: .12rem 0 0;
+      font-size: clamp(1.75rem, 3.4vw, 3.25rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .treatment__intro p {
+      margin: 0;
+      color: var(--body);
+      font-size: .93rem;
+    }
+
+    .section-code { color: var(--cobalt-deep); }
+
+    .lifecycle-band {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1.5px solid var(--ink);
+      border-radius: .7rem;
+      background: var(--paper);
+    }
+
+    .lifecycle-band span {
+      position: relative;
+      min-width: 0;
+      padding: .62rem .5rem;
+      border-right: 1px solid var(--line-soft);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: clamp(.72rem, .8vw, .78rem);
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .lifecycle-band span:last-child { border-right: 0; }
+    .lifecycle-band span:nth-child(odd) { background: var(--cobalt-pale); }
+
+    .record-title { margin: 0; font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1; }
+
+    .record-deck {
+      margin: .55rem 0 0;
+      color: var(--body);
+      font-size: .91rem;
+    }
+
+    .record-block {
+      display: grid;
+      gap: .65rem;
+      min-width: 0;
+    }
+
+    .record-block > h3, .record-block > h4 {
+      margin: 0;
+      font-size: .87rem;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    /* A ledger boundary, not a collection of controls. */
+    .metric-ledger {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+      border: 1.5px solid currentColor;
+      border-radius: .55rem;
+      background: color-mix(in srgb, var(--paper) 82%, transparent);
+    }
+
+    .metric-ledger > div {
+      display: grid;
+      grid-template-columns: minmax(6.2rem, .38fr) minmax(0, .62fr);
+      gap: .55rem;
+      align-content: start;
+      min-width: 0;
+      padding: .62rem .7rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .metric-ledger > div:nth-last-child(-n + 2) { border-bottom: 0; }
+    .metric-ledger > div:nth-child(odd) { border-right: 1px solid var(--line-soft); }
+
+    .metric-ledger dt {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .metric-ledger dd {
+      margin: 0;
+      color: var(--ink);
+      font-size: .82rem;
+      line-height: 1.35;
+    }
+
+    .metric-ledger [data-emphasis="major"] dd {
+      font-size: 1.1rem;
+      font-weight: 850;
+      line-height: 1.05;
+    }
+
+    .role-list, .context-list, .case-list, .qual-list, .blueprint-cell ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .role-list { display: grid; gap: .55rem; }
+
+    .role-list li {
+      display: grid;
+      grid-template-columns: minmax(8rem, .36fr) minmax(0, .64fr);
+      gap: .65rem;
+      padding-top: .55rem;
+      border-top: 1px solid var(--line-soft);
+      font-size: .82rem;
+    }
+
+    .role-list strong { color: var(--ink); }
+    .role-list span { color: var(--body); }
+
+    .case-list { display: grid; gap: .65rem; }
+
+    .evidence-case {
+      min-width: 0;
+      padding: .75rem;
+      border: 1px solid var(--line);
+      border-left: .32rem solid var(--cobalt);
+      border-radius: .4rem;
+      background: var(--paper);
+    }
+
+    .evidence-case--quality { border-left-color: var(--sea-deep); }
+
+    .case-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem .75rem;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .case-head h4 { margin: 0; font-size: .91rem; line-height: 1.2; }
+    .case-domain { color: var(--muted); font-size: .72rem; }
+
+    .evidence-case dl {
+      display: grid;
+      grid-template-columns: 6.7rem minmax(0, 1fr);
+      gap: .28rem .6rem;
+      margin: .55rem 0 0;
+      font-size: .82rem;
+    }
+
+    .evidence-case dt {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .evidence-case dd { margin: 0; color: var(--body); }
+
+    .evidence-case dt:nth-of-type(4),
+    .translation-table dt:nth-of-type(4),
+    .blueprint-cell dt:nth-of-type(4),
+    .source-case dt:nth-of-type(4) {
+      padding-left: .35rem;
+      border-left: .22rem solid var(--coral);
+      color: var(--ink);
+    }
+
+    .case-qual {
+      display: inline-flex;
+      gap: .3rem;
+      align-items: center;
+      margin-top: .55rem;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .case-qual::before {
+      width: .48rem;
+      height: .48rem;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      background: var(--acid);
+      content: "";
+    }
+
+    .qual-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .45rem;
+    }
+
+    .qual-list li {
+      padding: .55rem .6rem;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--sea) 42%, var(--paper));
+      font-size: .82rem;
+    }
+
+    .qual-state {
+      display: block;
+      margin-bottom: .22rem;
+      color: var(--sea-deep);
+      font-size: .7rem;
+    }
+
+    .record-thread {
+      margin: 0;
+      padding: .72rem .8rem;
+      border-left: .35rem solid var(--acid);
+      background: var(--ink);
+      color: white;
+      font-size: .82rem;
+    }
+
+    .currentness {
+      margin: 0;
+      padding-top: .55rem;
+      border-top: 1px solid var(--line-soft);
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    /* 01 — Twin Operating Folios */
+    .treatment--twin {
+      background:
+        linear-gradient(90deg, rgba(207, 231, 247, .48) 0 50%, rgba(217, 239, 234, .55) 50% 100%),
+        var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .twin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .folio {
+      display: grid;
+      gap: 1rem;
+      min-width: 0;
+      padding: clamp(.8rem, 1.4vw, 1.25rem);
+      border: 1.5px solid var(--ink);
+      border-radius: var(--radius-panel);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+    }
+
+    .folio--career { box-shadow: .32rem .32rem 0 var(--cobalt); }
+    .folio--quality { box-shadow: .32rem .32rem 0 var(--tiffany); }
+
+    .folio__head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .65rem;
+      align-items: start;
+      padding-bottom: .8rem;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .folio__mark {
+      display: grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      place-items: center;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      background: var(--cobalt-pale);
+      color: var(--cobalt-deep);
+    }
+
+    .folio--quality .folio__mark { background: var(--sea); color: var(--sea-deep); }
+
+    /* 02 — Rotating Dossier */
+    .treatment--rotating {
+      background:
+        linear-gradient(rgba(33, 50, 82, .045) 1px, transparent 1px) 0 0 / 100% 1.7rem,
+        var(--ledger-canvas);
+      box-shadow: .5rem .5rem 0 #8e8265;
+    }
+
+    .dossier-shell {
+      overflow: hidden;
+      border: 1.5px solid var(--ink);
+      border-radius: .85rem;
+      background: var(--ledger-paper);
+    }
+
+    .dossier-tabs {
+      display: flex;
+      gap: .35rem;
+      overflow-x: auto;
+      padding: .65rem .65rem 0;
+      border-bottom: 1.5px solid var(--ink);
+      background: #e4d9b9;
+    }
+
+    .dossier-tab {
+      display: inline-flex;
+      gap: .45rem;
+      align-items: center;
+      min-height: 2.7rem;
+      padding: .55rem .9rem;
+      border: 1.5px solid var(--ink);
+      border-bottom: 0;
+      border-radius: .65rem .65rem 0 0;
+      background: #d6d1c5;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .dossier-tab[aria-selected="true"] {
+      position: relative;
+      top: 2px;
+      background: var(--ledger-paper);
+      color: var(--cobalt-deep);
+    }
+
+    .dossier-panel { padding: clamp(.8rem, 2vw, 1.5rem); }
+    .dossier-panel[hidden] { display: none; }
+
+    .dossier-layout {
+      display: grid;
+      grid-template-columns: minmax(17rem, .72fr) minmax(0, 1.28fr);
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    .dossier-rail, .dossier-reading { display: grid; gap: 1rem; min-width: 0; }
+
+    /* 03 — Translation Ledger */
+    .treatment--ledger {
+      background: var(--ledger-paper);
+      box-shadow: .5rem .5rem 0 #8e8265;
+    }
+
+    .ledger-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .75rem;
+    }
+
+    .ledger-summary article {
+      min-width: 0;
+      padding: .75rem;
+      border: 1px solid var(--ink);
+      background: var(--paper);
+    }
+
+    .translation-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1.5px solid var(--ink);
+      background: var(--paper);
+      scrollbar-width: thin;
+    }
+
+    .translation-table {
+      width: 100%;
+      min-width: 62rem;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: .82rem;
+    }
+
+    .translation-table caption {
+      padding: .75rem;
+      border-bottom: 1px solid var(--ink);
+      text-align: left;
+    }
+
+    .translation-table th, .translation-table td {
+      padding: .7rem;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .translation-table tr:last-child th,
+    .translation-table tr:last-child td { border-bottom: 0; }
+    .translation-table th:last-child,
+    .translation-table td:last-child { border-right: 0; }
+
+    .translation-table thead th {
+      background: var(--ledger-blue);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .translation-table tbody th {
+      width: 10rem;
+      background: #ebe3d1;
+      color: var(--ink);
+    }
+
+    .translation-table ul { margin: 0; padding-left: 1.1rem; }
+    .translation-table li + li { margin-top: .6rem; }
+    .translation-table strong { display: block; margin-bottom: .18rem; }
+    .translation-table small { display: block; margin-top: .28rem; color: var(--muted); }
+    .translation-table summary { color: var(--ink); cursor: pointer; }
+    .translation-table summary span { display: block; color: var(--body); }
+    .translation-table dl {
+      display: grid;
+      grid-template-columns: 5.8rem minmax(0, 1fr);
+      gap: .22rem .45rem;
+      margin: .55rem 0 0;
+    }
+    .translation-table dt { color: var(--muted); font-family: var(--font-mono); font-size: .7rem; font-weight: 800; text-transform: uppercase; }
+    .translation-table dd { margin: 0; }
+
+    /* 04 — Two-Lens Service Blueprint */
+    .treatment--blueprint {
+      background:
+        linear-gradient(90deg, transparent 49.85%, rgba(40, 85, 243, .13) 49.85% 50.15%, transparent 50.15%),
+        var(--paper-blue);
+      box-shadow: var(--shadow);
+    }
+
+    .blueprint-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem 1rem;
+      padding: .65rem .75rem;
+      border: 1px solid var(--line);
+      border-radius: .6rem;
+      background: var(--paper);
+      font-size: .78rem;
+    }
+
+    .blueprint-key span { display: inline-flex; gap: .35rem; align-items: center; }
+
+    .blueprint-key i {
+      width: .7rem;
+      height: .7rem;
+      border: 1px solid var(--ink);
+      background: var(--powder);
+    }
+
+    .blueprint-key span:nth-child(2) i { background: var(--sea); }
+    .blueprint-key span:nth-child(3) i { border-radius: 50%; background: var(--acid); }
+
+    .blueprint {
+      display: grid;
+      gap: .7rem;
+      min-width: 0;
+    }
+
+    .blueprint-head, .blueprint-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(7rem, .18fr) minmax(0, 1fr);
+      gap: .7rem;
+      min-width: 0;
+    }
+
+    .blueprint-head div {
+      padding: .5rem .7rem;
+      border-bottom: 2px solid var(--ink);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .07em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .blueprint-row { align-items: stretch; }
+
+    .stage-node {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      min-height: 6rem;
+      padding: .55rem;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      background: var(--acid);
+      text-align: center;
+    }
+
+    .stage-name { font-size: .7rem; }
+
+    .blueprint-cell {
+      min-width: 0;
+      padding: .7rem;
+      border: 1px solid var(--line);
+      border-radius: .65rem;
+      background: color-mix(in srgb, var(--powder) 45%, var(--paper));
+    }
+
+    .blueprint-cell--quality { background: color-mix(in srgb, var(--sea) 62%, var(--paper)); }
+
+    .blueprint-cell details + details { margin-top: .45rem; }
+
+    .blueprint-cell summary {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .4rem;
+      align-items: start;
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .blueprint-cell summary::marker { color: var(--cobalt-deep); }
+    .blueprint-cell dl { margin: .55rem 0 0; font-size: .82rem; }
+    .blueprint-cell dt { margin-top: .35rem; color: var(--muted); font-family: var(--font-mono); font-size: .7rem; font-weight: 800; text-transform: uppercase; }
+    .blueprint-cell dd { margin: .12rem 0 0; color: var(--body); }
+
+    /* 05 — Evidence Case Files */
+    .treatment--files {
+      background:
+        repeating-linear-gradient(0deg, transparent 0 2.35rem, rgba(38, 63, 66, .09) 2.35rem calc(2.35rem + 1px)),
+        var(--slate-mist);
+      color: var(--slate-ink);
+      box-shadow: .5rem .5rem 0 var(--slate-line);
+    }
+
+    .case-files {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .case-file {
+      min-width: 0;
+      overflow: hidden;
+      border: 1.5px solid var(--slate-ink);
+      border-radius: .8rem;
+      background: color-mix(in srgb, var(--paper) 90%, var(--slate-foam));
+    }
+
+    .case-file__tab {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .6rem;
+      align-items: center;
+      padding: .8rem;
+      border-bottom: 1.5px solid var(--slate-ink);
+      background: var(--slate-glass);
+    }
+
+    .case-file__tab span:first-child {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 850;
+    }
+
+    .case-file__tab h3 { margin: 0; font-size: 1.25rem; }
+    .case-file__body { display: grid; gap: .8rem; padding: .8rem; }
+
+    .file-section {
+      border: 1px solid var(--slate-line);
+      border-radius: .4rem;
+      background: rgba(255, 255, 255, .55);
+    }
+
+    .file-section summary {
+      display: flex;
+      gap: .55rem;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 2.75rem;
+      padding: .55rem .65rem;
+      color: var(--slate-ink);
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .file-section summary span {
+      display: inline-grid;
+      min-width: 1.5rem;
+      height: 1.5rem;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+    }
+
+    .file-section__content { padding: 0 .65rem .7rem; }
+    .file-section .metric-ledger { grid-template-columns: 1fr; }
+    .file-section .metric-ledger > div { border-right: 0; }
+    .file-section .metric-ledger > div:nth-last-child(-n + 2) { border-bottom: 1px solid var(--line-soft); }
+    .file-section .metric-ledger > div:last-child { border-bottom: 0; }
+
+    /* Full-fidelity source: visible without JavaScript, visually parked after parsing. */
+    .source-ledger {
+      display: grid;
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+      padding: clamp(.8rem, 2vw, 1.5rem);
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-frame);
+      background: var(--paper);
+    }
+
+    .source-ledger > header h2 { margin: .2rem 0; font-size: clamp(1.6rem, 3vw, 2.6rem); }
+    .source-ledger > header p { max-width: 72rem; margin: .25rem 0 0; color: var(--muted); }
+
+    .source-record {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-panel);
+    }
+
+    .source-record [data-cases] { display: grid; gap: .7rem; }
+
+    .source-case {
+      padding: .75rem;
+      border: 1px solid var(--line);
+      border-left: .3rem solid var(--cobalt);
+    }
+
+    .source-record[data-slug="quality"] .source-case { border-left-color: var(--sea-deep); }
+    .source-case h4 { margin: 0; }
+    .source-case dl { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: .25rem .6rem; }
+    .source-case dt { color: var(--muted); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+    .source-case dd { margin: 0; }
+
+    .js .source-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .no-js .visual-stage, .no-js .treatment-deck, .no-js .contract-strip { display: none; }
+
+    @media (max-width: 78rem) {
+      .twin-grid, .case-files { grid-template-columns: 1fr; }
+      .treatment--twin {
+        background:
+          linear-gradient(180deg, rgba(207, 231, 247, .48) 0 50%, rgba(217, 239, 234, .55) 50% 100%),
+          var(--paper);
+      }
+    }
+
+    @media (max-width: 58rem) {
+      .treatment__intro, .dossier-layout { grid-template-columns: 1fr; }
+      .blueprint-head { display: none; }
+      .blueprint-row {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "stage"
+          "career"
+          "quality";
+      }
+      .stage-node {
+        grid-area: stage;
+        min-height: auto;
+        border-radius: .55rem;
+      }
+      .blueprint-cell:first-child { grid-area: career; }
+      .blueprint-cell:last-child { grid-area: quality; }
+      .blueprint-cell::before {
+        display: block;
+        margin-bottom: .45rem;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: .62rem;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        content: "Career lens";
+      }
+      .blueprint-cell--quality::before { content: "Quality lens"; }
+    }
+
+    @media (max-width: 46rem) {
+      .masthead {
+        background:
+          linear-gradient(180deg, transparent 0 76%, rgba(158, 223, 212, .32) 76% 100%),
+          linear-gradient(135deg, var(--paper), var(--cobalt-pale));
+      }
+      .treatment-deck { position: static; }
+      .contract-strip { grid-template-columns: 1fr; gap: .2rem; }
+      .treatment-nav { grid-template-columns: repeat(5, minmax(9.3rem, 1fr)); }
+      .qual-list, .ledger-summary { grid-template-columns: 1fr; }
+      .metric-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric-ledger > div {
+        grid-template-columns: 1fr;
+        gap: .18rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .metric-ledger > div:nth-child(odd) { border-right: 1px solid var(--line-soft); }
+      .metric-ledger > div:nth-last-child(-n + 2) { border-bottom: 0; }
+      .role-list li { grid-template-columns: 1fr; gap: .2rem; }
+      .lifecycle-band {
+        grid-template-columns: 1fr;
+        border-radius: .5rem;
+      }
+      .lifecycle-band span { border-right: 0; border-bottom: 1px solid var(--line-soft); text-align: left; }
+      .lifecycle-band span:last-child { border-bottom: 0; }
+      .evidence-case dl, .source-case dl { grid-template-columns: 1fr; gap: .08rem; }
+      .evidence-case dt, .source-case dt { margin-top: .35rem; }
+    }
+
+    @media (max-width: 24.5rem) {
+      .masthead { padding-inline: .75rem; }
+      main { padding-inline: .45rem; }
+      .treatment-deck { margin-inline: -.45rem; padding-inline: .45rem; }
+      .treatment { padding: .55rem; border-radius: 1rem; }
+      .folio, .dossier-panel, .case-file__body { padding: .65rem; }
+      .metric-ledger > div { grid-template-columns: 1fr; gap: .18rem; }
+      .dossier-tab { padding-inline: .65rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    @media (forced-colors: active) {
+      body, .masthead, .treatment, .folio, .dossier-shell, .dossier-tabs, .dossier-tab,
+      .dossier-panel, .ledger-summary article, .translation-scroll, .blueprint-cell,
+      .stage-node, .case-file, .case-file__tab, .file-section, .metric-ledger,
+      .metric-ledger > div, .evidence-case, .qual-list li, .record-thread {
+        color: CanvasText;
+        border-color: CanvasText;
+        background: Canvas;
+        box-shadow: none;
+        forced-color-adjust: auto;
+      }
+      .treatment-link[aria-current="true"], .dossier-tab[aria-selected="true"] {
+        color: HighlightText;
+        background: Highlight;
+      }
+      .contract-strip { color: CanvasText; border-color: CanvasText; background: Canvas; }
+      .contract-strip[data-complete="true"] .contract-strip__message::before { color: CanvasText; }
+      .case-qual::before, .blueprint-key i { background: CanvasText; }
+    }
+
+    @media print {
+      @page { margin: .55in; }
+      body { background: white; color: black; font-size: 10pt; }
+      .masthead { padding: 0 0 .25in; border-bottom: 1px solid black; background: white; }
+      .masthead h1 { max-width: none; font-size: 28pt; }
+      .masthead__note, .treatment-deck, .contract-strip, .visual-stage { display: none !important; }
+      .js .source-ledger, .source-ledger {
+        position: static;
+        display: grid;
+        width: auto;
+        height: auto;
+        margin: .25in 0 0;
+        padding: 0;
+        overflow: visible;
+        border: 0;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
+      }
+      .source-record, .source-case { break-inside: avoid; border-color: #555; }
+      .metric-ledger, .qual-list { break-inside: avoid; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#comparison">Skip to treatment comparison</a>
+
+<svg class="icon-bank" aria-hidden="true">
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M3 7h18v13H3zM8 7V4h8v3M3 12h18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+</svg>
+
+<header class="masthead">
+  <p class="eyebrow">Context Canvas · Career + Quality comparison instrument</p>
+  <h1>Two records. Five useful readings.</h1>
+  <p class="masthead__deck">A shared evidence ledger keeps the career and regulatory-quality record intact while layout changes the question: compare, focus, translate, follow the lifecycle, or investigate.</p>
+  <p class="masthead__note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span>The record preserves source-era portfolio claims. Standards, jurisdictions, attribution, baselines, and decision authority remain explicit rather than implied by the visual treatment.</span></p>
+</header>
+
+<main id="comparison">
+  <nav class="treatment-deck" aria-label="Choose a visual treatment">
+    <div class="treatment-deck__label"><strong>Visual treatment</strong><span>Each view keeps the same complete Career and Quality record.</span></div>
+    <div class="treatment-nav">
+      <a class="treatment-link" data-treatment-link="twin" href="?treatment=twin">
+        <span class="treatment-link__number">01</span><strong>Twin folios</strong><small>Compare at once</small>
+      </a>
+      <a class="treatment-link" data-treatment-link="rotating" href="?treatment=rotating">
+        <span class="treatment-link__number">02</span><strong>Rotating dossier</strong><small>Focus by set</small>
+      </a>
+      <a class="treatment-link" data-treatment-link="ledger" href="?treatment=ledger">
+        <span class="treatment-link__number">03</span><strong>Translation ledger</strong><small>Read by phase</small>
+      </a>
+      <a class="treatment-link" data-treatment-link="blueprint" href="?treatment=blueprint">
+        <span class="treatment-link__number">04</span><strong>Two-lens blueprint</strong><small>Follow handoffs</small>
+      </a>
+      <a class="treatment-link" data-treatment-link="files" href="?treatment=files">
+        <span class="treatment-link__number">05</span><strong>Evidence files</strong><small>Investigate details</small>
+      </a>
+    </div>
+  </nav>
+
+  <p class="status" id="treatment-status" aria-live="polite"></p>
+  <section class="contract-strip" id="contract-strip" data-complete="false" aria-label="Content carried into this view">
+    <p class="contract-strip__count"><strong id="coverage-count">Checking…</strong><span>record elements carried forward</span></p>
+    <p class="contract-strip__message" id="coverage-message">Checking that this view carries the Career and Quality record.</p>
+  </section>
+  <div class="visual-stage" id="visual-stage" tabindex="-1"></div>
+
+  <section class="source-ledger" id="source-ledger" aria-labelledby="source-title">
+    <header>
+      <p class="eyebrow">No-JavaScript and print reading · semantic source</p>
+      <h2 id="source-title">Full-fidelity career and quality ledger</h2>
+      <p>This is the one source parsed by every treatment. Static facts use definition lists; situations retain mechanism, changed work, and boundaries; quality claims retain their qualification state.</p>
+    </header>
+
+    <article class="source-record" data-record data-slug="career" data-icon="briefcase">
+      <header>
+        <p class="eyebrow" data-field="eyebrow">Career record · scale, roles, and consequences</p>
+        <h2 data-field="title">Career at a Glance</h2>
+        <p data-field="deck">Twenty-plus years leading and building across scientific, technical, product, quality, and executive teams where software behavior can alter consequential work.</p>
+      </header>
+
+      <section aria-labelledby="career-facts-source">
+        <h3 id="career-facts-source">Operating contexts</h3>
+        <dl data-facts>
+          <div data-fact data-emphasis="major"><dt>Experience</dt><dd>20+ years in regulated, high-stakes environments</dd></div>
+          <div data-fact><dt>Primary focus</dt><dd>Healthcare, biopharma, genomics, logistics, automation, internal tooling</dd></div>
+          <div data-fact><dt>Business models</dt><dd>End-to-end enterprise work; B2C products with B2B components in CPG contexts</dd></div>
+          <div data-fact><dt>In-house</dt><dd>12 years</dd></div>
+          <div data-fact><dt>Agency &amp; consulting</dt><dd>3 years</dd></div>
+          <div data-fact><dt>Startup</dt><dd>4 years · zero-to-one and greenfield</dd></div>
+          <div data-fact><dt>Independent contracting</dt><dd>4 years</dd></div>
+          <div data-fact><dt>Adjacent domains</dt><dd>Insurance, education, energy, retail, IT, and nonprofit work</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="career-roles-source">
+        <h3 id="career-roles-source">Roles connecting strategy, design, engineering, and quality</h3>
+        <ul data-roles>
+          <li><strong>Founder &amp; CPTO</strong><span>Hands-on technical leadership, mentorship, hiring, quality management, engineering economics, and developer experience.</span></li>
+          <li><strong>Senior Manager / Principal Product Designer</strong><span>Led systems-oriented product design, research, shared specifications, and process change across organizations.</span></li>
+          <li><strong>Front-end focused Software Engineer III</strong><span>Built and supported distributed, production-grade applications used globally.</span></li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="career-cases-source">
+        <h3 id="career-cases-source">Situation records</h3>
+        <div data-cases>
+          <article class="source-case" data-case data-phase="frame" data-domain="Data movement" data-qualification="Source-era portfolio claim">
+            <h4>Silent bulk-export boundary</h4>
+            <dl>
+              <dt>Situation</dt><dd>A build-versus-buy evaluation exposed records silently disappearing above a bulk-export threshold, without an error route.</dd>
+              <dt>Mechanism</dt><dd>Threshold tests, record-count reconciliation, and vendor-boundary inspection made the unrecognized constraint observable.</dd>
+              <dt>Changed work</dt><dd>The team could evaluate the product with evidence and design a recoverable movement path before committing.</dd>
+              <dt>Boundary</dt><dd>The summary does not assign vendor fault or sole attribution; the corresponding Debrief and records hold the baseline.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="build" data-domain="LIMS · ELN · operations" data-qualification="Practiced across source-era roles">
+            <h4>Modernization while work continued</h4>
+            <dl>
+              <dt>Situation</dt><dd>LIMS, ELN, ITSM, genome visualization, caseload, and operations interfaces needed end-to-end modernization while legacy systems still carried live work.</dd>
+              <dt>Mechanism</dt><dd>Shared service maps, participatory specifications, production-connected prototypes, parallel release paths, and explicit data and decision handoffs.</dd>
+              <dt>Changed work</dt><dd>Scientists, operators, designers, engineers, and quality partners could inspect dependencies and stage replacement while preserving continuity for live work.</dd>
+              <dt>Boundary</dt><dd>System ownership, local validation, migration sequencing, and authorization stayed with the participating teams.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="assure" data-domain="Authentication · AI" data-qualification="Source-era reported outcome">
+            <h4>Multiple-account abuse login pathways</h4>
+            <dl>
+              <dt>Situation</dt><dd>Multiple-account abuse crossed interface, authentication, support, and operating boundaries that isolated metrics could not explain.</dd>
+              <dt>Mechanism</dt><dd>I connected sentiment analysis and forecasting to a directed graph of account-abuse pathways, with guardian and steward layers and human review.</dd>
+              <dt>Changed work</dt><dd>My work contributed to a 10% reduction in multiple-account abuse logins and created a clearer operational review route.</dd>
+              <dt>Boundary</dt><dd>This portfolio summary records the 10% checkpoint; the Debrief and organizational records carry its baseline, sampling, shared contribution, and causal limits.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="operate" data-domain="EHR · identity" data-qualification="Source-era technical incident claim">
+            <h4>Token life versus key propagation</h4>
+            <dl>
+              <dt>Situation</dt><dd>EHR JSON Web Tokens expired five minutes after issuance while public keys propagated in roughly one hour in one environment and twelve in another.</dd>
+              <dt>Mechanism</dt><dd>Cross-environment timing comparison translated terse logs, key availability, and token claims into a visible control-loop mismatch.</dd>
+              <dt>Changed work</dt><dd>Collaborators could reason about retries, cache and propagation posture, observability, and escalation as one operable condition.</dd>
+              <dt>Boundary</dt><dd>Exact remediation depends on the identity provider, environment configuration, security posture, and authorized system owners.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="translate" data-domain="Cross-role leadership" data-qualification="Operating practice">
+            <h4>A shared language without flattened expertise</h4>
+            <dl>
+              <dt>Situation</dt><dd>Business units, scientists, designers, engineers, quality partners, and executives held different histories, evidence, and decision rights.</dd>
+              <dt>Mechanism</dt><dd>Boundary objects, inspectable prototypes, shared specifications, and role-specific readings preserved the route back to source evidence.</dd>
+              <dt>Changed work</dt><dd>Participants across roles gained a defensible language for deciding what to build, assure, fund, operate, and learn next.</dd>
+              <dt>Boundary</dt><dd>Translation supports specialist judgment; it does not replace subject-matter authority or manufacture agreement.</dd>
+            </dl>
+          </article>
+        </div>
+      </section>
+
+      <p data-field="thread"><strong>Common thread:</strong> people across roles gain a shared, defensible language for a complicated system.</p>
+      <p data-field="currentness">Durations and domains overlap and are not additive. The corresponding Debriefs carry scenario-level attribution, methods, and shared contribution.</p>
+    </article>
+
+    <article class="source-record" data-record data-slug="quality" data-icon="shield">
+      <header>
+        <p class="eyebrow" data-field="eyebrow">Regulatory &amp; Quality · designed into the work</p>
+        <h2 data-field="title">Regulatory &amp; Quality Expertise</h2>
+        <p data-field="deck">Quality work begins during framing and continues through implementation, release, recovery, and learning.</p>
+      </header>
+
+      <section aria-labelledby="quality-facts-source">
+        <h3 id="quality-facts-source">Operating contexts</h3>
+        <dl data-facts>
+          <div data-fact data-emphasis="major"><dt>Experience</dt><dd>13+ years across medical-device, education, and multi-jurisdictional work</dd></div>
+          <div data-fact><dt>Product context</dt><dd>Medical devices, IVD, adverse-event reporting, SaMD, and ML decision pipelines</dd></div>
+          <div data-fact><dt>Regulatory / quality</dt><dd>21 CFR Parts 11, 820, 312 · ISO 13485, 9001, 14971:2019</dd></div>
+          <div data-fact><dt>Security &amp; privacy</dt><dd>ISO/IEC 27001/27002 · GDPR · CCPA · HIPAA · SOC 2 Type I</dd></div>
+          <div data-fact><dt>Interoperability</dt><dd>HL7 v2.x · FHIR · DICOM</dd></div>
+          <div data-fact><dt>Lifecycle &amp; access</dt><dd>IQ/OQ/PQ · WCAG 2.2 · usability audits · validation-ready specifications</dd></div>
+          <div data-fact><dt>Government-contractor context</dt><dd>8 years represented in the source-era portfolio · applicable contract and regulatory obligations are verified per engagement</dd></div>
+          <div data-fact><dt>Working posture</dt><dd>Applicability and authority stay with qualified regulatory, quality, privacy, security, and legal owners.</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="quality-roles-source">
+        <h3 id="quality-roles-source">Roles that connect quality and engineering</h3>
+        <ul data-roles>
+          <li><strong>Founder &amp; Director of Quality Engineering</strong><span>Designed and supported lifecycle-appropriate IQ/OQ/PQ approaches for internal systems, accessibility, usability, inspection readiness, and operating support.</span></li>
+          <li><strong>Designer &amp; Web Developer III, Computational Biology Engineering</strong><span>Connected stakeholder research, validation-ready specifications, SaMD design systems, enterprise implementation, on-call support, and global integration.</span></li>
+          <li><strong>Principal Designer, Internal Systems &amp; Medical Reports</strong><span>Designed longitudinal patient reports and clinical-trial software across geographies, then supported submission materials and inspection- and 483-response evidence.</span></li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="quality-cases-source">
+        <h3 id="quality-cases-source">Situation records</h3>
+        <div data-cases>
+          <article class="source-case" data-case data-phase="frame" data-domain="Intended use · specification" data-qualification="Practiced quality collaboration">
+            <h4>Inspectable behavior before implementation hardens</h4>
+            <dl>
+              <dt>Situation</dt><dd>Teams needed to connect intended use, uncommon states, requirements, acceptance, and evidence before implementation choices became expensive to reverse.</dd>
+              <dt>Mechanism</dt><dd>Specification by example, risk-based test design, explicit decision owners, and attention cues that ranged from in-interface notifications to API-triggered Slack or Teams messages for abnormal or high-consequence states.</dd>
+              <dt>Changed work</dt><dd>Quality, product, design, engineering, and operations could inspect the same behavior, route urgent states to named recipients, and resolve evidence gaps earlier.</dd>
+              <dt>Boundary</dt><dd>Examples and notifications support requirements and verification planning; qualified owners determine applicable controls, escalation thresholds, and approval routes.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="build" data-domain="SaMD · validation" data-qualification="Practiced and supporting">
+            <h4>Validation-ready implementation path</h4>
+            <dl>
+              <dt>Situation</dt><dd>SaMD, internal systems, clinical-trial software, and medical reports crossed design systems, implementation, accessibility, validation, and global integration.</dd>
+              <dt>Mechanism</dt><dd>Validation-ready specifications, traceable design decisions, IQ/OQ/PQ lifecycle attention, WCAG 2.2 review, usability audit, and on-call feedback.</dd>
+              <dt>Changed work</dt><dd>Implementation and validation evidence advanced together, preserving traceable rationale through release and recovery.</dd>
+              <dt>Boundary</dt><dd>Validation strategy, device classification, intended use, and release authorization remain product- and jurisdiction-specific.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="assure" data-domain="Pharmacovigilance · ML" data-qualification="Source-era technical practice">
+            <h4>Adverse-event signal attention</h4>
+            <dl>
+              <dt>Situation</dt><dd>Post-market and pharmacovigilance teams needed to examine adverse-event signals across multiple source streams.</dd>
+              <dt>Mechanism</dt><dd>XGBoost and random-cut-forest ensembles surfaced patterns for review while provenance and source differences remained inspectable.</dd>
+              <dt>Changed work</dt><dd>Human reviewers could direct scarce attention toward candidate signals while qualified assessors retained regulatory conclusions.</dd>
+              <dt>Boundary</dt><dd>Pharmacovigilance, safety, clinical, and regulatory owners retain assessment, reporting, and escalation authority.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="operate" data-domain="Privacy · data lifecycle" data-qualification="Engineering practice with owner review">
+            <h4>Deletion includes the forgotten stores</h4>
+            <dl>
+              <dt>Situation</dt><dd>Deletion requests could leave discoverable traces when application records disappeared but search indexes or database write-ahead logs were omitted.</dd>
+              <dt>Mechanism</dt><dd>Lifecycle mapping explicitly included Elasticsearch indexes, database WALs, retention controls, verification, and exception handling.</dd>
+              <dt>Changed work</dt><dd>Engineering and privacy teams could follow application records, search indexes, write-ahead logs, retention rules, and exceptions through one complete deletion route.</dd>
+              <dt>Boundary</dt><dd>Retention, legal hold, backup, security, and deletion requirements remain system- and jurisdiction-specific.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="operate" data-domain="Forecasting · service quality" data-qualification="Exploratory model use">
+            <h4>Seasonality and service anomalies</h4>
+            <dl>
+              <dt>Situation</dt><dd>Batch data and service-level metrics contained holidays, seasonality, missing values, and unusual combinations that static thresholds obscured.</dd>
+              <dt>Mechanism</dt><dd>Prophet supported seasonal batch review; TimeGPT supported zero-shot anomaly exploration joined to directed graphs and six-sigma analysis.</dd>
+              <dt>Changed work</dt><dd>Teams could route unusual conditions into operational review and distinguish discovery signals from confirmed causes.</dd>
+              <dt>Boundary</dt><dd>Forecasts and anomaly scores direct investigation; service owners establish cause, impact, and response.</dd>
+            </dl>
+          </article>
+
+          <article class="source-case" data-case data-phase="translate" data-domain="Submission · inspection" data-qualification="Supporting materials">
+            <h4>Evidence that travels into review</h4>
+            <dl>
+              <dt>Situation</dt><dd>Clinical, product, engineering, quality, and compliance teams needed specifications and records usable in submissions, inspections, and 483 responses.</dd>
+              <dt>Mechanism</dt><dd>Traceable specifications, validation packages, design and test evidence, release readiness, reconciliation and replay records, and clear escalation ownership.</dd>
+              <dt>Changed work</dt><dd>Quality and compliance partners could focus more attention on submission strategy and judgment because product behavior and its rationale remained traceable.</dd>
+              <dt>Boundary</dt><dd>Accountable owners govern the final record. These materials support review; they do not confer legal advice, regulatory authority, certification, or approval.</dd>
+            </dl>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="quality-qualification-source">
+        <h3 id="quality-qualification-source">Qualification states</h3>
+        <ul data-qualifications>
+          <li data-state="Practiced"><strong>Practiced</strong><span>Risk-based specification and testing; IQ/OQ/PQ attention; WCAG 2.2 and usability; HL7/FHIR/DICOM; data and model quality.</span></li>
+          <li data-state="Supporting"><strong>Supporting material</strong><span>Validation-ready specifications, submission documentation, privacy material, inspection readiness, and 483-response evidence.</span></li>
+          <li data-state="Confirm"><strong>Confirm applicability</strong><span>21 CFR, ISO, privacy, security, EU MDR, government-contract, and multi-jurisdictional requirements vary by product and role.</span></li>
+          <li data-state="Watching"><strong>Watching</strong><span>AI-enabled medical-device expectations and related guidance continue to evolve; current qualified review is required.</span></li>
+        </ul>
+      </section>
+
+      <p data-field="thread"><strong>Common thread:</strong> teams can trace decisions and supporting materials through review while quality and compliance partners keep attention available for judgment.</p>
+      <p data-field="currentness">Source-era portfolio context through 2025. FDA's Quality Management System Regulation became effective February 2, 2026; verify its applicability, current editions, guidance status, jurisdiction, product classification, and organizational authority before reuse.</p>
+    </article>
+
+    <section aria-labelledby="lifecycle-source-title">
+      <h2 id="lifecycle-source-title">Shared operating lifecycle</h2>
+      <ol data-lifecycle>
+        <li data-phase="frame">Frame</li>
+        <li data-phase="build">Build</li>
+        <li data-phase="assure">Assure</li>
+        <li data-phase="operate">Operate / Recover</li>
+        <li data-phase="translate">Translate / Sustain</li>
+      </ol>
+    </section>
+  </section>
+</main>
+
+<script>
+  (() => {
+    const source = document.querySelector('#source-ledger');
+    const stage = document.querySelector('#visual-stage');
+    const status = document.querySelector('#treatment-status');
+    const contractStrip = document.querySelector('#contract-strip');
+    const coverageCount = document.querySelector('#coverage-count');
+    const coverageMessage = document.querySelector('#coverage-message');
+    const treatmentLinks = [...document.querySelectorAll('[data-treatment-link]')];
+    const allowed = new Set(['twin', 'rotating', 'ledger', 'blueprint', 'files']);
+
+    const text = (root, selector) => root.querySelector(selector)?.textContent.trim() || '';
+    const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[character]);
+
+    const parseRecord = (element) => ({
+      slug: element.dataset.slug,
+      icon: element.dataset.icon,
+      eyebrow: text(element, '[data-field="eyebrow"]'),
+      title: text(element, '[data-field="title"]'),
+      deck: text(element, '[data-field="deck"]'),
+      thread: text(element, '[data-field="thread"]'),
+      currentness: text(element, '[data-field="currentness"]'),
+      facts: [...element.querySelectorAll('[data-facts] [data-fact]')].map((item, index) => ({
+        id: `${element.dataset.slug}-fact-${index + 1}`,
+        label: text(item, 'dt'),
+        value: text(item, 'dd'),
+        emphasis: item.dataset.emphasis || ''
+      })),
+      roles: [...element.querySelectorAll('[data-roles] > li')].map((item, index) => ({
+        id: `${element.dataset.slug}-role-${index + 1}`,
+        title: text(item, 'strong'),
+        body: text(item, 'span')
+      })),
+      cases: [...element.querySelectorAll('[data-cases] [data-case]')].map((item, index) => {
+        const fields = {};
+        [...item.querySelectorAll('dl > dt')].forEach(term => {
+          fields[term.textContent.trim().toLowerCase().replace(/\s+/g, '')] = term.nextElementSibling?.textContent.trim() || '';
+        });
+        return {
+          id: `${element.dataset.slug}-case-${index + 1}`,
+          title: text(item, 'h4'),
+          phase: item.dataset.phase,
+          domain: item.dataset.domain,
+          qualification: item.dataset.qualification,
+          situation: fields.situation,
+          mechanism: fields.mechanism,
+          changed: fields.changedwork,
+          boundary: fields.boundary
+        };
+      }),
+      qualifications: [...element.querySelectorAll('[data-qualifications] > li')].map((item, index) => ({
+        id: `${element.dataset.slug}-qualification-${index + 1}`,
+        state: item.dataset.state,
+        title: text(item, 'strong'),
+        body: text(item, 'span')
+      }))
+    });
+
+    const model = {
+      records: [...source.querySelectorAll('[data-record]')].map(parseRecord),
+      lifecycle: [...source.querySelectorAll('[data-lifecycle] > li')].map(item => ({
+        phase: item.dataset.phase,
+        label: item.textContent.trim()
+      }))
+    };
+
+    const record = slug => model.records.find(item => item.slug === slug);
+    const expectedSourceIds = model.records.flatMap(item => [
+      ...item.facts.map(entry => entry.id),
+      ...item.roles.map(entry => entry.id),
+      ...item.cases.map(entry => entry.id),
+      ...item.qualifications.map(entry => entry.id)
+    ]);
+    const expectedFieldValues = model.records.flatMap(item => [
+      item.title,
+      item.deck,
+      item.thread,
+      item.currentness,
+      ...item.facts.flatMap(entry => [entry.label, entry.value]),
+      ...item.roles.flatMap(entry => [entry.title, entry.body]),
+      ...item.cases.flatMap(entry => [entry.title, entry.situation, entry.mechanism, entry.changed, entry.boundary, entry.qualification]),
+      ...item.qualifications.flatMap(entry => [entry.title, entry.body])
+    ]).filter(Boolean);
+    const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${escapeHTML(name)}"/></svg>`;
+
+    const lifecycleBand = () => `
+      <div class="lifecycle-band" aria-label="Shared operating lifecycle">
+        ${model.lifecycle.map(item => `<span>${escapeHTML(item.label)}</span>`).join('')}
+      </div>`;
+
+    const intro = (code, title, body) => `
+      <header class="treatment__intro">
+        <div><span class="section-code">${escapeHTML(code)}</span><h2 id="treatment-title">${escapeHTML(title)}</h2></div>
+        <p>${escapeHTML(body)}</p>
+      </header>`;
+
+    const metricLedger = data => `
+      <dl class="metric-ledger">
+        ${data.facts.map(fact => `
+          <div data-source-id="${escapeHTML(fact.id)}"${fact.emphasis ? ` data-emphasis="${escapeHTML(fact.emphasis)}"` : ''}>
+            <dt>${escapeHTML(fact.label)}</dt><dd>${escapeHTML(fact.value)}</dd>
+          </div>`).join('')}
+      </dl>`;
+
+    const roles = data => `
+      <ul class="role-list">
+        ${data.roles.map(role => `<li data-source-id="${escapeHTML(role.id)}"><strong>${escapeHTML(role.title)}</strong><span>${escapeHTML(role.body)}</span></li>`).join('')}
+      </ul>`;
+
+    const qualifications = data => data.qualifications.length ? `
+      <ul class="qual-list">
+        ${data.qualifications.map(item => `<li data-source-id="${escapeHTML(item.id)}"><span class="qual-state">${escapeHTML(item.title)}</span>${escapeHTML(item.body)}</li>`).join('')}
+      </ul>` : '';
+
+    const evidenceCase = (item, slug) => `
+      <article class="evidence-case evidence-case--${escapeHTML(slug)}" data-source-id="${escapeHTML(item.id)}">
+        <header class="case-head"><h4>${escapeHTML(item.title)}</h4><span class="case-domain">${escapeHTML(item.domain)} · ${escapeHTML(model.lifecycle.find(stageItem => stageItem.phase === item.phase)?.label || item.phase)}</span></header>
+        <dl>
+          <dt>Situation</dt><dd>${escapeHTML(item.situation)}</dd>
+          <dt>Mechanism</dt><dd>${escapeHTML(item.mechanism)}</dd>
+          <dt>Changed work</dt><dd>${escapeHTML(item.changed)}</dd>
+          <dt>Boundary</dt><dd>${escapeHTML(item.boundary)}</dd>
+        </dl>
+        <span class="case-qual">${escapeHTML(item.qualification)}</span>
+      </article>`;
+
+    const recordHeading = data => `
+      <header>
+        <p class="eyebrow">${escapeHTML(data.eyebrow)}</p>
+        <h3 class="record-title">${escapeHTML(data.title)}</h3>
+        <p class="record-deck">${escapeHTML(data.deck)}</p>
+      </header>`;
+
+    const fullRecord = data => `
+      ${recordHeading(data)}
+      <section class="record-block"><h4>Operating contexts</h4>${metricLedger(data)}</section>
+      <section class="record-block"><h4>Roles connecting strategy, design, engineering, and quality</h4>${roles(data)}</section>
+      <section class="record-block"><h4>Situation · mechanism · changed work · boundary</h4><div class="case-list">${data.cases.map(item => evidenceCase(item, data.slug)).join('')}</div></section>
+      ${data.qualifications.length ? `<section class="record-block"><h4>Qualification states</h4>${qualifications(data)}</section>` : ''}
+      <p class="record-thread">${escapeHTML(data.thread)}</p>
+      <p class="currentness">${escapeHTML(data.currentness)}</p>`;
+
+    const folio = data => `
+      <article class="folio folio--${escapeHTML(data.slug)}" aria-labelledby="folio-${escapeHTML(data.slug)}-title">
+        <header class="folio__head">
+          <span class="folio__mark">${icon(data.icon)}</span>
+          <div><p class="eyebrow">${escapeHTML(data.eyebrow)}</p><h3 class="record-title" id="folio-${escapeHTML(data.slug)}-title">${escapeHTML(data.title)}</h3><p class="record-deck">${escapeHTML(data.deck)}</p></div>
+        </header>
+        <section class="record-block"><h4>Static operating ledger</h4>${metricLedger(data)}</section>
+        <section class="record-block"><h4>Roles</h4>${roles(data)}</section>
+        <section class="record-block"><h4>Consequential records</h4><div class="case-list">${data.cases.map(item => evidenceCase(item, data.slug)).join('')}</div></section>
+        ${data.qualifications.length ? `<section class="record-block"><h4>Applicability ledger</h4>${qualifications(data)}</section>` : ''}
+        <p class="record-thread">${escapeHTML(data.thread)}</p>
+        <p class="currentness">${escapeHTML(data.currentness)}</p>
+      </article>`;
+
+    const renderTwin = () => `
+      <section class="treatment treatment--twin" aria-labelledby="treatment-title">
+        ${intro('01 · Side-by-side operating records', 'Twin Operating Folios', 'A simultaneous executive read: equal visual standing, distinct evidence, one shared operating lifecycle.')}
+        ${lifecycleBand()}
+        <div class="twin-grid">${model.records.map(folio).join('')}</div>
+      </section>`;
+
+    const dossierPanel = (data, selected) => `
+      <section class="dossier-panel" id="dossier-panel-${escapeHTML(data.slug)}" role="tabpanel" tabindex="0" aria-labelledby="dossier-tab-${escapeHTML(data.slug)}"${selected ? '' : ' hidden'}>
+        <div class="dossier-layout">
+          <aside class="dossier-rail"><div>${recordHeading(data)}</div><section class="record-block"><h4>Static operating ledger</h4>${metricLedger(data)}</section>${data.qualifications.length ? `<section class="record-block"><h4>Qualification states</h4>${qualifications(data)}</section>` : ''}<p class="currentness">${escapeHTML(data.currentness)}</p></aside>
+          <div class="dossier-reading"><section class="record-block"><h4>Roles</h4>${roles(data)}</section><section class="record-block"><h4>Situation records</h4><div class="case-list">${data.cases.map(item => evidenceCase(item, data.slug)).join('')}</div></section><p class="record-thread">${escapeHTML(data.thread)}</p></div>
+        </div>
+      </section>`;
+
+    const renderRotating = () => `
+      <section class="treatment treatment--rotating" aria-labelledby="treatment-title">
+        ${intro('02 · Focused record view', 'Rotating Dossier', 'Career and Quality keep the same position in one reading surface. The tab is a focus control, not a hierarchy.')}
+        ${lifecycleBand()}
+        <div class="dossier-shell">
+          <div class="dossier-tabs" role="tablist" aria-label="Career and quality dossier">
+            ${model.records.map((data, index) => `<button class="dossier-tab" id="dossier-tab-${escapeHTML(data.slug)}" type="button" role="tab" aria-selected="${index === 0}" aria-controls="dossier-panel-${escapeHTML(data.slug)}" tabindex="${index === 0 ? '0' : '-1'}">${icon(data.icon)}${escapeHTML(data.title)}</button>`).join('')}
+          </div>
+          ${model.records.map((data, index) => dossierPanel(data, index === 0)).join('')}
+        </div>
+      </section>`;
+
+    const casesFor = (data, phase) => data.cases.filter(item => item.phase === phase);
+    const ledgerCell = items => items.length ? `<ul>${items.map(item => `
+      <li data-source-id="${escapeHTML(item.id)}">
+        <details>
+          <summary><strong>${escapeHTML(item.title)}</strong><span>${escapeHTML(item.changed)}</span></summary>
+          <dl>
+            <dt>Situation</dt><dd>${escapeHTML(item.situation)}</dd>
+            <dt>Mechanism</dt><dd>${escapeHTML(item.mechanism)}</dd>
+            <dt>Changed work</dt><dd>${escapeHTML(item.changed)}</dd>
+            <dt>Boundary</dt><dd>${escapeHTML(item.boundary)}</dd>
+          </dl>
+          <small>${escapeHTML(item.qualification)}</small>
+        </details>
+      </li>`).join('')}</ul>` : '<span>—</span>';
+
+    const renderLedger = () => {
+      const career = record('career');
+      const quality = record('quality');
+      return `
+        <section class="treatment treatment--ledger" aria-labelledby="treatment-title">
+          ${intro('03 · Lifecycle comparison', 'Career × Quality Translation Ledger', 'The lifecycle becomes the index. Each cell shows changed work and keeps its qualification and boundary attached.')}
+          <div class="ledger-summary">
+            <article><p class="eyebrow">Career context</p><h3 class="record-title">${escapeHTML(career.title)}</h3><p class="record-deck">${escapeHTML(career.deck)}</p>${metricLedger(career)}</article>
+            <article><p class="eyebrow">Quality context</p><h3 class="record-title">${escapeHTML(quality.title)}</h3><p class="record-deck">${escapeHTML(quality.deck)}</p>${metricLedger(quality)}</article>
+          </div>
+          <div class="translation-scroll" tabindex="0" role="region" aria-label="Career and quality translation ledger; scroll horizontally on smaller screens">
+            <table class="translation-table">
+              <caption>Same source ledger, reorganized by the work collaborators need to coordinate.</caption>
+              <thead><tr><th scope="col">Operating phase</th><th scope="col">Career evidence</th><th scope="col">Quality evidence</th></tr></thead>
+              <tbody>
+                ${model.lifecycle.map(stageItem => `<tr><th scope="row">${escapeHTML(stageItem.label)}</th><td>${ledgerCell(casesFor(career, stageItem.phase))}</td><td>${ledgerCell(casesFor(quality, stageItem.phase))}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="ledger-summary"><article><h3>Career roles</h3>${roles(career)}<p class="record-thread">${escapeHTML(career.thread)}</p><p class="currentness">${escapeHTML(career.currentness)}</p></article><article><h3>Quality roles + applicability</h3>${roles(quality)}${qualifications(quality)}<p class="record-thread">${escapeHTML(quality.thread)}</p><p class="currentness">${escapeHTML(quality.currentness)}</p></article></div>
+        </section>`;
+    };
+
+    const blueprintDetails = items => items.length ? items.map(item => `
+      <details data-source-id="${escapeHTML(item.id)}">
+        <summary>${icon('eye')}<span>${escapeHTML(item.title)}</span></summary>
+        <dl><dt>Situation</dt><dd>${escapeHTML(item.situation)}</dd><dt>Mechanism</dt><dd>${escapeHTML(item.mechanism)}</dd><dt>Changed work</dt><dd>${escapeHTML(item.changed)}</dd><dt>Boundary</dt><dd>${escapeHTML(item.boundary)}</dd><dt>Qualification</dt><dd>${escapeHTML(item.qualification)}</dd></dl>
+      </details>`).join('') : '<p>No discrete case in this phase; the shared roles still carry through.</p>';
+
+    const renderBlueprint = () => {
+      const career = record('career');
+      const quality = record('quality');
+      return `
+        <section class="treatment treatment--blueprint" aria-labelledby="treatment-title">
+          ${intro('04 · Expandable service lifecycle', 'Two-Lens Service Blueprint', 'Rotate attention across the same initiative lifecycle. Expand a situation to inspect mechanism, changed work, and authority boundary.')}
+          <div class="blueprint-key" aria-label="Blueprint legend"><span><i></i>Career lens</span><span><i></i>Quality lens</span><span><i></i>Shared coordination phase</span></div>
+          <div class="blueprint">
+            <div class="blueprint-head" aria-hidden="true"><div>Career lens</div><div>Coordination</div><div>Quality lens</div></div>
+            ${model.lifecycle.map(stageItem => `
+              <section class="blueprint-row" aria-labelledby="stage-${escapeHTML(stageItem.phase)}">
+                <div class="blueprint-cell">${blueprintDetails(casesFor(career, stageItem.phase))}</div>
+                <div class="stage-node"><span class="stage-name" id="stage-${escapeHTML(stageItem.phase)}">${escapeHTML(stageItem.label)}</span></div>
+                <div class="blueprint-cell blueprint-cell--quality">${blueprintDetails(casesFor(quality, stageItem.phase))}</div>
+              </section>`).join('')}
+          </div>
+          <div class="ledger-summary"><article><p class="eyebrow">Career operating context</p><h3>${escapeHTML(career.title)}</h3><p class="record-deck">${escapeHTML(career.deck)}</p>${metricLedger(career)}${roles(career)}<p class="record-thread">${escapeHTML(career.thread)}</p><p class="currentness">${escapeHTML(career.currentness)}</p></article><article><p class="eyebrow">Quality operating context</p><h3>${escapeHTML(quality.title)}</h3><p class="record-deck">${escapeHTML(quality.deck)}</p>${metricLedger(quality)}${roles(quality)}${qualifications(quality)}<p class="record-thread">${escapeHTML(quality.thread)}</p><p class="currentness">${escapeHTML(quality.currentness)}</p></article></div>
+        </section>`;
+    };
+
+    const fileSection = (label, index, content, open = false) => `
+      <details class="file-section"${open ? ' open' : ''}>
+        <summary>${escapeHTML(label)}<span>${String(index).padStart(2, '0')}</span></summary>
+        <div class="file-section__content">${content}</div>
+      </details>`;
+
+    const caseFile = data => `
+      <article class="case-file" aria-labelledby="file-${escapeHTML(data.slug)}-title">
+        <header class="case-file__tab"><span>${data.slug === 'career' ? 'C-20+' : 'Q-13+'}</span><div><p class="eyebrow">${escapeHTML(data.eyebrow)}</p><h3 id="file-${escapeHTML(data.slug)}-title">${escapeHTML(data.title)}</h3></div></header>
+        <div class="case-file__body">
+          <p class="record-deck">${escapeHTML(data.deck)}</p>
+          ${fileSection('Operating contexts', 1, metricLedger(data), true)}
+          ${fileSection('Roles', 2, roles(data))}
+          ${fileSection('Situation records', 3, `<div class="case-list">${data.cases.map(item => evidenceCase(item, data.slug)).join('')}</div>`)}
+          ${data.qualifications.length ? fileSection('Qualification states', 4, qualifications(data)) : ''}
+          <p class="record-thread">${escapeHTML(data.thread)}</p>
+          <p class="currentness">${escapeHTML(data.currentness)}</p>
+        </div>
+      </article>`;
+
+    const renderFiles = () => `
+      <section class="treatment treatment--files" aria-labelledby="treatment-title">
+        ${intro('05 · Compact evidence cases', 'Evidence Case Files', 'A compact first scan with native disclosure. The record expands without turning evidence into decoration or a carousel.')}
+        ${lifecycleBand()}
+        <div class="case-files">${model.records.map(caseFile).join('')}</div>
+      </section>`;
+
+    const renderers = {
+      twin: renderTwin,
+      rotating: renderRotating,
+      ledger: renderLedger,
+      blueprint: renderBlueprint,
+      files: renderFiles
+    };
+
+    const validateCoverage = () => {
+      const placedIds = new Set([...stage.querySelectorAll('[data-source-id]')].map(item => item.dataset.sourceId));
+      const missing = expectedSourceIds.filter(id => !placedIds.has(id));
+      const extra = [...placedIds].filter(id => !expectedSourceIds.includes(id));
+      const visibleRecordText = stage.textContent.replace(/\s+/g, ' ').trim();
+      const missingFields = expectedFieldValues.filter(value => !visibleRecordText.includes(value.replace(/\s+/g, ' ').trim()));
+      const complete = missing.length === 0 && extra.length === 0 && missingFields.length === 0;
+      contractStrip.dataset.complete = String(complete);
+      coverageCount.textContent = `${placedIds.size} of ${expectedSourceIds.length}`;
+      coverageMessage.textContent = complete
+        ? 'This view carries every operating fact, role, situation, mechanism, changed-work statement, boundary, currentness note, and qualification state.'
+        : `Review needed · ${missing.length} record elements, ${missingFields.length} field details, and ${extra.length} unrecognized elements need attention.`;
+      return {complete, expected: [...expectedSourceIds], placed: [...placedIds], missing, missingFields, extra};
+    };
+
+    const treatmentName = key => ({
+      twin: 'Twin Operating Folios',
+      rotating: 'Rotating Dossier',
+      ledger: 'Career × Quality Translation Ledger',
+      blueprint: 'Two-Lens Service Blueprint',
+      files: 'Evidence Case Files'
+    })[key];
+
+    const initTabs = () => {
+      const tabs = [...stage.querySelectorAll('[role="tab"]')];
+      if (!tabs.length) return;
+      const activate = (tab, moveFocus = true) => {
+        tabs.forEach(item => {
+          const selected = item === tab;
+          item.setAttribute('aria-selected', String(selected));
+          item.tabIndex = selected ? 0 : -1;
+          const panel = stage.querySelector(`#${item.getAttribute('aria-controls')}`);
+          if (panel) panel.hidden = !selected;
+        });
+        if (moveFocus) tab.focus();
+      };
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activate(tab, false));
+        tab.addEventListener('keydown', event => {
+          let nextIndex = null;
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % tabs.length;
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === 'Home') nextIndex = 0;
+          if (event.key === 'End') nextIndex = tabs.length - 1;
+          if (nextIndex !== null) {
+            event.preventDefault();
+            activate(tabs[nextIndex]);
+          }
+        });
+      });
+    };
+
+    const readTreatment = () => {
+      const value = new URL(window.location.href).searchParams.get('treatment');
+      return allowed.has(value) ? value : 'twin';
+    };
+
+    const setLinkAddresses = () => {
+      treatmentLinks.forEach(link => {
+        const url = new URL(window.location.href);
+        url.searchParams.set('treatment', link.dataset.treatmentLink);
+        link.href = `${url.pathname}${url.search}${url.hash}`;
+      });
+    };
+
+    const render = (key, options = {}) => {
+      const treatment = allowed.has(key) ? key : 'twin';
+      stage.innerHTML = renderers[treatment]();
+      treatmentLinks.forEach(link => {
+        if (link.dataset.treatmentLink === treatment) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+      initTabs();
+      if (options.updateHistory) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('treatment', treatment);
+        window.history.pushState({treatment}, '', url);
+        setLinkAddresses();
+      }
+      document.title = `${treatmentName(treatment)} — Career + Quality`;
+      status.textContent = `${treatmentName(treatment)} treatment displayed.`;
+      validateCoverage();
+    };
+
+    treatmentLinks.forEach(link => link.addEventListener('click', event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      render(link.dataset.treatmentLink, {updateHistory: true});
+    }));
+
+    const parkSource = () => {
+      source.setAttribute('aria-hidden', 'true');
+      source.inert = true;
+    };
+    const exposeSource = () => {
+      source.removeAttribute('aria-hidden');
+      source.inert = false;
+    };
+
+    window.addEventListener('popstate', () => render(readTreatment()));
+    window.addEventListener('beforeprint', exposeSource);
+    window.addEventListener('afterprint', parkSource);
+    parkSource();
+    setLinkAddresses();
+    render(readTreatment());
+    window.careerQualityComparison = {
+      getState: () => ({treatment: readTreatment()}),
+      getCoverage: validateCoverage,
+      getModelSummary: () => model.records.map(item => ({
+        slug: item.slug,
+        facts: item.facts.length,
+        roles: item.roles.length,
+        cases: item.cases.length,
+        qualifications: item.qualifications.length
+      }))
+    };
+  })();
+</script>
+</body>
+</html>

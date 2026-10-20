@@ -1,0 +1,160 @@
+{
+  "id": "a3-stacked-cube-atlas-expanded.manifest.v0.2",
+  "title": "Evidence-Guided Capability Transfer Atlas Bundle",
+  "version": "0.2.0",
+  "status": "source_lineage_candidate",
+  "generated_on": "2026-09-30",
+  "canonical_type": "atlas_expanded_authority_and_evidence_research_surface",
+  "entrypoint": "index.html",
+  "files": {
+    "prototype": "index.html",
+    "canonical": "model/a3-stacked-cube-expanded-canonical-delta-v0.2.json",
+    "schema": "schema/expanded-delta.schema.json",
+    "context": "schema/a3-stacked-cube.context.jsonld",
+    "validation_report": "validation/validation-report.json"
+  },
+  "extends": {
+    "artifact_id": "A3-CUBE-MANIFEST",
+    "version": "0.1.0",
+    "local_source": "model/a3-stacked-cube-canonical-v0.1.json",
+    "preserve_stable_ids": true
+  },
+  "source_reference": {
+    "repository": "urn:source-key:prototype-exemplars",
+    "consulted_commit": "e029455bb1ec0d41616f08e52123363cd0876c92",
+    "consulted_path": "core-architectures-chimeric-prototype-current-pack-v0.1/"
+  },
+  "publication": {
+    "repository": "driftframestudios/human-ai-systems-exemplars",
+    "repository_path": "a3-stacked-cube-atlas-expanded-bundle-v0.2/"
+  },
+  "runtime_contract": {
+    "self_contained_primary_html": true,
+    "executable_remote_dependencies": [],
+    "primary_visual": "inline_svg"
+  },
+  "inventory": [
+    {
+      "path": "embed.html",
+      "media_type": "text/html",
+      "role": "embeddable_host_fragment",
+      "bytes": 35438,
+      "sha256": "3b2a6c46fad6c29c3e63e3efaf15e0f87b5d8e746440b4889736426e30d6d24d"
+    },
+    {
+      "path": "index.html",
+      "media_type": "text/html",
+      "role": "primary_prototype",
+      "bytes": 84406,
+      "sha256": "ac2cff483e199ee132503ec5bd80f830c910702e686246564f00c70de376d1fb"
+    },
+    {
+      "path": "model/a3-stacked-cube-canonical-v0.1.json",
+      "media_type": "application/json",
+      "role": "supporting_artifact",
+      "bytes": 24161,
+      "sha256": "e08830a22b99dd7e57bbeaa4ea709a31455631f7bc5f26bd7d05edef8a1d7cbb"
+    },
+    {
+      "path": "model/a3-stacked-cube-expanded-canonical-delta-v0.2.json",
+      "media_type": "application/json",
+      "role": "canonical_model",
+      "bytes": 15477,
+      "sha256": "502eede8dc9c9a4d463cc2789fedbbf6236c2afb7465d104a73363260aa6a149"
+    },
+    {
+      "path": "model/a3-stacked-cube-expanded-view-model-v0.2.json",
+      "media_type": "application/json",
+      "role": "rendering_view_model",
+      "bytes": 30450,
+      "sha256": "2be16230295c60dad3707b7dc3f3456ca82ffebff95cf1af2e57c900ed9da0bf"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "role": "human_readme",
+      "bytes": 3960,
+      "sha256": "67d1a81f5eee2ed7c1c07c3d6dbbf8b1409532f0de109f5ec1ad5165ba53455c"
+    },
+    {
+      "path": "research/coverage-ledger-v0.2.json",
+      "media_type": "application/json",
+      "role": "research_coverage_ledger",
+      "bytes": 15072,
+      "sha256": "009b86e2d4fcd673e7906975d4fec4add644c78dceebc8e85b3becbf2327c7d5"
+    },
+    {
+      "path": "research/research-plan-v0.2.md",
+      "media_type": "text/markdown",
+      "role": "research_plan",
+      "bytes": 6267,
+      "sha256": "857cae3f20562c634cd8a463aa6bce69d1dfff5c5360f8a74350d6dfe95c6f37"
+    },
+    {
+      "path": "research/source-registry-v0.2.json",
+      "media_type": "application/json",
+      "role": "source_registry",
+      "bytes": 12308,
+      "sha256": "068db5d212466608e2c82beaa53401e9d6fdfbf3d7814a4622157323c8d70c48"
+    },
+    {
+      "path": "schema/a3-stacked-cube.context.jsonld",
+      "media_type": "application/ld+json",
+      "role": "jsonld_context",
+      "bytes": 2482,
+      "sha256": "3d00d6adccb7e401d66d3d26cd9ac02b4b8c3854c7d3a93ad64bfd2d07d1ff7c"
+    },
+    {
+      "path": "schema/coverage-ledger.schema.json",
+      "media_type": "application/schema+json",
+      "role": "research_coverage_ledger",
+      "bytes": 1574,
+      "sha256": "02dba1dd1e225c3f2e25dfd39cf8ccf5153e7000595dd9062ff14b2e8aafd230"
+    },
+    {
+      "path": "schema/expanded-delta.schema.json",
+      "media_type": "application/schema+json",
+      "role": "canonical_schema",
+      "bytes": 7234,
+      "sha256": "9da40cfdbf26f9ef5db394c3395a3d9044d1b1bef8d7648163eeaa47b7ae9575"
+    },
+    {
+      "path": "schema/expanded-view-model.schema.json",
+      "media_type": "application/schema+json",
+      "role": "rendering_view_model",
+      "bytes": 5218,
+      "sha256": "cf1bfad3e3dfb4481d25889f56fb2d6aebec2965910bb6e57a930f8400d2d187"
+    },
+    {
+      "path": "schema/source-registry.schema.json",
+      "media_type": "application/schema+json",
+      "role": "source_registry",
+      "bytes": 1334,
+      "sha256": "93892230c899828d30decc3ef295500e3246c41d162e0677eaf0e9ac55214893"
+    },
+    {
+      "path": "validation/validation-report.json",
+      "media_type": "application/json",
+      "role": "validation_receipt",
+      "bytes": 2662,
+      "sha256": "b4449a79b0f7903b9644a8f9a732e3389895ec35f07e01fd25358d2742c9e682"
+    }
+  ],
+  "validation": {
+    "report": "validation/validation-report.json",
+    "result": "pass",
+    "scope": "2026-09-30 public-name, boundary-language, model-parity, and browser-runtime revision",
+    "prior_receipt": {
+      "report": "validation/validation-report.json",
+      "result": "pass",
+      "executed_on": "2026-07-27",
+      "scope": "bundle revision before source-lineage projection"
+    }
+  },
+  "notes": [
+    "index.html is the complete self-contained surface; embed.html is a host fragment.",
+    "The canonical base plus additive delta preserve historical assertions separately from conditional research claims.",
+    "The extracted view model is authoritative for reproducing the current rendering projection.",
+    "The 2026-09-30 manifest refresh records the public Evidence-Guided Capability Transfer Atlas name, accessible boundary language, and the current byte/hash inventory."
+  ]
+}

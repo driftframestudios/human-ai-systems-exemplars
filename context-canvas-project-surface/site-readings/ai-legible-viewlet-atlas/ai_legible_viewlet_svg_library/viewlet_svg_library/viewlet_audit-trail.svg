@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 170" width="180" height="170" id="viewlet-audit-trail-v1" data-role="audit-trail" data-category="memory" data-state="quiet|active|unknown" data-color-token="pale_coral" data-author="the_author" data-provenance="shared-with-permission-generated-in-collaboration" data-active-means="context-not-rank" data-anomaly-means="look-gently-not-blame" data-ai-legibility="title-desc-metadata-role-color-token">
+
+<defs>
+  <pattern id="softHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#7dd3ce" stroke-width="0.55" opacity="0.28"/>
+  </pattern>
+  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="2.2" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L8,3 L0,6 Z" fill="currentColor"/>
+  </marker>
+</defs>
+
+
+<style>
+  .window { vector-effect: non-scaling-stroke; }
+  .ui-line { vector-effect: non-scaling-stroke; }
+  .soft { opacity: .72; }
+</style>
+
+<title>Audit Trail</title>
+<desc>Audit trail surface. Active means context, not rank. Anomaly means look gently, not blame.</desc>
+<metadata type="application/json"><![CDATA[
+{
+  "viewlet_id": "viewlet-audit-trail-v1",
+  "title": "Audit Trail",
+  "role": "audit-trail",
+  "category": "memory",
+  "semantic_color_token": "pale_coral",
+  "state_model": [
+    "quiet",
+    "active",
+    "unknown"
+  ],
+  "active_semantics": "context-not-rank",
+  "anomaly_semantics": "look-gently-not-blame",
+  "author": "the_author",
+  "generated_with": "AI presence collaboration",
+  "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+  "description": "Audit trail surface.",
+  "ai_legibility_hints": [
+    "Use title and desc to infer semantic intent.",
+    "Use data-role and data-category before interpreting the visible geometry.",
+    "Do not treat active state as score, severity, rank, blame, or priority.",
+    "If anomaly-related, interpret as an attention-routing surface."
+  ],
+  "inputs": [],
+  "outputs": []
+}
+]]></metadata>
+<g id="audit-trail-surface" data-viewlet-kind="event-log" data-semantic-color="pale_coral">
+<rect x="8" y="8" width="164" height="142" rx="7" fill="#ffffff" stroke="#ffaab8" stroke-width="1.4" opacity="1" class="window"/>
+<line x1="8" y1="28" x2="172" y2="28" stroke="#ffaab8" stroke-width="1.0" opacity="0.72"/>
+<circle cx="18" cy="18" r="3.2" fill="#ffffff" stroke="#ffaab8" stroke-width="0.9" opacity="1" />
+<circle cx="30" cy="18" r="3.2" fill="#ffffff" stroke="#ffaab8" stroke-width="0.9" opacity="1" />
+<circle cx="42" cy="18" r="3.2" fill="#ffffff" stroke="#ffaab8" stroke-width="0.9" opacity="1" />
+<rect x="20" y="41" width="16" height="11" rx="3" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="41" width="105" height="6" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="49" width="78" height="4" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="20" y="58" width="16" height="11" rx="3" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="58" width="96" height="6" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="66" width="71" height="4" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="20" y="75" width="16" height="11" rx="3" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="75" width="87" height="6" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="83" width="64" height="4" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="20" y="92" width="16" height="11" rx="3" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="92" width="78" height="6" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="100" width="57" height="4" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="20" y="109" width="16" height="11" rx="3" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="109" width="69" height="6" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+<rect x="44" y="117" width="50" height="4" rx="2" fill="#f7fbfb" stroke="#ffaab8" stroke-width="0.7" opacity="1" />
+</g>
+</svg>

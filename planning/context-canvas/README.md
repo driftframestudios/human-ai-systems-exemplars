@@ -1,0 +1,85 @@
+# Context Canvas — principal engineering and publication
+
+## Hydration record
+
+The Context Canvas is already a sophisticated visitor system: semantic HTML, CSS, accessible SVG, and small dependency-free JavaScript form the runtime; embedded collaborative prototypes carry inspectable state, schema, and richer interaction. Its delivery system now combines route-owned CSS, repaired public metadata and recovery paths, an accepted production carrier, exact iframe delivery, a tagged Pages projection, and a schema Worker while preserving the visual contracts and dependency-free runtime.
+
+This program asks how the repository can become:
+
+- deterministic and recoverable while code is continually moving;
+- economical with remote CI minutes while retaining strong local proof;
+- legible to collaborators with different GitHub, branch, workspace, and tool access;
+- safe to publish through an allowlisted static artifact;
+- ready for controlled domains, Cloudflare CDN/WAF, and cross-subdomain prototype hosting;
+- able to publish stable schemas and machine-readable context while consequential publication choices remain explicit and person-confirmed;
+- structured so human and AI collaborators can work through clear ownership boundaries and focused files.
+
+## Read this program in this order
+
+1. [Cross-repository functional-nucleus assessment](../functional-nucleus-assessment-horizon.md) — the six repositories, their concrete affordances, maturity, and Hold / Extend / Durable Encounter tracks.
+2. [Principal engineering program](principal-engineering-program.md) — the complete architecture and implementation plan.
+3. [CSS modularization and visual reference plan](css-modularization-and-visual-reference-plan.md) — the approved core-plus-route direction, all-page capture inventory, probability model, extraction waves, contract/creative boundary, and purposeful deferrals.
+4. [Contrast convergence and visual consistency](contrast-convergence-and-visual-consistency-plan.md) — the approved two-level color roles, regression and viewport evidence, modern-CSS disposition, research synthesis, future states, milestone 22, and exact re-entry.
+5. [Visual consistency skill cultivation](visual-consistency-skill-cultivation.md) — the active visual-verification contract, CSS and surface-reading revisions, private/public registry boundary, queued billets, and forge conditions.
+6. [Planning matrix](planning-matrix.md) — terrain, next useful move, evidence, and re-entry across the system.
+7. [Open questions and current leanings](open-questions.md) — the original twenty-one questions, working responses, changed-situation questions, and current re-entry position.
+8. [Threadkeeping index](../../threadkeeping/README.md) — decisions and prior-cycle history that inform this program.
+9. [Prompt-Side Conditions test-drive and visual-synthesis payload](prompt-side-test-drive-visual-research-payload.md) — the approved experiential page route, four diagram hypotheses, selected Butterfly Service Loop, class-size and grouping coordination microexample, coverage ledger, and completion gate.
+10. [Strategy Canvas collaboration system](strategy-canvas/README.md) — the two-expression semantic spine, method and scale boundary, human-first elicitation, room-scale direct manipulation, domain-anchor atlas, AI proposal channel, portable handoffs, and verification gates.
+11. [Open-issue collaboration waves](open-issue-collaboration-waves.md) — the current CSS/visual-reference sequence and retained implementation routes for the earlier visitor and Cloudflare waves.
+12. [Reading measure research spike](reading-measure-research-spike.md) — the shared 66ch prose target, wide-artifact boundary, Grammar Family consolidation, and first physical CSS extraction seam.
+13. [Notion Registry link handoff](notion-registry-link-handoff.md) — the locator-free public routing method, family plan, semantic-key materialization boundary, return shape, and repository sequence; the companion [public reference routes](notion-public-reference-routes.csv) retain the earlier family-level planning view, while the current [tracked Registry binding](../../deployment/public-references/README.md) owns exact accepted public routes and exact workspace resolution remains in private Notion.
+14. [Locator-free public-history rehearsal](../locator-free-public-history-rehearsal.md) — the reversible ref, pull-ref, Pages, schema-link, GitHub-prose, metadata, and recovery packet for the selected clean-successor route, receiving the repository-wide current-tree settlement before cutover.
+
+## Current posture
+
+- The repository's established topology is the baseline. This planning pass adds a memory and coordination layer while visitor and prototype source stays in place.
+- `main` is the broadest cross-platform receipt because some collaborators can inspect only the default branch. Focused branches remain useful for isolation and review when the receiving collaborator can access them.
+- GitHub Actions is enabled with GitHub-owned actions and immutable revisions. `main` is the sole active metered evidence receiver through one bounded public-boundary receipt; `research`, `res/*`, `dev`, `docs`, `stg`, `release`, and `prod` rest with receiver budgets set to `false`. GitHub Pages remains the standing free publication path, manual reference proofs retain their separate human-dispatch gate, paid overage remains **$0**, and the deployment receiver list begins empty.
+- GitHub Issues should receive bounded implementation, repair, documentation, or investigation packets. Planning retains multi-horizon terrain and unresolved design; threadkeeping retains rationale and re-entry; pull requests retain the exact reviewed change.
+- The [CSS modularization and visual-reference plan](css-modularization-and-visual-reference-plan.md) carries the complete 42-route visual-reference utility, its historical 39-page cutoff, readable modular source, contract discoverability, and core-plus-route bundle sequence.
+- The [contrast and visual-consistency plan](contrast-convergence-and-visual-consistency-plan.md) records the approved painted-owner link roles, role/state/mode/geometry regression contract, 42-route reference, milestone 22, and human/AI semantic-visual evidence boundary.
+- The [Notion Registry link handoff](notion-registry-link-handoff.md) coordinates public-facing Enterprise Registry destinations for the workspace identities referenced by Context Canvas. Registry-scoped semantic keys remain in tracked HTML; the reviewed binding now maps their live set to exact current Atlas identities and public routes, while ignored external configuration carries only the professional-profile destination. The one-time migration counts remain historical observations rather than recurring thresholds. Exact retired locators and re-entry conditions remain in the private resolver; Registry ancestry, reader-facing content standing, signed-out availability, Atlas observation, and mechanical materialization remain distinct receipts.
+- Repository-wide source settlement extends the accepted Context Canvas HTML receipt through every tracked source family. The final A3 receipt maps **20 locator shapes across 9 files** to the established `SRC-A3` and `SRC-ATLAS` private-lineage keys; the expanded prototype renders those records as semantic labels while public evidence remains linked. The candidate also carries 15 readable revision-link first forms across two files. Issue work:repository-locator-disposition returns both receipts to work:public-baseline-rehearsal, where the named **Public-baseline revision-link settlement** binds those routes to the accepted additive-snapshot revision.
+- The [public-history rehearsal](../locator-free-public-history-rehearsal.md) accounts for refs, Pages, schema receivers, commit metadata, adjacent GitHub prose, and recovery. The initialized cross-slug successor and two-commit additive sequence are selected. Technical-collaboration replay proceeds as an independent learning surface, while cutoff refresh, recovery preparation, and revision-link pinning return through Issue work:public-baseline-rehearsal. Remote commits, merge, and publication settings retain their human-cued boundary.
+- The historical 14-file Field Inspection pilot established deterministic, allowlisted Static Assets packaging and a Wrangler dry-run. The accepted production carrier and specialized Pages, iframe, schema, and media receivers now own delivery; the collaboration team uses Issue #428 to coordinate complete pilot retirement.
+- Caddy is the preferred local proving surface for real origin separation and local HTTPS. Hosts-file edits remain a short-lived diagnostic technique rather than architecture.
+- The future `@driftframe` constellation can own shared schemas and registries. The Context Canvas can consume those contracts through versioned references on an independent migration timeline.
+
+## Settled foundation
+
+- `field-inspection.css` is the first physically separated route family and retains its authored position immediately after `expanded.css`.
+- Every top-level Context Canvas page follows one narrow, desktop, and wide capture path. The current 42-route inventory has exact family assignments; historical cutoffs stay bound to their source revisions.
+- Readable `core/`, `components/`, `contracts/`, and `routes/` owners are active, while `expanded.css` remains the named legacy remainder. About is the first complete first-paint path to leave that remainder.
+- The Context Canvas now has a section `README.md`, an authored `404.html`, repaired manifest and browser metadata, explicit stewardship text, and an updated root metadata surface. The historical `404.shtml` and server error log have left the public source path.
+- `cloudflare/context-canvas-field-pilot/` retains the historical 14-file proof until Issue #428 removes the superseded delivery source as one bounded undertaking.
+- Cross-origin iframe delivery has separate manifest-owned Core and Canvas families beneath `https://iframes.vik.guru/v1/`; accepted bytes, response policy, and deployed-parent behavior retain independent package and live-verification receipts.
+
+## Planning influences
+
+The program applies these established collaboration patterns:
+
+- **Threadkeeping** — place rationale and re-entry in adjacent durable memory so the execution path stays focused.
+- **Folding** — preserve prior passes, extend before creating, compose before duplicating, and leave open questions as collaboration handles.
+- **Practitioner Probes** — ask a technically consequential question, expose the causal mechanism, connect it to observable evidence, and extract an instruction another collaborator can use.
+- **Constellation planning** — the reader experience may nest while source architecture references rather than duplicates.
+
+## Receiving artifacts
+
+The settled foundation hands forward small, separately reviewable continuations:
+
+- Publication and origin architecture decision
+- Root collaboration and contribution contract
+- Full-page Context Canvas visual-reference utility and browseable family index
+- Existing focused visual and interaction checks for changed behavior
+- Implemented allowlisted production assembler and cPanel carrier for the selected primary collection and aggregate iframe package
+- Context Canvas core, component, contract, route, and legacy source modules
+- Direct route bundles followed by conservative, content-hashed CSS distribution
+- Prototype capability manifest and cross-origin protocol
+- Versioned schema and semantic-twin publishing contract
+- Locator-free Notion Registry handoff, family route ledger, Registry-scoped semantic keys, dependency-free build-time materialization, and private source-to-public-target resolution
+- Explicit cross-origin Cloudflare/Caddy header contracts for each active receiver; the historical direct-view pilot stays outside current authority while Issue #428 coordinates retirement
+- Performance budgets based on measured routes
+- A lightweight GitHub Issue form and label vocabulary for bounded Context Canvas work, introduced once two or three real issues demonstrate the fields that matter
+
+Each receiving artifact should preserve the readable source and make its evidence reproducible.

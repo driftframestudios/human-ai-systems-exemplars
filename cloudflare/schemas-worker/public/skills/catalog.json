@@ -1,0 +1,827 @@
+{
+  "schemaVersion": "1",
+  "repository": "human-ai-systems-exemplars",
+  "sourceRevision": "c1e35fdd57c2193812c2b183955aca15a5020be8",
+  "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+  "schemaRefRole": "canonical_schema_identity",
+  "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+  "publicationStanding": "public_ready",
+  "selectionRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
+  "skills": [
+    {
+      "name": "audit-anthropomorphic-cues",
+      "title": "Audit anthropomorphic cues",
+      "description": "Audits bundled person-like cues in generative-system interfaces and work language, separating human-interpretation evidence, model-output hypotheses, local system functions, and accountable authority. Applies when names, pronouns, avatars, voice, emotional language, agency claims, role metaphors, or tool surfaces may change reliance, delegation, capability expectations, responsibility, or recovery.",
+      "useWhen": "Person-like or social cues may shape how people interpret a generative system, or when a terminology pass risks treating one phrase as the whole intervention.",
+      "produces": "A compact cue ledger plus retain, qualify, separate, disclose, test, or revise decisions that preserve useful warmth while making the acting system and accountable human recoverable.",
+      "publicationStanding": "public_ready",
+      "pagePath": "audit-anthropomorphic-cues/",
+      "projectionPath": "audit-anthropomorphic-cues/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/audit-anthropomorphic-cues/projection.json",
+      "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "sourceRoute": "source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "sourceSha256": "26bc66d0cc0ccee013e34f9dfcbcc1883a595c96523cd29c99d7c0fd71d6f0f0",
+      "dependencies": []
+    },
+    {
+      "name": "bounded-support-routing",
+      "title": "Bounded support routing",
+      "description": "Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.",
+      "useWhen": "A collaborator needs a sharply bounded observation, repair, or recovery contribution while ownership of the wider undertaking stays with its named steward.",
+      "produces": "The receiver can identify the opportunity, focal surface, requested result, action mode, granted actions, held boundaries, expected observation, recovery and return route, and stop condition in one pass.",
+      "publicationStanding": "public_ready",
+      "pagePath": "bounded-support-routing/",
+      "projectionPath": "bounded-support-routing/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/bounded-support-routing/projection.json",
+      "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
+      "sourceRoute": "source/.agents/skills/bounded-support-routing/SKILL.md",
+      "sourceSha256": "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
+          "path": "source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
+          "sha256": "583d5b8996414680416fcc538e124ea3094ce226ba7caed004f836a74d38a5f8"
+        },
+        {
+          "sourcePath": ".agents/skills/bounded-support-routing/references/openai-codex-spark.md",
+          "path": "source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md",
+          "sha256": "d61403946255e22fb5939a4921601dbe32df0e9034c9441f922aae0df539aee1"
+        },
+        {
+          "sourcePath": ".github/workflows/prototype-unit-tests.yml",
+          "path": "source/github/workflows/prototype-unit-tests.yml",
+          "sha256": "c1e0a84e603836ca4f476a6ba70dbc1937336507caeeb496d079745d1c28497d"
+        }
+      ]
+    },
+    {
+      "name": "collaboration-accounting",
+      "title": "Collaboration accounting",
+      "description": "Accounts for decision-changing collaboration observations and routes them into immediate skill creation, existing-skill revision, a named candidate, continued observation, settlement, or retirement. Applies when materially meaningful work exposes a reusable collaboration affordance, an upcoming skill receives new evidence, or skill recursion needs a release decision.",
+      "useWhen": "Material work reveals a reusable collaboration move, friction in an active skill, a promising skill billet, overlapping skill territory, or a repeated meta-level pass whose continuation needs justification.",
+      "produces": "One named route, the evidence that supports it, the smallest useful action, and a return condition that leaves the original work easy to resume.",
+      "publicationStanding": "public_ready",
+      "pagePath": "collaboration-accounting/",
+      "projectionPath": "collaboration-accounting/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/collaboration-accounting/projection.json",
+      "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
+      "sourceRoute": "source/.agents/skills/collaboration-accounting/SKILL.md",
+      "sourceSha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
+          "path": "source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
+          "sha256": "d4aad9c20dcf1fd93db6f2aff4be1a780d793f9c60ca6f9f3dd903b24c0dfeb7"
+        },
+        {
+          "sourcePath": ".agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
+          "path": "source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
+          "sha256": "3f67711bf98fad38f9e746ffcacfe4fd6d467803d3aebb4fd7f0dd4d640d0d80"
+        }
+      ]
+    },
+    {
+      "name": "collaboration-runbook-authoring",
+      "title": "Collaboration runbook authoring",
+      "description": "Converts a settled, repeatable multi-phase collaboration route into a versioned AI-legible runbook with explicit entry, authority, checks, recovery, stop, and handback. Applies when a known procedure spans several source owners, Issues, or bounded support returns and the runbook plus its linked current owners should provide sufficient re-entry orientation.",
+      "useWhen": "The desired receiving state and phase sequence are sufficiently settled, several source or Issue owners participate, and a future AI collaborator should be able to enter, act, verify, recover, and return through the runbook and its linked current owners.",
+      "produces": "One public-possible or internal-only runbook makes the desired state, entry condition, source owners, action modes, ordered phases, evidence gates, recovery, stop condition, and safe handback legible in one pass.",
+      "publicationStanding": "public_ready",
+      "pagePath": "collaboration-runbook-authoring/",
+      "projectionPath": "collaboration-runbook-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/collaboration-runbook-authoring/projection.json",
+      "sourcePath": ".agents/skills/collaboration-runbook-authoring/SKILL.md",
+      "sourceRoute": "source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
+      "sourceSha256": "9e5c5de2277768d2efd1fa639006a7e7179e814fba84f9d1c0ab96f3155bfaf9",
+      "dependencies": []
+    },
+    {
+      "name": "context-canvas-css-ownership",
+      "title": "Context Canvas CSS ownership",
+      "description": "Establishes legible Context Canvas CSS ownership. Applies when expanded.css, cascade diagnosis, selector or token migration, route bundles, first-paint work, or Visual Fidelity Contract mapping enters scope.",
+      "useWhen": "`expanded.css`, cascade behavior, selector naming, first paint, visual-contract mapping, or route-family bundles enter scope.",
+      "produces": "Findable ownership and proportionate evidence for the changed boundary, with reduced unrelated route CSS when reduction is an intended outcome.",
+      "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-css-ownership/",
+      "projectionPath": "context-canvas-css-ownership/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-css-ownership/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-css-ownership/SKILL.md",
+      "sourceRoute": "source/.agents/skills/context-canvas-css-ownership/SKILL.md",
+      "sourceSha256": "089d578df27a47ee4307770714621f078fa2decb4f9dec452bce4dc7e72b3250",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/context-canvas-css-ownership/references/scenarios.md",
+          "path": "source/.agents/skills/context-canvas-css-ownership/references/scenarios.md",
+          "sha256": "d0a0027bf1febe7e0562ffefe10a0d5ddec4bd334be4d16d82ed248d7d46e93c"
+        },
+        {
+          "sourcePath": ".agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
+          "path": "source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
+          "sha256": "28dc40c0534a7c7d914c7528fec4e53e9be50894ef7fed265f09e5bb60498074"
+        }
+      ]
+    },
+    {
+      "name": "context-canvas-surface-reading",
+      "title": "Context Canvas surface reading",
+      "description": "Reads a Context Canvas page or route family as a visitor surface and primary design input. Applies before assessment, planning, or material changes to a Canvas page, embedded instrument, or family relationship.",
+      "useWhen": "Assessment, planning, or material visitor-surface change begins.",
+      "produces": "Route standing, visitor ability, evidence boundary, runtime owners, visual fingerprint, and affected family.",
+      "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-surface-reading/",
+      "projectionPath": "context-canvas-surface-reading/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-surface-reading/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-surface-reading/SKILL.md",
+      "sourceRoute": "source/.agents/skills/context-canvas-surface-reading/SKILL.md",
+      "sourceSha256": "b0861479adc855a26c4c2d7a62d49a436f44a803e3c28a406da28c26b83d7188",
+      "dependencies": []
+    },
+    {
+      "name": "context-canvas-visual-verification",
+      "title": "Context Canvas visual verification",
+      "description": "Selects proportionate visual and browser evidence for Context Canvas visitor-surface changes. Applies when layout, CSS, responsive behavior, interaction state, print, forced colors, or a visible regression needs review.",
+      "useWhen": "A change can alter composition, responsive behavior, interaction state, alternate presentation, or a route's visible fingerprint.",
+      "produces": "The smallest fitting reference or focused check, an interpreted result, coverage and environment limits, and one next receiver.",
+      "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-visual-verification/",
+      "projectionPath": "context-canvas-visual-verification/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-visual-verification/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
+      "sourceRoute": "source/.agents/skills/context-canvas-visual-verification/SKILL.md",
+      "sourceSha256": "3ae5ab182f0b0a0136a016b9c2959d8e0ef8e6cc38b97fd607bd5505125293b0",
+      "dependencies": []
+    },
+    {
+      "name": "contextual-jargon-scan",
+      "title": "Contextual jargon scan",
+      "description": "Classifies potentially specialist or inside wording within a bounded corpus and revises replaceable shorthand into ordinary language. Applies when public, visitor-facing, or cross-team prose may rely on context its reader does not share, including an in-stride review of material already receiving substantive change.",
+      "useWhen": "A bounded public, visitor-facing, cross-team, or durable collaboration surface may carry terms whose meaning depends on local practice.",
+      "produces": "A scoped occurrence map with targeted revisions, intentional retentions, deferred receivers, and a verification signal tied to the changed prose.",
+      "publicationStanding": "public_ready",
+      "pagePath": "contextual-jargon-scan/",
+      "projectionPath": "contextual-jargon-scan/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/contextual-jargon-scan/projection.json",
+      "sourcePath": ".agents/skills/contextual-jargon-scan/SKILL.md",
+      "sourceRoute": "source/.agents/skills/contextual-jargon-scan/SKILL.md",
+      "sourceSha256": "af2d00add7e4916e11b8dfe00e97ce180e901b874c99627069d695baa1d4df11",
+      "dependencies": []
+    },
+    {
+      "name": "conversation-data-visualization",
+      "title": "Conversation data visualization",
+      "description": "Produces bounded exploratory data visuals with recoverable values and calibrated interpretation in a conversation. Applies when a human and AI are examining data together and a figure can change the next question or decision.",
+      "useWhen": "A shared data exploration needs a pattern, comparison, distribution, uncertainty, or relationship made visible before committing to a durable publication.",
+      "produces": "A useful figure or simpler alternative, a concise interpretation, and enough source/value context to continue or correct the exploration.",
+      "publicationStanding": "public_ready",
+      "pagePath": "conversation-data-visualization/",
+      "projectionPath": "conversation-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/conversation-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/conversation-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/conversation-data-visualization/SKILL.md",
+      "sourceSha256": "ede34cac9c90969f33e9ed8c41c04eacc24f36fead71f9d1f33090c997dbdbce",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+          "path": "source/.agents/skills/conversation-data-visualization/references/python-session-rendering.md",
+          "sha256": "af014508db0bee61810a7c36c63c0c8180bc1d1daa6284d1d3a717ec3eea389f"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    },
+    {
+      "name": "cost-and-ownership-analysis",
+      "title": "Cost and ownership analysis",
+      "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+      "useWhen": "Complexity or resource use may change a design, a security-shaped concern needs a precise mechanism, or state crosses validation, computation, rendering, exchange, and filesystem boundaries. Ordinary edits use the smallest relevant call path; a complete function inventory follows the requested scope.",
+      "produces": "A scoped function inventory with interpreted bounds or explicit compositional costs, ownership and exposure findings, fitting repairs and acceptance evidence when authorized, and one clear receiving decision.",
+      "publicationStanding": "public_ready",
+      "pagePath": "cost-and-ownership-analysis/",
+      "projectionPath": "cost-and-ownership-analysis/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/cost-and-ownership-analysis/projection.json",
+      "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "sourceRoute": "source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "sourceSha256": "3f7ec3bbaa7902d3939a9a2cdf2e9c6b14c1dc1b51bd4aea36faac785ce331b9",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+          "path": "source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+          "sha256": "ec7f4d6457fcb88eb407990ba7c26e39e1cb55d0668e81302e9b7a6f0b4d678f"
+        },
+        {
+          "sourcePath": ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+          "path": "source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+          "sha256": "5ab5625b1de8e755fd325ca7b5eec54a365563f7755fa4fa6b95b17ec165db9e"
+        },
+        {
+          "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
+          "path": "source/.agents/skills/practitioner-probe/SKILL.md",
+          "sha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"
+        },
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+          "sha256": "81ac465440bac0b45dc68533ca323f33c228e7fcfd09e4b73a76d77182038fb5"
+        },
+        {
+          "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
+          "path": "source/.agents/skills/collaboration-accounting/SKILL.md",
+          "sha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089"
+        },
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
+        }
+      ]
+    },
+    {
+      "name": "data-visualization-foundations",
+      "title": "Data visualization foundations",
+      "description": "Establishes source-grounded data meaning, reader operations, visual encodings, and evidence companions before rendering. Applies when creating or materially revising a visualization across conversation, web, scientific, or document destinations.",
+      "useWhen": "A visualization's population, measure, comparison, uncertainty, or form needs a decision before production. A settled figure's isolated copy correction can use direct reasoning.",
+      "produces": "One usable form-selection decision with its data basis, scale, companion, supported reading, unresolved condition, and fitting observation.",
+      "publicationStanding": "public_ready",
+      "pagePath": "data-visualization-foundations/",
+      "projectionPath": "data-visualization-foundations/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/data-visualization-foundations/projection.json",
+      "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+      "sourceRoute": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+      "sourceSha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    },
+    {
+      "name": "declarative-skill-authoring",
+      "title": "Declarative skill authoring",
+      "description": "Authors or revises repository skills as declarative, transferable specifications. Applies when skill metadata, What/When/Boundaries contracts, Rule declarations, optional Given/When/Then examples, conditional context, or experiment-to-helper progression needs definition.",
+      "useWhen": "A recurring collaboration affordance deserves a new skill or an existing skill produces routing or workflow friction.",
+      "produces": "A conventional `SKILL.md` with declarative third-person metadata, clear completion, and proportionate progressive disclosure.",
+      "publicationStanding": "public_ready",
+      "pagePath": "declarative-skill-authoring/",
+      "projectionPath": "declarative-skill-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/declarative-skill-authoring/projection.json",
+      "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+      "sourceRoute": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+      "sourceSha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        }
+      ]
+    },
+    {
+      "name": "embedded-prototype-layout",
+      "title": "Embedded prototype layout",
+      "description": "Resolves prototype layout pressure at the actual parent and iframe boundary. Applies when a self-contained instrument works standalone but its embedded controls, tables, focus, shadows or onward route become difficult to use.",
+      "useWhen": "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.",
+      "produces": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.",
+      "publicationStanding": "public_ready",
+      "pagePath": "embedded-prototype-layout/",
+      "projectionPath": "embedded-prototype-layout/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/embedded-prototype-layout/projection.json",
+      "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
+      "sourceRoute": "source/.agents/skills/embedded-prototype-layout/SKILL.md",
+      "sourceSha256": "9f0131fb35b55f717ba4c5af4b1a958bf28a22d90e53a34ac0edfe9e5942ec2a",
+      "dependencies": []
+    },
+    {
+      "name": "evidence-grounded-research-spike",
+      "title": "Evidence-grounded research spike",
+      "description": "Converts current expert writing, official documentation, standards, and practiced experience into a bounded repository decision. Applies when contemporary evidence should change a plan, instruction, architecture boundary, or collaboration method.",
+      "useWhen": "A technical or collaboration decision depends on contemporary external evidence.",
+      "produces": "Supported or bounded decision, remaining uncertainty, and a clear receiving surface.",
+      "publicationStanding": "public_ready",
+      "pagePath": "evidence-grounded-research-spike/",
+      "projectionPath": "evidence-grounded-research-spike/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/evidence-grounded-research-spike/projection.json",
+      "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
+      "sourceRoute": "source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
+      "sourceSha256": "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531",
+      "dependencies": []
+    },
+    {
+      "name": "issue-chain-stewardship",
+      "title": "Issue chain stewardship",
+      "description": "Makes related repository issues legible as a revisable work route while each issue retains its own outcome, authority, and acceptance boundary. Applies when completion, evidence, or a human-held decision in one issue materially changes whether another issue can begin or settle.",
+      "useWhen": "Several issues form a decision-bearing sequence, branch, containment relationship, or return path that an individual issue cannot explain on its own.",
+      "produces": "A receiving collaborator can see why one issue is current, what each issue owns, what passes between them, which terrain runs in parallel, and which event releases the chain.",
+      "publicationStanding": "public_ready",
+      "pagePath": "issue-chain-stewardship/",
+      "projectionPath": "issue-chain-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/issue-chain-stewardship/projection.json",
+      "sourcePath": ".agents/skills/issue-chain-stewardship/SKILL.md",
+      "sourceRoute": "source/.agents/skills/issue-chain-stewardship/SKILL.md",
+      "sourceSha256": "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57",
+      "dependencies": []
+    },
+    {
+      "name": "locator-boundary-stewardship",
+      "title": "Locator-boundary stewardship",
+      "description": "Produces locator-safe public collaboration records while exact gated lineage remains recoverable through stable semantic keys and an authorized resolver. Applies when Issues, pull requests, Threadkeeping, handoffs, or public-history preparation cross publication boundaries.",
+      "useWhen": "A durable Issue, pull request, review, comment, commit message, Threadkeeping record, handoff, or public-history packet carries locators whose retrieval standing differs from the receiving surface.",
+      "produces": "A locator-safe public record with semantic receivers, stable source keys where needed, complete rationale, an explicit cutoff, and a workable re-entry route.",
+      "publicationStanding": "public_ready",
+      "pagePath": "locator-boundary-stewardship/",
+      "projectionPath": "locator-boundary-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/locator-boundary-stewardship/projection.json",
+      "sourcePath": ".agents/skills/locator-boundary-stewardship/SKILL.md",
+      "sourceRoute": "source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+      "sourceSha256": "9a71f2512756ddb1163ef1694effa5ec5b159783b8b8cf46e7aa166884f10723",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
+          "path": "source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
+          "sha256": "c78cb01b4361ec308aa29b2cc989e64cf3125dea0ed4b4981925c4a03de7b9b5"
+        },
+        {
+          "sourcePath": ".agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
+          "path": "source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
+          "sha256": "52a1e6f2963fb7947de5cff61f05d8411f2b76da292308fe2263ac552186597a"
+        }
+      ]
+    },
+    {
+      "name": "pdf-data-visualization",
+      "title": "PDF data visualization",
+      "description": "Produces reproducible data figures for final PDF placement with physical-size legibility, source context, and a usable evidence companion. Applies when a report, paper, handout, or exported page requires reliable vector or mixed vector/raster visualization.",
+      "useWhen": "The receiving artifact is a PDF report, scientific paper, editorial document, handout, or print-oriented export.",
+      "produces": "A reproducible figure and final-document handoff with fitting dimensions, export settings, caption/source, exact values, and an observed or explicitly pending placement check.",
+      "publicationStanding": "public_ready",
+      "pagePath": "pdf-data-visualization/",
+      "projectionPath": "pdf-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/pdf-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/pdf-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/pdf-data-visualization/SKILL.md",
+      "sourceSha256": "3f14b0f0470f57dd2cec04081ce896e4ba7b4061e2087dc53d88db9ae98c005e",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+          "path": "source/.agents/skills/pdf-data-visualization/references/production-and-handoff.md",
+          "sha256": "9054578b289befa31ab9fb0dda7842fe5c3e1fa6dc0e3e480c52306491a39f5e"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+          "path": "source/.agents/skills/web-data-visualization/SKILL.md",
+          "sha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    },
+    {
+      "name": "practitioner-probe",
+      "title": "Practitioner probe",
+      "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
+      "useWhen": "Code appears plausible but shallow, a gap lacks mechanism, or an issue lacks decision-changing evidence.",
+      "produces": "Mechanism, observable evidence, gap utility, instruction yield, transfer boundary, and receiving route.",
+      "publicationStanding": "public_ready",
+      "pagePath": "practitioner-probe/",
+      "projectionPath": "practitioner-probe/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/practitioner-probe/projection.json",
+      "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
+      "sourceRoute": "source/.agents/skills/practitioner-probe/SKILL.md",
+      "sourceSha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",
+      "dependencies": []
+    },
+    {
+      "name": "repository-attribution-stewardship",
+      "title": "Repository attribution stewardship",
+      "description": "Distinguishes and aligns copyright-holder records, citation metadata, contribution credit, copy-local public notices, and bounded machine projections. Applies during repository attribution changes, fork or adaptation guidance, and cold-start attribution orientation. Legal interpretation and rights decisions remain with a named human receiver or qualified counsel.",
+      "useWhen": "Authorship, citation, contribution credit, public HTML attribution, machine-readable metadata, or adaptation lineage could be conflated.",
+      "produces": "A concise carrier map and the smallest repository change that keeps identity, credit, citation, licensing, and publication roles legible.",
+      "publicationStanding": "public_ready",
+      "pagePath": "repository-attribution-stewardship/",
+      "projectionPath": "repository-attribution-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/repository-attribution-stewardship/projection.json",
+      "sourcePath": ".agents/skills/repository-attribution-stewardship/SKILL.md",
+      "sourceRoute": "source/.agents/skills/repository-attribution-stewardship/SKILL.md",
+      "sourceSha256": "6c13f9a54543e973824bc5ce407ae9fe17f8a07d2ef22dccb532f60685c12dfd",
+      "dependencies": []
+    },
+    {
+      "name": "repository-reentry",
+      "title": "Repository re-entry",
+      "description": "Reconstructs current truth across source, Git, GitHub, planning, and threadkeeping. Applies during resumed work, handoffs, status reconciliation, stale-plan review, and branch or pull-request re-entry.",
+      "useWhen": "Multi-cycle work resumes or repository records appear to disagree.",
+      "produces": "One source path, one live collaboration surface, and one bounded re-entry move.",
+      "publicationStanding": "public_ready",
+      "pagePath": "repository-reentry/",
+      "projectionPath": "repository-reentry/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/repository-reentry/projection.json",
+      "sourcePath": ".agents/skills/repository-reentry/SKILL.md",
+      "sourceRoute": "source/.agents/skills/repository-reentry/SKILL.md",
+      "sourceSha256": "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90",
+      "dependencies": []
+    },
+    {
+      "name": "schema-contract-authoring",
+      "title": "Schema contract authoring",
+      "description": "Authors or revises repository schema families as bounded, legible contracts with distinct identity, authority, retrieval, examples, semantic context, dependency closure, and proportional material-use checks. Applies when a schema root, versioned contract, JSON-LD context, example family, publication route, or cross-repository schema projection enters scope.",
+      "useWhen": "A repository adds or revises a schema root, family version, semantic context, example set, publication route, or linked projection from another authority.",
+      "produces": "A versioned contract whose identity, source, retrieval paths, dependency closure, examples, and intended extension points are easy to find.",
+      "publicationStanding": "public_ready",
+      "pagePath": "schema-contract-authoring/",
+      "projectionPath": "schema-contract-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/schema-contract-authoring/projection.json",
+      "sourcePath": ".agents/skills/schema-contract-authoring/SKILL.md",
+      "sourceRoute": "source/.agents/skills/schema-contract-authoring/SKILL.md",
+      "sourceSha256": "46f58b788bd8c04c60fc71ae0dc33e108f9392e98a18e88ef131917500e8dfe9",
+      "dependencies": []
+    },
+    {
+      "name": "secret-boundary-inspection",
+      "title": "Secret-boundary inspection",
+      "description": "Produces a canary-proven, scope-explicit secret-material observation for a repository, exact proposed index, locally available history, or named artifact. Applies before snapshot, publication, delivery, or receiving-repository handoffs where credential-shaped material could travel.",
+      "useWhen": "Source, an exact proposed index, locally available history, or a named generated artifact is preparing to cross a snapshot, publication, delivery, or repository-reception boundary.",
+      "produces": "The detector path proves itself before interpretation; each requested scope returns zero unresolved matches or enters a private response route; and the receipt names what was observed, what it establishes, and where its evidence stops.",
+      "publicationStanding": "public_ready",
+      "pagePath": "secret-boundary-inspection/",
+      "projectionPath": "secret-boundary-inspection/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/secret-boundary-inspection/projection.json",
+      "sourcePath": ".agents/skills/secret-boundary-inspection/SKILL.md",
+      "sourceRoute": "source/.agents/skills/secret-boundary-inspection/SKILL.md",
+      "sourceSha256": "a32b9cac0c88a872657c4bba3f238ea6eb45872174a7ba872e5fc9e58294a7aa",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+          "path": "source/.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+          "sha256": "b62cff0e3502ed6315ef4f34f19c8b41764a437f549398836f0b181e1ed9c39f"
+        },
+        {
+          "sourcePath": "threadkeeping/repository-secret-material-boundary.md",
+          "path": "source/threadkeeping/repository-secret-material-boundary.md",
+          "sha256": "c88ba14ec39549c94c47b59f4d0c0dbf212729cc48e6d43b2fa0fe2fd819425c"
+        },
+        {
+          "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
+          "path": "source/threadkeeping/context-canvas-public-reference-materialization.md",
+          "sha256": "9df756f5f309aacfa6269efb23f5f96308a7fb2a83e6deabc4c194f875f9bc2a"
+        },
+        {
+          "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
+          "path": "source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
+          "sha256": "a236bdb88e8ceb22ca8f9e102ff5421478095f6a7c98e89c26cf51e5fab4b212"
+        }
+      ]
+    },
+    {
+      "name": "semantic-table-design",
+      "title": "Semantic table design",
+      "description": "Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.",
+      "useWhen": "A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.",
+      "produces": "One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation.",
+      "publicationStanding": "public_ready",
+      "pagePath": "semantic-table-design/",
+      "projectionPath": "semantic-table-design/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/semantic-table-design/projection.json",
+      "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+      "sourceRoute": "source/.agents/skills/semantic-table-design/SKILL.md",
+      "sourceSha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        }
+      ]
+    },
+    {
+      "name": "source-authority-mapping",
+      "title": "Source authority mapping",
+      "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion. Applies when repositories, workspaces, mirrors, snapshots, or publication surfaces make authority and lineage difficult to distinguish.",
+      "useWhen": "Source, semantic ownership, schema or contract authority, publication, delivery, snapshotting, or downstream use could be mistaken for one another.",
+      "produces": "A concise lineage map that identifies the authoritative source, typed projections, current receiver, promotion boundary, and re-entry condition.",
+      "publicationStanding": "public_ready",
+      "pagePath": "source-authority-mapping/",
+      "projectionPath": "source-authority-mapping/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/source-authority-mapping/projection.json",
+      "sourcePath": ".agents/skills/source-authority-mapping/SKILL.md",
+      "sourceRoute": "source/.agents/skills/source-authority-mapping/SKILL.md",
+      "sourceSha256": "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",
+      "dependencies": []
+    },
+    {
+      "name": "stateful-artifact-behavior-contracts",
+      "title": "Stateful artifact behavior contracts",
+      "description": "Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.",
+      "useWhen": "An artifact imports, edits, derives, renders, serializes, re-imports, or recovers state across one or more human- and machine-readable surfaces.",
+      "produces": "Accepted state remains usable through its own exchange route, semantic twins agree, the minimum usable state stays explicit, and a rejected candidate leaves the accepted state available with a direct revision route.",
+      "publicationStanding": "public_ready",
+      "pagePath": "stateful-artifact-behavior-contracts/",
+      "projectionPath": "stateful-artifact-behavior-contracts/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/projection.json",
+      "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+      "sourceRoute": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+      "sourceSha256": "81ac465440bac0b45dc68533ca323f33c228e7fcfd09e4b73a76d77182038fb5",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
+        },
+        {
+          "sourcePath": "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+          "path": "source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
+          "sha256": "1f353c93d47eff19a04fa179ef2c271959c94c4a9409c39ca47c05504e29e8a7"
+        },
+        {
+          "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+          "path": "source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+          "sha256": "0112e77e4e73710d8b1511193d9ef6d196d57af999860b843bcaf091a7c7a3ec"
+        },
+        {
+          "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+          "path": "source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+          "sha256": "93ff0569df00ba4f555116564c75ed16e7d7633960c50cf4c14053d4c202d7c9"
+        }
+      ]
+    },
+    {
+      "name": "uv-backed-python-execution",
+      "title": "uv-backed Python execution",
+      "description": "Resolves and runs repository-declared Python checks through uv while preserving the host's base Python installation. Applies when a required Python version, existing uv lock, isolated dependency environment, or unwritable default uv cache must be reconciled before validation.",
+      "useWhen": "The repository authorizes `uv` and its Python requirement, lockfile, hosted workflow, existing environment, or local base interpreter leaves the validation runtime unclear.",
+      "produces": "The named check runs through an identified `uv` and Python combination; the return says whether dependencies came from a checked lockfile or were resolved for this run; tracked source remains legible; and any unresolved environment condition has one owner and a clear trigger for another attempt. This contract owns repository-declared Python checks. Conversation-only figures default to an isolated session runtime and can opt into repository-version matching or the documented project environment. Their rendering preference leaves the source-owned runtime, lock and evidence requirements for repository checks intact.",
+      "publicationStanding": "public_ready",
+      "pagePath": "uv-backed-python-execution/",
+      "projectionPath": "uv-backed-python-execution/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/uv-backed-python-execution/projection.json",
+      "sourcePath": ".agents/skills/uv-backed-python-execution/SKILL.md",
+      "sourceRoute": "source/.agents/skills/uv-backed-python-execution/SKILL.md",
+      "sourceSha256": "53bded8c1986b748cf88ba5ca28b23c4595d28c062a50da761fdb80884e73511",
+      "dependencies": []
+    },
+    {
+      "name": "web-data-visualization",
+      "title": "Web data visualization",
+      "description": "Integrates source-grounded editorial or scientific visualizations into existing web surfaces with semantic companions and coherent view state. Applies to static charts, SVG galleries, and coordinated interactive views whose delivery, responsive behavior, or export affects interpretation.",
+      "useWhen": "A website or digital instrument needs a new or materially revised static figure, scientific plot, gallery, or coordinated set of views.",
+      "produces": "An integrated, inspectable figure or view family with usable static reading, intentional enhancement, and evidence for the changed behavior.",
+      "publicationStanding": "public_ready",
+      "pagePath": "web-data-visualization/",
+      "projectionPath": "web-data-visualization/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/web-data-visualization/projection.json",
+      "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+      "sourceRoute": "source/.agents/skills/web-data-visualization/SKILL.md",
+      "sourceSha256": "9535cf8e5b5e2589d4e93eb9b44bd528a71272b07d0537db456879c7691e402a",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+          "path": "source/.agents/skills/data-visualization-foundations/SKILL.md",
+          "sha256": "724752060330dd5f5ee04832e2c60e3a6e1c251166aa646d924c0256f863c8e2"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md",
+          "sha256": "1c6655576827f4ab88f451cf8f493a3f867c49b691f2ed44a3073eb65840f050"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/atlas-exercises.md",
+          "sha256": "9e372e463c6130a75006e87778c0623b98ee15d90074d25eae279329eef01855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+          "sha256": "ce916974c08de12b5cb2308a148f5328a1630cfda16e682f0e5b356614788199"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/form-and-data-contract.md",
+          "sha256": "1ce69fad425d830cd22e9cb7d30a3bef791fda87db295405ea8a2b1d11862855"
+        },
+        {
+          "sourcePath": ".agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "path": "source/.agents/skills/data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md",
+          "sha256": "1afb46800e541625278b520f1bbedb9961d77c1f813e92b30e0a52eccad2343b"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
+          "sha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c"
+        },
+        {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+          "path": "source/.agents/skills/semantic-table-design/SKILL.md",
+          "sha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "be199d22d30bd4568c2e1a05ab19d1060f5c0d717cee1c57da793ec97b6241a2"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "path": "source/.agents/skills/web-data-visualization/references/svg-and-coordinated-views.md",
+          "sha256": "c04481afd689aad80f196a532efff78aec3165d0972fcebd50f0b4d1999eafa5"
+        }
+      ]
+    }
+  ],
+  "supportingSources": [
+    {
+      "sourcePath": "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+      "path": "source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+      "sha256": "d9145467ae22bc251bd15c788c628de22b175f0cb2666d63c91cc6c8577c1835"
+    }
+  ]
+}

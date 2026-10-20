@@ -1,0 +1,543 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:local-materialization-receipt:v0.1",
+  "title": "Repository handoff local materialization receipt v0.1",
+  "description": "A deterministic foundation-policy receipt for a create-absent-only local installation. Exact-source and receiving-owner-current dispositions remain stable across owner edits and no-op reruns.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactType",
+    "schemaAuthority",
+    "foundation",
+    "profile",
+    "selectedModules",
+    "entries",
+    "summary",
+    "checks",
+    "coverageBoundary",
+    "recovery",
+    "nextOwnerAction",
+    "operationBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schema/local-materialization-receipt.schema.v0.1.json"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "artifactType": {
+      "const": "repository_handoff_foundation_install_receipt"
+    },
+    "schemaAuthority": {
+      "$ref": "#/$defs/schemaAuthority"
+    },
+    "key": {
+      "$ref": "#/$defs/stableKey"
+    },
+    "foundation": {
+      "$ref": "#/$defs/foundationReference"
+    },
+    "profile": {
+      "$ref": "#/$defs/profileReference"
+    },
+    "technologyProfile": {
+      "$ref": "#/$defs/technologyProfileReference"
+    },
+    "sourceDigest": {
+      "$ref": "#/$defs/sourceDigest"
+    },
+    "issueSeeds": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/issueSeedReference"
+      }
+    },
+    "selectedModules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/materializedEntry"
+      }
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "coverageBoundary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "recovery": {
+      "$ref": "#/$defs/recovery"
+    },
+    "nextOwnerAction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "operationBoundary": {
+      "$ref": "#/$defs/operationBoundary"
+    },
+    "projection": {
+      "$ref": "#/$defs/projection"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "type": "object",
+            "properties": {
+              "sourceStanding": {
+                "const": "source_received"
+              }
+            },
+            "required": [
+              "sourceStanding"
+            ]
+          }
+        },
+        "required": [
+          "profile"
+        ]
+      },
+      "then": {
+        "required": [
+          "technologyProfile",
+          "sourceDigest"
+        ],
+        "properties": {
+          "technologyProfile": {
+            "$ref": "#/$defs/technologyProfileReference"
+          },
+          "sourceDigest": {
+            "$ref": "#/$defs/sourceDigest"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "technologyProfile": false,
+          "sourceDigest": false
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?![^/]{256})(?!.*\\/[^/]{256})(?!.*(?:^|\\/)(?:\\.|\\.\\.)(?:\\/|$))(?!.*(?:^|\\/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.[^/]*)?(?:\\/|$))(?!.*\\.(?:\\/|$))[A-Za-z0-9._-]+(?:\\/[A-Za-z0-9._-]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "schemaAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "const": "urn:repository-handoff-foundation:schema:local-materialization-receipt:v0.1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "foundationReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "version",
+        "manifestSha256"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "version": {
+          "$ref": "#/$defs/semanticVersion"
+        },
+        "manifestSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "profileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "sha256",
+        "sourceStanding"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sourceStanding": {
+          "enum": [
+            "source_awaiting",
+            "source_received"
+          ]
+        }
+      }
+    },
+    "technologyProfileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "version",
+        "sha256"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "version": {
+          "$ref": "#/$defs/semanticVersion"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sourceDigest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "scope",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "value": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "issueSeedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "sha256"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "materializedEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "moduleKey",
+        "targetPath",
+        "ownership",
+        "verificationPolicy",
+        "sourceSha256",
+        "disposition"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "moduleKey": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "ownership": {
+          "enum": [
+            "foundation_generator",
+            "receiving_owner"
+          ]
+        },
+        "verificationPolicy": {
+          "enum": [
+            "exact_bytes",
+            "present_regular_file"
+          ]
+        },
+        "sourceSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "disposition": {
+          "enum": [
+            "exact_source",
+            "receiving_owner_current"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ownership": {
+                "const": "foundation_generator"
+              }
+            },
+            "required": [
+              "ownership"
+            ]
+          },
+          "then": {
+            "properties": {
+              "verificationPolicy": {
+                "const": "exact_bytes"
+              },
+              "disposition": {
+                "const": "exact_source"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "verificationPolicy": {
+                "const": "present_regular_file"
+              }
+            },
+            "required": [
+              "verificationPolicy"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ownership": {
+                "const": "receiving_owner"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "receiving_owner_current"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ownership": {
+                "const": "receiving_owner"
+              },
+              "verificationPolicy": {
+                "const": "present_regular_file"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The materializer recomputes these counts from entries: selected equals exactSource plus receivingOwnerCurrent, and every selected entry appears exactly once.",
+      "required": [
+        "selected",
+        "exactSource",
+        "receivingOwnerCurrent"
+      ],
+      "properties": {
+        "selected": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 512
+        },
+        "exactSource": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 512
+        },
+        "receivingOwnerCurrent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 512
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "result",
+        "establishes"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "result": {
+          "enum": [
+            "passed",
+            "passed_with_receiving_owner_state"
+          ]
+        },
+        "establishes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "knownGoodCoordinate",
+        "rule"
+      ],
+      "properties": {
+        "strategy": {
+          "const": "digest_and_identity_guarded_rollback"
+        },
+        "knownGoodCoordinate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "manifestSha256",
+            "profileSha256"
+          ],
+          "properties": {
+            "manifestSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "profileSha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "operationBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutationPolicy",
+        "localFilesystemOnly",
+        "gitMutation",
+        "githubMutation",
+        "networkMutation"
+      ],
+      "properties": {
+        "mutationPolicy": {
+          "const": "create_absent_only"
+        },
+        "localFilesystemOnly": {
+          "const": true
+        },
+        "gitMutation": {
+          "const": "none"
+        },
+        "githubMutation": {
+          "const": "none"
+        },
+        "networkMutation": {
+          "const": "none"
+        }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "jsonSource",
+        "yamlTarget",
+        "mode",
+        "derivationNote"
+      ],
+      "properties": {
+        "authority": {
+          "const": "json"
+        },
+        "jsonSource": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "yamlTarget": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "mode": {
+          "const": "exact_json_bytes"
+        },
+        "derivationNote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

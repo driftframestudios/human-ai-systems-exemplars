@@ -1,0 +1,194 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import test from "node:test";
+
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
+const repositoryRoot = resolve(import.meta.dirname, "../..");
+const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
+const contextRoot = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1",
+);
+const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
+
+const artifacts = [
+  {
+    id: "upstream-revision-loop",
+    name: "Upstream Revision Loop",
+    currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
+    historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+    historicalDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
+    currentDigest: "af79684032787d47655c8e01a162f1a34f405848f8d63b34502f93c4ffaa8d36",
+    stateContract: "upstream-revision-loop-state.v0.1",
+    apiName: "upstreamRevisionLoop",
+    promptId: "aiPromptOut",
+    loops: ["repository-reentry", "public-release"],
+    skills: [
+      [".agents/skills/repository-reentry/SKILL.md", "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90"],
+      [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+      [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"],
+    ],
+  },
+  {
+    id: "recovery-routing-atlas",
+    name: "Recovery Routing Atlas",
+    currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+    historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+    historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
+    currentDigest: "0c3bdc319ce5b8e830d8c1328c7ea3bedc246a3f407d6db7f9c64f60cd8d8475",
+    stateContract: "recovery-routing-atlas-state.v0.1",
+    apiName: "recoveryRoutingAtlas",
+    promptId: "promptBox",
+    loops: ["repository-reentry", "skill-from-receiving-use"],
+    skills: [
+      [".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+      [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
+      [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"],
+    ],
+  },
+];
+
+const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+
+async function json(path) {
+  return JSON.parse(await readFile(path, "utf8"));
+}
+
+function staticPrompt(html, id) {
+  const match = html.match(new RegExp(`<pre id="${id}"[^>]*>([\\s\\S]*?)<\\/pre>`, "u"));
+  assert.ok(match, `${id} carries an authored plain Prompt Capsule baseline`);
+  return match[1]
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'")
+    .replaceAll("&amp;", "&");
+}
+
+for (const artifact of artifacts) {
+  test(`${artifact.name} v0.1.5 is one byte-identical current source`, async () => {
+    const [source, projection, historical, historicalProjection, coreManifest, contextManifest] = await Promise.all([
+      readFile(resolve(coreRoot, artifact.currentFile)),
+      readFile(resolve(contextRoot, artifact.currentFile)),
+      readFile(resolve(coreRoot, artifact.historicalFile)),
+      readFile(resolve(contextRoot, artifact.historicalFile)),
+      json(resolve(coreRoot, manifestName)),
+      json(resolve(contextRoot, manifestName)),
+    ]);
+    const current = coreManifest.prototypes.find(({ id }) => id === artifact.id);
+    const contextCurrent = contextManifest.prototypes.find(({ id }) => id === artifact.id);
+
+    assert.deepEqual([current.file, current.version], [artifact.currentFile, "0.1.5"]);
+    assert.deepEqual([contextCurrent.file, contextCurrent.version], [artifact.currentFile, "0.1.5"]);
+    assert.equal(current.previous.at(-1), artifact.historicalFile);
+    assert.equal(contextCurrent.previous.at(-1), artifact.historicalFile);
+    assert.equal(current.size_bytes, source.byteLength);
+    assert.equal(contextCurrent.size_bytes, projection.byteLength);
+    assert.ok(source.equals(projection), "current source and Context projection agree byte for byte");
+    assert.ok(historical.equals(historicalProjection), "v0.1.4 remains the byte-identical historical pair");
+    assert.equal(sha256(source), artifact.currentDigest);
+    assert.equal(sha256(historical), artifact.historicalDigest);
+  });
+
+  test(`${artifact.name} carries the complete Prompt Capsule source contract`, async () => {
+    const [html, loopRegistry, routeManifest] = await Promise.all([
+      readFile(resolve(coreRoot, artifact.currentFile), "utf8"),
+      readFile(resolve(repositoryRoot, "schemas/collaboration/index.html"), "utf8"),
+      json(resolve(coreRoot, "public-iframe-route-manifest-v1.json")),
+    ]);
+    const plain = staticPrompt(html, artifact.promptId);
+    const route = routeManifest.routes.find(({ id }) => id === artifact.id);
+
+    assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
+    assert.ok(html.includes(`const PROMPT_CAPSULE_STATE_CONTRACT = '${artifact.stateContract}';`));
+    assert.match(html, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
+    assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
+    assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
+    assert.match(html, /<noscript>[\s\S]*?complete default plain Markdown remains available/u);
+    assert.ok(html.includes(`window.${artifact.apiName} = Object.freeze(`));
+
+    const orderedSections = [
+      "## Purpose and target",
+      "## Relevant context and inputs",
+      "## Working state",
+      "## Boundaries and human-held decisions",
+      "## Requested return",
+      "## Related loops",
+      "## Evidence and recovery",
+    ];
+    assert.match(plain, new RegExp(`^# Prompt Capsule: ${artifact.name}\\n`, "u"));
+    assert.match(plain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(plain, /- View: `plain`/u);
+    assert.doesNotMatch(plain, /## Skill assistance/u);
+    if (artifact.id === "upstream-revision-loop") {
+      assert.match(
+        plain,
+        /When options use probabilities, name the outcome or condition each probability describes before assigning a value\./u,
+      );
+    }
+    if (artifact.id === "recovery-routing-atlas") {
+      assert.equal(
+        [...plain.matchAll(/^### .+ \(`geom-[^)]+`\)$/gmu)].length,
+        19,
+        "the script-free Recovery Routing capsule carries all 19 geometries",
+      );
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?html \{ scroll-behavior: auto; \}/u);
+      assert.match(html, /els\.atlasSvg\.setAttribute\('viewBox', `0 0 \$\{w\} \$\{h\}`\);/u);
+      assert.match(html, /The prototype’s diagrams and interface are local expressions of that recovery-routing model\./u);
+      assert.match(html, /directs each strain cue toward a named restored state\./u);
+      assert.doesNotMatch(html, /No external visual reference is used in this prototype\./u);
+    }
+    assert.ok(
+      orderedSections.every((section, index) => index === 0 || plain.indexOf(orderedSections[index - 1]) < plain.indexOf(section)),
+      "the authored baseline keeps the contract-defined section order",
+    );
+    for (const loopId of artifact.loops) {
+      assert.match(html, new RegExp(`data-related-loop-id="${loopId}"`, "u"));
+      assert.match(loopRegistry, new RegExp(`id="${loopId}"`, "u"));
+    }
+
+    assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, "0.1.5"]);
+    assert.deepEqual(route.carrier_policy, {
+      sandbox_tokens: [
+        "allow-downloads",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox",
+        "allow-scripts",
+      ],
+      permissions_policy: ["clipboard-write"],
+      held_capabilities: [],
+    });
+  });
+
+  test(`${artifact.name} pins the exact public skills it offers`, async () => {
+    const html = await readFile(resolve(coreRoot, artifact.currentFile), "utf8");
+    const skillRevision = "efb94fcf70a80630d8edd289697341699b966f00";
+
+    assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION = '${skillRevision}';`, "u"));
+    for (const [path, expectedDigest] of artifact.skills) {
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
+      assert.ok(html.includes(`path: '${path}'`));
+      assert.ok(html.includes(`sha256: '${expectedDigest}'`));
+    }
+  });
+}
+
+test("Recovery Routing and Revision advances the current inventory as one family", async () => {
+  const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Upstream Revision Loop v0\.1\.5/u);
+  assert.match(currentInventory, /Recovery Routing Atlas v0\.1\.5/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
+});

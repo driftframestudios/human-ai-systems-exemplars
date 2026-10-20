@@ -1,0 +1,90 @@
+{
+  "id": "context-canvas.prototype-library.v0.1",
+  "title": "Context Canvas Prototype Library",
+  "version": "0.1",
+  "status": "context_canvas_owned_library",
+  "created": "2026-08-19",
+  "owningSurface": "context-canvas-project-surface/context-canvas",
+  "collectionPathBase": "manifest-directory",
+  "publicationPosture": "internal-reference-only",
+  "localManifestSchema": "prototype-local-manifest.schema.json",
+  "validator": "validate-prototype-manifests.mjs",
+  "contract": "Prototype implementations under this directory are owned by the Context Canvas surface. Source packages remain authoritative for reusable contracts; Context-owned projections may evolve their local vocabulary, routing, and interactions for the standalone digital experience.",
+  "routingRules": [
+    "Context Canvas pages should link to prototypes/... rather than sibling package paths.",
+    "Prototype pack indexes should use same-directory or child-directory links for files inside the local pack.",
+    "Every local pack should keep a context-canvas-local-manifest-v0.1.json file with source authority, source path, local path, entry file, and divergence status.",
+    "The library index is an internal reference surface. Visitors enter prototypes from the Context Canvas page that gives each one decision context."
+  ],
+  "collections": [
+    {
+      "id": "cc.core-architectures.chimeric-pack.v0.1",
+      "title": "Core Architectures Chimeric Prototype Pack",
+      "localPath": "core-architectures/chimeric-pack-v0.1/",
+      "entryFile": "core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.4.html",
+      "localManifest": "core-architectures/chimeric-pack-v0.1/context-canvas-local-manifest-v0.1.json",
+      "sourcePath": "../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
+      "canonicalStatus": "adapted_copy",
+      "usedByPages": [
+        "../ai-systems.html",
+        "../concept-nursery.html",
+        "../core-architectures-orientation-index.html",
+        "../cross-platform-collaboration-cycle.html",
+        "../debriefs.html",
+        "../spatial-capture-collaborative-memory.html",
+        "../exemplar-index-landing.html",
+        "../fmi-lims-eln-replatforming.html",
+        "../grammar-family.html",
+        "../planning-surface.html",
+        "../poda.html",
+        "../who-to-believe-reviews-platform.html"
+      ]
+    },
+    {
+      "id": "cc.narrative-architectures.narrative-capsule-composer.v0.1",
+      "title": "Narrative Capsule Composer",
+      "localPath": "narrative-architectures/narrative-capsule-composer/",
+      "entryFile": "narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html",
+      "localManifest": "narrative-architectures/narrative-capsule-composer/context-canvas-local-manifest-v0.1.json",
+      "sourcePath": "narrative-architectures/narrative-capsule-composer/",
+      "canonicalStatus": "context_canvas_owned_projection",
+      "usedByPages": [
+        "../ai-systems.html"
+      ]
+    },
+    {
+      "id": "cc.narrative-architectures.technology-fit-sampling-tableau.v0.2",
+      "title": "Technology Fit Sampling Tableau",
+      "localPath": "narrative-architectures/technology-fit-sampling-tableau/",
+      "entryFile": "narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "localManifest": "narrative-architectures/technology-fit-sampling-tableau/context-canvas-local-manifest-v0.1.json",
+      "sourcePath": "narrative-architectures/technology-fit-sampling-tableau/",
+      "canonicalStatus": "context_canvas_owned_projection",
+      "usedByPages": [
+        "../planning-surface.html"
+      ]
+    },
+    {
+      "id": "cc.narrative-architectures.semantic-sampling-tableau.v0.1",
+      "title": "Narrative Sampling Tableau",
+      "localPath": "narrative-architectures/semantic-sampling-tableau/",
+      "entryFile": "narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+      "localManifest": "narrative-architectures/semantic-sampling-tableau/context-canvas-local-manifest-v0.1.json",
+      "sourcePath": "narrative-architectures/semantic-sampling-tableau/",
+      "canonicalStatus": "context_canvas_owned_experimental_projection",
+      "usedByPages": []
+    },
+    {
+      "id": "cc.narrative-architectures.threadkeeping-ledger.v0.1",
+      "title": "Threadkeeping Ledger",
+      "localPath": "narrative-architectures/threadkeeping-ledger/",
+      "entryFile": "narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "localManifest": "narrative-architectures/threadkeeping-ledger/context-canvas-local-manifest-v0.1.json",
+      "sourcePath": "narrative-architectures/threadkeeping-ledger/",
+      "canonicalStatus": "context_canvas_owned_projection",
+      "usedByPages": [
+        "../metadata-blocks.html"
+      ]
+    }
+  ]
+}

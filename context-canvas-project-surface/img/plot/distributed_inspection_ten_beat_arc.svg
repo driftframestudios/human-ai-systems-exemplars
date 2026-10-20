@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1180" role="img" aria-labelledby="ten-beat-title ten-beat-desc">
+  <title id="ten-beat-title">Two source-native architecture tracks carry ten consequential beats</title>
+  <desc id="ten-beat-desc">The upper Solution Architecture track presents five beats from Situation through Consequence. The lower Implementation Architecture track presents five build-and-recovery beats in the same order. Every card contains a Then condition and a Now design response. Numbered circle markers distinguish Solution beats and numbered square markers distinguish Implementation beats, so the tracks remain legible without color.</desc>
+  <defs>
+    <pattern id="ten-beat-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#8db4ef" stroke-width="1" opacity=".2"/>
+      <circle cx="1" cy="1" r="1.2" fill="#f2ff67" opacity=".24"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .title{font-size:39px;font-weight:840;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:840;letter-spacing:1.45px}.track-title{font-size:25px;font-weight:840}
+      .beat-title{font-size:20px;font-weight:820}.label{font-size:12px;font-weight:850;letter-spacing:1.25px}
+      .body{font-size:15px;font-weight:610}.small{font-size:13px;font-weight:640}.marker-text{font-size:14px;font-weight:900}
+      .ink{fill:#141c5b}.blue{fill:#183a78}.muted{fill:#566783}.paper{fill:#fff7f4}.acid{fill:#f2ff67}
+      .rose-card{fill:#fff7f4;stroke:#141c5b;stroke-width:2}.dark-card{fill:#17345f;stroke:#8db4ef;stroke-width:2}
+      .then-rule{stroke-dasharray:6 5;stroke-width:2}.now-rule{stroke-width:4}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1180" fill="#f5eee4"/>
+  <rect x="28" y="28" width="1544" height="1124" rx="34" fill="#fffdf8" stroke="#141c5b" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="88" class="title ink">Two architecture tracks · ten consequential beats</text>
+    <text x="72" y="123" class="subtitle muted">The source keeps Then and Now visible at every step: operating intent above, build and recovery below.</text>
+
+    <g role="group" aria-labelledby="ten-beat-legend-title" transform="translate(1180 62)">
+      <title id="ten-beat-legend-title">Legend distinguishing Solution beats with circles and Implementation beats with squares</title>
+      <rect width="340" height="72" rx="15" fill="#fff7f4" stroke="#141c5b" stroke-width="2"/>
+      <circle cx="28" cy="25" r="11" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+      <text x="48" y="30" class="small ink">Circle + S = Solution beat</text>
+      <rect x="17" y="43" width="22" height="22" fill="#17345f" stroke="#141c5b" stroke-width="2"/>
+      <text x="48" y="59" class="small ink">Square + I = Implementation beat</text>
+    </g>
+
+    <g role="group" aria-labelledby="solution-track-title">
+      <title id="solution-track-title">Solution Architecture track: five beats explain why the harness takes this shape</title>
+      <rect x="72" y="166" width="1456" height="408" rx="26" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+      <text x="98" y="202" class="eyebrow blue">SOLUTION ARCHITECTURE · PURPOSE + CHANGED WORK</text>
+      <text x="98" y="235" class="track-title ink">Why the harness takes this shape</text>
+
+      <path d="M356 390H376V382L392 394 376 406V398H356Z" fill="#fa7065" aria-hidden="true"/>
+      <path d="M650 390H670V382L686 394 670 406V398H650Z" fill="#fa7065" aria-hidden="true"/>
+      <path d="M944 390H964V382L980 394 964 406V398H944Z" fill="#fa7065" aria-hidden="true"/>
+      <path d="M1238 390H1258V382L1274 394 1258 406V398H1238Z" fill="#fa7065" aria-hidden="true"/>
+
+      <g transform="translate(98 266)" role="group" aria-labelledby="solution-situation-title">
+        <title id="solution-situation-title">Solution beat 1, Situation: assembled tools become a first-class inspection record</title>
+        <rect class="rose-card" width="258" height="270" rx="20"/>
+        <circle cx="28" cy="29" r="17" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+        <text x="28" y="34" text-anchor="middle" class="marker-text ink">S1</text>
+        <text x="56" y="35" class="beat-title ink">Situation</text>
+        <text x="20" y="75" class="label blue">THEN · ASSEMBLED TOOLS</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body ink"><tspan x="20" dy="0">A form and spreadsheet</tspan><tspan x="20" dy="21">capture an inspection,</tspan><tspan x="20" dy="21">barely.</tspan></text>
+        <text x="20" y="184" class="label blue">NOW · DOMAIN OBJECT</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#2855f3"/>
+        <text x="20" y="220" class="body ink"><tspan x="20" dy="0">A native app owns the</tspan><tspan x="20" dy="21">inspection as a first-class</tspan><tspan x="20" dy="21">record.</tspan></text>
+      </g>
+
+      <g transform="translate(392 266)" role="group" aria-labelledby="solution-tension-title">
+        <title id="solution-tension-title">Solution beat 2, Tension: friction and disputes become durable offline work</title>
+        <rect class="rose-card" width="258" height="270" rx="20"/>
+        <circle cx="28" cy="29" r="17" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+        <text x="28" y="34" text-anchor="middle" class="marker-text ink">S2</text>
+        <text x="56" y="35" class="beat-title ink">Tension</text>
+        <text x="20" y="75" class="label blue">THEN · FRICTION</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body ink"><tspan x="20" dy="0">Signal gaps, re-keying,</tspan><tspan x="20" dy="21">and variable grading create</tspan><tspan x="20" dy="21">disputes.</tspan></text>
+        <text x="20" y="184" class="label blue">NOW · DURABLE WORK</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#2855f3"/>
+        <text x="20" y="220" class="body ink"><tspan x="20" dy="0">Offline capture and assisted</tspan><tspan x="20" dy="21">rollup preserve work and</tspan><tspan x="20" dy="21">judgment.</tspan></text>
+      </g>
+
+      <g transform="translate(686 266)" role="group" aria-labelledby="solution-turn-title">
+        <title id="solution-turn-title">Solution beat 3, Turn: a bolted stack becomes one shared inspection-record contract</title>
+        <rect class="rose-card" width="258" height="270" rx="20"/>
+        <circle cx="28" cy="29" r="17" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+        <text x="28" y="34" text-anchor="middle" class="marker-text ink">S3</text>
+        <text x="56" y="35" class="beat-title ink">Turn</text>
+        <text x="20" y="75" class="label blue">THEN · BOLTED STACK</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body ink"><tspan x="20" dy="0">Each repair adds another</tspan><tspan x="20" dy="21">tool and another fragile</tspan><tspan x="20" dy="21">handoff.</tspan></text>
+        <text x="20" y="184" class="label blue">NOW · SHARED UNIT</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#2855f3"/>
+        <text x="20" y="220" class="body ink"><tspan x="20" dy="0">Every capability strengthens</tspan><tspan x="20" dy="21">one inspection-record</tspan><tspan x="20" dy="21">contract.</tspan></text>
+      </g>
+
+      <g transform="translate(980 266)" role="group" aria-labelledby="solution-resolution-title">
+        <title id="solution-resolution-title">Solution beat 4, Resolution: review by default becomes an exception route</title>
+        <rect class="rose-card" width="258" height="270" rx="20"/>
+        <circle cx="28" cy="29" r="17" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+        <text x="28" y="34" text-anchor="middle" class="marker-text ink">S4</text>
+        <text x="56" y="35" class="beat-title ink">Resolution</text>
+        <text x="20" y="75" class="label blue">THEN · REVIEW AS DEFAULT</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body ink"><tspan x="20" dy="0">The operation compensates</tspan><tspan x="20" dy="21">with broader manual</tspan><tspan x="20" dy="21">review.</tspan></text>
+        <text x="20" y="184" class="label blue">NOW · EXCEPTION ROUTE</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#2855f3"/>
+        <text x="20" y="220" class="body ink"><tspan x="20" dy="0">Signed envelopes settle the</tspan><tspan x="20" dy="21">ordinary path; exceptions</tspan><tspan x="20" dy="21">reach people.</tspan></text>
+      </g>
+
+      <g transform="translate(1274 266)" role="group" aria-labelledby="solution-consequence-title">
+        <title id="solution-consequence-title">Solution beat 5, Consequence: scale load becomes a measurable marginal-cost curve</title>
+        <rect class="rose-card" width="228" height="270" rx="20"/>
+        <circle cx="28" cy="29" r="17" fill="#ffd3d0" stroke="#141c5b" stroke-width="2"/>
+        <text x="28" y="34" text-anchor="middle" class="marker-text ink">S5</text>
+        <text x="56" y="35" class="beat-title ink">Consequence</text>
+        <text x="20" y="75" class="label blue">THEN · SCALE LOAD</text>
+        <line x1="20" y1="85" x2="208" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body ink"><tspan x="20" dy="0">More inspections multiply</tspan><tspan x="20" dy="21">cost and dispute exposure.</tspan></text>
+        <text x="20" y="184" class="label blue">NOW · MEASURED CURVE</text>
+        <line x1="20" y1="194" x2="208" y2="194" class="now-rule" stroke="#2855f3"/>
+        <text x="20" y="220" class="body ink"><tspan x="20" dy="0">A shared platform creates</tspan><tspan x="20" dy="21">the conditions for lower</tspan><tspan x="20" dy="21">marginal cost.</tspan></text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="implementation-track-title">
+      <title id="implementation-track-title">Implementation Architecture track: five beats make the shape buildable and recoverable</title>
+      <rect x="72" y="602" width="1456" height="408" rx="10" fill="#0f2147" stroke="#141c5b" stroke-width="2"/>
+      <rect x="72" y="602" width="1456" height="408" rx="10" fill="url(#ten-beat-grid)"/>
+      <text x="98" y="638" class="eyebrow" fill="#cfe2ff">IMPLEMENTATION ARCHITECTURE · STATE + AUTHORITY + RECOVERY</text>
+      <text x="98" y="671" class="track-title paper">How the shape becomes buildable and recoverable</text>
+
+      <path d="M356 826H376V818L392 830 376 842V834H356Z" fill="#f2ff67" aria-hidden="true"/>
+      <path d="M650 826H670V818L686 830 670 842V834H650Z" fill="#f2ff67" aria-hidden="true"/>
+      <path d="M944 826H964V818L980 830 964 842V834H944Z" fill="#f2ff67" aria-hidden="true"/>
+      <path d="M1238 826H1258V818L1274 830 1258 842V834H1238Z" fill="#f2ff67" aria-hidden="true"/>
+
+      <g transform="translate(98 702)" role="group" aria-labelledby="implementation-situation-title">
+        <title id="implementation-situation-title">Implementation beat 1, Situation: handwritten rows become typed identity</title>
+        <rect class="dark-card" width="258" height="270" rx="6"/>
+        <rect x="11" y="12" width="34" height="34" fill="#f2ff67" stroke="#fff7f4" stroke-width="2"/>
+        <text x="28" y="35" text-anchor="middle" class="marker-text ink">I1</text>
+        <text x="56" y="36" class="beat-title paper">Situation</text>
+        <text x="20" y="75" class="label" fill="#cfe2ff">THEN · ROWS BY HAND</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body paper"><tspan x="20" dy="0">Spreadsheet rows rely on</tspan><tspan x="20" dy="21">manual keys and fragile</tspan><tspan x="20" dy="21">identity.</tspan></text>
+        <text x="20" y="184" class="label acid">NOW · TYPED IDENTITY</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#f2ff67"/>
+        <text x="20" y="220" class="body paper"><tspan x="20" dy="0">A typed record begins with</tspan><tspan x="20" dy="21">a stable client-generated</tspan><tspan x="20" dy="21">identifier.</tspan></text>
+      </g>
+
+      <g transform="translate(392 702)" role="group" aria-labelledby="implementation-tension-title">
+        <title id="implementation-tension-title">Implementation beat 2, Tension: signal loss becomes local durability</title>
+        <rect class="dark-card" width="258" height="270" rx="6"/>
+        <rect x="11" y="12" width="34" height="34" fill="#f2ff67" stroke="#fff7f4" stroke-width="2"/>
+        <text x="28" y="35" text-anchor="middle" class="marker-text ink">I2</text>
+        <text x="56" y="36" class="beat-title paper">Tension</text>
+        <text x="20" y="75" class="label" fill="#cfe2ff">THEN · SIGNAL LOSS</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body paper"><tspan x="20" dy="0">A connection break can</tspan><tspan x="20" dy="21">erase in-flight capture and</tspan><tspan x="20" dy="21">force re-keying.</tspan></text>
+        <text x="20" y="184" class="label acid">NOW · LOCAL DURABILITY</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#f2ff67"/>
+        <text x="20" y="220" class="body paper"><tspan x="20" dy="0">A write-ahead log and queued</tspan><tspan x="20" dy="21">envelope preserve committed</tspan><tspan x="20" dy="21">local work.</tspan></text>
+      </g>
+
+      <g transform="translate(686 702)" role="group" aria-labelledby="implementation-turn-title">
+        <title id="implementation-turn-title">Implementation beat 3, Turn: duplicate media becomes content-addressed media</title>
+        <rect class="dark-card" width="258" height="270" rx="6"/>
+        <rect x="11" y="12" width="34" height="34" fill="#f2ff67" stroke="#fff7f4" stroke-width="2"/>
+        <text x="28" y="35" text-anchor="middle" class="marker-text ink">I3</text>
+        <text x="56" y="36" class="beat-title paper">Turn</text>
+        <text x="20" y="75" class="label" fill="#cfe2ff">THEN · DUPLICATE MEDIA</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body paper"><tspan x="20" dy="0">Repeated photos bloat</tspan><tspan x="20" dy="21">storage and weaken media</tspan><tspan x="20" dy="21">identity.</tspan></text>
+        <text x="20" y="184" class="label acid">NOW · CONTENT HASHES</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#f2ff67"/>
+        <text x="20" y="220" class="body paper"><tspan x="20" dy="0">Edge hashes de-duplicate</tspan><tspan x="20" dy="21">media and retain its record</tspan><tspan x="20" dy="21">address.</tspan></text>
+      </g>
+
+      <g transform="translate(980 702)" role="group" aria-labelledby="implementation-resolution-title">
+        <title id="implementation-resolution-title">Implementation beat 4, Resolution: retry surges become bounded retry and review</title>
+        <rect class="dark-card" width="258" height="270" rx="6"/>
+        <rect x="11" y="12" width="34" height="34" fill="#f2ff67" stroke="#fff7f4" stroke-width="2"/>
+        <text x="28" y="35" text-anchor="middle" class="marker-text ink">I4</text>
+        <text x="56" y="36" class="beat-title paper">Resolution</text>
+        <text x="20" y="75" class="label" fill="#cfe2ff">THEN · RETRY SURGE</text>
+        <line x1="20" y1="85" x2="238" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body paper"><tspan x="20" dy="0">Returning devices hammer</tspan><tspan x="20" dy="21">the server with unshaped</tspan><tspan x="20" dy="21">retries.</tspan></text>
+        <text x="20" y="184" class="label acid">NOW · BOUNDED RETRY</text>
+        <line x1="20" y1="194" x2="238" y2="194" class="now-rule" stroke="#f2ff67"/>
+        <text x="20" y="220" class="body paper"><tspan x="20" dy="0">Backoff with full jitter</tspan><tspan x="20" dy="21">smooths bursts; exhausted</tspan><tspan x="20" dy="21">work parks for review.</tspan></text>
+      </g>
+
+      <g transform="translate(1274 702)" role="group" aria-labelledby="implementation-consequence-title">
+        <title id="implementation-consequence-title">Implementation beat 5, Consequence: bespoke links become versioned event fan-out</title>
+        <rect class="dark-card" width="228" height="270" rx="6"/>
+        <rect x="11" y="12" width="34" height="34" fill="#f2ff67" stroke="#fff7f4" stroke-width="2"/>
+        <text x="28" y="35" text-anchor="middle" class="marker-text ink">I5</text>
+        <text x="56" y="36" class="beat-title paper">Consequence</text>
+        <text x="20" y="75" class="label" fill="#cfe2ff">THEN · BESPOKE LINKS</text>
+        <line x1="20" y1="85" x2="208" y2="85" class="then-rule" stroke="#fa7065"/>
+        <text x="20" y="111" class="body paper"><tspan x="20" dy="0">Each downstream connection</tspan><tspan x="20" dy="21">translates the record again.</tspan></text>
+        <text x="20" y="184" class="label acid">NOW · EVENT FAN-OUT</text>
+        <line x1="20" y1="194" x2="208" y2="194" class="now-rule" stroke="#f2ff67"/>
+        <text x="20" y="220" class="body paper"><tspan x="20" dy="0">One versioned event supplies</tspan><tspan x="20" dy="21">valuation, listing, and</tspan><tspan x="20" dy="21">arbitration.</tspan></text>
+      </g>
+    </g>
+
+    <g transform="translate(72 1040)" role="group" aria-labelledby="ten-beat-boundary-title">
+      <title id="ten-beat-boundary-title">Evidence boundary: the Now track remains a design to validate through implementation and measurement</title>
+      <rect width="1456" height="76" rx="18" fill="#141c5b"/>
+      <text x="24" y="29" class="eyebrow" fill="#f2ff67">EVIDENCE BOUNDARY</text>
+      <text x="24" y="56" class="body paper">The Now track names a design to validate. Field durability, review rate, marginal cost, and downstream effects become findings only after implementation and measurement.</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+cff-version: "1.2.0"
+message: "Use this metadata to cite Human–AI Systems Exemplars. AUTHORS identifies copyright holders, and GOVERNANCE.md explains contribution and publication attribution."
+type: software
+title: "Human–AI Systems Exemplars"
+authors:
+  - given-names: "Vikrant Varun"
+    family-names: "Kudesia"
+contact:
+  - name: "Driftframe Studios, Limited Liability Company"
+    email: "contact@driftframestudios.org"
+repository-code: "https://github.com/driftframestudios/human-ai-systems-exemplars"
+license: Apache-2.0

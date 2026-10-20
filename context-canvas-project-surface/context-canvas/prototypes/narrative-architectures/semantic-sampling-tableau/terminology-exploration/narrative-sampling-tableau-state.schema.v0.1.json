@@ -1,0 +1,1083 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.driftframestudios.org/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+  "title": "Narrative Sampling Tableau State",
+  "description": "State schema for the Narrative Sampling Tableau chimeric prototype, including outcome definition, sampling conditions, prompt capsule, dimensions, sampling runs, candidates, gaps, statistical-fit posture, shift hypotheses, decisions, routes, boundaries, view state, and source notes.",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "version",
+    "surface",
+    "outcomeDefinition",
+    "conditionProfile",
+    "promptCapsule",
+    "dimensions",
+    "runs",
+    "activeRunId",
+    "comparison",
+    "gaps",
+    "statisticalFit",
+    "shiftHypotheses",
+    "decision",
+    "routeSelections",
+    "boundary",
+    "viewState",
+    "sourceNote"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "const": "NarrativeSamplingSurfaceState"
+    },
+    "version": {
+      "type": "string"
+    },
+    "surface": {
+      "$ref": "#/$defs/Surface"
+    },
+    "outcomeDefinition": {
+      "$ref": "#/$defs/OutcomeDefinition"
+    },
+    "conditionProfile": {
+      "$ref": "#/$defs/ConditionProfile"
+    },
+    "promptCapsule": {
+      "$ref": "#/$defs/PromptCapsule"
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Dimension"
+      }
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/SamplingRun"
+      }
+    },
+    "activeRunId": {
+      "type": "string"
+    },
+    "comparison": {
+      "$ref": "#/$defs/Comparison"
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Gap"
+      }
+    },
+    "statisticalFit": {
+      "$ref": "#/$defs/StatisticalFit"
+    },
+    "shiftHypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ShiftHypothesis"
+      }
+    },
+    "decision": {
+      "$ref": "#/$defs/Decision"
+    },
+    "routeSelections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RouteSelection"
+      }
+    },
+    "boundary": {
+      "$ref": "#/$defs/Boundary"
+    },
+    "viewState": {
+      "type": "object"
+    },
+    "sourceNote": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "StringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "UniqueStringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "Confidence": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "high",
+        "moderate",
+        "low",
+        "unknown"
+      ]
+    },
+    "Surface": {
+      "type": "object",
+      "required": [
+        "id",
+        "canonicalType",
+        "displayName",
+        "samplingSystemRef",
+        "samplingSnapshotRef",
+        "publicationStatus",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canonicalType": {
+          "const": "NarrativeSamplingSurface"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "samplingSystemRef": {
+          "type": "string"
+        },
+        "samplingSnapshotRef": {
+          "type": "string"
+        },
+        "publicationStatus": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "OutcomeDefinition": {
+      "type": "object",
+      "required": [
+        "id",
+        "statement",
+        "subjectRef",
+        "eventType",
+        "population",
+        "horizon",
+        "conditions",
+        "successCriteria",
+        "exclusions",
+        "decisionContextRef",
+        "sourceRefs",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 12
+        },
+        "subjectRef": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "string"
+        },
+        "population": {
+          "type": "string",
+          "minLength": 1
+        },
+        "horizon": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conditions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "successCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclusions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "decisionContextRef": {
+          "type": "string"
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "ConditionProfile": {
+      "type": "object",
+      "required": [
+        "id",
+        "outcomeDefinitionRef",
+        "population",
+        "horizon",
+        "constraints",
+        "exclusions",
+        "candidateSetSemantics",
+        "candidateCountRequested",
+        "diversityInstruction",
+        "tailInstruction",
+        "modelRef",
+        "modelVersion",
+        "providerOrRuntime",
+        "samplingParameters",
+        "evidenceRefs",
+        "asOf",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "outcomeDefinitionRef": {
+          "type": "string"
+        },
+        "focalizationRef": {
+          "type": "string"
+        },
+        "population": {
+          "type": "string"
+        },
+        "horizon": {
+          "type": "string"
+        },
+        "constraints": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "exclusions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "candidateSetSemantics": {
+          "type": "string",
+          "enum": [
+            "closed_exclusive_exhaustive",
+            "open_exclusive",
+            "independent_events",
+            "composable_portfolio",
+            "ranked_nonprobabilistic",
+            "mixed"
+          ]
+        },
+        "candidateCountRequested": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 30
+        },
+        "diversityInstruction": {
+          "type": "string"
+        },
+        "tailInstruction": {
+          "type": "string"
+        },
+        "modelRef": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "providerOrRuntime": {
+          "type": "string"
+        },
+        "samplingParameters": {
+          "type": "object"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "asOf": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "PromptCapsule": {
+      "type": "object",
+      "required": [
+        "id",
+        "displayName",
+        "currentDecision",
+        "outcomeDefinitionRef",
+        "samplingConditionProfileRef",
+        "samplingGoal",
+        "dimensionRefs",
+        "estimateKindRequested",
+        "comparisonRunRefs",
+        "shiftQuestion",
+        "diversityInstruction",
+        "tailInstruction",
+        "confidenceRequested",
+        "gapReviewRequested",
+        "outputContract",
+        "sourceBand",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "currentDecision": {
+          "type": "string"
+        },
+        "outcomeDefinitionRef": {
+          "type": "string"
+        },
+        "samplingConditionProfileRef": {
+          "type": "string"
+        },
+        "samplingGoal": {
+          "type": "string"
+        },
+        "dimensionRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "estimateKindRequested": {
+          "type": "string"
+        },
+        "comparisonRunRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "shiftQuestion": {
+          "type": "string"
+        },
+        "diversityInstruction": {
+          "type": "string"
+        },
+        "tailInstruction": {
+          "type": "string"
+        },
+        "confidenceRequested": {
+          "type": "boolean"
+        },
+        "gapReviewRequested": {
+          "type": "boolean"
+        },
+        "outputContract": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceBand": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "Dimension": {
+      "type": "object",
+      "required": [
+        "id",
+        "displayName",
+        "definition",
+        "direction",
+        "weight",
+        "weightOrigin",
+        "sourceOfTruthBand",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "higher_is_better",
+            "lower_is_better",
+            "target_range",
+            "descriptive_only"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "weightOrigin": {
+          "type": "string"
+        },
+        "evidenceRequirement": {
+          "type": "string"
+        },
+        "sourceOfTruthBand": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "Candidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "displayName",
+        "description",
+        "candidateKind",
+        "semanticCluster",
+        "origin",
+        "assumptions",
+        "tradeoffs",
+        "failureModes",
+        "evidenceNeeded",
+        "estimate",
+        "lowerBound",
+        "upperBound",
+        "estimateKind",
+        "measurementStatus",
+        "calibrationState",
+        "estimatorRef",
+        "basis",
+        "confidence",
+        "dimensionScores",
+        "decisionState",
+        "sourceRefs",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "candidateKind": {
+          "type": "string"
+        },
+        "semanticCluster": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "assumptions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "tradeoffs": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "failureModes": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "evidenceNeeded": {
+          "type": "string"
+        },
+        "estimate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "lowerBound": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "upperBound": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "estimateKind": {
+          "type": "string"
+        },
+        "measurementStatus": {
+          "type": "string"
+        },
+        "calibrationState": {
+          "type": "string"
+        },
+        "estimatorRef": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/Confidence"
+        },
+        "dimensionScores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "decisionState": {
+          "type": "string",
+          "enum": [
+            "selected",
+            "held",
+            "declined",
+            "unassigned"
+          ]
+        },
+        "componentCandidateRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "exclusiveWithRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "compatibleWithRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "SamplingRun": {
+      "type": "object",
+      "required": [
+        "id",
+        "displayName",
+        "runPurpose",
+        "changedFields",
+        "runState",
+        "candidateSetSemantics",
+        "otherOrTailMass",
+        "missingModeClasses",
+        "candidates",
+        "startedAt",
+        "completedAt",
+        "valueOrigin",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "runPurpose": {
+          "type": "string"
+        },
+        "parentRunRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "variantRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "changedFields": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "runState": {
+          "type": "string"
+        },
+        "candidateSetSemantics": {
+          "type": "string",
+          "enum": [
+            "closed_exclusive_exhaustive",
+            "open_exclusive",
+            "independent_events",
+            "composable_portfolio",
+            "ranked_nonprobabilistic",
+            "mixed"
+          ]
+        },
+        "otherOrTailMass": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "missingModeClasses": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Candidate"
+          }
+        },
+        "startedAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "valueOrigin": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "Comparison": {
+      "type": "object",
+      "required": [
+        "id",
+        "baselineRunId",
+        "comparisonRunId",
+        "commensurabilityState",
+        "comparisonBasis",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "baselineRunId": {
+          "type": "string"
+        },
+        "comparisonRunId": {
+          "type": "string"
+        },
+        "commensurabilityState": {
+          "type": "string"
+        },
+        "comparisonBasis": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "Gap": {
+      "type": "object",
+      "required": [
+        "id",
+        "runRef",
+        "gapType",
+        "description",
+        "consequence",
+        "gapUtility",
+        "currentHandling",
+        "evidenceNeeded",
+        "routeTargetId",
+        "resolutionState",
+        "valueOrigin",
+        "confidence",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "runRef": {
+          "type": "string"
+        },
+        "gapType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "consequence": {
+          "type": "string"
+        },
+        "gapUtility": {
+          "type": "string",
+          "enum": [
+            "generative",
+            "neutral",
+            "coordination_gap",
+            "harmful",
+            "unknown"
+          ]
+        },
+        "currentHandling": {
+          "type": "string"
+        },
+        "evidenceNeeded": {
+          "type": "string"
+        },
+        "routeTargetId": {
+          "type": "string"
+        },
+        "resolutionState": {
+          "type": "string",
+          "enum": [
+            "open",
+            "held_open",
+            "reviewing",
+            "resolved",
+            "superseded",
+            "retired"
+          ]
+        },
+        "valueOrigin": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/Confidence"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "StatisticalFit": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "assumptions",
+        "diagnostics",
+        "sourceOfTruthBand",
+        "asOf",
+        "reviewState"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "statisticName": {
+          "type": "string"
+        },
+        "statisticValue": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "modelClass": {
+          "type": "string"
+        },
+        "observedDataRef": {
+          "type": "string"
+        },
+        "sampleSize": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "population": {
+          "type": "string"
+        },
+        "referenceModel": {
+          "type": "string"
+        },
+        "assumptions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "diagnostics": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "sourceOfTruthBand": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "asOf": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            },
+            "required": [
+              "enabled"
+            ]
+          },
+          "then": {
+            "properties": {
+              "statisticName": {
+                "type": "string"
+              },
+              "modelClass": {
+                "type": "string"
+              },
+              "observedDataRef": {
+                "type": "string"
+              },
+              "sampleSize": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            },
+            "required": [
+              "statisticName",
+              "modelClass",
+              "observedDataRef",
+              "sampleSize"
+            ]
+          }
+        }
+      ]
+    },
+    "ShiftHypothesis": {
+      "type": "object",
+      "required": [
+        "id",
+        "outcomeDefinitionRef",
+        "candidateRef",
+        "proposedChange",
+        "expectedDirection",
+        "expectedMagnitude",
+        "mechanism",
+        "assumptions",
+        "confounders",
+        "evidenceRefs",
+        "falsifier",
+        "evaluationPlanRef",
+        "causalStatus",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "outcomeDefinitionRef": {
+          "type": "string"
+        },
+        "candidateRef": {
+          "type": "string"
+        },
+        "proposedChange": {
+          "type": "string"
+        },
+        "expectedDirection": {
+          "type": "string",
+          "enum": [
+            "raise",
+            "lower",
+            "redistribute",
+            "clarify_only",
+            "unknown"
+          ]
+        },
+        "expectedMagnitude": {
+          "type": "string"
+        },
+        "mechanism": {
+          "type": "string"
+        },
+        "assumptions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "confounders": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "falsifier": {
+          "type": "string"
+        },
+        "evaluationPlanRef": {
+          "type": "string"
+        },
+        "causalStatus": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "required": [
+        "id",
+        "selectedCandidateIds",
+        "heldCandidateIds",
+        "declinedCandidateIds",
+        "decisionRule",
+        "probabilityRole",
+        "rationale",
+        "dissentOrMinorityRead",
+        "unresolvedGapIds",
+        "updateTriggers",
+        "decisionAuthorityRef",
+        "humanReviewState",
+        "effectiveAt",
+        "reviewAfter",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "selectedCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "heldCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "declinedCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "decisionRule": {
+          "type": "string"
+        },
+        "probabilityRole": {
+          "type": "string",
+          "enum": [
+            "informative",
+            "threshold",
+            "tie_breaker",
+            "scenario_weight",
+            "not_used"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "dissentOrMinorityRead": {
+          "type": "string"
+        },
+        "unresolvedGapIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "updateTriggers": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "decisionAuthorityRef": {
+          "type": "string"
+        },
+        "humanReviewState": {
+          "type": "string"
+        },
+        "effectiveAt": {
+          "type": "string"
+        },
+        "reviewAfter": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    },
+    "RouteSelection": {
+      "type": "object",
+      "required": [
+        "id",
+        "routeTargetId",
+        "routeType",
+        "routeReason",
+        "payloadRefs",
+        "expectedReturn",
+        "receiptRequired",
+        "routeState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "routeTargetId": {
+          "type": "string"
+        },
+        "routeType": {
+          "type": "string"
+        },
+        "routeReason": {
+          "type": "string"
+        },
+        "payloadRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "expectedReturn": {
+          "type": "string"
+        },
+        "receiptRequired": {
+          "type": "boolean"
+        },
+        "routeState": {
+          "type": "string"
+        }
+      }
+    },
+    "Boundary": {
+      "type": "object",
+      "required": [
+        "visibility",
+        "privateLocatorsIncluded",
+        "unreviewedInferenceIncludedInPublic",
+        "sourceLocalAnnotationIncludedInPublic",
+        "publicSafeSourceMarker",
+        "disclosedOmissions",
+        "reviewState"
+      ],
+      "properties": {
+        "visibility": {
+          "type": "string"
+        },
+        "privateLocatorsIncluded": {
+          "const": false
+        },
+        "unreviewedInferenceIncludedInPublic": {
+          "const": false
+        },
+        "sourceLocalAnnotationIncludedInPublic": {
+          "const": false
+        },
+        "publicSafeSourceMarker": {
+          "type": "string"
+        },
+        "disclosedOmissions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

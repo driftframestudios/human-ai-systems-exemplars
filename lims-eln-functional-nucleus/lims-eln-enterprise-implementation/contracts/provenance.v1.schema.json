@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://driftframe.example/contracts/provenance.v1.schema.json",
+  "title": "Repository Provenance v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "repository_role",
+    "created_as_of",
+    "seed",
+    "independence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "repository_role": {"const": "actual_implementation"},
+    "created_as_of": {"type": "string", "format": "date"},
+    "seed": {
+      "type": "object",
+      "required": ["repository", "review", "source_key"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^urn:source-key:[a-z0-9-]+$"},
+        "review": {"type": "string", "pattern": "^urn:source-key:[a-z0-9-]+$"},
+        "source_key": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "source_pack": {"type": "string"},
+        "source_validation": {"type": "object"}
+      }
+    },
+    "independence_boundary": {
+      "type": "object",
+      "required": [
+        "runtime_source_imported_from_simulation",
+        "shared_surface",
+        "evidence_namespace"
+      ],
+      "properties": {
+        "runtime_source_imported_from_simulation": {"const": false},
+        "shared_surface": {"type": "string"},
+        "evidence_namespace": {"const": "observed_actual"}
+      }
+    }
+  }
+}

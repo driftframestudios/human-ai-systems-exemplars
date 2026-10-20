@@ -1,0 +1,63 @@
+{
+  "report_version": "1.0.0",
+  "validated_on": "2026-09-30",
+  "package": "a3-stacked-cube-atlas-expanded-bundle-v0.2",
+  "result": "pass",
+  "checks": [
+    {
+      "id": "JSON-PARSE",
+      "status": "pass",
+      "detail": "Every packaged JSON, JSON Schema, and JSON-LD file parses as JSON."
+    },
+    {
+      "id": "SCHEMA-DIALECT",
+      "status": "pass",
+      "detail": "All four JSON Schemas declare https://json-schema.org/draft/2020-12/schema and parse successfully."
+    },
+    {
+      "id": "SOURCE-REFS",
+      "status": "pass",
+      "detail": "All 93 source references collected from the delta and extracted view model resolve against 36 unique source-registry IDs; no duplicate IDs or obsolete SRC-HIPAA-308/SRC-HIPAA-312 aliases remain."
+    },
+    {
+      "id": "VIEW-MODEL-PARITY",
+      "status": "pass",
+      "detail": "After excluding its companion $schema pointer, the packaged view-model JSON is byte-equivalent after JSON normalization to the a3-model object embedded in index.html."
+    },
+    {
+      "id": "SOURCE-REGISTRY-PARITY",
+      "status": "pass",
+      "detail": "The 36 packaged source records are byte-equivalent after JSON normalization to the sources array embedded in index.html."
+    },
+    {
+      "id": "PROBABILITY-INVARIANT",
+      "status": "pass",
+      "detail": "Each of DR-01, DR-02, and DR-03 contains four bounded percentages summing to 100."
+    },
+    {
+      "id": "SCRIPT-SYNTAX",
+      "status": "pass",
+      "detail": "The executable inline JavaScript blocks in index.html and embed.html compile without syntax errors."
+    },
+    {
+      "id": "DELIVERY-SURFACES",
+      "status": "pass",
+      "detail": "index.html is a complete HTML document; embed.html is intentionally a host fragment."
+    },
+    {
+      "id": "RUNTIME-DEPENDENCIES",
+      "status": "pass",
+      "detail": "No external script, stylesheet, @import, unpkg, jsDelivr, or cdnjs runtime dependency is present. External hyperlinks in index.html are evidence citations only."
+    },
+    {
+      "id": "FULL-SCHEMA-EVALUATION",
+      "status": "pass",
+      "detail": "Ajv CLI 5 evaluated all four package instances against their Draft 2020-12 schemas with strict mode disabled for declared URI and date formats; those formats were checked separately with native URL parsing and ISO-date validation."
+    },
+    {
+      "id": "BROWSER-SMOKE",
+      "status": "pass",
+      "detail": "Headless Chrome exercised all five lenses and F0–F3 at 1440, 736, 390, and 320 CSS pixels after the public-name and boundary-language revision, with no console errors, page errors, remote runtime requests, or horizontal overflow."
+    }
+  ]
+}

@@ -1,0 +1,564 @@
+{
+  "@context": {
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "ra": "https://schemas.driftframestudios.org/ra#",
+    "pp": "https://schemas.driftframestudios.org/pp#",
+    "is": "https://schemas.driftframestudios.org/is#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "NarrativeSamplingSurface": "na:NarrativeSamplingSurface",
+    "VerbalizedSamplingSystem": "na:VerbalizedSamplingSystem",
+    "VerbalizedSamplingSnapshot": "na:VerbalizedSamplingSnapshot",
+    "ProbabilityOutcomeDefinition": "na:ProbabilityOutcomeDefinition",
+    "SamplingConditionProfile": "na:SamplingConditionProfile",
+    "SamplingPromptCapsule": "na:SamplingPromptCapsule",
+    "SamplingRun": "na:SamplingRun",
+    "PossibilitySet": "na:PossibilitySet",
+    "PossibilitySetVersion": "na:PossibilitySetVersion",
+    "PossibilityCandidate": "na:PossibilityCandidate",
+    "ProbabilityEstimate": "na:ProbabilityEstimate",
+    "DimensionDefinition": "na:DimensionDefinition",
+    "CandidateDimensionAssessment": "na:CandidateDimensionAssessment",
+    "DimensionalFitAssessment": "na:DimensionalFitAssessment",
+    "StatisticalFitAssessment": "na:StatisticalFitAssessment",
+    "MultiplicityCoverageAssessment": "na:MultiplicityCoverageAssessment",
+    "SamplingVariant": "na:SamplingVariant",
+    "SamplingComparison": "na:SamplingComparison",
+    "ProbabilityShiftHypothesis": "na:ProbabilityShiftHypothesis",
+    "MethodologicalGap": "na:MethodologicalGap",
+    "SamplingDecisionRecord": "na:SamplingDecisionRecord",
+    "SamplingRouteRecord": "na:SamplingRouteRecord",
+    "SamplingReceipt": "na:SamplingReceipt",
+    "SamplingReturnRecord": "na:SamplingReturnRecord",
+    "CoreArchitectureCard": "ca:CoreArchitectureCard",
+    "ArchitectureFamily": "ca:ArchitectureFamily",
+    "ResearchAtlas": "ra:ResearchAtlas",
+    "PractitionerJudgmentProbe": "pp:PractitionerJudgmentProbe",
+    "TerminologicalRegistry": "is:TerminologicalRegistry",
+    "samplingSystemRef": {
+      "@id": "na:samplingSystemRef",
+      "@type": "@id"
+    },
+    "samplingSnapshotRef": {
+      "@id": "na:samplingSnapshotRef",
+      "@type": "@id"
+    },
+    "outcomeDefinitionRef": {
+      "@id": "na:outcomeDefinitionRef",
+      "@type": "@id"
+    },
+    "conditionProfileRef": {
+      "@id": "na:conditionProfileRef",
+      "@type": "@id"
+    },
+    "promptCapsuleRef": {
+      "@id": "na:promptCapsuleRef",
+      "@type": "@id"
+    },
+    "samplingRunRef": {
+      "@id": "na:samplingRunRef",
+      "@type": "@id"
+    },
+    "possibilitySetRef": {
+      "@id": "na:possibilitySetRef",
+      "@type": "@id"
+    },
+    "possibilityCandidateRef": {
+      "@id": "na:possibilityCandidateRef",
+      "@type": "@id"
+    },
+    "dimensionRef": {
+      "@id": "na:dimensionRef",
+      "@type": "@id"
+    },
+    "gapRef": {
+      "@id": "na:gapRef",
+      "@type": "@id"
+    },
+    "comparisonRef": {
+      "@id": "na:comparisonRef",
+      "@type": "@id"
+    },
+    "decisionRecordRef": {
+      "@id": "na:decisionRecordRef",
+      "@type": "@id"
+    },
+    "routeTargetRef": {
+      "@id": "na:routeTargetRef",
+      "@type": "@id"
+    },
+    "coreArchitectureCardRef": {
+      "@id": "ca:coreArchitectureCardRef",
+      "@type": "@id"
+    },
+    "architectureFamilyRef": {
+      "@id": "ca:architectureFamilyRef",
+      "@type": "@id"
+    },
+    "candidateSetSemantics": "na:candidateSetSemantics",
+    "estimate": "na:estimate",
+    "estimateKind": "na:estimateKind",
+    "measurementStatus": "na:measurementStatus",
+    "calibrationState": "na:calibrationState",
+    "confidence": "na:confidence",
+    "otherOrTailMass": "na:otherOrTailMass",
+    "probabilityRole": "na:probabilityRole",
+    "decisionState": "na:decisionState",
+    "gapType": "na:gapType",
+    "gapUtility": "na:gapUtility",
+    "currentHandling": "na:currentHandling",
+    "expectedDirection": "na:expectedDirection",
+    "causalStatus": "na:causalStatus",
+    "solutionOrigin": "ca:solutionOrigin",
+    "implementationOrigin": "ca:implementationOrigin",
+    "recoveryOrigin": "ca:recoveryOrigin",
+    "sourceBand": "ca:sourceBand",
+    "sourceOfTruthBand": "ca:sourceOfTruthBand",
+    "publicationStatus": "ca:publicationStatus",
+    "valueOrigin": "ca:valueOrigin",
+    "reviewState": "ca:reviewState"
+  },
+  "@id": "na:narrative-sampling-tableau/demo-v0.1",
+  "@type": "na:NarrativeSamplingSurface",
+  "schema:name": "Narrative Sampling Tableau",
+  "na:samplingSystemRef": {
+    "@id": "na:verbalized-sampling/demo-system"
+  },
+  "na:samplingSnapshotRef": {
+    "@id": "na:verbalized-sampling/demo-snapshot-v0.1"
+  },
+  "na:outcomeDefinition": {
+    "@id": "vs:outcome/name-hold-conation-motion",
+    "@type": "na:ProbabilityOutcomeDefinition",
+    "schema:description": "Probability that the selected naming arrangement remains semantically adequate, human-legible, AI-legible, and resistant to material drift across Driftframe documentation and machine-readable contexts for the next 18 months.",
+    "na:population": "Human–AI collaborators using Driftframe Narrative Architecture and related schemas",
+    "na:horizon": "18 months / first implementation and cross-model review cycle"
+  },
+  "na:activeRun": {
+    "@id": "vs:run/layered-label",
+    "@type": "na:SamplingRun",
+    "schema:name": "Variant · layered canonical / display labels",
+    "na:candidateSetSemantics": "open_exclusive",
+    "na:otherOrTailMass": 0.12,
+    "na:possibilityCandidate": [
+      {
+        "@id": "vs:candidate/conation-motions",
+        "@type": "na:PossibilityCandidate",
+        "schema:name": "Conation motions",
+        "na:estimate": 0.42,
+        "na:estimateKind": "planning_judgment",
+        "na:measurementStatus": "planning_estimate",
+        "na:calibrationState": "uncalibrated",
+        "na:confidence": "moderate",
+        "na:decisionState": "selected",
+        "na:dimensionAssessment": [
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/semantic-stability"
+            },
+            "schema:value": 8.9
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/human-legibility"
+            },
+            "schema:value": 8.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/ai-legibility"
+            },
+            "schema:value": 8.7
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/cross-model-portability"
+            },
+            "schema:value": 8.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/source-fidelity"
+            },
+            "schema:value": 9.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/future-refactorability"
+            },
+            "schema:value": 9.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/accessibility"
+            },
+            "schema:value": 8
+          }
+        ]
+      },
+      {
+        "@id": "vs:candidate/conative-behavior",
+        "@type": "na:PossibilityCandidate",
+        "schema:name": "Conative behavior",
+        "na:estimate": 0.16,
+        "na:estimateKind": "planning_judgment",
+        "na:measurementStatus": "planning_estimate",
+        "na:calibrationState": "uncalibrated",
+        "na:confidence": "moderate",
+        "na:decisionState": "held",
+        "na:dimensionAssessment": [
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/semantic-stability"
+            },
+            "schema:value": 8.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/human-legibility"
+            },
+            "schema:value": 7.4
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/ai-legibility"
+            },
+            "schema:value": 7.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/cross-model-portability"
+            },
+            "schema:value": 8.4
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/source-fidelity"
+            },
+            "schema:value": 8.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/future-refactorability"
+            },
+            "schema:value": 8.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/accessibility"
+            },
+            "schema:value": 6.8
+          }
+        ]
+      },
+      {
+        "@id": "vs:candidate/volitional-actions",
+        "@type": "na:PossibilityCandidate",
+        "schema:name": "Volitional actions",
+        "na:estimate": 0.13,
+        "na:estimateKind": "planning_judgment",
+        "na:measurementStatus": "planning_estimate",
+        "na:calibrationState": "uncalibrated",
+        "na:confidence": "moderate",
+        "na:decisionState": "held",
+        "na:dimensionAssessment": [
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/semantic-stability"
+            },
+            "schema:value": 7.6
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/human-legibility"
+            },
+            "schema:value": 8.9
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/ai-legibility"
+            },
+            "schema:value": 9
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/cross-model-portability"
+            },
+            "schema:value": 7.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/source-fidelity"
+            },
+            "schema:value": 7.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/future-refactorability"
+            },
+            "schema:value": 7.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/accessibility"
+            },
+            "schema:value": 8.6
+          }
+        ]
+      },
+      {
+        "@id": "vs:candidate/motor-intentions",
+        "@type": "na:PossibilityCandidate",
+        "schema:name": "Motor intentions",
+        "na:estimate": 0.1,
+        "na:estimateKind": "planning_judgment",
+        "na:measurementStatus": "planning_estimate",
+        "na:calibrationState": "uncalibrated",
+        "na:confidence": "moderate",
+        "na:decisionState": "declined",
+        "na:dimensionAssessment": [
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/semantic-stability"
+            },
+            "schema:value": 8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/human-legibility"
+            },
+            "schema:value": 8.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/ai-legibility"
+            },
+            "schema:value": 8.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/cross-model-portability"
+            },
+            "schema:value": 7.9
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/source-fidelity"
+            },
+            "schema:value": 5.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/future-refactorability"
+            },
+            "schema:value": 6.5
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/accessibility"
+            },
+            "schema:value": 8.2
+          }
+        ]
+      },
+      {
+        "@id": "vs:candidate/motivated-movements",
+        "@type": "na:PossibilityCandidate",
+        "schema:name": "Motivated movements",
+        "na:estimate": 0.07,
+        "na:estimateKind": "planning_judgment",
+        "na:measurementStatus": "planning_estimate",
+        "na:calibrationState": "uncalibrated",
+        "na:confidence": "moderate",
+        "na:decisionState": "declined",
+        "na:dimensionAssessment": [
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/semantic-stability"
+            },
+            "schema:value": 7.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/human-legibility"
+            },
+            "schema:value": 9
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/ai-legibility"
+            },
+            "schema:value": 8.6
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/cross-model-portability"
+            },
+            "schema:value": 7
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/source-fidelity"
+            },
+            "schema:value": 6.2
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/future-refactorability"
+            },
+            "schema:value": 6.8
+          },
+          {
+            "@type": "na:CandidateDimensionAssessment",
+            "na:dimensionRef": {
+              "@id": "vs:dimension/accessibility"
+            },
+            "schema:value": 8.4
+          }
+        ]
+      }
+    ],
+    "na:parentRunRef": {
+      "@id": "vs:run/baseline-single-label"
+    },
+    "na:variantRef": {
+      "@id": "vs:variant/layered-label"
+    }
+  },
+  "na:comparison": {
+    "@id": "vs:comparison/layered-vs-baseline",
+    "@type": "na:SamplingRunComparison",
+    "na:baselineRunRef": {
+      "@id": "vs:run/baseline-single-label"
+    },
+    "na:comparisonRunRef": {
+      "@id": "vs:run/layered-label"
+    }
+  },
+  "na:methodologicalGap": [
+    {
+      "@id": "vs:gap/calibration-absent",
+      "@type": "na:MethodologicalGap",
+      "na:gapType": "calibration_absent",
+      "schema:description": "The probabilities are planning estimates and have no empirical calibration against future naming outcomes.",
+      "na:gapUtility": "coordination_gap",
+      "na:routeTargetRef": {
+        "@id": "ra:research-atlas"
+      }
+    },
+    {
+      "@id": "vs:gap/human-vocabulary",
+      "@type": "na:MethodologicalGap",
+      "na:gapType": "human_vocabulary_gap",
+      "schema:description": "Different readers may lack the disciplinary vocabulary needed to interpret rare canonical terms.",
+      "na:gapUtility": "coordination_gap",
+      "na:routeTargetRef": {
+        "@id": "ca:context-tree"
+      }
+    },
+    {
+      "@id": "vs:gap/collision-review",
+      "@type": "na:MethodologicalGap",
+      "na:gapType": "legal_or_collision_review",
+      "schema:description": "Public and technical collision review remains incomplete for several candidates and aliases.",
+      "na:gapUtility": "coordination_gap",
+      "na:routeTargetRef": {
+        "@id": "is:terminological-registry"
+      }
+    },
+    {
+      "@id": "vs:gap/model-portability",
+      "@type": "na:MethodologicalGap",
+      "na:gapType": "model_or_version_unknown",
+      "schema:description": "The candidates have not been tested across a sufficiently broad set of model families and versions.",
+      "na:gapUtility": "coordination_gap",
+      "na:routeTargetRef": {
+        "@id": "ca:practitioner-judgment-probes"
+      }
+    }
+  ],
+  "na:decisionRecord": {
+    "@id": "vs:decision/conation-motion-name",
+    "@type": "na:SamplingDecisionRecord",
+    "na:selectedCandidateRef": [
+      {
+        "@id": "vs:candidate/conation-motions"
+      }
+    ],
+    "na:heldCandidateRef": [
+      {
+        "@id": "vs:candidate/conative-behavior"
+      },
+      {
+        "@id": "vs:candidate/volitional-actions"
+      }
+    ],
+    "na:declinedCandidateRef": [
+      {
+        "@id": "vs:candidate/motor-intentions"
+      },
+      {
+        "@id": "vs:candidate/motivated-movements"
+      }
+    ],
+    "na:probabilityRole": "informative",
+    "schema:description": "The layered naming arrangement raises the practical viability of the most stable source-faithful term while preserving accessible public language."
+  },
+  "na:routeRecord": [
+    {
+      "@id": "vs:route/strategy-canvas",
+      "@type": "na:SamplingRouteRecord",
+      "na:routeTargetRef": {
+        "@id": "ca:strategy-canvas"
+      },
+      "schema:description": "Compare how the naming candidates perform across the declared dimensions and layered naming conditions."
+    },
+    {
+      "@id": "vs:route/terminological-registry",
+      "@type": "na:SamplingRouteRecord",
+      "na:routeTargetRef": {
+        "@id": "is:terminological-registry"
+      },
+      "schema:description": "Resolve canonical, display, authored, technical, alias, and collision states."
+    }
+  ],
+  "ca:publicationStatus": "private_working"
+}

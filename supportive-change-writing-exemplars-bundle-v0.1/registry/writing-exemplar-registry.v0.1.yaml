@@ -1,0 +1,272 @@
+{
+  "$schema": "../schema/writing-exemplar-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "writing-exemplar-registry:supportive-change:v0.1",
+  "registry_type": "writing_exemplars",
+  "version": "0.1.0",
+  "purpose": "Connect writing exemplars with their paths, branches, modes, and schema descriptions.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can locate every essay and testimonial draft set through stable IDs and paths.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "essay:executive-culture:culture-as-a-coordination-system:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Culture as a Coordination System",
+      "path": "../exemplars/01-executive-culture/essays/01-culture-as-a-coordination-system.md",
+      "branch_id": "executive-culture",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:executive-culture:power-capacity-and-a-fair-settlement:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Power, Capacity, and a Fair Settlement",
+      "path": "../exemplars/01-executive-culture/essays/02-power-capacity-and-a-fair-settlement.md",
+      "branch_id": "executive-culture",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:executive-culture:executive-attention-as-a-form-of-stewardship:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Executive Attention as a Form of Stewardship",
+      "path": "../exemplars/01-executive-culture/essays/03-executive-attention-as-a-form-of-stewardship.md",
+      "branch_id": "executive-culture",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:frontline-teams:reliability-is-a-social-achievement:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Reliability Is a Social Achievement",
+      "path": "../exemplars/02-frontline-teams/essays/01-reliability-is-a-social-achievement.md",
+      "branch_id": "frontline-teams",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:frontline-teams:capacity-turns-ingenuity-into-reliable-work:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Capacity Turns Ingenuity into Reliable Work",
+      "path": "../exemplars/02-frontline-teams/essays/02-capacity-turns-ingenuity-into-reliable-work.md",
+      "branch_id": "frontline-teams",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:frontline-teams:the-pause-that-keeps-a-team-adaptive:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "The Pause That Keeps a Team Adaptive",
+      "path": "../exemplars/02-frontline-teams/essays/03-the-pause-that-keeps-a-team-adaptive.md",
+      "branch_id": "frontline-teams",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:cross-functional-collaboration:the-work-between-functions:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "The Work Between Functions",
+      "path": "../exemplars/03-cross-functional-collaboration/essays/01-the-work-between-functions.md",
+      "branch_id": "cross-functional-collaboration",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:cross-functional-collaboration:systems-that-make-collaboration-possible:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Systems That Make Collaboration Possible",
+      "path": "../exemplars/03-cross-functional-collaboration/essays/02-systems-that-make-collaboration-possible.md",
+      "branch_id": "cross-functional-collaboration",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:cross-functional-collaboration:the-handoff-as-a-place-of-learning:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "The Handoff as a Place of Learning",
+      "path": "../exemplars/03-cross-functional-collaboration/essays/03-the-handoff-as-a-place-of-learning.md",
+      "branch_id": "cross-functional-collaboration",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:sustainable-well-being:well-being-that-can-survive-the-work:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Well-Being That Can Survive the Work",
+      "path": "../exemplars/04-sustainable-well-being/essays/01-well-being-that-can-survive-the-work.md",
+      "branch_id": "sustainable-well-being",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:sustainable-well-being:build-recovery-into-the-system:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Build Recovery Into the System",
+      "path": "../exemplars/04-sustainable-well-being/essays/02-build-recovery-into-the-system.md",
+      "branch_id": "sustainable-well-being",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:sustainable-well-being:small-openings-in-a-demanding-day:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Small Openings in a Demanding Day",
+      "path": "../exemplars/04-sustainable-well-being/essays/03-small-openings-in-a-demanding-day.md",
+      "branch_id": "sustainable-well-being",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:customer-community-service:service-as-a-sensing-system:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Service as a Sensing System",
+      "path": "../exemplars/05-customer-and-community-service/essays/01-service-as-a-sensing-system.md",
+      "branch_id": "customer-community-service",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:customer-community-service:fair-systems-make-courtesy-consequential:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Fair Systems Make Courtesy Consequential",
+      "path": "../exemplars/05-customer-and-community-service/essays/02-fair-systems-make-courtesy-consequential.md",
+      "branch_id": "customer-community-service",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:customer-community-service:the-quiet-need-at-the-counter:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "The Quiet Need at the Counter",
+      "path": "../exemplars/05-customer-and-community-service/essays/03-the-quiet-need-at-the-counter.md",
+      "branch_id": "customer-community-service",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:small-business-leadership:resourcefulness-with-a-full-cost-view-of-scarcity:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Resourcefulness with a Full-Cost View of Scarcity",
+      "path": "../exemplars/06-small-business-leadership/essays/01-resourcefulness-with-a-full-cost-view-of-scarcity.md",
+      "branch_id": "small-business-leadership",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:small-business-leadership:viability-beyond-endurance:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Viability Beyond Endurance",
+      "path": "../exemplars/06-small-business-leadership/essays/02-viability-beyond-endurance.md",
+      "branch_id": "small-business-leadership",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:small-business-leadership:stewardship-and-the-next-viable-move:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Stewardship and the Next Viable Move",
+      "path": "../exemplars/06-small-business-leadership/essays/03-stewardship-and-the-next-viable-move.md",
+      "branch_id": "small-business-leadership",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:personal-work-transitions:re-entering-work-with-a-whole-life-intact:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Re-entering Work with a Whole Life Intact",
+      "path": "../exemplars/07-personal-to-work-transitions/essays/01-re-entering-work-with-a-whole-life-intact.md",
+      "branch_id": "personal-work-transitions",
+      "essay_mode": "integrative",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:personal-work-transitions:adjustment-as-a-shared-organizational-capacity:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "Adjustment as a Shared Organizational Capacity",
+      "path": "../exemplars/07-personal-to-work-transitions/essays/02-adjustment-as-a-shared-organizational-capacity.md",
+      "branch_id": "personal-work-transitions",
+      "essay_mode": "critical_systems",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "essay:personal-work-transitions:the-provisional-self-at-work:v0.1",
+      "artifact_type": "essay_exemplar",
+      "title": "The Provisional Self at Work",
+      "path": "../exemplars/07-personal-to-work-transitions/essays/03-the-provisional-self-at-work.md",
+      "branch_id": "personal-work-transitions",
+      "essay_mode": "human_horizon",
+      "schema_ref": "../schema/writing-artifact-exemplar.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:corporate-peer-to-corporate-peer:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch A — Corporate peer to corporate peer",
+      "format": "short",
+      "path": "../blurbs/short/01-corporate-peer-to-corporate-peer.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:long-time-supporter:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch B — Long-time supporter",
+      "format": "short",
+      "path": "../blurbs/short/02-long-time-supporter.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:evidence-aware-change-and-psychology:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch C — Evidence-aware change and psychology",
+      "format": "short",
+      "path": "../blurbs/short/03-evidence-aware-change-and-psychology.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:people-manager-or-team-leader:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch D — People manager or team leader",
+      "format": "short",
+      "path": "../blurbs/short/04-people-manager-or-team-leader.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:hr-and-learning-leader:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch E — HR and learning leader",
+      "format": "short",
+      "path": "../blurbs/short/05-hr-and-learning-leader.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:inclusion-and-accessibility-advocate:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch F — Inclusion and accessibility advocate",
+      "format": "short",
+      "path": "../blurbs/short/06-inclusion-and-accessibility-advocate.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:short:event-organizer-or-program-host:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Branch G — Event organizer or program host",
+      "format": "short",
+      "path": "../blurbs/short/07-event-organizer-or-program-host.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    },
+    {
+      "id": "blurb-set:long:adult-workplace-voices:v0.1",
+      "artifact_type": "testimonial_blurb_set",
+      "title": "Long-form testimonial-style drafts",
+      "format": "long",
+      "path": "../blurbs/long-form.md",
+      "schema_ref": "../schema/testimonial-blurb-set.schema.v0.1.json"
+    }
+  ]
+}

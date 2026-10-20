@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lims-eln-comparative-evidence"
+version = "0.3.1"
+description = "Independent comparator for caller-supplied observed evidence, planned contract shapes, and selected-future simulations"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+validation = ["jsonschema==4.26.0"]
+contract-conformance = [
+  "lims-eln-program-specification==0.3.1",
+]
+
+[project.scripts]
+lims-eln-compare = "comparative_evidence.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+comparative_evidence = ["contract_resources/*.json"]

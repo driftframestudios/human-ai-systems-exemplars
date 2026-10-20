@@ -9,23 +9,43 @@ adapt research, integration, staging, release, and delivery to particular jobs.
 | Branch | Primary job | Service relation |
 | --- | --- | --- |
 | `main` | Canonical collaboration trunk and authored current source | Radiant Null collaboration family |
+| `snapshot` | Exact selected `main` revision for stable-core comparison and recovery re-entry | Comparison input for a named preflight; feature work returns through a living branch |
 | `research` | Future-state projection and AI research-integration environment | Preview artifacts or a later purpose-bound research route |
 | `dev` | Sustained feature integration | Radiant Null collaboration family |
-| `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru schema family |
-| `release` | Accepted release integration and source for generated documentation | Vik Guru schema family |
-| `docs` | Generated GitHub Pages projection | Radiant Null collaboration family |
-| `prod` | Accepted schema and later Worker-backed production surface | Vik Guru schema family |
+| `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru delivery family |
+| `release` | Accepted release integration and promotion source for production | Vik Guru delivery family |
+| `docs` | Reviewed GitHub Pages projection rebuilt from an exact accepted `main` source | Radiant Null collaboration family |
+| `prod` | Accepted schema and exact production carrier authorized for delivery | Vik Guru delivery family |
 
 The service families are:
 
 - `schemas.radiantnull.com` for the collaboration-facing `main`, `dev`, and
   generated `docs` projections;
-- `schemas.vik.guru` for `stg`, `release`, and `prod`.
+- the Vik Guru delivery family for `stg`, `release`, and `prod`, with
+  `schemas.vik.guru` as the schema receiver, `vik.guru` as the primary visitor
+  receiver, and `iframes.vik.guru` as the embedded-artifact receiver.
 
 A GitHub Pages custom domain is repository-level. These groups describe source,
 promotion, and delivery intent rather than separate Pages sites for every
 branch. `research` begins with preview artifacts and receives a stable route
 only through a named service decision.
+
+## Snapshot baseline
+
+`snapshot` is a deliberately quiet copy of a selected `main` revision. Before
+using it, compare the exact `main` and `snapshot` commit IDs and record the
+result in the receiving Issue or pull request. A recovery, population, or
+preflight branch consumes the selected baseline by branching from `snapshot`
+or merging that exact snapshot revision into its living branch. Accepted
+feature work returns through the living pull-request branch; `snapshot` remains
+a comparison input.
+
+After a stable-core wave settles on `main`, fast-forward `snapshot` to that
+accepted revision. When its history has diverged, recreate the ref only after a
+recorded human cue names the previous revision, replacement revision,
+observation date, and receiving use. This preserves a legible recovery point
+while source authority, publication standing, and delivery configuration stay
+with their named branches and settings.
 
 ## Research flow
 
@@ -50,18 +70,92 @@ human review and explicit cue precede every merge from an epic branch into
 `res` is the environment label used in receipts, workflow names, and future
 deployment metadata. `research` remains the single canonical branch name.
 
-## Promotion flow
+## Promotion and publication flow
 
 Research supplies candidate implementations and evidence. Authored source and
-promotion branches select the durable result:
+promotion branches select the durable result through two distinct routes.
+
+The production route is:
 
 1. `main` receives accepted contracts and concise research receipts so
    main-only collaborators can understand and continue the work.
-2. `dev` integrates a chosen sustained feature direction.
-3. `stg` receives a selected deployment candidate or Worker pilot.
+2. `dev` optionally integrates a chosen sustained feature direction.
+3. `stg` receives a selected deployment candidate or Worker pilot, directly
+   from `main` when a sustained `dev` lane adds no useful integration step.
 4. `release` binds the accepted source, evidence, and integration result.
-5. An accepted `release` update produces the `docs` projection.
-6. A separately reviewed move advances accepted release material to `prod`.
+5. A separately reviewed move advances accepted release material to `prod`.
+
+### Protected destination promotion adapter
+
+A downstream ruleset can require the pull-request head to contain the current
+destination coordinate. Preserve the long-lived upstream branch by adapting
+one accepted coordinate on a short-lived branch:
+
+1. record the exact accepted upstream coordinate `U` and current destination
+   coordinate `D`;
+2. create a temporary promotion branch at exact `D`;
+3. merge exact `U` into that branch, producing candidate `C` with parents
+   `[D, U]`;
+4. verify the expected tree and path relationships before pushing;
+5. review `C → destination` after the destination checks pass;
+6. merge with a merge commit, producing promotion result `P` with parents
+   `[D, C]`; and
+7. verify `P`, record the durable receipt, then retire the temporary branch.
+
+For `stg → release`, `C` carries the accepted staging tree. For
+`release → prod`, `C` carries accepted release source outside
+`deployment/cpanel/carrier/**` while its complete carrier subtree—including
+path set, modes, and bytes—equals the preceding production destination. The
+accepted promotion result is production source `S = P`; `R` remains reserved
+for the later carrier-only merge result. That carrier branch starts from exact
+`S` and replaces the retained historical carrier.
+
+This adapter keeps downstream history on the destination side while canonical
+upstream history remains focused on its role. PR #468 remains accepted history
+without rewrite. A conflict, unexpected path delta, moving destination, or
+changed upstream acceptance forms a new source or candidate review boundary.
+
+The reviewed result must retain the topology receipt: `P^1 = D` and `P^2 = C`.
+Squash, rebase, and fast-forward results do not satisfy this promotion
+contract, even when their file trees match. For `release → prod`, verify the
+same outside-carrier and complete-carrier-subtree relationships on both `C`
+and `S` before carrier formation begins.
+
+Run the repository-owned checker with the four recorded coordinates. Omit the
+result while reviewing a candidate; include it after the destination merge:
+
+```sh
+npm run check:promotion-topology -- \
+  --upstream "$U" --destination "$D" --candidate "$C" --result "$P"
+```
+
+Add `--retained-root deployment/cpanel/carrier` for the `release → prod`
+specialization. The checker accepts only full commit object IDs, reads Git
+objects without moving refs or worktree state, and returns a compact normalized
+receipt. Its focused tests cover accepted topology and the failure paths that
+form a fresh candidate or return work to its source-owning lane.
+
+An equal-tree promotion changes Git ancestry and review receipts while the
+accepted source tree stays byte-identical. Existing iframe packages,
+production projections, media families, tag refs, carriers, and live
+deployments remain at their recorded coordinates. A separately authorized
+artifact contract starts any rebuild, tag, carrier staging, or activation.
+Production carrier staging begins after exact `S` acceptance and may update
+commit-bound metadata even when authored source stayed equal.
+
+Issue [#469](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/469)
+records the exercised procedure and its verification contract.
+[PR #470](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/470)
+is the first worked `release → prod` receipt; the publication stabilization
+runbook records its exact coordinates and subtree evidence.
+
+The schema Pages route is:
+
+1. An exact accepted `main` revision supplies the source.
+2. A generated `docs` projection receives its own review.
+3. The Pages workflow receives both revisions, rebuilds from the accepted
+   source, and requires complete byte equality before a deliberately selected
+   deployment.
 
 Publication, DNS, schema identity, credentials, and production authority remain
 with their named branch, setting, or human-reviewed operation. Generated
@@ -70,6 +164,29 @@ with their named branch, setting, or human-reviewed operation. Generated
 Selected promotion pull requests are the standing bridge from research. A bulk
 merge of accumulated research becomes fitting only when a human-reviewed epic
 receipt selects that complete target future.
+
+### cPanel production carrier
+
+The cPanel visitor deployment follows `main → stg → release → prod`; `dev`
+remains available when sustained integration earns it. The reviewed source
+promotion into `prod` establishes source commit `S`. A following pull request,
+started from exact `S`, changes only the generated
+`deployment/cpanel/carrier/**` closure. Its merged release commit `R` must keep
+`S` as first parent (`R^1 = S`) and pass the carrier verifier before cPanel
+receives it.
+
+Carrier bytes remain downstream, generated `prod` release material. They do
+not promote backward into source branches and the assembler excludes them from
+production inputs. The selected host receiver deploys `R`, while the carried
+manifest identifies `S`. `prod` names accepted production material rather than
+an attached checkout or transfer event. The immutable tag and carrier digests
+identify the payload; a transfer receipt identifies one delivery attempt; live
+observation identifies visitor standing. A human-approved deployment packet
+authorizes the first pilot; manual workflow dispatch can authorize a later
+artifact transfer without introducing another moving deployment branch. If
+`prod` moves before the carrier merge, regenerate from
+the new source coordinate. The complete sequence and host boundary live in
+[`deployment/cpanel/README.md`](deployment/cpanel/README.md).
 
 ## Synchronization and re-entry
 
@@ -109,16 +226,33 @@ environment bindings, and deployments receive their own reviewable changes.
 
 ### Current evidence window
 
-`main` is the sole budget-active receiver. Its public-boundary workflow reads
-tracked text on non-draft pull requests targeting the trunk. It uses one Linux
-job with a two-minute ceiling, read-only contents permission, superseded-run
-cancellation, and a one-day aggregate receipt. Findings retain advisory
-standing while merge authority stays with current reviewers.
+`main` remains a budget-active evidence receiver. Its public-boundary workflow
+reads tracked text on non-draft pull requests targeting the trunk. A companion
+schema-route receipt reads matching schema changes through the existing schema
+surface contract and Pages projection. Both use read-only contents permission,
+superseded-run cancellation, and advisory findings while merge authority stays
+with current reviewers. Their ceilings are two and six minutes respectively;
+the boundary reader retains its aggregate receipt for one day. `release` and
+`prod` are the two additional budget-active receivers for the bounded schema
+delivery contract described below.
 
-`research`, `res/*`, `dev`, `docs`, `stg`, `release`, and `prod` rest with budget
-values set to `false`. The shared profile envelope remains human-managed. A
-later evidence receipt can propose another active receiver, wider triggers, or
-a longer budget. `.github/ENVIRONMENTS.md` carries the operative receiver,
+The complete source-owned Actions family also travels with the trunk: the
+Pages workflow can publish a reviewed `docs` projection, Core and Narrative
+units remain manually selectable with their pull-request receiver resting behind
+`PROTOTYPE_UNIT_TESTS_AUTOMATIC`, and two LIMS/ELN proof paths retain explicit
+dispatch and confirmation. Every external action is pinned to a full reviewed
+commit SHA. These routes have distinct activation controls and leave the main
+public-boundary intake and schema-route receipt as the bounded automatic
+readers.
+
+`release` and `prod` each carry an approved 300-minute Actions allocation and
+the shared automatic schema-delivery contract. Deployment remains a separate
+receiver choice: `release` exercises the contract-only integration route, while
+an accepted `prod` push can pass through its exact-branch environment and human
+handoff when `prod` enters `DEPLOYMENT_ACTIVE_RECEIVERS`. `research`, `res/*`,
+`dev`, `docs`, and `stg`
+retain their resting budget values. The shared profile envelope remains
+human-managed. `.github/ENVIRONMENTS.md` carries the operative receiver,
 serving, deployment, and credential-routing contract.
 
 ## Working answers
@@ -141,6 +275,11 @@ serving, deployment, and credential-routing contract.
   recurring spend.
 
 ## Pull-request receipts
+
+Every review-ready pull request carries one receiving milestone and the
+smallest meaningful label set. Metadata supports navigation; the body remains
+the durable receipt for the material result, related issues, change boundary,
+fitting evidence and its coverage boundary, recovery path, and next receiver.
 
 A feature receipt names the question, bounded change, fitting evidence, recovery
 path, and next receiver. An epic receipt adds the included features,

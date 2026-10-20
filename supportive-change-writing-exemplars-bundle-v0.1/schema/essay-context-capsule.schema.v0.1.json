@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Essay Context Capsule",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band",
+    "capsule_type",
+    "applies_to",
+    "format_summary",
+    "content_surface_contract",
+    "essay_modes",
+    "probability_referent"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "prompt_capsule"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "capsule_type": {
+      "const": "essay_context"
+    },
+    "applies_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "linked_tone_goal_refs": {
+      "description": "Tone-goal artifacts that shape the writing context.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "register_dimension_refs": {
+      "description": "Local tone-goal dimension references foregrounded by the capsule.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "format_summary": {
+      "type": "string"
+    },
+    "content_surface_contract": {
+      "type": "string"
+    },
+    "essay_modes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "integrative",
+          "critical_systems",
+          "human_horizon"
+        ]
+      }
+    },
+    "probability_referent": {
+      "type": "string"
+    }
+  }
+}

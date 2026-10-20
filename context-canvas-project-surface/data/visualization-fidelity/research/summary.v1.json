@@ -1,0 +1,465 @@
+{
+  "id": "atlas-public-research-summary.v1",
+  "version": 1,
+  "population": "Explicitly selected public bibliography works; not a workspace census",
+  "counting": {
+    "work": "One admitted work id; source URLs and inspected sections do not add works",
+    "membership": "One work in one editorially assigned topic; topic totals can overlap",
+    "evidenceKind": "One descriptive kind per work, not an evidence-strength score",
+    "citationUse": "Record declarations refer to citation occurrence, not organizational application",
+    "zero": "Zero means no membership in this supplied set; wider coverage remains unspecified"
+  },
+  "citationOwner": ".agents/skills/data-visualization-foundations/references/evidence-and-source-map.md",
+  "totals": {
+    "works": 13,
+    "topicMemberships": 21,
+    "multiTopicWorks": 7,
+    "byEvidenceKind": {
+      "empirical-study": 2,
+      "technical-guidance": 6,
+      "practitioner-source": 5
+    }
+  },
+  "topics": [
+    {
+      "id": "comparison",
+      "works": 5,
+      "byEvidenceKind": {
+        "empirical-study": 1,
+        "technical-guidance": 1,
+        "practitioner-source": 3
+      },
+      "workIds": [
+        "weissgerber-2015-beyond-bars",
+        "d3-scales-and-joins",
+        "wilke-coordinate-systems",
+        "few-bullet-specification",
+        "few-thoughtful-defaults"
+      ]
+    },
+    {
+      "id": "interpretation",
+      "works": 7,
+      "byEvidenceKind": {
+        "empirical-study": 1,
+        "technical-guidance": 2,
+        "practitioner-source": 4
+      },
+      "workIds": [
+        "ajani-2021-declutter-focus",
+        "munzner-2009-nested-model",
+        "ons-line-guidance",
+        "wilke-coordinate-systems",
+        "few-thoughtful-defaults",
+        "knaflic-two-tips",
+        "registry-visualization-atlas"
+      ]
+    },
+    {
+      "id": "distribution-and-uncertainty",
+      "works": 2,
+      "byEvidenceKind": {
+        "empirical-study": 1,
+        "technical-guidance": 1,
+        "practitioner-source": 0
+      },
+      "workIds": [
+        "weissgerber-2015-beyond-bars",
+        "ons-line-guidance"
+      ]
+    },
+    {
+      "id": "accessibility",
+      "works": 2,
+      "byEvidenceKind": {
+        "empirical-study": 0,
+        "technical-guidance": 1,
+        "practitioner-source": 1
+      },
+      "workIds": [
+        "w3c-wai-complex-images",
+        "registry-visualization-atlas"
+      ]
+    },
+    {
+      "id": "web-delivery-and-state",
+      "works": 2,
+      "byEvidenceKind": {
+        "empirical-study": 0,
+        "technical-guidance": 2,
+        "practitioner-source": 0
+      },
+      "workIds": [
+        "w3c-svg-processing",
+        "d3-scales-and-joins"
+      ]
+    },
+    {
+      "id": "production-and-validation",
+      "works": 3,
+      "byEvidenceKind": {
+        "empirical-study": 0,
+        "technical-guidance": 2,
+        "practitioner-source": 1
+      },
+      "workIds": [
+        "munzner-2009-nested-model",
+        "matplotlib-export",
+        "registry-visualization-atlas"
+      ]
+    }
+  ],
+  "realWorldApplication": {
+    "standing": "unspecified",
+    "count": null
+  },
+  "records": [
+    {
+      "id": "ajani-2021-declutter-focus",
+      "recordKind": "work",
+      "title": "Declutter and Focus: Empirically Evaluating Design Guidelines for Effective Data Communication",
+      "creditedTo": "Kiran Ajani; Elsie Lee; Cindy Xiong; Cole Nussbaumer Knaflic; William Kemper; Steven Franconeri",
+      "version": "2021 IEEE TVCG paper; DOI 10.1109/TVCG.2021.3068337",
+      "sourceUri": "https://doi.org/10.1109/TVCG.2021.3068337",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://content.ieeevis.org/year/2021/paper_v-tvcg-9385921.html",
+          "scope": "publisher-abstract"
+        }
+      ],
+      "evidenceKind": "empirical-study",
+      "evidenceStanding": "Controlled graph-design experiment; this extract inspected the conference abstract. It supports changes in subjective ratings and recall under the reported task conditions.",
+      "topics": [
+        "interpretation"
+      ],
+      "supportedConsequence": "Use selective emphasis for a stated reading; the study reports changes in subjective ratings and recalled highlighted patterns under its task conditions.",
+      "transferBoundary": "General comprehension, correctness, trust, and any universal rule about shadows remain unestablished.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "weissgerber-2015-beyond-bars",
+      "recordKind": "work",
+      "title": "Beyond Bar and Line Graphs: Time for a New Data Presentation Paradigm",
+      "creditedTo": "Tracey L. Weissgerber; Natasa M. Milic; Stacey J. Winham; Vesna D. Garovic",
+      "version": "2015 PLOS Biology article; DOI 10.1371/journal.pbio.1002128",
+      "sourceUri": "https://doi.org/10.1371/journal.pbio.1002128",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128",
+          "scope": "article-text"
+        }
+      ],
+      "evidenceKind": "empirical-study",
+      "evidenceStanding": "Systematic review of 703 physiology articles from a defined 2014 journal/time frame, accompanied by worked data-display examples.",
+      "topics": [
+        "comparison",
+        "distribution-and-uncertainty"
+      ],
+      "supportedConsequence": "Retain observations or paired changes when distribution and within-unit dependence matter; the same mean and error summary can conceal different data structures.",
+      "transferBoundary": "That publication sample is distinct from this repository and workspace. Continuous-data summaries and categorical count bars have different meanings.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "munzner-2009-nested-model",
+      "recordKind": "work",
+      "title": "A Nested Model for Visualization Design and Validation",
+      "creditedTo": "Tamara Munzner",
+      "version": "2009 IEEE TVCG 15(6), pages 921-928",
+      "sourceUri": "https://www.cs.ubc.ca/labs/imager/tr/2009/NestedModel/",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.cs.ubc.ca/labs/imager/tr/2009/NestedModel/",
+          "scope": "author-abstract"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "Author's abstract of a conceptual design and validation framework.",
+      "topics": [
+        "interpretation",
+        "production-and-validation"
+      ],
+      "supportedConsequence": "Separate the domain question, data/task abstraction, encoding/interaction, and algorithm; choose observations that address the level of the decision.",
+      "transferBoundary": "The framework structures validation; implementation validity and measured usability require observations of the receiving implementation.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "w3c-wai-complex-images",
+      "recordKind": "work",
+      "title": "Complex Images",
+      "creditedTo": "W3C Web Accessibility Initiative",
+      "version": "Living Images Tutorial; page updated 2026-04-08; inspected 2026-10-04",
+      "sourceUri": "https://www.w3.org/WAI/tutorials/images/complex/",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.w3.org/WAI/tutorials/images/complex/",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "Official accessibility tutorial with short and extended description examples.",
+      "topics": [
+        "accessibility"
+      ],
+      "supportedConsequence": "Pair a complex figure with concise identification and a recoverable account of its meaningful values and relationships, retaining useful table structure.",
+      "transferBoundary": "A text companion is one design measure; complete accessibility and conformance require broader evaluation of the receiving experience.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "w3c-svg-processing",
+      "recordKind": "work",
+      "title": "Scalable Vector Graphics (SVG) 2: Conformance",
+      "creditedTo": "W3C SVG Working Group",
+      "version": "SVG 2, W3C Candidate Recommendation, 2018-10-04; conformance chapter inspected 2026-10-04",
+      "sourceUri": "https://www.w3.org/TR/SVG/conform.html",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.w3.org/TR/SVG/conform.html",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "SVG specification provisions define document and image processing modes.",
+      "topics": [
+        "web-delivery-and-state"
+      ],
+      "supportedConsequence": "Choose image delivery for static content and a separately governed document or inline representation when scripting or interaction is required.",
+      "transferBoundary": "Each embedding mode and receiving interface requires its own capability check.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "d3-scales-and-joins",
+      "recordKind": "work",
+      "title": "D3 documentation: scales and data joins",
+      "creditedTo": "Mike Bostock and Observable contributors",
+      "version": "Documentation displaying D3 7.9.0; inspected 2026-10-04",
+      "sourceUri": "https://d3js.org/d3-scale",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://d3js.org/d3-scale",
+          "scope": "full-guidance"
+        },
+        {
+          "uri": "https://d3js.org/d3-selection/joining",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "Official API documentation; the two inspected sections form one documentation-work record.",
+      "topics": [
+        "comparison",
+        "web-delivery-and-state"
+      ],
+      "supportedConsequence": "Keep data-to-position mapping explicit and use stable keys for record-to-element correspondence when a view updates.",
+      "transferBoundary": "Retained selection, keyboard behavior, and cross-view consistency require observations of the receiving implementation.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "matplotlib-export",
+      "recordKind": "work",
+      "title": "Matplotlib documentation: matplotlib.pyplot.savefig",
+      "creditedTo": "Matplotlib contributors",
+      "version": "Stable documentation displaying version 3.11.2; inspected 2026-10-04",
+      "sourceUri": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "Official export API documentation, limited here to the savefig entry.",
+      "topics": [
+        "production-and-validation"
+      ],
+      "supportedConsequence": "Specify the output format and resolution deliberately and account for backend-dependent metadata when handing off a figure.",
+      "transferBoundary": "Final-size legibility, embedded-font behavior, and receiving-PDF accessibility require observations of the exported artifact.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "ons-line-guidance",
+      "recordKind": "work",
+      "title": "Data over time: Line chart",
+      "creditedTo": "Office for National Statistics",
+      "version": "Living Service Manual guidance inspected 2026-10-04",
+      "sourceUri": "https://service-manual.ons.gov.uk/data-visualisation/chart-types/line-chart",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://service-manual.ons.gov.uk/data-visualisation/chart-types/line-chart",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "technical-guidance",
+      "evidenceStanding": "Official practice guidance for line-chart construction and alternatives.",
+      "topics": [
+        "interpretation",
+        "distribution-and-uncertainty"
+      ],
+      "supportedConsequence": "Expose irregular observations with markers, preserve gaps for missing regular observations, and use steps for values held between discrete changes.",
+      "transferBoundary": "Interpolation and time-series modeling require dataset-specific justification.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "wilke-coordinate-systems",
+      "recordKind": "work",
+      "title": "Fundamentals of Data Visualization",
+      "creditedTo": "Claus O. Wilke",
+      "version": "Online book, chapter 3: Coordinate systems and axes; inspected 2026-10-04",
+      "sourceUri": "https://clauswilke.com/dataviz/coordinate-systems-axes.html",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://clauswilke.com/dataviz/coordinate-systems-axes.html",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "practitioner-source",
+      "evidenceStanding": "Author-written explanatory book; this extract inspected one chapter and counts the book once.",
+      "topics": [
+        "comparison",
+        "interpretation"
+      ],
+      "supportedConsequence": "Choose additive or multiplicative distance to match the question; distinguish raw-value log-axis ticks from labels for already transformed values.",
+      "transferBoundary": "Coordinate examples supply design reasoning; universal audience comprehension remains unestablished. Ordinary log axes require positive values.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "few-bullet-specification",
+      "recordKind": "work",
+      "title": "Bullet Graph Design Specification",
+      "creditedTo": "Stephen Few",
+      "version": "Last revision 2013-10-10",
+      "sourceUri": "https://perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf",
+          "scope": "full-guidance"
+        }
+      ],
+      "evidenceKind": "practitioner-source",
+      "evidenceStanding": "Author's five-page design specification.",
+      "topics": [
+        "comparison"
+      ],
+      "supportedConsequence": "Compare one measure with supplied reference values on a common scale; use zero-based bars or a point mark when a restricted range is necessary.",
+      "transferBoundary": "Domain definitions supply targets and qualitative ranges; a universal performance advantage remains unestablished.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "few-thoughtful-defaults",
+      "recordKind": "work",
+      "title": "The Role of Software and the Importance of Thoughtful Defaults",
+      "creditedTo": "Stephen Few",
+      "version": "Visual Business Intelligence Newsletter, December 2007",
+      "sourceUri": "https://www.perceptualedge.com/articles/visual_business_intelligence/thoughtful_defaults.pdf",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.perceptualedge.com/articles/visual_business_intelligence/thoughtful_defaults.pdf",
+          "scope": "article-text"
+        }
+      ],
+      "evidenceKind": "practitioner-source",
+      "evidenceStanding": "Practitioner essay and chart examples about software defaults.",
+      "topics": [
+        "comparison",
+        "interpretation"
+      ],
+      "supportedConsequence": "Choose defaults that fit data and reading, including zero-based bars, point marks for restricted ranges, and subdued supporting guides.",
+      "transferBoundary": "These recommendations carry practitioner reasoning; an experimental ranking or universal axis-and-guide rule would require separate evidence.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "knaflic-two-tips",
+      "recordKind": "work",
+      "title": "two tips for better graphs",
+      "creditedTo": "Cole Nussbaumer Knaflic",
+      "version": "Public article inspected 2026-10-04; visible date April 27 leaves year unspecified",
+      "sourceUri": "https://www.storytellingwithdata.com/blog/two-tips-for-better-graphs",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://www.storytellingwithdata.com/blog/two-tips-for-better-graphs",
+          "scope": "article-text"
+        }
+      ],
+      "evidenceKind": "practitioner-source",
+      "evidenceStanding": "Practitioner explanation linked to the separately counted Ajani et al. study.",
+      "topics": [
+        "interpretation"
+      ],
+      "supportedConsequence": "Reduce distracting detail and use limited contrast to direct an explanatory reading while retaining comparison context.",
+      "transferBoundary": "The pair shares source lineage and contributes one line of empirical support; independent corroboration requires a separate work.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    },
+    {
+      "id": "registry-visualization-atlas",
+      "recordKind": "work",
+      "title": "Visualization Fidelity Atlas: Data Shape to Cognitive Move to Visual Form",
+      "creditedTo": "Enterprise Human-AI Practitioner Registry",
+      "version": "Version 0.1.0; public Registry content last edited 2026-09-30",
+      "sourceUri": "https://kindlight.systems/research-atlas-observatory/visualization-fidelity-atlas-data-shape-cognitive-move-visual-form",
+      "inspectedOn": "2026-10-04",
+      "inspectedSources": [
+        {
+          "uri": "https://kindlight.systems/research-atlas-observatory/visualization-fidelity-atlas-data-shape-cognitive-move-visual-form",
+          "scope": "registry-connector-content"
+        }
+      ],
+      "evidenceKind": "practitioner-source",
+      "evidenceStanding": "Public Registry method synthesis; connector content confirms the public-route property and Registry ancestry.",
+      "topics": [
+        "interpretation",
+        "accessibility",
+        "production-and-validation"
+      ],
+      "supportedConsequence": "Choose from the reader's operation, data shape, audience/stakes, uncertainty, and companion need; distinguish production commitment from evidence strength.",
+      "transferBoundary": "The Registry guidance and its synthetic examples establish a method. Dataset validity, empirical impact, and deployment require their own evidence; public-route rendering remains unchecked.",
+      "citationUse": "observed-in-skill-evidence-map",
+      "realWorldApplication": "unspecified"
+    }
+  ],
+  "source": {
+    "path": "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
+    "sha256": "f3f773b0c939d4c239379bbfd6275979df106da93d67de518e90737ea5d7df45",
+    "standing": "byte-verified-public-editorial-extract",
+    "selectedOn": "2026-10-04",
+    "selection": {
+      "basis": "bounded-public-bibliography-extract",
+      "authorization": "The current request authorizes a public extract of already-public citations and public Registry guidance.",
+      "enumeration": "Exactly the 13 work records listed here; selected for concrete visualization decisions rather than exhaustive coverage.",
+      "uniqueWorkRule": "One stable id per selected work. D3 sections count as one documentation work; Wilke's inspected chapter counts within one book. Distinct practitioner commentary and the empirical study it cites remain separate works, not independent confirmations.",
+      "membershipRule": "Topics are explicit editorial classifications. A work contributes once to each assigned topic and may contribute to several topics.",
+      "coverage": "Complete for the enumerated subset only. Coverage of the wider bibliography, literature, Registry, and private workspace is unspecified.",
+      "inspectionBoundary": "Inspection covers the named sections and scopes, not every cited work in those sources. Registry content was read through its connector under confirmed public Registry ancestry; its public route is retained without a claim of anonymous browser access.",
+      "exclusions": [
+        "Private workspace pages, names, locators, search-result totals, and operating material.",
+        "Public works that were not selected and inspected for this extract; this is not a systematic literature review.",
+        "Heer and Bostock's graphical-perception paper, whose attempted source retrieval was unavailable in this selection pass.",
+        "Uninspected chapters and document sections; multiple URLs for an included work do not add works.",
+        "Application frequency, adoption, measured impact, evidence-quality scores, and current workspace counts.",
+        "Source article full text, page dumps, connector metadata, and synthetic example data from the Registry."
+      ]
+    }
+  }
+}

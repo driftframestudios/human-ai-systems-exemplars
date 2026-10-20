@@ -1,0 +1,847 @@
+{
+  "version": "0.2.0",
+  "asOf": "2026-07-24",
+  "method": {
+    "name": "Deep Research Atlas — Self-Contained Payload",
+    "version": "1.2",
+    "url": "urn:source-key:SRC-ATLAS"
+  },
+  "frames": [
+    {
+      "id": "F0",
+      "label": "Current authority",
+      "note": "Most capabilities remain under legacy or human authority. Coupling and unknowns are explicit."
+    },
+    {
+      "id": "F1",
+      "label": "Boundary identified",
+      "note": "The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes."
+    },
+    {
+      "id": "F2",
+      "label": "Shadow / dual-run",
+      "note": "The candidate mirrors or receives bounded traffic while legacy remains authoritative and rollback stays available."
+    },
+    {
+      "id": "F3",
+      "label": "Validated authority",
+      "note": "Authority transfers only for the validated capability. Risky, coupled, human, and unknown work remains deliberately visible."
+    }
+  ],
+  "lenses": [
+    {
+      "id": "authority",
+      "label": "Authority topology",
+      "note": "Locate execution and decision authority without treating position as value, maturity, effort, safety, or priority."
+    },
+    {
+      "id": "assurance",
+      "label": "Assurance gates",
+      "note": "Seven independent evidence gates surround the transfer. Their categories are research-backed; applicability and pass/fail remain product-specific."
+    },
+    {
+      "id": "runtime",
+      "label": "Runtime + data",
+      "note": "Read, write, response, record, authorization, comparison, and fallback relationships are distinct. Shadow never implies stateful safety."
+    },
+    {
+      "id": "recovery",
+      "label": "Recovery + retirement",
+      "note": "A cutover is followed by observation, rollback holding, controlled stop, retention, and owner authorization before decommission."
+    },
+    {
+      "id": "evidence",
+      "label": "Evidence provenance",
+      "note": "Every broadened assertion exposes source class, boundary, disconfirmation, and the evidence that could change the decision."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "CAP-OP-ASSIGN",
+      "label": "Profiles, permissions & case assignment",
+      "short": "Operational / assignment",
+      "family": "Operational bridge",
+      "states": [
+        "legacy",
+        "seam",
+        "shadow",
+        "new"
+      ],
+      "evidence": "Historical source assertion; first bounded candidate"
+    },
+    {
+      "id": "CAP-SEARCH",
+      "label": "Standard and advanced search",
+      "short": "Search",
+      "family": "Viewer surface",
+      "states": [
+        "legacy",
+        "legacy",
+        "legacy",
+        "legacy"
+      ],
+      "evidence": "Candidate only; separability not demonstrated"
+    },
+    {
+      "id": "CAP-SPECIMEN",
+      "label": "Specimen details and overview",
+      "short": "Specimen overview",
+      "family": "Viewer surface",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed, not bounded"
+    },
+    {
+      "id": "CAP-SOP-NOTES",
+      "label": "SOPs, notes, and comments",
+      "short": "SOPs / notes",
+      "family": "Viewer surface",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed, not bounded"
+    },
+    {
+      "id": "CAP-VARIANT",
+      "label": "Variant detail views and status rules",
+      "short": "Variant details",
+      "family": "Scientific business logic",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Explicit risk; deeply coupled"
+    },
+    {
+      "id": "CAP-QC",
+      "label": "Quality control",
+      "short": "Quality control",
+      "family": "Scientific business logic",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed; coupling unresolved"
+    },
+    {
+      "id": "CAP-BIOMARKER",
+      "label": "Biomarkers",
+      "short": "Biomarkers",
+      "family": "Scientific business logic",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed; coupling unresolved"
+    },
+    {
+      "id": "CAP-NON-HUMAN",
+      "label": "Non-human workflows",
+      "short": "Non-human",
+      "family": "Viewer surface",
+      "states": [
+        "unknown",
+        "unknown",
+        "unknown",
+        "unknown"
+      ],
+      "evidence": "UNKNOWN / unbounded"
+    },
+    {
+      "id": "CAP-PGX",
+      "label": "Pharmacogenomics",
+      "short": "Pharmacogenomics",
+      "family": "Scientific business logic",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed; coupling unresolved"
+    },
+    {
+      "id": "CAP-PLUGINS",
+      "label": "Plugins and arbitrary code",
+      "short": "Plugins / arbitrary code",
+      "family": "Viewer surface",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Explicit risk; deeply coupled"
+    },
+    {
+      "id": "SVC-IAM",
+      "label": "Identity and access management",
+      "short": "IAM",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "seam",
+        "shadow",
+        "new"
+      ],
+      "evidence": "Material dependency of first candidate"
+    },
+    {
+      "id": "SVC-NOTIFY",
+      "label": "Notifications and realtime transport",
+      "short": "Notifications",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Listed, not bounded"
+    },
+    {
+      "id": "SVC-API",
+      "label": "API and service layer",
+      "short": "API / service layer",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "seam",
+        "shadow",
+        "new"
+      ],
+      "evidence": "Material contract surface"
+    },
+    {
+      "id": "SVC-MVC",
+      "label": "MVC factories and visitor patterns",
+      "short": "MVC factories / visitors",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Deeply coupled dependency"
+    },
+    {
+      "id": "SVC-SPRING",
+      "label": "Framework-handled serialization",
+      "short": "Spring serialization",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Deeply coupled dependency"
+    },
+    {
+      "id": "SVC-ERROR",
+      "label": "Error handling and HTTP responses",
+      "short": "Error / HTTP behavior",
+      "family": "Service underpinning",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Material failure behavior; not bounded"
+    },
+    {
+      "id": "SVC-REG",
+      "label": "Regulatory-grade logout and data obscuring",
+      "short": "Regulatory constraints",
+      "family": "Regulatory control",
+      "states": [
+        "legacy",
+        "retained",
+        "retained",
+        "retained"
+      ],
+      "evidence": "Explicit control; retained legacy"
+    }
+  ],
+  "assuranceGates": [
+    {
+      "id": "AG-01",
+      "label": "Regulatory + intended-use context",
+      "status": "UNRESOLVED",
+      "summary": "Research or clinical; display or recommend; HCP or patient; time-critical or deliberative; established or uncertain genomic relevance.",
+      "boundary": "External guidance cannot determine device status, intended use, jurisdiction, or pathway for this system.",
+      "sources": [
+        "SRC-FDA-CDS",
+        "SRC-FDA-SW",
+        "SRC-QMSR",
+        "SRC-CLIA"
+      ]
+    },
+    {
+      "id": "AG-02",
+      "label": "Clinical evidence",
+      "status": "CONDITIONAL",
+      "summary": "Keep valid clinical association, analytical validation, and clinical validation distinct.",
+      "boundary": "May sit outside a bounded operational capability if it has no clinical interpretation or patient-facing effect.",
+      "sources": [
+        "SRC-IMDRF-SAMD",
+        "SRC-FDA-CDS"
+      ]
+    },
+    {
+      "id": "AG-03",
+      "label": "Software evidence bundle",
+      "status": "DEPTH UNRESOLVED",
+      "summary": "Requirements; interfaces and data flows; traceability; configuration; test results; anomalies; rollback.",
+      "boundary": "The exact documentation level depends on intended use, risk, and applicable pathway.",
+      "sources": [
+        "SRC-FDA-SW",
+        "SRC-FDA-CSA",
+        "SRC-NIST-SSDF"
+      ]
+    },
+    {
+      "id": "AG-04",
+      "label": "Human-factors critical-task delta",
+      "status": "APPLICABILITY UNRESOLVED",
+      "summary": "Perception, cognition, physical interaction, and critical-task sequence changes; URRA and validation method.",
+      "boundary": "A documented assessment may show no UI or critical-task delta for the bounded change.",
+      "sources": [
+        "SRC-FDA-HF-2026",
+        "SRC-FDA-HFE"
+      ]
+    },
+    {
+      "id": "AG-05",
+      "label": "Safety + cybersecurity",
+      "status": "SEPARATE, LINKED",
+      "summary": "Safety hazards; threat model; trust boundaries; SBOM; testing; logging; recovery; patchability; ownership.",
+      "boundary": "Cyber-device obligations are conditional; generic security architecture remains relevant but is not compliance proof.",
+      "sources": [
+        "SRC-FDA-CYBER",
+        "SRC-NIST-SSDF",
+        "SRC-NIST-ZTA",
+        "SRC-RFC9700"
+      ]
+    },
+    {
+      "id": "AG-06",
+      "label": "Records, audit + genomic custody",
+      "status": "REGIME UNRESOLVED",
+      "summary": "Actor, authority, action, time, reason, prior/resulting state, source version, retention, access, recovery, data-use limits.",
+      "boundary": "Part 11, HIPAA, CLIA, and NIH controlled-access applicability require separate scope determinations.",
+      "sources": [
+        "SRC-PART11",
+        "SRC-HIPAA",
+        "SRC-NIH-DATA",
+        "SRC-PROV"
+      ]
+    },
+    {
+      "id": "AG-07",
+      "label": "Change authorization",
+      "status": "NAMED DECISION",
+      "summary": "Intended-use change; new risk; pathway rationale; HF and security impact; approvers; release criteria; monitoring; rollback trigger.",
+      "boundary": "A bounded non-device operational change may need a smaller evidence set, but must still preserve authority, audit, and rollback semantics.",
+      "sources": [
+        "SRC-FDA-CHANGE",
+        "SRC-FDA-PCCP",
+        "SRC-AWS-RETIRE",
+        "SRC-AZURE-RETIRE"
+      ]
+    }
+  ],
+  "migrationGates": [
+    {
+      "id": "G0",
+      "label": "Boundary readiness",
+      "status": "PARTIAL HISTORICAL EVIDENCE",
+      "summary": "Stable identity; routable interception or abstraction; owner and dependency map; known system of record.",
+      "sources": [
+        "SRC-FOWLER-STRANGLER",
+        "SRC-AWS-STRANGLER",
+        "SRC-FOWLER-ABSTRACTION"
+      ]
+    },
+    {
+      "id": "G1",
+      "label": "Data readiness",
+      "status": "UNKNOWN",
+      "summary": "Backfill scope; schema compatibility; lag; conflicts; reconciliation; idempotency.",
+      "sources": [
+        "SRC-AWS-OUTBOX",
+        "SRC-DEBEZIUM",
+        "SRC-PG-REPL"
+      ]
+    },
+    {
+      "id": "G2",
+      "label": "Contract readiness",
+      "status": "UNKNOWN",
+      "summary": "Declared interface; current provider verification; failure behavior; version compatibility.",
+      "sources": [
+        "SRC-OPENAPI",
+        "SRC-PACT"
+      ]
+    },
+    {
+      "id": "G3",
+      "label": "Runtime readiness",
+      "status": "UNKNOWN",
+      "summary": "Canary/control separation; user-centered indicators; adequate window; parity and error-budget verdict.",
+      "sources": [
+        "SRC-GOOGLE-CANARY",
+        "SRC-GOOGLE-SLO",
+        "SRC-ISTIO-MIRROR"
+      ]
+    },
+    {
+      "id": "G4",
+      "label": "Security readiness",
+      "status": "UNKNOWN",
+      "summary": "Per-request authorization equivalence; least privilege; audience and scope; telemetry boundary.",
+      "sources": [
+        "SRC-NIST-ZTA",
+        "SRC-RFC9700",
+        "SRC-FDA-CYBER"
+      ]
+    },
+    {
+      "id": "G5",
+      "label": "Authority transfer",
+      "status": "HISTORICALLY ASSERTED FOR ONE CANDIDATE",
+      "summary": "Rollback rehearsed; residual risk reviewed; named domain, operations, quality, and security authorization.",
+      "sources": [
+        "SRC-A3",
+        "SRC-FDA-SW",
+        "SRC-GOOGLE-CANARY"
+      ]
+    },
+    {
+      "id": "G6",
+      "label": "Retirement readiness",
+      "status": "NOT CLAIMED",
+      "summary": "No unresolved dependencies; controlled stop; archive retrieval; retention and owner approvals; temporary controls retired.",
+      "sources": [
+        "SRC-AWS-RETIRE",
+        "SRC-AZURE-RETIRE"
+      ]
+    }
+  ],
+  "runtimeItems": [
+    {
+      "id": "RT-ROUTER",
+      "label": "Interception router / abstraction",
+      "status": "Candidate control",
+      "summary": "A routable interception or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.",
+      "boundary": "Proxy, ACL, bottleneck, and unclear-domain risks remain.",
+      "sources": [
+        "SRC-AWS-STRANGLER",
+        "SRC-FOWLER-ABSTRACTION"
+      ]
+    },
+    {
+      "id": "RT-LEGACY",
+      "label": "Legacy execution + decision authority",
+      "status": "Protected baseline",
+      "summary": "Legacy serves the authoritative result until the named gate authorizes a bounded transfer.",
+      "boundary": "Physical deployment does not itself define authority.",
+      "sources": [
+        "SRC-A3"
+      ]
+    },
+    {
+      "id": "RT-NEW",
+      "label": "Target implementation",
+      "status": "Candidate / selectively authoritative",
+      "summary": "In F2 it may receive non-authoritative mirrored traffic; in F3 only the evidenced operational capability is shown as authoritative.",
+      "boundary": "No broader clinical, scientific, data-store, or retirement authority is implied.",
+      "sources": [
+        "SRC-A3",
+        "SRC-ISTIO-MIRROR"
+      ]
+    },
+    {
+      "id": "RT-COMPARE",
+      "label": "Contract + response comparator",
+      "status": "Evidence plane",
+      "summary": "Declared contract, current provider verification, and old/new result comparison are different evidence objects.",
+      "boundary": "Passing contracts does not replace data, security, production, or end-to-end evidence.",
+      "sources": [
+        "SRC-OPENAPI",
+        "SRC-PACT",
+        "SRC-GOOGLE-CANARY"
+      ]
+    },
+    {
+      "id": "RT-DATA",
+      "label": "Data transition + reconciliation",
+      "status": "UNKNOWN for this system",
+      "summary": "Backfill, outbox/CDC, idempotent consumption, lag, conflicts, and parity require explicit evidence if state moves.",
+      "boundary": "Uncoordinated dual writes are not assumed; CDC is not complete replication.",
+      "sources": [
+        "SRC-AWS-OUTBOX",
+        "SRC-DEBEZIUM",
+        "SRC-PG-REPL"
+      ]
+    },
+    {
+      "id": "RT-AUTH",
+      "label": "Policy decision + enforcement",
+      "status": "Per-request control",
+      "summary": "Authentication and authorization remain explicit at each protected resource; they do not move implicitly with a cube.",
+      "boundary": "Product-specific identity topology and policies were not available.",
+      "sources": [
+        "SRC-NIST-ZTA",
+        "SRC-RFC9700"
+      ]
+    },
+    {
+      "id": "RT-PROV",
+      "label": "Provenance + audit ledger",
+      "status": "Evidence plane",
+      "summary": "Record entities, activities, agents, derivations, versions, observations, decisions, and accountable owners.",
+      "boundary": "A provenance model does not itself establish retention, Part 11, HIPAA, or clinical-record applicability.",
+      "sources": [
+        "SRC-PROV",
+        "SRC-PART11"
+      ]
+    },
+    {
+      "id": "RT-CONTROL",
+      "label": "Cohort, promotion + rollback controls",
+      "status": "Temporary control plane",
+      "summary": "Cohort and traffic selection support evidence-bounded promotion and reversible rollback; temporary controls need retirement.",
+      "boundary": "Applicable two-, four-, six-, or eight-stage profile remains an internal decision.",
+      "sources": [
+        "SRC-LD-MIGRATION",
+        "SRC-GOOGLE-CANARY",
+        "SRC-AWS-RETIRE"
+      ]
+    }
+  ],
+  "discrepancies": [
+    {
+      "id": "DR-01",
+      "question": "Does generic shadow hide distinct read, write, response, and record-authority transitions here?",
+      "values": [
+        45,
+        25,
+        20,
+        10
+      ],
+      "confidence": "Low—internal runtime evidence absent.",
+      "falsifier": "Internal contracts and data flows show that the capability is stateless or that all authority dimensions move atomically.",
+      "sources": [
+        "SRC-LD-MIGRATION",
+        "SRC-AWS-OUTBOX",
+        "SRC-ISTIO-MIRROR"
+      ]
+    },
+    {
+      "id": "DR-02",
+      "question": "Does validated authority need post-release stabilization and retirement readiness?",
+      "values": [
+        60,
+        15,
+        5,
+        20
+      ],
+      "confidence": "Medium—independent migration and retirement sources concur.",
+      "falsifier": "The artifact is explicitly scoped only to pre-retirement authority and links to a separately governed retirement model.",
+      "sources": [
+        "SRC-GOOGLE-CANARY",
+        "SRC-AWS-RETIRE",
+        "SRC-AZURE-RETIRE"
+      ]
+    },
+    {
+      "id": "DR-03",
+      "question": "Do all seven regulated-assurance gates apply to the operational capability?",
+      "values": [
+        25,
+        45,
+        10,
+        20
+      ],
+      "confidence": "Low—regulatory scope unresolved.",
+      "falsifier": "A documented applicability assessment places one or more gates outside the product or record boundary.",
+      "sources": [
+        "SRC-FDA-CDS",
+        "SRC-PART11",
+        "SRC-HIPAA",
+        "SRC-CLIA"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "SRC-A3",
+      "title": "Evidence-Guided Capability Transfer Model",
+      "url": "urn:source-key:SRC-A3",
+      "role": "Protected historical and semantic baseline.",
+      "boundary": "Internal source assertion; operational evidence still required for new claims."
+    },
+    {
+      "id": "SRC-ATLAS",
+      "title": "Deep Research Atlas v1.2",
+      "url": "urn:source-key:SRC-ATLAS",
+      "role": "Coverage ledger, confounders, disconfirmation, probability referent, provenance, completion gate.",
+      "boundary": "Research protocol; domain evidence remains with the cited sources."
+    },
+    {
+      "id": "SRC-QMSR",
+      "title": "FDA Quality Management System Regulation",
+      "url": "https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr",
+      "role": "Current quality-system context; effective 2 February 2026.",
+      "boundary": "Incorporated ISO text was not reproduced in the page."
+    },
+    {
+      "id": "SRC-FDA-SW",
+      "title": "FDA Premarket Submissions for Device Software Functions",
+      "url": "https://www.fda.gov/media/153781/download",
+      "role": "Architecture, requirements, traceability, verification, versions, anomaly disposition.",
+      "boundary": "Product-specific documentation level unresolved."
+    },
+    {
+      "id": "SRC-FDA-CSA",
+      "title": "FDA Computer Software Assurance, February 2026",
+      "url": "https://www.fda.gov/media/188844/download",
+      "role": "Risk-proportional assurance and evidence records.",
+      "boundary": "Applies to production/QMS software, not device software functions themselves."
+    },
+    {
+      "id": "SRC-FDA-CYBER",
+      "title": "FDA Cybersecurity in Medical Devices, February 2026",
+      "url": "https://www.fda.gov/media/119933/download",
+      "role": "Threat model, architecture, SBOM, testing, logging, recovery, vulnerability management.",
+      "boundary": "Section 524B duties depend on cyber-device status."
+    },
+    {
+      "id": "SRC-FDA-HF-2026",
+      "title": "FDA Human Factors Submission Information, May 2026",
+      "url": "https://www.fda.gov/media/163694/download",
+      "role": "Critical-task delta, URRA, validation evidence.",
+      "boundary": "Within stated operationalization interval through 1 August 2026."
+    },
+    {
+      "id": "SRC-FDA-HFE",
+      "title": "FDA Applying Human Factors and Usability Engineering",
+      "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/applying-human-factors-and-usability-engineering-medical-devices",
+      "role": "Use-related risk foundation.",
+      "boundary": "Does not itself determine submission category."
+    },
+    {
+      "id": "SRC-FDA-CDS",
+      "title": "FDA Clinical Decision Support Software, January 2026",
+      "url": "https://www.fda.gov/media/109618/download",
+      "role": "Non-Device CDS criteria, independent review, time criticality, genomic examples.",
+      "boundary": "Device status cannot be concluded without intended use and actual function."
+    },
+    {
+      "id": "SRC-IMDRF-SAMD",
+      "title": "IMDRF SaMD Clinical Evaluation",
+      "url": "https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation",
+      "role": "Clinical association, analytical validation, clinical validation.",
+      "boundary": "International technical document, not a standalone US legal requirement."
+    },
+    {
+      "id": "SRC-PART11",
+      "title": "21 CFR 11.10",
+      "url": "https://www.ecfr.gov/current/title-21/part-11/section-11.10",
+      "role": "Validation, copies, retention, access, audit trail, authority and sequence checks.",
+      "boundary": "Predicate-rule and record-scope analysis required."
+    },
+    {
+      "id": "SRC-HIPAA",
+      "title": "45 CFR 164.308 and 164.312",
+      "url": "https://www.ecfr.gov/current/title-45/part-164/section-164.308",
+      "role": "Risk analysis, access, contingency, audit, integrity, authentication, transmission security.",
+      "boundary": "Applicability depends on entity, relationship, and ePHI."
+    },
+    {
+      "id": "SRC-NIH-DATA",
+      "title": "NIH Controlled-Access Data Requirements",
+      "url": "https://www.grants.nih.gov/policy-and-compliance/policy-topics/sharing-policies/accessing-data/requirements",
+      "role": "Approved use, security, incident reporting, institutional accountability.",
+      "boundary": "Conditional on controlled-access data and agreements."
+    },
+    {
+      "id": "SRC-CLIA",
+      "title": "CMS Clinical Laboratory Improvement Amendments",
+      "url": "https://www.cms.gov/medicare/quality/clinical-laboratory-improvement-amendments",
+      "role": "US human-laboratory testing boundary.",
+      "boundary": "No genomic-viewer-specific software rule was established by this page."
+    },
+    {
+      "id": "SRC-NIST-SSDF",
+      "title": "NIST SSDF 1.1",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "role": "Secure development, provenance, verification, response.",
+      "boundary": "Voluntary framework, not certification; draft 1.2 excluded."
+    },
+    {
+      "id": "SRC-NIST-ZTA",
+      "title": "NIST SP 800-207 Zero Trust Architecture",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "role": "Per-request policy decisions and enforcement; least privilege.",
+      "boundary": "General architecture; product policy topology unresolved."
+    },
+    {
+      "id": "SRC-RFC9700",
+      "title": "RFC 9700 OAuth 2.0 Security BCP",
+      "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+      "role": "Audience-restricted and sender-constrained token guidance.",
+      "boundary": "Does not establish the product’s identity protocol."
+    },
+    {
+      "id": "SRC-FOWLER-STRANGLER",
+      "title": "Fowler — Original Strangler Fig Application",
+      "url": "https://martinfowler.com/bliki/OriginalStranglerFigApplication.html",
+      "role": "Gradual replacement and frequent release framing.",
+      "boundary": "Pattern description, not proof of product separability."
+    },
+    {
+      "id": "SRC-AWS-STRANGLER",
+      "title": "AWS Strangler Fig Pattern",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html",
+      "role": "Proxy and anti-corruption boundary with risks and limitations.",
+      "boundary": "Implementation choice and domain boundary remain product-specific."
+    },
+    {
+      "id": "SRC-FOWLER-ABSTRACTION",
+      "title": "Fowler — Branch by Abstraction",
+      "url": "https://martinfowler.com/bliki/BranchByAbstraction.html",
+      "role": "Inner boundary, coexisting implementations, feature-flagged switching.",
+      "boundary": "Requires a viable abstraction; not always available."
+    },
+    {
+      "id": "SRC-LD-MIGRATION",
+      "title": "LaunchDarkly Multi-stage Migrations",
+      "url": "https://launchdarkly.com/docs/guides/flags/migrations",
+      "role": "Old-only, dual-write, shadow, live, ramp-down, complete; selectable profiles.",
+      "boundary": "Not all systems support coexisting implementations."
+    },
+    {
+      "id": "SRC-AWS-OUTBOX",
+      "title": "AWS Transactional Outbox",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+      "role": "Avoid uncoordinated dual writes; atomic state and event commit.",
+      "boundary": "Duplicate delivery still requires idempotent consumers."
+    },
+    {
+      "id": "SRC-DEBEZIUM",
+      "title": "Debezium Outbox and CDC Features",
+      "url": "https://debezium.io/documentation/reference/stable/features.html",
+      "role": "Change capture, deletes, transaction metadata, engine limitations.",
+      "boundary": "Connector-specific constraints remain."
+    },
+    {
+      "id": "SRC-PG-REPL",
+      "title": "PostgreSQL Logical Replication Restrictions",
+      "url": "https://www.postgresql.org/docs/current/logical-replication-restrictions.html",
+      "role": "DDL, sequence, large-object, view, and conflict limitations.",
+      "boundary": "Database-specific; PostgreSQL use is not asserted."
+    },
+    {
+      "id": "SRC-ISTIO-MIRROR",
+      "title": "Istio Traffic Mirroring",
+      "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/",
+      "role": "Fire-and-forget mirror whose response is discarded.",
+      "boundary": "Does not prevent stateful side effects by itself."
+    },
+    {
+      "id": "SRC-GOOGLE-CANARY",
+      "title": "Google SRE Workbook — Canarying Releases",
+      "url": "https://sre.google/workbook/canarying-releases/",
+      "role": "Canary/control separation, representative metrics, evaluation windows.",
+      "boundary": "Operational practice, not product validation or compliance proof."
+    },
+    {
+      "id": "SRC-GOOGLE-SLO",
+      "title": "Google SRE — Service Level Objectives",
+      "url": "https://sre.google/sre-book/service-level-objectives/",
+      "role": "User-centered indicators, SLOs, and error-budget release posture.",
+      "boundary": "Thresholds must be locally defined."
+    },
+    {
+      "id": "SRC-OPENAPI",
+      "title": "OpenAPI Specification",
+      "url": "https://spec.openapis.org/oas/latest.html",
+      "role": "Language-neutral interface description.",
+      "boundary": "Declared contract is not a verified contract."
+    },
+    {
+      "id": "SRC-PACT",
+      "title": "Pact Provider Verification",
+      "url": "https://docs.pact.io/getting_started/verifying_pacts",
+      "role": "Replay consumer assumptions against the provider.",
+      "boundary": "Does not replace data, security, production, or end-to-end evidence."
+    },
+    {
+      "id": "SRC-PROV",
+      "title": "W3C PROV-O",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "role": "Entities, activities, agents, usage, derivation, attribution, responsibility.",
+      "boundary": "Provenance semantics do not establish a regulatory regime."
+    },
+    {
+      "id": "SRC-AWS-RETIRE",
+      "title": "AWS Controlled Stop and Retirement Guidance",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/best-practice-4.html",
+      "role": "Dependency evidence and reversible controlled stop.",
+      "boundary": "Business cycles and retention thresholds remain system-specific."
+    },
+    {
+      "id": "SRC-AZURE-RETIRE",
+      "title": "Microsoft Decommission Source Workloads",
+      "url": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/decommission-source-workload",
+      "role": "Approvals, success criteria, rollback grace, archival, recovery testing.",
+      "boundary": "General cloud guidance, not regulated-product approval."
+    },
+    {
+      "id": "SRC-FDA-CHANGE",
+      "title": "FDA Deciding When to Submit a 510(k) for a Software Change",
+      "url": "https://www.fda.gov/media/99785/download",
+      "role": "Intended-use and risk-change assessment; change records.",
+      "boundary": "Specific to covered existing devices."
+    },
+    {
+      "id": "SRC-FDA-PCCP",
+      "title": "FDA AI-Enabled Device PCCP Guidance",
+      "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/marketing-submission-recommendations-predetermined-change-control-plan-artificial-intelligence",
+      "role": "Authorized modification description, protocol, criteria, impact assessment.",
+      "boundary": "Conditional branch only; not a generic migration shortcut."
+    },
+    {
+      "id": "SRC-WCAG",
+      "title": "W3C WCAG 2.2 and complex-image guidance",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "role": "Keyboard/focus, reflow, contrast, redundant color, text equivalents.",
+      "boundary": "Conformance requires testing beyond this artifact’s design intent."
+    },
+    {
+      "id": "SRC-SVG2",
+      "title": "W3C SVG 2 Document Structure",
+      "url": "https://www.w3.org/TR/SVG/struct.html",
+      "role": "Title and description semantics for meaningful SVG groups.",
+      "boundary": "Assistive-technology behavior still requires testing."
+    }
+  ],
+  "$schema": "../schema/expanded-view-model.schema.json"
+}

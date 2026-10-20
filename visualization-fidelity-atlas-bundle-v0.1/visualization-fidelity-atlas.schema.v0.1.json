@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.radiantnull.com/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+  "title": "Visualization Fidelity Atlas",
+  "type": "object",
+  "required": [
+    "artifact_identity",
+    "data_primitives",
+    "data_shapes",
+    "cognitive_moves",
+    "visual_forms",
+    "recommendations",
+    "exemplars",
+    "citations"
+  ],
+  "properties": {
+    "artifact_identity": {
+      "type": "object"
+    },
+    "quick_use": {
+      "type": "object"
+    },
+    "doctrine": {
+      "type": "object"
+    },
+    "data_primitives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DataPrimitive"
+      }
+    },
+    "data_shapes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DataShape"
+      }
+    },
+    "cognitive_moves": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CognitiveMove"
+      }
+    },
+    "visual_forms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/VisualForm"
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/VisualRecommendation"
+      }
+    },
+    "exemplars": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/VisualizationExemplar"
+      }
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CitationAnchor"
+      }
+    },
+    "view_state": {
+      "$ref": "#/$defs/ViewState"
+    }
+  },
+  "$defs": {
+    "ViewState": {
+      "type": "object",
+      "required": [
+        "selectedMoveId",
+        "selectedShapeId",
+        "selectedExemplarId",
+        "selectedVisualFormId",
+        "showReserved",
+        "audience",
+        "uncertaintyRequired",
+        "aiIngestion"
+      ],
+      "properties": {
+        "selectedMoveId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedShapeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedExemplarId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedVisualFormId": {
+          "type": "string"
+        },
+        "showReserved": {
+          "type": "boolean",
+          "description": "Whether the Reserved recommendation group is visible in the interactive Atlas."
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "mixed",
+            "executive",
+            "technical",
+            "research",
+            "public"
+          ]
+        },
+        "uncertaintyRequired": {
+          "type": "boolean"
+        },
+        "aiIngestion": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DataPrimitive": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "definition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        }
+      }
+    },
+    "DataShape": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "primitive_ids",
+        "required_fields"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "primitive_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "type": "string"
+        }
+      }
+    },
+    "CognitiveMove": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "prompt"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        }
+      }
+    },
+    "VisualForm": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "family",
+        "best_for",
+        "works_when"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "best_for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "works_when": {
+          "type": "string"
+        },
+        "citation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fidelity": {
+          "type": "number"
+        },
+        "accessibility": {
+          "type": "number"
+        },
+        "ai_readiness": {
+          "type": "number"
+        }
+      }
+    },
+    "VisualRecommendation": {
+      "type": "object",
+      "required": [
+        "id",
+        "data_shape_id",
+        "cognitive_move_id",
+        "recommended_visual_form_ids",
+        "reasoning"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "data_shape_id": {
+          "type": "string"
+        },
+        "cognitive_move_id": {
+          "type": "string"
+        },
+        "recommended_visual_form_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conditional_visual_form_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reserved_visual_form_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reasoning": {
+          "type": "string"
+        },
+        "fidelity_score": {
+          "type": "number"
+        },
+        "accessibility_score": {
+          "type": "number"
+        },
+        "ai_readiness_score": {
+          "type": "number"
+        }
+      }
+    },
+    "VisualizationExemplar": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "visual_form_id",
+        "cognitive_move_id",
+        "data_shape_id",
+        "chart_type",
+        "dataset"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "visual_form_id": {
+          "type": "string"
+        },
+        "cognitive_move_id": {
+          "type": "string"
+        },
+        "data_shape_id": {
+          "type": "string"
+        },
+        "chart_type": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "dataset": {
+          "type": "object"
+        },
+        "text_equivalent": {
+          "type": "string"
+        },
+        "ai_summary": {
+          "type": "string"
+        },
+        "why_fit": {
+          "type": "string"
+        },
+        "caveat": {
+          "type": "string"
+        },
+        "citation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CitationAnchor": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "text",
+        "supports"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "supports": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

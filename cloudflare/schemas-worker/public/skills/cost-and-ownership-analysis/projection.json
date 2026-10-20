@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/cost-and-ownership-analysis/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "cost-and-ownership-analysis",
+  "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+  "semanticAuthorityRef": "../source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/9",
+  "contract": {
+    "what": "A source-grounded account of scoped function cost, input boundaries, and mutation ownership, followed by the smallest authorized repair and its decision-changing evidence.",
+    "when": [
+      "Complexity or resource use may change a design, a security-shaped concern needs a precise mechanism, or state crosses validation, computation, rendering, exchange, and filesystem boundaries. Ordinary edits use the smallest relevant call path; a complete function inventory follows the requested scope."
+    ],
+    "boundaries": [
+      "Current intent selects observation or implementation, revision, and receiving surface. Shared generated copies point to their canonical owner. External library, engine, DOM, and I/O costs retain explicit terms until evidence resolves them. Source-derived mechanisms, observed exploitation, measured performance, and release approval each retain their own evidence and authority."
+    ],
+    "result": "A scoped function inventory with interpreted bounds or explicit compositional costs, ownership and exposure findings, fitting repairs and acceptance evidence when authorized, and one clear receiving decision."
+  },
+  "receivingUse": {
+    "job": "Complexity or resource use may change a design, a security-shaped concern needs a precise mechanism, or state crosses validation, computation, rendering, exchange, and filesystem boundaries. Ordinary edits use the smallest relevant call path; a complete function inventory follows the requested scope.",
+    "materialResult": "A scoped function inventory with interpreted bounds or explicit compositional costs, ownership and exposure findings, fitting repairs and acceptance evidence when authorized, and one clear receiving decision.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/cost-and-ownership-analysis/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

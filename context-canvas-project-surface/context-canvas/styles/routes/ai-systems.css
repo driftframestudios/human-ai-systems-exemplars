@@ -1,0 +1,416 @@
+/* Context Canvas route bundle: AI Systems family -------------------------
+   Consumers: top-level AI Systems reading-family pages carrying .ai-systems-page.
+   Owns: shared AI Systems tokens, scan/field/card/reading-path grammar,
+   ten-instrument safeguards, multi-route tables and static equivalents, and
+   the small Shared Machinery hub seam.
+   Load order: shared core, expanded.css, optional
+   styles/components/instrument-atlas.css, this family bundle, optional
+   ai-systems-entry.css or hiring-surfaces.css, then later page-local styles
+   and canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   Entry-only labs and Goal Fidelity tables belong to ai-systems-entry.css;
+   Hiring density and late anchors belong to hiring-surfaces.css. Visualization
+   references and gallery states belong to visualization-fidelity-atlas.css. Each route
+   retains authority over color, rhythm, density, layout, and new experiments. */
+
+/* Shared Machinery hub and instrument-family safeguards ----------------- */
+
+.shared-machinery-page .shared-machinery-grammar-field {
+    background: #dbf0f0;
+}
+
+.shared-machinery-page .shared-machinery-planning-field {
+    background: #e6f5f1;
+}
+
+.shared-machinery-page .shared-machinery-selection-field {
+    background: #fffdf8;
+}
+
+.shared-machinery-page .shared-machinery-grid {
+    align-items: stretch;
+}
+
+.shared-machinery-page .shared-machinery-grid a {
+    min-block-size: 10rem;
+}
+
+.shared-machinery-page .shared-machinery-selection-field .table--comparison {
+    min-inline-size: 72rem;
+}
+
+.instrument-page .ai-systems-hero .h1-hero,
+.instrument-page .ai-systems-reading-path a {
+    overflow-wrap: anywhere;
+}
+
+.instrument-page .debrief-at-glance > div {
+    min-inline-size: 0;
+}
+
+@media screen and (max-width: 44rem) {
+    .shared-machinery-page .shared-machinery-grid a {
+        min-block-size: auto;
+    }
+
+    .instrument-page .ai-systems-hero .h1-hero {
+        font-size: clamp(2.15rem, 11vw, 3.35rem);
+    }
+}
+
+@media print {
+    .shared-machinery-page .shared-machinery-grid a,
+    .instrument-page .story-visual img,
+    .instrument-page .cobalt-operating-field__table,
+    .instrument-page .cobalt-operating-field__aside {
+        box-shadow: none;
+    }
+
+    .shared-machinery-page .shared-machinery-grid a,
+    .instrument-page .story-visual {
+        break-inside: avoid;
+    }
+
+    .shared-machinery-page .shared-machinery-selection-field .table--comparison {
+        min-inline-size: 0;
+    }
+}
+
+/* Shared AI Systems family grammar -------------------------------------- */
+
+.ai-systems-page {
+    --blueprint-cobalt: #2855f3;
+    --blueprint-cobalt-deep: #153fbe;
+    --blueprint-ink: #17345f;
+    --blueprint-sky: #cfe7f7;
+    --blueprint-sea: #d9efea;
+    --blueprint-cream: #fff5de;
+    --blueprint-coral: #ff7a66;
+    --blueprint-pink: #ff7a97;
+    --blueprint-rose: #ffe0e6;
+    --blueprint-gold: #f2c94c;
+    --blueprint-lime: #ccff00;
+    --blueprint-acid-yellow: #f2ff67;
+}
+
+.ai-systems-page .debrief-quote--operating-principle {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+    color: var(--blueprint-ink);
+    margin: clamp(2rem, 4vw, 3.5rem) auto .5rem;
+    max-inline-size: var(--canvas-reading-measure);
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    text-align: start;
+}
+
+.ai-systems-page .debrief-quote--operating-principle :is(p, footer) {
+    color: var(--blueprint-ink);
+}
+
+/* The operating principle participates as the fourth card in the Solution field. */
+.ai-systems-solution-field .blueprint-pop-cards > .debrief-quote--operating-principle {
+    margin: 0;
+    max-inline-size: none;
+    min-inline-size: 0;
+}
+
+.ai-systems-page .anchor_ai_systems,
+.ai-systems-page .anchor_ai_systems:visited {
+    background: rgba(0, 0, 0, .6);
+    border-block-end-color: var(--blueprint-coral);
+    color: var(--blueprint-pink);
+}
+
+.ai-systems-scan > div:nth-child(3n + 1) {
+    border-block-start: .25rem solid var(--blueprint-cobalt);
+}
+
+.ai-systems-scan > div:nth-child(3n + 2) {
+    border-block-start: .25rem solid var(--blueprint-coral);
+}
+
+.ai-systems-scan > div:nth-child(3n) {
+    border-block-start: .25rem solid var(--blueprint-gold);
+}
+
+:where(.ai-systems-solution-field) {
+    --canvas-ink-muted: var(--blueprint-ink);
+    background: var(--blueprint-sea);
+}
+
+.ai-systems-solution-field .architecture-track-title {
+    border-block-end-color: var(--blueprint-cobalt-deep);
+}
+
+.blueprint-pop-cards article {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-ink);
+}
+
+.blueprint-pop-cards article:nth-child(2) {
+    background: var(--blueprint-sky);
+    box-shadow: .5rem .5rem 0 var(--blueprint-cobalt);
+}
+
+.blueprint-pop-cards article:nth-child(3) {
+    background: #ffe0e6;
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+.blueprint-pop-cards .architecture-pair__label {
+    color: var(--blueprint-cobalt-deep);
+}
+
+/* Project-reference figures stay bounded by their architecture card at every width. */
+.architecture-example__figure {
+    margin: 1rem 0 0;
+    min-inline-size: 0;
+}
+
+.architecture-example__figure .story-visual__open {
+    display: block;
+}
+
+.architecture-example__figure img {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+}
+
+.architecture-example__figure--portrait img {
+    margin-inline: auto;
+    max-inline-size: 28rem;
+}
+
+.architecture-example__figure figcaption {
+    margin-block-start: .75rem;
+}
+
+.blueprint-pop-visual img {
+    background: var(--blueprint-cream);
+    border-color: var(--blueprint-ink);
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+:where(.ai-systems-implementation-field) {
+    background: #eef3fa;
+}
+
+:where(.ai-systems-instrument-field) {
+    background: var(--blueprint-cream);
+}
+
+.ai-systems-instrument-field .architecture-track-title {
+    border-block-end-color: var(--blueprint-coral);
+}
+
+.population-cartography-table thead th {
+    background: var(--blueprint-ink);
+    color: #fff;
+}
+
+.ai-systems-page .conditioning-static-equivalent {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .65rem;
+    padding: 1rem;
+}
+
+:where(.ai-systems-page .conditioning-static-equivalent) {
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.ai-systems-page .conditioning-static-equivalent > summary {
+    color: var(--blueprint-cobalt-deep);
+    cursor: pointer;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .82rem;
+    font-weight: 850;
+    letter-spacing: .04em;
+    min-block-size: 2.75rem;
+    padding: .7rem .25rem;
+    text-transform: uppercase;
+}
+
+.ai-systems-page .conditioning-static-equivalent[open] > summary {
+    border-block-end: .1rem solid var(--blueprint-ink);
+    margin-block-end: 1rem;
+}
+
+.ai-systems-page .conditioning-static-equivalent .table-figure {
+    margin-block: 0;
+}
+
+:where(.ai-systems-goal-field) {
+    background: #e7edff;
+}
+
+.ai-systems-goal-field .architecture-track-title {
+    border-block-end-color: var(--blueprint-cobalt);
+}
+
+.goal-fidelity-table-figure {
+    background: #fff;
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-cobalt);
+    padding: clamp(.75rem, 2vw, 1.25rem);
+}
+
+:where(.ai-systems-investment-field) {
+    background: #f7f5ef;
+}
+
+.ai-systems-investment-field .architecture-track-title {
+    border-block-end-color: var(--blueprint-ink);
+}
+
+.population-cartography-table {
+    min-inline-size: 70rem;
+}
+
+.ai-systems-page .source-list li::marker {
+    color: var(--blueprint-cobalt-deep);
+    font-weight: 750;
+}
+
+@media screen and (max-width: 30rem) {
+    .ai-systems-page .debrief-quote--operating-principle,
+    .blueprint-pop-cards article,
+    .goal-fidelity-table-figure {
+        box-shadow: .3rem .3rem 0 var(--blueprint-ink);
+    }
+}
+
+@media (forced-colors: active) {
+    .ai-systems-page .debrief-quote--operating-principle,
+    .blueprint-pop-cards article,
+    .goal-fidelity-table-figure {
+        border: .125rem solid CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .ai-systems-page .debrief-quote--operating-principle,
+    .goal-fidelity-table-figure,
+    .blueprint-pop-cards article {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .ai-systems-page .conditioning-static-equivalent:not([open]) > :not(summary) {
+        display: block !important;
+    }
+
+    .ai-systems-page .conditioning-static-equivalent > summary {
+        display: none;
+    }
+}
+
+/*.population-cartography-table tbody tr:nth-child(even) > * {*/
+/*    background: color-mix(in srgb, var(--blueprint-sea) 34%, #fff 66%);*/
+/*}*/
+
+/* Shared family cascade anchors ----------------------------------------- */
+
+.ai-systems-page .blueprint-pop-cards article {
+    background: var(--blueprint-cream);
+    break-inside: avoid;
+    border: .125rem solid var(--blueprint-ink);
+}
+
+.ai-systems-page .blueprint-pop-cards article:nth-child(2) {
+    background: var(--blueprint-rose);
+}
+
+.ai-systems-page .blueprint-pop-cards article:nth-child(3) {
+    background: var(--blueprint-sky);
+}
+
+.ai-systems-page .blueprint-pop-visual img {
+    background: var(--blueprint-cream);
+    border-color: var(--blueprint-ink);
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+.ai-systems-page .prototype-embed--blueprint iframe {
+    border: .125rem solid var(--blueprint-ink);
+}
+
+.ai-systems-page .ai-systems-reading-path {
+    margin-block: clamp(2rem, 4vw, 3.5rem) 0;
+}
+
+.ai-systems-page .ai-systems-reading-path ol {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    margin: 0;
+    padding: 0;
+}
+
+.ai-systems-page .ai-systems-reading-path li {
+    margin: 0;
+    min-inline-size: 0;
+}
+
+.ai-systems-page .ai-systems-reading-path a,
+.ai-systems-page .ai-systems-reading-path a:visited {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-block-start: .4rem solid var(--blueprint-cobalt);
+    border-radius: .5rem;
+    color: var(--blueprint-ink);
+    display: block;
+    font-weight: 700;
+    min-block-size: 100%;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+}
+
+.ai-systems-page .ai-systems-reading-path li:nth-child(3n + 2) a {
+    border-block-start-color: var(--blueprint-coral);
+}
+
+.ai-systems-page .ai-systems-reading-path li:nth-child(3n) a {
+    border-block-start-color: var(--blueprint-gold);
+}
+
+.ai-systems-page .ai-systems-reading-path a:hover,
+.ai-systems-page .ai-systems-reading-path a:focus-visible {
+    background: var(--blueprint-sky);
+    text-decoration: underline;
+    text-decoration-thickness: .12em;
+    text-underline-offset: .18em;
+}
+
+@container canvas-reading (min-width: 64rem) {
+    .ai-systems-page .ai-systems-reading-path ol {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media print {
+    .ai-systems-page .population-cartography-table {
+        min-inline-size: 0;
+    }
+
+    .ai-systems-page .population-cartography-table thead th {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .ai-systems-page .blueprint-pop-visual img,
+    .ai-systems-page .goal-fidelity-table-figure,
+    .ai-systems-page .prototype-embed--blueprint,
+    .ai-systems-page .blueprint-pop-cards article {
+        box-shadow: none;
+    }
+}

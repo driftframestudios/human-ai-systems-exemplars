@@ -1,0 +1,96 @@
+/* FMI authored reading rail enhancement.
+   Consumer: fmi-lims-eln-replatforming.html, after its route and shell styles.
+   The URL selects a destination; the reading line identifies current position.
+   Native anchors, rail geometry and focus remain with the FMI route owner. */
+
+.fmi-reading-rail__state {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .65rem;
+    font-weight: 600;
+    line-height: 1.4;
+    min-block-size: 1.4em;
+}
+
+.fmi-reading-rail a.is-current {
+    background: var(--fmi-acid);
+}
+
+.fmi-reading-rail a.is-selected {
+    border-style: double;
+    border-width: 3px;
+    padding: calc(.45rem - 2px) calc(.7rem - 2px);
+}
+
+@media screen and (max-width: 74.99rem) {
+    .fmi-reading-rail a.is-current,
+    .fmi-reading-rail a.is-selected {
+        background: transparent;
+        border: 0;
+        padding: 0;
+    }
+
+    .fmi-reading-rail a.is-current .fmi-reading-rail__tick {
+        background: var(--fmi-cobalt);
+        block-size: .42rem;
+        inline-size: .86rem;
+    }
+
+    .fmi-reading-rail a.is-selected .fmi-reading-rail__tick {
+        outline: .125rem solid var(--fmi-ink);
+        outline-offset: .125rem;
+    }
+
+    .fmi-reading-rail a:is(:hover, :focus-visible) {
+        background: var(--fmi-warm-white);
+    }
+
+    /* Fixed labels escape the marker list's local scroll clip while keeping
+       their original link, accessible name and state description together. */
+    .fmi-reading-rail[data-reading-ready] a .fmi-reading-rail__text {
+        inset-inline-start: 2rem;
+        opacity: 0;
+        pointer-events: auto;
+        position: fixed;
+        transform: translateY(-50%);
+        transition: none;
+        visibility: hidden;
+    }
+
+    .fmi-reading-rail[data-reading-ready] a.is-preview .fmi-reading-rail__text {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .fmi-reading-rail[data-reading-ready] .fmi-reading-rail__text::before {
+        block-size: 100%;
+        content: "";
+        inline-size: 1rem;
+        inset-block-start: 0;
+        inset-inline-end: 100%;
+        position: absolute;
+    }
+
+}
+
+@media (forced-colors: active) {
+    .fmi-reading-rail a.is-current {
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+    }
+
+    .fmi-reading-rail a.is-selected {
+        border-color: Highlight;
+    }
+
+    .fmi-reading-rail a.is-current .fmi-reading-rail__tick {
+        background: Highlight;
+        border-color: Highlight;
+        forced-color-adjust: none;
+    }
+
+    .fmi-reading-rail a.is-selected .fmi-reading-rail__tick {
+        outline-color: CanvasText;
+    }
+}

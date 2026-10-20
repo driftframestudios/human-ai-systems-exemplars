@@ -1,0 +1,748 @@
+<div id="a3-atlas-expanded-inline">
+  <div class="viz-controls" aria-label="Diagram lens">
+    <button type="button" class="btn btn-primary" data-a3-lens="authority" aria-pressed="true">Authority</button>
+    <button type="button" class="btn" data-a3-lens="assurance" aria-pressed="false">Assurance</button>
+    <button type="button" class="btn" data-a3-lens="runtime" aria-pressed="false">Runtime + data</button>
+    <button type="button" class="btn" data-a3-lens="recovery" aria-pressed="false">Recovery</button>
+    <button type="button" class="btn" data-a3-lens="evidence" aria-pressed="false">Evidence</button>
+  </div>
+
+  <div class="viz-controls" id="a3-inline-frames" aria-label="Historical authority frame">
+    <button type="button" class="btn btn-primary" data-a3-frame="F0" aria-pressed="true">1 · Current</button>
+    <button type="button" class="btn" data-a3-frame="F1" aria-pressed="false">2 · Boundary</button>
+    <button type="button" class="btn" data-a3-frame="F2" aria-pressed="false">3 · Shadow</button>
+    <button type="button" class="btn" data-a3-frame="F3" aria-pressed="false">4 · Validated</button>
+  </div>
+
+  <p class="text-small text-muted" id="a3-inline-note" aria-live="polite"></p>
+
+  <div class="a3-inline-stage">
+    <svg class="a3-inline-svg" id="a3-inline-svg" role="img" aria-labelledby="a3-inline-title a3-inline-desc"></svg>
+  </div>
+
+  <div class="viz-row a3-inline-legend" aria-label="State legend">
+    <span><i class="a3-inline-swatch a3-inline-legacy" aria-hidden="true"></i>Legacy</span>
+    <span><i class="a3-inline-swatch a3-inline-seam" aria-hidden="true"></i>Boundary / conditional</span>
+    <span><i class="a3-inline-swatch a3-inline-shadow" aria-hidden="true"></i>Shadow</span>
+    <span><i class="a3-inline-swatch a3-inline-new" aria-hidden="true"></i>New authority</span>
+    <span><i class="a3-inline-swatch a3-inline-retained" aria-hidden="true"></i>Retained</span>
+    <span><i class="a3-inline-swatch a3-inline-unknown" aria-hidden="true"></i>UNKNOWN</span>
+  </div>
+
+  <div class="card" id="a3-inline-detail" aria-live="polite"></div>
+
+  <details>
+    <summary>Text equivalent</summary>
+    <p id="a3-inline-text"></p>
+  </details>
+</div>
+
+<style>
+#a3-atlas-expanded-inline {
+  --a3-legacy-fill: color-mix(in srgb, var(--muted) 78%, transparent);
+  --a3-seam-fill: color-mix(in srgb, var(--viz-series-2) 12%, transparent);
+  --a3-shadow-fill: color-mix(in srgb, var(--viz-series-2) 26%, transparent);
+  --a3-new-fill: color-mix(in srgb, var(--viz-series-1) 28%, transparent);
+  --a3-retained-fill: color-mix(in srgb, var(--viz-series-4) 20%, transparent);
+  --a3-human-fill: color-mix(in srgb, var(--viz-series-3) 18%, transparent);
+  --a3-evidence-fill: color-mix(in srgb, var(--viz-series-5) 18%, transparent);
+  width: 100%;
+  color: var(--foreground);
+}
+#a3-atlas-expanded-inline [hidden] {
+  display: none !important;
+}
+#a3-atlas-expanded-inline .a3-inline-stage {
+  width: 100%;
+  margin-block: 0.75rem;
+}
+#a3-atlas-expanded-inline .a3-inline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+#a3-atlas-expanded-inline .a3-inline-svg text {
+  fill: var(--foreground);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 400;
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-strong {
+  font-weight: 500;
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-secondary {
+  fill: var(--muted-foreground);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-zone {
+  fill: transparent;
+  stroke: var(--border);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-legacy {
+  fill: var(--a3-legacy-fill);
+  stroke: var(--muted-foreground);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-seam {
+  fill: var(--a3-seam-fill);
+  stroke: var(--viz-series-2);
+  stroke-dasharray: 7 5;
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-shadow {
+  fill: url(#a3-inline-hatch);
+  stroke: var(--viz-series-2);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-new {
+  fill: var(--a3-new-fill);
+  stroke: var(--viz-series-1);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-retained {
+  fill: var(--a3-retained-fill);
+  stroke: var(--viz-series-4);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-human {
+  fill: var(--a3-human-fill);
+  stroke: var(--viz-series-3);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-evidence {
+  fill: var(--a3-evidence-fill);
+  stroke: var(--viz-series-5);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-unknown {
+  fill: var(--background);
+  stroke: var(--muted-foreground);
+  stroke-dasharray: 6 5;
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-route {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 2;
+  marker-end: url(#a3-inline-arrow);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-route-mirror {
+  stroke: var(--viz-series-2);
+  stroke-dasharray: 3 6;
+  marker-end: url(#a3-inline-arrow-series-2);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-route-fallback {
+  stroke: var(--viz-series-4);
+  stroke-dasharray: 8 6;
+  marker-end: url(#a3-inline-arrow-series-4);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-route-evidence {
+  stroke: var(--viz-series-5);
+  stroke-dasharray: 2 5;
+  marker-end: url(#a3-inline-arrow-series-5);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-route-human {
+  stroke: var(--viz-series-3);
+  stroke-dasharray: 9 4 2 4;
+  marker-end: url(#a3-inline-arrow-series-3);
+}
+#a3-atlas-expanded-inline .a3-inline-svg .a3-axis {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+#a3-atlas-expanded-inline .a3-inline-legend {
+  justify-content: flex-start;
+}
+#a3-atlas-expanded-inline .a3-inline-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+#a3-atlas-expanded-inline .a3-inline-swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--border);
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-legacy {
+  background: var(--a3-legacy-fill);
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-seam {
+  background: var(--a3-seam-fill);
+  border-color: var(--viz-series-2);
+  border-style: dashed;
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-shadow {
+  background: repeating-linear-gradient(135deg, var(--a3-shadow-fill), var(--a3-shadow-fill) 3px, transparent 3px, transparent 6px);
+  border-color: var(--viz-series-2);
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-new {
+  background: var(--a3-new-fill);
+  border-color: var(--viz-series-1);
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-retained {
+  background: var(--a3-retained-fill);
+  border-color: var(--viz-series-4);
+}
+#a3-atlas-expanded-inline .a3-inline-swatch.a3-inline-unknown {
+  background: var(--background);
+  border-color: var(--muted-foreground);
+  border-style: dashed;
+}
+#a3-atlas-expanded-inline #a3-inline-detail {
+  margin-top: 0.75rem;
+}
+#a3-atlas-expanded-inline #a3-inline-detail p {
+  margin: 0;
+}
+#a3-atlas-expanded-inline details {
+  margin-top: 0.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  #a3-atlas-expanded-inline * {
+    transition: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById("a3-atlas-expanded-inline");
+  if (!root || root.dataset.ready === "true") return;
+  root.dataset.ready = "true";
+
+  const svg = root.querySelector("#a3-inline-svg");
+  const frameControls = root.querySelector("#a3-inline-frames");
+  const note = root.querySelector("#a3-inline-note");
+  const detail = root.querySelector("#a3-inline-detail");
+  const textEquivalent = root.querySelector("#a3-inline-text");
+
+  const frames = [
+    { id: "F0", label: "Current authority", note: "Most bounded software remains legacy-authoritative; human work and unknown coupling stay visible." },
+    { id: "F1", label: "Boundary identified", note: "A candidate boundary is named, but execution and decision authority have not moved." },
+    { id: "F2", label: "Shadow / dual-run", note: "Representative traffic may be mirrored for evidence while the legacy result remains authoritative." },
+    { id: "F3", label: "Validated authority", note: "Only the evidenced operational capability changes authority; retained work and rollback remain visible." }
+  ];
+
+  const lenses = {
+    authority: {
+      label: "Authority topology",
+      note: "Position means current execution or decision authority only.",
+      detail: "The original four-frame history remains the protected spine."
+    },
+    assurance: {
+      label: "Assurance gates",
+      note: "Seven independent evidence categories surround the bounded transfer.",
+      detail: "The categories are research-backed; applicability and pass/fail remain product-specific."
+    },
+    runtime: {
+      label: "Runtime + data",
+      note: "Read, write, response, record, authorization, comparison, and fallback are distinct.",
+      detail: "Shadow does not imply stateful safety, and no data transition is asserted without internal evidence."
+    },
+    recovery: {
+      label: "Recovery + retirement",
+      note: "Cutover is followed by observation, rollback holding, controlled stop, retention, and authorization.",
+      detail: "Validated authority never means safe to delete."
+    },
+    evidence: {
+      label: "Evidence provenance",
+      note: "Sources become classified claims, candidate elements, explicit decisions, and derived artifacts.",
+      detail: "Displayed probabilities explain potential content gaps; they are not migration-success or compliance probabilities."
+    }
+  };
+
+  const assuranceGates = [
+    ["Context", "UNRESOLVED"],
+    ["Clinical evidence", "CONDITIONAL"],
+    ["Software evidence", "DEPTH UNKNOWN"],
+    ["Human factors", "APPLICABILITY UNKNOWN"],
+    ["Safety + cyber", "SEPARATE / LINKED"],
+    ["Records + custody", "REGIME UNKNOWN"],
+    ["Change authorization", "NAMED DECISION"]
+  ];
+
+  const readinessGates = [
+    ["G0", "Boundary", "PARTIAL"],
+    ["G1", "Data", "UNKNOWN"],
+    ["G2", "Contract", "UNKNOWN"],
+    ["G3", "Runtime", "UNKNOWN"],
+    ["G4", "Security", "UNKNOWN"],
+    ["G5", "Transfer", "HISTORICAL"],
+    ["G6", "Retirement", "NOT CLAIMED"]
+  ];
+
+  const discrepancies = [
+    {
+      label: "Shadow hides distinct authority dimensions?",
+      values: [45, 25, 20, 10]
+    },
+    {
+      label: "Validated needs stabilization / retirement?",
+      values: [60, 15, 5, 20]
+    },
+    {
+      label: "All seven assurance gates apply here?",
+      values: [25, 45, 10, 20]
+    }
+  ];
+
+  let activeLens = "authority";
+  let activeFrame = "F0";
+  let compact = false;
+
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  })[character]);
+
+  function wrap(text, x, y, maxCharacters, className = "", lineHeight = 18, maxLines = 3) {
+    const words = String(text).split(/\s+/);
+    const lines = [];
+    let current = "";
+    words.forEach(word => {
+      const candidate = current ? `${current} ${word}` : word;
+      if (candidate.length > maxCharacters && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+    if (current) lines.push(current);
+    const visible = lines.slice(0, maxLines);
+    if (lines.length > maxLines) visible[maxLines - 1] = `${visible[maxLines - 1]}…`;
+    return `<text x="${x}" y="${y}" class="${className}">${visible.map((line, index) =>
+      `<tspan x="${x}" dy="${index ? lineHeight : 0}">${escapeHtml(line)}</tspan>`
+    ).join("")}</text>`;
+  }
+
+  function defs() {
+    return `
+      <defs>
+        <pattern id="a3-inline-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="var(--a3-shadow-fill)"></rect>
+          <line x1="0" y1="0" x2="0" y2="8" stroke="var(--viz-series-2)" stroke-width="2"></line>
+        </pattern>
+        <marker id="a3-inline-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="var(--foreground)"></path>
+        </marker>
+        <marker id="a3-inline-arrow-series-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="var(--viz-series-2)"></path>
+        </marker>
+        <marker id="a3-inline-arrow-series-3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="var(--viz-series-3)"></path>
+        </marker>
+        <marker id="a3-inline-arrow-series-4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="var(--viz-series-4)"></path>
+        </marker>
+        <marker id="a3-inline-arrow-series-5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="var(--viz-series-5)"></path>
+        </marker>
+      </defs>`;
+  }
+
+  function box(x, y, width, height, className, title, subtitle = "", maxCharacters = 22) {
+    const subtitleCharacters = maxCharacters + 4;
+    const subtitleLineCount = subtitle
+      ? Math.min(2, Math.max(1, Math.ceil(subtitle.length / subtitleCharacters)))
+      : 0;
+    const subtitleY = y + height - 12 - Math.max(0, subtitleLineCount - 1) * 16;
+    return `
+      <g>
+        <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="8" class="${className}"></rect>
+        ${wrap(title, x + 12, y + 25, maxCharacters, "a3-strong", 18, 2)}
+        ${subtitle ? wrap(subtitle, x + 12, subtitleY, subtitleCharacters, "a3-secondary", 16, 2) : ""}
+      </g>`;
+  }
+
+  function diagramHeader(title, description, width, height) {
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    return `${defs()}
+      <title id="a3-inline-title">${escapeHtml(title)}</title>
+      <desc id="a3-inline-desc">${escapeHtml(description)}</desc>`;
+  }
+
+  function authorityWide() {
+    const selectedFrame = frames.find(frame => frame.id === activeFrame);
+    let output = diagramHeader(
+      `${lenses.authority.label}: ${selectedFrame.label}`,
+      `${selectedFrame.note} Position encodes authority only; human work stays separate.`,
+      760,
+      475
+    );
+    output += `
+      <rect x="8" y="8" width="236" height="350" rx="10" class="a3-zone"></rect>
+      <rect x="262" y="8" width="236" height="350" rx="10" class="a3-zone"></rect>
+      <rect x="516" y="8" width="236" height="350" rx="10" class="a3-zone"></rect>
+      <text x="24" y="34" class="a3-strong">LEGACY</text>
+      <text x="278" y="34" class="a3-strong">TRANSFER BOUNDARY</text>
+      <text x="532" y="34" class="a3-strong">NEW AUTHORITY</text>`;
+
+    [
+      ["Search", 58],
+      ["Specimen overview", 112],
+      ["Variant details", 166],
+      ["Quality control", 220],
+      ["Plugins / arbitrary code", 274]
+    ].forEach(([label, y], index) => {
+      const className = activeFrame === "F0" && index < 2 ? "a3-legacy" : index ? "a3-retained" : "a3-legacy";
+      output += box(24, y, 204, 42, className, label, "", 22);
+    });
+    output += box(24, 322, 204, 26, "a3-unknown", "UNKNOWN / unbounded", "", 22);
+
+    if (activeFrame === "F0") {
+      output += box(278, 142, 204, 72, "a3-unknown", "No verified boundary", "No transfer", 22);
+      output += wrap("Operational / assignment remains legacy-authoritative.", 532, 150, 22, "a3-secondary", 18, 3);
+    }
+    if (activeFrame === "F1") {
+      output += box(278, 64, 204, 56, "a3-seam", "Operational / assignment", "candidate boundary", 22);
+      output += box(278, 158, 204, 126, "a3-seam", "Evidence gate", "identity · dependencies · parity · audit · rollback · human review", 22);
+      output += wrap("No authority transfer", 532, 150, 22, "a3-secondary", 18, 2);
+    }
+    if (activeFrame === "F2") {
+      output += box(278, 64, 204, 56, "a3-shadow", "Operational / assignment", "non-authoritative shadow", 22);
+      output += box(278, 158, 204, 126, "a3-evidence", "Evidence period", "compare · observe · isolate side effects · preserve fallback", 22);
+      output += `<path class="a3-route a3-route-mirror" d="M244 292 C260 292 255 92 270 92"></path>`;
+      output += wrap("Legacy response remains authoritative.", 532, 150, 22, "a3-secondary", 18, 3);
+    }
+    if (activeFrame === "F3") {
+      output += box(278, 158, 204, 126, "a3-seam", "Bounded authority gate", "one candidate · named scope · rollback remains", 22);
+      output += box(532, 64, 204, 68, "a3-new", "Operational / assignment", "validated authority", 22);
+      output += `<path class="a3-route" d="M482 220 C514 220 500 98 524 98"></path>
+        <path class="a3-route a3-route-fallback" d="M552 144 C520 320 280 335 236 298"></path>`;
+      output += wrap("Retirement is not claimed.", 532, 180, 22, "a3-secondary", 18, 2);
+    }
+
+    output += `
+      <rect x="8" y="376" width="744" height="82" rx="10" class="a3-human"></rect>
+      <text x="24" y="405" class="a3-strong">HUMAN WORKFLOW AUTHORITY</text>
+      ${wrap("Quality assessment · NCR/CAPA · rerun/requeue · interpretation · sign-off · incident and rollback decisions", 24, 433, 86, "a3-secondary", 18, 2)}`;
+    return output;
+  }
+
+  function assuranceWide() {
+    let output = diagramHeader(
+      lenses.assurance.label,
+      "Seven independent evidence categories surround the bounded operational authority candidate. Applicability and outcomes remain unresolved.",
+      760,
+      500
+    );
+    output += `
+      <rect x="8" y="8" width="744" height="48" rx="8" class="a3-unknown"></rect>
+      <text x="24" y="37" class="a3-strong">INTENDED USE / JURISDICTION / REGIME — UNRESOLVED</text>
+      <rect x="8" y="68" width="744" height="48" rx="8" class="a3-human"></rect>
+      <text x="24" y="97" class="a3-strong">NAMED HUMAN AUTHORITY REMAINS ABOVE THE GATE</text>`;
+
+    const positions = [
+      [16, 138], [16, 244], [16, 350],
+      [528, 138], [528, 244], [528, 350],
+      [272, 372]
+    ];
+    assuranceGates.forEach((gate, index) => {
+      const [x, y] = positions[index];
+      const className = gate[1].includes("UNKNOWN") || gate[1].includes("UNRESOLVED") ? "a3-unknown" : "a3-seam";
+      output += box(x, y, 216, index === 6 ? 84 : 84, className, `${index + 1} · ${gate[0]}`, gate[1], 23);
+      if (index < 3) {
+        output += `<path class="a3-route a3-route-evidence" d="M232 ${y + 42} C252 ${y + 42} 246 264 264 264"></path>`;
+      } else if (index < 6) {
+        output += `<path class="a3-route a3-route-evidence" d="M528 ${y + 42} C508 ${y + 42} 514 264 496 264"></path>`;
+      }
+    });
+    output += `
+      <rect x="264" y="176" width="232" height="176" rx="12" class="a3-new"></rect>
+      <text x="282" y="208" class="a3-strong">BOUNDED CANDIDATE</text>
+      ${wrap("Profiles, permissions & case assignment", 282, 244, 25, "a3-strong", 20, 3)}
+      ${wrap("Gate categories are sourced. Pass, fail, applicability, and evidence depth are not asserted.", 282, 310, 29, "a3-secondary", 18, 3)}
+      <path class="a3-route a3-route-evidence" d="M380 372 L380 360"></path>
+      <rect x="8" y="472" width="744" height="26" rx="8" class="a3-evidence"></rect>
+      <text x="24" y="491" class="a3-secondary">source → requirement / risk → control → test / observation → named decision → authority record</text>`;
+    return output;
+  }
+
+  function runtimeWide() {
+    const selectedFrame = frames.find(frame => frame.id === activeFrame);
+    let output = diagramHeader(
+      `${lenses.runtime.label}: ${selectedFrame.label}`,
+      "The diagram separates request routing, response authority, authorization, comparison, record authority, data transition, provenance, and fallback.",
+      760,
+      470
+    );
+    output += `
+      <rect x="8" y="8" width="744" height="52" rx="8" class="a3-seam"></rect>
+      <text x="24" y="39" class="a3-strong">COHORT / PROMOTION / ROLLBACK CONTROL PLANE</text>
+      ${box(16, 96, 108, 68, "a3-zone", "Caller", "request", 12)}
+      ${box(168, 88, 132, 84, activeFrame === "F0" ? "a3-unknown" : "a3-seam", "Interception boundary", activeFrame === "F0" ? "not established" : "router / abstraction", 14)}
+      ${box(350, 74, 160, 72, activeFrame === "F3" ? "a3-retained" : "a3-legacy", "Legacy implementation", activeFrame === "F3" ? "fallback retained" : "authoritative", 18)}
+      ${box(350, 176, 160, 72, activeFrame === "F0" ? "a3-unknown" : activeFrame === "F1" ? "a3-seam" : activeFrame === "F2" ? "a3-shadow" : "a3-new", "Target implementation", activeFrame === "F2" ? "mirror response discarded" : activeFrame === "F3" ? "bounded authority" : "candidate", 18)}
+      ${box(550, 112, 114, 92, "a3-evidence", "Contract + response", "declared · verified · compared", 13)}
+      ${box(680, 96, 64, 108, "a3-human", "PDP / PEP", "per request", 8)}`;
+
+    if (activeFrame === "F0") {
+      output += `<path class="a3-route" d="M124 130 L340 110"></path>`;
+    } else {
+      output += `<path class="a3-route" d="M124 130 L158 130"></path>`;
+      if (activeFrame === "F1" || activeFrame === "F2") {
+        output += `<path class="a3-route" d="M300 124 L340 110"></path>`;
+      }
+      if (activeFrame === "F2") {
+        output += `<path class="a3-route a3-route-mirror" d="M300 138 C322 138 320 212 340 212"></path>
+          <path class="a3-route a3-route-evidence" d="M510 110 C532 110 526 138 540 138"></path>
+          <path class="a3-route a3-route-evidence" d="M510 212 C532 212 526 178 540 178"></path>`;
+      }
+      if (activeFrame === "F3") {
+        output += `<path class="a3-route" d="M300 138 C322 138 320 212 340 212"></path>
+          <path class="a3-route a3-route-fallback" d="M350 236 C320 280 294 214 300 150"></path>
+          <path class="a3-route a3-route-evidence" d="M510 212 C532 212 526 178 540 178"></path>`;
+      }
+    }
+
+    output += `
+      <path class="a3-route a3-route-human" d="M680 124 C626 72 568 78 518 104"></path>
+      <path class="a3-route a3-route-human" d="M680 178 C626 250 568 224 518 218"></path>
+      <text x="16" y="292" class="a3-strong">DATA / RECORD AUTHORITY</text>
+      ${box(34, 322, 188, 78, "a3-legacy", "Legacy record authority", activeFrame === "F3" ? "retained · scope unresolved" : "current system of record", 21)}
+      ${box(286, 310, 188, 102, "a3-unknown", "Backfill · outbox / CDC · reconciliation", "NOT ASSERTED HERE", 21)}
+      ${box(538, 322, 188, 78, "a3-unknown", "Target record authority", "UNKNOWN", 21)}
+      <path class="a3-route a3-route-mirror" d="M222 361 L276 361"></path>
+      <path class="a3-route a3-route-mirror" d="M474 361 L528 361"></path>
+      <rect x="160" y="432" width="440" height="28" rx="8" class="a3-evidence"></rect>
+      <text x="176" y="451" class="a3-secondary">provenance / audit: entities · activities · agents · versions · observations · decisions</text>`;
+    return output;
+  }
+
+  function recoveryWide() {
+    let output = diagramHeader(
+      lenses.recovery.label,
+      "Readiness gates remain distinct from post-transfer stabilization and retirement states. Safe-to-delete is not implied.",
+      760,
+      470
+    );
+    output += `
+      <rect x="8" y="8" width="744" height="50" rx="8" class="a3-human"></rect>
+      <text x="24" y="38" class="a3-strong">NAMED AUTHORIZATION / RESIDUAL-RISK OWNERSHIP</text>`;
+
+    readinessGates.forEach((gate, index) => {
+      const firstRow = index < 4;
+      const x = firstRow ? 16 + index * 184 : 108 + (index - 4) * 184;
+      const y = firstRow ? 88 : 198;
+      const className = gate[2] === "UNKNOWN" || gate[2] === "NOT CLAIMED" ? "a3-unknown" : gate[0] === "G5" ? "a3-new" : "a3-seam";
+      output += box(x, y, 168, 84, className, `${gate[0]} · ${gate[1]}`, gate[2], 18);
+      if (firstRow && index < 3) output += `<path class="a3-route" d="M${x + 168} ${y + 42} L${x + 176} ${y + 42}"></path>`;
+      if (!firstRow && index < 6) output += `<path class="a3-route" d="M${x + 168} ${y + 42} L${x + 176} ${y + 42}"></path>`;
+    });
+
+    output += `
+      <text x="16" y="320" class="a3-strong">POST-TRANSFER STATES</text>
+      ${box(16, 342, 160, 76, "a3-evidence", "Released + monitoring", "evidence freshness", 18)}
+      ${box(204, 342, 160, 76, "a3-seam", "Rollback holding", "fallback rehearsed", 18)}
+      ${box(392, 342, 160, 76, "a3-seam", "Controlled stop", "reversible dormancy", 18)}
+      ${box(580, 342, 164, 76, "a3-retained", "Retired + readable", "archive / recovery", 18)}
+      <path class="a3-route" d="M176 380 L194 380"></path>
+      <path class="a3-route" d="M364 380 L382 380"></path>
+      <path class="a3-route" d="M552 380 L570 380"></path>
+      <path class="a3-route a3-route-fallback" d="M412 426 C360 466 230 466 176 426"></path>
+      <rect x="16" y="438" width="728" height="24" rx="8" class="a3-unknown"></rect>
+      <text x="32" y="455" class="a3-secondary">SAFE-TO-DELETE IS NOT IMPLIED · local thresholds, retention, recovery, and approvals remain required</text>`;
+    return output;
+  }
+
+  function evidenceWide() {
+    let output = diagramHeader(
+      lenses.evidence.label,
+      "Evidence provenance leads from source to classified claim, candidate element, decision, and artifact. Probability bars show competing explanations.",
+      760,
+      455
+    );
+    const chain = [
+      ["Source", "version / scope", "a3-evidence"],
+      ["Claim", "fact / inference", "a3-seam"],
+      ["Candidate", "node / edge / gate", "a3-unknown"],
+      ["Decision", "layer / unknown / exclude", "a3-new"],
+      ["Artifact", "SVG / table / text", "a3-evidence"]
+    ];
+    chain.forEach((item, index) => {
+      const x = 8 + index * 152;
+      output += box(x, 24, 136, 78, item[2], item[0], item[1], 14);
+      if (index < chain.length - 1) output += `<path class="a3-route a3-route-evidence" d="M${x + 136} 63 L${x + 144} 63"></path>`;
+    });
+    output += `
+      <rect x="8" y="124" width="744" height="56" rx="8" class="a3-zone"></rect>
+      <text x="24" y="151" class="a3-strong">EVIDENCE STATE — NEVER COLOR ALONE</text>
+      <text x="24" y="171" class="a3-secondary">● verified · ◉ corroborated · ○ single source · ▧ estimate · ╌ unresolved · ◷ stale · ◌ not exercised</text>
+      <text x="8" y="216" class="a3-strong">CANDIDATE-EXPLANATION DISTRIBUTIONS</text>
+      <text x="8" y="238" class="a3-secondary">H1 omitted · H2 unstable boundary · H3 contextual / stale · benign</text>`;
+
+    discrepancies.forEach((item, index) => {
+      const y = 270 + index * 58;
+      output += wrap(`${index + 1} · ${item.label}`, 8, y, 31, "a3-strong", 17, 2);
+      const barX = 304;
+      const barWidth = 448;
+      let offset = 0;
+      item.values.forEach((value, valueIndex) => {
+        const width = barWidth * value / 100;
+        const classes = ["a3-retained", "a3-seam", "a3-evidence", "a3-human"];
+        output += `<rect x="${barX + offset}" y="${y - 20}" width="${width}" height="28" class="${classes[valueIndex]}"></rect>`;
+        if (width > 44) output += `<text x="${barX + offset + width / 2}" y="${y}" text-anchor="middle" class="a3-strong">${value}%</text>`;
+        offset += width;
+      });
+    });
+    return output;
+  }
+
+  function compactList(title, description, items) {
+    const height = 128 + items.length * 84;
+    let output = diagramHeader(title, description, 328, height);
+    output += `
+      <rect x="8" y="8" width="312" height="76" rx="8" class="a3-unknown"></rect>
+      ${wrap(title, 22, 34, 30, "a3-strong", 18, 2)}
+      <text x="22" y="72" class="a3-secondary">Compact semantic order</text>`;
+    items.forEach((item, index) => {
+      const y = 104 + index * 84;
+      output += box(12, y, 304, 68, item.className, item.title, item.subtitle, 31);
+      if (index < items.length - 1) output += `<path class="a3-route a3-route-evidence" d="M164 ${y + 68} L164 ${y + 80}"></path>`;
+    });
+    return output;
+  }
+
+  function compactDiagram() {
+    if (activeLens === "authority") {
+      const frame = frames.find(item => item.id === activeFrame);
+      const candidateState = {
+        F0: ["Legacy", "a3-legacy"],
+        F1: ["Boundary only · no move", "a3-seam"],
+        F2: ["Shadow · legacy authoritative", "a3-shadow"],
+        F3: ["Validated bounded authority", "a3-new"]
+      }[activeFrame];
+      return compactList(
+        `${lenses.authority.label} · ${frame.label}`,
+        frame.note,
+        [
+          { title: "Retained scientific / regulatory logic", subtitle: "legacy authority", className: "a3-retained" },
+          { title: "Operational / assignment", subtitle: candidateState[0], className: candidateState[1] },
+          { title: "Evidence gate + rollback", subtitle: activeFrame === "F0" ? "not established" : "named and reversible", className: activeFrame === "F0" ? "a3-unknown" : "a3-seam" },
+          { title: "Human workflow authority", subtitle: "separate from software cubes", className: "a3-human" },
+          { title: "UNKNOWN / unbounded", subtitle: "durable visible state", className: "a3-unknown" }
+        ]
+      );
+    }
+    if (activeLens === "assurance") {
+      return compactList(
+        lenses.assurance.label,
+        lenses.assurance.note,
+        assuranceGates.map((gate, index) => ({
+          title: `${index + 1} · ${gate[0]}`,
+          subtitle: gate[1],
+          className: gate[1].includes("UNKNOWN") || gate[1].includes("UNRESOLVED") ? "a3-unknown" : "a3-seam"
+        }))
+      );
+    }
+    if (activeLens === "runtime") {
+      return compactList(
+        `${lenses.runtime.label} · ${frames.find(item => item.id === activeFrame).label}`,
+        lenses.runtime.note,
+        [
+          { title: "Cohort / promotion / rollback", subtitle: "temporary control plane", className: "a3-seam" },
+          { title: "Interception boundary", subtitle: activeFrame === "F0" ? "not established" : "router / abstraction", className: activeFrame === "F0" ? "a3-unknown" : "a3-seam" },
+          { title: "Legacy result authority", subtitle: activeFrame === "F3" ? "fallback retained" : "authoritative", className: activeFrame === "F3" ? "a3-retained" : "a3-legacy" },
+          { title: "Target implementation", subtitle: activeFrame === "F2" ? "non-authoritative mirror" : activeFrame === "F3" ? "bounded authority" : "candidate", className: activeFrame === "F2" ? "a3-shadow" : activeFrame === "F3" ? "a3-new" : "a3-unknown" },
+          { title: "Data / record transition", subtitle: "UNKNOWN · not asserted", className: "a3-unknown" },
+          { title: "Provenance + authorization", subtitle: "explicit evidence planes", className: "a3-evidence" }
+        ]
+      );
+    }
+    if (activeLens === "recovery") {
+      return compactList(
+        lenses.recovery.label,
+        lenses.recovery.note,
+        readinessGates.map(gate => ({
+          title: `${gate[0]} · ${gate[1]}`,
+          subtitle: gate[2],
+          className: gate[2] === "UNKNOWN" || gate[2] === "NOT CLAIMED" ? "a3-unknown" : gate[0] === "G5" ? "a3-new" : "a3-seam"
+        }))
+      );
+    }
+    return compactList(
+      lenses.evidence.label,
+      lenses.evidence.note,
+      [
+        { title: "Source → claim → candidate", subtitle: "scope and evidence class preserved", className: "a3-evidence" },
+        { title: "Decision → derived artifact", subtitle: "overview · layer · UNKNOWN · exclude", className: "a3-new" },
+        ...discrepancies.map((item, index) => ({
+          title: `${index + 1} · Explanation distribution`,
+          subtitle: `H1 ${item.values[0]} · H2 ${item.values[1]} · H3 ${item.values[2]} · benign ${item.values[3]}`,
+          className: "a3-unknown"
+        }))
+      ]
+    );
+  }
+
+  function textForCurrentView() {
+    const lens = lenses[activeLens];
+    if (activeLens === "authority") {
+      const frame = frames.find(item => item.id === activeFrame);
+      return `${lens.label}, ${frame.label}. ${frame.note} Position encodes authority only. Retained scientific and regulatory logic, human workflow authority, and UNKNOWN remain visible.`;
+    }
+    if (activeLens === "assurance") {
+      return "Seven independent evidence categories surround the bounded operational and assignment candidate: intended-use context, clinical evidence, software evidence, human factors, safety and cybersecurity, records and genomic-data custody, and change authorization. Applicability and gate outcomes remain unresolved.";
+    }
+    if (activeLens === "runtime") {
+      return `${lens.label}, ${frames.find(item => item.id === activeFrame).label}. Request routing, result authority, per-request authorization, contract and response comparison, record authority, data transition, provenance, and fallback are shown as distinct relations. Data movement is not asserted.`;
+    }
+    if (activeLens === "recovery") {
+      return "Readiness gates G0 through G6 cover boundary, data, contract, runtime, security, authority transfer, and retirement. Post-transfer states distinguish monitoring, rollback holding, controlled stop, and retired-but-readable preservation. Safe-to-delete is not implied.";
+    }
+    return "Evidence provenance runs from source through classified claim, candidate element, inclusion decision, and derived artifact. Three stacked distributions show competing explanations for potential diagram gaps and include a benign alternative. They do not estimate migration success or compliance.";
+  }
+
+  function render() {
+    const lens = lenses[activeLens];
+    compact = root.getBoundingClientRect().width < 560;
+    let content;
+    if (compact) content = compactDiagram();
+    else if (activeLens === "authority") content = authorityWide();
+    else if (activeLens === "assurance") content = assuranceWide();
+    else if (activeLens === "runtime") content = runtimeWide();
+    else if (activeLens === "recovery") content = recoveryWide();
+    else content = evidenceWide();
+    svg.innerHTML = content;
+
+    root.querySelectorAll("[data-a3-lens]").forEach(button => {
+      const active = button.dataset.a3Lens === activeLens;
+      button.setAttribute("aria-pressed", String(active));
+      button.classList.toggle("btn-primary", active);
+    });
+    root.querySelectorAll("[data-a3-frame]").forEach(button => {
+      const active = button.dataset.a3Frame === activeFrame;
+      button.setAttribute("aria-pressed", String(active));
+      button.classList.toggle("btn-primary", active);
+    });
+
+    frameControls.hidden = !(activeLens === "authority" || activeLens === "runtime");
+    note.textContent = frameControls.hidden
+      ? `${lens.label} · ${lens.note}`
+      : `${lens.label} · ${frames.find(item => item.id === activeFrame).label} · ${lens.note}`;
+    detail.innerHTML = `<p><strong>${escapeHtml(lens.label)}.</strong> ${escapeHtml(lens.detail)}</p>`;
+    textEquivalent.textContent = textForCurrentView();
+  }
+
+  root.querySelectorAll("[data-a3-lens]").forEach(button => {
+    button.addEventListener("click", () => {
+      activeLens = button.dataset.a3Lens;
+      render();
+    });
+  });
+
+  root.querySelectorAll("[data-a3-frame]").forEach(button => {
+    button.addEventListener("click", () => {
+      activeFrame = button.dataset.a3Frame;
+      render();
+    });
+  });
+
+  let lastCompact = null;
+  const observer = new ResizeObserver(() => {
+    const nextCompact = root.getBoundingClientRect().width < 560;
+    if (nextCompact !== lastCompact) {
+      lastCompact = nextCompact;
+      render();
+    }
+  });
+  observer.observe(root);
+  render();
+})();
+</script>

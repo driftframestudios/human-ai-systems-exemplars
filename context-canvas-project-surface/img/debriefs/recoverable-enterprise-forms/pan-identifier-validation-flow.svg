@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+  <title id="title">PAN identifier capture, checking, and authorization flow</title>
+  <desc id="desc">A card number is captured as text, divided conceptually into issuer identification, account identification, and a check digit, screened for likely transcription errors with the Luhn checksum, then sent through a payment provider for tokenization and issuer authorization. Candidate network matching, checksum consistency, and authorization remain distinct states.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 12 6 0 12Z" fill="#2855f3"/>
+    </marker>
+    <style>
+      text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17345f; }
+      .eyebrow { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 22px; font-weight: 750; letter-spacing: 2px; }
+      .heading { font-size: 48px; font-weight: 760; }
+      .subhead { font-size: 27px; }
+      .card-title { font-size: 28px; font-weight: 760; }
+      .body { font-size: 22px; }
+      .small { font-size: 19px; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .card { stroke: #17345f; stroke-width: 3; rx: 20; }
+      .flow { fill: none; stroke: #2855f3; stroke-width: 7; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" rx="30" fill="#fffdf8" stroke="#17345f" stroke-width="5"/>
+
+  <g id="orientation" aria-label="Orientation">
+    <text class="eyebrow" x="72" y="78">RECOVERABLE FORM CONTRACT · PAYMENT IDENTIFIER</text>
+    <text class="heading" x="72" y="146">A card number is an identifier—not an amount.</text>
+    <text class="subhead" x="72" y="192">Preserve every digit, catch likely transcription errors early, and let the payment provider authorize securely.</text>
+  </g>
+
+  <g id="anatomy" aria-label="Primary account number anatomy">
+    <text class="eyebrow" x="72" y="260">CONCEPTUAL ANATOMY</text>
+    <rect x="72" y="284" width="348" height="104" rx="14" fill="#cfe7f7" stroke="#17345f" stroke-width="3"/>
+    <rect x="420" y="284" width="706" height="104" fill="#d9efea" stroke="#17345f" stroke-width="3"/>
+    <rect x="1126" y="284" width="402" height="104" rx="14" fill="#fff5de" stroke="#17345f" stroke-width="3"/>
+    <text class="card-title" x="100" y="330">IIN / BIN</text>
+    <text class="small" x="100" y="363">6- and 8-digit assignments coexist</text>
+    <text class="card-title" x="454" y="330">Issuer-assigned account identifier</text>
+    <text class="small" x="454" y="363">Digits remain characters in their original order</text>
+    <text class="card-title" x="1158" y="330">Check digit</text>
+    <text class="small" x="1158" y="363">Derived through Mod-10 Luhn</text>
+  </g>
+
+  <g id="capture" aria-label="Stage one: capture as text">
+    <rect class="card" x="72" y="460" width="330" height="350" fill="#fdebe9"/>
+    <text class="eyebrow" x="102" y="508">01 · CAPTURE</text>
+    <text class="card-title" x="102" y="552">Keep the PAN as text</text>
+    <rect x="102" y="584" width="270" height="64" rx="10" fill="#fff" stroke="#17345f" stroke-width="3"/>
+    <text class="body mono" x="123" y="625">•••• •••• •••• •••D</text>
+    <text class="body" x="102" y="690">Spaces can aid reading.</text>
+    <text class="body" x="102" y="726">Normalize to an ASCII-digit</text>
+    <text class="body" x="102" y="756">string before checking.</text>
+    <text class="small mono" x="102" y="792">type=text · inputmode=numeric</text>
+  </g>
+
+  <path class="flow" d="M414 636H470"/>
+
+  <g id="network" aria-label="Stage two: suggest candidate networks">
+    <rect class="card" x="482" y="460" width="330" height="350" fill="#e7efff"/>
+    <text class="eyebrow" x="512" y="508">02 · SUGGEST</text>
+    <text class="card-title" x="512" y="552">Return candidate network(s)</text>
+    <text class="body" x="512" y="607">Use current account-range</text>
+    <text class="body" x="512" y="637">data from the provider or</text>
+    <text class="body" x="512" y="667">network—not a frozen regex.</text>
+    <rect x="512" y="704" width="122" height="50" rx="25" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <text class="small" x="536" y="737">Unknown</text>
+    <rect x="646" y="704" width="136" height="50" rx="25" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <text class="small" x="662" y="737">Ambiguous</text>
+    <text class="small" x="512" y="792">Both are useful, recoverable states.</text>
+  </g>
+
+  <path class="flow" d="M824 636H880"/>
+
+  <g id="checksum" aria-label="Stage three: screen format and Luhn checksum">
+    <rect class="card" x="892" y="460" width="330" height="350" fill="#fff5de"/>
+    <text class="eyebrow" x="922" y="508">03 · SCREEN</text>
+    <text class="card-title" x="922" y="552">Format + Luhn</text>
+    <text class="body" x="922" y="602">From the right, double every</text>
+    <text class="body" x="922" y="632">second digit; subtract 9 from</text>
+    <text class="body" x="922" y="662">a doubled result above 9.</text>
+    <rect x="922" y="700" width="270" height="54" rx="12" fill="#fff" stroke="#17345f" stroke-width="2"/>
+    <text class="body mono" x="966" y="736">Σ digits mod 10 = 0</text>
+    <text class="small" x="922" y="792">Report “checksum consistent,” not validity.</text>
+  </g>
+
+  <path class="flow" d="M1234 636H1290"/>
+
+  <g id="authorization" aria-label="Stage four: tokenize and authorize">
+    <rect class="card" x="1302" y="460" width="226" height="350" fill="#d9efea"/>
+    <text class="eyebrow" x="1332" y="508">04 · SEND</text>
+    <text class="card-title" x="1332" y="552">Provider</text>
+    <text class="body" x="1332" y="607">Tokenize.</text>
+    <text class="body" x="1332" y="643">Authorize.</text>
+    <text class="body" x="1332" y="679">Return a</text>
+    <text class="body" x="1332" y="709">receipt.</text>
+    <rect x="1332" y="744" width="166" height="44" rx="10" fill="#fff" stroke="#17345f" stroke-width="2"/>
+    <text class="small mono" x="1352" y="773">tok_••••</text>
+  </g>
+
+  <g id="business-continuity" aria-label="Human and business continuity">
+    <rect x="72" y="858" width="1456" height="92" rx="18" fill="#17345f"/>
+    <text x="104" y="899" fill="#fffdf8" class="eyebrow">CONTINUING HUMAN PURPOSE</text>
+    <text x="104" y="932" fill="#fffdf8" class="body">Comprehensible entry → calm correction → completed intent → authoritative receipt → locally measured conversion and support effects</text>
+  </g>
+
+  <g id="security-boundary" aria-label="Security and evidence boundary">
+    <rect x="72" y="986" width="1456" height="84" rx="16" fill="#ffd3d0" stroke="#17345f" stroke-width="3"/>
+    <text class="small" x="102" y="1021"><tspan font-weight="760">Security boundary:</tspan> keep raw PAN out of logs, mask displays, and never retain CVV after authorization.</text>
+    <text class="small" x="102" y="1052"><tspan font-weight="760">Evidence boundary:</tspan> network matching suggests candidates; Luhn detects some entry errors; issuer authorization remains a separate decision.</text>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+{
+  "id": "cc.narrative-architectures.prototype-collection.v0.1",
+  "title": "Narrative Architectures — Context Canvas Projection Collection",
+  "version": "0.1",
+  "created": "2026-08-19",
+  "canonicalStatus": "context_canvas_owned_projection_collection",
+  "sourceAuthority": {
+    "contractOwner": "@driftframe/narrative-architecture",
+    "implementationOwner": "Context Canvas",
+    "relationship": "context_canvas_owned_projection_collection"
+  },
+  "sourceRoot": ".",
+  "orientationSource": "README.md",
+  "centralContract": "Narrative Architecture preserves identity, attention, movement, uncertainty, state, boundaries, evidence, and possible continuations across long-running collaboration.",
+  "projections": [
+    {
+      "id": "narrative-capsule-composer",
+      "entryFile": "narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html",
+      "localManifest": "narrative-capsule-composer/context-canvas-local-manifest-v0.1.json"
+    },
+    {
+      "id": "technology-fit-sampling-tableau",
+      "entryFile": "technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "localManifest": "technology-fit-sampling-tableau/context-canvas-local-manifest-v0.1.json"
+    },
+    {
+      "id": "semantic-sampling-tableau",
+      "entryFile": "semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+      "localManifest": "semantic-sampling-tableau/context-canvas-local-manifest-v0.1.json"
+    },
+    {
+      "id": "threadkeeping-ledger",
+      "entryFile": "threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "localManifest": "threadkeeping-ledger/context-canvas-local-manifest-v0.1.json"
+    }
+  ]
+}

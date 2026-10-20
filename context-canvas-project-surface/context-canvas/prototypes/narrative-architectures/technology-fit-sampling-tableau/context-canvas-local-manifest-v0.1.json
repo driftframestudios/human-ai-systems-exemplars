@@ -1,0 +1,49 @@
+{
+  "id": "cc.narrative-architectures.technology-fit-sampling-tableau.local-manifest.v0.1",
+  "title": "Technology Fit Sampling Tableau — Context Canvas Projection",
+  "version": "0.1",
+  "created": "2026-08-19",
+  "sourceAuthority": {
+    "contractOwner": "@driftframe/narrative-architecture",
+    "implementationOwner": "Context Canvas",
+    "relationship": "context_canvas_owned_projection"
+  },
+  "pathContract": {
+    "sourcePath": "manifest-directory",
+    "localPath": "repository-root",
+    "entryFile": "localPath",
+    "sourceManifest": "localPath",
+    "usedByPages": "manifest-directory"
+  },
+  "publicationPosture": "visitor-linked-through-receiving-pages",
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "88de50de644f80583ef0a4d714a03930048f74071f4e5588a46384b352e3cba1"
+  },
+  "canonicalStatus": "context_canvas_owned_projection",
+  "sourcePath": ".",
+  "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/",
+  "entryFile": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+  "sourceManifest": "technology-fit-sampling-tableau-manifest-v0.1.json",
+  "localAdaptations": [
+    "Strategy Canvas routes in the decision registry and inline prototype resolve through the Context-local canonical pack.",
+    "The deterministic local bundle carries the current v0.2 prototype and Context-resolved registry."
+  ],
+  "divergence": {
+    "status": "context_canvas_owned_projection",
+    "changedPaths": [
+      "technology-decision-routing-registry.v0.1.json",
+      "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "technology-fit-sampling-tableau-manifest-v0.1.json",
+      "technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+    ]
+  },
+  "usedByPages": [
+    "../../../planning-surface.html"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "2.0.0",
+  "name": "lims-eln-enterprise-implementation",
+  "version": "0.3.1",
+  "python": ">=3.12",
+  "repository_role": "enterprise_implementation",
+  "evidence_role": "actual_implementation",
+  "fixture_policy": "synthetic_only",
+  "validation_command": "python3 scripts/validate_repository.py",
+  "control_plane": {
+    "governance_schema_release": "2.0.1",
+    "control_plane_profile": "0.3.0",
+    "machine_node": "machine-node.json",
+    "first_receipt": "first-receipt.json",
+    "coordination_horizon": "COORDINATION-HORIZON.json",
+    "historical_machine_node": "release/seed-lineage-machine-node-v0.2.json"
+  },
+  "contract_versions": {
+    "specimen_command": "1.0.0",
+    "execution_receipt": "1.1.0",
+    "provenance": "1.0.0",
+    "runtime_setting_catalog": "1.0.0",
+    "bounded_caller_binding": "0.3.1",
+    "database_flyway_release": "1.0.0",
+    "open_receipt_ledger": "2.0.0"
+  },
+  "bounded_caller": {
+    "binding_manifest": "release/bounded-caller-bindings.json",
+    "binding_digest": "sha256:04bff51ec3e319c91268d340c63f0fbb548aa936117efd2ede24c42a2adb4a7d",
+    "registered_operations": [
+      "specimen.read",
+      "specimen.review_flag.set",
+      "specimen.quarantine.bulk",
+      "specimen.golden_journey.execute",
+      "specimen.golden_journey.recover_instrument"
+    ],
+    "effect_classes": [
+      "read",
+      "narrow_write",
+      "broad_write"
+    ]
+  },
+  "runtime_configuration": {
+    "configuration_source": "aws_systems_manager_parameter_store",
+    "secret_source": "aws_secrets_manager",
+    "resource_scope": "full_arn_partition_region_account",
+    "cache": "bounded_process_memory_fail_closed_at_expiry",
+    "credential_source": "workload_identity"
+  },
+  "database": {
+    "engine": "postgresql",
+    "qualified_major": 17,
+    "migration_head": "005",
+    "migration_product": "Flyway Community",
+    "migration_product_version": "13.0.0",
+    "migration_release": "database/flyway-release.json",
+    "migration_release_digest": "sha256:a4fafe7ebb50da1efbad47df24d6d7af741130039ba8c90b8d6457e9d1d107b9",
+    "migration_configuration": "flyway.conf",
+    "migration_transaction_policy": "one_transaction_per_migration",
+    "tenant_authority": "signed_short_lived_database_verified_context",
+    "outbox_canonicalization": "postgresql-jsonb-text-v1"
+  },
+  "receipt_families": [
+    "configured_vendor_environments",
+    "representative_migration_restore_rehearsals",
+    "production_security_observability",
+    "accountable_scientific_quality_regulatory_acceptance"
+  ],
+  "acceptance_domains": [
+    "engineering",
+    "scientific",
+    "quality",
+    "regulatory",
+    "security",
+    "operations"
+  ]
+}

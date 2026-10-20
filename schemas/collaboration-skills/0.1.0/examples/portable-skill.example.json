@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/source-authority-mapping",
+  "kind": "portable_skill_contract",
+  "name": "source-authority-mapping",
+  "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion.",
+  "semanticAuthorityRef": ".agents/skills/source-authority-mapping/SKILL.md",
+  "sourceRef": "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+  "contract": {
+    "what": "A portable method for making the authority and receiving path of a claim, artifact, or contract legible across several systems.",
+    "when": [
+      "Source, semantic ownership, publication, delivery, snapshotting, or downstream use could be mistaken for one another."
+    ],
+    "boundaries": [
+      "The map records evidenced relations and granted decisions.",
+      "Private or gated material remains within its publication boundary.",
+      "Delivery infrastructure remains separate from semantic ownership."
+    ],
+    "result": "A concise lineage map that identifies the authoritative source, typed projections, current receiver, promotion boundary, and re-entry condition."
+  },
+  "receivingUse": {
+    "job": "Give a cross-platform collaborator a source-to-receiver route for one material object.",
+    "materialResult": "A repository ownership map and a reusable typed contract linked from the Context Canvas skills page.",
+    "completion": "Another collaborator can locate meaning, current representation, projection relations, publication authority, and the receiving decision."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Observed across schema delivery, workspace reference routing, and repository ownership mapping.",
+    "wakeTrigger": "A cross-system promotion exposes a new authority ambiguity or unnecessary attention cost."
+  },
+  "evidence": {
+    "band": "observed",
+    "sourceRefs": [
+      "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+      "README.md"
+    ]
+  },
+  "transferBoundary": "This projection carries local instruction yield; publication rights remain with their stewards, and another system may retain its own ownership vocabulary."
+}

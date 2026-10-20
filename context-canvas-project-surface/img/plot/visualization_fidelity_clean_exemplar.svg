@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-labelledby="title description">
+  <title id="title">July has the highest observed failure rate; August has the most failed tests</title>
+  <desc id="description">SECOM semiconductor manufacturing records, 2008. July 19-31, 2008: 14 failed of 63 recorded tests, 22.2 per 100. August 1-31, 2008: 51 failed of 555 recorded tests, 9.2 per 100. September 1-30, 2008: 17 failed of 590 recorded tests, 2.9 per 100. October 1-17, 2008: 22 failed of 359 recorded tests, 6.1 per 100. July and October are partial observation windows. Rates describe the released records; effort and operational causes require separate evidence.</desc>
+  <style>text{font-family:Verdana,sans-serif;fill:#17345f}.small{font-size:16px}.label{font-size:19px}.number{font-size:25px;font-variant-numeric:tabular-nums}.rule{stroke:#bbc8d7;stroke-width:1}</style>
+  <rect width="1200" height="760" fill="#fffcf5"/>
+  <g id="reading-context" aria-label="Question and population">
+    <text x="40" y="43" class="small" font-weight="bold" letter-spacing="2">SEMICONDUCTOR MANUFACTURING / RECORDED LINE TESTS</text>
+    <text x="40" y="98" font-size="38" font-weight="bold">A rate leader and a volume leader</text>
+    <text x="40" y="140" class="label">July has the highest observed failure rate; August has the most failed tests.</text>
+    <text x="40" y="173" class="small">19 July-17 October 2008 / 1,567 recorded tests / 104 failed tests</text>
+  </g>
+  <g id="comparison" aria-label="Monthly rates, failed counts and tested counts">
+    <text id="window-heading" x="40" y="225" class="small" font-weight="bold">WINDOW</text>
+    <text id="rate-heading" x="260" y="225" class="small" font-weight="bold">FAILED TESTS PER 100</text>
+    <text x="805" y="225" class="small" font-weight="bold" text-anchor="end">RATE</text>
+    <text x="964" y="225" class="small" font-weight="bold" text-anchor="end">FAILED</text>
+    <text x="1150" y="225" class="small" font-weight="bold" text-anchor="end">TESTED</text>
+    <line class="rule" x1="260" x2="260" y1="248" y2="590"/><text x="260" y="617" class="small" text-anchor="middle">0</text>
+    <line class="rule" x1="350" x2="350" y1="248" y2="590"/><text x="350" y="617" class="small" text-anchor="middle">5</text>
+    <line class="rule" x1="440" x2="440" y1="248" y2="590"/><text x="440" y="617" class="small" text-anchor="middle">10</text>
+    <line class="rule" x1="530" x2="530" y1="248" y2="590"/><text x="530" y="617" class="small" text-anchor="middle">15</text>
+    <line class="rule" x1="620" x2="620" y1="248" y2="590"/><text x="620" y="617" class="small" text-anchor="middle">20</text>
+    <line class="rule" x1="710" x2="710" y1="248" y2="590"/><text x="710" y="617" class="small" text-anchor="middle">25</text>
+    <g id="month-2008-07" data-period="2008-07" aria-label="July 19-31, 2008">
+      <text x="40" y="290" class="label" font-weight="bold">July</text><text x="40" y="315" class="small">19-31 July 2008</text>
+      <rect x="260" y="267" width="400.000" height="32" fill="#2855f3"/>
+      <text x="805" y="290" class="number" text-anchor="end">22.2</text>
+      <text x="964" y="290" class="number" text-anchor="end" font-weight="normal">14</text>
+      <text x="1150" y="290" class="number" text-anchor="end">63</text>
+    </g>
+    <g id="month-2008-08" data-period="2008-08" aria-label="August 1-31, 2008">
+      <text x="40" y="374" class="label" font-weight="bold">August</text><text x="40" y="399" class="small">1-31 August 2008</text>
+      <rect x="260" y="351" width="165.405" height="32" fill="#2855f3"/>
+      <text x="805" y="374" class="number" text-anchor="end">9.2</text>
+      <text x="964" y="374" class="number" text-anchor="end" font-weight="bold">51</text>
+      <text x="1150" y="374" class="number" text-anchor="end">555</text>
+    </g>
+    <g id="month-2008-09" data-period="2008-09" aria-label="September 1-30, 2008">
+      <text x="40" y="458" class="label" font-weight="bold">September</text><text x="40" y="483" class="small">1-30 September 2008</text>
+      <rect x="260" y="435" width="51.864" height="32" fill="#2855f3"/>
+      <text x="805" y="458" class="number" text-anchor="end">2.9</text>
+      <text x="964" y="458" class="number" text-anchor="end" font-weight="normal">17</text>
+      <text x="1150" y="458" class="number" text-anchor="end">590</text>
+    </g>
+    <g id="month-2008-10" data-period="2008-10" aria-label="October 1-17, 2008">
+      <text x="40" y="542" class="label" font-weight="bold">October</text><text x="40" y="567" class="small">1-17 October 2008</text>
+      <rect x="260" y="519" width="110.306" height="32" fill="#2855f3"/>
+      <text x="805" y="542" class="number" text-anchor="end">6.1</text>
+      <text x="964" y="542" class="number" text-anchor="end" font-weight="normal">22</text>
+      <text x="1150" y="542" class="number" text-anchor="end">359</text>
+    </g>
+  </g>
+  <g id="source-context" aria-label="Source, transformation and interpretation boundary">
+    <line class="rule" x1="40" x2="1160" y1="645" y2="645"/>
+    <text x="40" y="675" class="small">Monthly aggregation of released in-house line-test labels. July and October have partial coverage.</text>
+    <text x="40" y="705" class="small">Data: McCann &amp; Johnston (2008), SECOM, UCI / doi:10.24432/C54305 / CC BY 4.0</text>
+    <text x="40" y="735" class="small">Observed-record comparison. Operational causes, severity and effort need their own evidence.</text>
+  </g>
+</svg>

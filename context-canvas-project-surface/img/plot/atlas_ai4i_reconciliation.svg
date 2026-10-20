@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="atlas-ai4i-reconciliation-figure" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-labelledby="atlas-ai4i-reconciliation-title atlas-ai4i-reconciliation-description">
+<title id="atlas-ai4i-reconciliation-title">Published labels and mode flags can differ: All product types</title>
+<desc id="atlas-ai4i-reconciliation-description">All product types: 10000 records, 339 Machine failure labels, 348 records with any mode flag, 27 label/flag disagreements. Rates use the published Machine failure field. The released table supplies record identifiers rather than observation timestamps. Source type: published-generated-records; DOI https://doi.org/10.24432/C5HS5C; license CC-BY-4.0; verified-input SHA-256 dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e.</desc>
+<style>
+#atlas-ai4i-reconciliation-figure text{font-family:Verdana,sans-serif;fill:#1d3557}
+#atlas-ai4i-reconciliation-figure .small{font-size:14px}#atlas-ai4i-reconciliation-figure .body{font-size:16px}
+#atlas-ai4i-reconciliation-figure .label{font-size:19px}#atlas-ai4i-reconciliation-figure .number{font-size:25px;font-variant-numeric:tabular-nums}
+#atlas-ai4i-reconciliation-figure .big{font-size:38px;font-weight:bold}#atlas-ai4i-reconciliation-figure .tick{font-size:13px}
+#atlas-ai4i-reconciliation-figure .cell{font-size:14px;font-variant-numeric:tabular-nums}#atlas-ai4i-reconciliation-figure .inverse{fill:#fffcf5}
+#atlas-ai4i-reconciliation-figure .rule{stroke:#d4e3f5;stroke-width:1}
+</style>
+<rect width="1200" height="760" fill="#fffcf5"/>
+<g id="atlas-ai4i-reconciliation-reading-context">
+<text x="40" y="35" class="small" font-weight="bold">AI4I 2020 / PUBLISHED GENERATED RECORDS</text>
+<text x="40" y="79" font-size="30" font-weight="bold">Published labels and mode flags can differ</text>
+<text x="40" y="113" class="label">All product types | 10000 records | 339 machine-failure labels</text>
+<text x="40" y="144" class="small">Descriptive comparison. Product type is a source quality variant; record identifiers are not timestamps.</text>
+</g>
+<g id="atlas-ai4i-reconciliation-label-reconciliation"><text x="680" y="193" class="small" text-anchor="middle" font-weight="bold">AT LEAST ONE OF THE FIVE MODE FLAGS</text>
+<text x="507" y="226" class="label" text-anchor="middle" font-weight="bold">NO</text>
+<text x="842" y="226" class="label" text-anchor="middle" font-weight="bold">YES</text>
+<text x="310" y="314" class="label" text-anchor="end">Machine failure 0</text>
+<text x="310" y="469" class="label" text-anchor="end">Machine failure 1</text>
+<g id="atlas-ai4i-reconciliation-agreement-neither" aria-label="Machine failure 0; no mode flag; 9643 records">
+<rect x="350" y="246" width="315" height="136" fill="#d4e3f5"/>
+<text x="507" y="300" class="big" text-anchor="middle">9643</text>
+<text x="507" y="329" class="body" text-anchor="middle">records</text>
+<text x="507" y="359" class="small" text-anchor="middle">96.4 per 100 selected</text>
+</g>
+<g id="atlas-ai4i-reconciliation-agreement-modeOnly" aria-label="Machine failure 0; at least one mode flag; 18 records">
+<rect x="685" y="246" width="315" height="136" fill="#2855f3"/>
+<text x="842" y="300" class="big inverse" text-anchor="middle">18</text>
+<text x="842" y="329" class="body inverse" text-anchor="middle">records</text>
+<text x="842" y="359" class="small inverse" text-anchor="middle">0.2 per 100 selected</text>
+</g>
+<g id="atlas-ai4i-reconciliation-agreement-labelOnly" aria-label="Machine failure 1; no mode flag; 9 records">
+<rect x="350" y="401" width="315" height="136" fill="#2855f3"/>
+<text x="507" y="455" class="big inverse" text-anchor="middle">9</text>
+<text x="507" y="484" class="body inverse" text-anchor="middle">records</text>
+<text x="507" y="514" class="small inverse" text-anchor="middle">0.1 per 100 selected</text>
+</g>
+<g id="atlas-ai4i-reconciliation-agreement-both" aria-label="Machine failure 1; at least one mode flag; 330 records">
+<rect x="685" y="401" width="315" height="136" fill="#d4e3f5"/>
+<text x="842" y="455" class="big" text-anchor="middle">330</text>
+<text x="842" y="484" class="body" text-anchor="middle">records</text>
+<text x="842" y="514" class="small" text-anchor="middle">3.3 per 100 selected</text>
+</g>
+<text x="40" y="593" class="body">Disagreement: 27 records (mode flag only plus machine-failure label only).</text>
+<text x="40" y="625" class="body">Mode memberships can overlap. The four cells above count each selected record exactly once.</text></g>
+<g id="atlas-ai4i-reconciliation-source-context">
+<line class="rule" x1="40" x2="1160" y1="654" y2="654"/>
+<text x="40" y="680" class="small">AI4I 2020 Predictive Maintenance Dataset | Published generated records | CC-BY-4.0</text>
+<text x="40" y="707" class="small">Source: https://doi.org/10.24432/C5HS5C</text>
+<text x="40" y="735" class="tick">The released table supplies record identifiers rather than observation timestamps</text>
+</g>
+</svg>

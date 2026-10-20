@@ -1,0 +1,59 @@
+{
+  "databaseMigrations": {
+    "executionScope": "static_offline",
+    "expected": 8,
+    "supportedBaselines": [
+      "empty",
+      "v0.1"
+    ],
+    "validated": 8
+  },
+  "dataPrimitiveLedger": {
+    "expected": 53,
+    "validated": 53
+  },
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic",
+  "failures": [],
+  "generatedAt": "2026-10-06T06:02:32+00:00",
+  "houseSyntax": {
+    "successful": true
+  },
+  "limitations": [
+    "Configured Sapio, Benchling, and LabKey tenants remain external qualification receipts.",
+    "Vendor adapters use synthetic gateway doubles and retain vendor-shaped compatibility boundaries.",
+    "This local report records static migration verification; a separately authorized hosted PostgreSQL proof can add executed migration and security evidence.",
+    "Organizational migration, restore, security, and production acceptance remain accountable adoption receipts.",
+    "Engineering tests contribute validation evidence; accountable Quality and Regulatory decisions establish the applicable compliance posture."
+  ],
+  "receiptId": "lims-eln-reference-v0.3-local-20261006T060232Z",
+  "result": {
+    "errors": 0,
+    "failures": 0,
+    "successful": true,
+    "testsRun": 101
+  },
+  "runtime": {
+    "dependencies": {
+      "PyYAML": "6.0.3",
+      "jsonschema": "4.26.0"
+    },
+    "python": "3.12.13"
+  },
+  "sampleManifests": {
+    "expected": 9,
+    "validated": 9
+  },
+  "schemaContracts": {
+    "draft": "2020-12",
+    "expected": 4,
+    "formatAssertions": true,
+    "validated": 4
+  },
+  "sourceDigest": "3c273410c811044a2441ce1952f05ca04a91d38df128ea9d17217070b45e6b1f",
+  "sourceScope": {
+    "algorithm": "sha256",
+    "files": 89,
+    "rule": "Sorted relative path plus SHA-256 of published CONF, JSON, Markdown, Python, shell, SQL, TOML, and YAML files. The stable authored source surface places receipts, local caches, and generated packaging trees outside its boundary."
+  }
+}
