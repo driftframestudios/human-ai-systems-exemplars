@@ -79,6 +79,10 @@
 /* Shared AI Systems family grammar -------------------------------------- */
 
 .ai-systems-page {
+    /* Keep enlarged headings, labels, and card copy inside their reading
+       measure. Preformatted code and local evidence scrollers keep their
+       existing whitespace and overflow owners. */
+    overflow-wrap: anywhere;
     --blueprint-cobalt: #2855f3;
     --blueprint-cobalt-deep: #153fbe;
     --blueprint-ink: #17345f;
@@ -91,6 +95,12 @@
     --blueprint-gold: #f2c94c;
     --blueprint-lime: #ccff00;
     --blueprint-acid-yellow: #f2ff67;
+}
+
+/* Shared tables retain their established intrinsic column measures and
+   locally scrollable evidence boundary. */
+.ai-systems-page :where(table) {
+    overflow-wrap: normal;
 }
 
 .ai-systems-page .debrief-quote--operating-principle {
