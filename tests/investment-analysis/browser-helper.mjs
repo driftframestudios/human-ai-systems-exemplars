@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import {startStaticServer, monitor, assertTelemetry} from '../../tools/core-architecture-browser-helper.mjs';
 
 function throwFailures(failures) {

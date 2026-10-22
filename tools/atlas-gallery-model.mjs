@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** AI4I gallery derivation. Existing maintenance source ownership stays in atlas-maintenance-data.mjs. */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';

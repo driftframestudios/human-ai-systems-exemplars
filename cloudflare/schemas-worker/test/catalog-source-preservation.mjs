@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 
 // Observed at the author-host root on 2026-10-04 UTC. This pins the entire

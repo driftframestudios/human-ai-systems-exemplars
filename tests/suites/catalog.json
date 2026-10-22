@@ -423,7 +423,8 @@
       "members": [
         "tests/security/dependency-security.test.mjs",
         "tests/security/node-runtime.test.mjs",
-        "tests/security/secret-material.test.mjs"
+        "tests/security/secret-material.test.mjs",
+        "tests/security/node-route-inventory.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -2961,7 +2962,8 @@
           "tests/narrative-architectures/*.test.mjs"
         ],
         "test:node-runtime": [
-          "tests/security/node-runtime.test.mjs"
+          "tests/security/node-runtime.test.mjs",
+          "tests/security/node-route-inventory.test.mjs"
         ]
       },
       "directBrowserToolSelections": {

@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** Source-owned data and executable dependencies for the two material checks. */
 export const corePlanningInputs = Object.freeze([
   "tools/core-planning-instrument-contract.mjs", "tools/core-architecture-browser-helper.mjs",

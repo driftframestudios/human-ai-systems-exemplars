@@ -11,7 +11,8 @@
     "test:receiver": "node ../../tools/check-node-runtime.mjs --quiet && node test/live-receiver.mjs",
     "test:browser": "node ../../tools/check-node-runtime.mjs --quiet && node test/catalog-browser.mjs",
     "dev": "node ../../tools/check-node-runtime.mjs --quiet && wrangler dev",
-    "deploy": "node ../../tools/check-node-runtime.mjs --quiet && npm run check:accepted-publication && wrangler deploy"
+    "deploy": "node ../../tools/check-node-runtime.mjs --quiet && npm run check:accepted-publication && wrangler deploy",
+    "wrangler": "node ../../tools/check-node-runtime.mjs --quiet && wrangler"
   },
   "devDependencies": {
     "wrangler": "4.149.0"

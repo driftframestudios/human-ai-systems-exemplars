@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 
 export async function observeFormControlLabels(rootLocator, width) {

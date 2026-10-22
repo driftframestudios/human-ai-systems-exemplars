@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 // RFC 9110 sections 8.8.3 and 13.1.2: validate entity-tag syntax and compare
 // opaque values literally, allowing the optional weak marker on either side.
 function opaqueETag(value) {

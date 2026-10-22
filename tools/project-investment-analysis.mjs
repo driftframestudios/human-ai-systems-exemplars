@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 /* Inline delivery and source-readable capsule defaults. Edit canonical owners, then regenerate. */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";

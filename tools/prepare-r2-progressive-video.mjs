@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { createHash, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";

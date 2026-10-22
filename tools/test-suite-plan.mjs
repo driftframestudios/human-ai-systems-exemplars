@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { constants as fsConstants } from "node:fs";
 import { lstat, mkdir, open, opendir, rmdir, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";

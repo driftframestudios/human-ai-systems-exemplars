@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { createHash } from "node:crypto";
 import { resolve } from "node:path";

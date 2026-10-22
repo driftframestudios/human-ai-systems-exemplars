@@ -7,8 +7,9 @@ The planner reads JSON metadata; every displayed command remains undispatched.
 ## First useful move
 
 Use the [reviewed Node runtime](../../NODE-RUNTIME.md) before dispatching
-Node commands from a plan. Package aliases include admission; direct commands
-retain an explicit `node tools/check-node-runtime.mjs` preflight.
+Node commands from a plan. Package aliases include admission, and maintained
+Node entrypoints load the same guard before downstream module evaluation.
+`node tools/check-node-runtime.mjs` emits the standalone component receipt.
 
 ```sh
 npm run test:suites:list
