@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 /* Inline delivery and source-readable capsule defaults. Edit canonical owners, then regenerate. */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -109,6 +110,6 @@ async function main() {
   }
   console.log("Investment inline projections " + (check ? "match" : "updated from") + " their four source owners across two hosts.");
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch(error => { console.error(error.message); process.exitCode = 1; });
 }

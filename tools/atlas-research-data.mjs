@@ -1,7 +1,7 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
-import { pathToFileURL } from 'node:url';
 
 export const SOURCE_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json';
 export const SUMMARY_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/summary.v1.json';
@@ -271,7 +271,7 @@ export async function buildResearchData({ check = false } = {}) {
   return { works: document.totals.works, topicMemberships: document.totals.topicMemberships, topics: document.topics.length };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isDirectExecution(import.meta.url)) {
   if (process.argv.length !== 3 || !['--write', '--check'].includes(process.argv[2])) {
     throw new Error('Use --write or --check.');
   }

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
@@ -135,7 +136,7 @@ export async function main(args = process.argv.slice(2)) {
   );
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === toolPath) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     console.error(error instanceof Error ? error.stack ?? error.message : error);
     if (error instanceof AggregateError) {

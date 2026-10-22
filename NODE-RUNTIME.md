@@ -32,6 +32,12 @@ executable before downstream module evaluation. The shared module evaluates
 once per module graph. Node resolves and links that graph first: an absent
 dependency or unparsable source can produce a loader diagnostic before admission.
 
+Maintained tools that serve both imports and CLI calls use the checker’s shared
+`isDirectExecution` helper. It compares the physical source and invoked paths,
+so accepted-runtime symlink aliases execute the same owned work as direct calls.
+Imported modules stay inert at the CLI boundary; missing entry paths, stdin,
+and query- or fragment-qualified module URLs retain their import role.
+
 Use `npm run playwright -- <arguments>` and `npm run wrangler -- <arguments>`
 for the repository's locked external tools. These aliases admit Node in the
 same command before launching the tool. The schema Worker also owns its local

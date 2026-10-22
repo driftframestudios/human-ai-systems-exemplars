@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { lstat, readdir, readFile, realpath, stat } from "node:fs/promises";
 import { dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
-import { pathToFileURL } from "node:url";
 
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
 import { schemaCompanionRoutes } from "./schema-publication.mjs";
@@ -742,6 +742,6 @@ async function main() {
   console.log(`README route check passed: ${result.readmeCount} README files, ${result.localLinkCount} local links, ${result.fragmentCount} checked fragments.`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isDirectExecution(import.meta.url)) {
   await main();
 }

@@ -36,17 +36,21 @@ export function runtimeReceipt() {
   };
 }
 
-function isEntrypoint() {
-  if (!process.argv[1]) return false;
+// Direct invocation follows filesystem identity, including symlink aliases.
+// Missing CLI paths (for example stdin execution) leave imported tools inert.
+export function isDirectExecution(moduleUrl, entryPath = process.argv[1]) {
+  if (!entryPath) return false;
+  const url = new URL(moduleUrl);
+  if (url.protocol !== 'file:' || url.search || url.hash) return false;
   try {
-    return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+    return realpathSync(entryPath) === realpathSync(fileURLToPath(url));
   } catch (error) {
     if (error.code === 'ENOENT' || error.code === 'ENOTDIR') return false;
     throw error;
   }
 }
 
-if (isEntrypoint()) {
+if (isDirectExecution(import.meta.url)) {
   try {
     const args = process.argv.slice(2);
     if (args.length > 1 || (args.length === 1 && args[0] !== '--quiet')) {

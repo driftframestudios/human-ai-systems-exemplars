@@ -1,8 +1,8 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 import { chromium } from "@playwright/test";
 import { startStaticServer, repositoryRoot } from "./core-architecture-browser-helper.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
@@ -412,7 +412,7 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (isDirectExecution(import.meta.url)) {
   const args = process.argv.slice(2);
   const option = (name, fallback) => {
     const index = args.indexOf(name);

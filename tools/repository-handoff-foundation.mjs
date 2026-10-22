@@ -1,10 +1,11 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { constants as fsConstants } from "node:fs";
 import { lstat, mkdir, open, opendir, rmdir, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { TextDecoder } from "node:util";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
@@ -2684,7 +2685,6 @@ export async function run(argv = process.argv.slice(2), io = { stdout: process.s
 
 export const main = run;
 
-const invokedPath = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : "";
-if (invokedPath === import.meta.url) {
+if (isDirectExecution(import.meta.url)) {
   process.exitCode = await run();
 }
