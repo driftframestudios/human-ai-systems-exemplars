@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { constants as fileConstants } from "node:fs";

@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** Static SECOM reference owner. Parse O(n); aggregate O(n + m log m); render O(m). */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';

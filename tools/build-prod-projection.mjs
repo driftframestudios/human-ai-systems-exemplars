@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { execFile } from "node:child_process";
 import {
   lstat,

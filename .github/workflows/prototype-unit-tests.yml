@@ -178,15 +178,15 @@ jobs:
 
       - name: Install Chromium for the selected rendered-page contracts
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
-        run: npm exec -- playwright install --with-deps chromium
+        run: npm run playwright -- install --with-deps chromium
 
       - name: Install WebKit for the Context Canvas image-delivery contract
         if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && (inputs.suite == 'all' || inputs.suite == 'iframe')) }}
-        run: npm exec -- playwright install --with-deps webkit
+        run: npm run playwright -- install --with-deps webkit
 
       - name: Install Firefox for the all-family Debrief reading contracts
         if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && inputs.suite == 'all') }}
-        run: npm exec -- playwright install --with-deps firefox
+        run: npm run playwright -- install --with-deps firefox
 
       - name: Exercise the selected source contracts
         env:
@@ -281,7 +281,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Install Chromium for native video receiver checks
-        run: npm exec -- playwright install --with-deps chromium
+        run: npm run playwright -- install --with-deps chromium
 
       - name: Install the Ubuntu media receiver
         run: |

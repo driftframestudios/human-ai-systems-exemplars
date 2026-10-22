@@ -258,8 +258,8 @@ A named cross-engine question can add the locked Playwright Firefox and WebKit
 runtimes after dependency installation:
 
 ```sh
-npx playwright install firefox webkit
-npx playwright --version
+npm run playwright -- install firefox webkit
+npm run playwright -- --version
 ```
 
 Record added browser names and versions. Browser downloads change the local

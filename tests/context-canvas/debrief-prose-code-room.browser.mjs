@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { observeCompanionBoundary as observeReadingGutter, assertCompanionBoundary as assertReadingGutter } from './companion-reading-boundary.mjs';
 import { after, before, test } from 'node:test';

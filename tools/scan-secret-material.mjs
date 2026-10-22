@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { createHash, randomBytes } from "node:crypto";
 import { constants as filesystemConstants } from "node:fs";
 import {

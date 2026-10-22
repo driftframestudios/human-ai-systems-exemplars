@@ -87,7 +87,7 @@ jobs:
         working-directory: cloudflare/schemas-worker
         env:
           WRANGLER_LOG_PATH: ${{ runner.temp }}/wrangler-logs
-        run: npm exec -- wrangler deploy --dry-run
+        run: npm run wrangler -- deploy --dry-run
 
       - name: Prepare the pinned secret-material reader
         run: npm run security:secrets:install
@@ -177,7 +177,7 @@ jobs:
             echo "The $RECEIVER environment is ready for its Cloudflare account coordinate and API token."
             exit 2
           fi
-          exec ./node_modules/.bin/wrangler deploy --strict --message "$GITHUB_REPOSITORY@$GITHUB_SHA"
+          exec npm run wrangler -- deploy --strict --message "$GITHUB_REPOSITORY@$GITHUB_SHA"
 
       - name: Record the deployment receipt
         shell: bash

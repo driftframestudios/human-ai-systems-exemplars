@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { constants as fsConstants } from "node:fs";
 import { access, lstat, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";

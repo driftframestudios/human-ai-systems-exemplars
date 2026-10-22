@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import {
   chmod,

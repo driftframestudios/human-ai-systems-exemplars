@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 
 const visitorRoot = '/context-canvas-project-surface/context-canvas/';

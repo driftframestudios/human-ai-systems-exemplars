@@ -1,8 +1,10 @@
+import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { access, copyFile, mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
+import { createRequire } from 'node:module';
 import { delimiter, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -17,8 +19,10 @@ const readJson = async path => JSON.parse(await readFile(path, 'utf8'));
 function runNode(args, options = {}) {
   const env = { ...process.env, PATH: `${dirname(process.execPath)}${delimiter}${process.env.PATH ?? ''}` };
   delete env.NODE_OPTIONS;
-  const result = spawnSync(process.execPath, args, {
-    cwd: root, encoding: 'utf8', timeout: 20_000, ...options,
+  delete env.NODE_TEST_CONTEXT;
+  const { executable = process.execPath, ...childOptions } = options;
+  const result = spawnSync(executable, args, {
+    cwd: root, encoding: 'utf8', timeout: 20_000, ...childOptions,
     env: { ...env, ...options.env },
   });
   assert.ifError(result.error);
@@ -61,7 +65,7 @@ async function exists(path) {
 test('stable Node 22 admission uses the reviewed floor and numeric patch ordering', () => {
   assert.equal(NODE_FLOOR, floor);
   assert.equal(NODE_RANGE, range);
-  for (const value of ['22.23.4', 'v22.23.4', '22.23.5', '22.23.10', '22.24.0', '22.100.0']) {
+  for (const value of ['22.23.4', 'v22.23.4', '22.23.5', '22.23.10', '22.24.0', '22.100.0', '22.23.4+metadata', 'v22.23.4+build.001', '22.24.0+vendor-build.a-1']) {
     assert.equal(supportsNode(value), true, value);
     assert.doesNotThrow(() => requireNode(value));
   }
@@ -76,7 +80,7 @@ test('version admission rejects malformed, prerelease, ambiguous, and oversized 
     '', '22', '22.23', '22.23.4.1', 'V22.23.4', 'vv22.23.4',
     ' 22.23.4', '22.23.4 ', '22.23.4\n', '22.23.4\0',
     '022.23.4', '22.023.4', '22.23.04', '+22.23.4', '22.-23.4',
-    '22.23.4-rc.1', '22.24.0-nightly', '22.23.4+metadata',
+    '22.23.4-rc.1', '22.24.0-nightly', '22.23.4+', '22.23.4+..', '22.23.4+vendor..one', '22.23.4+meta_data',
     '22.9007199254740992.0', '22.23.9007199254740992', `22.23.${'9'.repeat(65)}`,
   ];
   for (const value of rejected) assert.equal(supportsNode(value), false, String(value));
@@ -248,4 +252,71 @@ test('active setup-node jobs select the exact patch and record admission before 
     }
   }
   assert.ok(jobsObserved > 0, 'active CI Node owners remain discoverable');
+});
+
+
+test('direct maintained scripts, test entrypoints, and builders refuse a stale runtime', async t => {
+  const { directory, staleOptions } = await fixture(t);
+  const calls = [
+    [checker],
+    [join(root, 'tools/check-readme-routes.mjs')],
+    ['--test', join(root, 'tests/attribution/governance.test.mjs')],
+    [join(root, 'tools/build-prod-projection.mjs'), '--check'],
+    [join(root, 'cloudflare/schemas-worker/verify-accepted-publication.mjs')],
+  ];
+  const alias = join(directory, 'readme-check.mjs');
+  await symlink(join(root, 'tools/check-readme-routes.mjs'), alias);
+  calls.push([alias]);
+  const modes = [{ env: { NODE_OPTIONS: staleOptions } }];
+  if (process.env.NODE_RUNTIME_STALE_EXECUTABLE) {
+    const executable = process.env.NODE_RUNTIME_STALE_EXECUTABLE;
+    const coordinate = runNode(['--version'], { executable });
+    assert.equal(coordinate.status, 0, coordinate.stderr);
+    assert.equal(coordinate.stdout.trim(), 'v22.23.3', 'the supplied diagnostic executable has the prior patch coordinate');
+    modes.push({ executable });
+  }
+  for (const mode of modes) {
+    for (const args of calls) {
+      const result = runNode(args, { cwd: directory, ...mode });
+      assert.notEqual(result.status, 0, `the maintained entrypoint refuses the stale runtime: ${args.map(value => value.split('/').at(-1)).join(' ')}`);
+      assert.match(result.stderr + result.stdout, /ERR_NODE_RUNTIME: Detected Node v22\.23\.3/u);
+      assert.doesNotMatch(result.stdout, /README route check passed/u);
+    }
+  }
+});
+
+test('first-dependency admission precedes dependency and entrypoint effects', async t => {
+  const { directory, staleOptions } = await fixture(t);
+  await copyFile(join(root, 'tools/node-runtime-admission.mjs'), join(directory, 'tools/node-runtime-admission.mjs'));
+  await writeFile(join(directory, 'dependency.mjs'), "import { writeFileSync } from 'node:fs'; writeFileSync('dependency-effect', 'ran');\n");
+  const entry = join(directory, 'builder.mjs');
+  const body = "import './dependency.mjs';\nimport { writeFileSync } from 'node:fs'; writeFileSync('entry-effect', 'ran');\n";
+  await writeFile(entry, "import './tools/node-runtime-admission.mjs';\n" + body);
+  const denied = runNode([entry], { cwd: directory, env: { NODE_OPTIONS: staleOptions } });
+  assert.equal(denied.status, 1);
+  assert.match(denied.stderr, /ERR_NODE_RUNTIME/u);
+  for (const marker of ['dependency-effect', 'entry-effect']) assert.equal(await exists(join(directory, marker)), false);
+  const admitted = runNode([entry], { cwd: directory });
+  assert.equal(admitted.status, 0, admitted.stderr);
+  for (const marker of ['dependency-effect', 'entry-effect']) {
+    assert.equal(await readFile(join(directory, marker), 'utf8'), 'ran');
+    await rm(join(directory, marker));
+  }
+  await writeFile(entry, body);
+  const restoredFault = runNode([entry], { cwd: directory, env: { NODE_OPTIONS: staleOptions } });
+  assert.equal(restoredFault.status, 0, restoredFault.stderr);
+  for (const marker of ['dependency-effect', 'entry-effect']) assert.equal(await readFile(join(directory, marker), 'utf8'), 'ran');
+});
+
+
+test('stable build metadata agrees with the installed npm engine evaluator', async () => {
+  const npmRequire = createRequire(pathToFileURL(await npmCli()));
+  const { satisfies } = npmRequire('semver');
+  const coordinates = [
+    '22.23.4', '22.23.4+metadata', '22.23.4+build.001', '22.24.0+vendor.a-1',
+    '22.23.3+metadata', '22.23.4-rc.1', '22.24.0-rc.1+build.1', '24.22.1+build',
+  ];
+  for (const coordinate of coordinates) {
+    assert.equal(supportsNode(coordinate), satisfies(coordinate, range), coordinate);
+  }
 });

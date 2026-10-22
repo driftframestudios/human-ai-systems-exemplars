@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import '../../../tools/node-runtime-admission.mjs';
 
 /**
  * Refresh the accepted repository-rendered inputs for the About visual sequence.

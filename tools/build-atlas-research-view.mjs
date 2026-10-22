@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** Public research extract projection. O(works + topic memberships + output bytes).
  * The admitted bibliography owns source selection; this owner supplies the view.
  */

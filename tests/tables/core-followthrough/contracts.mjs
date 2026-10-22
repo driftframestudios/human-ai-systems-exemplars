@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";

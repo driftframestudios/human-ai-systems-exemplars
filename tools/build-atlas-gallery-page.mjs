@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** Atlas manufacturing gallery projection. O(serialized data + rendered rows).
  * Source data and pure SVG/table owners precede this page composition.
  */

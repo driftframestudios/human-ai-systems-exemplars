@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import { open } from "node:fs/promises";
 import { dirname, join } from "node:path";

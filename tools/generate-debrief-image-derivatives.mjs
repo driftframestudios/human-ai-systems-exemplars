@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { randomUUID } from "node:crypto";
 import {

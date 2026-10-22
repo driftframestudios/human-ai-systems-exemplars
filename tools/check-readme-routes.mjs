@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { lstat, readdir, readFile, realpath, stat } from "node:fs/promises";
 import { dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";

@@ -8,9 +8,9 @@ export const NODE_RANGE = '>=22.23.4 <23';
 // numeric comparison keeps 22.23.10 above 22.23.4 independently of text ordering.
 export function supportsNode(version) {
   if (typeof version !== 'string' || version.length > 64) return false;
-  const match = /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/u.exec(version);
+  const match = /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u.exec(version);
   if (!match) return false;
-  const [major, minor, patch] = match.slice(1).map(Number);
+  const [major, minor, patch] = match.slice(1, 4).map(Number);
   return [major, minor, patch].every(Number.isSafeInteger)
     && major === 22 && (minor > 23 || (minor === 23 && patch >= 4));
 }

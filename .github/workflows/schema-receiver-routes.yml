@@ -97,7 +97,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Install the browser used by the public-surface checks
-        run: npm exec -- playwright install --with-deps chromium
+        run: npm run playwright -- install --with-deps chromium
 
       - name: Read schema identities and build receiver routes
         id: schema

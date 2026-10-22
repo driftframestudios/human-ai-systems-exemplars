@@ -142,7 +142,10 @@
     "test:card-rail-clearance-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/card-rail-clearance.browser.mjs",
     "test:linked-reading-containment-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/linked-reading-containment.browser.mjs",
     "check:node-runtime": "node tools/check-node-runtime.mjs",
-    "test:node-runtime": "node tools/check-node-runtime.mjs --quiet && node --test tests/security/node-runtime.test.mjs"
+    "test:node-runtime": "node tools/check-node-runtime.mjs --quiet && node --test tests/security/node-runtime.test.mjs tests/security/node-route-inventory.test.mjs",
+    "playwright": "node tools/check-node-runtime.mjs --quiet && playwright",
+    "wrangler": "node tools/check-node-runtime.mjs --quiet && wrangler",
+    "check:node-routes": "node tools/check-node-runtime.mjs --quiet && node tools/node-route-inventory.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

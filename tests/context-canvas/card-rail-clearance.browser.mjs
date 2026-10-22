@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { readFile, readdir, mkdir } from 'node:fs/promises';
 import { before, after, test } from 'node:test';

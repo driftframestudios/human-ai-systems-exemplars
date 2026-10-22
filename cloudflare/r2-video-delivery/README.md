@@ -70,7 +70,7 @@ Run the focused contract locally with:
 
 ```sh
 node --test tests/media-publication/r2-video-worker.test.mjs
-npx wrangler deploy --dry-run --config cloudflare/r2-video-delivery/wrangler.jsonc
+npm run wrangler -- deploy --dry-run --config cloudflare/r2-video-delivery/wrangler.jsonc
 ```
 
 ## Activation boundary
