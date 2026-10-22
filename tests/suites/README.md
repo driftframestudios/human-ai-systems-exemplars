@@ -6,6 +6,10 @@ The planner reads JSON metadata; every displayed command remains undispatched.
 
 ## First useful move
 
+Use the [reviewed Node runtime](../../NODE-RUNTIME.md) before dispatching
+Node commands from a plan. Package aliases include admission; direct commands
+retain an explicit `node tools/check-node-runtime.mjs` preflight.
+
 ```sh
 npm run test:suites:list
 node tools/test-suite-plan.mjs --suite node.visualization-fidelity-atlas --json
@@ -101,7 +105,7 @@ Other browser families keep their established routes and evidence contracts.
 
 ## Compatibility and preparation
 
-Existing package scripts remain unchanged. A suite's `aliases` are related
+Existing package commands retain their original work behind the shared runtime-admission prefix. A suite's `aliases` are related
 commands, rather than exact-selection synonyms. The catalog records direct
 Node selectors, browser entries, ordered composite steps and explicit
 `npm run` edges. The planner traces those declared edges and presents original
@@ -142,8 +146,8 @@ record the design decisions; the receiving PR/Issue owns executed results.
 
 An invalid or stale map returns to the existing direct command and its owner.
 Update exact memberships and prerequisites in the catalog, then use the focused
-fixtures before relying on a new plan. Existing commands and all CI settings
-remain intact.
+fixtures before relying on a new plan. The shared runtime boundary precedes each existing package command; CI selects
+the reviewed patch before installation.
 
 Use the [Python component entry](../tables/README.md#python-component-entry)
 for focused table checks, the [browser ownership map](browser-ownership.md)

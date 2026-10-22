@@ -405,7 +405,7 @@ The packaging job runs without hosting credentials:
 2. resolve the tag to the expected full commit and reject a branch name;
 3. use `permissions: contents: read`, `persist-credentials: false`, and a
    bounded timeout;
-4. install Node 22 from a full-SHA-pinned GitHub action and use
+4. install the reviewed Node 22.23.4 from a full-SHA-pinned GitHub action and use
    `npm ci --ignore-scripts`;
 5. run `npm run test:prod-deployment` and the focused transfer-contract tests;
 6. build the archive and receipt from tagged carrier blobs, then rerun the
