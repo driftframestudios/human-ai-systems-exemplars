@@ -148,3 +148,10 @@ configuration and range behavior][cache], [fixed-length Worker responses][respon
 [response]: https://developers.cloudflare.com/workers/runtime-apis/response/#set-the-content-length-header
 [routes]: https://developers.cloudflare.com/workers/configuration/routing/routes/
 [runbook]: ../../planning/media-publication/runbooks/r2-progressive-video-publication.v0.1.md
+
+## CLI runtime
+
+Use the [reviewed repository Node lane](../../NODE-RUNTIME.md) for Wrangler
+and media tooling. Root package commands own the dependency closure and
+runtime admission. The deployed Worker runs under Cloudflare workerd with its
+existing compatibility configuration.

@@ -225,11 +225,12 @@ browser, scanner, or other environment capability. Direct source reading can
 proceed to Phase 7 with the existing environment; Node/npm probes and
 installation are conditional on the chosen check.
 
-For a selected Node-based check, the repository currently requires Node 22 or
-newer and carries a root lockfile. Inspect that local lane first:
+For a selected Node-based check, use the reviewed Node >=22.23.4 <23 lane.
+The `.node-version` file selects 22.23.4; the root lockfile owns package
+resolution. Inspect that local lane first:
 
 ```sh
-node --version
+node tools/check-node-runtime.mjs
 npm --version
 test -f package-lock.json
 test -d node_modules
