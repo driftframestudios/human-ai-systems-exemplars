@@ -36,6 +36,7 @@ import {
 const execFileAsync = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const BUNDLE_ROOT = path.join(ROOT, "repository-handoff-foundation-v0.1");
+const TOOL_PATH = path.join(ROOT, "tools/repository-handoff-foundation.mjs");
 
 function foundationError(code) {
   return (error) => error instanceof FoundationError && error.code === code;
