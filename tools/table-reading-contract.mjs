@@ -12,6 +12,7 @@ import { executionPlan, inputSnapshot, observationVersion, publishCampaign, publ
 import { acceptancePlan, assertAcceptanceRecord, createDocumentAccounting, reportReceiver, runAcceptanceCases, runFocusedAcceptance } from "./table-focused-acceptance.mjs";
 
 export const harnessSources = [
+  "tools/node-runtime-admission.mjs", "tools/check-node-runtime.mjs",
   "tools/table-reading-contract.mjs", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs",
   "tools/evidence-campaign.mjs",
   "tools/table-focused-acceptance.mjs",
