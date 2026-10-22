@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import {
   cp,
   lstat,
@@ -1690,8 +1691,7 @@ async function main(arguments_) {
   );
 }
 
-const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
-if (invokedPath === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main(process.argv.slice(2)).catch((error) => {
     if (error instanceof PublicReferenceContractError) {
       console.error(error.message);

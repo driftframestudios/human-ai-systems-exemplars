@@ -1,10 +1,11 @@
 import '../../tools/node-runtime-admission.mjs';
+import { isDirectExecution } from '../../tools/check-node-runtime.mjs';
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { lstat, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 import {
   expectedContentType,
@@ -299,7 +300,7 @@ export async function verifyAcceptedPublication(options = {}) {
   });
 }
 
-const isDirectRun = process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
+const isDirectRun = isDirectExecution(import.meta.url);
 if (isDirectRun) {
   try {
     const receipt = await verifyAcceptedPublication();

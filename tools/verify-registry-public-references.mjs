@@ -1,5 +1,5 @@
 import './node-runtime-admission.mjs';
-import { pathToFileURL } from "node:url";
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
@@ -424,7 +424,7 @@ async function main() {
   );
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     if (error instanceof RegistryRouteAggregateVerificationError) {
       process.stderr.write(`${JSON.stringify({

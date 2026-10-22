@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -289,7 +290,7 @@ export async function main(args, {root = ROOT, write = value => process.stdout.w
   return result;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main(process.argv.slice(2)).catch(error => {
     process.stderr.write((error instanceof CatalogError ? error.code : 'catalog-read') + ': ' + error.message + '\n');
     process.exitCode = 1;

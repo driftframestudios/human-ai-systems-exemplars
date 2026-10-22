@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { lstat, readFile, readdir } from "node:fs/promises";
@@ -182,7 +183,6 @@ export async function verifySchemaPagesReceiver({
   return { fileCount: artifactPaths.length, closureDigest: artifactDigest };
 }
 
-const modulePath = fileURLToPath(import.meta.url);
 export async function verifySchemaSiteRelease(options) {
   const result = await verifySchemaPagesReceiver(options);
   const release = JSON.parse(await readFile(resolve(options.artifactRoot, "release.json"), "utf8"));
@@ -194,7 +194,7 @@ export async function verifySchemaSiteRelease(options) {
   return result;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === modulePath) {
+if (isDirectExecution(import.meta.url)) {
   const options = parseArguments(process.argv.slice(2));
   const sourceRevision = options["source-revision"];
   const sourceBranch = options["source-branch"];

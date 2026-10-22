@@ -166,7 +166,8 @@ test("the bundle check runs with only Node and the copied working-bundle files",
   const toolSource = await readFile(isolatedTool, "utf8");
   const importedSpecifiers = [...toolSource.matchAll(/\bfrom\s+["']([^"']+)["']/gu)].map((match) => match[1]);
   assert.ok(importedSpecifiers.length > 0);
-  assert.ok(importedSpecifiers.every((specifier) => specifier.startsWith("node:")), importedSpecifiers);
+  assert.ok(importedSpecifiers.every((specifier) =>
+    specifier.startsWith("node:") || specifier === "./check-node-runtime.mjs"), importedSpecifiers);
   assert.ok(toolSource.startsWith("import './node-runtime-admission.mjs';"));
 
   const { stdout, stderr } = await execFileAsync(

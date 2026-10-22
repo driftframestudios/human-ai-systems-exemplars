@@ -1,9 +1,9 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { execFile } from 'node:child_process';
-import { open, readFile, realpath } from 'node:fs/promises';
+import { open, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
@@ -345,16 +345,6 @@ async function main() {
   if (!result.ok) process.exitCode = 1;
 }
 
-async function isEntrypoint() {
-  if (!process.argv[1]) return false;
-  try {
-    return await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url));
-  } catch (error) {
-    if (error.code === 'ENOENT' || error.code === 'ENOTDIR') return false;
-    throw error;
-  }
-}
-
-if (await isEntrypoint()) {
+if (isDirectExecution(import.meta.url)) {
   main().catch(error => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
 }

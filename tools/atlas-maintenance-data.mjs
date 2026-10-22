@@ -1,7 +1,7 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
-import { pathToFileURL } from 'node:url';
 
 export const SOURCE_PATH = 'context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv';
 export const SUMMARY_PATH = 'context-canvas-project-surface/data/visualization-fidelity/ai4i/summary.v1.json';
@@ -151,7 +151,7 @@ export async function buildMaintenanceData({ check = false } = {}) {
   return { records: document.populations[0].records, populations: document.populations.length, disagreements: document.populations[0].disagreements };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isDirectExecution(import.meta.url)) {
   if (process.argv.length !== 3 || !['--write', '--check'].includes(process.argv[2])) throw new Error('Use --write or --check.');
   console.log(JSON.stringify(await buildMaintenanceData({ check: process.argv[2] === '--check' })));
 }

@@ -1,4 +1,5 @@
 import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { constants as fsConstants } from "node:fs";
 import { access, lstat, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -714,7 +715,7 @@ async function main() {
   process.stdout.write(`Materialized ${routes.length} catalog Case Brief and Full Debrief At-a-Glance projections.\n`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`${formatMaterializationError(error)}\n`);
     process.exitCode = 1;

@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 import { delimiter, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { NODE_FLOOR, NODE_RANGE, requireNode, supportsNode } from '../../tools/check-node-runtime.mjs';
+import { NODE_FLOOR, NODE_RANGE, isDirectExecution, requireNode, supportsNode } from '../../tools/check-node-runtime.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const checker = join(root, 'tools/check-node-runtime.mjs');
@@ -144,6 +144,100 @@ test('symlinked CLI invocation preserves admission and the runtime receipt', asy
   assert.match(refused.stderr, /ERR_NODE_RUNTIME: Detected Node v22\.23\.3/u);
 });
 
+test('direct execution follows physical identity while distinct module URLs stay inert', async t => {
+  const { directory } = await fixture(t);
+  const entry = join(directory, 'owned #100%.mjs');
+  const alias = join(directory, 'alias #100%.mjs');
+  await writeFile(entry, 'export {};\n');
+  await symlink(entry, alias);
+  const url = pathToFileURL(entry);
+  assert.equal(isDirectExecution(url, entry), true);
+  assert.equal(isDirectExecution(url.href, alias), true);
+  assert.equal(isDirectExecution(pathToFileURL(alias), entry), true);
+  for (const input of [null, '', '-', join(directory, 'missing.mjs'), join(entry, 'child.mjs')]) {
+    assert.equal(isDirectExecution(url, input), false, String(input));
+  }
+  assert.equal(isDirectExecution(pathToFileURL(join(directory, 'missing.mjs')), entry), false);
+  for (const suffix of ['?view=import', '#module', '?view=import#module']) {
+    assert.equal(isDirectExecution(url.href + suffix, entry), false, suffix);
+  }
+  assert.equal(isDirectExecution('data:text/javascript,export{}', entry), false);
+});
+
+test('direct execution preserves filesystem failures beyond missing paths', async t => {
+  const { directory } = await fixture(t);
+  const first = join(directory, 'loop-a.mjs');
+  const second = join(directory, 'loop-b.mjs');
+  await symlink(second, first);
+  await symlink(first, second);
+  assert.throws(() => isDirectExecution(pathToFileURL(checker), first), { code: 'ELOOP' });
+});
+
+test('maintained tool symlinks preserve owned work across caller directories', async t => {
+  const { directory } = await fixture(t);
+  const routes = [
+    { name: 'readme', entry: join(root, 'tools/check-readme-routes.mjs'), args: [root] },
+    { name: 'inventory', entry: join(root, 'tools/node-route-inventory.mjs'), args: [] },
+  ];
+  for (const { name, entry, args } of routes) {
+    const direct = runNode([entry, ...args], { cwd: directory });
+    assert.equal(direct.status, 0, direct.stderr);
+    assert.equal(direct.stderr, '');
+    if (name === 'readme') {
+      const counts = direct.stdout.match(/^README route check passed: (\d+) README files, (\d+) local links, (\d+) checked fragments\.\n$/u);
+      assert.ok(counts, 'the README entrypoint reports completed route inspection');
+      assert.ok(counts.slice(1).every(value => Number(value) > 0), 'the explicit repository root supplies the inspected population');
+    } else {
+      const receipt = JSON.parse(direct.stdout);
+      assert.equal(receipt.ok, true);
+      assert.ok(receipt.files > 0, 'the inventory entrypoint inspects repository-owned files');
+      assert.deepEqual(receipt.diagnostics, []);
+    }
+    const aliasName = `${name}-alias.mjs`;
+    const alias = join(directory, aliasName);
+    await symlink(entry, alias);
+    for (const invocation of [
+      { path: alias, cwd: root },
+      { path: `./${aliasName}`, cwd: directory },
+    ]) {
+      const linked = runNode([invocation.path, ...args], { cwd: invocation.cwd });
+      assert.equal(linked.status, 0, linked.stderr);
+      assert.equal(linked.stderr, '');
+      assert.equal(linked.stdout, direct.stdout, `${name} performs the same work through its alias`);
+    }
+  }
+});
+
+test('a symlinked Issue-route command retains its owned argument failure', async t => {
+  const { directory } = await fixture(t);
+  const entry = join(root, 'tools/repository-handoff-issue-route.mjs');
+  const alias = join(directory, 'issue-route-alias.mjs');
+  await symlink(entry, alias);
+  const direct = runNode([entry, '--plan'], { cwd: directory });
+  assert.equal(direct.status, 1);
+  assert.equal(direct.stdout, '');
+  assert.match(direct.stderr, /Issue-route operation held \(arguments\): Choose the destination with --repo OWNER\/REPOSITORY\./u);
+  const linked = runNode([alias, '--plan'], { cwd: directory });
+  assert.equal(linked.status, direct.status);
+  assert.equal(linked.stdout, direct.stdout);
+  assert.equal(linked.stderr, direct.stderr, 'the alias reaches the same argument validation before GitHub work');
+});
+
+test('genuine imports through tool aliases leave their CLI work inert', async t => {
+  const { directory } = await fixture(t);
+  for (const name of ['check-readme-routes', 'node-route-inventory']) {
+    const alias = join(directory, `${name}-alias.mjs`);
+    await symlink(join(root, `tools/${name}.mjs`), alias);
+    const source = `await import(${JSON.stringify(pathToFileURL(alias).href)}); process.stdout.write('import-complete');`;
+    for (const invocation of [{ args: ['--input-type=module', '-e', source] }, { args: ['--input-type=module', '-'], input: source }]) {
+      const result = runNode(invocation.args, { cwd: directory, input: invocation.input });
+      assert.equal(result.status, 0, result.stderr);
+      assert.equal(result.stdout, 'import-complete', `${name} exposes its module without running its CLI`);
+      assert.equal(result.stderr, '');
+    }
+  }
+});
+
 test('imports expose policy without running the CLI', () => {
   const source = `await import(${JSON.stringify(pathToFileURL(checker).href)}); process.stdout.write('import-complete');`;
   const result = runNode(['--input-type=module', '-e', source]);
@@ -260,13 +354,16 @@ test('direct maintained scripts, test entrypoints, and builders refuse a stale r
   const calls = [
     [checker],
     [join(root, 'tools/check-readme-routes.mjs')],
+    [join(root, 'tools/node-route-inventory.mjs')],
     ['--test', join(root, 'tests/attribution/governance.test.mjs')],
     [join(root, 'tools/build-prod-projection.mjs'), '--check'],
     [join(root, 'cloudflare/schemas-worker/verify-accepted-publication.mjs')],
   ];
-  const alias = join(directory, 'readme-check.mjs');
-  await symlink(join(root, 'tools/check-readme-routes.mjs'), alias);
-  calls.push([alias]);
+  for (const name of ['check-readme-routes', 'node-route-inventory']) {
+    const alias = join(directory, `${name}-alias.mjs`);
+    await symlink(join(root, `tools/${name}.mjs`), alias);
+    calls.push([alias]);
+  }
   const modes = [{ env: { NODE_OPTIONS: staleOptions } }];
   if (process.env.NODE_RUNTIME_STALE_EXECUTABLE) {
     const executable = process.env.NODE_RUNTIME_STALE_EXECUTABLE;
@@ -280,7 +377,7 @@ test('direct maintained scripts, test entrypoints, and builders refuse a stale r
       const result = runNode(args, { cwd: directory, ...mode });
       assert.notEqual(result.status, 0, `the maintained entrypoint refuses the stale runtime: ${args.map(value => value.split('/').at(-1)).join(' ')}`);
       assert.match(result.stderr + result.stdout, /ERR_NODE_RUNTIME: Detected Node v22\.23\.3/u);
-      assert.doesNotMatch(result.stdout, /README route check passed/u);
+      if (args[0] !== '--test') assert.equal(result.stdout, '', 'refusal precedes owned work and success receipts');
     }
   }
 });
