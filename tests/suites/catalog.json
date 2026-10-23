@@ -2563,6 +2563,28 @@
       "aliases": [
         "test:linked-reading-containment-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-evidence-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-one evidence cards on ten Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, deterministic split canary and fresh-source recovery. Native browsers and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-evidence-cards-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2672,7 +2694,8 @@
         "browser.context-canvas.debrief-architecture-cards",
         "browser.context-canvas.ai-narrow-reading",
         "browser.context-canvas.card-rail-clearance",
-        "browser.context-canvas.linked-reading-containment"
+        "browser.context-canvas.linked-reading-containment",
+        "browser.context-canvas.debrief-evidence-cards"
       ]
     },
     {
@@ -3056,6 +3079,9 @@
         "test:node-runtime": [
           "tests/security/node-runtime.test.mjs",
           "tests/security/node-route-inventory.test.mjs"
+        ],
+        "test:debrief-evidence-cards-browser": [
+          "tests/context-canvas/debrief-evidence-cards.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

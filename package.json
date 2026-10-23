@@ -145,7 +145,8 @@
     "test:node-runtime": "node tools/check-node-runtime.mjs --quiet && node --test tests/security/node-runtime.test.mjs tests/security/node-route-inventory.test.mjs",
     "playwright": "node tools/check-node-runtime.mjs --quiet && playwright",
     "wrangler": "node tools/check-node-runtime.mjs --quiet && wrangler",
-    "check:node-routes": "node tools/check-node-runtime.mjs --quiet && node tools/node-route-inventory.mjs"
+    "check:node-routes": "node tools/check-node-runtime.mjs --quiet && node tools/node-route-inventory.mjs",
+    "test:debrief-evidence-cards-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/debrief-evidence-cards.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
