@@ -35,6 +35,7 @@ on:
       - ready_for_review
     paths:
       - ".github/workflows/prototype-unit-tests.yml"
+      - ".github/dependencies/**"
       - ".agents/skills/**/SKILL.md"
       - ".agents/skills/**/scripts/**"
       - ".agents/skills/publication-selection.json"
@@ -264,6 +265,15 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Record the runner image and media-job start
+        id: media-runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${ImageVersion:?GitHub-hosted runner image version is required}"
+          printf 'image-version=%s\n' "$ImageVersion" >> "$GITHUB_OUTPUT"
+          printf 'job-started-at=%s\n' "$(date +%s)" >> "$GITHUB_OUTPUT"
+
       - name: Check out the candidate source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -280,22 +290,172 @@ jobs:
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
-      - name: Install Chromium for native video receiver checks
-        run: npm run playwright -- install --with-deps chromium
-
-      - name: Install the Ubuntu media receiver
+      - name: Resolve the verified Ubuntu media package plan
+        id: media-apt-plan
+        shell: bash
         run: |
+          set -euo pipefail
+          started=$SECONDS
+          mapfile -t packages < <(
+            sed -E 's/[[:space:]]*#.*$//' .github/dependencies/media-apt-packages.txt |
+              sed -E '/^[[:space:]]*$/d'
+          )
+          if ((${#packages[@]} == 0)); then
+            echo "The media package manifest must select at least one Ubuntu package." >&2
+            exit 2
+          fi
+          for package in "${packages[@]}"; do
+            if [[ ! "$package" =~ ^[a-z0-9][a-z0-9+.-]*$ ]]; then
+              echo "The media package manifest contains an unsupported package token: $package" >&2
+              exit 2
+            fi
+          done
+
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends ffmpeg
+          plan="$RUNNER_TEMP/media-apt-plan.txt"
+          LC_ALL=C apt-get --simulate install --no-install-recommends "${packages[@]}" |
+            awk -f .github/dependencies/apt-install-plan.awk |
+            sort -u > "$plan"
+          if [[ ! -s "$plan" ]]; then
+            dpkg-query --show --showformat='${binary:Package}=${Version}\n' "${packages[@]}" |
+              sort -u > "$plan"
+          fi
+
+          digest="$(sha256sum "$plan" | awk '{print $1}')"
+          printf 'digest=%s\n' "$digest" >> "$GITHUB_OUTPUT"
+          printf 'package-count=%s\n' "$(wc -l < "$plan" | tr -d ' ')" >> "$GITHUB_OUTPUT"
+          printf 'resolve-seconds=%s\n' "$((SECONDS - started))" >> "$GITHUB_OUTPUT"
+
+      - name: Restore the verified FFmpeg package closure
+        id: restore-media-apt
+        continue-on-error: true
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/media-apt-archives
+          key: media-apt-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.media-apt-plan.outputs.digest }}-${{ steps.media-runtime.outputs.image-version }}
+          restore-keys: |
+            media-apt-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.media-apt-plan.outputs.digest }}-
+
+      - name: Install the verified Ubuntu media toolchain
+        id: install-media-apt
+        env:
+          MEDIA_APT_ARCHIVES: ${{ runner.temp }}/media-apt-archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          started=$SECONDS
+          mapfile -t packages < <(
+            sed -E 's/[[:space:]]*#.*$//' .github/dependencies/media-apt-packages.txt |
+              sed -E '/^[[:space:]]*$/d'
+          )
+          mkdir -p "$MEDIA_APT_ARCHIVES/partial"
+          chmod 0755 "$MEDIA_APT_ARCHIVES"
+          sudo chown _apt:root "$MEDIA_APT_ARCHIVES/partial"
+          sudo chmod 0700 "$MEDIA_APT_ARCHIVES/partial"
+          # Download and installation remain separate so a restored archive can
+          # satisfy the second phase entirely from the verified local closure.
+          sudo apt-get \
+            -o Dir::Cache::archives="$MEDIA_APT_ARCHIVES" \
+            install --download-only --yes --no-install-recommends "${packages[@]}"
+          sudo apt-get \
+            -o Dir::Cache::archives="$MEDIA_APT_ARCHIVES" \
+            install --no-download --yes --no-install-recommends "${packages[@]}"
+          sudo chmod -R a+rX "$MEDIA_APT_ARCHIVES"
+          printf 'install-seconds=%s\n' "$((SECONDS - started))" >> "$GITHUB_OUTPUT"
 
       - name: Confirm the media toolchain and exercise both preparation strategies
+        id: media-contracts
         env:
           MEDIA_TEST_REQUIRE_FFMPEG: "true"
+          PLAYWRIGHT_BROWSER_CHANNEL: chrome
+        shell: bash
         run: |
+          set -euo pipefail
+          started=$SECONDS
+          google-chrome --version
           ffmpeg -version
           ffprobe -version
           npm run test:media-publication
           npm run test:video-receivers-browser
+          printf 'test-seconds=%s\n' "$((SECONDS - started))" >> "$GITHUB_OUTPUT"
 
-      - name: Compile the exact Worker package without activation
-        run: npm run dry-run:r2-video-delivery
+      - name: Compile the exact Worker package for inspection
+        id: worker-dry-run
+        shell: bash
+        run: |
+          set -euo pipefail
+          started=$SECONDS
+          npm run dry-run:r2-video-delivery
+          printf 'compile-seconds=%s\n' "$((SECONDS - started))" >> "$GITHUB_OUTPUT"
+
+      - name: Save the verified FFmpeg package closure
+        id: save-media-apt
+        if: >-
+          success() &&
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/main' &&
+          steps.restore-media-apt.outputs.cache-hit != 'true'
+        continue-on-error: true
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/media-apt-archives
+          key: media-apt-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.media-apt-plan.outputs.digest }}-${{ steps.media-runtime.outputs.image-version }}
+
+      - name: Record the media lane receipt
+        if: always()
+        env:
+          APT_INSTALL_SECONDS: ${{ steps.install-media-apt.outputs.install-seconds }}
+          APT_PACKAGE_COUNT: ${{ steps.media-apt-plan.outputs.package-count }}
+          APT_PLAN_DIGEST: ${{ steps.media-apt-plan.outputs.digest }}
+          APT_RESOLVE_SECONDS: ${{ steps.media-apt-plan.outputs.resolve-seconds }}
+          CACHE_HIT: ${{ steps.restore-media-apt.outputs.cache-hit }}
+          CACHE_MATCHED_KEY: ${{ steps.restore-media-apt.outputs.cache-matched-key }}
+          CACHE_RESTORE_OUTCOME: ${{ steps.restore-media-apt.outcome }}
+          CACHE_SAVE_OUTCOME: ${{ steps.save-media-apt.outcome }}
+          JOB_STARTED_AT: ${{ steps.media-runtime.outputs.job-started-at }}
+          MEDIA_CONTRACTS_OUTCOME: ${{ steps.media-contracts.outcome }}
+          MEDIA_TEST_SECONDS: ${{ steps.media-contracts.outputs.test-seconds }}
+          RUNNER_IMAGE_VERSION: ${{ steps.media-runtime.outputs.image-version }}
+          WORKER_COMPILE_OUTCOME: ${{ steps.worker-dry-run.outcome }}
+          WORKER_COMPILE_SECONDS: ${{ steps.worker-dry-run.outputs.compile-seconds }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${CACHE_RESTORE_OUTCOME:-skipped}" in
+            success)
+              if [[ "${CACHE_HIT:-}" == "true" ]]; then
+                cache_standing="exact hit"
+              elif [[ -n "${CACHE_MATCHED_KEY:-}" ]]; then
+                cache_standing="compatible restore"
+              else
+                cache_standing="miss"
+              fi
+              ;;
+            failure) cache_standing="unavailable" ;;
+            cancelled) cache_standing="cancelled" ;;
+            skipped) cache_standing="skipped" ;;
+            *) cache_standing="unrecorded" ;;
+          esac
+          started_at="${JOB_STARTED_AT:-$(date +%s)}"
+          total_seconds="$(( $(date +%s) - started_at ))"
+          chrome_version="$(google-chrome --version 2>/dev/null || printf 'unavailable')"
+          ffmpeg_version="$(ffmpeg -version 2>/dev/null | sed -n '1p' || printf 'unavailable')"
+          ffprobe_version="$(ffprobe -version 2>/dev/null | sed -n '1p' || printf 'unavailable')"
+          {
+            echo "## Media preparation and delivery receipt"
+            echo
+            echo "| Field | Observation |"
+            echo "| --- | --- |"
+            echo "| Runner image | ${RUNNER_IMAGE_VERSION:-unrecorded} |"
+            echo "| Browser receiver | ${chrome_version} |"
+            echo "| FFmpeg | ${ffmpeg_version} |"
+            echo "| FFprobe | ${ffprobe_version} |"
+            echo "| Package closure | ${APT_PACKAGE_COUNT:-unrecorded} packages |"
+            echo "| Package-plan digest | ${APT_PLAN_DIGEST:-unrecorded} |"
+            echo "| Cache | ${cache_standing}; save ${CACHE_SAVE_OUTCOME:-skipped} |"
+            echo "| Package-plan resolution | ${APT_RESOLVE_SECONDS:-unrecorded}s |"
+            echo "| Media package installation | ${APT_INSTALL_SECONDS:-unrecorded}s |"
+            echo "| Media and browser contracts | ${MEDIA_CONTRACTS_OUTCOME:-skipped}; ${MEDIA_TEST_SECONDS:-unrecorded}s |"
+            echo "| Worker compilation | ${WORKER_COMPILE_OUTCOME:-skipped}; ${WORKER_COMPILE_SECONDS:-unrecorded}s |"
+            echo "| Observed job time | ${total_seconds}s |"
+          } >> "$GITHUB_STEP_SUMMARY"

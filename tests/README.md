@@ -323,16 +323,22 @@ npm run media:video:verify -- --source <master.mp4>
 npm run test:context-canvas
 ```
 
-The local tests exercise preparation routing, strict decode, Fast Start,
+The local tests exercise CI cache identity and APT-plan parsing alongside
+preparation routing, strict decode, Fast Start,
 copy-remux packet identity, selected scaling geometry, sanitized metadata
 reporting, atomic promotion and cleanup disposition, the finite public path
 grammar, exact R2 key mapping, typed response failures, stream ownership,
 bounded reads, accepted movie-to-poster lineage, visitor-receiver binding, and
 both head-first and cold-range-first live verification.
-The required CI receiver proves both real FFmpeg preparation branches and the
-synthetic failure contracts. The Wrangler dry run establishes
-that the selected source bundles against the declared R2 binding and route; it
-does not create a bucket, upload bytes, attach the route, or observe the edge.
+The executable APT-plan fixture uses POSIX `awk`, matching the Ubuntu CI owner;
+macOS and Linux development environments provide the same fixture boundary.
+The required CI receiver proves both real FFmpeg preparation branches, the
+synthetic failure contracts, and the invariant media and Worker command route
+for exact, compatible, missed, or unavailable cache standings. The Wrangler
+dry run establishes that the selected source bundles against the declared R2
+binding and route. Its proof boundary ends at local compilation; bucket
+creation, byte upload, route attachment, and edge observation retain their
+deployment owners.
 
 After human-owned R2 upload and route activation, begin with the transport-only
 live check:

@@ -511,6 +511,7 @@
       "family": "media-publication",
       "kind": "node-test",
       "members": [
+        "tests/media-publication/ci-provisioning.test.mjs",
         "tests/media-publication/prepare-r2-progressive-video.test.mjs",
         "tests/media-publication/r2-video-worker.test.mjs",
         "tests/media-publication/video-publication-manifest.test.mjs",
@@ -526,7 +527,7 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
+      "scope": "CI provisioning and cache identity, source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
       "aliases": [
         "test:media-publication"
       ]
