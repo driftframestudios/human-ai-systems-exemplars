@@ -60,8 +60,11 @@ jobs:
       - name: Use the reviewed Node runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: "22"
+          node-version: "22.23.4"
           cache: npm
+
+      - name: Record the admitted Node runtime
+        run: node tools/check-node-runtime.mjs
 
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
@@ -89,14 +92,17 @@ jobs:
       - name: Use the reviewed Node runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: "22"
+          node-version: "22.23.4"
           cache: npm
+
+      - name: Record the admitted Node runtime
+        run: node tools/check-node-runtime.mjs
 
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
       - name: Install the named browser engines
-        run: npm exec -- playwright install --with-deps chromium firefox webkit
+        run: npm run playwright -- install --with-deps chromium firefox webkit
 
       - name: Exercise rendered behavior across the named engines
         run: npm run test:visual-fidelity-contracts:browser

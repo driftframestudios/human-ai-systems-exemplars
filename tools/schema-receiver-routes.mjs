@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 export const schemaReceiverRoutes = Object.freeze([
   {
     source: "collaboration/investment-analysis/state.schema.json",

@@ -148,7 +148,8 @@ policy.
 
 ## Prepare and check
 
-Use Node.js 22 or newer. Form the publication in a clean checkout at the exact
+Use the [reviewed Node 22.23.4 lane](../../NODE-RUNTIME.md). Wrangler runs
+on this Node executable; the deployed Worker runs on Cloudflare workerd. Form the publication in a clean checkout at the exact
 accepted semantic source so later repository work retains its own release
 boundary. The initial selection names both accepted coordinates:
 

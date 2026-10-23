@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -19,7 +20,7 @@ const execute = promisify(execFile);
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = path.join(root, ".visual-runs/hiring-schema-print");
 const source = "collaboration/hiring-surfaces-talent-agent-intake/index.html";
-const definitions = [source, "tests/tables/hiring-schema-print.browser.mjs", "tests/tables/hiring-schema-print-contract.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/contracts.mjs", "package-lock.json"];
+const definitions = ["tools/node-runtime-admission.mjs", "tools/check-node-runtime.mjs", source, "tests/tables/hiring-schema-print.browser.mjs", "tests/tables/hiring-schema-print-contract.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/contracts.mjs", "package-lock.json"];
 const print = { paper: "Letter", orientation: "landscape", marginInches: 0.5, preferCSSPageSize: true };
 const item = { id: "hiring-expanded-schema-letter-landscape", width: 1280, print };
 const extraction = `import json, pymupdf, sys

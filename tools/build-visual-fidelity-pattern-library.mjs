@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { access, copyFile, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';

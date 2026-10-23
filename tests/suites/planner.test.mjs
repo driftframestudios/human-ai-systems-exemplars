@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, mkdtemp, mkdir, writeFile, rm, access, readdir } from 'node:fs/promises';
@@ -8,6 +9,8 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/security/node-route-inventory.test.mjs',
+  'tests/security/node-runtime.test.mjs',
   'tests/context-canvas/debrief-caption-colors.browser.mjs',
   'tests/context-canvas/debrief-hero-wrapping.browser.mjs',
   'tests/context-canvas/debrief-link-cues.browser.mjs',
@@ -225,10 +228,13 @@ test('Visual Fidelity source ownership stays identical in package and suite rout
     readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
   ]);
   const suite = catalog.suites.find(candidate => candidate.id === 'node.visual-fidelity-contracts');
+  const admission = 'node tools/check-node-runtime.mjs --quiet && ';
   const prefix = 'node --test ';
   const command = pkg.scripts['test:visual-fidelity-contracts:source'];
-  assert.ok(command.startsWith(prefix), 'source alias retains a literal node --test boundary');
-  const aliasMembers = command.slice(prefix.length).split(' ');
+  assert.ok(command.startsWith(admission), 'source alias admits the reviewed runtime before owned work');
+  const admittedCommand = command.slice(admission.length);
+  assert.ok(admittedCommand.startsWith(prefix), 'source alias retains a literal node --test boundary');
+  const aliasMembers = admittedCommand.slice(prefix.length).split(' ');
   assert.deepEqual(suite.members, aliasMembers);
   assert.deepEqual(
     catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:visual-fidelity-contracts:source'],
@@ -260,7 +266,7 @@ test('existing package aliases retain their exact source through the compatibili
   }
   for (const [name, value] of Object.entries(baseline.compatibilityScripts)) {
     if (!retiredDeploymentAliases.has(name)) {
-      assert.equal(pkg.scripts[name], POST_BASELINE_COMPATIBILITY_SCRIPTS[name] ?? value, name);
+      assert.equal(pkg.scripts[name], 'node tools/check-node-runtime.mjs --quiet && ' + (POST_BASELINE_COMPATIBILITY_SCRIPTS[name] ?? value), name);
     }
   }
   const aliases = [...new Set((await catalogPromise).suites.flatMap(s => s.aliases))];
@@ -456,7 +462,7 @@ test('Python entry fixtures have a separate route and all-component alias keeps 
   assert.deepEqual(plan.suites[0].aliases, ['test:tables:python:entry']);
   const pkg = JSON.parse(await readFile(resolve(ROOT, 'package.json'), 'utf8'));
   assert.equal(pkg.scripts['test:tables:python'],
-    'env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all');
+    'node tools/check-node-runtime.mjs --quiet && env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all');
 });
 
 test('nested Python projects preserve host Python through managed isolated uv routes', async () => {

@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { lstat, readdir, realpath } from "node:fs/promises";
 import { isAbsolute, relative, resolve, sep } from "node:path";
 

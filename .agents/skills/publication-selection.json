@@ -323,7 +323,10 @@
         ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
         "context-canvas-project-surface/context-canvas/atlas-gallery.js",
         "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
-        "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs"
+        "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+        "tools/node-runtime-admission.mjs",
+        "tools/check-node-runtime.mjs",
+        "NODE-RUNTIME.md"
       ]
     },
     {
