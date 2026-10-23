@@ -93,7 +93,7 @@ packet, and leave repository and external state as found.
 
 ## Conditional preparation
 
-Use Node 22 or newer. Install the locked root dependencies with
+Use the reviewed Node 22.23.4 lane from `NODE-RUNTIME.md`. Install the locked root dependencies with
 `npm ci --ignore-scripts` when they are absent and the current task permits
 dependency installation. Install the focused Chromium runtime with
 `npm run playwright:install` when a named browser check requires it. Prepare

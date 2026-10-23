@@ -1,10 +1,10 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
-import { fileURLToPath } from "node:url";
 
 const execFileAsync = promisify(execFile);
-const toolPath = fileURLToPath(import.meta.url);
 const contractId = "promotion-topology.v1";
 const modes = Object.freeze({
   equalTree: "equal-tree",
@@ -496,7 +496,7 @@ async function main(argv) {
   process.stdout.write(`${JSON.stringify(receipt)}\n`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === toolPath) {
+if (isDirectExecution(import.meta.url)) {
   main(process.argv.slice(2)).catch((error) => {
     const message = error instanceof Error ? error.message : String(error);
     process.stderr.write(`Promotion topology: FAIL — ${message}\n`);

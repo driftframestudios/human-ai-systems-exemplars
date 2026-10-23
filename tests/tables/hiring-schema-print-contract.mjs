@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 
 const layoutSpace = character => character === " " || character === "\t" || character === "\r" || character === "\n";

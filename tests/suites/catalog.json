@@ -5,7 +5,7 @@
   "profiles": [
     {
       "id": "node-source",
-      "runtime": "Node >=22 and root development dependencies",
+      "runtime": "Node >=22.23.4 <23 and root development dependencies",
       "prerequisites": [
         "Root npm dependencies installed; consult the owning suite for optional fixture tools."
       ],
@@ -19,7 +19,7 @@
     },
     {
       "id": "browser",
-      "runtime": "Node >=22, repository Playwright, and the Chromium, Firefox or WebKit engines named by the selected suite",
+      "runtime": "Node >=22.23.4 <23, repository Playwright, and the Chromium, Firefox or WebKit engines named by the selected suite",
       "prerequisites": [
         "Root npm dependencies and the browser engines named by the selected suite installed.",
         "Existing harness prerequisites, source packages and explicit local execution authority."
@@ -78,7 +78,7 @@
     },
     {
       "id": "carrier",
-      "runtime": "Node >=22 and the receiving carrier's declared tools",
+      "runtime": "Node >=22.23.4 <23 and the receiving carrier's declared tools",
       "prerequisites": [
         "Use current manifests and source-owned build/check modes.",
         "A release, deployment or upload keeps its existing separate authorization."
@@ -422,7 +422,9 @@
       "kind": "node-test",
       "members": [
         "tests/security/dependency-security.test.mjs",
-        "tests/security/secret-material.test.mjs"
+        "tests/security/node-runtime.test.mjs",
+        "tests/security/secret-material.test.mjs",
+        "tests/security/node-route-inventory.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -437,7 +439,8 @@
       "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
       "aliases": [
         "test:dependency-security",
-        "test:secret-material"
+        "test:secret-material",
+        "test:node-runtime"
       ]
     },
     {
@@ -3049,6 +3052,10 @@
         ],
         "test:narrative-architectures": [
           "tests/narrative-architectures/*.test.mjs"
+        ],
+        "test:node-runtime": [
+          "tests/security/node-runtime.test.mjs",
+          "tests/security/node-route-inventory.test.mjs"
         ]
       },
       "directBrowserToolSelections": {

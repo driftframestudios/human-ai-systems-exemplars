@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 const SOURCE_RELATIONSHIP_PATTERN = /^(Current|Preview) · /u;
 const RAIL_MODES = new Set(["missing", "standard", "source"]);
 const MINIMUM_VISIBLE_RATIO = 0.99;

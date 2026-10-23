@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 /** Browser-side observations; geometry signals invite source-owner review. */
 export function observeTableReading({ selector = "table" } = {}) {
   const normalized = (value) => value.replace(/\s+/gu, " ").trim();

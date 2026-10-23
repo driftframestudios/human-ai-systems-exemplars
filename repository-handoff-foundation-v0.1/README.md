@@ -55,6 +55,24 @@ npm run apply:repository-handoff-issue-route -- --repo OWNER/REPOSITORY --confir
 npm run verify:repository-handoff-issue-route -- --repo OWNER/REPOSITORY --receipt /path/to/accepted-issue-route-receipt.json
 ```
 
+### Receive the executable with its runtime owner
+
+The data bundle remains source-neutral. To run its checker from a separate
+checkout, copy the bundle directory and these three files together, preserving
+their relative locations:
+
+- `tools/repository-handoff-foundation.mjs`
+- `tools/node-runtime-admission.mjs`
+- `tools/check-node-runtime.mjs`
+
+Run the copied command with Node 22.23.4 or a later reviewed stable Node 22
+patch. This execution closure uses only Node built-ins; npm installation is
+unnecessary. The shared admission module checks the running executable before
+the checker reads or materializes the bundle. Adding
+`tools/repository-handoff-issue-route.mjs` to the same closure supplies the
+separately authorized GitHub route. The isolated receiving tests exercise this
+copy operation and its runtime refusal independently of the source checkout.
+
 `check` admits the bundle and verifies its schema identities and bytes,
 internal references, source digests, relation closure, and exact projections.
 `plan` compares the selected

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { researchDocument, SOURCE_PATH } from '../../tools/atlas-research-data.mjs';
