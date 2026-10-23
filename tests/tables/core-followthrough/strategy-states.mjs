@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import { observeTableReading } from "../../../tools/table-reading-observer.mjs";
 import { readSemanticTable } from "./closure.mjs";

@@ -1,11 +1,11 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { MIMEType } from "node:util";
 
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 
-const toolPath = fileURLToPath(import.meta.url);
 const productionBaseUrl = "https://iframes.vik.guru/v1/";
 const strategySchemaPath =
   "core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json";
@@ -432,7 +432,7 @@ async function main() {
   if (!result.ok) process.exitCode = 1;
 }
 
-if (path.resolve(process.argv[1] ?? "") === toolPath) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(`Live iframe route verification failed: ${error.message}\n`);
     process.exitCode = 1;

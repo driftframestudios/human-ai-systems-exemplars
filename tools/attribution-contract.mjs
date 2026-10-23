@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { readFileSync } from "node:fs";
 
 const contractUrl = new URL("../attribution.yml", import.meta.url);
