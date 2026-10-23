@@ -221,6 +221,15 @@ The three-engine layout contract inventories this family, checks child and
 visible-text containment across the standing viewport seams, and exercises the
 ordinary fragmenting state before restoring the accepted component contract.
 
+Twenty-one evidence-boundary cards across ten Debriefs use the same screen
+reading component to keep each label, heading and explanation in one painted
+unit. The composition contract retains their palette, border and spacing;
+print retains ordinary block pagination. The focused
+`test:debrief-evidence-cards-browser` contract observes fresh and scrolled
+reading positions, individual fragments and text, with a deterministic split
+canary and fresh-source recovery. Its images support paint review; native
+Safari/DuckDuckGo observations retain their separate application boundary.
+
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
 `.reading-flow` boundary in thirteen reading regions. Their metadata,

@@ -217,6 +217,16 @@
     inline-size: 100%;
 }
 
+/* Evidence boundaries remain one screen reading unit within continuous prose.
+   The contract stylesheet retains their palette, spacing, and border ownership;
+   ordinary print flow keeps its existing pagination choices. */
+@media screen {
+    .prose-flow > .debrief-evidence-boundary {
+        display: inline-block;
+        inline-size: 100%;
+    }
+}
+
 /* Compact notes set their useful measure; the shared screen frame below
    also accounts for the rail's current side and text-scaled paint reserve.
    Palette, padding, and the paragraph measure remain with existing owners. */
