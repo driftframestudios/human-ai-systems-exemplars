@@ -63,7 +63,7 @@ retained source because the successor intake already owns this receiving job.
 `schema-receiver-routes.yml` receives matching non-draft pull requests into
 `main` while `ACTIONS_BUDGET_MAIN=true`. Its advisory step runs exactly
 `npm run check:schemas && npm run test:schema-pages` after installing the locked
-Node 22 toolchain. Those commands exercise the schema surface and Pages
+Node 22.23.4 toolchain. Those commands exercise the schema surface and Pages
 contracts through the repository's source-to-receiver map. This keeps a
 schema's semantic identity distinct from its source revision and its current
 retrieval or publication receiver. The publication workflow owns the selected
@@ -203,7 +203,7 @@ tag. The declared trigger includes draft PRs; this lane has no budget-variable
 condition or deployment authority.
 
 One read-only Ubuntu 24.04 job uses pinned checkout and Node setup actions,
-Node 22, the locked toolchain, and a ten-minute ceiling. It runs
+Node 22.23.4, the locked toolchain, and a ten-minute ceiling. It runs
 `npm run test:prod-deployment`, forms the selected transfer envelope, verifies
 its receipt against that explicit tag, and exercises the ZIP with `unzip -t`.
 Pull requests use immutable `production-v0.2.0` as a historical regression

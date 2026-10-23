@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -8,7 +9,7 @@ import { executionPlan, inputSnapshot, publishCampaign, publishScreenshot } from
 import { conditioningInputs, corePlanningInputs } from "../../tools/evidence-inputs.mjs";
 import { digest, openCheckpoints, withCheckpointLock } from "../../tools/observation-checkpoint.mjs";
 import { assertSelectedInspection } from "./conditioning.browser.mjs";
-import { invocationCounts, publishTableObservation } from "../../tools/table-reading-contract.mjs";
+import { harnessSources, invocationCounts, publishTableObservation } from "../../tools/table-reading-contract.mjs";
 import { runAcceptanceCases } from "../../tools/table-focused-acceptance.mjs";
 
 const family = { id: "example", source: "example.html", widths: [320, 390], tables: { script: 1, static: 1 } };
@@ -26,6 +27,57 @@ test("exact plans reject unknown selectors before executable work", () => {
 test("fingerprints include material assertion data and loaded shell owners", () => {
   assert(corePlanningInputs.includes("attribution.yml"));
   for (const file of ["canvas-shell.css", "canvas-shell.js"]) assert(conditioningInputs.some((input) => input.endsWith(file)));
+});
+
+test("every resumable campaign fingerprints runtime policy changes", async () => {
+  const repository = path.resolve(import.meta.dirname, "../..");
+  const runtimeFiles = ["tools/node-runtime-admission.mjs", "tools/check-node-runtime.mjs"];
+  const routes = new Map([
+    ["table-reading", harnessSources], ["core-planning", corePlanningInputs], ["conditioning", conditioningInputs],
+  ]);
+  // Read the browser campaigns' literal definitions while their execution remains separate.
+  for (const [file, name] of [
+    ["tests/core-architectures/recovery-import.browser.mjs", "definitions"],
+    ["tests/core-architectures/jobs-text.browser.mjs", "definitions"],
+    ["tests/tables/hiring-schema-print.browser.mjs", "definitions"],
+    ["tests/tables/core-followthrough/browser.mjs", "definitionFiles"],
+  ]) {
+    const source = await fs.readFile(path.join(repository, file), "utf8");
+    const declaration = source.match(new RegExp(String.raw`const ${name} = \[([\s\S]*?)\];`, "u"));
+    assert(declaration, `${file} retains an inspectable input definition`);
+    routes.set(file, [...declaration[1].matchAll(/"([^"\n]+)"/gu)].map(match => match[1]));
+  }
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "runtime-fingerprints-")));
+  try {
+    const files = new Set([...routes.values()].flat());
+    for (const file of files) {
+      await fs.mkdir(path.dirname(path.join(root, file)), { recursive: true });
+      await fs.writeFile(path.join(root, file), "original");
+    }
+    const store = await openCheckpoints(path.join(root, "checkpoints"));
+    const signatures = new Map();
+    for (const [route, inputs] of routes) {
+      for (const file of runtimeFiles) assert(inputs.includes(file), `${route} fingerprints ${file}`);
+      const dependencies = await inputSnapshot(root).fingerprints(inputs);
+      const signature = digest(JSON.stringify(dependencies));
+      signatures.set(route, signature);
+      await store.write(route, signature, dependencies, { standing: "pass" });
+    }
+    await fs.writeFile(path.join(root, "unrelated-review-note.md"), "changed");
+    const agrees = dependencies => inputSnapshot(root).agrees(dependencies, true);
+    for (const [route, signature] of signatures) {
+      assert.deepEqual(await store.read(route, signature, agrees), { standing: "pass" }, route);
+    }
+    for (const file of runtimeFiles) {
+      await fs.writeFile(path.join(root, file), "updated runtime policy");
+      for (const [route, inputs] of routes) {
+        const next = digest(JSON.stringify(await inputSnapshot(root).fingerprints(inputs)));
+        assert.notEqual(next, signatures.get(route), `${route} reopens when ${file} changes`);
+        assert.equal(await store.read(route, signatures.get(route), agrees), null, route);
+      }
+      await fs.writeFile(path.join(root, file), "original");
+    }
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
 
 test("CLI value options stop at admission when their value is absent", () => {

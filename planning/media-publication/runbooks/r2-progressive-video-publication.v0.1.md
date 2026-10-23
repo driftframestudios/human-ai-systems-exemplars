@@ -138,7 +138,7 @@ aws s3api put-object \
 Use the same shape with `image/webp`, `image/avif`, `image/jpeg`, `image/png`, or
 `text/vtt; charset=utf-8` for the finite companion carriers. A `412` means the
 key already exists; inspect those existing bytes instead of replacing them.
-Download each accepted key with `npx wrangler r2 object get
+Download each accepted key with `npm run wrangler -- r2 object get
 <bucket>/<key> --remote --file <fresh-path>` and compare its byte count and
 SHA-256 with the packet.
 
@@ -149,12 +149,12 @@ an authenticated remote read, serialize writes, and retrieve each object into
 a fresh target for digest comparison:
 
 ```sh
-env WRANGLER_WRITE_LOGS=false npx wrangler r2 object get \
+env WRANGLER_WRITE_LOGS=false npm run wrangler -- r2 object get \
   "<bucket>/v1/video/<id>/<version>/movie.mp4" \
   --remote \
   --file <fresh-preflight-path>
 
-env WRANGLER_WRITE_LOGS=false npx wrangler r2 object put \
+env WRANGLER_WRITE_LOGS=false npm run wrangler -- r2 object put \
   "<bucket>/v1/video/<id>/<version>/movie.mp4" \
   --remote \
   --file <accepted-master.mp4> \
@@ -162,7 +162,7 @@ env WRANGLER_WRITE_LOGS=false npx wrangler r2 object put \
   --cache-control "public, max-age=31536000, immutable" \
   --storage-class Standard
 
-env WRANGLER_WRITE_LOGS=false npx wrangler r2 object get \
+env WRANGLER_WRITE_LOGS=false npm run wrangler -- r2 object get \
   "<bucket>/v1/video/<id>/<version>/movie.mp4" \
   --remote \
   --file <fresh-verification-path>
@@ -227,11 +227,11 @@ Use the repository-pinned Wrangler and keep command output inside the
 authorized operator boundary:
 
 ```sh
-npx wrangler whoami
-npx wrangler r2 bucket dev-url get "<bucket>"
-npx wrangler r2 bucket dev-url enable "<bucket>"
-npx wrangler r2 bucket dev-url disable "<bucket>"
-npx wrangler r2 bucket dev-url get "<bucket>"
+npm run wrangler -- whoami
+npm run wrangler -- r2 bucket dev-url get "<bucket>"
+npm run wrangler -- r2 bucket dev-url enable "<bucket>"
+npm run wrangler -- r2 bucket dev-url disable "<bucket>"
+npm run wrangler -- r2 bucket dev-url get "<bucket>"
 ```
 
 The final status observation confirms the development URL is disabled. Public
@@ -275,9 +275,9 @@ route is attached to the Cloudflare zone.
 After the human authorizes activation, use the repository-pinned Wrangler:
 
 ```sh
-npx wrangler whoami
+npm run wrangler -- whoami
 npm run dry-run:r2-video-delivery
-npx wrangler deploy --config cloudflare/r2-video-delivery/wrangler.jsonc
+npm run wrangler -- deploy --config cloudflare/r2-video-delivery/wrangler.jsonc
 ```
 
 Keep command output inside the authorized operator boundary. In the Cloudflare

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { createHash, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
@@ -1751,8 +1753,7 @@ async function main() {
   if (result.ok !== true) process.exitCode = 1;
 }
 
-const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
-if (invokedPath === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(mediaCliFailureMessage(error));
     process.exitCode = 1;

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import { copyFile, lstat, mkdir, readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
