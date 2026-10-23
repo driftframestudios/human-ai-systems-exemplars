@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import '../../../tools/node-runtime-admission.mjs';
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, resolve} from 'node:path';

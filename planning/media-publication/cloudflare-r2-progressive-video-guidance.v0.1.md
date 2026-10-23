@@ -80,11 +80,11 @@ unaliased: Cloudflare documents a CNAME to `r2.dev` as an unsupported route.
 The repository-pinned Wrangler can observe and control the development URL:
 
 ```sh
-npx wrangler whoami
-npx wrangler r2 bucket dev-url get vik-guru-video-carriers
-npx wrangler r2 bucket dev-url enable vik-guru-video-carriers
-npx wrangler r2 bucket dev-url disable vik-guru-video-carriers
-npx wrangler r2 bucket dev-url get vik-guru-video-carriers
+npm run wrangler -- whoami
+npm run wrangler -- r2 bucket dev-url get vik-guru-video-carriers
+npm run wrangler -- r2 bucket dev-url enable vik-guru-video-carriers
+npm run wrangler -- r2 bucket dev-url disable vik-guru-video-carriers
+npm run wrangler -- r2 bucket dev-url get vik-guru-video-carriers
 ```
 
 Keep command output inside the authorized operator boundary. The second `get`
@@ -323,7 +323,7 @@ aws s3api put-object \
   --if-none-match "*"
 ```
 
-Download each remote object to a fresh local path with `npx wrangler r2 object get
+Download each remote object to a fresh local path with `npm run wrangler -- r2 object get
 <bucket>/<key> --remote --file <path>`, then compare byte count and SHA-256
 against the accepted packet. An unknown outcome first retrieves the target:
 matching bytes complete the operation, a missing key permits the same
