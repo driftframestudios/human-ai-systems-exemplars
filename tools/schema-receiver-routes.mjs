@@ -84,5 +84,85 @@ export const schemaReceiverRoutes = Object.freeze([
     source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json",
     id: "https://schemas.driftframestudios.org/fg/schema/threadkeeping-ledger.schema.v0.1.json",
     receiverPath: "fg/schema/threadkeeping-ledger.schema.v0.1.json"
+  },
+  {
+    source: "visual-fidelity-contracts/schemas/visual-fidelity-contract.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+    receiverPath: "visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/schemas/lab-state.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+    receiverPath: "visual-fidelity-contracts/1.0.0/lab-state.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/schemas/catalog.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+    receiverPath: "visual-fidelity-contracts/1.0.0/catalog.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/schemas/example-catalog.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+    receiverPath: "visual-fidelity-contracts/1.0.0/example-catalog.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/schemas/public-lineage.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/public-lineage.schema.json",
+    receiverPath: "visual-fidelity-contracts/1.0.0/public-lineage.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/component-lab/schemas/component-lab.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/component-lab/v1.schema.json",
+    receiverPath: "visual-fidelity/component-lab/v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/data-view-lab/schemas/data-view-lab.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/data-view-lab/v1.schema.json",
+    receiverPath: "visual-fidelity/data-view-lab/v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/probes/components-and-data/probe-catalog.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/components-and-data-probe-catalog/v1.schema.json",
+    receiverPath: "visual-fidelity/components-and-data-probe-catalog/v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/ai-call.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-ai-call.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-ai-call.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/checkpoint.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-checkpoint.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-checkpoint.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/command.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-command.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/continuation.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-continuation.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-continuation.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/issue.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-issue.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/projection.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-projection.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-projection.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/receipt.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-receipt.v1.schema.json"
+  },
+  {
+    source: "visual-fidelity-contracts/labs/service-boundary-lab/schemas/response.schema.json",
+    id: "https://schemas.vik.guru/visual-fidelity/service-boundary-response.v1.schema.json",
+    receiverPath: "visual-fidelity/service-boundary-response.v1.schema.json"
   }
 ]);

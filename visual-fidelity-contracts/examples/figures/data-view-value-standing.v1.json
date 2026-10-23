@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0.0",
+  "exampleId": "vfp:data-view:value-standing",
+  "title": "Data view, value standing, and evidence",
+  "description": "A comparison workspace helps a reviewer see weekly case volume, inspect the exact values behind the chart, and understand which values are current, estimated, missing, or restricted.",
+  "alt": "Data-view workbench with decision controls, a horizontal comparison chart, exact-value table, revision and lineage labels, and a key for six value standings.",
+  "caption": "Figure 4. The data-view lab keeps the chart and exact-value twin connected to the same accepted records, lineage, units, denominator, and value standing.",
+  "summary": "The selected decision need determines the fitting view while the table and machine twin preserve exact values and standing.",
+  "relationships": [
+    {
+      "relationship": "Decision need",
+      "reading": "Compare twelve workflow stages as cases per weekly review"
+    },
+    {
+      "relationship": "Visible view",
+      "reading": "A local two-dimensional chart supports comparison"
+    },
+    {
+      "relationship": "Exact twin",
+      "reading": "A paginated table carries the same records, units, and standing"
+    },
+    {
+      "relationship": "Recovery",
+      "reading": "A rejected candidate leaves the prior accepted revision available"
+    }
+  ],
+  "source": {
+    "path": "visual-fidelity-contracts/labs/data-view-lab/index.html",
+    "selector": "main[data-data-view-lab]",
+    "state": "partial",
+    "type": "runnable-lab",
+    "identity": "data-view-lab@1.0.0",
+    "files": [
+      "visual-fidelity-contracts/labs/data-view-lab/index.html",
+      "visual-fidelity-contracts/labs/data-view-lab/src/controller.js",
+      "visual-fidelity-contracts/labs/data-view-lab/src/model.js",
+      "visual-fidelity-contracts/labs/data-view-lab/src/render.js",
+      "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
+      "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css",
+      "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/current.json",
+      "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/partial.json"
+    ]
+  },
+  "contract": {
+    "id": "vfc:soft-color-blocking",
+    "version": "1.0.0",
+    "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+    "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+  },
+  "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-data-view-lab-shape-state-evidence",
+  "rights": {
+    "license": "Apache-2.0",
+    "copyrightHoldersSource": "AUTHORS",
+    "copyrightHolders": [
+      "Vikrant Varun Kudesia",
+      "Driftframe Studios, Limited Liability Company"
+    ],
+    "publisher": "Driftframe Studios, Limited Liability Company",
+    "standing": "Documentation derivative of synthetic source maintained in this repository"
+  },
+  "publicationReceipt": {
+    "sourceAuthority": "Declared repository source set",
+    "publicationAuthority": {
+      "standing": "held",
+      "receiver": "Vikrant Varun Kudesia — named human publication receiver",
+      "activationEvent": "Explicit human approval of the publication receiver"
+    },
+    "method": "Playwright Chromium element capture → Sharp WebP derivative",
+    "reviewedOn": "2026-10-20",
+    "sourceClosure": {
+      "algorithm": "sha256",
+      "files": [
+        "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/current.json",
+        "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/partial.json",
+        "visual-fidelity-contracts/labs/data-view-lab/index.html",
+        "visual-fidelity-contracts/labs/data-view-lab/src/controller.js",
+        "visual-fidelity-contracts/labs/data-view-lab/src/model.js",
+        "visual-fidelity-contracts/labs/data-view-lab/src/render.js",
+        "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
+        "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css"
+      ],
+      "sha256": "a6a04f8eb5f9b42307b979d4d65c2c245a505acafd3f7cafc990cbd7f62967c7"
+    },
+    "metadataInspection": {
+      "standing": "passed",
+      "derivativeCount": 3,
+      "fields": [
+        "EXIF absent",
+        "XMP absent",
+        "IPTC absent",
+        "orientation absent"
+      ]
+    },
+    "locatorInspection": {
+      "standing": "passed",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "secretInspection": {
+      "standing": "passed",
+      "method": "Bounded secret-shaped lexical admission scan",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "pixelInspection": {
+      "standing": "reviewed",
+      "reviewedOn": "2026-10-20",
+      "derivativeSha256": "8809a05db6910079ea8a7e43926ee0d8063fe8b156d5a70d32a60e1902b7b736",
+      "scope": "1600-pixel derivative inspected at original resolution"
+    }
+  },
+  "tests": [
+    "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+    "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+    "tests/visual-fidelity-contracts/data-view-browser.test.mjs"
+  ]
+}

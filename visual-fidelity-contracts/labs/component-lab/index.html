@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="description" content="Inspectable panels, drawers, validation, commerce intent, authority reconciliation, and recovery states.">
+  <title>Visual Fidelity Component Lab</title>
+  <link rel="stylesheet" href="./src/styles/lab.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the component lab</a>
+  <main id="main" data-component-lab data-component-js-state="reading">
+    <header class="lab-header">
+      <p class="eyebrow">Visual Fidelity Contract · Component Behavior</p>
+      <h1>Panels, drawers, validation, and accepted commerce state</h1>
+      <p class="lede">Prepare and review an order while the last accepted catalog stays visible through loading, failure, and recovery.</p>
+      <p class="inspection-routes"><a href="./standalone/">Open the standalone reading artifact</a></p>
+      <dl class="identity-grid">
+        <div><dt>Accepted revision</dt><dd data-component-revision>catalog-r1</dd></div>
+        <div><dt>Lineage</dt><dd data-component-lineage>bundled-fixture · first admitted revision</dd></div>
+        <div><dt>Request</dt><dd data-component-request>Ready</dd></div>
+        <div><dt>Data</dt><dd data-component-data>Current data</dd></div>
+      </dl>
+    </header>
+
+    <noscript>
+      <section class="status-banner status-banner--reading">
+        <h2>Reading representation</h2>
+        <p>The accepted catalog contains Field notebook, Review cards, and Decision ledger. The interactive version demonstrates validation, authorization, a provisional intent, authority reconciliation, and retained state during recovery.</p>
+        <p><a href="./standalone/">Open the complete standalone reading artifact.</a></p>
+      </section>
+    </noscript>
+
+    <p class="live-status" role="status" aria-live="polite" aria-atomic="true" data-component-live>Reading view. The standalone artifact carries the complete accepted catalog.</p>
+
+    <section class="lab-grid" aria-label="Component behavior workbench">
+      <article class="panel panel--catalog">
+        <div class="panel__heading">
+          <div>
+            <p class="eyebrow">Accepted catalog</p>
+            <h2>Choose an item</h2>
+          </div>
+          <button type="button" class="button button--quiet" data-component-action="reload" disabled>Refresh candidate</button>
+          <button type="button" class="button button--risk" data-component-action="load-invalid" disabled>Exercise rejected candidate</button>
+        </div>
+        <div data-component-catalog>
+          <fieldset class="component-catalog">
+            <legend>Choose one catalog item</legend>
+            <label class="component-catalog__item"><input type="radio" name="catalog-item" value="field-notebook" checked disabled><span>Field notebook</span><small>$18.00 · 12 available</small></label>
+            <label class="component-catalog__item"><input type="radio" name="catalog-item" value="review-cards" disabled><span>Review cards</span><small>$24.00 · 8 available</small></label>
+            <label class="component-catalog__item"><input type="radio" name="catalog-item" value="decision-ledger" disabled><span>Decision ledger</span><small>$32.00 · 5 available</small></label>
+          </fieldset>
+        </div>
+      </article>
+
+      <aside class="panel panel--intent" aria-labelledby="component-intent-title">
+        <p class="eyebrow">Local intent</p>
+        <h2 id="component-intent-title">Prepare a review order</h2>
+        <form data-component-form action="./standalone/" method="get" novalidate>
+          <div class="form-field">
+            <label for="component-email">Receipt email</label>
+            <input id="component-email" type="email" autocomplete="email" data-component-draft="email" aria-describedby="component-issues" disabled>
+          </div>
+          <div class="form-field">
+            <label for="component-quantity">Quantity</label>
+            <input id="component-quantity" type="number" min="1" step="1" value="1" inputmode="numeric" data-component-draft="quantity" aria-describedby="component-issues" disabled>
+          </div>
+          <div class="form-field">
+            <label for="component-authorization">Authorization</label>
+            <select id="component-authorization" disabled>
+              <option value="unknown">Awaiting check</option>
+              <option value="allowed">Allowed for this exercise</option>
+              <option value="held">Held for review</option>
+              <option value="denied">Denied</option>
+            </select>
+          </div>
+          <ul id="component-issues" class="issue-list" data-component-issues hidden></ul>
+          <div class="price-row"><span>Prepared total</span><strong data-component-total>$18.00</strong></div>
+          <div class="button-row">
+            <button type="submit" class="button" data-component-submit disabled>Record intent</button>
+            <button type="button" class="button button--quiet" data-component-action="open-dialog" disabled>Open drawer</button>
+          </div>
+        </form>
+      </aside>
+    </section>
+
+    <section class="receipt" data-component-receipt hidden aria-labelledby="component-receipt-title">
+      <p class="eyebrow">Authority receipt · <span data-component-receipt-standing>absent</span></p>
+      <h2 id="component-receipt-title" data-component-receipt-id>Awaiting authority receipt</h2>
+      <p data-component-receipt-message>A receipt appears after intent submission.</p>
+      <p><strong>Intent context:</strong> <span data-component-receipt-context>A submitted intent will name its item, quantity, total, and accepted revision.</span></p>
+    </section>
+
+    <details class="semantic-twin" data-component-disclosure>
+      <summary>Inspect the accepted semantic twin</summary>
+      <p>The visible labels and this JSON projection come from the same accepted state.</p>
+      <pre data-component-machine-twin>{"status":"JavaScript supplies the accepted twin."}</pre>
+    </details>
+
+    <section class="operating-state" aria-labelledby="component-operating-state-title">
+      <h2 id="component-operating-state-title">Current operating state</h2>
+      <dl class="operating-state__grid">
+        <div><dt>Owner</dt><dd data-component-owner>component-lab-controller · generation 1</dd></div>
+        <div><dt>Payment</dt><dd data-component-payment>unstarted</dd></div>
+        <div><dt>Order</dt><dd data-component-order>unstarted</dd></div>
+        <div><dt>Disclosure</dt><dd data-component-disclosure-standing>compact</dd></div>
+      </dl>
+    </section>
+
+    <section class="state-key" aria-labelledby="component-state-key-title">
+      <h2 id="component-state-key-title">States exercised here</h2>
+      <ul>
+        <li><strong>Request:</strong> idle, pending, succeeded, failed.</li>
+        <li><strong>Data:</strong> absent, partial, current, stale.</li>
+        <li><strong>Authority:</strong> unknown, allowed, held, denied.</li>
+        <li><strong>Receipt:</strong> absent, provisional, accepted, rejected.</li>
+      </ul>
+    </section>
+
+    <dialog class="drawer" data-component-dialog aria-labelledby="component-drawer-title">
+      <form method="dialog" class="drawer__frame">
+        <div>
+          <p class="eyebrow">Native dialog · bounded focus</p>
+          <h2 id="component-drawer-title">Review the decision boundary</h2>
+          <p>Catalog price and stock describe the accepted data revision. The order remains a local intent until the authority receipt arrives.</p>
+        </div>
+        <button class="button" value="close" data-component-action="close-dialog" disabled>Return to the workbench</button>
+      </form>
+    </dialog>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+  <script type="module" src="./src/controller.js"></script>
+</body>
+</html>

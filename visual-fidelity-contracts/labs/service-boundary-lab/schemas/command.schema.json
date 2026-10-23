@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json",
+  "title": "Visual Fidelity service-boundary command",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "task",
+    "actor",
+    "role",
+    "tenant",
+    "policyScope",
+    "policyRevision",
+    "representation",
+    "sourceId",
+    "baseRevision",
+    "idempotencyKey",
+    "proposedStatus"
+  ],
+  "properties": {
+    "id": { "$ref": "#/$defs/boundedText" },
+    "task": { "$ref": "#/$defs/boundedText" },
+    "actor": { "$ref": "#/$defs/boundedText" },
+    "role": { "$ref": "#/$defs/boundedText" },
+    "tenant": { "$ref": "#/$defs/boundedText" },
+    "policyScope": { "$ref": "#/$defs/boundedText" },
+    "policyRevision": { "$ref": "#/$defs/boundedText" },
+    "representation": { "$ref": "#/$defs/boundedText" },
+    "sourceId": { "$ref": "#/$defs/boundedText" },
+    "baseRevision": { "type": "integer", "minimum": 1 },
+    "idempotencyKey": { "$ref": "#/$defs/boundedText" },
+    "proposedStatus": { "$ref": "#/$defs/boundedText" }
+  },
+  "$defs": {
+    "boundedText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[\\p{L}\\p{N} .,:;_@/+\\-()]+$",
+      "not": {
+        "anyOf": [
+          { "pattern": "\\b(?:[aA][pP][iI][ _-]?[kK][eE][yY]|[pP][aA][sS][sS][wW][oO][rR][dD]|[sS][eE][cC][rR][eE][tT]|[tT][oO][kK][eE][nN])\\s*:\\s*\\S+" },
+          { "pattern": "\\b(?:[gG][iI][tT][hH][uU][bB]_[pP][aA][tT]|[gG][hH][pPoOuUsSrR]|[sS][kK])_[\\p{L}\\p{N}_-]{8,}\\b" }
+        ]
+      }
+    }
+  }
+}

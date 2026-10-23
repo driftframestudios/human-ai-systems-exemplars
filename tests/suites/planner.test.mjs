@@ -8,7 +8,77 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/security/node-route-inventory.test.mjs', 'tests/security/node-runtime.test.mjs', 'tests/context-canvas/debrief-caption-colors.browser.mjs', 'tests/context-canvas/debrief-hero-wrapping.browser.mjs', 'tests/context-canvas/debrief-link-cues.browser.mjs', 'tests/context-canvas/debrief-hero-colors.browser.mjs', 'tests/context-canvas/debrief-card-measure.browser.mjs', 'tests/context-canvas/site-navigation.browser.mjs', 'tests/context-canvas/debrief-companion-spacing.browser.mjs', 'tests/context-canvas/debrief-ordered-room.browser.mjs', 'tests/context-canvas/debrief-evidence-room.browser.mjs', 'tests/context-canvas/debrief-prose-code-room.browser.mjs', 'tests/context-canvas/fmi-reading-room.browser.mjs', 'tests/context-canvas/fmi-reading-rail.browser.mjs', 'tests/context-canvas/debrief-reference-figures.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs', 'tests/context-canvas/ai-entry-cascade.browser.mjs', 'tests/context-canvas/ai-systems-reading-layout.browser.mjs', 'tests/context-canvas/technology-fit-layout.browser.mjs', 'tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/ai-systems-cross-references.test.mjs', 'tests/context-canvas/debrief-case-brief-materializer.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-reading-layout.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-image-delivery.browser.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/context-canvas/who-to-believe-system-graph.browser.mjs', 'tests/context-canvas/who-to-believe-system-graph.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/prod-deployment/promotion-topology.test.mjs', 'tests/public-references/live-route-verifier.test.mjs', 'tests/public-references/registry-reference-contract.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = [
+  'tests/security/node-route-inventory.test.mjs',
+  'tests/security/node-runtime.test.mjs',
+  'tests/context-canvas/debrief-caption-colors.browser.mjs',
+  'tests/context-canvas/debrief-hero-wrapping.browser.mjs',
+  'tests/context-canvas/debrief-link-cues.browser.mjs',
+  'tests/context-canvas/debrief-hero-colors.browser.mjs',
+  'tests/context-canvas/debrief-card-measure.browser.mjs',
+  'tests/context-canvas/site-navigation.browser.mjs',
+  'tests/context-canvas/debrief-companion-spacing.browser.mjs',
+  'tests/context-canvas/debrief-ordered-room.browser.mjs',
+  'tests/context-canvas/debrief-evidence-room.browser.mjs',
+  'tests/context-canvas/debrief-prose-code-room.browser.mjs',
+  'tests/context-canvas/fmi-reading-room.browser.mjs',
+  'tests/context-canvas/fmi-reading-rail.browser.mjs',
+  'tests/context-canvas/debrief-reference-figures.browser.mjs',
+  'tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs',
+  'tests/context-canvas/ai-entry-cascade.browser.mjs',
+  'tests/context-canvas/ai-systems-reading-layout.browser.mjs',
+  'tests/context-canvas/technology-fit-layout.browser.mjs',
+  'tests/suites/planner.test.mjs',
+  'tests/investment-analysis/browser-helper.test.mjs',
+  'tests/context-canvas/about-first-paint-css.test.mjs',
+  'tests/context-canvas/ai-systems-cross-references.test.mjs',
+  'tests/context-canvas/debrief-case-brief-materializer.test.mjs',
+  'tests/context-canvas/debrief-catalog-preview-images.test.mjs',
+  'tests/context-canvas/debrief-catalog-preview.browser.mjs',
+  'tests/context-canvas/debrief-reading-layout.browser.mjs',
+  'tests/context-canvas/debrief-image-derivatives.test.mjs',
+  'tests/context-canvas/debrief-video-receivers.test.mjs',
+  'tests/context-canvas/lims-capability-transfer-model.test.mjs',
+  'tests/context-canvas/prompt-side-figure.browser.mjs',
+  'tests/context-canvas/video-receivers.browser.mjs',
+  'tests/context-canvas/visual-reference-observations.test.mjs',
+  'tests/context-canvas/visitor-image-delivery.browser.mjs',
+  'tests/context-canvas/visitor-video-contract.test.mjs',
+  'tests/context-canvas/who-to-believe-system-graph.browser.mjs',
+  'tests/context-canvas/who-to-believe-system-graph.test.mjs',
+  'tests/media-publication/prepare-r2-progressive-video.test.mjs',
+  'tests/media-publication/r2-video-worker.test.mjs',
+  'tests/media-publication/video-publication-manifest.test.mjs',
+  'tests/media-publication/verify-r2-video-route.test.mjs',
+  'tests/prod-deployment/promotion-topology.test.mjs',
+  'tests/public-references/live-route-verifier.test.mjs',
+  'tests/public-references/registry-reference-contract.test.mjs',
+  'tests/repository-handoff-foundation/foundation.test.mjs',
+  'tests/repository-handoff-foundation/install.test.mjs',
+  'tests/repository-handoff-foundation/issue-route-materializer.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs',
+  'tests/visualization-fidelity-atlas/atlas-research.browser.mjs',
+  'tests/visual-fidelity-contracts/component-model.test.mjs',
+  'tests/visual-fidelity-contracts/component-page.test.mjs',
+  'tests/visual-fidelity-contracts/component-probes.test.mjs',
+  'tests/visual-fidelity-contracts/component.browser.mjs',
+  'tests/visual-fidelity-contracts/contract-art-directions.browser.mjs',
+  'tests/visual-fidelity-contracts/contract-art-directions.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-browser.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-model.test.mjs',
+  'tests/visual-fidelity-contracts/data-view-page.test.mjs',
+  'tests/visual-fidelity-contracts/design-token-pipeline.test.mjs',
+  'tests/visual-fidelity-contracts/foundation-contracts.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-browser.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-model.test.mjs',
+  'tests/visual-fidelity-contracts/lifecycle-source.test.mjs',
+  'tests/visual-fidelity-contracts/pattern-library.browser.mjs',
+  'tests/visual-fidelity-contracts/pattern-library.test.mjs',
+  'tests/visual-fidelity-contracts/service-boundary-model.test.mjs',
+  'tests/visual-fidelity-contracts/service-boundary.browser.mjs',
+];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
 };
@@ -152,6 +222,27 @@ test('Context Canvas source-suite membership follows every on-disk unit module',
   assert.deepEqual([...suite.members].sort(), onDisk);
 });
 
+test('Visual Fidelity source ownership stays identical in package and suite routes', async () => {
+  const [catalog, pkg] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+  ]);
+  const suite = catalog.suites.find(candidate => candidate.id === 'node.visual-fidelity-contracts');
+  const admission = 'node tools/check-node-runtime.mjs --quiet && ';
+  const prefix = 'node --test ';
+  const command = pkg.scripts['test:visual-fidelity-contracts:source'];
+  assert.ok(command.startsWith(admission), 'source alias admits the reviewed runtime before owned work');
+  const admittedCommand = command.slice(admission.length);
+  assert.ok(admittedCommand.startsWith(prefix), 'source alias retains a literal node --test boundary');
+  const aliasMembers = admittedCommand.slice(prefix.length).split(' ');
+  assert.deepEqual(suite.members, aliasMembers);
+  assert.deepEqual(
+    catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:visual-fidelity-contracts:source'],
+    aliasMembers,
+  );
+  for (const member of suite.members) await access(resolve(ROOT, member));
+});
+
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {
   const catalog = await catalogPromise;
   assert.deepEqual(catalog.bundles.map(b => b.id), ['source-unit', 'family-integration', 'focused-browser', 'visual-media', 'carrier', 'live', 'research']);
@@ -293,6 +384,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
   assert.deepEqual(ids('live'), ['worker.live', 'live.iframe-ancestry', 'live.iframe', 'live.r2-video', 'live.schema-pages']);
   assert.deepEqual(ids('research'), ['research.parser-comparison']);
   assert.deepEqual(ids('visual-media'), [
+    'browser.visual-fidelity-contracts',
     'browser.visualization-fidelity-atlas.atlas-essay.browser',
     'browser.visualization-fidelity-atlas.atlas-gallery.browser',
     'browser.tables.hiring-schema-print',
@@ -316,7 +408,8 @@ test('consequential bundle routes retain independent literal expectations', asyn
   ]);
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment', 'node.public-references',
-    'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication', 'worker.source',
+    'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication',
+    'node.visual-fidelity-contracts', 'worker.source',
     'carrier.debrief-image-derivatives', 'carrier.debrief-case-briefs', 'carrier.iframe', 'carrier.production', 'carrier.transfer',
     'carrier.r2-video-delivery', 'carrier.schemas',
   ]);

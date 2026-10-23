@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="description" content="Inspectable data shape, state, lineage, renderer choice, semantic twins, and recovery behavior.">
+  <title>Visual Fidelity Data-View Lab</title>
+  <link rel="stylesheet" href="./src/styles/lab.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the data-view lab</a>
+  <main id="main" data-data-view-lab data-data-js-state="reading">
+    <header class="lab-header">
+      <p class="eyebrow">Visual Fidelity Contract · Data Shape and State</p>
+      <h1>Compare the picture and exact values before making the next decision</h1>
+      <p class="lede">The chart and table describe the same accepted records. Source history, written status, units, scope, and denominator explain what each value means and how current it is.</p>
+      <nav class="inspection-routes" aria-label="Implementation routes">
+        <a href="./README.md">Read the source guide</a>
+        <a href="./standalone/">Open the single-file reading artifact</a>
+      </nav>
+      <dl class="identity-grid">
+        <div><dt>Accepted revision</dt><dd data-data-revision>cohort-r1</dd></div>
+        <div><dt>Lineage</dt><dd data-data-lineage>bundled-fixture · first admitted revision</dd></div>
+        <div><dt>Data standing</dt><dd data-data-standing>current</dd></div>
+        <div><dt>Renderer</dt><dd data-data-renderer>chart</dd></div>
+        <div><dt>Request</dt><dd data-data-request>idle</dd></div>
+        <div><dt>Authorization</dt><dd data-data-authorization-state>unknown</dd></div>
+        <div><dt>Ownership</dt><dd data-data-ownership>active · data-view-lab-controller · generation 1</dd></div>
+      </dl>
+    </header>
+
+    <noscript>
+      <section class="status-banner status-banner--reading">
+        <h2>Reading representation</h2>
+        <p>The accepted fixture compares twelve workflow stages as cases per weekly review. The <a href="./standalone/">single-file reading artifact</a> carries every accepted value, standing, relationship, and source boundary. The interactive lab adds decision selection, candidate admission, pagination, and recovery.</p>
+      </section>
+    </noscript>
+
+    <p class="live-status" role="status" aria-live="polite" aria-atomic="true" data-data-live>12 records · current data · chart view for compare.</p>
+
+    <section class="controls" aria-labelledby="data-controls-title">
+      <div>
+        <p class="eyebrow">Decision control</p>
+        <h2 id="data-controls-title">Choose what the view needs to help decide</h2>
+      </div>
+      <div class="control-field">
+        <label for="data-decision-need">Decision need</label>
+        <select id="data-decision-need" data-data-view>
+          <option value="single-status">Single status</option>
+          <option value="exact-values">Exact values</option>
+          <option value="compare" selected>Compare</option>
+          <option value="change-over-time">Change over time</option>
+          <option value="relationships">Relationships</option>
+          <option value="spatial">Spatial relationship</option>
+        </select>
+      </div>
+      <div class="control-field">
+        <label for="data-authorization">Local authorization signal</label>
+        <select id="data-authorization" data-data-authorization>
+          <option value="unknown" selected>Unknown</option>
+          <option value="allowed">Allowed</option>
+          <option value="held">Held</option>
+          <option value="denied">Denied</option>
+        </select>
+      </div>
+      <div class="button-row" aria-label="Fixture states">
+        <button class="button" type="button" data-data-action="load" data-fixture="current">Load current</button>
+        <button class="button button--quiet" type="button" data-data-action="load" data-fixture="partial">Load partial</button>
+        <button class="button button--quiet" type="button" data-data-action="load" data-fixture="absent">Load empty</button>
+        <button class="button button--risk" type="button" data-data-action="load" data-fixture="invalid">Exercise rejected candidate</button>
+      </div>
+    </section>
+
+    <section class="view-grid" aria-label="Visible and semantic data views">
+      <figure class="plot-panel">
+        <figcaption><strong>Inspectable visual view.</strong> A local two-dimensional scroller retains readable marks when the admitted scale exceeds the viewport.</figcaption>
+        <div class="plot-scroller" tabindex="0" role="region" aria-label="Scrollable data visualization" data-data-svg></div>
+      </figure>
+
+      <section class="table-panel" aria-labelledby="data-table-title">
+        <div class="panel-heading">
+          <h2 id="data-table-title">Exact-value twin</h2>
+          <div class="pager" aria-label="Table pages">
+            <button class="button button--quiet" type="button" data-data-action="previous" data-data-previous>Previous</button>
+            <span data-data-page>1 / 1</span>
+            <button class="button button--quiet" type="button" data-data-action="next" data-data-next>Next</button>
+          </div>
+        </div>
+        <div class="table-scroller" tabindex="0" role="region" aria-label="Scrollable exact-value table" data-data-table>
+          <table><caption>Loading the accepted fixture.</caption></table>
+        </div>
+      </section>
+    </section>
+
+    <details class="semantic-twin" data-data-disclosure>
+      <summary>Inspect the accepted machine-readable twin</summary>
+      <p>The visual view and exact-value table derive from this same paginated record set.</p>
+      <pre data-data-machine-twin>{"status":"JavaScript supplies the accepted twin."}</pre>
+    </details>
+
+    <section class="standing-key" aria-labelledby="standing-key-title">
+      <h2 id="standing-key-title">Value standing remains part of the data</h2>
+      <ul>
+        <li data-standing="known"><strong>Known</strong> carries an observed numeric value.</li>
+        <li data-standing="unknown"><strong>Unknown</strong> records an open question.</li>
+        <li data-standing="absent"><strong>Absent</strong> records an expected value that is unavailable.</li>
+        <li data-standing="stale"><strong>Stale</strong> keeps a prior value and marks its age.</li>
+        <li data-standing="estimated"><strong>Estimated</strong> carries a numeric model or human estimate.</li>
+        <li data-standing="redacted"><strong>Redacted</strong> confirms a governed value exists.</li>
+      </ul>
+    </section>
+
+    <aside class="evidence-boundary" aria-labelledby="data-evidence-boundary-title">
+      <h2 id="data-evidence-boundary-title">What this lab establishes</h2>
+      <p>The bundled synthetic fixtures establish the state transitions, renderer rules, exact-value parity, and recovery behavior exercised here. A receiving system supplies its own authorization, service, security, accessibility, performance, and scientific validation.</p>
+      <p>The interactive page loads same-origin public fixtures. The standalone artifact is a static reading document. A hosting owner sets the response-level framing policy that fits the receiving site.</p>
+    </aside>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+  <script type="module" src="./src/controller.js"></script>
+</body>
+</html>

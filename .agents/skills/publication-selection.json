@@ -165,6 +165,14 @@
       ]
     },
     {
+      "name": "design-token-pipeline-stewardship",
+      "sourcePath": ".agents/skills/design-token-pipeline-stewardship/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The first repository exercise applies the contract to one visual-fidelity hub. Public projection remains held while an independent pipeline use tests cross-tool transfer and a later publication review rechecks the conditional vendor reference and declares it in the complete source package."
+    },
+    {
       "name": "embedded-prototype-layout",
       "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
       "publicationStanding": "public_ready",

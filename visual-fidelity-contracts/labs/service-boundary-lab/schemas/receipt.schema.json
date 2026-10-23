@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-receipt.v1.schema.json",
+  "title": "Visual Fidelity service-boundary receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "commandId", "idempotencyKey", "acceptedRevision", "requestFingerprint", "requestMeaning", "outcome"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "commandId": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "idempotencyKey": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "acceptedRevision": { "type": "integer", "minimum": 1 },
+    "requestFingerprint": { "type": "string", "pattern": "^fnv1a32:[0-9a-f]{8}$" },
+    "requestMeaning": { "$ref": "https://schemas.vik.guru/visual-fidelity/service-boundary-command.v1.schema.json" },
+    "outcome": { "enum": ["committed", "rolled_back", "held"] }
+  }
+}

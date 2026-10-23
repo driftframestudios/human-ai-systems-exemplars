@@ -37,6 +37,22 @@ const BROWSER_SHARED = new Set([
   'core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js',
   'core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.template.js',
   'lims-eln-functional-nucleus/lims-eln-enterprise-implementation/src/lims_eln_implementation/workbench/static/workbench.js',
+  'visual-fidelity-contracts/labs/component-lab/src/controller.js',
+  'visual-fidelity-contracts/labs/component-lab/src/model.js',
+  'visual-fidelity-contracts/labs/component-lab/src/render.js',
+  'visual-fidelity-contracts/labs/component-lab/src/semantics.js',
+  'visual-fidelity-contracts/labs/data-view-lab/src/controller.js',
+  'visual-fidelity-contracts/labs/data-view-lab/src/model.js',
+  'visual-fidelity-contracts/labs/data-view-lab/src/render.js',
+  'visual-fidelity-contracts/labs/data-view-lab/src/semantics.js',
+  'visual-fidelity-contracts/labs/lifecycle-lab/framework-adapters/react-19.2.0.mjs',
+  'visual-fidelity-contracts/labs/lifecycle-lab/framework-contracts.js',
+  'visual-fidelity-contracts/labs/lifecycle-lab/lifecycle-lab.js',
+  'visual-fidelity-contracts/labs/lifecycle-lab/lifecycle-model.js',
+  'visual-fidelity-contracts/labs/lifecycle-lab/platform-adapters.js',
+  'visual-fidelity-contracts/labs/lifecycle-lab/scenario-data.js',
+  'visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-lab.js',
+  'visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js',
 ]);
 
 function safePath(value) {

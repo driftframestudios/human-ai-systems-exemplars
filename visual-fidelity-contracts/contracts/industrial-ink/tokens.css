@@ -1,0 +1,141 @@
+/* Industrial Ink v1.0.0 reference mapping.
+   Receiving components own their mapped variables and record intentional changes. */
+:root {
+  color-scheme: dark;
+  --ii-ink-950: #0b0f12;
+  --ii-ink-900: #13191d;
+  --ii-ink-800: #1c2429;
+  --ii-ash-50: #f5f2e9;
+  --ii-ash-100: #ded9ce;
+  --ii-ash-300: #aaa79f;
+  --ii-ash-500: #747975;
+  --ii-signal: #f3d348;
+  --ii-oxide: #7f2f1f;
+  --ii-oxide-pale: #f2b9a0;
+  --ii-instrument: #9ccabb;
+
+  --ii-canvas: var(--ii-ink-950);
+  --ii-panel: var(--ii-ink-900);
+  --ii-panel-raised: var(--ii-ink-800);
+  --ii-text: var(--ii-ash-50);
+  --ii-text-muted: var(--ii-ash-300);
+  --ii-boundary: var(--ii-ash-500);
+  --ii-attention: var(--ii-signal);
+  --ii-hold: var(--ii-oxide);
+  --ii-accepted: var(--ii-instrument);
+  --ii-focus-inner: var(--ii-ink-950);
+  --ii-focus-outer: var(--ii-signal);
+
+  --ii-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ii-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --ii-text-body: 1rem;
+  --ii-text-meta: 0.75rem;
+  --ii-leading: 1.5;
+  --ii-measure: 66ch;
+
+  --ii-space-1: 0.25rem;
+  --ii-space-2: 0.5rem;
+  --ii-space-3: 0.75rem;
+  --ii-space-4: 1rem;
+  --ii-space-5: 1.5rem;
+  --ii-space-6: 2rem;
+  --ii-corner: 0.125rem;
+  --ii-rule: 0.0625rem;
+  --ii-target: 2.75rem;
+  --ii-layer-base: 0;
+  --ii-layer-controls: 10;
+  --ii-layer-status: 20;
+  --ii-duration: 140ms;
+  --ii-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ii-panel {
+  border: var(--ii-rule) solid var(--ii-boundary);
+  border-radius: var(--ii-corner);
+  background: var(--ii-panel);
+  color: var(--ii-text);
+}
+
+.ii-label {
+  color: var(--ii-text-muted);
+  font: 700 var(--ii-text-meta) / 1.3 var(--ii-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ii-control {
+  min-block-size: var(--ii-target);
+  min-inline-size: var(--ii-target);
+  border: var(--ii-rule) solid var(--ii-boundary);
+  border-radius: var(--ii-corner);
+  background: var(--ii-panel-raised);
+  color: var(--ii-text);
+  font: inherit;
+}
+
+.ii-control:focus-visible {
+  outline: 0.1875rem solid var(--ii-focus-outer);
+  outline-offset: 0.1875rem;
+  box-shadow: 0 0 0 0.0625rem var(--ii-focus-inner);
+}
+
+.ii-status--attention {
+  border-color: var(--ii-attention);
+  background: var(--ii-attention);
+  color: var(--ii-ink-950);
+}
+
+.ii-status--hold {
+  border-color: var(--ii-oxide-pale);
+  background: var(--ii-hold);
+  color: var(--ii-ash-50);
+}
+
+.ii-status--accepted {
+  border-color: var(--ii-accepted);
+  background: var(--ii-accepted);
+  color: var(--ii-ink-950);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --ii-duration: 0ms; }
+}
+
+@media (forced-colors: active) {
+  .ii-panel,
+  .ii-control {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ii-control:focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+
+  .ii-status--attention,
+  .ii-status--hold,
+  .ii-status--accepted {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  :root { color-scheme: light; }
+
+  .ii-panel,
+  .ii-control,
+  .ii-status--attention,
+  .ii-status--hold,
+  .ii-status--accepted {
+    border-color: #000;
+    background: #fff;
+    color: #000;
+    box-shadow: none;
+  }
+}
