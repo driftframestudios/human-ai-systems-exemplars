@@ -1,3 +1,5 @@
+import '../../tools/node-runtime-admission.mjs';
+
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { betaPosterior, betaAnyEvent, betaUpperTail, gammaPosterior, waitingProbability, waitingDensity, generator, forwardDerivative, propagate, expectedHandoffMinutes } from './model.mjs';

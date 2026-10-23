@@ -1,3 +1,5 @@
+import '../../tools/node-runtime-admission.mjs';
+
 // Trusted local research adapter. Application execution and acceptance stay with their owners.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';

@@ -14,6 +14,20 @@ import {
 
 const execFileAsync = promisify(execFile);
 
+const researchVerificationRoutes = [
+  'research/table-verification-threshold/epochs/table-repair-01.test.mjs',
+  'research/table-verification-threshold/model.mjs',
+  'research/table-verification-threshold/model.test.mjs',
+  'research/table-verification-threshold/paired-replay-02/core.mjs',
+  'research/table-verification-threshold/paired-replay-02/replay.mjs',
+  'research/table-verification-threshold/paired-replay-02/replay.test.mjs',
+  'research/table-verification-threshold/paired-replay-02/runner-path.test.mjs',
+  'research/table-verification-threshold/paired-replay-02/worker.mjs',
+  'research/table-verification-threshold/scenarios.mjs',
+  'research/table-verification-threshold/shadow-campaign.mjs',
+  'research/table-verification-threshold/shadow-campaign.test.mjs',
+];
+
 async function fixture(t, files) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'node-routes-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -29,6 +43,9 @@ const admitted = file => `import '${admissionSpecifier(file)}';\nexport const va
 test('runtime owners are explicit for browser/shared, workerd, bootstrap and new JavaScript', () => {
   assert.equal(classifyJavaScript('tools/new-tool.mjs'), 'node');
   assert.equal(classifyJavaScript('tools/check-node-runtime.mjs'), 'bootstrap');
+  assert.equal(classifyJavaScript('research/table-verification-threshold/paired-replay-02/check-node-runtime.mjs'), 'bootstrap');
+  assert.equal(classifyJavaScript('research/table-verification-threshold/paired-replay-02/node-runtime-admission.mjs'), 'bootstrap');
+  assert.equal(admissionSpecifier('research/table-verification-threshold/paired-replay-02/core.mjs'), './node-runtime-admission.mjs');
   assert.equal(classifyJavaScript('cloudflare/r2-video-delivery/src/index.js'), 'workerd');
   assert.equal(classifyJavaScript('collaboration/investment-analysis/core.js'), 'browser-shared');
   assert.equal(classifyJavaScript('new/browser.js'), 'unclassified');
@@ -197,6 +214,13 @@ test('concrete maintained Node commands require known admitted Node targets', as
 test('the tracked repository route inventory remains fully admitted', async () => {
   const result = await inspectNodeRoutes();
   assert.deepEqual(result.diagnostics, [], JSON.stringify(result.diagnostics));
+});
+
+test('research verification routes admit the reviewed runtime before owned work', async () => {
+  for (const file of researchVerificationRoutes) {
+    const source = await readFile(new URL(`../../${file}`, import.meta.url), 'utf8');
+    assert.equal(hasFirstAdmission(source, file), true, file);
+  }
 });
 
 

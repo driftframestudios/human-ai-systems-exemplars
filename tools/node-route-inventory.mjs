@@ -9,7 +9,21 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const ROOT = path.resolve(import.meta.dirname, '..');
 const ADMISSION = 'tools/node-runtime-admission.mjs';
-const BOOTSTRAPS = new Set(['tools/check-node-runtime.mjs', ADMISSION]);
+const PAIRED_REPLAY_ROOT = 'research/table-verification-threshold/paired-replay-02';
+const PAIRED_REPLAY_ADMISSION = `${PAIRED_REPLAY_ROOT}/node-runtime-admission.mjs`;
+const PAIRED_REPLAY_ROUTES = new Set([
+  `${PAIRED_REPLAY_ROOT}/core.mjs`,
+  `${PAIRED_REPLAY_ROOT}/replay.mjs`,
+  `${PAIRED_REPLAY_ROOT}/replay.test.mjs`,
+  `${PAIRED_REPLAY_ROOT}/runner-path.test.mjs`,
+  `${PAIRED_REPLAY_ROOT}/worker.mjs`,
+]);
+const BOOTSTRAPS = new Set([
+  'tools/check-node-runtime.mjs',
+  ADMISSION,
+  `${PAIRED_REPLAY_ROOT}/check-node-runtime.mjs`,
+  PAIRED_REPLAY_ADMISSION,
+]);
 const FROZEN = 'cloudflare/schemas-worker/public/';
 const HISTORICAL = new Set(['tests/suites/baseline-e1f00de.json']);
 const WORKER = new Set([
@@ -58,7 +72,8 @@ export function classifyJavaScript(file) {
 }
 
 export function admissionSpecifier(file) {
-  const relative = path.posix.relative(path.posix.dirname(file), ADMISSION);
+  const admission = PAIRED_REPLAY_ROUTES.has(file) ? PAIRED_REPLAY_ADMISSION : ADMISSION;
+  const relative = path.posix.relative(path.posix.dirname(file), admission);
   return relative.startsWith('.') ? relative : `./${relative}`;
 }
 

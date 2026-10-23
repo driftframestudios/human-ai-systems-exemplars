@@ -1,3 +1,5 @@
+import '../../tools/node-runtime-admission.mjs';
+
 import { betaUpperTail, waitingProbability, waitingDensity, propagate, expectedHandoffMinutes } from './model.mjs';
 const rates = { D_R:.1, R_V:.2, V_R:.05, V_H:.2 };
 console.log(JSON.stringify({standing:'illustrative assumptions; not fitted to the table wave',priorProbabilityYieldExceedsTwentyPercent:{uniform:betaUpperTail(1,1,.2),lowYield:betaUpperTail(1,3,.2),highYield:betaUpperTail(3,1,.2)},gammaPrior:{shape:1,rateMinutes:60,probabilityWithinTenEligibleMinutes:waitingProbability(1,60,10),waitingDensityAtTenPerMinute:waitingDensity(1,60,10)},transitionScenario:{ratesPerMinute:rates,probabilitiesAtThirtyMinutes:propagate([1,0,0,0],rates,30),expectedHandoffMinutesByState:expectedHandoffMinutes(rates)}},null,2));
