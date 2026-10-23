@@ -8,7 +8,8 @@ separate prospective epoch for #585–#587 on current application source. Its
 deferred and executed decisions while retaining the table record below. The
 ledger records independent protocol review before campaign enrollment; required
 application checks keep their authority. The observer budget adds zero research-only browser launches.
-#589's visitor update awaits the human's cue and publication remains held.
+The [bounded feasibility return](epochs/debrief-card-01-feasibility.md) records
+the six-enrollment stop and independently adjudicated final family renewal. #589's visitor update awaits the human's cue and publication remains held.
 
 ## Current continuation: 2026-10-03
 
