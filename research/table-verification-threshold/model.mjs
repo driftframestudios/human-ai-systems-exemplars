@@ -1,3 +1,5 @@
+import '../../tools/node-runtime-admission.mjs';
+
 // Pure, bounded research calculations. Inputs describe scenarios, not readiness authority.
 const STATES = 4;
 const EDGE_KEYS = ['D_R', 'D_V', 'R_D', 'R_V', 'V_D', 'V_R', 'V_H'];

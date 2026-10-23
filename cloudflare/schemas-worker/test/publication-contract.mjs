@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import { lstat, readdir } from "node:fs/promises";
 import { relative, resolve, sep } from "node:path";

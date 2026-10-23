@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 const IFRAME_ORIGIN = "https://iframes.vik.guru";
 const APPROVED_PARENT_ORIGIN = "https://vik.guru";
 const BLOCKED_BY_RESPONSE = "net::ERR_BLOCKED_BY_RESPONSE";

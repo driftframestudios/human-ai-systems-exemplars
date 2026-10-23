@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { chromium } from "@playwright/test";
 import { readdir, readFile } from "node:fs/promises";

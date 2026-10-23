@@ -94,7 +94,7 @@ python3 -m http.server 8000
 Then open a complete repository-relative route such as
 `http://localhost:8000/context-canvas-project-surface/context-canvas/index.html`,
 or append any path above to `http://localhost:8000/`. For executable checks,
-use Node 22 or newer and install the locked root dependencies plus the browser
+use the [reviewed Node 22.23.4 lane](NODE-RUNTIME.md) and install the locked root dependencies plus the browser
 engines named by the focused Context Canvas contracts:
 
 ```sh
