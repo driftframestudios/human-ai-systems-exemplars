@@ -237,6 +237,12 @@
         display: inline-block;
         inline-size: 100%;
     }
+
+    /* An opening definition starts with its reading columns. Its padding keeps
+       the statement inset; mid-flow definitions retain their section rhythm. */
+    .prose-flow > .cornerstone-definition:first-child {
+        margin-block-start: 0;
+    }
 }
 
 /* Compact notes set their useful measure; the shared screen frame below

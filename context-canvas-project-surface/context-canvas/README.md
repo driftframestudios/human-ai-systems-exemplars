@@ -239,6 +239,11 @@ access, alternate modes and modeled split-definition recovery. Native-browser
 observations and paginated-paper behavior retain their separate evidence.
 [Issue #587](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/587)
 holds this component boundary within the complete Debrief-family review.
+Opening definitions start at the reading-column origin while their statement
+padding remains intact; definitions embedded in an existing prose run retain
+their preceding space. The same contract exercises all four Debrief definition contexts
+and a prior-margin fault with fresh-source recovery for
+[Issue #594](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/594).
 
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same

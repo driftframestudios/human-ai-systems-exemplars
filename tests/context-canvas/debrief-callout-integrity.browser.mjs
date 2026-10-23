@@ -22,6 +22,12 @@ const selector = '.prose-flow > :is(.interpretive-aside, .discovery-callout, .de
 const orientationSelector = '.prose-flow > .debrief-quote--orientation';
 const definitionSelector = '.prose-flow > .cornerstone-definition';
 const clinical = 'fmi-clinical-trial-coordination.html';
+const definitionPositions = new Map([
+  ['who-to-believe-reviews-platform.html', 'opening'],
+  ['field-inspection-harness-replatform.html', 'opening'],
+  [clinical, 'mid-flow'],
+  ['initiative-costing.html', 'mid-flow'],
+]);
 // The 80rem canvas-reading threshold follows the 80px desktop page gutters.
 const widths = [390, 1359, 1360, 1440, 2560];
 const engines = { chromium, firefox, webkit };
@@ -42,12 +48,49 @@ async function withReading(engine, route, options, run) {
   finally { await session.close(); }
 }
 
+async function observeDefinitionPosition(page) {
+  return page.locator(definitionSelector).evaluate(element => {
+    const rect = frame => ({ top: frame.top, left: frame.left, right: frame.right });
+    const owner = element.parentElement;
+    const style = getComputedStyle(element);
+    const consequence = element.nextElementSibling;
+    return {
+      first: element === owner.firstElementChild,
+      ownerTop: owner.getBoundingClientRect().top,
+      frame: rect(element.getBoundingClientRect()),
+      margin: parseFloat(style.marginBlockStart), padding: parseFloat(style.paddingBlockStart),
+      consequences: consequence?.matches('.cornerstone-consequence')
+        ? [...consequence.getClientRects()].map(rect) : [],
+    };
+  });
+}
+
+function assertDefinitionPosition(position, route) {
+  const opening = definitionPositions.get(route) === 'opening';
+  assert.equal(position.first, opening, `${route}: the definition retains its authored position`);
+  assert.ok(position.padding > 0, `${route}: the definition retains its inset statement`);
+  assert.ok(position.consequences.length > 0, `${route}: the authored consequence follows the definition`);
+  if (!opening) {
+    assert.ok(position.margin > 0, `${route}: the mid-flow definition retains its preceding space`);
+    return;
+  }
+  assert.ok(Math.abs(position.frame.top - position.ownerTop) <= 1.5,
+    `${route}: the opening definition frame starts at the reading origin`);
+  for (const consequence of position.consequences.filter(frame => frame.left >= position.frame.right - 1.5)) {
+    assert.ok(Math.abs(position.frame.top - consequence.top) <= 1.5,
+      `${route}: the opening definition and adjacent consequence start together`);
+  }
+}
+
 async function assertCallouts(page, route, assertReading = assertIntactUnits) {
   const units = await observeReadingUnits(page, selector);
   assert.equal(units.length, routes.get(route), `${route}: every authored callout and quote participates`);
   assertReading(units, `${route}: callout and quotation`);
   const orientations = await observeReadingUnits(page, orientationSelector);
   if (orientations.length) assertReading(orientations, `${route}: retained orientation`);
+  if (assertReading === assertIntactUnits && definitionPositions.has(route)) {
+    assertDefinitionPosition(await observeDefinitionPosition(page), route);
+  }
   return units;
 }
 
@@ -142,3 +185,19 @@ for (const route of ['who-to-believe-reviews-platform.html', 'field-inspection-h
     });
   });
 }
+
+// The previous opening margin is a distinct composition fault from a split
+// quotation. Its fresh recovery keeps the frame at the reading-column origin.
+test('webkit: an opening definition detects its prior offset and fresh alignment', { timeout: 60_000 }, async () => {
+  const route = 'who-to-believe-reviews-platform.html';
+  const faultCss = `${definitionSelector}:first-child { margin-block-start: clamp(1.25rem, 3vw, 2rem) !important; }`;
+  await withReading('webkit', route, { faultCss }, async page => {
+    const offset = await observeDefinitionPosition(page);
+    assert.throws(() => assertDefinitionPosition(offset, route), /starts at the reading origin/u);
+  });
+  await withReading('webkit', route, {}, async page => {
+    await assertCallouts(page, route);
+    await scrollToReadingUnit(page, definitionSelector, 0);
+    await assertCallouts(page, route);
+  });
+});
