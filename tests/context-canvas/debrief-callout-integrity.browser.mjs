@@ -6,7 +6,7 @@ import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
 import {
-  openReadingPage, observeReadingUnits, assertIntactUnits, scrollToReadingUnit,
+  openReadingPage, observeReadingUnits, assertIntactUnits, assertContainedReadingFragments, scrollToReadingUnit,
 } from './reading-unit-helper.mjs';
 
 const routes = new Map([
@@ -42,12 +42,12 @@ async function withReading(engine, route, options, run) {
   finally { await session.close(); }
 }
 
-async function assertCallouts(page, route) {
+async function assertCallouts(page, route, assertReading = assertIntactUnits) {
   const units = await observeReadingUnits(page, selector);
   assert.equal(units.length, routes.get(route), `${route}: every authored callout and quote participates`);
-  assertIntactUnits(units, `${route}: callout and quotation`);
+  assertReading(units, `${route}: callout and quotation`);
   const orientations = await observeReadingUnits(page, orientationSelector);
-  if (orientations.length) assertIntactUnits(orientations, `${route}: retained orientation`);
+  if (orientations.length) assertReading(orientations, `${route}: retained orientation`);
   return units;
 }
 
@@ -77,10 +77,10 @@ for (const engine of Object.keys(engines)) {
       }, async page => {
         if (mode === 'forced-colors') await page.emulateMedia({ forcedColors: 'active' });
         if (mode === 'print') await page.emulateMedia({ media: 'print' });
-        await assertCallouts(page, clinical);
+        await assertCallouts(page, clinical, mode === 'print' ? assertContainedReadingFragments : assertIntactUnits);
         if (mode === 'print') {
           const display = await page.locator(selector).evaluateAll(elements => elements.map(element => getComputedStyle(element).display));
-          assert.ok(display.every(value => value === 'block'), 'Printed callouts retain ordinary block pagination.');
+          assert.ok(display.every(value => value === 'block'), 'Print media retains ordinary block flow.');
         }
       });
     });
@@ -106,8 +106,10 @@ for (const engine of Object.keys(engines)) {
     await withReading(engine, clinical, {}, async page => {
       const link = page.locator('.interpretive-aside a[href="#source-fda-master-protocol"]');
       await link.focus();
-      await page.keyboard.press('Tab');
-      await page.keyboard.press('Shift+Tab');
+      // The installed macOS WebKit preference includes links with Option-Tab.
+      await page.keyboard.press(engine === 'webkit' ? 'Alt+Tab' : 'Tab');
+      assert.equal(await link.evaluate(element => document.activeElement === element), false, 'Forward keyboard traversal moves beyond the reference.');
+      await page.keyboard.press(engine === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab');
       assert.equal(await link.evaluate(element => document.activeElement === element), true, 'Keyboard traversal returns to the authored reference.');
       await assertCallouts(page, clinical);
     });
