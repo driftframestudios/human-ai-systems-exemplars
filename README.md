@@ -18,7 +18,7 @@ The [static discovery page](index.html) presents the same first-contact route wh
 | Local prototype manifest | Files and relationships needed to open a self-contained prototype locally | [Manifest schema](context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json) |
 | Narrative Architecture and Threadkeeping 0.1 | Capsule composition, semantic and technology-fit sampling state, and durable continuity records | [Cohort orientation](narrative-threadkeeping/0.1/README.md) · schemas, contexts, and material examples retain their named Context Canvas source coordinates |
 
-The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
+The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A future publication candidate stays with the repository until its complete source package is ready for the same audience.
 
 The registry, Skills collection, individual skill pages, and collaboration guide share one static primary navigation route. The Skills collection derives **Use when** and **Produces** language from each selected `SKILL.md`; each individual page repeats the exact Contract Result before its revision and source coordinates. The first-contact view routes readers from the shared visualization foundation into conversation, web, or PDF production while keeping semantic-table and embedded-layout methods distinct. The complete catalog remains the inventory authority. The [readable-table and embedded-layout worked reference](examples/readable-table-embedded-layout/index.html) demonstrates one source-owned result inside the same release closure.
 
@@ -49,13 +49,14 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The accepted v0.3 release family retains the 17-contract schema cohort first
-assembled for `pages-v0.2.0` and expands the public-ready skill collection to
-27 complete packages. Seven JSON-LD contexts, four examples, and one cohort
-orientation travel as revalidating companions and stay outside the contract
-count. The Worker cohort received its independently gated production
-observation on 2026-10-13: all 17 contracts, 27 skills, and shared public bytes
-passed the signed-out receiver and browser checks.
+The accepted `pages-v0.3.1` release and active Worker receiver retain the
+17-contract schema cohort first assembled for `pages-v0.2.0` and the 27-package
+public-ready skill collection. Seven JSON-LD contexts, four examples, and one
+cohort orientation travel as revalidating companions and stay outside the
+contract count. On 2026-10-18, independently gated signed-out receiver and
+browser checks established live delivery for the active v0.3.1 Worker cohort:
+all 17 contracts, 27 skills, and shared public bytes passed. Issue #531 records
+the v0.3.1 activation and signed-out acceptance.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
 31 immutable paths for 16 frozen contracts; the unversioned local-manifest
@@ -174,9 +175,12 @@ prefer a forward repair over an older artifact that omits those routes.
 
 The accepted author-host Worker uses the same selected contract payload.
 Issue #18 and PRs #311-#313 preserve the earlier 13-contract delivery lineage;
-completed Issue #406, PR #480, and workflow run `38411427064` carry the current
-v0.3 activation, parity, cache/CORS, and recovery receipt. The catalog's
-observed edge addition is classified
+completed Issue #406, PR #480, and workflow run `38411427064` preserve the
+v0.3.0 activation lineage. Completed Issue #531 records the active v0.3.1
+parity, cache/CORS, activation, and recovery receipt; PR #536 preserves its
+accepted production source, and workflow run `39166814705` records deployment
+execution.
+The catalog's observed edge addition is classified
 separately from exact schema-byte parity; the Worker README describes that
 source-preservation boundary and its focused check. Selected
 reviewed skill source copies are deliberate public artifacts; the complete

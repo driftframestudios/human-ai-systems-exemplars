@@ -37,33 +37,62 @@ reading route available while expressing the corpus boundary directly.
 
 ## Deployed-origin behavior
 
-The intended deterministic production projection gives each deployed origin
-its own source-controlled `/robots.txt`. The reviewed file will express the
-posture above and name the current crawler families that need explicit allow
-or exclusion rules. Cloudflare's verified-bot and AI Crawl Control behavior
-will apply the matching server-side treatment while keeping `/robots.txt`
-available for crawlers to read.
+The deterministic production projection gives each deployed origin a reviewed
+source-controlled `/robots.txt`. On the primary production origin, Cloudflare
+Bot Preference Sync adds a managed policy preamble ahead of that authored body.
+The preamble is an intentional edge projection; the repository file remains
+the authority for the authored crawler rules and data-use statement.
 
-The production receiver owns two observations before this posture is described
-as live:
+The production receiver establishes the ordinary signed-out portion of this
+posture through two observations:
 
-1. the served `/robots.txt` returns `200` with the `text/plain` media type and
-   exactly matches its reviewed source bytes; and
-2. verified Search and person-directed Agent traffic can reach the selected
-   public routes while verified Training traffic receives the configured edge
-   treatment.
+1. the served `/robots.txt` returns `200` with the `text/plain` media type,
+   retains the reviewed authored body, and carries the expected Cloudflare
+   policy preamble while Bot Preference Sync is active; and
+2. ordinary signed-out requests can reach the selected public routes while the
+   configured crawler policy remains visible through the managed preamble.
+
+Verified Search, person-directed Agent, and Training classifications depend on
+Cloudflare's verified-bot identity and selected edge policy. A future receipt
+can use the corresponding edge observations before describing each bot-class
+treatment as exercised.
 
 The Robots Exclusion Protocol communicates crawler instructions; it is not an
 access-control system. Cloudflare enforcement, origin configuration, and
 ordinary application security remain separate operational layers. Cloudflare
-Managed `robots.txt` stays disabled where it would prepend changing content and
-break the required source-to-runtime byte comparison.
+Managed crawler content is therefore classified separately from carrier drift:
+the carrier-controlled routes retain exact-byte acceptance, while the live
+`robots.txt` receipt names both the authored body and the managed preamble.
 
-Until the production projection and signed-out observations exist, these are
-the intended deployed-origin behaviors rather than claims about current live
-routes. A repository file also cannot set the crawler behavior of
-`github.com`, `raw.githubusercontent.com`, or `gist.github.com`; their platform
-owners control those hosts.
+The reviewed source keeps the public collaboration address directly
+machine-readable so search agents, evaluation systems, and other teams can
+discover a route for assistance. Cloudflare Email Address Obfuscation is active
+at the production edge and adds proportionate friction for mechanical address
+harvesting while preserving the visible address for human visitors. The live
+HTML receipt classifies this edge rewrite separately from carrier-controlled
+bytes. Capable public-search agents can still recover the intentionally public
+address; the edge rewrite targets basic bulk harvesting rather than identity
+secrecy. In the 2026-10-19 signed-out pass, Chromium and WebKit exposed the
+address as visible accessibility text on representative About, AI Systems, and
+Debrief routes.
+
+Cloudflare currently recognizes some `artifact@version` coordinates as
+email-shaped text. Chromium exposed all 26 inspected coordinates in the
+rendered document, while raw-HTML and script-free readers receive the
+edge-obfuscated form. Two self-contained prototypes also retain
+content-security policies that decline the injected email decoder and
+JavaScript Detections scripts. A bounded follow-up can mark the
+technical coordinates with Cloudflare's `email_off` boundary or apply a
+narrowly scoped configuration rule, reconcile those two policies, and compare
+representative raw parsers before claiming ATS parity. Rate controls and
+crawler enforcement remain separate edge concerns.
+
+The `production-v0.4.0` signed-out receipt establishes the ordinary signed-out,
+managed `robots.txt`, and email-rewrite behaviors described here on the primary
+production origin. Verified-bot-class behavior retains its separate edge
+observation. A repository file cannot set the crawler behavior of `github.com`,
+`raw.githubusercontent.com`, or `gist.github.com`; their platform owners control
+those hosts.
 
 ## Maintenance boundary
 
@@ -81,6 +110,8 @@ Current primary references:
 - [Cloudflare `robots.txt` setting and Content Signals](https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/)
 - [Cloudflare Verified bot classifications](https://developers.cloudflare.com/bots/concepts/bot/verified-bots/)
 - [Cloudflare AI Crawl Control](https://developers.cloudflare.com/ai-crawl-control/)
+- [Cloudflare Email Address Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/)
+- [Cloudflare Configuration Rule settings](https://developers.cloudflare.com/rules/configuration-rules/settings/)
 
 The repository records the selected posture and the evidence that can establish
 it. Questions about a particular third party's conduct remain with their

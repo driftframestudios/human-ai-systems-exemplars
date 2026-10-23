@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "c1e35fdd57c2193812c2b183955aca15a5020be8",
+  "sourceRevision": "90766e8c4dc1ff12572eff2832ec41cb194342e5",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
@@ -50,7 +50,7 @@
         {
           "sourcePath": ".github/workflows/prototype-unit-tests.yml",
           "path": "source/github/workflows/prototype-unit-tests.yml",
-          "sha256": "c1e0a84e603836ca4f476a6ba70dbc1937336507caeeb496d079745d1c28497d"
+          "sha256": "af13f41274f6119d6a5a1ed06b21e82b210d89325f8f4801ab0c388185a5588e"
         }
       ]
     },
@@ -133,7 +133,7 @@
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-surface-reading/projection.json",
       "sourcePath": ".agents/skills/context-canvas-surface-reading/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-surface-reading/SKILL.md",
-      "sourceSha256": "b0861479adc855a26c4c2d7a62d49a436f44a803e3c28a406da28c26b83d7188",
+      "sourceSha256": "3c8ceaf93fc594689df6e714a98ad26fe36d82ca9e557b3ac136907776d08c80",
       "dependencies": []
     },
     {
@@ -148,8 +148,14 @@
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-visual-verification/projection.json",
       "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-visual-verification/SKILL.md",
-      "sourceSha256": "3ae5ab182f0b0a0136a016b9c2959d8e0ef8e6cc38b97fd607bd5505125293b0",
-      "dependencies": []
+      "sourceSha256": "9242aac97f3ea30aab42257d703fc2e95299da7f5ac9cdf394c739119d1f4448",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
+          "path": "source/.agents/skills/context-canvas-visual-verification/references/behavior-oracles-and-verification-scope.md",
+          "sha256": "d64876c1326a646ccddcd784456b3896dad1c881fe705691a76406df665544a4"
+        }
+      ]
     },
     {
       "name": "contextual-jargon-scan",
@@ -639,7 +645,7 @@
         {
           "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
           "path": "source/threadkeeping/context-canvas-public-reference-materialization.md",
-          "sha256": "9df756f5f309aacfa6269efb23f5f96308a7fb2a83e6deabc4c194f875f9bc2a"
+          "sha256": "7695c905d0d75b6225097ac8a9e0c4e8de96af0ee8bd1d12780992f66d8ef6ed"
         },
         {
           "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
@@ -716,12 +722,27 @@
         {
           "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
           "path": "source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
-          "sha256": "0112e77e4e73710d8b1511193d9ef6d196d57af999860b843bcaf091a7c7a3ec"
+          "sha256": "3431145c13c728a4cfb9b3a0d5c6563adbfb5a3a189678214ddb18222563866f"
         },
         {
           "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
           "path": "source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
-          "sha256": "93ff0569df00ba4f555116564c75ed16e7d7633960c50cf4c14053d4c202d7c9"
+          "sha256": "fedc8d79c0f88aa1a8bd2820449e71548e52ae7ab27bd5041f0f5a8e41dd9967"
+        },
+        {
+          "sourcePath": "tools/node-runtime-admission.mjs",
+          "path": "source/tools/node-runtime-admission.mjs",
+          "sha256": "d7b1a76c1db018a224bbd02680bc7d12de5437a21f238aa0fc61ac8e06117ffa"
+        },
+        {
+          "sourcePath": "tools/check-node-runtime.mjs",
+          "path": "source/tools/check-node-runtime.mjs",
+          "sha256": "6a27fa3eacf474c81902192ece634846e67b6426be87c6ddefdf1ee7ff2f1935"
+        },
+        {
+          "sourcePath": "NODE-RUNTIME.md",
+          "path": "source/NODE-RUNTIME.md",
+          "sha256": "be2add729cefc3068d8de93740a653a04f5229ffd16b7474cf98a3a035e4c8dd"
         }
       ]
     },
