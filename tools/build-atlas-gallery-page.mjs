@@ -1,10 +1,12 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 /** Atlas manufacturing gallery projection. O(serialized data + rendered rows).
  * Source data and pure SVG/table owners precede this page composition.
  */
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { getGalleryRows } from '../context-canvas-project-surface/context-canvas/atlas-gallery-model.js';
 import { escapeGalleryText, galleryJsonText, renderGalleryTable } from '../context-canvas-project-surface/context-canvas/atlas-gallery-table.js';
 
@@ -112,6 +114,6 @@ export async function buildGalleryPage({ check = false } = {}) {
   return { page: PAGE, staticViews: GALLERY_VIEWS.length };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (isDirectExecution(import.meta.url)) {
   console.log(JSON.stringify(await buildGalleryPage({ check: process.argv.includes('--check') })));
 }

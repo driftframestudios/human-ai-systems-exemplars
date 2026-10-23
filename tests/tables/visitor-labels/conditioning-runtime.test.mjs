@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 // Execute the actual fallback builders against a bounded node harness.
 // Native structure/source parity lives in test_visitor_labels.py; browsers are parent-owned.
 // Current node:test output is authoritative; this suite emits no reusable receipt files.

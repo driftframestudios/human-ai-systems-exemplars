@@ -81,21 +81,24 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: '22'
+          node-version: "22.23.4"
           cache: npm
           cache-dependency-path: source/package-lock.json
+      - name: Record the admitted Node runtime
+        run: node release-tools/tools/check-node-runtime.mjs
+
       - name: Prepare locked dependencies
         working-directory: source
         run: npm ci --ignore-scripts
       - name: Install the browser used by the public-surface checks
         working-directory: source
-        run: npm exec -- playwright install --with-deps chromium
+        run: node --import ../release-tools/tools/node-runtime-admission.mjs ./node_modules/@playwright/test/cli.js install --with-deps chromium
       - name: Confirm the configured public host
         working-directory: source
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
         run: |
-          node --input-type=module -e 'import fs from "node:fs"; const host=fs.readFileSync("schemas/CNAME","utf8").trim(); const url=new URL(process.env.PAGES_BASE_URL); if(!/^[a-z0-9.-]+$/.test(host)||url.hostname!==host||url.protocol!=="https:") process.exit(1);'
+          node --import ../release-tools/tools/node-runtime-admission.mjs --input-type=module -e 'import fs from "node:fs"; const host=fs.readFileSync("schemas/CNAME","utf8").trim(); const url=new URL(process.env.PAGES_BASE_URL); if(!/^[a-z0-9.-]+$/.test(host)||url.hostname!==host||url.protocol!=="https:") process.exit(1);'
       - name: Exercise schema and site contracts
         working-directory: source
         run: npm run check:schemas && npm run test:schema-pages

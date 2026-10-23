@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -104,7 +105,7 @@ async function run() {
     const store = await openCheckpoints(path.join(output, "checkpoints"));
     const packageFiles = new Map();
     const snapshot = inputSnapshot(root, packageFiles);
-    const definitionFiles = ["tests/tables/core-followthrough/browser.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/contracts.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/strategy-states.mjs", "tests/tables/core-followthrough/runtime.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "package-lock.json"];
+    const definitionFiles = ["tools/node-runtime-admission.mjs", "tools/check-node-runtime.mjs", "tests/tables/core-followthrough/browser.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/contracts.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/strategy-states.mjs", "tests/tables/core-followthrough/runtime.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "package-lock.json"];
     const definitionParts = await snapshot.fingerprints(definitionFiles);
     const executable = await fs.stat(chromium.executablePath());
     const definition = digest(JSON.stringify([definitionParts, process.version, process.platform, executable.size, executable.mtimeMs]));

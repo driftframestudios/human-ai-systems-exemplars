@@ -1,3 +1,5 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { execFile } from "node:child_process";
 import {
   lstat,
@@ -4840,7 +4842,7 @@ async function main() {
   ].join("\n"));
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === toolPath) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 1;

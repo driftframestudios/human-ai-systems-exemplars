@@ -1,8 +1,9 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { createHash } from "node:crypto";
 import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 
 const MAX_CACHEABLE_OBJECT_BYTES = 512_000_000;
 const MAX_COMPANION_DOWNLOAD_BYTES = 32 * 1024 * 1024;
@@ -1512,8 +1513,7 @@ async function main() {
   if (!result.ok) process.exitCode = 1;
 }
 
-const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
-if (invokedPath === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     if (error instanceof R2RouteVerificationError) {
       process.stderr.write(`${error.message}\n`);
