@@ -6,10 +6,17 @@ A collaborator can find the owned suite for a change, select a proportionate
 bundle, interpret its result, and resume expensive observations with trustworthy
 evidence. Existing runners and domain expectations remain the behavior owners.
 
-[Milestone 25](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/25) and
-[coordination Issue #368](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/368) own the execution route.
-This document holds the architectural options, source assessment, and skill
-candidates. Issues own current acceptance and receiving decisions.
+[Milestone 25](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/25)
+and [coordination Issue #368](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/368)
+own the original architecture route. [Issue #58](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/58)
+owns skill disposition. [Issue #597](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/597)
+and [PR #598](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/598)
+supply the latest operational receiver: phase evidence identified dependency
+provisioning as the source of a 29-minute outlier, and the candidate workflow
+retained all 79 media tests and three browser checks while its first cold run
+completed in 1 minute 9 seconds. A trusted warm run remains the receiver for
+warm-cache performance. This document preserves the architecture, source
+assessment, and skill lineage; Issues and pull requests own current acceptance.
 
 The architecture audit read tracked source at `ab71e23`, incorporated through
 PR #367 into `main@e1f00de`. It covered maintained tests, root and nested runtime
@@ -18,13 +25,21 @@ Counts below describe files and direct imports or command selections, rather
 than executed cases. Untracked research changes, local ad-hoc commands, and
 history-wide tool use remain outside that census.
 
-This planning wave changes documentation and skill guidance. Test migration,
-package installation, browser campaigns, hosted activation, and publication
-remain subsequent receiving decisions.
+The original planning wave changed documentation, plan-only discovery, and
+skill guidance. Subsequent receiving work implemented the owned-suite catalog,
+focused planner tests, browser-helper convergence, and the media-CI preparation
+route. Hosted activation, merge, publication, and live release remain with
+their named receivers.
 
 ## Existing source terrain
 
-The [implemented plan-only catalog](../../tests/suites/README.md) maps exact entry files, related commands and prerequisites. The [Issue #371 exercise](exercises/issue-371.md) applies the draft testing skills and conversational Python rendering; the receiving PR/Issue owns execution results.
+The [implemented plan-only catalog](../../tests/suites/README.md) maps exact
+entry files, related commands and prerequisites. The [Issue #371 exercise](exercises/issue-371.md)
+supplied the first bounded use of the testing contracts. The media-CI receiver
+supplied the fresh operational use that supported promotion into the active
+[evidence-bearing test-design](../../.agents/skills/evidence-bearing-test-design/README.md)
+and [test-suite-composition](../../.agents/skills/test-suite-composition/README.md)
+skills. The receiving PR or Issue continues to own executed results.
 
 | Component | Source observation | Receiving boundary |
 | --- | --- | --- |
@@ -184,16 +199,19 @@ reference. Preserve meaningful differences in length and layering.
 | Refine | Cost and ownership | Separate admission, canonical projection and nested detachment; bound surplus-copy cost. |
 | Reconcile | CSS ownership | Use the visual-verification owner for proportionate evidence; CSS reduction follows the actual task. |
 | Retain | Other 25 skills in the audited cohort | In this audit, the other 25 core contracts continue to fit their named jobs. Natural-use evidence can reopen a specific layer. |
-| Draft | [Evidence-bearing test design](draft-skills/evidence-bearing-test-design/SKILL.md) | Independent oracle, plausible fault, observation layer and explicit evidence limit. |
-| Draft | [Test-suite composition](draft-skills/test-suite-composition/SKILL.md) | Owned membership, selection, prerequisites, runner coordination and trustworthy reruns. |
+| Promote as public-ready | [Evidence-bearing test design](../../.agents/skills/evidence-bearing-test-design/README.md) | Independent oracle, plausible fault, observation layer, result standing, and explicit evidence limit. |
+| Promote as public-ready | [Test-suite composition](../../.agents/skills/test-suite-composition/README.md) | Owned membership, selection, prerequisites, phase cost, runner coordination, safe reuse, and trustworthy reruns. |
 
-The existing declarative skill is the skill-writing owner. The two testing drafts
-have reviewed local applications and remain outside active skill routing for
-a future fresh-receiver transfer exercise. Their current disposition is focused
-refinement; #58 remains the collection's receiving Issue. Resource-fault guidance belongs with the existing
-stateful skill instead of adding another overlapping portable skill.
+The existing declarative skill remains the skill-writing owner. The two testing
+skills now have two materially different repository uses: suite discovery and
+operational CI provisioning. They enter active routing with complete
+public-ready source packages. Issue #58 remains the collection's receiving
+Issue, and an independent repository use remains the next transfer signal for
+further revision. Resource-fault guidance stays with the stateful skill. Provisioning
+and runner guidance stays a conditional reference under suite composition
+until a second independent receiver demonstrates a distinct reusable job.
 
-The reviewed publication selection now lists all 34 active skills, including
+The reviewed publication selection now lists all 36 active skills, including
 the four visualization skills and their declared dependency closure. Accepted
 site and Worker release records own current publication status. Newly linked public-ready
 references receive explicit dependency entries; publication execution retains
@@ -208,11 +226,11 @@ its existing closure checks.
 - Authoring guidance: let a fresh-context collaborator distinguish a fit, near miss and poor fit, then find the applicable reference and recovery without extra author context.
 
 A completed source audit is an exercise of repository re-entry, ownership
-analysis and existing skill-authoring guidance. The newly drafted testing skills
-have bounded planner, Python-entry, and browser-lifecycle applications. Their
-receiving PRs carry execution evidence; the refined drafts keep transfer claims
-open for a future fresh receiver. Keep observations to the smallest result that
-changes the artifact or its next disposition.
+analysis and existing skill-authoring guidance. The active testing skills have
+bounded planner, Python-entry, browser-lifecycle, and CI-provisioning uses.
+Their receiving pull requests carry execution evidence; the established site
+release process owns later projection. Keep observations to the smallest result
+that changes the artifact or its next disposition.
 
 ## Research and evidence boundaries
 
@@ -251,11 +269,12 @@ four component identities; the browser pilot keeps domain assertions local;
 the evidence-boundary guide preserves owner standing and original scope.
 These are available compositions rather than a required full sequence.
 
-The two testing drafts now distinguish metadata discovery, importing discovery,
-native skip semantics, independent oracles, and final-validation telemetry.
-Their bounded local applications support these refinements. A fresh receiving
-team or materially different family can establish the next transfer signal.
-Use #58 for that disposition rather than creating a parallel result ledger.
+The two testing skills distinguish metadata discovery, importing discovery,
+native skip semantics, independent oracles, final-validation telemetry,
+preparation reuse, and behavior evidence. A materially different repository
+can establish the next transfer signal. Use #58 for that disposition and the
+[cross-repository test-system stewardship runbook](../../.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md)
+for collection-specific sequencing.
 
 Keep application, browser, research, live, and publication choices separate.
 A new browser-family migration earns its own membership/fault exercise.

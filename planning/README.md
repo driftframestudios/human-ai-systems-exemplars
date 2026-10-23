@@ -26,7 +26,7 @@ preserves the decision and return point.
 
 ## Current planning areas
 
-- [Repository test architecture and evidence coherence](testing-suite-consolidation/README.md): owned Node, Python and browser suites; phased evidence bundles; helper convergence; and draft testing skills.
+- [Repository test architecture and evidence coherence](testing-suite-consolidation/README.md): owned Node, Python and browser suites; phased evidence bundles; helper convergence; active portable testing skills; and the cross-repository stewardship route.
 
 - [Cross-repository LIMS/ELN functional nucleus](functional-nucleus-assessment-horizon.md)
 - [Context Canvas — principal engineering and publication](context-canvas/README.md) — includes the approved contrast architecture, visual-consistency milestone, and skill-cultivation continuations.
