@@ -644,7 +644,7 @@ test("the private selection ledger classifies the complete repository skill fami
   const possibleNames = selection.skills
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
-  assert.equal(readyNames.length, 27);
+  assert.equal(readyNames.length, 29);
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
