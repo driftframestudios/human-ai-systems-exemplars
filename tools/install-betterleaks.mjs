@@ -1,3 +1,5 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash } from "node:crypto";
 import {
   chmod,
@@ -509,7 +511,7 @@ async function main() {
   );
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     const message =
       error instanceof BetterleaksInstallError

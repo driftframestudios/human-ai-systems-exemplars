@@ -1,10 +1,12 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 /** Public research extract projection. O(works + topic memberships + output bytes).
  * The admitted bibliography owns source selection; this owner supplies the view.
  */
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { buildResearchData, researchDocument, SUMMARY_PATH, EVIDENCE_KINDS } from './atlas-research-data.mjs';
 import { escapeGalleryText as escape, renderGalleryTable } from '../context-canvas-project-surface/context-canvas/atlas-gallery-table.js';
 
@@ -197,6 +199,6 @@ export async function buildResearchView({ check = false } = {}) {
   return { works: document.totals.works, memberships: document.totals.topicMemberships, svg: RESEARCH_SVG };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (isDirectExecution(import.meta.url)) {
   console.log(JSON.stringify(await buildResearchView({ check: process.argv.includes('--check') })));
 }

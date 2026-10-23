@@ -1,8 +1,9 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 /** AI4I gallery derivation. Existing maintenance source ownership stays in atlas-maintenance-data.mjs. */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { maintenanceDocument, parseMaintenanceCsv, SOURCE_PATH, SOURCE_SHA256, SOURCE_DOI } from './atlas-maintenance-data.mjs';
 import {
   createGalleryScales, DEFAULT_GALLERY_STATE, GALLERY_POPULATIONS, GALLERY_VIEWS,
@@ -121,7 +122,7 @@ export async function buildAtlasGallery({ check = false } = {}) {
   return { records: document.populations[0].records, populations: 4, cellsPerPopulation: 100, outputs: outputs.length };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (isDirectExecution(import.meta.url)) {
   if (process.argv.length !== 3 || !['--write', '--check'].includes(process.argv[2])) throw new Error('Use --write or --check.');
   console.log(JSON.stringify(await buildAtlasGallery({ check: process.argv[2] === '--check' })));
 }
