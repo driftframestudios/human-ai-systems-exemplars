@@ -1,7 +1,8 @@
+import '../../tools/node-runtime-admission.mjs';
+import { isDirectExecution } from '../../tools/check-node-runtime.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 import { chromium } from "@playwright/test";
 import { startStaticServer, repositoryRoot } from "../../tools/core-architecture-browser-helper.mjs";
 import { digest, openCheckpoints } from "../../tools/observation-checkpoint.mjs";
@@ -55,4 +56,4 @@ else {
 }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await runConditioning();
+if (isDirectExecution(import.meta.url)) await runConditioning();

@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { spawnSync } from "node:child_process";
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
 
 // Shared by companion suites that protect the same frame/heading/rail boundary.

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -15,7 +16,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = path.join(root, ".visual-runs/recovery-import-containment");
 const family = coreFamilies.find(item => item.id === "recovery");
 const manifest = "core-architectures-chimeric-prototype-manifest-v0.1.json";
-const definitions = ["tests/core-architectures/recovery-import.browser.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tools/table-reading-observer.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/closure.mjs", "package-lock.json"];
+const definitions = ["tools/node-runtime-admission.mjs", "tools/check-node-runtime.mjs", "tests/core-architectures/recovery-import.browser.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tools/table-reading-observer.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/closure.mjs", "package-lock.json"];
 const cases = [family.source, family.projection].flatMap((source, index) =>
   [[304, false], [320, false], [390, true]].map(([width, enlarged]) =>
     ({ id: `${index ? "projection" : "source"}-${width}-${enlarged ? "text200" : "normal"}`, source, width, enlarged })));
