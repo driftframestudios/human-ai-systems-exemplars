@@ -230,6 +230,16 @@ reading positions, individual fragments and text, with a deterministic split
 canary and fresh-source recovery. Its images support paint review; native
 Safari/DuckDuckGo observations retain their separate application boundary.
 
+Eighteen prose-local callouts and quotations across seven Debriefs use a
+screen-only atomic boundary for their explanation, statement and attribution.
+Their existing owners retain palette and padding; print keeps ordinary block
+layout. `test:debrief-callout-integrity-browser` exercises the complete family,
+the Clinical reading's two reconstructed quotations, reference-link keyboard
+access, alternate modes and modeled split-definition recovery. Native-browser
+observations and paginated-paper behavior retain their separate evidence.
+[Issue #587](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/587)
+holds this component boundary within the complete Debrief-family review.
+
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same
 `.reading-flow` boundary in thirteen reading regions. Their metadata,
