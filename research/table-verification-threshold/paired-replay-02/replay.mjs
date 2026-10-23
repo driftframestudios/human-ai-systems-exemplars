@@ -1,3 +1,5 @@
+import './node-runtime-admission.mjs';
+
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -15,8 +17,9 @@ const browserRoot = path.join(local, "browsers");
 const output = path.join(app, ".visual-runs/paired-replay-02");
 const seedDirectory = path.join(local, "seed");
 const protocol = JSON.parse(await fs.readFile(path.join(root, "protocol.json"), "utf8"));
-const bundleFiles = [".gitignore", "README.md", "PROTOCOL.md", "protocol.json", "core.mjs",
-  "worker.mjs", "replay.mjs", "replay.test.mjs", "faults.json", "runner-path.test.mjs"];
+const bundleFiles = [".gitignore", "README.md", "PROTOCOL.md", "protocol.json", "check-node-runtime.mjs",
+  "node-runtime-admission.mjs", "core.mjs", "worker.mjs", "replay.mjs", "replay.test.mjs",
+  "faults.json", "runner-path.test.mjs"];
 const args = process.argv.slice(2);
 const command = args.shift();
 function option(name, fallback = null) {

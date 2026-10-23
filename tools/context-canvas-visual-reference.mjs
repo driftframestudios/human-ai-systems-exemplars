@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { chromium } from "@playwright/test";
 import { execFile } from "node:child_process";

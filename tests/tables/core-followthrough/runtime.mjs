@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 import fs from "node:fs/promises";
 import path from "node:path";
 

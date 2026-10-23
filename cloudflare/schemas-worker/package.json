@@ -4,16 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare:publication": "node prepare-publication.mjs",
-    "check:publication": "node prepare-publication.mjs --check",
-    "check:accepted-publication": "node verify-accepted-publication.mjs",
-    "test": "node --test test/*.test.mjs",
-    "test:receiver": "node test/live-receiver.mjs",
-    "test:browser": "node test/catalog-browser.mjs",
-    "dev": "wrangler dev",
-    "deploy": "npm run check:accepted-publication && wrangler deploy"
+    "prepare:publication": "node ../../tools/check-node-runtime.mjs --quiet && node prepare-publication.mjs",
+    "check:publication": "node ../../tools/check-node-runtime.mjs --quiet && node prepare-publication.mjs --check",
+    "check:accepted-publication": "node ../../tools/check-node-runtime.mjs --quiet && node verify-accepted-publication.mjs",
+    "test": "node ../../tools/check-node-runtime.mjs --quiet && node --test test/*.test.mjs",
+    "test:receiver": "node ../../tools/check-node-runtime.mjs --quiet && node test/live-receiver.mjs",
+    "test:browser": "node ../../tools/check-node-runtime.mjs --quiet && node test/catalog-browser.mjs",
+    "dev": "node ../../tools/check-node-runtime.mjs --quiet && wrangler dev",
+    "deploy": "node ../../tools/check-node-runtime.mjs --quiet && npm run check:accepted-publication && wrangler deploy",
+    "wrangler": "node ../../tools/check-node-runtime.mjs --quiet && wrangler"
   },
   "devDependencies": {
     "wrangler": "4.149.0"
+  },
+  "engines": {
+    "node": ">=22.23.4 <23"
   }
 }

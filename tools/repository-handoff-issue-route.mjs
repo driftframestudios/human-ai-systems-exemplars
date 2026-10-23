@@ -1,9 +1,10 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { constants as fileConstants } from "node:fs";
 import { link, lstat, open, realpath, unlink } from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 
 import {
   admitFoundation,
@@ -1738,7 +1739,7 @@ export async function main(argv = process.argv.slice(2), dependencies = {}) {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     process.stderr.write(formatIssueRouteError(error));
     process.exitCode = 1;

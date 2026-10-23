@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { INVESTMENT_HOSTS, readInvestmentSources, assertInvestmentProjection } from "./project-investment-analysis.mjs";
