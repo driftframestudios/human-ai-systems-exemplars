@@ -2585,6 +2585,28 @@
       "aliases": [
         "test:debrief-evidence-cards-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-callout-integrity",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-callout-integrity.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eighteen callouts and quotations on seven Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, attributed quotation and keyboard checks, deterministic split-definition canaries and fresh-source recovery. Native browsers, paginated paper and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-callout-integrity-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2695,7 +2717,8 @@
         "browser.context-canvas.ai-narrow-reading",
         "browser.context-canvas.card-rail-clearance",
         "browser.context-canvas.linked-reading-containment",
-        "browser.context-canvas.debrief-evidence-cards"
+        "browser.context-canvas.debrief-evidence-cards",
+        "browser.context-canvas.debrief-callout-integrity"
       ]
     },
     {
@@ -3082,6 +3105,9 @@
         ],
         "test:debrief-evidence-cards-browser": [
           "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+        ],
+        "test:debrief-callout-integrity-browser": [
+          "tests/context-canvas/debrief-callout-integrity.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
