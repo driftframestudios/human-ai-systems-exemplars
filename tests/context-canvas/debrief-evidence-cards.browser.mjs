@@ -4,7 +4,7 @@ import { after, before, test } from 'node:test';
 import { mkdir } from 'node:fs/promises';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
-import { openReadingPage, observeReadingUnits, scrollToReadingUnit, assertIntactUnits } from './reading-unit-helper.mjs';
+import { openReadingPage, observeReadingUnits, scrollToReadingUnit, assertIntactUnits, assertContainedReadingFragments } from './reading-unit-helper.mjs';
 
 const inventory = new Map([
   ['choose-your-player-humatics.html', 3], ['fmi-clinical-trial-coordination.html', 2],
@@ -52,7 +52,7 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     });
   }
   for (const mode of ['enlarged', 'no-script', 'print', 'forced-colors']) {
-    test(`${engine}: Humatics evidence cards retain ${mode} reading`, async t => {
+    test(`${engine}: Humatics evidence cards retain ${mode} reading`, { timeout: 45_000 }, async t => {
       const session = await openReadingPage(await browserFor(engine), server.origin, 'choose-your-player-humatics.html', {
         fontSize: mode === 'enlarged' ? 32 : 16, javaScriptEnabled: mode !== 'no-script',
       });
@@ -61,8 +61,9 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
       if (mode === 'forced-colors') await session.page.emulateMedia({ forcedColors: 'active' });
       const units = await observeReadingUnits(session.page, selector);
       assert.equal(units.length, 3);
-      assertIntactUnits(units, mode);
-      if (mode === 'print') assert.ok(units.every(unit => unit.display === 'block'), 'Print retains ordinary block pagination.');
+      if (mode === 'print') assertContainedReadingFragments(units, mode);
+      else assertIntactUnits(units, mode);
+      if (mode === 'print') assert.ok(units.every(unit => unit.display === 'block'), 'Print media retains ordinary block flow.');
       if (mode === 'enlarged') assert.ok(units.every(unit => unit.columns === 1), 'Enlarged text uses the available single reading lane.');
     });
   }

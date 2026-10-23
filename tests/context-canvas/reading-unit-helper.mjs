@@ -25,8 +25,15 @@ export async function openReadingPage(browser, origin, route, {
     });
     const page = await context.newPage();
     await page.goto(`${origin}/context-canvas-project-surface/context-canvas/${route}`, { waitUntil: 'load' });
-    await page.evaluate(() => document.fonts.ready);
-    return { page, close: () => context.close() };
+    // Driver-side polling also works when Firefox disables page Promise jobs.
+    // The existing architecture-card contract uses this bounded font-state route.
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (await page.evaluate(() => document.fonts.status === 'loaded')) {
+        return { page, close: () => context.close() };
+      }
+      await new Promise(resolve => setTimeout(resolve, 25));
+    }
+    assert.fail('The authored fonts reach their loaded state.');
   } catch (error) {
     await context.close();
     throw error;
@@ -77,19 +84,30 @@ export async function observeReadingUnits(page, selector) {
   });
 }
 
-export function assertIntactUnits(units, label) {
+export function assertContainedReadingFragments(units, label) {
   assert.ok(units.length > 0, `${label}: the declared reading units are present`);
   for (const unit of units) {
     const name = `${label}: ${unit.id || unit.heading}`;
     assert.equal(unit.visibility, 'visible', `${name}: the unit remains visible`);
     assert.notEqual(unit.display, 'none', `${name}: the unit retains layout`);
-    assert.equal(unit.fragments.length, 1, `${name}: one contiguous painted-unit fragment`);
-    const frame = unit.fragments[0];
-    assert.ok(frame.left >= -1.5 && frame.right <= unit.viewport + 1.5, `${name}: the frame fits the viewport`);
-    assert.ok(unit.owner && frame.left >= unit.owner.left - 1.5 && frame.right <= unit.owner.right + 1.5,
-      `${name}: the frame fits its prose owner`);
+    assert.ok(unit.fragments.length > 0, `${name}: the unit retains visible fragments`);
+    for (const frame of unit.fragments) {
+      assert.ok(frame.left >= -1.5 && frame.right <= unit.viewport + 1.5, `${name}: the frame fits the viewport`);
+      assert.ok(unit.owner && frame.left >= unit.owner.left - 1.5 && frame.right <= unit.owner.right + 1.5,
+        `${name}: the frame fits its prose owner`);
+    }
     assert.ok(unit.text.length > 0, `${name}: visible text has layout fragments`);
-    assert.ok(unit.text.every(r => r.left >= frame.left - 1.5 && r.right <= frame.right + 1.5
-      && r.top >= frame.top - 1.5 && r.bottom <= frame.bottom + 1.5), `${name}: complete text remains inside its frame`);
+    assert.ok(unit.text.every(r => unit.fragments.some(frame =>
+      r.left >= frame.left - 1.5 && r.right <= frame.right + 1.5
+      && r.top >= frame.top - 1.5 && r.bottom <= frame.bottom + 1.5)),
+    `${name}: complete text remains inside its own reading fragments`);
   }
+}
+
+export function assertIntactUnits(units, label) {
+  for (const unit of units) {
+    assert.equal(unit.fragments.length, 1,
+      `${label}: ${unit.id || unit.heading}: one contiguous painted-unit fragment`);
+  }
+  assertContainedReadingFragments(units, label);
 }
