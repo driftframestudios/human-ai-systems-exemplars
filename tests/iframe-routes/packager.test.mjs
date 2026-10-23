@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";

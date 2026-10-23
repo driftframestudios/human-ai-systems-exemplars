@@ -556,7 +556,7 @@ The settled [CSS modularization plan](../../planning/context-canvas/css-modulari
 
 ## Work locally
 
-From the repository root, use Node 22 or newer:
+From the repository root, use the [reviewed Node 22.23.4 runtime](../../NODE-RUNTIME.md):
 
 ```bash
 npm ci --ignore-scripts

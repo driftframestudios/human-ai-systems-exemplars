@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 
 import { randomUUID } from "node:crypto";
 import {
@@ -488,8 +490,7 @@ async function main() {
   );
 }
 
-const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
-if (invokedPath === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
