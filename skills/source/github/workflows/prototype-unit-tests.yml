@@ -119,7 +119,10 @@ jobs:
       - name: Use the reviewed Node runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: "22"
+          node-version: "22.23.4"
+
+      - name: Record the admitted Node runtime
+        run: node tools/check-node-runtime.mjs
 
       - name: Use the reviewed Python runtime
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -130,7 +133,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Exercise the owned contract routes
-        run: npm run test:public-reference-contracts
+        run: npm run test:node-runtime && npm run test:public-reference-contracts
 
   prototype-units:
     name: Selected prototype or iframe contract
@@ -143,8 +146,10 @@ jobs:
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
     runs-on: ubuntu-24.04
-    # The explicit all-plus-browser route exercises Chromium and WebKit across every carrier family.
-    timeout-minutes: 20
+    # The explicit all-plus-browser route exercises Chromium, Firefox, and WebKit
+    # across every carrier family in sequence. Thirty minutes keeps that release
+    # proof bounded while preserving headroom for the complete declared route.
+    timeout-minutes: 30
 
     steps:
       - name: Check out the candidate source
@@ -155,7 +160,10 @@ jobs:
       - name: Use the reviewed Node runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: "22"
+          node-version: "22.23.4"
+
+      - name: Record the admitted Node runtime
+        run: node tools/check-node-runtime.mjs
 
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
@@ -170,11 +178,15 @@ jobs:
 
       - name: Install Chromium for the selected rendered-page contracts
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
-        run: npm exec -- playwright install --with-deps chromium
+        run: npm run playwright -- install --with-deps chromium
 
       - name: Install WebKit for the Context Canvas image-delivery contract
         if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && (inputs.suite == 'all' || inputs.suite == 'iframe')) }}
-        run: npm exec -- playwright install --with-deps webkit
+        run: npm run playwright -- install --with-deps webkit
+
+      - name: Install Firefox for the all-family Debrief reading contracts
+        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && inputs.suite == 'all') }}
+        run: npm run playwright -- install --with-deps firefox
 
       - name: Exercise the selected source contracts
         env:
@@ -218,6 +230,12 @@ jobs:
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:about-media-browser
                 npm run test:debrief-catalog-preview-browser
+                npm run test:debrief-reading-layout-browser
+                npm run test:debrief-reference-figures-browser
+                npm run test:debrief-caption-colors-browser
+                npm run test:ai-systems-reading-layout-browser
+                npm run test:site-navigation-browser
+                npm run test:debrief-link-cues-browser
                 npm run test:context-canvas-image-delivery-browser
                 npm run test:who-to-believe-system-graph-browser
                 npm run test:prod-css-projection-browser
@@ -243,7 +261,7 @@ jobs:
        inputs.confirm_run &&
        (inputs.suite == 'all' || inputs.suite == 'media'))
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     steps:
       - name: Check out the candidate source
@@ -254,13 +272,16 @@ jobs:
       - name: Use the reviewed Node runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: "22"
+          node-version: "22.23.4"
+
+      - name: Record the admitted Node runtime
+        run: node tools/check-node-runtime.mjs
 
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
       - name: Install Chromium for native video receiver checks
-        run: npm exec -- playwright install --with-deps chromium
+        run: npm run playwright -- install --with-deps chromium
 
       - name: Install the Ubuntu media receiver
         run: |
