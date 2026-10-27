@@ -137,11 +137,14 @@ on import distinguishes metadata discovery from incidental harness loading.
 Literal unit/browser/Python memberships establish selection meaning; matching
 counts alone are insufficient.
 
-The Issue #371 exercise uses the draft
-[evidence-bearing test-design](../../planning/testing-suite-consolidation/draft-skills/evidence-bearing-test-design/SKILL.md)
-and [suite-composition](../../planning/testing-suite-consolidation/draft-skills/test-suite-composition/SKILL.md)
+The Issue #371 exercise supplied the first bounded use of the active
+[evidence-bearing test-design](../../.agents/skills/evidence-bearing-test-design/README.md)
+and [suite-composition](../../.agents/skills/test-suite-composition/README.md)
 contracts. [The exercise and figure sources](../../planning/testing-suite-consolidation/exercises/issue-371.md)
-record the design decisions; the receiving PR/Issue owns executed results.
+record the design decisions; the receiving pull request or Issue owns executed
+results. The [cross-repository stewardship runbook](../../.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md)
+routes the same portable contracts through repository-specific commands,
+budgets, and acceptance owners.
 
 ## Recovery and continuation
 
