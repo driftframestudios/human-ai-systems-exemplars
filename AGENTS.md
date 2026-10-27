@@ -48,6 +48,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `contextual-jargon-scan` classifies potentially inside wording within a bounded corpus and revises only shorthand whose meaning becomes clearer in ordinary language.
 - `evidence-grounded-research-spike` converts current external evidence into a bounded repository decision.
 - `declarative-skill-authoring` creates and revises transferable skills through contracts, rules, sparse behavior examples, and conditional context.
+- `design-token-pipeline-stewardship` carries visual meaning from named source authority through a bounded canonical token set, validated alias graph, pinned compiler, generated artifacts, receiving UI adapters, semantic review, and recovery.
 - `collaboration-accounting` routes decision-changing working observations into skill creation, revision, a triggered candidate, continued observation, settlement, consolidation, or retirement.
 - `schema-contract-authoring` shapes bounded schema families through distinct identity, authority, retrieval, dependency closure, examples, semantic context, and proportional material-use checks.
 - `source-authority-mapping` traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery, receiving use, and promotion.

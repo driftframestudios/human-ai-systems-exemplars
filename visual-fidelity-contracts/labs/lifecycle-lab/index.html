@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-lifecycle-contract="lifecycle-contract@0.1.0">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Browser and framework lifecycle lab</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="lifecycle-lab.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#lifecycle-reading">Skip to the lifecycle reading</a>
+  <header class="page-header">
+    <p class="eyebrow">Visual Fidelity Contracts · executable lifecycle probe</p>
+    <h1>Browser and framework lifecycle behavior, made inspectable</h1>
+    <p class="lede">Run one ownership question at a time. The lab shows the accepted state, active resources, observable result, and recovery path together.</p>
+  </header>
+
+  <main id="lifecycle-reading">
+    <section class="lab" data-lifecycle-lab data-js-state="static" aria-labelledby="lab-heading">
+      <div class="lab__orientation">
+        <div>
+          <p class="eyebrow">Platform-semantic reference</p>
+          <h2 id="lab-heading">One behavior, one controlled fault, one result you can inspect</h2>
+        </div>
+        <p>The browser implementation supplies executable evidence. Framework rows translate the same ownership questions and gain runtime standing when a named adapter carries its own receipt.</p>
+      </div>
+
+      <noscript>
+        <p class="notice">The complete scenario questions, expected observations, framework mappings, and runtime receipt remain available below. Enable JavaScript to exercise the controlled transitions.</p>
+      </noscript>
+      <p class="notice notice--error" data-initialization-error hidden>Interactive setup paused. The static lifecycle reading remains available.</p>
+      <p class="notice notice--error" data-retirement-recovery role="status" hidden>A fresh lifecycle owner is active. Prior-owner cleanup evidence remains available for recovery.</p>
+
+      <form class="control-panel" data-controls hidden>
+        <div class="control-panel__field">
+          <label for="lifecycle-scenario">Lifecycle scenario</label>
+          <select id="lifecycle-scenario" name="scenario">
+            <option value="strict-replay">Setup, cleanup, and replay</option>
+            <option value="entity-replacement">Entity replacement and late delivery</option>
+            <option value="external-store">Coherent external-store snapshot</option>
+            <option value="cache-reconcile">Server cache and local draft</option>
+            <option value="dialog-replacement">Dialog focus return</option>
+            <option value="svg-identities">Inline SVG document identities</option>
+            <option value="history-restore">History state restoration</option>
+            <option value="hydration-version">Hydration and named runtime version</option>
+          </select>
+        </div>
+        <div class="control-panel__fault">
+          <input id="lifecycle-fault" name="injectFault" type="checkbox">
+          <label for="lifecycle-fault"><span>Exercise controlled fault</span><small data-fault-label>Retain the first setup resources</small></label>
+        </div>
+        <div class="control-panel__actions">
+          <button type="submit">Run observation</button>
+          <button type="button" class="button-secondary" data-reset>Restore verified baseline</button>
+          <button type="button" class="button-secondary" data-release-reentry>Release and re-enter</button>
+        </div>
+      </form>
+
+      <div class="evidence-field" data-evidence-field hidden>
+        <article class="evidence-card evidence-card--state" aria-labelledby="accepted-heading">
+          <p class="card-index">01 · accepted state</p>
+          <h3 id="accepted-heading">What currently carries authority</h3>
+          <dl>
+            <div><dt>Identity</dt><dd data-accepted-identity>entity-a</dd></div>
+            <div><dt>Revision</dt><dd data-accepted-revision>0</dd></div>
+            <div><dt>Value</dt><dd data-accepted-value>Reviewed baseline</dd></div>
+          </dl>
+        </article>
+
+        <article class="evidence-card evidence-card--resources" aria-labelledby="resources-heading">
+          <p class="card-index">02 · owned resources</p>
+          <h3 id="resources-heading">What setup must release</h3>
+          <dl class="resource-counts">
+            <div><dt>Listeners</dt><dd data-resource-listeners>1</dd></div>
+            <div><dt>Subscriptions</dt><dd data-resource-subscriptions>1</dd></div>
+            <div><dt>Requests</dt><dd data-resource-requests>0</dd></div>
+            <div><dt>Enhancement owners</dt><dd data-resource-infrastructure>1</dd></div>
+          </dl>
+        </article>
+
+        <article class="evidence-card evidence-card--oracle" aria-labelledby="oracle-heading" data-oracle-card>
+          <p class="card-index">03 · expected observation</p>
+          <h3 id="oracle-heading" data-result-heading>Ready for a lifecycle observation</h3>
+          <p data-result-detail>Choose a scenario, then run the accepted path or its named controlled fault.</p>
+          <p class="decision"><strong>Decision:</strong> <span data-result-decision>The static reading remains available alongside the interactive evidence.</span></p>
+          <output class="status" data-status role="status" aria-live="polite" aria-atomic="true">Verified baseline ready.</output>
+        </article>
+
+        <article class="evidence-card evidence-card--log" aria-labelledby="log-heading">
+          <p class="card-index">04 · event order</p>
+          <h3 id="log-heading">What acquired, updated, and released</h3>
+          <ol class="event-log" data-event-log>
+            <li>Mount acquired the verified baseline resources.</li>
+          </ol>
+        </article>
+      </div>
+
+      <section class="behavior-stage" data-behavior-stage hidden aria-labelledby="behavior-heading">
+        <div>
+          <p class="eyebrow">Native behavior stage</p>
+          <h3 id="behavior-heading">Focus and document identity remain directly inspectable</h3>
+          <p>Open the dialog to observe focus return. Compare the two inline SVGs to inspect instance-scoped labels, gradients, clips, and paint order.</p>
+          <button type="button" data-open-dialog>Open replacement dialog</button>
+        </div>
+        <div class="svg-pair" data-svg-pair aria-label="Two inline SVG identity specimens"></div>
+        <div class="sandbox-stage">
+          <iframe src="sandbox-specimen.html" sandbox title="Sandboxed lifecycle reading specimen"></iframe>
+          <p><strong>Sandbox boundary:</strong> this embedded reading receives a unique origin and carries static content. The parent lab owns interactive lifecycle state.</p>
+        </div>
+      </section>
+
+      <dialog data-replacement-dialog aria-labelledby="dialog-title" aria-describedby="dialog-description">
+        <div class="dialog-panel">
+          <p class="eyebrow">Dialog replacement boundary</p>
+          <h3 id="dialog-title">Inspect the replacement and return to the lab</h3>
+          <p id="dialog-description">The dialog owns temporary inspection focus. Closing it returns the visitor to the control that opened it.</p>
+          <form method="dialog"><button value="accepted">Close and return</button></form>
+        </div>
+      </dialog>
+
+      <section class="static-reading" data-static-reading aria-labelledby="scenario-reading-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Script-independent reading</p>
+          <h2 id="scenario-reading-heading">Eight questions that preserve the implementation boundary</h2>
+        </div>
+        <div class="scenario-grid">
+          <details open data-scenario-id="strict-replay"><summary>Setup, cleanup, and replay</summary><p data-question>Does a repeated setup release its first listeners and subscriptions before acquiring replacements?</p><p><strong>Expected observation:</strong> <span data-oracle>One listener and one subscription remain active after replay.</span></p><p data-scenario-receipt><strong>Owner:</strong> event-target listener and immutable-store subscription leases · <strong>Release:</strong> setup cleanup and final controller release · <strong>Preserved work:</strong> accepted entity-a baseline · <strong>Re-entry:</strong> fresh attachment from the verified baseline</p></details>
+          <details data-scenario-id="entity-replacement"><summary>Entity replacement and late delivery</summary><p data-question>Can a response for the previous entity change the accepted view after identity and revision move forward?</p><p><strong>Expected observation:</strong> <span data-oracle>Entity B revision 2 remains accepted after entity A delivers late.</span></p><p data-scenario-receipt><strong>Owner:</strong> identity, revision, and owner-generation request gate · <strong>Release:</strong> replacement abort or deterministic settlement · <strong>Preserved work:</strong> current entity B result · <strong>Re-entry:</strong> next observation generation</p></details>
+          <details data-scenario-id="external-store"><summary>Coherent external-store snapshot</summary><p data-question>Do related values come from one immutable store revision?</p><p><strong>Expected observation:</strong> <span data-oracle>The label and count share one snapshot revision.</span></p><p data-scenario-receipt><strong>Owner:</strong> immutable external-store adapter · <strong>Release:</strong> scenario unsubscribe after snapshot notification · <strong>Preserved work:</strong> coherent accepted snapshot · <strong>Re-entry:</strong> next immutable store revision</p></details>
+          <details data-scenario-id="cache-reconcile"><summary>Server cache and local draft</summary><p data-question>Does fresh server data preserve the local draft that the browser owns?</p><p><strong>Expected observation:</strong> <span data-oracle>Server revision 2 arrives while the local draft remains intact.</span></p><p data-scenario-receipt><strong>Owner:</strong> revision cache for server data and browser interaction for the draft · <strong>Release:</strong> cache unsubscribe after invalidation · <strong>Preserved work:</strong> local reviewer-authority draft · <strong>Re-entry:</strong> next keyed invalidation</p></details>
+          <details data-scenario-id="dialog-replacement"><summary>Dialog focus return</summary><p data-question>Does closing the replacement dialog return focus to its invoking control?</p><p><strong>Expected observation:</strong> <span data-oracle>Focus returns to the button that opened the dialog.</span></p><p data-scenario-receipt><strong>Owner:</strong> native dialog and recorded invoking control · <strong>Release:</strong> dialog close event · <strong>Preserved work:</strong> current scenario and fault selection · <strong>Re-entry:</strong> focus on the invoking control</p></details>
+          <details data-scenario-id="svg-identities"><summary>Inline SVG document identities</summary><p data-question>Does each inline SVG own unique gradient, clip-path, and labelled-by identifiers?</p><p><strong>Expected observation:</strong> <span data-oracle>Every document identifier is unique and each reference resolves inside its own SVG.</span></p><p data-scenario-receipt><strong>Owner:</strong> instance-scoped SVG identifier prefix · <strong>Release:</strong> document replacement removes the prior SVG instances · <strong>Preserved work:</strong> accessible label and authored layer order · <strong>Re-entry:</strong> new instance prefix on render</p></details>
+          <details data-scenario-id="history-restore"><summary>History state restoration</summary><p data-question>Does browser history restore the selected scenario and its corresponding reading state?</p><p><strong>Expected observation:</strong> <span data-oracle>The restored selection matches the recorded history entry.</span></p><p data-scenario-receipt><strong>Owner:</strong> serialized browser history entry · <strong>Release:</strong> next navigation entry · <strong>Preserved work:</strong> scenario and controlled-fault selection · <strong>Re-entry:</strong> popstate restores selection and useful focus</p></details>
+          <details data-scenario-id="hydration-version"><summary>Hydration and named runtime version</summary><p data-question>Do server markup and client behavior declare the same contract version before enhancement?</p><p><strong>Expected observation:</strong> <span data-oracle>Server and client declare lifecycle-contract@0.1.0.</span></p><p data-scenario-receipt><strong>Owner:</strong> server-authored contract attribute and client enhancement version · <strong>Release:</strong> enhancement pauses at a version mismatch · <strong>Preserved work:</strong> script-independent server reading · <strong>Re-entry:</strong> compatible client contract begins enhancement</p></details>
+        </div>
+      </section>
+
+      <section class="framework-reading" aria-labelledby="framework-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Transfer into framework-owned lifetimes</p>
+          <h2 id="framework-heading">Platform evidence first; named adapters carry the result forward</h2>
+        </div>
+        <div class="table-region" tabindex="0" role="region" aria-label="Framework lifecycle contract table">
+          <table>
+            <caption>Framework questions mapped to the browser mechanism exercised in this lab</caption>
+            <thead><tr><th scope="col">Framework family</th><th scope="col">Owned mechanism</th><th scope="col">Bounded local adapter</th><th scope="col">Transfer receipt</th></tr></thead>
+            <tbody>
+              <tr data-framework-id="react-effect"><th scope="row">React effects and development replay</th><td>Acquire resources during setup and release the same owned resources during cleanup.</td><td data-local-adapter>react-strict-mode-effect-replay runs through React 19.2.0 and React DOM 19.2.0 and records setup, cleanup, replay, and final release.</td><td>Which named React version runs this setup-cleanup-setup sequence, and what counter proves one active resource?</td></tr>
+              <tr data-framework-id="external-store"><th scope="row">External-store snapshot adapters</th><td>Return one immutable snapshot per revision and notify subscribers after the accepted snapshot changes.</td><td data-local-adapter>react-use-sync-external-store runs through React 19.2.0 and React DOM 19.2.0 and records coherent snapshots, subscription, and release.</td><td>Which store adapter supplies coherent server and client snapshots for the named package version?</td></tr>
+              <tr data-framework-id="server-cache"><th scope="row">Server cache and invalidation libraries</th><td>Reconcile fresh server records while browser-owned draft state keeps its separate owner.</td><td data-local-adapter>revision-cache@0.1.0 executes invalidation beside a separately owned local draft.</td><td>Which query key, invalidation event, and named package version establish the server-state boundary?</td></tr>
+              <tr data-framework-id="next-runtime"><th scope="row">Next.js server and client composition</th><td>Name the contract version in server markup and confirm the same version before client enhancement.</td><td data-local-adapter>The platform specimen compares server-authored markup with the client contract; a Next.js receipt remains version-specific.</td><td>Which Next.js version, router mode, cache policy, and navigation event own the observed behavior?</td></tr>
+              <tr data-framework-id="component-package"><th scope="row">Reusable component packages</th><td>Assign refs, events, form participation, focus return, and release behavior to explicit owners.</td><td data-local-adapter>Native dialog, event ownership, and inline SVG scenarios provide the platform reference; package compatibility remains version-specific.</td><td>Which package and semantic version preserve those ownership contracts for consuming applications?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="receipt" aria-labelledby="receipt-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Version and runtime receipt</p>
+          <h2 id="receipt-heading">What this evidence can support</h2>
+        </div>
+        <dl>
+          <div><dt>Question</dt><dd>Which browser and framework lifecycle boundaries keep accepted state coherent through replay, replacement, and recovery?</dd></div>
+          <div><dt>Decision</dt><dd>Use browser-owned semantics as the executable reference and require a named runtime receipt from each framework adapter.</dd></div>
+          <div><dt>Lab version</dt><dd>lifecycle-contract@0.1.0</dd></div>
+          <div><dt>Source date</dt><dd>2026-10-20</dd></div>
+          <div><dt>Runtime</dt><dd>ECMAScript modules and browser platform APIs</dd></div>
+          <div><dt>Browser execution</dt><dd data-runtime-user-agent>Resolved by the receiving browser during enhancement.</dd></div>
+          <div><dt>Operating platform</dt><dd data-runtime-platform>Resolved by the receiving browser during enhancement.</dd></div>
+          <div><dt>Runtime language</dt><dd data-runtime-language>Resolved by the receiving browser during enhancement.</dd></div>
+          <div><dt>Bounded adapters</dt><dd data-runtime-adapters>event-target-lifetime@0.1.0, immutable-external-store@0.1.0, revision-cache@0.1.0, deferred-delivery@0.1.0</dd></div>
+          <div><dt>Owner and release</dt><dd>The controller owns fixture resources; the enhancement owner registers its browser listener group for final release.</dd></div>
+          <div><dt>Preserved work and re-entry</dt><dd>Each scenario names the work it carries forward and the event that begins the next valid owner.</dd></div>
+          <div><dt>Evidence standing</dt><dd>Deterministic local mechanism evidence from executable bounded adapters. React 19.2.0 and React DOM 19.2.0 carry local runtime observations for StrictMode effect replay and external-store snapshot coherence in Chromium. The remaining framework rows await versioned adapters and runtime receipts from their receiving implementations.</dd></div>
+        </dl>
+      </section>
+    </section>
+  </main>
+
+  <footer class="artifact-attribution">
+    <p>Visual Fidelity Contracts · lifecycle behavior remains inspectable in source, interface, and test evidence.</p>
+    <p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
+  </footer>
+</body>
+</html>

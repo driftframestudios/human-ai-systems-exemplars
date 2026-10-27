@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json",
+  "title": "Visual Fidelity Lab State",
+  "description": "A bounded state envelope for visual-fidelity labs that keeps accepted work, draft work, request progress, recovery, and authority distinct.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "artifactId",
+    "revision",
+    "phase",
+    "acceptedState",
+    "draftState",
+    "request",
+    "messages",
+    "recovery",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/lab-state.schema.json"
+    },
+    "schemaVersion": { "const": "1.0.0" },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[./:-][a-z0-9]+)*$",
+      "maxLength": 160
+    },
+    "revision": { "type": "integer", "minimum": 0 },
+    "phase": {
+      "enum": ["idle", "loading", "ready", "partial", "stale", "error", "recovering"]
+    },
+    "acceptedState": { "$ref": "#/$defs/acceptedState" },
+    "draftState": { "$ref": "#/$defs/draftState" },
+    "request": { "$ref": "#/$defs/request" },
+    "messages": {
+      "type": "array",
+      "maxItems": 24,
+      "items": { "$ref": "#/$defs/message" }
+    },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "authority": { "$ref": "#/$defs/authority" }
+  },
+  "$defs": {
+    "values": {
+      "type": "object",
+      "maxProperties": 64,
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" },
+          { "type": "null" }
+        ]
+      }
+    },
+    "acceptedState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fingerprint", "values"],
+      "properties": {
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "acceptedAt": { "type": "string", "format": "date-time" },
+        "values": { "$ref": "#/$defs/values" }
+      }
+    },
+    "draftState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dirty", "values"],
+      "properties": {
+        "dirty": { "type": "boolean" },
+        "values": { "$ref": "#/$defs/values" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[-:][a-z0-9]+)*$",
+          "maxLength": 120
+        },
+        "status": { "enum": ["resting", "pending", "succeeded", "failed", "cancelled"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "level", "text", "sourceId"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 100 },
+        "level": { "enum": ["status", "success", "attention", "error"] },
+        "text": { "type": "string", "minLength": 3, "maxLength": 500 },
+        "sourceId": { "type": "string", "minLength": 2, "maxLength": 160 }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availableActions", "nextAction"],
+      "properties": {
+        "availableActions": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["retry", "restore_accepted", "edit_draft", "reopen", "contact_owner"]
+          }
+        },
+        "nextAction": {
+          "enum": ["retry", "restore_accepted", "edit_draft", "reopen", "contact_owner", "none"]
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decisionOwner", "dataOwner", "serviceOwner", "humanApprovalRequired"],
+      "properties": {
+        "decisionOwner": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "dataOwner": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "serviceOwner": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "humanApprovalRequired": { "type": "boolean" }
+      }
+    }
+  }
+}

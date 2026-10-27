@@ -105,6 +105,143 @@ export function assertTelemetry(telemetry) {
   assert.deepEqual(observations, [], observations.join(" | "));
 }
 
+export async function inspectLabelControlLayout(page, controlSelectors) {
+  return page.evaluate(selectors => selectors.map(selector => {
+    const control = document.querySelector(selector);
+    if (!(control instanceof HTMLElement)) {
+      return { selector, present: false };
+    }
+    const label = control.labels?.[0] ?? null;
+    const labelRect = label?.getBoundingClientRect();
+    const controlRect = control.getBoundingClientRect();
+    const labelStyle = label ? getComputedStyle(label) : null;
+    const controlStyle = getComputedStyle(control);
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const overlapStart = labelRect ? Math.max(labelRect.left, controlRect.left) : 0;
+    const overlapEnd = labelRect ? Math.min(labelRect.right, controlRect.right) : 0;
+    return {
+      selector,
+      present: true,
+      associationMatches: label?.control === control,
+      sameContainer: label?.parentElement === control.parentElement,
+      labelText: label?.textContent?.trim() ?? '',
+      labelVisible: Boolean(labelRect && labelRect.width > 0 && labelRect.height > 0
+        && labelStyle?.display !== 'none' && labelStyle?.visibility !== 'hidden'),
+      controlVisible: controlRect.width > 0 && controlRect.height > 0
+        && controlStyle.display !== 'none' && controlStyle.visibility !== 'hidden',
+      labelBottom: labelRect?.bottom ?? null,
+      controlTop: controlRect.top,
+      blockGap: labelRect ? controlRect.top - labelRect.bottom : null,
+      inlineOverlap: Math.max(0, overlapEnd - overlapStart),
+      rootFontSize,
+    };
+  }), controlSelectors);
+}
+
+export function assertLabelsLeadControls(observations, context) {
+  for (const observation of observations) {
+    const prefix = `${context} ${observation.selector}`;
+    assert.equal(observation.present, true, `${prefix} control is present`);
+    assert.equal(observation.associationMatches, true, `${prefix} resolves its visible label through the native label-control association`);
+    assert.equal(observation.sameContainer, true, `${prefix} keeps its label and control in one local field`);
+    assert.ok(observation.labelText, `${prefix} label carries visible text`);
+    assert.equal(observation.labelVisible, true, `${prefix} label remains visible`);
+    assert.equal(observation.controlVisible, true, `${prefix} control remains visible`);
+    assert.ok(observation.labelBottom <= observation.controlTop + 0.5,
+      `${prefix} label ends before its control begins (${JSON.stringify(observation)})`);
+    assert.ok(observation.blockGap >= -0.5 && observation.blockGap <= observation.rootFontSize * 0.75,
+      `${prefix} label stays distinct and within 0.75rem of its control (${JSON.stringify(observation)})`);
+    assert.ok(observation.inlineOverlap > 0,
+      `${prefix} label and control retain a shared inline reading column (${JSON.stringify(observation)})`);
+  }
+}
+
+export async function inspectSelectPresentation(page, selectSelectors) {
+  return page.evaluate(selectors => selectors.map(selector => {
+    const select = document.querySelector(selector);
+    if (!(select instanceof HTMLSelectElement)) return { selector, present: false };
+    const style = getComputedStyle(select);
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const direction = style.direction;
+    const inlineEndPatterns = direction === 'rtl'
+      ? [
+          /^([\d.]+)px$/u,
+          /left\s+([\d.]+)px/u,
+          /calc\(0%\s*\+\s*([\d.]+)px\)/u,
+        ]
+      : [
+          /calc\(100%\s*-\s*([\d.]+)px\)/u,
+          /right\s+([\d.]+)px/u,
+        ];
+    const insetMatch = inlineEndPatterns
+      .map(pattern => style.backgroundPositionX.match(pattern))
+      .find(Boolean);
+    return {
+      selector,
+      present: true,
+      direction,
+      appearance: style.appearance,
+      backgroundImage: style.backgroundImage,
+      backgroundPosition: style.backgroundPosition,
+      backgroundPositionX: style.backgroundPositionX,
+      inlineEndInset: insetMatch ? Number.parseFloat(insetMatch[1]) : null,
+      expectedInlineEndInset: 12,
+      rootFontSize,
+    };
+  }), selectSelectors);
+}
+
+export function assertCustomSelectPresentation(observations, context, { expectedDirection = 'ltr' } = {}) {
+  for (const observation of observations) {
+    const prefix = `${context} ${observation.selector}`;
+    assert.equal(observation.present, true, `${prefix} select is present`);
+    assert.equal(observation.direction, expectedDirection, `${prefix} resolves the expected writing direction`);
+    assert.equal(observation.appearance, 'none', `${prefix} uses the authored select indicator in ordinary colors`);
+    assert.notEqual(observation.backgroundImage, 'none', `${prefix} exposes the authored select indicator`);
+    assert.ok(observation.inlineEndInset !== null, `${prefix} exposes a measurable inline-end indicator inset (${observation.backgroundPositionX})`);
+    assert.ok(Math.abs(observation.inlineEndInset - observation.expectedInlineEndInset) <= 0.01,
+      `${prefix} resolves the indicator to the 12-pixel visual-control inset (${JSON.stringify(observation)})`);
+  }
+}
+
+export async function assertBidirectionalSelectContract(page, selectSelectors, context) {
+  const initialDirection = await page.evaluate(() => ({
+    attribute: document.documentElement.getAttribute('dir'),
+    computed: getComputedStyle(document.documentElement).direction,
+  }));
+  try {
+    for (const direction of ['ltr', 'rtl']) {
+      await page.evaluate(value => { document.documentElement.dir = value; }, direction);
+      assertCustomSelectPresentation(
+        await inspectSelectPresentation(page, selectSelectors),
+        `${context} in ${direction.toUpperCase()}`,
+        { expectedDirection: direction },
+      );
+      assertLabelsLeadControls(
+        await inspectLabelControlLayout(page, selectSelectors),
+        `${context} in ${direction.toUpperCase()}`,
+      );
+    }
+  } finally {
+    await page.evaluate(({ attribute, computed }) => {
+      if (attribute === null) document.documentElement.removeAttribute('dir');
+      else document.documentElement.dir = attribute;
+      if (getComputedStyle(document.documentElement).direction !== computed) {
+        throw new Error('The document writing direction did not return to its initial state');
+      }
+    }, initialDirection);
+  }
+}
+
+export function assertForcedColorsSelectPresentation(observations, context) {
+  for (const observation of observations) {
+    const prefix = `${context} ${observation.selector}`;
+    assert.equal(observation.present, true, `${prefix} select is present`);
+    assert.equal(observation.appearance, 'auto', `${prefix} restores the native select appearance in forced colors`);
+    assert.equal(observation.backgroundImage, 'none', `${prefix} yields the authored indicator to the native forced-color control`);
+  }
+}
+
 async function assertArtifactAttribution(page, route) {
   const receipt = await page.evaluate(() => {
     const footer = document.querySelector("footer.artifact-attribution");

@@ -41,6 +41,29 @@ Begin with the source owner's focused command. The sections below separate
 build boundaries, deployment assembly, source contracts, and rendered browser
 behavior so one passing result keeps a clear evidence scope.
 
+### Visual Fidelity hub
+
+The Visual Fidelity source route validates shared schemas, contract records,
+tokens, deterministic lab models, fixtures, source parity, example metadata,
+checked-in image bytes, and deterministic digests for each declared source set.
+The browser route exercises runnable behavior and pattern readings across
+Chromium, Firefox, and WebKit. The aggregate command checks the catalog,
+semantic companions, gallery, and existing derivatives while leaving their
+bytes unchanged. `npm run build:visual-fidelity-pattern-library` performs a
+fresh browser capture after a source definition or captured state changes.
+
+```sh
+npm run test:visual-fidelity-contracts:source
+npm run check:visual-fidelity-pattern-library
+npm run test:visual-fidelity-contracts:browser
+npm run test:visual-fidelity-contracts
+```
+
+These checks establish behavior for the named synthetic fixtures, browser
+versions, source revisions, and responsive states. Receiving products retain
+their own security, accessibility-conformance, performance, scientific-validity,
+and service-reliability observations.
+
 The documentation route contract checks the repository's current Markdown
 forms: inline and used reference links in ordinary, quoted, and list prose;
 ATX headings and explicit HTML identifiers; and fenced or inline code kept at
@@ -262,7 +285,7 @@ catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
 overflow. The same focused route selects Case Brief mode across narrow,
-responsive-seam, and desktop widths, then verifies all sixteen source-owned
+responsive-seam, and desktop widths, then verifies all sixteen source-maintained
 scans, their stable six-field order, thirty-two independently operable track
 disclosures, collapsed initial states, state-aware labels, related media, one
 complete-reading action, the five-route EHR group's atomic replacement and

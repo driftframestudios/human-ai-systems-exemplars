@@ -1,0 +1,137 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/visual-fidelity-contract.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:industrial-ink",
+  "title": "Industrial Ink",
+  "version": "1.0.0",
+  "standing": "review_candidate",
+  "kind": "art_direction_contract",
+  "reviewedOn": "2026-10-20",
+  "supersedes": [],
+  "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract",
+  "sourceAuthority": {
+    "semanticOwner": "Visual Fidelity Contracts maintainers",
+    "schemaOwner": "Visual Fidelity Contracts schema maintainers",
+    "publicationOwner": "Vikrant Varun Kudesia — named human publication receiver",
+    "sourcePath": "visual-fidelity-contracts/contracts/industrial-ink/README.md",
+    "relationship": "authored_source"
+  },
+  "purpose": {
+    "plainLanguage": "A precise technical-instrument language for dense scientific, inspection, engineering, and operational workbenches.",
+    "populations": [
+      "Scientists and quality reviewers who compare material evidence.",
+      "Engineers and operators who inspect state and act inside explicit authority boundaries.",
+      "Visitors who need a legible technical overview before opening deeper evidence."
+    ],
+    "jobs": [
+      "Compare material states and measurements.",
+      "Locate the current selection, accepted revision, named hold, and recovery route.",
+      "Connect a visual state with its evidence standing and responsible owner."
+    ]
+  },
+  "fit": {
+    "fits": [
+      "Scientific or material qualification workbenches.",
+      "Inspection, commissioning, engineering, and operational ledgers.",
+      "Dense controls and tabular values that need calm hierarchy."
+    ],
+    "poorFits": [
+      "Long editorial narratives benefit from Rose Quartz or another reading-first field.",
+      "Broad guided workflows benefit from Soft Color Blocking.",
+      "Relationship-heavy architecture maps benefit from Cobalt Operating Field."
+    ],
+    "smallestUsefulDose": "One ink work region, one ash hierarchy, one localized signal, and direct written state labels."
+  },
+  "invariants": [
+    "Ink planes and ash rules carry structural hierarchy.",
+    "Signal yellow marks a consequential selection or commitment.",
+    "Oxide identifies material context or a named hold whose owner and release evidence are written.",
+    "Written labels, geometry, and state relationships carry meaning while color reinforces the distinction.",
+    "Accepted work remains visible during loading, failure, and recovery."
+  ],
+  "permittedVariation": [
+    "Panel count, orientation, data density, and domain vocabulary can follow the receiving instrument.",
+    "Authentic scientific and documentary imagery can retain source-native color inside a labeled image region.",
+    "Framework adapters can vary while semantic state, keyboard behavior, focus, and recovery stay stable."
+  ],
+  "tokens": {
+    "authority": "reference_mapping",
+    "path": "visual-fidelity-contracts/contracts/industrial-ink/tokens.css",
+    "paletteClosed": true,
+    "colorPairs": [
+      { "foreground": "#f5f2e9", "background": "#0b0f12", "minimumRatio": 17.19, "uses": ["Body and instrument text on deep ink."] },
+      { "foreground": "#0b0f12", "background": "#f3d348", "minimumRatio": 13.03, "uses": ["Signal labels and selected matrix cells."] },
+      { "foreground": "#0b0f12", "background": "#f2b9a0", "minimumRatio": 11.2, "uses": ["Hold explanations on the oxide field."] },
+      { "foreground": "#f5f2e9", "background": "#7f2f1f", "minimumRatio": 8.06, "uses": ["Compact hold badges and material identity labels."] },
+      { "foreground": "#0b0f12", "background": "#9ccabb", "minimumRatio": 10.61, "uses": ["Accepted-state labels."] }
+    ]
+  },
+  "typography": {
+    "families": [
+      "System sans for narrative, labels, controls, and instructions.",
+      "System monospace for specimen IDs, units, revisions, timestamps, and tabular values."
+    ],
+    "bodyMinimumRem": 1,
+    "metadataMinimumRem": 0.75,
+    "readingMeasureCh": { "targetMin": 50, "targetMax": 66, "absoluteMax": 75 },
+    "uses": [
+      "Metadata stays short and high-contrast and receives a 200 percent text-resize observation.",
+      "Tabular numerals support measurement comparison; written labels and geometry also carry state."
+    ]
+  },
+  "geometry": {
+    "cornerTreatment": "near_square",
+    "targetMinimumCssPx": 44,
+    "depth": "Ink-plane shifts, one-pixel rules, and restrained stepped offsets create fabricated depth.",
+    "spacing": "Alignment and spacing form the first hierarchy; signals remain localized to their governed state."
+  },
+  "behavior": {
+    "states": ["idle", "available", "hover", "focus", "selected", "disabled", "loading", "empty", "partial", "stale", "invalid", "error", "recovering", "recovered", "accepted", "held"],
+    "errorRecovery": [
+      "Loading, stale, invalid, and error states preserve the last accepted revision.",
+      "Recovery offers retry, restore accepted work, edit the draft, or contact the named owner according to local authority.",
+      "A hold names its owner, reason, and the evidence that can release it."
+    ],
+    "focus": "A high-contrast double ring stays visible across ink, signal, oxide, and forced-color fields.",
+    "keyboard": "Native controls preserve tab order, radio-group arrow behavior, labels, and a polite selected-state announcement.",
+    "motion": "Brief motion supports state continuity; reduced-motion mode presents the final state directly.",
+    "noJavaScript": "The sixteen-state table, labels, instructions, and evidence boundary remain complete in document order."
+  },
+  "media": {
+    "reflow320CssPx": "Major regions follow source order; a named local inspection region carries the two-dimensional matrix.",
+    "textResize200Percent": "Controls grow with labels and status copy wraps inside its owning region.",
+    "print": "White paper, black text, retained rules, full state labels, and the evidence boundary create the print record.",
+    "forcedColors": "Canvas, CanvasText, ButtonText, Highlight, and HighlightText carry structural and selected state.",
+    "reducedMotion": "Transition duration resolves to zero while focus, selection, recovery, and accepted state stay visible.",
+    "svg": "A useful title and description, semantic groups, integrated labels, and a nearby table carry the same reading.",
+    "imagery": "Technical imagery receives a figure number, concise caption, source standing, and a full-size detail route."
+  },
+  "evidence": {
+    "standing": "repository_observation",
+    "establishes": [
+      "The source package defines Industrial Ink visual roles and interaction guidance.",
+      "Focused source tests validate schema shape, token declaration, matrix completeness, and named contrast pairs."
+    ],
+    "boundaries": [
+      "The synthetic specimen leaves scientific validity and material qualification with the receiving domain owner.",
+      "Authorization, durable transactions, and operational receipts remain with the receiving application."
+    ],
+    "reentry": [
+      "A palette, state-meaning, browser, accessibility, specimen, or authority change reopens review.",
+      "A receiving implementation that claims exact token parity earns a byte or value-level drift check."
+    ]
+  },
+  "references": {
+    "canonicalExamples": [
+      { "label": "Industrial Ink technical-workbench specimen", "path": "visual-fidelity-contracts/contracts/industrial-ink/specimen.html", "standing": "canonical" }
+    ],
+    "codeSamples": [
+      "visual-fidelity-contracts/contracts/industrial-ink/tokens.css",
+      "visual-fidelity-contracts/contracts/industrial-ink/specimen.html"
+    ],
+    "tests": [
+      "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+      "tests/visual-fidelity-contracts/contract-art-directions.test.mjs"
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="description" content="A static comparison of weekly case values with status, units, source history, and dates.">
+  <title>Compare Weekly Case Values · Data-View Lab</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#132f58;background:#f7e6ee}*{box-sizing:border-box}body{margin:0}main{width:min(68rem,calc(100% - 2rem));margin:2rem auto;background:#fffaf0;border:2px solid #173e72;box-shadow:.55rem .55rem 0 #132f58;padding:clamp(1rem,4vw,3rem)}h1{font-size:clamp(2rem,6vw,4rem);line-height:1;max-width:20ch}.eyebrow{text-transform:uppercase;font:700 .8rem ui-monospace,monospace;letter-spacing:.08em}.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.65rem}.meta div{padding:.65rem;border:1px solid #173e72;background:#dcecf5}.meta dt{font-size:.75rem;font-weight:800;text-transform:uppercase}.meta dd{margin:.2rem 0 0;overflow-wrap:anywhere}.scroll{overflow:auto;border:1px solid #173e72}table{width:100%;border-collapse:collapse;background:white}th,td{padding:.65rem;border:1px solid #bfd1df;text-align:left}thead{background:#132f58;color:white}.known{border-left:.5rem solid #214bd5}.estimated{border-left:.5rem solid #d4e000}.unknown,.absent,.redacted{border-left:.5rem solid #ff8fa8}.relationships li{margin-block:.45rem}.boundary{margin-top:1rem;padding:1rem;border:1px solid #173e72;background:#dcecf5}@media(forced-colors:active){main,.scroll,.boundary,.meta div{border-color:CanvasText}}@media print{body{background:white}main{width:100%;margin:0;box-shadow:none}.scroll{overflow:visible}}
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Weekly workflow comparison · static reading</p>
+    <h1>Compare weekly case values and see what each value means</h1>
+    <p>The table keeps each value with its status, unit, source history, and observation date. Together, those fields explain how the value can support a decision.</p>
+    <nav aria-label="Continue from this reading"><a href="../">Run the interactive lab</a> · <a href="../README.md">Read the source guide</a></nav>
+    <dl class="meta">
+      <div><dt>Fixture identity</dt><dd>visual-fidelity-data-view-lab</dd></div>
+      <div><dt>Schema version</dt><dd>1</dd></div>
+      <div><dt>Decision need</dt><dd>compare</dd></div>
+      <div><dt>Data standing</dt><dd>current</dd></div>
+      <div><dt>Lineage</dt><dd>bundled-fixture · first admitted revision</dd></div>
+    </dl>
+    <div class="scroll" tabindex="0" role="region" aria-label="Accepted fixture values">
+      <table>
+        <caption>All records from the accepted comparison fixture, in stable order</caption>
+        <thead><tr><th scope="col">Order</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Standing</th><th scope="col">Group</th><th scope="col">Observed</th><th scope="col">Position x/y</th></tr></thead>
+        <tbody>
+          <tr class="known" data-record-id="intake"><td>0</td><th scope="row">Intake</th><td>28 cases</td><td>Known</td><td>coordination</td><td>2026-10-01</td><td>8 / 18</td></tr>
+          <tr class="known" data-record-id="triage"><td>1</td><th scope="row">Triage</th><td>24 cases</td><td>Known</td><td>coordination</td><td>2026-10-02</td><td>24 / 18</td></tr>
+          <tr class="known" data-record-id="consent"><td>2</td><th scope="row">Consent</th><td>21 cases</td><td>Known</td><td>governance</td><td>2026-10-03</td><td>40 / 18</td></tr>
+          <tr class="known" data-record-id="accession"><td>3</td><th scope="row">Accession</th><td>20 cases</td><td>Known</td><td>laboratory</td><td>2026-10-04</td><td>56 / 18</td></tr>
+          <tr class="known" data-record-id="extraction"><td>4</td><th scope="row">Extraction</th><td>18 cases</td><td>Known</td><td>laboratory</td><td>2026-10-05</td><td>72 / 18</td></tr>
+          <tr class="known" data-record-id="sequencing"><td>5</td><th scope="row">Sequencing</th><td>17 cases</td><td>Known</td><td>laboratory</td><td>2026-10-06</td><td>88 / 18</td></tr>
+          <tr class="estimated" data-record-id="analysis"><td>6</td><th scope="row">Analysis</th><td>15 cases</td><td>Estimated</td><td>computation</td><td>2026-10-07</td><td>88 / 62</td></tr>
+          <tr class="known" data-record-id="review"><td>7</td><th scope="row">Review</th><td>13 cases</td><td>Known</td><td>interpretation</td><td>2026-10-08</td><td>72 / 62</td></tr>
+          <tr class="unknown" data-record-id="board"><td>8</td><th scope="row">Tumor board</th><td>Unknown</td><td>Unknown</td><td>interpretation</td><td>Unavailable</td><td>56 / 62</td></tr>
+          <tr class="known" data-record-id="report"><td>9</td><th scope="row">Report</th><td>11 cases</td><td>Known</td><td>release</td><td>2026-10-10</td><td>40 / 62</td></tr>
+          <tr class="redacted" data-record-id="billing"><td>10</td><th scope="row">Billing</th><td>Redacted</td><td>Redacted</td><td>operations</td><td>Unavailable</td><td>24 / 62</td></tr>
+          <tr class="absent" data-record-id="follow-up"><td>11</td><th scope="row">Follow-up</th><td>Absent</td><td>Absent</td><td>operations</td><td>Unavailable</td><td>8 / 62</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <section aria-labelledby="relationship-title">
+      <h2 id="relationship-title">Relationship reading</h2>
+      <p>Eleven named relationships connect the accepted workflow stages. Report release opens two routes: one for operations and one for follow-up.</p>
+      <ol class="relationships">
+        <li data-relationship-id="intake-to-triage"><strong>Intake → Triage:</strong> hands accepted intake to triage.</li>
+        <li data-relationship-id="triage-to-consent"><strong>Triage → Consent:</strong> routes a qualifying case to consent review.</li>
+        <li data-relationship-id="consent-to-accession"><strong>Consent → Accession:</strong> releases the consented case to accession.</li>
+        <li data-relationship-id="accession-to-extraction"><strong>Accession → Extraction:</strong> hands accession state to extraction.</li>
+        <li data-relationship-id="extraction-to-sequencing"><strong>Extraction → Sequencing:</strong> routes extracted material to sequencing.</li>
+        <li data-relationship-id="sequencing-to-analysis"><strong>Sequencing → Analysis:</strong> routes sequence output to analysis.</li>
+        <li data-relationship-id="analysis-to-review"><strong>Analysis → Review:</strong> routes interpreted results to review.</li>
+        <li data-relationship-id="review-to-board"><strong>Review → Tumor board:</strong> prepares reviewed results for tumor board.</li>
+        <li data-relationship-id="board-to-report"><strong>Tumor board → Report:</strong> routes an accepted interpretation to reporting.</li>
+        <li data-relationship-id="report-to-billing"><strong>Report → Billing:</strong> records report release for operations.</li>
+        <li data-relationship-id="report-to-follow-up"><strong>Report → Follow-up:</strong> opens the follow-up route.</li>
+      </ol>
+    </section>
+    <aside class="boundary" aria-labelledby="standalone-boundary-title">
+      <h2 id="standalone-boundary-title">Reading and embedding boundary</h2>
+      <p>This artifact is a static reading document built from synthetic public data. Its document policy permits inline presentation styling while keeping script execution, form submission, remote assets, network requests, and object embedding outside the reading route. A hosting owner supplies the response-level frame policy and an iframe sandbox that fit the receiving site.</p>
+    </aside>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

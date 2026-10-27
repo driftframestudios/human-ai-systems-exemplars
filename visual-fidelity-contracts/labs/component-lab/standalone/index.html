@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Review the Catalog and Accepted Order · Component Lab</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#132f58;background:#dcecf5}*{box-sizing:border-box}body{margin:0}main{width:min(64rem,calc(100% - 2rem));margin:2rem auto;background:#fffaf0;border:2px solid #173e72;box-shadow:.55rem .55rem 0 #132f58;padding:clamp(1rem,4vw,3rem)}h1{font-size:clamp(2rem,6vw,4rem);line-height:1;max-width:18ch}.eyebrow{text-transform:uppercase;font:700 .8rem ui-monospace,monospace;letter-spacing:.08em}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}.card,details{border:2px solid #173e72;padding:1rem;background:white}.card:first-child{background:#efff48}dt{font-weight:800}dd{margin:0 0 .75rem}summary{font-weight:800;cursor:pointer}@media(max-width:42rem){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main data-fixture-id="visual-fidelity-component-lab" data-fixture-revision="catalog-r1">
+    <p class="eyebrow">Current catalog and order state · static reading</p>
+    <h1>Review the catalog and see how an order becomes accepted</h1>
+    <p>This page keeps the current items, prices, availability, and acceptance rules available in one script-independent reading.</p>
+    <nav aria-label="Continue from this reading"><a href="../">Run the interactive lab</a> · <a href="../README.md">Read the source guide</a></nav>
+    <section class="grid" aria-label="Accepted catalog">
+      <article class="card"><h2>Field notebook</h2><p>$18.00 · 12 available</p></article>
+      <article class="card"><h2>Review cards</h2><p>$24.00 · 8 available</p></article>
+      <article class="card"><h2>Decision ledger</h2><p>$32.00 · 5 available</p></article>
+    </section>
+    <dl>
+      <dt>Identity</dt><dd>visual-fidelity-component-lab</dd>
+      <dt>Revision</dt><dd>catalog-r1</dd>
+      <dt>Lineage</dt><dd>bundled-fixture · first admitted revision</dd>
+    </dl>
+    <details><summary>Read the behavior contract</summary><p>Local input creates a provisional intent. A matching authority result accepts or rejects the order. Loading, malformed candidates, and late results retain the prior accepted view and draft.</p></details>
+    <details><summary>Read the evidence boundary</summary><p>This synthetic fixture demonstrates the states exercised by this lab. Receiving environments supply production performance, service reliability, security posture, accessibility-conformance, and commercial-authority evidence.</p></details>
+    <p><strong>Embedding posture:</strong> This reading artifact uses static HTML and CSS. An embedding page can use an empty iframe sandbox; the delivery layer supplies frame-ancestor policy as an HTTP response header.</p>
+  </main>
+  <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+</body>
+</html>

@@ -1,0 +1,298 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "vfc:catalog",
+  "reviewedOn": "2026-10-20",
+  "authority": {
+    "semanticOwner": "Visual Fidelity Contracts maintainers",
+    "schemaOwner": "Visual Fidelity Contracts schema maintainers",
+    "publicationOwner": "Vikrant Varun Kudesia — named human publication receiver"
+  },
+  "contracts": [
+    {
+      "id": "vfc:industrial-ink",
+      "title": "Industrial Ink",
+      "kind": "art_direction_contract",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "profile": "art_direction_v1",
+      "sourcePath": "visual-fidelity-contracts/contracts/industrial-ink/README.md",
+      "recordPath": "visual-fidelity-contracts/contracts/industrial-ink/contract.v1.json",
+      "tokensPath": "visual-fidelity-contracts/contracts/industrial-ink/tokens.css",
+      "specimenPath": "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract",
+      "examples": ["visual-fidelity-contracts/contracts/industrial-ink/specimen.html"],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.test.mjs"
+      ]
+    },
+    {
+      "id": "vfc:soft-color-blocking",
+      "title": "Soft Color Blocking",
+      "kind": "art_direction_contract",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "profile": "art_direction_v1",
+      "sourcePath": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+      "recordPath": "visual-fidelity-contracts/contracts/soft-color-blocking/contract.v1.json",
+      "tokensPath": "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css",
+      "specimenPath": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+      "examples": [
+        "collaboration/context-tree-visual-variants/index.html",
+        "collaboration/impact-map-visual-variants/index.html",
+        "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+        "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html",
+        "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+        "tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:cobalt-operating-field",
+      "title": "Cobalt Operating Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/cobalt-operating-field.md",
+      "tokensPath": "visual-fidelity-contracts/cobalt-operating-field.tokens.css",
+      "examples": [
+        "collaboration/registry-goal-fidelity-routing/index.html",
+        "context-canvas-project-surface/img/plot/genomic_viewer_case_review_workbench.svg"
+      ],
+      "tests": ["tests/context-canvas/visual-reference-observations.test.mjs"]
+    },
+    {
+      "id": "vfc:cobalt-temporal-field",
+      "title": "Cobalt Temporal Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/cobalt-temporal-field.md",
+      "examples": ["context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"],
+      "tests": ["tests/context-canvas/visual-reference-observations.test.mjs"]
+    },
+    {
+      "id": "vfc:rose-quartz-editorial-field",
+      "title": "Rose Quartz Editorial Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/rose-quartz-editorial-field.md",
+      "examples": [
+        "collaboration/context-tree-visual-variants/genomic-viewer-presentation.html",
+        "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+      ],
+      "tests": ["tests/context-canvas/visual-reference-observations.test.mjs"]
+    },
+    {
+      "id": "vfc:cobalt-constellation-field",
+      "title": "Cobalt Constellation Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/cobalt-constellation-field.md",
+      "examples": ["collaboration/lims-eln-program-constellation/index.html"],
+      "tests": ["tests/context-canvas/visual-reference-observations.test.mjs"]
+    },
+    {
+      "id": "vfc:dual-track-debrief-composition",
+      "title": "Dual-Track Debrief Composition",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/dual-track-debrief-composition.md",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+        "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
+      ],
+      "tests": ["tests/context-canvas/debrief-reading-layout.browser.mjs"]
+    },
+    {
+      "id": "vfc:tiffany-ledger-field",
+      "title": "Tiffany Ledger Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/tiffany-ledger-field.md",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html",
+        "collaboration/career-quality-visual-variants/index.html"
+      ],
+      "tests": ["tests/context-canvas/about-first-paint-css.test.mjs"]
+    },
+    {
+      "id": "vfc:tiffany-conditions-routing-field",
+      "title": "Tiffany Conditions & Routing Field",
+      "kind": "repository_composition_contract",
+      "standing": "established",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/tiffany-conditions-routing-field.md",
+      "examples": ["collaboration/about-prompt-conditions-explorer/index.html"],
+      "tests": ["tests/context-canvas/about-first-paint-css.test.mjs"]
+    }
+  ],
+  "resources": [
+    {
+      "id": "vfc-resource:component-lab",
+      "title": "Component ownership and recovery lab",
+      "kind": "executable_lab",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/labs/component-lab/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-component-lab-panels-drawers-commerce-flows",
+      "tests": [
+        "tests/visual-fidelity-contracts/component-model.test.mjs",
+        "tests/visual-fidelity-contracts/component-page.test.mjs",
+        "tests/visual-fidelity-contracts/component.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:data-view-lab",
+      "title": "Data shape, state, and evidence lab",
+      "kind": "executable_lab",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/labs/data-view-lab/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-data-view-lab-shape-state-evidence",
+      "tests": [
+        "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-browser.test.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:lifecycle-lab",
+      "title": "Browser and framework lifecycle lab",
+      "kind": "executable_lab",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/labs/lifecycle-lab/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-framework-lifecycles-stateful-composition",
+      "tests": [
+        "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-source.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-browser.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:service-boundary-lab",
+      "title": "Service boundary and bounded caller lab",
+      "kind": "executable_lab",
+      "standing": "review_candidate",
+      "version": "1.2.0",
+      "sourcePath": "visual-fidelity-contracts/labs/service-boundary-lab/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-back-end-runtime-transactions-framework-boundaries",
+      "tests": [
+        "tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
+        "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:components-and-data-probes",
+      "title": "Component ownership, errors, and recovery probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/components-and-data/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-in-execution-component-ownership-errors-recovery",
+      "tests": [
+        "tests/visual-fidelity-contracts/component-probes.test.mjs",
+        "tests/visual-fidelity-contracts/component.browser.mjs",
+        "tests/visual-fidelity-contracts/data-view-browser.test.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:browser-probes",
+      "title": "Browser semantics, CSS, SVG, and JavaScript probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/browser/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-browser-semantics-css-svg-javascript",
+      "tests": ["tests/visual-fidelity-contracts/lifecycle-source.test.mjs"]
+    },
+    {
+      "id": "vfc-resource:framework-probes",
+      "title": "Framework lifecycle and stateful composition probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/frameworks/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-framework-lifecycles-stateful-composition",
+      "tests": [
+        "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:middleware-probes",
+      "title": "Client middleware, backend-for-frontend, and service contract probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/middleware/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-client-middleware-bffs-service-contracts",
+      "tests": ["tests/visual-fidelity-contracts/service-boundary-model.test.mjs"]
+    },
+    {
+      "id": "vfc-resource:backend-probes",
+      "title": "Back-end runtime and transaction probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/backend/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-back-end-runtime-transactions-framework-boundaries",
+      "tests": ["tests/visual-fidelity-contracts/service-boundary-model.test.mjs"]
+    },
+    {
+      "id": "vfc-resource:bounded-caller-probes",
+      "title": "Bounded caller, disclosure, and recovery probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/ai/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-with-ai-bounded-callers-disclosure-recovery-probes",
+      "tests": [
+        "tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
+        "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc-resource:design-token-pipeline-probes",
+      "title": "Design-token pipeline and programmatic-styling probes",
+      "kind": "practitioner_probe",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/probes/design-token-pipelines/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence",
+      "tests": ["tests/visual-fidelity-contracts/design-token-pipeline.test.mjs"]
+    },
+    {
+      "id": "vfc-resource:pattern-library",
+      "title": "Visual Fidelity pattern library",
+      "kind": "example_collection",
+      "standing": "review_candidate",
+      "version": "1.0.0",
+      "sourcePath": "visual-fidelity-contracts/examples/README.md",
+      "publicRoute": "https://kindlight.systems/visual-fidelity-contracts",
+      "tests": [
+        "tests/visual-fidelity-contracts/pattern-library.test.mjs",
+        "tests/visual-fidelity-contracts/pattern-library.browser.mjs"
+      ]
+    }
+  ]
+}

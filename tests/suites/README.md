@@ -15,6 +15,8 @@ Node entrypoints load the same guard before downstream module evaluation.
 npm run test:suites:list
 node tools/test-suite-plan.mjs --suite node.visualization-fidelity-atlas --json
 node tools/test-suite-plan.mjs --suite browser.visualization-fidelity-atlas.atlas-gallery.browser --json
+node tools/test-suite-plan.mjs --suite node.visual-fidelity-contracts --json
+node tools/test-suite-plan.mjs --suite browser.visual-fidelity-contracts --json
 node tools/test-suite-plan.mjs --suite python.tables.table-context --json
 node tools/test-suite-plan.mjs --bundle source-unit --bundle carrier --json
 ```
@@ -103,6 +105,22 @@ The first command exercises lifecycle faults with doubles; the second uses real
 Chromium. [Browser ownership](browser-ownership.md) describes the retained
 server/consumer dispositions and the Worker root-toolchain prerequisite.
 Other browser families keep their established routes and evidence contracts.
+
+## Visual Fidelity Contracts
+
+The Visual Fidelity Contracts routes keep deterministic state and schema checks
+separate from browser-owned observations:
+
+```sh
+npm run test:visual-fidelity-contracts:source
+npm run test:visual-fidelity-contracts:browser
+npm run test:visual-fidelity-contracts
+```
+
+The combined route also verifies the checked-in pattern images, catalog,
+semantic companions, and deterministic digest of each declared source set.
+The build route performs a fresh browser capture when those sources change.
+Release publication retains its own authorization.
 
 ## Compatibility and preparation
 
