@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { copyFile, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";

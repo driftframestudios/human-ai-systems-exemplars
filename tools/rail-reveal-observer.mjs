@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 export async function measureRailReveal(page, options = {}) {
   const links = page.locator(".page-section-rail__link");
   const count = await links.count();

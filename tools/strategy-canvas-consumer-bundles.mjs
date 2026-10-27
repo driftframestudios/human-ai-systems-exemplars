@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './node-runtime-admission.mjs';
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";

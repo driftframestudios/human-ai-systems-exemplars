@@ -1,3 +1,4 @@
+import './node-runtime-admission.mjs';
 import assert from "node:assert/strict";
 
 // Supplemental acceptance only. PR326 retains the broad initial/media/model evidence.

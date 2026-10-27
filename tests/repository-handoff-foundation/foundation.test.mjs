@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
@@ -146,17 +147,28 @@ function entryByKey(result, key) {
   return entry;
 }
 
+async function copyFoundationExecutable(isolatedRoot) {
+  const files = [
+    'tools/repository-handoff-foundation.mjs',
+    'tools/node-runtime-admission.mjs',
+    'tools/check-node-runtime.mjs',
+  ];
+  await mkdir(path.join(isolatedRoot, 'tools'), { recursive: true });
+  for (const relative of files) await cp(path.join(ROOT, relative), path.join(isolatedRoot, relative));
+  return path.join(isolatedRoot, files[0]);
+}
+
 test("the bundle check runs with only Node and the copied working-bundle files", async (t) => {
   const isolatedRoot = await temporaryDirectory(t, "repository-handoff-isolated-");
-  const isolatedTool = path.join(isolatedRoot, "tools/repository-handoff-foundation.mjs");
-  await mkdir(path.dirname(isolatedTool), { recursive: true });
-  await cp(TOOL_PATH, isolatedTool);
+  const isolatedTool = await copyFoundationExecutable(isolatedRoot);
   await cp(BUNDLE_ROOT, path.join(isolatedRoot, "repository-handoff-foundation-v0.1"), { recursive: true });
 
   const toolSource = await readFile(isolatedTool, "utf8");
   const importedSpecifiers = [...toolSource.matchAll(/\bfrom\s+["']([^"']+)["']/gu)].map((match) => match[1]);
   assert.ok(importedSpecifiers.length > 0);
-  assert.ok(importedSpecifiers.every((specifier) => specifier.startsWith("node:")), importedSpecifiers);
+  assert.ok(importedSpecifiers.every((specifier) =>
+    specifier.startsWith("node:") || specifier === "./check-node-runtime.mjs"), importedSpecifiers);
+  assert.ok(toolSource.startsWith("import './node-runtime-admission.mjs';"));
 
   const { stdout, stderr } = await execFileAsync(
     process.execPath,
@@ -170,6 +182,12 @@ test("the bundle check runs with only Node and the copied working-bundle files",
   assert.equal(result.execution, "read_only");
   assert.equal(result.schemaVersion, "0.2");
   assert.equal(result.profileKey, "source-awaiting");
+  const priorFixture = path.join(isolatedRoot, 'prior-runtime.mjs');
+  await writeFile(priorFixture, "Object.defineProperty(process, 'version', { value: 'v22.23.3' });\n");
+  await assert.rejects(execFileAsync(process.execPath, [isolatedTool, '--check', '--json'], {
+    cwd: isolatedRoot,
+    env: { ...process.env, NODE_OPTIONS: `--import=${priorFixture}` },
+  }), error => error.code === 1 && /ERR_NODE_RUNTIME: Detected Node v22\.23\.3/u.test(error.stderr));
 });
 
 test("the dependency-free copied-bundle check rejects tampered schema authorities", async (t) => {
@@ -177,10 +195,8 @@ test("the dependency-free copied-bundle check rejects tampered schema authoritie
   for (const schemaPath of manifest.schemas.map((schema) => schema.sourcePath)) {
     await t.test(schemaPath, async (t) => {
       const isolatedRoot = await temporaryDirectory(t, "repository-handoff-schema-integrity-");
-      const isolatedTool = path.join(isolatedRoot, "tools/repository-handoff-foundation.mjs");
+      const isolatedTool = await copyFoundationExecutable(isolatedRoot);
       const isolatedBundle = path.join(isolatedRoot, "repository-handoff-foundation-v0.1");
-      await mkdir(path.dirname(isolatedTool), { recursive: true });
-      await cp(TOOL_PATH, isolatedTool);
       await cp(BUNDLE_ROOT, isolatedBundle, { recursive: true });
       const copiedSchema = path.join(isolatedBundle, schemaPath);
       await writeFile(copiedSchema, Buffer.concat([await readFile(copiedSchema), Buffer.from(" ")]));
