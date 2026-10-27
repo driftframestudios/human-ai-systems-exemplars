@@ -1,0 +1,2754 @@
+{
+  "$schema": "./context-canvas-route-bindings.schema.json",
+  "id": "context-canvas.public-route-reference-bindings.v1",
+  "version": "1",
+  "public_roots": {
+    "primary": "https://vik.guru/",
+    "iframe": "https://iframes.vik.guru/",
+    "schema": "https://schemas.vik.guru/"
+  },
+  "bindings": [
+    {
+      "token": "PUBLIC_URL_ASSET_ABOUT_PROMPT_CONDITIONS_CARTOGRAPHY",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/about_prompt_conditions_cartography.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/about_prompt_conditions_cartography.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_BENCHMARK_RESULT_COORDINATE",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/benchmark_result_coordinate.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/benchmark_result_coordinate.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_BGR_CASESTUDY770",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg",
+        "media_type": "image/jpeg"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/bgr/bgr_casestudy770.jpg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_COLLABORATION_SKILL_AFFORDANCE_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/collaboration_skill_affordance_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/collaboration_skill_affordance_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_CONCEPT_NURSERY_LIFECYCLE",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/concept_nursery_lifecycle.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/concept_nursery_lifecycle.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_CORE_ARCHITECTURES_RESOLVER",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/core_architectures_resolver.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/core_architectures_resolver.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_CROSS_PLATFORM_COLLABORATION_TURN",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/cross_platform_collaboration_turn.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/cross_platform_collaboration_turn.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_DISTRIBUTED_INSPECTION_RECORD_FLOW",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/distributed_inspection_record_flow.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_EHR_CANONICAL_FRONT_DOORS_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/ehr_canonical_front_doors_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/ehr_canonical_front_doors_map.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_EHR_DISCRETE_RESULT_CONTRACT_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/ehr_discrete_result_contract_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/ehr_discrete_result_contract_map.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_EHR_INTERFACE_ENGINE_RECONCILIATION_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/ehr_interface_engine_reconciliation_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/ehr_interface_engine_reconciliation_map.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_EHR_PGX_ATTENTION_FAILURE_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/ehr_pgx_attention_failure_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/ehr_pgx_attention_failure_map.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_EHR_TWO_CHARTS_FANOUT_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/ehr_two_charts_fanout_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/ehr_two_charts_fanout_map.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_FMI_CLINICAL_TRIAL_COORDINATION_SURFACE",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/fmi_clinical_trial_coordination_surface.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/fmi_clinical_trial_coordination_surface.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_FMI_SHARED_OBJECT_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/fmi_shared_object_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/fmi_shared_object_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_GENOMIC_VIEWER_BOUNDARY_CONTRACT_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/genomic_viewer_boundary_contract_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/genomic_viewer_boundary_contract_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_HIRING_TWO_READER_OPERATING_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/hiring_two_reader_operating_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/hiring_two_reader_operating_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_HUMATICS_ROLE_HANDOFF_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/humatics_role_handoff_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/humatics_role_handoff_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_INITIATIVE_COSTING_METHOD_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/initiative_costing_method_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/initiative_costing_method_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_INSPECTION_PLATFORM_OPERATING_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/inspection_platform_operating_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/inspection_platform_operating_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_LEARNER_SITUATION_MODEL_DESKTOP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+        "media_type": "image/webp"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_MAPS_SOURCE_BOUNDARY",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/maps_source_boundary.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/maps_source_boundary.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_METADATA_SCAN_CONTRACT",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/metadata_scan_contract.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/metadata_scan_contract.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_NEG_DEEP_RESEARCH_COLLABORATION_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/neg_deep_research_collaboration_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/neg_deep_research_collaboration_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_PODA_INVESTMENT_FLOW",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/poda_investment_flow.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/poda_investment_flow.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_PORTRAIT_OF_VVK_TECHNOLOGY_LEADER",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg",
+        "media_type": "image/jpeg"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/portrait-of-vvk-technology-leader.jpg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_PROMPT_SIDE_PRACTICE_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/prompt_side_practice_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/prompt_side_practice_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_PROSPECTIVE_READING_AREA_HIERARCHY",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/prospective_reading_area_hierarchy.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/prospective_reading_area_hierarchy.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_RECOVERABLE_FORM_CONTRACT",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/recoverable_form_contract.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/recoverable_form_contract.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_REGISTRY_GOAL_FIDELITY_OPERATING_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/registry_goal_fidelity_operating_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/registry_goal_fidelity_operating_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_RESTING_CONCEPTS_RETURN_LOOP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/resting_concepts_return_loop.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/resting_concepts_return_loop.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_SHARED_MACHINERY_CONSTELLATION",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/shared_machinery_constellation.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/shared_machinery_constellation.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_SITE_READING_GRAMMAR_SMALL_MULTIPLES",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/site_reading_grammar_small_multiples.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/site_reading_grammar_small_multiples.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_SPATIAL_CAPTURE_COLLABORATIVE_MEMORY",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/spatial_capture_collaborative_memory.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/spatial_capture_collaborative_memory.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_TABLE_READING_CONTRACT",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/table_reading_contract.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_THREE_WAY_COMPARATIVE_OPERATING_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/three_way_comparative_operating_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/three_way_comparative_operating_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_VISUALIZATION_FIDELITY_CLEAN_EXEMPLAR",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/visualization_fidelity_clean_exemplar.svg",
+      "allowed_carriers": [
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_VISUALIZATION_FIDELITY_SELECTOR_FIELD",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_selector_field.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/visualization_fidelity_selector_field.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_ASSET_WHO_TO_BELIEVE_INFLUENCE_MAP",
+      "authority_class": "asset",
+      "role": "primary_asset",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/img/plot/who_to_believe_influence_map.svg",
+        "media_type": "image/svg+xml"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/img/plot/who_to_believe_influence_map.svg",
+      "allowed_carriers": [
+        "jsonld",
+        "open_graph_image",
+        "twitter_image"
+      ],
+      "selection_basis": "The primary route manifest projects this structured-head image at the production origin."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_CORE_ARCHITECTURES",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "core",
+        "route_id": "core-architectures-pack"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/core/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_CORE_ARCHITECTURE_FAMILY_INDEX",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "core",
+        "route_id": "core-architecture-family-index"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/core/core-architecture-family-index/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_CORE_HEART_CHART",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "core",
+        "route_id": "heart-chart"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/core/heart-chart/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_CROSS_FUNCTIONAL_INVESTMENT_STUDIO",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "canvas",
+        "route_id": "cross-functional-investment-studio"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_PROMPT_CONDITIONS_EXPLORER",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "canvas",
+        "route_id": "prompt-conditions-explorer"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/canvas/prompt-conditions-explorer/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_IFRAME_REGISTRY_GOAL_FIDELITY",
+      "authority_class": "iframe",
+      "role": "hosted_instrument",
+      "owner": {
+        "type": "iframe_route_manifest",
+        "family": "canvas",
+        "route_id": "registry-goal-fidelity"
+      },
+      "fragment": null,
+      "expected_url": "https://iframes.vik.guru/v1/canvas/registry-goal-fidelity/",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ABOUT",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/index.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/",
+      "allowed_carriers": [
+        "anchor",
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ABOUT_ABOUT",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/index.html"
+      },
+      "fragment": "about",
+      "expected_url": "https://vik.guru/#about",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ABOUT_ORGANIZATION",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/index.html"
+      },
+      "fragment": "organization",
+      "expected_url": "https://vik.guru/#organization",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ABOUT_WEBSITE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/index.html"
+      },
+      "fragment": "website",
+      "expected_url": "https://vik.guru/#website",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_AI_SYSTEMS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ai-systems.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ai-systems.html",
+      "allowed_carriers": [
+        "anchor",
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_AI_SYSTEMS_COLLECTION",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ai-systems.html"
+      },
+      "fragment": "collection",
+      "expected_url": "https://vik.guru/ai-systems.html#collection",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_BENCHMARK_ORIENTATION",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/benchmark-orientation.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/benchmark-orientation.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_BENCHMARK_ORIENTATION_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/benchmark-orientation.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/benchmark-orientation.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CHOOSE_YOUR_PLAYER_HUMATICS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/choose-your-player-humatics.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CHOOSE_YOUR_PLAYER_HUMATICS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/choose-your-player-humatics.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_COLLABORATION_SKILLS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/collaboration-skills.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/collaboration-skills.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_COLLABORATION_SKILLS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/collaboration-skills.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/collaboration-skills.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CONCEPT_NURSERY",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/concept-nursery.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/concept-nursery.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CONCEPT_NURSERY_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/concept-nursery.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/concept-nursery.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CONDITIONING_FIELD",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/conditioning-field.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/conditioning-field.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CONDITIONING_FIELD_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/conditioning-field.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/conditioning-field.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CORE_ARCHITECTURES_ORIENTATION_INDEX",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/core-architectures-orientation-index.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CORE_ARCHITECTURES_ORIENTATION_INDEX_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/core-architectures-orientation-index.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CROSS_PLATFORM_COLLABORATION_CYCLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/cross-platform-collaboration-cycle.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_CROSS_PLATFORM_COLLABORATION_CYCLE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/cross-platform-collaboration-cycle.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DEBRIEFS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/debriefs.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/debriefs.html",
+      "allowed_carriers": [
+        "anchor",
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DEBRIEFS_BREADCRUMB",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/debriefs.html"
+      },
+      "fragment": "breadcrumb",
+      "expected_url": "https://vik.guru/debriefs.html#breadcrumb",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DEBRIEFS_ITEMLIST",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/debriefs.html"
+      },
+      "fragment": "itemlist",
+      "expected_url": "https://vik.guru/debriefs.html#itemlist",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DEBRIEFS_PRIMARYIMAGE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/debriefs.html"
+      },
+      "fragment": "primaryimage",
+      "expected_url": "https://vik.guru/debriefs.html#primaryimage",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DEBRIEFS_WEBPAGE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/debriefs.html"
+      },
+      "fragment": "webpage",
+      "expected_url": "https://vik.guru/debriefs.html#webpage",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DISTRIBUTED_INSPECTION_HARNESS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/distributed-inspection-harness.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/distributed-inspection-harness.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_DISTRIBUTED_INSPECTION_HARNESS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/distributed-inspection-harness.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/distributed-inspection-harness.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_DISCRETE_GENOMIC_RESULT",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-discrete-genomic-result.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ehr-discrete-genomic-result.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_DISCRETE_GENOMIC_RESULT_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-discrete-genomic-result.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/ehr-discrete-genomic-result.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_INTERFACE_ENGINE_REPLATFORM",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-interface-engine-replatform.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ehr-interface-engine-replatform.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_INTERFACE_ENGINE_REPLATFORM_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-interface-engine-replatform.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/ehr-interface-engine-replatform.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_PGX_ALERT_FAILURE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-pgx-alert-failure.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ehr-pgx-alert-failure.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_PGX_ALERT_FAILURE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-pgx-alert-failure.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/ehr-pgx-alert-failure.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_THREE_FRONT_DOORS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-three-front-doors.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ehr-three-front-doors.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_THREE_FRONT_DOORS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-three-front-doors.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/ehr-three-front-doors.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_TWO_CHARTS_ONE_RESULT",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-two-charts-one-result.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/ehr-two-charts-one-result.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_EHR_TWO_CHARTS_ONE_RESULT_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/ehr-two-charts-one-result.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/ehr-two-charts-one-result.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FIELD_INSPECTION_HARNESS_REPLATFORM",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/field-inspection-harness-replatform.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FIELD_INSPECTION_HARNESS_REPLATFORM_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/field-inspection-harness-replatform.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FMI_CLINICAL_TRIAL_COORDINATION",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/fmi-clinical-trial-coordination.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FMI_CLINICAL_TRIAL_COORDINATION_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/fmi-clinical-trial-coordination.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FMI_LIMS_ELN_REPLATFORMING",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/fmi-lims-eln-replatforming.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_FMI_LIMS_ELN_REPLATFORMING_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/fmi-lims-eln-replatforming.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_GENOMIC_VIEWER_REPLATFORMING",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/genomic-viewer-replatforming.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_GENOMIC_VIEWER_REPLATFORMING_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/genomic-viewer-replatforming.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_GRAMMAR_FAMILY",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/grammar-family.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/grammar-family.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_GRAMMAR_FAMILY_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/grammar-family.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/grammar-family.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_HIRING_SURFACES_TALENT_AGENT_INTAKE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/hiring-surfaces-talent-agent-intake.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_HIRING_SURFACES_TALENT_AGENT_INTAKE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/hiring-surfaces-talent-agent-intake.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_INITIATIVE_COSTING",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/initiative-costing.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/initiative-costing.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_INITIATIVE_COSTING_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/initiative-costing.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/initiative-costing.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_MAPS_EVALUATIONS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/maps-evaluations.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/maps-evaluations.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_MAPS_EVALUATIONS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/maps-evaluations.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/maps-evaluations.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_METADATA_BLOCKS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/metadata-blocks.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/metadata-blocks.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_METADATA_BLOCKS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/metadata-blocks.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/metadata-blocks.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_MULTILINGUAL_CLINICAL_VOCABULARY_PRACTICE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/multilingual-clinical-vocabulary-practice.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_MULTILINGUAL_CLINICAL_VOCABULARY_PRACTICE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/multilingual-clinical-vocabulary-practice.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_NARRATIVE_EXECUTION_GAP_RESEARCH_ATLAS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/narrative-execution-gap-research-atlas.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_NARRATIVE_EXECUTION_GAP_RESEARCH_ATLAS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/narrative-execution-gap-research-atlas.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ONE_FIGURE_SEVERAL_READINGS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/one-figure-several-readings.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/one-figure-several-readings.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ONE_FIGURE_SEVERAL_READINGS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/one-figure-several-readings.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/one-figure-several-readings.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PLANNING_SURFACE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/planning-surface.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/planning-surface.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PLANNING_SURFACE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/planning-surface.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/planning-surface.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PODA",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/poda.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/poda.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PODA_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/poda.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/poda.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PROMPT_SIDE_CONDITIONS_PRACTICE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/prompt-side-conditions-practice.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_PROMPT_SIDE_CONDITIONS_PRACTICE_PRACTICE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html"
+      },
+      "fragment": "practice",
+      "expected_url": "https://vik.guru/prompt-side-conditions-practice.html#practice",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_READABLE_TABLES_REUSABLE_EVIDENCE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/readable-tables-reusable-evidence.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_READABLE_TABLES_REUSABLE_EVIDENCE_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/readable-tables-reusable-evidence.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_RECOVERABLE_ENTERPRISE_FORMS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/recoverable-enterprise-forms.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_RECOVERABLE_ENTERPRISE_FORMS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/recoverable-enterprise-forms.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_REGISTRY_GOAL_FIDELITY_ROUTING",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/registry-goal-fidelity-routing.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_REGISTRY_GOAL_FIDELITY_ROUTING_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/registry-goal-fidelity-routing.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_RESTING_CONCEPTS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/resting-concepts.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/resting-concepts.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_RESTING_CONCEPTS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/resting-concepts.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/resting-concepts.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_SHARED_MACHINERY",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/shared-machinery.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/shared-machinery.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_SHARED_MACHINERY_COLLECTION",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/shared-machinery.html"
+      },
+      "fragment": "collection",
+      "expected_url": "https://vik.guru/shared-machinery.html#collection",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_SPATIAL_CAPTURE_COLLABORATIVE_MEMORY",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/spatial-capture-collaborative-memory.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_SPATIAL_CAPTURE_COLLABORATIVE_MEMORY_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/spatial-capture-collaborative-memory.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_THREE_WAY_COMPARATIVE_RETURN",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/three-way-comparative-return.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/three-way-comparative-return.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_THREE_WAY_COMPARATIVE_RETURN_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/three-way-comparative-return.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/three-way-comparative-return.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_VISUALIZATION_FIDELITY_ATLAS",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/visualization-fidelity-atlas.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_VISUALIZATION_FIDELITY_ATLAS_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/visualization-fidelity-atlas.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_WHO_TO_BELIEVE_REVIEWS_PLATFORM",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html"
+      },
+      "fragment": null,
+      "expected_url": "https://vik.guru/who-to-believe-reviews-platform.html",
+      "allowed_carriers": [
+        "canonical",
+        "jsonld",
+        "open_graph_url",
+        "sitemap"
+      ],
+      "selection_basis": "The primary route manifest and production configuration establish this indexed Context Canvas page at its production route."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_WHO_TO_BELIEVE_REVIEWS_PLATFORM_ARTICLE",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html"
+      },
+      "fragment": "article",
+      "expected_url": "https://vik.guru/who-to-believe-reviews-platform.html#article",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_SCHEMA_CONTEXT_CANVAS_CONTEXT",
+      "authority_class": "schema",
+      "role": "schema_retrieval",
+      "owner": {
+        "type": "schemas_worker_publication",
+        "public_path": "/context-canvas/1.0.0/context-canvas.context.jsonld",
+        "content_type": "application/ld+json"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.context.jsonld",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The schemas Worker publication manifest exposes this Context Canvas resource through its stable companion route."
+    },
+    {
+      "token": "PUBLIC_URL_SCHEMA_CONTEXT_CANVAS_SCHEMA",
+      "authority_class": "schema",
+      "role": "schema_retrieval",
+      "owner": {
+        "type": "schemas_worker_publication",
+        "public_path": "/context-canvas/1.0.0/context-canvas.schema.json",
+        "content_type": "application/json"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The schemas Worker publication manifest exposes this Context Canvas resource through its stable companion route."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_AUDIT_ANTHROPOMORPHIC_CUES",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "audit-anthropomorphic-cues"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/audit-anthropomorphic-cues/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_BOUNDED_SUPPORT_ROUTING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "bounded-support-routing"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/bounded-support-routing/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CATALOG",
+      "authority_class": "skill",
+      "role": "skill_catalog",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": null
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/",
+      "allowed_carriers": [
+        "anchor",
+        "jsonld"
+      ],
+      "selection_basis": "The repository skill publication selection declares the public catalog projection base used by structured data."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_COLLABORATION_ACCOUNTING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "collaboration-accounting"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/collaboration-accounting/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_COLLABORATION_ACCOUNT_EXAMPLE",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "schema_companion_route",
+        "source": "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+        "receiver_path": "collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+        "content_type": "application/json"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The tracked schema companion selection prepares this public example for the accepted Worker publication."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_COLLABORATION_RUNBOOK_AUTHORING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "collaboration-runbook-authoring"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/collaboration-runbook-authoring/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_COLLABORATION_SKILLS_README",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "schema_companion_route",
+        "source": "schemas/collaboration-skills/0.1.0/README.md",
+        "receiver_path": "collaboration-skills/0.1.0/README.md",
+        "content_type": "text/markdown"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/collaboration-skills/0.1.0/README.md",
+      "allowed_carriers": [
+        "anchor",
+        "jsonld"
+      ],
+      "selection_basis": "The selected schema companion route prepares this skill resource for activation in the next accepted Worker publication."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CONTEXTUAL_JARGON_SCAN",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "contextual-jargon-scan"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/contextual-jargon-scan/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CONTEXT_CANVAS_CSS_OWNERSHIP",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "context-canvas-css-ownership"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/context-canvas-css-ownership/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CONTEXT_CANVAS_SURFACE_READING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "context-canvas-surface-reading"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/context-canvas-surface-reading/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CONTEXT_CANVAS_VISUAL_VERIFICATION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "context-canvas-visual-verification"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/context-canvas-visual-verification/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_CONVERSATION_DATA_VISUALIZATION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "conversation-data-visualization"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/conversation-data-visualization/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_COST_AND_OWNERSHIP_ANALYSIS",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "cost-and-ownership-analysis"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/cost-and-ownership-analysis/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_DATA_VISUALIZATION_FOUNDATIONS",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "data-visualization-foundations"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/data-visualization-foundations/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_DECLARATIVE_SKILL_AUTHORING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "declarative-skill-authoring"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/declarative-skill-authoring/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_EMBEDDED_PROTOTYPE_LAYOUT",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "embedded-prototype-layout"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/embedded-prototype-layout/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_EVIDENCE_BEARING_TEST_DESIGN",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "evidence-bearing-test-design"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/evidence-bearing-test-design/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_EVIDENCE_GROUNDED_RESEARCH_SPIKE",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "evidence-grounded-research-spike"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/evidence-grounded-research-spike/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_ISSUE_CHAIN_STEWARDSHIP",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "issue-chain-stewardship"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/issue-chain-stewardship/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_LOCATOR_BOUNDARY_STEWARDSHIP",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "locator-boundary-stewardship"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/locator-boundary-stewardship/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_PDF_DATA_VISUALIZATION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "pdf-data-visualization"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/pdf-data-visualization/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_PORTABLE_SKILL_EXAMPLE",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "schema_companion_route",
+        "source": "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+        "receiver_path": "collaboration-skills/0.1.0/examples/portable-skill.example.json",
+        "content_type": "application/json"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+      "allowed_carriers": [
+        "anchor",
+        "jsonld"
+      ],
+      "selection_basis": "The selected schema companion route prepares this skill resource for activation in the next accepted Worker publication."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_PRACTITIONER_PROBE",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "practitioner-probe"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/practitioner-probe/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_REPOSITORY_ATTRIBUTION_STEWARDSHIP",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "repository-attribution-stewardship"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/repository-attribution-stewardship/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_REPOSITORY_REENTRY",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "repository-reentry"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/repository-reentry/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_RETIRED_PROJECTION_EXAMPLE",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "schema_companion_route",
+        "source": "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+        "receiver_path": "collaboration-skills/0.1.0/examples/retired-projection.example.json",
+        "content_type": "application/json"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The tracked schema companion selection prepares this public example for the accepted Worker publication."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_SCHEMA_CONTRACT_AUTHORING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "schema-contract-authoring"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/schema-contract-authoring/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_SECRET_BOUNDARY_INSPECTION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "secret-boundary-inspection"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/secret-boundary-inspection/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_SEMANTIC_TABLE_DESIGN",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "semantic-table-design"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/semantic-table-design/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_SOURCE_AUTHORITY_MAPPING",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "source-authority-mapping"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/source-authority-mapping/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_STATEFUL_ARTIFACT_BEHAVIOR_CONTRACTS",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "stateful-artifact-behavior-contracts"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/stateful-artifact-behavior-contracts/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_TEST_SUITE_COMPOSITION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "test-suite-composition"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/test-suite-composition/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_UV_BACKED_PYTHON_EXECUTION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "uv-backed-python-execution"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/uv-backed-python-execution/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_WEB_DATA_VISUALIZATION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "web-data-visualization"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/web-data-visualization/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    }
+  ]
+}

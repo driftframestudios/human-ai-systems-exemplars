@@ -349,8 +349,11 @@
       "family": "public-references",
       "kind": "node-test",
       "members": [
+        "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+        "tests/public-references/context-canvas-head-route-validator.test.mjs",
         "tests/public-references/live-route-verifier.test.mjs",
         "tests/public-references/materializer.test.mjs",
+        "tests/public-references/public-route-reference-contract.test.mjs",
         "tests/public-references/registry-reference-contract.test.mjs"
       ],
       "profile": "node-source",
@@ -363,8 +366,9 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "scope": "Registry and repository route authorities, source and generated structured-head relationships, sitemap parity, occurrence-matrix maintenance, deterministic materialization, and bounded synthetic receiver behavior.",
       "aliases": [
+        "test:context-canvas-head-routes",
         "test:public-references"
       ]
     },
@@ -2927,6 +2931,9 @@
       "tools/evidence-inputs.mjs",
       "tools/observation-checkpoint.mjs"
     ],
+    "publicReferenceSupport": [
+      "tests/public-references/source-route-authority.mjs"
+    ],
     "projector": "tools/project_table_context.py",
     "exclusions": [
       "Held untracked Atlas research files are outside the accepted baseline.",
@@ -2938,6 +2945,8 @@
     "npmRunEdges": {
       "test:public-reference-contracts": [
         "test:public-references",
+        "test:context-canvas-head-routes",
+        "test:public-reference-projections",
         "test:citation-atlas-selection",
         "test:suites:unit"
       ],
@@ -2994,9 +3003,17 @@
           "tests/public-references/materializer.test.mjs"
         ],
         "test:public-references": [
+          "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+          "tests/public-references/context-canvas-head-route-validator.test.mjs",
+          "tests/public-references/live-route-verifier.test.mjs",
           "tests/public-references/materializer.test.mjs",
-          "tests/public-references/registry-reference-contract.test.mjs",
-          "tests/public-references/live-route-verifier.test.mjs"
+          "tests/public-references/public-route-reference-contract.test.mjs",
+          "tests/public-references/registry-reference-contract.test.mjs"
+        ],
+        "test:public-reference-projections": [
+          "tests/iframe-routes/packager.test.mjs",
+          "tests/prod-deployment/primary-closure.test.mjs",
+          "tests/prod-deployment/projection.test.mjs"
         ],
         "test:repository-handoff-foundation": [
           "tests/repository-handoff-foundation/foundation.test.mjs",

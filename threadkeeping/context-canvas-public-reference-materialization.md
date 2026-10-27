@@ -2,33 +2,38 @@
 
 ## Desired state
 
-Context Canvas source remains useful to a collaborator without embedding a
-mutable workspace route in durable public-possible history. Stable semantic
-keys preserve the reader job and receiving identity. An authorized build
-supplies the reviewed destination and emits ordinary static links for visitors.
+Context Canvas source remains useful to a collaborator while stable semantic
+keys carry mutable public destinations outside authored identity and
+relationship prose. An authorized build verifies each destination through its
+named owner and emits ordinary static links for visitors.
 
-The public-possible workspace boundary covers the approved source family and
-its descendants. Authored Context Canvas HTML carries no direct workspace page
-route, including a route that may later become public. Private lineage remains
-recoverable through the authorized resolver.
+The public workspace boundary covers the approved source family and its
+descendants. Authored Context Canvas HTML uses semantic keys for pages whose
+lineage began in the workspace. The authorized resolver preserves private
+lineage, including a page that may later become public.
 
 ## Settled source and build contract
 
 - Complete anchor `href` values and token-bearing JSON-LD strings carry one
-  `PUBLIC_URL_REGISTRY_*` key per semantic receiver.
+  `PUBLIC_URL_REGISTRY_*` key per Registry receiver.
+- Canonical links, Open Graph and Twitter metadata, JSON-LD relationships, and
+  sitemap entries carry `PUBLIC_URL_PAGE_*`, `PUBLIC_URL_ASSET_*`,
+  `PUBLIC_URL_IFRAME_*`, `PUBLIC_URL_SCHEMA_*`, or `PUBLIC_URL_SKILL_*` keys.
 - The shared footer script carries the exact
   `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key once. Local source presents a
   useful availability label; a configured build presents the ordinary profile
   link with its descriptive accessible name.
 - Visible link text and neighboring explanation keep the unmaterialized source
   orienting; the generated artifact supplies navigation to the external route.
-- Required keys are discovered from authored HTML and the one approved shared
-  script carrier. A bounded tracked binding selects one exact current Registry
-  Atlas identity for each discovered Registry key; no recurring workspace
-  census or copied Atlas owns that truth.
+- Required keys are discovered from authored HTML, sitemap XML, and the one
+  approved shared script carrier. A bounded Registry binding selects one exact
+  current Atlas identity for each Registry key. A second bounded route binding
+  derives repository-published destinations from primary, iframe, schema, and
+  skill publication owners.
 - Ignored `.env.public` or its matching process-environment value supplies the
-  separately approved professional-profile destination. Registry destinations
-  come from the reviewed binding, and external Registry overrides fail closed.
+  separately approved professional-profile destination. Tracked bindings own
+  Registry and repository-published destinations. The configuration parser
+  directs override attempts back to those owners.
 - The complete Atlas remains an external, dated discovery corpus. The binding
   retains its accepted coordinates and digests while Atlas prose remains inert
   reference data rather than build instruction.
@@ -37,7 +42,7 @@ recoverable through the authorized resolver.
   path-shaped access coordinates and unfamiliar signing conventions.
 - The dependency-free Node 22 materializer copies the
   `context-canvas-project-surface/` subtree, transforms approved Context Canvas
-  HTML carriers and the shared footer-script carrier in a temporary sibling
+  HTML, sitemap, and shared footer-script carriers in a temporary sibling
   generation, validates every accepted carrier, and then replaces only an
   output generation bearing its ownership marker.
 - A configuration or validation failure leaves the prior accepted generation
@@ -47,9 +52,30 @@ recoverable through the authorized resolver.
   configuration remains outside the copied source tree. An exceptional
   filesystem restore failure preserves its ignored recovery directory rather
   than discarding the prior generation.
-- The generated subtree is a materialized build input. A future publication
-  assembler still owns adjacent repository dependencies, audience selection,
-  upload, and recovery.
+- The generated subtree is a materialized build input. The production assembler
+  owns adjacent repository dependencies, audience selection, upload, and
+  recovery.
+
+## Structured-head and sitemap authority
+
+The primary route manifest selects the 40 indexed top-level Context Canvas
+pages. Their canonical, `og:url`, social-image, JSON-LD, and sitemap carriers
+resolve through the same route binding. Page fragments retain their page owner;
+asset routes retain their selected source file; iframe identities retain their
+family and route ID; schema and skill routes retain their publication owners.
+
+The tracked head-authority matrix records every occurrence with its source
+path, carrier or JSON pointer, token, authority class, and relationship role.
+The focused gate derives the page set from the manifest, parses all JSON-LD,
+checks sitemap parity, and aggregates every finding before returning its status.
+The matrix writer prepares a deterministic candidate for review; the ordinary
+check compares source behavior with the tracked candidate.
+
+Four Collaboration Skills companion resources now participate in the tracked
+schema Worker selection: the versioned README, portable skill example, retired
+projection example, and collaboration-account example. Their public route
+activation follows the next accepted Worker publication. The current accepted
+Worker manifest continues to describe the live closure until that release event.
 
 ## Hosted iframe receiver transition
 
@@ -77,12 +103,11 @@ single-file receiver; its adjacent full-view route remains local.
 ## Evidence and evidence boundary
 
 The migration began with a bounded set of workspace identities across anchor
-and JSON-LD occurrences in the Context Canvas HTML family. That observation
-established the initial scope and confirmed one shared semantic-key family.
-The runnable check now discovers the live public-reference and
-professional-profile key set from source, exercises a complete synthetic
-materialization, parses only token-bearing JSON-LD, and confirms that authored
-input and activated iframe destinations remain unchanged.
+and JSON-LD occurrences in the Context Canvas HTML family. The current check
+discovers the complete Registry, page, asset, iframe, schema, skill, and
+professional-profile key set from source; exercises a complete synthetic
+materialization; parses structured metadata and JSON-LD; and confirms sitemap
+membership from the primary manifest.
 
 The build establishes deterministic substitution, exact Registry-key coverage,
 context-appropriate escaping, accepted-Atlas traceability, and
@@ -92,34 +117,27 @@ private resolver and human observation supply those receipts.
 
 The exact proposed-index comparison returned ready in no-additions mode. It
 observed zero tracked workspace-platform route occurrences, with no additions
-in any other scoped locator family. Strict successor readiness remains with the
-established public-baseline chain because the retained repository still carries
-earlier first-party GitHub routes and repository coordinates outside this
-materializer's contract.
+in any other scoped locator family. Repository and external citation links
+retain their separate source owners outside this materializer contract.
 
 ## Receiver sequence
 
-The retained-source implementation is the current front for
-`work:late-bound-public-route-receiver`. Its review-ready return consists of the
-semantic source change, materializer, focused tests, documentation, and a
+Issues #608–#614 coordinate source inventory, route authority, materialization,
+head and sitemap consistency, social metadata, generated-output validation, and
+the later receiver observation. Their review-ready return consists of semantic
+source tokens, tracked bindings and matrix, focused tests, documentation, and a
 locator-safe pull-request receipt.
 
-After acceptance:
-
-1. the successor snapshot collaborator re-forms the first population commit
-   from the accepted source and re-pins its revision-link settlement;
-2. the successor's strict boundary receipt observes a locator-free candidate;
-3. this session verifies that the successor received the materializer contract,
-   ignored configuration boundary, tests, and nearest documentation intact;
-4. the successor-owned Core and Narrative baseline becomes the next
-   stabilization front; and
-5. the first authorized documentation or Context Canvas delivery forms one
-   focused receiver for configuration injection, pre-upload materialization,
-   complete asset closure, and delivery evidence.
+Release-candidate formation remains held while the next About-page change joins
+the release scope. The source contracts and generated-output gate can settle
+independently. After a later release candidate is accepted, the receiving cycle
+will materialize the selected source coordinate, verify the production closure,
+observe live canonical and social behavior, and record the Worker companion
+activation when that publication is included.
 
 The historical Field Inspection pilot keeps its authored-byte parity until
-Issue #428 coordinates complete retirement. The accepted production assembler
-owns the materialize-then-assemble composition seam for current shared delivery.
+Issue #428 coordinates complete retirement. The production assembler owns the
+materialize-then-assemble composition seam for current shared delivery.
 
 ## Skill return
 
@@ -138,11 +156,10 @@ authority layer.
 
 ## Re-entry
 
-Re-enter at the materializer's nearest README and test before changing build
-behavior. The professional-profile destination remains in ignored local or
-delivery configuration and is ready for the production assembler’s eventual
-materialize-then-select seam. Reopen delivery architecture when a named public
-receiver owns a complete asset closure and approved configuration. Reopen
-runtime routing when instant rotation, vanity paths, contextual fallback,
-access observation, or an authenticated synchronization job creates a visitor
-or operator benefit that a rebuild cannot supply.
+Re-enter at the public-reference README, route binding, head-authority matrix,
+and focused gate before changing build behavior. Update the publication owner
+first, then its semantic binding and occurrence matrix. The professional-profile
+destination remains in ignored local or delivery configuration. Reopen runtime
+routing when instant rotation, vanity paths, contextual fallback, access
+observation, or an authenticated synchronization job creates a visitor or
+operator benefit that a rebuild cannot supply.

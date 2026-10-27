@@ -24,6 +24,8 @@ import {
   verifyPackagePlan,
   writePackagePlan,
 } from "./iframe-route-package-engine.mjs";
+import { materializePublicReferenceHtml } from "./materialize-public-references.mjs";
+import { loadPublicRouteReferenceBinding } from "./public-route-reference-contract.mjs";
 
 export {
   assertRegularFile,
@@ -265,7 +267,7 @@ const conditioningFieldProjectionStyle = `  <style data-iframe-route-projection>
   </style>
 `;
 
-export function deriveConditioningFieldProjection(html) {
+export function deriveConditioningFieldProjection(html, routeDestinations = null) {
   if (typeof html !== "string") {
     fail("Conditioning Field projection requires HTML text.");
   }
@@ -289,6 +291,13 @@ export function deriveConditioningFieldProjection(html) {
     /,\n\s*"isBasedOn":\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\n\s*\})/gu,
     "",
     "Unresolved Conditioning Field JSON-LD public reference",
+  );
+  projected = materializePublicReferenceHtml(
+    projected,
+    routeDestinations,
+    "Conditioning Field embedded projection",
+    null,
+    routeDestinations,
   );
   projected = replaceExactOnce(
     projected,
@@ -931,11 +940,14 @@ function sourceRootForRoute(paths, route) {
 }
 
 export async function createPackagePlan(options = {}) {
-  const paths = { ...defaultPaths, ...options };
-  const [routeManifestReading, sourceManifestReading] = await Promise.all([
+  const { publicRouteReference = null, ...pathOptions } = options;
+  const paths = { ...defaultPaths, ...pathOptions };
+  const [routeManifestReading, sourceManifestReading, routeReference] = await Promise.all([
     readJsonFile(paths.sourceRoot, paths.routeManifestPath, "Public iframe route manifest"),
     readJsonFile(paths.sourceRoot, paths.sourceManifestPath, "Core source manifest"),
+    publicRouteReference ?? loadPublicRouteReferenceBinding(),
   ]);
+  const routeDestinations = routeReference.destinations ?? routeReference;
   const contract = routeManifestReading.value;
   const sourceManifest = sourceManifestReading.value;
   validateRouteContract(contract, sourceManifest);
@@ -965,7 +977,7 @@ export async function createPackagePlan(options = {}) {
     const baseProjectionText = route.kind === "hub"
       ? rewriteHub(sourceText, contract)
       : route.kind === "supplemental_instrument"
-        ? deriveConditioningFieldProjection(sourceText)
+        ? deriveConditioningFieldProjection(sourceText, routeDestinations)
         : sourceText;
     const navigationProjection = rewriteDeclaredNavigation(baseProjectionText, route);
     const exitProjection = route.kind === "hub"

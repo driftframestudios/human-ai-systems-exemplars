@@ -15,10 +15,14 @@ import { dirname, join, win32 } from "node:path";
 import test from "node:test";
 
 import {
+  PUBLIC_ASSET_NAMESPACE,
   PUBLIC_AUTHOR_PROFILE_KEY,
   PUBLIC_IFRAME_NAMESPACE,
+  PUBLIC_PAGE_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_REFERENCE_SOURCE,
+  PUBLIC_SCHEMA_NAMESPACE,
+  PUBLIC_SKILL_NAMESPACE,
   inspectPublicReferenceSource,
   isPublicReferencePathWithin,
   materializePublicReferences,
@@ -28,6 +32,10 @@ import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
   loadRegistryReferenceBinding,
 } from "../../tools/registry-reference-contract.mjs";
+import {
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+  loadPublicRouteReferenceBinding,
+} from "../../tools/public-route-reference-contract.mjs";
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
@@ -803,10 +811,6 @@ test("requires explicit hosted iframe carriers and complete local fallbacks", as
        <a href="prototypes/core/other-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
       "PUBLIC_REFERENCE_IFRAME_FALLBACK",
     ],
-    [
-      `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
-      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
-    ],
   ];
 
   for (const [html, code] of cases) {
@@ -821,6 +825,24 @@ test("requires explicit hosted iframe carriers and complete local fallbacks", as
       );
     });
   }
+});
+
+test("allows structured data to identify a hosted instrument without embedding it", async (t) => {
+  const paths = await fixture(
+    t,
+    `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
+  );
+  await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.deepEqual(jsonLdBodies(generated).map((body) => JSON.parse(body)), [
+    { contentUrl: IFRAME_ROUTE },
+  ]);
 });
 
 test("requires a minimal explicit policy on hosted iframe carriers", async (t) => {
@@ -1167,11 +1189,15 @@ test("the repository source materializes from discovered keys without frozen rou
     assert.equal(
       key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
         key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+        key.startsWith(PUBLIC_PAGE_NAMESPACE) ||
+        key.startsWith(PUBLIC_ASSET_NAMESPACE) ||
+        key.startsWith(PUBLIC_SCHEMA_NAMESPACE) ||
+        key.startsWith(PUBLIC_SKILL_NAMESPACE) ||
         key === PUBLIC_AUTHOR_PROFILE_KEY,
       true,
     );
   }
-  assert.equal(inventory.keys.has(IFRAME_KEY), false);
+  assert.equal(inventory.keys.has(IFRAME_KEY), true);
   assert.equal(inventory.iframeCount, 0);
 
   const expectedLocalFallback =
@@ -1220,10 +1246,24 @@ test("the repository source materializes from discovered keys without frozen rou
   });
   assert.equal(registryReference.destinations.size, registryKeys.length);
   assert.equal(registryReference.receipt.atlas.publicRoot, "https://kindlight.systems/");
+  const routeKeys = [...inventory.keys]
+    .filter((key) =>
+      key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+      key.startsWith(PUBLIC_PAGE_NAMESPACE) ||
+      key.startsWith(PUBLIC_ASSET_NAMESPACE) ||
+      key.startsWith(PUBLIC_SCHEMA_NAMESPACE) ||
+      key.startsWith(PUBLIC_SKILL_NAMESPACE))
+    .sort();
+  const routeReference = await loadPublicRouteReferenceBinding({
+    path: DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+    requiredKeys: routeKeys,
+  });
+  assert.equal(routeReference.destinations.size, routeKeys.length);
 
   const before = new Map();
   const materializedRecords = [
     ...inventory.htmlFiles,
+    ...inventory.sitemapFiles,
     ...inventory.scriptFiles,
   ];
   for (const record of materializedRecords) {
@@ -1254,12 +1294,14 @@ test("the repository source materializes from discovered keys without frozen rou
   }
 
   assert.equal(result.registryReference.bindingCount, registryKeys.length);
+  assert.equal(result.routeReference.bindingCount, routeKeys.length);
   const marker = JSON.parse(
     await readFile(join(outputRoot, ".public-reference-materialization.json"), "utf8"),
   );
-  assert.equal(marker.format, 2);
+  assert.equal(marker.format, 3);
   assert.equal(marker.registry_reference.bindingCount, registryKeys.length);
   assert.equal(marker.registry_reference.atlas.referenceVersion, "0.2.1");
+  assert.equal(marker.route_reference.bindingCount, routeKeys.length);
 
   const generatedShell = await readFile(
     join(outputRoot, "context-canvas/canvas-shell.js"),

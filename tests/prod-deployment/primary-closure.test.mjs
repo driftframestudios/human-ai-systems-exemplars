@@ -11,6 +11,10 @@ import {
   validatePrimaryManifest,
 } from "../../tools/build-prod-projection.mjs";
 import { createAggregatePackagePlan } from "../../tools/package-v1-iframe-routes.mjs";
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -137,16 +141,16 @@ function allJsonLdObjects(value) {
   return [value, ...Object.values(value).flatMap(allJsonLdObjects)];
 }
 
-function pageDateModified(html, location, label) {
+function pageDateModified(html, location, label, authority) {
   const document = firstJsonLd(html, label);
   if (typeof document.dateModified === "string") return document.dateModified;
   const dates = new Set(
     allJsonLdObjects(document)
-      .filter((entry) =>
-        entry.url === location ||
-        entry["@id"] === location ||
-        (typeof entry["@id"] === "string" && entry["@id"].startsWith(`${location}#`)),
-      )
+      .filter((entry) => {
+        const url = resolveSourceRouteValue(entry.url, authority);
+        const id = resolveSourceRouteValue(entry["@id"], authority);
+        return url === location || id === location || id?.startsWith(`${location}#`);
+      })
       .map((entry) => entry.dateModified)
       .filter((value) => typeof value === "string"),
   );
@@ -404,30 +408,32 @@ test("the semantic inventory resolves every selected image without becoming a me
 });
 
 test("the sitemap identifies exactly the 40 indexable production routes with page-owned dates", async () => {
+  const authority = await loadSourceRouteAuthority();
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",
   );
-  const legacyBase =
-    "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+  const publicBase = "https://vik.guru/";
   const entries = [...sitemap.matchAll(
     /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/gu,
   )].map(([, location, lastModified]) => ({ location, lastModified }));
   const routes = entries.map(({ location }) => {
-    assert.ok(location.startsWith(legacyBase), location);
-    return location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const resolved = resolveSourceRouteValue(location, authority);
+    assert.ok(resolved.startsWith(publicBase), resolved);
+    return resolved === publicBase ? "index.html" : resolved.slice(publicBase.length);
   });
   assert.deepEqual(routes.sort(), acceptedRoutes);
   assert.equal(routes.includes("404.html"), false);
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
   for (const { location, lastModified } of entries) {
-    const route = location === legacyBase ? "index.html" : location.slice(legacyBase.length);
+    const resolved = resolveSourceRouteValue(location, authority);
+    const route = resolved === publicBase ? "index.html" : resolved.slice(publicBase.length);
     const html = await readFile(path.join(repositoryRoot, canvasRoot, route), "utf8");
     // Advance both owners for meaningful public content or structured-data changes.
     // Mechanical styling and footer-only edits keep the latest substantive date.
     assert.equal(
       lastModified,
-      pageDateModified(html, location, route),
+      pageDateModified(html, resolved, route, authority),
       `${route}: current modification date`,
     );
   }
