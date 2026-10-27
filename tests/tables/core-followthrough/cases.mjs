@@ -1,3 +1,4 @@
+import '../../../tools/node-runtime-admission.mjs';
 export const coreRoot = "core-architectures-chimeric-prototype-current-pack-v0.1/";
 export const canvasRoot = "context-canvas-project-surface/context-canvas/";
 export const projectionRoot = `${canvasRoot}prototypes/core-architectures/chimeric-pack-v0.1/`;
