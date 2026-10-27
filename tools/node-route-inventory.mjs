@@ -10,7 +10,11 @@ const execFileAsync = promisify(execFile);
 const ROOT = path.resolve(import.meta.dirname, '..');
 const ADMISSION = 'tools/node-runtime-admission.mjs';
 const BOOTSTRAPS = new Set(['tools/check-node-runtime.mjs', ADMISSION]);
-const FROZEN = 'cloudflare/schemas-worker/public/';
+// Tracked publication closures keep their originating source owner's runtime classification.
+const FROZEN_PREFIXES = [
+  'cloudflare/schemas-worker/public/',
+  'deployment/cpanel/carrier/',
+];
 const HISTORICAL = new Set(['tests/suites/baseline-e1f00de.json']);
 const WORKER = new Set([
   'cloudflare/r2-video-delivery/src/entrypoints.js',
@@ -39,6 +43,10 @@ const BROWSER_SHARED = new Set([
   'lims-eln-functional-nucleus/lims-eln-enterprise-implementation/src/lims_eln_implementation/workbench/static/workbench.js',
 ]);
 
+function isFrozenPublication(file) {
+  return FROZEN_PREFIXES.some(prefix => file.startsWith(prefix));
+}
+
 function safePath(value) {
   if (typeof value !== 'string' || !value || value.includes('\\') || value.startsWith('/') || value.split('/').some(part => !part || part === '.' || part === '..')) {
     throw new Error('Inventory inputs require canonical repository-relative paths.');
@@ -48,7 +56,7 @@ function safePath(value) {
 
 export function classifyJavaScript(file) {
   safePath(file);
-  if (file.startsWith(FROZEN)) return 'frozen-publication';
+  if (isFrozenPublication(file)) return 'frozen-publication';
   if (BOOTSTRAPS.has(file)) return 'bootstrap';
   if (WORKER.has(file)) return 'workerd';
   if (BROWSER_SHARED.has(file)) return 'browser-shared';
@@ -228,7 +236,7 @@ function jsonCommands(value, out = []) {
 }
 
 function carrierCommands(file, source) {
-  if (file.startsWith(FROZEN) || HISTORICAL.has(file) || /(?:^|\/)(?:package(?:-lock)?|npm-shrinkwrap)\.json$/.test(file)) return [];
+  if (isFrozenPublication(file) || HISTORICAL.has(file) || /(?:^|\/)(?:package(?:-lock)?|npm-shrinkwrap)\.json$/.test(file)) return [];
   if (/\.(?:md|markdown)$/.test(file)) return markdownCommands(source);
   if (file.endsWith('.json')) {
     try {
