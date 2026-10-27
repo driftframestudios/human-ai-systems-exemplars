@@ -29,6 +29,51 @@ The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/REA
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.vik.guru`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the earlier v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 Worker publication and signed-out receipt.
 
+## About comparison and Gallery scroll pilot
+
+About owns the vertical reading flow through its native heatmap comparison and
+its opted-in AI Method Gallery. The full Investment Studio and Prompt Conditions
+Explorer retain their existing independent carriers.
+
+`collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
+`tools/materialize-about-heatmap.mjs` projects its two figures, captions, and
+interpretation into a marked native block in `index.html`; `about-heatmap.js`
+adds root-scoped Before, After, and Side-by-side controls. Static and print
+readings retain both figures. `styles/routes/about.css` owns the receiving
+composition and uses the existing About palette. Run `npm run build:about-heatmap`
+after an intentional canonical content edit and `npm run check:about-heatmap`
+to verify the receiving projection.
+
+Only `iframe[data-about-gallery-fit]` receives `about-gallery-fit.js`. A fresh
+MessageChannel belongs to each frame document; the parent accepts a bounded,
+versioned whole-pixel height and releases its reserved minimum after admission.
+The child's inline adapter measures its natural body, including the packaged
+footer. Its body height stays independent of the frame viewport, allowing
+both expansion and shrinkage. The fitted presentation lets prompt and contract
+text flow and introduces separate matrix disclosures. The full-view route and
+ordinary frame sizing remain the fallback when the channel is unavailable.
+Existing sandbox permissions and hosted route identity retain their owners.
+The standalone Gallery preserves its complete static and print comparisons;
+About keeps its existing print policy for embedded instruments. The native
+heatmap participates directly in About print.
+
+Focused source observations:
+
+```sh
+node --test tests/context-canvas/about-heatmap.test.mjs tests/context-canvas/about-gallery-fit.test.mjs
+npm run check:about-heatmap
+npm run test:about-scroll-browser
+```
+
+The browser checks exercise Chromium, Firefox, and Playwright WebKit. Gallery
+cases explicitly substitute the freshly packaged child on a second local origin
+while preserving the production sandbox. This establishes local source and
+package behavior; the unchanged hosted child and native device input retain
+separate observations. A future authorized release publishes and verifies the
+compatible child before receiving the parent enhancement. Publication remains
+held for this dev pilot. Issues #616 and #617 hold acceptance and the reviewed PR
+receipt; #596 retains independent probability-calibration ownership.
+
 ## Primary navigation
 
 Forty top-level routes share the three native destination links owned by

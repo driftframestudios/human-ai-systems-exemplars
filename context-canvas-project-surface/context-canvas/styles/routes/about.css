@@ -122,7 +122,7 @@
     --about-shadow: .65rem .65rem 0 #1f325b;
     background: var(--about-canvas);
     color: var(--about-ink);
-    min-inline-size: 17.5rem;
+    min-inline-size: min(100%, 17.5rem);
 }
 
 .about-page main {
@@ -585,6 +585,12 @@ p#on-dark-iron-ore {
     display: block;
     inline-size: 100%;
     min-block-size: 48rem;
+}
+
+/* Gallery height belongs to its admitted document channel; other carriers keep their reservation. */
+.about-embed iframe[data-about-gallery-fit][data-gallery-fit="ready"] {
+    min-block-size: 0;
+    block-size: var(--about-gallery-block-size);
 }
 
 .about-embed--studio iframe {
@@ -1834,4 +1840,107 @@ p#on-dark-iron-ore {
   .about-page .about-prompt-static > summary {
     display: none;
   }
+}
+
+
+/* Native navigation-evidence receiver. Content is projected from the standalone
+   heatmap; About owns containment, reflow, optional view selection, and media. */
+.about-heatmap {
+    background: var(--about-paper);
+    border: .15rem solid var(--about-ink);
+    border-radius: .75rem;
+    color: var(--about-ink);
+    margin-block-start: 2rem;
+    min-inline-size: 0;
+}
+
+.about-heatmap__header {
+    background: var(--about-info);
+    border-block-end: .15rem solid var(--about-ink);
+    border-radius: .6rem .6rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.about-heatmap__header > div { min-inline-size: 0; }
+.about-heatmap__header h3 { margin: .3rem 0; }
+.about-heatmap p { color: var(--about-muted); font-size: 1rem; margin: .5rem 0; }
+.about-heatmap__eyebrow { font: 800 .75rem "SFMono-Regular", Consolas, monospace; }
+
+.about-heatmap__controls {
+    align-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.about-heatmap__controls button {
+    align-items: center;
+    background: var(--about-paper);
+    border: .125rem solid var(--about-ink);
+    border-radius: .4rem;
+    color: var(--about-ink);
+    cursor: pointer;
+    display: inline-flex;
+    font: 800 1rem/1.4 system-ui, sans-serif;
+    gap: .35rem;
+    max-inline-size: 100%;
+    min-block-size: 2.75rem;
+    padding: .5rem .7rem;
+    white-space: normal;
+}
+
+.about-heatmap__controls svg { flex: none; inline-size: 1rem; block-size: 1rem; }
+.about-heatmap__controls [aria-pressed="true"] { background: var(--about-tiffany); border-style: double; }
+.about-heatmap__controls [aria-pressed="true"]::after { content: "✓"; }
+.about-heatmap__controls button:focus-visible { outline: .2rem solid var(--about-cobalt); outline-offset: .2rem; }
+.about-heatmap__status { background: var(--about-route); padding: .65rem 1rem; }
+.about-heatmap [hidden] { display: none; }
+
+.about-heatmap__views {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    padding: 1rem;
+}
+
+.about-heatmap__view {
+    background: var(--about-paper);
+    border: .1rem solid var(--about-ink);
+    margin: 0;
+    min-inline-size: 0;
+}
+
+.about-heatmap__view img { block-size: auto; display: block; inline-size: 100%; max-inline-size: 100%; }
+.about-heatmap__view figcaption {
+    border-block-start: .1rem solid var(--about-ink);
+    color: var(--about-ink);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    gap: .5rem;
+    padding: .8rem;
+}
+.about-heatmap__view figcaption > span:last-child { flex: 1 1 15rem; min-inline-size: 0; }
+.about-heatmap__marker { align-self: start; border: .1rem solid; font-weight: 800; padding: .1rem .4rem; }
+.about-heatmap__view[data-view="after"] .about-heatmap__marker { background: var(--about-tiffany); }
+.about-heatmap__foot { border-block-start: .15rem solid var(--about-ink); padding: .8rem 1rem; }
+.about-heatmap[data-mode="before"] .about-heatmap__views,
+.about-heatmap[data-mode="after"] .about-heatmap__views { grid-template-columns: minmax(0, 1fr); }
+.about-heatmap[data-mode="before"] [data-view="after"],
+.about-heatmap[data-mode="after"] [data-view="before"] { display: none; }
+
+@media (forced-colors: active) {
+    .about-heatmap, .about-heatmap__view, .about-heatmap__controls button { border-color: CanvasText; }
+    .about-heatmap__controls [aria-pressed="true"] { outline: .15rem double CanvasText; }
+    .about-heatmap__controls button:focus { outline: .2rem solid Highlight; }
+}
+
+@media print {
+    .about-heatmap__controls, .about-heatmap__status { display: none; }
+    .about-heatmap[data-mode] .about-heatmap__view { display: block; break-inside: avoid; }
+    .about-heatmap[data-mode] .about-heatmap__views { grid-template-columns: minmax(0, 1fr); }
 }
