@@ -36,6 +36,7 @@ GitHub-owned action revisions:
 | `actions/checkout` | `v7.0.1` | `3d3c42e5aac5ba805825da76410c181273ba90b1` |
 | `actions/setup-node` | `v7.0.0` | `820762786026740c76f36085b0efc47a31fe5020` |
 | `actions/setup-python` | `v7.0.0` | `5fda3b95a4ea91299a34e894583c3862153e4b97` |
+| `actions/cache` | `v6.1.0` | `55cc8345863c7cc4c66a329aec7e433d2d1c52a9` |
 | `actions/configure-pages` | `v6.0.0` | `45bfe0192ca1faeb007ade9deae92b16b8254a0d` |
 | `actions/upload-pages-artifact` | `v5.0.0` | `fc324d3547104276b827a68afc52ff2a11cc49c9` |
 | `actions/deploy-pages` | `v5.0.0` | `cd2ce8fcbc39b97be8ca5fce6e763baed58fa128` |
@@ -61,15 +62,33 @@ rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
 coverage requires `include_browser=true`, while an enabled PR receiver includes
 the selected browser contracts. Chromium supports every browser-enabled
 selection, WebKit joins `iframe` and `all`, and Firefox joins `all`. The
-workflow's separate ten-minute media job
-runs for matching pull requests and for confirmed `media` or `all` dispatches.
-That job installs the locked Node toolchain, Chromium, and FFmpeg; exercises
-media preparation, manifest, delivery, and native-video receiver contracts;
-and dry-runs the Worker package. Same-ref manual suites can supersede one
-another. The LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a
-selected confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise
-offline and database matrix jobs have fifteen- and thirty-minute ceilings
-respectively. Those ceilings remain distinct from approved allocations.
+workflow's separate thirty-minute media job runs for matching pull requests
+and for confirmed `media` or `all` dispatches. That job installs the locked
+Node toolchain, selects the Google Chrome channel provided by the reviewed
+Ubuntu runner for its native-video receiver contract, and installs FFmpeg from
+a verified APT archive closure. The GitHub-owned cache action restores that
+closure by operating system, architecture, resolved package-plan digest, and
+runner-image coordinate. A trusted `main` dispatch saves a newly verified
+closure after every media test and the Worker dry run passes. Pull-request jobs
+consume an accessible default-branch closure and leave publication ownership
+with the trusted dispatch.
+
+Cache standing changes preparation time while APT retains package-integrity
+authority and every behavioral check still runs. An exact hit, compatible
+restore, miss, or unavailable standing appears in the job summary with the
+runner image, tool versions, phase timings, test outcome, and Worker
+compilation outcome.
+GitHub owns cache retention and eviction. A confirmed `main` dispatch can
+re-warm an evicted entry after the complete proof passes. The focused rollback
+removes the restore and save steps and returns the same manifest to direct APT
+installation.
+The cache path contains APT package archives; credentials, browser profiles,
+generated receipts, logs, and installed dependency trees remain with their
+existing owners. Same-ref manual suites can supersede one another. The
+LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a selected
+confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise offline
+and database matrix jobs have fifteen- and thirty-minute ceilings respectively.
+Those ceilings remain distinct from approved allocations.
 
 The production-carrier lane accepted in PR #255 receives matching `main` pull
 requests, including drafts, and manual dispatch. Its read-only ten-minute job
