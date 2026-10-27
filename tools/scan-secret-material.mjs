@@ -1,3 +1,5 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 import { createHash, randomBytes } from "node:crypto";
 import { constants as filesystemConstants } from "node:fs";
 import {
@@ -752,7 +754,7 @@ async function main() {
   process.stdout.write(renderReceipt(receipt));
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isDirectExecution(import.meta.url)) {
   main().catch((error) => {
     if (error instanceof SecretScanFindingsError) {
       process.stderr.write(renderFindings(error));

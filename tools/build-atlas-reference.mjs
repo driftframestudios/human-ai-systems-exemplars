@@ -1,7 +1,9 @@
+import './node-runtime-admission.mjs';
+import { isDirectExecution } from './check-node-runtime.mjs';
 /** Static SECOM reference owner. Parse O(n); aggregate O(n + m log m); render O(m). */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
@@ -157,7 +159,7 @@ export async function buildReference({ check = false } = {}) {
   return { records: derived.sourceRows, failures: derived.failures, windows: groups.length, outputs: outputs.length };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (isDirectExecution(import.meta.url)) {
   const flag = process.argv[2];
   if (!['--write', '--check'].includes(flag) || process.argv.length !== 3) throw new Error('Use --write to derive outputs or --check to compare them.');
   console.log(JSON.stringify(await buildReference({ check: flag === '--check' })));

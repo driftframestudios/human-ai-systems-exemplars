@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import test from "node:test";
 import { Worker } from "node:worker_threads";
 import assert from "node:assert/strict";

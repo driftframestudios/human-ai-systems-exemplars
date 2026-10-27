@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";

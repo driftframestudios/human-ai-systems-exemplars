@@ -151,7 +151,7 @@ directory established that Worker and root resolve the same installed
 Playwright package:
 
 ```sh
-node --input-type=module -e 'import assert from "node:assert/strict"; import {createRequire} from "node:module"; import {resolve} from "node:path"; const worker=createRequire(resolve("package.json")); const root=createRequire(resolve("../../package.json")); assert.equal(worker.resolve("playwright"),root.resolve("playwright")); console.log("Worker and root resolve the same Playwright package; no browser launched.");'
+node --import ../../tools/node-runtime-admission.mjs --input-type=module -e 'import assert from "node:assert/strict"; import {createRequire} from "node:module"; import {resolve} from "node:path"; const worker=createRequire(resolve("package.json")); const root=createRequire(resolve("../../package.json")); assert.equal(worker.resolve("playwright"),root.resolve("playwright")); console.log("Worker and root resolve the same Playwright package; no browser launched.");'
 ```
 
 That observation establishes local dependency resolution, not Chromium
