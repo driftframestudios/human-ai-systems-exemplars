@@ -8,7 +8,7 @@ import { startStaticServer } from "../../tools/core-architecture-browser-helper.
 
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const routes = [
-  { label: "About", path: "index.html", imageCount: 1, expectsLazyImage: false },
+  { label: "About", path: "index.html", imageCount: 3, expectsLazyImage: false },
   { label: "AI Systems", path: "ai-systems.html", imageCount: 15, expectsLazyImage: true },
   { label: "Debriefs", path: "debriefs.html", imageCount: 20, expectsLazyImage: true },
 ];
@@ -120,7 +120,7 @@ async function observeRoute(browser, route) {
       assert.equal(
         lazyImageCount,
         0,
-        `${route.label} keeps its sole above-the-fold image eager; the native-video poster has a focused contract`,
+        `${route.label} keeps its authored images eager; the native-video poster has a focused contract`,
       );
     }
 

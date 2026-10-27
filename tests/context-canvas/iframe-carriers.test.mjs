@@ -116,12 +116,6 @@ const expectedCarrierInventory = [
   ],
   [
     primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/heatmap-comparison/",
-    "Interactive before and after heatmap comparison",
-    "lazy",
-  ],
-  [
-    primaryIndexOwner,
     "https://iframes.vik.guru/v1/canvas/ai-method-gallery/",
     "Interactive AI and ML method gallery",
     "lazy",
@@ -203,7 +197,6 @@ const expectedCarrierInventory = [
 const expectedDuplicateRouteCounts = [
   ["https://iframes.vik.guru/v1/canvas/ai-method-gallery/", 2],
   ["https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/", 2],
-  ["https://iframes.vik.guru/v1/canvas/heatmap-comparison/", 2],
   ["https://iframes.vik.guru/v1/canvas/registry-goal-fidelity/", 2],
   ["https://iframes.vik.guru/v1/core/strategy-canvas/", 2],
 ];
@@ -360,17 +353,17 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
     expectedCarrierInventory,
     "the authored owner, route, title, loading, and source order stay explicit",
   );
-  assert.equal(carriers.length, 28, "the visitor source owns 28 iframe occurrences");
+  assert.equal(carriers.length, 27, "the visitor source owns 27 iframe occurrences");
   assert.equal(new Set(carriers.map(({ src }) => src)).size, 23, "the carriers use 23 routes");
   assert.equal(new Set(carriers.map(({ owner }) => owner)).size, 18, "18 visitor files own carriers");
   const canvasCarriers = carriers.filter(({ src }) =>
     src.startsWith("https://iframes.vik.guru/v1/canvas/"));
-  assert.equal(canvasCarriers.length, 19, "the Canvas manifest owns 19 carrier occurrences");
+  assert.equal(canvasCarriers.length, 18, "the Canvas manifest owns 18 carrier occurrences");
   assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 15, "the Canvas carriers use 15 routes");
   assert.deepEqual(
     routeCountEntries(carriers).filter(([, count]) => count > 1),
     expectedDuplicateRouteCounts,
-    "only the five declared routes have duplicate carriers",
+    "the four declared routes have duplicate carriers",
   );
 
   for (const carrier of carriers) {
@@ -462,7 +455,7 @@ test("the Who To Believe Context Tree sits beside outcomes in an expanded viewin
   );
 });
 
-test("the retained cobalt exemplar keeps exact carrier parity with the primary index", async () => {
+test("the retained cobalt exemplar keeps its heatmap and parity for shared primary-index carriers", async () => {
   const carriers = await discoverVisitorCarriers();
   const exemplars = carriers.filter(({ owner }) => owner === exemplarOwner);
   const primary = carriers.filter(({ owner }) => owner === primaryIndexOwner);
@@ -475,7 +468,11 @@ test("the retained cobalt exemplar keeps exact carrier parity with the primary i
       "https://iframes.vik.guru/v1/canvas/ai-method-gallery/",
     ],
   );
-  for (const exemplar of exemplars) {
+  const shared = exemplars.filter(({ src }) => !src.endsWith('/heatmap-comparison/'));
+  assert.equal(shared.length, 2, "Studio and Gallery retain their shared carrier boundary");
+  assert.equal(primary.some(({ src }) => src.endsWith('/heatmap-comparison/')), false,
+    "About receives the heatmap as native content");
+  for (const exemplar of shared) {
     const twin = primary.find(({ src }) => src === exemplar.src);
     assert.ok(twin, `${exemplar.src} has a primary-index twin`);
     assert.deepEqual(

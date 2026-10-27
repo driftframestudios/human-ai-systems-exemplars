@@ -9,6 +9,11 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/context-canvas/about-heatmap.test.mjs',
+  'tests/context-canvas/about-gallery-fit.test.mjs',
+  'tests/context-canvas/about-heatmap.browser.mjs',
+  'tests/context-canvas/about-gallery-fit.browser.mjs',
+
   'tests/context-canvas/debrief-evidence-cards.browser.mjs',
   'tests/context-canvas/debrief-callout-integrity.browser.mjs',
   'tests/security/node-route-inventory.test.mjs',
