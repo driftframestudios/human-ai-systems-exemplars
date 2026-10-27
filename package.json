@@ -57,9 +57,11 @@
     "test:dependency-security": "node tools/check-node-runtime.mjs --quiet && node --test tests/security/dependency-security.test.mjs",
     "test:open-lesson-field": "node tools/check-node-runtime.mjs --quiet && node tools/open-lesson-field-contract.mjs",
     "test:public-reference-materializer": "node tools/check-node-runtime.mjs --quiet && node --test tests/public-references/materializer.test.mjs",
-    "test:public-references": "node tools/check-node-runtime.mjs --quiet && node --test tests/public-references/materializer.test.mjs tests/public-references/registry-reference-contract.test.mjs tests/public-references/live-route-verifier.test.mjs",
+    "test:public-references": "node tools/check-node-runtime.mjs --quiet && node --test tests/public-references/context-canvas-head-authority-matrix.test.mjs tests/public-references/context-canvas-head-route-validator.test.mjs tests/public-references/live-route-verifier.test.mjs tests/public-references/materializer.test.mjs tests/public-references/public-route-reference-contract.test.mjs tests/public-references/registry-reference-contract.test.mjs",
+    "test:context-canvas-head-routes": "node tools/check-node-runtime.mjs --quiet && node tools/check-context-canvas-head-routes.mjs",
+    "test:public-reference-projections": "node tools/check-node-runtime.mjs --quiet && node --test tests/iframe-routes/packager.test.mjs tests/prod-deployment/primary-closure.test.mjs tests/prod-deployment/projection.test.mjs",
     "test:citation-atlas-selection": "node tools/check-node-runtime.mjs --quiet && env PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v tests.skills.citation_atlas_selection_test",
-    "test:public-reference-contracts": "node tools/check-node-runtime.mjs --quiet && npm run test:public-references && npm run test:citation-atlas-selection && npm run test:suites:unit",
+    "test:public-reference-contracts": "node tools/check-node-runtime.mjs --quiet && npm run test:public-references && npm run test:context-canvas-head-routes && npm run test:public-reference-projections && npm run test:citation-atlas-selection && npm run test:suites:unit",
     "verify:registry-public-references": "node tools/check-node-runtime.mjs --quiet && node tools/verify-registry-public-references.mjs",
     "test:context-canvas": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/*.test.mjs",
     "test:context-canvas-medium-containment": "node tools/check-node-runtime.mjs --quiet && node tools/context-canvas-medium-containment-contract.mjs",
@@ -147,7 +149,12 @@
     "wrangler": "node tools/check-node-runtime.mjs --quiet && wrangler",
     "check:node-routes": "node tools/check-node-runtime.mjs --quiet && node tools/node-route-inventory.mjs",
     "test:debrief-evidence-cards-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/debrief-evidence-cards.browser.mjs",
-    "test:debrief-callout-integrity-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/debrief-callout-integrity.browser.mjs"
+    "test:debrief-callout-integrity-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/debrief-callout-integrity.browser.mjs",
+    "build:visual-fidelity-pattern-library": "node tools/check-node-runtime.mjs --quiet && node tools/build-visual-fidelity-pattern-library.mjs",
+    "check:visual-fidelity-pattern-library": "node tools/check-node-runtime.mjs --quiet && node tools/build-visual-fidelity-pattern-library.mjs --check",
+    "test:visual-fidelity-contracts:source": "node tools/check-node-runtime.mjs --quiet && node --test tests/visual-fidelity-contracts/component-model.test.mjs tests/visual-fidelity-contracts/component-page.test.mjs tests/visual-fidelity-contracts/component-probes.test.mjs tests/visual-fidelity-contracts/contract-art-directions.test.mjs tests/visual-fidelity-contracts/data-view-model.test.mjs tests/visual-fidelity-contracts/data-view-page.test.mjs tests/visual-fidelity-contracts/design-token-pipeline.test.mjs tests/visual-fidelity-contracts/foundation-contracts.test.mjs tests/visual-fidelity-contracts/lifecycle-model.test.mjs tests/visual-fidelity-contracts/lifecycle-source.test.mjs tests/visual-fidelity-contracts/pattern-library.test.mjs tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
+    "test:visual-fidelity-contracts:browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/visual-fidelity-contracts/component.browser.mjs tests/visual-fidelity-contracts/contract-art-directions.browser.mjs tests/visual-fidelity-contracts/data-view-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs tests/visual-fidelity-contracts/pattern-library.browser.mjs tests/visual-fidelity-contracts/service-boundary.browser.mjs",
+    "test:visual-fidelity-contracts": "node tools/check-node-runtime.mjs --quiet && npm run test:visual-fidelity-contracts:source && npm run check:visual-fidelity-pattern-library && npm run test:visual-fidelity-contracts:browser"
   },
   "overrides": {
     "fast-uri": "4.1.5"
@@ -156,6 +163,10 @@
     "@playwright/test": "^1.62.1",
     "ajv": "^8.20.0",
     "csso": "5.0.5",
+    "esbuild": "0.28.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "sharp": "^0.35.5",
     "wrangler": "4.149.0"
   }
 }

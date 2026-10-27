@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "componentLabId": "visual-fidelity-component-lab",
+  "revision": "catalog-invalid",
+  "catalog": [
+    {
+      "sku": "field-notebook",
+      "label": "Field notebook",
+      "unitPriceCents": 1800,
+      "stock": 12
+    }
+  ]
+}

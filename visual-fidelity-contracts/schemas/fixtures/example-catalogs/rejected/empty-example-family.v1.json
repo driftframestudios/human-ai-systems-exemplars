@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+  "schemaVersion": "1.0.0",
+  "libraryId": "visual-fidelity-pattern-library",
+  "reviewedOn": "2026-10-20",
+  "publicCollection": "https://kindlight.systems/visual-fidelity-contracts",
+  "generation": {
+    "command": "npm run build:visual-fidelity-pattern-library",
+    "check": "npm run check:visual-fidelity-pattern-library",
+    "widths": [640, 1280, 1600]
+  },
+  "examples": []
+}

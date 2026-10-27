@@ -15,6 +15,9 @@ Node entrypoints load the same guard before downstream module evaluation.
 npm run test:suites:list
 node tools/test-suite-plan.mjs --suite node.visualization-fidelity-atlas --json
 node tools/test-suite-plan.mjs --suite browser.visualization-fidelity-atlas.atlas-gallery.browser --json
+node tools/test-suite-plan.mjs --suite node.visual-fidelity-contracts --json
+node tools/test-suite-plan.mjs --suite browser.visual-fidelity-contracts --json
+node tools/test-suite-plan.mjs --suite node.public-references --json
 node tools/test-suite-plan.mjs --suite python.tables.table-context --json
 node tools/test-suite-plan.mjs --bundle source-unit --bundle carrier --json
 ```
@@ -69,6 +72,13 @@ The carrier bundle includes the non-mutating Debrief derivative check as its
 own discoverable route. Check mode needs no encoder; the separately invoked
 build mode uses `cwebp` after an accepted full-size source changes.
 
+The public-reference source suite includes the Registry binding, repository
+route binding, structured-head validator, occurrence matrix, materializer, and
+synthetic live-route verifier. Its `test:context-canvas-head-routes` alias is a
+repository-state gate over the current 40-page manifest and sitemap; the suite
+planner continues to present the focused Node modules without dispatching that
+gate.
+
 ## Python table components
 
 The [table component entry](../tables/README.md#python-component-entry) keeps
@@ -104,6 +114,22 @@ Chromium. [Browser ownership](browser-ownership.md) describes the retained
 server/consumer dispositions and the Worker root-toolchain prerequisite.
 Other browser families keep their established routes and evidence contracts.
 
+## Visual Fidelity Contracts
+
+The Visual Fidelity Contracts routes keep deterministic state and schema checks
+separate from browser-owned observations:
+
+```sh
+npm run test:visual-fidelity-contracts:source
+npm run test:visual-fidelity-contracts:browser
+npm run test:visual-fidelity-contracts
+```
+
+The combined route also verifies the checked-in pattern images, catalog,
+semantic companions, and deterministic digest of each declared source set.
+The build route performs a fresh browser capture when those sources change.
+Release publication retains its own authorization.
+
 ## Compatibility and preparation
 
 Existing package commands retain their original work behind the shared runtime-admission prefix. A suite's `aliases` are related
@@ -137,11 +163,14 @@ on import distinguishes metadata discovery from incidental harness loading.
 Literal unit/browser/Python memberships establish selection meaning; matching
 counts alone are insufficient.
 
-The Issue #371 exercise uses the draft
-[evidence-bearing test-design](../../planning/testing-suite-consolidation/draft-skills/evidence-bearing-test-design/SKILL.md)
-and [suite-composition](../../planning/testing-suite-consolidation/draft-skills/test-suite-composition/SKILL.md)
+The Issue #371 exercise supplied the first bounded use of the active
+[evidence-bearing test-design](../../.agents/skills/evidence-bearing-test-design/README.md)
+and [suite-composition](../../.agents/skills/test-suite-composition/README.md)
 contracts. [The exercise and figure sources](../../planning/testing-suite-consolidation/exercises/issue-371.md)
-record the design decisions; the receiving PR/Issue owns executed results.
+record the design decisions; the receiving pull request or Issue owns executed
+results. The [cross-repository stewardship runbook](../../.agents/runbooks/cross-repository-test-system-stewardship.v0.1.md)
+routes the same portable contracts through repository-specific commands,
+budgets, and acceptance owners.
 
 ## Recovery and continuation
 

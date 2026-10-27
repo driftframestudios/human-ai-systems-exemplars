@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "context-canvas-route-bindings.schema.json",
+  "title": "Context Canvas public-route authority bindings",
+  "description": "A reviewed binding from semantic public-route tokens to the repository manifests that own primary pages, assets, hosted instruments, schemas, and published skills. Owner manifests determine destinations; this document records the expected result and intended carriers.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "id", "version", "public_roots", "bindings"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "./context-canvas-route-bindings.schema.json"
+    },
+    "id": {
+      "type": "string",
+      "const": "context-canvas.public-route-reference-bindings.v1"
+    },
+    "version": {
+      "type": "string",
+      "const": "1"
+    },
+    "public_roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "iframe", "schema"],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "const": "https://vik.guru/"
+        },
+        "iframe": {
+          "type": "string",
+          "const": "https://iframes.vik.guru/"
+        },
+        "schema": {
+          "type": "string",
+          "const": "https://schemas.vik.guru/"
+        }
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    }
+  },
+  "$defs": {
+    "nonemptyText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "selectionText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "token",
+        "authority_class",
+        "role",
+        "owner",
+        "fragment",
+        "expected_url",
+        "allowed_carriers",
+        "selection_basis"
+      ],
+      "properties": {
+        "token": {
+          "type": "string",
+          "pattern": "^PUBLIC_URL_(?:PAGE|ASSET|IFRAME|SCHEMA|SKILL)_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+        },
+        "authority_class": {
+          "enum": ["page", "asset", "iframe", "schema", "skill"]
+        },
+        "role": {
+          "enum": [
+            "primary_retrieval",
+            "primary_asset",
+            "hosted_instrument",
+            "schema_retrieval",
+            "skill_catalog",
+            "skill_retrieval"
+          ]
+        },
+        "owner": {
+          "oneOf": [
+            { "$ref": "#/$defs/primaryPageOwner" },
+            { "$ref": "#/$defs/primaryAssetOwner" },
+            { "$ref": "#/$defs/iframeOwner" },
+            { "$ref": "#/$defs/schemaOwner" },
+            { "$ref": "#/$defs/skillOwner" },
+            { "$ref": "#/$defs/schemaCompanionOwner" }
+          ]
+        },
+        "fragment": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9._~-]*$"
+            }
+          ]
+        },
+        "expected_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://(?:vik\\.guru|iframes\\.vik\\.guru|schemas\\.vik\\.guru)/(?!(?:[^#]*/)?(?:\\.|%2[eE]){1,2}(?:/|#|$))(?![^#]*//)(?:(?:[A-Za-z0-9._~!$&'()*+,;=:@/-]|%[0-9A-Fa-f]{2})*(?:#[A-Za-z][A-Za-z0-9._~-]*)?)?$"
+        },
+        "allowed_carriers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "anchor",
+              "canonical",
+              "iframe_full_view",
+              "iframe_source",
+              "jsonld",
+              "open_graph_image",
+              "open_graph_url",
+              "sitemap",
+              "twitter_image"
+            ]
+          }
+        },
+        "selection_basis": {
+          "$ref": "#/$defs/selectionText"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "authority_class": { "const": "page" } },
+            "required": ["authority_class"]
+          },
+          "then": {
+            "properties": {
+              "token": {
+                "type": "string",
+                "pattern": "^PUBLIC_URL_PAGE_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+              },
+              "role": { "const": "primary_retrieval" },
+              "owner": { "$ref": "#/$defs/primaryPageOwner" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "authority_class": { "const": "asset" } },
+            "required": ["authority_class"]
+          },
+          "then": {
+            "properties": {
+              "token": {
+                "type": "string",
+                "pattern": "^PUBLIC_URL_ASSET_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+              },
+              "role": { "const": "primary_asset" },
+              "owner": { "$ref": "#/$defs/primaryAssetOwner" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "authority_class": { "const": "iframe" } },
+            "required": ["authority_class"]
+          },
+          "then": {
+            "properties": {
+              "token": {
+                "type": "string",
+                "pattern": "^PUBLIC_URL_IFRAME_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+              },
+              "role": { "const": "hosted_instrument" },
+              "owner": { "$ref": "#/$defs/iframeOwner" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "authority_class": { "const": "schema" } },
+            "required": ["authority_class"]
+          },
+          "then": {
+            "properties": {
+              "token": {
+                "type": "string",
+                "pattern": "^PUBLIC_URL_SCHEMA_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+              },
+              "role": { "const": "schema_retrieval" },
+              "owner": { "$ref": "#/$defs/schemaOwner" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "authority_class": { "const": "skill" } },
+            "required": ["authority_class"]
+          },
+          "then": {
+            "properties": {
+              "token": {
+                "type": "string",
+                "pattern": "^PUBLIC_URL_SKILL_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+              }
+            },
+            "oneOf": [
+              {
+                "properties": {
+                  "role": { "const": "skill_catalog" },
+                  "owner": { "$ref": "#/$defs/skillCatalogOwner" }
+                },
+                "required": ["role", "owner"]
+              },
+              {
+                "properties": {
+                  "role": { "const": "skill_retrieval" },
+                  "owner": {
+                    "oneOf": [
+                      { "$ref": "#/$defs/skillRetrievalOwner" },
+                      { "$ref": "#/$defs/schemaOwner" },
+                      { "$ref": "#/$defs/schemaCompanionOwner" }
+                    ]
+                  }
+                },
+                "required": ["role", "owner"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "primaryPageOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "source_path"],
+      "properties": {
+        "type": { "const": "primary_route_manifest" },
+        "source_path": { "$ref": "#/$defs/nonemptyText" }
+      }
+    },
+    "primaryAssetOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "source_path", "media_type"],
+      "properties": {
+        "type": { "const": "primary_route_manifest" },
+        "source_path": { "$ref": "#/$defs/nonemptyText" },
+        "media_type": { "$ref": "#/$defs/nonemptyText" }
+      }
+    },
+    "iframeOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "family", "route_id"],
+      "properties": {
+        "type": { "const": "iframe_route_manifest" },
+        "family": { "enum": ["canvas", "core"] },
+        "route_id": { "$ref": "#/$defs/nonemptyText" }
+      }
+    },
+    "schemaOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "public_path", "content_type"],
+      "properties": {
+        "type": { "const": "schemas_worker_publication" },
+        "public_path": {
+          "type": "string",
+          "pattern": "^/(?:[^?{}\\\\]+)$"
+        },
+        "content_type": { "$ref": "#/$defs/nonemptyText" }
+      }
+    },
+    "skillOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "skill_name"],
+      "properties": {
+        "type": { "const": "skill_publication_selection" },
+        "skill_name": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          ]
+        }
+      }
+    },
+    "skillCatalogOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "skill_name"],
+      "properties": {
+        "type": { "const": "skill_publication_selection" },
+        "skill_name": { "type": "null" }
+      }
+    },
+    "skillRetrievalOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "skill_name"],
+      "properties": {
+        "type": { "const": "skill_publication_selection" },
+        "skill_name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      }
+    },
+    "schemaCompanionOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "source", "receiver_path", "content_type"],
+      "properties": {
+        "type": { "const": "schema_companion_route" },
+        "source": { "$ref": "#/$defs/nonemptyText" },
+        "receiver_path": {
+          "type": "string",
+          "pattern": "^(?!/)(?:[^?{}\\\\]+)$"
+        },
+        "content_type": { "$ref": "#/$defs/nonemptyText" }
+      }
+    }
+  }
+}

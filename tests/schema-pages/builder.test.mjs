@@ -33,6 +33,9 @@ import {
   schemaCompanionRoutes,
 } from "../../tools/schema-publication.mjs";
 import {
+  loadPublicRouteReferenceBinding,
+} from "../../tools/public-route-reference-contract.mjs";
+import {
   assertExactFileInventory,
   assertPublicMaterial,
   assertTermsAbsent,
@@ -273,24 +276,46 @@ test("every declared receiver is discoverable and byte-identical to its source",
   }
 });
 
-test("every selected companion is byte-identical, public-safe, and available at its receiver path", async () => {
+test("every selected companion is public-safe and available at its receiver path", async () => {
   const allReceiverPaths = [
     ...schemaReceiverRoutes.map(({ receiverPath }) => receiverPath),
     ...schemaCompanionRoutes.map(({ receiverPath }) => receiverPath),
   ];
   assert.equal(new Set(allReceiverPaths).size, allReceiverPaths.length);
+  const projectedCompanionPaths = new Set([
+    "collaboration-skills/0.1.0/README.md",
+  ]);
 
   for (const route of schemaCompanionRoutes) {
     const [sourceBytes, receiverBytes] = await Promise.all([
       readFile(resolve(repositoryRoot, route.source)),
       readFile(resolve(outputRoot, route.receiverPath)),
     ]);
-    assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    if (!projectedCompanionPaths.has(route.receiverPath)) {
+      assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    }
     assert.doesNotThrow(() => assertPublicMaterial(sourceBytes, route.source));
+    assert.doesNotThrow(() => assertPublicMaterial(receiverBytes, route.receiverPath));
     if (/\.json(?:ld)?$/u.test(route.receiverPath)) {
       assert.doesNotThrow(() => JSON.parse(sourceBytes.toString("utf8")), route.receiverPath);
     }
   }
+});
+
+test("the projected Collaboration Skills README localizes its repository routes", async () => {
+  const receiver = await readFile(
+    resolve(outputRoot, "collaboration-skills/0.1.0/README.md"),
+    "utf8",
+  );
+  assert.ok(receiver.includes(
+    "[Browse the repository-local public skills catalog](../../skills/).",
+  ));
+  assert.ok(receiver.includes("(../../skills/source-authority-mapping/)"));
+  assert.ok(receiver.includes(
+    "(../../skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
+  ));
+  assert.equal(receiver.includes("../../../.agents/skills/"), false);
+  assert.equal(receiver.includes("../../../threadkeeping/"), false);
 });
 
 test("the public Narrative and Threadkeeping examples exercise their selected contracts", async () => {
@@ -644,10 +669,11 @@ test("the private selection ledger classifies the complete repository skill fami
   const possibleNames = selection.skills
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
-  assert.equal(readyNames.length, 27);
+  assert.equal(readyNames.length, 29);
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
+    "design-token-pipeline-stewardship",
     "relational-execution-review",
     "repository-collaboration-cycle",
     "repository-handoff-readiness",
@@ -924,14 +950,29 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
     /<section\s+aria-labelledby="catalog-title">([\s\S]*?)<\/section>/u,
   )?.[1];
   assert.ok(table);
-  const catalogNames = [...table.matchAll(/schemas\.radiantnull\.com\/skills\/([^/]+)\//gu)]
-    .map((match) => match[1])
+  const routeContract = await loadPublicRouteReferenceBinding();
+  const skillBindings = new Map(routeContract.routes
+    .filter(({ owner }) =>
+      owner.type === "skill_publication_selection" &&
+      typeof owner.skill_name === "string")
+    .map(({ owner, token }) => [owner.skill_name, token]));
+  const nameByToken = new Map(
+    [...skillBindings].map(([name, token]) => [token, name]),
+  );
+  const catalogNames = [...table.matchAll(
+    /href="\{\{(PUBLIC_URL_SKILL_[A-Z0-9_]+)\}\}"/gu,
+  )]
+    .map((match) => nameByToken.get(match[1]))
+    .filter(Boolean)
     .sort();
   assert.deepEqual(catalogNames, readyNames);
+  assert.equal(skillBindings.size, readyNames.length);
   assert.equal(new Set(catalogNames).size, catalogNames.length);
   for (const readyName of readyNames) {
+    const token = skillBindings.get(readyName);
+    assert.equal(typeof token, "string", readyName);
     assert.ok(table.includes(
-      `href="https://schemas.radiantnull.com/skills/${readyName}/"`,
+      `href="{{${token}}}"`,
     ));
   }
   for (const skillName of visualizationLadderNames) {

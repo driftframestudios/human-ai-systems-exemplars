@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0.0",
+  "exampleId": "vfp:component:accepted-recovery",
+  "title": "Component ownership and recovery",
+  "description": "A review workspace preserves accepted catalog data while a person edits an order, receives a clear authorization result, and recovers from a held or failed request.",
+  "alt": "Two-panel component workbench with selectable catalog items, a review-order form, request and data status, an accepted receipt, and a disclosure for the semantic state twin.",
+  "caption": "Figure 3. The component lab keeps accepted data on screen while local intent and authority move through their own validation, failure, and recovery states.",
+  "summary": "Accepted catalog state, local form intent, request state, and authority receipt have distinct owners.",
+  "relationships": [
+    {
+      "relationship": "Accepted data",
+      "reading": "Catalog revision and item availability remain visible"
+    },
+    {
+      "relationship": "Local intent",
+      "reading": "Email, quantity, and selected item stay editable until submission"
+    },
+    {
+      "relationship": "Authority",
+      "reading": "Allowed, held, and denied remain explicit states"
+    },
+    {
+      "relationship": "Recovery",
+      "reading": "Prior accepted data remains available when a candidate fails or refreshes"
+    }
+  ],
+  "source": {
+    "path": "visual-fidelity-contracts/labs/component-lab/index.html",
+    "selector": "main[data-component-lab]",
+    "state": "accepted-receipt",
+    "type": "runnable-lab",
+    "identity": "component-lab@1.0.0",
+    "files": [
+      "visual-fidelity-contracts/labs/component-lab/index.html",
+      "visual-fidelity-contracts/labs/component-lab/src/controller.js",
+      "visual-fidelity-contracts/labs/component-lab/src/model.js",
+      "visual-fidelity-contracts/labs/component-lab/src/render.js",
+      "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
+      "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css",
+      "visual-fidelity-contracts/labs/component-lab/fixtures/valid/catalog.json"
+    ]
+  },
+  "contract": {
+    "id": "vfc:soft-color-blocking",
+    "version": "1.0.0",
+    "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+    "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+  },
+  "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-component-lab-panels-drawers-commerce-flows",
+  "rights": {
+    "license": "Apache-2.0",
+    "copyrightHoldersSource": "AUTHORS",
+    "copyrightHolders": [
+      "Vikrant Varun Kudesia",
+      "Driftframe Studios, Limited Liability Company"
+    ],
+    "publisher": "Driftframe Studios, Limited Liability Company",
+    "standing": "Documentation derivative of synthetic source maintained in this repository"
+  },
+  "publicationReceipt": {
+    "sourceAuthority": "Declared repository source set",
+    "publicationAuthority": {
+      "standing": "held",
+      "receiver": "Vikrant Varun Kudesia — named human publication receiver",
+      "activationEvent": "Explicit human approval of the publication receiver"
+    },
+    "method": "Playwright Chromium element capture → Sharp WebP derivative",
+    "reviewedOn": "2026-10-20",
+    "sourceClosure": {
+      "algorithm": "sha256",
+      "files": [
+        "visual-fidelity-contracts/labs/component-lab/fixtures/valid/catalog.json",
+        "visual-fidelity-contracts/labs/component-lab/index.html",
+        "visual-fidelity-contracts/labs/component-lab/src/controller.js",
+        "visual-fidelity-contracts/labs/component-lab/src/model.js",
+        "visual-fidelity-contracts/labs/component-lab/src/render.js",
+        "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
+        "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css"
+      ],
+      "sha256": "439dab918c0828bcf60fa9d1e2c6f3cdd6da788344b9d1744660698a53a2d8a2"
+    },
+    "metadataInspection": {
+      "standing": "passed",
+      "derivativeCount": 3,
+      "fields": [
+        "EXIF absent",
+        "XMP absent",
+        "IPTC absent",
+        "orientation absent"
+      ]
+    },
+    "locatorInspection": {
+      "standing": "passed",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "secretInspection": {
+      "standing": "passed",
+      "method": "Bounded secret-shaped lexical admission scan",
+      "scope": "Declared source files, definitions, catalog, semantic companions, and gallery"
+    },
+    "pixelInspection": {
+      "standing": "reviewed",
+      "reviewedOn": "2026-10-20",
+      "derivativeSha256": "47f4753ed0ce105ba6e99ef0f4dd1b9ccb8d053e3e0e716e36f4676b456c1513",
+      "scope": "1600-pixel derivative inspected at original resolution"
+    }
+  },
+  "tests": [
+    "tests/visual-fidelity-contracts/component-model.test.mjs",
+    "tests/visual-fidelity-contracts/component-page.test.mjs",
+    "tests/visual-fidelity-contracts/component.browser.mjs"
+  ]
+}

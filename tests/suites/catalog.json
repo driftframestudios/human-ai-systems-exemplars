@@ -349,8 +349,11 @@
       "family": "public-references",
       "kind": "node-test",
       "members": [
+        "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+        "tests/public-references/context-canvas-head-route-validator.test.mjs",
         "tests/public-references/live-route-verifier.test.mjs",
         "tests/public-references/materializer.test.mjs",
+        "tests/public-references/public-route-reference-contract.test.mjs",
         "tests/public-references/registry-reference-contract.test.mjs"
       ],
       "profile": "node-source",
@@ -363,8 +366,9 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "scope": "Registry and repository route authorities, source and generated structured-head relationships, sitemap parity, occurrence-matrix maintenance, deterministic materialization, and bounded synthetic receiver behavior.",
       "aliases": [
+        "test:context-canvas-head-routes",
         "test:public-references"
       ]
     },
@@ -511,6 +515,7 @@
       "family": "media-publication",
       "kind": "node-test",
       "members": [
+        "tests/media-publication/ci-provisioning.test.mjs",
         "tests/media-publication/prepare-r2-progressive-video.test.mjs",
         "tests/media-publication/r2-video-worker.test.mjs",
         "tests/media-publication/video-publication-manifest.test.mjs",
@@ -526,7 +531,7 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
+      "scope": "CI provisioning and cache identity, source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
       "aliases": [
         "test:media-publication"
       ]
@@ -551,6 +556,67 @@
       "scope": "Independent planner fixtures and source membership checks.",
       "aliases": [
         "test:suites:unit"
+      ]
+    },
+    {
+      "id": "node.visual-fidelity-contracts",
+      "family": "visual-fidelity-contracts",
+      "kind": "node-test",
+      "members": [
+        "tests/visual-fidelity-contracts/component-model.test.mjs",
+        "tests/visual-fidelity-contracts/component-page.test.mjs",
+        "tests/visual-fidelity-contracts/component-probes.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+        "tests/visual-fidelity-contracts/design-token-pipeline.test.mjs",
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-source.test.mjs",
+        "tests/visual-fidelity-contracts/pattern-library.test.mjs",
+        "tests/visual-fidelity-contracts/service-boundary-model.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "visual-fidelity-contracts/README.md",
+      "scope": "Versioned contracts, closed schemas, deterministic lab models, static semantic parity, public-safe routes, and responsive example metadata.",
+      "aliases": [
+        "test:visual-fidelity-contracts:source"
+      ]
+    },
+    {
+      "id": "browser.visual-fidelity-contracts",
+      "family": "visual-fidelity-contracts",
+      "kind": "node-test",
+      "members": [
+        "tests/visual-fidelity-contracts/component.browser.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+        "tests/visual-fidelity-contracts/data-view-browser.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-browser.test.mjs",
+        "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs",
+        "tests/visual-fidelity-contracts/pattern-library.browser.mjs",
+        "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "visual-fidelity-contracts/README.md",
+      "scope": "Chromium, Firefox, and WebKit interaction; narrow and wide reflow; focus and keyboard paths; teardown and re-entry; alternate media; SVG identity; CSP and sandbox boundaries; and responsive gallery rendering.",
+      "aliases": [
+        "test:visual-fidelity-contracts:browser"
       ]
     },
     {
@@ -2630,6 +2696,7 @@
         "node.tables",
         "node.visualization-fidelity-atlas",
         "node.suite-planner",
+        "node.visual-fidelity-contracts",
         "python.citation-atlas-selection",
         "python.tables.parser",
         "python.tables.hiring-table-media",
@@ -2648,6 +2715,8 @@
         "node.narrative-architectures",
         "node.tables",
         "node.visualization-fidelity-atlas",
+        "node.visual-fidelity-contracts",
+        "browser.visual-fidelity-contracts",
         "worker.source",
         "python.lims-eln-enterprise-reference-v0.1",
         "python.lims-eln-enterprise-implementation",
@@ -2664,6 +2733,7 @@
         "browser.investment-analysis.browser",
         "browser.investment-analysis.capsule.browser",
         "browser.investment-analysis.presentation.browser",
+        "browser.visual-fidelity-contracts",
         "browser.visualization-fidelity-atlas.atlas-essay.browser",
         "browser.visualization-fidelity-atlas.atlas-gallery.browser",
         "browser.visualization-fidelity-atlas.atlas-reference.browser",
@@ -2725,6 +2795,7 @@
       "id": "visual-media",
       "description": "Visual selection and existing print/media-owning modules; file selection retains the full file's scenarios.",
       "suites": [
+        "browser.visual-fidelity-contracts",
         "browser.visualization-fidelity-atlas.atlas-essay.browser",
         "browser.visualization-fidelity-atlas.atlas-gallery.browser",
         "browser.tables.hiring-schema-print",
@@ -2759,6 +2830,7 @@
         "node.repository-handoff-foundation",
         "node.schema-pages",
         "node.security",
+        "node.visual-fidelity-contracts",
         "worker.source",
         "carrier.debrief-image-derivatives",
         "carrier.debrief-case-briefs",
@@ -2997,6 +3069,9 @@
       "tools/evidence-inputs.mjs",
       "tools/observation-checkpoint.mjs"
     ],
+    "publicReferenceSupport": [
+      "tests/public-references/source-route-authority.mjs"
+    ],
     "projector": "tools/project_table_context.py",
     "exclusions": [
       "Held untracked Atlas research files are outside the accepted baseline.",
@@ -3008,6 +3083,8 @@
     "npmRunEdges": {
       "test:public-reference-contracts": [
         "test:public-references",
+        "test:context-canvas-head-routes",
+        "test:public-reference-projections",
         "test:citation-atlas-selection",
         "test:suites:unit"
       ],
@@ -3026,6 +3103,11 @@
       "test:prototype-units": [
         "test:core-architectures",
         "test:narrative-architectures"
+      ],
+      "test:visual-fidelity-contracts": [
+        "test:visual-fidelity-contracts:source",
+        "check:visual-fidelity-pattern-library",
+        "test:visual-fidelity-contracts:browser"
       ],
       "dry-run:schema-delivery": [
         "build:schema-delivery"
@@ -3059,9 +3141,17 @@
           "tests/public-references/materializer.test.mjs"
         ],
         "test:public-references": [
+          "tests/public-references/context-canvas-head-authority-matrix.test.mjs",
+          "tests/public-references/context-canvas-head-route-validator.test.mjs",
+          "tests/public-references/live-route-verifier.test.mjs",
           "tests/public-references/materializer.test.mjs",
-          "tests/public-references/registry-reference-contract.test.mjs",
-          "tests/public-references/live-route-verifier.test.mjs"
+          "tests/public-references/public-route-reference-contract.test.mjs",
+          "tests/public-references/registry-reference-contract.test.mjs"
+        ],
+        "test:public-reference-projections": [
+          "tests/iframe-routes/packager.test.mjs",
+          "tests/prod-deployment/primary-closure.test.mjs",
+          "tests/prod-deployment/projection.test.mjs"
         ],
         "test:repository-handoff-foundation": [
           "tests/repository-handoff-foundation/foundation.test.mjs",
@@ -3098,6 +3188,20 @@
         ],
         "test:narrative-architectures": [
           "tests/narrative-architectures/*.test.mjs"
+        ],
+        "test:visual-fidelity-contracts:source": [
+          "tests/visual-fidelity-contracts/component-model.test.mjs",
+          "tests/visual-fidelity-contracts/component-page.test.mjs",
+          "tests/visual-fidelity-contracts/component-probes.test.mjs",
+          "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+          "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+          "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+          "tests/visual-fidelity-contracts/design-token-pipeline.test.mjs",
+          "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-model.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-source.test.mjs",
+          "tests/visual-fidelity-contracts/pattern-library.test.mjs",
+          "tests/visual-fidelity-contracts/service-boundary-model.test.mjs"
         ],
         "test:node-runtime": [
           "tests/security/node-runtime.test.mjs",
@@ -3158,6 +3262,15 @@
         ],
         "test:prototype-exchanges": [
           "tools/cross-prototype-exchange-contract.mjs"
+        ],
+        "test:visual-fidelity-contracts:browser": [
+          "tests/visual-fidelity-contracts/component.browser.mjs",
+          "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+          "tests/visual-fidelity-contracts/data-view-browser.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-browser.test.mjs",
+          "tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs",
+          "tests/visual-fidelity-contracts/pattern-library.browser.mjs",
+          "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
         ]
       },
       "orderedCompositeSteps": {

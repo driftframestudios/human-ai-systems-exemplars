@@ -24,6 +24,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 
 - [Cost and ownership analysis formation](2026-10-01-cost-and-ownership-analysis.md): function-cost coverage, ownership repairs, and the public skill review boundary.
 - [Citation Atlas selection formation](2026-10-11-citation-atlas-selection.md) — exact offline selection from an external public Atlas, a bounded repository binding, and the `create_now` route for a portable operator-neutral lookup skill.
+- [Testing-suite efficiency and topology cultivation](2026-10-23-testing-suite-efficiency-and-topology.md) — the owned-suite and media-CI receiving uses, two promoted public-ready skills, conditional provisioning guidance, collection overlays, and the next independent transfer event.
 
 ## Return condition
 

@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json",
+  "title": "Visual Fidelity Pattern Library Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "libraryId", "reviewedOn", "publicCollection", "generation", "examples"],
+  "properties": {
+    "$schema": { "const": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/example-catalog.schema.json" },
+    "schemaVersion": { "const": "1.0.0" },
+    "libraryId": { "const": "visual-fidelity-pattern-library" },
+    "reviewedOn": { "type": "string", "format": "date" },
+    "publicCollection": { "type": "string", "format": "uri", "pattern": "^https://kindlight\\.systems/" },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "check", "widths"],
+      "properties": {
+        "command": { "const": "npm run build:visual-fidelity-pattern-library" },
+        "check": { "const": "npm run check:visual-fidelity-pattern-library" },
+        "widths": { "const": [640, 1280, 1600] }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 24,
+      "items": { "$ref": "#/$defs/example" }
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "path": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[A-Za-z0-9][A-Za-z0-9._/ -]*$" },
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "ordinal", "category", "title", "description", "alt", "caption", "source", "contract", "publicContinuation", "semanticCompanion", "tests", "rights", "publicationReceipt", "responsiveImage"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^vfp:[a-z0-9]+(?:-[a-z0-9]+)*(?::[a-z0-9]+(?:-[a-z0-9]+)*)+$" },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "ordinal": { "type": "integer", "minimum": 1, "maximum": 99 },
+        "category": { "enum": ["industrial-ink", "soft-color-blocking", "component-and-recovery", "data-view-and-evidence"] },
+        "title": { "$ref": "#/$defs/text" },
+        "description": { "$ref": "#/$defs/text" },
+        "alt": { "$ref": "#/$defs/text" },
+        "caption": { "$ref": "#/$defs/text" },
+        "source": { "$ref": "#/$defs/source" },
+        "contract": { "$ref": "#/$defs/contract" },
+        "publicContinuation": { "type": "string", "format": "uri", "pattern": "^https://kindlight\\.systems/" },
+        "semanticCompanion": { "$ref": "#/$defs/companion" },
+        "tests": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/path" } },
+        "rights": { "$ref": "#/$defs/rights" },
+        "publicationReceipt": { "$ref": "#/$defs/publicationReceipt" },
+        "responsiveImage": { "$ref": "#/$defs/responsiveImage" }
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "selector", "state", "type", "identity", "files"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" }, "selector": { "$ref": "#/$defs/text" },
+        "state": { "$ref": "#/$defs/text" }, "type": { "enum": ["runnable-lab", "contract-specimen"] },
+        "identity": { "$ref": "#/$defs/text" },
+        "files": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/path" } }
+      }
+    },
+    "contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "path", "publicRoute"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^vfc:[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "path": { "$ref": "#/$defs/path" },
+        "publicRoute": { "type": "string", "format": "uri", "pattern": "^https://kindlight\\.systems/" }
+      }
+    },
+    "companion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["summary", "relationships", "path"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/text" }, "path": { "$ref": "#/$defs/path" },
+        "relationships": {
+          "type": "array", "minItems": 4, "maxItems": 16,
+          "items": {
+            "type": "array", "prefixItems": [{ "$ref": "#/$defs/text" }, { "$ref": "#/$defs/text" }],
+            "items": false, "minItems": 2, "maxItems": 2
+          }
+        }
+      }
+    },
+    "rights": {
+      "type": "object", "additionalProperties": false,
+      "required": ["license", "copyrightHoldersSource", "copyrightHolders", "publisher", "standing"],
+      "properties": {
+        "license": { "const": "Apache-2.0" },
+        "copyrightHoldersSource": { "const": "AUTHORS" },
+        "copyrightHolders": {
+          "const": ["Vikrant Varun Kudesia", "Driftframe Studios, Limited Liability Company"]
+        },
+        "publisher": { "const": "Driftframe Studios, Limited Liability Company" },
+        "standing": { "$ref": "#/$defs/text" }
+      }
+    },
+    "publicationReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceAuthority", "publicationAuthority", "method", "reviewedOn", "sourceClosure", "metadataInspection", "locatorInspection", "secretInspection", "pixelInspection"],
+      "properties": {
+        "sourceAuthority": { "$ref": "#/$defs/text" },
+        "publicationAuthority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["standing", "receiver", "activationEvent"],
+          "properties": {
+            "standing": { "enum": ["held", "approved"] },
+            "receiver": { "$ref": "#/$defs/text" },
+            "activationEvent": { "$ref": "#/$defs/text" }
+          }
+        },
+        "method": { "$ref": "#/$defs/text" },
+        "reviewedOn": { "type": "string", "format": "date" },
+        "sourceClosure": {
+          "type": "object", "additionalProperties": false,
+          "required": ["algorithm", "files", "sha256"],
+          "properties": {
+            "algorithm": { "const": "sha256" },
+            "files": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/path" } },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+        "metadataInspection": {
+          "type": "object", "additionalProperties": false,
+          "required": ["standing", "derivativeCount", "fields"],
+          "properties": {
+            "standing": { "const": "passed" },
+            "derivativeCount": { "const": 3 },
+            "fields": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/text" } }
+          }
+        },
+        "locatorInspection": {
+          "type": "object", "additionalProperties": false,
+          "required": ["standing", "scope"],
+          "properties": { "standing": { "const": "passed" }, "scope": { "$ref": "#/$defs/text" } }
+        },
+        "secretInspection": {
+          "type": "object", "additionalProperties": false,
+          "required": ["standing", "method", "scope"],
+          "properties": {
+            "standing": { "const": "passed" },
+            "method": { "$ref": "#/$defs/text" },
+            "scope": { "$ref": "#/$defs/text" }
+          }
+        },
+        "pixelInspection": {
+          "type": "object", "additionalProperties": false,
+          "required": ["standing", "reviewedOn", "derivativeSha256", "scope"],
+          "properties": {
+            "standing": { "const": "reviewed" },
+            "reviewedOn": { "type": "string", "format": "date" },
+            "derivativeSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "scope": { "$ref": "#/$defs/text" }
+          }
+        }
+      }
+    },
+    "responsiveImage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["intrinsicWidth", "intrinsicHeight", "sizes", "derivatives"],
+      "properties": {
+        "intrinsicWidth": { "type": "integer", "minimum": 1 }, "intrinsicHeight": { "type": "integer", "minimum": 1 },
+        "sizes": { "$ref": "#/$defs/text" },
+        "derivatives": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/derivative" } }
+      }
+    },
+    "derivative": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "width", "height", "format", "bytes", "sha256", "metadata"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" }, "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }, "format": { "const": "webp" },
+        "bytes": { "type": "integer", "minimum": 1 }, "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "metadata": {
+          "type": "object", "additionalProperties": false,
+          "required": ["exif", "xmp", "iptc", "orientation", "colorProfile"],
+          "properties": {
+            "exif": { "const": false }, "xmp": { "const": false }, "iptc": { "const": false },
+            "orientation": { "type": "null" }, "colorProfile": { "$ref": "#/$defs/text" }
+          }
+        }
+      }
+    }
+  }
+}

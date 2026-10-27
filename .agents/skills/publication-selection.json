@@ -165,11 +165,29 @@
       ]
     },
     {
+      "name": "design-token-pipeline-stewardship",
+      "sourcePath": ".agents/skills/design-token-pipeline-stewardship/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The first repository exercise applies the contract to one visual-fidelity hub. Public projection remains held while an independent pipeline use tests cross-tool transfer and a later publication review rechecks the conditional vendor reference and declares it in the complete source package."
+    },
+    {
       "name": "embedded-prototype-layout",
       "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": []
+    },
+    {
+      "name": "evidence-bearing-test-design",
+      "sourcePath": ".agents/skills/evidence-bearing-test-design/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
+      ]
     },
     {
       "name": "evidence-grounded-research-spike",
@@ -328,6 +346,16 @@
       "sourceAvailability": "repository_only",
       "dependencies": [],
       "publicationNote": "Promote after its Semantic Attractor and evidence dependencies have source-owned public adaptations."
+    },
+    {
+      "name": "test-suite-composition",
+      "sourcePath": ".agents/skills/test-suite-composition/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+        ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md"
+      ]
     },
     {
       "name": "uv-backed-python-execution",

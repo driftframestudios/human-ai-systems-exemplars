@@ -214,14 +214,16 @@ The referenced manifest uses one explicit entry for every primary output:
 ```
 
 The assembler reads selected files from regular Git blobs at the accepted
-source coordinate. It resolves Registry tokens through the tracked, reviewed
-binding in [`deployment/public-references/`](../public-references/README.md)
-and resolves the professional-profile token from ignored `.env.public` in
-memory. The plan records the tracked binding and accepted Atlas receipt plus
-the external receiver's digest and non-Registry key set, then rechecks both
-inputs before returning. It uses an empty process environment for this step,
-so `.env.public` is the complete external receiver for a production
-projection. Registry overrides in that receiver fail closed.
+source coordinate. It resolves Registry tokens through the tracked Registry
+binding in [`deployment/public-references/`](../public-references/README.md).
+The adjacent route binding derives page, asset, iframe, schema, and skill
+destinations from their repository-owned manifests and publication selections.
+Ignored `.env.public` supplies the professional-profile token in memory. The
+plan records both binding receipts, the accepted Atlas receipt, and the external
+receiver digest, then rechecks every input before returning. It uses an empty
+process environment for this step, so `.env.public` remains the complete
+external receiver for a production projection. A tracked-route setting in that
+file directs the operator to the corresponding binding owner.
 
 For the About CSS projection, the deployment manifest also records the exact
 profile, CSSO package/version/options, consumer and execution context, ordered
@@ -234,15 +236,24 @@ maps remain absent because repository source plus manifest lineage supplies the
 inspection path.
 
 Publication transforms then map the nested Context Canvas root to
-`https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
+`https://vik.guru/`. Canonical, social, JSON-LD, and sitemap identities arrive
+from the same tracked route authority; the generated candidate gate compares
+their relationships before accepting a projection plan. Local relative
 references follow their projected locations. Markdown links resolve through
 their complete selected-file closure, including fragments and directory
 README targets; repository-only continuations use their accepted public owner
-or remain ordinary prose. Schema identities and literal
-`https://iframes.vik.guru/v1/` routes retain their authored values. Generated
+or remain ordinary prose. Visible hosted iframe carriers continue to follow
+their exact route manifests. Generated
 rows record their source digest and projected digest; unchanged files retain
 byte-preserved standing. The ignored `.public-reference-build/` directory is
 not an input.
+
+Two Collaboration Skills companion resources are selected for the next schema
+Worker publication. Their receiver routes become active when that Worker
+publication is accepted; the current Worker manifest continues to describe the
+live closure. Source and projection checks can validate the selection while
+release-candidate formation remains with its separately authorized release
+event.
 
 When a selected primary HTML file is also owned by the Canvas iframe route
 manifest, the assembler applies that manifest's shared public metadata at the
@@ -262,6 +273,7 @@ complete iframe package have been regenerated together.
 ## Commands
 
 ```sh
+npm run test:context-canvas-head-routes
 npm run test:prod-deployment
 npm run test:prod-css-projection-browser
 npm run check:prod-projection

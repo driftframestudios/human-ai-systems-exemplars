@@ -60,11 +60,19 @@ completes the job.
 | [`collaboration-accounting`](collaboration-accounting/README.md) · [contract](collaboration-accounting/SKILL.md) | Material work changes the disposition of a skill or candidate | One create, revise, observe, settle, consolidate, or retire route |
 | [`collaboration-runbook-authoring`](collaboration-runbook-authoring/README.md) · [contract](collaboration-runbook-authoring/SKILL.md) | A settled multi-phase procedure needs re-entrant guidance | A versioned route with entry, authority, checks, recovery, and handback |
 
+### Design and maintain test systems
+
+| Skill | Use it when | Result |
+| --- | --- | --- |
+| [`evidence-bearing-test-design`](evidence-bearing-test-design/README.md) · [contract](evidence-bearing-test-design/SKILL.md) | One behavior needs an independent oracle, a consequential fault, and the smallest observation that distinguishes them | A focused test whose pass, failure, and evidence boundary remain interpretable |
+| [`test-suite-composition`](test-suite-composition/README.md) · [contract](test-suite-composition/SKILL.md) | Checks, runners, prerequisites, shared setup, or reruns need a proportionate and recoverable topology | An explicit composition with exact population, phase cost, expansion events, and recovery |
+
 ### Steward contracts, authority, and delivery boundaries
 
 | Skill | Use it when | Result |
 | --- | --- | --- |
 | [`schema-contract-authoring`](schema-contract-authoring/README.md) · [contract](schema-contract-authoring/SKILL.md) | A schema family, context, example, or compatibility boundary changes | A bounded versioned contract with dependency closure |
+| [`design-token-pipeline-stewardship`](design-token-pipeline-stewardship/README.md) · [contract](design-token-pipeline-stewardship/SKILL.md) | Visual meaning must travel from an authored source through token interchange and compilation into UI receivers | A reproducible token pipeline with semantic diffs, adapter boundaries, evidence, and recovery |
 | [`source-authority-mapping`](source-authority-mapping/README.md) · [contract](source-authority-mapping/SKILL.md) | Mirrors, snapshots, workspaces, or delivery obscure ownership | A trace from semantic owner through receiving use and promotion |
 | [`issue-chain-stewardship`](issue-chain-stewardship/README.md) · [contract](issue-chain-stewardship/SKILL.md) | Several Issues form one decision-bearing route | The Issue currently receiving work, transition record, next receiver, and release event |
 | [`bounded-support-routing`](bounded-support-routing/README.md) · [contract](bounded-support-routing/SKILL.md) | One finite contribution needs an explicit return and stopping event | A compact support packet and observable handback |

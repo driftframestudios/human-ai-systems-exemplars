@@ -4,6 +4,11 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
@@ -13,6 +18,11 @@ const compactSourcePath = resolve(
   repositoryRoot,
   "context-canvas-project-surface/data/debrief-case-briefs.source.html",
 );
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 
 const expectedCaseBriefFields = [
   "Situation and stakes",
@@ -668,7 +678,10 @@ test("the two table-reading articles retain ordinary routes and the Atlas readin
     "Structured positions should remain contiguous after catalog reordering",
   );
   assert.equal(list.itemListElement.at(-1).position, list.numberOfItems);
-  assert.ok(list.itemListElement.at(-1).url.endsWith("/one-figure-several-readings.html"));
+  assert.ok(
+    publicValue(list.itemListElement.at(-1).url)
+      .endsWith("/one-figure-several-readings.html"),
+  );
   const article = await readCanvasFile("readable-tables-reusable-evidence.html");
   assert.match(article, /<h1\b[^>]*>Give the Comparison Room<\/h1>/u);
   assert.match(article, /estimate verification work at the beginning/u);

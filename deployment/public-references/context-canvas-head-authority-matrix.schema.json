@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "context-canvas-head-authority-matrix.schema.json",
+  "title": "Context Canvas head-authority occurrence matrix",
+  "description": "An inspectable inventory of every URL-bearing carrier in indexed Context Canvas page heads and the sitemap. Semantic bindings retain destination authority; reviewed literals record public vocabularies and citations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "id",
+    "version",
+    "scope",
+    "authority_receipts",
+    "counts",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./context-canvas-head-authority-matrix.schema.json"
+    },
+    "id": {
+      "const": "context-canvas.head-authority-matrix.v1"
+    },
+    "version": {
+      "const": "1"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_root",
+        "primary_manifest",
+        "sitemap",
+        "indexed_page_count"
+      ],
+      "properties": {
+        "source_root": {
+          "const": "context-canvas-project-surface/context-canvas"
+        },
+        "primary_manifest": {
+          "const": "deployment/cpanel/primary-route-manifest.json"
+        },
+        "sitemap": {
+          "const": "context-canvas-project-surface/context-canvas/sitemap.xml"
+        },
+        "indexed_page_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "authority_receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_route_binding_sha256",
+        "registry_binding_sha256",
+        "occurrence_sha256"
+      ],
+      "properties": {
+        "public_route_binding_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "registry_binding_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "occurrence_sha256": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entries",
+        "pages",
+        "registry",
+        "repository_routes",
+        "reviewed_literals"
+      ],
+      "properties": {
+        "entries": { "$ref": "#/$defs/count" },
+        "pages": { "$ref": "#/$defs/count" },
+        "registry": { "$ref": "#/$defs/count" },
+        "repository_routes": { "$ref": "#/$defs/count" },
+        "reviewed_literals": { "$ref": "#/$defs/count" }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "token": {
+      "type": "string",
+      "pattern": "^PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_path",
+        "locator",
+        "carrier",
+        "property",
+        "object_type",
+        "object_name",
+        "source_value",
+        "token",
+        "effective_url",
+        "authority_class",
+        "authority_role",
+        "relationship_role",
+        "authority_owner",
+        "confidence",
+        "review_status",
+        "follow_up_issue"
+      ],
+      "properties": {
+        "source_path": {
+          "$ref": "#/$defs/text"
+        },
+        "locator": {
+          "$ref": "#/$defs/text"
+        },
+        "carrier": {
+          "enum": [
+            "canonical",
+            "jsonld",
+            "open_graph_image",
+            "open_graph_url",
+            "sitemap",
+            "twitter_image"
+          ]
+        },
+        "property": {
+          "$ref": "#/$defs/text"
+        },
+        "object_type": {
+          "$ref": "#/$defs/text"
+        },
+        "object_name": {
+          "$ref": "#/$defs/text"
+        },
+        "source_value": {
+          "$ref": "#/$defs/text"
+        },
+        "token": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/token" }
+          ]
+        },
+        "effective_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "authority_class": {
+          "enum": [
+            "asset",
+            "external_reference",
+            "external_vocabulary",
+            "iframe",
+            "page",
+            "registry",
+            "schema",
+            "schema_vocabulary",
+            "skill"
+          ]
+        },
+        "authority_role": {
+          "$ref": "#/$defs/text"
+        },
+        "relationship_role": {
+          "enum": [
+            "jsonld",
+            "primary_asset",
+            "primary_retrieval",
+            "vocabulary"
+          ]
+        },
+        "authority_owner": {
+          "$ref": "#/$defs/text"
+        },
+        "confidence": {
+          "enum": [
+            "manifest_derived",
+            "registry_atlas_derived",
+            "reviewed_literal"
+          ]
+        },
+        "review_status": {
+          "const": "accepted"
+        },
+        "follow_up_issue": {
+          "enum": [
+            "#609",
+            "#610",
+            "#611",
+            "#612",
+            "#613",
+            "#614"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -46,6 +46,27 @@ const registryBindingRelativePath =
   "deployment/public-references/context-canvas-registry-bindings.v1.json";
 const registryDataUseRelativePath =
   "deployment/public-references/registry-atlas-data-use.txt";
+const routeBindingRelativePath =
+  "deployment/public-references/context-canvas-route-bindings.v1.json";
+const routeAuthorityRelativePaths = Object.freeze({
+  canvasIframeManifest:
+    "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
+  coreIframeManifest:
+    "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json",
+  schemaPublicationManifest:
+    "cloudflare/schemas-worker/public/publication-manifest.json",
+  schemaCompanionSelection:
+    "deployment/public-references/schema-companion-selection.v1.json",
+  skillPublicationSelection: ".agents/skills/publication-selection.json",
+});
+const fixtureSchemaCompanionSelection = Object.freeze({
+  id: "schemas-worker.schema-companion-selection.v1",
+  version: "1",
+  routes: [{
+    source: "schemas/fixture/example.json",
+    receiver_path: "fixture/example.json",
+  }],
+});
 const registryDataUseBytes = await readFile(
   new URL("../../deployment/public-references/registry-atlas-data-use.txt", import.meta.url),
 );
@@ -722,6 +743,404 @@ async function enableTrackedRegistryPublicationFixture(fixture) {
 
 async function enablePublicationFixture(fixture) {
   return enableTrackedRegistryPublicationFixture(fixture);
+}
+
+async function enableTrackedRoutePublicationFixture(fixture) {
+  const token = "PUBLIC_URL_PAGE_FIXTURE_HOME";
+  const sourceRoot = "visitor";
+  const indexSource = `${sourceRoot}/index.html`;
+  const sitemapSource = `${sourceRoot}/sitemap.xml`;
+  const indexBytes = [
+    "<!doctype html>",
+    "<html><head>",
+    '<meta charset="utf-8">',
+    "<title>Fixture route</title>",
+    `<link rel="canonical" href="{{${token}}}">`,
+    `<meta property="og:url" content="{{${token}}}">`,
+    '<script type="application/ld+json">' + JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `{{${token}}}`,
+      url: `{{${token}}}`,
+    }) + "</script>",
+    "</head><body>Fixture route</body></html>",
+    "",
+  ].join("\n");
+  const sitemapBytes = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    `  <url><loc>{{${token}}}</loc></url>`,
+    "</urlset>",
+    "",
+  ].join("\n");
+  await mkdir(path.join(fixture.root, sourceRoot), { recursive: true });
+  await writeFile(path.join(fixture.root, indexSource), indexBytes, "utf8");
+  await writeFile(path.join(fixture.root, sitemapSource), sitemapBytes, "utf8");
+  const manifest = primaryManifest([
+    {
+      source_path: indexSource,
+      projected_path: "index.html",
+      media_type: "text/html",
+    },
+    {
+      source_path: sitemapSource,
+      projected_path: "sitemap.xml",
+      media_type: "application/xml",
+    },
+  ]);
+  const configuration = {
+    id: "prod-projection.configuration.v1",
+    version: "1",
+    primary_manifest: primaryManifestRelativePath,
+    publication: {
+      base_url: "https://vik.guru/",
+      source_root: sourceRoot,
+      public_reference_config: ".env.public",
+    },
+  };
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(
+    fixture.configurationPath,
+    `${JSON.stringify(configuration, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(path.join(fixture.root, ".gitignore"), ".env.public\n", "utf8");
+  await writeFile(path.join(fixture.root, ".env.public"), "", "utf8");
+
+  const binding = {
+    $schema: "./context-canvas-route-bindings.schema.json",
+    id: "context-canvas.public-route-reference-bindings.v1",
+    version: "1",
+    public_roots: {
+      primary: "https://vik.guru/",
+      iframe: "https://iframes.vik.guru/",
+      schema: "https://schemas.vik.guru/",
+    },
+    bindings: [
+      {
+        token,
+        authority_class: "page",
+        role: "primary_retrieval",
+        owner: {
+          type: "primary_route_manifest",
+          source_path: indexSource,
+        },
+        fragment: null,
+        expected_url: "https://vik.guru/",
+        allowed_carriers: [
+          "canonical",
+          "jsonld",
+          "open_graph_url",
+          "sitemap",
+        ],
+        selection_basis: "The primary manifest owns the fixture retrieval route.",
+      },
+    ],
+  };
+  const trackedJson = new Map([
+    [routeBindingRelativePath, binding],
+    [
+      routeAuthorityRelativePaths.canvasIframeManifest,
+      { id: "fixture.canvas-routes", host: "iframes.vik.guru", routes: [] },
+    ],
+    [
+      routeAuthorityRelativePaths.coreIframeManifest,
+      { id: "fixture.core-routes", host: "iframes.vik.guru", routes: [] },
+    ],
+    [routeAuthorityRelativePaths.schemaPublicationManifest, { resources: {} }],
+    [routeAuthorityRelativePaths.schemaCompanionSelection,
+      fixtureSchemaCompanionSelection],
+    [
+      routeAuthorityRelativePaths.skillPublicationSelection,
+      { projectionBase: "https://schemas.vik.guru/skills/", skills: [] },
+    ],
+  ]);
+  for (const [relativePath, value] of trackedJson) {
+    const selected = path.join(fixture.root, ...relativePath.split("/"));
+    await mkdir(path.dirname(selected), { recursive: true });
+    await writeFile(selected, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  }
+  fixture.sourceSha = await commitFixture(
+    fixture.root,
+    "Accept tracked route publication fixture",
+  );
+  return { token, indexSource, sitemapSource, binding };
+}
+
+function contextCanvasHeadFixtureHtml({
+  title,
+  pageToken,
+  identityToken,
+  imageToken,
+  registryToken = null,
+}) {
+  return [
+    "<!doctype html>",
+    '<html lang="en"><head>',
+    '<meta charset="utf-8">',
+    `<title>${title}</title>`,
+    `<link rel="canonical" href="{{${pageToken}}}">`,
+    `<meta property="og:title" content="${title}">`,
+    `<meta property="og:description" content="${title} description.">`,
+    `<meta property="og:url" content="{{${pageToken}}}">`,
+    `<meta property="og:image" content="{{${imageToken}}}">`,
+    `<meta property="og:image:alt" content="${title} share visual.">`,
+    '<meta name="twitter:card" content="summary_large_image">',
+    `<meta name="twitter:title" content="${title}">`,
+    `<meta name="twitter:description" content="${title} description.">`,
+    `<meta name="twitter:image" content="{{${imageToken}}}">`,
+    `<meta name="twitter:image:alt" content="${title} share visual.">`,
+    '<script type="application/ld+json">' + JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `{{${identityToken}}}`,
+      url: `{{${pageToken}}}`,
+      name: title,
+      image: `{{${imageToken}}}`,
+      ...(registryToken === null
+        ? {}
+        : { citation: `{{${registryToken}}}` }),
+      author: { "@type": "Person", name: "Fixture Author" },
+      publisher: { "@type": "Organization", name: "Fixture Publisher" },
+      dateModified: "2026-10-27",
+    }) + "</script>",
+    `</head><body><main><h1>${title}</h1></main></body></html>`,
+    "",
+  ].join("\n");
+}
+
+async function enableContextCanvasHeadRouteFixture(
+  fixture,
+  { includeRegistry = true } = {},
+) {
+  const sourceRoot = "context-canvas-project-surface/context-canvas";
+  const imageSource = `${sourceRoot}/img/head-route-fixture.svg`;
+  const imageToken = "PUBLIC_URL_ASSET_HEAD_ROUTE_FIXTURE";
+  const registryToken = "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES";
+  const registryUrl =
+    "https://kindlight.systems/human-ai-collaboration-field-guide/practitioner-probes";
+  const pageRows = Array.from({ length: 40 }, (_, index) => {
+    const projectedPath = index === 0
+      ? "index.html"
+      : `head-route-fixture-${String(index).padStart(2, "0")}.html`;
+    const sourcePath = `${sourceRoot}/${projectedPath}`;
+    const suffix = index === 0 ? "ABOUT" : `HEAD_ROUTE_FIXTURE_${String(index).padStart(2, "0")}`;
+    return {
+      title: index === 0 ? "Context Canvas fixture" : `Context Canvas fixture ${index}`,
+      sourcePath,
+      projectedPath,
+      pageToken: `PUBLIC_URL_PAGE_${suffix}`,
+      identityToken: `PUBLIC_URL_PAGE_${suffix}_WEBPAGE`,
+    };
+  });
+
+  for (const row of pageRows) {
+    const receiver = path.join(fixture.root, ...row.sourcePath.split("/"));
+    await mkdir(path.dirname(receiver), { recursive: true });
+    await writeFile(receiver, contextCanvasHeadFixtureHtml({
+      ...row,
+      imageToken,
+      registryToken:
+        includeRegistry && row.projectedPath === "index.html" ? registryToken : null,
+    }), "utf8");
+  }
+  await writeFile(
+    path.join(fixture.root, sourceRoot, "404.html"),
+    '<!doctype html><html><head><meta name="robots" content="noindex, follow"><title>Missing</title></head><body></body></html>\n',
+    "utf8",
+  );
+  await mkdir(path.dirname(path.join(fixture.root, imageSource)), { recursive: true });
+  await writeFile(
+    path.join(fixture.root, imageSource),
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><title>Fixture</title><rect width="10" height="10"/></svg>\n',
+    "utf8",
+  );
+  const sitemapSource = `${sourceRoot}/sitemap.xml`;
+  await writeFile(
+    path.join(fixture.root, sitemapSource),
+    [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      ...pageRows.map(({ pageToken }) => `  <url><loc>{{${pageToken}}}</loc></url>`),
+      "</urlset>",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+
+  const files = [
+    {
+      source_path: `${sourceRoot}/404.html`,
+      projected_path: "404.html",
+      media_type: "text/html",
+    },
+    ...pageRows.map(({ sourcePath, projectedPath }) => ({
+      source_path: sourcePath,
+      projected_path: projectedPath,
+      media_type: "text/html",
+    })),
+    {
+      source_path: imageSource,
+      projected_path: "img/head-route-fixture.svg",
+      media_type: "image/svg+xml",
+    },
+    {
+      source_path: sitemapSource,
+      projected_path: "sitemap.xml",
+      media_type: "application/xml",
+    },
+  ];
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(primaryManifest(files), null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(
+    fixture.configurationPath,
+    `${JSON.stringify({
+      id: "prod-projection.configuration.v1",
+      version: "1",
+      primary_manifest: primaryManifestRelativePath,
+      publication: {
+        base_url: "https://vik.guru/",
+        source_root: sourceRoot,
+        public_reference_config: ".env.public",
+      },
+    }, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(path.join(fixture.root, ".gitignore"), ".env.public\n", "utf8");
+  await writeFile(path.join(fixture.root, ".env.public"), "", "utf8");
+
+  const bindings = [
+    ...pageRows.flatMap((row) => {
+      const pageUrl = row.projectedPath === "index.html"
+        ? "https://vik.guru/"
+        : `https://vik.guru/${row.projectedPath}`;
+      const owner = {
+        type: "primary_route_manifest",
+        source_path: row.sourcePath,
+      };
+      return [
+        {
+          token: row.pageToken,
+          authority_class: "page",
+          role: "primary_retrieval",
+          owner,
+          fragment: null,
+          expected_url: pageUrl,
+          allowed_carriers: ["canonical", "jsonld", "open_graph_url", "sitemap"],
+          selection_basis: "The primary manifest owns this fixture page route.",
+        },
+        {
+          token: row.identityToken,
+          authority_class: "page",
+          role: "primary_retrieval",
+          owner,
+          fragment: "webpage",
+          expected_url: `${pageUrl}#webpage`,
+          allowed_carriers: ["jsonld"],
+          selection_basis: "The page identity extends its manifest-owned retrieval route.",
+        },
+      ];
+    }),
+    {
+      token: imageToken,
+      authority_class: "asset",
+      role: "primary_asset",
+      owner: {
+        type: "primary_route_manifest",
+        source_path: imageSource,
+        media_type: "image/svg+xml",
+      },
+      fragment: null,
+      expected_url: "https://vik.guru/img/head-route-fixture.svg",
+      allowed_carriers: ["jsonld", "open_graph_image", "twitter_image"],
+      selection_basis: "The primary manifest owns the fixture share image.",
+    },
+  ].sort((left, right) => Buffer.compare(Buffer.from(left.token), Buffer.from(right.token)));
+  const trackedJson = new Map([
+    [routeBindingRelativePath, {
+      $schema: "./context-canvas-route-bindings.schema.json",
+      id: "context-canvas.public-route-reference-bindings.v1",
+      version: "1",
+      public_roots: {
+        primary: "https://vik.guru/",
+        iframe: "https://iframes.vik.guru/",
+        schema: "https://schemas.vik.guru/",
+      },
+      bindings,
+    }],
+    [routeAuthorityRelativePaths.canvasIframeManifest,
+      { id: "fixture.canvas-routes", host: "iframes.vik.guru", routes: [] }],
+    [routeAuthorityRelativePaths.coreIframeManifest,
+      { id: "fixture.core-routes", host: "iframes.vik.guru", routes: [] }],
+    [routeAuthorityRelativePaths.schemaPublicationManifest, { resources: {} }],
+    [routeAuthorityRelativePaths.schemaCompanionSelection,
+      fixtureSchemaCompanionSelection],
+    [routeAuthorityRelativePaths.skillPublicationSelection,
+      { projectionBase: "https://schemas.vik.guru/skills/", skills: [] }],
+  ]);
+  for (const [relativePath, value] of trackedJson) {
+    const selected = path.join(fixture.root, ...relativePath.split("/"));
+    await mkdir(path.dirname(selected), { recursive: true });
+    await writeFile(selected, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  }
+  const registryBinding = {
+    $schema: "./context-canvas-registry-bindings.schema.json",
+    id: "context-canvas.registry-public-reference-bindings.v1",
+    version: "1",
+    atlas: {
+      reference_version: "0.2.1",
+      guide_version: 5,
+      data_schema_version: "0.1.0",
+      snapshot_date: "2026-10-07",
+      accepted_at: "2026-10-11",
+      archive_sha256: "1".repeat(64),
+      registry_atlas_sha256: "2".repeat(64),
+      manifest_sha256: "3".repeat(64),
+      current_route_map_sha256: "4".repeat(64),
+      public_root: "https://kindlight.systems/",
+      license: "Apache-2.0",
+      content_role: "reference_data",
+      action_authority: "current_human_request_and_repository_owned_tools",
+      data_use_notice: registryDataUseRelativePath,
+      data_use_sha256: sha256(registryDataUseBytes),
+      benchmark_scope: "all_atlas_records_and_resources",
+    },
+    bindings: [{
+      token: registryToken,
+      atlas_record_key: "registry:collaboration/practitioner-probes",
+      expected_public_title: "Practitioner Probes",
+      expected_family: "Collaboration Field Guide",
+      expected_resource_role: "Practice or method",
+      expected_reader_job: "Use",
+      expected_source_lifecycle: "Current",
+      expected_route_state: "Identity verified",
+      url: registryUrl,
+      selection_basis: "The selected page answers the authored reader job.",
+    }],
+  };
+  if (includeRegistry) {
+    await writeFile(
+      path.join(fixture.root, registryBindingRelativePath),
+      `${JSON.stringify(registryBinding, null, 2)}\n`,
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture.root, registryDataUseRelativePath),
+      registryDataUseBytes,
+    );
+  }
+  fixture.sourceSha = await commitFixture(
+    fixture.root,
+    "Accept complete Context Canvas head-route fixture",
+  );
+  return { pageRows, sourceRoot };
 }
 
 async function enableCssProjectionPlanFixture(fixture) {
@@ -1896,6 +2315,273 @@ test("tracked Registry binding owns Registry routes while external configuration
         aggregatePlan: aggregateFixture(),
       }),
       /tracked Registry binding owns PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("tracked route authority materializes page identities and sitemap routes from source-bound inputs", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const publication = await enableTrackedRoutePublicationFixture(fixture);
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const carrierRoot = path.join(fixture.root, "deployment/cpanel/carrier");
+    await mkdir(carrierRoot, { recursive: true });
+    await writeFile(
+      path.join(carrierRoot, "deployment-manifest.json"),
+      '{"standing":"fixture carrier"}\n',
+      "utf8",
+    );
+    await writeFile(
+      path.join(carrierRoot, "deployment-files.tsv"),
+      "fixture\n",
+      "utf8",
+    );
+    const releaseSha = await commitFixture(fixture.root, "Add fixture carrier release");
+    const historical = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      carrierReleaseSha: releaseSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    assert.ok(
+      historical.outputFiles.get("primary-public/index.html").equals(
+        plan.outputFiles.get("primary-public/index.html"),
+      ),
+      "the accepted source blob retains route materialization across its carrier-only child",
+    );
+    const html = plan.outputFiles.get("primary-public/index.html").toString("utf8");
+    const sitemap = plan.outputFiles.get("primary-public/sitemap.xml").toString("utf8");
+    assert.match(html, /<link rel="canonical" href="https:\/\/vik\.guru\/">/);
+    assert.match(html, /<meta property="og:url" content="https:\/\/vik\.guru\/">/);
+    assert.doesNotMatch(html, /\{\{PUBLIC_URL_/);
+    assert.match(sitemap, /<loc>https:\/\/vik\.guru\/<\/loc>/);
+    assert.doesNotMatch(sitemap, /\{\{PUBLIC_URL_/);
+
+    const input = plan.manifest.inputs.public_references;
+    assert.equal(
+      input.source_relationship,
+      "tracked_route_binding_with_external_digest_bound_input",
+    );
+    assert.deepEqual(input.keys, [publication.token]);
+    assert.deepEqual(input.tracked_routes.keys, [publication.token]);
+    assert.equal(input.tracked_routes.binding.source_path, routeBindingRelativePath);
+    assert.equal(
+      input.tracked_routes.binding.git_blob_id,
+      await git(fixture.root, ["rev-parse", `HEAD:${routeBindingRelativePath}`]),
+    );
+    assert.equal(input.tracked_routes.binding.binding_count, 1);
+    assert.deepEqual(input.tracked_routes.binding.authority_counts, {
+      page: 1,
+      asset: 0,
+      iframe: 0,
+      schema: 0,
+      skill: 0,
+    });
+    for (const record of Object.values(input.tracked_routes.authorities)) {
+      assert.match(record.git_blob_id, /^[a-f0-9]{40}$/);
+      assert.match(record.sha256, /^[a-f0-9]{64}$/);
+    }
+    assert.deepEqual(input.external_configuration.keys, []);
+    assert.doesNotMatch(JSON.stringify(plan.manifest), /https:\/\/vik\.guru\//);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("generated Context Canvas heads complete the 40-page authority gate and record its receipt", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { pageRows } = await enableContextCanvasHeadRouteFixture(fixture);
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const receipt = plan.manifest.inputs.public_references.generated_head_routes;
+    assert.equal(receipt.id, "context-canvas.head-route-authority.v1");
+    assert.equal(receipt.page_count, 40);
+    assert.ok(receipt.carrier_count >= 40 * 7);
+    assert.match(receipt.carrier_sha256, /^[a-f0-9]{64}$/u);
+    for (const { projectedPath } of pageRows) {
+      const html = plan.outputFiles
+        .get(`primary-public/${projectedPath}`)
+        .toString("utf8");
+      assert.doesNotMatch(html, /\{\{PUBLIC_URL_/u, projectedPath);
+    }
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("generated Context Canvas head findings stop carrier formation with aggregate diagnostics", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { pageRows } = await enableContextCanvasHeadRouteFixture(fixture);
+    const affected = pageRows[3];
+    const affectedPath = path.join(fixture.root, ...affected.sourcePath.split("/"));
+    const source = await readFile(affectedPath, "utf8");
+    await writeFile(
+      affectedPath,
+      source.replace(
+        new RegExp(`<meta name="twitter:image:alt"[^>]*>\\n`, "u"),
+        "",
+      ),
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(
+      fixture.root,
+      "Introduce one generated head-route fixture finding",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /HEAD_METADATA_MISSING/u,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("generated Context Canvas heads reject governed literals outside composite authority", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { pageRows } = await enableContextCanvasHeadRouteFixture(fixture);
+    const affected = pageRows[0];
+    const affectedPath = path.join(fixture.root, ...affected.sourcePath.split("/"));
+    const source = await readFile(affectedPath, "utf8");
+    await writeFile(
+      affectedPath,
+      source.replace(
+        '"dateModified":"2026-10-27"',
+        '"sameAs":"https://kindlight.systems/untracked-generated-fixture","dateModified":"2026-10-27"',
+      ),
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(
+      fixture.root,
+      "Introduce an unowned generated head route",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /HEAD_ROUTE_LITERAL_UNOWNED/u,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("route-only generated Context Canvas heads retain governed-literal protection", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { pageRows } = await enableContextCanvasHeadRouteFixture(fixture, {
+      includeRegistry: false,
+    });
+    const affected = pageRows[0];
+    const affectedPath = path.join(fixture.root, ...affected.sourcePath.split("/"));
+    const source = await readFile(affectedPath, "utf8");
+    await writeFile(
+      affectedPath,
+      source.replace(
+        '"dateModified":"2026-10-27"',
+        '"sameAs":"https://kindlight.systems/untracked-route-only-fixture","dateModified":"2026-10-27"',
+      ),
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(
+      fixture.root,
+      "Introduce an unowned route-only generated head route",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /HEAD_ROUTE_LITERAL_UNOWNED/u,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("Context Canvas publication requires exact route-token coverage before generated validation", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { pageRows, sourceRoot } = await enableContextCanvasHeadRouteFixture(
+      fixture,
+      { includeRegistry: false },
+    );
+    const binding = JSON.parse(
+      await readFile(path.join(fixture.root, routeBindingRelativePath), "utf8"),
+    );
+    const replacements = new Map(
+      binding.bindings.map(({ token, expected_url: url }) => [
+        `{{${token}}}`,
+        url,
+      ]),
+    );
+    for (const relativePath of [
+      ...pageRows.map(({ sourcePath }) => sourcePath),
+      `${sourceRoot}/sitemap.xml`,
+    ]) {
+      const selected = path.join(fixture.root, ...relativePath.split("/"));
+      let source = await readFile(selected, "utf8");
+      for (const [token, url] of replacements) {
+        source = source.replaceAll(token, url);
+      }
+      await writeFile(selected, source, "utf8");
+    }
+    fixture.sourceSha = await commitFixture(
+      fixture.root,
+      "Replace the complete typed route population with literals",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /PUBLIC_ROUTE_BINDING_COVERAGE/u,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("public-route tokens require their tracked route authority", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await enableTrackedRoutePublicationFixture(fixture);
+    await rm(path.join(fixture.root, routeBindingRelativePath));
+    fixture.sourceSha = await commitFixture(fixture.root, "Remove fixture route authority");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /Production public-route tokens require the tracked binding/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });

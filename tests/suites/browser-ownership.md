@@ -72,7 +72,7 @@ their separate owners.
 
 | Owner | Disposition and reason |
 | --- | --- |
-| `tools/core-architecture-browser-helper.mjs` | Retain unchanged as the shared server and four-channel telemetry primitive. Its existing consumers remain in place. |
+| `tools/core-architecture-browser-helper.mjs` | Retain as the shared server, four-channel telemetry, and bounded launch-policy primitive. Existing consumers select bundled Playwright browsers by default; the media CI lane explicitly selects hosted Chrome. |
 | `tools/open-lesson-field-contract.mjs` | Retain this wave. Its static server is a plausible later reuse candidate, but direct/embedded route policy and timestamped screenshot/summary identity belong to its campaign. |
 | `tools/narrative-architecture-contract.mjs` | Retain. Its 14 verification journeys and projection semantics remain family-owned; a future lifecycle migration needs its own parity observation. |
 | `tools/strategy-canvas-contract.mjs` | Retain. Attribution, projection, story phases, and screenshot/summary production are a larger receiving boundary than this pilot. |
