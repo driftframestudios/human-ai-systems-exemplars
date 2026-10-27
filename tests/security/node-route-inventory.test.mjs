@@ -48,6 +48,7 @@ test('runtime owners are explicit for browser/shared, workerd, bootstrap and new
   assert.equal(admissionSpecifier('research/table-verification-threshold/paired-replay-02/core.mjs'), './node-runtime-admission.mjs');
   assert.equal(classifyJavaScript('cloudflare/r2-video-delivery/src/index.js'), 'workerd');
   assert.equal(classifyJavaScript('collaboration/investment-analysis/core.js'), 'browser-shared');
+  assert.equal(classifyJavaScript('deployment/cpanel/carrier/primary-public/example.js'), 'frozen-publication');
   assert.equal(classifyJavaScript('new/browser.js'), 'unclassified');
   assert.equal(classifyJavaScript('new/cli.cjs'), 'unclassified');
   assert.throws(() => classifyJavaScript('../outside.mjs'), /repository-relative/);
@@ -85,9 +86,13 @@ test('new JavaScript and Node shebang routes require classification while Node m
 test('frozen publication bytes retain their existing owner and remain unchanged by inspection', async t => {
   const file = 'cloudflare/schemas-worker/public/skills/source/example.mjs';
   const doc = 'cloudflare/schemas-worker/public/skills/source/README.md';
+  const carrierFile = 'deployment/cpanel/carrier/primary-public/example.js';
+  const carrierDoc = 'deployment/cpanel/carrier/primary-public/receipt.json';
   const input = await fixture(t, {
     [file]: 'export const historical = true;\n',
     [doc]: '```sh\nnpx historical-example\nnode -e "process.exit()"\n```\n',
+    [carrierFile]: 'window.historicalCarrier = true;\n',
+    [carrierDoc]: JSON.stringify({ historical: 'node -e "process.exit()"' }),
   });
   const before = await Promise.all(input.paths.map(p => readFile(path.join(input.root, p))));
   assert.equal((await inspectNodeRoutes(input)).ok, true);
