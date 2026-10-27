@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/data-view-lab/v1.schema.json",
+  "title": "Visual Fidelity Data-View Lab Fixture",
+  "description": "A closed fixture contract for identity, lineage, scope, units, denominator, value standing, and deterministic ordering.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dataViewLabId", "revision", "lineage", "decisionNeed", "dataStanding", "scope", "unit", "denominator", "records", "relationships"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "dataViewLabId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+    "revision": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "parentRevision"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1, "maxLength": 160, "pattern": "\\S" },
+        "parentRevision": { "type": ["string", "null"], "minLength": 1, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9._-]*$" }
+      }
+    },
+    "decisionNeed": { "enum": ["single-status", "exact-values", "compare", "change-over-time", "relationships", "spatial"] },
+    "dataStanding": { "enum": ["absent", "partial", "current", "stale"] },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 160, "pattern": "\\S" },
+    "unit": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "\\S" },
+    "denominator": { "type": "string", "minLength": 1, "maxLength": 160, "pattern": "\\S" },
+    "records": {
+      "type": "array",
+      "maxItems": 500,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "order", "value", "standing", "group", "observedAt", "position"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,47}$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S" },
+          "order": { "type": "integer", "minimum": 0 },
+          "value": { "type": ["number", "null"] },
+          "standing": { "enum": ["known", "unknown", "absent", "stale", "estimated", "redacted"] },
+          "group": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "\\S" },
+          "observedAt": { "type": ["string", "null"], "minLength": 1, "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "number", "minimum": 0, "maximum": 100 },
+              "y": { "type": "number", "minimum": 0, "maximum": 100 }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "standing": { "enum": ["known", "stale", "estimated"] } }, "required": ["standing"] },
+            "then": {
+              "properties": {
+                "value": { "type": "number" },
+                "observedAt": { "type": "string" }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": { "type": "null" },
+                "observedAt": { "type": "null" }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 1000,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sourceId", "targetId", "label"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+          "sourceId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,47}$" },
+          "targetId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,47}$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S" }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "dataStanding": { "const": "absent" } }, "required": ["dataStanding"] },
+      "then": { "properties": { "records": { "type": "array", "maxItems": 0 }, "relationships": { "type": "array", "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "records": { "type": "array", "maxItems": 0 } }, "required": ["records"] },
+      "then": { "properties": { "dataStanding": { "const": "absent" } } }
+    },
+    {
+      "if": { "properties": { "dataStanding": { "const": "current" } }, "required": ["dataStanding"] },
+      "then": {
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "standing": { "enum": ["known", "unknown", "absent", "estimated", "redacted"] } }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

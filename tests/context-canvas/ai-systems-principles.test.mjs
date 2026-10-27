@@ -4,13 +4,22 @@ import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
-const aiSystemsCollectionId =
-  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html#collection";
+const aiSystemsCollectionId = "https://vik.guru/ai-systems.html#collection";
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 const aiSystemsCollectionName =
   "AI Systems — Accountable Decisions and Recoverable Work";
 const humanAuthor = { "@type": "Person", name: "Vikrant Varun Kudesia" };
@@ -458,7 +467,7 @@ test("the AI Systems family presents one title across document, social, and stru
       ? metadata.isPartOf
       : [metadata.isPartOf];
     const collection = parents.find(
-      (parent) => parent?.["@id"] === aiSystemsCollectionId,
+      (parent) => publicValue(parent?.["@id"]) === aiSystemsCollectionId,
     );
     assert.equal(
       collection?.name,
@@ -538,7 +547,7 @@ test("the AI Systems family identifies human authorship, publication, and collec
     assert.match(metadata.dateModified, /^\d{4}-\d{2}-\d{2}$/u, `${route}: dateModified`);
 
     if (route === "ai-systems.html") {
-      assert.equal(metadata["@id"], aiSystemsCollectionId, route);
+      assert.equal(publicValue(metadata["@id"]), aiSystemsCollectionId, route);
       assert.match(
         source,
         /class="anchor_ai_systems" aria-current="page">AI Systems<\/a>/u,
@@ -551,7 +560,7 @@ test("the AI Systems family identifies human authorship, publication, and collec
       ? metadata.isPartOf
       : [metadata.isPartOf];
     assert.ok(
-      parents.some((parent) => parent?.["@id"] === aiSystemsCollectionId),
+      parents.some((parent) => publicValue(parent?.["@id"]) === aiSystemsCollectionId),
       `${route}: AI Systems collection ancestry`,
     );
     assert.match(

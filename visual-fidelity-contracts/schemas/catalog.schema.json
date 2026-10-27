@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
+  "title": "Visual Fidelity Contract Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "id", "reviewedOn", "authority", "contracts", "resources"],
+  "properties": {
+    "$schema": {
+      "const": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json"
+    },
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "const": "vfc:catalog" },
+    "reviewedOn": { "type": "string", "format": "date" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["semanticOwner", "schemaOwner", "publicationOwner"],
+      "properties": {
+        "semanticOwner": { "type": "string", "minLength": 3 },
+        "schemaOwner": { "type": "string", "minLength": 3 },
+        "publicationOwner": { "type": "string", "minLength": 3 }
+      }
+    },
+    "contracts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/catalogEntry" }
+    },
+    "resources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/resourceEntry" }
+    }
+  },
+  "$defs": {
+    "repositoryPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[A-Za-z0-9][A-Za-z0-9._/ -]*$",
+      "minLength": 3,
+      "maxLength": 300
+    },
+    "catalogEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "kind", "standing", "version", "profile", "sourcePath", "examples", "tests"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^vfc:[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "kind": { "enum": ["art_direction_contract", "repository_composition_contract"] },
+        "standing": { "enum": ["review_candidate", "established", "superseded", "retired"] },
+        "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+        "profile": { "enum": ["legacy_document", "art_direction_v1"] },
+        "sourcePath": { "$ref": "#/$defs/repositoryPath" },
+        "recordPath": { "$ref": "#/$defs/repositoryPath" },
+        "tokensPath": { "$ref": "#/$defs/repositoryPath" },
+        "specimenPath": { "$ref": "#/$defs/repositoryPath" },
+        "publicRoute": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://kindlight\\.systems/"
+        },
+        "examples": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": { "$ref": "#/$defs/repositoryPath" },
+          "uniqueItems": true
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": { "$ref": "#/$defs/repositoryPath" },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "profile": { "const": "art_direction_v1" } }, "required": ["profile"] },
+          "then": {
+            "properties": {
+              "recordPath": { "$ref": "#/$defs/repositoryPath" },
+              "tokensPath": { "$ref": "#/$defs/repositoryPath" },
+              "specimenPath": { "$ref": "#/$defs/repositoryPath" },
+              "publicRoute": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://kindlight\\.systems/"
+              }
+            },
+            "required": ["recordPath", "tokensPath", "specimenPath", "publicRoute"]
+          }
+        }
+      ]
+    },
+    "resourceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "kind", "standing", "version", "sourcePath", "publicRoute", "tests"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^vfc-resource:[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+        "kind": { "enum": ["executable_lab", "practitioner_probe", "example_collection"] },
+        "standing": { "enum": ["review_candidate", "established", "superseded", "retired"] },
+        "version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+        "sourcePath": { "$ref": "#/$defs/repositoryPath" },
+        "publicRoute": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://kindlight\\.systems/"
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": { "$ref": "#/$defs/repositoryPath" },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

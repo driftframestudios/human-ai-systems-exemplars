@@ -28,6 +28,10 @@ export async function assertPublicationRevision(root, revision, paths) {
 export const schemaCompanionRoutes = Object.freeze([
   { source: "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json", receiverPath: "prototype-exemplars/1.0.0/prototype-exemplars.example.json" },
   { source: "schemas/context-canvas/1.0.0/context-canvas.context.jsonld", receiverPath: "context-canvas/1.0.0/context-canvas.context.jsonld" },
+  { source: "schemas/collaboration-skills/0.1.0/README.md", receiverPath: "collaboration-skills/0.1.0/README.md" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json", receiverPath: "collaboration-skills/0.1.0/examples/portable-skill.example.json" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json", receiverPath: "collaboration-skills/0.1.0/examples/retired-projection.example.json" },
+  { source: "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json", receiverPath: "collaboration-skills/0.1.0/examples/collaboration-account.example.json" },
   { source: "collaboration/investment-analysis/example.json", receiverPath: "investment-analysis/0.2.0/example.json" },
   { source: "schemas/investment-analysis/0.2.0/README.md", receiverPath: "investment-analysis/0.2.0/README.md" },
   { source: "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/a3-stacked-cube.context.jsonld", receiverPath: "a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld" },

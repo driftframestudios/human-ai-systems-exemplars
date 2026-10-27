@@ -1,0 +1,17 @@
+{
+  "schema": "visual-fidelity.service-boundary-response.v1",
+  "standing": "held",
+  "projection": {
+    "id": "synthetic-case-0142",
+    "revision": 7,
+    "status": "assembled",
+    "nextAction": "Request an authorized projection"
+  },
+  "receipt": null,
+  "issue": {
+    "id": "ISSUE-AUTH-01",
+    "code": "PROJECTION_HELD",
+    "message": "The current role receives a bounded projection.",
+    "recovery": "Request the required role or continue with the visible fields."
+  }
+}

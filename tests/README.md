@@ -41,6 +41,29 @@ Begin with the source owner's focused command. The sections below separate
 build boundaries, deployment assembly, source contracts, and rendered browser
 behavior so one passing result keeps a clear evidence scope.
 
+### Visual Fidelity hub
+
+The Visual Fidelity source route validates shared schemas, contract records,
+tokens, deterministic lab models, fixtures, source parity, example metadata,
+checked-in image bytes, and deterministic digests for each declared source set.
+The browser route exercises runnable behavior and pattern readings across
+Chromium, Firefox, and WebKit. The aggregate command checks the catalog,
+semantic companions, gallery, and existing derivatives while leaving their
+bytes unchanged. `npm run build:visual-fidelity-pattern-library` performs a
+fresh browser capture after a source definition or captured state changes.
+
+```sh
+npm run test:visual-fidelity-contracts:source
+npm run check:visual-fidelity-pattern-library
+npm run test:visual-fidelity-contracts:browser
+npm run test:visual-fidelity-contracts
+```
+
+These checks establish behavior for the named synthetic fixtures, browser
+versions, source revisions, and responsive states. Receiving products retain
+their own security, accessibility-conformance, performance, scientific-validity,
+and service-reliability observations.
+
 The documentation route contract checks the repository's current Markdown
 forms: inline and used reference links in ordinary, quoted, and list prose;
 ATX headings and explicit HTML identifiers; and fenced or inline code kept at
@@ -103,20 +126,38 @@ source-selection boundary rather than Core or Narrative prototype behavior:
 ```sh
 npm run test:public-reference-contracts
 npm run test:public-references
+npm run test:context-canvas-head-routes
+npm run test:public-reference-projections
 npm run test:citation-atlas-selection
 npm run test:public-reference-materializer
 ```
 
-The aggregate contract route runs both focused families and confirms their
-suite-catalog reachability. The complete Node route runs the materializer,
-Registry binding, and synthetic live-route verifier modules. These checks use synthetic destinations,
-stubbed HTTP responses, and temporary directories. They exercise context-aware
-anchor and JSON-LD substitution, configuration failures, source/output
-separation, retained-generation recovery, bounded response handling, exact
-route and title identity, and the current Context Canvas source without
-retaining or reporting configured destinations. The focused
+The aggregate contract route runs both focused families, one focused edge over
+the coupled iframe package, production closure, and production projection
+modules, and their suite-catalog reachability. The complete iframe and
+production-deployment families remain independently selectable through
+`test:iframe-routes` and `test:prod-deployment`.
+The complete public-reference Node route runs the materializer,
+Registry and repository-route bindings, Context Canvas head validator,
+head-authority matrix, and synthetic live-route verifier modules. These checks
+use synthetic destinations, stubbed HTTP responses, and temporary directories.
+They exercise context-aware anchor, metadata, JSON-LD, and sitemap substitution;
+configuration failures; source/output separation; retained-generation recovery;
+bounded response handling; exact route and title identity; and the current
+Context Canvas source while destination values remain in their configured
+receiver. The focused
 `test:public-reference-materializer` compatibility route remains available for
 the materializer module alone.
+
+`test:context-canvas-head-routes` is the repository-state gate. It derives the
+40 indexed top-level pages from the primary manifest, preserves the explicit
+404 and retained-exemplar standing, parses canonical and social metadata plus
+recursive JSON-LD URLs, compares sitemap membership, enforces token/carrier
+authority, and checks the tracked occurrence matrix. Diagnostics aggregate and
+sort before the command returns. Maintainers can inspect the same result as
+structured JSON with `node tools/check-context-canvas-head-routes.mjs --json`.
+The explicit `--write-matrix` mode prepares a deterministic reviewed update;
+the ordinary gate keeps that tracked matrix current.
 
 The Registry contract cases enforce the tracked binding's exact shape,
 accepted Atlas identity, normalized public host, current lifecycle,
@@ -124,6 +165,14 @@ identity-verified route state, deterministic ordering, inert prose boundary,
 and exact source-discovered token coverage. The repository case discovers its
 keys and occurrences from source; migration counts remain a historical
 observation rather than a release threshold.
+
+The route-binding cases validate all page, asset, iframe, schema, and skill
+keys against their named publication owners. The head cases cover source-token
+and generated-URL states, malformed JSON-LD, multiple simultaneous findings,
+unknown URL-bearing properties, sitemap divergence, retained-route standing,
+and carrier-policy mismatches. The schema Worker companion selection tests keep
+the upcoming Collaboration Skills README and portable example visible while
+their live activation waits for the next accepted Worker publication.
 
 The Python route exercises the portable Citation Atlas helper through its
 public CLI. Synthetic Atlas records cover strict UTF-8 JSON, lifecycle and
@@ -262,7 +311,7 @@ catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
 overflow. The same focused route selects Case Brief mode across narrow,
-responsive-seam, and desktop widths, then verifies all sixteen source-owned
+responsive-seam, and desktop widths, then verifies all sixteen source-maintained
 scans, their stable six-field order, thirty-two independently operable track
 disclosures, collapsed initial states, state-aware labels, related media, one
 complete-reading action, the five-route EHR group's atomic replacement and
@@ -323,16 +372,22 @@ npm run media:video:verify -- --source <master.mp4>
 npm run test:context-canvas
 ```
 
-The local tests exercise preparation routing, strict decode, Fast Start,
+The local tests exercise CI cache identity and APT-plan parsing alongside
+preparation routing, strict decode, Fast Start,
 copy-remux packet identity, selected scaling geometry, sanitized metadata
 reporting, atomic promotion and cleanup disposition, the finite public path
 grammar, exact R2 key mapping, typed response failures, stream ownership,
 bounded reads, accepted movie-to-poster lineage, visitor-receiver binding, and
 both head-first and cold-range-first live verification.
-The required CI receiver proves both real FFmpeg preparation branches and the
-synthetic failure contracts. The Wrangler dry run establishes
-that the selected source bundles against the declared R2 binding and route; it
-does not create a bucket, upload bytes, attach the route, or observe the edge.
+The executable APT-plan fixture uses POSIX `awk`, matching the Ubuntu CI owner;
+macOS and Linux development environments provide the same fixture boundary.
+The required CI receiver proves both real FFmpeg preparation branches, the
+synthetic failure contracts, and the invariant media and Worker command route
+for exact, compatible, missed, or unavailable cache standings. The Wrangler
+dry run establishes that the selected source bundles against the declared R2
+binding and route. Its proof boundary ends at local compilation; bucket
+creation, byte upload, route attachment, and edge observation retain their
+deployment owners.
 
 After human-owned R2 upload and route activation, begin with the transport-only
 live check:

@@ -29,6 +29,7 @@ import {
   verifyPackagePlan,
   writePackagePlan,
 } from "../../tools/package-iframe-routes.mjs";
+import { loadPublicRouteReferenceBinding } from "../../tools/public-route-reference-contract.mjs";
 
 const [coreSourceRoot, contextProjectionPath] =
   attributionContract.public_html.core_projection_roots;
@@ -137,7 +138,8 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   const secondProjection = secondPlan.outputFiles.get("conditioning-field/index.html");
   const projection = firstProjection.toString("utf8");
   const receipt = firstPlan.receipt.routes.find(({ id }) => id === "conditioning-field");
-  const derived = deriveConditioningFieldProjection(source);
+  const routeReference = await loadPublicRouteReferenceBinding();
+  const derived = deriveConditioningFieldProjection(source, routeReference.destinations);
 
   assert.ok(firstProjection.equals(secondProjection));
   assert.notEqual(derived, projection);
@@ -189,7 +191,7 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
     '<script>window.parent.postMessage({type: "conditioning-state"}, "*");</script>\n</body>',
   );
   assert.throws(
-    () => deriveConditioningFieldProjection(messagingSource),
+    () => deriveConditioningFieldProjection(messagingSource, routeReference.destinations),
     /must not initiate cross-document messaging/,
   );
 });
@@ -472,7 +474,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2784424 });
+  assert.deepEqual(verification, { files: 27, bytes: 2784168 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

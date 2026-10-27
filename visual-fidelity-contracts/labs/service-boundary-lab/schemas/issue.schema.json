@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/visual-fidelity/service-boundary-issue.v1.schema.json",
+  "title": "Visual Fidelity service-boundary issue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "code", "message", "recovery"],
+  "properties": {
+    "id": { "$ref": "#/$defs/text" },
+    "code": { "$ref": "#/$defs/text" },
+    "message": { "$ref": "#/$defs/text" },
+    "recovery": { "$ref": "#/$defs/text" }
+  },
+  "$defs": { "text": { "type": "string", "minLength": 1, "maxLength": 160 } }
+}

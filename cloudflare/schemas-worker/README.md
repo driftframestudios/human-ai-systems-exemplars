@@ -68,11 +68,13 @@ records the activation, Worker-version, and recovery receipt.
 
 ## Publication boundary
 
-`tools/schema-receiver-routes.mjs` selects 17 schema contracts.
-`tools/schema-publication.mjs` selects their 16 examples, contexts, and guide
-companions. `tools/schema-publication-lock.json` binds every schema contract to
-its accepted digest. The Worker publishes each contract through its established
-route and its `/schemas/` asset route while preserving its canonical `$id`.
+The accepted v0.3.1 source coordinate selected 17 schema contracts and 16
+examples, contexts, and guide companions. The current route ledger names the
+next candidate cohort; a reviewed activation will establish its production
+membership. `tools/schema-publication-lock.json` binds every selected schema
+contract to its accepted digest. The Worker publishes each accepted contract
+through its established route and its `/schemas/` asset route while preserving
+its canonical `$id`.
 
 The accepted skill boundary contains 86 shared files under `/skills/`:
 

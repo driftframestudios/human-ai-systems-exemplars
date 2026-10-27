@@ -4,11 +4,21 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from "../public-references/source-route-authority.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const routeAuthority = await loadSourceRouteAuthority();
+
+function publicValue(value) {
+  return resolveSourceRouteValue(value, routeAuthority);
+}
 
 async function readCanvasFile(path) {
   return readFile(resolve(canvasRoot, path), "utf8");
@@ -121,7 +131,7 @@ test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => 
     Array.from({ length: 23 }, (_, index) => index + 1),
   );
 
-  const itemUrls = itemList.itemListElement.map(item => item.url);
+  const itemUrls = itemList.itemListElement.map(item => publicValue(item.url));
   assert.ok(itemUrls.some(url => url.endsWith("/benchmark-orientation.html")));
   assert.ok(itemUrls.some(url => url.endsWith("/maps-evaluations.html")));
 
@@ -140,7 +150,10 @@ test("sitemap and local route inventory expose both readings", async () => {
   ]);
 
   for (const route of ["benchmark-orientation.html", "maps-evaluations.html"]) {
-    assert.equal(countMatches(sitemap, new RegExp(route.replace(".", "\\."), "gu")), 1);
+    const token = [...routeAuthority.entries()]
+      .find(([, destination]) => destination === `https://vik.guru/${route}`)?.[0];
+    assert.ok(token, `${route}: manifest-derived public token`);
+    assert.equal(countMatches(sitemap, new RegExp(`\\{\\{${token}\\}\\}`, "gu")), 1);
     assert.ok(readme.includes(`[\`${route}\`]`));
   }
 });

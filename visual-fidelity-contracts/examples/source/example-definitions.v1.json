@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "1.0.0",
+  "libraryId": "visual-fidelity-pattern-library",
+  "reviewedOn": "2026-10-20",
+  "publicCollection": "https://kindlight.systems/visual-fidelity-contracts",
+  "rights": {
+    "license": "Apache-2.0",
+    "copyrightHoldersSource": "AUTHORS",
+    "copyrightHolders": [
+      "Vikrant Varun Kudesia",
+      "Driftframe Studios, Limited Liability Company"
+    ],
+    "publisher": "Driftframe Studios, Limited Liability Company",
+    "standing": "Documentation derivative of synthetic source maintained in this repository"
+  },
+  "examples": [
+    {
+      "id": "vfp:industrial-ink:service-boundary",
+      "slug": "industrial-ink-service-boundary",
+      "ordinal": 1,
+      "category": "industrial-ink",
+      "title": "Industrial Ink service boundary",
+      "description": "A technical workbench lets a reviewer follow one accepted task through authorization, processing, recovery, and a final human decision.",
+      "alt": "Dark technical workbench with scenario controls, an accepted task record, and separate cards for request, authorization, transaction, receipt, cache, AI output, disclosure, and decision state.",
+      "caption": "Figure 1. Industrial Ink gives dense service state a calm hierarchy while one accepted revision remains visible through replay, interruption, rollback, and recovery.",
+      "pixelInspection": {
+        "reviewedOn": "2026-10-20",
+        "derivativeSha256": "0791b9da373c22d871cbff5c33ae358f00e07ae7bb8cf95e3383d108e8bc4b69",
+        "scope": "1600-pixel derivative inspected at original resolution"
+      },
+      "source": {
+        "path": "visual-fidelity-contracts/labs/service-boundary-lab/index.html",
+        "selector": "main[data-service-boundary-lab]",
+        "state": "success",
+        "type": "runnable-lab",
+        "identity": "service-boundary-lab@1.2.0",
+        "files": [
+          "visual-fidelity-contracts/labs/service-boundary-lab/index.html",
+          "visual-fidelity-contracts/labs/service-boundary-lab/styles.css",
+          "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-lab.js",
+          "visual-fidelity-contracts/labs/service-boundary-lab/service-boundary-model.js"
+        ]
+      },
+      "contract": {
+        "id": "vfc:industrial-ink",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/industrial-ink/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/industrial-ink-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence/visual-fidelity-probes-back-end-runtime-transactions-framework-boundaries",
+      "semanticCompanion": {
+        "summary": "The accepted task remains available while each boundary reports its own state and recovery route.",
+        "relationships": [
+          ["Accepted object", "Task T-204 at accepted revision 7"],
+          ["Candidate path", "Authorized command → transaction → receipt → outbox"],
+          ["Recovery", "Interrupt, checkpoint, resume, rollback, or retain the prior accepted revision"],
+          ["Decision authority", "A named human accepts a generated claim after its evidence label is visible"]
+        ]
+      },
+      "tests": [
+        "tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
+        "tests/visual-fidelity-contracts/service-boundary.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfp:soft-color-blocking:workflow",
+      "slug": "soft-color-blocking-workflow",
+      "ordinal": 2,
+      "category": "soft-color-blocking",
+      "title": "Soft Color Blocking workflow",
+      "description": "Broad fields give orientation, comparison, review, and recovery distinct places while labels carry the selected state and the next useful action.",
+      "alt": "Warm pink and cream workflow with four square state blocks for Orient, Compare, Review, and Recover, followed by selected-state details and a state register.",
+      "caption": "Figure 2. Soft Color Blocking makes a four-stage workflow approachable while written labels, geometry, and status text preserve its operating meaning.",
+      "pixelInspection": {
+        "reviewedOn": "2026-10-20",
+        "derivativeSha256": "53631af48305729219089dfd5826bec071027f404f21811dc3959236921b04f0",
+        "scope": "1600-pixel derivative inspected at original resolution"
+      },
+      "source": {
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+        "selector": "main.shell",
+        "state": "review",
+        "type": "contract-specimen",
+        "identity": "soft-color-blocking-specimen@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
+          "visual-fidelity-contracts/contracts/soft-color-blocking/tokens.css"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+      "semanticCompanion": {
+        "summary": "Four written workflow states lead to a selected detail and an explicit next action.",
+        "relationships": [
+          ["Sequence", "Orient → Compare → Review → Recover"],
+          ["Selected state", "Review is held with its object and next action visible"],
+          ["Redundant meaning", "Labels, source order, borders, and status text reinforce the color fields"],
+          ["Recovery", "The accepted revision and continuation action stay explicit"]
+        ]
+      },
+      "tests": [
+        "tests/visual-fidelity-contracts/contract-art-directions.test.mjs",
+        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfp:component:accepted-recovery",
+      "slug": "component-accepted-recovery",
+      "ordinal": 3,
+      "category": "component-and-recovery",
+      "title": "Component ownership and recovery",
+      "description": "A review workspace preserves accepted catalog data while a person edits an order, receives a clear authorization result, and recovers from a held or failed request.",
+      "alt": "Two-panel component workbench with selectable catalog items, a review-order form, request and data status, an accepted receipt, and a disclosure for the semantic state twin.",
+      "caption": "Figure 3. The component lab keeps accepted data on screen while local intent and authority move through their own validation, failure, and recovery states.",
+      "pixelInspection": {
+        "reviewedOn": "2026-10-20",
+        "derivativeSha256": "47f4753ed0ce105ba6e99ef0f4dd1b9ccb8d053e3e0e716e36f4676b456c1513",
+        "scope": "1600-pixel derivative inspected at original resolution"
+      },
+      "source": {
+        "path": "visual-fidelity-contracts/labs/component-lab/index.html",
+        "selector": "main[data-component-lab]",
+        "state": "accepted-receipt",
+        "type": "runnable-lab",
+        "identity": "component-lab@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/labs/component-lab/index.html",
+          "visual-fidelity-contracts/labs/component-lab/src/controller.js",
+          "visual-fidelity-contracts/labs/component-lab/src/model.js",
+          "visual-fidelity-contracts/labs/component-lab/src/render.js",
+          "visual-fidelity-contracts/labs/component-lab/src/semantics.js",
+          "visual-fidelity-contracts/labs/component-lab/src/styles/lab.css",
+          "visual-fidelity-contracts/labs/component-lab/fixtures/valid/catalog.json"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-component-lab-panels-drawers-commerce-flows",
+      "semanticCompanion": {
+        "summary": "Accepted catalog state, local form intent, request state, and authority receipt have distinct owners.",
+        "relationships": [
+          ["Accepted data", "Catalog revision and item availability remain visible"],
+          ["Local intent", "Email, quantity, and selected item stay editable until submission"],
+          ["Authority", "Allowed, held, and denied remain explicit states"],
+          ["Recovery", "Prior accepted data remains available when a candidate fails or refreshes"]
+        ]
+      },
+      "tests": [
+        "tests/visual-fidelity-contracts/component-model.test.mjs",
+        "tests/visual-fidelity-contracts/component-page.test.mjs",
+        "tests/visual-fidelity-contracts/component.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfp:data-view:value-standing",
+      "slug": "data-view-value-standing",
+      "ordinal": 4,
+      "category": "data-view-and-evidence",
+      "title": "Data view, value standing, and evidence",
+      "description": "A comparison workspace helps a reviewer see weekly case volume, inspect the exact values behind the chart, and understand which values are current, estimated, missing, or restricted.",
+      "alt": "Data-view workbench with decision controls, a horizontal comparison chart, exact-value table, revision and lineage labels, and a key for six value standings.",
+      "caption": "Figure 4. The data-view lab keeps the chart and exact-value twin connected to the same accepted records, lineage, units, denominator, and value standing.",
+      "pixelInspection": {
+        "reviewedOn": "2026-10-20",
+        "derivativeSha256": "8809a05db6910079ea8a7e43926ee0d8063fe8b156d5a70d32a60e1902b7b736",
+        "scope": "1600-pixel derivative inspected at original resolution"
+      },
+      "source": {
+        "path": "visual-fidelity-contracts/labs/data-view-lab/index.html",
+        "selector": "main[data-data-view-lab]",
+        "state": "partial",
+        "type": "runnable-lab",
+        "identity": "data-view-lab@1.0.0",
+        "files": [
+          "visual-fidelity-contracts/labs/data-view-lab/index.html",
+          "visual-fidelity-contracts/labs/data-view-lab/src/controller.js",
+          "visual-fidelity-contracts/labs/data-view-lab/src/model.js",
+          "visual-fidelity-contracts/labs/data-view-lab/src/render.js",
+          "visual-fidelity-contracts/labs/data-view-lab/src/semantics.js",
+          "visual-fidelity-contracts/labs/data-view-lab/src/styles/lab.css",
+          "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/current.json",
+          "visual-fidelity-contracts/labs/data-view-lab/fixtures/valid/partial.json"
+        ]
+      },
+      "contract": {
+        "id": "vfc:soft-color-blocking",
+        "version": "1.0.0",
+        "path": "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
+        "publicRoute": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract"
+      },
+      "publicContinuation": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-data-view-lab-shape-state-evidence",
+      "semanticCompanion": {
+        "summary": "The selected decision need determines the fitting view while the table and machine twin preserve exact values and standing.",
+        "relationships": [
+          ["Decision need", "Compare twelve workflow stages as cases per weekly review"],
+          ["Visible view", "A local two-dimensional chart supports comparison"],
+          ["Exact twin", "A paginated table carries the same records, units, and standing"],
+          ["Recovery", "A rejected candidate leaves the prior accepted revision available"]
+        ]
+      },
+      "tests": [
+        "tests/visual-fidelity-contracts/data-view-model.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-page.test.mjs",
+        "tests/visual-fidelity-contracts/data-view-browser.test.mjs"
+      ]
+    }
+  ]
+}

@@ -5,10 +5,14 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import visitorBoundary from '../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js';
 import { aggregateLabels, DATA_PATH, parseLabels, renderTable } from '../../tools/build-atlas-reference.mjs';
+import {
+  loadSourceRouteAuthority,
+  resolveSourceRouteValue,
+} from '../public-references/source-route-authority.mjs';
 
 const root = new URL('../../', import.meta.url);
 const route = 'one-figure-several-readings.html';
-const canonical = `https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/${route}`;
+const canonical = `https://vik.guru/${route}`;
 const read = path => readFile(new URL(path, root), 'utf8');
 const linkedData = text => [...text.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gu)].map(match => JSON.parse(match[1]));
 const entities = data => data.flatMap(entity => entity['@graph'] ?? [entity]);
@@ -61,6 +65,7 @@ test('original figure remains an immutable reference with a selected production 
 });
 
 test('essay uses the shared source table and source-owned SVG', async () => {
+  const authority = await loadSourceRouteAuthority();
   const html = await read(`context-canvas-project-surface/context-canvas/${route}`);
   const groups = aggregateLabels(parseLabels(await read(DATA_PATH)));
   assert.ok(html.includes(renderTable(groups)));
@@ -68,12 +73,13 @@ test('essay uses the shared source table and source-owned SVG', async () => {
   assert.match(html, /July and October are partial observation windows/u);
   assert.match(html, /https:\/\/doi.org\/10.24432\/C54305/u);
   const article = entities(linkedData(html)).find(entity => entity['@type'].includes('Article'));
-  assert.equal(article['@id'], `${canonical}#article`);
-  assert.equal(article.url, canonical);
+  assert.equal(resolveSourceRouteValue(article['@id'], authority), `${canonical}#article`);
+  assert.equal(resolveSourceRouteValue(article.url, authority), canonical);
   assert.ok(article.citation.includes('https://www.w3.org/WAI/tutorials/images/complex/'));
 });
 
 test('catalog keeps the essay at the authored end and links the declared entity', async () => {
+  const authority = await loadSourceRouteAuthority();
   const html = await read('context-canvas-project-surface/context-canvas/debriefs.html');
   const card = html.match(/<li\b[^>]*id="catalog-atlas-reference"[\s\S]*?<span class="txt-right">[\s\S]*?<\/span>\s*<\/li>/u)?.[0];
   assert.ok(card, 'The new card retains the established catalog structure.');
@@ -83,7 +89,10 @@ test('catalog keeps the essay at the authored end and links the declared entity'
   const graph = entities(linkedData(html));
   const list = graph.find(entity => entity['@type'] === 'ItemList');
   assert.equal(list.numberOfItems, list.itemListElement.length);
-  assert.equal(list.itemListElement.at(-1).url, canonical);
-  const collection = graph.find(entity => entity['@id'] === canonical.replace(`${route}`, 'debriefs.html#webpage'));
-  assert.ok(collection.hasPart.some(part => part['@id'] === `${canonical}#article`));
+  assert.equal(resolveSourceRouteValue(list.itemListElement.at(-1).url, authority), canonical);
+  const collectionId = canonical.replace(`${route}`, 'debriefs.html#webpage');
+  const collection = graph.find(entity => resolveSourceRouteValue(entity['@id'], authority) === collectionId);
+  assert.ok(collection.hasPart.some(part =>
+    resolveSourceRouteValue(part['@id'], authority) === `${canonical}#article`,
+  ));
 });

@@ -39,6 +39,8 @@ The on-demand workflows live in `.agents/skills/`:
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
 - `cost-and-ownership-analysis` maps scoped function cost, input boundaries, and mutation ownership to proportionate repairs and evidence.
+- `evidence-bearing-test-design` joins one owned behavior, one plausible fault, one independent expectation, and the smallest observation that can distinguish them.
+- `test-suite-composition` maps owned checks, dependencies, runners, environment preparation, phase cost, result meaning, expansion events, and recovery into proportionate execution routes.
 - `relational-execution-review` connects relational contracts, ordinary-role SQL, query plans, object ownership, and named recovery events to bounded implementation evidence.
 - `supportive-change-writing` shapes repository prose and instruction surfaces.
 - `agency-and-action-writing` restores truthful actors, actual actions, concrete objects, and material consequences when prose hides them while preserving flexible voice and precise abstractions.
@@ -46,6 +48,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `contextual-jargon-scan` classifies potentially inside wording within a bounded corpus and revises only shorthand whose meaning becomes clearer in ordinary language.
 - `evidence-grounded-research-spike` converts current external evidence into a bounded repository decision.
 - `declarative-skill-authoring` creates and revises transferable skills through contracts, rules, sparse behavior examples, and conditional context.
+- `design-token-pipeline-stewardship` carries visual meaning from named source authority through a bounded canonical token set, validated alias graph, pinned compiler, generated artifacts, receiving UI adapters, semantic review, and recovery.
 - `collaboration-accounting` routes decision-changing working observations into skill creation, revision, a triggered candidate, continued observation, settlement, consolidation, or retirement.
 - `schema-contract-authoring` shapes bounded schema families through distinct identity, authority, retrieval, dependency closure, examples, semantic context, and proportional material-use checks.
 - `source-authority-mapping` traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery, receiving use, and promotion.

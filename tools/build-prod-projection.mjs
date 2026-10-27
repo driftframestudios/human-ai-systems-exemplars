@@ -32,8 +32,10 @@ import {
   decorateCanvasPublicDocument,
 } from "./package-canvas-iframe-routes.mjs";
 import {
+  inspectPublicReferenceSitemap,
   inspectProfessionalProfileScript,
   inspectPublicReferenceHtml,
+  materializePublicReferenceSitemap,
   materializeProfessionalProfileScript,
   materializePublicReferenceHtml,
   PUBLIC_REFERENCE_NAMESPACE,
@@ -45,6 +47,19 @@ import {
   parseRegistryReferenceBinding,
   verifyRegistryAtlasDataUse,
 } from "./registry-reference-contract.mjs";
+import {
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_AUTHORITY_PATHS,
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+  parsePublicRouteReferenceBinding,
+} from "./public-route-reference-contract.mjs";
+import {
+  CONTEXT_CANVAS_SOURCE_ROOT,
+  formatContextCanvasHeadRouteDiagnostics,
+  validateContextCanvasHeadRoutes,
+} from "./context-canvas-head-route-validator.mjs";
+import {
+  createContextCanvasHeadAuthority,
+} from "./check-context-canvas-head-routes.mjs";
 
 const execFileAsync = promisify(execFile);
 const toolPath = fileURLToPath(import.meta.url);
@@ -80,6 +95,18 @@ const productionRegistryReferenceBinding = path
 const productionPublicReferenceCoordinationRoot =
   path.posix.dirname(productionRegistryReferenceBinding);
 const productionRegistryDataUseNotice = REGISTRY_ATLAS_DATA_USE_NOTICE;
+const productionRouteReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
+const productionRouteReferenceAuthorityPaths = Object.freeze(Object.fromEntries(
+  Object.entries(DEFAULT_PUBLIC_ROUTE_REFERENCE_AUTHORITY_PATHS).map(
+    ([key, absolutePath]) => [
+      key,
+      path.relative(repositoryRoot, absolutePath).split(path.sep).join(path.posix.sep),
+    ],
+  ),
+));
 const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
 const contextCoreManifestPath =
   "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json";
@@ -3657,6 +3684,7 @@ function transformPrimaryBytes(
   trackedBlobs,
   projectedPaths,
   destinations,
+  routeDestinations,
   absoluteProjectionUrls,
   onResolvedReference,
 ) {
@@ -3701,6 +3729,26 @@ function transformPrimaryBytes(
           text,
           destinations,
           materializerPath,
+          null,
+          routeDestinations,
+        );
+      }
+    } else if (
+      extension === ".xml" &&
+      path.posix.basename(file.source_path).toLowerCase() === "sitemap.xml" &&
+      text.includes("{{PUBLIC_URL")
+    ) {
+      const inspection = inspectPublicReferenceSitemap(
+        text,
+        materializerPath,
+        routeDestinations,
+      );
+      if (inspection.occurrenceCount > 0) {
+        text = materializePublicReferenceSitemap(
+          text,
+          destinations,
+          materializerPath,
+          routeDestinations,
         );
       }
     } else if (extension === ".js" && text.includes("{{PUBLIC_URL")) {
@@ -3774,6 +3822,49 @@ function publicReferenceMaterializerPath(sourcePath, sourceRoot) {
   return path.posix.relative(path.posix.dirname(sourceRoot), sourcePath);
 }
 
+function usesTrackedPublicRouteAuthority(key) {
+  return [
+    "PUBLIC_URL_PAGE_",
+    "PUBLIC_URL_ASSET_",
+    "PUBLIC_URL_IFRAME_",
+    "PUBLIC_URL_SCHEMA_",
+    "PUBLIC_URL_SKILL_",
+  ].some((prefix) => key.startsWith(prefix));
+}
+
+function carriesCompleteContextCanvasHeadPopulation(publication, primaryInputs) {
+  if (publication.source_root !== CONTEXT_CANVAS_SOURCE_ROOT) return false;
+  const indexedTopLevelPages = [...primaryInputs.keys()].filter((sourcePath) => {
+    if (!sourcePath.startsWith(`${CONTEXT_CANVAS_SOURCE_ROOT}/`)) return false;
+    const relative = path.posix.relative(CONTEXT_CANVAS_SOURCE_ROOT, sourcePath);
+    return !relative.includes("/") && relative.endsWith(".html") && relative !== "404.html";
+  });
+  return indexedTopLevelPages.length === 40 &&
+    primaryInputs.has(`${CONTEXT_CANVAS_SOURCE_ROOT}/sitemap.xml`);
+}
+
+async function readTrackedAuthorityInput(
+  root,
+  trackedBlobs,
+  trackedInputs,
+  sourcePath,
+  label,
+) {
+  if (trackedBlobs.get(sourcePath)?.mode !== "100644") {
+    fail(`${label} must be a tracked non-executable blob: ${sourcePath}.`);
+  }
+  const existing = trackedInputs.get(sourcePath);
+  if (existing !== undefined) return existing;
+  const input = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    sourcePath,
+    label,
+  );
+  trackedInputs.set(sourcePath, input);
+  return input;
+}
+
 async function loadPublicationInput(
   root,
   publication,
@@ -3810,6 +3901,12 @@ async function loadPublicationInput(
     let inspection = null;
     if (extension === ".html") {
       inspection = inspectPublicReferenceHtml(source, safePath);
+    } else if (
+      extension === ".xml" &&
+      path.posix.basename(sourcePath).toLowerCase() === "sitemap.xml" &&
+      source.includes("{{PUBLIC_URL")
+    ) {
+      inspection = inspectPublicReferenceSitemap(source, safePath);
     } else if (extension === ".js" && source.includes("{{PUBLIC_URL")) {
       inspection = inspectProfessionalProfileScript(source, safePath);
     }
@@ -3819,26 +3916,113 @@ async function loadPublicationInput(
   const registryKeys = sortedKeys.filter((key) =>
     key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
   );
+  const routeKeys = sortedKeys.filter(usesTrackedPublicRouteAuthority);
   const externalKeys = sortedKeys.filter((key) =>
-    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE) &&
+    !usesTrackedPublicRouteAuthority(key),
   );
   const hasTrackedRegistryBinding = trackedBlobs.has(
     productionRegistryReferenceBinding,
   );
+  const hasTrackedRouteBinding = trackedBlobs.has(
+    productionRouteReferenceBinding,
+  );
+  const requiresRouteAuthority = routeKeys.length > 0 ||
+    carriesCompleteContextCanvasHeadPopulation(publication, primaryInputs);
+  if (registryKeys.length > 0 && !hasTrackedRegistryBinding) {
+    fail(
+      `Production Registry tokens require the tracked binding: ` +
+      `${productionRegistryReferenceBinding}.`,
+    );
+  }
+  if (requiresRouteAuthority && !hasTrackedRouteBinding) {
+    fail(
+      `Production public-route tokens require the tracked binding: ` +
+      `${productionRouteReferenceBinding}.`,
+    );
+  }
 
-  if (!hasTrackedRegistryBinding) {
-    if (registryKeys.length > 0) {
-      fail(
-        `Production Registry tokens require the tracked binding: ` +
-        `${productionRegistryReferenceBinding}.`,
+  let registryReference = null;
+  let registryInput = null;
+  let dataUseInput = null;
+  let dataUseReceipt = null;
+  if (registryKeys.length > 0) {
+    registryInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      trackedInputs,
+      productionRegistryReferenceBinding,
+      "Production Registry binding",
+    );
+    registryReference = parseRegistryReferenceBinding(registryInput.bytes, {
+      requiredKeys: registryKeys,
+    });
+    dataUseInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      trackedInputs,
+      productionRegistryDataUseNotice,
+      "Production Registry DATA-USE notice",
+    );
+    dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
+  }
+
+  let routeReference = null;
+  let routeBindingInput = null;
+  const routeAuthorityInputs = new Map();
+  if (requiresRouteAuthority) {
+    routeBindingInput = await readTrackedAuthorityInput(
+      root,
+      trackedBlobs,
+      trackedInputs,
+      productionRouteReferenceBinding,
+      "Production public-route binding",
+    );
+    for (const [name, sourcePath] of Object.entries(
+      productionRouteReferenceAuthorityPaths,
+    )) {
+      routeAuthorityInputs.set(
+        name,
+        await readTrackedAuthorityInput(
+          root,
+          trackedBlobs,
+          trackedInputs,
+          sourcePath,
+          `Production public-route ${name}`,
+        ),
       );
     }
-    const destinations = await resolvePublicReferenceDestinations(keys, {
-      configurationSource: configurationBytes.toString("utf8"),
-      environment: {},
+    routeReference = parsePublicRouteReferenceBinding(routeBindingInput.bytes, {
+      requiredKeys: routeKeys,
+      bindingPath: productionRouteReferenceBinding,
+      primaryManifestBytes: routeAuthorityInputs.get("primaryManifest").bytes,
+      productionConfigBytes: routeAuthorityInputs.get("productionConfig").bytes,
+      canvasIframeManifestBytes: routeAuthorityInputs.get("canvasIframeManifest").bytes,
+      coreIframeManifestBytes: routeAuthorityInputs.get("coreIframeManifest").bytes,
+      schemaPublicationManifestBytes:
+        routeAuthorityInputs.get("schemaPublicationManifest").bytes,
+      schemaCompanionSelectionBytes:
+        routeAuthorityInputs.get("schemaCompanionSelection").bytes,
+      skillPublicationSelectionBytes:
+        routeAuthorityInputs.get("skillPublicationSelection").bytes,
     });
+  }
+
+  const destinations = await resolvePublicReferenceDestinations(keys, {
+    configurationSource: configurationBytes.toString("utf8"),
+    environment: {},
+    ...(registryReference === null
+      ? {}
+      : { registryDestinations: registryReference.destinations }),
+    ...(routeReference === null
+      ? {}
+      : { routeDestinations: routeReference.destinations }),
+  });
+  if (registryReference === null && routeReference === null) {
     return {
       destinations,
+      registryReference,
+      routeReference,
       input: {
         source_relationship: "external_digest_bound_input",
         configuration_path: productionPublicReferenceConfig,
@@ -3852,82 +4036,89 @@ async function loadPublicationInput(
     };
   }
 
-  if (trackedBlobs.get(productionRegistryReferenceBinding)?.mode !== "100644") {
-    fail(
-      `Production Registry binding must be a tracked non-executable blob: ` +
-      `${productionRegistryReferenceBinding}.`,
-    );
-  }
-  const bindingInput = await readTrackedRepositoryInput(
-    root,
-    trackedBlobs,
-    productionRegistryReferenceBinding,
-    "Production Registry binding",
-  );
-  const registryReference = parseRegistryReferenceBinding(bindingInput.bytes, {
-    requiredKeys: registryKeys,
-  });
-  trackedInputs.set(productionRegistryReferenceBinding, bindingInput);
-  if (trackedBlobs.get(productionRegistryDataUseNotice)?.mode !== "100644") {
-    fail(
-      `Production Registry DATA-USE notice must be a tracked non-executable blob: ` +
-      `${productionRegistryDataUseNotice}.`,
-    );
-  }
-  const dataUseInput = await readTrackedRepositoryInput(
-    root,
-    trackedBlobs,
-    productionRegistryDataUseNotice,
-    "Production Registry DATA-USE notice",
-  );
-  const dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
-  trackedInputs.set(productionRegistryDataUseNotice, dataUseInput);
-  const destinations = await resolvePublicReferenceDestinations(keys, {
-    configurationSource: configurationBytes.toString("utf8"),
-    environment: {},
-    registryDestinations: registryReference.destinations,
-  });
-  const atlas = registryReference.receipt.atlas;
+  const atlas = registryReference?.receipt.atlas ?? null;
+  const sourceRelationship = registryReference !== null && routeReference !== null
+    ? "tracked_registry_and_route_bindings_with_external_digest_bound_input"
+    : registryReference !== null
+      ? "tracked_registry_binding_with_external_digest_bound_input"
+      : "tracked_route_binding_with_external_digest_bound_input";
   return {
     destinations,
+    registryReference,
+    routeReference,
     input: {
-      source_relationship:
-        "tracked_registry_binding_with_external_digest_bound_input",
+      source_relationship: sourceRelationship,
       keys: sortedKeys,
-      tracked_registry: {
-        keys: registryKeys,
-        binding: {
-          source_path: productionRegistryReferenceBinding,
-          git_blob_id: bindingInput.object,
-          sha256: registryReference.receipt.bindingSha256,
-          id: registryReference.receipt.id,
-          version: registryReference.receipt.version,
-          binding_count: registryReference.receipt.bindingCount,
-        },
-        data_use: {
-          source_path: productionRegistryDataUseNotice,
-          git_blob_id: dataUseInput.object,
-          sha256: dataUseReceipt.sha256,
-          bytes: dataUseReceipt.bytes,
-        },
-        atlas_receipt: {
-          reference_version: atlas.referenceVersion,
-          guide_version: atlas.guideVersion,
-          data_schema_version: atlas.dataSchemaVersion,
-          snapshot_date: atlas.snapshotDate,
-          accepted_at: atlas.acceptedAt,
-          archive_sha256: atlas.archiveSha256,
-          registry_atlas_sha256: atlas.registryAtlasSha256,
-          manifest_sha256: atlas.manifestSha256,
-          current_route_map_sha256: atlas.currentRouteMapSha256,
-          license: atlas.license,
-          content_role: atlas.contentRole,
-          action_authority: atlas.actionAuthority,
-          data_use_notice: atlas.dataUseNotice,
-          data_use_sha256: atlas.dataUseSha256,
-          benchmark_scope: atlas.benchmarkScope,
-        },
-      },
+      ...(registryReference === null
+        ? {}
+        : {
+            tracked_registry: {
+              keys: registryKeys,
+              binding: {
+                source_path: productionRegistryReferenceBinding,
+                git_blob_id: registryInput.object,
+                sha256: registryReference.receipt.bindingSha256,
+                id: registryReference.receipt.id,
+                version: registryReference.receipt.version,
+                binding_count: registryReference.receipt.bindingCount,
+              },
+              data_use: {
+                source_path: productionRegistryDataUseNotice,
+                git_blob_id: dataUseInput.object,
+                sha256: dataUseReceipt.sha256,
+                bytes: dataUseReceipt.bytes,
+              },
+              atlas_receipt: {
+                reference_version: atlas.referenceVersion,
+                guide_version: atlas.guideVersion,
+                data_schema_version: atlas.dataSchemaVersion,
+                snapshot_date: atlas.snapshotDate,
+                accepted_at: atlas.acceptedAt,
+                archive_sha256: atlas.archiveSha256,
+                registry_atlas_sha256: atlas.registryAtlasSha256,
+                manifest_sha256: atlas.manifestSha256,
+                current_route_map_sha256: atlas.currentRouteMapSha256,
+                license: atlas.license,
+                content_role: atlas.contentRole,
+                action_authority: atlas.actionAuthority,
+                data_use_notice: atlas.dataUseNotice,
+                data_use_sha256: atlas.dataUseSha256,
+                benchmark_scope: atlas.benchmarkScope,
+              },
+            },
+          }),
+      ...(routeReference === null
+        ? {}
+        : {
+            tracked_routes: {
+              keys: routeKeys,
+              binding: {
+                source_path: productionRouteReferenceBinding,
+                git_blob_id: routeBindingInput.object,
+                sha256: routeReference.receipt.sourceDigests.binding,
+                id: routeReference.receipt.id,
+                version: routeReference.receipt.version,
+                binding_count: routeReference.receipt.bindingCount,
+                authority_counts: routeReference.receipt.authorityCounts,
+              },
+              schema_companion_selection_sha256:
+                routeReference.receipt.sourceDigests.schema_companion_selection,
+              authorities: Object.fromEntries(
+                Object.entries(productionRouteReferenceAuthorityPaths).map(
+                  ([name, sourcePath]) => [
+                    name,
+                    {
+                      source_path: sourcePath,
+                      git_blob_id: routeAuthorityInputs.get(name).object,
+                      sha256: routeReference.receipt.sourceDigests[
+                        name.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
+                      ],
+                    },
+                  ],
+                ),
+              ),
+            },
+          }),
       external_configuration: {
         source_relationship: "external_digest_bound_input",
         configuration_path: productionPublicReferenceConfig,
@@ -3952,6 +4143,66 @@ async function verifyPublicationInputState(state) {
   if (sha256(await readFile(state.path)) !== state.sha256) {
     fail("Production public-reference configuration changed during composition.");
   }
+}
+
+function assertGeneratedContextCanvasHeadRoutes({
+  primaryManifest,
+  publication,
+  outputFiles,
+  routeReference,
+  registryReference,
+}) {
+  if (
+    routeReference === null ||
+    publication.source_root !== CONTEXT_CANVAS_SOURCE_ROOT
+  ) {
+    return null;
+  }
+  const documents = new Map();
+  let sitemapSource = null;
+  for (const file of primaryManifest.files) {
+    const projected = outputFiles.get(`primary-public/${file.projected_path}`);
+    if (!Buffer.isBuffer(projected)) continue;
+    if (file.media_type === "text/html") {
+      documents.set(file.source_path, projected.toString("utf8"));
+    }
+    if (
+      file.source_path === `${publication.source_root}/sitemap.xml` &&
+      file.media_type === "application/xml"
+    ) {
+      sitemapSource = projected.toString("utf8");
+    }
+  }
+  const result = validateContextCanvasHeadRoutes({
+    primaryManifest,
+    documents,
+    sitemapSource,
+    authority: createContextCanvasHeadAuthority({
+      routeReference,
+      registryReference,
+    }),
+    expectedPageCount: 40,
+    // The retained exemplar belongs to source validation. It remains outside
+    // the production projection by design, so the generated carrier validates
+    // its complete indexed population and sitemap here.
+    requireStandingDocuments: false,
+  });
+  if (!result.accepted) {
+    fail(formatContextCanvasHeadRouteDiagnostics(result).trim());
+  }
+  const carrierReceipt = result.records.map((record) => ({
+    source: record.source,
+    locator: record.locator,
+    carrier: record.carrier,
+    property: record.property,
+    effective: record.effective,
+  }));
+  return {
+    id: result.id,
+    page_count: result.pageCount,
+    carrier_count: result.recordCount,
+    carrier_sha256: sha256(Buffer.from(JSON.stringify(carrierReceipt), "utf8")),
+  };
 }
 
 function serializeManifest(manifest) {
@@ -4153,6 +4404,7 @@ export async function createProductionProjectionPlan(options = {}) {
           trackedBlobs,
           projectedPaths,
           publicationInput.destinations,
+          publicationInput.routeReference?.destinations ?? null,
           absoluteProjectionUrls,
           noteResolvedReference,
         );
@@ -4233,6 +4485,19 @@ export async function createProductionProjectionPlan(options = {}) {
       css_projection_id: generated.id,
       generation: generated.lineage,
     });
+  }
+
+  const generatedHeadRouteValidation = publicationInput === null
+    ? null
+    : assertGeneratedContextCanvasHeadRoutes({
+        primaryManifest,
+        publication: selection.configuration.publication,
+        outputFiles,
+        routeReference: publicationInput.routeReference,
+        registryReference: publicationInput.registryReference,
+      });
+  if (generatedHeadRouteValidation !== null) {
+    publicationInput.input.generated_head_routes = generatedHeadRouteValidation;
   }
 
   assertSettledProductionAuthority(outputFiles, aggregatePlan.outputFiles);

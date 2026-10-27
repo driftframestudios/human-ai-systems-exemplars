@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "dataViewLabId": "visual-fidelity-data-view-lab",
+  "revision": "cohort-r2-partial",
+  "lineage": { "source": "bundled-fixture", "parentRevision": "cohort-r1" },
+  "decisionNeed": "exact-values",
+  "dataStanding": "partial",
+  "scope": "Cross-functional review stages",
+  "unit": "cases",
+  "denominator": "per weekly review",
+  "records": [
+    { "id": "intake", "label": "Intake", "order": 0, "value": 31, "standing": "known", "group": "coordination", "observedAt": "2026-10-13", "position": { "x": 8, "y": 22 } },
+    { "id": "triage", "label": "Triage", "order": 1, "value": 27, "standing": "known", "group": "coordination", "observedAt": "2026-10-14", "position": { "x": 24, "y": 22 } },
+    { "id": "consent", "label": "Consent", "order": 2, "value": null, "standing": "unknown", "group": "governance", "observedAt": null, "position": { "x": 40, "y": 22 } },
+    { "id": "accession", "label": "Accession", "order": 3, "value": 20, "standing": "stale", "group": "laboratory", "observedAt": "2026-10-12", "position": { "x": 56, "y": 22 } },
+    { "id": "extraction", "label": "Extraction", "order": 4, "value": 19, "standing": "estimated", "group": "laboratory", "observedAt": "2026-10-17", "position": { "x": 72, "y": 22 } },
+    { "id": "sequencing", "label": "Sequencing", "order": 5, "value": null, "standing": "absent", "group": "laboratory", "observedAt": null, "position": { "x": 72, "y": 68 } },
+    { "id": "analysis", "label": "Analysis", "order": 6, "value": 16, "standing": "estimated", "group": "computation", "observedAt": "2026-10-19", "position": { "x": 40, "y": 68 } },
+    { "id": "review", "label": "Review", "order": 7, "value": null, "standing": "redacted", "group": "interpretation", "observedAt": null, "position": { "x": 8, "y": 68 } }
+  ],
+  "relationships": [
+    { "id": "intake-to-triage", "sourceId": "intake", "targetId": "triage", "label": "hands accepted intake to triage" },
+    { "id": "triage-to-consent", "sourceId": "triage", "targetId": "consent", "label": "routes a qualifying case to consent review" },
+    { "id": "consent-to-accession", "sourceId": "consent", "targetId": "accession", "label": "releases the consented case to accession" },
+    { "id": "accession-to-extraction", "sourceId": "accession", "targetId": "extraction", "label": "hands accession state to extraction" },
+    { "id": "extraction-to-sequencing", "sourceId": "extraction", "targetId": "sequencing", "label": "routes extracted material to sequencing" },
+    { "id": "sequencing-to-analysis", "sourceId": "sequencing", "targetId": "analysis", "label": "routes sequence output to analysis" },
+    { "id": "analysis-to-review", "sourceId": "analysis", "targetId": "review", "label": "routes interpreted results to review" }
+  ]
+}

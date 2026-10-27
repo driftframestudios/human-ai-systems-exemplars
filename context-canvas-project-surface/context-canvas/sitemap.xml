@@ -1,163 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/</loc>
+    <loc>{{PUBLIC_URL_PAGE_ABOUT}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_AI_SYSTEMS}}</loc>
     <lastmod>2026-10-18</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/collaboration-skills.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_COLLABORATION_SKILLS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_HIRING_SURFACES_TALENT_AGENT_INTAKE}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/shared-machinery.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_SHARED_MACHINERY}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/poda.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_PODA}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/metadata-blocks.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_METADATA_BLOCKS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/grammar-family.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_GRAMMAR_FAMILY}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_VISUALIZATION_FIDELITY_ATLAS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/concept-nursery.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_CONCEPT_NURSERY}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/resting-concepts.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_RESTING_CONCEPTS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_CROSS_PLATFORM_COLLABORATION_CYCLE}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/planning-surface.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_PLANNING_SURFACE}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_CORE_ARCHITECTURES_ORIENTATION_INDEX}}</loc>
     <lastmod>2026-10-18</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/debriefs.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_DEBRIEFS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_REGISTRY_GOAL_FIDELITY_ROUTING}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/conditioning-field.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_CONDITIONING_FIELD}}</loc>
     <lastmod>2026-08-21</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/three-way-comparative-return.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_THREE_WAY_COMPARATIVE_RETURN}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_NARRATIVE_EXECUTION_GAP_RESEARCH_ATLAS}}</loc>
     <lastmod>2026-08-30</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_PROMPT_SIDE_CONDITIONS_PRACTICE}}</loc>
     <lastmod>2026-08-30</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/benchmark-orientation.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_BENCHMARK_ORIENTATION}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/maps-evaluations.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_MAPS_EVALUATIONS}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_GENOMIC_VIEWER_REPLATFORMING}}</loc>
     <lastmod>2026-10-18</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_FMI_CLINICAL_TRIAL_COORDINATION}}</loc>
     <lastmod>2026-10-18</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ehr-discrete-genomic-result.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_EHR_DISCRETE_GENOMIC_RESULT}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ehr-two-charts-one-result.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_EHR_TWO_CHARTS_ONE_RESULT}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ehr-three-front-doors.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_EHR_THREE_FRONT_DOORS}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ehr-pgx-alert-failure.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_EHR_PGX_ALERT_FAILURE}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ehr-interface-engine-replatform.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_EHR_INTERFACE_ENGINE_REPLATFORM}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_FMI_LIMS_ELN_REPLATFORMING}}</loc>
     <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_WHO_TO_BELIEVE_REVIEWS_PLATFORM}}</loc>
     <lastmod>2026-10-11</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/choose-your-player-humatics.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_CHOOSE_YOUR_PLAYER_HUMATICS}}</loc>
     <lastmod>2026-10-09</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/initiative-costing.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_INITIATIVE_COSTING}}</loc>
     <lastmod>2026-09-08</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_FIELD_INSPECTION_HARNESS_REPLATFORM}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/distributed-inspection-harness.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_DISTRIBUTED_INSPECTION_HARNESS}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_SPATIAL_CAPTURE_COLLABORATIVE_MEMORY}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_MULTILINGUAL_CLINICAL_VOCABULARY_PRACTICE}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_RECOVERABLE_ENTERPRISE_FORMS}}</loc>
     <lastmod>2026-10-06</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_READABLE_TABLES_REUSABLE_EVIDENCE}}</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
   <url>
-    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/one-figure-several-readings.html</loc>
+    <loc>{{PUBLIC_URL_PAGE_ONE_FIGURE_SEVERAL_READINGS}}</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
 </urlset>
