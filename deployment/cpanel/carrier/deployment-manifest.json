@@ -1,7 +1,7 @@
 {
   "id": "prod-projection.deployment-manifest.v1",
   "version": "1",
-  "source_sha": "b708a8ecb6628b62e28818f502eab509b8b615e9",
+  "source_sha": "a0dd863de61a5ba2d00fda2da0c7832661f36d1e",
   "inputs": {
     "configuration": {
       "source_path": "deployment/cpanel/production-projection.config.json",
@@ -5121,7 +5121,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5183,7 +5183,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5245,7 +5245,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5307,7 +5307,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5369,7 +5369,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5431,7 +5431,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5493,7 +5493,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5555,7 +5555,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5617,7 +5617,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5679,7 +5679,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5741,7 +5741,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5803,7 +5803,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5865,7 +5865,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5927,7 +5927,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -5989,7 +5989,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The source-only robotics-upfront catalog image is 5116 by 2710 pixels with SHA-256 ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-orientation source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -6054,7 +6054,7 @@
           "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 211784,
           "canonical_source_sha256": "ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection.",
@@ -6119,7 +6119,7 @@
           "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 211784,
           "canonical_source_sha256": "ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection.",
@@ -6184,7 +6184,7 @@
           "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 211784,
           "canonical_source_sha256": "ab3f208e0ea8b92a0a594602741dfc5227e081a2198fa027938fbfc68a77a81a",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Choose Your Player card at narrow and wide viewports, and rebuild the production projection.",
@@ -9362,7 +9362,7 @@
           "profile": "debrief-catalog-preview-width-1920-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 174544,
           "canonical_source_sha256": "92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection.",
@@ -9425,7 +9425,7 @@
           "profile": "debrief-catalog-preview-width-480-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 174544,
           "canonical_source_sha256": "92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection.",
@@ -9488,7 +9488,7 @@
           "profile": "debrief-catalog-preview-width-960-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 174544,
           "canonical_source_sha256": "92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Sample Nobody Could Find preview at narrow and wide viewports, and rebuild the production projection.",
@@ -9550,7 +9550,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9612,7 +9612,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9674,7 +9674,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9736,7 +9736,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9798,7 +9798,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9860,7 +9860,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9922,7 +9922,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -9984,7 +9984,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10046,7 +10046,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10108,7 +10108,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10170,7 +10170,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10232,7 +10232,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10294,7 +10294,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10356,7 +10356,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10418,7 +10418,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10480,7 +10480,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10542,7 +10542,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10604,7 +10604,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software and the clinical-trial coordination rule builder using synthetic data. The source-only clinical-trial-coordination-upfront catalog image is 2654 by 1482 pixels with SHA-256 92a108357c71a0697e9573380db57490549f07404f1f21ae31c1d2c138607833. Full-Debrief images use 960 and 1920 pixel responsive derivatives; this catalog-preview source also uses a 480 pixel derivative. All responsive derivatives use libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is planned for a future open-source release.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
         "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
@@ -10669,7 +10669,7 @@
           "profile": "debrief-catalog-card-width-1920-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 48252,
           "canonical_source_sha256": "415675935c936bf69ee822e4e6608dd5d05c780c0c2d4b033782f8a4d1484766",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection.",
@@ -10734,7 +10734,7 @@
           "profile": "debrief-catalog-card-width-480-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 48252,
           "canonical_source_sha256": "415675935c936bf69ee822e4e6608dd5d05c780c0c2d4b033782f8a4d1484766",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection.",
@@ -10799,7 +10799,7 @@
           "profile": "debrief-catalog-card-width-960-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 48252,
           "canonical_source_sha256": "415675935c936bf69ee822e4e6608dd5d05c780c0c2d4b033782f8a4d1484766",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare The Photographs Were a Proxy card at narrow and wide viewports, and rebuild the production projection.",
@@ -11112,7 +11112,7 @@
           "profile": "debrief-webp-width-1920-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 206358,
           "canonical_source_sha256": "fbac22662f3050803e4e21c225dbe123cfc5b7c298ff8864120fbfe11a17cfdd",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at wide viewports, and rebuild the production projection.",
@@ -11177,7 +11177,7 @@
           "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 206358,
           "canonical_source_sha256": "fbac22662f3050803e4e21c225dbe123cfc5b7c298ff8864120fbfe11a17cfdd",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at narrow viewports, and rebuild the production projection.",
@@ -11301,7 +11301,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11363,7 +11363,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11425,7 +11425,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11487,7 +11487,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11549,7 +11549,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11611,7 +11611,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11673,7 +11673,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11735,7 +11735,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11797,7 +11797,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11859,7 +11859,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11921,7 +11921,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -11983,7 +11983,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -12045,7 +12045,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -12107,7 +12107,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -12169,7 +12169,7 @@
           "standing": "accepted_generated_asset",
           "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
           "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides.",
-          "provenance_owner_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "provenance_owner_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
@@ -12234,7 +12234,7 @@
           "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none",
           "canonical_source_bytes": 162148,
           "canonical_source_sha256": "caae1401e5037f70fa43d65cce1d8411a0050a18d9da8336576fc6870408f96e",
-          "generator_sha256": "5226f451c7c9147f4d651ac2bb0c48046c213482775f3bccca22c573519f6d9b"
+          "generator_sha256": "a3685ca2b033d51e2f51784b8fe0cfc17f55b18d458ae12c0c3892cb2cf314a3"
         },
         "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
         "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Debrief catalog card at narrow and wide viewports, and rebuild the production projection.",
@@ -12682,7 +12682,7 @@
           "profile": "ai4i-gallery-conditions-v1",
           "canonical_source_bytes": 522048,
           "canonical_source_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-          "generator_sha256": "447e9f3afbfe5c87e0abab08c29d47408203ee7d6272622ef8ff6946320a33bb"
+          "generator_sha256": "8345ddcb988b050bf1fb3aaffbd0cd22b5809e524874c3e6b833b65027adea24"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection.",
@@ -12747,7 +12747,7 @@
           "profile": "ai4i-gallery-count-v1",
           "canonical_source_bytes": 522048,
           "canonical_source_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-          "generator_sha256": "447e9f3afbfe5c87e0abab08c29d47408203ee7d6272622ef8ff6946320a33bb"
+          "generator_sha256": "8345ddcb988b050bf1fb3aaffbd0cd22b5809e524874c3e6b833b65027adea24"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection.",
@@ -12812,7 +12812,7 @@
           "profile": "ai4i-gallery-rate-v1",
           "canonical_source_bytes": 522048,
           "canonical_source_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-          "generator_sha256": "447e9f3afbfe5c87e0abab08c29d47408203ee7d6272622ef8ff6946320a33bb"
+          "generator_sha256": "8345ddcb988b050bf1fb3aaffbd0cd22b5809e524874c3e6b833b65027adea24"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection.",
@@ -12877,7 +12877,7 @@
           "profile": "ai4i-gallery-reconciliation-v1",
           "canonical_source_bytes": 522048,
           "canonical_source_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-          "generator_sha256": "447e9f3afbfe5c87e0abab08c29d47408203ee7d6272622ef8ff6946320a33bb"
+          "generator_sha256": "8345ddcb988b050bf1fb3aaffbd0cd22b5809e524874c3e6b833b65027adea24"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection.",
@@ -12943,7 +12943,7 @@
           "profile": "public-research-topic-memberships-v1",
           "canonical_source_bytes": 18358,
           "canonical_source_sha256": "f3f773b0c939d4c239379bbfd6275979df106da93d67de518e90737ea5d7df45",
-          "generator_sha256": "f4044402b7cc5da7b70107ef3d53238fb736e7165db60b651279fb2da15d1f99"
+          "generator_sha256": "d335a26143ed77a85df55c6fbace331b8902112b25ed02c65c072302ed60a528"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the admitted public research extract, run node tools/atlas-research-data.mjs --write and node tools/build-atlas-research-view.mjs, then rebuild the production projection.",
@@ -16675,7 +16675,7 @@
           "profile": "secom-calendar-months-v1",
           "canonical_source_bytes": 40638,
           "canonical_source_sha256": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03",
-          "generator_sha256": "85c3bbaa5e750b17f0f169f126561c3f15ad6458f26e0531605d919130d79c57"
+          "generator_sha256": "d9baaa635e39bfae7c2487e6f949dc8097cc467202f5f7d7e575e60c5bedf976"
         },
         "semantic_authority_path": null,
         "recovery_condition": "Restore the digest-pinned label records and run node tools/build-atlas-reference.mjs --write before rebuilding the production projection.",
