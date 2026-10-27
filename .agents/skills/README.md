@@ -60,6 +60,13 @@ completes the job.
 | [`collaboration-accounting`](collaboration-accounting/README.md) · [contract](collaboration-accounting/SKILL.md) | Material work changes the disposition of a skill or candidate | One create, revise, observe, settle, consolidate, or retire route |
 | [`collaboration-runbook-authoring`](collaboration-runbook-authoring/README.md) · [contract](collaboration-runbook-authoring/SKILL.md) | A settled multi-phase procedure needs re-entrant guidance | A versioned route with entry, authority, checks, recovery, and handback |
 
+### Design and maintain test systems
+
+| Skill | Use it when | Result |
+| --- | --- | --- |
+| [`evidence-bearing-test-design`](evidence-bearing-test-design/README.md) · [contract](evidence-bearing-test-design/SKILL.md) | One behavior needs an independent oracle, a consequential fault, and the smallest observation that distinguishes them | A focused test whose pass, failure, and evidence boundary remain interpretable |
+| [`test-suite-composition`](test-suite-composition/README.md) · [contract](test-suite-composition/SKILL.md) | Checks, runners, prerequisites, shared setup, or reruns need a proportionate and recoverable topology | An explicit composition with exact population, phase cost, expansion events, and recovery |
+
 ### Steward contracts, authority, and delivery boundaries
 
 | Skill | Use it when | Result |

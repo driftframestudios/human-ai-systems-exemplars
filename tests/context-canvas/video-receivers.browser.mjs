@@ -6,6 +6,7 @@ import { chromium } from "@playwright/test";
 
 import {
   assertTelemetry,
+  browserLaunchOptions,
   monitor,
   startStaticServer,
 } from "../../tools/core-architecture-browser-helper.mjs";
@@ -66,7 +67,7 @@ let server;
 
 before(async () => {
   server = await startStaticServer();
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch(browserLaunchOptions());
 });
 
 after(async () => {

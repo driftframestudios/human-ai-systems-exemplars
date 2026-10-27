@@ -180,6 +180,16 @@
       "dependencies": []
     },
     {
+      "name": "evidence-bearing-test-design",
+      "sourcePath": ".agents/skills/evidence-bearing-test-design/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/evidence-bearing-test-design/references/fault-oracle-evidence-worksheet.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
+      ]
+    },
+    {
       "name": "evidence-grounded-research-spike",
       "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
       "publicationStanding": "public_ready",
@@ -336,6 +346,16 @@
       "sourceAvailability": "repository_only",
       "dependencies": [],
       "publicationNote": "Promote after its Semantic Attractor and evidence dependencies have source-owned public adaptations."
+    },
+    {
+      "name": "test-suite-composition",
+      "sourcePath": ".agents/skills/test-suite-composition/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/test-suite-composition/references/ci-provisioning-and-runner-efficiency.md",
+        ".agents/skills/test-suite-composition/references/runtime-provisioning-cards.md"
+      ]
     },
     {
       "name": "uv-backed-python-execution",

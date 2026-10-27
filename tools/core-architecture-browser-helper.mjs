@@ -13,6 +13,17 @@ import {
 
 export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
+export function browserLaunchOptions(environment = process.env) {
+  const channel = environment.PLAYWRIGHT_BROWSER_CHANNEL?.trim();
+  if (!channel) return { headless: true };
+  if (channel !== "chrome") {
+    throw new Error(
+      "Set PLAYWRIGHT_BROWSER_CHANNEL to chrome, or leave it empty to use the locked Playwright Chromium browser.",
+    );
+  }
+  return { headless: true, channel };
+}
+
 export const coreProjections = [
   {
     label: "Core source",

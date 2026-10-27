@@ -46,6 +46,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/context-canvas/visitor-video-contract.test.mjs',
   'tests/context-canvas/who-to-believe-system-graph.browser.mjs',
   'tests/context-canvas/who-to-believe-system-graph.test.mjs',
+  'tests/media-publication/ci-provisioning.test.mjs',
   'tests/media-publication/prepare-r2-progressive-video.test.mjs',
   'tests/media-publication/r2-video-worker.test.mjs',
   'tests/media-publication/video-publication-manifest.test.mjs',
