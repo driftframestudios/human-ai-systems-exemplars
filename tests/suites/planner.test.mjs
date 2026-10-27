@@ -9,6 +9,9 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/public-references/context-canvas-head-authority-matrix.test.mjs',
+  'tests/public-references/context-canvas-head-route-validator.test.mjs',
+  'tests/public-references/public-route-reference-contract.test.mjs',
   'tests/security/node-route-inventory.test.mjs',
   'tests/security/node-runtime.test.mjs',
   'tests/context-canvas/debrief-caption-colors.browser.mjs',
@@ -82,6 +85,7 @@ const POST_BASELINE_NODE_MEMBERS = [
 ];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
+  'test:public-reference-contracts': 'npm run test:public-references && npm run test:context-canvas-head-routes && npm run test:public-reference-projections && npm run test:citation-atlas-selection && npm run test:suites:unit',
 };
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
@@ -288,15 +292,34 @@ test('Python table membership stays explicit and distinct from nested project an
 });
 
 test('public-reference source routes include every Node contract and the portable Atlas selection check', async () => {
-  const catalog = await catalogPromise;
+  const [catalog, pkg] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+  ]);
   const plan = createPlan(catalog, {suites: ['node.public-references', 'python.citation-atlas-selection']});
   const byId = new Map(plan.suites.map(suite => [suite.id, suite]));
   assert.deepEqual(byId.get('node.public-references').members, [
+    'tests/public-references/context-canvas-head-authority-matrix.test.mjs',
+    'tests/public-references/context-canvas-head-route-validator.test.mjs',
     'tests/public-references/live-route-verifier.test.mjs',
     'tests/public-references/materializer.test.mjs',
+    'tests/public-references/public-route-reference-contract.test.mjs',
     'tests/public-references/registry-reference-contract.test.mjs',
   ]);
-  assert.deepEqual(byId.get('node.public-references').aliases, ['test:public-references']);
+  assert.deepEqual(byId.get('node.public-references').aliases, [
+    'test:context-canvas-head-routes',
+    'test:public-references',
+  ]);
+  const publicReferencePrefix = 'node tools/check-node-runtime.mjs --quiet && node --test ';
+  assert.ok(pkg.scripts['test:public-references'].startsWith(publicReferencePrefix));
+  assert.deepEqual(
+    pkg.scripts['test:public-references'].slice(publicReferencePrefix.length).split(' '),
+    byId.get('node.public-references').members,
+  );
+  assert.equal(
+    pkg.scripts['test:context-canvas-head-routes'],
+    'node tools/check-node-runtime.mjs --quiet && node tools/check-context-canvas-head-routes.mjs',
+  );
   assert.deepEqual(byId.get('python.citation-atlas-selection').members, [
     'tests/skills/citation_atlas_selection_test.py',
   ]);
@@ -312,9 +335,19 @@ test('public-reference source routes include every Node contract and the portabl
   ]);
   assert.deepEqual(catalog.inventory.npmRunEdges['test:public-reference-contracts'], [
     'test:public-references',
+    'test:context-canvas-head-routes',
+    'test:public-reference-projections',
     'test:citation-atlas-selection',
     'test:suites:unit',
   ]);
+  assert.deepEqual(
+    catalog.inventory.rootScriptSelection.directNodeTestSelectors['test:public-reference-projections'],
+    [
+      'tests/iframe-routes/packager.test.mjs',
+      'tests/prod-deployment/primary-closure.test.mjs',
+      'tests/prod-deployment/projection.test.mjs',
+    ],
+  );
   assert.equal(
     createPlan(catalog, {bundles: ['source-unit']}).suites.some(
       suite => suite.id === 'python.citation-atlas-selection',

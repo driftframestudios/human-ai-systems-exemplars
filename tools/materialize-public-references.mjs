@@ -32,6 +32,13 @@ import {
   isRegistryReferenceDestinationAuthority,
   loadRegistryReferenceBinding,
 } from "./registry-reference-contract.mjs";
+import {
+  DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+  PublicRouteReferenceContractError,
+  assertPublicRouteReferenceCarrier,
+  isPublicRouteReferenceDestinationAuthority,
+  loadPublicRouteReferenceBinding,
+} from "./public-route-reference-contract.mjs";
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -56,14 +63,29 @@ export const PUBLIC_IFRAME_ROUTE_MANIFEST = join(
 );
 export const PUBLIC_REFERENCE_NAMESPACE = "PUBLIC_URL_REGISTRY_";
 export const PUBLIC_IFRAME_NAMESPACE = "PUBLIC_URL_IFRAME_";
+export const PUBLIC_PAGE_NAMESPACE = "PUBLIC_URL_PAGE_";
+export const PUBLIC_ASSET_NAMESPACE = "PUBLIC_URL_ASSET_";
+export const PUBLIC_SCHEMA_NAMESPACE = "PUBLIC_URL_SCHEMA_";
+export const PUBLIC_SKILL_NAMESPACE = "PUBLIC_URL_SKILL_";
 export const PUBLIC_AUTHOR_PROFILE_KEY =
   "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
 
 const OUTPUT_MARKER = ".public-reference-materialization.json";
-const OUTPUT_FORMAT = 2;
+const OUTPUT_FORMAT = 3;
 const PUBLIC_REFERENCE_NAMESPACES = [
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_IFRAME_NAMESPACE,
+  PUBLIC_PAGE_NAMESPACE,
+  PUBLIC_ASSET_NAMESPACE,
+  PUBLIC_SCHEMA_NAMESPACE,
+  PUBLIC_SKILL_NAMESPACE,
+];
+const PUBLIC_ROUTE_NAMESPACES = [
+  PUBLIC_IFRAME_NAMESPACE,
+  PUBLIC_PAGE_NAMESPACE,
+  PUBLIC_ASSET_NAMESPACE,
+  PUBLIC_SCHEMA_NAMESPACE,
+  PUBLIC_SKILL_NAMESPACE,
 ];
 const PUBLIC_IFRAME_LOCAL_ROOT =
   "context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
@@ -73,7 +95,7 @@ const PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH = posix.join(
   "context-canvas",
   "canvas-shell.js",
 );
-const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+$/;
+const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+$/;
 const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
 const PUBLIC_KEY_LOOKALIKE = /PUBLIC_URL(?:_[A-Za-z0-9]+)+/;
@@ -333,14 +355,85 @@ function tokenBearingJsonBlocks(html) {
   return blocks;
 }
 
-function registryAnchorTokenCarriers(html) {
+function anchorTokenCarriers(html) {
   const carriers = [];
   for (const match of html.matchAll(/<a\b[^>]*>/gi)) {
     const tag = match[0];
-    const href = /\bhref\s*=\s*(["'])\{\{(PUBLIC_URL_REGISTRY_[A-Z0-9_]+)\}\}\1/i.exec(tag);
-    if (href) carriers.push({ key: href[2] });
+    const href = /\bhref\s*=\s*(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}\1/i.exec(tag);
+    if (href) carriers.push({ key: href[2], tag, carrier: "anchor" });
   }
   return carriers;
+}
+
+function metadataTokenCarriers(html) {
+  const carriers = [];
+  const acceptedMetaNames = new Set([
+    "og:image",
+    "og:url",
+    "twitter:image",
+  ]);
+
+  for (const match of html.matchAll(/<(link|meta)\b[^>]*>/gi)) {
+    const tag = match[0];
+    const tagName = match[1].toLowerCase();
+    const carrierName = tagName === "link" ? "href" : "content";
+    const carrierMatches = attributeMatches(tag, carrierName);
+    if (carrierMatches.length === 0) continue;
+    const token = /^\{\{(PUBLIC_URL_(?:PAGE|ASSET)_[A-Z0-9_]+)\}\}$/.exec(
+      carrierMatches[0][2],
+    );
+    if (token === null) continue;
+
+    let carrier;
+    if (tagName === "link") {
+      const relation = attributeMatches(tag, "rel");
+      if (relation.length !== 1 || relation[0][2].toLowerCase() !== "canonical") {
+        throw new PublicReferenceContractError(
+          "PUBLIC_REFERENCE_METADATA_CARRIER",
+          "a token-bearing link metadata carrier must be the canonical link",
+        );
+      }
+      carrier = "canonical";
+    } else {
+      const property = attributeMatches(tag, "property")[0]?.[2];
+      const name = attributeMatches(tag, "name")[0]?.[2];
+      const metadataName = (property ?? name ?? "").toLowerCase();
+      if (!acceptedMetaNames.has(metadataName)) {
+        throw new PublicReferenceContractError(
+          "PUBLIC_REFERENCE_METADATA_CARRIER",
+          `a token-bearing meta carrier must use one of ${[...acceptedMetaNames].join(", ")}`,
+        );
+      }
+      carrier = metadataName === "og:url"
+        ? "open_graph_url"
+        : metadataName === "og:image"
+          ? "open_graph_image"
+          : "twitter_image";
+    }
+    carriers.push({
+      key: token[1],
+      tag,
+      tagName,
+      carrierName,
+      carrier,
+    });
+  }
+  return carriers;
+}
+
+function usesTrackedRouteAuthority(key) {
+  return PUBLIC_ROUTE_NAMESPACES.some((namespace) => key.startsWith(namespace));
+}
+
+function assertTrackedRouteCarrier(authority, key, carrier, safePath) {
+  if (!usesTrackedRouteAuthority(key) || authority === null) return;
+  if (!isPublicRouteReferenceDestinationAuthority(authority)) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_ROUTE_BINDING",
+      "typed public routes require the immutable authority returned by the route binding contract",
+    );
+  }
+  assertPublicRouteReferenceCarrier(authority, key, carrier, safePath);
 }
 
 function attributeMatches(tag, name) {
@@ -433,6 +526,7 @@ function iframeTokenCarriers(html, safePath) {
       localFallback: localMatches[0][2],
       tagName,
       tag,
+      carrier: tagName === "iframe" ? "iframe_source" : "iframe_full_view",
     });
   }
   return carriers;
@@ -540,6 +634,7 @@ export function inspectPublicReferenceHtml(
   html,
   safePath = "Context Canvas HTML",
   iframeCarrierPolicies = null,
+  routeDestinations = null,
 ) {
   if (containsDirectNotionPageUrl(html)) {
     throw new PublicReferenceContractError(
@@ -558,17 +653,54 @@ export function inspectPublicReferenceHtml(
     }
   }
 
-  const registryAnchors = registryAnchorTokenCarriers(html);
+  const anchors = anchorTokenCarriers(html);
+  const metadataCarriers = metadataTokenCarriers(html);
   const iframeCarriers = iframeTokenCarriers(html, safePath);
   const jsonBlocks = tokenBearingJsonBlocks(html);
   const jsonCarriers = jsonBlocks.flatMap((block) => block.carriers);
   const carrierCount =
-    registryAnchors.length + iframeCarriers.length + jsonCarriers.length;
+    anchors.length +
+    metadataCarriers.length +
+    iframeCarriers.length +
+    jsonCarriers.length;
 
   if (carrierCount !== tokens.length) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_CARRIER",
       `${safePath} must carry each public-reference token as a complete Registry anchor, hosted iframe data carrier, or JSON-LD string value`,
+    );
+  }
+
+  for (const carrier of anchors) {
+    assertTrackedRouteCarrier(
+      routeDestinations,
+      carrier.key,
+      carrier.carrier,
+      safePath,
+    );
+  }
+  for (const carrier of metadataCarriers) {
+    assertTrackedRouteCarrier(
+      routeDestinations,
+      carrier.key,
+      carrier.carrier,
+      safePath,
+    );
+  }
+  for (const carrier of iframeCarriers) {
+    assertTrackedRouteCarrier(
+      routeDestinations,
+      carrier.key,
+      carrier.carrier,
+      safePath,
+    );
+  }
+  for (const carrier of jsonCarriers) {
+    assertTrackedRouteCarrier(
+      routeDestinations,
+      carrier.key,
+      "jsonld",
+      safePath,
     );
   }
 
@@ -608,17 +740,12 @@ export function inspectPublicReferenceHtml(
   for (const carrier of iframeCarriers.filter(({ tagName }) => tagName === "iframe")) {
     assertHostedIframePolicy(carrier, safePath, iframeCarrierPolicies);
   }
-  for (const carrier of jsonCarriers) {
-    if (EXACT_IFRAME_TOKEN.test(carrier.key) && !iframeKeys.has(carrier.key)) {
-      throw new PublicReferenceContractError(
-        "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
-        `${carrier.key} appears in JSON-LD without a matching hosted iframe carrier in ${safePath}`,
-      );
-    }
-  }
+  // A structured-data object can identify a manifest-owned hosted instrument
+  // without embedding that instrument on the same page. Visible iframe
+  // carriers retain the stricter paired iframe/full-view contract above.
 
   const withoutExactTokens = html.replace(
-    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+\}\}/g,
+    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+\}\}/g,
     "",
   );
   if (withoutExactTokens.includes("{{PUBLIC_URL")) {
@@ -649,13 +776,98 @@ export function inspectPublicReferenceHtml(
     keys: new Set(tokens.map((token) => token.key)),
     occurrenceCount: tokens.length,
     anchorCount:
-      registryAnchors.length +
+      anchors.length +
       iframeCarriers.filter((carrier) => carrier.tagName === "a").length,
     iframeCount: iframeCarriers.filter(
       (carrier) => carrier.tagName === "iframe",
     ).length,
+    metadataCount: metadataCarriers.length,
     jsonLdCount: jsonCarriers.length,
   };
+}
+
+export function inspectPublicReferenceSitemap(
+  source,
+  safePath = "context-canvas/sitemap.xml",
+  routeDestinations = null,
+) {
+  const tokens = tokenOccurrences(source);
+  const carriers = [...source.matchAll(
+    /<loc>\s*\{\{(PUBLIC_URL_PAGE_[A-Z0-9_]+)\}\}\s*<\/loc>/g,
+  )].map((match) => ({ key: match[1] }));
+  if (
+    tokens.some((token) => !token.key.startsWith(PUBLIC_PAGE_NAMESPACE)) ||
+    carriers.length !== tokens.length
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_SITEMAP_CARRIER",
+      `${safePath} must carry each public page token as one complete loc value`,
+    );
+  }
+  for (const carrier of carriers) {
+    assertTrackedRouteCarrier(
+      routeDestinations,
+      carrier.key,
+      "sitemap",
+      safePath,
+    );
+  }
+  const withoutExactTokens = source.replace(
+    /\{\{PUBLIC_URL_PAGE_[A-Z0-9_]+\}\}/g,
+    "",
+  );
+  if (
+    withoutExactTokens.includes("{{PUBLIC_URL") ||
+    PUBLIC_KEY_LOOKALIKE.test(withoutExactTokens)
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_SITEMAP_CARRIER",
+      `${safePath} contains a public-reference key outside an exact loc carrier`,
+    );
+  }
+  return {
+    keys: new Set(tokens.map((token) => token.key)),
+    occurrenceCount: tokens.length,
+    sitemapCount: carriers.length,
+  };
+}
+
+export function materializePublicReferenceSitemap(
+  source,
+  destinations,
+  safePath = "context-canvas/sitemap.xml",
+  routeDestinations = null,
+) {
+  const expected = inspectPublicReferenceSitemap(
+    source,
+    safePath,
+    routeDestinations,
+  );
+  let sitemapCount = 0;
+  const materialized = source.replace(
+    /(<loc>\s*)\{\{(PUBLIC_URL_PAGE_[A-Z0-9_]+)\}\}(\s*<\/loc>)/g,
+    (_carrier, opening, key, closing) => {
+      const value = destinations.get(key);
+      if (value === undefined) {
+        throw new PublicReferenceContractError(
+          "PUBLIC_REFERENCE_VALUE_MISSING",
+          `${key} needs an approved destination before ${safePath} can materialize`,
+        );
+      }
+      sitemapCount += 1;
+      return `${opening}${value.replaceAll("&", "&amp;").replaceAll("<", "&lt;")}${closing}`;
+    },
+  );
+  if (
+    sitemapCount !== expected.sitemapCount ||
+    materialized.includes("{{PUBLIC_URL")
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_SITEMAP_COUNT",
+      `${safePath} did not materialize every accepted loc carrier`,
+    );
+  }
+  return materialized;
 }
 
 function normalizedSafePath(safePath) {
@@ -760,6 +972,7 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
 
   const files = [];
   const htmlFiles = [];
+  const sitemapFiles = [];
   const scriptFiles = [];
   const keys = new Set();
   let occurrenceCount = 0;
@@ -811,7 +1024,17 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
       const isMaterializedHtml =
         isPublicReferencePathWithin(htmlRoot, path) &&
         extname(path).toLowerCase() === ".html";
+      const isMaterializedSitemap =
+        isPublicReferencePathWithin(htmlRoot, path) &&
+        entry.name === "sitemap.xml";
       if (!isMaterializedHtml) {
+        if (isMaterializedSitemap) {
+          const inspection = inspectPublicReferenceSitemap(searchable, safePath);
+          sitemapFiles.push({ path, safePath, inspection, source: searchable });
+          occurrenceCount += inspection.occurrenceCount;
+          for (const key of inspection.keys) keys.add(key);
+          continue;
+        }
         if (normalizedSafePath(safePath) === PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH) {
           const inspection = inspectProfessionalProfileScript(searchable, safePath);
           scriptFiles.push({ path, safePath, inspection, source: searchable });
@@ -863,6 +1086,7 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
   return {
     files,
     htmlFiles,
+    sitemapFiles,
     scriptFiles,
     keys,
     occurrenceCount,
@@ -1024,6 +1248,7 @@ export async function resolvePublicReferenceDestinations(
     environment = process.env,
     configurationSource,
     registryDestinations,
+    routeDestinations,
   } = {},
 ) {
   if (
@@ -1033,6 +1258,15 @@ export async function resolvePublicReferenceDestinations(
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_REGISTRY_BINDING",
       "the reviewed Registry destinations must use the immutable authority returned by the Registry binding contract",
+    );
+  }
+  if (
+    routeDestinations !== undefined &&
+    !isPublicRouteReferenceDestinationAuthority(routeDestinations)
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_ROUTE_BINDING",
+      "typed public routes must use the immutable authority returned by the route binding contract",
     );
   }
   if (configurationSource !== undefined && typeof configurationSource !== "string") {
@@ -1103,20 +1337,38 @@ export async function resolvePublicReferenceDestinations(
     }
   }
 
+  if (routeDestinations !== undefined) {
+    const routeOverrides = new Set(
+      [...assignmentInfo.assignments, ...Object.keys(environment)]
+        .filter((key) => usesTrackedRouteAuthority(key)),
+    );
+    if (routeOverrides.size > 0) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_ROUTE_OVERRIDE",
+        `the tracked route binding owns ${[...routeOverrides].sort().join(", ")}; remove these settings from the external receiver`,
+      );
+    }
+  }
+
   const resolved = new Map();
   for (const key of [...keys].sort()) {
     const usesRegistryBinding =
       registryDestinations !== undefined &&
       key.startsWith(PUBLIC_REFERENCE_NAMESPACE);
+    const usesRouteBinding =
+      routeDestinations !== undefined &&
+      usesTrackedRouteAuthority(key);
     const processValue = Object.hasOwn(environment, key) ? environment[key] : undefined;
     const value = usesRegistryBinding
       ? registryDestinations.get(key)
+      : usesRouteBinding
+        ? routeDestinations.get(key)
       : processValue === undefined
         ? fileValues[key]
         : processValue;
     resolved.set(
       key,
-      key.startsWith(PUBLIC_IFRAME_NAMESPACE)
+      key.startsWith(PUBLIC_IFRAME_NAMESPACE) && !usesRouteBinding
         ? validateIframeDestination(key, value)
         : validateDestination(key, value),
     );
@@ -1160,19 +1412,22 @@ export function materializePublicReferenceHtml(
   destinations,
   safePath = "Context Canvas HTML",
   iframeCarrierPolicies = null,
+  routeDestinations = null,
 ) {
   const expected = inspectPublicReferenceHtml(
     html,
     safePath,
     iframeCarrierPolicies,
+    routeDestinations,
   );
   let anchorCount = 0;
   let iframeCount = 0;
+  let metadataCount = 0;
   let jsonLdCount = 0;
 
   let materialized = html.replace(/<a\b[^>]*>/gi, (tag) =>
     tag.replace(
-      /(\bhref\s*=\s*)(["'])\{\{(PUBLIC_URL_REGISTRY_[A-Z0-9_]+)\}\}\2/i,
+      /(\bhref\s*=\s*)(["'])\{\{(PUBLIC_URL_(?:REGISTRY|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}\2/i,
       (carrier, prefix, quote, key) => {
         const value = destinations.get(key);
         if (value === undefined) {
@@ -1185,6 +1440,29 @@ export function materializePublicReferenceHtml(
         return `${prefix}${quote}${escapeHtmlAttribute(value, quote)}${quote}`;
       },
     ),
+  );
+
+  materialized = materialized.replace(
+    /<(link|meta)\b[^>]*>/gi,
+    (tag, rawTagName) => {
+      const tagName = rawTagName.toLowerCase();
+      const carrierName = tagName === "link" ? "href" : "content";
+      const matches = attributeMatches(tag, carrierName);
+      if (matches.length === 0) return tag;
+      const token = /^\{\{(PUBLIC_URL_(?:PAGE|ASSET)_[A-Z0-9_]+)\}\}$/.exec(
+        matches[0][2],
+      );
+      if (token === null) return tag;
+      const value = destinations.get(token[1]);
+      if (value === undefined) {
+        throw new PublicReferenceContractError(
+          "PUBLIC_REFERENCE_VALUE_MISSING",
+          `${token[1]} needs an approved destination before ${safePath} can materialize`,
+        );
+      }
+      metadataCount += 1;
+      return replaceHtmlAttribute(tag, carrierName, value);
+    },
   );
 
   materialized = materialized.replace(
@@ -1227,7 +1505,7 @@ export function materializePublicReferenceHtml(
     (script, open, _quote, body, close) => {
       if (!body.includes("PUBLIC_URL")) return script;
       const transformed = body.replace(
-        /"\{\{(PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+)\}\}"/g,
+        /"\{\{(PUBLIC_URL_(?:REGISTRY|IFRAME|PAGE|ASSET|SCHEMA|SKILL)_[A-Z0-9_]+)\}\}"/g,
         (carrier, key) => {
           const value = destinations.get(key);
           if (value === undefined) {
@@ -1261,6 +1539,7 @@ export function materializePublicReferenceHtml(
   if (
     anchorCount !== expected.anchorCount ||
     iframeCount !== expected.iframeCount ||
+    metadataCount !== expected.metadataCount ||
     jsonLdCount !== expected.jsonLdCount
   ) {
     throw new PublicReferenceContractError(
@@ -1466,12 +1745,10 @@ function carrierPoliciesForDestinations(destinations, routeProfiles) {
   for (const [key, destination] of destinations) {
     if (!key.startsWith(PUBLIC_IFRAME_NAMESPACE)) continue;
     const profile = routeProfiles.get(destination);
-    if (profile === undefined) {
-      throw new PublicReferenceContractError(
-        "PUBLIC_REFERENCE_IFRAME_POLICY",
-        `${key} needs an exact profile in the iframe route manifest`,
-      );
-    }
+    // JSON-LD may identify a manifest-owned instrument without embedding it.
+    // A visible iframe carrier still asks assertHostedIframePolicy for an
+    // exact entry, so a missing profile remains a material failure at use.
+    if (profile === undefined) continue;
     policies.set(key, profile);
   }
   return policies;
@@ -1517,6 +1794,7 @@ export async function materializePublicReferences({
   let preserveStaging = false;
   let inventory;
   let registryReference = null;
+  let routeReference = null;
 
   try {
     await cp(source, stagedOutput, {
@@ -1538,6 +1816,13 @@ export async function materializePublicReferences({
         path: DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
         requiredKeys: registryKeys,
       });
+      const routeKeys = [...inventory.keys]
+        .filter((key) => usesTrackedRouteAuthority(key))
+        .sort();
+      routeReference = await loadPublicRouteReferenceBinding({
+        path: DEFAULT_PUBLIC_ROUTE_REFERENCE_BINDING_PATH,
+        requiredKeys: routeKeys,
+      });
     }
     const destinations = await resolvePublicReferenceDestinations(
       inventory.keys,
@@ -1545,6 +1830,7 @@ export async function materializePublicReferences({
         configPath: config,
         environment,
         registryDestinations: registryReference?.destinations,
+        routeDestinations: routeReference?.destinations,
       },
     );
     const routeProfiles = await loadIframeRouteProfiles(
@@ -1562,6 +1848,7 @@ export async function materializePublicReferences({
         destinations,
         record.safePath,
         iframeCarrierPolicies,
+        routeReference?.destinations ?? null,
       );
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }
@@ -1572,6 +1859,17 @@ export async function materializePublicReferences({
         record.source,
         destinations,
         record.safePath,
+      );
+      await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
+    }
+
+    for (const record of inventory.sitemapFiles) {
+      if (record.inspection.occurrenceCount === 0) continue;
+      const materialized = materializePublicReferenceSitemap(
+        record.source,
+        destinations,
+        record.safePath,
+        routeReference?.destinations ?? null,
       );
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }
@@ -1592,6 +1890,15 @@ export async function materializePublicReferences({
                   ...registryReference.receipt,
                 },
               }),
+          ...(routeReference === null
+            ? {}
+            : {
+                route_reference: {
+                  binding_path:
+                    "deployment/public-references/context-canvas-route-bindings.v1.json",
+                  ...routeReference.receipt,
+                },
+              }),
         },
         null,
         2,
@@ -1605,6 +1912,12 @@ export async function materializePublicReferences({
     if (error instanceof RegistryReferenceContractError) {
       throw new PublicReferenceContractError(
         "PUBLIC_REFERENCE_REGISTRY_BINDING",
+        error.message,
+      );
+    }
+    if (error instanceof PublicRouteReferenceContractError) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_ROUTE_BINDING",
         error.message,
       );
     }
@@ -1629,14 +1942,19 @@ export async function materializePublicReferences({
     sourceFileCount: inventory.files.length,
     htmlFileCount: inventory.htmlFiles.length,
     scriptFileCount: inventory.scriptFiles.length,
+    sitemapFileCount: inventory.sitemapFiles.length,
     affectedHtmlFileCount: inventory.htmlFiles.filter(
       (record) => record.inspection.occurrenceCount > 0,
     ).length,
     affectedScriptFileCount: inventory.scriptFiles.filter(
       (record) => record.inspection.occurrenceCount > 0,
     ).length,
+    affectedSitemapFileCount: inventory.sitemapFiles.filter(
+      (record) => record.inspection.occurrenceCount > 0,
+    ).length,
     affectedSourceFileCount: [
       ...inventory.htmlFiles,
+      ...inventory.sitemapFiles,
       ...inventory.scriptFiles,
     ].filter((record) => record.inspection.occurrenceCount > 0).length,
     keyCount: inventory.keys.size,
@@ -1646,6 +1964,7 @@ export async function materializePublicReferences({
     jsonLdCount: inventory.jsonLdCount,
     keys: [...inventory.keys].sort(),
     registryReference: registryReference?.receipt ?? null,
+    routeReference: routeReference?.receipt ?? null,
   };
 }
 
@@ -1658,16 +1977,26 @@ Usage:
 Inputs:
   deployment/public-references/context-canvas-registry-bindings.v1.json
                               tracked reviewed Registry destinations
+  deployment/public-references/context-canvas-route-bindings.v1.json
+                              tracked page, asset, iframe, schema, and skill routes
+  deployment/cpanel/primary-route-manifest.json
+  deployment/cpanel/production-projection.config.json
+  iframe-route-families/canvas/public-iframe-route-manifest-v1.json
+  core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json
+  cloudflare/schemas-worker/public/publication-manifest.json
+  .agents/skills/publication-selection.json
+                              source authorities checked by the route binding
   .env.public                 optional ignored file for the profile route
-  PUBLIC_URL_IFRAME_*         approved iframes.vik.guru/v1/ route values
   PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE
                               approved professional-profile destination
 
 Output:
   .public-reference-build/context-canvas-project-surface
 
-The command has fixed repository-local source and output roots. It never prints
-configured destination values.`);
+The command has fixed repository-local source and output roots. Tracked bindings
+own Registry and repository-published destinations; .env.public may supply only
+the professional-profile route. The command keeps configured destination values
+out of terminal output.`);
 }
 
 async function main(arguments_) {

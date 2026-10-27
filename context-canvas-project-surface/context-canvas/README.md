@@ -27,7 +27,7 @@ parent page, and JavaScript adds bounded enhancement.
 
 The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas reading](../../.agents/skills/context-canvas-surface-reading/README.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/README.md), [visual-verification](../../.agents/skills/context-canvas-visual-verification/README.md), and [anthropomorphic-cue audit](../../.agents/skills/audit-anthropomorphic-cues/README.md) overviews provide compact collaboration entries and link to their authoritative skill contracts.
 
-The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 `schemas.vik.guru` publication and signed-out receipt.
+The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.vik.guru`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the earlier v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 Worker publication and signed-out receipt.
 
 ## Primary navigation
 
@@ -342,7 +342,8 @@ enlarged desktop text because its measure scales with the text.
 | Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
 | Progressive video | Selected native-video carriers resolve through the same-origin `https://vik.guru/v1-cdn/video/` Worker route. The [bounded video-publication manifest](../../planning/media-publication/video-publication-manifest.v0.1.json) records accepted public identities and open page-release states while R2 retains the media bytes. |
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
-| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` and `schemas.vik.guru` are observed retrieval surfaces for the accepted v0.3.1 closure; completed Issue #406 preserves the v0.3 delivery lineage, and completed Issue #531 carries the current Worker publication and exact-version live checks. |
+| Structured public references | Tracked semantic keys identify pages, assets, hosted instruments, schemas, and skills. The route binding derives their destinations from the primary, iframe, schema, and skill publication owners; materialized output carries ordinary HTTPS routes. |
+| Schemas | A schema's `$id` remains its semantic identity. `schemas.vik.guru` is the accepted Worker retrieval surface. Completed Issue #406 preserves the v0.3 delivery lineage, and completed Issue #531 carries the v0.3.1 Worker publication and exact-version live checks. |
 
 The project-level [`asset-inventory.json`](../asset-inventory.json) supplies the
 semantic family, visitor job, accessibility owner, provenance, and recovery
@@ -599,11 +600,13 @@ applications when a report depends on application sandbox policy.
 ## Materialize approved public references
 
 Authored Context Canvas sources carry stable public-reference keys. Registry
-keys appear as complete anchor `href` values and JSON-LD strings. One exact
+keys appear as complete anchor `href` values and JSON-LD strings. Page, asset,
+iframe, schema, and skill keys carry canonical identity, social metadata,
+JSON-LD relationships, and sitemap membership. One exact
 `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key appears in the shared footer
 script. The visible label, neighboring explanation, and key keep local source
-useful before a public build; materialization supplies each approved external
-destination. Direct Notion page routes stay with the authorized resolver.
+useful before a public build; materialization supplies each reviewed
+destination. Workspace lineage stays with the authorized resolver.
 
 The tracked
 [`context-canvas-registry-bindings.v1.json`](../../deployment/public-references/context-canvas-registry-bindings.v1.json)
@@ -615,13 +618,24 @@ build. The adjacent [binding documentation](../../deployment/public-references/R
 records the accepted Atlas coordinates, integrity digests, license standing,
 data-use notice, and update boundary.
 
+The tracked
+[`context-canvas-route-bindings.v1.json`](../../deployment/public-references/context-canvas-route-bindings.v1.json)
+selects the current public destination for every `PUBLIC_URL_PAGE_*`,
+`PUBLIC_URL_ASSET_*`, `PUBLIC_URL_IFRAME_*`, `PUBLIC_URL_SCHEMA_*`, and
+`PUBLIC_URL_SKILL_*` key. Its contract derives those destinations from the
+primary route manifest, production origin, Canvas and Core iframe manifests,
+schema Worker manifest, and skill publication selection. The accompanying
+head-authority matrix records every indexed structured-head and sitemap use,
+so one review can see the token, carrier, JSON pointer, authority class, and
+relationship role together.
+
 The authored footer describes the professional profile as available in the
 public build. A materialized build changes that same shared carrier into an
 ordinary, same-tab “Professional profile” link with a descriptive accessible
 name. Its destination lives only in ignored `.env.public` or the delivery
 process environment.
 
-Activated iframe carriers use their public route manifests directly. Their
+Activated visible iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or
 `/v1/canvas/` family, while each adjacent full-view `href` remains an ordinary
 link to the repository-local base prototype that becomes a primary-site route.
@@ -659,26 +673,30 @@ cp .env.public.example .env.public
 # Add the approved professional-profile destination.
 npm run build:public-references
 npm run test:public-references
+npm run test:context-canvas-head-routes
 ```
 
-The tracked binding remains the Registry configuration authority while active.
+The tracked bindings remain the Registry and repository-route configuration
+authorities while active.
 An explicit process-environment value can override the professional-profile
 entry, which keeps the same build seam available to a later delivery receiver.
 The materializer keeps destination values out of logs and terminal output. It
-verifies exact source-discovered Registry-token coverage and accepts one
-unambiguous HTTPS destination per required key, with credential-free authority,
-path, and query components, before atomically replacing an accepted generation.
-Authored source defines the required key set; the reviewed binding supplies its
-Registry destinations.
+verifies exact source-discovered token coverage and accepts one unambiguous
+HTTPS destination per required key before atomically replacing an accepted
+generation. Authored source defines the required key set. The Registry binding
+supplies Registry destinations; the route binding verifies repository-published
+destinations against their source owners. The professional-profile receiver
+retains its separate ignored configuration seam.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies
 the complete `context-canvas-project-surface/` subtree, transforms approved
 Context Canvas HTML carriers and the one shared footer-script carrier, and
 preserves every other regular file byte-for-byte. It validates token-bearing
-JSON-LD, scans every copied regular file for direct Notion routes, and replaces
-the prior generation only after the complete result succeeds. Configuration
-and the Registry coordination directory stay outside the copied tree. Symbolic links and special filesystem entries
+metadata, JSON-LD, and sitemap entries, scans every copied regular file for
+workspace routes, and replaces the prior generation only after the complete
+result succeeds. Configuration and the public-reference coordination directory
+stay outside the copied tree. Symbolic links and special filesystem entries
 stay outside this build boundary. Tracked input remains byte-unchanged. An
 operational restore failure preserves the ignored recovery directory for an
 explicit local recovery.

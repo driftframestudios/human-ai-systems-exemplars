@@ -17,6 +17,7 @@ node tools/test-suite-plan.mjs --suite node.visualization-fidelity-atlas --json
 node tools/test-suite-plan.mjs --suite browser.visualization-fidelity-atlas.atlas-gallery.browser --json
 node tools/test-suite-plan.mjs --suite node.visual-fidelity-contracts --json
 node tools/test-suite-plan.mjs --suite browser.visual-fidelity-contracts --json
+node tools/test-suite-plan.mjs --suite node.public-references --json
 node tools/test-suite-plan.mjs --suite python.tables.table-context --json
 node tools/test-suite-plan.mjs --bundle source-unit --bundle carrier --json
 ```
@@ -70,6 +71,13 @@ governance owner keep their runtime and workflow gates.
 The carrier bundle includes the non-mutating Debrief derivative check as its
 own discoverable route. Check mode needs no encoder; the separately invoked
 build mode uses `cwebp` after an accepted full-size source changes.
+
+The public-reference source suite includes the Registry binding, repository
+route binding, structured-head validator, occurrence matrix, materializer, and
+synthetic live-route verifier. Its `test:context-canvas-head-routes` alias is a
+repository-state gate over the current 40-page manifest and sitemap; the suite
+planner continues to present the focused Node modules without dispatching that
+gate.
 
 ## Python table components
 

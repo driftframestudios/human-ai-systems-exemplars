@@ -126,20 +126,38 @@ source-selection boundary rather than Core or Narrative prototype behavior:
 ```sh
 npm run test:public-reference-contracts
 npm run test:public-references
+npm run test:context-canvas-head-routes
+npm run test:public-reference-projections
 npm run test:citation-atlas-selection
 npm run test:public-reference-materializer
 ```
 
-The aggregate contract route runs both focused families and confirms their
-suite-catalog reachability. The complete Node route runs the materializer,
-Registry binding, and synthetic live-route verifier modules. These checks use synthetic destinations,
-stubbed HTTP responses, and temporary directories. They exercise context-aware
-anchor and JSON-LD substitution, configuration failures, source/output
-separation, retained-generation recovery, bounded response handling, exact
-route and title identity, and the current Context Canvas source without
-retaining or reporting configured destinations. The focused
+The aggregate contract route runs both focused families, one focused edge over
+the coupled iframe package, production closure, and production projection
+modules, and their suite-catalog reachability. The complete iframe and
+production-deployment families remain independently selectable through
+`test:iframe-routes` and `test:prod-deployment`.
+The complete public-reference Node route runs the materializer,
+Registry and repository-route bindings, Context Canvas head validator,
+head-authority matrix, and synthetic live-route verifier modules. These checks
+use synthetic destinations, stubbed HTTP responses, and temporary directories.
+They exercise context-aware anchor, metadata, JSON-LD, and sitemap substitution;
+configuration failures; source/output separation; retained-generation recovery;
+bounded response handling; exact route and title identity; and the current
+Context Canvas source while destination values remain in their configured
+receiver. The focused
 `test:public-reference-materializer` compatibility route remains available for
 the materializer module alone.
+
+`test:context-canvas-head-routes` is the repository-state gate. It derives the
+40 indexed top-level pages from the primary manifest, preserves the explicit
+404 and retained-exemplar standing, parses canonical and social metadata plus
+recursive JSON-LD URLs, compares sitemap membership, enforces token/carrier
+authority, and checks the tracked occurrence matrix. Diagnostics aggregate and
+sort before the command returns. Maintainers can inspect the same result as
+structured JSON with `node tools/check-context-canvas-head-routes.mjs --json`.
+The explicit `--write-matrix` mode prepares a deterministic reviewed update;
+the ordinary gate keeps that tracked matrix current.
 
 The Registry contract cases enforce the tracked binding's exact shape,
 accepted Atlas identity, normalized public host, current lifecycle,
@@ -147,6 +165,14 @@ identity-verified route state, deterministic ordering, inert prose boundary,
 and exact source-discovered token coverage. The repository case discovers its
 keys and occurrences from source; migration counts remain a historical
 observation rather than a release threshold.
+
+The route-binding cases validate all page, asset, iframe, schema, and skill
+keys against their named publication owners. The head cases cover source-token
+and generated-URL states, malformed JSON-LD, multiple simultaneous findings,
+unknown URL-bearing properties, sitemap divergence, retained-route standing,
+and carrier-policy mismatches. The schema Worker companion selection tests keep
+the upcoming Collaboration Skills README and portable example visible while
+their live activation waits for the next accepted Worker publication.
 
 The Python route exercises the portable Citation Atlas helper through its
 public CLI. Synthetic Atlas records cover strict UTF-8 JSON, lifecycle and
