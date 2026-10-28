@@ -95,13 +95,14 @@ the entry-point inventory below counts the three executable case files separatel
 
 ## Existing direct Core consumers
 
-These 52 current direct browser entry points retain their imports and case
+These 53 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
 
 | Entry | Retained receiving responsibility |
 | --- | --- |
+| `tests/native-investment-studio/controller.browser.mjs` | Native About coordination controls: independently calculated money/effort, draft and accepted-state recovery, exact target/base ownership, lifecycle release, focus through disclosures and responsive rearrangement, narrow/enlarged text, forced colors, reduced motion, ordinary page wheel movement, and the preserved full-Studio route in three engines. |
 | `tests/context-canvas/about-heatmap.browser.mjs` | Native About comparison state, exact figure identity, scriptless and print reading, enlarged-text containment, keyboard focus, page wheel movement, and controlled state/layout faults in three engines. |
 | `tests/context-canvas/about-gallery-fit.browser.mjs` | About Gallery natural body/footer height, disclosure growth/shrinkage, retained selections, per-document channel and fallback, parent wheel movement, local package substitution, and restored bounded-height fault in three engines. |
 | `tests/context-canvas/about-prompt-fit.browser.mjs` | Five-condition Explorer state, parent/document/local-region scroll ownership, natural height, narrow/enlarged text, keyboard, two-frame isolation, fallback, and static/print readings in three engines. |

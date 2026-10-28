@@ -36,6 +36,7 @@
   <script src="about-media.js" defer></script>
   <script src="about-heatmap.js" defer></script>
   <script src="about-content-fit.js" defer></script>
+  <script type="module" src="../../collaboration/native-investment-studio/controller.mjs"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -44,7 +45,7 @@
     "url": "{{PUBLIC_URL_PAGE_ABOUT}}",
     "name": "Technology leadership portfolio",
     "description": "An About surface for regulated product, design, engineering, quality, and a connected public system for human–AI collaboration.",
-    "dateModified": "2026-10-12",
+    "dateModified": "2026-10-28",
     "about": "A technology-leadership portfolio spanning regulated product, design, engineering, quality, and human–AI systems work.",
     "hasPart": [
       {"@type":"SoftwareApplication","name":"Cross-Functional Investment Studio","applicationCategory":"BusinessApplication","url":"{{PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS}}"},
@@ -139,6 +140,93 @@
   </div></section>
 
   <section class="about-field about-field--dark-iron-ore" aria-labelledby="ai-orientation-title"><div class="about-reading"><p id="on-dark-iron-ore" class="about-kicker">AI Systems · work, memory, and judgment held together</p><h2 id="ai-orientation-title">Valuable initiatives meaningfully <span class = "about-reading--accent">change the way people work</span>.</h2><p class="about-reading-sidebar">My AI systems are specialist decision surfaces for technical and non-technical participants engaged in consequential cross-organizational work. They assemble distributed memory and design-research systems, support organizational modeling, build and inspect applications, preserve controls, and route questions back to people with standing.</p><div class="about-route-grid"><a href="ai-systems.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg><strong>View AI Systems</strong><span>See methods, contracts, and working software for accountable decisions, explicit human authority, and recoverable work.</span></a><a href="shared-machinery.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg><strong>Inspect Shared Machinery</strong><span>Compare ten instruments for framing, shaping, staging, recovering, and handing off work across tools and teams.</span></a></div></div></section>
+
+  <section class="about-field about-field--coordination" aria-labelledby="native-coordination-title">
+    <div class="about-reading about-reading--wide">
+      <p class="about-kicker">Native instrument · one agreement, an inspectable consequence</p>
+      <div class="native-coordination" data-native-coordination>
+        <header class="native-coordination__amp">
+          <div class="native-coordination__identity">
+            <p class="native-coordination__plate">Investment Studio / Coordination 01</p>
+            <h2 id="native-coordination-title">Make room for the conversation.</h2>
+            <p>Adjust the agreement. Trace what the plan requires.</p>
+          </div>
+          <div class="native-coordination__readout">
+            <span class="native-coordination__plate" data-native-standing>Priced plan · USD</span>
+            <strong data-native-total>$1,200.00</strong>
+            <span data-native-revision>Accepted revision 0</span>
+          </div>
+          <dl class="native-coordination__funding">
+            <div><dt>Funded staffing</dt><dd data-native-funded>$0.00</dd></div>
+            <div><dt>Additional purchases</dt><dd data-native-additional>$1,200.00</dd></div>
+            <div><dt>Attributed inside staffing</dt><dd data-native-allocated>$0.00</dd></div>
+          </dl>
+          <div class="native-coordination__transport"><button type="button" data-action="edit" hidden>Edit agreement</button></div>
+        </header>
+        <div class="native-coordination__body">
+          <div class="native-coordination__agreement">
+            <p class="native-coordination__plate">Working agreement / participant effort</p>
+            <h3 data-native-agreement>Weekly working agreement</h3>
+            <div class="native-coordination__connection" aria-label="Team participation in the working agreement">
+              <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
+              <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
+              <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 participants</small></span>
+            </div>
+            <p class="native-coordination__effort" data-native-effort>4 people × 30 minutes × 6 occurrences = 720 participant-minutes</p>
+            <p class="native-coordination__scope" data-native-scope>Additional purchase · planned work · 6-week context. Occurrences carry effort; calendar timing remains unspecified.</p>
+            <p class="native-coordination__draft" data-native-draft-state>Accepted plan · edit the agreement to explore a change.</p>
+            <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
+          </div>
+          <details class="native-coordination__configuration" data-native-configure>
+            <summary>Configure agreement</summary>
+            <form novalidate>
+              <fieldset disabled>
+                <legend>Draft quantities</legend>
+                <p class="native-coordination__hint">The amount above changes when you apply. Closing this panel keeps your draft.</p>
+                <div class="native-coordination__controls">
+                  <div class="native-coordination__control">
+                    <label for="native-duration">Minutes per occurrence</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-field="minutesPerOccurrence" data-step="-1" aria-label="Decrease minutes by one">−</button>
+                      <input id="native-duration" name="minutesPerOccurrence" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-range native-duration-error">
+                      <button type="button" data-field="minutesPerOccurrence" data-step="1" aria-label="Increase minutes by one">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-duration-range" data-native-range="minutesPerOccurrence">Whole minutes · 0–1,440</p>
+                    <p class="native-coordination__error" id="native-duration-error" data-native-error="minutesPerOccurrence"></p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="native-occurrences">Occurrences in this plan</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease occurrences by one">−</button>
+                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-occurrences-range native-occurrences-error">
+                      <button type="button" data-field="occurrences" data-step="1" aria-label="Increase occurrences by one">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences">Whole occurrences · 0–10,000</p>
+                    <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
+                  </div>
+                </div>
+                <div class="native-coordination__actions"><button type="submit" data-action="apply">Apply changes</button><button type="button" data-action="cancel">Cancel changes</button></div>
+              </fieldset>
+            </form>
+          </details>
+          <details class="native-coordination__trace" data-native-trace>
+            <summary>Trace this amount <span>Accepted effort → funding → investment</span></summary>
+            <div class="native-coordination__trace-body">
+              <p data-native-trace-summary>Four participants each contribute 180 minutes at $100 per hour: $300 each, for a $1,200 additional purchase. Funded staffing is $0; allocated attribution is $0.</p>
+              <ul class="native-coordination__ledger" data-native-trace-list>
+                <li><h4>product-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>product-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>engineering-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>engineering-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+              </ul>
+            </div>
+          </details>
+        </div>
+        <footer class="native-coordination__footer"><p>Synthetic planning example. Your changes stay in this page; qualified people set rates and approve commitments.</p><p data-native-fallback>Read the example and its trace here. Editing becomes available when this instrument loads.</p></footer>
+      </div>
+      <p class="about-evidence-note">Explore one coordination agreement above. Continue below for the complete Studio’s plans, people, change frameworks, quality, recovery, and comparison. Each instrument keeps its own planning state.</p>
+    </div>
+  </section>
 
   <section class="about-field about-field--studio" aria-labelledby="studio-title"><div class="about-reading about-reading--wide"><p class="about-prototype-kicker">Embedded prototype · Cross-functional investment and change</p><h2 id="studio-title">Cross-Functional Investment Studio</h2><div class="about-reading--prototype"><p>Complex, important initiatives are often cross-functional resource requests. This prototype lets a visitor model plans, goals, change frameworks, staffing, quality, human–AI handoffs, disruption, learning, and investment while keeping an early estimate visibly provisional.</p></div><div class="about-embed about-embed--studio"><iframe data-about-content-fit="studio-chapters" title="Interactive Cross-Functional Investment Studio chapters" src="https://iframes.vik.guru/v1/canvas/investment-studio-chapters/" sandbox="allow-downloads allow-popups allow-popups-to-escape-sandbox allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer" loading="eager"></iframe></div><div class="about-embed-caption"><span>Five working chapters · plan, people, work and recovery, coordination, and comparison · six starting plans</span><a href="../../collaboration/initiative-costing-calculator/index.html">Open the full studio</a></div><div class="about-table-wrap" tabindex="0" role="region" aria-label="Cross-Functional Investment Studio static counterpart; scroll horizontally"><table class="about-role-table" data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis"><caption>Cross-Functional Investment Studio: static counterpart to the editable analysis</caption><thead><tr data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis: column headings"><th scope="col" data-label="Domain">Domain</th><th scope="col" data-label="What the instrument compares">What the instrument compares</th><th scope="col" data-label="Inputs and evidence">Inputs and evidence</th><th scope="col" data-label="Decision boundary">Decision boundary</th></tr></thead><tbody>
 <tr data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis: Internal investment"><th scope="row" data-label="Domain">Internal investment</th><td data-label="What the instrument compares">Allocated staffing, incremental activity, quality, recovery, and a provisional planning band.</td><td data-label="Inputs and evidence">People, loaded rates, horizon, additional-work shares, and named reserve heuristics.</td><td data-label="Decision boundary">Accountable people establish staffing, quote, and budget authority.</td></tr>

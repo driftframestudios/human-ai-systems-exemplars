@@ -1942,3 +1942,177 @@ p#on-dark-iron-ore {
     min-block-size: 0;
     block-size: var(--about-content-block-size);
 }
+
+/* Native coordination receiver — index.html / native-investment-studio.
+   Industrial Ink gives accepted amounts their instrument plane; About's
+   Soft Color Blocking mapping carries editable paper and exact trace records.
+   The 52rem seam changes composition while one DOM editor retains its state. */
+.about-field--coordination { background: var(--about-sea-glass); }
+.native-coordination {
+    --native-ink: var(--about-dark-iron-ore);
+    --native-paper: var(--about-paper);
+    --native-text: var(--about-ink);
+    --native-signal: var(--about-tiffany);
+    --native-rule: #66766e;
+    --native-key-shadow: #45534b;
+    --native-error: #853126;
+    --native-focus: var(--about-cobalt);
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--native-ink);
+    color: var(--native-text);
+    color-scheme: light;
+    font: 1rem/1.5 system-ui, sans-serif;
+    margin-block: 1.5rem;
+    overflow-wrap: anywhere;
+}
+.native-coordination *, .native-coordination *::before, .native-coordination *::after { box-sizing: border-box; }
+.native-coordination :is(p, h2, h3, h4, dl, dd, ul) { margin: 0; }
+.native-coordination :is(h2, h3, h4) { max-inline-size: none; }
+.native-coordination [hidden] { display: none; }
+.native-coordination__amp {
+    background: var(--native-ink);
+    border-block-end: .3rem solid var(--native-signal);
+    border-radius: .6rem .6rem 0 0;
+    color: var(--native-paper);
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(1rem, 3vw, 2.5rem);
+}
+.native-coordination__plate {
+    font: 700 .75rem/1.5 ui-monospace, monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.native-coordination__amp .native-coordination__plate { color: var(--native-signal); }
+.about-page .native-coordination__identity h2 {
+    color: var(--native-paper);
+    font: 600 clamp(1.6rem, 2.8vw, 2.5rem)/1.14 system-ui, sans-serif;
+    letter-spacing: -.035em;
+    margin-block: .65rem .75rem;
+    max-inline-size: 21ch;
+}
+.native-coordination__identity > p:last-child { max-inline-size: 44ch; }
+.native-coordination__readout { display: grid; gap: .3rem; align-content: end; min-inline-size: 0; }
+.native-coordination__readout strong {
+    color: var(--native-signal);
+    font: 500 clamp(2rem, 5vw, 3.8rem)/1.15 ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.055em;
+}
+.native-coordination__readout > span:last-child { font: .8rem/1.5 ui-monospace, monospace; }
+.native-coordination__funding { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: end; }
+.native-coordination__funding dt { color: var(--native-paper); font-size: .8rem; }
+.native-coordination__funding dd { color: var(--native-signal); font: 600 1.15rem/1.6 ui-monospace, monospace; }
+.native-coordination button, .native-coordination summary {
+    cursor: pointer;
+    font: inherit;
+    min-block-size: 2.75rem;
+}
+.native-coordination button {
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .3rem;
+    box-shadow: .2rem .2rem 0 var(--native-key-shadow);
+    color: var(--native-text);
+    font-weight: 650;
+    min-inline-size: 2.75rem;
+    padding: .55rem .85rem;
+}
+.native-coordination button:active:not(:disabled) {
+    box-shadow: .06rem .06rem 0 var(--native-key-shadow);
+    transform: translate(.14rem, .14rem);
+}
+.native-coordination button:disabled { cursor: default; opacity: .6; }
+.native-coordination :is(button, input, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
+.native-coordination__amp button:focus-visible { outline-color: var(--native-signal); }
+.native-coordination__transport { align-self: end; }
+.native-coordination__transport button { border-color: var(--native-paper); }
+.native-coordination__body { display: grid; gap: 1.5rem; padding: clamp(1rem, 3vw, 2.5rem); }
+.native-coordination__body > * { min-inline-size: 0; }
+.native-coordination__agreement { display: grid; gap: 1rem; align-content: start; }
+.about-page .native-coordination__agreement h3 { font: 650 1.5rem/1.25 system-ui, sans-serif; color: var(--native-text); }
+.native-coordination__connection {
+    align-items: center;
+    background: var(--about-mint-green);
+    border: .0625rem solid var(--native-rule);
+    border-radius: .3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    padding: 1rem;
+}
+.native-coordination__connection > span { flex: 1 1 8rem; }
+.native-coordination__connection b { font-weight: 650; }
+.native-coordination__connection small { display: block; margin-inline-start: 1rem; }
+.native-coordination__connection i { background: var(--native-signal); border: .125rem solid var(--native-ink); border-radius: 50%; display: inline-block; inline-size: .6rem; block-size: .6rem; margin-inline-end: .4rem; }
+.native-coordination__connection svg { flex: 0 0 2.25rem; inline-size: 2.25rem; block-size: 1rem; stroke-width: 3; }
+.native-coordination__effort { font-weight: 650; }
+.native-coordination__scope, .native-coordination__hint { font-size: .875rem; }
+.native-coordination__draft { border-inline-start: .25rem solid var(--about-deep-teal); padding-inline-start: .75rem; font-size: .9rem; }
+.native-coordination[data-native-state='editing'] .native-coordination__draft { border-color: var(--about-cobalt); }
+.native-coordination[data-native-state='stale'] .native-coordination__draft { border-color: var(--native-error); color: var(--native-error); }
+.native-coordination__status:empty { display: none; }
+.native-coordination__status { font-size: .9rem; font-weight: 650; }
+.native-coordination details { border: .125rem solid var(--native-ink); align-self: start; }
+.native-coordination summary { background: var(--about-cool-blue); padding: .8rem 1rem; font-weight: 700; }
+.native-coordination summary span { display: block; font-size: .8rem; font-weight: 400; }
+.native-coordination__configuration[open] { box-shadow: .25rem .25rem 0 var(--native-key-shadow); }
+.native-coordination__configuration form { padding: 1.15rem; background: var(--about-soft-apricot); }
+.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
+.native-coordination legend { font: 700 .75rem/1.5 ui-monospace, monospace; letter-spacing: .07em; text-transform: uppercase; padding: 0 0 .5rem; }
+.native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
+.native-coordination__control { display: grid; gap: .55rem; min-inline-size: 0; }
+.native-coordination label { font-weight: 650; }
+.native-coordination__stepper { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .65rem; }
+.native-coordination__stepper button { border-radius: 50%; inline-size: 2.75rem; block-size: 2.75rem; padding: 0; font-size: 1.3rem; }
+.native-coordination input {
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .25rem;
+    color: var(--native-text);
+    font: 600 1.2rem/1.4 ui-monospace, monospace;
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: 2.75rem;
+    padding: .45rem;
+    text-align: center;
+}
+.native-coordination input[aria-invalid='true'] { border-color: var(--native-error); border-style: dashed; }
+.native-coordination__error { color: var(--native-error); font-size: .875rem; }
+.native-coordination__error:empty { display: none; }
+.native-coordination__actions { display: flex; flex-wrap: wrap; gap: .85rem; }
+.native-coordination__actions [data-action='apply'] { background: var(--native-signal); }
+.native-coordination__trace { grid-column: 1 / -1; }
+.native-coordination__trace-body { padding: 1rem; }
+.native-coordination__trace-body > p { max-inline-size: 75ch; }
+.native-coordination__ledger { display: grid; gap: 1rem; list-style: none; padding: 0; margin-block-start: 1rem; }
+.native-coordination__ledger li { border: .0625rem solid var(--native-rule); border-inline-start: .25rem solid var(--about-deep-teal); padding: 1rem; min-inline-size: 0; background: var(--about-mint-green); }
+.about-page .native-coordination__ledger h4 { font: 700 1rem/1.4 ui-monospace, monospace; color: var(--native-text); }
+.native-coordination__ledger li > p { font-size: .875rem; margin-block: .25rem .75rem; }
+.native-coordination__ledger dl { display: grid; gap: .65rem; }
+.native-coordination__ledger dt { font-size: .8rem; }
+.native-coordination__ledger dd { font-size: .9rem; font-weight: 650; }
+.native-coordination__footer { border-block-start: .0625rem solid var(--native-rule); padding: 1rem clamp(1rem, 3vw, 2.5rem); font-size: .8rem; }
+.native-coordination__footer p + p { margin-block-start: .5rem; }
+@media (min-width: 52rem) {
+    .native-coordination__amp { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+    .native-coordination__readout { text-align: end; }
+    .native-coordination__transport { justify-self: end; }
+    .native-coordination__body { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+    .native-coordination__ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+    .native-coordination { --native-focus: Highlight; --native-text: CanvasText; --native-ink: CanvasText; --native-paper: Canvas; --native-signal: LinkText; --native-rule: CanvasText; --native-error: CanvasText; box-shadow: none; }
+    .native-coordination :is(button, details) { box-shadow: none; }
+    .native-coordination input[aria-invalid='true'] { border-style: dashed; }
+}
+
+/* Keep enlarged numeric entry readable when its own panel becomes narrow. */
+@container (max-width: 22rem) {
+    .native-coordination__stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .native-coordination__stepper input { grid-column: 1 / -1; grid-row: 1; }
+    .native-coordination__stepper button { grid-row: 2; inline-size: min(2.75rem, 100%); min-inline-size: 44px; }
+    .native-coordination__stepper button:last-child { justify-self: end; }
+}

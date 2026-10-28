@@ -303,6 +303,7 @@
       "kind": "node-test",
       "members": [
         "tests/native-investment-studio/contract.test.mjs",
+        "tests/native-investment-studio/controller.test.mjs",
         "tests/native-investment-studio/draft.test.mjs",
         "tests/native-investment-studio/state.test.mjs"
       ],
@@ -313,7 +314,7 @@
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
-      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, bounded draft and scheduled-commit recovery, and exchange; visitor rendering enters a later tranche.",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, bounded draft and scheduled-commit recovery, exchange, and the native About receiver's static and local module-delivery contracts.",
       "aliases": []
     },
     {
@@ -2743,6 +2744,23 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.coordination",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/controller.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": ["node", "--test"],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About coordination controls: independent money/effort, draft and accepted identity, explicit Apply/Cancel, stale recovery and teardown, focus/disclosure continuity, responsive and enlarged-text containment, forced colors, reduced motion, and ordinary page scrolling across Chromium, Firefox and Playwright WebKit. Native touch, assistive technology and comprehension retain separate observations.",
+      "aliases": []
+    },
+    {
       "id": "browser.context-canvas.about-studio-chapters",
       "family": "context-canvas",
       "kind": "node-test",
@@ -2882,7 +2900,8 @@
         "browser.context-canvas.debrief-callout-integrity",
         "browser.context-canvas.about-scroll",
         "browser.context-canvas.about-disclosures",
-        "browser.context-canvas.about-studio-chapters"
+        "browser.context-canvas.about-studio-chapters",
+        "browser.native-investment-studio.coordination"
       ]
     },
     {

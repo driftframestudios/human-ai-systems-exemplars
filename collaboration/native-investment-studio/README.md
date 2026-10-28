@@ -1,19 +1,17 @@
-# Native Investment Studio: capability and state foundation
+# Native Investment Studio: coordination, capability, and state
 
-This package gives the future About-page Studio one accepted planning state,
-an inspectable investment calculation, and a recoverable edit boundary. Its
-first tranche establishes those contracts before native controls receive them.
-The draft adapter adds one bounded coordination-work editor over that accepted
-owner, preserving unfinished input until an explicit or scheduled Apply.
-The intended receiver is an ordinary section of About: visitors keep the page's
-vertical reading flow while they explore coordination, teams, practices, and
-investment consequences.
+This package gives About one native coordination agreement, an inspectable
+investment calculation, and a recoverable edit boundary. Visitors change
+minutes or occurrences, apply the draft, and trace the accepted participant
+effort and funding. The ordinary About section preserves vertical reading
+while the complete Studio retains its richer planning capabilities.
 
 [Issue #637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637)
-holds the approved design and implementation sequence. The first tranche adds
-the capability inventory, portable state, calculation, and state-owner APIs.
-Visitor HTML, About's current Studio chapters, and the complete original Studio
-retain their present behavior. Each receiving pull request records its review
+holds the approved design and implementation sequence. The capability and state
+foundation supports the draft adapter and
+[Issue #643's native receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/643).
+About's existing Studio chapters and the complete original Studio retain their
+source and routes. Each receiving pull request records its review
 and integration authority; publication remains held.
 
 ## Source map
@@ -26,11 +24,18 @@ and integration authority; publication remains held.
   revision.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
   the optional one-request scheduling boundary.
+- `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
+  explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
+- About's `index.html` owns the semantic panel and its scriptless example;
+  `styles/routes/about.css` owns its scoped composition and palette mapping.
 - `tests/native-investment-studio/contract.test.mjs` and
   `tests/native-investment-studio/state.test.mjs`, relative to the repository
   root, own focused contract and state-transition observations.
 - `tests/native-investment-studio/draft.test.mjs` owns draft recovery,
   coalescing, exact-target identity, and scheduling lifecycle observations.
+- `tests/native-investment-studio/controller.test.mjs` owns the local module
+  delivery and semantic receiving checks; `controller.browser.mjs` owns the
+  actual control, reading, and lifecycle observations across three engines.
 
 ## Existing owners and the receiving boundary
 
@@ -261,7 +266,7 @@ an explicit compatibility result; their original instruments remain the fitting
 receivers while a future adapter establishes a tested transformation.
 
 UI drafts, open menus, reversed-card faces, focus targets, and reading position
-belong to the future presentation adapter. A draft can remain editable while
+belong to their presentation adapters. A draft can remain editable while
 the accepted amount and export continue to describe the last valid revision.
 
 ## Coordination-work draft adapter
@@ -270,7 +275,8 @@ the accepted amount and export continue to describe the last valid revision.
 introduces a source-only adapter for `minutesPerOccurrence` and `occurrences`.
 It owns one open editor with at most 32 UTF-16 code units per raw field. Labels,
 membership, funding, and all other work fields retain the captured row's values.
-The complete Studio and About DOM continue through their existing owners.
+The native controller receives this adapter; the complete Studio and its About
+chapters continue through their existing owners.
 
 The pre-existing `collaboration/investment-analysis/studio.js` preserves
 invalid control drafts, applies grouped records, and checks request identity
@@ -388,6 +394,60 @@ identical operation traces. Raw edits, steps, pending requests, accepted commits
 and complete synchronous Apply cost retain separate metrics. Fake scheduling
 establishes ordering and counts; browser latency begins with native controls.
 
+## Native coordination receiver
+
+About loads `controller.mjs` as a module. Its four same-directory dependencies
+retain the canonical package geometry in local and production delivery.
+`deployment/cpanel/primary-route-manifest.json` declares all five files and
+their JavaScript media type. The production closure test builds an isolated
+artifact with the real builder and follows its parsed import graph; removing
+one dependency earns a failing closure observation. The shared local browser
+server, focused visual-check server, and Canvas visual-reference server each
+prove JavaScript media and exact module bytes. This module
+group leaves the existing iframe package inputs with their current owners.
+
+`mountCoordinationPanel(root, { studio, workId })` binds one cooperative Studio
+owner and agreement to one root. Calling it again returns the mounted receiver.
+Its `read`, `refresh`, and `dispose` methods support controlled integration and
+testing. A host that replaces accepted state calls `refresh`; the controller
+then shows the new amount alongside any retained stale draft. Cancel followed
+by Edit starts from that accepted projection.
+
+The receiver validates all required elements before installing eight listeners.
+Initialization failure releases installed resources. Disposal removes those
+listeners, ends the draft, and exposes the accepted static reading. A repaired
+root can mount again. A persisted page transition retains the owner for browser
+history restoration; an actual departure disposes it.
+
+Raw text and circular step buttons update one two-field draft. Explicit Apply
+commits one complete row; Cancel retains the accepted investment. Composition
+input settles before Apply. Closing the native configuration disclosure retains
+the draft, and responsive changes reuse the same elements and focus. This
+receiver uses explicit Apply and creates no deferred request or periodic timer.
+The adapter's deferred mode remains available to separately measured receivers.
+
+The accepted amount, effort equation, person traces, and funding distinction all
+read one immutable projection. Funded staffing plus additional purchases forms
+the commitment; attributed allocation remains inside staffing. Incomplete
+pricing carries its standing beside the known subtotal. The horizon is context:
+the occurrence count carries effort while calendar placement needs a later
+timing model. Integer-cent formatting retains exact cents through the admitted
+monetary range.
+
+One new accepted projection costs O(W + T + P) for receiver lookups and person
+trace construction, in addition to the model's complete preparation. Raw edits
+render two bounded fields in O(1); the accepted trace is retained until its
+projection changes. The receiver retains one rendered projection, one draft
+owner, and one listener group. Issue #641 owns runtime cost observations and
+any later optimization decision.
+
+Industrial Ink supplies the dark amount plane and hard down-right shadows;
+About's Soft Color Blocking palette supplies paper controls and trace cards.
+The 52rem viewport seam pairs the agreement and configuration. A 22rem control
+container seam places the numeric input above its nearby step buttons when
+enlarged text needs more room. The native panel uses document scrolling,
+keyboard controls, visible focus, and system colors in forced-color mode.
+
 ## Data structures and pattern decisions
 
 Ordered arrays preserve authored order in portable state. Preparation builds
@@ -472,7 +532,9 @@ From the repository root:
 
 ```sh
 node --test tests/native-investment-studio/*.test.mjs
+node --test tests/native-investment-studio/controller.browser.mjs
 node --test tests/context-canvas/about-studio-chapters.test.mjs
+node --test tests/prod-deployment/primary-closure.test.mjs
 ```
 
 The native tests establish independent monetary expectations, allocation versus
@@ -486,18 +548,21 @@ settlement, latest-value and additive-step behavior, coherent field commits,
 stale/foreign session recovery, deferred final flush, cancellation/disposal,
 same-session cleanup reentry, and replacement-session request ownership.
 
-The first tranche's source and state contracts need focused model observations.
-A later native control group earns its own keyboard, focus, scroll, reduced
-motion, narrow-width, and cross-browser checks. The receiving PR carries actual
+The native control group adds independently priced edits, invalid-input recovery,
+keyboard actions, retained drafts across disclosure and reflow, document wheel
+scrolling, enlarged text, forced colors, reduced motion, stale-owner recovery,
+failed-mount cleanup, remount, and a scriptless reading. These browser tests use
+local placeholders for separately owned remote iframe and media requests. They
+establish the native panel's behavior; the existing Studio and delivery tests
+retain their own evidence. The receiving PR carries actual
 commands and normalized results, independent review, and current human authority.
 
-## Next native receiver
+## Continuing the native instrument
 
-The approved amp-head composition places the primary total at the top right as
-an LED-like number and its subordinate amounts at the lower left. Every amount
-keeps a visible unit and completeness label. A future trace panel consumes the
-same accepted revision. Controls continue to use native keyboard and direct
-numeric-entry behavior beneath their tactile visual treatment.
+The coordination panel establishes the amp-head amount, funding distinctions,
+explicit draft boundary, and trace. Team shaping, practices, change models,
+comparison, and richer instrumentation can receive focused tranches through
+Issue #637 after their capability and accounting contracts are settled.
 
 About remains the leading home for the native showpiece.
 [Issue #638](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638)
@@ -505,6 +570,5 @@ owns the complete legacy Studio's later AI Systems reading route while
 preserving its existing URL and capabilities. That move is distinct
 from the capability/state tranche and from publication.
 
-Re-entry begins at Issue #637 and this package's focused tests. The next bounded
-tranche can bind a coherent native coordination control group to this accepted
-state owner after the human reviews the foundation.
+Re-entry begins at Issue #643's receiving observations, Issue #641's measurement
+plan, and this package's focused tests. Issue #637 retains the wider sequence.

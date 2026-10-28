@@ -2,7 +2,7 @@
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{PUBLIC_URL_PAGE_ABOUT}}</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-28</lastmod>
   </url>
   <url>
     <loc>{{PUBLIC_URL_PAGE_AI_SYSTEMS}}</loc>
