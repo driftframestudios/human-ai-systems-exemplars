@@ -27,6 +27,19 @@ node tools/test-suite-plan.mjs --suite python.tables.table-context --json
 These invocations list metadata and prerequisites. Execution is a separate
 receiving action. Source-file counts remain distinct from runtime test cases.
 
+## Native Investment Studio foundation
+
+The [native Studio owner](../collaboration/native-investment-studio/README.md)
+defines the new About instrument's capability and state contract. Its source
+suite checks monetary and capacity semantics, finite admission, exact accepted
+snapshots, stale-edit recovery, and native exchange. About's existing visitor
+receiver and the complete Studio retain their current behavior.
+
+```sh
+node tools/test-suite-plan.mjs --suite node.native-investment-studio --json
+node --test tests/native-investment-studio/contract.test.mjs tests/native-investment-studio/state.test.mjs
+```
+
 ## Existing family check guide
 
 

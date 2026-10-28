@@ -298,6 +298,24 @@
       "aliases": []
     },
     {
+      "id": "node.native-investment-studio",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/contract.test.mjs",
+        "tests/native-investment-studio/state.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": ["node", "--test"],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, bounded recovery, and exchange; visitor rendering enters a later tranche.",
+      "aliases": []
+    },
+    {
       "id": "node.narrative-architectures",
       "family": "narrative-architectures",
       "kind": "node-test",
@@ -2757,6 +2775,7 @@
         "node.documentation",
         "node.iframe-routes",
         "node.investment-analysis",
+        "node.native-investment-studio",
         "node.media-publication",
         "node.narrative-architectures",
         "node.prod-deployment",
