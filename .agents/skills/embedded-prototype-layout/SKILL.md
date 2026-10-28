@@ -7,7 +7,7 @@ description: Resolves prototype layout pressure at the actual parent and iframe 
 
 ## Contract
 
-- **What:** A measured parent/child layout contract that keeps a compact preview useful for deciding whether to continue in a full view, while preserving the instrument's meaningful interactions and comparisons.
+- **What:** A measured parent/child layout contract that keeps the embedded instrument useful for its receiving page, preserving meaningful interactions and comparisons alongside an additional full-view route.
 - **When:** An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.
 - **Boundaries:** The parent owns placement, reserved dimensions, title, embedding policy and full-view route. The child owns its internal document and controls. Packaging owns declared projection changes. Local canonical-child evidence, live hosted delivery, accessibility conformance and permission changes retain separate observations and authority.
 - **Result:** One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.
@@ -45,6 +45,15 @@ child viewport separately. Padding, gutters, borders, zoom and scrollbar space c
 change the available measure. A nominal mobile width supplies a comparison case;
 the measured embedded width identifies the constrained receiving surface.
 
+### Rule: The receiving page determines the embedded job
+
+When the parent is the primary opportunity to operate an instrument, preserve a
+materially meaningful working experience there. A supplementary full-view link
+supports that experience. Chapters or disclosures can retain one mounted state
+and fit the active content while the parent owns ordinary vertical reading.
+The visitor operation determines whether a compact preview or a fuller working
+composition is appropriate.
+
 ### Rule: Preview usefulness leads completeness pressure
 
 A compact preview supports orientation, a meaningful first interaction or
@@ -71,6 +80,16 @@ including the final column; a column wider than the viewport can remain valid.
 A control moved through a reorder or disclosure stays visibly focused, with its
 accepted state, selection and record identity preserved. A fitting keyboard path
 includes entry, travel and exit, with named overflow regions where needed.
+
+### Rule: Parent geometry establishes final focus visibility
+
+Measure the focused target against the parent viewport and its fixed navigation
+after chapter selection and frame sizing settle. Complete fit inside the child
+establishes internal reach; the parent observation establishes visible focus.
+If native cross-frame revealing leaves a target outside the parent reading area,
+a bounded layout-only request can return positioning to the parent owner through
+the existing admitted document channel. Keep calculation and editable state in
+their current owners.
 
 ### Rule: A changed seam earns a bounded comparison
 

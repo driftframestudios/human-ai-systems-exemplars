@@ -129,22 +129,32 @@ export async function fitted(observation) {
 
 export async function wheelObservation(observation, selector = 'header h1') {
   const target = observation.frame.locator(selector).first();
+  // A fault fixture can resize the carrier before the child has laid out that
+  // viewport. Admit the new child geometry before positioning its wheel target.
+  await observation.carrier.scrollIntoViewIfNeeded();
+  await expect.poll(async () => Math.abs(await observation.frame.evaluate(() => innerHeight)
+    - await observation.carrier.evaluate(node => node.clientHeight))).toBeLessThanOrEqual(2);
+  await observation.frame.evaluate(() => new Promise(requestAnimationFrame));
   await target.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
   let box = await target.boundingBox();
+  let carrierBox = await observation.carrier.boundingBox();
   assert.ok(box && box.width > 0 && box.height > 0);
+  assert.ok(carrierBox && carrierBox.width > 0 && carrierBox.height > 0);
   const positions = async () => ({ parent: await observation.page.evaluate(() => scrollY),
     child: await observation.frame.evaluate(() => scrollY), local: await target.evaluate(element => element.scrollTop) });
   const viewport = observation.page.viewportSize();
   const navigationBottom = await observation.page.locator('.nav__top--sticky').evaluate(node => node.getBoundingClientRect().bottom);
   // Native centering may align a tall frame while leaving an oversized control
   // beyond the parent viewport. Place that control before measuring wheel input.
-  if (Math.min(box.y + box.height, viewport.height) - Math.max(box.y, navigationBottom) <= 2) {
-    await observation.page.evaluate(top => scrollBy({ top, behavior: 'instant' }), box.y - navigationBottom - 16);
+  if (Math.min(box.y + box.height, carrierBox.y + carrierBox.height, viewport.height) - Math.max(box.y, carrierBox.y, navigationBottom) <= 2) {
+    await observation.page.evaluate(top => scrollBy({ top, behavior: 'instant' }), Math.max(box.y, carrierBox.y) - navigationBottom - 16);
     box = await target.boundingBox();
+    carrierBox = await observation.carrier.boundingBox();
     assert.ok(box && box.width > 0 && box.height > 0);
+    assert.ok(carrierBox && carrierBox.width > 0 && carrierBox.height > 0);
   }
-  const visible = { left: Math.max(box.x, 0), right: Math.min(box.x + box.width, viewport.width),
-    top: Math.max(box.y, navigationBottom), bottom: Math.min(box.y + box.height, viewport.height) };
+  const visible = { left: Math.max(box.x, carrierBox.x, 0), right: Math.min(box.x + box.width, carrierBox.x + carrierBox.width, viewport.width),
+    top: Math.max(box.y, carrierBox.y, navigationBottom), bottom: Math.min(box.y + box.height, carrierBox.y + carrierBox.height, viewport.height) };
   assert.ok(visible.right - visible.left > 2 && visible.bottom - visible.top > 2, 'the wheel target has a visible intersection below About navigation');
   // A naturally tall editor can begin above the parent viewport after centering.
   // Keep ordinary target coordinates while placing oversized targets in view.
