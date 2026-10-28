@@ -1,6 +1,6 @@
 ---
 title: Repository collaboration cycle
-version: 0.1.1
+version: 0.1.2
 status: working
 audience: ai_collaborators
 source_band: public_possible
@@ -460,7 +460,8 @@ when the current task grants them. Merge follows its explicit grant.
    recovery path, environment note, and next receiver.
 8. When merge is explicitly granted, re-check the live head, checks, and merge
    state; merge through the repository's current reviewed strategy; then
-   verify the accepted `main` coordinate.
+   verify the accepted coordinate on the named receiving branch, such as
+   `dev` for an integration repair or `main` for an approved source promotion.
 
 **Checkpoint:** One receiving surface carries the exact proposed or accepted
 change and enough evidence for its next decision. A green check establishes
@@ -481,9 +482,11 @@ Report the final branch or inspected source coordinate, worktree state, Issue
 or pull-request standing, and one exact continuation. A source-only cycle
 names the preserved checkout, the observed source, and the finding's next
 receiver; optional runtime or external claims retain their unobserved
-standing. A merged cycle can verify
-its head commits are ancestors of current `main`; a review-ready cycle names
-the review event; a held cycle names the signal that releases it.
+standing. A merged cycle verifies its accepted source on the named receiving
+branch and checks ancestry in the form supported by its merge strategy; a
+review-ready cycle names the review event; a held cycle names the signal that
+releases it. A squash or rebase keeps its reviewed source relation explicit
+even when the original head commits have different identities.
 
 **Checkpoint:** Another collaborator can continue directly from the named
 coordinate and action.

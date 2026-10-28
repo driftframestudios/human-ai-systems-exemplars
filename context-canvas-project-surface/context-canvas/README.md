@@ -187,12 +187,65 @@ and verification of the actually deployed source remain separate receiving
 observations. [Issue #496](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/496)
 holds the family extension and deployment-status boundary.
 
+Eight operating-field comparison grids across the five EHR readings, Spatial
+Capture, and Multilingual Clinical Vocabulary stand between continuous prose
+runs. Each comparison uses the ordinary reading width, preserving its authored
+article order and the existing one- or two-column grid. This HTML boundary
+keeps the grid outside prose fragmentation; shared card palette, borders, and
+shadows retain their existing CSS owners. `test:debrief-architecture-cards-browser`
+checks each card fragment, its text and paint, both responsive seams, alternate
+modes, and a fresh-document restoration of the former nested composition.
+[Issue #566](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/566)
+connects the collection observation with the native-browser receiving checks.
+
+Card groups use their local reading owner's available width. The generated
+rail keeps its existing position; its markers can occupy the accepted hard-shadow
+zone. `canvas-shell.css` retains the separate reservation for wide tables and
+story visuals. Authored FMI navigation and scriptless reading keep their own
+layout boundaries.
+
+`npm run test:card-rail-clearance-browser` retains its established entry point
+and inventories 69 groups across 30 routes: 271 articles and 11 native
+disclosures. Its current oracle observes local card width, complete text and
+paint, and retained rail behavior. A controlled replay of the former width cap
+must fail the width assertion. The screen campaign covers the complete family
+at desktop width and representative narrow, seam, wide, enlarged-text, keyboard,
+and touch states across three engines.
+[Issue #629](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/629)
+records this restoration and the preserved WebKit repairs. The earlier
+[Issue #569](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/569)
+retains the lineage of the dev-only spacing experiment. Publication remains held.
+
 Twelve direct-child orientation callouts participate in continuous prose as
 one atomic painted object. Their statement and footer remain together inside
 the same visible boundary as the reading changes between one and two columns.
 The three-engine layout contract inventories this family, checks child and
 visible-text containment across the standing viewport seams, and exercises the
 ordinary fragmenting state before restoring the accepted component contract.
+
+Twenty-one evidence-boundary cards across ten Debriefs use the same screen
+reading component to keep each label, heading and explanation in one painted
+unit. The composition contract retains their palette, border and spacing;
+print retains ordinary block pagination. The focused
+`test:debrief-evidence-cards-browser` contract observes fresh and scrolled
+reading positions, individual fragments and text, with a deterministic split
+canary and fresh-source recovery. Its images support paint review; native
+Safari/DuckDuckGo observations retain their separate application boundary.
+
+Eighteen prose-local callouts and quotations across seven Debriefs use a
+screen-only atomic boundary for their explanation, statement and attribution.
+Their existing owners retain palette and padding; print keeps ordinary block
+layout. `test:debrief-callout-integrity-browser` exercises the complete family,
+the Clinical reading's two reconstructed quotations, reference-link keyboard
+access, alternate modes and modeled split-definition recovery. Native-browser
+observations and paginated-paper behavior retain their separate evidence.
+[Issue #587](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/587)
+holds this component boundary within the complete Debrief-family review.
+Opening definitions start at the reading-column origin while their statement
+padding remains intact; definitions embedded in an existing prose run retain
+their preceding space. The same contract exercises all four Debrief definition contexts
+and a prior-margin fault with fresh-source recovery for
+[Issue #594](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/594).
 
 AI Systems, Core Architectures Orientation Index, Grammar Family, Hiring
 Surfaces / Talent-Agent Intake, Metadata Blocks, and PODA use the same

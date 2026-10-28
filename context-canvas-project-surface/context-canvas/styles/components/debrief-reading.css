@@ -1,6 +1,6 @@
 /* Context Canvas component: Debrief reading routes -----------------------
    Consumers: Debrief catalog, composed Debriefs, and enterprise readings
-   using .track-index, .source-basis, .debrief-quote--orientation, or the
+   using .track-index, .source-basis, prose-local callouts and quotations, or the
    .debrief-movement composition, dense .debrief-proxy-figure references,
    opt-in companion bodies, code examples, and ordered descriptions/procedures.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
@@ -202,6 +202,34 @@
     break-inside: avoid;
     display: inline-block;
     inline-size: 100%;
+}
+
+/* Evidence boundaries remain one screen reading unit within continuous prose.
+   The contract stylesheet retains their palette, spacing, and border ownership;
+   ordinary print flow keeps its existing pagination choices. */
+@media screen {
+    .prose-flow > .debrief-evidence-boundary {
+        display: inline-block;
+        inline-size: 100%;
+    }
+}
+
+/* A prose-local callout or attributed quotation travels as one screen unit.
+   Atomic layout keeps its frame and footer together through column balancing;
+   existing paint owners retain palette and padding. Printed content keeps its
+   ordinary block layout so a long unit can continue across paper pages. */
+@media screen {
+    .prose-flow > :is(.interpretive-aside, .discovery-callout, .debrief-quote:not(.debrief-quote--orientation)) {
+        break-inside: avoid;
+        display: inline-block;
+        inline-size: 100%;
+    }
+
+    /* An opening definition starts with its reading columns. Its padding keeps
+       the statement inset; mid-flow definitions retain their section rhythm. */
+    .prose-flow > .cornerstone-definition:first-child {
+        margin-block-start: 0;
+    }
 }
 
 /* Compact notes set their useful measure; the shared screen frame below

@@ -84,7 +84,7 @@ their separate owners.
 
 ## Existing direct Core consumers
 
-These 41 current direct browser entry points retain their imports and case
+These 45 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
@@ -126,6 +126,10 @@ and does not claim a new execution of every assertion.
 | `tests/context-canvas/debrief-reference-figures.browser.mjs` | Thirty-five-figure cascade, local keyboard scrolling, portrait fit, scriptless width boundary, two opt-in bounded captions, painted-owner and text-fragment containment, unchanged media geometry, alternate media, and restored faults across three engines. |
 | `tests/context-canvas/ai-entry-cascade.browser.mjs` | Five entry bridges, accepted cascade, 30rem shadow seam, print and forced-color treatment, controlled faults and restoration across three engines. |
 | `tests/context-canvas/ai-systems-reading-layout.browser.mjs` | Twenty-six AI Systems and Shared Machinery readings plus the Debriefs parent across three engines and narrow, desktop, and wide dimensions; repaired reading owners, container seams, text containment, local overflow, alternate presentations, controlled faults, and restoration. |
+| `tests/context-canvas/debrief-architecture-cards.browser.mjs` | Eight comparison grids across seven Debriefs retain contiguous card fragments, local text, shadows, source order and useful full-width distribution across Chromium, Firefox and Playwright WebKit; grid/prose seams, alternate modes and a before-parse restoration of the original nesting. |
+| `tests/context-canvas/card-rail-clearance.browser.mjs` | Thirty generated-rail routes retain local-owner card width, complete text and hard-shadow paint, and the accepted rail/shadow adjacency; exact consumers, representative widths, enlarged text, narrow touch, control owners, and a rejected width-cap fault are observed in three engines. |
+| `tests/context-canvas/debrief-evidence-cards.browser.mjs` | Twenty-one evidence-boundary cards across ten Debriefs keep their label, heading, explanation and painted frame together across three engines, with enlarged/scriptless controls, individual-fragment observations, modeled split recovery and a WebKit paint check. |
+| `tests/context-canvas/debrief-callout-integrity.browser.mjs` | Eighteen prose-local callouts and quotations across seven Debriefs preserve complete frames, attribution and reachable references across three engines; opening definitions align with their reading columns, with modeled split and prior-margin recovery. |
 | `tests/context-canvas/technology-fit-layout.browser.mjs` | Technology Fit Sampling Tableau header and comparison-toolbar layout across three engines and source-adjacent dimensions, including complete controls, local overflow, comparison state, enlarged text, and controlled historical faults. |
 | `tests/context-canvas/prompt-side-figure.browser.mjs` | The Prompt-Side article's linked SVG overview, keyboard and pointer journey, static reading, and print at narrow and desktop widths. |
 | `tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs` | Atlas CSS cascade, local table/SVG canvases, hidden states, closed print disclosures, forced colors, static reading, and restored faults across three engines. |

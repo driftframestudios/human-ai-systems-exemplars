@@ -2541,6 +2541,94 @@
       "aliases": [
         "test:debrief-caption-colors-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-architecture-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-architecture-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eight comparison grids across seven Debriefs retain contiguous card fragments, local text, shadows, source order and useful full-width distribution across Chromium, Firefox and Playwright WebKit; grid/prose seams, alternate modes and a before-parse restoration of the original nesting. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:debrief-architecture-cards-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.card-rail-clearance",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/card-rail-clearance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Thirty generated-rail routes retain local-owner card width, complete text, borders and hard shadows, with the accepted rail/shadow adjacency. The family inventory, representative responsive widths, enlarged text, narrow touch, authored-rail and scriptless controls, and a rejected width-cap fault receive three-engine observations. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:card-rail-clearance-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-evidence-cards",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Twenty-one evidence cards on ten Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, deterministic split canary and fresh-source recovery. Native browsers and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-evidence-cards-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.debrief-callout-integrity",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-callout-integrity.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eighteen callouts and quotations on seven Debriefs retain complete screen fragments and text at the reading-column seam, fresh load and scrolled reading positions; representative alternate modes, attributed quotation and keyboard checks, deterministic split-definition canaries and fresh-source recovery. Native browsers, paginated paper and deployed state retain separate observations.",
+      "aliases": [
+        "test:debrief-callout-integrity-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2650,7 +2738,11 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.debrief-architecture-cards",
+        "browser.context-canvas.card-rail-clearance",
+        "browser.context-canvas.debrief-evidence-cards",
+        "browser.context-canvas.debrief-callout-integrity"
       ]
     },
     {
@@ -3068,6 +3160,12 @@
         "test:node-runtime": [
           "tests/security/node-runtime.test.mjs",
           "tests/security/node-route-inventory.test.mjs"
+        ],
+        "test:debrief-evidence-cards-browser": [
+          "tests/context-canvas/debrief-evidence-cards.browser.mjs"
+        ],
+        "test:debrief-callout-integrity-browser": [
+          "tests/context-canvas/debrief-callout-integrity.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
