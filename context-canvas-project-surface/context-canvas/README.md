@@ -36,13 +36,14 @@ Gallery, Prompt Conditions Explorer, native coordination panel, and interactive 
 Investment Studio retains its original source and independent route.
 
 The [native coordination package](../../collaboration/native-investment-studio/README.md)
-owns About's two-field draft/Apply controller and accepted investment model.
+owns About's hours/minutes/session draft, live preview, explicit Apply controller,
+and accepted investment model.
 `index.html` supplies its semantic panel and static example;
 `styles/routes/about.css` owns the scoped `.native-coordination` composition.
 The primary route manifest carries all five canonical browser modules with
 their relative import geometry. Source, production-closure, and focused
 three-engine interaction checks belong to Issue #643. Issue #641 receives the
-explicit Apply boundary for runtime measurement. Existing Studio chapters
+live-preview and explicit Apply boundaries for separate runtime measurement. Existing Studio chapters
 retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.

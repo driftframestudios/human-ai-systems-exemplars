@@ -2,7 +2,8 @@
 
 This package gives About one native coordination agreement, an inspectable
 investment calculation, and a recoverable edit boundary. Visitors change
-minutes or occurrences, apply the draft, and trace the accepted participant
+hours, remaining minutes, and working sessions, inspect the draft investment,
+apply the change, and trace the accepted participant
 effort and funding. The ordinary About section preserves vertical reading
 while the complete Studio retains its richer planning capabilities.
 
@@ -207,7 +208,7 @@ part of the existing $16,000.
 ## Accepted state and commands
 
 `createStudio` creates an independent state owner with `read`, `replace`,
-`updateWork`, `importText`, `exportText`, and `capture` operations. Each accepted
+`updateWork`, `previewWork`, `importText`, `exportText`, and `capture` operations. Each accepted
 mutation produces a newly prepared immutable revision. Mutations receive the
 exact immutable projection returned by `read()` as their expected-state token:
 
@@ -230,6 +231,13 @@ descriptor callbacks.
 the native plan revision. Replacement and import preserve the supplied native
 revision and replace the accepted projection identity. The work-position index
 is rebuilt for replacement/import and reused for an ordinary work edit.
+
+`previewWork(workId, fullReplacementRow, expectedProjection)` shares the same
+target checks and complete preparation with `updateWork`. It returns a proposed
+next-revision projection while `read`, `capture`, and `exportText` retain the
+accepted projection. The exact-state check runs before and after preparation.
+Apply prepares again against the accepted owner; a displayed proposal carries
+the estimate, while Apply retains commit authority.
 
 `read` returns the prepared immutable snapshot. The owner calculates and retains
 the result once for that accepted revision; reading a snapshot performs constant
@@ -306,8 +314,9 @@ before using its result.
 | `begin(workId, expectedProjection)` | From idle, capture an existing work row and the exact current projection; create an opaque session token. |
 | `setText(token, field, rawText)` | Retain bounded raw text for one declared field, including a temporarily invalid value. |
 | `step(token, field, direction)` | Add one admitted `+1` or `-1` step to the current valid draft value; preserve raw text at a range boundary. |
-| `validate(token)` | Check the current base projection and both fields while preserving the draft and accepted state. |
-| `apply(token)` | Invalidate pending callbacks, validate both fields, and pass one complete replacement to `studio.updateWork`. Success settles the draft. |
+| `validate(token)` | Check the current base projection and all draft quantities while preserving the draft and accepted state. |
+| `preview(token)` | Validate the current draft and return a cached proposed projection through `studio.previewWork`, preserving accepted state. |
+| `apply(token)` | Invalidate pending callbacks, validate the quantities, and pass one complete replacement to `studio.updateWork`. Success settles the draft. |
 | `queueApply(token)` | Request at most one deferred Apply using the injected scheduler; subsequent draft changes feed that same pending Apply. |
 | `cancel(token)` | Settle the draft and invalidate its pending callback while preserving accepted state. |
 | `dispose()` | End the adapter's lifetime and release its pending request. Repeated disposal retains any cleanup diagnostic. |
@@ -321,6 +330,24 @@ unsigned decimal digits, with leading zeroes accepted and normalized on commit.
 Whitespace, fractions, and exponent forms receive field diagnostics. Lexical
 admission precedes Number conversion. Oversized or non-string input receives a
 text diagnostic while the prior bounded raw value remains available.
+
+The optional third factory argument `{ durationFormat: 'hours-minutes' }`
+selects the native panel's duration entry. The same draft owner then retains
+`hoursPerSession`, `minutesPerSession`, and `occurrences`. Whole hours (0–24)
+and remaining minutes (0–59) combine into canonical integer minutes, bounded
+at 24 hours total. A minute step carries across the hour boundary; an hour step
+adds 60 minutes. Invalid or unfinished parts retain their raw text and precise
+diagnostics. The default `minutes` format preserves the original two-field API.
+`draft.changed` compares admitted quantities with the captured row; alternate
+leading-zero spellings retain the same meaning, while invalid input remains
+a changed draft requiring attention.
+
+Preview keeps one cached result per unchanged active draft. Changed raw text
+invalidates that result; stale, foreign, disposed, or reentrant sessions receive
+their fitting diagnostics. A rejected preview shows its reason while accepted
+state remains available. The preview shares funding-pool rounding, capacity,
+missing-rate standing, and admission with Apply. Each funding pool settles once,
+so changing a rounded work line alone does not establish the new total.
 
 Each session command requires the opaque `draft.token` returned by Begin.
 This identity keeps late control callbacks attached to their original editor.
@@ -343,7 +370,7 @@ wrapper can invoke the callback and then render `editor.read()`; its choice of
 frame or task scheduling receives browser evidence with the actual controls.
 
 Repeated absolute samples replace the same raw field. Step commands add their
-individual steps immediately to the draft. Both fields therefore reach one
+individual steps immediately to the draft. All draft quantities therefore reach one
 coherent candidate when the callback applies. An explicit Apply serves as the
 final flush, including when a browser has suspended its frame callbacks.
 An invalid final draft remains editable beside the accepted amount and export.
@@ -380,12 +407,19 @@ this adapter supplies lifecycle guards rather than an execution sandbox.
 ### Cost and next measurement
 
 Begin locates one work row in O(W). Read, text edits, field validation, and steps
-operate on two bounded strings. Scheduling retains one ticket. Successful Apply
+operate on two or three bounded strings, according to the duration format.
+Scheduling retains one ticket. Successful Apply
 retains the complete O(P + T + W + A + R + B) preparation and serialization path;
 it introduces no incremental calculator. One active draft retains one base
 projection, which may differ from the Studio's current projection after an
 external change. Caller-retained views and scheduler-retained callbacks have
 their own lifetimes; the future receiver bounds any history it keeps.
+
+A new valid preview uses the same complete preparation cost and retains one
+proposed projection. Repeated preview reads of unchanged raw quantities reuse
+that projection. The current UI computes synchronously; #641 measures preview
+preparations separately from raw edits and accepted commits before introducing
+coalescing or a second accounting strategy.
 
 [Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
 receives the implemented edit/apply boundary for measurement. Its first slice
@@ -419,10 +453,14 @@ listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
 history restoration; an actual departure disposes it.
 
-Raw text and circular step buttons update one two-field draft. Explicit Apply
-commits one complete row; Cancel retains the accepted investment. Composition
-input settles before Apply. Closing the native configuration disclosure retains
-the draft, and responsive changes reuse the same elements and focus. This
+Raw text and circular step buttons update one three-field draft. The in-card
+draft investment updates from complete preparation while the amp head retains
+the accepted amount. Explicit Apply commits one complete row, keeps Configure
+open, begins a fresh draft, and preserves focus on Apply. Applying valid
+unchanged quantities preserves the accepted revision. Cancel retains the
+accepted investment and closes Configure. Composition input settles before
+preview or Apply. Closing the native configuration disclosure retains the
+draft, and responsive changes reuse the same elements and focus. This
 receiver uses explicit Apply and creates no deferred request or periodic timer.
 The adapter's deferred mode remains available to separately measured receivers.
 
@@ -430,22 +468,25 @@ The accepted amount, effort equation, person traces, and funding distinction all
 read one immutable projection. Funded staffing plus additional purchases forms
 the commitment; attributed allocation remains inside staffing. Incomplete
 pricing carries its standing beside the known subtotal. The horizon is context:
-the occurrence count carries effort while calendar placement needs a later
-timing model. Integer-cent formatting retains exact cents through the admitted
+the working-session count carries repeated participant effort while sprint
+length, calendar placement, and per-sprint allocation need a later timing
+contract. Integer-cent formatting retains exact cents through the admitted
 monetary range.
 
 One new accepted projection costs O(W + T + P) for receiver lookups and person
 trace construction, in addition to the model's complete preparation. Raw edits
-render two bounded fields in O(1); the accepted trace is retained until its
-projection changes. The receiver retains one rendered projection, one draft
-owner, and one listener group. Issue #641 owns runtime cost observations and
+render three bounded fields in O(1), plus complete preparation for a changed
+valid preview; the accepted trace is retained until its projection changes.
+The receiver retains one rendered projection, one draft owner with one cached
+preview, and one listener group. Issue #641 owns runtime cost observations and
 any later optimization decision.
 
 Industrial Ink supplies the dark amount plane and hard down-right shadows;
 About's Soft Color Blocking palette supplies paper controls and trace cards.
 The 52rem viewport seam pairs the agreement and configuration. A 22rem control
-container seam places the numeric input above its nearby step buttons when
-enlarged text needs more room. The native panel uses document scrolling,
+container seam places the compact numeric input above its nearby step buttons
+when enlarged text needs more room. Input widths reflect two duration digits
+and five count digits with padding. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
 
 ## Data structures and pattern decisions

@@ -1,8 +1,15 @@
 import { createStudio } from './state.mjs';
 import { createWorkDraftAdapter } from './draft.mjs';
-import { LIMITS } from './config.mjs';
+import { CONTRACT, LIMITS } from './config.mjs';
 
-const FIELDS = Object.freeze(['minutesPerOccurrence', 'occurrences']);
+const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
+
+const FIELD_RULES = Object.freeze({
+  hoursPerSession: Object.freeze({ maximum: Math.floor(LIMITS.minutesPerOccurrence / MINUTES_PER_HOUR), unit: 'hours' }),
+  minutesPerSession: Object.freeze({ maximum: MINUTES_PER_HOUR - 1, unit: 'remaining minutes' }),
+  occurrences: Object.freeze({ maximum: LIMITS.occurrences, unit: 'working sessions' }),
+});
+const FIELDS = Object.freeze(Object.keys(FIELD_RULES));
 const INTEGER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const INSTANCES = new WeakMap();
 
@@ -12,6 +19,12 @@ function money(cents) {
   const value = BigInt(cents);
   const magnitude = value < 0n ? -value : value;
   return `${value < 0n ? '−' : ''}$${INTEGER.format(magnitude / 100n)}.${String(magnitude % 100n).padStart(2, '0')}`;
+}
+
+function duration(minutes) {
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  const remainder = minutes % MINUTES_PER_HOUR;
+  return [hours ? `${INTEGER.format(hours)} h` : '', remainder || !hours ? `${remainder} min` : ''].filter(Boolean).join(' ');
 }
 
 export function mountCoordinationPanel(root, options = {}) {
@@ -34,12 +47,14 @@ export function mountCoordinationPanel(root, options = {}) {
     ['traceSummary', '[data-native-trace-summary]'], ['status', '[data-native-status]'],
     ['draftState', '[data-native-draft-state]'], ['configure', '[data-native-configure]'],
     ['form', 'form'], ['fieldset', 'fieldset'], ['edit', '[data-action="edit"]'],
+    ['apply', '[data-action="apply"]'], ['previewTotal', '[data-native-preview-total]'],
+    ['previewStanding', '[data-native-preview-standing]'], ['previewNote', '[data-native-preview-note]'],
     ['fallback', '[data-native-fallback]'],
   ].map(([name, selector]) => [name, requireElement(selector)]));
   const inputs = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
   const ranges = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[data-native-range="${field}"]`)]));
-  const editor = createWorkDraftAdapter(studio);
+  const editor = createWorkDraftAdapter(studio, null, { durationFormat: 'hours-minutes' });
   const cleanup = [];
   let renderedProjection = null;
   let work = null;
@@ -68,10 +83,10 @@ export function mountCoordinationPanel(root, options = {}) {
     text('team', state.teams.find(team => team.id === work?.teamId)?.label ?? 'Agreement unavailable');
     text('participants', work ? `${work.personIds.length} participants` : 'Open a plan containing this agreement');
     text('effort', work
-      ? `${work.personIds.length} people × ${work.minutesPerOccurrence} minutes × ${work.occurrences} occurrences = ${INTEGER.format(work.personIds.length * work.minutesPerOccurrence * work.occurrences)} participant-minutes`
+      ? `${work.personIds.length} people × ${duration(work.minutesPerOccurrence)} per session × ${work.occurrences} working sessions = ${duration(work.personIds.length * work.minutesPerOccurrence * work.occurrences)} of participant effort.`
       : 'Select a plan containing this agreement to edit it.');
     text('scope', work
-      ? `${work.funding === 'additional' ? 'Additional purchase' : 'Inside funded staffing'} · ${work.status === 'planned' ? 'planned work' : 'paused obligation'} · ${state.horizonWeeks}-week context. Occurrences carry effort; calendar timing remains unspecified.`
+      ? `${work.funding === 'additional' ? 'Additional purchase' : 'Inside funded staffing'} · ${work.status === 'planned' ? 'planned work' : 'paused obligation'} · ${state.horizonWeeks}-week planning context. Working sessions repeat the activity above. Calendar placement and sprint cadence have their own planning rules.`
       : 'The accepted plan remains available in the investment trace.');
     const people = new Map(state.people.map(person => [person.id, person]));
     const staffing = new Map(result.staffing.map(line => [line.personId, line.cents]));
@@ -105,6 +120,34 @@ export function mountCoordinationPanel(root, options = {}) {
     renderedProjection = projection;
   }
 
+  function renderPreview(view) {
+    if (!view.draft) {
+      text('previewTotal', money(view.projection.result.knownCommitmentCents));
+      text('previewStanding', 'Accepted investment');
+      text('previewNote', 'Edit the quantities to preview their investment.');
+      return;
+    }
+    if (composing) {
+      text('previewTotal', '—');
+      text('previewStanding', 'Draft investment');
+      text('previewNote', 'Finish entering this quantity to update the draft estimate.');
+      return;
+    }
+    const proposed = editor.preview(view.draft.token);
+    if (!proposed.ok) {
+      text('previewTotal', '—');
+      text('previewStanding', 'Draft investment');
+      text('previewNote', proposed.error.message);
+      return;
+    }
+    const result = proposed.projection.result;
+    text('previewTotal', money(result.knownCommitmentCents));
+    text('previewStanding', result.standing === 'priced' ? 'Draft investment · USD' : 'Draft known subtotal · review open conditions');
+    text('previewNote', view.draft.changed
+      ? 'Preview only. Apply changes to update the accepted amount above.'
+      : 'These values match the accepted plan. Edit them to explore another change.');
+  }
+
   function render() {
     const view = editor.read();
     if (disposed) return view;
@@ -112,17 +155,24 @@ export function mountCoordinationPanel(root, options = {}) {
     root.dataset.nativeState = view.status;
     elements.edit.disabled = work === null;
     elements.fieldset.disabled = view.draft === null;
+    elements.apply.setAttribute('aria-disabled', view.draft?.changed ? 'false' : 'true');
     text('draftState', view.status === 'stale'
       ? 'This draft belongs to an earlier plan. Cancel it, then edit the accepted agreement.'
-      : view.draft ? 'Draft · apply to update the accepted investment.' : 'Accepted plan · edit the agreement to explore a change.');
+      : view.draft?.changed ? 'Draft · apply to update the accepted investment.' : 'Accepted values · edit the agreement to explore a change.');
+    const acceptedValues = work ? {
+      hoursPerSession: String(Math.floor(work.minutesPerOccurrence / MINUTES_PER_HOUR)),
+      minutesPerSession: String(work.minutesPerOccurrence % MINUTES_PER_HOUR),
+      occurrences: String(work.occurrences),
+    } : {};
     for (const field of FIELDS) {
       const input = inputs[field];
-      const value = view.draft?.raw[field] ?? String(work?.[field] ?? '');
+      const value = view.draft?.raw[field] ?? acceptedValues[field] ?? '';
       if (input.value !== value) input.value = value;
       const error = view.draft?.errors.find(item => item.path === `draft.${field}`);
       input.setAttribute('aria-invalid', error ? 'true' : 'false');
       errors[field].textContent = error?.message ?? '';
     }
+    renderPreview(view);
     return view;
   }
 
@@ -136,13 +186,17 @@ export function mountCoordinationPanel(root, options = {}) {
     elements.configure.open = true;
     render();
     announce('');
-    if (focus) inputs.minutesPerOccurrence.focus();
+    if (focus) inputs.hoursPerSession.focus();
   }
 
   function settle(action) {
     if (composing && action === 'apply') { announce('Finish entering this quantity, then apply the draft.'); return; }
     const view = editor.read();
     if (view.draft === null) return;
+    if (action === 'apply' && !view.draft.changed && view.status !== 'stale') {
+      announce('These values are already accepted. Edit a quantity to explore another change.');
+      return;
+    }
     const result = editor[action](view.draft.token);
     render();
     if (!result.ok) {
@@ -151,9 +205,14 @@ export function mountCoordinationPanel(root, options = {}) {
       if (field) inputs[field].focus();
       return;
     }
-    elements.configure.open = false;
     composing = false;
-    elements.edit.focus();
+    if (action === 'apply') {
+      begin(false);
+      elements.apply.focus();
+    } else {
+      elements.configure.open = false;
+      elements.edit.focus();
+    }
     announce(action === 'apply' ? `Changes applied. Accepted investment ${money(result.view.projection.result.knownCommitmentCents)}.` : 'Draft cancelled. The accepted investment is unchanged.');
   }
 
@@ -207,12 +266,12 @@ export function mountCoordinationPanel(root, options = {}) {
     render();
     for (const field of FIELDS) {
       inputs[field].maxLength = 32;
-      ranges[field].textContent = `Whole ${field === 'occurrences' ? 'occurrences' : 'minutes'} · 0–${INTEGER.format(LIMITS[field])}`;
+      ranges[field].textContent = `Whole ${FIELD_RULES[field].unit} · 0–${INTEGER.format(FIELD_RULES[field].maximum)}`;
     }
     listen(root, 'click', click);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'input', editText);
-    listen(elements.form, 'compositionstart', () => { composing = true; });
+    listen(elements.form, 'compositionstart', () => { composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; editText(event); });
     listen(elements.configure, 'toggle', () => {
       if (elements.configure.open && editor.read().draft === null) begin(false);

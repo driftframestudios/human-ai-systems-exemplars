@@ -2020,11 +2020,11 @@ p#on-dark-iron-ore {
     min-inline-size: 2.75rem;
     padding: .55rem .85rem;
 }
-.native-coordination button:active:not(:disabled) {
+.native-coordination button:active:not(:disabled, [aria-disabled='true']) {
     box-shadow: .06rem .06rem 0 var(--native-key-shadow);
     transform: translate(.14rem, .14rem);
 }
-.native-coordination button:disabled { cursor: default; opacity: .6; }
+.native-coordination button:is(:disabled, [aria-disabled='true']) { cursor: default; opacity: .6; }
 .native-coordination :is(button, input, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
 .native-coordination__amp button:focus-visible { outline-color: var(--native-signal); }
 .native-coordination__transport { align-self: end; }
@@ -2060,12 +2060,16 @@ p#on-dark-iron-ore {
 .native-coordination summary span { display: block; font-size: .8rem; font-weight: 400; }
 .native-coordination__configuration[open] { box-shadow: .25rem .25rem 0 var(--native-key-shadow); }
 .native-coordination__configuration form { padding: 1.15rem; background: var(--about-soft-apricot); }
+.native-coordination__preview { background: var(--native-paper); border-inline-start: .25rem solid var(--about-deep-teal); display: grid; gap: .35rem; margin-block: .5rem 1rem; padding: .75rem; }
+.native-coordination__preview output { font: 600 1.65rem/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
 .native-coordination legend { font: 700 .75rem/1.5 ui-monospace, monospace; letter-spacing: .07em; text-transform: uppercase; padding: 0 0 .5rem; }
-.native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
+.native-coordination__controls { container-type: inline-size; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 1.5rem; margin-block: 1.25rem; }
+.native-coordination__controls > .native-coordination__hint, .native-coordination__control:last-child { grid-column: 1 / -1; }
 .native-coordination__control { display: grid; gap: .55rem; min-inline-size: 0; }
 .native-coordination label { font-weight: 650; }
-.native-coordination__stepper { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .65rem; }
+.native-coordination__stepper { font: 600 1.2rem/1.4 ui-monospace, monospace; --native-input-measure: calc(2ch + 1.25rem); display: inline-grid; grid-template-columns: auto minmax(0, var(--native-input-measure)) auto; inline-size: max-content; max-inline-size: 100%; justify-self: start; align-items: center; gap: .65rem; }
+.native-coordination__stepper--count { --native-input-measure: calc(5ch + 1.25rem); }
 .native-coordination__stepper button { border-radius: 50%; inline-size: 2.75rem; block-size: 2.75rem; padding: 0; font-size: 1.3rem; }
 .native-coordination input {
     background: var(--native-paper);
@@ -2111,8 +2115,8 @@ p#on-dark-iron-ore {
 
 /* Keep enlarged numeric entry readable when its own panel becomes narrow. */
 @container (max-width: 22rem) {
-    .native-coordination__stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .native-coordination__stepper input { grid-column: 1 / -1; grid-row: 1; }
+    .native-coordination__stepper { grid-template-columns: repeat(2, minmax(0, 2.75rem)); }
+    .native-coordination__stepper input { grid-column: 1 / -1; grid-row: 1; inline-size: min(var(--native-input-measure), 100%); justify-self: center; }
     .native-coordination__stepper button { grid-row: 2; inline-size: min(2.75rem, 100%); min-inline-size: 44px; }
     .native-coordination__stepper button:last-child { justify-self: end; }
 }

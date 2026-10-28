@@ -172,8 +172,8 @@
               <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
               <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 participants</small></span>
             </div>
-            <p class="native-coordination__effort" data-native-effort>4 people × 30 minutes × 6 occurrences = 720 participant-minutes</p>
-            <p class="native-coordination__scope" data-native-scope>Additional purchase · planned work · 6-week context. Occurrences carry effort; calendar timing remains unspecified.</p>
+            <p class="native-coordination__effort" data-native-effort>4 people × 30 min per session × 6 working sessions = 12 h of participant effort.</p>
+            <p class="native-coordination__scope" data-native-scope>Additional purchase · planned work · 6-week planning context. Working sessions repeat the activity above. Calendar placement and sprint cadence have their own planning rules.</p>
             <p class="native-coordination__draft" data-native-draft-state>Accepted plan · edit the agreement to explore a change.</p>
             <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
           </div>
@@ -181,27 +181,43 @@
             <summary>Configure agreement</summary>
             <form novalidate>
               <fieldset disabled>
-                <legend>Draft quantities</legend>
-                <p class="native-coordination__hint">The amount above changes when you apply. Closing this panel keeps your draft.</p>
+                <legend>Time and working sessions</legend>
+                <div class="native-coordination__preview">
+                  <span class="native-coordination__plate" data-native-preview-standing>Draft investment · USD</span>
+                  <output data-native-preview-total aria-live="off" aria-label="Draft investment">$1,200.00</output>
+                  <p class="native-coordination__hint" data-native-preview-note>Preview only. Apply changes to update the accepted amount above.</p>
+                </div>
+                <p class="native-coordination__hint">Enter each participant’s time per working session, then count the sessions in this plan. Closing this panel keeps your draft.</p>
                 <div class="native-coordination__controls">
                   <div class="native-coordination__control">
-                    <label for="native-duration">Minutes per occurrence</label>
+                    <label for="native-hours">Hours per person, per session</label>
                     <div class="native-coordination__stepper">
-                      <button type="button" data-field="minutesPerOccurrence" data-step="-1" aria-label="Decrease minutes by one">−</button>
-                      <input id="native-duration" name="minutesPerOccurrence" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-range native-duration-error">
-                      <button type="button" data-field="minutesPerOccurrence" data-step="1" aria-label="Increase minutes by one">+</button>
+                      <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
+                      <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-hours-range native-duration-limit native-hours-error">
+                      <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-duration-range" data-native-range="minutesPerOccurrence">Whole minutes · 0–1,440</p>
-                    <p class="native-coordination__error" id="native-duration-error" data-native-error="minutesPerOccurrence"></p>
+                    <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession">Whole hours · 0–24</p>
+                    <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
                   </div>
                   <div class="native-coordination__control">
-                    <label for="native-occurrences">Occurrences in this plan</label>
+                    <label for="native-minutes">Additional minutes per session</label>
                     <div class="native-coordination__stepper">
-                      <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease occurrences by one">−</button>
-                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-occurrences-range native-occurrences-error">
-                      <button type="button" data-field="occurrences" data-step="1" aria-label="Increase occurrences by one">+</button>
+                      <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
+                      <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-minutes-range native-duration-limit native-minutes-error">
+                      <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences">Whole occurrences · 0–10,000</p>
+                    <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession">Whole remaining minutes · 0–59</p>
+                    <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
+                  </div>
+                  <p class="native-coordination__hint" id="native-duration-limit">Hours and minutes combine into one duration, up to 24 hours per working session.</p>
+                  <div class="native-coordination__control">
+                    <label for="native-occurrences">Working sessions in this plan</label>
+                    <div class="native-coordination__stepper native-coordination__stepper--count">
+                      <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease working sessions by one">−</button>
+                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-occurrences-range native-occurrences-error">
+                      <button type="button" data-field="occurrences" data-step="1" aria-label="Increase working sessions by one">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences">Whole working sessions · 0–10,000</p>
                     <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
                   </div>
                 </div>

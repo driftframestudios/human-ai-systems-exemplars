@@ -15,7 +15,10 @@ const modulePaths = ['config', 'contract', 'state', 'draft', 'controller']
 test('native About coordination has one module receiver and retains both legacy Studio routes', () => {
   assert.equal((about.match(/\bdata-native-coordination(?:\s|>)/gu) ?? []).length, 1);
   assert.match(about, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\.\.\/\.\.\/collaboration\/native-investment-studio\/controller\.mjs")[^>]*>/u);
-  for (const field of ['minutesPerOccurrence', 'occurrences']) {
+  const fields = ['hoursPerSession', 'minutesPerSession', 'occurrences'];
+  const nativePanel = about.slice(about.indexOf('<div class="native-coordination"'), about.indexOf('</section>', about.indexOf('<div class="native-coordination"')));
+  assert.equal((nativePanel.match(/<input\b/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
+  for (const field of fields) {
     const input = about.match(new RegExp(`<input\\b(?=[^>]*\\bname="${field}")[^>]*>`, 'u'))?.[0];
     assert.ok(input, `${field} has its own input`);
     assert.match(input, /\btype="text"/u, 'raw lexical drafts reach the adapter');
@@ -23,6 +26,7 @@ test('native About coordination has one module receiver and retains both legacy 
     const id = input.match(/\bid="([^"]+)"/u)?.[1];
     assert.ok(id && about.includes(`for="${id}"`), `${field} retains a native label relationship`);
   }
+  assert.match(nativePanel, /<output\b[^>]*data-native-preview-total[^>]*aria-live="off"[^>]*>/u, 'the draft amount updates independently of the explicit-action live region');
   assert.match(about, /<iframe\b[^>]*data-about-content-fit="studio-chapters"[^>]*>/u);
   assert.match(about, /href="\.\.\/\.\.\/collaboration\/initiative-costing-calculator\/index.html"/u);
 });
