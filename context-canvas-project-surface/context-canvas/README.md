@@ -32,8 +32,8 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 ## About comparison and fitted instruments
 
 About owns vertical reading through its native heatmap comparison, AI Method
-Gallery, and Prompt Conditions Explorer. The full Investment Studio retains its
-existing independent carrier.
+Gallery, Prompt Conditions Explorer, and interactive Studio chapters. The full
+Investment Studio retains its original source and independent route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
 `tools/materialize-about-heatmap.mjs` projects its two figures, captions, and
@@ -42,9 +42,12 @@ adds root-scoped Before, After, and Side-by-side controls. Static and print
 readings retain both figures. `styles/routes/about.css` owns the receiving
 composition and uses the existing About palette.
 
-`about-content-fit.js` admits height reports only for About's two explicit
+`about-content-fit.js` admits layout reports only for About's three explicit
 `iframe[data-about-content-fit]` consumers. Each document receives its own
-MessageChannel, bounded versioned height reports, and navigation cleanup. The
+MessageChannel, bounded versioned height reports, and navigation cleanup.
+Explicit Studio jumps also send bounded target geometry through that channel;
+About applies the matching height before positioning the target in its own
+visible reading area beneath navigation. Model values remain in the child. The
 parent batches writes to `--about-content-block-size`; its ready-state rule
 follows the ordinary route-specific reservations, including the narrow Explorer
 fallback. Other carriers retain their existing dimensions.
@@ -111,8 +114,37 @@ probability-calibration ownership, and #589 remains human-held.
 Issue #621 owns the parent folio and static-prompt disclosure repair. Its print
 checks cover the declared browser engines and media area; physical pagination,
 native applications, and older engines with different disclosure rendering keep
-their separate receiving observations. Issue #623 tracks the media
-visual-description disclosure's separate print repair.
+their separate receiving observations. The human has set on-screen scroll
+preservation as the current priority; #623 is closed as unplanned for this undertaking.
+
+### Interactive Studio chapters
+
+Issue #625 derives an About presentation from the original full Studio through
+`tools/materialize-about-studio-chapters.mjs`. The
+[chapter receiver](../../collaboration/about-investment-studio-chapters/README.md)
+names its source, adapter, style, and layout owners. The generator adds the
+presentation and shared height adapter while preserving every original control,
+calculation, and state owner. The Canvas packager checks that derivation before
+forming the new `investment-studio-chapters` route.
+
+The original Studio remains available through its current source and hosted
+identity. About receives the derived chapter route with the same sandbox and
+capabilities. Its live investment summary stays above the selected chapter;
+chapter switching preserves mounted inputs and planning state. Complete working
+Plan, People, Work & recovery, Coordination, and Comparison chapters demonstrate
+capabilities inside About. The full-view link supplements that experience.
+
+```sh
+npm run build:about-studio-chapters
+npm run check:about-studio-chapters
+node --test tests/context-canvas/about-studio-chapters.test.mjs
+npm run test:about-studio-chapters-browser
+```
+
+The focused browser receiver uses the fresh local package through About's actual
+sandbox. Screen observations cover edits and results, retained state, cross-chapter
+navigation, active-content sizing and parent-owned vertical reading. Publication
+remains held; a later release publishes the compatible child before the parent.
 
 ## Primary navigation
 

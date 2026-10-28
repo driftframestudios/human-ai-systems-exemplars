@@ -7,7 +7,7 @@ description: Resolves prototype layout pressure at the actual parent and iframe 
 
 ## Contract
 
-- **What:** A measured parent/child layout contract that keeps a compact preview useful for deciding whether to continue in a full view, while preserving the instrument's meaningful interactions and comparisons.
+- **What:** A measured parent/child layout contract that keeps the embedded instrument useful for its receiving page, preserving meaningful interactions and comparisons alongside an additional full-view route.
 - **When:** An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.
 - **Boundaries:** The parent owns placement, reserved dimensions, title, embedding policy and full-view route. The child owns its internal document and controls. Packaging owns declared projection changes. Local canonical-child evidence, live hosted delivery, accessibility conformance and permission changes retain separate observations and authority.
 - **Result:** One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.
@@ -17,10 +17,10 @@ description: Resolves prototype layout pressure at the actual parent and iframe 
 - **Useful when:** Controls fragment inside an iframe, a comparison loses readable columns, focused content moves outside the preview, or a parent gutter changes the child breakpoint in use.
 - **Poor fit when:** The same defect exists at the same width in a standalone child and the parent contributes no relevant constraint, or the task concerns only schema meaning, hosting availability or prose. The child owner, semantic table contract, delivery owner or direct reasoning can carry those results.
 - **Smallest useful dose:** One parent/child pair, one visitor operation, the measured constraint and one observation that distinguishes the responsible owner.
-- **Foregrounds:** Actual available space, ownership of scrolling and focus, progressive disclosure, and the visitor's route from preview to full view.
+- **Foregrounds:** Actual available space, ownership of scrolling and focus, progressive disclosure, and the visitor's route between the embedded instrument and full view.
 - **May under-attend:** A clear preview can contain incorrect data or difficult table semantics. A local substitute can behave correctly while the deployed artifact, permissions or network route differs. Those claims retain their own receiving evidence.
 - **Interactions:** For an embedded-layout task, this skill owns the measured parent/child constraint and its layout disposition. Semantic table design supplies the table representation and comparison requirements, including native relationships and literal/unit continuity; this skill applies those requirements at the embedded boundary. For a table-design task, the table skill owns the final result and receives this skill's measurement contribution. Source-authority mapping can resolve a disputed canonical child; visual verification supplies fitting observations; packaging retains source/projection agreement. The task names one primary result owner.
-- **Rest or release when:** The intended preview operation and onward route work at the affected boundary, or an exact owner question preserves a viable continuation. A changed container, child, policy or visitor operation can reactivate the contract.
+- **Rest or release when:** The intended embedded operation and onward route work at the affected boundary, or an exact owner question preserves a viable continuation. A changed container, child, policy or visitor operation can reactivate the contract.
 
 ## Inputs, defaults and output
 
@@ -44,6 +44,15 @@ Measure the outer viewport, parent content width, frame border/client width and
 child viewport separately. Padding, gutters, borders, zoom and scrollbar space can
 change the available measure. A nominal mobile width supplies a comparison case;
 the measured embedded width identifies the constrained receiving surface.
+
+### Rule: The receiving page determines the embedded job
+
+When the parent is the primary opportunity to operate an instrument, preserve a
+materially meaningful working experience there. A supplementary full-view link
+supports that experience. Chapters or disclosures can retain one mounted state
+and fit the active content while the parent owns ordinary vertical reading.
+The visitor operation determines whether a compact preview or a fuller working
+composition is appropriate.
 
 ### Rule: Preview usefulness leads completeness pressure
 
@@ -71,6 +80,16 @@ including the final column; a column wider than the viewport can remain valid.
 A control moved through a reorder or disclosure stays visibly focused, with its
 accepted state, selection and record identity preserved. A fitting keyboard path
 includes entry, travel and exit, with named overflow regions where needed.
+
+### Rule: Parent geometry establishes final focus visibility
+
+Measure the focused target against the parent viewport and its fixed navigation
+after chapter selection and frame sizing settle. Complete fit inside the child
+establishes internal reach; the parent observation establishes visible focus.
+If native cross-frame revealing leaves a target outside the parent reading area,
+a bounded layout-only request can return positioning to the parent owner through
+the existing admitted document channel. Keep calculation and editable state in
+their current owners.
 
 ### Rule: A changed seam earns a bounded comparison
 
@@ -100,7 +119,7 @@ and returns a harness finding rather than a claim about the prototype.
 
 ## Operating sequence
 
-1. **Name the visitor operation:** State what the preview must make legible and what the full-view route supplies. Select one consequential symptom.
+1. **Name the visitor operation:** State what the embedded instrument must make legible and what the full-view route supplies. Select one consequential symptom.
 2. **Resolve ownership:** Trace parent, child and package identities; distinguish a layout constraint from a missing route, semantic defect or deployment question.
 3. **Measure the boundary:** Capture the parent and child dimensions, current disclosure/state and affected control or table. Use fitting standalone widths to isolate the parent contribution.
 4. **Choose the smallest source-owned change:** Reuse layout primitives, preserve readable measure and scroll ownership, and alter the responsible parent or child rule. Keep policy and unrelated surfaces intact.
@@ -158,7 +177,7 @@ private workspace access or a particular browser-testing tool.
 
 ## Completion and re-entry
 
-The receiver can operate the affected preview control or comparison, follow its
+The receiver can operate the affected embedded control or comparison, follow its
 full-view route, and locate the measured boundary and fitting evidence. A bounded
 finding can complete an observation-only task when the remaining measurement or
 permission has a named receiver. New source, parent composition, interaction,

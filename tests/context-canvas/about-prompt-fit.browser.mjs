@@ -176,7 +176,7 @@ for (const engine of Object.keys(engines)) {
       await expect.poll(async () => (await fitted(gallery)).content).toBeGreaterThan(galleryHeight + 100);
       assert.equal(await observation.frame.evaluate(() => window.__siblingFitReports), 0, 'an admitted sibling receives no sizing port from another child');
       await observation.frame.evaluate(() => window.__siblingFitPort.close());
-      assert.equal(await observation.page.locator('iframe[title="Interactive Cross-Functional Investment Studio"]').getAttribute('data-about-content-fit'), null, 'Studio retains its independent carrier');
+      assert.equal(await observation.page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 1, 'About owns one separately fitted Studio chapter receiver');
     } finally { await observation.close(); }
     const fallback = await session(engine, { childObserverAvailable: false });
     try {

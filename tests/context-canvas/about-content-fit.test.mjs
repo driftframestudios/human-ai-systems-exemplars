@@ -15,8 +15,9 @@ const childSource = await readFile(resolve(root, 'collaboration/about-ai-method-
 const adapterSource = await readFile(resolve(root, embeddedContentFitSource), 'utf8');
 const module = { exports: {} };
 vm.runInNewContext(parentSource, { module });
-const { acceptsHeight, attach } = module.exports;
+const { acceptsHeight, acceptsReveal, attach } = module.exports;
 const report = height => ({ type: 'context-canvas:content-fit-height', version: 1, height });
+const reveal = (height, top, bottom) => ({ type: 'context-canvas:content-fit-reveal', version: 1, height, top, bottom });
 
 function carrierFixture() {
   const channels = [];
@@ -24,8 +25,13 @@ function carrierFixture() {
   const listeners = new Map();
   const properties = new Map();
   const messages = [];
+  const scrolls = [];
   let nextTask = 0;
   const environment = {
+    scrollY: 1000,
+    innerHeight: 900,
+    document: { querySelector() { return { getBoundingClientRect() { return { top: 0, bottom: 70 }; } }; } },
+    scrollTo(options) { scrolls.push(JSON.parse(JSON.stringify(options))); },
     MessageChannel: class {
       constructor() {
         this.port1 = { onmessage: null, closed: false, start() {}, close() { this.closed = true; } };
@@ -37,13 +43,15 @@ function carrierFixture() {
     cancelAnimationFrame(id) { tasks.delete(id); },
   };
   const frame = {
+    clientTop: 0,
+    getBoundingClientRect() { return { top: 200 }; },
     dataset: {},
     style: { setProperty(name, value) { properties.set(name, value); }, removeProperty(name) { properties.delete(name); } },
     contentWindow: { postMessage(...args) { messages.push(args); } },
     addEventListener(name, callback) { listeners.set(name, callback); },
     removeEventListener(name) { listeners.delete(name); },
   };
-  return { frame, environment, channels, listeners, properties, messages,
+  return { frame, environment, channels, listeners, properties, messages, scrolls,
     flush() { const pending = [...tasks.values()]; tasks.clear(); pending.forEach(callback => callback()); },
     get pending() { return tasks.size; },
   };
@@ -57,6 +65,51 @@ test('height admission accepts bounded whole pixels and rejects malformed layout
   for (const message of [null, [], {}, { ...report(900), version: 2 }, { ...report(900), extra: 'unowned' }]) {
     assert.equal(acceptsHeight(message), false);
   }
+});
+
+test('reveal admission accepts contained layout geometry and rejects malformed or excessive requests', () => {
+  for (const message of [reveal(900, 0, 1), reveal(100000, 99900, 100000)]) assert.equal(acceptsReveal(message), true);
+  for (const message of [null, [], {}, reveal(0, 0, 1), reveal(100001, 1, 2),
+    reveal(900, -1, 2), reveal(900, 10, 10), reveal(900, 20, 10), reveal(900, 800, 901),
+    reveal(900, 0.5, 20), reveal(900, 0, Infinity), reveal(900, '0', 20),
+    { ...reveal(900, 10, 20), version: 2 }, { ...reveal(900, 10, 20), target: 'private state' },
+  ]) assert.equal(acceptsReveal(message), false);
+});
+
+test('the current channel applies fitted height before revealing the target within the parent reading area', () => {
+  const fixture = carrierFixture();
+  attach(fixture.frame, fixture.environment);
+  fixture.frame.getBoundingClientRect = () => {
+    assert.equal(fixture.properties.get('--about-content-block-size'), '1200px');
+    return { top: 200 };
+  };
+  const receive = fixture.channels[0].port1.onmessage;
+  receive({ data: report(1000) });
+  receive({ data: reveal(1200, 100, 140) });
+  assert.equal(fixture.pending, 1, 'layout and reveal share one queued receiving frame');
+  assert.equal(fixture.scrolls.length, 0, 'the page waits for accepted frame geometry');
+  fixture.flush();
+  assert.deepEqual(fixture.scrolls, [{ top: 835, behavior: 'instant' }],
+    'target center 320 is placed at center 485 of the 70–900 parent reading interval');
+});
+
+test('a newer height and a replacement document revoke queued reveal geometry', () => {
+  const fixture = carrierFixture();
+  const controller = attach(fixture.frame, fixture.environment);
+  const oldReceive = fixture.channels[0].port1.onmessage;
+  oldReceive({ data: reveal(1200, 100, 140) });
+  oldReceive({ data: report(900) });
+  fixture.flush();
+  assert.equal(fixture.scrolls.length, 0, 'changed child geometry retires the preceding reveal');
+  oldReceive({ data: reveal(1200, 100, 140) });
+  fixture.listeners.get('load')();
+  oldReceive({ data: reveal(1200, 100, 140) });
+  fixture.flush();
+  assert.equal(fixture.scrolls.length, 0, 'the prior document cannot reposition About');
+  fixture.channels[1].port1.onmessage({ data: reveal(1200, 100, 140) });
+  controller.destroy();
+  fixture.flush();
+  assert.equal(fixture.scrolls.length, 0, 'teardown cancels a pending reveal');
 });
 
 test('the current document channel coalesces growth and shrinkage into one frame write', () => {

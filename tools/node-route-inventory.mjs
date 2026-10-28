@@ -23,6 +23,7 @@ const WORKER = new Set([
 ]);
 const BROWSER_SHARED = new Set([
   'collaboration/embedded-content-fit.js',
+  'collaboration/about-investment-studio-chapters/chapters.js',
   'collaboration/investment-analysis/capsule.js',
   'collaboration/investment-analysis/core.js',
   'collaboration/investment-analysis/studio.js',
