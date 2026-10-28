@@ -3,6 +3,8 @@
 This package gives the future About-page Studio one accepted planning state,
 an inspectable investment calculation, and a recoverable edit boundary. Its
 first tranche establishes those contracts before native controls receive them.
+The draft adapter adds one bounded coordination-work editor over that accepted
+owner, preserving unfinished input until an explicit or scheduled Apply.
 The intended receiver is an ordinary section of About: visitors keep the page's
 vertical reading flow while they explore coordination, teams, practices, and
 investment consequences.
@@ -22,9 +24,13 @@ human review; merging and publication remain held.
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `state.mjs` owns the `createStudio` facade and each instance's accepted
   revision.
+- `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
+  the optional one-request scheduling boundary.
 - `tests/native-investment-studio/contract.test.mjs` and
   `tests/native-investment-studio/state.test.mjs`, relative to the repository
   root, own focused contract and state-transition observations.
+- `tests/native-investment-studio/draft.test.mjs` owns draft recovery,
+  coalescing, exact-target identity, and scheduling lifecycle observations.
 
 ## Existing owners and the receiving boundary
 
@@ -258,6 +264,119 @@ UI drafts, open menus, reversed-card faces, focus targets, and reading position
 belong to the future presentation adapter. A draft can remain editable while
 the accepted amount and export continue to describe the last valid revision.
 
+## Coordination-work draft adapter
+
+[Issue #640](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/640)
+introduces a source-only adapter for `minutesPerOccurrence` and `occurrences`.
+It owns one open editor with at most 32 UTF-16 code units per raw field. Labels,
+membership, funding, and all other work fields retain the captured row's values.
+The complete Studio and About DOM continue through their existing owners.
+
+The pre-existing `collaboration/investment-analysis/studio.js` preserves
+invalid control drafts, applies grouped records, and checks request identity
+against intervening interaction. Those responsibilities guide this adapter.
+Its DOM-dependent handlers, analytical schema, and numeric revision context
+have different receivers, so this small module owns the native work-row and
+exact-projection boundary directly.
+
+```js
+import { createWorkDraftAdapter } from './collaboration/native-investment-studio/draft.mjs';
+
+const editor = createWorkDraftAdapter(studio);
+const opened = editor.begin('review', studio.read());
+const token = opened.view.draft.token;
+editor.setText(token, 'minutesPerOccurrence', '45');
+editor.setText(token, 'occurrences', '12');
+const applied = editor.apply(token);
+// With the four-person example, applied.view.projection carries 360000 cents.
+```
+
+The example assumes the `studio` instance created above and checks a complete
+successful path. Receiving controls inspect each command's `ok` and `error`
+before using its result.
+
+| Operation | Owned transition |
+| --- | --- |
+| `begin(workId, expectedProjection)` | From idle, capture an existing work row and the exact current projection; create an opaque session token. |
+| `setText(token, field, rawText)` | Retain bounded raw text for one declared field, including a temporarily invalid value. |
+| `step(token, field, direction)` | Add one admitted `+1` or `-1` step to the current valid draft value; preserve raw text at a range boundary. |
+| `validate(token)` | Check the current base projection and both fields while preserving the draft and accepted state. |
+| `apply(token)` | Invalidate pending callbacks, validate both fields, and pass one complete replacement to `studio.updateWork`. Success settles the draft. |
+| `queueApply(token)` | Request at most one deferred Apply using the injected scheduler; subsequent draft changes feed that same pending Apply. |
+| `cancel(token)` | Settle the draft and invalidate its pending callback while preserving accepted state. |
+| `dispose()` | End the adapter's lifetime and release its pending request. Repeated disposal retains any cleanup diagnostic. |
+| `read()` | Return a frozen view with current accepted projection, draft text/errors, pending state, and last command error. |
+
+Commands return `{ ok, view }` or `{ ok: false, error, view }`. A successful
+`setText` means that editable text was retained; `draft.errors` establishes its
+current field validity. Empty text, an unfinished token such as `-` or `1e`, a
+negative quantity, and zero retain distinct outcomes. The numeric grammar uses
+unsigned decimal digits, with leading zeroes accepted and normalized on commit.
+Whitespace, fractions, and exponent forms receive field diagnostics. Lexical
+admission precedes Number conversion. Oversized or non-string input receives a
+text diagnostic while the prior bounded raw value remains available.
+
+Each session command requires the opaque `draft.token` returned by Begin.
+This identity keeps late control callbacks attached to their original editor.
+An old session's command receives its own error while the current editor keeps
+its draft and diagnostic.
+An open draft makes another Begin return `draft-open`; Apply or Cancel settles
+the original before a receiver switches targets. The view is `stale` when its
+base projection differs from the current accepted plan, including an import or
+replacement with the same numeric revision. Stale text remains inspectable;
+Cancel then Begin is this tranche's explicit recovery route. The adapter keeps
+the core's exact projection check and adds its own distinct editor identity.
+
+### Deferred Apply and resource ownership
+
+The optional scheduler supplies synchronous `request(callback)` and
+`cancel(handle)` host operations, with deferred callback delivery.
+It returns an opaque handle before invoking the callback. The adapter has no
+default timer, frame loop, listener registry, or DOM dependency. A future browser
+wrapper can invoke the callback and then render `editor.read()`; its choice of
+frame or task scheduling receives browser evidence with the actual controls.
+
+Repeated absolute samples replace the same raw field. Step commands add their
+individual steps immediately to the draft. Both fields therefore reach one
+coherent candidate when the callback applies. An explicit Apply serves as the
+final flush, including when a browser has suspended its frame callbacks.
+An invalid final draft remains editable beside the accepted amount and export.
+
+Every scheduled request has its own identity. Apply, Cancel, and Dispose clear
+that identity before calling scheduler cancellation; a late callback stays
+inert even if cancellation throws. A synchronous callback receives a scheduler
+diagnostic and its returned handle is cancelled. If cancellation or disposal
+occurs during request acquisition, the adapter releases the returned handle
+when it arrives. The callback must be one-shot; repeated invocation is inert
+after its first delivery.
+
+A scheduler exception returns a fixed `scheduler` or `cleanup` diagnostic.
+Accepted state remains intact. If a scheduler registers a resource and throws
+before returning its handle, that scheduler owns the release route. A cleanup
+diagnostic records an invalidated callback with physical release still due.
+The scheduler owns that remaining release; later adapter disposal cannot retry
+a handle whose failed cancellation has already relinquished logical ownership.
+Explicit Apply can recover a retained draft after a failed scheduling attempt.
+Direct scheduler functions and Studio ownership are cooperative host APIs;
+this adapter supplies lifecycle guards rather than an execution sandbox.
+
+### Cost and next measurement
+
+Begin locates one work row in O(W). Read, text edits, field validation, and steps
+operate on two bounded strings. Scheduling retains one ticket. Successful Apply
+retains the complete O(P + T + W + A + R + B) preparation and serialization path;
+it introduces no incremental calculator. One active draft retains one base
+projection, which may differ from the Studio's current projection after an
+external change. Caller-retained views and scheduler-retained callbacks have
+their own lifetimes; the future receiver bounds any history it keeps.
+
+[Issue #641](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/641)
+receives the implemented edit/apply boundary for measurement. Its first slice
+compares direct accepted edits, explicit draft Apply, and deferred Apply through
+identical operation traces. Raw edits, steps, pending requests, accepted commits,
+and complete synchronous Apply cost retain separate metrics. Fake scheduling
+establishes ordering and counts; browser latency begins with native controls.
+
 ## Data structures and pattern decisions
 
 Ordered arrays preserve authored order in portable state. Preparation builds
@@ -341,7 +460,7 @@ observations when the native receiver is introduced.
 From the repository root:
 
 ```sh
-node --test tests/native-investment-studio/contract.test.mjs tests/native-investment-studio/state.test.mjs
+node --test tests/native-investment-studio/*.test.mjs
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 ```
 
@@ -350,6 +469,10 @@ additional purchase, missing-rate completeness, paused obligations, capacity
 overruns, invalid input recovery, stable reference identity, detached ownership,
 revision conflicts, and native round-trip. The existing chapter test establishes
 that its materialized receiver preserves the full Studio source.
+
+The draft cases additionally protect raw-input retention, explicit target
+settlement, latest-value and additive-step behavior, coherent field commits,
+stale/foreign session recovery, deferred final flush, and cancellation/disposal.
 
 The first tranche's source and state contracts need focused model observations.
 A later native control group earns its own keyboard, focus, scroll, reduced

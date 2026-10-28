@@ -303,6 +303,7 @@
       "kind": "node-test",
       "members": [
         "tests/native-investment-studio/contract.test.mjs",
+        "tests/native-investment-studio/draft.test.mjs",
         "tests/native-investment-studio/state.test.mjs"
       ],
       "profile": "node-source",
@@ -312,7 +313,7 @@
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
-      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, bounded recovery, and exchange; visitor rendering enters a later tranche.",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, bounded draft and scheduled-commit recovery, and exchange; visitor rendering enters a later tranche.",
       "aliases": []
     },
     {
