@@ -1,0 +1,27 @@
+{
+  "id": "native-studio-edit-cost-01",
+  "issue": 641,
+  "sourceCommit": "3f714dcb43770a1c2f4a85594e92e44139b1fbd5",
+  "reviewedHead": "bdc4be3ef73a56cef46e97c1b82623ad46aaddad",
+  "researchBase": "2539f2c6bd42d56353d083ee914dbeb31543bf59",
+  "fixtures": ["example", "medium", "caps", "near-byte"],
+  "node": {"runs": 5, "warmup": 50, "samples": 200},
+  "browser": {
+    "engines": ["chromium", "firefox", "webkit"],
+    "profiles": [
+      {"id": "desktop", "width": 1440, "height": 1000},
+      {"id": "narrow", "width": 390, "height": 844}
+    ],
+    "runs": 5,
+    "warmupPairs": 20,
+    "measuredPairs": 50,
+    "noOpSamples": 100
+  },
+  "budgets": {
+    "processingMedianMs": 16,
+    "processingP95Ms": 50,
+    "renderOpportunityP95Ms": 100,
+    "standing": "prospective local engineering decision thresholds"
+  },
+  "publication": "held"
+}
