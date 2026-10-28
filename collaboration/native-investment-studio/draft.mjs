@@ -41,6 +41,7 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   let lastError = null;
   let disposalError = null;
   let diagnosticOwner = null;
+  let releasingToken = null;
 
   function values(draft) {
     const admitted = {};
@@ -63,13 +64,13 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     return Object.freeze({
       status: disposed ? 'disposed' : isStale ? 'stale' : active ? 'editing' : 'idle',
       projection, draft, pending: pending !== null,
-      error: lastError ?? (isStale ? stale() : null),
+      error: disposalError ?? lastError ?? (isStale ? stale() : null),
     });
   }
 
   function fail(error, retain = true) {
     // A late control receives its error while the current editor keeps its own.
-    if (retain && error.code !== 'draft-token' && error.code !== 'disposed') lastError = error;
+    if (retain && error.code !== 'draft-token' && error.code !== 'disposed' && error.code !== 'settling') lastError = error;
     return Object.freeze({ ok: false, error, view: read() });
   }
 
@@ -91,15 +92,24 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
       ? null : diagnostic('field', 'draft', 'Choose duration or occurrence count.');
   }
 
+  function commitGuard(token) {
+    return guard(token) ?? (token === releasingToken
+      ? diagnostic('settling', 'scheduler', 'Finish releasing this draft’s pending request before applying or scheduling it again.')
+      : null);
+  }
+
   function release(ticket) {
     if (!ticket.hasHandle || ticket.released) return null;
     ticket.released = true;
+    const previousToken = releasingToken;
+    releasingToken = ticket.token;
     try { cancelRequest(ticket.handle); }
     catch {
       const error = diagnostic('cleanup', 'scheduler', 'The callback is invalidated; the scheduler must finish releasing its resource.');
       if (disposed) disposalError ??= error;
       return error;
     }
+    finally { releasingToken = previousToken; }
     return null;
   }
 
@@ -153,7 +163,7 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   }
 
   function apply(token) {
-    const error = guard(token);
+    const error = commitGuard(token);
     if (error) return fail(error);
     const cleanup = stopPending();
     if (cleanup) return fail(cleanup, ownsDiagnostic(token));
@@ -170,12 +180,12 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   }
 
   function queueApply(token) {
-    const error = guard(token);
+    const error = commitGuard(token);
     if (error) return fail(error);
     if (active.baseProjection !== studio.read()) return fail(stale());
     if (request === null) return fail(diagnostic('scheduler-unavailable', 'scheduler', 'Apply directly or supply a deferred scheduler.'));
     if (pending !== null) return succeed();
-    const ticket = { hasHandle: false, handle: undefined, released: false, early: false };
+    const ticket = { token, hasHandle: false, handle: undefined, released: false, early: false };
     pending = ticket;
     try {
       ticket.handle = request(() => {

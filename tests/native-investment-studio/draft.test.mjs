@@ -572,3 +572,134 @@ test('a coalesced commit crosses the accepted boundary exactly once', () => {
   clock.run();
   assert.equal(commits, 1);
 });
+
+test('cleanup settles its original draft before that draft can acquire another request', () => {
+  for (const throws of [false, true]) {
+    const studio = createStudio();
+    const initial = studio.read();
+    const clock = scheduler();
+    const release = clock.cancel;
+    let adapter;
+    let token;
+    let nestedQueue;
+    let nestedApply;
+    let firstRelease = true;
+    clock.cancel = handle => {
+      release(handle);
+      if (!firstRelease) return;
+      firstRelease = false;
+      nestedQueue = adapter.queueApply(token);
+      nestedApply = adapter.apply(token);
+      if (throws) throw new Error('Host cleanup needs attention');
+    };
+    adapter = createWorkDraftAdapter(studio, clock);
+    token = adapter.begin('review', initial).view.draft.token;
+    adapter.setText(token, 'minutesPerOccurrence', '45');
+    adapter.queueApply(token);
+    const oldHandle = clock.latest();
+    const applied = adapter.apply(token);
+    assert.equal(nestedQueue.error?.code, 'settling');
+    assert.equal(nestedApply.error?.code, 'settling');
+    assert.equal(clock.count(), 0);
+    assert.equal(adapter.read().pending, false);
+    if (throws) {
+      assert.equal(applied.error.code, 'cleanup');
+      retained(studio, initial);
+      assert.equal(adapter.apply(token).ok, true);
+    } else assert.equal(applied.ok, true);
+    assert.equal(studio.read().state.revision, 1);
+    assert.equal(studio.read().result.plannedCommitmentCents, 180000);
+    token = adapter.begin('review', studio.read()).view.draft.token;
+    adapter.setText(token, 'minutesPerOccurrence', '60');
+    assert.equal(adapter.queueApply(token).ok, true);
+    const newHandle = clock.latest();
+    assert.notEqual(newHandle, oldHandle);
+    clock.run(oldHandle);
+    assert.equal(adapter.read().pending, true);
+    clock.run(newHandle);
+    assert.equal(studio.read().result.plannedCommitmentCents, 240000);
+    assert.equal(studio.read().state.revision, 2);
+    assert.equal(adapter.read().pending, false);
+  }
+});
+
+test('cleanup of an older request preserves a replacement draft and its pending request', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  const clock = scheduler();
+  const release = clock.cancel;
+  let adapter;
+  let oldToken;
+  let freshToken;
+  clock.cancel = handle => {
+    release(handle);
+    adapter.cancel(oldToken);
+    freshToken = adapter.begin('review', before).view.draft.token;
+    adapter.setText(freshToken, 'minutesPerOccurrence', '60');
+    assert.equal(adapter.queueApply(freshToken).ok, true);
+  };
+  adapter = createWorkDraftAdapter(studio, clock);
+  oldToken = adapter.begin('review', before).view.draft.token;
+  adapter.setText(oldToken, 'minutesPerOccurrence', '45');
+  adapter.queueApply(oldToken);
+  const oldHandle = clock.latest();
+  const applied = adapter.apply(oldToken);
+  assert.equal(applied.error.code, 'draft-token');
+  assert.strictEqual(adapter.read().draft.token, freshToken);
+  assert.equal(adapter.read().pending, true);
+  assert.equal(clock.count(), 1);
+  const freshHandle = clock.latest();
+  clock.run(oldHandle);
+  retained(studio, before);
+  assert.equal(adapter.read().pending, true);
+  clock.run(freshHandle);
+  assert.equal(studio.read().result.plannedCommitmentCents, 240000);
+  assert.equal(studio.read().state.revision, 1);
+});
+
+test('inline-scheduler cleanup also settles its draft before a new queue request', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  let adapter;
+  let token;
+  let firstRelease = true;
+  let requests = 0;
+  let nested;
+  const clock = {
+    request(callback) { requests += 1; callback(); return requests; },
+    cancel() {
+      if (firstRelease) { firstRelease = false; nested = adapter.queueApply(token); }
+    },
+  };
+  adapter = createWorkDraftAdapter(studio, clock);
+  token = adapter.begin('review', before).view.draft.token;
+  const result = adapter.queueApply(token);
+  assert.equal(result.error.code, 'scheduler');
+  assert.equal(nested.error?.code, 'settling');
+  assert.equal(requests, 1);
+  assert.equal(adapter.read().pending, false);
+  retained(studio, before);
+});
+
+test('a disposed view reports eventual handle cleanup failure as soon as acquisition returns', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  let adapter;
+  let callback;
+  let releases = 0;
+  const clock = {
+    request(next) { callback = next; adapter.dispose(); return 0; },
+    cancel() { releases += 1; throw new Error('Host resource still needs release'); },
+  };
+  adapter = createWorkDraftAdapter(studio, clock);
+  const token = adapter.begin('review', before).view.draft.token;
+  const result = adapter.queueApply(token);
+  assert.equal(result.error.code, 'cleanup');
+  assert.strictEqual(result.view.error, result.error);
+  assert.strictEqual(adapter.read().error, result.error);
+  assert.equal(adapter.read().status, 'disposed');
+  callback();
+  retained(studio, before);
+  assert.strictEqual(adapter.dispose().error, result.error);
+  assert.equal(releases, 1);
+});

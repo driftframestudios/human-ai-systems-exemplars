@@ -13,8 +13,8 @@ investment consequences.
 holds the approved design and implementation sequence. The first tranche adds
 the capability inventory, portable state, calculation, and state-owner APIs.
 Visitor HTML, About's current Studio chapters, and the complete original Studio
-retain their present behavior. The receiving pull request remains available for
-human review; merging and publication remain held.
+retain their present behavior. Each receiving pull request records its review
+and integration authority; publication remains held.
 
 ## Source map
 
@@ -350,12 +350,23 @@ occurs during request acquisition, the adapter releases the returned handle
 when it arrives. The callback must be one-shot; repeated invocation is inert
 after its first delivery.
 
+While the scheduler releases a request, Apply and Queue Apply for that request's
+draft return a `settling` diagnostic to the reentrant caller. The draft's own
+diagnostic remains available. This session-scoped guard covers explicit Apply,
+inline-callback rejection, and release of a handle acquired after cancellation.
+A cancellation hook can settle that draft and open a new one; the new session
+owns its own pending request. The returning older command checks its original
+session again before it can commit.
+
 A scheduler exception returns a fixed `scheduler` or `cleanup` diagnostic.
 Accepted state remains intact. If a scheduler registers a resource and throws
 before returning its handle, that scheduler owns the release route. A cleanup
 diagnostic records an invalidated callback with physical release still due.
 The scheduler owns that remaining release; later adapter disposal cannot retry
 a handle whose failed cancellation has already relinquished logical ownership.
+If disposal occurs during acquisition and the eventual handle fails cleanup,
+the disposed view immediately retains the same cleanup diagnostic as the
+returning command. Repeated reads and disposal preserve that evidence.
 Explicit Apply can recover a retained draft after a failed scheduling attempt.
 Direct scheduler functions and Studio ownership are cooperative host APIs;
 this adapter supplies lifecycle guards rather than an execution sandbox.
@@ -472,12 +483,13 @@ that its materialized receiver preserves the full Studio source.
 
 The draft cases additionally protect raw-input retention, explicit target
 settlement, latest-value and additive-step behavior, coherent field commits,
-stale/foreign session recovery, deferred final flush, and cancellation/disposal.
+stale/foreign session recovery, deferred final flush, cancellation/disposal,
+same-session cleanup reentry, and replacement-session request ownership.
 
 The first tranche's source and state contracts need focused model observations.
 A later native control group earns its own keyboard, focus, scroll, reduced
 motion, narrow-width, and cross-browser checks. The receiving PR carries actual
-commands and normalized results, independent review, and the human review hold.
+commands and normalized results, independent review, and current human authority.
 
 ## Next native receiver
 
