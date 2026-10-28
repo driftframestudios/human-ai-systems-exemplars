@@ -1,9 +1,4 @@
 /* About page · static readings and native disclosure when scripting is unavailable. */
-.about-page .about-folio-disclosure > summary,
 .about-page .about-prompt-explorer {
   display: none;
-}
-
-.about-page .about-folio-disclosure:not([open]) > .about-folio-disclosure__body {
-  display: grid;
 }

@@ -158,6 +158,7 @@
     "build:about-heatmap": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-heatmap.mjs",
     "check:about-heatmap": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-heatmap.mjs --check",
     "test:about-scroll-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-heatmap.browser.mjs tests/context-canvas/about-gallery-fit.browser.mjs tests/context-canvas/about-prompt-fit.browser.mjs",
+    "test:about-disclosure-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-disclosure-readings.browser.mjs",
     "build:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs",
     "check:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs --check"
   },
