@@ -315,21 +315,23 @@ modes, and a fresh-document restoration of the former nested composition.
 [Issue #566](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/566)
 connects the collection observation with the native-browser receiving checks.
 
-The generated reading rail owns an available frame in `canvas-shell.css`.
-At its desktop seam, `--page-section-rail-frame-inline-size` shares the
-existing wide-evidence reservation with `.architecture-pair`,
-`.repeatability-cards`, and `.implementation-moves`. Each card group keeps the
-smaller of its local owner and that frame, so its border and hard shadow remain
-visibly separate from the rail's marker and keyboard focus paint. Authored FMI
-navigation and scriptless reading keep their own layout boundaries.
+Card groups use their local reading owner's available width. The generated
+rail keeps its existing position; its markers can occupy the accepted hard-shadow
+zone. `canvas-shell.css` retains the separate reservation for wide tables and
+story visuals. Authored FMI navigation and scriptless reading keep their own
+layout boundaries.
 
-`npm run test:card-rail-clearance-browser` inventories 69 groups across 30
-routes: 271 articles and 11 native disclosures. It measures text, border,
-shadow, marker, and focus extents across responsive seams and three engines,
-with enlarged text, narrow touch, print, forced colors, and a restored
-intersection. Temporary inspection labels retain their existing dismissal
-behavior. [Issue #569](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/569)
-records the decision and its native-browser and publication boundaries.
+`npm run test:card-rail-clearance-browser` retains its established entry point
+and inventories 69 groups across 30 routes: 271 articles and 11 native
+disclosures. Its current oracle observes local card width, complete text and
+paint, and retained rail behavior. A controlled replay of the former width cap
+must fail the width assertion. The screen campaign covers the complete family
+at desktop width and representative narrow, seam, wide, enlarged-text, keyboard,
+and touch states across three engines.
+[Issue #629](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/629)
+records this restoration and the preserved WebKit repairs. The earlier
+[Issue #569](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/569)
+retains the lineage of the dev-only spacing experiment. Publication remains held.
 
 Twelve direct-child orientation callouts participate in continuous prose as
 one atomic painted object. Their statement and footer remain together inside

@@ -91,8 +91,6 @@ async function observe(page) {
       const following = group.nextElementSibling;
       return {
         viewport: document.documentElement.clientWidth,
-        railReserve: matchMedia('(min-width: 56.0625rem)').matches && matchMedia('screen').matches
-          && document.querySelector('.page-section-rail + main') ? 10 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize) : 0,
         direct: group.parentElement === reading,
         emptyRuns: [...reading.querySelectorAll('.prose-flow')].filter(run => !run.textContent.trim() && !run.children.length).length,
         grid: box(group.getBoundingClientRect()), owner: box(reading.getBoundingClientRect()),
@@ -132,8 +130,7 @@ function assertCards(groups, route) {
     assert.equal(group.cards.length, 3, 'The three authored comparison cards remain available.');
     assert.equal(group.columns, group.owner.width >= 64 * group.rootFont ? 2 : 1,
       'The available reading width selects the complete one- or two-column comparison.');
-    const available = Math.min(group.owner.width, group.viewport - group.railReserve);
-    assert.ok(Math.abs(group.grid.width - available) <= 1.5, 'The comparison uses its complete reading width with the generated rail reservation.');
+    assert.ok(Math.abs(group.grid.width - group.owner.width) <= 1.5, 'The comparison uses the complete reading width.');
     assert.ok(group.heading && group.heading.bottom <= group.grid.top + 1.5, 'The opening heading precedes all cards.');
     assert.ok(!group.following || group.following.top >= group.grid.bottom - 1.5, 'Following content begins below the complete comparison.');
     const paints = [];

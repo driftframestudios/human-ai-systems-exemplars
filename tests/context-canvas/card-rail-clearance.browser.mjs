@@ -24,8 +24,10 @@ const inventory = {
 };
 const representatives = ['spatial-capture-collaborative-memory.html', 'multilingual-clinical-vocabulary-practice.html',
   'genomic-viewer-replatforming.html', 'ai-systems.html', 'who-to-believe-reviews-platform.html'];
-const widths = [390, 896, 897, 1103, 1104, 1359, 1360, 1361, 1440, 2560];
-const fault = '@media screen and (min-width:56.0625rem) { .page-section-rail + main :is(.architecture-pair,.repeatability-cards,.implementation-moves) { max-inline-size:none; margin-inline:0; } }';
+// The shared-width restoration brackets its former 897px seam on five
+// representative routes; every other authored consumer receives the 1440px check.
+const representativeWidths = [390, 896, 897, 1440, 2560];
+const fault = '@media screen and (min-width:56.0625rem) { .page-section-rail + main :is(.architecture-pair,.repeatability-cards,.implementation-moves) { max-inline-size:min(100%,calc(100vw - 10rem)); margin-inline:auto; } }';
 const output = new URL('../../.visual-runs/card-rail-clearance/', import.meta.url);
 const browsers = new Map();
 let server;
@@ -39,14 +41,14 @@ after(async () => {
 });
 
 async function open(engine, route, options = {}) {
-  const { font = 16, restoreWidth = false, ...contextOptions } = options;
+  const { font = 16, reintroduceCap = false, ...contextOptions } = options;
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...contextOptions });
   await context.route('**/*', async request => {
     const url = new URL(request.request().url());
     if (url.origin !== server.origin || url.pathname.startsWith('/v1-cdn/')) return request.fulfill({ body: '' });
-    if ((font !== 16 || restoreWidth) && url.pathname === root + route) {
+    if ((font !== 16 || reintroduceCap) && url.pathname === root + route) {
       const response = await request.fetch();
-      return request.fulfill({ response, body: (await response.text()).replace('</head>', `<style>html{font-size:${font}px}${restoreWidth ? fault : ''}</style></head>`) });
+      return request.fulfill({ response, body: (await response.text()).replace('</head>', `<style>html{font-size:${font}px}${reintroduceCap ? fault : ''}</style></head>`) });
     }
     return request.continue();
   });
@@ -120,17 +122,16 @@ async function stable(page) {
   }
   assert.fail('Card and rail paint reaches a bounded settled state.');
 }
-function assertClearance(result, count) {
+function assertLocalWidth(result, count) {
   assert.equal(result.groups.length, count[0]);
   assert.equal(result.groups.reduce((sum, group) => sum + group.cards.filter(card => card.tag === 'ARTICLE').length, 0), count[1], 'Every authored article participates in the paint observation.');
   assert.equal(result.groups.reduce((sum, group) => sum + group.cards.filter(card => card.tag === 'DETAILS').length, 0), count[2] || 0, 'Native disclosures retain their distinct semantic and paint inventory.');
   if (result.desktop) assert.ok(result.markers.length > 0, 'The generated reading rail participates.');
   for (const group of result.groups) {
     assert.ok(group.cards.length > 0, 'Each comparison group supplies its authored article or disclosure cards.');
-    const expected = result.desktop ? Math.min(group.parentWidth, result.viewport - 10 * result.rootFont) : group.parentWidth;
-    // These block/grid owners use their available parent width. The minimum
-    // keeps an inset companion from growing merely because its viewport grew.
-    assert.ok(Math.abs(group.box.width - expected) <= 2, 'The grid uses its local owner within the reserved viewport frame.');
+    // The accepted card composition uses its local owner's full content width.
+    // Rail markers may share the hard-shadow zone while text stays in its card.
+    assert.ok(Math.abs(group.box.width - group.parentWidth) <= 2, 'The grid uses its full available local owner width.');
     for (const card of group.cards) {
       assert.ok(card.shadow.every(shadow => !shadow.inset && shadow.sizes.length === 4 && shadow.sizes[2] === 0), 'The existing hard-shadow paint has a bounded extent.');
       assert.ok(card.paint.left >= -1.5 && card.paint.right <= result.viewport + 1.5, 'Card paint remains reachable within the viewport.');
@@ -141,8 +142,6 @@ function assertClearance(result, count) {
         assert.ok(frame.left >= card.box.left - 1.5 && frame.right <= card.box.right + 1.5,
           'Card text or its local pre/table scroll frame remains inside the card.');
       }
-      if (result.desktop) assert.ok(card.paint.right + 1 <= Math.min(...result.markers.map(marker => marker.left)),
-        'The card border and shadow leave a visible interval before persistent rail or focus paint.');
     }
   }
 }
@@ -162,33 +161,33 @@ test('The authored card family names every generated-rail consumer and the autho
 
 for (const engine of ['chromium', 'firefox', 'webkit']) {
   for (const [route, count] of Object.entries(inventory)) {
-    test(`${engine}: ${route} keeps card paint clear across rail and reading seams`, { timeout: 60_000 }, async t => {
+    test(`${engine}: ${route} keeps local card width and readable contents`, { timeout: 60_000 }, async t => {
       const session = await open(engine, route); t.after(session.close);
-      for (const width of widths) {
+      for (const width of representatives.includes(route) ? representativeWidths : [1440]) {
         await session.page.setViewportSize({ width, height: 1000 });
-        await t.test(`${width}px`, async () => assertClearance(await stable(session.page), count));
+        await t.test(`${width}px`, async () => assertLocalWidth(await stable(session.page), count));
       }
     });
   }
   for (const route of representatives) {
-    test(`${engine}: ${route} preserves selected, hover, and keyboard rail paint at 200%`, { timeout: 30_000 }, async t => {
+    test(`${engine}: ${route} preserves local card width and selected, hover, and keyboard rail behavior at 200%`, { timeout: 30_000 }, async t => {
       const session = await open(engine, route, { font: 32 }); t.after(session.close);
       const links = session.page.locator('.page-section-rail a');
       // macOS WebKit includes native links through Option-Tab.
       await links.first().focus(); await session.page.keyboard.press(engine === 'webkit' ? 'Alt+Tab' : 'Tab');
       let result = await stable(session.page);
       assert.ok(result.markers.some(marker => marker.focus), 'Keyboard navigation shows its focus outline.');
-      assertClearance(result, inventory[route]);
+      assertLocalWidth(result, inventory[route]);
       await session.page.keyboard.press('Enter'); result = await stable(session.page);
       assert.ok(result.markers.some(marker => marker.selected), 'Keyboard activation retains the selected destination.');
-      assertClearance(result, inventory[route]);
+      assertLocalWidth(result, inventory[route]);
       await links.nth(2).hover(); result = await stable(session.page);
       assert.equal(result.readout, true, 'Deliberate inspection opens the transient readout.');
-      assertClearance(result, inventory[route]);
+      assertLocalWidth(result, inventory[route]);
       await session.page.keyboard.press('Escape'); result = await stable(session.page);
       assert.equal(result.readout, false, 'Dismissal returns the full reading field.');
-      // Readout overlays intentionally enter the reading field during deliberate
-      // inspection. The lasting marker/focus boundary owns this clearance test.
+      // The rail keeps its intentional marker/shadow adjacency. Deliberate
+      // inspection and dismissal retain their own visible interaction states.
     });
   }
   test(`${engine}: narrow rail retains its marker, touch target, and dismissible inspection`, { timeout: 30_000 }, async t => {
@@ -204,32 +203,36 @@ for (const engine of ['chromium', 'firefox', 'webkit']) {
     assert.equal(selected.readout, false);
     const restored = await session.page.addStyleTag({ content: fault });
     const unchanged = await stable(session.page);
-    assert.deepEqual(unchanged.groups.map(group => group.box), selected.groups.map(group => group.box), 'The desktop clearance rule leaves narrow card geometry with its existing owner.');
+    assert.deepEqual(unchanged.groups.map(group => group.box), selected.groups.map(group => group.box), 'The rejected desktop cap leaves narrow card geometry with its existing owner.');
     await restored.evaluate(node => node.remove());
   });
   for (const mode of ['print', 'forced-colors']) {
     test(`${engine}: alternate ${mode} preserves card and rail ownership`, { timeout: 30_000 }, async t => {
       const route = representatives[0], session = await open(engine, route); t.after(session.close);
       await session.page.emulateMedia(mode === 'print' ? { media: 'print' } : { forcedColors: 'active' });
-      const result = await stable(session.page); assertClearance(result, inventory[route]);
+      const result = await stable(session.page); assertLocalWidth(result, inventory[route]);
       if (mode === 'print') assert.equal(result.railDisplay, 'none');
     });
   }
-  test(`${engine}: the restored card width exposes the disputed paint intersection`, { timeout: 30_000 }, async t => {
+  test(`${engine}: the rejected viewport cap is detected by the local-width oracle`, { timeout: 30_000 }, async t => {
     const route = representatives[0], session = await open(engine, route); t.after(session.close);
-    assertClearance(await stable(session.page), inventory[route]);
+    const accepted = await stable(session.page);
+    assertLocalWidth(accepted, inventory[route]);
     const style = await session.page.addStyleTag({ content: fault });
     const broken = await stable(session.page);
-    assert.ok(broken.groups.some(group => group.cards.some(card => card.paint.right > Math.min(...broken.markers.map(marker => marker.left)))), 'The old card width intersects persistent rail paint.');
-    assert.throws(() => assertClearance(broken, inventory[route]));
-    await style.evaluate(node => node.remove()); assertClearance(await stable(session.page), inventory[route]);
+    assert.ok(broken.groups.some((group, index) => group.box.width < accepted.groups[index].box.width - 2),
+      'Reintroducing the rejected viewport cap reduces a real comparison group.');
+    assert.throws(() => assertLocalWidth(broken, inventory[route]), /full available local owner width/u);
+    const inlineRail = result => result.markers.map(({ left, right, targetWidth }) => ({ left, right, targetWidth }));
+    assert.deepEqual(inlineRail(broken), inlineRail(accepted), 'Card-width restoration leaves the rail marker positions with their existing owner.');
+    await style.evaluate(node => node.remove()); assertLocalWidth(await stable(session.page), inventory[route]);
   });
   test(`${engine}: authored FMI rail and scriptless reading retain local card width`, { timeout: 30_000 }, async t => {
     for (const [route, options] of [['fmi-lims-eln-replatforming.html', {}], [representatives[0], { javaScriptEnabled: false }]]) {
       const session = await open(engine, route, options); t.after(session.close);
       assert.equal(await session.page.locator('.page-section-rail').count(), 0);
       const result = await stable(session.page);
-      const comparison = await open(engine, route, { ...options, restoreWidth: true }); t.after(comparison.close);
+      const comparison = await open(engine, route, { ...options, reintroduceCap: true }); t.after(comparison.close);
       const inlineFrame = group => ({ left: group.box.left, right: group.box.right, width: group.box.width });
       assert.deepEqual((await stable(comparison.page)).groups.map(inlineFrame), result.groups.map(inlineFrame),
         'Authored-rail and scriptless cards preserve their local inline frame across fresh documents.');
