@@ -89,6 +89,18 @@ are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
 
+JSON exchange uses whole-number tokens, with an optional minus sign followed
+by integer digits. Domain bounds then admit the nonnegative values; negative
+zero normalizes to zero. Fraction and exponent spellings receive an
+`integer-token` diagnostic, including mathematically integral spellings such as
+`1.0` and `3e1`. This keeps an underflowing negative quantity or an excessively
+precise fraction from becoming an accepted integer through JSON Number
+rounding. Native exports already use this spelling. The byte-bounded import
+first checks JSON syntax, then examines number tokens in one linear pass while
+skipping quoted strings. Labels retain their exact text. Direct JavaScript
+calls receive already-evaluated Numbers; exact source-spelling checks belong
+to the text import boundary.
+
 Preparation verifies unique IDs, reference resolution, membership, collection
 and text limits, supported vocabulary, and numeric bounds. Duplicate references
 and ambiguous ownership receive explicit diagnostics. A negative time input,
@@ -108,6 +120,10 @@ one-minute records at $100/hour display 167 cents each; a -20-cent adjustment
 reconciles those displays to the $100 settled hour. BigInt intermediate products
 preserve exact integer arithmetic before the rounded amount returns to the
 admitted safe Number range. Aggregate addition checks the same monetary range.
+Display-line sums use BigInt as well: rounding can put their sum temporarily
+above the safe-Number ceiling even when the actual settled commitment is
+within it. The signed reconciliation is calculated exactly and checked before
+conversion to Number. It explains display rounding within its funding pool.
 
 Allocated work attributes effort and cost inside funded staffing. Additional
 work contributes its own purchased amount. The total therefore joins funded
@@ -146,6 +162,11 @@ An import or replacement can supply a historical numeric revision; its newly
 prepared projection still makes earlier edit tokens stale. A numeric revision
 comparison alone would miss that return to an earlier-looking state. The caller
 keeps a rejected draft available while the newer accepted plan remains intact.
+The command checks that identity again immediately before commit. If a direct
+JavaScript descriptor callback admits another edit during preparation, the
+newer snapshot and its identity index remain accepted and the outer command
+returns `stale-edit`. Serialized JSON contains data rather than executable
+descriptor callbacks.
 
 `updateWork` retains the target work ID and collection order, then increments
 the native plan revision. Replacement and import preserve the supplied native
@@ -222,12 +243,25 @@ part of an accepted plan.
 ## Cost and input-frequency contract
 
 Let P be people, T teams, W work items, R all participant/support reference
-edges, and B the bounded text and serialized payload. Admission, index
+edges, A practice assignments, and B the bounded text and serialized payload. Admission, index
 construction, reference validation, calculation, and field-owned projection
-take O(P + T + W + R + B) time under ordinary expected Map/Set lookup. Prepared
+take O(P + T + W + A + R + B) time under ordinary expected Map/Set lookup. Prepared
 state, indexes, results, and serialization take proportional memory. A complete
 accepted edit prepares the admitted revision; the contract describes that
 linear work explicitly.
+
+Array admission reads its own length data descriptor once, validates that
+count, and uses the same count for key checks and iteration. A changing direct
+JavaScript array view therefore retains one bounded traversal. Rejection of
+direct object candidates also includes O(K) time and temporary key-array
+space for K caller-supplied own keys enumerated before shape rejection.
+`importText` supplies the byte-bounded external-data route. Direct object APIs
+assume ordinary cooperative JavaScript receivers; arbitrary Proxy trap runtime
+or callback exceptions remain caller code rather than an isolated data parser.
+
+`read` and `capture` take O(1) work. The owner retains one current projection;
+a caller retaining H historical captures retains the sum of those H revision
+sizes. The future baseline/undo owner must choose its history retention bound.
 
 Static catalogue lookup and numeric rules are prepared outside the per-work
 loops. The work pass resolves participants through its existing index; it

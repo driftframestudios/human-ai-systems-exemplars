@@ -200,6 +200,36 @@ test('import and collection budgets reject before downstream work', () => {
   rejects(edges, 'reference-budget');
 });
 
+test('array admission snapshots its own length and bounds traversal despite a changing view', () => {
+  const plan = createExamplePlan();
+  let lengthReads = 0;
+  let lengthDescriptors = 0;
+  let personDescriptors = 0;
+  plan.people = new Proxy([], {
+    get(target, key, receiver) {
+      // A live view changes after two observations. Its own array length stays zero.
+      if (key === 'length') return ++lengthReads <= 2 ? 0 : LIMITS.people + 1;
+      return Reflect.get(target, key, receiver);
+    },
+    getOwnPropertyDescriptor(target, key) {
+      if (key === 'length') lengthDescriptors += 1;
+      if (/^\d+$/.test(key)) {
+        personDescriptors += 1;
+        return { enumerable: true, configurable: true, writable: true,
+          value: { id: `person-${key}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0 } };
+      }
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  plan.teams = []; plan.work = []; plan.practices = [];
+  const result = preparePlan(plan);
+  assert.equal(result.state.people.length, 0);
+  assert.equal(result.result.plannedCommitmentCents, 0);
+  assert.equal(lengthDescriptors, 1);
+  assert.equal(lengthReads, 0);
+  assert.equal(personDescriptors, 0);
+});
+
 test('large individually valid line amounts cannot overflow the aggregate', () => {
   const plan = createExamplePlan();
   plan.people = Array.from({ length: 16 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour }));
@@ -208,6 +238,39 @@ test('large individually valid line amounts cannot overflow the aggregate', () =
   plan.work = Array.from({ length: 200 }, (_, i) => ({ ...plan.work[0], id: `work-${i}`, personIds, minutesPerOccurrence: LIMITS.minutesPerOccurrence, occurrences: LIMITS.occurrences }));
   plan.practices = [];
   rejects(plan, 'money-overflow');
+});
+
+test('safe settled ceiling survives larger display-line totals and reordered work', () => {
+  const plan = createExamplePlan();
+  plan.people = [
+    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: 100000000 },
+    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 56514959 },
+    { id: 'filler', label: 'Filler', fundedMinutes: 0, rateCentsPerHour: 60 },
+  ];
+  plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two', 'filler'] }];
+  const work = (id, personIds, minutesPerOccurrence, occurrences) => ({
+    id, label: id, teamId: 'delivery', personIds, minutesPerOccurrence, occurrences,
+    funding: 'additional', status: 'planned', timing: null,
+  });
+  // The two settled pools total 9,007,199,239,831,992 cents. The filler buys
+  // 14,908,999 minutes at one cent/minute, reaching the exact safe ceiling.
+  plan.work = Array.from({ length: 240 }, (_, i) => work(`work-${i}`, ['one', 'two'], 1439, 9998));
+  plan.work.push(work('filler-one', ['filler'], 1440, 10000));
+  plan.work.push(work('filler-two', ['filler'], 1440, 353));
+  plan.work.push(work('filler-three', ['filler'], 679, 1));
+  plan.practices = [];
+
+  for (const reverse of [false, true]) {
+    if (reverse) plan.work.reverse();
+    const result = preparePlan(plan).result;
+    assert.equal(result.plannedCommitmentCents, Number.MAX_SAFE_INTEGER);
+    assert.equal(result.knownCommitmentCents, 9007199254740991);
+    const displayCents = result.ledger.reduce((total, row) => total + row.lines.reduce((subtotal, line) => subtotal + BigInt(line.cents), 0n), 0n);
+    assert.equal(displayCents, 9007199254741159n);
+    assert.equal(result.lineRoundingAdjustments.additionalCents, -168);
+    assert.equal(displayCents + BigInt(result.lineRoundingAdjustments.additionalCents), 9007199254740991n);
+    assert.equal(result.standing, 'priced');
+  }
 });
 
 test('public projections and vocabulary are frozen; input records retain their own ownership', () => {

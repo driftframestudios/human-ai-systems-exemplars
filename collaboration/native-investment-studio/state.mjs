@@ -12,6 +12,8 @@ export function createStudio(initial = createExamplePlan()) {
       // An exact immutable projection binds both target revision and model instance.
       if (expected !== accepted) throw new PlanError('stale-edit', 'edit', 'Read the current plan before applying this edit.');
       const next = operation();
+      // Direct-JavaScript reflection can run a reentrant caller callback.
+      if (expected !== accepted) throw new PlanError('stale-edit', 'edit', 'Read the newer accepted plan before applying this edit.');
       accepted = next.projection;
       if (next.positions) workPositions = next.positions;
       return Object.freeze({ ok: true, projection: accepted });

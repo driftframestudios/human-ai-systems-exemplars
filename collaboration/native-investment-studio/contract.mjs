@@ -1,6 +1,8 @@
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
+const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
+const NUMBER_CHARACTER = /[0-9.eE+-]/;
 const PRACTICE_IDS = new Set(PRACTICES.map(record => record.id));
 const encoder = new TextEncoder();
 const FUNDING = Object.freeze(['allocated', 'additional']);
@@ -50,14 +52,19 @@ function record(value, kind, path) {
 }
 
 function list(value, max, path) {
-  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype || value.length > max) {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
     reject('collection', path, `Supply a dense array with at most ${max} entries.`);
   }
-  if (Reflect.ownKeys(value).length !== value.length + 1) {
+  const descriptor = Object.getOwnPropertyDescriptor(value, 'length');
+  const length = descriptor && Object.hasOwn(descriptor, 'value') ? descriptor.value : undefined;
+  if (!Number.isSafeInteger(length) || length < 0 || length > max) {
+    reject('collection', path, `Supply a dense array with at most ${max} entries.`);
+  }
+  if (Reflect.ownKeys(value).length !== length + 1) {
     reject('collection', path, 'Supply consecutive array entries.');
   }
   const owned = [];
-  for (let index = 0; index < value.length; index += 1) {
+  for (let index = 0; index < length; index += 1) {
     const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
     if (!descriptor?.enumerable || !Object.hasOwn(descriptor, 'value')) {
       reject('data-property', `${path}[${index}]`, 'Supply an enumerable array value.');
@@ -135,13 +142,19 @@ function price(minutes, rate) {
   return Number(cents);
 }
 
+function reconcile(settledCents, displayCents) {
+  const adjustment = Number(BigInt(settledCents) - displayCents);
+  if (!Number.isSafeInteger(adjustment)) reject('money-overflow', 'result', 'Keep the display reconciliation within the safe integer-cent range.');
+  return adjustment;
+}
+
 function calculate(state, peopleById) {
   const capacity = new Map(state.people.map(person => [person.id, { personId: person.id, fundedMinutes: person.fundedMinutes, allocatedMinutes: 0, additionalMinutes: 0 }]));
   let fundedKnownCents = 0;
   let additionalKnownCents = 0;
   let allocatedKnownCents = 0;
-  let additionalLineCents = 0;
-  let allocatedLineCents = 0;
+  let additionalLineCents = 0n;
+  let allocatedLineCents = 0n;
   let incomplete = false;
   const staffing = state.people.map(person => {
     const cents = price(person.fundedMinutes, person.rateCentsPerHour);
@@ -159,10 +172,10 @@ function calculate(state, peopleById) {
       const usage = capacity.get(personId);
       if (work.funding === 'allocated') {
         usage.allocatedMinutes += minutes;
-        if (cents !== null) allocatedLineCents = sum(allocatedLineCents, cents);
+        if (cents !== null) allocatedLineCents += BigInt(cents);
       } else {
         usage.additionalMinutes += minutes;
-        if (cents !== null) additionalLineCents = sum(additionalLineCents, cents);
+        if (cents !== null) additionalLineCents += BigInt(cents);
       }
       if (cents === null) incomplete = true;
       return { personId, minutes, cents };
@@ -186,7 +199,7 @@ function calculate(state, peopleById) {
     currency: CONTRACT.currency,
     plannedCommitmentCents: incomplete ? null : knownCommitmentCents,
     knownCommitmentCents, fundedKnownCents, additionalKnownCents, allocatedKnownCents,
-    lineRoundingAdjustments: { allocatedCents: allocatedKnownCents - allocatedLineCents, additionalCents: additionalKnownCents - additionalLineCents },
+    lineRoundingAdjustments: { allocatedCents: reconcile(allocatedKnownCents, allocatedLineCents), additionalCents: reconcile(additionalKnownCents, additionalLineCents) },
     staffing, ledger, capacity: capacityRows, obligations,
     timing: 'unscheduled',
   };
@@ -250,12 +263,35 @@ export function preparePlan(candidate) {
   return freeze({ state, result: calculate(state, peopleById), serialized });
 }
 
+// JSON.parse owns syntax. This linear pass retains numeric spelling admission
+// across runtimes, including those without JSON reviver source context.
+function admitIntegerTokens(source) {
+  for (let cursor = 0; cursor < source.length; cursor += 1) {
+    const character = source[cursor];
+    if (character === '"') {
+      cursor += 1;
+      while (cursor < source.length && source[cursor] !== '"') {
+        if (source[cursor] === '\\') cursor += 1;
+        cursor += 1;
+      }
+    } else if (character === '-' || (character >= '0' && character <= '9')) {
+      let end = cursor + 1;
+      while (end < source.length && NUMBER_CHARACTER.test(source[end])) end += 1;
+      if (!INTEGER_TOKEN.test(source.slice(cursor, end))) {
+        reject('integer-token', 'import', 'Write numeric fields as whole-number JSON tokens; express fractions and exponents in the declared integer units.');
+      }
+      cursor = end - 1;
+    }
+  }
+}
+
 export function parsePlan(text) {
   if (typeof text !== 'string' || text.length > LIMITS.bytes || encoder.encode(text).byteLength > LIMITS.bytes) {
     reject('bytes', 'import', 'Supply JSON text within the declared UTF-8 budget.');
   }
   let raw;
   try { raw = JSON.parse(text); } catch { reject('json', 'import', 'Supply a complete JSON plan.'); }
+  admitIntegerTokens(text);
   return preparePlan(raw);
 }
 

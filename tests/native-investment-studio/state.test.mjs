@@ -182,3 +182,67 @@ test('separate instances and caller-owned initial records keep independent state
   assert.strictEqual(second.read(), secondProjection);
   assert.equal(secondProjection.result.plannedCommitmentCents, 120000);
 });
+
+test('replacement admission preserves a newer edit made by a direct-API descriptor callback', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  let nested;
+  const candidate = new Proxy(createExamplePlan(), {
+    getOwnPropertyDescriptor(target, key) {
+      if (!nested) {
+        nested = studio.updateWork('review', changedReview(before, { occurrences: 12 }), before);
+      }
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  const outer = studio.replace(candidate, before);
+  assert.equal(nested.ok, true);
+  assert.equal(nested.projection.result.plannedCommitmentCents, 240000);
+  expectHeld(outer, nested.projection, 'stale-edit');
+  assert.strictEqual(studio.read(), nested.projection);
+  assert.equal(studio.exportText(), nested.projection.serialized);
+});
+
+test('work admission preserves a reentrant replacement and its refreshed identity index', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  const replacement = createExamplePlan();
+  replacement.work = [{ ...replacement.work[0], id: 'preparation', minutesPerOccurrence: 15, occurrences: 1 }];
+  replacement.practices = [];
+  let nested;
+  const candidate = new Proxy(changedReview(before, { minutesPerOccurrence: 60 }), {
+    getOwnPropertyDescriptor(target, key) {
+      if (!nested) nested = studio.importText(JSON.stringify(replacement), before);
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  const outer = studio.updateWork('review', candidate, before);
+  assert.equal(nested.ok, true);
+  assert.equal(nested.projection.result.plannedCommitmentCents, 10000);
+  expectHeld(outer, nested.projection, 'stale-edit');
+  assert.deepEqual(studio.read().state.work.map(row => row.id), ['preparation']);
+  const revised = studio.updateWork('preparation', { ...nested.projection.state.work[0], minutesPerOccurrence: 30 }, nested.projection);
+  assert.equal(revised.ok, true);
+  assert.equal(revised.projection.result.plannedCommitmentCents, 20000);
+});
+
+test('import admits integer spellings while retaining the accepted plan after rounded numeric tokens', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  for (const token of ['-1e-999', '-0.1e-999', '1.0000000000000001', '29.9999999999999999999', '1.0', '3e1']) {
+    const source = before.serialized.replace('"minutesPerOccurrence":30', `"minutesPerOccurrence":${token}`);
+    expectHeld(studio.importText(source, before), before, 'integer-token');
+    assert.equal(studio.exportText(), before.serialized);
+  }
+  const candidate = createExamplePlan();
+  candidate.people[0].label = 'Review "1e999" \\ 1.0000000000000001 and 29.99';
+  const result = studio.importText(JSON.stringify(candidate), before);
+  assert.equal(result.ok, true);
+  assert.equal(result.projection.state.people[0].label, candidate.people[0].label);
+  assert.equal(result.projection.result.plannedCommitmentCents, 120000);
+  const signedZero = result.projection.serialized.replace('"minutesPerOccurrence":30', '"minutesPerOccurrence":-0');
+  const zeroResult = studio.importText(signedZero, result.projection);
+  assert.equal(zeroResult.ok, true);
+  assert.ok(Object.is(zeroResult.projection.state.work[0].minutesPerOccurrence, 0));
+  assert.equal(zeroResult.projection.result.plannedCommitmentCents, 0);
+});
