@@ -2,6 +2,7 @@ import './node-runtime-admission.mjs';
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { INVESTMENT_HOSTS, readInvestmentSources, assertInvestmentProjection } from "./project-investment-analysis.mjs";
+import { studioChaptersPath, readStudioChapterInputs, assertStudioChapterProjection } from "./materialize-about-studio-chapters.mjs";
 import { fileURLToPath } from "node:url";
 import visitorBoundaryContract from "../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 import {
@@ -273,8 +274,8 @@ export function validateCanvasRouteContract(contract) {
     ["eligible"],
     "Canvas activation standings",
   );
-  if (!Array.isArray(contract.routes) || contract.routes.length !== 15) {
-    fail("Canvas route manifest must declare exactly 15 routes.");
+  if (!Array.isArray(contract.routes) || contract.routes.length !== 16) {
+    fail("Canvas route manifest must declare exactly 16 routes.");
   }
 
   const routeIds = new Set();
@@ -702,6 +703,9 @@ export async function createCanvasPackagePlan(options = {}) {
   const contract = routeManifestReading.value;
   validateCanvasRouteContract(contract);
   const investmentSources = await readInvestmentSources(paths.repositoryRoot);
+  const studioChapterInputs = contract.routes.some(route => route.source_file === studioChaptersPath)
+    ? await readStudioChapterInputs(paths.repositoryRoot) : null;
+  if (studioChapterInputs) assertInvestmentProjection(studioChapterInputs.source, investmentSources);
 
   const outputFiles = new Map();
   const portableOutputPaths = new Set(["route-manifest.json"]);
@@ -722,6 +726,7 @@ export async function createCanvasPackagePlan(options = {}) {
     }
     const sourceHtml = sourceBytes.toString("utf8");
     if (INVESTMENT_HOSTS.includes(route.source_file)) assertInvestmentProjection(sourceHtml, investmentSources);
+    if (route.source_file === studioChaptersPath) assertStudioChapterProjection(sourceHtml, studioChapterInputs);
     const projection = deriveCanvasProjection(sourceHtml, route);
     const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes

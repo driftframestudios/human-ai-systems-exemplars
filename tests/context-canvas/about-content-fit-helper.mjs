@@ -13,10 +13,11 @@ export const aboutPath = '/context-canvas-project-surface/context-canvas/index.h
 export const engines = { chromium, firefox, webkit };
 export const receivers = Object.freeze({
   gallery: { label: 'Gallery', path: '/v1/canvas/ai-method-gallery/' },
+  'studio-chapters': { label: 'Studio chapters', path: '/v1/canvas/investment-studio-chapters/' },
   'prompt-conditions': { label: 'Prompt Conditions Explorer', path: '/v1/canvas/prompt-conditions-explorer/' },
 });
 
-// These two About receivers share their packaged transport, opaque sandbox,
+// These About receivers share their packaged transport, opaque sandbox,
 // telemetry, geometry and cleanup mechanics. Cases retain content expectations.
 export async function createAboutContentFitHarness() {
   const browsers = new Map();
@@ -51,7 +52,7 @@ export async function createAboutContentFitHarness() {
       if (!browsers.has(engine)) browsers.set(engine, await engines[engine].launch());
       const { childObserverAvailable = true, ...contextOptions } = options;
       const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 900 }, ...contextOptions });
-      if (!childObserverAvailable) await context.addInitScript(() => { window.ResizeObserver = undefined; });
+      if (!childObserverAvailable) await context.addInitScript(() => { delete window.ResizeObserver; });
       await context.route('**/*', async route => {
         const url = new URL(route.request().url());
         if (url.origin === parentServer.origin && url.pathname === aboutPath) {
@@ -129,12 +130,29 @@ export async function fitted(observation) {
 export async function wheelObservation(observation, selector = 'header h1') {
   const target = observation.frame.locator(selector).first();
   await target.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
-  const box = await target.boundingBox();
+  let box = await target.boundingBox();
   assert.ok(box && box.width > 0 && box.height > 0);
   const positions = async () => ({ parent: await observation.page.evaluate(() => scrollY),
     child: await observation.frame.evaluate(() => scrollY), local: await target.evaluate(element => element.scrollTop) });
+  const viewport = observation.page.viewportSize();
+  const navigationBottom = await observation.page.locator('.nav__top--sticky').evaluate(node => node.getBoundingClientRect().bottom);
+  // Native centering may align a tall frame while leaving an oversized control
+  // beyond the parent viewport. Place that control before measuring wheel input.
+  if (Math.min(box.y + box.height, viewport.height) - Math.max(box.y, navigationBottom) <= 2) {
+    await observation.page.evaluate(top => scrollBy({ top, behavior: 'instant' }), box.y - navigationBottom - 16);
+    box = await target.boundingBox();
+    assert.ok(box && box.width > 0 && box.height > 0);
+  }
+  const visible = { left: Math.max(box.x, 0), right: Math.min(box.x + box.width, viewport.width),
+    top: Math.max(box.y, navigationBottom), bottom: Math.min(box.y + box.height, viewport.height) };
+  assert.ok(visible.right - visible.left > 2 && visible.bottom - visible.top > 2, 'the wheel target has a visible intersection below About navigation');
+  // A naturally tall editor can begin above the parent viewport after centering.
+  // Keep ordinary target coordinates while placing oversized targets in view.
+  const x = Math.min(visible.right - 1, Math.max(visible.left + 1, box.x + Math.min(box.width / 2, 80)));
+  const y = Math.min(visible.bottom - 1, Math.max(visible.top + 1, box.y + Math.min(box.height / 2, 20)));
+  await observation.page.mouse.move(x, y);
+  await expect.poll(() => target.evaluate(node => node.matches(':hover'))).toBe(true);
   const before = await positions();
-  await observation.page.mouse.move(box.x + Math.min(box.width / 2, 80), box.y + Math.min(box.height / 2, 20));
   await observation.page.mouse.wheel(0, 260);
   await expect.poll(async () => {
     const current = await positions();

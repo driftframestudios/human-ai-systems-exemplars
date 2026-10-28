@@ -51,23 +51,23 @@ test("the shared package writer rejects paths outside its output root", async ()
   }
 });
 
-test("the Canvas family plan follows the authored 15-route manifest", async () => {
+test("the Canvas family plan follows the authored 16-route manifest", async () => {
   const first = await createCanvasPackagePlan();
   const second = await createCanvasPackagePlan();
 
   assert.equal(first.contract.base_path, "/v1/canvas/");
-  assert.equal(first.contract.routes.length, 15);
-  assert.equal(first.outputFiles.size, 40);
+  assert.equal(first.contract.routes.length, 16);
+  assert.equal(first.outputFiles.size, 41);
   assert.equal(
     first.receipt.route_contract.file,
     "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
   );
   assert.deepEqual(first.receipt.package_contract, {
-    primary_routes: 15,
-    decorated_routes: 15,
+    primary_routes: 16,
+    decorated_routes: 16,
     byte_identical_routes: 0,
     navigation_adapted_routes: 1,
-    generated_files: 40,
+    generated_files: 41,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
     browser_request_observation_required: true,
@@ -237,8 +237,8 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
     assert.ok(bytes.equals(aggregate.outputFiles.get(`canvas/${file}`)), `Canvas ${file}`);
   }
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
-  assert.equal(aggregate.receipt.package_contract.primary_routes, 38);
-  assert.equal(aggregate.receipt.package_contract.generated_files, 68);
+  assert.equal(aggregate.receipt.package_contract.primary_routes, 39);
+  assert.equal(aggregate.receipt.package_contract.generated_files, 69);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,
     [...aggregate.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
@@ -252,7 +252,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
         bytes: [...core.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
       },
       {
-        routes: 15,
+        routes: 16,
         files: canvas.outputFiles.size,
         bytes: [...canvas.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
       },
@@ -280,7 +280,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   );
 
   const verification = await checkAggregatePackage(aggregate);
-  assert.equal(verification.files, 68);
+  assert.equal(verification.files, 69);
   assert.ok(verification.bytes > 1_740_871);
 });
 

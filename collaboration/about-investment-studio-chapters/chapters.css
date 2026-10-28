@@ -1,0 +1,163 @@
+/* About Studio receiver only, loaded after the original Studio styles. The full
+   Studio owns its palette, controls and calculations; this layer owns chapters,
+   the live overview and natural-height editing inside the fitted carrier. */
+html[data-about-studio-chapters="ready"] body {
+  min-inline-size: 0;
+}
+
+html[data-about-studio-chapters="ready"] .page-nav {
+  display: none;
+}
+
+html[data-about-studio-chapters="ready"] main {
+  padding: clamp(.8rem, 3vw, 2rem);
+  min-inline-size: 0;
+}
+
+html[data-about-studio-chapters="ready"] main [id] {
+  scroll-margin-block-start: 1rem;
+}
+
+html[data-about-studio-chapters="ready"] .intro h1 {
+  font-size: clamp(1.8rem, 4vw, 3.3rem);
+  max-inline-size: 22ch;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-chapters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  min-inline-size: 0;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview {
+  background: var(--ink-strong);
+  color: var(--paper);
+  border: 2px solid var(--line);
+  border-block-start: .6rem solid var(--tiffany);
+  border-radius: var(--radius);
+  padding: clamp(.85rem, 2vw, 1.4rem);
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview__title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: inherit;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview__plan {
+  margin: .4rem 0 0;
+  font-weight: 750;
+  color: var(--tiffany);
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview .estimate {
+  padding: 1rem 0;
+  background: transparent;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview :is(.estimate-label, .estimate-note) {
+  color: var(--info);
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview .estimate-band {
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-full-view {
+  display: inline-block;
+  color: var(--paper);
+  font-weight: 750;
+  text-underline-offset: .2em;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-full-view:focus-visible {
+  outline: 3px solid var(--tiffany);
+  outline-offset: 4px;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-overview__note {
+  max-inline-size: 75ch;
+  margin: .55rem 0 0;
+  font-size: .8rem;
+  color: var(--info);
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-chapter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-chapter-button {
+  flex: 1 1 9rem;
+  min-inline-size: 0;
+  min-block-size: 2.75rem;
+  padding: .7rem .85rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 7px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-chapter-button[aria-pressed="true"] {
+  background: var(--tiffany);
+  border-block-end-width: 5px;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  min-inline-size: 0;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-panel > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+html[data-about-studio-chapters="ready"] [data-studio-panel][hidden] {
+  display: none;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-panel__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-panel__description {
+  max-inline-size: 75ch;
+  margin: -.6rem 0 0;
+}
+
+html[data-about-studio-chapters="ready"] .about-studio-panel > :is(.panel, .component-zone, .horizon-field, .lens-field, .method, .investment-analysis) {
+  margin-block: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+html[data-about-studio-chapters="ready"] .summary {
+  position: static;
+}
+
+html[data-about-studio-chapters="ready"] .investment-analysis textarea {
+  overflow: hidden;
+  resize: none;
+  max-block-size: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (forced-colors: active) {
+  html[data-about-studio-chapters="ready"] .about-studio-overview {
+    background: Canvas;
+    color: CanvasText;
+  }
+  html[data-about-studio-chapters="ready"] .about-studio-chapter-button[aria-pressed="true"] {
+    outline: 3px double CanvasText;
+  }
+}

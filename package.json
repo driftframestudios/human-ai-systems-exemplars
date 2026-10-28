@@ -160,7 +160,10 @@
     "test:about-scroll-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-heatmap.browser.mjs tests/context-canvas/about-gallery-fit.browser.mjs tests/context-canvas/about-prompt-fit.browser.mjs",
     "test:about-disclosure-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-disclosure-readings.browser.mjs",
     "build:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs",
-    "check:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs --check"
+    "check:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs --check",
+    "build:about-studio-chapters": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-studio-chapters.mjs",
+    "check:about-studio-chapters": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-studio-chapters.mjs --check",
+    "test:about-studio-chapters-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-studio-chapters.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"
