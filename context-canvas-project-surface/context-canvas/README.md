@@ -257,6 +257,31 @@ PODA's second section title, and independently composed asides keep their
 authored position. These routes load the neutral component directly after
 `expanded.css`; their route bundles continue to own color, measure, and rhythm.
 
+The AI Systems family also receives a combined narrow-width and enlarged-text
+observation through `npm run test:ai-narrow-reading-browser`. Family-owned
+wrapping preserves the selected type scale while headings and navigation-card
+copy fit their available width. Deliberate code and table scroll regions retain
+their local owners. [Issue #567](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/567)
+records the source scope and the distinction between automated engine evidence
+and native-browser confirmation.
+
+Eight independently styled examples opt their `main` reading into
+`.debrief-reading`: FMI Clinical Trial Coordination, FMI LIMS/ELN, Genomic
+Viewer, Prompt-Side Conditions, Initiative Costing, Recoverable Enterprise
+Forms, One Figure, Several Readings, and Who To Believe. The shared Debrief
+component supplies emergency word wrapping at that authored boundary while
+tables keep their existing intrinsic measures and local scrolling. Other
+component consumers retain their existing typography owners.
+
+`npm run test:linked-reading-containment-browser` observes the eight readings
+at 320px and 390px with ordinary and doubled root text, alongside Conditioning
+Field as an independent control. Individual text fragments, ordinary desktop
+composition, real keyboard controls, local evidence access, alternate modes,
+and restored wrapping faults provide the fitting evidence. The two narrow
+reading suites share the same text-observation helper and retain their distinct
+consumer populations. [Issue #568](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/568)
+connects this repair with the original enlarged-text discovery.
+
 `npm run test:ai-systems-reading-layout-browser` exercises the twenty-six
 AI Systems / Shared Machinery primary and directly linked example readings,
 plus the Debriefs parent, in Chromium, Firefox, and Playwright WebKit. The

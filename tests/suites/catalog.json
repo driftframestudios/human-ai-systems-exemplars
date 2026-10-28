@@ -2565,6 +2565,28 @@
       ]
     },
     {
+      "id": "browser.context-canvas.ai-narrow-reading",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-narrow-reading.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "AI Systems family reading at narrow widths with enlarged text: complete heading and navigation-card content, local scroll ownership, normal-size controls and fault restoration across Chromium, Firefox and Playwright WebKit. Native browser and deployed confirmation retain separate observations.",
+      "aliases": [
+        "test:ai-narrow-reading-browser"
+      ]
+    },
+    {
       "id": "browser.context-canvas.card-rail-clearance",
       "family": "context-canvas",
       "kind": "node-test",
@@ -2584,6 +2606,28 @@
       "scope": "Thirty generated-rail routes retain local-owner card width, complete text, borders and hard shadows, with the accepted rail/shadow adjacency. The family inventory, representative responsive widths, enlarged text, narrow touch, authored-rail and scriptless controls, and a rejected width-cap fault receive three-engine observations. Native browser and deployed confirmation retain separate observations.",
       "aliases": [
         "test:card-rail-clearance-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.linked-reading-containment",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/linked-reading-containment.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Eight independently styled AI example readings preserve complete text at narrow widths with enlarged type; the independent control, ordinary desktop geometry, local evidence scrolling, keyboard access, alternate modes, and restored wrapping faults remain explicit across Chromium, Firefox, and Playwright WebKit.",
+      "aliases": [
+        "test:linked-reading-containment-browser"
       ]
     },
     {
@@ -2740,7 +2784,9 @@
         "browser.context-canvas.debrief-hero-wrapping",
         "browser.context-canvas.debrief-caption-colors",
         "browser.context-canvas.debrief-architecture-cards",
+        "browser.context-canvas.ai-narrow-reading",
         "browser.context-canvas.card-rail-clearance",
+        "browser.context-canvas.linked-reading-containment",
         "browser.context-canvas.debrief-evidence-cards",
         "browser.context-canvas.debrief-callout-integrity"
       ]
