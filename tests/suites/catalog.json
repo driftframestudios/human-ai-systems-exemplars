@@ -2699,6 +2699,28 @@
       "aliases": [
         "test:about-scroll-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.about-disclosures",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-disclosure-readings.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "About Career and Quality native disclosure reach with scripting enabled or disabled, fixed record membership, state labels and keyboard focus, complete parent print readings for thirteen records and five Prompt Conditions rows, repeated screen/print state preservation, and restored hiding faults in Chromium, Firefox and Playwright WebKit. Native applications and physical pagination retain separate observations.",
+      "aliases": [
+        "test:about-disclosure-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2815,7 +2837,8 @@
         "browser.context-canvas.linked-reading-containment",
         "browser.context-canvas.debrief-evidence-cards",
         "browser.context-canvas.debrief-callout-integrity",
-        "browser.context-canvas.about-scroll"
+        "browser.context-canvas.about-scroll",
+        "browser.context-canvas.about-disclosures"
       ]
     },
     {
@@ -2842,7 +2865,8 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.about-disclosures"
       ]
     },
     {
@@ -3244,6 +3268,9 @@
           "tests/context-canvas/about-heatmap.browser.mjs",
           "tests/context-canvas/about-gallery-fit.browser.mjs",
           "tests/context-canvas/about-prompt-fit.browser.mjs"
+        ],
+        "test:about-disclosure-browser": [
+          "tests/context-canvas/about-disclosure-readings.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

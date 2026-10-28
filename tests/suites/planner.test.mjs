@@ -9,6 +9,7 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/context-canvas/about-disclosure-readings.browser.mjs',
   'tests/context-canvas/about-heatmap.test.mjs',
   'tests/context-canvas/about-prompt-fit.browser.mjs',
   'tests/context-canvas/about-content-fit.test.mjs',
@@ -451,6 +452,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
     'browser.context-canvas.debrief-link-cues',
     'browser.context-canvas.debrief-hero-wrapping',
     'browser.context-canvas.debrief-caption-colors',
+    'browser.context-canvas.about-disclosures',
   ]);
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment', 'node.public-references',

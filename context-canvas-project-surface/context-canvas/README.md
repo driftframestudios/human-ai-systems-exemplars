@@ -69,6 +69,19 @@ while the height channel is unavailable.
 With scripting disabled, About retains the Explorer's native static-overview
 disclosure so visitors can open its complete five-condition reading by keyboard.
 
+Career and Quality also keep their native disclosure summaries available with
+scripting disabled. All three summaries pair a closed-state “Show” action with
+an open-state “Hide” action; the folios name the additional record count.
+`styles/routes/about-noscript.css` owns that fallback;
+`styles/routes/about.css` owns the three disclosures' print presentation. Its
+`::details-content` rule reveals all thirteen records and the five-condition
+table for print while preserving the visitor's screen `open` attributes. This
+follows the existing Visualization Atlas print approach and uses the authored
+records directly. The focused browser checks observe native visibility and text
+fragments because the current Playwright WebKit visibility helper treats closed
+disclosure ancestry as hidden even when print CSS exposes the content. Restored
+hiding faults must fail those same observations.
+
 Focused checks:
 
 ```sh
@@ -78,6 +91,7 @@ node --test tests/context-canvas/about-content-fit.test.mjs
 npm run build:about-heatmap
 npm run check:about-heatmap
 npm run test:about-scroll-browser
+npm run test:about-disclosure-browser
 ```
 
 The browser suite exercises Chromium, Firefox, and Playwright WebKit. Its fitted
@@ -94,6 +108,11 @@ Explorer iteration and shared adapter. The reviewed PR is the durable receiving
 record. A future authorized release publishes and verifies compatible children
 before the parent enhancement. Publication remains held; #596 retains independent
 probability-calibration ownership, and #589 remains human-held.
+Issue #621 owns the parent folio and static-prompt disclosure repair. Its print
+checks cover the declared browser engines and media area; physical pagination,
+native applications, and older engines with different disclosure rendering keep
+their separate receiving observations. Issue #623 tracks the media
+visual-description disclosure's separate print repair.
 
 ## Primary navigation
 
