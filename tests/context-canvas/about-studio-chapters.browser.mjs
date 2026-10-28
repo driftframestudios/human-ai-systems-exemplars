@@ -186,6 +186,92 @@ for (const engine of Object.keys(engines)) {
     } finally { await observation.close(); }
   });
 
+  test(`${engine}: Studio owns chapter fragments while preserving the visitor's latest selection`, { timeout: 90000 }, async () => {
+    const observation = await session(engine);
+    try {
+      await fitted(observation);
+      await selectChapter(observation.frame, 'coordination');
+      const initialLength = await observation.frame.evaluate(() => {
+        window.studioFragmentClicks = [];
+        document.addEventListener('click', event => {
+          const link = event.target.closest?.('a[href^="#"]');
+          if (link) window.studioFragmentClicks.push({ href: link.getAttribute('href'), prevented: event.defaultPrevented });
+        });
+        return history.length;
+      });
+      const rolesLink = observation.frame.locator('.horizon-jump[href="#roles-title"]').first();
+      await rolesLink.click();
+      assert.deepEqual(await observation.frame.evaluate(() => window.studioFragmentClicks.at(-1)),
+        { href: '#roles-title', prevented: true }, 'the chapter adapter owns the recognized click before native fragment navigation');
+      assert.deepEqual(await observation.frame.evaluate(() => ({ hash: location.hash, length: history.length })),
+        { hash: '#roles-title', length: initialLength + 1 }, 'one new destination creates one recoverable history entry');
+      await assertFocusReach(observation, observation.frame.locator('#roles-title'));
+      await selectChapter(observation.frame, 'coordination');
+      await rolesLink.click();
+      await assertFocusReach(observation, observation.frame.locator('#roles-title'));
+      assert.equal(await observation.frame.evaluate(() => history.length), initialLength + 1,
+        'revisiting the current fragment keeps its existing history entry');
+
+      await selectChapter(observation.frame, 'comparison');
+      await observation.frame.locator('[data-summary-tab="receipts"]').click();
+      await observation.frame.locator('#summary-panel-receipts a[href="#quality-title"]').evaluate(link => {
+        link.click();
+        document.querySelector('button[data-studio-chapter="coordination"]').click();
+      });
+      await observation.frame.evaluate(() => new Promise(resolve => {
+        requestAnimationFrame(() => setTimeout(() => requestAnimationFrame(resolve), 0));
+      }));
+      await assertChapter(observation.frame, 'coordination');
+      assert.deepEqual(await observation.frame.evaluate(() => window.studioFragmentClicks.at(-1)),
+        { href: '#quality-title', prevented: true }, 'a later chapter selection supersedes the owned fragment request');
+      assert.equal(await observation.frame.evaluate(() => history.length), initialLength + 2);
+
+      const delegated = await observation.frame.evaluate(() => {
+        const cases = [
+          { name: 'unknown fragment', href: '#fixture-unowned-fragment' },
+          { name: 'another origin', href: 'https://example.invalid/#roles-title' },
+          { name: 'another path', href: '../fixture-unowned-path/#roles-title' },
+          { name: 'another query', href: '?fixture=delegated#roles-title' },
+          ...['ctrlKey', 'metaKey', 'shiftKey', 'altKey'].map(key => ({ name: key, options: { [key]: true } })),
+          { name: 'auxiliary button', options: { button: 1 } },
+          { name: 'new browsing context', target: '_blank' },
+          { name: 'download', download: '' },
+        ];
+        return cases.map(({ name, href = '#roles-title', options = {}, ...attributes }) => {
+          const link = document.createElement('a');
+          link.href = href;
+          for (const [key, value] of Object.entries(attributes)) link.setAttribute(key, value);
+          document.body.append(link);
+          const before = { hash: location.hash, length: history.length, chapter: document.documentElement.dataset.studioChapter };
+          let prevented;
+          // Observe after the adapter's document-capture handler, then keep the
+          // fixture's delegated default action inside this browser context.
+          const observe = event => {
+            if (event.target !== link) return;
+            prevented = event.defaultPrevented;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          };
+          document.body.addEventListener('click', observe, true);
+          try { link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, ...options })); }
+          finally { document.body.removeEventListener('click', observe, true); link.remove(); }
+          return { name, prevented, before, after: { hash: location.hash, length: history.length, chapter: document.documentElement.dataset.studioChapter } };
+        });
+      });
+      assert.equal(delegated.length, 11, 'the delegated population includes each distinct activation boundary');
+      for (const { name, prevented, before, after } of delegated) {
+        assert.equal(prevented, false, `${name} keeps its browser-owned activation`);
+        assert.deepEqual(after, before, `${name} preserves the current chapter and history`);
+      }
+
+      const count = await observation.frame.locator('[data-kind="activity"][data-field="name"]').count();
+      await observation.frame.locator('[data-gap-add]').first().click();
+      await assertChapter(observation.frame, 'work');
+      await assertFocusReach(observation, field(observation.frame, 'activity', count, 'name'));
+      assert.equal(await observation.frame.evaluate(() => scrollY), 0, 'the added field is visible through parent scrolling with the child at its vertical origin');
+    } finally { await observation.close(); }
+  });
+
   test(`${engine}: Studio natural chapter heights preserve parent reading through narrow and enlarged layouts`, { timeout: 120000 }, async () => {
     const observation = await session(engine, { reducedMotion: 'reduce' });
     const readings = [];
