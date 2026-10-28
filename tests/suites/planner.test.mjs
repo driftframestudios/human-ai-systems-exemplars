@@ -10,6 +10,7 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/contract.test.mjs',
+  'tests/native-investment-studio/draft.test.mjs',
   'tests/native-investment-studio/state.test.mjs',
   'tests/context-canvas/about-studio-chapters.test.mjs',
   'tests/context-canvas/about-studio-chapters.browser.mjs',
