@@ -1839,6 +1839,7 @@ p#on-dark-iron-ore {
     background: var(--about-paper);
     border: .15rem solid var(--about-ink);
     border-radius: .75rem;
+    box-shadow: var(--about-shadow);
     color: var(--about-ink);
     margin-block-start: 2rem;
     min-inline-size: 0;
