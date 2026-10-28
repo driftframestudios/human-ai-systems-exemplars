@@ -17,10 +17,10 @@ description: Resolves prototype layout pressure at the actual parent and iframe 
 - **Useful when:** Controls fragment inside an iframe, a comparison loses readable columns, focused content moves outside the preview, or a parent gutter changes the child breakpoint in use.
 - **Poor fit when:** The same defect exists at the same width in a standalone child and the parent contributes no relevant constraint, or the task concerns only schema meaning, hosting availability or prose. The child owner, semantic table contract, delivery owner or direct reasoning can carry those results.
 - **Smallest useful dose:** One parent/child pair, one visitor operation, the measured constraint and one observation that distinguishes the responsible owner.
-- **Foregrounds:** Actual available space, ownership of scrolling and focus, progressive disclosure, and the visitor's route from preview to full view.
+- **Foregrounds:** Actual available space, ownership of scrolling and focus, progressive disclosure, and the visitor's route between the embedded instrument and full view.
 - **May under-attend:** A clear preview can contain incorrect data or difficult table semantics. A local substitute can behave correctly while the deployed artifact, permissions or network route differs. Those claims retain their own receiving evidence.
 - **Interactions:** For an embedded-layout task, this skill owns the measured parent/child constraint and its layout disposition. Semantic table design supplies the table representation and comparison requirements, including native relationships and literal/unit continuity; this skill applies those requirements at the embedded boundary. For a table-design task, the table skill owns the final result and receives this skill's measurement contribution. Source-authority mapping can resolve a disputed canonical child; visual verification supplies fitting observations; packaging retains source/projection agreement. The task names one primary result owner.
-- **Rest or release when:** The intended preview operation and onward route work at the affected boundary, or an exact owner question preserves a viable continuation. A changed container, child, policy or visitor operation can reactivate the contract.
+- **Rest or release when:** The intended embedded operation and onward route work at the affected boundary, or an exact owner question preserves a viable continuation. A changed container, child, policy or visitor operation can reactivate the contract.
 
 ## Inputs, defaults and output
 
@@ -119,7 +119,7 @@ and returns a harness finding rather than a claim about the prototype.
 
 ## Operating sequence
 
-1. **Name the visitor operation:** State what the preview must make legible and what the full-view route supplies. Select one consequential symptom.
+1. **Name the visitor operation:** State what the embedded instrument must make legible and what the full-view route supplies. Select one consequential symptom.
 2. **Resolve ownership:** Trace parent, child and package identities; distinguish a layout constraint from a missing route, semantic defect or deployment question.
 3. **Measure the boundary:** Capture the parent and child dimensions, current disclosure/state and affected control or table. Use fitting standalone widths to isolate the parent contribution.
 4. **Choose the smallest source-owned change:** Reuse layout primitives, preserve readable measure and scroll ownership, and alter the responsible parent or child rule. Keep policy and unrelated surfaces intact.
@@ -177,7 +177,7 @@ private workspace access or a particular browser-testing tool.
 
 ## Completion and re-entry
 
-The receiver can operate the affected preview control or comparison, follow its
+The receiver can operate the affected embedded control or comparison, follow its
 full-view route, and locate the measured boundary and fitting evidence. A bounded
 finding can complete an observation-only task when the remaining measurement or
 permission has a named receiver. New source, parent composition, interaction,
