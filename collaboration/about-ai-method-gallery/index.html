@@ -17,8 +17,8 @@
     .learning{grid-column:1/-1;border-top:2px solid var(--line);padding:1rem;background:#fffdf8}.learning h2{font-size:1rem;margin:.15rem 0 .35rem}.learning>p{font-size:.78rem;color:var(--muted);max-width:78ch}.prompt-display{background:#17345f;border:2px solid var(--line);box-shadow:5px 5px 0 var(--tiffany);color:#fffaf2;margin:1rem 0;padding:.9rem;max-height:13rem;overflow:auto}.prompt-display:focus-visible{outline:4px solid var(--cobalt);outline-offset:3px}.prompt-display strong{color:var(--tiffany);display:block;font:800 .66rem var(--mono);letter-spacing:.07em;text-transform:uppercase}.prompt-display pre{color:inherit;font:600 .74rem/1.55 var(--mono);margin:.55rem 0 0;white-space:pre-wrap}.prompt-options{display:grid;gap:.55rem;grid-template-columns:repeat(3,minmax(0,1fr))}.prompt-button{align-items:center;background:var(--paper);border:2px solid var(--line);color:var(--ink);cursor:pointer;display:flex;font-weight:800;gap:.55rem;min-height:3rem;padding:.65rem;text-align:left}.prompt-button::before{content:"›";font:900 1.4rem/1 var(--mono);transform:rotate(0);transition:transform .18s ease}.prompt-button[aria-pressed="true"]{background:var(--tiffany);box-shadow:4px 4px 0 var(--ink)}.prompt-button[aria-pressed="true"]::before{transform:rotate(-90deg)}.prompt-button:focus-visible{outline:4px solid var(--cobalt);outline-offset:2px}.source-note{font-size:.7rem;color:var(--muted)}
     .semantic-equivalent,.contract{grid-column:1/-1;min-width:0;border-top:2px solid var(--line);padding:1rem;background:var(--route)}.semantic-equivalent h2,.contract summary,.matrix-disclosure>summary{font-size:1rem;font-weight:850;margin:.1rem 0 .5rem}.semantic-equivalent>p{font-size:.78rem;max-width:75ch}.table-region{max-width:100%;overflow-x:auto;border:2px solid var(--line);background:#fffdf8}.table-region:focus-visible{outline:4px solid var(--cobalt);outline-offset:3px}table{border-collapse:separate;border-spacing:0;min-width:62rem;width:100%}caption{font-weight:850;padding:.75rem;text-align:left}th,td{border-right:1px solid var(--line);border-top:1px solid var(--line);font-size:.72rem;padding:.65rem;text-align:left;vertical-align:top}thead th{background:var(--info)}tbody th{background:var(--paper);min-width:11rem}.contract{background:#fffdf8}.contract summary{cursor:pointer}.contract-grid{display:grid;gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr))}.contract-grid h3{font:800 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase}.contract-grid pre{background:#17345f;border:2px solid var(--line);color:#fffaf2;font:600 .68rem/1.5 var(--mono);margin:0;max-height:18rem;overflow:auto;padding:.8rem;white-space:pre-wrap}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .matrix-disclosure{margin-block:1rem}.matrix-disclosure>summary{cursor:pointer}.matrix-disclosure>summary:focus-visible{outline:4px solid var(--cobalt);outline-offset:3px}
-    html[data-gallery-fit="active"] .prompt-display,html[data-gallery-fit="active"] .contract-grid pre{max-height:none;overflow:visible}
-    html[data-gallery-fit="active"] .prompt-display pre,html[data-gallery-fit="active"] .contract-grid pre{min-inline-size:0;max-inline-size:100%;overflow-wrap:anywhere}
+    html[data-content-fit="active"] .prompt-display,html[data-content-fit="active"] .contract-grid pre{max-height:none;overflow:visible}
+    html[data-content-fit="active"] .prompt-display pre,html[data-content-fit="active"] .contract-grid pre{min-inline-size:0;max-inline-size:100%;overflow-wrap:anywhere}
     @media(max-width:1100px){.panel{grid-template-columns:1fr}}
     @media(max-width:760px){main{grid-template-columns:1fr}.tabs{border-right:0;border-bottom:2px solid var(--line);display:flex;overflow-x:auto}.tab{flex:0 0 13rem}.prompt-options,.contract-grid,.position-note{grid-template-columns:1fr}.viewlet-rack{display:flex;overflow-x:auto;padding-bottom:1rem}.viewlet-rack::before{display:none}.viewlet-token{flex:0 0 8.75rem}}
     @media(prefers-reduced-motion:reduce){.tab[aria-selected="true"]{transform:none}.panel:not([hidden]) .visual,.panel:not([hidden]) .viewlet-token,.pipeline-arrow{animation:none}.prompt-button::before{transition:none}}
@@ -102,18 +102,37 @@
   promptButtons.forEach(function(button){button.addEventListener('click',function(){selectPrompt(button);});});
   selectPrompt(promptButtons[0]);
 })();</script>
-<script data-gallery-height-adapter>
+<script data-gallery-reading-lifecycle>
 (function () {
   "use strict";
-  const CONNECT = "context-canvas:gallery-connect";
-  const HEIGHT = "context-canvas:gallery-height";
+  let printStates = null;
+  document.addEventListener("context-canvas:content-fit", () => {
+    document.querySelectorAll("[data-gallery-matrix]").forEach(table => { table.open = false; });
+  }, { once: true });
+  window.addEventListener("beforeprint", () => {
+    printStates = new Map([...document.querySelectorAll("details")].map(details => [details, details.open]));
+    printStates.forEach((_open, details) => { details.open = true; });
+  });
+  window.addEventListener("afterprint", () => {
+    printStates?.forEach((open, details) => { details.open = open; });
+    printStates = null;
+  });
+})();
+</script>
+<!-- embedded-content-fit:start -->
+<script data-embedded-content-fit>
+/* Canonical child height adapter. The materializer places this source inline in
+   its two declared instrument receivers; package capabilities remain inline. */
+(function () {
+  "use strict";
+  const CONNECT = "context-canvas:content-fit-connect";
+  const HEIGHT = "context-canvas:content-fit-height";
   const VERSION = 1;
   let port = null;
   let observer = null;
   let queued = false;
   let previousHeight = null;
   let fittedBefore = false;
-  let printStates = null;
 
   function measure() {
     queued = false;
@@ -148,10 +167,10 @@
       || typeof ResizeObserver !== "function") return;
     release();
     port = event.ports[0];
-    document.documentElement.dataset.galleryFit = "active";
+    document.documentElement.dataset.contentFit = "active";
     if (!fittedBefore) {
-      document.querySelectorAll("[data-gallery-matrix]").forEach(table => { table.open = false; });
       fittedBefore = true;
+      document.dispatchEvent(new Event("context-canvas:content-fit"));
     }
     observer = new ResizeObserver(schedule);
     observer.observe(document.body);
@@ -163,16 +182,8 @@
   document.addEventListener("DOMContentLoaded", schedule);
   document.fonts?.ready.then(schedule);
   window.addEventListener("pagehide", release);
-  window.addEventListener("beforeprint", () => {
-    printStates = new Map([...document.querySelectorAll("details")].map(details => [details, details.open]));
-    printStates.forEach((_open, details) => { details.open = true; });
-  });
-  window.addEventListener("afterprint", () => {
-    printStates?.forEach((open, details) => { details.open = open; });
-    printStates = null;
-    schedule();
-  });
 })();
 </script>
+<!-- embedded-content-fit:end -->
 </body>
 </html>

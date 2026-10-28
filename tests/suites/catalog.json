@@ -151,7 +151,7 @@
       "kind": "node-test",
       "members": [
         "tests/context-canvas/about-first-paint-css.test.mjs",
-        "tests/context-canvas/about-gallery-fit.test.mjs",
+        "tests/context-canvas/about-content-fit.test.mjs",
         "tests/context-canvas/about-heatmap.test.mjs",
         "tests/context-canvas/ai-systems-cross-references.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
@@ -2682,7 +2682,8 @@
       "kind": "node-test",
       "members": [
         "tests/context-canvas/about-heatmap.browser.mjs",
-        "tests/context-canvas/about-gallery-fit.browser.mjs"
+        "tests/context-canvas/about-gallery-fit.browser.mjs",
+        "tests/context-canvas/about-prompt-fit.browser.mjs"
       ],
       "profile": "browser",
       "command": {
@@ -2694,7 +2695,7 @@
         "appendMembers": true
       },
       "owner": "context-canvas-project-surface/context-canvas/README.md",
-      "scope": "Native About heatmap selection, static/print reading and parent scroll; content-sized Gallery channel admission, full-content growth/shrink, retained state, keyboard and parent wheel behavior against an explicitly substituted local packaged child in Chromium, Firefox and Playwright WebKit. Native touch and live hosted release retain separate observations.",
+      "scope": "Native About heatmap selection, static/print reading and parent scroll; shared content-fit channel admission, independent Gallery and Prompt Conditions Explorer sizing, full-content growth/shrink, retained state, keyboard and wheel behavior against explicitly substituted local packaged children in Chromium, Firefox and Playwright WebKit. Native touch and live hosted release retain separate observations.",
       "aliases": [
         "test:about-scroll-browser"
       ]
@@ -3241,7 +3242,8 @@
         ],
         "test:about-scroll-browser": [
           "tests/context-canvas/about-heatmap.browser.mjs",
-          "tests/context-canvas/about-gallery-fit.browser.mjs"
+          "tests/context-canvas/about-gallery-fit.browser.mjs",
+          "tests/context-canvas/about-prompt-fit.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
