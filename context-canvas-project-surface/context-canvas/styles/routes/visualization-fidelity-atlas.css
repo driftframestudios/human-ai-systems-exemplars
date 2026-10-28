@@ -45,6 +45,9 @@
   background: #fffcf5;
   border: 1px solid currentColor;
   font: inherit;
+  /* Keep native selected-option paint inside the control at enlarged text
+     sizes. The native menu retains each complete option and keyboard route. */
+  overflow: hidden;
 }
 .atlas-gallery .story-visual { inline-size: 100%; margin-inline: 0; transform: none; }
 .atlas-gallery .atlas-gallery-figure svg,

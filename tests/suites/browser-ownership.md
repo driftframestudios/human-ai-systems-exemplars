@@ -84,7 +84,7 @@ their separate owners.
 
 ## Existing direct Core consumers
 
-These 45 current direct browser entry points retain their imports and case
+These 47 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
@@ -130,6 +130,8 @@ and does not claim a new execution of every assertion.
 | `tests/context-canvas/card-rail-clearance.browser.mjs` | Thirty generated-rail routes retain local-owner card width, complete text and hard-shadow paint, and the accepted rail/shadow adjacency; exact consumers, representative widths, enlarged text, narrow touch, control owners, and a rejected width-cap fault are observed in three engines. |
 | `tests/context-canvas/debrief-evidence-cards.browser.mjs` | Twenty-one evidence-boundary cards across ten Debriefs keep their label, heading, explanation and painted frame together across three engines, with enlarged/scriptless controls, individual-fragment observations, modeled split recovery and a WebKit paint check. |
 | `tests/context-canvas/debrief-callout-integrity.browser.mjs` | Eighteen prose-local callouts and quotations across seven Debriefs preserve complete frames, attribution and reachable references across three engines; opening definitions align with their reading columns, with modeled split and prior-margin recovery. |
+| `tests/context-canvas/ai-narrow-reading.browser.mjs` | AI Systems family reading at narrow widths with enlarged text: complete heading and navigation-card content, local scroll ownership, normal-size controls and fault restoration across Chromium, Firefox and Playwright WebKit. |
+| `tests/context-canvas/linked-reading-containment.browser.mjs` | Eight independently styled AI example readings preserve complete text at narrow widths with enlarged type; the independent control, ordinary desktop geometry, local evidence scrolling, keyboard access, alternate modes, and restored wrapping faults remain explicit across Chromium, Firefox, and Playwright WebKit. |
 | `tests/context-canvas/technology-fit-layout.browser.mjs` | Technology Fit Sampling Tableau header and comparison-toolbar layout across three engines and source-adjacent dimensions, including complete controls, local overflow, comparison state, enlarged text, and controlled historical faults. |
 | `tests/context-canvas/prompt-side-figure.browser.mjs` | The Prompt-Side article's linked SVG overview, keyboard and pointer journey, static reading, and print at narrow and desktop widths. |
 | `tests/visualization-fidelity-atlas/atlas-cascade.browser.mjs` | Atlas CSS cascade, local table/SVG canvases, hidden states, closed print disclosures, forced colors, static reading, and restored faults across three engines. |

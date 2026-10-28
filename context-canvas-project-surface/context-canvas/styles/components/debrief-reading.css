@@ -7,7 +7,7 @@
    measure and placement, movement-header grouping, dense reference figure
    inspection, canonical six-beat scan borders, sustained prose and code
    distribution, compact evidence frames, chronological columns, numbered
-   procedure pairs, hero word containment, opt-in hero color roles, screen
+   procedure pairs, opt-in reading and hero word containment, hero color roles, screen
    inline-padding floors, and print grouping. Each opt-in body keeps its heading in
    the ordinary outer flow; route styles retain their frame and palette.
    The adjacent reading-flow component owns shared beat-heading behavior.
@@ -17,6 +17,19 @@
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */
+
+/* Opt-in readings keep enlarged headings, labels, and prose within their
+   available measure. Emergency word breaks also release intrinsic grid/flex
+   minimums; each route retains its type scale, palette, and composition. */
+.debrief-reading {
+    overflow-wrap: anywhere;
+}
+
+/* Tables keep their two-dimensional column measures and local scroll owner.
+   Preformatted examples retain their declared whitespace and scroll behavior. */
+.debrief-reading :where(table) {
+    overflow-wrap: normal;
+}
 
 /* Hero words retain their ordinary breaks; an oversized word can use the
    available text measure when the visitor enlarges text or narrows the page. */
