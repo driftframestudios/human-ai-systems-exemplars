@@ -127,9 +127,9 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  // About now uses one native-video receiver; its poster, name, and visible
-  // sequence description are exercised by the focused About media contract.
-  assert.equal(imageCount, 165);
+  // About adds two native heatmap figures; their exact source pairing and
+  // directional-evidence wording have a focused About heatmap contract.
+  assert.equal(imageCount, 167);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
