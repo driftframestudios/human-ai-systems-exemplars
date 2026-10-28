@@ -104,8 +104,8 @@ const expectedCarrierInventory = [
   ],
   [
     primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/",
-    "Interactive Cross-Functional Investment Studio",
+    "https://iframes.vik.guru/v1/canvas/investment-studio-chapters/",
+    "Interactive Cross-Functional Investment Studio chapters",
     "eager",
   ],
   [
@@ -196,7 +196,6 @@ const expectedCarrierInventory = [
 
 const expectedDuplicateRouteCounts = [
   ["https://iframes.vik.guru/v1/canvas/ai-method-gallery/", 2],
-  ["https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/", 2],
   ["https://iframes.vik.guru/v1/canvas/registry-goal-fidelity/", 2],
   ["https://iframes.vik.guru/v1/core/strategy-canvas/", 2],
 ];
@@ -354,16 +353,16 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
     "the authored owner, route, title, loading, and source order stay explicit",
   );
   assert.equal(carriers.length, 27, "the visitor source owns 27 iframe occurrences");
-  assert.equal(new Set(carriers.map(({ src }) => src)).size, 23, "the carriers use 23 routes");
+  assert.equal(new Set(carriers.map(({ src }) => src)).size, 24, "the carriers use 24 routes");
   assert.equal(new Set(carriers.map(({ owner }) => owner)).size, 18, "18 visitor files own carriers");
   const canvasCarriers = carriers.filter(({ src }) =>
     src.startsWith("https://iframes.vik.guru/v1/canvas/"));
   assert.equal(canvasCarriers.length, 18, "the Canvas manifest owns 18 carrier occurrences");
-  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 15, "the Canvas carriers use 15 routes");
+  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 16, "the Canvas carriers use 16 routes");
   assert.deepEqual(
     routeCountEntries(carriers).filter(([, count]) => count > 1),
     expectedDuplicateRouteCounts,
-    "the four declared routes have duplicate carriers",
+    "the three declared routes have duplicate carriers",
   );
 
   for (const carrier of carriers) {
@@ -415,7 +414,11 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
         .filter((identity) => identity !== null),
     );
     assert.ok(
-      localAnchorIdentities.some((identities) => identities.includes(sourceIdentity)),
+      localAnchorIdentities.some((identities) => identities.includes(
+        profile.route.id === "investment-studio-chapters"
+          ? "collaboration/initiative-costing-calculator/index.html"
+          : sourceIdentity,
+      )),
       `${label} retains a repository-local full-view source identity in a containing semantic block`,
     );
   }
@@ -468,8 +471,9 @@ test("the retained cobalt exemplar keeps its heatmap and parity for shared prima
       "https://iframes.vik.guru/v1/canvas/ai-method-gallery/",
     ],
   );
-  const shared = exemplars.filter(({ src }) => !src.endsWith('/heatmap-comparison/'));
-  assert.equal(shared.length, 2, "Studio and Gallery retain their shared carrier boundary");
+  const shared = exemplars.filter(({ src }) => src.endsWith('/ai-method-gallery/'));
+  assert.equal(shared.length, 1, "Gallery retains its shared carrier boundary");
+  assert.ok(primary.some(({ src }) => src.endsWith('/investment-studio-chapters/')), "About receives the derived Studio chapters while the exemplar keeps the complete original");
   assert.equal(primary.some(({ src }) => src.endsWith('/heatmap-comparison/')), false,
     "About receives the heatmap as native content");
   for (const exemplar of shared) {
