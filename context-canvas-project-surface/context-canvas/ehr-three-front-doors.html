@@ -170,25 +170,23 @@
                 </div>
 
               <h3 id="solution-bottleneck" class="txt-h3 beat-title">§b The Bottleneck — Ordering Asymmetry, Three Identity Domains, Three Distribution Models</h3>
-              <div class="prose-flow">
-                <div class="architecture-pair cobalt-operating-field-cards">
-                  <article>
-                    <p class="architecture-pair__label">Ordering workflow</p>
-                    <h4 class="txt-h4">The result was shared; the ordering job varied most</h4>
-                    <p>Each EHR placed requisition context, required fields, and follow-up work differently, so order parity needed its own examples and acceptance boundaries.</p>
-                  </article>
-                  <article>
-                    <p class="architecture-pair__label">Identity scope</p>
-                    <h4 class="txt-h4">Multi-tenancy added a second boundary</h4>
-                    <p>Patient matching had to be correct inside the receiving identity domain and the intended practice tenant before an order or result could move.</p>
-                  </article>
-                  <article>
-                    <p class="architecture-pair__label">Distribution</p>
-                    <h4 class="txt-h4">Per-organization and one-to-many paths changed the investment shape</h4>
-                    <p>Epic and Oracle Health activation remained organization-specific; athenahealth’s marketplace pattern could extend one integration across multiple practice tenants.</p>
-                  </article>
-                </div>
-                </div>
+              <div class="architecture-pair cobalt-operating-field-cards table-span-all">
+                <article>
+                  <p class="architecture-pair__label">Ordering workflow</p>
+                  <h4 class="txt-h4">The result was shared; the ordering job varied most</h4>
+                  <p>Each EHR placed requisition context, required fields, and follow-up work differently, so order parity needed its own examples and acceptance boundaries.</p>
+                </article>
+                <article>
+                  <p class="architecture-pair__label">Identity scope</p>
+                  <h4 class="txt-h4">Multi-tenancy added a second boundary</h4>
+                  <p>Patient matching had to be correct inside the receiving identity domain and the intended practice tenant before an order or result could move.</p>
+                </article>
+                <article>
+                  <p class="architecture-pair__label">Distribution</p>
+                  <h4 class="txt-h4">Per-organization and one-to-many paths changed the investment shape</h4>
+                  <p>Epic and Oracle Health activation remained organization-specific; athenahealth’s marketplace pattern could extend one integration across multiple practice tenants.</p>
+                </article>
+              </div>
 
               <h3 id="solution-intervention" class="txt-h3 beat-title">§c The Intervention — Extend the Canonical Model and Specialize the Front Door</h3>
               <div class="prose-flow">

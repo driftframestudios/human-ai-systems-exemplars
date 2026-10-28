@@ -9,6 +9,10 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/context-canvas/debrief-architecture-cards.browser.mjs',
+  'tests/context-canvas/card-rail-clearance.browser.mjs',
+  'tests/context-canvas/debrief-evidence-cards.browser.mjs',
+  'tests/context-canvas/debrief-callout-integrity.browser.mjs',
   'tests/public-references/context-canvas-head-authority-matrix.test.mjs',
   'tests/public-references/context-canvas-head-route-validator.test.mjs',
   'tests/public-references/public-route-reference-contract.test.mjs',
