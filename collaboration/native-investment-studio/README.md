@@ -89,6 +89,14 @@ are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
 
+### Supported inputs
+
+| Receiver | Supported form | Ownership and recovery |
+| --- | --- | --- |
+| Direct JavaScript records | Ordinary records from the module's JavaScript realm, or null-prototype records, with exactly the declared own enumerable data fields | Preparation copies admitted fields into its owned projection. Frozen input records remain usable. Accessors and custom prototypes receive a shape diagnostic. |
+| Direct JavaScript collections | Dense arrays with that realm's ordinary `Array.prototype`, consecutive own enumerable data entries, and an admitted own length | Preparation reads each admitted entry into its own array. Frozen input arrays remain usable. |
+| Serialized exchange | UTF-8-budgeted JSON carrying the supported native envelope | `parsePlan` owns syntax and numeric spelling admission. Serialized exchange is the receiving route for data carried across JavaScript realms or transformed from custom application objects. |
+
 JSON exchange uses whole-number tokens, with an optional minus sign followed
 by integer digits. Domain bounds then admit the nonnegative values; negative
 zero normalizes to zero. Fraction and exponent spellings receive an
@@ -101,11 +109,33 @@ skipping quoted strings. Labels retain their exact text. Direct JavaScript
 calls receive already-evaluated Numbers; exact source-spelling checks belong
 to the text import boundary.
 
+The reference budget counts owned relationships:
+`sum(teams[].personIds.length) + sum(work[].personIds.length) + sum(practices[].workIds.length)`.
+The current ceiling is 4,096. One person participating in several teams carries
+one membership edge per team; each work participation and practice support
+edge has its own owner as well. Scalar `teamId` references remain bounded by
+the work and practice collection limits. Duplicate entries within one reference
+list receive a separate diagnostic.
+
+Each preparation creates a fresh budget. Its early size guard checks a list's
+contribution before validating that list's individual references. A candidate
+that exceeds the budget therefore receives `reference-budget` first, even when
+one of those entries would also fail a reference check. Rejection discards the
+invocation-local budget and leaves the accepted projection available; a later
+candidate starts with the full budget.
+
 Preparation verifies unique IDs, reference resolution, membership, collection
 and text limits, supported vocabulary, and numeric bounds. Duplicate references
 and ambiguous ownership receive explicit diagnostics. A negative time input,
 unsupported version, or invalid field leaves the current accepted revision
 available for reading and export.
+
+A future schema that admits fractional numeric spellings must version their
+units, exact-value semantics, token admission, and round-trip observations
+together. Nested work or dependency edges similarly need a declared cycle
+policy and fitting traversal checks in their introducing schema revision.
+The current typed references resolve IDs through fixed collection layers;
+preparation constructs the fixed-depth projection before recursively freezing it.
 
 ## Investment and capacity meaning
 
@@ -122,8 +152,19 @@ preserve exact integer arithmetic before the rounded amount returns to the
 admitted safe Number range. Aggregate addition checks the same monetary range.
 Display-line sums use BigInt as well: rounding can put their sum temporarily
 above the safe-Number ceiling even when the actual settled commitment is
-within it. The signed reconciliation is calculated exactly and checked before
-conversion to Number. It explains display rounding within its funding pool.
+within it. The signed reconciliation is calculated exactly; its Number
+representation passes a safe-integer check before entering the projection.
+It explains display rounding within its funding pool.
+
+The rounding adjustment depends on the number of priced display lines. For
+one person/funding pool with n lines, its absolute adjustment is at most
+floor(n / 2) cents under this nonnegative half-up rule. Each line consumes a
+work-participant reference, so the current 4,096-reference budget gives a
+conservative 2,048-cent bound across a funding pool. Higher rates change the
+settled amount while retaining that rounding-error bound. Per-person minutes
+are also bounded: 256 work records × 1,440 minutes × 10,000 occurrences gives
+at most 3,686,400,000 minutes. Changes to these limits, time units, or rounding
+policy receive a fresh arithmetic-bound review with their schema/model change.
 
 Allocated work attributes effort and cost inside funded staffing. Additional
 work contributes its own purchased amount. The total therefore joins funded
@@ -131,6 +172,12 @@ staffing and additional purchases, while allocated-work attribution remains an
 inspectable breakdown. A practice assignment references its supporting work;
 the assignment itself introduces neither a second charge nor an inferred
 productivity benefit.
+
+An accepted over-capacity plan can have allocated attribution greater than its
+funded staffing. Its capacity obligation and incomplete standing preserve the
+need to revise capacity or funding; the calculation continues to show the
+declared allocation. Allocation is therefore a funding treatment, rather than
+a guarantee that every accepted plan fits its funded capacity.
 
 A null rate leaves positive-effort pricing unavailable; zero effort remains
 zero cost. The result retains the
@@ -249,6 +296,15 @@ take O(P + T + W + A + R + B) time under ordinary expected Map/Set lookup. Prepa
 state, indexes, results, and serialization take proportional memory. A complete
 accepted edit prepares the admitted revision; the contract describes that
 linear work explicitly.
+
+Every accepted revision currently carries its complete serialized state.
+Producing that string costs at least its output length, even if a later
+calculator updates selected aggregates incrementally. Read, capture, and export
+reuse the existing projection or string. Future optimization starts with a
+measured receiving task: separate draft-input frequency, accepted commits,
+calculation, serialization, rendering, and paint. A row-count threshold alone
+leaves dependency fan-out unspecified; one rate edit can affect many work
+records and both funding pools.
 
 Array admission reads its own length data descriptor once, validates that
 count, and uses the same count for key checks and iteration. A changing direct

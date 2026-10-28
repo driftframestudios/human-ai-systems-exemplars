@@ -127,6 +127,47 @@ test('work edits require the existing target identity and a full valid replaceme
   assert.strictEqual(studio.read(), accepted);
 });
 
+test('each preparation owns its edge budget and exact-budget recovery retains the accepted snapshot', () => {
+  const candidate = createExamplePlan();
+  candidate.people = Array.from({ length: 128 }, (_, index) => ({
+    id: `person-${index}`, label: `Person ${index}`, fundedMinutes: 0, rateCentsPerHour: 0,
+  }));
+  candidate.teams = Array.from({ length: 32 }, (_, index) => ({
+    id: `team-${index}`, label: `Team ${index}`, personIds: candidate.people.map(person => person.id),
+  }));
+  candidate.work = [];
+  candidate.practices = [];
+  const studio = createStudio(candidate);
+  const before = studio.capture();
+  // The same 128 people have 32 separately owned memberships each: 4,096 edges.
+  assert.equal(before.state.teams.flatMap(team => team.personIds).length, 4096);
+  assert.equal(before.state.people.length, 128);
+
+  const overBudget = structuredClone(candidate);
+  overBudget.work = [{
+    id: 'review', label: 'Review', teamId: 'team-0', personIds: ['person-0'],
+    minutesPerOccurrence: 0, occurrences: 0, funding: 'additional', status: 'planned', timing: null,
+  }];
+  expectHeld(studio.replace(overBudget, before), before, 'reference-budget');
+  const duplicate = structuredClone(candidate);
+  duplicate.teams[31].personIds[127] = 'person-0';
+  expectHeld(studio.replace(duplicate, before), before, 'duplicate-reference');
+  assert.strictEqual(studio.read(), before);
+  assert.equal(studio.exportText(), before.serialized);
+
+  duplicate.teams[31].personIds[127] = 'person-127';
+  duplicate.horizonWeeks = 8;
+  const recovered = studio.replace(duplicate, before);
+  assert.equal(recovered.ok, true);
+  assert.strictEqual(studio.read(), recovered.projection);
+  assert.notStrictEqual(recovered.projection, before);
+  assert.equal(recovered.projection.state.horizonWeeks, 8);
+  assert.equal(recovered.projection.state.teams.flatMap(team => team.personIds).length, 4096);
+  assert.equal(recovered.projection.result.knownCommitmentCents, 0);
+  assert.equal(before.state.horizonWeeks, 6);
+  assert.deepEqual(JSON.parse(before.serialized), before.state);
+});
+
 test('whole-plan replacement refreshes the work index before later targeted edits', () => {
   const studio = createStudio();
   const accepted = studio.read();

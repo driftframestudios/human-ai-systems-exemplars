@@ -111,6 +111,25 @@ test('splitting work preserves spending and attribution with an explicit display
   }
 });
 
+test('positive display reconciliation restores a pooled cent in either funding treatment', () => {
+  for (const funding of ['allocated', 'additional']) {
+    const plan = createExamplePlan();
+    plan.people = [{ id: 'one', label: 'One', fundedMinutes: funding === 'allocated' ? 58 : 0, rateCentsPerHour: 1 }];
+    plan.teams[0].personIds = ['one'];
+    plan.work = ['first', 'second'].map(id => ({ ...plan.work[0], id,
+      personIds: ['one'], minutesPerOccurrence: 29, occurrences: 1, funding }));
+    plan.practices = [];
+    const result = preparePlan(plan).result;
+    // Two 29/60-cent displays round to zero; the 58/60-cent pool rounds to one.
+    assert.deepEqual(result.ledger.map(work => work.lines[0].cents), [0, 0]);
+    const key = funding === 'allocated' ? 'allocatedCents' : 'additionalCents';
+    assert.equal(result.lineRoundingAdjustments[key], 1);
+    assert.equal(result.capacity[0][key], 1);
+    assert.equal(result.plannedCommitmentCents, 1);
+    assert.equal(result.standing, 'priced');
+  }
+});
+
 test('invalid numeric forms and boundary neighbors receive structured rejection', () => {
   for (const value of [-1, 0.5, NaN, Infinity, -Infinity, '30', true, null, LIMITS.minutesPerOccurrence + 1]) {
     const plan = createExamplePlan();
