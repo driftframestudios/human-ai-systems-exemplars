@@ -1,6 +1,6 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit, expect } from '@playwright/test';
@@ -16,9 +16,19 @@ const controllerPath = '/collaboration/native-investment-studio/controller.mjs';
 const statePath = '/collaboration/native-investment-studio/state.mjs';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-coordination');
 let server;
+let aboutFixture;
 
 before(async () => {
   await mkdir(captures, { recursive: true });
+  const aboutSource = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
+  const objectSource = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
+  const closedOverview = aboutSource.match(/<details class="about-prompt-static">([\s\S]*?)<\/details>/u)?.[1];
+  assert.ok(closedOverview?.includes(objectSource), 'the unrelated diagram retains its separate closed-disclosure owner');
+  assert.equal(aboutSource.split(objectSource).length, 2, 'the fixture isolates exactly one unrelated object');
+  // WebKit can cancel this closed disclosure's object navigation while rendering
+  // About. Keep its fallback link and every native receiver byte; this bounded
+  // fixture leaves that diagram's loading behavior with the Prompt owner.
+  aboutFixture = aboutSource.replace(objectSource, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   server = await startStaticServer();
   for (const name of names) browsers.set(name, await engines[name].launch());
 });
@@ -42,8 +52,12 @@ async function open(t, engine, options = {}) {
   });
   // This case observes native About content. Hosted iframe and remote-media
   // contracts retain their owners; a stable local placeholder bounds this task.
-  await page.route('**/*', request => new URL(request.request().url()).origin === server.origin
-    ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate instrument owner</title>' }));
+  await page.route('**/*', request => {
+    const url = new URL(request.request().url());
+    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: aboutFixture });
+    return url.origin === server.origin ? request.continue()
+      : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate instrument owner</title>' });
+  });
   await page.goto(server.origin + route, { waitUntil: 'load' });
   if (options.javaScriptEnabled !== false) {
     // Settle the actual About media before interactions scroll this receiver.
@@ -53,7 +67,9 @@ async function open(t, engine, options = {}) {
       return image.decode();
     })));
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.locator(`${selector} [data-action="edit"]`)).toBeVisible();
+    await expect(page.locator(selector)).toHaveAttribute('data-native-ready', 'true');
+    await expect(page.locator(`${selector} [data-native-configure]`)).toHaveAttribute('open', '');
+    await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeEditable();
   }
   await settleRequests();
   return page;
@@ -61,9 +77,15 @@ async function open(t, engine, options = {}) {
 
 const panel = page => page.locator(selector);
 const action = (page, name) => panel(page).locator(`[data-action="${name}"]`);
+const settingsSummary = page => panel(page).locator('[data-native-configure] > summary');
 const input = (page, name = 'minutesPerSession') => panel(page).locator(`input[name="${name}"]`);
 const total = page => panel(page).locator('[data-native-total]');
 const preview = page => panel(page).locator('[data-native-preview-total]');
+
+async function assertDurationReadout(page, hours, minutes) {
+  await expect(panel(page).locator('[data-native-duration-hours]')).toHaveText(hours);
+  await expect(panel(page).locator('[data-native-duration-minutes]')).toHaveText(minutes);
+}
 
 async function setDuration(page, hours, minutes) {
   await input(page, 'hoursPerSession').fill(hours);
@@ -94,12 +116,30 @@ async function assertCompactControls(page) {
     assert.ok(box.width >= 43.95 && box.height >= 43.95,
       `each visible step control retains a 44px target within subpixel geometry precision: ${JSON.stringify(box)}`);
   }
+  const paintedGroups = await panel(page).locator('.native-coordination__controls > .native-coordination__control').evaluateAll(groups => groups.map(group => {
+    const paint = [...group.querySelectorAll('input,button')].map(node => {
+      const box = node.getBoundingClientRect(), style = getComputedStyle(node);
+      const [x = 0, y = 0, blur = 0, spread = 0] = (style.boxShadow.match(/-?[\d.]+px/gu) ?? []).map(Number.parseFloat);
+      const outline = style.outlineStyle === 'none' ? 0 : Number.parseFloat(style.outlineWidth) + Math.max(0, Number.parseFloat(style.outlineOffset));
+      return { left: Math.min(box.left - outline, box.left + x - blur - spread),
+        right: Math.max(box.right + outline, box.right + x + blur + spread),
+        top: Math.min(box.top - outline, box.top + y - blur - spread),
+        bottom: Math.max(box.bottom + outline, box.bottom + y + blur + spread) };
+    });
+    return { field: group.querySelector('input').name, left: Math.min(...paint.map(box => box.left)),
+      right: Math.max(...paint.map(box => box.right)), top: Math.min(...paint.map(box => box.top)), bottom: Math.max(...paint.map(box => box.bottom)) };
+  }));
+  for (let first = 0; first < paintedGroups.length; first += 1) for (let second = first + 1; second < paintedGroups.length; second += 1) {
+    const a = paintedGroups[first], b = paintedGroups[second];
+    assert.ok(a.right <= b.left + .05 || b.right <= a.left + .05 || a.bottom <= b.top + .05 || b.bottom <= a.top + .05,
+      `neighboring stepper groups retain separate paint, including hard shadows and focus: ${JSON.stringify({ a, b })}`);
+  }
 }
 
 async function assertMaximumDigitsFit(page) {
-  // Exercise the widest admitted component shapes, including a combined-duration
-  // error, while the accepted plan and the caller's unfinished draft stay owned.
-  await setDuration(page, '24', '59');
+  // Keep five raw digits visible in every field, including accidental leading
+  // zeros, while the accepted plan and the caller's draft stay owned.
+  await setDuration(page, '00024', '00059');
   await input(page, 'occurrences').fill('10000');
   await assertCompactControls(page);
   await assertContained(page);
@@ -108,9 +148,87 @@ async function assertMaximumDigitsFit(page) {
   await input(page).focus();
 }
 
+async function assertFormContainerSeams(page) {
+  const rem = await page.evaluate(() => Number.parseFloat(getComputedStyle(document.documentElement).fontSize));
+  const samples = [20 * rem - 1, 20 * rem + 1, 31 * rem - 1, 31 * rem + 1];
+  for (const target of samples) {
+    let width = Math.ceil(target + 100);
+    let observed;
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      observed = await panel(page).locator('.native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
+      if (Math.abs(observed - target) <= .75) break;
+      width += Math.round(target - observed);
+    }
+    assert.ok(Math.abs(observed - target) <= .75,
+      `the form-content fixture reaches ${target}px beside its responsive seam; observed ${observed}px at viewport ${width}px`);
+    await assertMaximumDigitsFit(page);
+    const settledWidth = await panel(page).locator('.native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
+    assert.ok(Math.abs(settledWidth - target) <= .75,
+      `the ${target}px form sample retains its measured width after editing: before ${observed}px, after ${settledWidth}px`);
+    const controls = await panel(page).locator('.native-coordination__controls > .native-coordination__control').evaluateAll(nodes =>
+      nodes.map(node => ({ top: node.getBoundingClientRect().top, width: node.getBoundingClientRect().width,
+        inputTop: node.querySelector('input').getBoundingClientRect().top,
+        buttonTop: node.querySelector('button').getBoundingClientRect().top })));
+    assert.equal(controls.length, 3);
+    if (target > 31 * rem) assert.ok(Math.max(...controls.map(item => item.inputTop)) - Math.min(...controls.map(item => item.inputTop)) < .1,
+      `all three inputs share the row beyond the wide seam: ${JSON.stringify(controls)}`);
+    else if (target > 20 * rem) assert.ok(Math.abs(controls[0].inputTop - controls[1].inputTop) < .1 && controls[2].top > controls[1].top,
+      `two duration controls share a row before the session count: ${JSON.stringify(controls)}`);
+    else assert.ok(controls[0].top < controls[1].top && controls[1].top < controls[2].top,
+      `the smallest form preserves the ordered three-control flow: ${JSON.stringify(controls)}`);
+    for (const control of controls) {
+      assert.ok(control.buttonTop > control.inputTop,
+        `each control consistently places its step buttons below the input: ${JSON.stringify(control)}`);
+    }
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
+}
+
+async function assertInputPositionsThroughFeedback(page, capture = null) {
+  const positions = () => panel(page).locator('input').evaluateAll(inputs => inputs.map(input => ({
+    name: input.name, top: input.getBoundingClientRect().top + scrollY,
+  })));
+  const baseline = await positions();
+  const unchanged = async state => {
+    const actual = await positions();
+    assert.deepEqual(actual.map(item => item.name), baseline.map(item => item.name));
+    for (let index = 0; index < baseline.length; index += 1) {
+      assert.ok(Math.abs(actual[index].top - baseline[index].top) < .1,
+        `${state} preserves ${actual[index].name} document position: ${JSON.stringify({ before: baseline[index], after: actual[index] })}`);
+    }
+    const order = await panel(page).evaluate(root => {
+      const lastInputBottom = Math.max(...[...root.querySelectorAll('input')].map(input => input.getBoundingClientRect().bottom));
+      return { lastInputBottom, feedbackTop: root.querySelector('.native-coordination__feedback').getBoundingClientRect().top,
+        previewTop: root.querySelector('.native-coordination__preview').getBoundingClientRect().top };
+    });
+    assert.ok(order.feedbackTop >= order.lastInputBottom && order.previewTop >= order.lastInputBottom,
+      'variable field feedback and investment preview follow every quantity control');
+  };
+  for (const raw of ['', '-1']) {
+    await input(page).fill(raw);
+    await expect(preview(page)).toHaveText('—');
+    await expect(panel(page).locator('[data-native-error="minutesPerSession"]')).toContainText('Minutes:');
+    await unchanged(`the ${JSON.stringify(raw)} draft`);
+  }
+  await setDuration(page, '24', '1');
+  await expect(preview(page)).toHaveText('—');
+  await unchanged('the combined-duration error');
+  if (capture) await panel(page).screenshot({ path: resolve(captures, `coordination-error-${capture}.png`) });
+  await action(page, 'apply').click();
+  await expect(input(page)).toBeFocused();
+  await unchanged('the explicit invalid Apply diagnostic');
+  await setDuration(page, '0', '45');
+  await expect(preview(page)).toHaveText('$1,800.00');
+  await expect(panel(page).locator('[data-native-error="minutesPerSession"]')).toHaveText('');
+  await unchanged('recovery to a complete draft');
+  await input(page).focus();
+}
+
 async function begin(page) {
-  await action(page, 'edit').click();
-  await expect(input(page)).toBeVisible();
+  if (!(await panel(page).locator('[data-native-configure]').evaluate(node => node.open))) await settingsSummary(page).click();
+  await expect(input(page)).toBeEditable();
 }
 
 async function assertAmount(page, value) {
@@ -159,9 +277,9 @@ async function injectOwner(page) {
     mountCoordinationPanel(root).dispose();
     const studio = createStudio();
     window.nativeFixture = { studio, initial: studio.read(), mountCoordinationPanel, root };
-    const range = root.querySelector('[data-native-range="occurrences"]');
-    const parent = range.parentNode, next = range.nextSibling;
-    range.remove();
+    const summary = root.querySelector('[data-native-configure] > summary');
+    const parent = summary.parentNode, next = summary.nextSibling;
+    summary.remove();
     const activeListeners = [];
     const restore = [];
     for (const target of [root, root.querySelector('form'), root.querySelector('[data-native-configure]'), window]) {
@@ -182,10 +300,10 @@ async function injectOwner(page) {
     let rejected = false;
     try { mountCoordinationPanel(root, { studio }); }
     catch { rejected = true; }
-    finally { for (const release of restore) release(); parent.insertBefore(range, next); }
+    finally { for (const release of restore) release(); parent.insertBefore(summary, next); }
     window.nativeFixture.failedMount = {
       rejected, liveListeners: activeListeners.length, disabled: root.querySelector('fieldset').disabled,
-      editHidden: root.querySelector('[data-action="edit"]').hidden,
+      settingsClosed: !root.querySelector('[data-native-configure]').open,
       fallbackVisible: !root.querySelector('[data-native-fallback]').hidden,
       readyAbsent: !root.hasAttribute('data-native-ready'),
       acceptedCents: studio.read().result.knownCommitmentCents,
@@ -198,9 +316,11 @@ for (const engine of names) {
   test(`${engine}: one coordination transaction preserves unfinished input and independently priced accepted amounts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await assertAmount(page, '$1,200.00');
+    await expect(settingsSummary(page)).toHaveText('Session settings');
     await begin(page);
     await expect(input(page, 'hoursPerSession')).toHaveValue('0');
     await expect(input(page)).toHaveValue('30');
+    await assertDurationReadout(page, '00', '30');
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
     await setDuration(page, '1', '0');
     await expect(preview(page)).toHaveText('$2,400.00');
@@ -212,6 +332,7 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
 
     const trace = panel(page).locator('[data-native-trace]');
+    await expect(trace.locator('summary')).toHaveText('Cost breakdown');
     await trace.locator('summary').click();
     const people = trace.locator('[data-native-trace-list] > li');
     assert.equal(await people.count(), 4, 'the trace retains all four independently priced participants');
@@ -220,6 +341,7 @@ for (const engine of names) {
     await expect(panel(page).locator('[data-native-effort]')).toHaveText('4 people × 1 h per session × 6 working sessions = 24 h of participant effort.');
     await trace.locator('summary').click();
     await input(page).fill('30');
+    await assertDurationReadout(page, '01', '30');
     await expect(preview(page)).toHaveText('$3,600.00');
     await input(page, 'occurrences').fill('8');
     await expect(preview(page)).toHaveText('$4,800.00');
@@ -233,10 +355,14 @@ for (const engine of names) {
       await expect(input(page)).toHaveValue(raw);
       await expect(input(page)).toHaveAttribute('aria-invalid', 'true');
       await expect(preview(page)).toHaveText('—');
+      await assertDurationReadout(page, '01', '—');
       await expect(panel(page).locator('[data-native-preview-note]')).not.toHaveText('');
       await assertAmount(page, '$4,800.00');
       await action(page, 'cancel').click();
-      await expect(action(page, 'edit')).toBeFocused();
+      await expect(settingsSummary(page)).toBeFocused();
+      await expect(panel(page).locator('[data-native-configure]')).not.toHaveAttribute('open', '');
+      await expect(panel(page).locator('[data-native-status]')).toBeVisible();
+      await expect(panel(page).locator('[data-native-status]')).toHaveText('Changes cancelled.');
       await assertAmount(page, '$4,800.00');
     }
     await begin(page);
@@ -248,7 +374,7 @@ for (const engine of names) {
     await expect(status).toHaveText('');
     await expect(preview(page)).toHaveText('$3,200.00');
     await action(page, 'apply').click();
-    await expect(status).toHaveText('Changes applied. Accepted investment $3,200.00.');
+    await expect(status).toHaveText('Total updated to $3,200.00.');
     await assertAmount(page, '$3,200.00');
     await input(page).focus();
     await input(page).dispatchEvent('compositionstart');
@@ -257,11 +383,13 @@ for (const engine of names) {
       node.dispatchEvent(new InputEvent('input', { bubbles: true, data: '30', inputType: 'insertCompositionText', isComposing: true }));
     });
     await expect(preview(page)).toHaveText('—');
+    await assertDurationReadout(page, '—', '—');
     await expect(panel(page).locator('[data-native-preview-note]')).toContainText('Finish entering');
     await input(page).press('Enter');
     await assertAmount(page, '$3,200.00');
     await input(page).dispatchEvent('compositionend');
     await expect(preview(page)).toHaveText('$4,800.00');
+    await assertDurationReadout(page, '01', '30');
     await setDuration(page, '0', '0');
     await input(page).press('Enter');
     await assertAmount(page, '$0.00');
@@ -270,6 +398,7 @@ for (const engine of names) {
     await increment.focus(); await increment.press('Enter');
     await expect(input(page, 'hoursPerSession')).toHaveValue('1');
     await expect(input(page)).toHaveValue('0');
+    await assertDurationReadout(page, '01', '00');
     await expect(preview(page)).toHaveText('$3,200.00');
     const decrement = panel(page).locator('[data-field="minutesPerSession"][data-step="-1"]');
     await decrement.focus(); await decrement.press('Space');
@@ -295,6 +424,15 @@ for (const engine of names) {
   test(`${engine}: disclosure and responsive changes preserve drafts while About owns vertical scrolling`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await begin(page); await input(page).fill('45');
+    const wide = await panel(page).evaluate(root => {
+      const form = root.querySelector('form'), style = getComputedStyle(form);
+      return { contentWidth: form.getBoundingClientRect().width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight),
+        threshold: 31 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
+        tops: [...root.querySelectorAll('input')].map(input => input.getBoundingClientRect().top) };
+    });
+    assert.ok(wide.contentWidth >= wide.threshold, `the wide fixture reaches the three-control row: ${JSON.stringify(wide)}`);
+    assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < .1, 'all three wide inputs share one top alignment');
+    await assertMaximumDigitsFit(page);
     if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-desktop.png') });
     const configure = panel(page).locator('[data-native-configure]');
     const summary = configure.locator('summary');
@@ -304,12 +442,15 @@ for (const engine of names) {
     await expect(input(page)).toHaveValue('45');
     await panel(page).locator('[data-native-trace] > summary').click();
     await input(page).focus();
+    await assertFormContainerSeams(page);
     for (const width of [833, 832, 831, 390, 320, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect(input(page)).toBeFocused();
       await expect(input(page)).toHaveValue('45');
       await assertContained(page);
       await assertCompactControls(page);
+      await assertMaximumDigitsFit(page);
+      if ([1440, 390, 320].includes(width)) await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? String(width) : null);
       if ([833, 832, 831].includes(width)) {
         const agreement = await panel(page).locator('.native-coordination__agreement').boundingBox();
         const configuration = await configure.boundingBox();
@@ -319,15 +460,21 @@ for (const engine of names) {
         } else assert.ok(configuration.y >= agreement.y + agreement.height, 'the narrow editor follows the agreement in document order');
       }
       if (width === 320) {
-        await assertMaximumDigitsFit(page);
         if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-320.png') });
       }
     }
     await page.setViewportSize({ width: 390, height: 1000 });
     await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-enlarged.png') });
-    await assertContained(page);
-    await assertMaximumDigitsFit(page);
+    for (const width of [390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect(input(page)).toBeFocused();
+      await assertContained(page);
+      await assertMaximumDigitsFit(page);
+      await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? `${width}-enlarged` : null);
+      if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures,
+        width === 390 ? 'coordination-enlarged.png' : 'coordination-320-enlarged.png') });
+    }
+    await page.setViewportSize({ width: 390, height: 1000 });
     await expect(input(page)).toHaveValue('45');
     await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
     await input(page, 'occurrences').focus();
@@ -359,7 +506,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await injectOwner(page);
     assert.deepEqual(await page.evaluate(() => window.nativeFixture.failedMount),
-      { rejected: true, liveListeners: 0, disabled: true, editHidden: true,
+      { rejected: true, liveListeners: 0, disabled: true, settingsClosed: true,
         fallbackVisible: true, readyAbsent: true, acceptedCents: 120000 },
       'failed mount releases its listeners and leaves the accepted example available before repaired remount');
     await begin(page);

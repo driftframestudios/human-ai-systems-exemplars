@@ -17,6 +17,9 @@ test('native About coordination has one module receiver and retains both legacy 
   assert.match(about, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\.\.\/\.\.\/collaboration\/native-investment-studio\/controller\.mjs")[^>]*>/u);
   const fields = ['hoursPerSession', 'minutesPerSession', 'occurrences'];
   const nativePanel = about.slice(about.indexOf('<div class="native-coordination"'), about.indexOf('</section>', about.indexOf('<div class="native-coordination"')));
+  assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary>Session settings<\/summary>/u,
+    'the native session disclosure remains the entry and return control');
+  assert.doesNotMatch(nativePanel, /data-action="edit"/u, 'the live editor opens directly through its receiver');
   assert.equal((nativePanel.match(/<input\b/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
   for (const field of fields) {
     const input = about.match(new RegExp(`<input\\b(?=[^>]*\\bname="${field}")[^>]*>`, 'u'))?.[0];
@@ -25,6 +28,14 @@ test('native About coordination has one module receiver and retains both legacy 
     assert.match(input, /\binputmode="numeric"/u);
     const id = input.match(/\bid="([^"]+)"/u)?.[1];
     assert.ok(id && about.includes(`for="${id}"`), `${field} retains a native label relationship`);
+    if (field !== 'occurrences') assert.match(input, /\baria-describedby="[^"]*\bnative-duration-label\b[^"]*"/u,
+      `${field} refers to the shared duration explanation`);
+  }
+  assert.match(nativePanel, /role="group" aria-labelledby="native-duration-label"/u, 'the named duration group owns the combined readout and explanation');
+  assert.match(nativePanel, /<output\b[^>]*for="native-hours native-minutes"[^>]*aria-live="off"[^>]*>/u);
+  for (const part of ['hours', 'minutes']) {
+    assert.equal((nativePanel.match(new RegExp(`data-native-duration-${part}`, 'gu')) ?? []).length, 1, `${part} has one combined readout receiver`);
+    assert.match(nativePanel, new RegExp(`data-native-duration-${part}>\\d{2}</strong><span>${part}</span>`, 'u'), `${part} retains a visible unit label`);
   }
   assert.match(nativePanel, /<output\b[^>]*data-native-preview-total[^>]*aria-live="off"[^>]*>/u, 'the draft amount updates independently of the explicit-action live region');
   assert.match(about, /<iframe\b[^>]*data-about-content-fit="studio-chapters"[^>]*>/u);

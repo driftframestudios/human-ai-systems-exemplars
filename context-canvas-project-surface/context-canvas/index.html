@@ -143,92 +143,93 @@
 
   <section class="about-field about-field--coordination" aria-labelledby="native-coordination-title">
     <div class="about-reading about-reading--wide">
-      <p class="about-kicker">Native instrument · one agreement, an inspectable consequence</p>
       <div class="native-coordination" data-native-coordination>
         <header class="native-coordination__amp">
           <div class="native-coordination__identity">
-            <p class="native-coordination__plate">Investment Studio / Coordination 01</p>
-            <h2 id="native-coordination-title">Make room for the conversation.</h2>
-            <p>Adjust the agreement. Trace what the plan requires.</p>
+            <p class="native-coordination__plate">Coordination</p>
+            <h2 id="native-coordination-title">Plan a working session.</h2>
           </div>
           <div class="native-coordination__readout">
-            <span class="native-coordination__plate" data-native-standing>Priced plan · USD</span>
+            <span class="native-coordination__plate" data-native-standing>Total · USD</span>
             <strong data-native-total>$1,200.00</strong>
-            <span data-native-revision>Accepted revision 0</span>
           </div>
           <dl class="native-coordination__funding">
-            <div><dt>Funded staffing</dt><dd data-native-funded>$0.00</dd></div>
-            <div><dt>Additional purchases</dt><dd data-native-additional>$1,200.00</dd></div>
-            <div><dt>Attributed inside staffing</dt><dd data-native-allocated>$0.00</dd></div>
+            <div><dt>Staffing</dt><dd data-native-funded>$0.00</dd></div>
+            <div><dt>Extra work</dt><dd data-native-additional>$1,200.00</dd></div>
+            <div><dt>Included in staffing</dt><dd data-native-allocated>$0.00</dd></div>
           </dl>
-          <div class="native-coordination__transport"><button type="button" data-action="edit" hidden>Edit agreement</button></div>
         </header>
         <div class="native-coordination__body">
           <div class="native-coordination__agreement">
-            <p class="native-coordination__plate">Working agreement / participant effort</p>
-            <h3 data-native-agreement>Weekly working agreement</h3>
-            <div class="native-coordination__connection" aria-label="Team participation in the working agreement">
+            <h3 data-native-agreement>Weekly working session</h3>
+            <div class="native-coordination__connection" aria-label="Working session participants">
               <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
               <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
-              <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 participants</small></span>
+              <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 people</small></span>
             </div>
             <p class="native-coordination__effort" data-native-effort>4 people × 30 min per session × 6 working sessions = 12 h of participant effort.</p>
-            <p class="native-coordination__scope" data-native-scope>Additional purchase · planned work · 6-week planning context. Working sessions repeat the activity above. Calendar placement and sprint cadence have their own planning rules.</p>
-            <p class="native-coordination__draft" data-native-draft-state>Accepted plan · edit the agreement to explore a change.</p>
-            <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
           </div>
           <details class="native-coordination__configuration" data-native-configure>
-            <summary>Configure agreement</summary>
+            <summary>Session settings</summary>
             <form novalidate>
-              <fieldset disabled>
-                <legend>Time and working sessions</legend>
-                <div class="native-coordination__preview">
-                  <span class="native-coordination__plate" data-native-preview-standing>Draft investment · USD</span>
-                  <output data-native-preview-total aria-live="off" aria-label="Draft investment">$1,200.00</output>
-                  <p class="native-coordination__hint" data-native-preview-note>Preview only. Apply changes to update the accepted amount above.</p>
+              <fieldset disabled aria-label="Working session settings">
+                <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
+                  <p id="native-duration-label" class="native-coordination__control-title">Time per person, per session</p>
+                  <output class="native-coordination__duration-display" for="native-hours native-minutes" aria-label="Draft time per person in one working session" aria-live="off">
+                    <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
+                    <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
+                  </output>
+                  <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
-                <p class="native-coordination__hint">Enter each participant’s time per working session, then count the sessions in this plan. Closing this panel keeps your draft.</p>
                 <div class="native-coordination__controls">
                   <div class="native-coordination__control">
-                    <label for="native-hours">Hours per person, per session</label>
+                    <label for="native-hours">Hours</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
-                      <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-hours-range native-duration-limit native-hours-error">
+                      <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-duration-limit native-hours-error">
                       <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession">Whole hours · 0–24</p>
-                    <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
+                    <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession" hidden>0–24 hours</p>
                   </div>
                   <div class="native-coordination__control">
-                    <label for="native-minutes">Additional minutes per session</label>
+                    <label for="native-minutes">Minutes</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
-                      <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-minutes-range native-duration-limit native-minutes-error">
+                      <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-duration-limit native-minutes-error">
                       <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession">Whole remaining minutes · 0–59</p>
-                    <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
+                    <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession" hidden>0–59 minutes</p>
                   </div>
-                  <p class="native-coordination__hint" id="native-duration-limit">Hours and minutes combine into one duration, up to 24 hours per working session.</p>
-                  <div class="native-coordination__control">
-                    <label for="native-occurrences">Working sessions in this plan</label>
-                    <div class="native-coordination__stepper native-coordination__stepper--count">
+                  <div class="native-coordination__control native-coordination__control--count">
+                    <label for="native-occurrences">Working sessions</label>
+                    <div class="native-coordination__stepper">
                       <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease working sessions by one">−</button>
-                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-occurrences-range native-occurrences-error">
+                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-session-context native-occurrences-range native-occurrences-error">
                       <button type="button" data-field="occurrences" data-step="1" aria-label="Increase working sessions by one">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences">Whole working sessions · 0–10,000</p>
-                    <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
+                    <p class="native-coordination__hint" id="native-session-context" data-native-session-context>Across this 6-week plan.</p>
+                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
                   </div>
+                </div>
+                <div class="native-coordination__feedback" role="group" aria-label="Quantity feedback">
+                  <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
+                  <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
+                  <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
+                </div>
+                <div class="native-coordination__preview">
+                  <span class="native-coordination__plate" data-native-preview-standing>Draft total · USD</span>
+                  <output data-native-preview-total aria-live="off" aria-label="Draft total">$1,200.00</output>
+                  <p class="native-coordination__hint" data-native-preview-note>Apply to update the total.</p>
                 </div>
                 <div class="native-coordination__actions"><button type="submit" data-action="apply">Apply changes</button><button type="button" data-action="cancel">Cancel changes</button></div>
               </fieldset>
             </form>
           </details>
+          <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
           <details class="native-coordination__trace" data-native-trace>
-            <summary>Trace this amount <span>Accepted effort → funding → investment</span></summary>
+            <summary>Cost breakdown</summary>
             <div class="native-coordination__trace-body">
-              <p data-native-trace-summary>Four participants each contribute 180 minutes at $100 per hour: $300 each, for a $1,200 additional purchase. Funded staffing is $0; allocated attribution is $0.</p>
+              <p data-native-trace-summary>Four people each spend 3 hours at $100 per hour: $300 each, or $1,200 total.</p>
               <ul class="native-coordination__ledger" data-native-trace-list>
                 <li><h4>product-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
                 <li><h4>product-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
@@ -238,9 +239,8 @@
             </div>
           </details>
         </div>
-        <footer class="native-coordination__footer"><p>Synthetic planning example. Your changes stay in this page; qualified people set rates and approve commitments.</p><p data-native-fallback>Read the example and its trace here. Editing becomes available when this instrument loads.</p></footer>
+        <p class="native-coordination__fallback" data-native-fallback hidden></p>
       </div>
-      <p class="about-evidence-note">Explore one coordination agreement above. Continue below for the complete Studio’s plans, people, change frameworks, quality, recovery, and comparison. Each instrument keeps its own planning state.</p>
     </div>
   </section>
 

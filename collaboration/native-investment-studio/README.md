@@ -1,6 +1,6 @@
 # Native Investment Studio: coordination, capability, and state
 
-This package gives About one native coordination agreement, an inspectable
+This package gives About one native working session, an inspectable
 investment calculation, and a recoverable edit boundary. Visitors change
 hours, remaining minutes, and working sessions, inspect the draft investment,
 apply the change, and trace the accepted participant
@@ -441,11 +441,11 @@ prove JavaScript media and exact module bytes. This module
 group leaves the existing iframe package inputs with their current owners.
 
 `mountCoordinationPanel(root, { studio, workId })` binds one cooperative Studio
-owner and agreement to one root. Calling it again returns the mounted receiver.
+owner and working session to one root. Calling it again returns the mounted receiver.
 Its `read`, `refresh`, and `dispose` methods support controlled integration and
 testing. A host that replaces accepted state calls `refresh`; the controller
 then shows the new amount alongside any retained stale draft. Cancel followed
-by Edit starts from that accepted projection.
+by opening Session settings starts from that accepted projection.
 
 The receiver validates all required elements before installing eight listeners.
 Initialization failure releases installed resources. Disposal removes those
@@ -453,12 +453,14 @@ listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
 history restoration; an actual departure disposes it.
 
+Mounting opens Session settings with a fresh draft. Its native summary handles
+later opening and closing; Cancel returns focus to that summary.
 Raw text and circular step buttons update one three-field draft. The in-card
 draft investment updates from complete preparation while the amp head retains
-the accepted amount. Explicit Apply commits one complete row, keeps Configure
+the accepted amount. Explicit Apply commits one complete row, keeps Session settings
 open, begins a fresh draft, and preserves focus on Apply. Applying valid
 unchanged quantities preserves the accepted revision. Cancel retains the
-accepted investment and closes Configure. Composition input settles before
+accepted investment and closes Session settings. Composition input settles before
 preview or Apply. Closing the native configuration disclosure retains the
 draft, and responsive changes reuse the same elements and focus. This
 receiver uses explicit Apply and creates no deferred request or periodic timer.
@@ -483,10 +485,17 @@ any later optimization decision.
 
 Industrial Ink supplies the dark amount plane and hard down-right shadows;
 About's Soft Color Blocking palette supplies paper controls and trace cards.
-The 52rem viewport seam pairs the agreement and configuration. A 22rem control
-container seam places the compact numeric input above its nearby step buttons
-when enlarged text needs more room. Input widths reflect two duration digits
-and five count digits with padding. The native panel uses document scrolling,
+The 52rem viewport seam pairs the session summary and settings. The form’s
+20rem and 31rem container seams arrange its three quantity controls into two
+rows and then one row. Each input sits above its circular minus/plus buttons at
+every width. Below 12rem of available form width, the duration display stacks
+its hours and minutes. All three
+inputs display five digits with padding, including an accidental excess zero
+that the visitor needs to correct. A combined hours/minutes display projects
+the same draft into a compact radio-style reading. The duration group owns its
+short explanation; the session-count hint sits beside its count. Variable
+validation feedback and the investment preview follow all inputs, so their
+wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
 
 ## Data structures and pattern decisions
