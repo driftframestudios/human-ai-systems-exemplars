@@ -1,7 +1,7 @@
 ---
 title: Selective source promotion
-version: 0.1.0
-status: working
+version: 0.1.1
+status: exercised
 audience: ai_collaborators
 source_band: public_possible
 task_type: operational_collaboration
@@ -202,9 +202,14 @@ or targeted perturbation can establish that the oracle distinguishes the
 regression being repaired.
 
 Record actual case, file, engine and artifact populations that matter to the
-decision. A filtered command must execute its intended cases. A skip, empty
-selection or interrupted run keeps its own standing. Preserve accepted prior
-evidence when its source and dependencies still match; rerun the owned checks
+decision. A filtered command must execute its intended cases and preserve the
+enclosing setup, aggregate assertions and required observation population.
+Inspect the command owner's parent assertions before filtering child cases.
+When an aggregate oracle joins several routes, select the complete owned
+command or an existing bounded entry point whose assertions fit the selected
+population. A skip, empty selection or interrupted run keeps its own standing.
+Preserve accepted prior evidence when its source and dependencies still match;
+rerun the owned checks
 when a later tranche changes their shared seam. The
 [test-system stewardship runbook](cross-repository-test-system-stewardship.v0.1.md)
 supplies preparation, reuse and expansion guidance.
@@ -334,18 +339,35 @@ with the accepted source and package coordinates.
 owns the first receiving exercise: restored card spacing, four Context Canvas
 promotion groups, their complete source-disposition map and final comparison.
 Its historical PR references retain the accepted implementation lineage.
-Initial composition exposed two useful accounting details: shared catalog
-entries arrive with their owned source, and browser-ownership summaries must
-be reconciled with the actual admitted population. Phase 3 incorporates both.
-Independent review also established the Phase 5 order: inspect and scan the
-proposed index before committing, then review the exact resulting head.
+The accepted Debrief integrity, narrow-screen readings and About continuity
+groups ([PR #632](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/632),
+[PR #633](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/633)
+and [PR #634](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/634))
+exercised source accounting, dependency-complete composition, proportionate
+checks and independent review through three receiving integrations.
 
-Keep this runbook `working` while its first receiving sequence is in progress.
-Move it to `exercised` when an actual traversal establishes the entry, tranche
-handoffs, review and final reconciliation, or exposes a documented refinement
-that is then exercised. Record decision-changing friction in the existing
-Issue and revise the affected rule. Repeated distinct uses may support
-`stable`; one successful sequence establishes only its stated context.
+Those traversals refined three parts of the procedure:
+
+- Phase 3 admits shared catalog entries with their owned source and reconciles
+  browser-ownership summaries with the actual admitted population.
+- Phase 4 preserves enclosing aggregate assertions when selecting cases. The
+  About image-delivery subtests established their three authored images in
+  each of two engines; the parent assertion also required image formats carried
+  by the other routes. Running the complete existing image-delivery command
+  supplied that population and established the unchanged aggregate contract.
+- Phase 5 inspects and scans the proposed index before committing, then binds
+  independent review to the exact resulting head.
+
+Version 0.1.1 is `exercised` for these observed phases and their revisions. The
+fourth group, Studio Chapters, is the next receiving candidate and will supply
+the proposed complete-tree comparison and generated source closure. Issue
+#630 retains acceptance of that candidate, the post-merge comparison and
+integration-branch reconciliation. These remaining observations retain their
+own standing until their recorded results establish them.
+
+Record later decision-changing friction in the existing Issue and revise the
+affected rule. Repeated distinct uses may support `stable`; this first exercise
+establishes only the phases and receiving context stated above.
 
 The runbook rests after the source handoff. A changed exclusion, generator,
 dependency, receiving branch or publication grant reopens its matching phase.

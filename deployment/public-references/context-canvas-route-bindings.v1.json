@@ -752,16 +752,16 @@
       "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
     },
     {
-      "token": "PUBLIC_URL_IFRAME_CROSS_FUNCTIONAL_INVESTMENT_STUDIO",
+      "token": "PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS",
       "authority_class": "iframe",
       "role": "hosted_instrument",
       "owner": {
         "type": "iframe_route_manifest",
         "family": "canvas",
-        "route_id": "cross-functional-investment-studio"
+        "route_id": "investment-studio-chapters"
       },
       "fragment": null,
-      "expected_url": "https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/",
+      "expected_url": "https://iframes.vik.guru/v1/canvas/investment-studio-chapters/",
       "allowed_carriers": [
         "jsonld"
       ],

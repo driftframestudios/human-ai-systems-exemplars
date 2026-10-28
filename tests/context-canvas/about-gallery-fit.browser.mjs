@@ -126,6 +126,10 @@ for (const engine of Object.keys(engines)) {
 
   test(`${engine}: foreign initialization, document navigation and failure preserve the receiving boundary`, { timeout: 60000 }, async () => {
     const observation = await session(engine);
+    const settleSelectedImages = () => observation.frame.locator('.panel:not([hidden]) img').evaluateAll(images => Promise.all(images.map(image => {
+      image.loading = 'eager';
+      return image.decode();
+    })));
     try {
       await fitted(observation);
       const baseline = await observation.carrier.evaluate(element => element.getBoundingClientRect().height);
@@ -150,12 +154,16 @@ for (const engine of Object.keys(engines)) {
       await expect.poll(async () => (await fitted(observation)).content).toBeGreaterThan(baseline + 100);
       assert.equal(await observation.page.evaluate(() => window.__foreignGalleryReports), 0, 'a different frame receives no Gallery sizing channel');
       await observation.context.route(`${childServer.origin}/old-gallery.html`, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Prior child</title><p style="height:1600px">Readable prior Gallery document.</p>' }));
+      // Finish the selected panel's lazy images before intentionally unloading
+      // its document; genuine request failures remain in strict telemetry.
+      await settleSelectedImages();
       await observation.frame.goto(`${childServer.origin}/old-gallery.html`);
       await expect(observation.carrier).not.toHaveAttribute('data-content-fit', 'ready');
       assert.ok(await observation.carrier.evaluate(element => element.getBoundingClientRect().height) > 300, 'a child without the protocol retains ordinary fallback space');
       assert.equal(await observation.page.locator('a[href="../../collaboration/about-ai-method-gallery/index.html"]').count(), 1);
       await observation.frame.goto(`${childServer.origin}${galleryPath}`);
       await fitted(observation);
+      await settleSelectedImages();
     } finally { await observation.close(); }
     const fallback = await session(engine, { childObserverAvailable: false });
     try {

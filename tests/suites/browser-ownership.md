@@ -84,18 +84,18 @@ their separate owners.
 
 ## About fitted-instrument mechanics
 
-`tests/context-canvas/about-content-fit-helper.mjs` serves the Gallery and Prompt
-Conditions Explorer cases. It reuses Core's static server and four-channel
-telemetry, packages both canonical children into a temporary second origin, and
+`tests/context-canvas/about-content-fit-helper.mjs` serves the Gallery, Prompt
+Conditions Explorer, and Studio chapter cases. It reuses Core's static server and four-channel
+telemetry, packages the three children into a temporary second origin, and
 preserves their authored opaque sandbox. It owns session cleanup and the actual
 parent, child-document, and targeted-local-region geometry observations. Each
 browser file owns its independent content, selection, keyboard, failure, and
 static/print expectations. This bounded helper adds a direct Core consumer;
-the entry-point inventory below counts the two executable case files separately.
+the entry-point inventory below counts the three executable case files separately.
 
 ## Existing direct Core consumers
 
-These 51 current direct browser entry points retain their imports and case
+These 52 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
@@ -105,6 +105,7 @@ and does not claim a new execution of every assertion.
 | `tests/context-canvas/about-heatmap.browser.mjs` | Native About comparison state, exact figure identity, scriptless and print reading, enlarged-text containment, keyboard focus, page wheel movement, and controlled state/layout faults in three engines. |
 | `tests/context-canvas/about-gallery-fit.browser.mjs` | About Gallery natural body/footer height, disclosure growth/shrinkage, retained selections, per-document channel and fallback, parent wheel movement, local package substitution, and restored bounded-height fault in three engines. |
 | `tests/context-canvas/about-prompt-fit.browser.mjs` | Five-condition Explorer state, parent/document/local-region scroll ownership, natural height, narrow/enlarged text, keyboard, two-frame isolation, fallback, and static/print readings in three engines. |
+| `tests/context-canvas/about-studio-chapters.browser.mjs` | About Studio live editing, retained chapter state, source/variant parity, independent staffing expectation, cross-chapter focus, active-document sizing and parent scroll, and controlled capture faults in three engines. |
 | `tests/context-canvas/about-disclosure-readings.browser.mjs` | About folio native disclosure reach, fixed thirteen-record and five-prompt-row print population, scripting enabled/disabled, keyboard focus and screen-state preservation, actual text containment, and restored hidden-summary/content faults in three engines. |
 | `tools/about-media-browser-contract.mjs` | About-media behavior and its own observations. |
 | `tests/context-canvas/visitor-image-delivery.browser.mjs` | Loopback delivery of every About, AI Systems, and Debriefs `img[src]` receiver in Chromium and Playwright WebKit, including browser-selected sources, image media types, route-appropriate eager or lazy loading, and intrinsic dimensions. The focused About media contract owns its native-video poster. |

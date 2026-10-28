@@ -9,9 +9,9 @@
     "indexed_page_count": 40
   },
   "authority_receipts": {
-    "public_route_binding_sha256": "e2753bd915f63e3b7218f57477cee41b38b46520786317946f4773d9e22efe4e",
+    "public_route_binding_sha256": "d7419e3b1a4efd8c5d245ecfaec53d389c6ccab0d54c73ea0a7a37e16e9e4834",
     "registry_binding_sha256": "9a28f3fe1db2aad1d5455361b40d4827538869768cd2ee89b03e4f1ebc1d41c3",
-    "occurrence_sha256": "5a0da219a059f5dba40f7332625c82764bf7d3ec6f910e37b2b0dd12d1b8ea8f"
+    "occurrence_sha256": "080cb8b579a587df65cc132326664c284d8c18aa2f986f79bd257454ab5b8c50"
   },
   "counts": {
     "entries": 626,
@@ -6292,13 +6292,13 @@
       "property": "url",
       "object_type": "SoftwareApplication",
       "object_name": "Cross-Functional Investment Studio",
-      "source_value": "{{PUBLIC_URL_IFRAME_CROSS_FUNCTIONAL_INVESTMENT_STUDIO}}",
-      "token": "PUBLIC_URL_IFRAME_CROSS_FUNCTIONAL_INVESTMENT_STUDIO",
-      "effective_url": "https://iframes.vik.guru/v1/canvas/cross-functional-investment-studio/",
+      "source_value": "{{PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS}}",
+      "token": "PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS",
+      "effective_url": "https://iframes.vik.guru/v1/canvas/investment-studio-chapters/",
       "authority_class": "iframe",
       "authority_role": "hosted_instrument",
       "relationship_role": "jsonld",
-      "authority_owner": "iframe_route_manifest:canvas:cross-functional-investment-studio",
+      "authority_owner": "iframe_route_manifest:canvas:investment-studio-chapters",
       "confidence": "manifest_derived",
       "review_status": "accepted",
       "follow_up_issue": "#610"

@@ -153,6 +153,7 @@
         "tests/context-canvas/about-first-paint-css.test.mjs",
         "tests/context-canvas/about-content-fit.test.mjs",
         "tests/context-canvas/about-heatmap.test.mjs",
+        "tests/context-canvas/about-studio-chapters.test.mjs",
         "tests/context-canvas/ai-systems-cross-references.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
@@ -2721,6 +2722,28 @@
       "aliases": [
         "test:about-disclosure-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.about-studio-chapters",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-studio-chapters.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "About Studio chapter editing, independent staffing arithmetic, original/variant parity, retained state, cross-chapter focus, active-content height and parent-owned vertical scrolling in three engines. Full Studio and hosted publication retain their source owners.",
+      "aliases": [
+        "test:about-studio-chapters-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2838,7 +2861,8 @@
         "browser.context-canvas.debrief-evidence-cards",
         "browser.context-canvas.debrief-callout-integrity",
         "browser.context-canvas.about-scroll",
-        "browser.context-canvas.about-disclosures"
+        "browser.context-canvas.about-disclosures",
+        "browser.context-canvas.about-studio-chapters"
       ]
     },
     {
@@ -3271,6 +3295,9 @@
         ],
         "test:about-disclosure-browser": [
           "tests/context-canvas/about-disclosure-readings.browser.mjs"
+        ],
+        "test:about-studio-chapters-browser": [
+          "tests/context-canvas/about-studio-chapters.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

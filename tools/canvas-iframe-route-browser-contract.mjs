@@ -137,9 +137,9 @@ async function assertGeneratedClosure(contract, receipt) {
   assert.equal(receipt.version, "1");
   assert.equal(receipt.host, contract.host);
   assert.equal(receipt.base_path, contract.base_path);
-  assert.equal(receipt.package_contract?.primary_routes, 15);
+  assert.equal(receipt.package_contract?.primary_routes, 16);
   assert.equal(receipt.package_contract?.browser_request_observation_required, true);
-  assert.equal(receipt.routes?.length, 15);
+  assert.equal(receipt.routes?.length, 16);
 
   const topLevelEntries = await readdir(canvasOutputRoot, { withFileTypes: true });
   const expectedTopLevel = sorted([
@@ -676,6 +676,20 @@ async function exerciseInvestmentStudio(session) {
     session,
     page.locator('a[href="https://www.blueoceanstrategy.com/tools/four-actions-framework/"]'),
   );
+}
+
+// The focused About chapter suite owns editing arithmetic and parent scrolling.
+// This family receiver checks that the packaged presentation keeps its controls.
+async function exerciseInvestmentStudioChapters({ page }) {
+  await page.locator('html[data-about-studio-chapters="ready"]').waitFor();
+  for (const chapter of ['plan', 'people', 'work', 'coordination', 'comparison']) {
+    const control = page.locator(`button[data-studio-chapter="${chapter}"]`);
+    await control.click();
+    assert.equal(await control.getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('[data-studio-panel]:visible').count(), 1);
+    assert.equal(await page.locator(`[data-studio-panel="${chapter}"]`).isVisible(), true);
+    assert.equal(await page.locator('#band').count(), 1, 'one original live investment summary');
+  }
 }
 
 async function observeExternalPopup(session, locator) {
@@ -2374,6 +2388,13 @@ const behaviorProfiles = new Map([
     },
     exercise: exerciseInvestmentStudio,
   }],
+  ["investment-studio-chapters", {
+    policy: {
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
+      permissions_policy: ["clipboard-write"],
+    },
+    exercise: exerciseInvestmentStudioChapters,
+  }],
   ["prompt-conditions-explorer", {
     policy: {
       sandbox_tokens: ["allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
@@ -2519,7 +2540,7 @@ export async function runCanvasIframeRouteBrowserContract(options = {}) {
 
   assert.equal(contract.id, "context-canvas.public-iframe-routes.v1");
   assert.equal(contract.base_path, "/v1/canvas/");
-  assert.equal(contract.routes?.length, 15);
+  assert.equal(contract.routes?.length, 16);
   assert.deepEqual(
     sorted(contract.routes.map(({ id }) => id)),
     sorted(behaviorProfiles.keys()),
