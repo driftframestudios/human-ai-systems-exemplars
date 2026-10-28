@@ -23,6 +23,16 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/about-content-fit.js",
+      "projected_path": "about-content-fit.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/about-heatmap.js",
+      "projected_path": "about-heatmap.js",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/about-media.js",
       "projected_path": "about-media.js",
       "media_type": "text/javascript"

@@ -1,14 +1,4 @@
-/* About page · complete static reading when scripting is unavailable. */
-.about-page .about-folio-disclosure > summary,
-.about-page .about-prompt-explorer,
-.about-page .about-prompt-static > summary {
+/* About page · static readings and native disclosure when scripting is unavailable. */
+.about-page .about-prompt-explorer {
   display: none;
-}
-
-.about-page .about-folio-disclosure:not([open]) > .about-folio-disclosure__body {
-  display: grid;
-}
-
-.about-page .about-prompt-static:not([open]) > :not(summary) {
-  display: block;
 }

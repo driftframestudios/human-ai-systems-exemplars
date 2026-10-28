@@ -154,7 +154,13 @@
     "check:visual-fidelity-pattern-library": "node tools/check-node-runtime.mjs --quiet && node tools/build-visual-fidelity-pattern-library.mjs --check",
     "test:visual-fidelity-contracts:source": "node tools/check-node-runtime.mjs --quiet && node --test tests/visual-fidelity-contracts/component-model.test.mjs tests/visual-fidelity-contracts/component-page.test.mjs tests/visual-fidelity-contracts/component-probes.test.mjs tests/visual-fidelity-contracts/contract-art-directions.test.mjs tests/visual-fidelity-contracts/data-view-model.test.mjs tests/visual-fidelity-contracts/data-view-page.test.mjs tests/visual-fidelity-contracts/design-token-pipeline.test.mjs tests/visual-fidelity-contracts/foundation-contracts.test.mjs tests/visual-fidelity-contracts/lifecycle-model.test.mjs tests/visual-fidelity-contracts/lifecycle-source.test.mjs tests/visual-fidelity-contracts/pattern-library.test.mjs tests/visual-fidelity-contracts/service-boundary-model.test.mjs",
     "test:visual-fidelity-contracts:browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/visual-fidelity-contracts/component.browser.mjs tests/visual-fidelity-contracts/contract-art-directions.browser.mjs tests/visual-fidelity-contracts/data-view-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-browser.test.mjs tests/visual-fidelity-contracts/lifecycle-framework-adapters.browser.mjs tests/visual-fidelity-contracts/pattern-library.browser.mjs tests/visual-fidelity-contracts/service-boundary.browser.mjs",
-    "test:visual-fidelity-contracts": "node tools/check-node-runtime.mjs --quiet && npm run test:visual-fidelity-contracts:source && npm run check:visual-fidelity-pattern-library && npm run test:visual-fidelity-contracts:browser"
+    "test:visual-fidelity-contracts": "node tools/check-node-runtime.mjs --quiet && npm run test:visual-fidelity-contracts:source && npm run check:visual-fidelity-pattern-library && npm run test:visual-fidelity-contracts:browser",
+    "build:about-heatmap": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-heatmap.mjs",
+    "check:about-heatmap": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-heatmap.mjs --check",
+    "test:about-scroll-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-heatmap.browser.mjs tests/context-canvas/about-gallery-fit.browser.mjs tests/context-canvas/about-prompt-fit.browser.mjs",
+    "test:about-disclosure-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-disclosure-readings.browser.mjs",
+    "build:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs",
+    "check:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs --check"
   },
   "overrides": {
     "fast-uri": "4.1.5"

@@ -22,9 +22,12 @@ const WORKER = new Set([
   'cloudflare/schemas-worker/src/index.js',
 ]);
 const BROWSER_SHARED = new Set([
+  'collaboration/embedded-content-fit.js',
   'collaboration/investment-analysis/capsule.js',
   'collaboration/investment-analysis/core.js',
   'collaboration/investment-analysis/studio.js',
+  'context-canvas-project-surface/context-canvas/about-content-fit.js',
+  'context-canvas-project-surface/context-canvas/about-heatmap.js',
   'context-canvas-project-surface/context-canvas/about-media.js',
   'context-canvas-project-surface/context-canvas/atlas-gallery-model.js',
   'context-canvas-project-surface/context-canvas/atlas-gallery-table.js',

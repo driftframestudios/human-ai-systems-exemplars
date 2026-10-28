@@ -151,6 +151,8 @@
       "kind": "node-test",
       "members": [
         "tests/context-canvas/about-first-paint-css.test.mjs",
+        "tests/context-canvas/about-content-fit.test.mjs",
+        "tests/context-canvas/about-heatmap.test.mjs",
         "tests/context-canvas/ai-systems-cross-references.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
@@ -171,11 +173,11 @@
         "tests/context-canvas/rail-label-failures.test.mjs",
         "tests/context-canvas/rail-shell-source.test.mjs",
         "tests/context-canvas/retained-exemplar-standing.test.mjs",
-        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
         "tests/context-canvas/visitor-terminology.test.mjs",
         "tests/context-canvas/visitor-video-contract.test.mjs",
+        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/who-to-believe-system-graph.test.mjs"
       ],
       "profile": "node-source",
@@ -2673,6 +2675,52 @@
       "aliases": [
         "test:debrief-callout-integrity-browser"
       ]
+    },
+    {
+      "id": "browser.context-canvas.about-scroll",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-heatmap.browser.mjs",
+        "tests/context-canvas/about-gallery-fit.browser.mjs",
+        "tests/context-canvas/about-prompt-fit.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Native About heatmap selection, static/print reading and parent scroll; shared content-fit channel admission, independent Gallery and Prompt Conditions Explorer sizing, full-content growth/shrink, retained state, keyboard and wheel behavior against explicitly substituted local packaged children in Chromium, Firefox and Playwright WebKit. Native touch and live hosted release retain separate observations.",
+      "aliases": [
+        "test:about-scroll-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.about-disclosures",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/about-disclosure-readings.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "About Career and Quality native disclosure reach with scripting enabled or disabled, fixed record membership, state labels and keyboard focus, complete parent print readings for thirteen records and five Prompt Conditions rows, repeated screen/print state preservation, and restored hiding faults in Chromium, Firefox and Playwright WebKit. Native applications and physical pagination retain separate observations.",
+      "aliases": [
+        "test:about-disclosure-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2788,7 +2836,9 @@
         "browser.context-canvas.card-rail-clearance",
         "browser.context-canvas.linked-reading-containment",
         "browser.context-canvas.debrief-evidence-cards",
-        "browser.context-canvas.debrief-callout-integrity"
+        "browser.context-canvas.debrief-callout-integrity",
+        "browser.context-canvas.about-scroll",
+        "browser.context-canvas.about-disclosures"
       ]
     },
     {
@@ -2815,7 +2865,8 @@
         "browser.context-canvas.debrief-hero-colors",
         "browser.context-canvas.debrief-link-cues",
         "browser.context-canvas.debrief-hero-wrapping",
-        "browser.context-canvas.debrief-caption-colors"
+        "browser.context-canvas.debrief-caption-colors",
+        "browser.context-canvas.about-disclosures"
       ]
     },
     {
@@ -3212,6 +3263,14 @@
         ],
         "test:debrief-callout-integrity-browser": [
           "tests/context-canvas/debrief-callout-integrity.browser.mjs"
+        ],
+        "test:about-scroll-browser": [
+          "tests/context-canvas/about-heatmap.browser.mjs",
+          "tests/context-canvas/about-gallery-fit.browser.mjs",
+          "tests/context-canvas/about-prompt-fit.browser.mjs"
+        ],
+        "test:about-disclosure-browser": [
+          "tests/context-canvas/about-disclosure-readings.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
