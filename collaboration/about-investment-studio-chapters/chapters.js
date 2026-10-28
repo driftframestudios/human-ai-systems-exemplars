@@ -190,12 +190,17 @@
     try { destination = new URL(target.getAttribute("href"), document.baseURI); }
     catch { return; }
     if (destination.origin === location.origin && destination.pathname === location.pathname && destination.search === location.search) {
-      navigateTo(fragmentTarget(destination.hash));
+      const receiver = fragmentTarget(destination.hash);
+      if (!receiver?.closest("[data-studio-panel]")) return;
+      // Chapter navigation owns this same-document transition. Native fragment
+      // navigation can emit a WebKit carrier load and reset its fitted channel.
+      event.preventDefault();
+      if (destination.hash !== location.hash) history.pushState(null, "", destination.hash);
+      navigateTo(receiver);
     }
   }, true);
   // Capture runs before the original fragment listeners focus their receivers.
   window.addEventListener("hashchange", revealFragment, true);
-  window.addEventListener("popstate", revealFragment, true);
   shell.addEventListener("input", scheduleEditorFit);
   shell.addEventListener("change", scheduleEditorFit);
   shell.addEventListener("click", scheduleEditorFit);

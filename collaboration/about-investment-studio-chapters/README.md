@@ -35,6 +35,15 @@ positions that target using its own viewport and navigation. This parent-owned
 reveal handles WebKit's observed cross-frame scrolling difference; the ordinary
 full Studio retains native document navigation.
 
+The chapter controller handles an ordinary same-document fragment link when
+its target belongs to a chapter. It adds one history entry when the fragment
+changes and schedules the receiving focus and reveal once. This preserves the
+current sizing channel: WebKit's native fragment navigation can emit an iframe
+load for the same child document and reset that channel. Back and Forward use
+`hashchange` to expose their receiving chapter. Modified clicks, downloads,
+other browsing targets, unknown fragments and other documents keep their native
+link behavior.
+
 ## Local verification and delivery
 
 From the repository root:
