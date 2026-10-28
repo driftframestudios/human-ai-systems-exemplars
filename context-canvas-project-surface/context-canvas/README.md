@@ -29,50 +29,71 @@ The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/REA
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.vik.guru`; completed [Issue #406](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/406) preserves the earlier v0.3 delivery lineage, while completed [Issue #531](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/531), under the [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) delivery family, records the accepted v0.3.1 Worker publication and signed-out receipt.
 
-## About comparison and Gallery scroll pilot
+## About comparison and fitted instruments
 
-About owns the vertical reading flow through its native heatmap comparison and
-its opted-in AI Method Gallery. The full Investment Studio and Prompt Conditions
-Explorer retain their existing independent carriers.
+About owns vertical reading through its native heatmap comparison, AI Method
+Gallery, and Prompt Conditions Explorer. The full Investment Studio retains its
+existing independent carrier.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
 `tools/materialize-about-heatmap.mjs` projects its two figures, captions, and
 interpretation into a marked native block in `index.html`; `about-heatmap.js`
 adds root-scoped Before, After, and Side-by-side controls. Static and print
 readings retain both figures. `styles/routes/about.css` owns the receiving
-composition and uses the existing About palette. Run `npm run build:about-heatmap`
-after an intentional canonical content edit and `npm run check:about-heatmap`
-to verify the receiving projection.
+composition and uses the existing About palette.
 
-Only `iframe[data-about-gallery-fit]` receives `about-gallery-fit.js`. A fresh
-MessageChannel belongs to each frame document; the parent accepts a bounded,
-versioned whole-pixel height and releases its reserved minimum after admission.
-The child's inline adapter measures its natural body, including the packaged
-footer. Its body height stays independent of the frame viewport, allowing
-both expansion and shrinkage. The fitted presentation lets prompt and contract
-text flow and introduces separate matrix disclosures. The full-view route and
-ordinary frame sizing remain the fallback when the channel is unavailable.
-Existing sandbox permissions and hosted route identity retain their owners.
-The standalone Gallery preserves its complete static and print comparisons;
-About keeps its existing print policy for embedded instruments. The native
-heatmap participates directly in About print.
+`about-content-fit.js` admits height reports only for About's two explicit
+`iframe[data-about-content-fit]` consumers. Each document receives its own
+MessageChannel, bounded versioned height reports, and navigation cleanup. The
+parent batches writes to `--about-content-block-size`; its ready-state rule
+follows the ordinary route-specific reservations, including the narrow Explorer
+fallback. Other carriers retain their existing dimensions.
 
-Focused source observations:
+`collaboration/embedded-content-fit.js` owns the common child layout adapter.
+`tools/materialize-embedded-content-fit.mjs` projects it inline into exactly the
+Gallery and Explorer HTML sources, preserving their self-contained package
+contract. Edit the common source and regenerate both inline receivers. The
+adapter measures natural body height, including packaged attribution, so both
+expansion and shrinkage remain observable. Keep changing content within Gallery's
+`main` or Explorer's padded `.shell`; a new direct body child must keep its outer
+block margins inside the measured body box. Changes to these flow owners or the
+attribution footer earn another expansion and shrinkage check. The first accepted
+fit event lets each instrument apply its own presentation; Gallery owns matrix disclosures and
+print restoration, and Explorer keeps its routing matrix visible.
+
+The fitted children let prompt and state/schema text grow and wrap. Selection,
+semantic tables, horizontal comparison regions, and onward destinations retain
+their instrument owners. Existing sandbox permissions, hosted route identities,
+and full-view links remain intact. Ordinary reserved sizing supplies the fallback
+while the height channel is unavailable.
+With scripting disabled, About retains the Explorer's native static-overview
+disclosure so visitors can open its complete five-condition reading by keyboard.
+
+Focused checks:
 
 ```sh
-node --test tests/context-canvas/about-heatmap.test.mjs tests/context-canvas/about-gallery-fit.test.mjs
+npm run build:embedded-content-fit
+npm run check:embedded-content-fit
+node --test tests/context-canvas/about-content-fit.test.mjs
+npm run build:about-heatmap
 npm run check:about-heatmap
 npm run test:about-scroll-browser
 ```
 
-The browser checks exercise Chromium, Firefox, and Playwright WebKit. Gallery
-cases explicitly substitute the freshly packaged child on a second local origin
-while preserving the production sandbox. This establishes local source and
-package behavior; the unchanged hosted child and native device input retain
-separate observations. A future authorized release publishes and verifies the
-compatible child before receiving the parent enhancement. Publication remains
-held for this dev pilot. Issues #616 and #617 hold acceptance and the reviewed PR
-receipt; #596 retains independent probability-calibration ownership.
+The browser suite exercises Chromium, Firefox, and Playwright WebKit. Its fitted
+instrument cases explicitly substitute freshly packaged children on a second
+local origin while preserving the production sandbox. This establishes local
+source and package behavior. Standalone print checks exercise each instrument's
+existing visible comparison; About keeps its established print policy for
+embedded instruments, with the native heatmap participating directly in print.
+Native-device input, physical pagination, and the exact hosted release retain
+separate observations.
+
+Issues #616 and #617 and PR #619 hold the first accepted pilot; #620 owns the
+Explorer iteration and shared adapter. The reviewed PR is the durable receiving
+record. A future authorized release publishes and verifies compatible children
+before the parent enhancement. Publication remains held; #596 retains independent
+probability-calibration ownership, and #589 remains human-held.
 
 ## Primary navigation
 

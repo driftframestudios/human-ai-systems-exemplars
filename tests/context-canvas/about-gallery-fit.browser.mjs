@@ -1,147 +1,25 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { mkdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { after, before, test } from 'node:test';
-import { chromium, firefox, webkit, expect } from '@playwright/test';
-import { assertTelemetry, monitor, startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
-import { createCanvasPackagePlan } from '../../tools/package-canvas-iframe-routes.mjs';
-import { writePackagePlan } from '../../tools/iframe-route-package-engine.mjs';
+import { expect } from '@playwright/test';
+import { assertTelemetry, monitor } from '../../tools/core-architecture-browser-helper.mjs';
+import { createAboutContentFitHarness, engines, fitted, wheelObservation, assertParentReading, observeCodeText } from './about-content-fit-helper.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
-const aboutPath = '/context-canvas-project-surface/context-canvas/index.html';
 const galleryPath = '/v1/canvas/ai-method-gallery/';
-const hostedGallery = `https://iframes.vik.guru${galleryPath}`;
-const frameSelector = 'iframe[data-about-gallery-fit]';
-const engines = { chromium, firefox, webkit };
-const browsers = new Map();
+const frameSelector = 'iframe[data-about-content-fit="gallery"]';
 const captureRoot = join(root, '.visual-runs/about-gallery-fit');
-let parentServer;
-let childServer;
-let temporaryRoot;
-let parentHtml;
-
+let harness, browsers, parentServer, childServer;
 before(async () => {
   await mkdir(captureRoot, { recursive: true });
-  parentHtml = await readFile(join(root, aboutPath), 'utf8');
-  assert.match(parentHtml, /data-about-gallery-fit/, 'the actual About carrier opts into the owned adapter');
-  const plan = await createCanvasPackagePlan();
-  temporaryRoot = await mkdtemp(join(tmpdir(), 'about-gallery-package-'));
-  await writePackagePlan(plan, join(temporaryRoot, 'v1/canvas'));
-  parentServer = await startStaticServer(root);
-  childServer = await startStaticServer(temporaryRoot);
-  assert.notEqual(parentServer.origin, childServer.origin, 'the packaged child has a distinct receiving origin');
+  harness = await createAboutContentFitHarness();
+  ({ browsers, parentServer, childServer } = harness);
 });
-after(async () => {
-  await Promise.all([...browsers.values()].map(browser => browser.close()));
-  await parentServer?.close();
-  await childServer?.close();
-  if (temporaryRoot) await rm(temporaryRoot, { recursive: true, force: true });
-});
-
-async function session(engine, options = {}) {
-  if (!browsers.has(engine)) browsers.set(engine, await engines[engine].launch());
-  const { childObserverAvailable = true, ...contextOptions } = options;
-  const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 900 }, ...contextOptions });
-  if (!childObserverAvailable) await context.addInitScript(() => { window.ResizeObserver = undefined; });
-  await context.route('**/*', async route => {
-    const url = new URL(route.request().url());
-    if (url.origin === parentServer.origin && url.pathname === aboutPath) {
-      // The stored carrier keeps its approved hosted alias. This response alone
-      // receives the freshly packaged child while publication is held.
-      await route.fulfill({ contentType: 'text/html', body: parentHtml.replace(`src="${hostedGallery}"`, `src="${childServer.origin}${galleryPath}"`) });
-    } else if (url.origin === childServer.origin) {
-      // Fulfill from the local package server: Chromium classifies an intercepted
-      // parent as public address space and otherwise blocks loopback children.
-      await route.fulfill({ response: await route.fetch() });
-    } else if (url.origin === parentServer.origin) {
-      await route.continue();
-    } else {
-      await route.fulfill({ contentType: route.request().resourceType() === 'image' ? 'image/svg+xml' : 'text/html',
-        body: route.request().resourceType() === 'image' ? '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>' : '<!doctype html><title>Unrelated hosted surface</title>' });
-    }
-  });
-  const page = await context.newPage();
-  page.setDefaultTimeout(8000);
-  const telemetry = monitor(page);
-  try {
-    await page.goto(`${parentServer.origin}${aboutPath}`, { waitUntil: 'domcontentloaded' });
-    // Resolve parent-owned images before print/scroll observations so lazy-image
-    // cancellation remains separate from this child-layout contract.
-    await page.locator('img').evaluateAll(images => Promise.all(images.map(image => { image.loading = 'eager'; return image.decode(); })));
-    const carrier = page.locator(frameSelector);
-    await carrier.scrollIntoViewIfNeeded();
-    const frame = await (await carrier.elementHandle()).contentFrame();
-    await frame.locator('main').waitFor();
-    return { context, page, carrier, frame, async close() {
-      try { await page.evaluate(() => new Promise(requestAnimationFrame)); assertTelemetry(telemetry); }
-      finally { await context.close(); }
-    } };
-  } catch (error) {
-    await context.close();
-    throw new Error(`Gallery local receiver setup: ${JSON.stringify(telemetry)}`, { cause: error });
-  }
-}
-
-async function fitted(observation) {
-  await observation.carrier.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest' }));
-  await expect(observation.carrier).toHaveAttribute('data-gallery-fit', 'ready');
-  let measured;
-  await expect.poll(async () => {
-    measured = await observation.frame.evaluate(() => ({
-      viewport: innerHeight, content: Math.ceil(document.body.getBoundingClientRect().height),
-      scroll: document.scrollingElement.scrollHeight, width: innerWidth,
-      footer: document.querySelector('[data-iframe-route-attribution]').getBoundingClientRect().bottom,
-      y: scrollY,
-    }));
-    return Math.max(Math.abs(measured.viewport - measured.content), measured.scroll - measured.viewport,
-      measured.footer - measured.viewport, Math.abs(measured.y));
-  }).toBeLessThanOrEqual(2);
-  assert.ok(measured.scroll <= measured.viewport + 2, 'the full generated document fits the child viewport');
-  assert.ok(measured.footer <= measured.viewport + 2, 'the package-owned footer participates in natural sizing');
-  assert.equal(measured.y, 0, 'the child retains its vertical reading origin');
-  return measured;
-}
-
-async function wheelObservation(observation, selector = 'header h1') {
-  const target = observation.frame.locator(selector).first();
-  // Native instant scrolling also works when a deliberate short-frame fault
-  // places the child outside the viewport and pauses its animation frames.
-  await target.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
-  const box = await target.boundingBox();
-  assert.ok(box && box.width > 0 && box.height > 0);
-  const before = { parent: await observation.page.evaluate(() => scrollY), child: await observation.frame.evaluate(() => scrollY) };
-  await observation.page.mouse.move(box.x + Math.min(box.width / 2, 80), box.y + Math.min(box.height / 2, 20));
-  await observation.page.mouse.wheel(0, 260);
-  await expect.poll(async () => {
-    const parent = await observation.page.evaluate(() => scrollY);
-    const child = await observation.frame.evaluate(() => scrollY);
-    return Math.abs(parent - before.parent) + Math.abs(child - before.child);
-  }).toBeGreaterThan(5);
-  return { parent: await observation.page.evaluate(() => scrollY) - before.parent,
-    child: await observation.frame.evaluate(() => scrollY) - before.child };
-}
-function assertParentReading(result) {
-  assert.ok(result.parent > 5, `About receives vertical reading input; observed parent delta ${result.parent}`);
-  assert.equal(result.child, 0, 'Gallery retains its vertical origin during ordinary reading');
-}
-
-async function observeCodeText(frame) {
-  return frame.locator('#prompt-text, #gallery-state, #gallery-schema').evaluateAll(elements => elements.map(element => {
-          const box = element.getBoundingClientRect();
-          const range = document.createRange();
-          const fragments = [];
-          const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-          for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-            for (const word of node.textContent.matchAll(/\S+/gu)) {
-              range.setStart(node, word.index); range.setEnd(node, word.index + word[0].length);
-              fragments.push(...[...range.getClientRects()].filter(rect => rect.width > 0 && rect.height > 0).map(rect => ({ left: rect.left, right: rect.right })));
-            }
-          }
-          return { id: element.id, box: { left: box.left, right: box.right }, viewport: innerWidth, fragments };
-        }));
-}
+after(async () => { await harness?.close(); });
+const session = (engine, options) => harness.session('gallery', engine, options);
+const galleryCode = '#prompt-text, #gallery-state, #gallery-schema';
 
 for (const engine of Object.keys(engines)) {
   test(`${engine}: packaged Gallery grows and shrinks with selection, disclosures, reflow and late content`, { timeout: 90000 }, async () => {
@@ -174,7 +52,11 @@ for (const engine of Object.keys(engines)) {
         await observation.page.setViewportSize({ width, height: 900 });
         await fitted(observation);
         if (engine === 'webkit' && [390, 1440].includes(width)) {
-          await observation.carrier.screenshot({ path: join(captureRoot, `gallery-${engine}-${width}.png`) });
+          await observation.carrier.evaluate(element => {
+            const nav = document.querySelector('.nav__top--sticky');
+            scrollTo({ top: scrollY + element.getBoundingClientRect().top - nav.getBoundingClientRect().height - 16, behavior: 'instant' });
+          });
+          await observation.page.screenshot({ path: join(captureRoot, `gallery-${engine}-${width}.png`) });
         }
       }
       // Bracket the child's 760px and 1100px composition seams using its actual
@@ -233,7 +115,7 @@ for (const engine of Object.keys(engines)) {
       await faultObservation.carrier.evaluate(element => { element.style.setProperty('block-size', '420px', 'important'); });
       const fault = await wheelObservation(faultObservation);
       assert.ok(fault.child > 5, `the restored bounded frame receives vertical input: ${JSON.stringify(fault)}`);
-      assert.throws(() => assertParentReading(fault), /About receives vertical reading input|Gallery retains/, 'the reading oracle detects captured scrolling');
+      assert.throws(() => assertParentReading(fault), /About receives vertical reading input|fitted instrument retains/, 'the reading oracle detects captured scrolling');
     } finally { await faultObservation.close(); }
     const recovered = await session(engine, { viewport: { width: 390, height: 900 } });
     try {
@@ -247,12 +129,12 @@ for (const engine of Object.keys(engines)) {
     try {
       await fitted(observation);
       const baseline = await observation.carrier.evaluate(element => element.getBoundingClientRect().height);
-      await observation.page.evaluate(() => window.postMessage({ type: 'context-canvas:gallery-height', version: 1, height: 99999 }, '*'));
+      await observation.page.evaluate(() => window.postMessage({ type: 'context-canvas:content-fit-height', version: 1, height: 99999 }, '*'));
       await observation.context.route(`${parentServer.origin}/gallery-foreign-sender.html`, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><script>
         const channel = new MessageChannel();
         parent.__foreignGalleryReports = 0;
         channel.port1.onmessage = () => { parent.__foreignGalleryReports += 1; };
-        parent.document.querySelector('${frameSelector}').contentWindow.postMessage({type:'context-canvas:gallery-connect',version:1}, '*', [channel.port2]);
+        parent.document.querySelector('${frameSelector}').contentWindow.postMessage({type:'context-canvas:content-fit-connect',version:1}, '*', [channel.port2]);
       </script>` }));
       await observation.page.evaluate(async origin => {
         const sender = document.createElement('iframe');
@@ -269,7 +151,7 @@ for (const engine of Object.keys(engines)) {
       assert.equal(await observation.page.evaluate(() => window.__foreignGalleryReports), 0, 'a different frame receives no Gallery sizing channel');
       await observation.context.route(`${childServer.origin}/old-gallery.html`, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Prior child</title><p style="height:1600px">Readable prior Gallery document.</p>' }));
       await observation.frame.goto(`${childServer.origin}/old-gallery.html`);
-      await expect(observation.carrier).not.toHaveAttribute('data-gallery-fit', 'ready');
+      await expect(observation.carrier).not.toHaveAttribute('data-content-fit', 'ready');
       assert.ok(await observation.carrier.evaluate(element => element.getBoundingClientRect().height) > 300, 'a child without the protocol retains ordinary fallback space');
       assert.equal(await observation.page.locator('a[href="../../collaboration/about-ai-method-gallery/index.html"]').count(), 1);
       await observation.frame.goto(`${childServer.origin}${galleryPath}`);
@@ -278,7 +160,7 @@ for (const engine of Object.keys(engines)) {
     const fallback = await session(engine, { childObserverAvailable: false });
     try {
       assert.equal(await fallback.frame.locator('[data-gallery-matrix][open]').count(), 2);
-      assert.equal(await fallback.carrier.getAttribute('data-gallery-fit'), null);
+      assert.equal(await fallback.carrier.getAttribute('data-content-fit'), null);
       assert.ok(await fallback.carrier.evaluate(element => element.getBoundingClientRect().height) > 300);
     } finally { await fallback.close(); }
   });
@@ -292,7 +174,7 @@ for (const engine of Object.keys(engines)) {
         await observation.page.setViewportSize({ width, height: 900 });
         await observation.frame.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, fontSize);
         await fitted(observation);
-        const readings = await observeCodeText(observation.frame);
+        const readings = await observeCodeText(observation.frame, galleryCode);
         assert.deepEqual(readings.map(reading => reading.id), ['prompt-text', 'gallery-state', 'gallery-schema']);
         for (const reading of readings) {
           assert.ok(reading.fragments.length > 0, `${reading.id} has visible text`);
@@ -301,11 +183,11 @@ for (const engine of Object.keys(engines)) {
         }
       }
       await observation.frame.locator('#prompt-text, #gallery-state, #gallery-schema').evaluateAll(elements => elements.forEach(element => { element.style.overflowWrap = 'normal'; }));
-      const fault = await observeCodeText(observation.frame);
+      const fault = await observeCodeText(observation.frame, galleryCode);
       assert.ok(fault.some(reading => reading.fragments.some(fragment => fragment.right > reading.box.right + 1)), 'restoring ordinary word wrapping exposes the enlarged-text overflow');
       await observation.frame.locator('#prompt-text, #gallery-state, #gallery-schema').evaluateAll(elements => elements.forEach(element => element.style.removeProperty('overflow-wrap')));
       await fitted(observation);
-      const recovered = await observeCodeText(observation.frame);
+      const recovered = await observeCodeText(observation.frame, galleryCode);
       assert.ok(recovered.every(reading => reading.fragments.every(fragment => fragment.right <= reading.box.right + 1)), 'the source-owned wrapping restores complete visible text');
     } finally { await observation.close(); }
   });

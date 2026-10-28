@@ -587,12 +587,6 @@ p#on-dark-iron-ore {
     min-block-size: 48rem;
 }
 
-/* Gallery height belongs to its admitted document channel; other carriers keep their reservation. */
-.about-embed iframe[data-about-gallery-fit][data-gallery-fit="ready"] {
-    min-block-size: 0;
-    block-size: var(--about-gallery-block-size);
-}
-
 .about-embed--studio iframe {
     min-block-size: 78rem;
 }
@@ -1943,4 +1937,11 @@ p#on-dark-iron-ore {
     .about-heatmap__controls, .about-heatmap__status { display: none; }
     .about-heatmap[data-mode] .about-heatmap__view { display: block; break-inside: avoid; }
     .about-heatmap[data-mode] .about-heatmap__views { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* About's two fitted instruments use their current document's admitted height.
+   Keep this after route-specific narrow fallback reservations. */
+.about-page iframe[data-about-content-fit][data-content-fit="ready"] {
+    min-block-size: 0;
+    block-size: var(--about-content-block-size);
 }

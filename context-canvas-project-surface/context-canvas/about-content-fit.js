@@ -1,4 +1,4 @@
-/* The About carrier accepts one bounded height channel per Gallery document. */
+/* The About carrier accepts one bounded height channel per opted-in document. */
 (function (root, factory) {
   const contract = factory();
   if (typeof module === "object" && module.exports) module.exports = contract;
@@ -7,7 +7,7 @@
   let controllers = [];
   const start = () => {
     if (controllers.length) return;
-    controllers = [...root.document.querySelectorAll("iframe[data-about-gallery-fit]")]
+    controllers = [...root.document.querySelectorAll("iframe[data-about-content-fit]")]
       .map(frame => contract.attach(frame, root));
   };
   const stop = () => {
@@ -20,8 +20,8 @@
 })(globalThis, function () {
   "use strict";
 
-  const CONNECT = "context-canvas:gallery-connect";
-  const HEIGHT = "context-canvas:gallery-height";
+  const CONNECT = "context-canvas:content-fit-connect";
+  const HEIGHT = "context-canvas:content-fit-height";
   const VERSION = 1;
   const MAX_HEIGHT = 100000;
 
@@ -52,8 +52,8 @@
       pendingFrame = null;
       latestHeight = null;
       appliedHeight = null;
-      delete frame.dataset.galleryFit;
-      frame.style.removeProperty("--about-gallery-block-size");
+      delete frame.dataset.contentFit;
+      frame.style.removeProperty("--about-content-block-size");
     }
 
     function connect() {
@@ -75,8 +75,8 @@
         pendingFrame = environment.requestAnimationFrame(() => {
           pendingFrame = null;
           if (destroyed || session !== generation) return;
-          frame.style.setProperty("--about-gallery-block-size", `${latestHeight}px`);
-          frame.dataset.galleryFit = "ready";
+          frame.style.setProperty("--about-content-block-size", `${latestHeight}px`);
+          frame.dataset.contentFit = "ready";
           appliedHeight = latestHeight;
         });
       };
