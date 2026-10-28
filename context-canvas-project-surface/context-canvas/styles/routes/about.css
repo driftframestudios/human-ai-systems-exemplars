@@ -1942,3 +1942,194 @@ p#on-dark-iron-ore {
     min-block-size: 0;
     block-size: var(--about-content-block-size);
 }
+
+/* Native coordination receiver — index.html / native-investment-studio.
+   Industrial Ink gives accepted amounts their instrument plane; About's
+   Soft Color Blocking mapping carries editable paper and exact trace records.
+   The 52rem seam changes composition while one DOM editor retains its state. */
+.about-field--coordination { background: var(--about-sea-glass); }
+.native-coordination {
+    --native-ink: var(--about-dark-iron-ore);
+    --native-paper: var(--about-paper);
+    --native-text: var(--about-ink);
+    --native-signal: var(--about-tiffany);
+    --native-rule: #66766e;
+    --native-key-shadow: #45534b;
+    --native-error: #853126;
+    --native-focus: var(--about-cobalt);
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--native-ink);
+    color: var(--native-text);
+    color-scheme: light;
+    font: 1rem/1.5 system-ui, sans-serif;
+    margin-block: 1.5rem;
+    overflow-wrap: anywhere;
+}
+.native-coordination *, .native-coordination *::before, .native-coordination *::after { box-sizing: border-box; }
+.native-coordination :is(p, h2, h3, h4, dl, dd, ul) { margin: 0; }
+.native-coordination :is(h2, h3, h4) { max-inline-size: none; }
+.native-coordination [hidden] { display: none; }
+.native-coordination__amp {
+    background: var(--native-ink);
+    border-block-end: .3rem solid var(--native-signal);
+    border-radius: .6rem .6rem 0 0;
+    color: var(--native-paper);
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(1rem, 3vw, 2.5rem);
+}
+.native-coordination__plate {
+    font: 700 .75rem/1.5 ui-monospace, monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.native-coordination__amp .native-coordination__plate { color: var(--native-signal); }
+.about-page .native-coordination__identity h2 {
+    color: var(--native-paper);
+    font: 600 clamp(1.6rem, 2.8vw, 2.5rem)/1.14 system-ui, sans-serif;
+    letter-spacing: -.035em;
+    margin-block: .65rem .75rem;
+    max-inline-size: 21ch;
+}
+.native-coordination__readout { display: grid; gap: .3rem; align-content: end; min-inline-size: 0; }
+.native-coordination__readout strong {
+    color: var(--native-signal);
+    font: 500 clamp(2rem, 5vw, 3.8rem)/1.15 ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.055em;
+}
+.native-coordination__funding { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: end; }
+.native-coordination__funding dt { color: var(--native-paper); font-size: .8rem; }
+.native-coordination__funding dd { color: var(--native-signal); font: 600 1.15rem/1.6 ui-monospace, monospace; }
+.native-coordination button, .native-coordination summary {
+    cursor: pointer;
+    font: inherit;
+    min-block-size: 2.75rem;
+}
+.native-coordination button {
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .3rem;
+    box-shadow: .2rem .2rem 0 var(--native-key-shadow);
+    color: var(--native-text);
+    font-weight: 650;
+    min-inline-size: 2.75rem;
+    padding: .55rem .85rem;
+}
+.native-coordination button:active:not(:disabled, [aria-disabled='true']) {
+    box-shadow: .06rem .06rem 0 var(--native-key-shadow);
+    transform: translate(.14rem, .14rem);
+}
+.native-coordination button:is(:disabled, [aria-disabled='true']) { cursor: default; opacity: .6; }
+.native-coordination :is(button, input, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
+.native-coordination__body { display: grid; gap: 1.5rem; padding: clamp(1rem, 3vw, 2.5rem); }
+.native-coordination__body > * { min-inline-size: 0; }
+.native-coordination__agreement { display: grid; gap: 1rem; align-content: start; }
+.about-page .native-coordination__agreement h3 { font: 650 1.5rem/1.25 system-ui, sans-serif; color: var(--native-text); }
+.native-coordination__connection {
+    align-items: center;
+    background: var(--about-mint-green);
+    border: .0625rem solid var(--native-rule);
+    border-radius: .3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    padding: 1rem;
+}
+.native-coordination__connection > span { flex: 1 1 8rem; }
+.native-coordination__connection b { font-weight: 650; }
+.native-coordination__connection small { display: block; margin-inline-start: 1rem; }
+.native-coordination__connection i { background: var(--native-signal); border: .125rem solid var(--native-ink); border-radius: 50%; display: inline-block; inline-size: .6rem; block-size: .6rem; margin-inline-end: .4rem; }
+.native-coordination__connection svg { flex: 0 0 2.25rem; inline-size: 2.25rem; block-size: 1rem; stroke-width: 3; }
+.native-coordination__effort { font-weight: 650; }
+.native-coordination__hint { font-size: .875rem; }
+.native-coordination__status:empty { display: none; }
+.native-coordination__status { grid-column: 1 / -1; font-size: .9rem; font-weight: 650; }
+.native-coordination details { border: .125rem solid var(--native-ink); align-self: start; }
+.native-coordination summary { background: var(--about-cool-blue); padding: .8rem 1rem; font-weight: 700; }
+.native-coordination__configuration[open] { box-shadow: .25rem .25rem 0 var(--native-key-shadow); }
+.native-coordination__configuration form { container-type: inline-size; padding: clamp(.5rem, 2.5vw, 1.15rem); background: var(--about-soft-apricot); }
+.native-coordination__preview { background: var(--native-paper); border-inline-start: .25rem solid var(--about-deep-teal); display: grid; gap: .35rem; margin-block: .5rem 1rem; padding: .75rem; }
+.native-coordination__preview output { font: 600 1.65rem/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.native-coordination__preview p:empty { display: none; }
+.native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
+.native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
+.native-coordination__duration-group { display: grid; gap: .75rem; min-inline-size: 0; }
+.native-coordination__control-title { font-weight: 650; }
+.native-coordination__duration-display {
+    background: var(--native-ink);
+    border: .125rem solid var(--native-rule);
+    border-radius: .3rem;
+    box-shadow: .2rem .2rem 0 var(--native-key-shadow);
+    color: var(--native-signal);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    inline-size: min(100%, 16rem);
+    padding: .75rem;
+    text-align: center;
+}
+.native-coordination__duration-display > span { display: grid; gap: .2rem; min-inline-size: 0; }
+.native-coordination__duration-display strong { font: 500 clamp(1.4rem, 4vw, 2rem)/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.native-coordination__duration-display > span > span { font-size: .75rem; }
+.native-coordination__feedback { display: grid; gap: .5rem; }
+.native-coordination__control { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
+.native-coordination label { font-weight: 650; }
+.native-coordination__stepper { font: 600 1.2rem/1.4 ui-monospace, monospace; --native-input-measure: calc(5ch + 1.25rem); display: inline-grid; grid-template-columns: repeat(2, minmax(0, 2.75rem)); inline-size: max-content; max-inline-size: 100%; justify-self: start; align-items: center; gap: .35rem; }
+.native-coordination__stepper button { border-radius: 50%; grid-row: 2; inline-size: min(2.75rem, 100%); min-inline-size: 44px; block-size: 2.75rem; padding: 0; font-size: 1.3rem; }
+.native-coordination__stepper button:last-child { justify-self: end; }
+.native-coordination input {
+    background: var(--native-paper);
+    border: .125rem solid var(--native-ink);
+    border-radius: .25rem;
+    color: var(--native-text);
+    font: 600 1.2rem/1.4 ui-monospace, monospace;
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: 2.75rem;
+    padding: .45rem;
+    text-align: center;
+}
+.native-coordination input[aria-invalid='true'] { border-color: var(--native-error); border-style: dashed; }
+.native-coordination__stepper input { grid-column: 1 / -1; grid-row: 1; inline-size: min(var(--native-input-measure), 100%); justify-self: center; }
+.native-coordination__error { color: var(--native-error); font-size: .875rem; }
+.native-coordination__error:empty { display: none; }
+.native-coordination__actions { display: flex; flex-wrap: wrap; gap: .85rem; }
+.native-coordination__actions [data-action='apply'] { background: var(--native-signal); }
+.native-coordination__trace { grid-column: 1 / -1; }
+.native-coordination__trace-body { padding: 1rem; }
+.native-coordination__trace-body > p { max-inline-size: 75ch; }
+.native-coordination__ledger { display: grid; gap: 1rem; list-style: none; padding: 0; margin-block-start: 1rem; }
+.native-coordination__ledger li { border: .0625rem solid var(--native-rule); border-inline-start: .25rem solid var(--about-deep-teal); padding: 1rem; min-inline-size: 0; background: var(--about-mint-green); }
+.about-page .native-coordination__ledger h4 { font: 700 1rem/1.4 ui-monospace, monospace; color: var(--native-text); }
+.native-coordination__ledger li > p { font-size: .875rem; margin-block: .25rem .75rem; }
+.native-coordination__ledger dl { display: grid; gap: .65rem; }
+.native-coordination__ledger dt { font-size: .8rem; }
+.native-coordination__ledger dd { font-size: .9rem; font-weight: 650; }
+.native-coordination__fallback { border-block-start: .0625rem solid var(--native-rule); padding: 1rem clamp(1rem, 3vw, 2.5rem); font-size: .875rem; }
+@media (min-width: 52rem) {
+    .native-coordination__amp { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+    .native-coordination__readout { text-align: end; }
+    .native-coordination__body { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+    .native-coordination__ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+    .native-coordination { --native-focus: Highlight; --native-text: CanvasText; --native-ink: CanvasText; --native-paper: Canvas; --native-signal: LinkText; --native-rule: CanvasText; --native-error: CanvasText; box-shadow: none; }
+    .native-coordination :is(button, details), .native-coordination__duration-display { box-shadow: none; }
+    .native-coordination input[aria-invalid='true'] { border-style: dashed; }
+}
+
+/* Keep enlarged numeric entry readable when its own panel becomes narrow. */
+@container (min-width: 20rem) {
+    .native-coordination__controls { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem .75rem; }
+    .native-coordination__control--count { grid-column: 1 / -1; }
+}
+@container (min-width: 31rem) {
+    .native-coordination__controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+    .native-coordination__control--count { grid-column: auto; }
+}
+@container (max-width: 12rem) {
+    .native-coordination__duration-display { grid-template-columns: minmax(0, 1fr); }
+}

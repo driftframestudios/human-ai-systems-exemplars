@@ -703,3 +703,170 @@ test('a disposed view reports eventual handle cleanup failure as soon as acquisi
   assert.strictEqual(adapter.dispose().error, result.error);
   assert.equal(releases, 1);
 });
+
+function startDuration(studio = createStudio(), clock = null) {
+  const adapter = createWorkDraftAdapter(studio, clock, { durationFormat: 'hours-minutes' });
+  const opened = adapter.begin('review', studio.read());
+  assert.equal(opened.ok, true);
+  return { studio, adapter, token: opened.view.draft.token };
+}
+
+test('hours and minutes share one raw draft and price one canonical session duration', () => {
+  const { studio, adapter, token } = startDuration();
+  const before = studio.read();
+  assert.deepEqual(adapter.read().draft.raw, { hoursPerSession: '0', minutesPerSession: '30', occurrences: '6' });
+  assert.equal(adapter.read().draft.changed, false);
+  assert.equal(adapter.setText(token, 'hoursPerSession', '1').ok, true);
+  assert.equal(adapter.read().draft.changed, true);
+  const preview = adapter.preview(token);
+  assert.equal(preview.ok, true);
+  assert.equal(preview.projection.state.work[0].minutesPerOccurrence, 90);
+  assert.equal(preview.projection.result.knownCommitmentCents, 360000);
+  retained(studio, before);
+  const applied = adapter.apply(token);
+  assert.equal(applied.ok, true);
+  assert.equal(applied.view.projection.result.knownCommitmentCents, 360000);
+  assert.equal(applied.view.projection.state.work[0].minutesPerOccurrence, 90);
+  assert.equal(applied.view.projection.state.revision, 1);
+  assert.equal(applied.view.draft, null);
+  const fresh = adapter.begin('review', studio.read()).view.draft;
+  assert.notStrictEqual(fresh.token, token);
+  assert.deepEqual(fresh.raw, { hoursPerSession: '1', minutesPerSession: '30', occurrences: '6' });
+  assert.equal(fresh.changed, false);
+  assert.equal(adapter.setText(token, 'hoursPerSession', '2').error.code, 'draft-token');
+});
+
+test('duration parts preserve incomplete input, combined limits, and a distinct zero', () => {
+  const { studio, adapter, token } = startDuration();
+  const before = studio.read();
+  for (const [raw, code] of [['', 'empty'], ['-', 'incomplete'], ['1e', 'incomplete'], ['-1', 'range'], ['1.5', 'integer-text'], ['25', 'range']]) {
+    adapter.setText(token, 'hoursPerSession', raw);
+    assert.equal(adapter.preview(token).error.code, code);
+    assert.equal(adapter.apply(token).error.code, code);
+    assert.equal(adapter.read().draft.raw.hoursPerSession, raw);
+    assert.equal(adapter.read().draft.changed, true);
+    retained(studio, before);
+  }
+  adapter.setText(token, 'hoursPerSession', '24');
+  adapter.setText(token, 'minutesPerSession', '1');
+  assert.equal(adapter.preview(token).error.path, 'draft.minutesPerSession');
+  assert.equal(adapter.apply(token).error.code, 'range');
+  adapter.setText(token, 'minutesPerSession', '60');
+  assert.equal(adapter.preview(token).error.code, 'range');
+  adapter.setText(token, 'minutesPerSession', '0');
+  assert.equal(adapter.preview(token).projection.state.work[0].minutesPerOccurrence, 1440);
+  assert.equal(adapter.apply(token).ok, true);
+  const zeroToken = adapter.begin('review', studio.read()).view.draft.token;
+  adapter.setText(zeroToken, 'hoursPerSession', '0');
+  assert.equal(adapter.preview(zeroToken).projection.result.knownCommitmentCents, 0);
+  assert.equal(adapter.apply(zeroToken).ok, true);
+  assert.equal(studio.read().state.work[0].minutesPerOccurrence, 0);
+  assert.equal(studio.read().result.knownCommitmentCents, 0);
+  assert.throws(() => createWorkDraftAdapter(studio, null, { durationFormat: 'sprints' }), TypeError);
+  assert.throws(() => createWorkDraftAdapter(studio, null, { durationFormat: '__proto__' }), TypeError);
+});
+
+test('duration steps carry minutes across hours and retain invalid or boundary text', () => {
+  const { studio, adapter, token } = startDuration();
+  const before = studio.read();
+  adapter.setText(token, 'minutesPerSession', '59');
+  adapter.step(token, 'minutesPerSession', 1);
+  assert.deepEqual(adapter.read().draft.raw, { hoursPerSession: '1', minutesPerSession: '0', occurrences: '6' });
+  adapter.step(token, 'minutesPerSession', -1);
+  assert.deepEqual(adapter.read().draft.raw, { hoursPerSession: '0', minutesPerSession: '59', occurrences: '6' });
+  adapter.step(token, 'hoursPerSession', 1);
+  assert.deepEqual(adapter.read().draft.raw, { hoursPerSession: '1', minutesPerSession: '59', occurrences: '6' });
+  adapter.setText(token, 'hoursPerSession', '');
+  assert.equal(adapter.step(token, 'minutesPerSession', 1).error.code, 'empty');
+  assert.equal(adapter.read().draft.raw.hoursPerSession, '');
+  adapter.setText(token, 'hoursPerSession', '24');
+  adapter.setText(token, 'minutesPerSession', '0');
+  assert.equal(adapter.step(token, 'minutesPerSession', 1).error.code, 'range');
+  assert.deepEqual(adapter.read().draft.raw, { hoursPerSession: '24', minutesPerSession: '0', occurrences: '6' });
+  adapter.setText(token, 'hoursPerSession', '0');
+  assert.equal(adapter.step(token, 'hoursPerSession', -1).error.code, 'range');
+  assert.equal(adapter.setText(token, 'minutesPerSession', '0'.repeat(33)).error.code, 'text');
+  assert.equal(adapter.read().draft.raw.minutesPerSession, '0');
+  retained(studio, before);
+});
+
+test('unchanged canonical quantities remain clean while invalid text remains a changed draft', () => {
+  for (const durationFormat of ['minutes', 'hours-minutes']) {
+    const studio = createStudio();
+    const adapter = createWorkDraftAdapter(studio, null, { durationFormat });
+    const token = adapter.begin('review', studio.read()).view.draft.token;
+    const field = durationFormat === 'minutes' ? 'minutesPerOccurrence' : 'minutesPerSession';
+    adapter.setText(token, field, '030');
+    adapter.setText(token, 'occurrences', '006');
+    assert.equal(adapter.read().draft.changed, false);
+    adapter.setText(token, field, '');
+    assert.equal(adapter.read().draft.changed, true);
+  }
+});
+
+test('preview caches one unchanged draft and preserves accepted identity through edits and stale recovery', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  let preparations = 0;
+  const receiver = { ...studio, previewWork(...args) { preparations += 1; return studio.previewWork(...args); } };
+  const { adapter, token } = startDuration(receiver);
+  const first = adapter.preview(token);
+  assert.equal(first.ok, true);
+  assert.strictEqual(adapter.preview(token).projection, first.projection);
+  adapter.setText(token, 'hoursPerSession', '0');
+  assert.strictEqual(adapter.preview(token).projection, first.projection);
+  assert.equal(preparations, 1);
+  adapter.setText(token, 'hoursPerSession', '1');
+  const next = adapter.preview(token);
+  assert.equal(next.projection.result.knownCommitmentCents, 360000);
+  assert.equal(preparations, 2);
+  retained(studio, before);
+  adapter.setText(token, 'minutesPerSession', '');
+  assert.equal(adapter.preview(token).error.code, 'empty');
+  assert.equal(preparations, 2);
+  adapter.setText(token, 'minutesPerSession', '30');
+  assert.equal(adapter.preview(token).ok, true);
+  assert.equal(preparations, 3);
+  studio.importText(studio.exportText(), before);
+  const imported = studio.read();
+  assert.equal(adapter.preview(token).error.code, 'stale-edit');
+  assert.equal(preparations, 3);
+  assert.equal(adapter.read().draft.raw.hoursPerSession, '1');
+  adapter.cancel(token);
+  const current = adapter.begin('review', imported).view.draft.token;
+  assert.equal(adapter.preview(token).error.code, 'draft-token');
+  assert.equal(adapter.preview(current).projection.result.knownCommitmentCents, 120000);
+  retained(studio, imported);
+  adapter.dispose();
+  assert.equal(adapter.preview(current).error.code, 'disposed');
+});
+
+test('preview retains a newer raw edit or session created during cooperative host evaluation', () => {
+  for (const change of ['raw', 'session']) {
+    const studio = createStudio();
+    const before = studio.read();
+    let adapter;
+    let token;
+    let currentToken;
+    let first = true;
+    const receiver = { ...studio, previewWork(...args) {
+      const result = studio.previewWork(...args);
+      if (first) {
+        first = false;
+        if (change === 'session') {
+          adapter.cancel(token);
+          currentToken = adapter.begin('review', studio.read()).view.draft.token;
+        } else currentToken = token;
+        adapter.setText(currentToken, 'hoursPerSession', '2');
+      }
+      return result;
+    } };
+    adapter = createWorkDraftAdapter(receiver, null, { durationFormat: 'hours-minutes' });
+    token = adapter.begin('review', before).view.draft.token;
+    const result = adapter.preview(token);
+    assert.equal(result.error.code, change === 'raw' ? 'draft-changed' : 'draft-token');
+    assert.equal(adapter.read().draft.raw.hoursPerSession, '2');
+    assert.equal(adapter.preview(currentToken).projection.result.knownCommitmentCents, 600000);
+    retained(studio, before);
+  }
+});

@@ -148,6 +148,31 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "collaboration/native-investment-studio/config.mjs",
+      "projected_path": "collaboration/native-investment-studio/config.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/contract.mjs",
+      "projected_path": "collaboration/native-investment-studio/contract.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/state.mjs",
+      "projected_path": "collaboration/native-investment-studio/state.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/open-lesson-field/index.html",
       "projected_path": "collaboration/open-lesson-field/index.html",
       "media_type": "text/html"

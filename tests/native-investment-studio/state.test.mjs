@@ -287,3 +287,73 @@ test('import admits integer spellings while retaining the accepted plan after ro
   assert.ok(Object.is(zeroResult.projection.state.work[0].minutesPerOccurrence, 0));
   assert.equal(zeroResult.projection.result.plannedCommitmentCents, 0);
 });
+
+test('work previews prepare exact prospective amounts while accepted identity and exchange stay intact', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  const candidate = changedReview(before, { minutesPerOccurrence: 90 });
+  const preview = studio.previewWork('review', candidate, before);
+  assert.equal(preview.ok, true);
+  assert.equal(preview.projection.result.knownCommitmentCents, 360000);
+  assert.equal(preview.projection.state.revision, 1);
+  assert.ok(Object.isFrozen(preview.projection));
+  assert.strictEqual(studio.read(), before);
+  assert.strictEqual(studio.capture(), before);
+  assert.equal(studio.exportText(), before.serialized);
+  expectHeld(studio.updateWork('review', candidate, preview.projection), before, 'stale-edit');
+  const accepted = studio.updateWork('review', candidate, before);
+  assert.equal(accepted.ok, true);
+  assert.deepEqual(accepted.projection, preview.projection);
+  assert.notStrictEqual(accepted.projection, preview.projection);
+  expectHeld(studio.previewWork('review', candidate, before), accepted.projection, 'stale-edit');
+});
+
+test('work preview admission retains target, bounds, foreign-owner, and reentrant replacement checks', () => {
+  const studio = createStudio();
+  const before = studio.read();
+  expectHeld(studio.previewWork('missing', changedReview(before), before), before, 'reference');
+  expectHeld(studio.previewWork('review', changedReview(before, { id: 'other' }), before), before, 'target');
+  expectHeld(studio.previewWork('review', changedReview(before, { minutesPerOccurrence: -1 }), before), before, 'integer');
+  expectHeld(studio.previewWork('review', changedReview(before), createStudio().read()), before, 'stale-edit');
+  let nested;
+  const candidate = new Proxy(changedReview(before, { minutesPerOccurrence: 90 }), {
+    getOwnPropertyDescriptor(target, key) {
+      if (!nested) nested = studio.updateWork('review', changedReview(before, { occurrences: 12 }), before);
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  const preview = studio.previewWork('review', candidate, before);
+  assert.equal(nested.ok, true);
+  expectHeld(preview, nested.projection, 'stale-edit');
+  assert.strictEqual(studio.read(), nested.projection);
+  assert.equal(studio.exportText(), nested.projection.serialized);
+});
+
+test('preview recomputes exact person funding pools rather than adding a rounded line delta', () => {
+  const plan = createExamplePlan();
+  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1 }];
+  plan.teams[0].personIds = ['one'];
+  const row = { ...plan.work[0], personIds: ['one'], occurrences: 1 };
+  plan.work = [
+    { ...row, id: 'allocated', funding: 'allocated', minutesPerOccurrence: 58 },
+    { ...row, id: 'first', funding: 'additional', minutesPerOccurrence: 29 },
+    { ...row, id: 'second', funding: 'additional', minutesPerOccurrence: 29 },
+  ];
+  plan.practices = [];
+  const studio = createStudio(plan);
+  const before = studio.read();
+  assert.equal(before.result.knownCommitmentCents, 2);
+  assert.equal(before.result.fundedKnownCents, 1);
+  assert.equal(before.result.allocatedKnownCents, 1);
+  assert.equal(before.result.ledger[1].lines[0].cents, 0);
+  assert.equal(before.result.lineRoundingAdjustments.additionalCents, 1);
+  const preview = studio.previewWork('first', { ...before.state.work[1], minutesPerOccurrence: 30 }, before);
+  assert.equal(preview.ok, true);
+  assert.equal(preview.projection.result.knownCommitmentCents, 2);
+  assert.equal(preview.projection.result.fundedKnownCents, 1);
+  assert.equal(preview.projection.result.allocatedKnownCents, 1);
+  assert.equal(preview.projection.result.ledger[1].lines[0].cents, 1);
+  assert.equal(preview.projection.result.lineRoundingAdjustments.additionalCents, 0);
+  assert.strictEqual(studio.read(), before);
+  assert.equal(studio.exportText(), before.serialized);
+});

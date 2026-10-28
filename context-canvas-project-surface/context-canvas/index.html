@@ -36,6 +36,7 @@
   <script src="about-media.js" defer></script>
   <script src="about-heatmap.js" defer></script>
   <script src="about-content-fit.js" defer></script>
+  <script type="module" src="../../collaboration/native-investment-studio/controller.mjs"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -44,7 +45,7 @@
     "url": "{{PUBLIC_URL_PAGE_ABOUT}}",
     "name": "Technology leadership portfolio",
     "description": "An About surface for regulated product, design, engineering, quality, and a connected public system for human–AI collaboration.",
-    "dateModified": "2026-10-12",
+    "dateModified": "2026-10-28",
     "about": "A technology-leadership portfolio spanning regulated product, design, engineering, quality, and human–AI systems work.",
     "hasPart": [
       {"@type":"SoftwareApplication","name":"Cross-Functional Investment Studio","applicationCategory":"BusinessApplication","url":"{{PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS}}"},
@@ -139,6 +140,109 @@
   </div></section>
 
   <section class="about-field about-field--dark-iron-ore" aria-labelledby="ai-orientation-title"><div class="about-reading"><p id="on-dark-iron-ore" class="about-kicker">AI Systems · work, memory, and judgment held together</p><h2 id="ai-orientation-title">Valuable initiatives meaningfully <span class = "about-reading--accent">change the way people work</span>.</h2><p class="about-reading-sidebar">My AI systems are specialist decision surfaces for technical and non-technical participants engaged in consequential cross-organizational work. They assemble distributed memory and design-research systems, support organizational modeling, build and inspect applications, preserve controls, and route questions back to people with standing.</p><div class="about-route-grid"><a href="ai-systems.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg><strong>View AI Systems</strong><span>See methods, contracts, and working software for accountable decisions, explicit human authority, and recoverable work.</span></a><a href="shared-machinery.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg><strong>Inspect Shared Machinery</strong><span>Compare ten instruments for framing, shaping, staging, recovering, and handing off work across tools and teams.</span></a></div></div></section>
+
+  <section class="about-field about-field--coordination" aria-labelledby="native-coordination-title">
+    <div class="about-reading about-reading--wide">
+      <div class="native-coordination" data-native-coordination>
+        <header class="native-coordination__amp">
+          <div class="native-coordination__identity">
+            <p class="native-coordination__plate">Coordination</p>
+            <h2 id="native-coordination-title">Plan a working session.</h2>
+          </div>
+          <div class="native-coordination__readout">
+            <span class="native-coordination__plate" data-native-standing>Total · USD</span>
+            <strong data-native-total>$1,200.00</strong>
+          </div>
+          <dl class="native-coordination__funding">
+            <div><dt>Staffing</dt><dd data-native-funded>$0.00</dd></div>
+            <div><dt>Extra work</dt><dd data-native-additional>$1,200.00</dd></div>
+            <div><dt>Included in staffing</dt><dd data-native-allocated>$0.00</dd></div>
+          </dl>
+        </header>
+        <div class="native-coordination__body">
+          <div class="native-coordination__agreement">
+            <h3 data-native-agreement>Weekly working session</h3>
+            <div class="native-coordination__connection" aria-label="Working session participants">
+              <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
+              <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
+              <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 people</small></span>
+            </div>
+            <p class="native-coordination__effort" data-native-effort>4 people × 30 min per session × 6 working sessions = 12 h of participant effort.</p>
+          </div>
+          <details class="native-coordination__configuration" data-native-configure>
+            <summary>Session settings</summary>
+            <form novalidate>
+              <fieldset disabled aria-label="Working session settings">
+                <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
+                  <p id="native-duration-label" class="native-coordination__control-title">Time per person, per session</p>
+                  <output class="native-coordination__duration-display" for="native-hours native-minutes" aria-label="Draft time per person in one working session" aria-live="off">
+                    <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
+                    <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
+                  </output>
+                  <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
+                </div>
+                <div class="native-coordination__controls">
+                  <div class="native-coordination__control">
+                    <label for="native-hours">Hours</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
+                      <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-duration-limit native-hours-error">
+                      <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession" hidden>0–24 hours</p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="native-minutes">Minutes</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
+                      <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-duration-limit native-minutes-error">
+                      <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession" hidden>0–59 minutes</p>
+                  </div>
+                  <div class="native-coordination__control native-coordination__control--count">
+                    <label for="native-occurrences">Working sessions</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease working sessions by one">−</button>
+                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-session-context native-occurrences-range native-occurrences-error">
+                      <button type="button" data-field="occurrences" data-step="1" aria-label="Increase working sessions by one">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="native-session-context" data-native-session-context>Across this 6-week plan.</p>
+                    <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
+                  </div>
+                </div>
+                <div class="native-coordination__feedback" role="group" aria-label="Quantity feedback">
+                  <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
+                  <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
+                  <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
+                </div>
+                <div class="native-coordination__preview">
+                  <span class="native-coordination__plate" data-native-preview-standing>Draft total · USD</span>
+                  <output data-native-preview-total aria-live="off" aria-label="Draft total">$1,200.00</output>
+                  <p class="native-coordination__hint" data-native-preview-note>Apply to update the total.</p>
+                </div>
+                <div class="native-coordination__actions"><button type="submit" data-action="apply">Apply changes</button><button type="button" data-action="cancel">Cancel changes</button></div>
+              </fieldset>
+            </form>
+          </details>
+          <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <details class="native-coordination__trace" data-native-trace>
+            <summary>Cost breakdown</summary>
+            <div class="native-coordination__trace-body">
+              <p data-native-trace-summary>Four people each spend 3 hours at $100 per hour: $300 each, or $1,200 total.</p>
+              <ul class="native-coordination__ledger" data-native-trace-list>
+                <li><h4>product-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>product-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>engineering-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>engineering-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+              </ul>
+            </div>
+          </details>
+        </div>
+        <p class="native-coordination__fallback" data-native-fallback hidden></p>
+      </div>
+    </div>
+  </section>
 
   <section class="about-field about-field--studio" aria-labelledby="studio-title"><div class="about-reading about-reading--wide"><p class="about-prototype-kicker">Embedded prototype · Cross-functional investment and change</p><h2 id="studio-title">Cross-Functional Investment Studio</h2><div class="about-reading--prototype"><p>Complex, important initiatives are often cross-functional resource requests. This prototype lets a visitor model plans, goals, change frameworks, staffing, quality, human–AI handoffs, disruption, learning, and investment while keeping an early estimate visibly provisional.</p></div><div class="about-embed about-embed--studio"><iframe data-about-content-fit="studio-chapters" title="Interactive Cross-Functional Investment Studio chapters" src="https://iframes.vik.guru/v1/canvas/investment-studio-chapters/" sandbox="allow-downloads allow-popups allow-popups-to-escape-sandbox allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer" loading="eager"></iframe></div><div class="about-embed-caption"><span>Five working chapters · plan, people, work and recovery, coordination, and comparison · six starting plans</span><a href="../../collaboration/initiative-costing-calculator/index.html">Open the full studio</a></div><div class="about-table-wrap" tabindex="0" role="region" aria-label="Cross-Functional Investment Studio static counterpart; scroll horizontally"><table class="about-role-table" data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis"><caption>Cross-Functional Investment Studio: static counterpart to the editable analysis</caption><thead><tr data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis: column headings"><th scope="col" data-label="Domain">Domain</th><th scope="col" data-label="What the instrument compares">What the instrument compares</th><th scope="col" data-label="Inputs and evidence">Inputs and evidence</th><th scope="col" data-label="Decision boundary">Decision boundary</th></tr></thead><tbody>
 <tr data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis: Internal investment"><th scope="row" data-label="Domain">Internal investment</th><td data-label="What the instrument compares">Allocated staffing, incremental activity, quality, recovery, and a provisional planning band.</td><td data-label="Inputs and evidence">People, loaded rates, horizon, additional-work shares, and named reserve heuristics.</td><td data-label="Decision boundary">Accountable people establish staffing, quote, and budget authority.</td></tr>

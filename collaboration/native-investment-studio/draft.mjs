@@ -1,10 +1,20 @@
-import { LIMITS } from './config.mjs';
+import { CONTRACT, LIMITS } from './config.mjs';
+
+const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 
 const FIELD_LIMITS = Object.freeze({
   minutesPerOccurrence: LIMITS.minutesPerOccurrence,
   occurrences: LIMITS.occurrences,
 });
-const FIELDS = Object.freeze(Object.keys(FIELD_LIMITS));
+const DURATION_PART_LIMITS = Object.freeze({
+  hoursPerSession: LIMITS.minutesPerOccurrence / MINUTES_PER_HOUR,
+  minutesPerSession: MINUTES_PER_HOUR - 1,
+  occurrences: LIMITS.occurrences,
+});
+const FORMATS = Object.freeze({
+  minutes: Object.freeze({ limits: FIELD_LIMITS, fields: Object.freeze(Object.keys(FIELD_LIMITS)) }),
+  'hours-minutes': Object.freeze({ limits: DURATION_PART_LIMITS, fields: Object.freeze(Object.keys(DURATION_PART_LIMITS)) }),
+});
 const TEXT_LIMIT = 32;
 const DIGITS = /^[0-9]+$/;
 const NEGATIVE = /^-[0-9]+$/;
@@ -13,11 +23,10 @@ const UNFINISHED = /^(?:-|[0-9]+[eE][+-]?)$/;
 function diagnostic(code, path, message) { return Object.freeze({ code, path, message }); }
 function stale() { return diagnostic('stale-edit', 'draft', 'Keep this draft for inspection; cancel and begin from the current accepted plan to revise it.'); }
 
-function parseField(field, raw) {
+function parseField(field, raw, max) {
   const path = `draft.${field}`;
   if (raw === '') return { error: diagnostic('empty', path, 'Enter a whole-number quantity; zero is a complete value.') };
   if (UNFINISHED.test(raw)) return { error: diagnostic('incomplete', path, 'Finish the quantity using decimal digits.') };
-  const max = FIELD_LIMITS[field];
   if (NEGATIVE.test(raw)) return { error: diagnostic('range', path, `Enter a whole number from 0 through ${max}.`) };
   if (!DIGITS.test(raw)) return { error: diagnostic('integer-text', path, 'Enter the quantity using decimal digits.') };
   const value = Number(raw);
@@ -26,13 +35,18 @@ function parseField(field, raw) {
 }
 
 // One editor owns bounded draft text; the Studio remains the accepted-state owner.
-export function createWorkDraftAdapter(studio, scheduler = null) {
+export function createWorkDraftAdapter(studio, scheduler = null, { durationFormat = 'minutes' } = {}) {
   if (!studio || typeof studio.read !== 'function' || typeof studio.updateWork !== 'function') {
     throw new TypeError('Supply a native Studio owner.');
   }
   if (scheduler !== null && (typeof scheduler?.request !== 'function' || typeof scheduler?.cancel !== 'function')) {
     throw new TypeError('Supply both scheduler request and cancel operations.');
   }
+  if (typeof durationFormat !== 'string' || !Object.hasOwn(FORMATS, durationFormat)) {
+    throw new TypeError('Choose minutes or hours-minutes for the duration format.');
+  }
+  const { limits, fields } = FORMATS[durationFormat];
+  const usesDurationParts = durationFormat === 'hours-minutes';
   const request = scheduler === null ? null : scheduler.request.bind(scheduler);
   const cancelRequest = scheduler === null ? null : scheduler.cancel.bind(scheduler);
   let active = null;
@@ -43,13 +57,29 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   let diagnosticOwner = null;
   let releasingToken = null;
 
+  function rawValues(row) {
+    return usesDurationParts ? {
+      hoursPerSession: String(Math.floor(row.minutesPerOccurrence / MINUTES_PER_HOUR)),
+      minutesPerSession: String(row.minutesPerOccurrence % MINUTES_PER_HOUR),
+      occurrences: String(row.occurrences),
+    } : Object.fromEntries(fields.map(field => [field, String(row[field])]));
+  }
+
   function values(draft) {
-    const admitted = {};
+    const parsedValues = {};
     const errors = [];
-    for (const field of FIELDS) {
-      const parsed = parseField(field, draft.raw[field]);
+    for (const field of fields) {
+      const parsed = parseField(field, draft.raw[field], limits[field]);
       if (parsed.error) errors.push(parsed.error);
-      else admitted[field] = parsed.value;
+      else parsedValues[field] = parsed.value;
+    }
+    if (!usesDurationParts) return { admitted: parsedValues, errors };
+    const admitted = { occurrences: parsedValues.occurrences };
+    if (Object.hasOwn(parsedValues, 'hoursPerSession') && Object.hasOwn(parsedValues, 'minutesPerSession')) {
+      const duration = parsedValues.hoursPerSession * MINUTES_PER_HOUR + parsedValues.minutesPerSession;
+      if (duration > LIMITS.minutesPerOccurrence) errors.push(diagnostic('range', 'draft.minutesPerSession',
+        `Keep the combined session duration within ${DURATION_PART_LIMITS.hoursPerSession} hours.`));
+      else admitted.minutesPerOccurrence = duration;
     }
     return { admitted, errors };
   }
@@ -57,9 +87,12 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   function read() {
     const projection = studio.read();
     const isStale = active !== null && active.baseProjection !== projection;
+    const parsed = active === null ? null : values(active);
     const draft = active === null ? null : Object.freeze({
       token: active.token, workId: active.row.id, baseProjection: active.baseProjection,
-      raw: Object.freeze({ ...active.raw }), errors: Object.freeze(values(active).errors),
+      raw: Object.freeze({ ...active.raw }), errors: Object.freeze(parsed.errors),
+      changed: parsed.errors.length > 0 || parsed.admitted.minutesPerOccurrence !== active.row.minutesPerOccurrence
+        || parsed.admitted.occurrences !== active.row.occurrences,
     });
     return Object.freeze({
       status: disposed ? 'disposed' : isStale ? 'stale' : active ? 'editing' : 'idle',
@@ -88,8 +121,8 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
   }
 
   function fieldGuard(field) {
-    return typeof field === 'string' && Object.hasOwn(FIELD_LIMITS, field)
-      ? null : diagnostic('field', 'draft', 'Choose duration or occurrence count.');
+    return typeof field === 'string' && Object.hasOwn(limits, field)
+      ? null : diagnostic('field', 'draft', 'Choose a duration field or the session count.');
   }
 
   function commitGuard(token) {
@@ -127,7 +160,7 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     const row = projection.state.work.find(work => work.id === workId);
     if (!row) return fail(diagnostic('reference', 'draft.workId', 'Choose an existing work record.'));
     active = { token: Object.freeze({}), row, baseProjection: projection,
-      raw: Object.fromEntries(FIELDS.map(field => [field, String(row[field])])) };
+      raw: rawValues(row), rawRevision: 0, preview: null };
     diagnosticOwner = active.token;
     return succeed();
   }
@@ -138,7 +171,11 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     if (typeof raw !== 'string' || raw.length > TEXT_LIMIT) {
       return fail(diagnostic('text', `draft.${field}`, `Supply editable text of at most ${TEXT_LIMIT} characters.`));
     }
-    active.raw[field] = raw;
+    if (active.raw[field] !== raw) {
+      active.raw[field] = raw;
+      active.rawRevision += 1;
+      active.preview = null;
+    }
     return succeed();
   }
 
@@ -146,11 +183,26 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     const error = guard(token) ?? fieldGuard(field);
     if (error) return fail(error);
     if (direction !== -1 && direction !== 1) return fail(diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.'));
-    const parsed = parseField(field, active.raw[field]);
+    if (usesDurationParts && field !== 'occurrences') {
+      const { admitted, errors } = values(active);
+      const durationError = errors.find(item => item.path !== 'draft.occurrences');
+      if (durationError) return fail(durationError);
+      const next = admitted.minutesPerOccurrence + direction * (field === 'hoursPerSession' ? MINUTES_PER_HOUR : 1);
+      if (next < 0 || next > LIMITS.minutesPerOccurrence) return fail(diagnostic('range', `draft.${field}`,
+        `Keep the combined session duration from zero through ${DURATION_PART_LIMITS.hoursPerSession} hours.`));
+      active.raw.hoursPerSession = String(Math.floor(next / MINUTES_PER_HOUR));
+      active.raw.minutesPerSession = String(next % MINUTES_PER_HOUR);
+      active.rawRevision += 1;
+      active.preview = null;
+      return succeed();
+    }
+    const parsed = parseField(field, active.raw[field], limits[field]);
     if (parsed.error) return fail(parsed.error);
     const next = parsed.value + direction;
-    if (next < 0 || next > FIELD_LIMITS[field]) return fail(diagnostic('range', `draft.${field}`, `Keep the quantity from 0 through ${FIELD_LIMITS[field]}.`));
+    if (next < 0 || next > limits[field]) return fail(diagnostic('range', `draft.${field}`, `Keep the quantity from 0 through ${limits[field]}.`));
     active.raw[field] = String(next);
+    active.rawRevision += 1;
+    active.preview = null;
     return succeed();
   }
 
@@ -160,6 +212,29 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     if (active.baseProjection !== studio.read()) return fail(stale());
     const { errors } = values(active);
     return errors.length ? fail(errors[0]) : succeed();
+  }
+
+  function preview(token) {
+    const error = guard(token);
+    if (error) return fail(error, false);
+    if (active.baseProjection !== studio.read()) return fail(stale(), false);
+    const { admitted, errors } = values(active);
+    if (errors.length) return fail(errors[0], false);
+    if (typeof studio.previewWork !== 'function') return fail(diagnostic('preview-unavailable', 'draft',
+      'Use a Studio with work-preview support to inspect the draft investment.'), false);
+    const session = active;
+    if (session.preview === null) {
+      const revision = session.rawRevision;
+      const result = studio.previewWork(session.row.id, { ...session.row, ...admitted }, session.baseProjection);
+      const current = guard(token);
+      if (current) return fail(current, false);
+      if (active !== session || session.baseProjection !== studio.read()) return fail(stale(), false);
+      if (session.rawRevision !== revision) return fail(diagnostic('draft-changed', 'draft',
+        'Inspect the current draft quantities to refresh this estimate.'), false);
+      session.preview = result;
+    }
+    if (!session.preview.ok) return fail(session.preview.error, false);
+    return Object.freeze({ ok: true, projection: session.preview.projection, view: read() });
   }
 
   function apply(token) {
@@ -227,5 +302,5 @@ export function createWorkDraftAdapter(studio, scheduler = null) {
     return disposalError ? fail(disposalError) : succeed();
   }
 
-  return Object.freeze({ read, begin, setText, step, validate, apply, queueApply, cancel, dispose });
+  return Object.freeze({ read, begin, setText, step, validate, preview, apply, queueApply, cancel, dispose });
 }

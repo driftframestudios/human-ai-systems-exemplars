@@ -32,8 +32,19 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 ## About comparison and fitted instruments
 
 About owns vertical reading through its native heatmap comparison, AI Method
-Gallery, Prompt Conditions Explorer, and interactive Studio chapters. The full
+Gallery, Prompt Conditions Explorer, native coordination panel, and interactive Studio chapters. The full
 Investment Studio retains its original source and independent route.
+
+The [native coordination package](../../collaboration/native-investment-studio/README.md)
+owns About's hours/minutes/session draft, live preview, explicit Apply controller,
+and accepted investment model.
+`index.html` supplies its semantic panel and static example;
+`styles/routes/about.css` owns the scoped `.native-coordination` composition.
+The primary route manifest carries all five canonical browser modules with
+their relative import geometry. Source, production-closure, and focused
+three-engine interaction checks belong to Issue #643. Issue #641 receives the
+live-preview and explicit Apply boundaries for separate runtime measurement. Existing Studio chapters
+retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
 `tools/materialize-about-heatmap.mjs` projects its two figures, captions, and
