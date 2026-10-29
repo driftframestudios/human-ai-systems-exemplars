@@ -7,6 +7,8 @@ import { mountChapterShell } from './shell.mjs';
 import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
+import { mountAssemblyPanel } from './assembly-controller.mjs';
+import { describeAssemblyTarget } from './command-draft.mjs';
 
 const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 
@@ -61,6 +63,8 @@ export function mountCoordinationPanel(root, options = {}) {
   let chapterShell = null;
   let purposePanel = null;
   let investmentPanel = null;
+  let assemblyPanel = null;
+  let peopleEditor = 'person';
   let activeChapter = 'coordination';
   let renderedSaved = [];
   let savedProjection = null;
@@ -73,6 +77,10 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function announce(message) { text('status', message); }
+  function resumePeople() {
+    if (peopleEditor === 'assembly') assemblyPanel?.resume();
+    else teamPanel?.resume();
+  }
 
   function renderSaved(projection) {
     const records = editing.read().parked;
@@ -85,24 +93,32 @@ export function mountCoordinationPanel(root, options = {}) {
     text('savedCount', String(records.length));
     const fragment = document.createDocumentFragment();
     const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
-      ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes', ...PURPOSE_LABELS };
+      ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes',
+      label: 'Name', personIds: 'People', ...PURPOSE_LABELS };
     const people = new Map(projection.state.people.map(person => [person.id, person.label]));
     const works = new Map(projection.state.work.map(row => [row.id, row.label]));
+    const teams = new Map(projection.state.teams.map(row => [row.id, row.label]));
     for (const record of records) {
       const key = `${record.kind}:${record.targetId}`;
       savedByKey.set(key, record);
       const item = document.createElement('li');
       const title = document.createElement('strong');
-      title.textContent = record.kind === 'purpose' ? 'Plan purpose'
+      const assembly = record.kind === 'assembly' ? describeAssemblyTarget(record.targetId) : null;
+      title.textContent = assembly ? record.raw.label?.trim() ||
+        (assembly.form.startsWith('person.') ? people : teams).get(assembly.id) || 'New record'
+        : record.kind === 'purpose' ? 'Plan purpose'
         : (record.kind === 'person' ? people : works).get(record.targetId) ?? record.targetId;
       const values = document.createElement('p');
-      values.textContent = Object.entries(record.raw).map(([field, raw]) => `${labels[field]}: ${raw || 'blank'}`).join(' · ');
+      values.textContent = Object.entries(record.raw).map(([field, raw]) => {
+        const value = Array.isArray(raw) ? raw.map(id => people.get(id) ?? id).join(', ') || 'None selected' : raw || 'blank';
+        return `${labels[field]}: ${value}`;
+      }).join(' · ');
       item.append(title, values);
-      if (!record.targetExists) {
+      if (!record.targetExists && record.kind !== 'assembly') {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (record.kind === 'purpose' || record.kind === 'person' || record.targetId === workId) {
+      } else if (record.kind === 'assembly' || record.kind === 'purpose' || record.kind === 'person' || record.targetId === workId) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -223,6 +239,7 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     renderPreview(view);
     teamPanel?.refresh();
+    assemblyPanel?.refresh();
     purposePanel?.refresh();
     investmentPanel?.refresh();
     return view;
@@ -296,8 +313,9 @@ export function mountCoordinationPanel(root, options = {}) {
       if (saved.kind === 'purpose') purposePanel?.open();
       else {
         purposePanel?.close({ resume: false });
-        chapterShell?.select(saved.kind === 'person' ? 'people' : 'coordination');
-        if (saved.kind === 'person') teamPanel?.select(saved.targetId);
+        chapterShell?.select(saved.kind === 'person' || saved.kind === 'assembly' ? 'people' : 'coordination');
+        if (saved.kind === 'assembly') assemblyPanel?.open(saved.targetId);
+        else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
         else begin();
       }
       render();
@@ -335,6 +353,7 @@ export function mountCoordinationPanel(root, options = {}) {
     chapterShell?.dispose();
     investmentPanel?.dispose();
     purposePanel?.dispose();
+    assemblyPanel?.dispose();
     teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -372,17 +391,34 @@ export function mountCoordinationPanel(root, options = {}) {
     begin();
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
-      onBegin: () => purposePanel?.close({ resume: false }),
-      isActive: () => activeChapter === 'people' && !purposePanel?.isOpen(), onAccepted: () => render(),
+      onBegin: () => {
+        peopleEditor = 'person';
+        purposePanel?.close({ resume: false });
+        assemblyPanel?.close({ park: false });
+      },
+      canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'people' && peopleEditor === 'person' && !purposePanel?.isOpen(), onAccepted: () => render(),
       onEditing: () => {
         const projection = studio.read(); renderAccepted(projection); renderSaved(projection);
-        purposePanel?.refresh(); investmentPanel?.refresh();
+        assemblyPanel?.refresh(); purposePanel?.refresh(); investmentPanel?.refresh();
       } });
+    const assemblyRoot = root.querySelector('[data-native-assembly]');
+    if (assemblyRoot) assemblyPanel = mountAssemblyPanel(assemblyRoot, { studio, editing,
+      onBegin: () => {
+        peopleEditor = 'assembly';
+        purposePanel?.close({ resume: false });
+        teamPanel?.close();
+      },
+      canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'people' && peopleEditor === 'assembly' && !purposePanel?.isOpen(),
+      onAccepted: () => render(), onEditing: () => render(),
+      onPersonCreated: id => teamPanel?.select(id),
+    });
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
       onOpen: () => { editing.park(); composing = false; },
       onClose: () => {
         if (activeChapter === 'coordination' && elements.configure.open) begin();
-        else if (activeChapter === 'people') teamPanel?.resume();
+        else if (activeChapter === 'people') resumePeople();
       }, onChange: () => render() });
     investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
     const chapterList = root.querySelector('[data-native-chapter-list]');
@@ -398,7 +434,7 @@ export function mountCoordinationPanel(root, options = {}) {
         activeChapter = chapter;
         composing = false;
         if (chapter === 'coordination' && elements.configure.open) begin();
-        else if (chapter === 'people') teamPanel?.resume();
+        else if (chapter === 'people') resumePeople();
         render();
       } });
     }

@@ -6,7 +6,7 @@ const LABELS = Object.freeze({ ratePerHour: 'Hourly rate', fundedHours: 'Funded 
 const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
-export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive = () => true,
+export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive = () => true, canOpen = isActive,
   onAccepted = () => {}, onEditing = () => {}, onBegin = () => {} }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
@@ -18,12 +18,12 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const elements = Object.fromEntries([
     ['roster', '[data-team-roster]'], ['configure', '[data-person-configure]'],
     ['summary', '[data-person-configure] > summary'], ['name', '[data-person-name]'],
-    ['form', 'form'], ['fieldset', 'fieldset'], ['apply', '[data-person-action="apply"]'],
+    ['form', '[data-person-configure] form'], ['fieldset', '[data-person-configure] fieldset'], ['apply', '[data-person-action="apply"]'],
     ['total', '[data-person-total]'], ['capacity', '[data-person-capacity]'],
     ['status', '[data-person-status]'], ['empty', '[data-team-empty]'],
     ['recovery', '[data-person-recovery]'], ['current', '[data-person-current]'],
   ].map(([key, selector]) => [key, find(selector)]));
-  const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[name="${field}"]`)]));
+  const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
   const editor = editing.person;
@@ -209,6 +209,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   }
 
   const receiver = Object.freeze({ read: () => editor.read(), refresh: render,
+    close: () => { if (!disposed) { composing = false; elements.configure.open = false; } },
     select, resume: () => { composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const input of Object.values(inputs)) input.maxLength = 32;
@@ -217,6 +218,11 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });
+    listen(elements.configure.querySelector('summary'), 'click', event => {
+      if (!disposed && !elements.configure.open && selectedId !== null && canOpen()) {
+        event.preventDefault(); select(selectedId);
+      }
+    });
     listen(elements.configure, 'toggle', () => {
       if (isActive() && elements.configure.open && editor.read().draft === null && selectedId !== null) select(selectedId);
     });

@@ -302,6 +302,8 @@
       "family": "native-investment-studio",
       "kind": "node-test",
       "members": [
+        "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/command-draft.test.mjs",
         "tests/native-investment-studio/commands.test.mjs",
         "tests/native-investment-studio/contract.test.mjs",
         "tests/native-investment-studio/controller.test.mjs",
@@ -2819,6 +2821,28 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.assembly",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assembly.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native People and Teams: finite creation, ordered membership, referenced-removal recovery, saved and stale drafts, imported identity collisions, callback ownership, exact amounts, compact inputs and ordinary page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:assembly-browser"
+      ]
+    },
+    {
       "id": "browser.native-investment-studio.team-assembly",
       "family": "native-investment-studio",
       "kind": "node-test",
@@ -2981,6 +3005,7 @@
         "browser.native-investment-studio.coordination",
         "browser.native-investment-studio.chapters",
         "browser.native-investment-studio.investment",
+        "browser.native-investment-studio.assembly",
         "browser.native-investment-studio.team-assembly"
       ]
     },
@@ -3356,6 +3381,8 @@
           "tests/context-canvas/*.test.mjs"
         ],
         "test:native-investment-studio:source": [
+          "tests/native-investment-studio/assembly-editing.test.mjs",
+          "tests/native-investment-studio/command-draft.test.mjs",
           "tests/native-investment-studio/commands.test.mjs",
           "tests/native-investment-studio/contract.test.mjs",
           "tests/native-investment-studio/controller.test.mjs",
@@ -3376,6 +3403,9 @@
         ],
         "test:native-investment-studio:team-browser": [
           "tests/native-investment-studio/team-controller.browser.mjs"
+        ],
+        "test:native-investment-studio:assembly-browser": [
+          "tests/native-investment-studio/assembly.browser.mjs"
         ],
         "test:native-investment-studio:investment-browser": [
           "tests/native-investment-studio/investment.browser.mjs"

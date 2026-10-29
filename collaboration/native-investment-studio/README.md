@@ -744,7 +744,7 @@ browser receiver owns actual input, layout, focus, and reading observations.
 ## Shared editing and saved drafts
 
 `createDraftCoordinator(studio, { limit })` returns one coordinator for that
-Studio instance. Its `work`, `person`, and `purpose` ports reuse the typed adapters
+Studio instance. Its `work`, `person`, `purpose`, and `assembly` ports reuse the typed adapters
 for validation, exact input conversion, preview and Apply. The parent receiver
 owns coordinator disposal; child receivers borrow their port and own their DOM
 listeners. A coordinator has at most one active adapter.
@@ -762,7 +762,7 @@ quantities retain their exact strings.
 Saved records contain a kind, target ID, fresh record token, bounded raw fields,
 and the tiny accepted-instance marker. Work and person edits have three fields
 of at most 32 UTF-16 units each; purpose has six fields of at most 600 units each.
-They retain each
+Assembly adds the finite text and ordered-ID fields described below. They retain each
 field's original meaning, including an unknown hourly rate represented by an
 empty string. Saved records carry neither prepared projections nor scheduled
 resources. A resumed edit receives a fresh lease; earlier tokens retain their
@@ -868,10 +868,11 @@ removed targets, scalar admission, synchronous reentry and disposal.
 
 ## Native coordination receiver
 
-About loads `controller.mjs` as a module. Its fifteen transitive same-directory
-dependencies retain the canonical package geometry in local and production
-delivery. `deployment/cpanel/primary-route-manifest.json` declares all sixteen files and
-their JavaScript media type. The production closure test builds an isolated
+About loads `controller.mjs` as a module. Its parsed transitive graph retains
+the canonical package geometry in local and production delivery.
+`deployment/cpanel/primary-route-manifest.json` declares every reachable module
+and its JavaScript media type; the shared closure check compares that ownership
+with the runtime inventory in both directions. The production closure test builds an isolated
 artifact with the real builder and follows its parsed import graph; removing
 one dependency earns a failing closure observation. The shared local browser
 server, focused visual-check server, and Canvas visual-reference server each
@@ -936,6 +937,39 @@ short explanation; the session-count hint sits beside its count. Variable
 validation feedback and the investment preview follow all inputs, so their
 wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
+
+## People and Teams receiver
+
+`assembly-controller.mjs` adds creation, ordered memberships, list order and
+removal confirmation to the existing People chapter. `team-controller.mjs`
+continues to own the selected person's rate and funded time. Both borrow the
+same draft coordinator. Their separate forms and action attributes keep input
+and submission with the selected editor. The root resumes the selected editor
+after Purpose or another chapter; saved entries also have their existing tray.
+
+A person creation previews funded cost before Apply. A team creation or update
+changes membership and its order; session participants remain their own work
+records. Referenced removals display the accepted team, work or practice labels
+that still use the record. The visitor can change those relationships first.
+An imported creation collision offers a fresh identity while retaining all
+entered text and ordered selections. Undo restores accepted identities and order.
+
+Accepted projection identity controls list rebuilding. People and reference
+indexes are rebuilt once per accepted projection. Membership rendering prepares
+one position map and selection set, then visits selected and available people
+once: O(P + M) time and retained DOM, where P is people and M is selected members.
+The raw coordinator carries bounded arrays; whole-plan preparation still owns
+validation and accounting. Each valid changed draft earns one cached preview.
+The receiver retains its displayed projection, bounded maps, selected target
+and listener group. Callback epochs protect a newer editor or disposed receiver
+from late focus and announcement writes.
+
+The About route stylesheet owns the shared palette and form geometry. Circular
+step buttons stay below numeric inputs; feedback follows all input rows. The
+focused assembly browser route observes literal monetary outcomes, membership
+order, removal references, stale and collision recovery, callback ownership,
+compact controls, and document scrolling. The existing person browser route
+continues to own rate/funded-time interactions.
 
 ## Purpose and Investment receivers
 
@@ -1174,6 +1208,7 @@ npm run test:native-investment-studio:coordination-browser
 npm run test:native-investment-studio:team-browser
 npm run test:native-investment-studio:chapters-browser
 npm run test:native-investment-studio:investment-browser
+npm run test:native-investment-studio:assembly-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```

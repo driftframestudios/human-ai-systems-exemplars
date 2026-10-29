@@ -274,9 +274,17 @@
             </div>
           </details>
         </section>
-        <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor aria-labelledby="native-team-title">
-          <h3 id="native-team-title">People and funded time</h3>
+        <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
+          <h3 id="native-team-title">People and teams</h3>
           <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
+          <div class="native-assembly__toolbar">
+            <button type="button" data-assembly-action="person-create" disabled>Add person</button>
+            <div class="native-assembly__arrange" data-assembly-people-tools>
+              <label for="assembly-person-order">Person to arrange</label>
+              <select id="assembly-person-order" data-assembly-person disabled></select>
+              <div class="native-coordination__actions"><button type="button" data-assembly-action="person-up" disabled>Move up</button><button type="button" data-assembly-action="person-down" disabled>Move down</button><button type="button" data-assembly-action="person-remove" disabled>Remove person</button></div>
+            </div>
+          </div>
           <ul class="native-team__roster" data-team-roster></ul>
           <p data-team-empty hidden>This plan has no people.</p>
           <details class="native-coordination__configuration" data-person-configure hidden>
@@ -332,6 +340,76 @@
             </form>
           </details>
           <p class="native-coordination__status" data-person-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
+            <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" data-assembly-action="team-create" disabled>Add team</button></div>
+            <ul class="native-assembly__team-list" data-assembly-teams></ul>
+            <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
+          </section>
+          <details class="native-coordination__configuration native-assembly__configuration" data-assembly-configure hidden>
+            <summary data-assembly-summary>People and team settings</summary>
+            <div class="native-coordination__recovery" data-assembly-recovery hidden>
+              <p data-assembly-current></p>
+              <div class="native-coordination__actions"><button type="button" data-assembly-action="review">Review saved edits</button><button type="button" data-assembly-action="useCurrent">Use current values</button><button type="button" data-assembly-action="freshId" data-assembly-fresh-id hidden>Use these entries for a new record</button><button type="button" data-assembly-action="cancel">Discard saved edits</button></div>
+            </div>
+            <form data-assembly-form novalidate>
+              <fieldset data-assembly-fieldset disabled aria-label="People and team settings">
+                <div class="native-assembly__name" data-assembly-name-group>
+                  <label for="assembly-label" data-assembly-name-label>Name</label>
+                  <input id="assembly-label" name="label" type="text" maxlength="120" autocomplete="off" aria-describedby="assembly-label-error">
+                </div>
+                <div class="native-coordination__controls" data-assembly-person-fields hidden>
+                  <div class="native-coordination__control">
+                    <label for="assembly-ratePerHour">Hourly rate · USD</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-assembly-action="step" data-assembly-field="ratePerHour" data-step="-1" aria-label="Decrease hourly rate by one dollar">−</button>
+                      <input id="assembly-ratePerHour" name="ratePerHour" type="text" inputmode="decimal" maxlength="32" autocomplete="off" spellcheck="false" aria-describedby="assembly-ratePerHour-hint assembly-ratePerHour-error">
+                      <button type="button" data-assembly-action="step" data-assembly-field="ratePerHour" data-step="1" aria-label="Increase hourly rate by one dollar">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="assembly-ratePerHour-hint">Leave blank if unknown.</p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="assembly-fundedHours">Funded hours</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-assembly-action="step" data-assembly-field="fundedHours" data-step="-1" aria-label="Decrease funded time by one hour">−</button>
+                      <input id="assembly-fundedHours" name="fundedHours" type="text" inputmode="numeric" maxlength="32" autocomplete="off" spellcheck="false" aria-describedby="assembly-fundedHours-hint assembly-fundedHours-error">
+                      <button type="button" data-assembly-action="step" data-assembly-field="fundedHours" data-step="1" aria-label="Increase funded time by one hour">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="assembly-fundedHours-hint">Available for work in this plan.</p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="assembly-fundedMinutes">Funded minutes</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-assembly-action="step" data-assembly-field="fundedMinutes" data-step="-1" aria-label="Decrease funded time by one minute">−</button>
+                      <input id="assembly-fundedMinutes" name="fundedMinutes" type="text" inputmode="numeric" maxlength="32" autocomplete="off" spellcheck="false" aria-describedby="assembly-fundedMinutes-hint assembly-fundedMinutes-error">
+                      <button type="button" data-assembly-action="step" data-assembly-field="fundedMinutes" data-step="1" aria-label="Increase funded time by one minute">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="assembly-fundedMinutes-hint">Added to funded hours.</p>
+                  </div>
+                </div>
+                <div class="native-assembly__membership" data-assembly-members-group hidden role="group" aria-labelledby="assembly-members-label">
+                  <p id="assembly-members-label" class="native-coordination__control-title">People in this team</p>
+                  <ul class="native-assembly__members" data-assembly-members aria-describedby="assembly-personIds-error"></ul>
+                </div>
+                <p class="native-assembly__confirm" data-assembly-confirm hidden></p>
+                <ul class="native-assembly__dependencies" data-assembly-dependencies hidden></ul>
+                <div class="native-coordination__feedback native-assembly__feedback" data-assembly-feedback aria-label="People and team settings feedback">
+                  <p class="native-coordination__error" id="assembly-label-error" data-assembly-error="label"></p>
+                  <p class="native-coordination__error" id="assembly-ratePerHour-error" data-assembly-error="ratePerHour"></p>
+                  <p class="native-coordination__error" id="assembly-fundedHours-error" data-assembly-error="fundedHours"></p>
+                  <p class="native-coordination__error" id="assembly-fundedMinutes-error" data-assembly-error="fundedMinutes"></p>
+                  <p class="native-coordination__error" id="assembly-personIds-error" data-assembly-error="personIds"></p>
+                  <p class="native-coordination__error" data-assembly-general-error></p>
+                </div>
+                <div class="native-coordination__preview" data-assembly-preview>
+                  <span class="native-coordination__plate">Draft known total · USD</span>
+                  <output data-assembly-total aria-live="off" aria-label="People and team settings draft total">—</output>
+                  <p class="native-coordination__hint" data-assembly-preview-note>Apply to update the plan.</p>
+                </div>
+                <div class="native-coordination__actions"><button type="submit" data-assembly-apply>Add person</button><button type="button" data-assembly-action="cancel" data-assembly-cancel>Cancel changes</button></div>
+              </fieldset>
+            </form>
+          </details>
+          <p class="native-coordination__status" data-assembly-status role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title">Keep and compare your plan.</h3>

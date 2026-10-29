@@ -48,7 +48,7 @@ after(async () => {
 
 const panel = page => page.locator('[data-native-coordination]');
 const team = page => page.locator('[data-native-team-editor]');
-const input = (page, field) => team(page).locator(`input[name="${field}"]`);
+const input = (page, field) => team(page).locator(`[data-person-configure] input[name="${field}"]`);
 const action = (page, name) => team(page).locator(`[data-person-action="${name}"]`);
 const accepted = page => panel(page).locator('[data-native-total]');
 const preview = page => team(page).locator('[data-person-total]');
@@ -335,7 +335,7 @@ for (const engine of names) {
       await input(page, 'fundedHours').scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       await assertContained(page);
-      const labels = await team(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
+      const labels = await settings(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
         const range = document.createRange();
         range.selectNodeContents(group.querySelector('label'));
         return { name: group.querySelector('input').name,
@@ -353,7 +353,7 @@ for (const engine of names) {
       }
       // The panel owns this feedback geometry; document scrolling can continue
       // independently while a browser moves focus to the edited control.
-      const positions = () => team(page).evaluate(root => {
+      const positions = () => settings(page).evaluate(root => {
         const top = root.getBoundingClientRect().top;
         return [...root.querySelectorAll('input')].map(node => ({
           name: node.name, top: node.getBoundingClientRect().top - top,
@@ -370,7 +370,7 @@ for (const engine of names) {
           `feedback keeps ${before[index].name} in place at ${width}px: ${JSON.stringify({ before: before[index], after: after[index] })}`);
       }
       await assertContained(page);
-      const controls = await team(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
+      const controls = await settings(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
         const field = group.querySelector('input');
         return { name: field.name, bottom: field.getBoundingClientRect().bottom,
           buttons: [...group.querySelectorAll('button')].map(button => {

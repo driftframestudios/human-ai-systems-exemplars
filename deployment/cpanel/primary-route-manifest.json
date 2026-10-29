@@ -148,6 +148,16 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "collaboration/native-investment-studio/assembly-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/assembly-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/command-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/command-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/commands.mjs",
       "projected_path": "collaboration/native-investment-studio/commands.mjs",
       "media_type": "text/javascript"
