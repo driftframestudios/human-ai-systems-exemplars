@@ -682,7 +682,18 @@ async function exerciseInvestmentStudio(session) {
 // This family receiver checks that the packaged presentation keeps its controls.
 async function exerciseInvestmentStudioChapters({ page }) {
   await page.locator('html[data-about-studio-chapters="ready"]').waitFor();
-  for (const chapter of ['plan', 'people', 'work', 'coordination', 'comparison']) {
+  const chapters = ['coordination', 'plan', 'people', 'work', 'change-modeling', 'comparison'];
+  assert.deepEqual(
+    await page.locator('button[data-studio-chapter]').evaluateAll(nodes => nodes.map(node => node.dataset.studioChapter)),
+    chapters,
+    'the packaged route retains the authored chapter sequence',
+  );
+  assert.deepEqual(
+    await page.locator('button[data-studio-chapter][aria-pressed="true"]').evaluateAll(nodes => nodes.map(node => node.dataset.studioChapter)),
+    ['coordination'],
+    'the packaged route opens with Coordination selected',
+  );
+  for (const chapter of chapters) {
     const control = page.locator(`button[data-studio-chapter="${chapter}"]`);
     await control.click();
     assert.equal(await control.getAttribute('aria-pressed'), 'true');
