@@ -1,5 +1,5 @@
-import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepareWorkRecord, parsePlan, createExamplePlan, PlanError } from './contract.mjs';
-import { HISTORY } from './config.mjs';
+import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepareWorkRecord, preparePurpose as preparePurposeRecord, parsePlan, createExamplePlan, PlanError } from './contract.mjs';
+import { HISTORY, PURPOSE_FIELDS } from './config.mjs';
 
 function historyLimit(options) {
   const prototype = options && typeof options === 'object' ? Object.getPrototypeOf(options) : undefined;
@@ -133,6 +133,13 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     return replacement(restoredEnvelope(stack[stack.length - 1]));
   }
 
+  function preparePurpose(candidate) {
+    const base = accepted;
+    const purpose = preparePurposeRecord(candidate, 'plan.purpose');
+    if (PURPOSE_FIELDS.every(field => purpose[field] === base.state.purpose[field])) return { projection: base };
+    return { projection: preparePlan({ ...base.state, revision: base.state.revision + 1, purpose }) };
+  }
+
   return Object.freeze({
     read: () => accepted,
     capture: () => accepted,
@@ -146,6 +153,8 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     previewWork: (workId, candidate, expected) => attempt(expected, () => prepareWork(workId, candidate), 'preview'),
     updatePerson: (personId, candidate, expected) => attempt(expected, () => preparePerson(personId, candidate)),
     previewPerson: (personId, candidate, expected) => attempt(expected, () => preparePerson(personId, candidate), 'preview'),
+    updatePurpose: (candidate, expected) => attempt(expected, () => preparePurpose(candidate)),
+    previewPurpose: (candidate, expected) => attempt(expected, () => preparePurpose(candidate), 'preview'),
     undo: expected => attempt(expected, () => traversal(undo, 'undo'), 'undo'),
     redo: expected => attempt(expected, () => traversal(redo, 'redo'), 'redo'),
     setBaseline: expected => attempt(expected, () => ({ projection: accepted }), 'baseline'),

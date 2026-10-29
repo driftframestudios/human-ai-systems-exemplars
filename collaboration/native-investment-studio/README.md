@@ -19,7 +19,8 @@ and integration authority; publication remains held.
 
 - `config.mjs` owns the immutable units, input limits, contract vocabulary,
   six practice definitions, and bounded history defaults.
-- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `parsePlan`, `createExamplePlan`, and
+- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `preparePurpose`,
+  `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `state.mjs` owns the `createStudio` facade, each instance's accepted
   chronology, bounded Undo/Redo and independent baseline capture.
@@ -89,9 +90,9 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.1.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.2.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, one closed `purpose` record, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
@@ -105,6 +106,45 @@ Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
+
+### Purpose and schema migration
+
+Purpose has exactly six nullable fields: `changedAbility`, `affectedPopulation`,
+`observationSignal`, `accountableOwner`, `reviewBoundary`, and `openConditions`.
+Each string admits at most 600 raw UTF-16 units before trimming surrounding
+whitespace. Canonical output retains the trimmed, nonblank value; explicit
+`null` carries an unspecified field. Direct admission rejects empty or
+whitespace-only strings. A future editor can turn its blank input into null at
+Apply. Purpose text describes the initiative independently of monetary inputs.
+
+`preparePlan` selects schema `0.1.0` or `0.2.0` from the root's own enumerable
+schema-version data descriptor. It fully admits a genuine closed 0.1 root,
+every row and reference, its numeric meaning, and the owned byte budget before
+constructing a current record with all six purpose fields null. The migrated
+record then passes current admission. Surplus fields remain outside both closed
+schemas; migration never copies an unadmitted graph.
+
+`prepareImport(text)` performs the existing bounded JSON and integer-token
+checks once and returns frozen `{ projection, sourceSchemaVersion }`.
+`parsePlan(text)` returns that same path's projection. Import previews can use
+the source version while exports always describe the actual current 0.2 state.
+Caller-owned legacy records and external captures retain their original version
+and contents. Construction, replacement, import, history and baseline retention
+inside a current Studio receive current-schema projections.
+
+`previewPurpose(candidate, expectedProjection)` validates and prepares a proposed
+purpose while preserving accepted state. `updatePurpose` publishes a material
+change through ordinary revision, acceptance and history rules. A normalized,
+validated no-op preserves exact accepted identity and Redo, including at the
+document revision ceiling. Purpose changes leave calculated monetary results
+unchanged. Stale and reentrant admission retains the newer accepted owner.
+
+The six bounded fields add O(6 × 600) normalization work. Current admission keeps
+the existing complete preparation path. A legacy import performs old admission
+and current admission once each; this finite migration has the same asymptotic
+bound with two owned preparation passes. The literal 0.1 fixture and focused
+contract/state cases cover migration, descriptor ownership, Unicode limits,
+unknown versus zero rates, deterministic round-trip, no-op history and recovery.
 
 ### Supported inputs
 
