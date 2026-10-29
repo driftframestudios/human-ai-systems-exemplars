@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { readNativeModuleClosure } from '../../tools/native-studio-module-closure.mjs';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
 import { startStaticServer as startVisualCheckServer } from '../../tools/visual-check.mjs';
 import { startStaticServer as startVisualReferenceServer } from '../../tools/context-canvas-visual-reference.mjs';
 
 const root = new URL('../../', import.meta.url);
 const about = await readFile(new URL('context-canvas-project-surface/context-canvas/index.html', root), 'utf8');
-const modulePaths = ['config', 'contract', 'controller', 'display', 'draft', 'editing', 'exchange', 'icons', 'investment-controller', 'person-draft', 'presets', 'purpose-controller', 'purpose-draft', 'shell', 'state', 'team-controller']
-  .map(name => `collaboration/native-investment-studio/${name}.mjs`);
+const { paths: modulePaths } = await readNativeModuleClosure(fileURLToPath(root));
 
 test('native About coordination has one module receiver and retains both legacy Studio routes', () => {
   assert.equal((about.match(/\bdata-native-coordination(?:\s|>)/gu) ?? []).length, 1);

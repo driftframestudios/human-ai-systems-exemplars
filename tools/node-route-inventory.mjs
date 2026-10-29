@@ -90,6 +90,10 @@ function safePath(value) {
   return value;
 }
 
+export function browserSharedJavaScriptPaths() {
+  return [...BROWSER_SHARED];
+}
+
 export function classifyJavaScript(file) {
   safePath(file);
   if (isFrozenPublication(file)) return 'frozen-publication';
