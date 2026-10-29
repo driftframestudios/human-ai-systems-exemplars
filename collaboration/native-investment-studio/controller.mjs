@@ -7,10 +7,13 @@ import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
-import { describeAssemblyTarget, describeSessionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
+import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 
 const INSTANCES = new WeakMap();
+const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
+  role: describeRoleTarget, contribution: describeContributionTarget });
 
 export function mountCoordinationPanel(root, options = {}) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
@@ -43,6 +46,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let purposePanel = null;
   let investmentPanel = null;
   let assemblyPanel = null;
+  let responsibilityPanel = null;
   let peopleEditor = 'person';
   let activeChapter = 'coordination';
   let renderedSaved = [];
@@ -58,6 +62,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function announce(message) { text('status', message); }
   function resumePeople() {
     if (peopleEditor === 'assembly') assemblyPanel?.resume();
+    else if (peopleEditor === 'responsibility') responsibilityPanel?.resume();
     else teamPanel?.resume();
   }
 
@@ -73,33 +78,50 @@ export function mountCoordinationPanel(root, options = {}) {
     const fragment = document.createDocumentFragment();
     const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
       ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes',
-      label: 'Name', personIds: 'People', teamId: 'Team', funding: 'Funding', status: 'Status', ...PURPOSE_LABELS };
+      label: 'Name', personIds: 'People', teamId: 'Team', funding: 'Funding', status: 'Status', ...PURPOSE_LABELS, ...RESPONSIBILITY_LABELS };
     const people = new Map(projection.state.people.map(person => [person.id, person.label]));
     const works = new Map(projection.state.work.map(row => [row.id, row.label]));
     const teams = new Map(projection.state.teams.map(row => [row.id, row.label]));
+    const contributions = new Map(projection.state.contributions.map(row => [row.id, responsibilityValue('categoryId', row.categoryId)]));
+    const collectionLabels = { people, teams, work: works, contributions };
+    function savedTitle(record, target) {
+      if (target) {
+        const enteredName = record.raw.label?.trim();
+        if (enteredName) return enteredName;
+        const currentName = collectionLabels[target.collection]?.get(target.id);
+        if (currentName) return currentName;
+        if (record.kind === 'contribution') return responsibilityValue('categoryId', record.raw.categoryId);
+        return 'New record';
+      }
+      if (record.kind === 'purpose') return 'Plan purpose';
+      const names = record.kind === 'person' ? people : works;
+      return names.get(record.targetId) ?? record.targetId;
+    }
+    function savedValue(field, raw) {
+      if (Array.isArray(raw)) {
+        const names = field === 'workIds' ? works : people;
+        return raw.map(id => names.get(id) ?? id).join(', ') || 'None selected';
+      }
+      if (field === 'teamId') return (teams.get(raw) ?? raw) || 'Choose a team';
+      if (field === 'receiverPersonId' || field === 'decisionOwnerPersonId') return (people.get(raw) ?? raw) || 'Unassigned';
+      if (Object.hasOwn(RESPONSIBILITY_LABELS, field)) return responsibilityValue(field, raw);
+      return raw || 'blank';
+    }
     for (const record of records) {
       const key = `${record.kind}:${record.targetId}`;
       savedByKey.set(key, record);
       const item = document.createElement('li');
       const title = document.createElement('strong');
-      const assembly = record.kind === 'assembly' ? describeAssemblyTarget(record.targetId)
-        : record.kind === 'session' ? describeSessionTarget(record.targetId) : null;
-      title.textContent = assembly ? record.raw.label?.trim() ||
-        (assembly.collection === 'people' ? people : assembly.collection === 'teams' ? teams : works).get(assembly.id) || 'New record'
-        : record.kind === 'purpose' ? 'Plan purpose'
-        : (record.kind === 'person' ? people : works).get(record.targetId) ?? record.targetId;
+      const target = Object.hasOwn(TARGET_READERS, record.kind) ? TARGET_READERS[record.kind](record.targetId) : null;
+      title.textContent = savedTitle(record, target);
       const values = document.createElement('p');
-      values.textContent = Object.entries(record.raw).map(([field, raw]) => {
-        const value = Array.isArray(raw) ? raw.map(id => people.get(id) ?? id).join(', ') || 'None selected'
-          : field === 'teamId' ? (teams.get(raw) ?? raw) || 'Choose a team' : raw || 'blank';
-        return `${labels[field]}: ${value}`;
-      }).join(' · ');
+      values.textContent = Object.entries(record.raw).map(([field, raw]) => `${labels[field]}: ${savedValue(field, raw)}`).join(' · ');
       item.append(title, values);
-      if (!record.targetExists && !assembly) {
+      if (!record.targetExists && !target) {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (record.kind === 'assembly' || record.kind === 'session' || record.kind === 'purpose' || record.kind === 'person') {
+      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution'].includes(record.kind)) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -160,6 +182,7 @@ export function mountCoordinationPanel(root, options = {}) {
     root.dataset.nativeState = view.status;
     teamPanel?.refresh();
     assemblyPanel?.refresh();
+    responsibilityPanel?.refresh();
     purposePanel?.refresh();
     investmentPanel?.refresh();
     return view;
@@ -184,10 +207,11 @@ export function mountCoordinationPanel(root, options = {}) {
       if (saved.kind === 'purpose') purposePanel?.open();
       else {
         purposePanel?.close({ resume: false });
-        chapterShell?.select(saved.kind === 'person' || saved.kind === 'assembly' ? 'people' : 'coordination');
+        chapterShell?.select(['person', 'assembly', 'role', 'contribution'].includes(saved.kind) ? 'people' : 'coordination');
         if (saved.kind === 'assembly') assemblyPanel?.open(saved.targetId);
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
         else if (saved.kind === 'session') workPanel?.open(saved.targetId);
+        else if (saved.kind === 'role' || saved.kind === 'contribution') responsibilityPanel?.open(saved.targetId);
       }
       render();
       return;
@@ -201,6 +225,7 @@ export function mountCoordinationPanel(root, options = {}) {
     workPanel?.dispose();
     investmentPanel?.dispose();
     purposePanel?.dispose();
+    responsibilityPanel?.dispose();
     assemblyPanel?.dispose();
     teamPanel?.dispose();
     for (const release of cleanup) release();
@@ -233,6 +258,7 @@ export function mountCoordinationPanel(root, options = {}) {
         peopleEditor = 'person';
         purposePanel?.close({ resume: false });
         assemblyPanel?.close({ park: false });
+        responsibilityPanel?.close({ park: false });
       },
       canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'people' && peopleEditor === 'person' && !purposePanel?.isOpen(), onAccepted: () => render(),
@@ -243,11 +269,23 @@ export function mountCoordinationPanel(root, options = {}) {
         peopleEditor = 'assembly';
         purposePanel?.close({ resume: false });
         teamPanel?.close();
+        responsibilityPanel?.close({ park: false });
       },
       canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'people' && peopleEditor === 'assembly' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
       onPersonCreated: id => teamPanel?.select(id),
+    });
+    if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
+      onBegin: () => {
+        peopleEditor = 'responsibility';
+        purposePanel?.close({ resume: false });
+        teamPanel?.close();
+        assemblyPanel?.close({ park: false });
+      },
+      canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'people' && peopleEditor === 'responsibility' && !purposePanel?.isOpen(),
+      onAccepted: () => render(), onEditing: () => render(),
     });
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
       onOpen: () => { editing.park(); },

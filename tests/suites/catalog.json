@@ -316,6 +316,8 @@
         "tests/native-investment-studio/presets.test.mjs",
         "tests/native-investment-studio/purpose-draft.test.mjs",
         "tests/native-investment-studio/relationships.test.mjs",
+        "tests/native-investment-studio/responsibility-draft.test.mjs",
+        "tests/native-investment-studio/responsibility-editing.test.mjs",
         "tests/native-investment-studio/session-draft.test.mjs",
         "tests/native-investment-studio/session-editing.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
@@ -2835,6 +2837,28 @@
       "aliases": ["test:native-investment-studio:session-browser"]
     },
     {
+      "id": "browser.native-investment-studio.responsibility",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/responsibility.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "People role details and human review assignments: complete field meaning, stable references, saved/stale recovery, unchanged accounting, ordered sessions, focus, narrow reading and disposal across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:responsibility-browser"
+      ]
+    },
+    {
       "id": "browser.native-investment-studio.assembly",
       "family": "native-investment-studio",
       "kind": "node-test",
@@ -3019,6 +3043,7 @@
         "browser.native-investment-studio.coordination",
         "browser.native-investment-studio.chapters",
         "browser.native-investment-studio.investment",
+        "browser.native-investment-studio.responsibility",
         "browser.native-investment-studio.sessions",
         "browser.native-investment-studio.assembly",
         "browser.native-investment-studio.team-assembly"
@@ -3410,6 +3435,8 @@
           "tests/native-investment-studio/presets.test.mjs",
           "tests/native-investment-studio/purpose-draft.test.mjs",
           "tests/native-investment-studio/relationships.test.mjs",
+          "tests/native-investment-studio/responsibility-draft.test.mjs",
+          "tests/native-investment-studio/responsibility-editing.test.mjs",
           "tests/native-investment-studio/session-draft.test.mjs",
           "tests/native-investment-studio/session-editing.test.mjs",
           "tests/native-investment-studio/shell.test.mjs",
@@ -3424,6 +3451,9 @@
         ],
         "test:native-investment-studio:session-browser": [
           "tests/native-investment-studio/session.browser.mjs"
+        ],
+        "test:native-investment-studio:responsibility-browser": [
+          "tests/native-investment-studio/responsibility.browser.mjs"
         ],
         "test:native-investment-studio:assembly-browser": [
           "tests/native-investment-studio/assembly.browser.mjs"
