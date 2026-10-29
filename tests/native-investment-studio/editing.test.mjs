@@ -113,7 +113,7 @@ test('purpose reserves a bounded slot, accepts only its fixed target, and releas
   const next = opened(editing, studio, 'purpose', 'purpose');
   editing.purpose.setText(next, 'changedAbility', 'Still a draft');
   const disposed = editing.dispose();
-  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null });
+  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null, session: null });
   assert.equal(disposed.slots, 0);
   assert.equal(disposed.active, null);
   assert.equal(editing.purpose.read().status, 'disposed');

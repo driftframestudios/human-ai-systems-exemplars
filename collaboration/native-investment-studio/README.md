@@ -31,12 +31,12 @@ and integration authority; publication remains held.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, its cached proposal, and the pure numeric codec
   reused by person creation.
-- `command-draft.mjs` owns five finite assembly forms, ordered raw selections,
+- `command-draft.mjs` owns the closed assembly and session form families, ordered raw selections,
   stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
-  shared by working sessions, people, purpose, and assembly forms.
+  shared by duration edits, people, purpose, assembly forms, and full session forms.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -744,7 +744,7 @@ browser receiver owns actual input, layout, focus, and reading observations.
 ## Shared editing and saved drafts
 
 `createDraftCoordinator(studio, { limit })` returns one coordinator for that
-Studio instance. Its `work`, `person`, `purpose`, and `assembly` ports reuse the typed adapters
+Studio instance. Its `work`, `person`, `purpose`, `assembly`, and `session` ports reuse the typed adapters
 for validation, exact input conversion, preview and Apply. The parent receiver
 owns coordinator disposal; child receivers borrow their port and own their DOM
 listeners. A coordinator has at most one active adapter.
@@ -865,6 +865,70 @@ no scheduled resources.
 $1,440 creation, ordered selection ownership, numeric codec reuse, no-op and
 preview behavior, dependencies, eight-slot recovery, imported collisions,
 removed targets, scalar admission, synchronous reentry and disposal.
+
+
+### Complete session forms
+
+`editing.session` selects and edits a whole working-session row through the
+same active lease and eight-slot limit. Its selection is separate from the
+existing `editing.work` duration editor. Switching between these editors parks
+changed raw values; accepting either edit gives the other saved edit a current
+plan to review.
+
+`SESSION_FORMS`, `makeSessionTarget`, and `describeSessionTarget` describe three
+closed forms: `work.create`, `work.update`, and `work.remove`. Descriptors carry
+`form`, `id`, `collection`, `mode`, and field metadata. A typed draft carries its
+full scalar key in `sessionId` and the work row ID in `targetId`. The session
+port supplies the same explicit create, begin, setText, setIds, step, validate,
+preview, apply, cancel, review, useCurrent, and freshId operations as the assembly
+form family. The private form engine selects only those two source-owned
+families; callers receive their named finite adapters.
+
+Creation starts with an empty name and team, an empty ordered participant list,
+a 30-minute duration, one session, additional funding, and planned status.
+The visitor supplies a team and at least one participant before preview or
+Apply. Current admission requires every participant to belong to the selected
+team. The editor retains the selected people while the owner reports a missing
+reference or membership adjustment. Timing remains `null` under schema 0.2;
+updates carry the accepted row's timing value through the existing work owner.
+The later scheduling contract owns any new timing representation.
+
+The full form edits name, team, participants, hours, minutes, session count,
+funding, and planned/paused status together. `prepareWorkDraftValues` and
+`stepWorkDraftValues` share the existing duration parser and minute carry with
+`createWorkDraftAdapter`; that adapter retains its optional scheduler and its
+original duration-only API. The pure codecs receive caller-admitted bounded raw
+strings. Session updates use `previewWork` and `updateWork`; creation and removal
+use the accepted command boundary. A canonical no-op preserves the projection,
+acceptance marker, history, and any Redo entry. Pausing retains modeled effort;
+allocated work uses funded capacity and additional work adds a purchase.
+
+`TYPES` owns each coordinator family's descriptor, copy, equality, index,
+creation, and restore strategies. Session targets keep stable IDs across
+parking. Import collisions retain raw text and ordered participants until an
+explicit fresh-ID operation prepares a different record. Removed saved sessions
+remain available for inspection and discard. Removal confirmations carry no
+changed raw fields, so chapter parking releases their transient intent.
+Practice references keep a session in the accepted plan until an explicit
+reassignment or removal of those references succeeds.
+
+A session payload contains at most 8,504 UTF-16 value units and 128 ordered-ID
+slots: 120 name units, 64 team-ID units, three 32-unit numeric strings, two
+16-unit choice strings, and 128 IDs of at most 64 units. Eight such parked
+payloads hold at most 68,032 value units and 1,024 ID slots, plus fixed metadata
+and tiny acceptance markers. Copy and comparison visit those bounded values;
+reference indexes rebuild once per accepted projection. Fresh-ID allocation
+visits one bounded collection and the at-most-eight held drafts. Changed valid
+preview and material Apply retain complete plan preparation, while an unchanged
+raw revision reuses its cached preview. This preserves the measured preparation
+strategy rather than introducing incremental accounting.
+
+`session-draft.test.mjs` and `session-editing.test.mjs` distinguish literal
+$1,200-to-$1,250 creation, a $150 paused session, allocated funding, unknown and
+zero rates, no-op identity, ordered-array ownership, numeric bounds, complete
+replacement, stale recovery, dependency-safe removal, eight-slot replacement,
+and publication reentry. Existing duration tests continue to exercise scheduler
+cleanup and ownership through the shared codec.
 
 ## Native coordination receiver
 
