@@ -239,6 +239,60 @@
             </div>
           </details>
         </div>
+        <section class="native-team" data-native-team-editor aria-labelledby="native-team-title">
+          <h3 id="native-team-title">People and funded time</h3>
+          <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
+          <ul class="native-team__roster" data-team-roster></ul>
+          <p data-team-empty hidden>This plan has no people.</p>
+          <details class="native-coordination__configuration" data-person-configure hidden>
+            <summary>Settings for <span data-person-name></span></summary>
+            <form novalidate>
+              <fieldset disabled aria-label="Person rate and funded time">
+                <div class="native-coordination__controls">
+                  <div class="native-coordination__control">
+                    <label for="person-ratePerHour">Hourly rate · USD</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-person-field="ratePerHour" data-step="-1" aria-label="Decrease hourly rate by one dollar">−</button>
+                      <input id="person-ratePerHour" name="ratePerHour" type="text" inputmode="decimal" value="100.00" autocomplete="off" spellcheck="false" aria-describedby="person-ratePerHour-hint person-ratePerHour-error">
+                      <button type="button" data-person-field="ratePerHour" data-step="1" aria-label="Increase hourly rate by one dollar">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="person-ratePerHour-hint">Leave blank if unknown.</p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="person-fundedHours">Funded hours</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-person-field="fundedHours" data-step="-1" aria-label="Decrease funded time by one hour">−</button>
+                      <input id="person-fundedHours" name="fundedHours" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="person-fundedHours-hint person-fundedHours-error">
+                      <button type="button" data-person-field="fundedHours" data-step="1" aria-label="Increase funded time by one hour">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="person-fundedHours-hint">Available for work in this plan.</p>
+                  </div>
+                  <div class="native-coordination__control">
+                    <label for="person-fundedMinutes">Funded minutes</label>
+                    <div class="native-coordination__stepper">
+                      <button type="button" data-person-field="fundedMinutes" data-step="-1" aria-label="Decrease funded time by one minute">−</button>
+                      <input id="person-fundedMinutes" name="fundedMinutes" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="person-fundedMinutes-hint person-fundedMinutes-error">
+                      <button type="button" data-person-field="fundedMinutes" data-step="1" aria-label="Increase funded time by one minute">+</button>
+                    </div>
+                    <p class="native-coordination__hint" id="person-fundedMinutes-hint">Added to funded hours.</p>
+                  </div>
+                </div>
+                <div class="native-coordination__feedback" aria-label="Person settings feedback">
+                  <p class="native-coordination__error" id="person-ratePerHour-error" data-person-error="ratePerHour"></p>
+                  <p class="native-coordination__error" id="person-fundedHours-error" data-person-error="fundedHours"></p>
+                  <p class="native-coordination__error" id="person-fundedMinutes-error" data-person-error="fundedMinutes"></p>
+                </div>
+                <div class="native-coordination__preview">
+                  <span class="native-coordination__plate">Draft known total · USD</span>
+                  <output data-person-total aria-live="off" aria-label="Person edit draft total">$1,200.00</output>
+                  <p data-person-capacity></p>
+                </div>
+                <div class="native-coordination__actions"><button type="submit" data-person-action="apply">Apply changes</button><button type="button" data-person-action="cancel">Cancel changes</button></div>
+              </fieldset>
+            </form>
+          </details>
+          <p class="native-coordination__status" data-person-status role="status" aria-live="polite" aria-atomic="true"></p>
+        </section>
         <p class="native-coordination__fallback" data-native-fallback hidden></p>
       </div>
     </div>

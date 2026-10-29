@@ -40,10 +40,13 @@ owns About's hours/minutes/session draft, live preview, explicit Apply controlle
 and accepted investment model.
 `index.html` supplies its semantic panel and static example;
 `styles/routes/about.css` owns the scoped `.native-coordination` composition.
-The primary route manifest carries all five canonical browser modules with
+The primary route manifest carries all eight canonical browser modules with
 their relative import geometry. Source, production-closure, and focused
-three-engine interaction checks belong to Issue #643. Issue #641 receives the
-live-preview and explicit Apply boundaries for separate runtime measurement. Existing Studio chapters
+three-engine interaction checks belong to Issue #643. Issue #641 records the accepted live-preview and explicit Apply measurement.
+The native Team Assembly receiver adds one roster and a person rate/funded-time
+editor through the same accepted state owner; its focused source and browser
+routes belong to Issue #645. `team-controller.mjs` owns that form,
+`person-draft.mjs` owns its raw draft, and `display.mjs` owns exact-value formatting. Existing Studio chapters
 retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.

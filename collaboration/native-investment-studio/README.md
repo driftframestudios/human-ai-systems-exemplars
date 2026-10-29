@@ -19,12 +19,14 @@ and integration authority; publication remains held.
 
 - `config.mjs` owns the immutable units, input limits, contract vocabulary,
   and six practice definitions.
-- `contract.mjs` owns `preparePlan`, `parsePlan`, `createExamplePlan`, and
+- `contract.mjs` owns `preparePlan`, `preparePerson`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `state.mjs` owns the `createStudio` facade and each instance's accepted
   revision.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
   the optional one-request scheduling boundary.
+- `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
+  one target-bound person draft, and its cached proposal.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -34,6 +36,9 @@ and integration authority; publication remains held.
   root, own focused contract and state-transition observations.
 - `tests/native-investment-studio/draft.test.mjs` owns draft recovery,
   coalescing, exact-target identity, and scheduling lifecycle observations.
+- `tests/native-investment-studio/person-state.test.mjs` and
+  `person-draft.test.mjs` own person accounting, admission, no-op, exact-target
+  recovery, and bounded rate/time draft observations.
 - `tests/native-investment-studio/controller.test.mjs` owns the local module
   delivery and semantic receiving checks; `controller.browser.mjs` owns the
   actual control, reading, and lifecycle observations across three engines.
@@ -208,12 +213,14 @@ part of the existing $16,000.
 ## Accepted state and commands
 
 `createStudio` creates an independent state owner with `read`, `replace`,
-`updateWork`, `previewWork`, `importText`, `exportText`, and `capture` operations. Each accepted
-mutation produces a newly prepared immutable revision. Mutations receive the
+`updateWork`, `previewWork`, `updatePerson`, `previewPerson`, `importText`,
+`exportText`, and `capture` operations. An accepted material edit produces a
+newly prepared immutable revision. Mutations receive the
 exact immutable projection returned by `read()` as their expected-state token:
 
 - `replace(candidatePlan, expectedProjection)`
 - `updateWork(workId, fullReplacementRow, expectedProjection)`
+- `updatePerson(personId, fullReplacementRow, expectedProjection)`
 - `importText(jsonText, expectedProjection)`
 
 Projection identity binds both the model instance and its accepted revision.
@@ -230,7 +237,8 @@ descriptor callbacks.
 `updateWork` retains the target work ID and collection order, then increments
 the native plan revision. Replacement and import preserve the supplied native
 revision and replace the accepted projection identity. The work-position index
-is rebuilt for replacement/import and reused for an ordinary work edit.
+and person-position index are rebuilt for replacement/import and reused for
+targeted edits that preserve identity and order.
 
 `previewWork(workId, fullReplacementRow, expectedProjection)` shares the same
 target checks and complete preparation with `updateWork`. It returns a proposed
@@ -238,6 +246,22 @@ next-revision projection while `read`, `capture`, and `exportText` retain the
 accepted projection. The exact-state check runs before and after preparation.
 Apply prepares again against the accepted owner; a displayed proposal carries
 the estimate, while Apply retains commit authority.
+
+### Person command contract
+
+| Command | Target, fields, and base identity | Success and recovery |
+| --- | --- | --- |
+| `previewPerson(personId, fullReplacementRow, expectedProjection)` | Existing person ID, complete `id`/`label`/`fundedMinutes`/`rateCentsPerHour` row, and the exact current projection | Return a fully prepared proposal while accepted reads, captures, and export retain their current values. |
+| `updatePerson(personId, fullReplacementRow, expectedProjection)` | The same target and canonical fields; rate is integer cents or null and funded time is integer minutes | Admit the complete row, preserve its ID and authored position, then publish one coherent revision. A rejected candidate retains accepted state. |
+| Either command with an unchanged admitted row | Every canonical field agrees with the current person; shared admission still checks shape, descriptors, and bounds | Return the exact accepted projection with the same revision, including at the revision limit. Surplus fields still receive their admission diagnostic. |
+
+`preparePerson` is the same canonical person admission used by complete-plan
+preparation. Its owned row allows a no-op check before the complete preparation
+path. A changed person re-enters that full path, including every shared work
+reference, funding-pool rounding, capacity, and serialization. Preview and Apply
+check exact projection identity both before and after candidate preparation.
+An equal-numbered import or a foreign Studio projection earns `stale-edit`.
+An old capture keeps its original data after the person changes.
 
 `read` returns the prepared immutable snapshot. The owner calculates and retains
 the result once for that accepted revision; reading a snapshot performs constant
@@ -427,6 +451,62 @@ compares direct accepted edits, explicit draft Apply, and deferred Apply through
 identical operation traces. Raw edits, steps, pending requests, accepted commits,
 and complete synchronous Apply cost retain separate metrics. Fake scheduling
 establishes ordering and counts; browser latency begins with native controls.
+
+## Person draft adapter
+
+`createPersonDraftAdapter(studio)` gives one person editor an explicit
+Apply/Cancel boundary. Its API matches the work adapter's session shape while
+keeping this editor's resource lifetime synchronous.
+
+| Operation | Result |
+| --- | --- |
+| `begin(personId, expectedProjection)` | Capture one existing person and the exact accepted projection; return an opaque `draft.token`. An open draft is settled before opening another. |
+| `setText(token, field, raw)` | Retain up to 32 characters for `ratePerHour`, `fundedHours`, or `fundedMinutes`; expose field diagnostics alongside the editable text. |
+| `step(token, field, direction)` | Add or subtract one dollar, hour, or minute. Dollar steps preserve cents; minute steps carry across hour boundaries. |
+| `validate(token)` / `preview(token)` | Validate the current values; preview returns the complete proposed projection while accepted state stays available. |
+| `apply(token)` | Publish one canonical person row and settle the draft. A canonical no-op also settles the draft while preserving accepted identity/revision. |
+| `cancel(token)` / `dispose()` | Release this draft and its cached proposal. Cancel leaves the adapter ready for another person; disposal ends its lifetime. |
+| `read()` | Return an immutable view with current accepted projection, `draft.personId`, token/base identity, raw values, field errors, changed status, and any command error. |
+
+Rates display USD with two decimal places. Entry admits unsigned whole dollars
+or one/two decimal places and converts the integer dollar/cents parts directly
+to integer cents. An empty rate means unavailable; explicit `0` means a zero
+rate. An unfinished decimal such as `100.` remains editable. Exponents,
+whitespace, negative amounts, excess precision, and out-of-bound quantities
+receive field diagnostics. The rate step requires a supplied rate; entering a
+rate supplies the recovery route from unknown.
+
+Funded hours and remaining minutes combine into canonical minutes. Remaining
+minutes run from zero through 59, and total funded time stays within the
+contract's 10,000,000-minute bound: 166,666 hours and 40 minutes. Funded time
+is total available effort in this plan. A calendar or sprint allocation keeps
+its separate future timing contract.
+
+The adapter retains one proposal keyed by canonical cents/minutes under its
+active token and base projection. Equivalent spellings such as `101` and
+`0101.00` reuse the same proposal; changed canonical values replace it. Invalid
+text retains its field diagnostic and accepted amount. Exact projection checks
+precede cache reuse, so an equal-numbered replacement makes the draft stale.
+Cancel followed by Begin opens the current person settings. A late foreign
+token receives its own diagnostic while the current draft stays intact.
+The editor creates no scheduler, timer, listener, or asynchronous resource.
+
+Begin locates its person in O(P). Read, validation, direct text edits, and steps
+operate on three bounded strings. A cache hit returns its prepared proposal in
+O(1); a changed valid preview or material Apply performs complete
+O(P + T + W + A + R + B) preparation, including serialization. The facade's
+person-position map adds O(P) retained entries and expected O(1) target lookup.
+A valid unchanged row performs bounded person admission before returning the
+accepted projection. Surplus direct-object keys retain their O(K) enumeration
+cost at the shared admission boundary. One editor retains its base projection,
+bounded text, and at most one proposal; caller-retained views have their own
+lifetimes.
+
+The focused person suites establish the literal $3/$24/$75 rate changes,
+shared-person funding, unknown/zero pricing, pool rounding, exact cents,
+duration bounds, order preservation, semantic preview reuse, stale recovery,
+and immutable captures. They extend the source contract while the roster's
+browser receiver owns actual input, layout, focus, and reading observations.
 
 ## Native coordination receiver
 

@@ -28,7 +28,10 @@ const repositoryRoot = path.resolve(
 );
 const canvasRoot = "context-canvas-project-surface/context-canvas";
 const nativeRoot = "collaboration/native-investment-studio";
-const nativeModules = ["config.mjs", "contract.mjs", "controller.mjs", "draft.mjs", "state.mjs"]
+const nativeModules = [
+  "config.mjs", "contract.mjs", "controller.mjs", "display.mjs", "draft.mjs",
+  "person-draft.mjs", "state.mjs", "team-controller.mjs",
+]
   .map((file) => `${nativeRoot}/${file}`);
 const nativeEntry = `${nativeRoot}/controller.mjs`;
 const execFileAsync = promisify(execFile);
@@ -285,7 +288,7 @@ test("every local stylesheet linked by production-selected HTML belongs to the e
   }
 });
 
-test("native coordination modules retain exact static-import and media closure in the production artifact", async (t) => {
+test("native Studio modules retain exact static-import and media closure in the production artifact", async (t) => {
   const manifest = await loadPrimaryManifest();
   const sources = new Map();
   for (const sourcePath of nativeModules) {
@@ -296,9 +299,12 @@ test("native coordination modules retain exact static-import and media closure i
     sources.set(sourcePath, await readFile(path.join(repositoryRoot, sourcePath)));
   }
   assert.deepEqual(await parsedNativeGraph(sources, nativeEntry), nativeModules);
-  const incomplete = new Map(sources);
-  incomplete.delete(`${nativeRoot}/config.mjs`);
-  await assert.rejects(parsedNativeGraph(incomplete, nativeEntry), /module closure supplies/u);
+  for (const required of ["config.mjs", "display.mjs", "person-draft.mjs", "team-controller.mjs"]) {
+    const incomplete = new Map(sources);
+    incomplete.delete(`${nativeRoot}/${required}`);
+    await assert.rejects(parsedNativeGraph(incomplete, nativeEntry), /module closure supplies/u,
+      `the production graph requires ${required}`);
+  }
 
   const about = await readFile(path.join(repositoryRoot, canvasRoot, "index.html"), "utf8");
   const tags = [...about.matchAll(/<script\b[^>]*>/giu)].map(([tag]) => tag).filter((tag) => {

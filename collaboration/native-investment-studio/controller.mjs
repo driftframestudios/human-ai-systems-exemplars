@@ -1,6 +1,8 @@
 import { createStudio } from './state.mjs';
 import { createWorkDraftAdapter } from './draft.mjs';
 import { CONTRACT, LIMITS } from './config.mjs';
+import { INTEGER, money, duration } from './display.mjs';
+import { mountTeamPanel } from './team-controller.mjs';
 
 const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 
@@ -10,22 +12,7 @@ const FIELD_RULES = Object.freeze({
   occurrences: Object.freeze({ maximum: LIMITS.occurrences, unit: 'sessions', label: 'Working sessions' }),
 });
 const FIELDS = Object.freeze(Object.keys(FIELD_RULES));
-const INTEGER = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const INSTANCES = new WeakMap();
-
-// Format admitted integer cents directly so the displayed cents stay exact.
-function money(cents) {
-  if (cents === null) return 'Rate needed';
-  const value = BigInt(cents);
-  const magnitude = value < 0n ? -value : value;
-  return `${value < 0n ? '−' : ''}$${INTEGER.format(magnitude / 100n)}.${String(magnitude % 100n).padStart(2, '0')}`;
-}
-
-function duration(minutes) {
-  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
-  const remainder = minutes % MINUTES_PER_HOUR;
-  return [hours ? `${INTEGER.format(hours)} h` : '', remainder || !hours ? `${remainder} min` : ''].filter(Boolean).join(' ');
-}
 
 export function mountCoordinationPanel(root, options = {}) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
@@ -62,6 +49,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let work = null;
   let disposed = false;
   let composing = false;
+  let teamPanel = null;
 
   function listen(target, type, handler) {
     target.addEventListener(type, handler);
@@ -173,6 +161,7 @@ export function mountCoordinationPanel(root, options = {}) {
       text(output, invalid ? '—' : String(Number(raw)).padStart(2, '0'));
     }
     renderPreview(view);
+    teamPanel?.refresh();
     return view;
   }
 
@@ -228,6 +217,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function click(event) {
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
+    if (button.closest('[data-native-team-editor]')) return;
     const action = button.dataset.action;
     if (action === 'cancel') { settle('cancel'); return; }
     const field = button.dataset.field;
@@ -243,6 +233,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function dispose() {
     if (disposed) return editor.read();
     disposed = true;
+    teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
     const view = editor.dispose().view;
@@ -275,6 +266,8 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     begin();
+    const teamRoot = root.querySelector('[data-native-team-editor]');
+    if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, onAccepted: () => render() });
     elements.fallback.hidden = true;
     root.dataset.nativeReady = 'true';
     INSTANCES.set(root, receiver);

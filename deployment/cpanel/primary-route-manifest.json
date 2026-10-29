@@ -163,13 +163,28 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/display.mjs",
+      "projected_path": "collaboration/native-investment-studio/display.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/draft.mjs",
       "projected_path": "collaboration/native-investment-studio/draft.mjs",
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/person-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/state.mjs",
       "projected_path": "collaboration/native-investment-studio/state.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/team-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/team-controller.mjs",
       "media_type": "text/javascript"
     },
     {

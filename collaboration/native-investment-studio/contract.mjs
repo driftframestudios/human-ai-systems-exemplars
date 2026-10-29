@@ -205,6 +205,13 @@ function calculate(state, peopleById) {
   };
 }
 
+export function preparePerson(candidate, path = 'person') {
+  const person = record(candidate, 'person', path);
+  return { id: text(person.id, `${path}.id`, true), label: text(person.label, `${path}.label`),
+    fundedMinutes: integer(person.fundedMinutes, LIMITS.fundedMinutes, `${path}.fundedMinutes`),
+    rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
+}
+
 export function preparePlan(candidate) {
   const raw = record(candidate, 'plan', 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
@@ -217,13 +224,8 @@ export function preparePlan(candidate) {
     people: [], teams: [], work: [], practices: [],
   };
   const budget = { remaining: LIMITS.references };
-  state.people = list(raw.people, LIMITS.people, 'plan.people').map((value, i) => {
-    const path = `plan.people[${i}]`;
-    const person = record(value, 'person', path);
-    return { id: text(person.id, `${path}.id`, true), label: text(person.label, `${path}.label`),
-      fundedMinutes: integer(person.fundedMinutes, LIMITS.fundedMinutes, `${path}.fundedMinutes`),
-      rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
-  });
+  state.people = list(raw.people, LIMITS.people, 'plan.people')
+    .map((value, i) => preparePerson(value, `plan.people[${i}]`));
   const peopleById = indexRecords(state.people, 'plan.people');
   state.teams = list(raw.teams, LIMITS.teams, 'plan.teams').map((value, i) => {
     const path = `plan.teams[${i}]`;
