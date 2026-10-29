@@ -163,6 +163,26 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/connection-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/connection-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/connection-template-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/connection-template-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/connection-templates.mjs",
+      "projected_path": "collaboration/native-investment-studio/connection-templates.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/connection-view.mjs",
+      "projected_path": "collaboration/native-investment-studio/connection-view.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/config.mjs",
       "projected_path": "collaboration/native-investment-studio/config.mjs",
       "media_type": "text/javascript"

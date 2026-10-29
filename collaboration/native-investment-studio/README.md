@@ -1331,6 +1331,58 @@ raw/accepted boundary. `responsibility.browser.mjs` owns complete-field meaning,
 unchanged monetary totals, retained and stale targets, narrow reading, focus
 and receiver disposal across the three engines.
 
+## Native connection patch bay
+
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
+places accepted team connections above the complete working-session editor in
+Coordination. `connection-view.mjs` derives the SVG, ordered connection list
+and selected detail from one immutable accepted projection. Its private
+identity and adjacency maps rebuild when that projection changes. Equal
+numeric revisions from separate imports retain their separate cache identity.
+
+The diagram shows eight directed connections per page between explicit sending
+and receiving racks. A team may appear in both roles with the same canonical
+ID. Arrowheads show direction; paused cables use dashes; text names unresolved
+receivers and retired teams, people or supporting sessions. These marks carry
+relationship meaning, while work and person records retain monetary authority.
+
+The racks keep canonical team order and provide separate 24-unit cable ports
+for 18-unit pointer targets. Each page fits an 880-unit width and at most
+584-unit height. The named diagram region scrolls horizontally on narrow
+screens; About retains vertical scrolling. Complete labels remain in the native
+list and selected detail. Supporting sessions use a disclosure so a maximum
+reference population stays available through a deliberate expansion.
+
+`mountConnectionView(root, {projection, onSelect})` returns `read`, `refresh`,
+`select`, `showPage` and `dispose`. Programmatic selection keeps the callback
+quiet; a list or cable action sends its raw connection ID once. Selection within
+one page updates the former and next selected marks plus the selected detail.
+Paging rebuilds eight list/cable records, retains the selected connection and
+provides a return action when that record is on another page. Each receiver owns
+its presentation state while immutable derived models may be shared.
+
+`connection-controller.mjs` maps that ID into one complete connection form
+through `editing.connection`. Its Add and Remove actions, ordered supporting
+sessions, receiver membership, stale review and collision recovery use the
+existing single active draft lease. `controller.mjs` coordinates the session,
+connection and template presentations and returns saved connection edits to
+their owner. The accepted diagram changes after publication; unfinished form
+values remain in their editor.
+
+`styles/routes/about.css` owns `.native-patch-bay`, `.native-connections`,
+`.native-connection` and `.native-connection-template`. The existing native
+palette supplies paper, ink, focus, mint and soft-apricot roles. Selection
+transitions respect reduced motion; hard shadows continue toward the lower
+right. The module owns SVG coordinate geometry and route CSS owns its rendered
+size, local scrolling, contrast and surrounding composition.
+
+The pure model and modeled-DOM observations in `connection-view.test.mjs`
+cover ordered endpoints, adjacency, maximum pages, state labels, exact cache
+identity, text ownership and receiver retirement. `connection.browser.mjs`
+receives actual cable targeting, diagram/list/editor agreement, input recovery,
+focus, narrow and enlarged-text geometry and ordinary About scrolling. These
+observations share literal plan identities and independently specified amounts.
+
 ## Native coordination receiver
 
 About loads `controller.mjs` as a module. Its parsed transitive graph retains

@@ -13,6 +13,12 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/assembly.browser.mjs',
   'tests/native-investment-studio/command-draft.test.mjs',
   'tests/native-investment-studio/commands.test.mjs',
+  'tests/native-investment-studio/connection-draft.test.mjs',
+  'tests/native-investment-studio/connection-editing.test.mjs',
+  'tests/native-investment-studio/connection-template.browser.mjs',
+  'tests/native-investment-studio/connection-templates.test.mjs',
+  'tests/native-investment-studio/connection-view.test.mjs',
+  'tests/native-investment-studio/connection.browser.mjs',
   'tests/native-investment-studio/contract.test.mjs',
   'tests/native-investment-studio/controller.test.mjs',
   'tests/native-investment-studio/controller.browser.mjs',
@@ -298,7 +304,7 @@ test('native Studio routes retain source and separate browser owners with execut
     readdir(resolve(ROOT, 'tests/native-investment-studio')),
   ]);
   const sourceMembers = [
-    'assembly-editing.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'assembly-editing.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
     'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].map(file => `tests/native-investment-studio/${file}`);
@@ -317,6 +323,10 @@ test('native Studio routes retain source and separate browser owners with execut
       ['tests/native-investment-studio/session.browser.mjs'], 'focused-browser'],
     ['browser.native-investment-studio.assembly', 'test:native-investment-studio:assembly-browser',
       ['tests/native-investment-studio/assembly.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connections', 'test:native-investment-studio:connection-browser',
+      ['tests/native-investment-studio/connection.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connection-templates', 'test:native-investment-studio:connection-template-browser',
+      ['tests/native-investment-studio/connection-template.browser.mjs'], 'focused-browser'],
     ['browser.native-investment-studio.responsibility', 'test:native-investment-studio:responsibility-browser',
       ['tests/native-investment-studio/responsibility.browser.mjs'], 'focused-browser'],
     ['browser.native-investment-studio.investment', 'test:native-investment-studio:investment-browser',

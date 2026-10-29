@@ -61,7 +61,15 @@ supporting sessions and review instructions. The same accepted plan supplies
 these controls, saved edits and exports; descriptive changes preserve money.
 Its focused browser route owns complete-field meaning, reference recovery,
 focus, narrow reading and disposal. The assembly and existing person routes
-retain their focused checks. Existing Studio chapters
+retain their focused checks.
+`connection-view.mjs` gives Coordination one accepted SVG/list projection with
+eight connections per page and a persistent selected detail. The diagram uses
+explicit sending and receiving racks; its local horizontal scrolling leaves
+vertical reading with About. `connection-controller.mjs` opens the same complete
+editor from a cable or list selection. Session, connection and template
+presentations share the existing coordinator and recover their own saved work.
+The patch bay lives above the complete working-session form; `styles/routes/about.css`
+owns its scoped palette, focus and reading geometry. Existing Studio chapters
 retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
