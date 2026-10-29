@@ -265,3 +265,65 @@ test('a cooperative preview callback that changes draft text cannot install its 
   assert.equal(current.projection.result.plannedCommitmentCents, 120600);
   assert.equal(studio.read().result.plannedCommitmentCents, 120000);
 });
+
+test('successful person Apply retains newer raw text written during publication', () => {
+  const studio = createStudio();
+  let editor, token;
+  editor = createPersonDraftAdapter({ ...studio, updatePerson(...args) {
+    const result = studio.updatePerson(...args);
+    editor.setText(token, 'ratePerHour', '102');
+    return result;
+  } });
+  token = editor.begin(PERSON, studio.read()).view.draft.token;
+  editor.setText(token, 'ratePerHour', '101');
+  const result = editor.apply(token);
+  assert.equal(result.ok, true);
+  assert.equal(studio.read().state.people[0].rateCentsPerHour, 10100);
+  assert.equal(studio.read().result.plannedCommitmentCents, 120300);
+  assert.equal(result.view.status, 'stale');
+  assert.strictEqual(result.view.draft.token, token);
+  assert.equal(result.view.draft.raw.ratePerHour, '102');
+  rejected(editor.apply(token), 'stale-edit');
+  assert.equal(editor.cancel(token).ok, true);
+});
+
+test('successful person Apply preserves a replacement editor and its diagnostic', () => {
+  const studio = createStudio();
+  let editor, token, replacement;
+  editor = createPersonDraftAdapter({ ...studio, updatePerson(...args) {
+    const result = studio.updatePerson(...args);
+    editor.cancel(token);
+    replacement = editor.begin(PERSON, studio.read()).view.draft.token;
+    editor.setText(replacement, 'ratePerHour', '103');
+    rejected(editor.setText(replacement, 'ratePerHour', '9'.repeat(33)), 'text');
+    return result;
+  } });
+  token = editor.begin(PERSON, studio.read()).view.draft.token;
+  editor.setText(token, 'ratePerHour', '101');
+  const result = editor.apply(token);
+  assert.equal(result.ok, true);
+  assert.equal(studio.read().state.people[0].rateCentsPerHour, 10100);
+  assert.strictEqual(result.view.draft.token, replacement);
+  assert.equal(result.view.draft.raw.ratePerHour, '103');
+  assert.equal(result.view.error.code, 'text');
+});
+
+test('failed person publication returns its error while a newer editor retains its own diagnostic', () => {
+  const studio = createStudio();
+  let editor, token, replacement;
+  editor = createPersonDraftAdapter({ ...studio, updatePerson(id, candidate, expected) {
+    const result = studio.updatePerson(id, { ...candidate, extra: true }, expected);
+    editor.cancel(token);
+    replacement = editor.begin(PERSON, studio.read()).view.draft.token;
+    rejected(editor.setText(replacement, 'ratePerHour', '9'.repeat(33)), 'text');
+    return result;
+  } });
+  token = editor.begin(PERSON, studio.read()).view.draft.token;
+  editor.setText(token, 'ratePerHour', '101');
+  const before = studio.read();
+  const result = editor.apply(token);
+  rejected(result, 'fields');
+  assert.strictEqual(result.view.draft.token, replacement);
+  assert.equal(result.view.error.code, 'text');
+  assert.strictEqual(studio.read(), before);
+});

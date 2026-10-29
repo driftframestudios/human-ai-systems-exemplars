@@ -180,9 +180,12 @@ export function createPersonDraftAdapter(studio) {
     const { admitted, errors } = values(active.raw);
     if (errors.length) return fail(errors[0]);
     const session = active;
+    const rawRevision = session.rawRevision;
     const result = studio.updatePerson(session.row.id, { ...session.row, ...admitted }, session.baseProjection);
-    if (!result.ok) return fail(result.error);
-    if (active === session) active = null;
+    if (!result.ok) return fail(result.error, active === session && session.rawRevision === rawRevision);
+    // Preserve edits or diagnostics created synchronously during publication.
+    if (active !== session || session.rawRevision !== rawRevision) return Object.freeze({ ok: true, view: read() });
+    active = null;
     return succeed();
   }
 

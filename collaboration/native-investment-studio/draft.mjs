@@ -248,8 +248,13 @@ export function createWorkDraftAdapter(studio, scheduler = null, { durationForma
     if (active.baseProjection !== studio.read()) return fail(stale());
     const { admitted, errors } = values(active);
     if (errors.length) return fail(errors[0]);
-    const result = studio.updateWork(active.row.id, { ...active.row, ...admitted }, active.baseProjection);
-    if (!result.ok) return fail(result.error);
+    const session = active;
+    const rawRevision = session.rawRevision;
+    const result = studio.updateWork(session.row.id, { ...session.row, ...admitted }, session.baseProjection);
+    if (!result.ok) return fail(result.error, active === session && session.rawRevision === rawRevision);
+    // A publication callback can open another editor or continue this draft.
+    // Its newer text and diagnostic keep their transaction ownership.
+    if (active !== session || session.rawRevision !== rawRevision) return succeed(false);
     active = null;
     return succeed();
   }
