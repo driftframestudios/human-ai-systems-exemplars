@@ -226,16 +226,19 @@ for (const engine of names) {
     await chapter(page, 'investment').click();
     const initial = await bytes(page);
     const legacy = JSON.parse(initial);
-    delete legacy.purpose; legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
+    delete legacy.purpose; delete legacy.contributions; delete legacy.connections;
+    for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
+    for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
+    legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.2.0.');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.3.0.');
     assert.equal(await bytes(page), initial);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
-    assert.equal(admitted.schemaVersion, '0.2.0');
+    assert.equal(admitted.schemaVersion, '0.3.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
     await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');

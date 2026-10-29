@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
 import { describeAssemblyTarget } from '../../collaboration/native-investment-studio/command-draft.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 function setup(options = {}) { const studio = createStudio(); return { studio, editing: createDraftCoordinator(studio, options) }; }
 function created(editing, studio, form) {
@@ -74,7 +77,7 @@ test('imported creation collision retains all raw data until explicit fresh-ID r
   const before = editing.assembly.read().draft;
   const id = describeAssemblyTarget(draft.assemblyId).id;
   const replacement = structuredClone(studio.read().state);
-  replacement.people.push({ id, label: 'Imported person', fundedMinutes: 0, rateCentsPerHour: 0 });
+  replacement.people.push({ id, label: 'Imported person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' });
   studio.replace(replacement, studio.read());
   assert.equal(editing.assembly.read().status, 'stale');
   assert.equal(editing.assembly.read().creationConflict, true);

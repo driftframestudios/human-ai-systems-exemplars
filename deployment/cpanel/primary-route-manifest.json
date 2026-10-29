@@ -228,6 +228,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/roles.mjs",
+      "projected_path": "collaboration/native-investment-studio/roles.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/shell.mjs",
       "projected_path": "collaboration/native-investment-studio/shell.mjs",
       "media_type": "text/javascript"

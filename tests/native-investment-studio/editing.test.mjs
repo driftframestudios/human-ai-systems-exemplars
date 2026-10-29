@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { createDraftCoordinator, EDITING_LIMITS } from '../../collaboration/native-investment-studio/editing.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 function setup(options = {}, source = createExamplePlan()) {
   const studio = createStudio(source);
@@ -76,8 +79,11 @@ test('legacy import preserves parked purpose text for review or deliberate curre
   const legacy = createExamplePlan();
   legacy.schemaVersion = '0.1.0';
   delete legacy.purpose;
+  delete legacy.contributions; delete legacy.connections;
+  for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
+  for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
-  assert.equal(studio.read().state.schemaVersion, '0.2.0');
+  assert.equal(studio.read().state.schemaVersion, '0.3.0');
   assert.equal(editing.purpose.read().status, 'stale');
   rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
   const reviewed = editing.purpose.review(saved, studio.read());
@@ -259,7 +265,7 @@ test('stale review binds the displayed current projection and current-values cho
 
 test('removed targets keep readable saved text until explicit discard', () => {
   const source = createExamplePlan();
-  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null });
+  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
   const { studio, editing } = setup({}, source);
   const token = opened(editing, studio, 'person', 'reserve');
   editing.person.setText(token, 'ratePerHour', '120');
@@ -293,7 +299,7 @@ test('accepted A to B to A restoration keeps older parked text stale', () => {
 
 test('discarding an unselected removed target releases capacity and preserves the active lease', () => {
   const source = createExamplePlan();
-  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null });
+  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
   const { studio, editing } = setup({ limit: 2 }, source);
   const reserve = opened(editing, studio, 'person', 'reserve');
   editing.person.setText(reserve, 'ratePerHour', '120');

@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 function apply(studio, command) {
   const result = studio.applyCommand(command, studio.read());
@@ -43,7 +46,7 @@ test('create person, team and work own their data and publish one priced change 
   // Four original people cost $1,200; one new person works 1.5 hours at $120.
   assert.equal(next.result.knownCommitmentCents, 138000);
   assert.equal(next.state.revision, 3);
-  assert.equal(next.state.schemaVersion, '0.2.0');
+  assert.equal(next.state.schemaVersion, '0.3.0');
   assert.equal(next.state.modelVersion, '0.1.0');
   assert.deepEqual(studio.readHistory(), { undoCount: 3, redoCount: 0, limit: 20 });
   suppliedPerson.rateCentsPerHour = 1;
@@ -118,8 +121,8 @@ test('work status retains modeled effort while funding changes select the accept
 
 test('ordered collections retain exact membership and refresh later targeted update indexes', () => {
   const plan = createExamplePlan();
-  plan.teams.push({ id: 'second', label: 'Second', personIds: ['product-one'] });
-  plan.work.push(work({ id: 'second-work', teamId: 'second', personIds: ['product-one'], minutesPerOccurrence: 10, occurrences: 1 }));
+  plan.teams.push({ id: 'second', label: 'Second', personIds: ['product-one'], lifecycle: 'active' });
+  plan.work.push(work({ lifecycle: 'active', id: 'second-work', teamId: 'second', personIds: ['product-one'], minutesPerOccurrence: 10, occurrences: 1 }));
   plan.practices.push({ id: 'second-practice', practiceId: 'assurance', teamId: 'second', workIds: ['review'] });
   const studio = createStudio(plan);
   for (const collection of ['people', 'teams', 'work', 'practices']) {
@@ -211,7 +214,7 @@ test('explicit whole-plan reassignment releases removal guards and supports hist
 
 test('cross-team practices remain visible removal dependencies and released identities stay reusable', () => {
   const plan = createExamplePlan();
-  plan.teams.push({ id: 'assurance', label: 'Assurance', personIds: [] });
+  plan.teams.push({ id: 'assurance', label: 'Assurance', personIds: [], lifecycle: 'active' });
   plan.practices.push({ id: 'peer-assurance', practiceId: 'assurance', teamId: 'assurance', workIds: ['review'] });
   const studio = createStudio(plan);
   assert.deepEqual(held(studio, { type: 'work.remove', workId: 'review' }, 'dependencies').references, [
@@ -374,16 +377,17 @@ test('team replacement checks canonical identity and nested reference admission 
 
 test('collection and reference budgets remain whole-plan boundaries for command creation', () => {
   const plan = createExamplePlan();
-  plan.people = Array.from({ length: 128 }, (_, index) => person(`person-${index}`, { rateCentsPerHour: 0 }));
-  plan.teams = Array.from({ length: 32 }, (_, index) => ({ id: `team-${index}`, label: 'Team', personIds: plan.people.map(row => row.id) }));
-  plan.work = [];
+  plan.people = Array.from({ length: 128 }, (_, index) => person(`person-${index}`, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }));
+  plan.teams = Array.from({ length: 32 }, (_, index) => ({ id: `team-${index}`, label: 'Team', personIds: plan.people.map(row => row.id), lifecycle: 'active' }));
+  plan.work = Array.from({ length: 32 }, (_, index) => work({ id: `work-${index}`, teamId: 'team-0',
+    personIds: plan.people.slice(0, index === 31 ? 96 : 128).map(row => row.id), minutesPerOccurrence: 0, lifecycle: 'active' }));
   plan.practices = [];
   const studio = createStudio(plan);
   held(studio, { type: 'person.create', person: person('overflow') }, 'collection');
   held(studio, { type: 'team.create', team: { id: 'overflow', label: 'Overflow', personIds: [] } }, 'collection');
   held(studio, { type: 'work.create', work: work({ teamId: 'team-0', personIds: ['person-0'] }) }, 'reference-budget');
   const error = held(studio, { type: 'person.remove', personId: 'person-0' }, 'dependencies');
-  assert.equal(error.references.length, 32);
+  assert.equal(error.references.length, 64);
   assert.deepEqual(error.references[0], { collection: 'teams', id: 'team-0', field: 'personIds' });
   assert.deepEqual(error.references[31], { collection: 'teams', id: 'team-31', field: 'personIds' });
 });

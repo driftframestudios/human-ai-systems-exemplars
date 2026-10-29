@@ -6,6 +6,9 @@ import { createDraftCoordinator } from '../../collaboration/native-investment-st
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 const VERSION = '1.0.0';
 const encoder = new TextEncoder();
@@ -72,7 +75,7 @@ test('comparison names row additions, removals and changed relationship fields',
   const { exchange } = fixture();
   const result = exchange.previewText(planText(plan => {
     plan.people.shift();
-    plan.people.push({ id: 'new-person', label: 'New person', fundedMinutes: 0, rateCentsPerHour: null });
+    plan.people.push({ id: 'new-person', label: 'New person', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
     plan.teams[0].personIds = plan.people.map(row => row.id);
     plan.work[0].personIds = plan.teams[0].personIds.slice();
   }));
@@ -89,13 +92,16 @@ test('legacy preview carries truthful source version while accepted export remai
   const { studio, exchange } = fixture();
   const legacy = createExamplePlan();
   delete legacy.purpose;
+  delete legacy.contributions; delete legacy.connections;
+  for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
+  for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   legacy.schemaVersion = '0.1.0';
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.2.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.3.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.2.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.3.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

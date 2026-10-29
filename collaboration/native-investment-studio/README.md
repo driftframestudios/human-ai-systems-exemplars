@@ -87,14 +87,14 @@ inspect today.
 
 | Module | Current source capability | First-tranche contract and next receiver |
 | --- | --- | --- |
-| Coordination | Full Studio coordination horizon, human-received AI contributions, and collaboration routes | Named work, teams, and participants establish effort and ownership. Explicit connections, decision gates, and schedule behavior follow in later tranches. |
-| Teams and capacity | Role quantities, rates, allocation, function, posture, ability enablers, and decision boundaries | Stable person and team identities, funded minutes, rates, membership, and explicit capacity consequences. Richer role descriptions and responsibility changes retain separate contracts. |
+| Coordination | Full Studio coordination horizon, human-received AI contributions, and collaboration routes | Named work, teams, and participants establish effort and ownership. Directed connections have a canonical source contract; patch-bay controls, decision gates, and schedule behavior follow their named receivers. |
+| Teams and capacity | Role quantities, rates, allocation, function, posture, ability enablers, and decision boundaries | Stable person and team identities, funded minutes, rates, membership, and explicit capacity consequences. Canonical role, lifecycle and human-responsibility records now support their next focused editors. |
 | Abilities and work | Activities, framework-related suggestions, and stated desired abilities | Stable work records and practice assignments reference one work owner. Customer abilities and decision authority remain distinct from team practices. |
 | Change and interpretation | Six change frameworks, eight interpretive lenses, and eight relative attention weights | The capability inventory preserves their separate jobs. Framework mappings and interpretation enter a later native module; attention weights retain their meaning as emphasis. |
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
 | Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.2.0 round-trip, admitted 0.1.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.3.0 round-trip, admitted 0.1.0 and 0.2.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
 recovery rows. Its geometry supplies a visual precedent; actual native timing,
@@ -102,17 +102,19 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.2.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.3.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
 `horizonWeeks`, one closed `purpose` record, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
 | --- | --- | --- |
-| `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. |
-| `teams` | `id`, `label`, `personIds` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
-| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; this version's `timing` is null. |
+| `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. |
+| `teams` | `id`, `label`, `personIds`, `lifecycle` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
+| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; this version's `timing` is null. |
 | `practices` | `id`, `practiceId`, `teamId`, `workIds` | Assignment of a catalogue practice to a team, supported by existing work identities. Multiple references to one work item retain one calculation. |
+| `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
+| `connections` | `id`, `senderTeamId`, `receiverTeamId`, `receiverPersonId`, `sharedObject`, `responseExpectation`, `workIds`, `status` | A directed team handoff with a receiving person, stated object, response expectation and active/paused state. |
 
 Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
@@ -129,28 +131,38 @@ whitespace. Canonical output retains the trimmed, nonblank value; explicit
 or explicit null. The purpose draft adapter converts blank input into null at
 Apply. Purpose text describes the initiative independently of monetary inputs.
 
-`preparePlan` selects schema `0.1.0` or `0.2.0` from the root's own enumerable
-schema-version data descriptor. It fully admits a genuine closed 0.1 root,
-every row and reference, its numeric meaning, and the owned byte budget before
-constructing a current record with all six purpose fields null. The migrated
-record then passes current admission. Surplus fields remain outside both closed
-schemas; migration never copies an unadmitted graph.
+`preparePlan` selects schema `0.1.0`, `0.2.0`, or `0.3.0` from the root's own
+enumerable schema-version data descriptor. It fully admits each source version's
+closed root, rows, references, numeric meaning and byte budget before constructing
+a current record. Version 0.1 receives six null purpose fields; both older
+versions receive unassigned role fields, active lifecycle values, and empty
+contribution/connection collections. A 0.2 purpose retains its admitted values.
+The owned migrated record then passes current admission. Current envelopes
+supply every declared current field; finite row-command compatibility has its
+own explicit construction boundary.
 
-`SCHEMA_BYTE_LIMITS` preserves the 524,288-byte source and owned-plan ceiling for
-0.1.0. The 0.2.0 ceiling is 546,029 bytes: the former budget plus 141 bytes for
-the inserted purpose member with six empty quoted values, and 21,600 bytes for
-six 600-unit strings at the maximum six JSON bytes per UTF-16 unit. This allows
-a full-size legacy plan to migrate and carry every bounded purpose field.
-Both original transport and canonical output use their schema's budget; a
-migrated export passes the current import boundary. The parser first bounds
-allocation with the current maximum, then applies the admitted source version's
-limit. The boundary tests exercise exact legacy and current limits, maximum
-escaped text, and one extra source byte.
+`SCHEMA_BYTE_LIMITS` preserves the source and canonical ceilings of 524,288 bytes
+for 0.1.0 and 546,029 bytes for 0.2.0. The 0.2 increase derives from its purpose
+member and six 600-unit strings at six JSON bytes per UTF-16 unit. Version 0.3.0
+has a conservative finite ceiling of 4,114,641 bytes. Its additional allowance
+covers 128 role records, 416 lifecycle fields, 128 contribution records, 256
+connections, and 8,192 maximum-length reference slots. The formula in
+`config.mjs` includes field punctuation, 64-character IDs, and each 600-unit
+relationship string at its worst JSON escaping size. It deliberately reserves
+space for every new field while retaining the complete older envelope.
+
+Original transport and owned output use their source schema's budget. The
+parser bounds allocation with the current maximum, then applies the admitted
+source version's ceiling. Literal tests fill a genuine 0.1 envelope to 524,288
+bytes and a genuine 0.2 envelope to 546,029 bytes; their current exports contain
+550,673 and 572,261 bytes respectively and re-import exactly. Separate current
+fixtures exercise every collection limit, escaped text, and the complete
+reference budget. Each old version still rejects its extra transport byte.
 
 `prepareImport(text)` performs the existing bounded JSON and integer-token
 checks once and returns frozen `{ projection, sourceSchemaVersion }`.
 `parsePlan(text)` returns that same path's projection. Import previews can use
-the source version while exports always describe the actual current 0.2 state.
+the source version while exports always describe the actual current 0.3 state.
 Caller-owned legacy records and external captures retain their original version
 and contents. Construction, replacement, import, history and baseline retention
 inside a current Studio receive current-schema projections.
@@ -376,12 +388,12 @@ The discriminant is checked again after reflection. The complete person, team
 and work validators remain shared with their plan contract. Changed plans
 receive the complete reference, membership, cardinality, byte-budget and exact
 accounting preparation used by other native edits. Command construction leaves
-the current schema at 0.2 and the pricing model at 0.1.
+the current schema at 0.3 and the pricing model at 0.1.
 
 A referenced removal returns `ok: false` with `error.code: 'dependencies'` and
 an immutable `error.references` array. Each entry has `{collection, id, field}`;
 entries follow accepted collection order. The receiver can show the precise
-teams, work or practices that still use the target. State, export, baseline,
+teams, work, practices, contributions or connections that still use the target. State, export, baseline,
 chronology and history remain intact. A receiver can submit an explicitly
 reviewed, atomic reassignment through the existing whole-plan `replace` method,
 then retry the removal. Person records survive removal of their team; team and
@@ -517,7 +529,7 @@ if (changed.ok) {
 console.log(before.result.knownCommitmentCents); // Captured prior value: 120000 cents
 ```
 
-`preparePlan` returns a deeply frozen projection with `state`, `result`, and
+`preparePlan` returns a deeply frozen projection with `state`, `result`, `observations`, and
 `serialized`, or throws `PlanError` carrying a diagnostic code, path, and
 message. Facade mutations return either `{ ok: true, projection }` or
 `{ ok: false, error: { code, path, message }, projection }`. The rejected result
@@ -525,8 +537,8 @@ still carries the existing accepted projection, giving a future UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.2.0 export/import retains
-the supported state, and genuine native 0.1.0 plans migrate through their complete
+edit. Rejection preserves the prior snapshot. Native 0.3.0 export/import retains
+the supported state, and genuine native 0.1.0/0.2.0 plans migrate through their complete
 original admission. Full-Studio exports and unknown schema versions receive an
 explicit compatibility result; their original instruments retain those records
 while a future adapter establishes a tested transformation.
@@ -534,6 +546,145 @@ while a future adapter establishes a tested transformation.
 UI drafts, open menus, reversed-card faces, focus targets, and reading position
 belong to their presentation adapters. A draft can remain editable while
 the accepted amount and export continue to describe the last valid revision.
+
+## Roles, human responsibilities and connections
+
+[Issue #666](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/666)
+adds one canonical relationship contract to the existing preparation owner.
+[Issue #667](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/667)
+receives its role and human-responsibility editors. The complete
+[Studio](../initiative-costing-calculator/index.html) retains its controls,
+pricing model and route.
+
+### Original selector inventory and native receiving fields
+
+The original `staffingRender` controls in `#staffing-map` own the eight role
+selectors. Their `data-staff-field` values map to the required closed
+`person.role` record below. [roles.mjs](roles.mjs) keeps immutable `{id,label}`
+catalogues and framework/component namespaces. IDs persist; labels guide the
+visitor. The source catalogue includes every original option, including
+working posture and ability enabler, which the old leave-behind omits.
+
+| Original selector | Native field | Meaning and next receiver |
+| --- | --- | --- |
+| `fn` — Function | `functionId` | Ten function families; the person-role editor selects a stable ID. |
+| `seniority` — Seniority / posture | `seniorityId` | Five seniority choices; the role editor keeps this distinct from working posture. |
+| `posture` — Working posture | `postureId` | Five working postures, including individual contributor and decision owner. |
+| `enabler` — Ability enabler | `enablerId` | Five access, focus, learning and authority supports. |
+| `change` — Change component | `change` | Null or `{frameworkId,componentId}`; one atomic selection belongs to its named framework. |
+| `quality` — Quality boundary | `qualityId` | Four person-level evidence/review choices; global quality effort retains its own later receiver. |
+| `ai` — AI contribution role | `aiId` | Four person-level participation choices, including an explicit `no-handoff` choice. |
+| `decision` — Decision boundary | `decisionId` | Advises, recommends, approves or operates; the person-role editor records the selected posture. |
+
+Each role field uses `null` for an unassigned value. The complete role object
+always exists. Catalogue choices such as `outside-scope` and `no-handoff`
+express a selected meaning and remain distinct from null. A change component
+belongs to one of the six original frameworks: Kotter, NPT, Rogers, Weick,
+ADKAR, or the dual operating system. Its named namespace preserves that
+relationship when another framework is displayed. The eight attention weights
+remain a separate lens.
+
+The legacy `data-ai-receiver` controls index six category labels into role
+names. Native contribution records give each output its own stable ID and
+carry these explicit category IDs in source order: `scenario-generation`,
+`source-retrieval`, `dependency-mapping`, `draft-artifacts`,
+`cross-source-synthesis`, and `transparent-calculation`. `receiverPersonId`
+and `decisionOwnerPersonId` each reference an existing person or use null for
+an unresolved responsibility. The same person may hold both responsibilities.
+The contribution editor owns these fields alongside supporting `workIds`,
+`reviewBoundary`, and `decisionBoundary`.
+
+Legacy role quantities, percentages and blended rates describe aggregate
+staffing. A future converter must state how those quantities become individual
+people, funded minutes and rates. Role labels and old receiver defaults alone
+leave person-level responsibility unassigned in a migrated native plan.
+
+### Relationship and lifecycle meaning
+
+A connection identifies distinct sender and receiver teams, a required
+`sharedObject`, optional receiving person, optional `responseExpectation`,
+ordered supporting work, and `active` or `paused` status. An assigned receiving
+person belongs to the receiving team. Contributions can name any existing
+person; their responsibility is independent of a connection endpoint. Empty
+supporting-work lists mean that the record currently names its object or
+responsibility without a supporting effort row. Null descriptive text means
+that the review, decision or response wording awaits assignment. Direct text
+admission trims a nonblank string of at most 600 raw UTF-16 units. Editors can
+convert a blank draft field into explicit null.
+
+Lifecycle `active` or `retired` belongs to people, teams and work. Retirement
+retains identity, references, funded time and priced work. Planned/paused work
+status and active/paused connection status retain their separate meanings.
+Pausing a connection keeps its supporting work and amount. A reviewed recovery
+work proposal can change the amount through the existing effort/funding owner.
+Response wording is descriptive; scheduling quantities belong to #653.
+
+`projection.observations` exposes unresolved human responsibility, retired
+receivers or endpoints, paused connections and retired supporting work. A
+`retired-record` observation carries retained commitments: funded/allocated/
+additional minutes for a person, owned work IDs for a team, and participant
+minutes, funding and IDs for work. These observations are immutable companions
+to the unchanged monetary `result`. One participant keeps one funding account;
+one work item keeps one price across practices, contributions and connections.
+
+### Finite commands and recovery
+
+The existing `previewCommand`/`applyCommand` boundary adds:
+
+- `person.role.replace` with `personId` and the complete `role` record.
+- `person.lifecycle.set`, `team.lifecycle.set`, and `work.lifecycle.set` with
+  their named target ID and `lifecycle`.
+- `contribution.create`, `.update`, and `.remove`; an update carries
+  `contributionId` and the complete `contribution` record.
+- `connection.create`, `.update`, and `.remove`; an update carries
+  `connectionId` and the complete `connection` record.
+- `connection.status.set` with `connectionId` and `status`.
+- `collection.reorder` for the two new ordered collections as well as existing
+  people, teams, work and practices.
+
+Removal diagnostics enumerate every remaining incoming reference with
+`{collection,id,field}` in stable collection order. Role catalogue identities
+have a fixed source owner and stay outside entity removal. Human assignments,
+connection endpoints and supporting-work references participate in removal
+checks. A caller can preview and explicitly accept an atomic whole-plan
+reassignment through `replace`; that path shares complete admission and exact
+accepted-projection ownership.
+
+The prior bounded person/team/work create payloads remain valid commands.
+Construction adds an unassigned role and active lifecycle where appropriate.
+Legacy-shaped complete-row updates preserve the accepted role/lifecycle;
+current-shaped rows validate every supplied field. Current versioned envelopes
+always require current metadata. Valid no-ops preserve projection identity,
+acceptance, history and Redo, including at the revision ceiling.
+
+### Bounds, ownership and observations
+
+The current plan admits at most 128 people, 32 teams, 256 work rows, 128
+practices, 128 contributions and 256 connections. Its 8,192-reference budget
+counts ordered membership/supporting-work lists and scalar plan-entity
+references. Versions 0.1 and 0.2 keep their original 4,096 list-reference
+budget. A complete older plan therefore fits the current reference budget
+when migrated with empty new collections.
+
+Admission constructs identity maps and membership sets once per preparation.
+Reference checks, retirement companions and monetary calculation traverse
+bounded records and total edges. With expected constant-time Map/Set lookup,
+full preparation takes O(P + T + W + A + C + E + R + S) time and space, where
+A is practices, C contributions, E connections, R total references and S
+admitted string/serialization size. A changed command adds one collection scan
+or copy before that same complete preparation. A same-record comparison costs
+its bounded canonical record size; roles have a fixed field count. An older
+import performs two complete preparation passes with the same asymptotic
+bound. Exchange builds revision-local ID maps and compares canonical role
+values, including equal independently imported objects.
+
+The source suite uses literal arithmetic, exact/one-over reference and
+collection fixtures, old maximum-envelope migration, maximum-shaped current
+escaped content, descriptor/reflection probes, detached nested records,
+retained captures, atomic reassignment, stale publication, and no-op history.
+It establishes canonical source behavior; the next coherent control group
+owns browser observations. Source ownership remains with `contract.mjs`,
+`commands.mjs`, `state.mjs` and the finite frozen `roles.mjs` catalogue.
 
 ## Coordination-work draft adapter
 
@@ -890,7 +1041,7 @@ a 30-minute duration, one session, additional funding, and planned status.
 The visitor supplies a team and at least one participant before preview or
 Apply. Current admission requires every participant to belong to the selected
 team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Timing remains `null` under schema 0.2;
+reference or membership adjustment. Timing remains `null` under schema 0.3;
 updates carry the accepted row's timing value through the existing work owner.
 The later scheduling contract owns any new timing representation.
 

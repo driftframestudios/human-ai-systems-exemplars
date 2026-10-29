@@ -1,4 +1,5 @@
 import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
+import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from './roles.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -8,18 +9,32 @@ const encoder = new TextEncoder();
 const FUNDING = Object.freeze(['allocated', 'additional']);
 const WORK_STATUS = Object.freeze(['planned', 'paused']);
 const LEGACY_SCHEMA = '0.1.0';
+const PURPOSE_SCHEMA = '0.2.0';
+const LIFECYCLE = Object.freeze(['active', 'retired']);
+const CONNECTION_STATUS = Object.freeze(['active', 'paused']);
+const ROLE_IDS = new Map(Object.entries(ROLE_CATALOGUES).map(([field, rows]) => [field, new Set(rows.map(row => row.id))]));
+const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new Set(row.components.map(component => component.id))]));
+const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
+  purposePlan: [...PLAN_FIELDS, 'purpose'],
   legacyPlan: PLAN_FIELDS,
   purpose: PURPOSE_FIELDS,
-  person: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour'],
-  team: ['id', 'label', 'personIds'],
-  work: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing'],
+  person: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle'],
+  legacyPerson: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour'],
+  role: ROLE_FIELDS,
+  change: ['frameworkId', 'componentId'],
+  team: ['id', 'label', 'personIds', 'lifecycle'],
+  legacyTeam: ['id', 'label', 'personIds'],
+  work: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle'],
+  legacyWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing'],
+  contribution: ['id', 'categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary'],
+  connection: ['id', 'senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status'],
   practice: ['id', 'practiceId', 'teamId', 'workIds'],
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
-const VERSION_FIELDS = new Map([[LEGACY_SCHEMA, 'legacyPlan'], [CONTRACT.schemaVersion, 'plan']]);
+const VERSION_FIELDS = new Map([[LEGACY_SCHEMA, 'legacyPlan'], [PURPOSE_SCHEMA, 'purposePlan'], [CONTRACT.schemaVersion, 'plan']]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
   'team.create': ['type', 'team'],
@@ -30,12 +45,23 @@ const COMMAND_FIELDS = Object.freeze({
   'work.funding.set': ['type', 'workId', 'funding'],
   'work.status.set': ['type', 'workId', 'status'],
   'collection.reorder': ['type', 'collection', 'ids'],
+  'person.role.replace': ['type', 'personId', 'role'],
+  'person.lifecycle.set': ['type', 'personId', 'lifecycle'],
+  'team.lifecycle.set': ['type', 'teamId', 'lifecycle'],
+  'work.lifecycle.set': ['type', 'workId', 'lifecycle'],
+  'contribution.create': ['type', 'contribution'],
+  'contribution.update': ['type', 'contributionId', 'contribution'],
+  'contribution.remove': ['type', 'contributionId'],
+  'connection.create': ['type', 'connection'],
+  'connection.update': ['type', 'connectionId', 'connection'],
+  'connection.remove': ['type', 'connectionId'],
+  'connection.status.set': ['type', 'connectionId', 'status'],
   'person.remove': ['type', 'personId'],
   'team.remove': ['type', 'teamId'],
   'work.remove': ['type', 'workId'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
-const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices']);
+const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections']);
 
 export class PlanError extends Error {
   constructor(code, path, message) {
@@ -242,12 +268,44 @@ function calculate(state, peopleById) {
   };
 }
 
-export function preparePerson(candidate, path = 'person') {
-  const person = record(candidate, 'person', path);
+// Compatibility belongs to the finite command/row API. Versioned plans select
+// one exact row shape; current envelopes always carry all current fields.
+function editableRecord(candidate, kind, path) {
+  const legacy = `legacy${kind[0].toUpperCase()}${kind.slice(1)}`;
+  const keys = candidate && typeof candidate === 'object' ? Reflect.ownKeys(candidate) : [];
+  return record(candidate, keys.length === FIELDS[legacy].length ? legacy : kind, path);
+}
+
+export function prepareRole(candidate, path = 'role') {
+  const raw = record(candidate, 'role', path);
+  const role = {};
+  for (const field of ROLE_FIELDS) {
+    const value = raw[field];
+    if (value === null) { role[field] = null; continue; }
+    if (field === 'change') {
+      const change = record(value, 'change', `${path}.change`);
+      if (!FRAMEWORK_COMPONENTS.get(change.frameworkId)?.has(change.componentId)) {
+        reject('role-choice', `${path}.change`, 'Choose a component within its named framework.');
+      }
+      role.change = { frameworkId: change.frameworkId, componentId: change.componentId };
+    } else {
+      if (!ROLE_IDS.get(field).has(value)) reject('role-choice', `${path}.${field}`, 'Choose a listed role value or leave it unassigned.');
+      role[field] = value;
+    }
+  }
+  return role;
+}
+
+function lifecycleFields(raw, path) {
+  return Object.hasOwn(raw, 'lifecycle') ? { lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`) } : {};
+}
+function personFields(person, path) {
   return { id: text(person.id, `${path}.id`, true), label: text(person.label, `${path}.label`),
     fundedMinutes: integer(person.fundedMinutes, LIMITS.fundedMinutes, `${path}.fundedMinutes`),
-    rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
+    rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`),
+    ...(Object.hasOwn(person, 'role') ? { role: prepareRole(person.role, `${path}.role`) } : {}), ...lifecycleFields(person, path) };
 }
+export function preparePerson(candidate, path = 'person') { return personFields(editableRecord(candidate, 'person', path), path); }
 
 function identifiers(candidate, max, path, min = 0) {
   const ids = list(candidate, max, path);
@@ -262,12 +320,12 @@ function identifiers(candidate, max, path, min = 0) {
 }
 
 export function prepareTeam(candidate, path = 'team') {
-  const team = record(candidate, 'team', path);
+  const team = editableRecord(candidate, 'team', path);
   return teamFields(team, identifiers(team.personIds, LIMITS.people, `${path}.personIds`), path);
 }
 
 function teamFields(team, personIds, path) {
-  return { id: text(team.id, `${path}.id`, true), label: text(team.label, `${path}.label`), personIds };
+  return { id: text(team.id, `${path}.id`, true), label: text(team.label, `${path}.label`), personIds, ...lifecycleFields(team, path) };
 }
 
 // The command envelope and every payload become owned before target lookup.
@@ -298,6 +356,17 @@ export function prepareAssemblyCommand(candidate) {
       const collection = choice(raw.collection, ORDERED_COLLECTIONS, `${path}.collection`);
       return { type, collection, ids: identifiers(raw.ids, LIMITS[collection], `${path}.ids`) };
     }
+    case 'person.role.replace': return { type, personId: text(raw.personId, `${path}.personId`, true), role: prepareRole(raw.role, `${path}.role`) };
+    case 'person.lifecycle.set': return { type, personId: text(raw.personId, `${path}.personId`, true), lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`) };
+    case 'team.lifecycle.set': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`) };
+    case 'work.lifecycle.set': return { type, workId: text(raw.workId, `${path}.workId`, true), lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`) };
+    case 'contribution.create': return { type, contribution: prepareContribution(raw.contribution, `${path}.contribution`) };
+    case 'contribution.update': return { type, contributionId: text(raw.contributionId, `${path}.contributionId`, true), contribution: prepareContribution(raw.contribution, `${path}.contribution`) };
+    case 'contribution.remove': return { type, contributionId: text(raw.contributionId, `${path}.contributionId`, true) };
+    case 'connection.create': return { type, connection: prepareConnection(raw.connection, `${path}.connection`) };
+    case 'connection.update': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true), connection: prepareConnection(raw.connection, `${path}.connection`) };
+    case 'connection.remove': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true) };
+    case 'connection.status.set': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true), status: choice(raw.status, CONNECTION_STATUS, `${path}.status`) };
     case 'person.remove': return { type, personId: text(raw.personId, `${path}.personId`, true) };
     case 'team.remove': return { type, teamId: text(raw.teamId, `${path}.teamId`, true) };
     case 'work.remove': return { type, workId: text(raw.workId, `${path}.workId`, true) };
@@ -325,19 +394,85 @@ function workFields(work, personIds, path) {
     minutesPerOccurrence: integer(work.minutesPerOccurrence, LIMITS.minutesPerOccurrence, `${path}.minutesPerOccurrence`),
     occurrences: integer(work.occurrences, LIMITS.occurrences, `${path}.occurrences`),
     funding: choice(work.funding, FUNDING, `${path}.funding`),
-    status: choice(work.status, WORK_STATUS, `${path}.status`), timing: null };
+    status: choice(work.status, WORK_STATUS, `${path}.status`), timing: null, ...lifecycleFields(work, path) };
 }
 
 // Admit one closed row before comparing it with an already accepted work row.
 // A changed row receives whole-plan reference, membership and budget checks.
 export function prepareWork(candidate, path = 'work') {
-  const work = record(candidate, 'work', path);
+  const work = editableRecord(candidate, 'work', path);
   const personIds = identifiers(work.personIds, LIMITS.people, `${path}.personIds`, 1);
   return workFields(work, personIds, path);
 }
 
+function nullableId(value, path) { return value === null ? null : text(value, path, true); }
+function relationshipText(value, path, nullable = true) {
+  if (nullable && value === null) return null;
+  if (typeof value !== 'string' || value.length > LIMITS.relationshipText || !value.trim()) {
+    reject('relationship-text', path, `Supply ${nullable ? 'null or ' : ''}nonblank text of at most ${LIMITS.relationshipText} UTF-16 units.`);
+  }
+  return value.trim();
+}
+export function prepareContribution(candidate, path = 'contribution') {
+  const raw = record(candidate, 'contribution', path);
+  if (!CATEGORY_IDS.has(raw.categoryId)) reject('category', `${path}.categoryId`, 'Choose a listed output category.');
+  return { id: text(raw.id, `${path}.id`, true), categoryId: raw.categoryId,
+    receiverPersonId: nullableId(raw.receiverPersonId, `${path}.receiverPersonId`),
+    decisionOwnerPersonId: nullableId(raw.decisionOwnerPersonId, `${path}.decisionOwnerPersonId`),
+    workIds: identifiers(raw.workIds, LIMITS.work, `${path}.workIds`),
+    reviewBoundary: relationshipText(raw.reviewBoundary, `${path}.reviewBoundary`), decisionBoundary: relationshipText(raw.decisionBoundary, `${path}.decisionBoundary`) };
+}
+export function prepareConnection(candidate, path = 'connection') {
+  const raw = record(candidate, 'connection', path);
+  const senderTeamId = text(raw.senderTeamId, `${path}.senderTeamId`, true);
+  const receiverTeamId = text(raw.receiverTeamId, `${path}.receiverTeamId`, true);
+  if (senderTeamId === receiverTeamId) reject('connection-endpoints', path, 'Choose two distinct teams for a directed connection.');
+  return { id: text(raw.id, `${path}.id`, true), senderTeamId, receiverTeamId,
+    receiverPersonId: nullableId(raw.receiverPersonId, `${path}.receiverPersonId`),
+    sharedObject: relationshipText(raw.sharedObject, `${path}.sharedObject`, false),
+    responseExpectation: relationshipText(raw.responseExpectation, `${path}.responseExpectation`),
+    workIds: identifiers(raw.workIds, LIMITS.work, `${path}.workIds`), status: choice(raw.status, CONNECTION_STATUS, `${path}.status`) };
+}
+function reference(id, index, path, budget) {
+  if (id === null) return;
+  if (!index.has(id)) reject('reference', path, 'Reference an existing record.');
+  budget.remaining -= 1;
+  if (budget.remaining < 0) reject('reference-budget', path, 'Use at most the declared total reference budget.');
+}
+function relationshipObservations(state, peopleById, teamsById, workById, result) {
+  const observations = [];
+  const capacityById = new Map(result.capacity.map(row => [row.personId, row]));
+  const teamWork = new Map(state.teams.map(row => [row.id, []]));
+  for (const row of state.work) teamWork.get(row.teamId).push(row.id);
+  for (const [collection, rows] of [['people', state.people], ['teams', state.teams], ['work', state.work]]) {
+    for (const row of rows) if (row.lifecycle === 'retired') {
+      const commitments = collection === 'people'
+        ? { fundedMinutes: row.fundedMinutes, allocatedMinutes: capacityById.get(row.id).allocatedMinutes, additionalMinutes: capacityById.get(row.id).additionalMinutes }
+        : collection === 'teams' ? { workIds: teamWork.get(row.id) }
+          : { minutesPerParticipant: row.minutesPerOccurrence * row.occurrences, funding: row.funding, personIds: row.personIds };
+      observations.push({ code: 'retired-record', collection, id: row.id, commitments });
+    }
+  }
+  const human = (row, collection, field) => {
+    const id = row[field];
+    if (id === null) observations.push({ code: 'unassigned-human', collection, id: row.id, field });
+    else if (peopleById.get(id).lifecycle === 'retired') observations.push({ code: 'retired-human', collection, id: row.id, field, personId: id });
+  };
+  for (const row of state.contributions) { human(row, 'contributions', 'receiverPersonId'); human(row, 'contributions', 'decisionOwnerPersonId'); }
+  for (const row of state.connections) {
+    human(row, 'connections', 'receiverPersonId');
+    if (row.status === 'paused') observations.push({ code: 'paused-connection', collection: 'connections', id: row.id });
+    for (const field of ['senderTeamId', 'receiverTeamId']) if (teamsById.get(row[field]).lifecycle === 'retired') observations.push({ code: 'retired-team', collection: 'connections', id: row.id, field, teamId: row[field] });
+  }
+  for (const [collection, rows] of [['contributions', state.contributions], ['connections', state.connections]]) {
+    for (const row of rows) for (const workId of row.workIds) if (workById.get(workId).lifecycle === 'retired') observations.push({ code: 'retired-supporting-work', collection, id: row.id, workId });
+  }
+  return observations;
+}
+
 function prepareVersion(candidate, version) {
   const raw = record(candidate, VERSION_FIELDS.get(version), 'plan');
+  const current = version === CONTRACT.schemaVersion;
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
     const expected = key === 'schemaVersion' ? version : CONTRACT[key];
     if (raw[key] !== expected) reject('unsupported-contract', `plan.${key}`, 'Use this native plan contract; retain other Studio records in their original instrument.');
@@ -346,23 +481,23 @@ function prepareVersion(candidate, version) {
     kind: CONTRACT.kind, schemaVersion: version, modelVersion: CONTRACT.modelVersion,
     planId: text(raw.planId, 'plan.planId', true), revision: integer(raw.revision, LIMITS.revision, 'plan.revision'),
     currency: CONTRACT.currency, horizonWeeks: integer(raw.horizonWeeks, LIMITS.horizonWeeks, 'plan.horizonWeeks', 1),
-    ...(version === CONTRACT.schemaVersion ? { purpose: preparePurpose(raw.purpose, 'plan.purpose') } : {}),
+    ...(version !== LEGACY_SCHEMA ? { purpose: preparePurpose(raw.purpose, 'plan.purpose') } : {}),
     people: [], teams: [], work: [], practices: [],
   };
-  const budget = { remaining: LIMITS.references };
+  const budget = { remaining: current ? LIMITS.references : 4096 };
   state.people = list(raw.people, LIMITS.people, 'plan.people')
-    .map((value, i) => preparePerson(value, `plan.people[${i}]`));
+    .map((value, i) => { const path = `plan.people[${i}]`; return personFields(record(value, current ? 'person' : 'legacyPerson', path), path); });
   const peopleById = indexRecords(state.people, 'plan.people');
   state.teams = list(raw.teams, LIMITS.teams, 'plan.teams').map((value, i) => {
     const path = `plan.teams[${i}]`;
-    const team = record(value, 'team', path);
+    const team = record(value, current ? 'team' : 'legacyTeam', path);
     return teamFields(team, references(team.personIds, peopleById, `${path}.personIds`, budget), path);
   });
   const teamsById = indexRecords(state.teams, 'plan.teams');
   const teamMembers = new Map(state.teams.map(team => [team.id, new Set(team.personIds)]));
   state.work = list(raw.work, LIMITS.work, 'plan.work').map((value, i) => {
     const path = `plan.work[${i}]`;
-    const work = record(value, 'work', path);
+    const work = record(value, current ? 'work' : 'legacyWork', path);
     const teamId = text(work.teamId, `${path}.teamId`, true);
     if (!teamsById.has(teamId)) reject('reference', `${path}.teamId`, 'Choose an existing team.');
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
@@ -381,10 +516,37 @@ function prepareVersion(candidate, version) {
       workIds: references(practice.workIds, workById, `${path}.workIds`, budget) };
   });
   indexRecords(state.practices, 'plan.practices');
+  if (current) {
+    // Scalar references join the same current-version budget as ordered lists.
+    budget.remaining -= state.work.length + state.practices.length;
+    if (budget.remaining < 0) reject('reference-budget', 'plan', 'Use at most the declared total reference budget.');
+    state.contributions = list(raw.contributions, LIMITS.contributions, 'plan.contributions').map((value, i) => {
+      const path = `plan.contributions[${i}]`;
+      const row = prepareContribution(value, path);
+      reference(row.receiverPersonId, peopleById, `${path}.receiverPersonId`, budget);
+      reference(row.decisionOwnerPersonId, peopleById, `${path}.decisionOwnerPersonId`, budget);
+      row.workIds = references(row.workIds, workById, `${path}.workIds`, budget);
+      return row;
+    });
+    indexRecords(state.contributions, 'plan.contributions');
+    state.connections = list(raw.connections, LIMITS.connections, 'plan.connections').map((value, i) => {
+      const path = `plan.connections[${i}]`;
+      const row = prepareConnection(value, path);
+      reference(row.senderTeamId, teamsById, `${path}.senderTeamId`, budget);
+      reference(row.receiverTeamId, teamsById, `${path}.receiverTeamId`, budget);
+      reference(row.receiverPersonId, peopleById, `${path}.receiverPersonId`, budget);
+      if (row.receiverPersonId !== null && !teamMembers.get(row.receiverTeamId).has(row.receiverPersonId)) reject('team-membership', `${path}.receiverPersonId`, 'Choose a receiving person who belongs to the receiving team.');
+      row.workIds = references(row.workIds, workById, `${path}.workIds`, budget);
+      return row;
+    });
+    indexRecords(state.connections, 'plan.connections');
+  }
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
-  return freeze({ state, result: calculate(state, peopleById), serialized });
+  const result = calculate(state, peopleById);
+  return freeze({ state, result, serialized,
+    ...(current ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}) });
 }
 
 function prepareSelectedVersion(candidate, version) {
@@ -393,7 +555,11 @@ function prepareSelectedVersion(candidate, version) {
   // The legacy record, every row/reference, its numeric meaning and its owned
   // bytes are fully admitted before migration. Only this owned state is copied.
   return prepareVersion({ ...admitted.state, schemaVersion: CONTRACT.schemaVersion,
-    purpose: emptyPurpose() }, CONTRACT.schemaVersion);
+    purpose: admitted.state.purpose ?? emptyPurpose(),
+    people: admitted.state.people.map(row => ({ ...row, role: emptyRole(), lifecycle: 'active' })),
+    teams: admitted.state.teams.map(row => ({ ...row, lifecycle: 'active' })),
+    work: admitted.state.work.map(row => ({ ...row, lifecycle: 'active' })),
+    contributions: [], connections: [] }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -443,9 +609,10 @@ export function createExamplePlan() {
     kind: CONTRACT.kind, schemaVersion: CONTRACT.schemaVersion, modelVersion: CONTRACT.modelVersion,
     currency: CONTRACT.currency, planId: 'coordination-example', revision: 0, horizonWeeks: 6,
     purpose: emptyPurpose(),
-    people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000 })),
-    teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'] }],
-    work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null }],
+    people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active' })),
+    teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
+    work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],
+    contributions: [], connections: [],
     practices: [{ id: 'shared-expectations', practiceId: 'expectation', teamId: 'delivery', workIds: ['review'] }],
   };
 }
