@@ -4,7 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 
 const about = await readFile(new URL('../../context-canvas-project-surface/context-canvas/index.html', import.meta.url), 'utf8');
-const team = about.match(/<section\b[^>]*\bdata-native-team-editor\b[\s\S]*?<\/section>/u)?.[0];
+const teamSection = about.match(/<section\b[^>]*\bdata-native-team-editor\b[\s\S]*?<\/section>/u)?.[0];
+const team = teamSection?.match(/<details\b[^>]*\bdata-person-configure\b[\s\S]*?<\/details>/u)?.[0];
 
 test('About gives person settings a separate form with connected labels and field feedback', () => {
   assert.ok(team, 'About carries the Team Assembly receiver');
@@ -40,7 +41,7 @@ test('About gives person settings a separate form with connected labels and fiel
 
 test('person drafts keep the live total quiet and retain explicit status and full-Studio routes', () => {
   assert.match(team, /<output\b(?=[^>]*data-person-total)(?=[^>]*aria-live="off")[^>]*>/u);
-  assert.match(team, /<p\b(?=[^>]*data-person-status)(?=[^>]*role="status")(?=[^>]*aria-live="polite")[^>]*>/u);
+  assert.match(teamSection, /<p\b(?=[^>]*data-person-status)(?=[^>]*role="status")(?=[^>]*aria-live="polite")[^>]*>/u);
   assert.match(team, /Leave blank if unknown\./u, 'a missing rate stays distinguishable from zero');
   assert.match(about, /<iframe\b[^>]*data-about-content-fit="studio-chapters"[^>]*>/u);
   assert.match(about, /href="\.\.\/\.\.\/collaboration\/initiative-costing-calculator\/index.html"/u);

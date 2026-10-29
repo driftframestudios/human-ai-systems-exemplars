@@ -50,7 +50,7 @@ const root = page => page.locator('[data-native-coordination]');
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const chapter = (page, name) => root(page).locator(`[data-native-chapter-panel="${name}"]`);
 const work = (page, name) => chapter(page, 'coordination').locator(`input[name="${name}"]`);
-const person = (page, name) => chapter(page, 'people').locator(`input[name="${name}"]`);
+const person = (page, name) => chapter(page, 'people').locator(`[data-person-configure] input[name="${name}"]`);
 const total = page => root(page).locator('[data-native-total]');
 const workAction = (page, name) => chapter(page, 'coordination').locator(`[data-action="${name}"]`);
 const personAction = (page, name) => chapter(page, 'people').locator(`[data-person-action="${name}"]`);
