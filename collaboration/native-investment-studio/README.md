@@ -586,9 +586,9 @@ browser receiver owns actual input, layout, focus, and reading observations.
 
 ## Native coordination receiver
 
-About loads `controller.mjs` as a module. Its four same-directory dependencies
-retain the canonical package geometry in local and production delivery.
-`deployment/cpanel/primary-route-manifest.json` declares all five files and
+About loads `controller.mjs` as a module. Its nine transitive same-directory
+dependencies retain the canonical package geometry in local and production
+delivery. `deployment/cpanel/primary-route-manifest.json` declares all ten files and
 their JavaScript media type. The production closure test builds an isolated
 artifact with the real builder and follows its parsed import graph; removing
 one dependency earns a failing closure observation. The shared local browser
@@ -653,6 +653,70 @@ short explanation; the session-count hint sits beside its count. Variable
 validation feedback and the investment preview follow all inputs, so their
 wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
+
+## Native Studio chapters
+
+`shell.mjs` owns the amp head's manually activated Coordination and People
+tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
+the shell after mounting both editors against the same Studio instance. The
+shell changes presentation while the working-session and person adapters
+retain their drafts, exact accepted bases and recovery behavior. The amp head
+continues to display the shared accepted amount.
+
+`mountChapterShell(root)` returns `read()`, `select(chapterKey)` and `dispose()`.
+Read reports the selected chapter and admitted chapter keys. Select reveals
+one chapter, focuses its tab and records its owned fragment. Disposal cancels
+motion, removes listeners and restores authored attributes without replacing
+editor descendants. A subsequent mount reconciles the current fragment.
+
+An authored, labelled `[data-native-chapter-list]` begins hidden. Its named
+buttons use `data-native-chapter` and `aria-controls`; corresponding sections
+use `data-native-chapter-panel` and `native-studio-<key>` IDs. Both sections
+begin visible for the static reading. The shell validates their complete
+one-to-one relationship before adding tab semantics or hiding a panel. Future
+chapters enter with their working content and finite icon geometry.
+
+Arrow keys move tab focus. Enter or Space selects; Home and End reach the
+ends. Tab continues into the active panel. The horizontal strip can reveal a
+focused tab locally while About retains vertical scrolling. A chapter change
+preserves mounted input elements, raw text and disclosure state. A later edit
+in another chapter can make an existing draft stale through its adapter's
+ordinary exact-base check.
+
+Owned fragments include the chapter panel IDs and existing descendants such
+as `#native-team-title`. Direct entry and Back/Forward reveal the corresponding
+panel while retaining that exact destination. A previously hidden descendant
+or panel receives its scroll after the panel enters document flow. The shell
+records its chapter in one versioned history-state field while retaining
+other owners' fields. Back can therefore restore the initial Coordination
+chapter when its entry has an empty fragment. Scalar and array history states
+retain their representation and use fragment recovery. Unrelated About
+fragments retain their existing scroll owner.
+
+The shell retains one cancellable entrance animation, honours reduced motion,
+and releases animation on a hidden document or disposal. A newer selection
+settles its semantic state immediately and cancels the preceding visual.
+An operation generation stops a superseded selection when a synchronous
+focus callback disposes or re-enters the shell.
+DOM discovery occurs once; the chapter map retains O(C) entries, and ordinary
+selection updates the previous and next pair in O(1). Preparing entry metadata
+copies H existing top-level history fields in O(H); the browser owns the
+structured clone of that entry. Fragment recovery follows the target's ancestor
+chain. Browser layout and paint retain their own costs.
+
+`icons.mjs` creates fresh decorative SVGs for the two implemented chapters.
+It carries the selected Lucide geometry and ISC notice in delivered bytes.
+The [upstream receipt](vendor/lucide/README.md) records the exact pin and
+complete licence. Visible button text supplies the accessible names. Each
+controller mount inserts its icons once and removes those owned nodes at
+disposal. The existing primary-module and source-closure owners carry delivery.
+
+`styles/routes/about.css` owns the tactile buttons, fixed top-left lighting,
+selected/focused states, wrapping introduction and narrow horizontal strip.
+`tests/native-investment-studio/shell.test.mjs` observes admission, retained
+nodes, history dispatch, cleanup, interrupted motion and fixed SVG construction
+through a bounded DOM protocol fixture. Native focus, scrolling, paint and
+accessibility remain with the shell's three-engine browser receiver.
 
 ## Data structures and pattern decisions
 
@@ -737,8 +801,10 @@ observations when the native receiver is introduced.
 From the repository root:
 
 ```sh
-node --test tests/native-investment-studio/*.test.mjs
-node --test tests/native-investment-studio/controller.browser.mjs
+npm run test:native-investment-studio:source
+npm run test:native-investment-studio:coordination-browser
+npm run test:native-investment-studio:team-browser
+npm run test:native-investment-studio:chapters-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```
@@ -762,6 +828,15 @@ local placeholders for separately owned remote iframe and media requests. They
 establish the native panel's behavior; the existing Studio and delivery tests
 retain their own evidence. The receiving PR carries actual
 commands and normalized results, independent review, and current human authority.
+
+The chapter browser route owns manual tab focus and explicit activation,
+retained work and person edits, stale commits across chapters, original fragment
+destinations, history, shell disposal and remount, reduced motion, narrow local
+scrolling, and the authored scriptless reading. Its state cases retain the exact
+native About section and style closure; the WebKit reading case uses the complete
+About document with the separately owned closed diagram's object navigation
+isolated. Select this route for chapter behavior, and retain the coordination
+and person routes for changes to their controls or state receivers.
 
 ## Continuing the native instrument
 

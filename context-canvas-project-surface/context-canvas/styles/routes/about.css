@@ -1957,6 +1957,7 @@ p#on-dark-iron-ore {
     --native-key-shadow: #45534b;
     --native-error: #853126;
     --native-focus: var(--about-cobalt);
+    --native-chapter-shadow: #050909;
     background: var(--native-paper);
     border: .125rem solid var(--native-ink);
     border-radius: .75rem;
@@ -1979,6 +1980,13 @@ p#on-dark-iron-ore {
     display: grid;
     gap: 1.5rem;
     padding: clamp(1rem, 3vw, 2.5rem);
+}
+.native-coordination__intro {
+    grid-column: 1 / -1;
+    color: var(--native-paper);
+    font-size: .875rem;
+    line-height: 1.5;
+    max-inline-size: 90ch;
 }
 .native-coordination__plate {
     font: 700 .75rem/1.5 ui-monospace, monospace;
@@ -2024,6 +2032,43 @@ p#on-dark-iron-ore {
 }
 .native-coordination button:is(:disabled, [aria-disabled='true']) { cursor: default; opacity: .6; }
 .native-coordination :is(button, input, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
+.native-coordination__chapters {
+    display: flex;
+    gap: .8rem;
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    padding: .7rem .7rem .75rem;
+    scrollbar-width: thin;
+    scroll-padding-inline: .7rem;
+}
+.native-coordination__chapters button {
+    display: inline-grid;
+    grid-template-columns: 1.25rem auto;
+    align-items: center;
+    gap: .55rem;
+    flex: 0 0 auto;
+    max-inline-size: none;
+    white-space: nowrap;
+    text-align: start;
+    box-shadow: .24rem .24rem 0 var(--native-chapter-shadow);
+    transition: background-color 160ms ease-out, box-shadow 120ms ease-out, transform 120ms ease-out;
+}
+.native-coordination__chapters button > span { min-inline-size: 0; }
+.native-studio__icon { inline-size: 1.25rem; block-size: 1.25rem; }
+.native-coordination__chapters button[aria-selected='true'] {
+    background: var(--native-signal);
+    box-shadow: .08rem .08rem 0 var(--native-chapter-shadow);
+    transform: translate(.16rem, .16rem);
+}
+.native-coordination__chapters button:active:not(:disabled, [aria-disabled='true']) {
+    box-shadow: .06rem .06rem 0 var(--native-chapter-shadow);
+    transform: translate(.18rem, .18rem);
+}
+.native-coordination__chapters button:focus-visible { outline-color: var(--native-paper); }
+.native-coordination [data-native-chapter-panel]:focus-visible { outline: .2rem solid var(--native-focus); outline-offset: -.4rem; }
+.native-coordination[data-native-chapters-ready] .native-team { border-block-start: 0; }
 .native-coordination__body { display: grid; gap: 1.5rem; padding: clamp(1rem, 3vw, 2.5rem); }
 .native-coordination__body > * { min-inline-size: 0; }
 .native-coordination__agreement { display: grid; gap: 1rem; align-content: start; }
@@ -2119,6 +2164,11 @@ p#on-dark-iron-ore {
     .native-coordination { --native-focus: Highlight; --native-text: CanvasText; --native-ink: CanvasText; --native-paper: Canvas; --native-signal: LinkText; --native-rule: CanvasText; --native-error: CanvasText; box-shadow: none; }
     .native-coordination :is(button, details), .native-coordination__duration-display { box-shadow: none; }
     .native-coordination input[aria-invalid='true'] { border-style: dashed; }
+    .native-coordination__chapters button[aria-selected='true'] { border-style: double; border-color: Highlight; box-shadow: none; }
+    .native-coordination__chapters button:focus-visible { outline-color: Highlight; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .native-coordination__chapters button { transition: none; }
 }
 
 /* Keep enlarged numeric entry readable when its own panel becomes narrow. */
