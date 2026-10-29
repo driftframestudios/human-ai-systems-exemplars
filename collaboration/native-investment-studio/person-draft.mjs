@@ -4,7 +4,8 @@ const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 const CENTS_PER_DOLLAR = 100;
 const MAX_HOURS = Math.floor(LIMITS.fundedMinutes / MINUTES_PER_HOUR);
 const MAX_RATE = LIMITS.rateCentsPerHour / CENTS_PER_DOLLAR;
-const TEXT_LIMIT = 32;
+export const PERSON_DRAFT_TEXT_LIMIT = 32;
+const TEXT_LIMIT = PERSON_DRAFT_TEXT_LIMIT;
 const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
 const DIGITS = /^[0-9]+$/;
 const MONEY = /^([0-9]+)(?:\.([0-9]{1,2}))?$/;
@@ -45,7 +46,7 @@ function parseQuantity(field, raw, max) {
   return { value };
 }
 
-function values(raw) {
+export function preparePersonDraftValues(raw) {
   const rate = parseRate(raw.ratePerHour);
   const hours = parseQuantity('fundedHours', raw.fundedHours, MAX_HOURS);
   const minutes = parseQuantity('fundedMinutes', raw.fundedMinutes, MINUTES_PER_HOUR - 1);
@@ -59,6 +60,34 @@ function values(raw) {
     } else admitted.fundedMinutes = total;
   }
   return { admitted, errors };
+}
+
+
+const values = preparePersonDraftValues;
+
+// The caller admits bounded raw text; creation and existing-person edits share this codec.
+export function stepPersonDraftValues(raw, field, direction) {
+  const stepFailure = error => ({ error });
+  if (!FIELDS.includes(field)) return stepFailure(diagnostic('field', 'draft', 'Choose the hourly rate or funded-time field.'));
+  const nextRaw = { ...raw };
+    if (direction !== -1 && direction !== 1) return stepFailure(diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.'));
+    if (field === 'ratePerHour') {
+      const parsed = parseRate(nextRaw.ratePerHour);
+      if (parsed.error) return stepFailure(parsed.error);
+      if (parsed.value === null) return stepFailure(diagnostic('unknown-rate', 'draft.ratePerHour', 'Enter an hourly rate before adjusting it.'));
+      const next = parsed.value + direction * CENTS_PER_DOLLAR;
+      if (next < 0 || next > LIMITS.rateCentsPerHour) return stepFailure(diagnostic('range', 'draft.ratePerHour', `Keep the rate from $0 through $${MAX_RATE}.`));
+      nextRaw.ratePerHour = rateText(next);
+    } else {
+      const parsed = values(nextRaw);
+      const durationError = parsed.errors.find(error => error.path !== 'draft.ratePerHour');
+      if (durationError) return stepFailure(durationError);
+      const next = parsed.admitted.fundedMinutes + direction * (field === 'fundedHours' ? MINUTES_PER_HOUR : 1);
+      if (next < 0 || next > LIMITS.fundedMinutes) return stepFailure(diagnostic('range', `draft.${field}`, `Keep funded time from zero through ${LIMITS.fundedMinutes} minutes.`));
+      nextRaw.fundedHours = String(Math.floor(next / MINUTES_PER_HOUR));
+      nextRaw.fundedMinutes = String(next % MINUTES_PER_HOUR);
+    }
+  return { raw: nextRaw };
 }
 
 // A person editor has one explicit transaction and creates no scheduled resource.
@@ -123,23 +152,9 @@ export function createPersonDraftAdapter(studio) {
   function step(token, field, direction) {
     const error = guard(token) ?? fieldGuard(field);
     if (error) return fail(error);
-    if (direction !== -1 && direction !== 1) return fail(diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.'));
-    if (field === 'ratePerHour') {
-      const parsed = parseRate(active.raw.ratePerHour);
-      if (parsed.error) return fail(parsed.error);
-      if (parsed.value === null) return fail(diagnostic('unknown-rate', 'draft.ratePerHour', 'Enter an hourly rate before adjusting it.'));
-      const next = parsed.value + direction * CENTS_PER_DOLLAR;
-      if (next < 0 || next > LIMITS.rateCentsPerHour) return fail(diagnostic('range', 'draft.ratePerHour', `Keep the rate from $0 through $${MAX_RATE}.`));
-      active.raw.ratePerHour = rateText(next);
-    } else {
-      const parsed = values(active.raw);
-      const durationError = parsed.errors.find(error => error.path !== 'draft.ratePerHour');
-      if (durationError) return fail(durationError);
-      const next = parsed.admitted.fundedMinutes + direction * (field === 'fundedHours' ? MINUTES_PER_HOUR : 1);
-      if (next < 0 || next > LIMITS.fundedMinutes) return fail(diagnostic('range', `draft.${field}`, `Keep funded time from zero through ${LIMITS.fundedMinutes} minutes.`));
-      active.raw.fundedHours = String(Math.floor(next / MINUTES_PER_HOUR));
-      active.raw.fundedMinutes = String(next % MINUTES_PER_HOUR);
-    }
+    const result = stepPersonDraftValues(active.raw, field, direction);
+    if (result.error) return fail(result.error);
+    active.raw = result.raw;
     active.rawRevision += 1;
     return succeed();
   }

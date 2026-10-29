@@ -29,11 +29,14 @@ and integration authority; publication remains held.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
   the optional one-request scheduling boundary.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
-  one target-bound person draft, and its cached proposal.
+  one target-bound person draft, its cached proposal, and the pure numeric codec
+  reused by person creation.
+- `command-draft.mjs` owns five finite assembly forms, ordered raw selections,
+  stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
-  shared by working sessions, people, and purpose.
+  shared by working sessions, people, purpose, and assembly forms.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -787,12 +790,12 @@ to both this marker and the accepted-state token while allowing ordinary chapter
 navigation. The current receiver uses explicit Apply and introduces no scheduled
 commit path.
 
-With D held edits, F fields and L characters per field, saved storage is
-O(D × F × L), conservatively bounded here by D ≤ 8, F ≤ 6 and L ≤ 600. The fixed
-purpose target admits one such edit; the remaining targets retain the smaller
-numeric field bounds. Target indexes rebuild once
-per accepted projection in O(people + work + 1); subsequent target lookups use Map
-lookup. A summary visits at most eight records. Typed preview retains the complete
+With D held edits and bounded raw payload size S, saved storage is O(D × S), with
+D ≤ 8. Work/person fields retain their 32-unit bounds; purpose has six fields
+of at most 600 units; assembly has the separate text/ordered-ID bounds below.
+Target indexes rebuild once per accepted projection in O(people + teams + work + 1);
+subsequent target lookups use Map lookup. A summary visits at most eight records.
+Typed preview retains the complete
 preparation route measured by #641 and computes only for the active editor.
 The accepted state's history and baseline remain with the state owner. Their
 full visitor controls belong to the later Keep/Carry and exchange receiver.
@@ -800,6 +803,68 @@ full visitor controls belong to the later Keep/Carry and exchange receiver.
 `tests/native-investment-studio/editing.test.mjs` owns literal monetary changes,
 capacity reservations, raw-text recovery, exact lease and accepted identities,
 removed targets, disposal, reentry and draft-intent behavior.
+
+### Assembly drafts and creation recovery
+
+`editing.assembly` borrows the same active lease and eight-slot reservation.
+Its first finite forms are `person.create`, `team.create`, `team.update`,
+`person.remove` and `team.remove`. `ASSEMBLY_FORMS` declares their text and
+ordered-selection fields. `makeAssemblyTarget(form, id)` creates a bounded
+scalar key; `describeAssemblyTarget(key)` returns its form, record ID,
+collection, mode and field metadata. The form and target remain fixed within
+each typed transaction.
+
+Use `editing.assembly.create(form, expectedProjection)` to allocate a new person
+or team ID and open the form. Existing records use
+`begin(makeAssemblyTarget(form, id), expectedProjection)`. The port supplies
+`setText`, `setIds`, person-numeric `step`, `validate`, `preview`, `apply`,
+`cancel`, `review` and `useCurrent`. The generated ID stays in the target key
+through preview, parking and resume. Creation Apply releases its lease, allowing
+the receiving UI to open the new person's rate/time editor or the accepted
+team's settings.
+
+Person creation has a label plus the existing hourly-rate/funded-time text
+codec. A blank rate means unknown; explicit zero retains its distinct meaning.
+Team forms have a label and a dense ordered `personIds` array of at most 128
+distinct bounded IDs. Raw labels retain up to 120 UTF-16 units and normalize
+surrounding whitespace only when preparing the command. Numeric fields retain
+their 32-unit cap. ID-selection admission snapshots data descriptors, rejects
+duplicate or malformed entries, and copies the ordered values before mutation.
+The post-admission guard keeps a synchronous reflection callback from replacing
+newer raw values or another session's diagnostic.
+
+Saved assembly selections are frozen arrays with their original order. The
+coordinator copies, compares and restores them through their finite field
+metadata. It preserves one active adapter and keeps the parked payload inert.
+An unchanged removal confirmation has no raw input to retain and releases its
+transient slot on navigation. A blocked removal carries the command owner's
+immutable dependency references; the accepted plan and its history stay intact.
+
+An imported plan can claim the ID of a saved creation. The draft remains visible
+with `creationConflict: true`. `freshId(token, displayedProjection)` explicitly
+allocates another ID, retains every raw field, and binds a new lease to the
+displayed current plan. It replaces the old slot, so recovery still works when
+all eight slots are occupied. The visitor receiver describes this action as
+using the entries for a new person or team. Earlier tokens stay retired.
+Saved removed targets remain selectable for inspection and discard; their
+review and Apply retain the current-target requirement.
+
+Creation allocation builds one bounded occupied-ID set from the current
+collection and held drafts, then searches at most its collection cap plus nine
+candidate IDs. Ordered selection admission costs O(K + I × L), where K is the
+supplied array's own-key enumeration, I ≤ 128 admitted entries and L ≤ 64 ID
+units. Extra-property values remain unread. Copy/equality/restore operate only
+on owned raw records, with O(I × L) storage and linear ordered comparison.
+The largest team raw payload holds 8,312 UTF-16 units and 128 array slots; eight
+such saved payloads hold at most 66,496 units and 1,024 slots, plus bounded keys,
+markers and field containers. Complete previews cache by raw revision and exact
+base; changed proposals keep #641's full preparation route. The adapter creates
+no scheduled resources.
+
+`command-draft.test.mjs` and `assembly-editing.test.mjs` cover literal $1,200 to
+$1,440 creation, ordered selection ownership, numeric codec reuse, no-op and
+preview behavior, dependencies, eight-slot recovery, imported collisions,
+removed targets, scalar admission, synchronous reentry and disposal.
 
 ## Native coordination receiver
 
