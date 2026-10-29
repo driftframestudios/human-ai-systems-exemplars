@@ -9,7 +9,7 @@ test('the finite native catalogue names its exact version and creates independen
   const list = listPresets();
   assert.deepEqual(list.map(row => row.id), ['shared-working-sessions', 'funded-working-sessions']);
   assert.equal(Object.isFrozen(list), true);
-  assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.2.0'));
+  assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.3.0'));
   const first = preparePreset(list[0].id, VERSION);
   const second = preparePreset(list[0].id, VERSION);
   assert.notStrictEqual(first.projection, second.projection);

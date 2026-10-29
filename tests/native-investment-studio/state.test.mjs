@@ -5,6 +5,9 @@ import { readFile } from 'node:fs/promises';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { HISTORY, LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 const legacyPurposeFixture = await readFile(new URL('./fixtures/plan-0.1.0.json', import.meta.url), 'utf8');
 
@@ -134,24 +137,24 @@ test('work edits require the existing target identity and a full valid replaceme
 test('each preparation owns its edge budget and exact-budget recovery retains the accepted snapshot', () => {
   const candidate = createExamplePlan();
   candidate.people = Array.from({ length: 128 }, (_, index) => ({
-    id: `person-${index}`, label: `Person ${index}`, fundedMinutes: 0, rateCentsPerHour: 0,
+    id: `person-${index}`, label: `Person ${index}`, fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active',
   }));
   candidate.teams = Array.from({ length: 32 }, (_, index) => ({
-    id: `team-${index}`, label: `Team ${index}`, personIds: candidate.people.map(person => person.id),
+    id: `team-${index}`, label: `Team ${index}`, personIds: candidate.people.map(person => person.id), lifecycle: 'active',
   }));
-  candidate.work = [];
+  candidate.work = Array.from({ length: 32 }, (_, index) => ({ id: `work-${index}`, label: 'Work', teamId: 'team-0',
+    personIds: candidate.people.slice(0, index === 31 ? 96 : 128).map(row => row.id), minutesPerOccurrence: 0, occurrences: 0,
+    funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }));
   candidate.practices = [];
   const studio = createStudio(candidate);
   const before = studio.capture();
-  // The same 128 people have 32 separately owned memberships each: 4,096 edges.
+  // 4,096 memberships, 4,064 participants and 32 work-owner IDs fill 8,192 references.
   assert.equal(before.state.teams.flatMap(team => team.personIds).length, 4096);
   assert.equal(before.state.people.length, 128);
+  assert.equal(before.state.work.flatMap(row => row.personIds).length, 4064);
 
   const overBudget = structuredClone(candidate);
-  overBudget.work = [{
-    id: 'review', label: 'Review', teamId: 'team-0', personIds: ['person-0'],
-    minutesPerOccurrence: 0, occurrences: 0, funding: 'additional', status: 'planned', timing: null,
-  }];
+  overBudget.work[31].personIds.push('person-96');
   expectHeld(studio.replace(overBudget, before), before, 'reference-budget');
   const duplicate = structuredClone(candidate);
   duplicate.teams[31].personIds[127] = 'person-0';
@@ -335,7 +338,7 @@ test('work preview admission retains target, bounds, foreign-owner, and reentran
 
 test('preview recomputes exact person funding pools rather than adding a rounded line delta', () => {
   const plan = createExamplePlan();
-  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1 }];
+  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active' }];
   plan.teams[0].personIds = ['one'];
   const row = { ...plan.work[0], personIds: ['one'], occurrences: 1 };
   plan.work = [
@@ -485,10 +488,10 @@ test('baseline capture keeps chronology and Redo while restoration preserves par
   const studio = createStudio(); const initial = studio.read();
   assert.equal(studio.readBaseline(), null);
   expectHeld(studio.restoreBaseline(initial), initial, 'baseline-empty');
-  const partial = studio.updatePerson('product-one', changedPerson(initial, { rateCentsPerHour: null }), initial).projection;
+  const partial = studio.updatePerson('product-one', changedPerson(initial, { rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' }), initial).projection;
   assert.equal(partial.result.plannedCommitmentCents, null);
   assert.equal(partial.result.knownCommitmentCents, 90000);
-  const zero = studio.updatePerson('product-one', changedPerson(partial, { rateCentsPerHour: 0 }), partial).projection;
+  const zero = studio.updatePerson('product-one', changedPerson(partial, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }), partial).projection;
   assert.equal(zero.result.plannedCommitmentCents, 90000);
   const undone = studio.undo(zero).projection;
   const acceptance = studio.readAcceptance(); const history = studio.readHistory();
@@ -594,7 +597,7 @@ test('changed work preserves reference, membership and authored participation or
     expectHeld(studio.updateWork('review', row, before), before, code);
   }
   const plan = createExamplePlan();
-  plan.teams.push({ id: 'other', label: 'Other', personIds: [] });
+  plan.teams.push({ id: 'other', label: 'Other', personIds: [], lifecycle: 'active' });
   const owned = createStudio(plan); const base = owned.read();
   expectHeld(owned.updateWork('review', changedReview(base, { teamId: 'other' }), base), base, 'team-membership');
   const reordered = studio.updateWork('review', changedReview(before, { personIds: [...before.state.work[0].personIds].reverse() }), before);
@@ -680,7 +683,7 @@ test('a reentrant A-to-B-to-A traversal retires an outer no-op even though its p
 test('canonical row admission retains target identity when a descriptor view changes between reads', () => {
   const plan = createExamplePlan();
   plan.practices = [];
-  plan.people.push({ id: 'unassigned', label: 'Unassigned participant', fundedMinutes: 0, rateCentsPerHour: 10000 });
+  plan.people.push({ id: 'unassigned', label: 'Unassigned participant', fundedMinutes: 0, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' });
   const studio = createStudio(plan); const before = studio.read(); const acceptance = studio.readAcceptance();
   for (const [command, id, row] of [
     ['updateWork', 'review', changedReview(before)], ['previewWork', 'review', changedReview(before)],
@@ -757,23 +760,23 @@ test('legacy admissions, current captures, history and baselines retain their ac
   const externalCapture = Object.freeze({ state: Object.freeze(oldState), serialized: legacyPurposeFixture });
   const studio = createStudio(externalCapture.state);
   const initial = studio.read();
-  assert.equal(initial.state.schemaVersion, '0.2.0');
+  assert.equal(initial.state.schemaVersion, '0.3.0');
   studio.setBaseline(initial);
   studio.updatePurpose({ ...initial.state.purpose, changedAbility: 'Improve the reading.' }, initial);
-  assert.equal(studio.read().state.schemaVersion, '0.2.0');
-  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.2.0');
+  assert.equal(studio.read().state.schemaVersion, '0.3.0');
+  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.3.0');
   assert.equal(studio.importText(legacyPurposeFixture, studio.read()).ok, true);
   assert.equal(studio.read().state.purpose.changedAbility, null);
   assert.equal(studio.replace(externalCapture.state, studio.read()).ok, true);
   studio.restoreBaseline(studio.read());
   while (studio.readHistory().undoCount) {
     assert.equal(studio.undo(studio.read()).ok, true);
-    assert.equal(studio.capture().state.schemaVersion, '0.2.0');
-    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.2.0');
+    assert.equal(studio.capture().state.schemaVersion, '0.3.0');
+    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.3.0');
   }
   while (studio.readHistory().redoCount) {
     assert.equal(studio.redo(studio.read()).ok, true);
-    assert.equal(studio.read().state.schemaVersion, '0.2.0');
+    assert.equal(studio.read().state.schemaVersion, '0.3.0');
   }
   assert.equal(externalCapture.state.schemaVersion, '0.1.0');
   assert.equal(Object.hasOwn(externalCapture.state, 'purpose'), false);

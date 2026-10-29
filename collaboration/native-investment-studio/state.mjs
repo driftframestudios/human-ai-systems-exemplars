@@ -28,7 +28,7 @@ function positions(rows) { return new Map(rows.map((row, index) => [row.id, inde
 function restoredEnvelope(projection) {
   // Nested state/result and serialized bytes are already owned and immutable.
   // Only the accepted envelope needs fresh identity to retire earlier edits.
-  return Object.freeze({ state: projection.state, result: projection.result, serialized: projection.serialized });
+  return Object.freeze({ state: projection.state, result: projection.result, serialized: projection.serialized, observations: projection.observations });
 }
 
 // One accepted owner per instance. Captures remain immutable after later commits.
@@ -102,10 +102,11 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     if (!id || !Object.hasOwn(id, 'value') || id.value !== personId) {
       throw new PlanError('target', 'edit.personId', 'Keep the replacement bound to its original person identity.');
     }
-    const person = preparePersonRecord(candidate, `plan.people[${position}]`);
+    const person = { ...base.state.people[position], ...preparePersonRecord(candidate, `plan.people[${position}]`) };
     if (person.id !== personId) throw new PlanError('target', 'edit.personId', 'Keep the admitted person bound to its original identity.');
     const current = base.state.people[position];
     if (person.id === current.id && person.label === current.label
+        && person.lifecycle === current.lifecycle && JSON.stringify(person.role) === JSON.stringify(current.role)
         && person.fundedMinutes === current.fundedMinutes && person.rateCentsPerHour === current.rateCentsPerHour) {
       return { projection: base };
     }
@@ -122,12 +123,12 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     if (!id || !Object.hasOwn(id, 'value') || id.value !== workId) {
       throw new PlanError('target', 'edit.workId', 'Keep the replacement bound to its original work identity.');
     }
-    const row = prepareWorkRecord(candidate, `plan.work[${position}]`);
+    const row = { ...base.state.work[position], ...prepareWorkRecord(candidate, `plan.work[${position}]`) };
     if (row.id !== workId) throw new PlanError('target', 'edit.workId', 'Keep the admitted work bound to its original identity.');
     const current = base.state.work[position];
     if (row.id === current.id && row.label === current.label && row.teamId === current.teamId
         && row.minutesPerOccurrence === current.minutesPerOccurrence && row.occurrences === current.occurrences
-        && row.funding === current.funding && row.status === current.status && row.timing === current.timing
+        && row.lifecycle === current.lifecycle && row.funding === current.funding && row.status === current.status && row.timing === current.timing
         && row.personIds.length === current.personIds.length && row.personIds.every((id, index) => id === current.personIds[index])) {
       return { projection: base };
     }

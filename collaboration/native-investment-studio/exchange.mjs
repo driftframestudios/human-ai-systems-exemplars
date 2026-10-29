@@ -7,10 +7,12 @@ const encoder = new TextEncoder();
 const ROOT_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks']);
 // These fields own preview comparisons, while contract.mjs owns admission.
 const ROW_FIELDS = Object.freeze({
-  people: Object.freeze(['label', 'fundedMinutes', 'rateCentsPerHour']),
-  teams: Object.freeze(['label', 'personIds']),
-  work: Object.freeze(['label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing']),
+  people: Object.freeze(['label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle']),
+  teams: Object.freeze(['label', 'personIds', 'lifecycle']),
+  work: Object.freeze(['label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle']),
   practices: Object.freeze(['practiceId', 'teamId', 'workIds']),
+  contributions: Object.freeze(['categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary']),
+  connections: Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status']),
 });
 const diagnostic = (code, message, path = 'exchange') => Object.freeze({ code, path, message });
 const staleDiagnostic = () => diagnostic('stale-preview', 'The plan or edits changed. Preview this plan again.');
@@ -99,6 +101,7 @@ export function readFileBytes(file, { signal, createReader = () => new FileReade
 }
 
 function equalField(left, right) {
+  if (left && right && typeof left === 'object' && typeof right === 'object' && !Array.isArray(left)) return JSON.stringify(left) === JSON.stringify(right);
   return Array.isArray(left) ? Array.isArray(right) && left.length === right.length
     && left.every((value, index) => value === right[index]) : left === right;
 }

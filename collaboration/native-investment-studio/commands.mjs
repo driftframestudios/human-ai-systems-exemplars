@@ -1,10 +1,12 @@
 import { PlanError, prepareAssemblyCommand, preparePlan } from './contract.mjs';
+import { emptyRole } from './roles.mjs';
 
 const WORK_CHANGE_FIELDS = new Map([
   ['work.participants.replace', 'personIds'], ['work.funding.set', 'funding'], ['work.status.set', 'status'],
 ]);
 const REMOVAL_TARGETS = new Map([
   ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']], ['work.remove', ['work', 'workId']],
+  ['contribution.remove', ['contributions', 'contributionId']], ['connection.remove', ['connections', 'connectionId']],
 ]);
 
 function sameIds(left, right) {
@@ -55,8 +57,19 @@ function dependencies(state, collection, id) {
   } else if (collection === 'teams') {
     include(state.work, 'work', 'teamId', row => row.teamId === id);
     include(state.practices, 'practices', 'teamId', row => row.teamId === id);
-  } else {
+  } else if (collection === 'work') {
     include(state.practices, 'practices', 'workIds', row => row.workIds.includes(id));
+  }
+  if (collection === 'people') {
+    include(state.contributions, 'contributions', 'receiverPersonId', row => row.receiverPersonId === id);
+    include(state.contributions, 'contributions', 'decisionOwnerPersonId', row => row.decisionOwnerPersonId === id);
+    include(state.connections, 'connections', 'receiverPersonId', row => row.receiverPersonId === id);
+  } else if (collection === 'teams') {
+    include(state.connections, 'connections', 'senderTeamId', row => row.senderTeamId === id);
+    include(state.connections, 'connections', 'receiverTeamId', row => row.receiverTeamId === id);
+  } else if (collection === 'work') {
+    include(state.contributions, 'contributions', 'workIds', row => row.workIds.includes(id));
+    include(state.connections, 'connections', 'workIds', row => row.workIds.includes(id));
   }
   return Object.freeze(references);
 }
@@ -83,17 +96,17 @@ export function prepareAssembly(base, candidate) {
   let rows;
   switch (command.type) {
     case 'person.create':
-      collection = 'people'; rows = append(state.people, command.person, 'command.person.id'); break;
+      collection = 'people'; rows = append(state.people, { role: emptyRole(), lifecycle: 'active', ...command.person }, 'command.person.id'); break;
     case 'team.create':
-      collection = 'teams'; rows = append(state.teams, command.team, 'command.team.id'); break;
+      collection = 'teams'; rows = append(state.teams, { lifecycle: 'active', ...command.team }, 'command.team.id'); break;
     case 'work.create':
-      collection = 'work'; rows = append(state.work, command.work, 'command.work.id'); break;
+      collection = 'work'; rows = append(state.work, { lifecycle: 'active', ...command.work }, 'command.work.id'); break;
     case 'team.update': {
       const index = position(state.teams, command.teamId, 'command.teamId');
       const current = state.teams[index];
-      const team = command.team;
+      const team = { ...current, ...command.team };
       if (team.id !== command.teamId) throw new PlanError('target', 'command.teamId', 'Keep the team replacement bound to its original identity.');
-      if (team.label === current.label && sameIds(team.personIds, current.personIds)) return { projection: base };
+      if (team.lifecycle === current.lifecycle && team.label === current.label && sameIds(team.personIds, current.personIds)) return { projection: base };
       collection = 'teams'; rows = update(state.teams, index, team); break;
     }
     case 'team.members.replace': {
@@ -112,6 +125,43 @@ export function prepareAssembly(base, candidate) {
       if (field === 'personIds' ? sameIds(value, current.personIds) : value === current[field]) return { projection: base };
       collection = 'work'; rows = update(state.work, index, { ...current, [field]: value }); break;
     }
+    case 'person.role.replace': {
+      const index = position(state.people, command.personId, 'command.personId');
+      if (JSON.stringify(state.people[index].role) === JSON.stringify(command.role)) return { projection: base };
+      collection = 'people'; rows = update(state.people, index, { ...state.people[index], role: command.role }); break;
+    }
+    case 'person.lifecycle.set':
+    case 'team.lifecycle.set':
+    case 'work.lifecycle.set': {
+      const kind = command.type.split('.')[0];
+      const field = `${kind}Id`;
+      collection = kind === 'person' ? 'people' : kind === 'team' ? 'teams' : 'work';
+      const index = position(state[collection], command[field], `command.${field}`);
+      const current = state[collection][index];
+      if (current.lifecycle === command.lifecycle) return { projection: base };
+      rows = update(state[collection], index, { ...current, lifecycle: command.lifecycle }); break;
+    }
+    case 'contribution.create':
+      collection = 'contributions'; rows = append(state.contributions, command.contribution, 'command.contribution.id'); break;
+    case 'connection.create':
+      collection = 'connections'; rows = append(state.connections, command.connection, 'command.connection.id'); break;
+    case 'contribution.update':
+    case 'connection.update': {
+      const kind = command.type.split('.')[0];
+      collection = `${kind}s`;
+      const field = `${kind}Id`;
+      const index = position(state[collection], command[field], `command.${field}`);
+      const row = command[kind];
+      if (row.id !== command[field]) throw new PlanError('target', `command.${field}`, 'Keep the replacement bound to its original record.');
+      if (JSON.stringify(row) === JSON.stringify(state[collection][index])) return { projection: base };
+      rows = update(state[collection], index, row); break;
+    }
+    case 'connection.status.set': {
+      const index = position(state.connections, command.connectionId, 'command.connectionId');
+      const current = state.connections[index];
+      if (current.status === command.status) return { projection: base };
+      collection = 'connections'; rows = update(state.connections, index, { ...current, status: command.status }); break;
+    }
     case 'collection.reorder':
       collection = command.collection;
       rows = reordered(state[collection], command.ids);
@@ -119,7 +169,9 @@ export function prepareAssembly(base, candidate) {
       break;
     case 'person.remove':
     case 'team.remove':
-    case 'work.remove': {
+    case 'work.remove':
+    case 'contribution.remove':
+    case 'connection.remove': {
       const [targetCollection, targetField] = REMOVAL_TARGETS.get(command.type);
       const next = removal(base, targetCollection, command[targetField], targetField);
       if (next.error) return next;

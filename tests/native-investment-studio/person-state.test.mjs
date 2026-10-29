@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan, preparePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
+  change: null, qualityId: null, aiId: null, decisionId: null });
+
 
 const PERSON = 'product-one';
 function person(projection, overrides = {}, id = PERSON) {
@@ -43,10 +46,10 @@ for (const [workCount, expectedDelta] of [[1, 300], [8, 2400], [25, 7500]]) {
 test('a person shared by teams contributes one funded account and both funding pools once', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 120, rateCentsPerHour: 10000 },
-    { id: 'two', label: 'Two', fundedMinutes: 60, rateCentsPerHour: 5000 },
+    { id: 'one', label: 'One', fundedMinutes: 120, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'two', label: 'Two', fundedMinutes: 60, rateCentsPerHour: 5000, role: unassignedRole(), lifecycle: 'active' },
   ];
-  plan.teams = ['first', 'second'].map(id => ({ id, label: id, personIds: ['one', 'two'] }));
+  plan.teams = ['first', 'second'].map(id => ({ id, label: id, personIds: ['one', 'two'], lifecycle: 'active' }));
   const work = (id, teamId, personId, minutes, funding) => ({ ...plan.work[0], id, teamId, personIds: [personId], minutesPerOccurrence: minutes, occurrences: 1, funding });
   plan.work = [work('one-allocation', 'first', 'one', 60, 'allocated'), work('one-purchase', 'second', 'one', 30, 'additional'),
     work('two-allocation', 'second', 'two', 15, 'allocated'), work('two-purchase', 'first', 'two', 60, 'additional')];
@@ -66,8 +69,8 @@ test('a person shared by teams contributes one funded account and both funding p
 
 test('person previews preserve pool rounding when displayed work lines round independently', () => {
   const plan = createExamplePlan();
-  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1 }];
-  plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one'] }];
+  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active' }];
+  plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one'], lifecycle: 'active' }];
   plan.work = ['allocated', 'additional'].flatMap(funding => [0, 1].map(index => ({ ...plan.work[0], id: `${funding}-${index}`,
     personIds: ['one'], minutesPerOccurrence: 15, occurrences: 1, funding })));
   plan.practices = [];
@@ -85,11 +88,11 @@ test('person previews preserve pool rounding when displayed work lines round ind
 test('unknown rate, explicit zero, and zero funded time retain different pricing meanings', () => {
   const studio = createStudio();
   const initial = studio.read();
-  const missing = studio.updatePerson(PERSON, person(initial, { rateCentsPerHour: null }), initial);
+  const missing = studio.updatePerson(PERSON, person(initial, { rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' }), initial);
   assert.equal(missing.ok, true);
   assert.equal(missing.projection.result.plannedCommitmentCents, null);
   assert.equal(missing.projection.result.knownCommitmentCents, 90000);
-  const zero = studio.updatePerson(PERSON, person(missing.projection, { rateCentsPerHour: 0 }), missing.projection);
+  const zero = studio.updatePerson(PERSON, person(missing.projection, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }), missing.projection);
   assert.equal(zero.ok, true);
   assert.equal(zero.projection.result.plannedCommitmentCents, 90000);
   assert.equal(zero.projection.result.standing, 'priced');
@@ -156,17 +159,17 @@ test('person commands validate every field before treating a candidate as unchan
 test('an individually valid rate whose aggregate exceeds safe money retains the last priced plan', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour },
-    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 0 },
+    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' },
   ];
-  plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two'] }];
+  plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two'], lifecycle: 'active' }];
   plan.work = Array.from({ length: LIMITS.work }, (_, index) => ({ ...plan.work[0], id: `work-${index}`,
     personIds: ['one', 'two'], minutesPerOccurrence: LIMITS.minutesPerOccurrence, occurrences: LIMITS.occurrences }));
   plan.practices = [];
   const studio = createStudio(plan);
   const before = studio.read();
   assert.equal(before.result.plannedCommitmentCents, 6144000000000000);
-  const candidate = person(before, { rateCentsPerHour: LIMITS.rateCentsPerHour }, 'two');
+  const candidate = person(before, { rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active' }, 'two');
   held(studio.previewPerson('two', candidate, before), before, 'money-overflow');
   held(studio.updatePerson('two', candidate, before), before, 'money-overflow');
   assert.strictEqual(studio.capture(), before);
