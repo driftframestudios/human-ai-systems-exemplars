@@ -93,7 +93,7 @@ async function setDuration(page, hours, minutes) {
 }
 
 async function assertCompactControls(page) {
-  const observations = await panel(page).locator('[data-native-configure] input').evaluateAll(inputs => inputs.map(input => {
+  const observations = await panel(page).locator('[data-native-configure] input[inputmode]').evaluateAll(inputs => inputs.map(input => {
     const style = getComputedStyle(input);
     const box = input.getBoundingClientRect();
     const context = document.createElement('canvas').getContext('2d');
@@ -187,7 +187,7 @@ async function assertFormContainerSeams(page) {
 }
 
 async function assertInputPositionsThroughFeedback(page, capture = null) {
-  const positions = () => panel(page).locator('[data-native-configure] input').evaluateAll(inputs => inputs.map(input => ({
+  const positions = () => panel(page).locator('[data-native-configure] input[inputmode]').evaluateAll(inputs => inputs.map(input => ({
     name: input.name, top: input.getBoundingClientRect().top + scrollY,
   })));
   const baseline = await positions();
@@ -199,8 +199,8 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
         `${state} preserves ${actual[index].name} document position: ${JSON.stringify({ before: baseline[index], after: actual[index] })}`);
     }
     const order = await panel(page).evaluate(root => {
-      const lastInputBottom = Math.max(...[...root.querySelectorAll('[data-native-configure] input')].map(input => input.getBoundingClientRect().bottom));
-      return { lastInputBottom, feedbackTop: root.querySelector('.native-coordination__feedback').getBoundingClientRect().top,
+      const lastInputBottom = Math.max(...[...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().bottom));
+      return { lastInputBottom, feedbackTop: root.querySelector('.native-session__quantity-feedback').getBoundingClientRect().top,
         previewTop: root.querySelector('.native-coordination__preview').getBoundingClientRect().top };
     });
     assert.ok(order.feedbackTop >= order.lastInputBottom && order.previewTop >= order.lastInputBottom,
@@ -431,7 +431,7 @@ for (const engine of names) {
       const form = root.querySelector('form'), style = getComputedStyle(form);
       return { contentWidth: form.getBoundingClientRect().width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight),
         threshold: 31 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
-        tops: [...root.querySelectorAll('[data-native-configure] input')].map(input => input.getBoundingClientRect().top) };
+        tops: [...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().top) };
     });
     assert.ok(wide.contentWidth >= wide.threshold, `the wide fixture reaches the three-control row: ${JSON.stringify(wide)}`);
     assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < .1, 'all three wide inputs share one top alignment');
@@ -457,10 +457,8 @@ for (const engine of names) {
       if ([833, 832, 831].includes(width)) {
         const agreement = await panel(page).locator('.native-coordination__agreement').boundingBox();
         const configuration = await configure.boundingBox();
-        if (width >= 832) {
-          assert.ok(configuration.x >= agreement.x + agreement.width, 'wide agreement and editor share a reading row');
-          assert.ok(Math.abs(configuration.y - agreement.y) < 2, 'the paired groups begin together');
-        } else assert.ok(configuration.y >= agreement.y + agreement.height, 'the narrow editor follows the agreement in document order');
+        assert.ok(configuration.y >= agreement.y + agreement.height, 'the complete session editor follows its accepted summary');
+        assert.ok(configuration.width >= agreement.width - 1, 'the complete form receives the chapter width');
       }
       if (width === 320) {
         if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-320.png') });
@@ -480,9 +478,8 @@ for (const engine of names) {
     await page.setViewportSize({ width: 390, height: 1000 });
     await expect(input(page)).toHaveValue('45');
     await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
-    await input(page, 'occurrences').focus();
+    await panel(page).locator('[data-native-configure] select[name="status"]').focus();
     const nextControl = engine === 'webkit' ? 'Alt+Tab' : 'Tab';
-    await input(page, 'occurrences').press(nextControl);
     await page.keyboard.press(nextControl);
     await expect(action(page, 'apply')).toBeFocused();
     assert.notEqual(await action(page, 'apply').evaluate(node => getComputedStyle(node).outlineStyle), 'none', 'keyboard focus retains a visible outline in forced colors');
@@ -594,7 +591,7 @@ for (const engine of names) {
     const page = await open(t, engine, { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     await expect(panel(page)).toBeVisible();
     await assertAmount(page, '$1,200.00');
-    for (const node of await panel(page).locator('button,input').all()) assert.equal(await node.isVisible(), false, 'inactive editing controls stay outside the static reading');
+    for (const node of await panel(page).locator('button,input').all()) assert.equal(await node.isVisible(), false, `Inactive editing controls stay outside the static reading: ${await node.evaluate(element => element.outerHTML)}`);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toBeVisible();
     assert.equal(await page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 1);
     await assertContained(page);

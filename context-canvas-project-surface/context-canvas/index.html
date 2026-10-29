@@ -189,25 +189,36 @@
             <ul data-native-saved-list></ul>
           </details>
         </header>
-        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-session-title">
+        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" data-native-session-editor aria-labelledby="native-session-title">
+          <div class="native-session__toolbar" data-native-session-toolbar hidden>
+            <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Weekly working session</option></select></div>
+            <div class="native-coordination__actions"><button type="button" data-session-action="create" disabled>Add session</button><button type="button" data-session-action="remove" disabled>Remove session</button></div>
+          </div>
           <div class="native-coordination__agreement">
             <h3 id="native-session-title" data-native-agreement>Weekly working session</h3>
             <div class="native-coordination__connection" aria-label="Working session participants">
               <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
               <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
-              <span><i aria-hidden="true"></i>Shared review <small data-native-participants>4 people</small></span>
+              <span><i aria-hidden="true"></i>Participants <small data-native-participants>4 people</small></span>
             </div>
             <p class="native-coordination__effort" data-native-effort>4 people × 30 min per session × 6 working sessions = 12 h of participant effort.</p>
+            <p class="native-coordination__hint" data-native-session-standing>Planned · Extra investment</p>
           </div>
           <details class="native-coordination__configuration" data-native-configure>
             <summary>Session settings</summary>
             <div class="native-coordination__recovery" data-native-recovery hidden>
               <p>The plan changed. Your saved values are shown below.</p>
               <p data-native-current></p>
-              <div class="native-coordination__actions"><button type="button" data-action="review">Review saved edits</button><button type="button" data-action="use-current">Use current values</button><button type="button" data-action="discard">Discard saved edits</button></div>
+              <div class="native-coordination__actions"><button type="button" data-action="review">Review saved edits</button><button type="button" data-action="use-current">Use current values</button><button type="button" data-session-action="freshId" hidden>Use these entries for a new session</button><button type="button" data-action="discard">Discard saved edits</button></div>
             </div>
             <form novalidate>
               <fieldset disabled aria-label="Working session settings">
+                <div data-native-session-fields>
+                <div class="native-session__settings-grid">
+                  <div><label for="native-session-name">Session name</label><input id="native-session-name" name="label" type="text" value="Weekly working session" maxlength="120" autocomplete="off" aria-describedby="native-session-name-error"></div>
+                  <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="delivery">Product and Engineering</option></select></div>
+                </div>
+                <div class="native-coordination__feedback native-session__name-feedback" aria-label="Session name and team feedback"><p class="native-coordination__error" id="native-session-name-error" data-native-error="label"></p><p class="native-coordination__error" id="native-session-team-error" data-native-error="teamId"></p></div>
                 <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
                   <p id="native-duration-label" class="native-coordination__control-title">Time per person, per session</p>
                   <output class="native-coordination__duration-display" for="native-hours native-minutes" aria-label="Draft time per person in one working session" aria-live="off">
@@ -246,12 +257,29 @@
                     <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
                   </div>
                 </div>
-                <div class="native-coordination__feedback" role="group" aria-label="Quantity feedback">
+                <div class="native-coordination__feedback native-session__quantity-feedback" role="group" aria-label="Quantity feedback">
                   <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
                   <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
                   <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
                 </div>
-                <div class="native-coordination__preview">
+                <div class="native-session__participant-group" role="group" aria-labelledby="native-session-people-label">
+                  <p id="native-session-people-label" class="native-coordination__control-title">Participants</p>
+                  <p class="native-coordination__hint">Choose people from this team.</p>
+                  <ul class="native-session__members" data-native-session-members aria-describedby="native-session-people-error"></ul>
+                  <p class="native-coordination__hint" data-native-session-people-empty hidden><a href="#native-studio-people">Add people in People and teams.</a></p>
+                  <p class="native-coordination__error" id="native-session-people-error" data-native-error="personIds"></p>
+                </div>
+                <div class="native-session__settings-grid">
+                  <div><label for="native-session-funding">Funding</label><select id="native-session-funding" name="funding" aria-describedby="native-session-funding-error"><option value="additional">Extra investment</option><option value="allocated">Included in funded time</option></select></div>
+                  <div><label for="native-session-status">Status</label><select id="native-session-status" name="status" aria-describedby="native-session-status-error native-session-pause-note"><option value="planned">Planned</option><option value="paused">Paused</option></select></div>
+                </div>
+                <p class="native-coordination__hint" id="native-session-pause-note" data-native-session-pause-note hidden>Paused sessions keep their planned time and cost.</p>
+                <div class="native-coordination__feedback native-session__choice-feedback" aria-label="Funding and status feedback"><p class="native-coordination__error" id="native-session-funding-error" data-native-error="funding"></p><p class="native-coordination__error" id="native-session-status-error" data-native-error="status"></p></div>
+                </div>
+                <p class="native-session__confirm" data-native-session-confirm hidden></p>
+                <ul class="native-session__dependencies" data-native-session-dependencies hidden></ul>
+                <p class="native-coordination__error native-session__general-error" data-native-session-error></p>
+                <div class="native-coordination__preview" data-native-session-preview>
                   <span class="native-coordination__plate" data-native-preview-standing>Draft total · USD</span>
                   <output data-native-preview-total aria-live="off" aria-label="Draft total">$1,200.00</output>
                   <p class="native-coordination__hint" data-native-preview-note>Apply to update the total.</p>
@@ -260,7 +288,7 @@
               </fieldset>
             </form>
           </details>
-          <p class="native-coordination__status" data-native-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <p class="native-coordination__status" data-native-status data-native-session-status role="status" aria-live="polite" aria-atomic="true"></p>
           <details class="native-coordination__trace" data-native-trace>
             <summary>Cost breakdown</summary>
             <div class="native-coordination__trace-body">

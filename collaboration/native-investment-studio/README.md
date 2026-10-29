@@ -37,6 +37,7 @@ and integration authority; publication remains held.
   and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
   shared by duration edits, people, purpose, assembly forms, and full session forms.
+- `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -944,7 +945,7 @@ prove JavaScript media and exact module bytes. This module
 group leaves the existing iframe package inputs with their current owners.
 
 `mountCoordinationPanel(root, { studio, workId })` binds one cooperative Studio
-owner and working session to one root. Calling it again returns the mounted receiver.
+owner and preferred working session to one root. Calling it again returns the mounted receiver.
 Its `read`, `refresh`, and `dispose` methods support controlled integration and
 testing. A host that replaces accepted state calls `refresh`; the controller
 then shows the new amount alongside any retained stale draft. Adjacent recovery
@@ -959,11 +960,13 @@ history restoration; an actual departure disposes it.
 
 Mounting opens Session settings with a fresh draft. Its native summary handles
 later opening and closing; Cancel returns focus to that summary.
-Raw text and circular step buttons update one three-field draft. The in-card
+`work-controller.mjs` owns one complete session form: name, team, ordered
+participants, duration, count, funding and status. Raw text and circular step
+buttons share the `editing.session` lease with every other chapter. The in-card
 draft investment updates from complete preparation while the amp head retains
 the accepted amount. Explicit Apply commits one complete row, keeps Session settings
 open, begins a fresh draft, and preserves focus on Apply. Applying valid
-unchanged quantities preserves the accepted revision. Cancel retains the
+unchanged values preserves the accepted revision and editing lease. Cancel retains the
 accepted investment and closes Session settings. Composition input settles before
 preview or Apply. Closing the native configuration disclosure retains the
 draft, and responsive changes reuse the same elements and focus. This
@@ -979,17 +982,19 @@ length, calendar placement, and per-sprint allocation need a later timing
 contract. Integer-cent formatting retains exact cents through the admitted
 monetary range.
 
-One new accepted projection costs O(W + T + P) for receiver lookups and person
-trace construction, in addition to the model's complete preparation. Raw edits
-render three bounded fields in O(1), plus complete preparation for a changed
-valid preview; the accepted trace is retained until its projection changes.
+One new accepted projection costs O(W + T + P + A) for receiver lookups and person
+trace construction, where A is attached practices, in addition to the model's complete preparation. Raw text edits update a fixed set of fields; comparing
+ordered participant selections costs O(M), where M is selected people. A change
+to membership, team or accepted projection rebuilds participant choices in
+O(P + M). A changed valid draft earns one cached complete preparation; the
+accepted trace stays intact until its projection changes.
 The receiver retains one rendered projection, one shared draft owner with one cached
 preview, and one listener group. Issue #641 owns runtime cost observations and
 any later optimization decision.
 
 Industrial Ink supplies the dark amount plane and hard down-right shadows;
 About's Soft Color Blocking palette supplies paper controls and trace cards.
-The 52rem viewport seam pairs the session summary and settings. The form’s
+The complete session form uses the chapter width. The form’s
 20rem and 31rem container seams arrange its three quantity controls into two
 rows and then one row. Each input sits above its circular minus/plus buttons at
 every width. Below 12rem of available form width, the duration display stacks
@@ -997,10 +1002,34 @@ its hours and minutes. All three
 inputs display five digits with padding, including an accidental excess zero
 that the visitor needs to correct. A combined hours/minutes display projects
 the same draft into a compact radio-style reading. The duration group owns its
-short explanation; the session-count hint sits beside its count. Variable
-validation feedback and the investment preview follow all inputs, so their
-wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
+short explanation; the session-count hint sits beside its count. Quantity
+feedback follows the three numeric controls, preserving their document positions
+as messages wrap. Name/team and funding/status feedback follow their own rows;
+the investment preview follows the complete form. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
+The scriptless route keeps the static example and complete Studio link while
+the About fallback stylesheet hides controls that require a mounted editor.
+
+Session selection retains each unfinished edit under its own stable target.
+Changing chapters parks that target and returning resumes it. Creation offers
+all admitted people and identifies those outside the selected team; validation
+keeps the current membership contract explicit. Changing the team retains the
+selected people for correction. Paused sessions retain declared effort and
+cost. Included funding attributes the session to funded time while extra
+funding contributes to the commitment.
+
+Removal shows any practice that still references the session. An empty work
+collection keeps Add session available. Creation collisions offer a fresh ID
+with the entered values intact. Cancellation closes the settings and returns
+focus to the entry control; successful removal returns focus to selection or
+Add session. Callback guards preserve a successor editor's focus and resources.
+
+`session.browser.mjs` owns complete-session arithmetic, draft selection across
+chapters, stale recovery, reference-aware removal, empty-plan entry and
+responsive controls. The existing coordination browser route continues to
+exercise duration entry, composition, stale replacement and teardown against
+the complete form. The legacy duration adapter remains an independently
+exercised source API.
 
 ## People and Teams receiver
 
@@ -1273,6 +1302,7 @@ npm run test:native-investment-studio:team-browser
 npm run test:native-investment-studio:chapters-browser
 npm run test:native-investment-studio:investment-browser
 npm run test:native-investment-studio:assembly-browser
+npm run test:native-investment-studio:session-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```
