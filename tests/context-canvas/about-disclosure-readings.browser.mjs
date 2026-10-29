@@ -28,11 +28,16 @@ const folios = [
   ] },
 ];
 const promptRows = ['Source diet', 'Desired state', 'Role boundary', 'Input sanitation', 'Working set'];
+const studioRows = ['Internal investment', 'Customer implementation', 'Commercial cohort', 'Service and operational value', 'Capital allocation'];
+const studioDisclosure = {
+  closed: 'Show the static counterpart table',
+  opened: 'Hide the static counterpart table',
+};
 const promptDisclosure = {
   closed: 'Show the static five-condition overview and semantic table',
   opened: 'Hide the static five-condition overview and semantic table',
 };
-const disclosureSelector = '.about-folio-disclosure, .about-prompt-static';
+const disclosureSelector = '.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static';
 const engines = { chromium, firefox, webkit };
 const browsers = new Map();
 let server;
@@ -67,6 +72,7 @@ async function assertMembership(page) {
     assert.deepEqual(await records.evaluateAll(nodes => nodes.map(node => node.dataset.sourceId)), definition.records.map(record => record[0]));
     assert.deepEqual(await records.locator('h4').allTextContents(), definition.records.map(record => record[1]));
   }
+  assert.deepEqual(await page.locator('.about-studio-counterpart tbody th[scope="row"]').allTextContents(), studioRows);
   assert.deepEqual(await page.locator('.about-prompt-static tbody th[scope="row"]').allTextContents(), promptRows);
 }
 
@@ -117,6 +123,8 @@ async function assertCompletePrint(page) {
   assert.equal(await page.evaluate(() => matchMedia('print').matches), true);
   await assertMembership(page);
   for (const definition of folios) await assertRecords(page, definition);
+  await assertVisibleText(page.locator('.about-studio-counterpart caption, .about-studio-counterpart th, .about-studio-counterpart td'), 'Studio counterpart print reading');
+  assert.equal(await page.locator('.about-studio-counterpart tbody tr').count(), 5);
   await assertVisibleText(page.locator('.about-prompt-static caption, .about-prompt-static th, .about-prompt-static td'), 'five-condition print reading');
   assert.equal(await page.locator('.about-prompt-static tbody tr').count(), 5);
 }
@@ -162,15 +170,33 @@ async function exercisePromptAction(page) {
   await assertSummary(detail, promptDisclosure, false); await assertPromptReading(page, false);
 }
 
+async function assertStudioReading(page, visible) {
+  assert.deepEqual(await page.locator('.about-studio-counterpart tbody th[scope="row"]').allTextContents(), studioRows);
+  const rows = await page.locator('.about-studio-counterpart tbody tr').evaluateAll(nodes => nodes.map(node => {
+    const box = node.getBoundingClientRect();
+    return node.checkVisibility() && box.width > 0 && box.height > 0;
+  }));
+  assert.deepEqual(rows, Array(5).fill(visible), 'the Studio action controls the complete five-row counterpart');
+}
+
+async function exerciseStudioAction(page) {
+  const detail = page.locator('.about-studio-counterpart');
+  await assertSummary(detail, studioDisclosure, false); await assertStudioReading(page, false);
+  await toggleNative(page, detail);
+  await assertSummary(detail, studioDisclosure, true); await assertStudioReading(page, true);
+  await toggleNative(page, detail);
+  await assertSummary(detail, studioDisclosure, false); await assertStudioReading(page, false);
+}
+
 for (const engine of Object.keys(engines)) {
-  test(`${engine}: scriptless About opens every Career and Quality record through native controls`, { timeout: 60000 }, async () => {
+  test(`${engine}: scriptless About opens each native disclosure through its own control`, { timeout: 60000 }, async () => {
     for (const sample of [{ width: 1440, font: 16 }, { width: 390, font: 16 }, { width: 390, font: 32 }]) {
       const observation = await session(engine, { javaScriptEnabled: false, viewport: { width: sample.width, height: 1000 } });
       const { page } = observation;
       try {
         await page.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, sample.font);
         await assertMembership(page);
-        assert.deepEqual(await states(page), [false, false, false], 'source reading starts with native collapsed disclosures');
+        assert.deepEqual(await states(page), [false, false, false, false], 'source reading starts with native collapsed disclosures');
         for (const definition of folios) {
           const detail = folio(page, definition).locator('.about-folio-disclosure');
           await assertSummary(detail, definition, false);
@@ -184,6 +210,7 @@ for (const engine of Object.keys(engines)) {
           }
           await toggleNative(page, detail); await assertSummary(detail, definition, false);
         }
+        await exerciseStudioAction(page);
         await exercisePromptAction(page);
         if (sample.width === 1440) {
           const summary = page.locator('.about-folio--career details > summary');
@@ -200,7 +227,7 @@ for (const engine of Object.keys(engines)) {
     const observation = await session(engine);
     const { page } = observation;
     try {
-      await assertMembership(page); assert.deepEqual(await states(page), [false, false, false]);
+      await assertMembership(page); assert.deepEqual(await states(page), [false, false, false, false]);
       for (const sample of [{ width: 1440, font: 16 }, { width: 390, font: 16 }, { width: 390, font: 32 }]) {
         await page.setViewportSize({ width: sample.width, height: 1000 });
         await page.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, sample.font);
@@ -209,6 +236,7 @@ for (const engine of Object.keys(engines)) {
           await toggleNative(page, detail); await assertSummary(detail, definition, true); await assertRecords(page, definition);
           await toggleNative(page, detail); await assertSummary(detail, definition, false);
         }
+        await exerciseStudioAction(page);
         await exercisePromptAction(page);
       }
       await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
@@ -217,7 +245,7 @@ for (const engine of Object.keys(engines)) {
       await toggleNative(page, page.locator('.about-prompt-static'));
       await assertSummary(page.locator('.about-prompt-static'), promptDisclosure, true);
       const accepted = await states(page);
-      assert.deepEqual(accepted, [true, false, true], 'the recovery fixture includes both screen choices');
+      assert.deepEqual(accepted, [true, false, false, true], 'the recovery fixture includes both screen choices');
       for (let cycle = 0; cycle < 2; cycle += 1) {
         await page.emulateMedia({ media: 'print' }); await assertCompletePrint(page);
         assert.deepEqual(await states(page), accepted, 'print presentation preserves native disclosure choices');
@@ -229,19 +257,19 @@ for (const engine of Object.keys(engines)) {
     } finally { await observation.close(); }
   });
 
-  test(`${engine}: About print includes all thirteen records and five conditions with scripting enabled or unavailable`, { timeout: 60000 }, async () => {
+  test(`${engine}: About print includes all records and both five-row static tables with scripting enabled or unavailable`, { timeout: 60000 }, async () => {
     for (const javaScriptEnabled of [true, false]) {
       const observation = await session(engine, { javaScriptEnabled, viewport: { width: 816, height: 1056 } });
       const { page } = observation;
       try {
-        const original = await states(page); assert.deepEqual(original, [false, false, false]);
+        const original = await states(page); assert.deepEqual(original, [false, false, false, false]);
         await page.emulateMedia({ media: 'print' }); await assertCompletePrint(page);
         assert.deepEqual(await states(page), original);
         if (engine === 'webkit' && !javaScriptEnabled) {
           await page.locator('[data-source-id="quality-case-7"]').scrollIntoViewIfNeeded();
           await page.screenshot({ path: join(captureRoot, 'scriptless-print-quality-continuation.png') });
         }
-        const fault = await injectStyle(page, '@media print { .about-page :is(.about-folio-disclosure, .about-prompt-static)::details-content { content-visibility: hidden !important; } }');
+        const fault = await injectStyle(page, '@media print { .about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static)::details-content { content-visibility: hidden !important; } }');
         try { await assert.rejects(() => assertCompletePrint(page), /native content visibility/); }
         finally { await fault.evaluate(node => node.remove()); }
         await assertCompletePrint(page);

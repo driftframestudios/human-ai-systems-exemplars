@@ -452,6 +452,38 @@ test("the About prose and role table state action and consequence directly", asy
   assert.doesNotMatch(designerEngineerRow, /into engineering handoff/u);
 });
 
+test("the Studio counterpart table starts collapsed inside a native disclosure", async () => {
+  const [html, css] = await Promise.all([
+    readCanvasFile("index.html"),
+    readCanvasFile("styles/routes/about.css"),
+  ]);
+  const disclosure = html.match(
+    /(<details class="about-studio-counterpart">[\s\S]*?<\/details>)/u,
+  )?.[1];
+  assert.ok(disclosure, "Expected the Studio counterpart disclosure");
+  assert.doesNotMatch(
+    disclosure,
+    /<details class="about-studio-counterpart"\s+open/u,
+  );
+  assert.match(disclosure, />Show the static counterpart table<\/span>/u);
+  assert.match(disclosure, />Hide the static counterpart table<\/span>/u);
+  assert.match(
+    disclosure,
+    /<div class="about-table-wrap" tabindex="0" role="region" aria-label="Cross-Functional Investment Studio static counterpart; scroll horizontally">/u,
+  );
+  assert.match(
+    disclosure,
+    /<table class="about-role-table" data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis">/u,
+  );
+  const body = disclosure.match(/<tbody>([\s\S]*?)<\/tbody>/u)?.[1];
+  assert.ok(body, "Expected the complete Studio counterpart table body");
+  assert.equal(body.match(/<tr data-label=/gu)?.length, 5);
+  assert.match(
+    css,
+    /:is\(\.about-folio-disclosure, \.about-studio-counterpart, \.about-prompt-static\)::details-content\s*\{\s*content-visibility:\s*visible;/su,
+  );
+});
+
 test("the About prompt-side readings resolve through public Registry bindings", async () => {
   const [html, bindingSource] = await Promise.all([
     readCanvasFile("index.html"),

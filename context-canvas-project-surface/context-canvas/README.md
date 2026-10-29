@@ -72,13 +72,16 @@ while the height channel is unavailable.
 With scripting disabled, About retains the Explorer's native static-overview
 disclosure so visitors can open its complete five-condition reading by keyboard.
 
-Career and Quality also keep their native disclosure summaries available with
-scripting disabled. All three summaries pair a closed-state “Show” action with
+Career, Quality, the Studio’s static counterpart table, and the Prompt
+Conditions overview keep their native disclosure summaries available with
+scripting disabled. All four summaries pair a closed-state “Show” action with
 an open-state “Hide” action; the folios name the additional record count.
-`styles/routes/about-noscript.css` owns that fallback;
-`styles/routes/about.css` owns the three disclosures' print presentation. Its
-`::details-content` rule reveals all thirteen records and the five-condition
-table for print while preserving the visitor's screen `open` attributes. This
+`styles/routes/about-noscript.css` swaps the interactive Prompt Explorer for
+its native overview; `styles/routes/about.css` owns all four disclosure
+presentations. Its
+`::details-content` rule reveals all thirteen records, the five-row Studio
+counterpart, and the five-condition table for print while preserving the
+visitor's screen `open` attributes. This
 follows the existing Visualization Atlas print approach and uses the authored
 records directly. The focused browser checks observe native visibility and text
 fragments because the current Playwright WebKit visibility helper treats closed
