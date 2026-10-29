@@ -33,7 +33,7 @@ and integration authority; publication remains held.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, its cached proposal, and the pure numeric codec
   reused by person creation.
-- `command-draft.mjs` owns the closed assembly, session, role and contribution form families, ordered raw selections,
+- `command-draft.mjs` owns the closed assembly, session, role, contribution and connection form families, ordered raw selections,
   stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
@@ -691,6 +691,77 @@ retained captures, atomic reassignment, stale publication, and no-op history.
 It establishes canonical source behavior; the next coherent control group
 owns browser observations. Source ownership remains with `contract.mjs`,
 `commands.mjs`, `state.mjs` and the finite frozen `roles.mjs` catalogue.
+
+## Connection draft adapter
+
+`command-draft.mjs` adds the finite `CONNECTION_FORMS` family to its existing
+form adapter: `connection.create`, `connection.update`, and
+`connection.remove`. `createConnectionDraftAdapter(studio)` uses the same
+raw-ownership, preview cache, exact-base Apply, recovery, and disposal path as
+the other form families. Canonical `connection.*` commands retain reference,
+membership, cost, and accepted-history authority.
+
+`makeConnectionTarget(form, id)` and `describeConnectionTarget(key)` bind a
+form to one record, such as `connection.update:handoff`. A connection draft
+reports this form key in `draft.connectionId` and its plain record ID in
+`draft.targetId`. `copyConnectionRaw` and `sameConnectionRaw` support the
+coordinator's owned snapshots and ordered comparisons.
+
+Creation and update use seven raw fields:
+
+| Field | Raw bound | Canonical meaning |
+| --- | --- | --- |
+| `senderTeamId`, `receiverTeamId` | 64 UTF-16 units each | Required, distinct existing team identities |
+| `receiverPersonId` | 64 UTF-16 units | Chosen receiving-team member, or blank for unassigned |
+| `sharedObject` | 600 UTF-16 units | Required trimmed object or decision description |
+| `responseExpectation` | 600 UTF-16 units | Trimmed expected response, or blank for unspecified |
+| `workIds` | 256 ordered, unique identifiers of at most 64 units each | Existing supporting sessions |
+| `status` | 16 UTF-16 units | The finite `active` or `paused` choice |
+
+Text bounds apply before trimming. `setText` accepts bounded raw strings;
+`setIds(token, 'workIds', ids)` owns a detached dense ordered list. Invalid raw
+choices remain visible for correction. A receiving-team change retains the
+selected person, so the visitor can make an explicit membership correction.
+The canonical `team-membership` diagnostic names a receiving person outside
+that group. Retired people and teams retain their identities and canonical
+observations. Referencing work, pausing an exchange, and removing a connection
+preserve the investment carried by existing work records.
+
+`editing.connection` contributes one port to the existing draft coordinator.
+Its `begin`, `setText`, `setIds`, `validate`, `preview`, `apply`, `cancel`,
+`review`, `useCurrent`, `create`, and `freshId` methods share the single active
+lease and the same eight active/saved slots used by every other family.
+`create('connection.create', expected)` allocates `connection-N` against both
+accepted records and held creation drafts. A full collection holds creation
+before disturbing another active edit. Import collisions retain raw text and
+ordered work references for deliberate fresh-ID recovery. Removed targets
+remain selectable for inspection and global discard; Apply still requires a
+current target.
+
+Preview reuse follows the active raw revision and exact accepted projection.
+An equal-payload import, Undo/Redo, or another accepted edit retires the earlier
+base. Review receives the projection shown to the visitor; a newer unseen
+projection keeps that recovery action held. Use current restores all seven
+fields from accepted state. Cancellation and disposal release the same owned
+lease used by the other families. Removal carries no editable raw fields and
+parks no saved draft.
+
+A maximal connection raw record contains at most 17,792 UTF-16 units, including
+256 identifiers, plus 256 reference slots and fixed metadata. Eight maximal
+connection drafts therefore retain at most 142,336 units and 2,048 reference
+slots; other families consume that same shared slot budget. Selection indexes
+rebuild once per accepted projection. An actual preview follows canonical
+whole-plan admission and calculation, while an unchanged cached preview reuses
+its immutable projection. Ordered work copying and equality cost O(W) with
+W bounded by 256; catalogue and field descriptors remain module-owned values.
+
+`connection-draft.test.mjs` observes fields, membership, cache and ownership,
+exact/one-over bounds, literal accounting, pause/removal, no-op, stale imports,
+and reentrant callback completion. `connection-editing.test.mjs` observes the
+shared lease and exact eight-slot boundary, identity collisions, displayed-base
+recovery, removed-target inspection/discard, full-collection admission and
+cleanup. The native patch-bay receiver maps both diagram and list selection to
+the same connection target and supplies the focused browser observations.
 
 ## Coordination template proposals
 
