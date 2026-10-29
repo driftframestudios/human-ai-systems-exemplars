@@ -163,8 +163,8 @@ for (const engine of names) {
     await chapter(page, 'people').click();
     await expect(purpose(page)).not.toHaveAttribute('open', '');
     await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
-    await root(page).locator('[data-person-id="product-one"]').click();
-    await root(page).locator('input[name="ratePerHour"]').fill('105');
+    await root(page).locator('[data-team-roster] [data-person-id="product-one"]').click();
+    await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,215.00');
     await purpose(page).locator('summary').click();
@@ -384,4 +384,97 @@ for (const engine of names) {
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toHaveCount(1);
     await expect(page.locator('table[data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis"]')).toHaveCount(1);
   });
+  test(`${engine}: Purpose receiver preserves successor focus, text and accepted publication`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountPurposePanel } = await import('/collaboration/native-investment-studio/purpose-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.investmentFixture.controller.dispose(); window.investmentFixture.editing.dispose();
+      const root = document.querySelector('[data-native-purpose]');
+      const status = () => root.querySelector('[data-purpose-status]');
+      const field = name => root.querySelector(`[name="${name}"]`);
+      const form = () => root.querySelector('form');
+      const observations = [];
+      for (const handoff of ['successor', 'same-receiver']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        const options = { studio, editing, onOpen: () => editing.park(), onClose() {}, onChange() {} };
+        let receiver = mountPurposePanel(root, options), successor;
+        receiver.open();
+        editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Discarded text'); receiver.refresh();
+        root.querySelector('summary').addEventListener('focus', () => {
+          if (handoff === 'successor') { receiver.dispose(); successor = mountPurposePanel(root, options); }
+          (successor ?? receiver).open();
+          editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Newer purpose text');
+          (successor ?? receiver).refresh();
+          status().textContent = 'The newer purpose stays.'; field('accountableOwner').focus();
+        }, { once: true });
+        root.querySelector('fieldset [data-purpose-action="cancel"]').click();
+        observations.push({ handoff, status: status().textContent, focus: document.activeElement.name,
+          raw: editing.purpose.read().draft?.raw.changedAbility, accepted: studio.read().state.purpose.changedAbility });
+        successor?.dispose(); receiver.dispose(); editing.dispose();
+      }
+      for (const event of ['onOpen', 'onChange', 'onClose']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        const beginNewer = () => {
+          if (!armed) return;
+          armed = false; receiver.open();
+          editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Newer callback text'); receiver.refresh();
+          status().textContent = 'The callback owns this edit.'; field('accountableOwner').focus();
+        };
+        receiver = mountPurposePanel(root, { studio, editing,
+          onOpen() { editing.park(); if (event === 'onOpen') beginNewer(); },
+          onChange: event === 'onChange' ? beginNewer : () => {}, onClose: event === 'onClose' ? beginNewer : () => {} });
+        if (event !== 'onOpen') {
+          receiver.open(); editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Accepted purpose'); receiver.refresh();
+        }
+        armed = true;
+        if (event === 'onOpen') receiver.open();
+        else if (event === 'onChange') form().dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        else root.querySelector('fieldset [data-purpose-action="cancel"]').click();
+        observations.push({ event, status: status().textContent, focus: document.activeElement.name,
+          raw: editing.purpose.read().draft?.raw.changedAbility, accepted: studio.read().state.purpose.changedAbility, open: root.open });
+        receiver.dispose(); editing.dispose();
+      }
+      const studio = createStudio();
+      let receiver, armed = false, callbacks = 0;
+      const facade = { ...studio, updatePurpose(...args) {
+        const result = studio.updatePurpose(...args); if (armed) { armed = false; receiver.dispose(); } return result;
+      } };
+      const editing = createDraftCoordinator(facade);
+      receiver = mountPurposePanel(root, { studio: facade, editing, onOpen() {}, onClose() {}, onChange: () => callbacks++ });
+      receiver.open(); editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Accepted once'); receiver.refresh();
+      callbacks = 0; armed = true; form().dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      observations.push({ operation: 'apply', callbacks, active: editing.read().active, accepted: studio.read().state.purpose.changedAbility,
+        open: root.open, disabled: root.querySelector('fieldset').disabled });
+      receiver.dispose(); editing.dispose();
+      {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        receiver = mountPurposePanel(root, { studio, editing, onClose() {}, onChange() {}, onOpen() {
+          if (!armed) return;
+          armed = false;
+          editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'Newer raw text'); receiver.refresh();
+          status().textContent = 'The current purpose edit stays.'; field('accountableOwner').focus();
+        } });
+        receiver.open(); const token = editing.purpose.read().draft.token;
+        armed = true; receiver.open();
+        observations.push({ operation: 'same-token-onOpen', sameToken: editing.purpose.read().draft.token === token,
+          raw: editing.purpose.read().draft.raw.changedAbility, status: status().textContent, focus: document.activeElement.name,
+          accepted: studio.read().state.purpose.changedAbility });
+        receiver.dispose(); editing.dispose();
+      }
+      return observations;
+    });
+    assert.deepEqual(observed.slice(0, 2), ['successor', 'same-receiver'].map(handoff => ({ handoff,
+      status: 'The newer purpose stays.', focus: 'accountableOwner', raw: 'Newer purpose text', accepted: null })));
+    assert.deepEqual(observed.slice(2, 5), ['onOpen', 'onChange', 'onClose'].map(event => ({ event,
+      status: 'The callback owns this edit.', focus: 'accountableOwner', raw: 'Newer callback text',
+      accepted: event === 'onChange' ? 'Accepted purpose' : null, open: true })));
+    assert.deepEqual(observed[5], { operation: 'apply', callbacks: 0, active: null, accepted: 'Accepted once', open: false, disabled: true });
+    assert.deepEqual(observed[6], { operation: 'same-token-onOpen', sameToken: true, raw: 'Newer raw text',
+      status: 'The current purpose edit stays.', focus: 'accountableOwner', accepted: null });
+  });
+
 }

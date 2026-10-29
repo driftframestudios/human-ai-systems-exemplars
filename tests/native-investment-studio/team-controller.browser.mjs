@@ -396,4 +396,111 @@ for (const engine of names) {
     await expect(input(page, 'fundedHours')).toHaveValue('1');
     await expect(accepted(page)).toHaveText('$1,200.00');
   });
+  test(`${engine}: person receiver yields focus and callbacks to the current operation`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const { mountTeamPanel } = await import('/collaboration/native-investment-studio/team-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      mountCoordinationPanel(document.querySelector('[data-native-coordination]')).dispose();
+      const root = document.querySelector('[data-native-team-editor]'); root.hidden = false;
+      const field = name => root.querySelector(`[data-person-configure] [name="${name}"]`);
+      const status = () => root.querySelector('[data-person-status]');
+      const form = () => root.querySelector('[data-person-configure] form');
+      const observations = [];
+      for (const action of ['select', 'apply', 'cancel']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, successor, retired = false, lateCallbacks = 0;
+        receiver = mountTeamPanel(root, { studio, editing, onEditing() { if (retired) lateCallbacks++; } });
+        if (action !== 'select') {
+          receiver.select('product-one');
+          editing.person.setText(editing.person.read().draft.token, 'ratePerHour', '105'); receiver.refresh();
+        }
+        const target = action === 'select' ? field('ratePerHour') : action === 'apply'
+          ? root.querySelector('[data-person-action="apply"]') : root.querySelector('[data-person-configure] summary');
+        target.addEventListener('focus', () => {
+          retired = true; receiver.dispose();
+          successor = mountTeamPanel(root, { studio, editing }); successor.select('product-two', false);
+          status().textContent = 'Successor owns this edit.'; field('fundedHours').focus();
+        }, { once: true });
+        if (action === 'select') receiver.select('product-one');
+        else if (action === 'apply') form().dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        else root.querySelector('[data-person-configure] fieldset [data-person-action="cancel"]').click();
+        observations.push({ action, retired, lateCallbacks, status: status().textContent, focus: document.activeElement.name,
+          selected: editing.read().selected.person, cents: studio.read().result.knownCommitmentCents });
+        successor?.dispose(); receiver.dispose(); editing.dispose();
+      }
+      for (const event of ['focus', 'onBegin', 'onAccepted']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        const replaceOperation = () => {
+          if (!armed) return;
+          armed = false; receiver.select('product-two', false);
+          status().textContent = 'The newer selection stays.'; field('fundedHours').focus();
+        };
+        receiver = mountTeamPanel(root, { studio, editing,
+          onBegin: event === 'onBegin' ? replaceOperation : () => {},
+          onAccepted: event === 'onAccepted' ? replaceOperation : () => {} });
+        if (event === 'onAccepted') {
+          receiver.select('product-one'); editing.person.setText(editing.person.read().draft.token, 'ratePerHour', '105'); receiver.refresh();
+        }
+        if (event === 'focus') field('ratePerHour').addEventListener('focus', replaceOperation, { once: true });
+        armed = true;
+        if (event === 'onAccepted') form().dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        else receiver.select('product-one');
+        observations.push({ event, selected: editing.read().selected.person, status: status().textContent,
+          focus: document.activeElement.name, cents: studio.read().result.knownCommitmentCents });
+        receiver.dispose(); editing.dispose();
+      }
+      for (const operation of ['preview', 'apply']) {
+        const studio = createStudio();
+        let receiver, armed = false, callbacks = 0;
+        const facade = { ...studio,
+          previewPerson(...args) { const result = studio.previewPerson(...args); if (armed && operation === 'preview') { armed = false; receiver.dispose(); } return result; },
+          updatePerson(...args) { const result = studio.updatePerson(...args); if (armed && operation === 'apply') { armed = false; receiver.dispose(); } return result; },
+        };
+        const editing = createDraftCoordinator(facade);
+        receiver = mountTeamPanel(root, { studio: facade, editing, onAccepted: () => callbacks++, onEditing: () => callbacks++ });
+        receiver.select('product-one'); callbacks = 0; armed = true;
+        if (operation === 'preview') { field('ratePerHour').value = '105'; field('ratePerHour').dispatchEvent(new Event('input', { bubbles: true })); }
+        else {
+          editing.person.setText(editing.person.read().draft.token, 'ratePerHour', '105');
+          form().dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+        observations.push({ operation, callbacks, active: editing.read().active?.kind ?? null,
+          saved: editing.read().parked[0]?.raw.ratePerHour ?? null, ready: root.hasAttribute('data-team-ready'),
+          cents: studio.read().result.knownCommitmentCents });
+        receiver.dispose(); editing.dispose();
+      }
+      {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        receiver = mountTeamPanel(root, { studio, editing, onBegin() {
+          if (!armed) return;
+          armed = false;
+          editing.person.setText(editing.person.read().draft.token, 'ratePerHour', '105'); receiver.refresh();
+          status().textContent = 'The current raw edit stays.'; field('fundedHours').focus();
+        } });
+        receiver.select('product-one'); const token = editing.person.read().draft.token;
+        armed = true; receiver.select('product-two');
+        observations.push({ operation: 'same-token-onBegin', selected: editing.read().selected.person,
+          sameToken: editing.person.read().draft.token === token, raw: editing.person.read().draft.raw.ratePerHour,
+          status: status().textContent, focus: document.activeElement.name, cents: studio.read().result.knownCommitmentCents });
+        receiver.dispose(); editing.dispose();
+      }
+      return observations;
+    });
+    assert.deepEqual(observed.slice(0, 3), ['select', 'apply', 'cancel'].map(action => ({ action, retired: true, lateCallbacks: 0,
+      status: 'Successor owns this edit.', focus: 'fundedHours', selected: 'product-two', cents: action === 'apply' ? 121500 : 120000 })));
+    assert.deepEqual(observed.slice(3, 6), ['focus', 'onBegin', 'onAccepted'].map(event => ({ event, selected: 'product-two',
+      status: 'The newer selection stays.', focus: 'fundedHours', cents: event === 'onAccepted' ? 121500 : 120000 })));
+    assert.deepEqual(observed.slice(6, 8), [
+      { operation: 'preview', callbacks: 0, active: null, saved: '105', ready: false, cents: 120000 },
+      { operation: 'apply', callbacks: 0, active: null, saved: null, ready: false, cents: 121500 },
+    ]);
+    assert.deepEqual(observed[8], { operation: 'same-token-onBegin', selected: 'product-one', sameToken: true, raw: '105',
+      status: 'The current raw edit stays.', focus: 'fundedHours', cents: 120000 });
+  });
+
 }

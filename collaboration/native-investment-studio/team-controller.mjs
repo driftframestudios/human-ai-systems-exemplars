@@ -33,13 +33,36 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   let people = new Map();
   let disposed = false;
   let composing = false;
+  let generation = 0, retiredToken = null;
 
   function listen(target, event, handler) {
     target.addEventListener(event, handler);
     cleanup.push(() => target.removeEventListener(event, handler));
   }
 
-  function announce(message) { elements.status.textContent = message; }
+  function owns(epoch) { return !disposed && epoch === generation; }
+  function boundary() { const view = editing.read(); return { projection: studio.read(), intent: view.intent, token: view.active?.token ?? null }; }
+  function retains(epoch, mark) {
+    const view = editing.read();
+    return owns(epoch) && studio.read() === mark.projection && view.intent === mark.intent && (view.active?.token ?? null) === mark.token;
+  }
+  function releaseRetiredLease() {
+    if (retiredToken === null) return;
+    const active = editing.read().active;
+    if (active?.kind !== 'person' || active.token !== retiredToken) { retiredToken = null; return; }
+    const result = editing.park();
+    if (result.ok || result.error.code !== 'settling') retiredToken = null;
+  }
+  function operate(method, ...args) {
+    try { return editor[method](...args); }
+    finally { releaseRetiredLease(); }
+  }
+  function announce(message) { if (!disposed) elements.status.textContent = message; }
+  function notify(epoch, focus = null) {
+    const mark = boundary();
+    onEditing();
+    if (focus && retains(epoch, mark)) focus();
+  }
 
   function renderRoster(next) {
     if (next === projection) return;
@@ -77,7 +100,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   }
 
   function render() {
-    const view = editor.read();
+    const view = editor.read(), epoch = generation;
     if (disposed) return view;
     renderRoster(view.projection);
     root.dataset.teamState = view.status;
@@ -102,7 +125,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
       errors[field].textContent = error ? `${LABELS[field]}: ${error.message}` : '';
     }
-    const proposed = view.draft && !composing ? editor.preview(view.draft.token) : null;
+    const proposed = view.status === 'editing' && view.draft && !composing ? operate('preview', view.draft.token) : null;
+    if (!owns(epoch)) return editor.read();
+    const current = editor.read();
+    if (proposed && current.status !== 'editing' && (current.projection !== view.projection || current.draft?.token !== view.draft?.token || current.status !== view.status)) return render();
     elements.total.textContent = proposed?.ok ? money(proposed.projection.result.knownCommitmentCents) : '—';
     const row = proposed?.ok ? proposed.projection.result.capacity.find(item => item.personId === selectedId) : null;
     elements.capacity.textContent = row ? (row.remainingMinutes < 0
@@ -115,27 +141,34 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
 
   function select(personId, focus = true) {
     if (disposed) return;
+    const epoch = ++generation, before = boundary();
     onBegin();
-    if (disposed) return;
-    const result = editor.begin(personId, studio.read());
+    const active = editing.read().active;
+    if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
+      || (active && active.token !== before.token)) return;
+    const result = operate('begin', personId, studio.read());
+    if (!owns(epoch)) return;
     selectedId = editing.read().selected.person;
     render();
+    if (!owns(epoch)) return;
     if (selectedId !== null) elements.configure.open = true;
-    if (focus) {
+    announce(result.ok ? '' : result.error.message);
+    notify(epoch, focus ? () => {
       if (editor.read().status === 'editing') inputs.ratePerHour.focus();
       else if (editor.read().status === 'stale') elements.recovery.querySelector('button').focus();
-    }
-    announce(result.ok ? '' : result.error.message);
-    onEditing();
+    } : null);
   }
 
   function settle(action) {
+    if (disposed) return;
     const view = editor.read();
     if (!view.draft) return;
     if (composing && action === 'apply') { announce('Finish entering the number, then apply.'); return; }
-    const result = editor[action](view.draft.token);
+    const epoch = ++generation, result = operate(action, view.draft.token);
+    if (!owns(epoch)) return;
     if (!result.ok) {
       render();
+      if (!owns(epoch)) return;
       announce(result.error.message);
       const field = FIELDS.find(key => result.error.path === `draft.${key}`);
       if (field) inputs[field].focus();
@@ -143,32 +176,40 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     }
     composing = false;
     if (action === 'apply') {
-      editor.begin(selectedId, studio.read());
-      onAccepted(studio.read());
+      operate('begin', selectedId, studio.read());
+      if (!owns(epoch)) return;
+      const mark = boundary();
+      onAccepted(mark.projection);
+      if (!retains(epoch, mark)) return;
       render();
+      if (!retains(epoch, mark)) return;
       elements.configure.open = true;
+      announce(`Total updated to ${money(mark.projection.result.knownCommitmentCents)}.`);
       elements.apply.focus();
-      announce(`Total updated to ${money(studio.read().result.knownCommitmentCents)}.`);
     } else {
       render();
+      if (!owns(epoch)) return;
       elements.configure.open = false;
-      elements.summary.focus();
       announce('Changes cancelled.');
-      onEditing();
+      notify(epoch, () => elements.summary.focus());
     }
   }
 
   function edit(event) {
+    if (disposed) return;
+    const epoch = ++generation;
     const field = event.target.name;
     if (!Object.hasOwn(inputs, field) || inputs[field] !== event.target) return;
     const view = editor.read();
     if (!view.draft) return;
-    const result = editor.setText(view.draft.token, field, event.target.value);
+    const result = operate('setText', view.draft.token, field, event.target.value);
+    if (!owns(epoch)) return;
     announce(result.ok ? '' : result.error.message);
     render();
   }
 
   function click(event) {
+    if (disposed) return;
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
     if (button.dataset.personId) { select(button.dataset.personId); return; }
@@ -177,28 +218,34 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const view = editor.read();
       if (!view.draft) return;
       const method = action === 'use-current' ? 'useCurrent' : action === 'discard' ? 'cancel' : 'review';
-      const result = editor[method](view.draft.token, projection);
+      const epoch = ++generation, result = operate(method, view.draft.token, projection);
+      if (!owns(epoch)) return;
       render();
+      if (!owns(epoch)) return;
       announce(result.ok ? '' : result.error.message);
-      onEditing();
-      if (result.ok) {
-        if (action === 'discard') { elements.configure.open = false; elements.summary.focus(); }
+      if (result.ok && action === 'discard') elements.configure.open = false;
+      notify(epoch, result.ok ? () => {
+        if (action === 'discard') elements.summary.focus();
         else inputs.ratePerHour.focus();
-      }
+      } : null);
       return;
     }
     if (button.dataset.personAction === 'cancel') { settle('cancel'); return; }
     const field = button.dataset.personField;
     const view = editor.read();
     if (!Object.hasOwn(inputs, field) || !view.draft || composing) return;
-    const result = editor.step(view.draft.token, field, Number(button.dataset.step));
+    const epoch = ++generation, result = operate('step', view.draft.token, field, Number(button.dataset.step));
+    if (!owns(epoch)) return;
     announce(result.ok ? '' : result.error.message);
     render();
   }
 
   function dispose() {
     if (disposed) return;
-    disposed = true;
+    disposed = true; generation += 1;
+    const active = editing.read().active;
+    if (active?.kind === 'person') retiredToken = active.token;
+    releaseRetiredLease();
     for (const release of cleanup) release();
     cleanup.length = 0;
     if (!sharedEditing) editing.dispose();
@@ -209,14 +256,14 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   }
 
   const receiver = Object.freeze({ read: () => editor.read(), refresh: render,
-    close: () => { if (!disposed) { composing = false; elements.configure.open = false; } },
-    select, resume: () => { composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
+    close: () => { if (!disposed) { generation += 1; composing = false; elements.configure.open = false; } },
+    select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const input of Object.values(inputs)) input.maxLength = 32;
     listen(root, 'click', click);
     listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
-    listen(elements.form, 'compositionstart', () => { composing = true; render(); });
+    listen(elements.form, 'compositionstart', () => { generation += 1; composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });
     listen(elements.configure.querySelector('summary'), 'click', event => {
       if (!disposed && !elements.configure.open && selectedId !== null && canOpen()) {
@@ -224,7 +271,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       }
     });
     listen(elements.configure, 'toggle', () => {
-      if (isActive() && elements.configure.open && editor.read().draft === null && selectedId !== null) select(selectedId);
+      if (!disposed && isActive() && elements.configure.open && editor.read().draft === null && selectedId !== null) select(selectedId);
     });
     render();
     root.dataset.teamReady = 'true';

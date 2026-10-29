@@ -24,17 +24,37 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   let disposed = false;
   let composing = false;
   let acknowledgedOpen = root.open;
+  let generation = 0, retiredToken = null;
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
     cleanup.push(() => element.removeEventListener(name, callback));
   }
-  function announce(message) { status.textContent = message; }
+  function owns(epoch) { return !disposed && epoch === generation; }
+  function boundary() { const view = editing.read(); return { projection: studio.read(), intent: view.intent, token: view.active?.token ?? null }; }
+  function retains(epoch, mark) {
+    const view = editing.read();
+    return owns(epoch) && studio.read() === mark.projection && view.intent === mark.intent && (view.active?.token ?? null) === mark.token;
+  }
+  function releaseRetiredLease() {
+    if (retiredToken === null) return;
+    const active = editing.read().active;
+    if (active?.kind !== 'purpose' || active.token !== retiredToken) { retiredToken = null; return; }
+    const result = editing.park();
+    if (result.ok || result.error.code !== 'settling') retiredToken = null;
+  }
+  function operate(method, ...args) {
+    try { return editor[method](...args); }
+    finally { releaseRetiredLease(); }
+  }
+  function announce(message) { if (!disposed) status.textContent = message; }
   function refresh() {
     if (disposed) return;
+    const epoch = generation;
     let view = editor.read();
     if (root.open && ['idle', 'parked'].includes(view.status) && editing.read().active === null) {
-      editor.begin('purpose', view.projection);
+      operate('begin', 'purpose', view.projection);
+      if (!owns(epoch)) return;
       view = editor.read();
     }
     projection = view.projection;
@@ -60,42 +80,60 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   }
   function begin() {
     if (disposed) return;
+    const epoch = ++generation, before = boundary();
     acknowledgedOpen = root.open;
     onOpen();
-    if (disposed) return;
-    const result = editor.begin('purpose', studio.read());
-    if (disposed) return;
+    const active = editing.read().active;
+    if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
+      || (active && active.token !== before.token)) return;
+    const result = operate('begin', 'purpose', studio.read());
+    if (!owns(epoch)) return;
     refresh();
+    if (!owns(epoch)) return;
     announce(result.ok ? '' : result.error.message);
+    const mark = boundary();
     onChange();
+    return retains(epoch, mark) ? { epoch, mark } : null;
   }
   function open() {
     if (disposed) return;
     root.open = true;
-    begin();
-    if (disposed) return;
+    const completion = begin();
+    if (!completion || !retains(completion.epoch, completion.mark)) return;
     if (editor.read().status === 'stale') recovery.querySelector('button').focus();
     else if (editor.read().status === 'editing') inputs.changedAbility.focus();
   }
   function close({ resume = true } = {}) {
     if (disposed) return;
-    const wasOpen = acknowledgedOpen || root.open;
+    if (!acknowledgedOpen && !root.open && editing.read().active?.kind !== 'purpose')
+      return { epoch: generation, mark: boundary(), focusUnchanged: true };
+    const epoch = ++generation, wasOpen = acknowledgedOpen || root.open;
     acknowledgedOpen = false;
     if (editing.read().active?.kind === 'purpose') editing.park();
+    if (!owns(epoch)) return;
     root.open = false;
-    if (resume && wasOpen) onClose();
-    if (disposed) return;
-    onChange();
-  }
-  function resultMessage(result) {
     refresh();
+    if (!owns(epoch)) return;
+    const focused = root.ownerDocument.activeElement;
+    if (resume && wasOpen) onClose();
+    if (!owns(epoch)) return;
+    const mark = boundary();
     onChange();
-    if (disposed) return;
-    announce(result.ok ? '' : result.error.message);
+    return retains(epoch, mark) ? { epoch, mark, focusUnchanged: root.ownerDocument.activeElement === focused } : null;
+  }
+  function resultMessage(result, epoch, success = '') {
+    if (!owns(epoch)) return;
+    refresh();
+    if (!owns(epoch)) return;
+    announce(result.ok ? success : result.error.message);
+    const mark = boundary();
+    onChange();
+    if (!retains(epoch, mark)) return;
     if (!result.ok) {
       const field = PURPOSE_FIELDS.find(name => result.error.path === `draft.${name}`);
       if (field) inputs[field].focus();
     }
+    return retains(epoch, mark);
   }
   for (const input of Object.values(inputs)) input.maxLength = LIMITS.purposeText;
   listen(root, 'toggle', () => {
@@ -104,47 +142,49 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
       if (editing.read().active?.kind !== 'purpose') begin();
     } else if (acknowledgedOpen) close();
   });
-  listen(form, 'compositionstart', () => { composing = true; });
+  listen(form, 'compositionstart', () => { generation += 1; composing = true; });
   listen(form, 'compositionend', () => { composing = false; });
   listen(form, 'input', event => {
-    if (inputs[event.target.name] !== event.target) return;
+    if (disposed || inputs[event.target.name] !== event.target) return;
     const view = editor.read();
     if (!view.draft) return;
-    resultMessage(editor.setText(view.draft.token, event.target.name, event.target.value));
+    const epoch = ++generation;
+    resultMessage(operate('setText', view.draft.token, event.target.name, event.target.value), epoch);
   });
   listen(form, 'submit', event => {
     event.preventDefault();
+    if (disposed) return;
     if (composing) { announce('Finish entering the text, then apply.'); return; }
     const view = editor.read();
     if (!view.draft) return;
-    const result = editor.apply(view.draft.token);
-    if (result.ok) editor.begin('purpose', result.view.projection);
-    resultMessage(result);
-    if (!disposed && result.ok) announce('Purpose updated.');
+    const epoch = ++generation, result = operate('apply', view.draft.token);
+    if (!owns(epoch)) return;
+    if (result.ok) operate('begin', 'purpose', result.view.projection);
+    resultMessage(result, epoch, 'Purpose updated.');
   });
   listen(root, 'click', event => {
     const button = event.target.closest('button[data-purpose-action]');
-    if (!button || !root.contains(button)) return;
+    if (disposed || !button || !root.contains(button)) return;
     const view = editor.read();
     if (!view.draft) return;
     const action = button.dataset.purposeAction;
     if (!['cancel', 'review', 'useCurrent'].includes(action)) return;
-    const result = editor[action](view.draft.token, projection);
-    resultMessage(result);
-    if (disposed) return;
+    const epoch = ++generation, result = operate(action, view.draft.token, projection);
+    if (!owns(epoch)) return;
     if (result.ok && action === 'cancel') {
-      close();
-      if (disposed) return;
-      summary.focus(); announce('Changes cancelled.');
-    }
-    else if (result.ok) inputs.changedAbility.focus();
+      announce('Changes cancelled.');
+      const completion = close();
+      if (completion?.focusUnchanged && retains(completion.epoch, completion.mark)) summary.focus();
+    } else if (resultMessage(result, epoch) && result.ok) inputs.changedAbility.focus();
   });
   refresh();
   return Object.freeze({ refresh, open, close, isOpen: () => root.open,
     dispose() {
       if (disposed) return;
-      disposed = true;
-      if (editing.read().active?.kind === 'purpose') editing.park();
+      disposed = true; generation += 1;
+      const active = editing.read().active;
+      if (active?.kind === 'purpose') retiredToken = active.token;
+      releaseRetiredLease();
       for (const release of cleanup) release();
       cleanup.length = 0;
       fieldset.disabled = true;
