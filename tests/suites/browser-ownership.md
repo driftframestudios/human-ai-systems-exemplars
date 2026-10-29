@@ -95,7 +95,7 @@ the entry-point inventory below counts the three executable case files separatel
 
 ## Existing direct Core consumers
 
-These 54 current direct browser entry points retain their imports and case
+These 55 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
@@ -104,6 +104,7 @@ and does not claim a new execution of every assertion.
 | --- | --- |
 | `tests/native-investment-studio/controller.browser.mjs` | Native About coordination controls: independently calculated money/effort, hours/minutes entry, live preview isolation, draft and accepted-state recovery, exact target/base ownership, lifecycle release, focus through disclosures and responsive rearrangement, narrow/enlarged text, forced colors, reduced motion, ordinary page wheel movement, and the preserved full-Studio route in three engines. |
 | `tests/native-investment-studio/team-controller.browser.mjs` | Native About Team Assembly: person rates and funded time, independently calculated investment and capacity, draft and accepted-state isolation, stale recovery, focus and keyboard editing, responsive containment, ordinary page scrolling, and the preserved full-Studio route in three engines. |
+| `tests/native-investment-studio/shell.browser.mjs` | Native About chapters: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, descendant fragments and history, visible focus, reduced motion, parent scrolling, and scriptless fallback in three engines. |
 | `tests/context-canvas/about-heatmap.browser.mjs` | Native About comparison state, exact figure identity, scriptless and print reading, enlarged-text containment, keyboard focus, page wheel movement, and controlled state/layout faults in three engines. |
 | `tests/context-canvas/about-gallery-fit.browser.mjs` | About Gallery natural body/footer height, disclosure growth/shrinkage, retained selections, per-document channel and fallback, parent wheel movement, local package substitution, and restored bounded-height fault in three engines. |
 | `tests/context-canvas/about-prompt-fit.browser.mjs` | Five-condition Explorer state, parent/document/local-region scroll ownership, natural height, narrow/enlarged text, keyboard, two-frame isolation, fallback, and static/print readings in three engines. |

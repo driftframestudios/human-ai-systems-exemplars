@@ -307,17 +307,21 @@
         "tests/native-investment-studio/draft.test.mjs",
         "tests/native-investment-studio/person-draft.test.mjs",
         "tests/native-investment-studio/person-state.test.mjs",
+        "tests/native-investment-studio/shell.test.mjs",
         "tests/native-investment-studio/state.test.mjs",
         "tests/native-investment-studio/team-controller.test.mjs"
       ],
       "profile": "node-source",
       "command": {
         "cwd": ".",
-        "argv": ["node", "--test"],
+        "argv": [
+          "node",
+          "--test"
+        ],
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
-      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, person and work edits, bounded drafts, scheduled work-commit recovery, exchange, and the native About receiver's static and local module-delivery contracts.",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, person and work edits, bounded drafts, scheduled work-commit recovery, chapter navigation and icon ownership, exchange, and the native About receiver's static and local module-delivery contracts.",
       "aliases": [
         "test:native-investment-studio:source"
       ]
@@ -2768,6 +2772,25 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.chapters",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/shell.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": ["node", "--test"],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About chapter navigation: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, original descendant fragments and browser history, visible focus, reduced-motion behavior, parent scrolling and scriptless fallback across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:chapters-browser"
+      ]
+    },
+    {
       "id": "browser.native-investment-studio.team-assembly",
       "family": "native-investment-studio",
       "kind": "node-test",
@@ -2928,6 +2951,7 @@
         "browser.context-canvas.about-disclosures",
         "browser.context-canvas.about-studio-chapters",
         "browser.native-investment-studio.coordination",
+        "browser.native-investment-studio.chapters",
         "browser.native-investment-studio.team-assembly"
       ]
     },
@@ -3308,6 +3332,7 @@
           "tests/native-investment-studio/draft.test.mjs",
           "tests/native-investment-studio/person-draft.test.mjs",
           "tests/native-investment-studio/person-state.test.mjs",
+          "tests/native-investment-studio/shell.test.mjs",
           "tests/native-investment-studio/state.test.mjs",
           "tests/native-investment-studio/team-controller.test.mjs"
         ],
@@ -3316,6 +3341,9 @@
         ],
         "test:native-investment-studio:team-browser": [
           "tests/native-investment-studio/team-controller.browser.mjs"
+        ],
+        "test:native-investment-studio:chapters-browser": [
+          "tests/native-investment-studio/shell.browser.mjs"
         ],
         "test:prototype-control-labels": [
           "tests/context-canvas/prototype-control-labels.test.mjs"

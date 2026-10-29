@@ -9,7 +9,7 @@ import { startStaticServer as startVisualReferenceServer } from '../../tools/con
 
 const root = new URL('../../', import.meta.url);
 const about = await readFile(new URL('context-canvas-project-surface/context-canvas/index.html', root), 'utf8');
-const modulePaths = ['config', 'contract', 'state', 'draft', 'display', 'person-draft', 'team-controller', 'controller']
+const modulePaths = ['config', 'contract', 'state', 'draft', 'display', 'icons', 'person-draft', 'shell', 'team-controller', 'controller']
   .map(name => `collaboration/native-investment-studio/${name}.mjs`);
 
 test('native About coordination has one module receiver and retains both legacy Studio routes', () => {
