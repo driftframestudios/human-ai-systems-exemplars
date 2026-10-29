@@ -30,6 +30,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
   let projection = studio.read(), bindings = new WeakMap(), controls = new Map(), optionSources = [], dynamic = [];
   const invalid = new Set();
+  const optionPopulations = new WeakMap();
   let fieldSequence = 0;
   const form = document.createElement('form'); form.noValidate = true; form.className = 'native-connection-template__form';
   const choice = document.createElement('select'); choice.dataset.templateChoice = '';
@@ -89,10 +90,25 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     return row.selection === 'new' ? row.label : projection.state.teams.find(team => team.id === row.selection.slice(5))?.label ?? `${row.selection.slice(5)} · removed team`;
   }
   function selectedOptions(control, values, options, optional = false) {
-    const list = optional ? [['', 'Unassigned'], ...options] : options;
-    const current = new Set(list.map(([id]) => id)), selected = Array.isArray(values) ? values : [values];
+    const list = optional ? [['', 'Unassigned'], ...options] : [...options];
+    const current = new Set(list.map(([id]) => id)), selected = new Set(Array.isArray(values) ? values : [values]);
     for (const id of selected) if (id && !current.has(id)) list.push([id, `${id} · removed record`]);
-    control.replaceChildren(...list.map(([id, label]) => { const node = option(id, label); node.selected = selected.includes(id); return node; }));
+    const previous = optionPopulations.get(control);
+    const sameChoices = previous?.rows.length === list.length
+      && list.every(([id, label], index) => previous.rows[index][0] === id && previous.rows[index][1] === label);
+    let nodes = previous?.nodes;
+    if (!sameChoices) {
+      // Choices own their order and labels; raw selection has a separate lifetime.
+      const rows = list.map(([id, label]) => [id, label]);
+      nodes = rows.map(([id, label]) => { const node = option(id, label); node.selected = selected.has(id); return node; });
+      control.replaceChildren(...nodes);
+      optionPopulations.set(control, { rows, nodes });
+    } else {
+      for (const node of nodes) {
+        const chosen = selected.has(node.value);
+        if (node.selected !== chosen) node.selected = chosen;
+      }
+    }
   }
   function field(container, path, label, record, key, { max = LIMITS.relationshipText, options, multiple = false, optional = false, numeric = false, dependsOnGroups = false } = {}) {
     const wrapper = element('div', undefined, 'native-coordination__control'), caption = element('label', label);
