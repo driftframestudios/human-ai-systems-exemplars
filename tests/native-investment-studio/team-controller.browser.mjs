@@ -53,7 +53,10 @@ const action = (page, name) => team(page).locator(`[data-person-action="${name}"
 const accepted = page => panel(page).locator('[data-native-total]');
 const preview = page => team(page).locator('[data-person-total]');
 const settings = page => team(page).locator('[data-person-configure]');
-const choose = (page, id = 'product-one') => team(page).locator(`[data-person-id="${id}"]`).click();
+const choose = async (page, id = 'product-one') => {
+  if (!(await team(page).isVisible())) await panel(page).locator('[data-native-chapter="people"]').click();
+  await team(page).locator(`[data-person-id="${id}"]`).click();
+};
 
 async function open(t, engine, fullAbout = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
@@ -157,6 +160,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await choose(page);
     await input(page, 'ratePerHour').fill('101');
+    await panel(page).locator('[data-native-chapter="coordination"]').click();
     await panel(page).locator('input[name="occurrences"]').fill('7');
     await expect(preview(page)).toHaveText('$1,203.00');
     await expect(panel(page).locator('[data-native-preview-total]')).toHaveText('$1,400.00');
@@ -164,6 +168,7 @@ for (const engine of names) {
     await expect(accepted(page)).toHaveText('$1,400.00');
     await expect(team(page)).toHaveAttribute('data-team-state', 'stale');
     await expect(input(page, 'ratePerHour')).toHaveValue('101');
+    await panel(page).locator('[data-native-chapter="people"]').click();
     await action(page, 'apply').click();
     await expect(accepted(page)).toHaveText('$1,400.00');
     await expect(team(page).locator('[data-person-status]')).toContainText('Cancel');

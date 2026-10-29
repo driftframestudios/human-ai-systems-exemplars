@@ -239,6 +239,9 @@ async function assertContained(page) {
   const observed = await panel(page).evaluate(root => {
     const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
     const rendered = node => {
+      // The chapter suite owns the local horizontal strip, including labels
+      // wider than its viewport. This oracle measures the visible form reading.
+      if (node.closest('[data-native-chapter-list]')) return false;
       if (node.getClientRects().length === 0) return false;
       for (let parent = node; parent && parent !== root; parent = parent.parentElement) {
         if (parent.hidden) return false;

@@ -145,9 +145,10 @@
     <div class="about-reading about-reading--wide">
       <div class="native-coordination" data-native-coordination>
         <header class="native-coordination__amp">
+          <p class="native-coordination__intro">Enterprise work is a cross-functional investment. Plan the people, work, disruption, and learning your initiative needs.</p>
           <div class="native-coordination__identity">
-            <p class="native-coordination__plate">Coordination</p>
-            <h2 id="native-coordination-title">Plan a working session.</h2>
+            <p class="native-coordination__plate">Investment Studio</p>
+            <h2 id="native-coordination-title">Plan the people and work.</h2>
           </div>
           <div class="native-coordination__readout">
             <span class="native-coordination__plate" data-native-standing>Total · USD</span>
@@ -158,10 +159,14 @@
             <div><dt>Extra work</dt><dd data-native-additional>$1,200.00</dd></div>
             <div><dt>Included in staffing</dt><dd data-native-allocated>$0.00</dd></div>
           </dl>
+          <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
+            <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
+            <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
+          </div>
         </header>
-        <div class="native-coordination__body">
+        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-session-title">
           <div class="native-coordination__agreement">
-            <h3 data-native-agreement>Weekly working session</h3>
+            <h3 id="native-session-title" data-native-agreement>Weekly working session</h3>
             <div class="native-coordination__connection" aria-label="Working session participants">
               <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
               <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
@@ -238,8 +243,8 @@
               </ul>
             </div>
           </details>
-        </div>
-        <section class="native-team" data-native-team-editor aria-labelledby="native-team-title">
+        </section>
+        <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor aria-labelledby="native-team-title">
           <h3 id="native-team-title">People and funded time</h3>
           <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
           <ul class="native-team__roster" data-team-roster></ul>

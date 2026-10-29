@@ -173,8 +173,18 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/icons.mjs",
+      "projected_path": "collaboration/native-investment-studio/icons.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/shell.mjs",
+      "projected_path": "collaboration/native-investment-studio/shell.mjs",
       "media_type": "text/javascript"
     },
     {

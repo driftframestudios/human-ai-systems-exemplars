@@ -3,6 +3,8 @@ import { createWorkDraftAdapter } from './draft.mjs';
 import { CONTRACT, LIMITS } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
+import { mountChapterShell } from './shell.mjs';
+import { createStudioIcon } from './icons.mjs';
 
 const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 
@@ -50,6 +52,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let disposed = false;
   let composing = false;
   let teamPanel = null;
+  let chapterShell = null;
 
   function listen(target, type, handler) {
     target.addEventListener(type, handler);
@@ -233,6 +236,7 @@ export function mountCoordinationPanel(root, options = {}) {
   function dispose() {
     if (disposed) return editor.read();
     disposed = true;
+    chapterShell?.dispose();
     teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -268,6 +272,15 @@ export function mountCoordinationPanel(root, options = {}) {
     begin();
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, onAccepted: () => render() });
+    const chapterList = root.querySelector('[data-native-chapter-list]');
+    if (chapterList) {
+      for (const button of chapterList.querySelectorAll('[data-native-chapter]')) {
+        const icon = createStudioIcon(document, button.dataset.nativeChapter);
+        button.prepend(icon);
+        cleanup.push(() => icon.remove());
+      }
+      chapterShell = mountChapterShell(root);
+    }
     elements.fallback.hidden = true;
     root.dataset.nativeReady = 'true';
     INSTANCES.set(root, receiver);
