@@ -27,6 +27,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/investment-analysis/capsule.js',
   'collaboration/investment-analysis/core.js',
   'collaboration/investment-analysis/studio.js',
+  'collaboration/native-investment-studio/commands.mjs',
   'collaboration/native-investment-studio/config.mjs',
   'collaboration/native-investment-studio/contract.mjs',
   'collaboration/native-investment-studio/controller.mjs',

@@ -9,6 +9,7 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/native-investment-studio/commands.test.mjs',
   'tests/native-investment-studio/contract.test.mjs',
   'tests/native-investment-studio/controller.test.mjs',
   'tests/native-investment-studio/controller.browser.mjs',
@@ -287,7 +288,7 @@ test('native Studio routes retain source and separate browser owners with execut
     readdir(resolve(ROOT, 'tests/native-investment-studio')),
   ]);
   const sourceMembers = [
-    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'commands.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
     'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].map(file => `tests/native-investment-studio/${file}`);
