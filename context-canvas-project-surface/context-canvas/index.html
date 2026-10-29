@@ -368,6 +368,62 @@
             </form>
           </details>
           <p class="native-coordination__status" data-person-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <details class="native-coordination__configuration native-responsibility__configuration" data-responsibility-configure="role" hidden>
+            <summary>Role details</summary>
+            <div class="native-coordination__recovery" data-responsibility-recovery hidden>
+              <p data-responsibility-current></p>
+              <div class="native-coordination__actions"><button type="button" data-responsibility-action="review">Review saved edits</button><button type="button" data-responsibility-action="useCurrent">Use current values</button><button type="button" data-responsibility-action="cancel">Discard saved edits</button></div>
+            </div>
+            <form novalidate>
+              <fieldset disabled aria-label="Role details">
+                <p class="native-responsibility__accepted" data-responsibility-accepted></p>
+                <div class="native-responsibility__grid">
+                  <div class="native-responsibility__field">
+                    <label for="role-functionId">Function</label>
+                    <select id="role-functionId" name="functionId" aria-describedby="role-functionId-error"></select>
+                    <p class="native-coordination__error" id="role-functionId-error" data-responsibility-error="functionId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-seniorityId">Seniority</label>
+                    <select id="role-seniorityId" name="seniorityId" aria-describedby="role-seniorityId-error"></select>
+                    <p class="native-coordination__error" id="role-seniorityId-error" data-responsibility-error="seniorityId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-postureId">Working posture</label>
+                    <select id="role-postureId" name="postureId" aria-describedby="role-postureId-error"></select>
+                    <p class="native-coordination__error" id="role-postureId-error" data-responsibility-error="postureId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-enablerId">Ability enabler</label>
+                    <select id="role-enablerId" name="enablerId" aria-describedby="role-enablerId-error"></select>
+                    <p class="native-coordination__error" id="role-enablerId-error" data-responsibility-error="enablerId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-change">Change model and component</label>
+                    <select id="role-change" name="change" aria-describedby="role-change-error"></select>
+                    <p class="native-coordination__error" id="role-change-error" data-responsibility-error="change"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-qualityId">Quality role</label>
+                    <select id="role-qualityId" name="qualityId" aria-describedby="role-qualityId-error"></select>
+                    <p class="native-coordination__error" id="role-qualityId-error" data-responsibility-error="qualityId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-aiId">AI role</label>
+                    <select id="role-aiId" name="aiId" aria-describedby="role-aiId-error"></select>
+                    <p class="native-coordination__error" id="role-aiId-error" data-responsibility-error="aiId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="role-decisionId">Decision boundary</label>
+                    <select id="role-decisionId" name="decisionId" aria-describedby="role-decisionId-error"></select>
+                    <p class="native-coordination__error" id="role-decisionId-error" data-responsibility-error="decisionId"></p>
+                  </div>
+                </div>
+                <p class="native-coordination__error native-responsibility__general-error" data-responsibility-general-error></p>
+                <div class="native-coordination__actions"><button type="submit" data-responsibility-apply>Apply changes</button><button type="button" data-responsibility-action="cancel">Cancel changes</button></div>
+              </fieldset>
+            </form>
+          </details>
           <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
             <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" data-assembly-action="team-create" disabled>Add team</button></div>
             <ul class="native-assembly__team-list" data-assembly-teams></ul>
@@ -438,6 +494,64 @@
             </form>
           </details>
           <p class="native-coordination__status" data-assembly-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <section class="native-responsibility" aria-labelledby="native-responsibility-title">
+            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Human review</h4><button type="button" data-responsibility-action="create" disabled>Add contribution</button></div>
+            <ul class="native-responsibility__list" data-responsibility-list hidden></ul>
+            <p class="native-coordination__hint" data-responsibility-empty hidden>Add an output and name who reviews it.</p>
+            <details class="native-coordination__configuration native-responsibility__configuration" data-responsibility-configure="contribution" hidden>
+              <summary>Contribution settings</summary>
+            <div class="native-coordination__recovery" data-responsibility-recovery hidden>
+              <p data-responsibility-current></p>
+              <div class="native-coordination__actions"><button type="button" data-responsibility-action="review">Review saved edits</button><button type="button" data-responsibility-action="useCurrent">Use current values</button><button type="button" data-responsibility-action="freshId" hidden>Use these entries for a new contribution</button><button type="button" data-responsibility-action="cancel">Discard saved edits</button></div>
+            </div>
+              <form novalidate>
+                <fieldset disabled aria-label="Contribution settings">
+                  <p data-responsibility-accepted hidden></p>
+                  <div data-responsibility-fields>
+                    <div class="native-responsibility__grid">
+                  <div class="native-responsibility__field">
+                    <label for="contribution-categoryId">Contribution</label>
+                    <select id="contribution-categoryId" name="categoryId" aria-describedby="contribution-categoryId-error"></select>
+                    <p class="native-coordination__error" id="contribution-categoryId-error" data-responsibility-error="categoryId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="contribution-receiverPersonId">Human receiver</label>
+                    <select id="contribution-receiverPersonId" name="receiverPersonId" aria-describedby="contribution-receiverPersonId-error"></select>
+                    <p class="native-coordination__error" id="contribution-receiverPersonId-error" data-responsibility-error="receiverPersonId"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="contribution-decisionOwnerPersonId">Who decides</label>
+                    <select id="contribution-decisionOwnerPersonId" name="decisionOwnerPersonId" aria-describedby="contribution-decisionOwnerPersonId-error"></select>
+                    <p class="native-coordination__error" id="contribution-decisionOwnerPersonId-error" data-responsibility-error="decisionOwnerPersonId"></p>
+                  </div>
+                    </div>
+                    <div class="native-responsibility__sessions" role="group" aria-labelledby="contribution-work-label">
+                      <p class="native-coordination__control-title" id="contribution-work-label">Supporting sessions</p>
+                      <ul class="native-responsibility__work" data-responsibility-work aria-describedby="contribution-workIds-error"></ul>
+                      <p class="native-coordination__error" id="contribution-workIds-error" data-responsibility-error="workIds"></p>
+                    </div>
+                    <div class="native-responsibility__grid">
+                  <div class="native-responsibility__field">
+                    <label for="contribution-reviewBoundary">Review before use</label>
+                    <textarea id="contribution-reviewBoundary" name="reviewBoundary" rows="3" aria-describedby="contribution-reviewBoundary-error"></textarea>
+                    <p class="native-coordination__error" id="contribution-reviewBoundary-error" data-responsibility-error="reviewBoundary"></p>
+                  </div>
+                  <div class="native-responsibility__field">
+                    <label for="contribution-decisionBoundary">Decision boundary</label>
+                    <textarea id="contribution-decisionBoundary" name="decisionBoundary" rows="3" aria-describedby="contribution-decisionBoundary-error"></textarea>
+                    <p class="native-coordination__error" id="contribution-decisionBoundary-error" data-responsibility-error="decisionBoundary"></p>
+                  </div>
+                    </div>
+                  </div>
+                  <p class="native-responsibility__confirm" data-responsibility-confirm hidden></p>
+                  <ul class="native-responsibility__dependencies" data-responsibility-dependencies hidden></ul>
+                  <p class="native-coordination__error native-responsibility__general-error" data-responsibility-general-error></p>
+                  <div class="native-coordination__actions"><button type="submit" data-responsibility-apply>Apply changes</button><button type="button" data-responsibility-action="cancel">Cancel changes</button></div>
+                </fieldset>
+              </form>
+            </details>
+            <p class="native-coordination__status" data-responsibility-status role="status" aria-live="polite" aria-atomic="true"></p>
+          </section>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title">Keep and compare your plan.</h3>

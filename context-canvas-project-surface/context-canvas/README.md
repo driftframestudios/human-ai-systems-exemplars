@@ -54,8 +54,14 @@ recovery through `assembly-controller.mjs`, finite `command-draft.mjs` forms,
 and the shared eight-slot coordinator. `work-controller.mjs` adds complete
 working-session creation and editing: team, ordered participants, duration,
 count, funding and status. Its session browser route observes arithmetic,
-selection, stale recovery, removal and empty-plan entry. The assembly and
-existing person routes retain their focused checks. Existing Studio chapters
+selection, stale recovery, removal and empty-plan entry.
+`responsibility-controller.mjs` adds the selected person's eight role fields
+and the six contribution categories with human receiver, decision owner,
+supporting sessions and review instructions. The same accepted plan supplies
+these controls, saved edits and exports; descriptive changes preserve money.
+Its focused browser route owns complete-field meaning, reference recovery,
+focus, narrow reading and disposal. The assembly and existing person routes
+retain their focused checks. Existing Studio chapters
 retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.

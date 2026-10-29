@@ -1,11 +1,11 @@
 # Native Investment Studio: coordination, capability, and state
 
-This package gives About one native working session, an inspectable
-investment calculation, and a recoverable edit boundary. Visitors change
-hours, remaining minutes, and working sessions, inspect the draft investment,
-apply the change, and trace the accepted participant
-effort and funding. The ordinary About section preserves vertical reading
-while the complete Studio retains its richer planning capabilities.
+This package lets About visitors plan people, teams and working sessions,
+assign roles and human review, and inspect the resulting investment. Each
+editor keeps unfinished entries separate from the accepted plan. Visitors can
+apply, cancel, recover saved edits, compare plans and trace participant effort
+and funding. About owns ordinary vertical reading; the complete Studio retains
+its richer planning capabilities as the native chapters develop.
 
 [Issue #637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637)
 holds the approved design and implementation sequence. The capability and state
@@ -31,13 +31,16 @@ and integration authority; publication remains held.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, its cached proposal, and the pure numeric codec
   reused by person creation.
-- `command-draft.mjs` owns the closed assembly and session form families, ordered raw selections,
+- `command-draft.mjs` owns the closed assembly, session, role and contribution form families, ordered raw selections,
   stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
-  shared by duration edits, people, purpose, assembly forms, and full session forms.
+  shared by duration edits, people, purpose, assembly forms, full sessions, roles and contributions.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
+- `responsibility-controller.mjs` owns selected-person role details and human
+  contribution records within the People chapter. Both forms use the shared
+  command-draft engine and its single active coordinator lease.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -220,13 +223,14 @@ skipping quoted strings. Labels retain their exact text. Direct JavaScript
 calls receive already-evaluated Numbers; exact source-spelling checks belong
 to the text import boundary.
 
-The reference budget counts owned relationships:
-`sum(teams[].personIds.length) + sum(work[].personIds.length) + sum(practices[].workIds.length)`.
-The current ceiling is 4,096. One person participating in several teams carries
-one membership edge per team; each work participation and practice support
-edge has its own owner as well. Scalar `teamId` references remain bounded by
-the work and practice collection limits. Duplicate entries within one reference
-list receive a separate diagnostic.
+The current 8,192-reference budget counts team memberships, work participants,
+practice/contribution/connection supporting-work lists, work/practice owning
+teams, connection endpoints and each assigned human reference. One person in
+several teams carries one membership per team. Each occurrence of a reference
+has its own owner even when several records point to the same priced work.
+Versions 0.1 and 0.2 keep their original 4,096 list-reference budget during
+migration admission. Duplicate entries within one list receive a separate
+diagnostic.
 
 Each preparation creates a fresh budget. Its early size guard checks a list's
 contribution before validating that list's individual references. A candidate
@@ -270,8 +274,8 @@ It explains display rounding within its funding pool.
 The rounding adjustment depends on the number of priced display lines. For
 one person/funding pool with n lines, its absolute adjustment is at most
 floor(n / 2) cents under this nonnegative half-up rule. Each line consumes a
-work-participant reference, so the current 4,096-reference budget gives a
-conservative 2,048-cent bound across a funding pool. Higher rates change the
+work-participant reference, so the current 8,192-reference budget gives a
+conservative 4,096-cent bound across a funding pool. Higher rates change the
 settled amount while retaining that rounding-error bound. Per-person minutes
 are also bounded: 256 work records × 1,440 minutes × 10,000 occurrences gives
 at most 3,686,400,000 minutes. Changes to these limits, time units, or rounding
@@ -896,7 +900,8 @@ browser receiver owns actual input, layout, focus, and reading observations.
 ## Shared editing and saved drafts
 
 `createDraftCoordinator(studio, { limit })` returns one coordinator for that
-Studio instance. Its `work`, `person`, `purpose`, `assembly`, and `session` ports reuse the typed adapters
+Studio instance. Its `work`, `person`, `purpose`, `assembly`, `session`, `role`
+and `contribution` ports reuse the typed adapters
 for validation, exact input conversion, preview and Apply. The parent receiver
 owns coordinator disposal; child receivers borrow their port and own their DOM
 listeners. A coordinator has at most one active adapter.
@@ -1081,6 +1086,45 @@ zero rates, no-op identity, ordered-array ownership, numeric bounds, complete
 replacement, stale recovery, dependency-safe removal, eight-slot replacement,
 and publication reentry. Existing duration tests continue to exercise scheduler
 cleanup and ownership through the shared codec.
+
+### Role and human-review forms
+
+`editing.role` opens `role.update:<personId>` through the shared finite form
+engine. Seven selectors carry source-owned catalogue IDs; the eighth carries
+one `frameworkId:componentId` key that admits an atomic framework/component
+pair. An empty choice becomes explicit null. The update replaces the complete
+role record while preserving the person's identity, rate, funded time and
+lifecycle. The update-only port has no creation or fresh-ID operation.
+
+`editing.contribution` supports create, update and remove targets. Its raw
+record contains `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`,
+ordered `workIds`, `reviewBoundary` and `decisionBoundary`. Empty human choices
+and blank explanatory text become null at Apply. The source requires one of
+the six contribution categories, resolves assigned humans and sessions by ID,
+and preserves the order of supporting sessions. Renames and retirement leave
+those identities recoverable; removal retains a useful reference diagnostic.
+
+Both ports share the single active lease and eight retained slots. Complete
+Apply, Cancel, explicit stale review, current-value recovery, removed targets
+and creation collisions follow the existing coordinator contract. Each form
+caches its preview by raw revision and accepted projection. Equal-payload
+imports still create a new acceptance identity and make earlier edits stale.
+
+A role payload holds at most 577 UTF-16 value units. A contribution payload
+holds at most 17,776 units, including 256 IDs, and eight such drafts hold at
+most 142,208 units plus 2,048 array slots and fixed metadata. Copy/comparison
+visits those bounded values. Catalogue lookup sets initialize once; receiving
+reference maps rebuild once per accepted projection. Material preview and
+Apply retain the measured full-preparation path.
+
+`responsibility-controller.mjs` presents Role details for the selected person
+and a Human review list within People. Native disclosures keep these editors
+local to the chapter. One grouped selector preserves the framework/component
+pair; adjacent labels and ordered session controls describe each operation.
+`responsibility-draft.test.mjs` and `responsibility-editing.test.mjs` own the
+raw/accepted boundary. `responsibility.browser.mjs` owns complete-field meaning,
+unchanged monetary totals, retained and stale targets, narrow reading, focus
+and receiver disposal across the three engines.
 
 ## Native coordination receiver
 
@@ -1454,6 +1498,7 @@ npm run test:native-investment-studio:chapters-browser
 npm run test:native-investment-studio:investment-browser
 npm run test:native-investment-studio:assembly-browser
 npm run test:native-investment-studio:session-browser
+npm run test:native-investment-studio:responsibility-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```

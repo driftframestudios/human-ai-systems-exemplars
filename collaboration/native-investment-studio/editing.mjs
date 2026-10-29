@@ -2,7 +2,9 @@ import { createWorkDraftAdapter } from './draft.mjs';
 import { createPersonDraftAdapter } from './person-draft.mjs';
 import { createPurposeDraftAdapter } from './purpose-draft.mjs';
 import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describeAssemblyTarget, copyAssemblyRaw, sameAssemblyRaw,
-  createSessionDraftAdapter, SESSION_FORMS, makeSessionTarget, describeSessionTarget, copySessionRaw, sameSessionRaw } from './command-draft.mjs';
+  createSessionDraftAdapter, SESSION_FORMS, makeSessionTarget, describeSessionTarget, copySessionRaw, sameSessionRaw,
+  createRoleDraftAdapter, ROLE_FORMS, makeRoleTarget, describeRoleTarget, copyRoleRaw, sameRoleRaw,
+  createContributionDraftAdapter, CONTRIBUTION_FORMS, makeContributionTarget, describeContributionTarget, copyContributionRaw, sameContributionRaw } from './command-draft.mjs';
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
@@ -24,10 +26,17 @@ const TYPES = Object.freeze({
     index: state => new Map(state.work.map(row => [`work:${row.id}`, row])),
     create: createSessionDraftAdapter, forms: SESSION_FORMS, make: makeSessionTarget,
     describe: describeSessionTarget, copy: copySessionRaw, same: sameSessionRaw }),
+  role: Object.freeze({ id: 'roleId', index: state => new Map(state.people.map(row => [`people:${row.id}`, row])),
+    create: createRoleDraftAdapter, forms: ROLE_FORMS, make: makeRoleTarget,
+    describe: describeRoleTarget, copy: copyRoleRaw, same: sameRoleRaw }),
+  contribution: Object.freeze({ id: 'contributionId', ids: true,
+    index: state => new Map(state.contributions.map(row => [`contributions:${row.id}`, row])),
+    create: createContributionDraftAdapter, forms: CONTRIBUTION_FORMS, make: makeContributionTarget,
+    describe: describeContributionTarget, copy: copyContributionRaw, same: sameContributionRaw }),
 });
 const KINDS = Object.freeze(Object.keys(TYPES));
 const EMPTY_ERRORS = Object.freeze([]);
-const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work' });
+const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work', contributions: 'contribution' });
 const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;
@@ -377,6 +386,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
   }
 
   function port(kind) {
+    const canCreate = TYPES[kind].forms && Object.values(TYPES[kind].forms).some(form => form.mode === 'create');
     return Object.freeze({
       read: () => readPort(kind),
       begin: (targetId, expected) => open(kind, targetId, expected),
@@ -389,7 +399,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
       cancel: token => cancel(kind, token),
       review: (token, expected) => recover(kind, token, expected, 'review'),
       useCurrent: (token, expected) => recover(kind, token, expected, 'current'),
-      ...(TYPES[kind].forms ? { create: (form, expected) => create(kind, form, expected), freshId: (token, expected) => freshId(kind, token, expected) } : {}),
+      ...(canCreate ? { create: (form, expected) => create(kind, form, expected), freshId: (token, expected) => freshId(kind, token, expected) } : {}),
     });
   }
   const coordinator = Object.freeze({ ...Object.fromEntries(KINDS.map(kind => [kind, port(kind)])), park, discard, read, dispose });
