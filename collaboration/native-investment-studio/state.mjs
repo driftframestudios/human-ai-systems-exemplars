@@ -1,5 +1,6 @@
 import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepareWorkRecord, preparePurpose as preparePurposeRecord, parsePlan, createExamplePlan, PlanError } from './contract.mjs';
 import { HISTORY, PURPOSE_FIELDS } from './config.mjs';
+import { prepareAssembly } from './commands.mjs';
 
 function historyLimit(options) {
   const prototype = options && typeof options === 'object' ? Object.getPrototypeOf(options) : undefined;
@@ -70,6 +71,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
       const next = operation();
       // Direct-JavaScript reflection can run a reentrant caller callback.
       if (expected !== accepted) throw new PlanError('stale-edit', 'edit', 'Read the newer accepted plan before applying this edit.');
+      if (next.error) return Object.freeze({ ok: false, error: next.error, projection: accepted });
       if (mode === 'baseline') {
         baseline = Object.freeze({ projection: accepted, acceptance, token: Symbol('native-studio-baseline') });
       } else if (mode !== 'preview' && next.projection !== accepted) {
@@ -84,6 +86,12 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
 
   function replacement(projection) {
     return { projection, workPositions: positions(projection.state.work), peoplePositions: positions(projection.state.people) };
+  }
+
+  function assembly(command) {
+    const base = accepted;
+    const next = prepareAssembly(base, command);
+    return next.projection === base ? next : replacement(next.projection);
   }
 
   function preparePerson(personId, candidate) {
@@ -149,6 +157,8 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     exportText: () => accepted.serialized,
     replace: (candidate, expected) => attempt(expected, () => replacement(preparePlan(candidate))),
     importText: (text, expected) => attempt(expected, () => replacement(parsePlan(text))),
+    applyCommand: (command, expected) => attempt(expected, () => assembly(command)),
+    previewCommand: (command, expected) => attempt(expected, () => assembly(command), 'preview'),
     updateWork: (workId, candidate, expected) => attempt(expected, () => prepareWork(workId, candidate)),
     previewWork: (workId, candidate, expected) => attempt(expected, () => prepareWork(workId, candidate), 'preview'),
     updatePerson: (personId, candidate, expected) => attempt(expected, () => preparePerson(personId, candidate)),

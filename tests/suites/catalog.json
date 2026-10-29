@@ -302,6 +302,7 @@
       "family": "native-investment-studio",
       "kind": "node-test",
       "members": [
+        "tests/native-investment-studio/commands.test.mjs",
         "tests/native-investment-studio/contract.test.mjs",
         "tests/native-investment-studio/controller.test.mjs",
         "tests/native-investment-studio/draft.test.mjs",
@@ -3355,6 +3356,7 @@
           "tests/context-canvas/*.test.mjs"
         ],
         "test:native-investment-studio:source": [
+          "tests/native-investment-studio/commands.test.mjs",
           "tests/native-investment-studio/contract.test.mjs",
           "tests/native-investment-studio/controller.test.mjs",
           "tests/native-investment-studio/draft.test.mjs",

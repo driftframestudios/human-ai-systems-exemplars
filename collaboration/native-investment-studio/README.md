@@ -19,9 +19,11 @@ and integration authority; publication remains held.
 
 - `config.mjs` owns the immutable units, input limits, contract vocabulary,
   six practice definitions, and bounded history defaults.
-- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `preparePurpose`,
-  `prepareImport`, `parsePlan`, `createExamplePlan`, and
+- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareTeam`, `prepareWork`,
+  `preparePurpose`, `prepareAssemblyCommand`, `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
+- `commands.mjs` owns finite assembly transitions and their removal references.
+  Each transition receives an immutable projection from the state owner.
 - `state.mjs` owns the `createStudio` facade, each instance's accepted
   chronology, bounded Undo/Redo and independent baseline capture.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
@@ -39,6 +41,8 @@ and integration authority; publication remains held.
 - `tests/native-investment-studio/contract.test.mjs` and
   `tests/native-investment-studio/state.test.mjs`, relative to the repository
   root, own focused contract and state-transition observations.
+- `tests/native-investment-studio/commands.test.mjs` owns assembly accounting,
+  ordered membership, dependency-held removal, and command admission observations.
 - `tests/native-investment-studio/draft.test.mjs` owns draft recovery,
   coalescing, exact-target identity, and scheduling lifecycle observations.
 - `tests/native-investment-studio/person-state.test.mjs` and
@@ -288,7 +292,7 @@ part of the existing $16,000.
 
 `createStudio` creates an independent state owner with `read`, `replace`,
 `updateWork`, `previewWork`, `updatePerson`, `previewPerson`, `importText`,
-`exportText`, and `capture` operations. An accepted material edit produces a
+`applyCommand`, `previewCommand`, `exportText`, and `capture` operations. An accepted material edit produces a
 newly prepared immutable revision. Mutations receive the
 exact immutable projection returned by `read()` as their expected-state token:
 
@@ -320,6 +324,81 @@ next-revision projection while `read`, `capture`, and `exportText` retain the
 accepted projection. The exact-state check runs before and after preparation.
 Apply prepares again against the accepted owner; a displayed proposal carries
 the estimate, while Apply retains commit authority.
+
+### Assembly command contract
+
+[Issue #648](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/648)
+adds creation, membership, order and removal through one finite command facade.
+`applyCommand(command, expectedProjection)` and
+`previewCommand(command, expectedProjection)` use the same exact-state checks,
+accepted chronology and history owner as the existing update methods. Preview
+returns a complete proposed projection; Apply prepares the command against its
+current accepted receiver. A material command advances the document revision
+once. A validated no-op preserves accepted identity, chronology, Redo and the
+revision, including at the revision ceiling.
+
+Each command is a plain closed record with these exact fields:
+
+| `type` | Additional fields | Effect |
+| --- | --- | --- |
+| `person.create` | `person` | Append a complete person row with a distinct ID. |
+| `team.create` | `team` | Append a complete team row with ordered, existing person IDs. |
+| `work.create` | `work` | Append a complete work row with its existing team and participating members. |
+| `team.update` | `teamId`, `team` | Replace the complete team row while retaining its target ID and position. |
+| `team.members.replace` | `teamId`, `personIds` | Replace the ordered membership list while preserving participating work relationships. |
+| `work.participants.replace` | `workId`, `personIds` | Replace the ordered, nonempty participating-person list. |
+| `work.funding.set` | `workId`, `funding` | Select `allocated` or `additional` through the existing accounting rules. |
+| `work.status.set` | `workId`, `status` | Select `planned` or `paused`; paused work retains its modeled effort and obligation. |
+| `collection.reorder` | `collection`, `ids` | Put every current row exactly once in the supplied order; the collection is `people`, `teams`, `work` or `practices`. |
+| `person.remove` | `personId` | Remove a person after team and work references have been reassigned. |
+| `team.remove` | `teamId` | Remove a team after work and practice ownership have been reassigned. |
+| `work.remove` | `workId` | Remove work after practice references have been reassigned. |
+
+For example, this preview prices a smaller participating group:
+
+```js
+const expected = studio.read();
+const command = {
+  type: 'work.participants.replace', workId: 'review', personIds: ['product-one'],
+};
+const proposal = studio.previewCommand(command, expected);
+// The receiver presents the proposal, then submits the same intended change.
+const result = studio.applyCommand(command, expected);
+```
+
+Contract admission snapshots enumerable data descriptors, bounded dense lists,
+canonical IDs and supported choices before the transition reads a target.
+The discriminant is checked again after reflection. The complete person, team
+and work validators remain shared with their plan contract. Changed plans
+receive the complete reference, membership, cardinality, byte-budget and exact
+accounting preparation used by other native edits. Command construction leaves
+the current schema at 0.2 and the pricing model at 0.1.
+
+A referenced removal returns `ok: false` with `error.code: 'dependencies'` and
+an immutable `error.references` array. Each entry has `{collection, id, field}`;
+entries follow accepted collection order. The receiver can show the precise
+teams, work or practices that still use the target. State, export, baseline,
+chronology and history remain intact. A receiver can submit an explicitly
+reviewed, atomic reassignment through the existing whole-plan `replace` method,
+then retry the removal. Person records survive removal of their team; team and
+person records survive removal of their work. Retirement, role metadata and
+richer lifecycle states retain their planned schema-transition owner.
+
+Three API shapes were considered: separate public methods for every operation,
+an unrestricted path patcher, and the selected finite command facade. The finite
+facade keeps one closed admission route and one publication boundary while
+existing focused update methods retain their compatibility. The command module
+owns pure transition preparation; `state.mjs` owns accepted publication and
+rebuilds person/work position indexes after material assembly changes.
+
+For P people, T teams, W work records, A practices, R reference edges and B
+serialized bytes, a material command retains full O(P + T + W + A + R + B)
+preparation and space. Target scans and path copies occur once per command;
+reordering builds one temporary ID map. Removal scans each relevant reference
+list once and returns at most T + W references for a person, W + A for a team,
+or A for work. Command admission and validated no-op checks scale with their
+bounded input. These source bounds retain Issue #641's complete-preparation
+decision; runtime responsiveness remains a measurement question for its receiver.
 
 ### Accepted chronology, history and baseline
 

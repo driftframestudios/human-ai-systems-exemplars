@@ -20,6 +20,22 @@ const FIELDS = Object.freeze({
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const VERSION_FIELDS = new Map([[LEGACY_SCHEMA, 'legacyPlan'], [CONTRACT.schemaVersion, 'plan']]);
+const COMMAND_FIELDS = Object.freeze({
+  'person.create': ['type', 'person'],
+  'team.create': ['type', 'team'],
+  'work.create': ['type', 'work'],
+  'team.update': ['type', 'teamId', 'team'],
+  'team.members.replace': ['type', 'teamId', 'personIds'],
+  'work.participants.replace': ['type', 'workId', 'personIds'],
+  'work.funding.set': ['type', 'workId', 'funding'],
+  'work.status.set': ['type', 'workId', 'status'],
+  'collection.reorder': ['type', 'collection', 'ids'],
+  'person.remove': ['type', 'personId'],
+  'team.remove': ['type', 'teamId'],
+  'work.remove': ['type', 'workId'],
+});
+const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
+const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices']);
 
 export class PlanError extends Error {
   constructor(code, path, message) {
@@ -33,14 +49,12 @@ export class PlanError extends Error {
 function reject(code, path, message) { throw new PlanError(code, path, message); }
 
 // Read only declared data descriptors. Surplus or accessor values are never traversed.
-function record(value, kind, path) {
+function dataRecord(value, fields, allowed, path) {
   const prototype = value && typeof value === 'object' ? Object.getPrototypeOf(value) : undefined;
   if (!value || typeof value !== 'object' || Array.isArray(value)
       || (prototype !== Object.prototype && prototype !== null)) {
     reject('record', path, 'Supply a plain record with the declared fields.');
   }
-  const fields = FIELDS[kind];
-  const allowed = FIELD_SETS.get(kind);
   const keys = Reflect.ownKeys(value);
   if (keys.length !== fields.length || keys.some(key => !allowed.has(key))) {
     reject('fields', path, 'Supply exactly the fields declared by this contract.');
@@ -55,6 +69,8 @@ function record(value, kind, path) {
   }
   return owned;
 }
+
+function record(value, kind, path) { return dataRecord(value, FIELDS[kind], FIELD_SETS.get(kind), path); }
 
 function schemaVersion(candidate) {
   const prototype = candidate && typeof candidate === 'object' ? Object.getPrototypeOf(candidate) : undefined;
@@ -233,6 +249,61 @@ export function preparePerson(candidate, path = 'person') {
     rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
 }
 
+function identifiers(candidate, max, path, min = 0) {
+  const ids = list(candidate, max, path);
+  if (ids.length < min) reject('reference-count', path, `Supply at least ${min} reference.`);
+  const seen = new Set();
+  for (const id of ids) {
+    text(id, path, true);
+    if (seen.has(id)) reject('duplicate-reference', path, 'Reference each record once within this list.');
+    seen.add(id);
+  }
+  return ids;
+}
+
+export function prepareTeam(candidate, path = 'team') {
+  const team = record(candidate, 'team', path);
+  return teamFields(team, identifiers(team.personIds, LIMITS.people, `${path}.personIds`), path);
+}
+
+function teamFields(team, personIds, path) {
+  return { id: text(team.id, `${path}.id`, true), label: text(team.label, `${path}.label`), personIds };
+}
+
+// The command envelope and every payload become owned before target lookup.
+// Recheck the discriminant after reflection, just as versioned plan admission does.
+export function prepareAssemblyCommand(candidate) {
+  const path = 'command';
+  const descriptor = candidate && typeof candidate === 'object'
+    ? Object.getOwnPropertyDescriptor(candidate, 'type') : null;
+  if (!descriptor?.enumerable || !Object.hasOwn(descriptor, 'value')) {
+    reject('data-property', `${path}.type`, 'Supply an enumerable command type.');
+  }
+  const type = descriptor.value;
+  if (typeof type !== 'string' || !COMMAND_FIELD_SETS.has(type)) {
+    reject('command', `${path}.type`, 'Choose a supported assembly command.');
+  }
+  const raw = dataRecord(candidate, COMMAND_FIELDS[type], COMMAND_FIELD_SETS.get(type), path);
+  if (raw.type !== type) reject('command', `${path}.type`, 'Keep the admitted command type consistent.');
+  switch (type) {
+    case 'person.create': return { type, person: preparePerson(raw.person, `${path}.person`) };
+    case 'team.create': return { type, team: prepareTeam(raw.team, `${path}.team`) };
+    case 'work.create': return { type, work: prepareWork(raw.work, `${path}.work`) };
+    case 'team.update': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), team: prepareTeam(raw.team, `${path}.team`) };
+    case 'team.members.replace': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`) };
+    case 'work.participants.replace': return { type, workId: text(raw.workId, `${path}.workId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1) };
+    case 'work.funding.set': return { type, workId: text(raw.workId, `${path}.workId`, true), funding: choice(raw.funding, FUNDING, `${path}.funding`) };
+    case 'work.status.set': return { type, workId: text(raw.workId, `${path}.workId`, true), status: choice(raw.status, WORK_STATUS, `${path}.status`) };
+    case 'collection.reorder': {
+      const collection = choice(raw.collection, ORDERED_COLLECTIONS, `${path}.collection`);
+      return { type, collection, ids: identifiers(raw.ids, LIMITS[collection], `${path}.ids`) };
+    }
+    case 'person.remove': return { type, personId: text(raw.personId, `${path}.personId`, true) };
+    case 'team.remove': return { type, teamId: text(raw.teamId, `${path}.teamId`, true) };
+    case 'work.remove': return { type, workId: text(raw.workId, `${path}.workId`, true) };
+  }
+}
+
 export function preparePurpose(candidate, path = 'purpose') {
   const raw = record(candidate, 'purpose', path);
   return Object.fromEntries(PURPOSE_FIELDS.map(field => {
@@ -261,14 +332,7 @@ function workFields(work, personIds, path) {
 // A changed row receives whole-plan reference, membership and budget checks.
 export function prepareWork(candidate, path = 'work') {
   const work = record(candidate, 'work', path);
-  const personIds = list(work.personIds, LIMITS.people, `${path}.personIds`);
-  if (!personIds.length) reject('reference-count', `${path}.personIds`, 'Supply at least one reference.');
-  const seen = new Set();
-  for (const id of personIds) {
-    text(id, `${path}.personIds`, true);
-    if (seen.has(id)) reject('duplicate-reference', `${path}.personIds`, 'Reference each record once within this list.');
-    seen.add(id);
-  }
+  const personIds = identifiers(work.personIds, LIMITS.people, `${path}.personIds`, 1);
   return workFields(work, personIds, path);
 }
 
@@ -292,7 +356,7 @@ function prepareVersion(candidate, version) {
   state.teams = list(raw.teams, LIMITS.teams, 'plan.teams').map((value, i) => {
     const path = `plan.teams[${i}]`;
     const team = record(value, 'team', path);
-    return { id: text(team.id, `${path}.id`, true), label: text(team.label, `${path}.label`), personIds: references(team.personIds, peopleById, `${path}.personIds`, budget) };
+    return teamFields(team, references(team.personIds, peopleById, `${path}.personIds`, budget), path);
   });
   const teamsById = indexRecords(state.teams, 'plan.teams');
   const teamMembers = new Map(state.teams.map(team => [team.id, new Set(team.personIds)]));
