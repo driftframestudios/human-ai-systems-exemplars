@@ -16,8 +16,9 @@ controls with different jobs:
   publish or deploy. Its resting value is `[]`.
 - `SCHEMA_WORKER_DEPENDENCY_GATE` is the repository-level production dependency
   prerequisite. Its resting, held state is unset or any value other than
-  `open`. The reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` locks
-  satisfy the dependency floor owned by Issue #402. Set this gate to `open` only
+  `open`. The reviewed Wrangler `4.155.0` / Miniflare `5.20261023.2-beta` /
+  Undici `7.30.1` / Sharp `0.35.5` locks satisfy the dependency floor owned
+  by Issue #659. Set this gate to `open` only
   for an explicitly selected production activation. This gate applies only to
   the `prod` deployment job and grants no runner or deployment authority by
   itself.

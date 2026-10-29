@@ -173,7 +173,7 @@
     "test:native-investment-studio:assembly-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/assembly.browser.mjs"
   },
   "overrides": {
-    "fast-uri": "4.1.5"
+    "fast-uri": "4.2.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
@@ -184,6 +184,6 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "sharp": "^0.35.5",
-    "wrangler": "4.149.0"
+    "wrangler": "4.155.0"
   }
 }
