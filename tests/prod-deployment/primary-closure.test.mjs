@@ -7,7 +7,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
-import { build } from "esbuild";
+import { NATIVE_STUDIO_ENTRY as nativeEntry, parseNativeModuleGraph, readNativeModuleClosure } from "../../tools/native-studio-module-closure.mjs";
 
 import {
   createProductionProjectionPlan,
@@ -15,7 +15,6 @@ import {
   validateAssetInventory,
   validatePrimaryManifest,
 } from "../../tools/build-prod-projection.mjs";
-import { classifyJavaScript } from "../../tools/node-route-inventory.mjs";
 import { createAggregatePackagePlan } from "../../tools/package-v1-iframe-routes.mjs";
 import {
   loadSourceRouteAuthority,
@@ -27,12 +26,6 @@ const repositoryRoot = path.resolve(
   "../..",
 );
 const canvasRoot = "context-canvas-project-surface/context-canvas";
-const nativeRoot = "collaboration/native-investment-studio";
-const nativeModules = [
-  "config.mjs", "contract.mjs", "controller.mjs", "display.mjs", "draft.mjs", "editing.mjs", "exchange.mjs", "icons.mjs", "investment-controller.mjs", "person-draft.mjs", "presets.mjs", "purpose-controller.mjs", "purpose-draft.mjs", "shell.mjs", "state.mjs", "team-controller.mjs"
-]
-  .map((file) => `${nativeRoot}/${file}`);
-const nativeEntry = `${nativeRoot}/controller.mjs`;
 const execFileAsync = promisify(execFile);
 const acceptedRoutes = [
   "index.html",
@@ -138,34 +131,6 @@ function localStylesheetReferences(html) {
     references.push(href.split(/[?#]/u, 1)[0]);
   }
   return references;
-}
-
-// esbuild parses the actual module syntax; the receiver supplies its exact closure.
-async function parsedNativeGraph(files, entry) {
-  const visited = new Set();
-  await build({
-    entryPoints: [entry], bundle: true, write: false, platform: "browser",
-    format: "esm", logLevel: "silent",
-    plugins: [{
-      name: "native-closure-observation",
-      setup(builder) {
-        builder.onResolve({ filter: /.*/ }, (args) => {
-          assert.ok(args.kind === "entry-point" || args.kind === "import-statement",
-            "the native receiver declares a static module graph");
-          if (args.kind !== "entry-point") assert.match(args.path, /^\.\.?\//u);
-          const resolved = args.kind === "entry-point" ? path.posix.normalize(args.path)
-            : path.posix.normalize(path.posix.join(path.posix.dirname(args.importer), args.path));
-          assert.ok(files.has(resolved), `module closure supplies ${resolved}`);
-          return { path: resolved, namespace: "native-closure" };
-        });
-        builder.onLoad({ filter: /.*/, namespace: "native-closure" }, (args) => {
-          visited.add(args.path);
-          return { contents: files.get(args.path), loader: "js" };
-        });
-      },
-    }],
-  });
-  return [...visited].sort();
 }
 
 function firstJsonLd(html, label) {
@@ -289,21 +254,7 @@ test("every local stylesheet linked by production-selected HTML belongs to the e
 
 test("native Studio modules retain exact static-import and media closure in the production artifact", async (t) => {
   const manifest = await loadPrimaryManifest();
-  const sources = new Map();
-  for (const sourcePath of nativeModules) {
-    assert.deepEqual(manifest.files.filter((file) => file.source_path === sourcePath), [{
-      source_path: sourcePath, projected_path: sourcePath, media_type: "text/javascript",
-    }], sourcePath);
-    assert.equal(classifyJavaScript(sourcePath), "browser-shared", sourcePath);
-    sources.set(sourcePath, await readFile(path.join(repositoryRoot, sourcePath)));
-  }
-  assert.deepEqual(await parsedNativeGraph(sources, nativeEntry), nativeModules);
-  for (const required of ["config.mjs", "display.mjs", "editing.mjs", "exchange.mjs", "icons.mjs", "investment-controller.mjs", "person-draft.mjs", "presets.mjs", "purpose-controller.mjs", "purpose-draft.mjs", "shell.mjs", "team-controller.mjs"]) {
-    const incomplete = new Map(sources);
-    incomplete.delete(`${nativeRoot}/${required}`);
-    await assert.rejects(parsedNativeGraph(incomplete, nativeEntry), /module closure supplies/u,
-      `the production graph requires ${required}`);
-  }
+  const { paths: nativeModules, sources } = await readNativeModuleClosure(repositoryRoot);
 
   const about = await readFile(path.join(repositoryRoot, canvasRoot, "index.html"), "utf8");
   const tags = [...about.matchAll(/<script\b[^>]*>/giu)].map(([tag]) => tag).filter((tag) => {
@@ -361,7 +312,7 @@ test("native Studio modules retain exact static-import and media closure in the 
   assert.ok(projectedTag, "the production About carrier keeps the module entry");
   assert.equal(quotedHtmlAttribute(projectedTag, "src"), nativeEntry);
   assert.equal(quotedHtmlAttribute(projectedTag, "type"), "module");
-  assert.deepEqual(await parsedNativeGraph(finalSources, nativeEntry), nativeModules);
+  assert.deepEqual(await parseNativeModuleGraph(source => finalSources.get(source), nativeEntry), nativeModules);
 });
 
 test("the manufacturing gallery carries its exact primary closure and generated image provenance", async () => {

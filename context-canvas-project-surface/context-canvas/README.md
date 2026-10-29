@@ -40,8 +40,10 @@ owns About's hours/minutes/session draft, live preview, explicit Apply controlle
 and accepted investment model.
 `index.html` supplies its semantic panel and static example;
 `styles/routes/about.css` owns the scoped `.native-coordination` composition.
-The primary route manifest carries all eight canonical browser modules with
-their relative import geometry. Source, production-closure, and focused
+The primary route manifest carries the canonical browser module graph with
+its relative import geometry. The shared native-module closure check compares
+parsed imports with that manifest and the browser/shared runtime inventory.
+Source, production-closure, and focused
 three-engine interaction checks belong to Issue #643. Issue #641 records the accepted live-preview and explicit Apply measurement.
 The native Team Assembly receiver adds one roster and a person rate/funded-time
 editor through the same accepted state owner; its focused source and browser

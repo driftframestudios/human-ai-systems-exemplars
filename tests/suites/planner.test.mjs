@@ -16,6 +16,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/editing.test.mjs',
   'tests/native-investment-studio/exchange.test.mjs',
   'tests/native-investment-studio/investment.browser.mjs',
+  'tests/native-investment-studio/module-closure.test.mjs',
   'tests/native-investment-studio/person-draft.test.mjs',
   'tests/native-investment-studio/person-state.test.mjs',
   'tests/native-investment-studio/presets.test.mjs',
@@ -287,7 +288,7 @@ test('native Studio routes retain source and separate browser owners with execut
   ]);
   const sourceMembers = [
     'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
-    'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'shell.test.mjs', 'state.test.mjs',
+    'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].map(file => `tests/native-investment-studio/${file}`);
   assert.deepEqual(

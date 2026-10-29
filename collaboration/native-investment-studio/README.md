@@ -1002,6 +1002,26 @@ observations when the native receiver is introduced.
 
 ## Focused regression route
 
+### Module delivery
+
+`tools/native-studio-module-closure.mjs` parses the static ESM graph from
+`controller.mjs`. It compares reachable modules with two independent owners:
+the primary route manifest's path-identical JavaScript entries and the explicit
+browser/shared inventory. Each owner covers the complete graph in both directions.
+Local server tests check media type and exact bytes; the production test parses
+the final projected bytes again and checks the About entry path.
+After syntax admission, the existing esbuild dependency checks import/export
+linkage using that exact in-memory source map.
+
+The helper uses development-only Acorn 8.19.0 (MIT) to inspect authored syntax,
+including dynamic imports inside branches a bundler can remove. Relative static
+`.mjs` imports and re-exports stay within this package. Dynamic imports,
+CommonJS loader references, and attributed imports receive typed diagnostics.
+Runtime assets such as fetched data and constructed URLs retain a separate
+asset observation when introduced. Parsing visits each module once; traversal
+cost follows total source size and import edges, with a final sorted path list.
+The parser and helper stay in the Node test/tool closure.
+
 From the repository root:
 
 ```sh
