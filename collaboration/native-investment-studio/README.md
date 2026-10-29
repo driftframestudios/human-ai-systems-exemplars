@@ -24,6 +24,8 @@ and integration authority; publication remains held.
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `commands.mjs` owns finite assembly transitions and their removal references.
   Each transition receives an immutable projection from the state owner.
+- `connection-templates.mjs` owns four authored coordination arrangements,
+  bounded team/connection bindings, and one atomic prepared proposal.
 - `state.mjs` owns the `createStudio` facade, each instance's accepted
   chronology, bounded Undo/Redo and independent baseline capture.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
@@ -689,6 +691,138 @@ retained captures, atomic reassignment, stale publication, and no-op history.
 It establishes canonical source behavior; the next coherent control group
 owns browser observations. Source ownership remains with `contract.mjs`,
 `commands.mjs`, `state.mjs` and the finite frozen `roles.mjs` catalogue.
+
+## Coordination template proposals
+
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
+receives four editable arrangements: pod, guild, project team, and shared
+service. `connection-templates.mjs` owns their finite catalogue and proposal
+factory. Each arrangement names group slots and directed exchanges. The visitor
+supplies the people, shared objects, receiving people, supporting work, and
+response expectations that give those exchanges meaning.
+
+A finite catalogue plus one factory keeps admission, identity, and publication
+in one path. Separate functions for each arrangement would repeat those
+boundaries; a general graph builder would introduce topology and construction
+states beyond these four arrangements. The catalogue describes useful starting
+arrangements. The visitor chooses how each arrangement fits the work.
+
+### Request and ownership
+
+`listCoordinationTemplates()` returns shared frozen catalogue records with
+`id`, `version`, `label`, `description`, ordered `teams`, and ordered
+`connections`. Group slots have `id` and `label`; connection slots add
+`senderSlotId` and `receiverSlotId`.
+
+`prepareCoordinationTemplate(base, request)` receives an immutable accepted
+projection and the following closed request:
+
+```js
+{
+  templateId: 'pod', version: '1.0.0', proposalId: 'review-cycle',
+  teams: [
+    { slotId: 'pod', kind: 'new', label: 'Product', personIds: ['product-one'] },
+    { slotId: 'partner', kind: 'existing', teamId: 'delivery', addPersonIds: [] }
+  ],
+  connections: [
+    { slotId: 'handoff', receiverPersonId: 'engineering-one',
+      sharedObject: 'A reviewed plan', responseExpectation: 'Review together.',
+      workIds: ['review'], status: 'active', recoveryWork: null },
+    { slotId: 'feedback', receiverPersonId: 'product-one',
+      sharedObject: 'Review decisions', responseExpectation: null,
+      workIds: ['review'], status: 'active', recoveryWork: null }
+  ]
+}
+```
+
+Each group binding uses one of two exact shapes:
+
+- Existing: `{slotId, kind: 'existing', teamId, addPersonIds}`. Additions name
+  existing people; current membership and order remain, followed by each newly
+  added person in the supplied order. Supplying a current member keeps its
+  existing position.
+- New: `{slotId, kind: 'new', label, personIds}`. The factory proposes an active
+  group with ID `${proposalId}-team-${slotId}` and the chosen existing people.
+  Existing work retains its current owning group and participants.
+
+Each connection binding has the exact fields shown above. Endpoints come from
+its authored slots. `workIds` names existing work in the starting plan.
+`receiverPersonId` and `responseExpectation` may be `null`; canonical
+observations retain their unresolved meaning. Every slot appears exactly once,
+with distinct bound groups. Catalogue order determines appended record order,
+so a request's slot order has the same meaning when reordered.
+
+`recoveryWork` is `null` or a complete record containing `label`, `teamId`,
+`personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`,
+`timing`, and `lifecycle`. The factory derives its ID as
+`${proposalId}-recovery-${connectionSlotId}` and appends that reference to the
+connection. The normal work constructor and whole-plan admission validate its
+units, funding, people, membership, and current `timing: null` rule. A recovery
+record may use a group proposed in the same preview. Its funding and effort
+remain explicit choices.
+
+Connection IDs use `${proposalId}-connection-${slotId}`. Every generated ID
+obeys the canonical 64-character bound. A generated identity already in the
+plan is reusable when its complete canonical row matches. A differing row
+returns `identity-collision`; a new proposal identifier starts a separate
+arrangement. Exact repetition keeps the current projection, including its
+revision and Redo entries. Historical IDs remain available after Undo; the
+fresh accepted envelope still retires earlier proposals.
+
+### Preview, Apply, and recovery
+
+The factory returns a frozen `{template, proposalId, projection, summary}`.
+The summary lists `newTeamIds`, `memberships` with ordered `addedPersonIds`,
+`newConnectionIds`, and `newRecoveryWorkIds`. Its `money` record shows known
+before/after/delta cents separately from before/after/delta total cents.
+An unknown total stays `null`, while a known zero remains zero. The preview's
+complete projection supplies labels, resulting memberships, relationships,
+observations, and calculations for the receiving view.
+
+`applyCoordinationTemplate(studio, proposal)` accepts a proposal created by
+this module and calls the existing Studio `replace` owner with its captured
+base. A changed proposal publishes once and creates one Undo entry. An exact
+no-op returns the accepted projection without advancing chronology. A stale
+base, including an equal-payload import or an Undo/Redo return, holds the
+proposal for another deliberate preview. A copied or fabricated proposal
+returns `template-proposal`. Dropping a prepared proposal cancels it; preparation
+itself changes no accepted state.
+
+The native receiver owns the editable request, preview selection, and draft
+intent. It retires a displayed proposal when its inputs change, coordinates
+with the existing single active editor, and renders the current preview before
+Apply. The factory adds no second editing owner or asynchronous scheduler.
+Connection editing and on/off controls continue through canonical commands.
+A paused connection changes its observation and presentation; the work records
+continue to carry their declared commitments.
+
+### Cost and fitting evidence
+
+At most three group slots and three connection slots belong to one template.
+Each optional recovery record belongs to one connection. The factory admits
+bounded dense arrays and own enumerable data fields before traversing their
+values. Invocation-local maps index existing people, groups, work, and
+connections; set membership preserves ordered uniqueness. It creates at most
+three groups, three connections, and three recovery records. Whole-plan
+admission checks the final record, reference, and encoded-byte budgets.
+
+With N accepted records, R references and B bounded text/serialized bytes,
+preparation is O(N + R + B) time and space under expected Map/Set lookup.
+Its row comparisons cover at most three finite records per collection. A
+changed Apply invokes the accepted owner's full admission once more; exact
+no-op Apply is O(1). Caller-retained proposals retain their immutable base and
+candidate projections. Direct-object admission also pays O(K) for enumerating
+K supplied own keys before rejecting a surplus shape; arbitrary Proxy callback
+runtime retains the existing direct-JavaScript boundary.
+
+`tests/native-investment-studio/connection-templates.test.mjs` observes the
+literal $16,000 funded amount, $400 allocated attribution, and $150 additional
+review; shared references price each work item once. It also exercises
+first-use group creation, membership additions, pause, exact/one-over record
+and reference limits, zero/unknown rates, descriptor admission, identity
+collisions, ownership, stale/ABA previews, atomic failure, no-op, and Undo.
+The native patch-bay receiver supplies diagram/list parity, keyboard focus,
+reading geometry and motion evidence in its focused browser tranche.
 
 ## Coordination-work draft adapter
 
