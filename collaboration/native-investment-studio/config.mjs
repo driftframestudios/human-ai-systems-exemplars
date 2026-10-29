@@ -11,6 +11,8 @@ export const LIMITS = Object.freeze({
   rateCentsPerHour: 100000000, revision: Number.MAX_SAFE_INTEGER - 1,
 });
 
+export const HISTORY = Object.freeze({ defaultEntries: 20, maxEntries: 100 });
+
 export const PRACTICES = Object.freeze([
   ['expectation', 'Actively negotiate expectations'],
   ['focalization', 'Bring the decision into focus'],

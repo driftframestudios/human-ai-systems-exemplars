@@ -18,11 +18,11 @@ and integration authority; publication remains held.
 ## Source map
 
 - `config.mjs` owns the immutable units, input limits, contract vocabulary,
-  and six practice definitions.
-- `contract.mjs` owns `preparePlan`, `preparePerson`, `parsePlan`, `createExamplePlan`, and
+  six practice definitions, and bounded history defaults.
+- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
-- `state.mjs` owns the `createStudio` facade and each instance's accepted
-  revision.
+- `state.mjs` owns the `createStudio` facade, each instance's accepted
+  chronology, bounded Undo/Redo and independent baseline capture.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
   the optional one-request scheduling boundary.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
@@ -237,8 +237,8 @@ descriptor callbacks.
 `updateWork` retains the target work ID and collection order, then increments
 the native plan revision. Replacement and import preserve the supplied native
 revision and replace the accepted projection identity. The work-position index
-and person-position index are rebuilt for replacement/import and reused for
-targeted edits that preserve identity and order.
+and person-position index are rebuilt for replacement, import and restoration;
+targeted edits reuse them while preserving identity and order.
 
 `previewWork(workId, fullReplacementRow, expectedProjection)` shares the same
 target checks and complete preparation with `updateWork`. It returns a proposed
@@ -246,6 +246,82 @@ next-revision projection while `read`, `capture`, and `exportText` retain the
 accepted projection. The exact-state check runs before and after preparation.
 Apply prepares again against the accepted owner; a displayed proposal carries
 the estimate, while Apply retains commit authority.
+
+### Accepted chronology, history and baseline
+
+[Issue #649](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/649)
+places chronology in the accepted state owner so direct commands and future
+editing/exchange receivers share the same history. Existing commands keep their
+exact-projection argument and result shape. A second optional constructor
+argument selects retention: `createStudio(plan, { historyLimit: 2 })`.
+`HISTORY` in `config.mjs` names the default of 20 predecessor plans and the
+configurable ceiling of 100. Zero retains accepted chronology and explicit
+baseline support while keeping Undo/Redo empty.
+
+| Receiver | Meaning |
+| --- | --- |
+| `readAcceptance()` | One frozen `{ instance, token, sequence }` record. Opaque Symbols identify this instance and its current accepted event; sequence begins at zero and increases once per publication. This tiny record retains no projection. |
+| `readHistory()` | Frozen `{ undoCount, redoCount, limit }` counts. The combined retained Undo/Redo entries fit the configured limit. |
+| `undo(expected)` / `redo(expected)` | Restore the nearest retained plan using a fresh accepted envelope and acceptance token. Empty history returns `history-empty`; an outdated expected projection receives `stale-edit` first. |
+| `setBaseline(expected)` | Capture the current projection and acceptance in a separate frozen `{ projection, acceptance, token }` record. Capture leaves accepted identity, sequence, Undo and Redo unchanged. |
+| `readBaseline()` | Return that capture record, or null before the first capture. Each capture has its own fresh token. |
+| `restoreBaseline(expected)` | Restore the captured payload as a new accepted event; an absent baseline returns `baseline-empty`. Restoration joins Undo and clears Redo like a material edit. |
+
+A complete admitted replacement or import creates an accepted event even when
+its payload and imported numeric revision match the current plan. Undo, Redo
+and baseline restoration likewise mint fresh envelopes. Earlier expected
+projections therefore remain stale after A → B → A. Imported document revision
+and local acceptance sequence answer separate questions; traversal restores
+the document's recorded revision while advancing local chronology. The safe
+integer sequence boundary returns `acceptance-limit` before any publication.
+
+Every material publication prepares its projection and applicable indexes,
+then checks exact freshness again. History, projection, indexes and acceptance
+change together through owned assignments after that check. A descriptor
+callback that publishes a newer plan retires the outer attempt. Baseline
+capture has its own record and survives an older reentrant attempt's return.
+Neither history entries nor acceptance records point back into a Studio or
+prior history container.
+
+Read, capture, export, previews, baseline capture and validated no-op row
+commands preserve accepted chronology. Invalid commands preserve their prior
+history as well. Material edits, complete replacement/import and baseline
+restoration clear Redo; Undo/Redo transfer one entry between their bounded
+stacks. Baseline restoration remains a deliberate accepted event even when
+the captured payload already matches the current one.
+
+`prepareWork` admits the complete closed work row, including its bounded dense
+participant list, before the no-op comparison. The shared `workFields` helper
+owns scalar vocabulary and bounds for both row and full-plan preparation.
+Admitted row equality includes participant order. An unchanged row reuses the
+exact accepted projection, including at the document revision limit; a changed
+row re-enters complete-plan preparation for reference resolution, team
+membership, aggregate edge budget, accounting and serialization. The ordinary
+full-plan path retains its early reference-budget check.
+
+The literal source fixture starts at $1,200, changes one rate to $101 for
+$1,203, then funds one hour for $1,304. Undo/Redo restore those values with
+fresh accepted identities. Adjacent cases cover partial pricing, baseline
+restoration, imported equal revisions, closed-row no-ops, retained order,
+reentrant publication and restored identity indexes. Existing draft fixtures
+continue to exercise their exact-projection stale boundary.
+
+History uses bounded arrays of immutable projection references. Let H be the
+configured entry limit and S a retained projection's state, result and serialized
+size. Retention is O(H × S), plus accepted state, one baseline and caller-owned
+captures. The serialized-byte limit bounds exchange bytes; heap use also
+includes records, arrays, indexes, strings and engine overhead. A ceiling of
+100 near-limit projections can therefore retain materially more memory than
+100 serialized files. The default of 20 is the ordinary receiving policy;
+a larger limit deserves a concrete local workload and memory observation.
+
+A row no-op admits and compares its row in O(R) for that row's participant
+count. A material edit keeps the existing full preparation path. Publication
+copies O(H) stack references; traversal and baseline restoration create an
+O(1) envelope, rebuild person/work position indexes in O(P + W), and share
+already frozen payloads. Reading acceptance, baseline and history counts costs
+O(1). Eviction releases the owner's reference; an explicit external capture
+can continue to retain that immutable projection.
 
 ### Person command contract
 

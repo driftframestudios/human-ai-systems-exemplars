@@ -212,6 +212,31 @@ export function preparePerson(candidate, path = 'person') {
     rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
 }
 
+function workFields(work, personIds, path) {
+  if (work.timing !== null) reject('timing-version', `${path}.timing`, 'Keep timing explicitly unavailable until a scheduling contract is selected.');
+  return { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`),
+    teamId: text(work.teamId, `${path}.teamId`, true), personIds,
+    minutesPerOccurrence: integer(work.minutesPerOccurrence, LIMITS.minutesPerOccurrence, `${path}.minutesPerOccurrence`),
+    occurrences: integer(work.occurrences, LIMITS.occurrences, `${path}.occurrences`),
+    funding: choice(work.funding, FUNDING, `${path}.funding`),
+    status: choice(work.status, WORK_STATUS, `${path}.status`), timing: null };
+}
+
+// Admit one closed row before comparing it with an already accepted work row.
+// A changed row receives whole-plan reference, membership and budget checks.
+export function prepareWork(candidate, path = 'work') {
+  const work = record(candidate, 'work', path);
+  const personIds = list(work.personIds, LIMITS.people, `${path}.personIds`);
+  if (!personIds.length) reject('reference-count', `${path}.personIds`, 'Supply at least one reference.');
+  const seen = new Set();
+  for (const id of personIds) {
+    text(id, `${path}.personIds`, true);
+    if (seen.has(id)) reject('duplicate-reference', `${path}.personIds`, 'Reference each record once within this list.');
+    seen.add(id);
+  }
+  return workFields(work, personIds, path);
+}
+
 export function preparePlan(candidate) {
   const raw = record(candidate, 'plan', 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
@@ -242,12 +267,7 @@ export function preparePlan(candidate) {
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
     const members = teamMembers.get(teamId);
     if (personIds.some(id => !members.has(id))) reject('team-membership', `${path}.personIds`, 'Assign participating people to the work-owning team.');
-    if (work.timing !== null) reject('timing-version', `${path}.timing`, 'Keep timing explicitly unavailable until a scheduling contract is selected.');
-    return { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`), teamId, personIds,
-      minutesPerOccurrence: integer(work.minutesPerOccurrence, LIMITS.minutesPerOccurrence, `${path}.minutesPerOccurrence`),
-      occurrences: integer(work.occurrences, LIMITS.occurrences, `${path}.occurrences`),
-      funding: choice(work.funding, FUNDING, `${path}.funding`),
-      status: choice(work.status, WORK_STATUS, `${path}.status`), timing: null };
+    return workFields(work, personIds, path);
   });
   const workById = indexRecords(state.work, 'plan.work');
   state.practices = list(raw.practices, LIMITS.practices, 'plan.practices').map((value, i) => {
