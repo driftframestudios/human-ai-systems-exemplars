@@ -156,23 +156,28 @@ for (const engine of names) {
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toHaveCount(1);
   });
 
-  test(`${engine}: separate forms and imported accepted state preserve stale person drafts`, { timeout: 45000 }, async t => {
+  test(`${engine}: parked person edits retain their target and stale recovery is explicit`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await choose(page);
     await input(page, 'ratePerHour').fill('101');
     await panel(page).locator('[data-native-chapter="coordination"]').click();
     await panel(page).locator('input[name="occurrences"]').fill('7');
-    await expect(preview(page)).toHaveText('$1,203.00');
+    await expect(input(page, 'ratePerHour')).toHaveValue('101');
+    await expect(input(page, 'ratePerHour')).toBeDisabled();
     await expect(panel(page).locator('[data-native-preview-total]')).toHaveText('$1,400.00');
     await panel(page).locator('[data-action="apply"]').click();
     await expect(accepted(page)).toHaveText('$1,400.00');
+    await panel(page).locator('[data-native-chapter="people"]').click();
     await expect(team(page)).toHaveAttribute('data-team-state', 'stale');
     await expect(input(page, 'ratePerHour')).toHaveValue('101');
-    await panel(page).locator('[data-native-chapter="people"]').click();
-    await action(page, 'apply').click();
+    await expect(input(page, 'ratePerHour')).toBeDisabled();
+    await expect(action(page, 'apply')).toBeDisabled();
+    await expect(team(page).locator('[data-person-recovery]')).toBeVisible();
+    await expect(team(page).locator('[data-person-current]')).toContainText('$100.00/hour');
+    await action(page, 'use-current').click();
+    await expect(input(page, 'ratePerHour')).toHaveValue('100.00');
+    await expect(input(page, 'ratePerHour')).toBeEditable();
     await expect(accepted(page)).toHaveText('$1,400.00');
-    await expect(team(page).locator('[data-person-status]')).toContainText('Cancel');
-    await action(page, 'cancel').click();
     await expect(panel(page).locator('input[name="occurrences"]')).toHaveValue('7');
 
     await page.evaluate(async ({ controllerPath, statePath }) => {
@@ -186,8 +191,38 @@ for (const engine of names) {
     await choose(page);
     await input(page, 'ratePerHour').fill('105');
     await choose(page, 'product-two');
+    await expect(team(page).locator('[data-person-name]')).toHaveText('product-two');
+    await expect(input(page, 'ratePerHour')).toHaveValue('100.00');
+    await expect(team(page).locator('[data-person-saved="product-one"]')).toBeVisible();
+    await expect(panel(page).locator('[data-native-saved]')).toBeVisible();
+    await expect(panel(page).locator('[data-native-saved-count]')).toHaveText('1');
+    await input(page, 'fundedHours').fill('1');
+    await choose(page, 'product-one');
     await expect(team(page).locator('[data-person-name]')).toHaveText('product-one');
-    await expect(team(page).locator('[data-person-status]')).toContainText('Apply or cancel');
+    await expect(input(page, 'ratePerHour')).toHaveValue('105');
+    await expect(input(page, 'fundedHours')).toHaveValue('0');
+    await expect(team(page).locator('[data-person-saved="product-two"]')).toBeVisible();
+    await expect(preview(page)).toHaveText('$1,215.00');
+    await expect(accepted(page)).toHaveText('$1,200.00');
+    await action(page, 'apply').click();
+    await expect(accepted(page)).toHaveText('$1,215.00');
+    assert.deepEqual(await page.evaluate(() => window.teamFixture.studio.read().state.people.slice(0, 2)
+      .map(({ id, rateCentsPerHour, fundedMinutes }) => ({ id, rateCentsPerHour, fundedMinutes }))), [
+      { id: 'product-one', rateCentsPerHour: 10500, fundedMinutes: 0 },
+      { id: 'product-two', rateCentsPerHour: 10000, fundedMinutes: 0 },
+    ], 'returning to a saved person edit applies only its original target');
+    await choose(page, 'product-two');
+    await expect(team(page)).toHaveAttribute('data-team-state', 'stale');
+    await expect(input(page, 'fundedHours')).toHaveValue('1');
+    await expect(input(page, 'fundedHours')).toBeDisabled();
+    await action(page, 'discard').click();
+    await expect(settings(page)).not.toHaveAttribute('open', '');
+    await expect(settings(page).locator('summary')).toBeFocused();
+    await expect(team(page).locator('[data-person-saved="product-two"]')).toBeHidden();
+    await expect(accepted(page)).toHaveText('$1,215.00');
+
+    await choose(page, 'product-one');
+    await input(page, 'ratePerHour').fill('104');
     await page.evaluate(() => {
       const fixture = window.teamFixture;
       const candidate = JSON.parse(fixture.studio.exportText());
@@ -199,20 +234,74 @@ for (const engine of names) {
       fixture.controller.refresh();
     });
     await expect(accepted(page)).toHaveText('$1,230.00');
-    await expect(input(page, 'ratePerHour')).toHaveValue('105');
+    await expect(input(page, 'ratePerHour')).toHaveValue('104');
     await expect(team(page)).toHaveAttribute('data-team-state', 'stale');
-    await input(page, 'ratePerHour').fill('104');
-    await expect(team(page).locator('[data-person-status]')).toContainText('Cancel');
+    await expect(input(page, 'ratePerHour')).toBeDisabled();
+    await expect(action(page, 'apply')).toBeDisabled();
+    await expect(team(page).locator('[data-person-current]')).toContainText('$110.00/hour');
+    await page.evaluate(() => {
+      const fixture = window.teamFixture;
+      const candidate = JSON.parse(fixture.studio.exportText());
+      candidate.people[0].rateCentsPerHour = 12000;
+      const result = fixture.studio.importText(JSON.stringify(candidate), fixture.studio.read());
+      if (!result.ok) throw new Error('The second accepted replacement must be admitted.');
+      fixture.accepted = fixture.studio.read();
+      fixture.serialized = fixture.studio.exportText();
+      // Simulate another accepted source arriving after the recovery copy was
+      // rendered. The first Review still belongs to the values the visitor saw.
+    });
+    await expect(team(page).locator('[data-person-current]')).toContainText('$110.00/hour');
+    await action(page, 'review').click();
+    await expect(input(page, 'ratePerHour')).toBeDisabled();
+    await expect(input(page, 'ratePerHour')).toHaveValue('104');
+    await expect(team(page)).toHaveAttribute('data-team-state', 'stale');
+    await expect(team(page).locator('[data-person-current]')).toContainText('$120.00/hour');
+    await expect(accepted(page)).toHaveText('$1,260.00');
+    await action(page, 'review').click();
+    await expect(input(page, 'ratePerHour')).toBeEditable();
+    await expect(input(page, 'ratePerHour')).toHaveValue('104');
+    await expect(preview(page)).toHaveText('$1,212.00');
     await team(page).locator('[data-person-field="ratePerHour"][data-step="1"]').click();
     await expect(input(page, 'ratePerHour')).toHaveValue('105.00');
-    await expect(team(page).locator('[data-person-status]')).toContainText('current plan');
-    await action(page, 'apply').click();
+    await expect(preview(page)).toHaveText('$1,215.00');
     assert.equal(await page.evaluate(() => window.teamFixture.studio.read() === window.teamFixture.accepted
       && window.teamFixture.studio.exportText() === window.teamFixture.serialized), true,
-    'stale Apply retains the imported accepted identity and bytes');
+    'reviewing and editing saved values retain the imported accepted identity and bytes until Apply');
     await action(page, 'cancel').click();
     await choose(page);
-    await expect(input(page, 'ratePerHour')).toHaveValue('110.00');
+    await expect(input(page, 'ratePerHour')).toHaveValue('120.00');
+
+    await input(page, 'ratePerHour').fill('115');
+    await choose(page, 'product-two');
+    await input(page, 'fundedHours').fill('2');
+    await choose(page, 'engineering-one');
+    await page.evaluate(() => {
+      const { studio, controller } = window.teamFixture;
+      const candidate = JSON.parse(studio.exportText());
+      candidate.people = candidate.people.filter(person => person.id !== 'product-one');
+      for (const row of [...candidate.teams, ...candidate.work]) row.personIds = row.personIds.filter(id => id !== 'product-one');
+      const result = studio.importText(JSON.stringify(candidate), studio.read());
+      if (!result.ok) throw new Error('The removed-target fixture keeps the remaining references valid.');
+      controller.refresh();
+    });
+    await expect(accepted(page)).toHaveText('$900.00');
+    const saved = panel(page).locator('[data-native-saved]');
+    await expect(saved).toBeVisible();
+    await saved.locator('summary').click();
+    const removed = saved.locator('li').filter({ has: page.locator('[data-saved-discard="person:product-one"]') });
+    await expect(removed).toContainText('115');
+    await expect(removed).toContainText('Record removed');
+    await expect(removed.locator('[data-saved-open]')).toHaveCount(0);
+    await expect(saved.locator('[data-saved-open="person:product-two"]')).toBeVisible();
+    await removed.locator('[data-saved-discard="person:product-one"]').click();
+    await expect(saved.locator('[data-saved-discard="person:product-one"]')).toHaveCount(0);
+    await expect(saved.locator('[data-saved-open="person:product-two"]')).toBeVisible();
+    await expect(saved.locator('[data-native-saved-count]')).toHaveText('1');
+    await saved.locator('[data-saved-open="person:product-two"]').click();
+    await expect(team(page).locator('[data-person-name]')).toHaveText('product-two');
+    await expect(input(page, 'fundedHours')).toHaveValue('2');
+    await expect(input(page, 'fundedHours')).toBeDisabled();
+    await expect(accepted(page)).toHaveText('$900.00');
   });
 
   test(`${engine}: keyboard steps, readable errors and responsive controls preserve About scrolling`, { timeout: 45000 }, async t => {

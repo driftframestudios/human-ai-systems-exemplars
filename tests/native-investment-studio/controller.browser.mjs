@@ -539,16 +539,21 @@ for (const engine of names) {
     await assertAmount(page, '$2,400.00');
     await expect(input(page)).toHaveValue('45');
     await expect(preview(page)).toHaveText('—');
-    await expect(panel(page).locator('[data-native-preview-note]')).toContainText('current accepted plan');
-    await action(page, 'apply').click();
+    await expect(input(page)).toBeDisabled();
+    await expect(action(page, 'apply')).toBeDisabled();
+    await expect(panel(page).locator('[data-native-recovery]')).toBeVisible();
+    await expect(panel(page).locator('[data-native-current]')).toContainText('12 working sessions');
     await expect(input(page)).toHaveValue('45');
     assert.deepEqual(await page.evaluate(() => {
       const { studio, initial, replacement, controller } = window.nativeFixture;
       return { currentRetained: studio.read() === replacement, initialCents: initial.result.knownCommitmentCents,
         stale: controller.read().status, raw: controller.read().draft.raw.minutesPerSession };
     }), { currentRetained: true, initialCents: 120000, stale: 'stale', raw: '45' });
-    await action(page, 'cancel').click(); await begin(page);
+    await action(page, 'use-current').click();
+    await expect(input(page)).toBeEditable();
+    await expect(input(page)).toHaveValue('30');
     await expect(input(page, 'occurrences')).toHaveValue('12');
+    await assertAmount(page, '$2,400.00');
     await setDuration(page, '1', '0');
     await page.evaluate(() => { window.nativeFixture.committingToken = window.nativeFixture.controller.read().draft.token; });
     await action(page, 'apply').click();

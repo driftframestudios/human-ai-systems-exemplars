@@ -13,6 +13,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/controller.test.mjs',
   'tests/native-investment-studio/controller.browser.mjs',
   'tests/native-investment-studio/draft.test.mjs',
+  'tests/native-investment-studio/editing.test.mjs',
   'tests/native-investment-studio/person-draft.test.mjs',
   'tests/native-investment-studio/person-state.test.mjs',
   'tests/native-investment-studio/shell.test.mjs',
@@ -281,7 +282,7 @@ test('native Studio routes retain source and separate browser owners with execut
     readdir(resolve(ROOT, 'tests/native-investment-studio')),
   ]);
   const sourceMembers = [
-    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs',
+    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs',
     'person-draft.test.mjs', 'person-state.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].map(file => `tests/native-investment-studio/${file}`);

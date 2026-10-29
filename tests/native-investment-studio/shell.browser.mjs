@@ -12,6 +12,8 @@ for (const name of names) assert.ok(Object.hasOwn(engines, name), `Unknown NATIV
 const browsers = new Map();
 const route = '/context-canvas-project-surface/context-canvas/index.html';
 const shellPath = '/collaboration/native-investment-studio/shell.mjs';
+const controllerPath = '/collaboration/native-investment-studio/controller.mjs';
+const statePath = '/collaboration/native-investment-studio/state.mjs';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-chapters');
 let server;
 let fixture;
@@ -95,7 +97,7 @@ async function selected(page, name) {
 }
 
 for (const engine of names) {
-  test(`${engine}: manual chapter activation retains both drafts and rejects a stale cross-chapter Apply`, { timeout: 45000 }, async t => {
+  test(`${engine}: manual chapter activation parks edits and requires review before a stale working session can apply`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await selected(page, 'coordination');
     await expect(root(page).getByRole('tablist', { name: 'Studio chapters' })).toHaveCount(1);
@@ -119,8 +121,8 @@ for (const engine of names) {
     await tab(page, 'people').press('Enter');
     await selected(page, 'people');
     await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
-    await person(page, 'ratePerHour').fill('101');
-    await expect(root(page).locator('[data-person-total]')).toHaveText('$1,203.00');
+    await person(page, 'ratePerHour').fill('105');
+    await expect(root(page).locator('[data-person-total]')).toHaveText('$1,215.00');
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'people').focus();
     await tab(page, 'people').press('Home');
@@ -129,24 +131,48 @@ for (const engine of names) {
     await tab(page, 'coordination').press('Space');
     await selected(page, 'coordination');
     await expect(work(page, 'minutesPerSession')).toHaveValue('45');
-    await workAction(page, 'apply').click();
-    // Four participants x 45 minutes x six working sessions x $100/hour.
-    await expect(total(page)).toHaveText('$1,800.00');
+    await expect(work(page, 'minutesPerSession')).toBeEditable();
+    await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
     await tab(page, 'people').click();
-    await expect(person(page, 'ratePerHour')).toHaveValue('101');
-    await expect(chapter(page, 'people')).toHaveAttribute('data-team-state', 'stale');
+    await expect(person(page, 'ratePerHour')).toHaveValue('105');
+    await expect(person(page, 'ratePerHour')).toBeEditable();
     await personAction(page, 'apply').click();
-    await expect(total(page)).toHaveText('$1,800.00');
-    await expect(root(page).locator('[data-person-status]')).toContainText('Cancel');
-    await personAction(page, 'cancel').click();
-    await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
-    await expect(person(page, 'ratePerHour')).toHaveValue('100.00');
+    // One person's three accepted hours gain $5/hour; the saved 45-minute
+    // session stays separate until the visitor reviews it against that rate.
+    await expect(total(page)).toHaveText('$1,215.00');
     await tab(page, 'coordination').click();
     await expect(work(page, 'minutesPerSession')).toHaveValue('45');
+    await expect(work(page, 'minutesPerSession')).toBeDisabled();
+    await expect(workAction(page, 'apply')).toBeDisabled();
+    await expect(root(page)).toHaveAttribute('data-native-state', 'stale');
+    await expect(root(page).locator('[data-native-recovery]')).toBeVisible();
+    await expect(workAction(page, 'review')).toHaveText('Review saved edits');
+    await expect(workAction(page, 'use-current')).toHaveText('Use current values');
+    await expect(workAction(page, 'discard')).toHaveText('Discard saved edits');
+    await expect(root(page).locator('[data-native-current]')).toContainText('30 min per session');
+    await expect(root(page).locator('[data-native-preview-total]')).toHaveText('—');
+    await workAction(page, 'review').click();
+    await expect(work(page, 'minutesPerSession')).toBeEditable();
+    await expect(work(page, 'minutesPerSession')).toHaveValue('45');
+    await expect(root(page).locator('[data-native-recovery]')).toBeHidden();
+    // Six 45-minute sessions give each person 4.5 hours: $472.50 + 3 × $450.
+    await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$1,822.50');
+    await expect(total(page)).toHaveText('$1,215.00');
+    await workAction(page, 'apply').click();
+    await expect(total(page)).toHaveText('$1,822.50');
+    await expect(workAction(page, 'apply')).toBeFocused();
   });
 
-  test(`${engine}: original fragments, history, motion preference and shell remount preserve editor ownership`, { timeout: 45000 }, async t => {
+  test(`${engine}: fragments and motion preserve draft ownership while a root remount retires drafts and retains accepted state`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, { fragment: '#native-team-title', reducedMotion: 'no-preference' });
+    await page.evaluate(async ({ controllerPath, statePath }) => {
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const { createStudio } = await import(statePath);
+      const node = document.querySelector('[data-native-coordination]');
+      mountCoordinationPanel(node).dispose();
+      const studio = createStudio();
+      window.chapterFixture = { studio, controller: mountCoordinationPanel(node, { studio }) };
+    }, { controllerPath, statePath });
     await selected(page, 'people');
     assert.equal(new URL(page.url()).hash, '#native-team-title');
     await expect(page.locator('#native-team-title')).toBeInViewport();
@@ -186,26 +212,39 @@ for (const engine of names) {
     await selected(page, 'people');
     assert.equal(await page.evaluate(() => window.chapterAnimations.length), 2);
     assert.equal(await root(page).evaluate(node => node.getAnimations({ subtree: true }).length), 0);
-    await page.evaluate(async path => {
-      const { mountChapterShell } = await import(path);
+    await page.evaluate(async ({ shellPath, controllerPath }) => {
+      const { mountChapterShell } = await import(shellPath);
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const fixture = window.chapterFixture;
       const node = document.querySelector('[data-native-coordination]');
       const rate = node.querySelector('input[name="ratePerHour"]');
       const shell = mountChapterShell(node);
+      const accepted = fixture.studio.read();
+      const acceptance = fixture.studio.readAcceptance();
       window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
       if (shell.read().disposed) throw new Error('A cached page retains its shell.');
       history.replaceState(history.state, '', '#native-studio-coordination');
       window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
       if (shell.read().activeChapter !== 'coordination') throw new Error('Restoration recovers the current fragment.');
-      shell.dispose();
+      const previous = fixture.controller;
+      previous.dispose();
+      if (previous.read().status !== 'disposed' || !shell.read().disposed) throw new Error('The root owner retires its drafts and presentation owner together.');
       if (!node.querySelector('[data-native-chapter-list]').hidden) throw new Error('Disposal restores authored controls.');
       if ([...node.querySelectorAll('[data-native-chapter-panel]')].some(panel => panel.hidden)) throw new Error('Disposal restores both authored readings.');
-      const next = mountChapterShell(node);
-      if (next === shell || node.querySelector('input[name="ratePerHour"]') !== rate || rate.value !== '103')
-        throw new Error('Shell replacement retains the same editor and its raw draft.');
-    }, shellPath);
+      fixture.controller = mountCoordinationPanel(node, { studio: fixture.studio });
+      if (fixture.controller === previous || mountChapterShell(node) === shell || node.querySelector('input[name="ratePerHour"]') !== rate)
+        throw new Error('A root remount creates fresh owners around the existing input elements.');
+      if (fixture.studio.read() !== accepted || fixture.studio.readAcceptance() !== acceptance)
+        throw new Error('Root remount preserves the same accepted plan and chronology.');
+      if (fixture.controller.read().draft.raw.minutesPerSession !== '30')
+        throw new Error('A fresh controller starts with accepted values after earlier drafts retire.');
+    }, { shellPath, controllerPath });
     await selected(page, 'coordination');
+    await expect(work(page, 'minutesPerSession')).toHaveValue('30');
+    await expect(work(page, 'minutesPerSession')).toBeEditable();
     await tab(page, 'people').click();
-    await expect(person(page, 'ratePerHour')).toHaveValue('103');
+    await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
+    await expect(person(page, 'ratePerHour')).toHaveValue('100.00');
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'coordination').click();
     await page.evaluate(() => { scrollTo(0, 0); location.hash = '#native-studio-people'; });

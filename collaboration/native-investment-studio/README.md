@@ -28,6 +28,8 @@ and integration authority; publication remains held.
   the optional one-request scheduling boundary.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, and its cached proposal.
+- `editing.mjs` owns one active typed editor and eight bounded draft slots
+  shared by the working-session and person controls.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -624,11 +626,70 @@ duration bounds, order preservation, semantic preview reuse, stale recovery,
 and immutable captures. They extend the source contract while the roster's
 browser receiver owns actual input, layout, focus, and reading observations.
 
+## Shared editing and saved drafts
+
+`createDraftCoordinator(studio, { limit })` returns one coordinator for that
+Studio instance. Its `work` and `person` ports reuse the existing typed adapters
+for validation, exact input conversion, preview and Apply. The parent receiver
+owns coordinator disposal; child receivers borrow their port and own their DOM
+listeners. A coordinator has at most one active adapter.
+Repeated factory calls return the same coordinator and retain its lifetime owner.
+The supported composition has one root receiver per Studio; a child receives
+the shared coordinator explicitly and leaves disposal to that root.
+
+The default limit is eight total draft slots. An active editor reserves one slot,
+so changing chapter can always park its text and dispose its adapter. Opening a
+ninth target asks the visitor to review or discard an existing edit. The original
+active target and selection remain available when that capacity check fails.
+Clean edits release their slot; changed raw spelling, unfinished text and invalid
+quantities retain their exact strings.
+
+Saved records contain a kind, target ID, fresh record token, three raw fields of
+at most 32 characters, and the tiny accepted-instance marker. They retain each
+field's original meaning, including an unknown hourly rate represented by an
+empty string. Saved records carry neither prepared projections nor scheduled
+resources. A resumed edit receives a fresh lease; earlier tokens retain their
+original, closed ownership.
+
+When the accepted plan changes, saved text remains readable and becomes stale.
+`review(token, expectedProjection)` reopens all three saved fields against the
+displayed current plan for inspection before Apply. It performs an explicit
+whole-edit review; it leaves field-by-field merging to a future declared policy.
+`useCurrent` deliberately replaces the saved fields with current values.
+`cancel` discards exactly the named edit. A removed target retains readable saved
+text and its discard route until a separate state owner restores that target.
+The coordinator's `discard(savedToken)` addresses any saved record, including an
+unselected or removed target, while preserving the current active lease. The
+Saved edits disclosure uses this bounded token route to release capacity.
+Person selection immediately refreshes that list. Recovery compares the saved
+text with the accepted projection actually rendered beside it. An intervening
+accepted change refreshes those values and the amp amount while keeping the
+saved edit available for a new review choice.
+
+The coordinator's `intent` marker changes with raw edits, accepted application,
+review, current-value replacement and discard. Parking, resuming, validating and
+previewing preserve it. A later exchange receiver can bind a replacement request
+to both this marker and the accepted-state token while allowing ordinary chapter
+navigation. The current receiver uses explicit Apply and introduces no scheduled
+commit path.
+
+With D held edits, F fields and L characters per field, saved storage is
+O(D × F × L), bounded here by D ≤ 8, F ≤ 3 and L ≤ 32. Target indexes rebuild once
+per accepted projection in O(people + work); subsequent target lookups use Map
+lookup. A summary visits at most eight records. Typed preview retains the complete
+preparation route measured by #641 and computes only for the active editor.
+The accepted state's history and baseline remain with the state owner. Their
+full visitor controls belong to the later Keep/Carry and exchange receiver.
+
+`tests/native-investment-studio/editing.test.mjs` owns literal monetary changes,
+capacity reservations, raw-text recovery, exact lease and accepted identities,
+removed targets, disposal, reentry and draft-intent behavior.
+
 ## Native coordination receiver
 
-About loads `controller.mjs` as a module. Its nine transitive same-directory
+About loads `controller.mjs` as a module. Its ten transitive same-directory
 dependencies retain the canonical package geometry in local and production
-delivery. `deployment/cpanel/primary-route-manifest.json` declares all ten files and
+delivery. `deployment/cpanel/primary-route-manifest.json` declares all eleven files and
 their JavaScript media type. The production closure test builds an isolated
 artifact with the real builder and follows its parsed import graph; removing
 one dependency earns a failing closure observation. The shared local browser
@@ -640,8 +701,9 @@ group leaves the existing iframe package inputs with their current owners.
 owner and working session to one root. Calling it again returns the mounted receiver.
 Its `read`, `refresh`, and `dispose` methods support controlled integration and
 testing. A host that replaces accepted state calls `refresh`; the controller
-then shows the new amount alongside any retained stale draft. Cancel followed
-by opening Session settings starts from that accepted projection.
+then shows the new amount alongside any retained stale draft. Adjacent recovery
+controls offer Review saved edits, Use current values, and Discard saved edits;
+stale fields remain readable while Apply awaits a current editing lease.
 
 The receiver validates all required elements before installing eight listeners.
 Initialization failure releases installed resources. Disposal removes those
@@ -675,7 +737,7 @@ One new accepted projection costs O(W + T + P) for receiver lookups and person
 trace construction, in addition to the model's complete preparation. Raw edits
 render three bounded fields in O(1), plus complete preparation for a changed
 valid preview; the accepted trace is retained until its projection changes.
-The receiver retains one rendered projection, one draft owner with one cached
+The receiver retains one rendered projection, one shared draft owner with one cached
 preview, and one listener group. Issue #641 owns runtime cost observations and
 any later optimization decision.
 
@@ -698,16 +760,22 @@ keyboard controls, visible focus, and system colors in forced-color mode.
 
 `shell.mjs` owns the amp head's manually activated Coordination and People
 tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
-the shell after mounting both editors against the same Studio instance. The
-shell changes presentation while the working-session and person adapters
-retain their drafts, exact accepted bases and recovery behavior. The amp head
+the shell after mounting both receivers against the same Studio instance. The
+shell changes presentation and calls the parent receiver's selection callback.
+The parent parks the outgoing edit and resumes the incoming target through the
+shared coordinator. The amp head
 continues to display the shared accepted amount.
 
-`mountChapterShell(root)` returns `read()`, `select(chapterKey)` and `dispose()`.
+`mountChapterShell(root, { onSelect })` returns `read()`, `select(chapterKey)` and `dispose()`.
 Read reports the selected chapter and admitted chapter keys. Select reveals
 one chapter, focuses its tab and records its owned fragment. Disposal cancels
 motion, removes listeners and restores authored attributes without replacing
-editor descendants. A subsequent mount reconciles the current fragment.
+editor descendants. A subsequent mount reconciles the current fragment and
+receives its owner's callback again. The complete Studio controller owns this
+integration lifetime; disposing and remounting that controller retires drafts
+and reuses the supplied accepted Studio. The callback receives one initial
+chapter and each later selection. Reentrant disposal retires the transition
+before a new animation is acquired.
 
 An authored, labelled `[data-native-chapter-list]` begins hidden. Its named
 buttons use `data-native-chapter` and `aria-controls`; corresponding sections
@@ -720,8 +788,8 @@ Arrow keys move tab focus. Enter or Space selects; Home and End reach the
 ends. Tab continues into the active panel. The horizontal strip can reveal a
 focused tab locally while About retains vertical scrolling. A chapter change
 preserves mounted input elements, raw text and disclosure state. A later edit
-in another chapter can make an existing draft stale through its adapter's
-ordinary exact-base check.
+in another chapter can make saved text stale through the accepted-instance
+marker; explicit review binds a fresh edit to the current projection.
 
 Owned fragments include the chapter panel IDs and existing descendants such
 as `#native-team-title`. Direct entry and Back/Forward reveal the corresponding
@@ -817,7 +885,8 @@ or callback exceptions remain caller code rather than an isolated data parser.
 
 `read` and `capture` take O(1) work. The owner retains one current projection;
 a caller retaining H historical captures retains the sum of those H revision
-sizes. The future baseline/undo owner must choose its history retention bound.
+sizes. The [accepted chronology owner](#accepted-chronology-history-and-baseline)
+retains 20 history entries by default, with a maximum of 100 and one baseline.
 
 Static catalogue lookup and numeric rules are prepared outside the per-work
 loops. The work pass resolves participants through its existing index; it
