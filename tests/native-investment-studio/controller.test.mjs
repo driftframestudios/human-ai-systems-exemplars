@@ -16,7 +16,10 @@ test('native About coordination has one module receiver and retains both legacy 
   assert.equal((about.match(/\bdata-native-coordination(?:\s|>)/gu) ?? []).length, 1);
   assert.match(about, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\.\.\/\.\.\/collaboration\/native-investment-studio\/controller\.mjs")[^>]*>/u);
   const fields = ['hoursPerSession', 'minutesPerSession', 'occurrences'];
-  const nativePanel = about.slice(about.indexOf('<div class="native-coordination"'), about.indexOf('</section>', about.indexOf('<div class="native-coordination"')));
+  const panelStart = about.indexOf('<div class="native-coordination"');
+  const peopleStart = about.indexOf('<section class="native-team"', panelStart);
+  assert.ok(panelStart >= 0 && peopleStart > panelStart, 'Coordination precedes the People chapter');
+  const nativePanel = about.slice(panelStart, peopleStart);
   assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary>Session settings<\/summary>/u,
     'the native session disclosure remains the entry and return control');
   assert.doesNotMatch(nativePanel, /data-action="edit"/u, 'the live editor opens directly through its receiver');

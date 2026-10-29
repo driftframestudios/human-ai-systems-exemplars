@@ -7,13 +7,16 @@ import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
-import { describeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
+import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
+import { mountConnectionView } from './connection-view.mjs';
+import { mountConnectionTemplatePanel } from './connection-template-controller.mjs';
 
 const INSTANCES = new WeakMap();
 const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
-  role: describeRoleTarget, contribution: describeContributionTarget });
+  role: describeRoleTarget, contribution: describeContributionTarget, connection: describeConnectionTarget });
 
 export function mountCoordinationPanel(root, options = {}) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
@@ -40,6 +43,7 @@ export function mountCoordinationPanel(root, options = {}) {
   const cleanup = [];
   let renderedProjection = null;
   let disposed = false;
+  let renderGeneration = 0;
   let workPanel = null;
   let teamPanel = null;
   let chapterShell = null;
@@ -47,6 +51,10 @@ export function mountCoordinationPanel(root, options = {}) {
   let investmentPanel = null;
   let assemblyPanel = null;
   let responsibilityPanel = null;
+  let connectionPanel = null;
+  let connectionView = null;
+  let templatePanel = null;
+  let coordinationEditor = 'session';
   let peopleEditor = 'person';
   let activeChapter = 'coordination';
   let renderedSaved = [];
@@ -65,6 +73,19 @@ export function mountCoordinationPanel(root, options = {}) {
     else if (peopleEditor === 'responsibility') responsibilityPanel?.resume();
     else teamPanel?.resume();
   }
+  function resumeCoordination() {
+    if (coordinationEditor === 'connection') connectionPanel?.resume();
+    else if (coordinationEditor === 'template') templatePanel?.resume();
+    else workPanel?.resume();
+  }
+  function beginCoordination(kind) {
+    if (disposed) return;
+    coordinationEditor = kind;
+    purposePanel?.close({ resume: false });
+    if (kind !== 'session') workPanel?.close({ park: false });
+    if (kind !== 'connection') connectionPanel?.close({ park: false });
+    if (kind !== 'template') templatePanel?.close();
+  }
 
   function renderSaved(projection) {
     const records = editing.read().parked;
@@ -78,12 +99,13 @@ export function mountCoordinationPanel(root, options = {}) {
     const fragment = document.createDocumentFragment();
     const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
       ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes',
-      label: 'Name', personIds: 'People', teamId: 'Team', funding: 'Funding', status: 'Status', ...PURPOSE_LABELS, ...RESPONSIBILITY_LABELS };
+      label: 'Name', personIds: 'People', teamId: 'Team', funding: 'Funding', status: 'Status', ...PURPOSE_LABELS, ...RESPONSIBILITY_LABELS, ...CONNECTION_LABELS };
     const people = new Map(projection.state.people.map(person => [person.id, person.label]));
     const works = new Map(projection.state.work.map(row => [row.id, row.label]));
     const teams = new Map(projection.state.teams.map(row => [row.id, row.label]));
     const contributions = new Map(projection.state.contributions.map(row => [row.id, responsibilityValue('categoryId', row.categoryId)]));
-    const collectionLabels = { people, teams, work: works, contributions };
+    const connections = new Map(projection.state.connections.map(row => [row.id, row.sharedObject]));
+    const collectionLabels = { people, teams, work: works, contributions, connections };
     function savedTitle(record, target) {
       if (target) {
         const enteredName = record.raw.label?.trim();
@@ -91,6 +113,7 @@ export function mountCoordinationPanel(root, options = {}) {
         const currentName = collectionLabels[target.collection]?.get(target.id);
         if (currentName) return currentName;
         if (record.kind === 'contribution') return responsibilityValue('categoryId', record.raw.categoryId);
+        if (record.kind === 'connection') return record.raw.sharedObject?.trim() || 'New connection';
         return 'New record';
       }
       if (record.kind === 'purpose') return 'Plan purpose';
@@ -102,7 +125,7 @@ export function mountCoordinationPanel(root, options = {}) {
         const names = field === 'workIds' ? works : people;
         return raw.map(id => names.get(id) ?? id).join(', ') || 'None selected';
       }
-      if (field === 'teamId') return (teams.get(raw) ?? raw) || 'Choose a team';
+      if (['teamId', 'senderTeamId', 'receiverTeamId'].includes(field)) return (teams.get(raw) ?? raw) || 'Choose a team';
       if (field === 'receiverPersonId' || field === 'decisionOwnerPersonId') return (people.get(raw) ?? raw) || 'Unassigned';
       if (Object.hasOwn(RESPONSIBILITY_LABELS, field)) return responsibilityValue(field, raw);
       return raw || 'blank';
@@ -121,7 +144,7 @@ export function mountCoordinationPanel(root, options = {}) {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution'].includes(record.kind)) {
+      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection'].includes(record.kind)) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -176,14 +199,29 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function render() {
     if (disposed) return editor.read();
+    const epoch = ++renderGeneration;
+    const current = () => !disposed && renderGeneration === epoch;
     const view = workPanel?.refresh() ?? editor.read();
+    if (!current()) return editor.read();
     renderAccepted(view.projection);
     renderSaved(view.projection);
     root.dataset.nativeState = view.status;
     teamPanel?.refresh();
+    if (!current()) return editor.read();
     assemblyPanel?.refresh();
+    if (!current()) return editor.read();
     responsibilityPanel?.refresh();
+    if (!current()) return editor.read();
+    connectionPanel?.refresh();
+    if (!current()) return editor.read();
+    connectionView?.refresh(studio.read());
+    if (!current()) return editor.read();
+    const selectedConnection = connectionPanel?.selection();
+    if (selectedConnection && selectedConnection !== connectionView?.read().selectedId) connectionView?.select(selectedConnection);
+    templatePanel?.render();
+    if (!current()) return editor.read();
     purposePanel?.refresh();
+    if (!current()) return editor.read();
     investmentPanel?.refresh();
     return view;
   }
@@ -212,6 +250,7 @@ export function mountCoordinationPanel(root, options = {}) {
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
         else if (saved.kind === 'session') workPanel?.open(saved.targetId);
         else if (saved.kind === 'role' || saved.kind === 'contribution') responsibilityPanel?.open(saved.targetId);
+        else if (saved.kind === 'connection') connectionPanel?.open(saved.targetId);
       }
       render();
       return;
@@ -221,7 +260,11 @@ export function mountCoordinationPanel(root, options = {}) {
   function dispose() {
     if (disposed) return editor.read();
     disposed = true;
+    renderGeneration += 1;
     chapterShell?.dispose();
+    connectionView?.dispose();
+    connectionPanel?.dispose();
+    templatePanel?.dispose();
     workPanel?.dispose();
     investmentPanel?.dispose();
     purposePanel?.dispose();
@@ -248,8 +291,22 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
-      onBegin: () => purposePanel?.close({ resume: false }),
+      onBegin: () => beginCoordination('session'),
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
+      onAccepted: () => render(), onEditing: () => render(),
+    });
+    connectionView = mountConnectionView(requireElement('[data-native-connection-view]'), { projection: studio.read(),
+      onSelect: id => { if (!disposed && connectionPanel?.select(id) === false) render(); } });
+    connectionPanel = mountConnectionPanel(requireElement('[data-native-connection-editor]'), { studio, editing,
+      onBegin: () => beginCoordination('connection'),
+      canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'coordination' && coordinationEditor === 'connection' && !purposePanel?.isOpen(),
+      onAccepted: () => render(), onEditing: () => render(),
+    });
+    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing,
+      onBegin: () => beginCoordination('template'),
+      canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'coordination' && coordinationEditor === 'template' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
     const teamRoot = root.querySelector('[data-native-team-editor]');
@@ -290,7 +347,7 @@ export function mountCoordinationPanel(root, options = {}) {
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
       onOpen: () => { editing.park(); },
       onClose: () => {
-        if (activeChapter === 'coordination') workPanel?.resume();
+        if (activeChapter === 'coordination') resumeCoordination();
         else if (activeChapter === 'people') resumePeople();
       }, onChange: () => render() });
     investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
@@ -305,7 +362,7 @@ export function mountCoordinationPanel(root, options = {}) {
         purposePanel?.close({ resume: false });
         if (activeChapter !== chapter) editing.park();
         activeChapter = chapter;
-        if (chapter === 'coordination') workPanel?.resume();
+        if (chapter === 'coordination') resumeCoordination();
         else if (chapter === 'people') resumePeople();
         render();
       } });

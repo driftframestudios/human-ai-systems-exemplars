@@ -1958,6 +1958,9 @@ p#on-dark-iron-ore {
     --native-error: #853126;
     --native-focus: var(--about-cobalt);
     --native-chapter-shadow: #050909;
+    --native-select-arrow-inset: 20px;
+    --native-select-arrow-size: 14px;
+    --native-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M3 4l5 5 5-5' fill='none' stroke='%23213252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background: var(--native-paper);
     border: .125rem solid var(--native-ink);
     border-radius: .75rem;
@@ -2269,7 +2272,89 @@ p#on-dark-iron-ore {
 
 /* Session selection and one complete draft share Coordination's native controls.
    The form uses the chapter width; the accepted amount remains in the amp head. */
-.native-coordination__body[data-native-session-editor] { grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-coordination__body[data-native-chapter-panel='coordination'] { grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-session { display: grid; gap: 1.5rem; min-inline-size: 0; }
+.native-session > * { min-inline-size: 0; }
+
+/* About's patch bay reads accepted relationships; its editor owns pending text. */
+.native-patch-bay { display: grid; gap: 1rem; min-inline-size: 0; padding: clamp(.25rem, 2vw, 1.25rem); border: .125rem solid var(--native-rule); border-radius: .4rem; background: var(--about-mint-green); box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
+.about-page .native-patch-bay h3 { color: var(--native-text); font: 650 1.5rem/1.25 system-ui, sans-serif; margin: 0; }
+.native-connections { display: grid; gap: 1rem; min-inline-size: 0; }
+.native-connections__count { font-weight: 650; }
+.native-connections__viewport { inline-size: 100%; max-inline-size: 100%; min-inline-size: 0; overflow-x: auto; overflow-y: hidden; border: .125rem solid var(--native-rule); border-radius: .3rem; background: var(--native-paper); scrollbar-width: thin; }
+.native-connections__viewport:focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .2rem; }
+.native-coordination .native-connections__diagram { display: block; inline-size: 880px; max-inline-size: none; block-size: auto; margin: 0; color: var(--native-text); }
+.native-connections__cable { color: var(--about-deep-teal); cursor: pointer; transition: color 160ms ease; }
+.native-connections__cable[data-status='paused'] { color: var(--native-ink); }
+.native-connections__cable[data-selected='true'] { color: var(--native-focus); }
+.native-connections__cable[data-selected='true'] > path:first-of-type { stroke-width: 5; }
+.native-connections__cable:focus-visible { outline: none; }
+.native-connections__cable:focus-visible > path:first-of-type { stroke-width: 7; }
+.native-connections__team[data-lifecycle='retired'] rect { stroke-dasharray: 5 3; }
+.native-connections__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .8rem; padding: 0; margin: 0; list-style: none; }
+.native-connections__item { min-inline-size: 0; margin: 0; }
+.native-connections__item > button { display: grid; gap: .35rem; inline-size: 100%; block-size: 100%; text-align: start; overflow-wrap: anywhere; transition: background-color 160ms ease; }
+.native-connections__item > button[data-selected='true'] { background: var(--about-cool-blue); border-inline-start-width: .4rem; }
+.native-connections__endpoints { font-weight: 700; }
+.native-connections__shared-object { font-weight: 400; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.native-connections__state { font-size: .8rem; }
+.native-connections__pages { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; }
+.native-connections__page-label { font: .85rem/1.4 ui-monospace, monospace; }
+.native-connections__detail { display: grid; gap: .6rem; padding: 1rem; border-inline-start: .3rem solid var(--about-deep-teal); background: var(--native-paper); }
+.native-connections__detail-title { font-weight: 700; }
+.native-connections__standing, .native-connections__receiver, .native-connections__no-work, .native-connections__response { font-size: .9rem; }
+.native-connections__work-list { padding: .8rem 1rem .8rem 2rem; }
+.native-connections__work-item { margin-block: .35rem; }
+.native-connection { display: grid; gap: 1rem; min-inline-size: 0; }
+.native-connection__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+.about-page .native-connection__heading h4 { color: var(--native-text); font: 650 1.2rem/1.3 system-ui, sans-serif; margin: 0; }
+.native-connection__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: .8rem 1.25rem; }
+.native-connection__configuration form { padding: clamp(.2rem, 1vw, .85rem); }
+.native-connection__field { display: grid; grid-template-rows: auto auto minmax(2.5em, auto); align-content: start; gap: .45rem; min-inline-size: 0; }
+.native-connection__field :is(select,textarea), .native-connection-template :is(select,textarea,input:not([type='checkbox'])) { inline-size: 100%; max-inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .5rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }
+.native-connection__field select { overflow: hidden; text-overflow: ellipsis; }
+.native-connection__field textarea, .native-connection-template textarea { resize: vertical; overflow-wrap: anywhere; }
+.native-connection__sessions { display: grid; gap: .7rem; margin-block: .5rem 1rem; min-inline-size: 0; }
+.native-connection__work { display: grid; gap: .65rem; padding: 0; list-style: none; }
+.native-connection__work > li { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; min-inline-size: 0; margin: 0; padding: .5rem; border: .0625rem solid var(--native-rule); background: var(--native-paper); }
+.native-connection__work label { display: flex; align-items: center; gap: .65rem; flex: 1 1 14rem; min-inline-size: 0; min-block-size: 2.75rem; cursor: pointer; }
+.native-connection__work label span { overflow-wrap: anywhere; min-inline-size: 0; }
+.native-connection__work input[type='checkbox'], .native-connection-template input[type='checkbox'] { flex: 0 0 1.2rem; inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; margin: 0; padding: 0; accent-color: var(--about-deep-teal); }
+.native-connection__confirm { font-weight: 650; }
+.native-connection__dependencies { padding-inline-start: 1.4rem; margin-block: .75rem; }
+.native-connection__general-error { min-block-size: 2.5em; margin-block: .65rem; }
+.native-connection [data-connection-apply] { background: var(--native-signal); }
+.native-connection-template { min-inline-size: 0; }
+.native-connection-template [data-connection-template-body] { padding: clamp(.125rem, 1vw, 1rem); }
+.native-connection-template__form, .native-connection-template__groups, .native-connection-template__card, .native-connection-template__recovery { display: grid; gap: .85rem; min-inline-size: 0; }
+.native-connection-template__groups { grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+.native-connection-template__card { padding: clamp(.125rem, 1vw, .8rem); border: .125rem solid var(--native-rule); background: var(--about-soft-apricot); }
+.native-connection-template .native-connection-template__duration { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 1rem; }
+.native-connection-template .native-coordination__stepper { --native-input-measure: calc(6ch + 1.25rem); grid-template-columns: repeat(2, minmax(0, 1fr)); inline-size: min(var(--native-input-measure), 100%); }
+.native-connection-template .native-coordination__stepper input { inline-size: min(var(--native-input-measure), 100%); font: 600 1.2rem/1.4 ui-monospace, monospace; }
+@media (prefers-reduced-motion: reduce) { .native-connections__cable, .native-connections__item > button { transition: none; } }
+@media (forced-colors: active) {
+  .native-patch-bay { box-shadow: none; }
+  .native-connections__cable { color: CanvasText; }
+  .native-connections__cable[data-selected='true'] { color: Highlight; }
+  .native-connections__item > button[data-selected='true'] { border-inline-start-color: Highlight; }
+}
+.native-coordination :is(select:not([multiple]):not([size]), select:not([multiple])[size='1']) {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: var(--native-select-arrow);
+    background-position: right var(--native-select-arrow-inset) center;
+    background-repeat: no-repeat;
+    background-size: var(--native-select-arrow-size) auto;
+    padding-inline-end: calc(var(--native-select-arrow-inset) + var(--native-select-arrow-size) + 12px);
+}
+@media (forced-colors: active) {
+    .native-coordination :is(select:not([multiple]):not([size]), select:not([multiple])[size='1']) {
+        -webkit-appearance: auto;
+        appearance: auto;
+        background-image: none;
+    }
+}
 .native-session__toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
 .native-session__toolbar > div:first-child { display: grid; gap: .5rem; flex: 1 1 19rem; min-inline-size: 0; }
 [data-native-session-editor] select { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; min-block-size: 2.75rem; padding: .55rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }

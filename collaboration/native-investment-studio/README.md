@@ -24,6 +24,8 @@ and integration authority; publication remains held.
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `commands.mjs` owns finite assembly transitions and their removal references.
   Each transition receives an immutable projection from the state owner.
+- `connection-templates.mjs` owns four authored coordination arrangements,
+  bounded team/connection bindings, and one atomic prepared proposal.
 - `state.mjs` owns the `createStudio` facade, each instance's accepted
   chronology, bounded Undo/Redo and independent baseline capture.
 - `draft.mjs` owns `createWorkDraftAdapter`, its single work-row draft, and
@@ -31,7 +33,7 @@ and integration authority; publication remains held.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, its cached proposal, and the pure numeric codec
   reused by person creation.
-- `command-draft.mjs` owns the closed assembly, session, role and contribution form families, ordered raw selections,
+- `command-draft.mjs` owns the closed assembly, session, role, contribution and connection form families, ordered raw selections,
   stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
@@ -690,6 +692,209 @@ It establishes canonical source behavior; the next coherent control group
 owns browser observations. Source ownership remains with `contract.mjs`,
 `commands.mjs`, `state.mjs` and the finite frozen `roles.mjs` catalogue.
 
+## Connection draft adapter
+
+`command-draft.mjs` adds the finite `CONNECTION_FORMS` family to its existing
+form adapter: `connection.create`, `connection.update`, and
+`connection.remove`. `createConnectionDraftAdapter(studio)` uses the same
+raw-ownership, preview cache, exact-base Apply, recovery, and disposal path as
+the other form families. Canonical `connection.*` commands retain reference,
+membership, cost, and accepted-history authority.
+
+`makeConnectionTarget(form, id)` and `describeConnectionTarget(key)` bind a
+form to one record, such as `connection.update:handoff`. A connection draft
+reports this form key in `draft.connectionId` and its plain record ID in
+`draft.targetId`. `copyConnectionRaw` and `sameConnectionRaw` support the
+coordinator's owned snapshots and ordered comparisons.
+
+Creation and update use seven raw fields:
+
+| Field | Raw bound | Canonical meaning |
+| --- | --- | --- |
+| `senderTeamId`, `receiverTeamId` | 64 UTF-16 units each | Required, distinct existing team identities |
+| `receiverPersonId` | 64 UTF-16 units | Chosen receiving-team member, or blank for unassigned |
+| `sharedObject` | 600 UTF-16 units | Required trimmed object or decision description |
+| `responseExpectation` | 600 UTF-16 units | Trimmed expected response, or blank for unspecified |
+| `workIds` | 256 ordered, unique identifiers of at most 64 units each | Existing supporting sessions |
+| `status` | 16 UTF-16 units | The finite `active` or `paused` choice |
+
+Text bounds apply before trimming. `setText` accepts bounded raw strings;
+`setIds(token, 'workIds', ids)` owns a detached dense ordered list. Invalid raw
+choices remain visible for correction. A receiving-team change retains the
+selected person, so the visitor can make an explicit membership correction.
+The canonical `team-membership` diagnostic names a receiving person outside
+that group. Retired people and teams retain their identities and canonical
+observations. Referencing work, pausing an exchange, and removing a connection
+preserve the investment carried by existing work records.
+
+`editing.connection` contributes one port to the existing draft coordinator.
+Its `begin`, `setText`, `setIds`, `validate`, `preview`, `apply`, `cancel`,
+`review`, `useCurrent`, `create`, and `freshId` methods share the single active
+lease and the same eight active/saved slots used by every other family.
+`create('connection.create', expected)` allocates `connection-N` against both
+accepted records and held creation drafts. A full collection holds creation
+before disturbing another active edit. Import collisions retain raw text and
+ordered work references for deliberate fresh-ID recovery. Removed targets
+remain selectable for inspection and global discard; Apply still requires a
+current target.
+
+Preview reuse follows the active raw revision and exact accepted projection.
+An equal-payload import, Undo/Redo, or another accepted edit retires the earlier
+base. Review receives the projection shown to the visitor; a newer unseen
+projection keeps that recovery action held. Use current restores all seven
+fields from accepted state. Cancellation and disposal release the same owned
+lease used by the other families. Removal carries no editable raw fields and
+parks no saved draft.
+
+A maximal connection raw record contains at most 17,792 UTF-16 units, including
+256 identifiers, plus 256 reference slots and fixed metadata. Eight maximal
+connection drafts therefore retain at most 142,336 units and 2,048 reference
+slots; other families consume that same shared slot budget. Selection indexes
+rebuild once per accepted projection. An actual preview follows canonical
+whole-plan admission and calculation, while an unchanged cached preview reuses
+its immutable projection. Ordered work copying and equality cost O(W) with
+W bounded by 256; catalogue and field descriptors remain module-owned values.
+
+`connection-draft.test.mjs` observes fields, membership, cache and ownership,
+exact/one-over bounds, literal accounting, pause/removal, no-op, stale imports,
+and reentrant callback completion. `connection-editing.test.mjs` observes the
+shared lease and exact eight-slot boundary, identity collisions, displayed-base
+recovery, removed-target inspection/discard, full-collection admission and
+cleanup. The native patch-bay receiver maps both diagram and list selection to
+the same connection target and supplies the focused browser observations.
+
+## Coordination template proposals
+
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
+receives four editable arrangements: pod, guild, project team, and shared
+service. `connection-templates.mjs` owns their finite catalogue and proposal
+factory. Each arrangement names group slots and directed exchanges. The visitor
+supplies the people, shared objects, receiving people, supporting work, and
+response expectations that give those exchanges meaning.
+
+A finite catalogue plus one factory keeps admission, identity, and publication
+in one path. Separate functions for each arrangement would repeat those
+boundaries; a general graph builder would introduce topology and construction
+states beyond these four arrangements. The catalogue describes useful starting
+arrangements. The visitor chooses how each arrangement fits the work.
+
+### Request and ownership
+
+`listCoordinationTemplates()` returns shared frozen catalogue records with
+`id`, `version`, `label`, `description`, ordered `teams`, and ordered
+`connections`. Group slots have `id` and `label`; connection slots add
+`senderSlotId` and `receiverSlotId`.
+
+`prepareCoordinationTemplate(base, request)` receives an immutable accepted
+projection and the following closed request:
+
+```js
+{
+  templateId: 'pod', version: '1.0.0', proposalId: 'review-cycle',
+  teams: [
+    { slotId: 'pod', kind: 'new', label: 'Product', personIds: ['product-one'] },
+    { slotId: 'partner', kind: 'existing', teamId: 'delivery', addPersonIds: [] }
+  ],
+  connections: [
+    { slotId: 'handoff', receiverPersonId: 'engineering-one',
+      sharedObject: 'A reviewed plan', responseExpectation: 'Review together.',
+      workIds: ['review'], status: 'active', recoveryWork: null },
+    { slotId: 'feedback', receiverPersonId: 'product-one',
+      sharedObject: 'Review decisions', responseExpectation: null,
+      workIds: ['review'], status: 'active', recoveryWork: null }
+  ]
+}
+```
+
+Each group binding uses one of two exact shapes:
+
+- Existing: `{slotId, kind: 'existing', teamId, addPersonIds}`. Additions name
+  existing people; current membership and order remain, followed by each newly
+  added person in the supplied order. Supplying a current member keeps its
+  existing position.
+- New: `{slotId, kind: 'new', label, personIds}`. The factory proposes an active
+  group with ID `${proposalId}-team-${slotId}` and the chosen existing people.
+  Existing work retains its current owning group and participants.
+
+Each connection binding has the exact fields shown above. Endpoints come from
+its authored slots. `workIds` names existing work in the starting plan.
+`receiverPersonId` and `responseExpectation` may be `null`; canonical
+observations retain their unresolved meaning. Every slot appears exactly once,
+with distinct bound groups. Catalogue order determines appended record order,
+so a request's slot order has the same meaning when reordered.
+
+`recoveryWork` is `null` or a complete record containing `label`, `teamId`,
+`personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`,
+`timing`, and `lifecycle`. The factory derives its ID as
+`${proposalId}-recovery-${connectionSlotId}` and appends that reference to the
+connection. The normal work constructor and whole-plan admission validate its
+units, funding, people, membership, and current `timing: null` rule. A recovery
+record may use a group proposed in the same preview. Its funding and effort
+remain explicit choices.
+
+Connection IDs use `${proposalId}-connection-${slotId}`. Every generated ID
+obeys the canonical 64-character bound. A generated identity already in the
+plan is reusable when its complete canonical row matches. A differing row
+returns `identity-collision`; a new proposal identifier starts a separate
+arrangement. Exact repetition keeps the current projection, including its
+revision and Redo entries. Historical IDs remain available after Undo; the
+fresh accepted envelope still retires earlier proposals.
+
+### Preview, Apply, and recovery
+
+The factory returns a frozen `{template, proposalId, projection, summary}`.
+The summary lists `newTeamIds`, `memberships` with ordered `addedPersonIds`,
+`newConnectionIds`, and `newRecoveryWorkIds`. Its `money` record shows known
+before/after/delta cents separately from before/after/delta total cents.
+An unknown total stays `null`, while a known zero remains zero. The preview's
+complete projection supplies labels, resulting memberships, relationships,
+observations, and calculations for the receiving view.
+
+`applyCoordinationTemplate(studio, proposal)` accepts a proposal created by
+this module and calls the existing Studio `replace` owner with its captured
+base. A changed proposal publishes once and creates one Undo entry. An exact
+no-op returns the accepted projection without advancing chronology. A stale
+base, including an equal-payload import or an Undo/Redo return, holds the
+proposal for another deliberate preview. A copied or fabricated proposal
+returns `template-proposal`. Dropping a prepared proposal cancels it; preparation
+itself changes no accepted state.
+
+The native receiver owns the editable request, preview selection, and draft
+intent. It retires a displayed proposal when its inputs change, coordinates
+with the existing single active editor, and renders the current preview before
+Apply. The factory adds no second editing owner or asynchronous scheduler.
+Connection editing and on/off controls continue through canonical commands.
+A paused connection changes its observation and presentation; the work records
+continue to carry their declared commitments.
+
+### Cost and fitting evidence
+
+At most three group slots and three connection slots belong to one template.
+Each optional recovery record belongs to one connection. The factory admits
+bounded dense arrays and own enumerable data fields before traversing their
+values. Invocation-local maps index existing people, groups, work, and
+connections; set membership preserves ordered uniqueness. It creates at most
+three groups, three connections, and three recovery records. Whole-plan
+admission checks the final record, reference, and encoded-byte budgets.
+
+With N accepted records, R references and B bounded text/serialized bytes,
+preparation is O(N + R + B) time and space under expected Map/Set lookup.
+Its row comparisons cover at most three finite records per collection. A
+changed Apply invokes the accepted owner's full admission once more; exact
+no-op Apply is O(1). Caller-retained proposals retain their immutable base and
+candidate projections. Direct-object admission also pays O(K) for enumerating
+K supplied own keys before rejecting a surplus shape; arbitrary Proxy callback
+runtime retains the existing direct-JavaScript boundary.
+
+`tests/native-investment-studio/connection-templates.test.mjs` observes the
+literal $16,000 funded amount, $400 allocated attribution, and $150 additional
+review; shared references price each work item once. It also exercises
+first-use group creation, membership additions, pause, exact/one-over record
+and reference limits, zero/unknown rates, descriptor admission, identity
+collisions, ownership, stale/ABA previews, atomic failure, no-op, and Undo.
+The native patch-bay receiver supplies diagram/list parity, keyboard focus,
+reading geometry and motion evidence in its focused browser tranche.
+
 ## Coordination-work draft adapter
 
 [Issue #640](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/640)
@@ -1125,6 +1330,58 @@ pair; adjacent labels and ordered session controls describe each operation.
 raw/accepted boundary. `responsibility.browser.mjs` owns complete-field meaning,
 unchanged monetary totals, retained and stale targets, narrow reading, focus
 and receiver disposal across the three engines.
+
+## Native connection patch bay
+
+[Issue #668](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/668)
+places accepted team connections above the complete working-session editor in
+Coordination. `connection-view.mjs` derives the SVG, ordered connection list
+and selected detail from one immutable accepted projection. Its private
+identity and adjacency maps rebuild when that projection changes. Equal
+numeric revisions from separate imports retain their separate cache identity.
+
+The diagram shows eight directed connections per page between explicit sending
+and receiving racks. A team may appear in both roles with the same canonical
+ID. Arrowheads show direction; paused cables use dashes; text names unresolved
+receivers and retired teams, people or supporting sessions. These marks carry
+relationship meaning, while work and person records retain monetary authority.
+
+The racks keep canonical team order and provide separate 24-unit cable ports
+for 18-unit pointer targets. Each page fits an 880-unit width and at most
+584-unit height. The named diagram region scrolls horizontally on narrow
+screens; About retains vertical scrolling. Complete labels remain in the native
+list and selected detail. Supporting sessions use a disclosure so a maximum
+reference population stays available through a deliberate expansion.
+
+`mountConnectionView(root, {projection, onSelect})` returns `read`, `refresh`,
+`select`, `showPage` and `dispose`. Programmatic selection keeps the callback
+quiet; a list or cable action sends its raw connection ID once. Selection within
+one page updates the former and next selected marks plus the selected detail.
+Paging rebuilds eight list/cable records, retains the selected connection and
+provides a return action when that record is on another page. Each receiver owns
+its presentation state while immutable derived models may be shared.
+
+`connection-controller.mjs` maps that ID into one complete connection form
+through `editing.connection`. Its Add and Remove actions, ordered supporting
+sessions, receiver membership, stale review and collision recovery use the
+existing single active draft lease. `controller.mjs` coordinates the session,
+connection and template presentations and returns saved connection edits to
+their owner. The accepted diagram changes after publication; unfinished form
+values remain in their editor.
+
+`styles/routes/about.css` owns `.native-patch-bay`, `.native-connections`,
+`.native-connection` and `.native-connection-template`. The existing native
+palette supplies paper, ink, focus, mint and soft-apricot roles. Selection
+transitions respect reduced motion; hard shadows continue toward the lower
+right. The module owns SVG coordinate geometry and route CSS owns its rendered
+size, local scrolling, contrast and surrounding composition.
+
+The pure model and modeled-DOM observations in `connection-view.test.mjs`
+cover ordered endpoints, adjacency, maximum pages, state labels, exact cache
+identity, text ownership and receiver retirement. `connection.browser.mjs`
+receives actual cable targeting, diagram/list/editor agreement, input recovery,
+focus, narrow and enlarged-text geometry and ordinary About scrolling. These
+observations share literal plan identities and independently specified amounts.
 
 ## Native coordination receiver
 

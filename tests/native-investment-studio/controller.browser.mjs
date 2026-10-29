@@ -316,6 +316,77 @@ async function injectOwner(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: the auto-booted Studio carries people, sessions, roles and connections through one investment history`, { timeout: 60000 }, async t => {
+    // Retain the real About entry script and its one model/coordinator. Every
+    // mutation enters through a visitor control; the download is the final read.
+    const page = await open(t, engine);
+    const tab = chapter => panel(page).locator(`[data-native-chapter="${chapter}"]`);
+    const people = panel(page).locator('[data-native-team-editor]');
+    const role = people.locator('[data-responsibility-configure="role"]');
+    const arrangements = panel(page).locator('[data-connection-templates]');
+    const graph = panel(page).locator('[data-native-connection-view]');
+    const connection = panel(page).locator('[data-native-connection-editor]');
+    const investment = panel(page).locator('.native-investment');
+    const invest = name => investment.locator(`[data-investment-action="${name}"]`);
+    const exported = async () => {
+      const pending = page.waitForEvent('download');
+      await invest('download').click();
+      const download = await pending, stream = await download.createReadStream(), chunks = [];
+      assert.equal(download.suggestedFilename(), 'investment-plan.json'); assert.ok(stream);
+      for await (const chunk of stream) chunks.push(chunk);
+      assert.equal(await download.failure(), null);
+      return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    };
+
+    await expect(total(page)).toHaveText('$1,200.00');
+    await tab('people').click();
+    await people.locator('[data-person-id="product-one"]').click();
+    await people.locator('[data-person-configure] [name="ratePerHour"]').fill('105');
+    await people.locator('[data-person-action="apply"]').click();
+    await expect(total(page)).toHaveText('$1,215.00');
+
+    await tab('coordination').click();
+    await input(page).fill('45'); await action(page, 'apply').click();
+    await expect(total(page)).toHaveText('$1,822.50');
+    await tab('people').click();
+    await people.locator('[data-person-id="product-one"]').click();
+    await role.locator('summary').click();
+    await role.locator('[name="functionId"]').selectOption('engineering');
+    await role.locator('[data-responsibility-apply]').click();
+    await expect(total(page)).toHaveText('$1,822.50');
+
+    await tab('coordination').click();
+    await arrangements.locator(':scope > summary').click();
+    await arrangements.locator('[data-template-action="preview"]').click();
+    await expect(arrangements.locator('[data-template-total]')).toHaveText('$1,822.50');
+    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(0);
+    await arrangements.locator('[data-template-action="apply"]').click();
+    await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(2);
+    await expect(total(page)).toHaveText('$1,822.50');
+    const selected = graph.locator('.native-connections__list button[data-connection-select]').first();
+    const selectedId = await selected.getAttribute('data-connection-select'); assert.ok(selectedId);
+    await selected.click();
+    await connection.locator('[name="status"]').selectOption('paused');
+    await connection.locator('[data-connection-apply]').click();
+    await expect(selected).toContainText('Paused'); await expect(total(page)).toHaveText('$1,822.50');
+
+    await tab('investment').click();
+    const accepted = await exported();
+    assert.equal(accepted.people.length, 4); assert.equal(accepted.teams.length, 3); assert.equal(accepted.work.length, 1);
+    const person = accepted.people.find(row => row.id === 'product-one');
+    assert.equal(person.rateCentsPerHour, 10500); assert.equal(person.role.functionId, 'engineering');
+    assert.equal(accepted.work[0].minutesPerOccurrence, 45); assert.equal(accepted.work[0].occurrences, 6);
+    assert.equal(accepted.connections.length, 2);
+    assert.equal(accepted.connections.find(row => row.id === selectedId).status, 'paused');
+    await invest('undo').click();
+    const restored = await exported();
+    assert.deepEqual(restored.connections, accepted.connections.map(row => row.id === selectedId ? { ...row, status: 'active' } : row));
+    assert.deepEqual(restored.people, accepted.people); assert.deepEqual(restored.work, accepted.work);
+    await invest('redo').click();
+    assert.deepEqual((await exported()).connections, accepted.connections);
+    await expect(total(page)).toHaveText('$1,822.50');
+  });
+
   test(`${engine}: one coordination transaction preserves unfinished input and independently priced accepted amounts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await assertAmount(page, '$1,200.00');

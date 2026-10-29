@@ -4,7 +4,8 @@ import { createPurposeDraftAdapter } from './purpose-draft.mjs';
 import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describeAssemblyTarget, copyAssemblyRaw, sameAssemblyRaw,
   createSessionDraftAdapter, SESSION_FORMS, makeSessionTarget, describeSessionTarget, copySessionRaw, sameSessionRaw,
   createRoleDraftAdapter, ROLE_FORMS, makeRoleTarget, describeRoleTarget, copyRoleRaw, sameRoleRaw,
-  createContributionDraftAdapter, CONTRIBUTION_FORMS, makeContributionTarget, describeContributionTarget, copyContributionRaw, sameContributionRaw } from './command-draft.mjs';
+  createContributionDraftAdapter, CONTRIBUTION_FORMS, makeContributionTarget, describeContributionTarget, copyContributionRaw, sameContributionRaw,
+  createConnectionDraftAdapter, CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget, copyConnectionRaw, sameConnectionRaw } from './command-draft.mjs';
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
@@ -33,10 +34,14 @@ const TYPES = Object.freeze({
     index: state => new Map(state.contributions.map(row => [`contributions:${row.id}`, row])),
     create: createContributionDraftAdapter, forms: CONTRIBUTION_FORMS, make: makeContributionTarget,
     describe: describeContributionTarget, copy: copyContributionRaw, same: sameContributionRaw }),
+  connection: Object.freeze({ id: 'connectionId', ids: true,
+    index: state => new Map(state.connections.map(row => [`connections:${row.id}`, row])),
+    create: createConnectionDraftAdapter, forms: CONNECTION_FORMS, make: makeConnectionTarget,
+    describe: describeConnectionTarget, copy: copyConnectionRaw, same: sameConnectionRaw }),
 });
 const KINDS = Object.freeze(Object.keys(TYPES));
 const EMPTY_ERRORS = Object.freeze([]);
-const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work', contributions: 'contribution' });
+const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work', contributions: 'contribution', connections: 'connection' });
 const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;
