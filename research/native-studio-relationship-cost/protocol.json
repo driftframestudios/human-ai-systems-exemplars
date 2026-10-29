@@ -1,0 +1,45 @@
+{
+  "id": "native-studio-relationship-cost-01",
+  "issue": 673,
+  "sourceCommit": "cf16539e2871d948b0539f679fcbb0915c0fde0c",
+  "researchBase": "31012ca",
+  "fixtures": [
+    "small",
+    "representative",
+    "caps",
+    "byte-pressure"
+  ],
+  "node": {
+    "runs": 5,
+    "warmup": 50,
+    "samples": 200
+  },
+  "browser": {
+    "engines": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "traces": [
+      "selection",
+      "connection",
+      "template"
+    ],
+    "runs": 5,
+    "warmupPairs": 20,
+    "measuredPairs": 50,
+    "eventStanding": "explicit public receiver commands and synthetic DOM events"
+  },
+  "budgets": {
+    "processingMedianMs": 16,
+    "processingP95Ms": 50,
+    "renderOpportunityP95Ms": 100,
+    "standing": "prospective local engineering decision thresholds"
+  },
+  "publication": "held",
+  "collectionStanding": "protocol review required"
+}
