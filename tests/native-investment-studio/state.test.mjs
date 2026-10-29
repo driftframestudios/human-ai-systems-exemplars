@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
+import { HISTORY, LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
 
 function changedReview(projection, overrides = {}) {
   return { ...projection.state.work.find(row => row.id === 'review'), ...overrides };
@@ -356,4 +357,318 @@ test('preview recomputes exact person funding pools rather than adding a rounded
   assert.equal(preview.projection.result.lineRoundingAdjustments.additionalCents, 0);
   assert.strictEqual(studio.read(), before);
   assert.equal(studio.exportText(), before.serialized);
+});
+
+
+function changedPerson(projection, overrides = {}, id = 'product-one') {
+  return { ...projection.state.people.find(row => row.id === id), ...overrides };
+}
+
+function assertAcceptance(studio, previous, sequence) {
+  const current = studio.readAcceptance();
+  assert.equal(current.sequence, sequence);
+  assert.strictEqual(current.instance, previous.instance);
+  assert.notStrictEqual(current.token, previous.token);
+  assert.ok(Object.isFrozen(current));
+  return current;
+}
+
+test('history restores the literal $1200, $1203 and $1304 amounts with fresh accepted identities', () => {
+  const studio = createStudio();
+  const initial = studio.read();
+  const firstAcceptance = studio.readAcceptance();
+  assert.equal(firstAcceptance.sequence, 0);
+  assert.equal(initial.result.plannedCommitmentCents, 120000);
+  const rate = studio.updatePerson('product-one', changedPerson(initial, { rateCentsPerHour: 10100 }), initial);
+  assert.equal(rate.ok, true);
+  assert.equal(rate.projection.result.plannedCommitmentCents, 120300);
+  const secondAcceptance = assertAcceptance(studio, firstAcceptance, 1);
+  const funded = studio.updatePerson('product-one', changedPerson(rate.projection, { fundedMinutes: 60 }), rate.projection);
+  assert.equal(funded.ok, true);
+  assert.equal(funded.projection.result.plannedCommitmentCents, 130400);
+  assertAcceptance(studio, secondAcceptance, 2);
+  assert.deepEqual(studio.readHistory(), { undoCount: 2, redoCount: 0, limit: 20 });
+  const undoOne = studio.undo(funded.projection);
+  assert.equal(undoOne.ok, true);
+  assert.equal(undoOne.projection.result.plannedCommitmentCents, 120300);
+  assert.notStrictEqual(undoOne.projection, rate.projection);
+  assert.strictEqual(undoOne.projection.state, rate.projection.state, 'immutable retained payloads may share data');
+  assert.equal(studio.readAcceptance().sequence, 3);
+  const undoTwo = studio.undo(undoOne.projection);
+  assert.equal(undoTwo.projection.result.plannedCommitmentCents, 120000);
+  assert.notStrictEqual(undoTwo.projection, initial);
+  assert.equal(studio.readAcceptance().sequence, 4);
+  expectHeld(studio.updateWork('review', changedReview(initial, { occurrences: 8 }), initial), undoTwo.projection, 'stale-edit');
+  expectHeld(studio.undo(initial), undoTwo.projection, 'stale-edit');
+  expectHeld(studio.redo(initial), undoTwo.projection, 'stale-edit');
+  for (const [amount, revision, sequence] of [[120300, 1, 5], [130400, 2, 6]]) {
+    const restored = studio.redo(studio.read());
+    assert.equal(restored.ok, true);
+    assert.equal(restored.projection.result.plannedCommitmentCents, amount);
+    assert.equal(restored.projection.state.revision, revision);
+    assert.equal(studio.readAcceptance().sequence, sequence);
+    assert.deepEqual(JSON.parse(studio.exportText()), restored.projection.state);
+  }
+  assert.equal(funded.projection.result.plannedCommitmentCents, 130400, 'earlier captures retain their exact values');
+});
+
+test('the configured history bound retains the most recent two predecessor plans', () => {
+  const studio = createStudio(undefined, { historyLimit: 2 });
+  for (const rateCentsPerHour of [10100, 10200, 10300]) {
+    const base = studio.read();
+    assert.equal(studio.updatePerson('product-one', changedPerson(base, { rateCentsPerHour }), base).ok, true);
+  }
+  assert.deepEqual(studio.readHistory(), { undoCount: 2, redoCount: 0, limit: 2 });
+  for (const amount of [120600, 120300]) {
+    const restored = studio.undo(studio.read());
+    assert.equal(restored.ok, true);
+    assert.equal(restored.projection.result.plannedCommitmentCents, amount);
+  }
+  const current = studio.read(); const acceptance = studio.readAcceptance();
+  expectHeld(studio.undo(current), current, 'history-empty');
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 2, limit: 2 });
+  assert.ok(Object.isFrozen(studio.readHistory()));
+});
+
+test('validated work/person no-ops and previews preserve Redo while a material edit starts a new branch', () => {
+  const studio = createStudio();
+  const initial = studio.read();
+  studio.updateWork('review', changedReview(initial, { occurrences: 7 }), initial);
+  studio.undo(studio.read());
+  const base = studio.read(); const acceptance = studio.readAcceptance(); const history = studio.readHistory();
+  for (const command of ['updateWork', 'previewWork']) {
+    const result = studio[command]('review', changedReview(base), base);
+    assert.equal(result.ok, true); assert.strictEqual(result.projection, base);
+  }
+  for (const command of ['updatePerson', 'previewPerson']) {
+    const result = studio[command]('product-one', changedPerson(base), base);
+    assert.equal(result.ok, true); assert.strictEqual(result.projection, base);
+  }
+  assert.equal(studio.previewWork('review', changedReview(base, { occurrences: 12 }), base).projection.result.plannedCommitmentCents, 240000);
+  assert.equal(studio.previewPerson('product-one', changedPerson(base, { rateCentsPerHour: 10100 }), base).projection.result.plannedCommitmentCents, 120300);
+  expectHeld(studio.updateWork('review', changedReview(base, { occurrences: -1 }), base), base, 'integer');
+  expectHeld(studio.importText('{', base), base, 'json');
+  assert.strictEqual(studio.read(), base);
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.deepEqual(studio.readHistory(), history);
+  const changed = studio.updateWork('review', changedReview(base, { occurrences: 8 }), base);
+  assert.equal(changed.ok, true);
+  assert.equal(changed.projection.result.plannedCommitmentCents, 160000);
+  assert.equal(studio.readAcceptance().sequence, acceptance.sequence + 1);
+  assert.deepEqual(studio.readHistory(), { undoCount: 1, redoCount: 0, limit: 20 });
+  expectHeld(studio.redo(studio.read()), studio.read(), 'history-empty');
+});
+
+test('complete admitted replacement and import advance acceptance even for equal payloads and revisions', () => {
+  const studio = createStudio();
+  for (const command of ['replace', 'importText']) {
+    const before = studio.read(); const acceptance = studio.readAcceptance();
+    const result = studio[command](command === 'replace' ? before.state : before.serialized, before);
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.projection, before);
+    assert.notStrictEqual(result.projection, before);
+    assertAcceptance(studio, acceptance, acceptance.sequence + 1);
+    expectHeld(studio.updatePerson('product-one', changedPerson(before), before), result.projection, 'stale-edit');
+  }
+  studio.undo(studio.read());
+  assert.equal(studio.readHistory().redoCount, 1);
+  const current = studio.read();
+  studio.importText(current.serialized, current);
+  assert.equal(studio.readHistory().redoCount, 0, 'accepting a whole imported plan starts a new history branch');
+});
+
+test('baseline capture keeps chronology and Redo while restoration preserves partial pricing with a fresh acceptance', () => {
+  const studio = createStudio(); const initial = studio.read();
+  assert.equal(studio.readBaseline(), null);
+  expectHeld(studio.restoreBaseline(initial), initial, 'baseline-empty');
+  const partial = studio.updatePerson('product-one', changedPerson(initial, { rateCentsPerHour: null }), initial).projection;
+  assert.equal(partial.result.plannedCommitmentCents, null);
+  assert.equal(partial.result.knownCommitmentCents, 90000);
+  const zero = studio.updatePerson('product-one', changedPerson(partial, { rateCentsPerHour: 0 }), partial).projection;
+  assert.equal(zero.result.plannedCommitmentCents, 90000);
+  const undone = studio.undo(zero).projection;
+  const acceptance = studio.readAcceptance(); const history = studio.readHistory();
+  assert.equal(studio.setBaseline(undone).ok, true);
+  const baseline = studio.readBaseline();
+  assert.ok(Object.isFrozen(baseline));
+  assert.strictEqual(baseline.projection, undone);
+  assert.strictEqual(baseline.acceptance, acceptance);
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.deepEqual(studio.readHistory(), history);
+  studio.setBaseline(undone);
+  assert.notStrictEqual(studio.readBaseline().token, baseline.token, 'capture metadata has its own identity');
+  studio.redo(undone);
+  const beforeRestore = studio.readAcceptance();
+  const restored = studio.restoreBaseline(studio.read());
+  assert.equal(restored.ok, true);
+  assert.notStrictEqual(restored.projection, undone);
+  assert.equal(restored.projection.state.people[0].rateCentsPerHour, null);
+  assert.equal(restored.projection.result.plannedCommitmentCents, null);
+  assert.equal(restored.projection.result.knownCommitmentCents, 90000);
+  assertAcceptance(studio, beforeRestore, beforeRestore.sequence + 1);
+  expectHeld(studio.updatePerson('product-one', changedPerson(undone), undone), restored.projection, 'stale-edit');
+  const samePayloadAcceptance = studio.readAcceptance();
+  assert.equal(studio.restoreBaseline(studio.read()).ok, true);
+  assertAcceptance(studio, samePayloadAcceptance, samePayloadAcceptance.sequence + 1);
+});
+
+test('baseline and history reject stale or foreign projections without changing their current records', () => {
+  const studio = createStudio(); const initial = studio.read();
+  studio.setBaseline(initial); const baseline = studio.readBaseline();
+  studio.updateWork('review', changedReview(initial, { occurrences: 7 }), initial);
+  const current = studio.read(); const acceptance = studio.readAcceptance(); const history = studio.readHistory();
+  const foreign = createStudio().read();
+  for (const command of ['undo', 'redo', 'setBaseline', 'restoreBaseline']) {
+    for (const expected of [initial, foreign, undefined]) expectHeld(studio[command](expected), current, 'stale-edit');
+  }
+  assert.strictEqual(studio.readBaseline(), baseline);
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.deepEqual(studio.readHistory(), history);
+  assert.notStrictEqual(createStudio().readAcceptance().instance, acceptance.instance);
+});
+
+test('zero retention still supports one explicit baseline and complete accepted chronology', () => {
+  const studio = createStudio(undefined, { historyLimit: 0 }); const initial = studio.read();
+  studio.setBaseline(initial);
+  const changed = studio.updateWork('review', changedReview(initial, { occurrences: 7 }), initial).projection;
+  assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 0, limit: 0 });
+  expectHeld(studio.undo(changed), changed, 'history-empty');
+  assert.equal(studio.restoreBaseline(changed).projection.result.plannedCommitmentCents, 120000);
+  assert.equal(studio.readAcceptance().sequence, 2);
+  assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 0, limit: 0 });
+});
+
+test('history configuration admits bounded data values and preserves getter-free construction', () => {
+  assert.equal(createStudio().readHistory().limit, HISTORY.defaultEntries);
+  assert.equal(createStudio(undefined, { historyLimit: HISTORY.maxEntries }).readHistory().limit, 100);
+  for (const options of [null, [], true, new Date(), { historyLimit: -1 }, { historyLimit: 101 },
+    { historyLimit: 1.5 }, { historyLimit: NaN }, { historyLimit: Infinity }, { historyLimit: '2' },
+    { historyLimit: undefined }, { historyLimit: 2, extra: true }, { [Symbol('extra')]: 1 }]) {
+    assert.throws(() => createStudio(undefined, options), { code: 'options' });
+  }
+  let reads = 0;
+  assert.throws(() => createStudio(undefined, { get historyLimit() { reads += 1; return 2; } }), { code: 'options' });
+  assert.equal(reads, 0);
+  const studio = createStudio();
+  for (let index = 0; index < 21; index += 1) {
+    const base = studio.read();
+    assert.equal(studio.updateWork('review', changedReview(base, { label: `Review ${index}` }), base).ok, true);
+  }
+  assert.equal(studio.readHistory().undoCount, 20);
+});
+
+test('a work no-op admits the entire closed row before preserving identity at the revision cap', () => {
+  const plan = createExamplePlan(); plan.revision = LIMITS.revision; plan.work[0].minutesPerOccurrence = 0;
+  const studio = createStudio(plan); const before = studio.read(); const acceptance = studio.readAcceptance();
+  for (const command of ['updateWork', 'previewWork']) {
+    const result = studio[command]('review', changedReview(before, { minutesPerOccurrence: -0 }), before);
+    assert.equal(result.ok, true); assert.strictEqual(result.projection, before);
+    expectHeld(studio[command]('review', changedReview(before, { occurrences: 8 }), before), before, 'integer');
+  }
+  let reads = 0;
+  const getter = changedReview(before);
+  Object.defineProperty(getter, 'label', { enumerable: true, get() { reads += 1; return before.state.work[0].label; } });
+  const entryGetter = changedReview(before, { personIds: [...before.state.work[0].personIds] });
+  Object.defineProperty(entryGetter.personIds, '0', { enumerable: true, get() { reads += 1; return 'product-one'; } });
+  const sparse = changedReview(before, { personIds: ['product-one', , 'engineering-one'] });
+  for (const [row, code] of [[changedReview(before, { extra: true }), 'fields'], [getter, 'data-property'],
+    [entryGetter, 'data-property'], [sparse, 'collection'], [changedReview(before, { personIds: [] }), 'reference-count'],
+    [changedReview(before, { personIds: ['product-one', 'product-one'] }), 'duplicate-reference'],
+    [changedReview(before, { personIds: new Array(LIMITS.people + 1) }), 'collection'],
+    [changedReview(before, { funding: 'unknown' }), 'choice'], [changedReview(before, { timing: {} }), 'timing-version']]) {
+    expectHeld(studio.updateWork('review', row, before), before, code);
+  }
+  assert.equal(reads, 0);
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.equal(studio.readHistory().undoCount, 0);
+});
+
+test('changed work preserves reference, membership and authored participation order', () => {
+  const studio = createStudio(); const before = studio.read();
+  for (const [row, code] of [[changedReview(before, { teamId: 'missing' }), 'reference'],
+    [changedReview(before, { personIds: ['missing'] }), 'reference']]) {
+    expectHeld(studio.updateWork('review', row, before), before, code);
+  }
+  const plan = createExamplePlan();
+  plan.teams.push({ id: 'other', label: 'Other', personIds: [] });
+  const owned = createStudio(plan); const base = owned.read();
+  expectHeld(owned.updateWork('review', changedReview(base, { teamId: 'other' }), base), base, 'team-membership');
+  const reordered = studio.updateWork('review', changedReview(before, { personIds: [...before.state.work[0].personIds].reverse() }), before);
+  assert.equal(reordered.ok, true);
+  assert.notStrictEqual(reordered.projection, before, 'authored participant order is a material presentation change');
+  assert.equal(reordered.projection.result.plannedCommitmentCents, 120000);
+  assert.deepEqual(reordered.projection.state.work[0].personIds, ['engineering-two', 'engineering-one', 'product-two', 'product-one']);
+});
+
+test('Undo, Redo and baseline restoration rebuild both identity indexes before the next edit', () => {
+  const studio = createStudio(); const initial = studio.read(); studio.setBaseline(initial);
+  const replacement = createExamplePlan();
+  replacement.people.reverse();
+  replacement.work = [{ ...replacement.work[0], id: 'preparation', minutesPerOccurrence: 15, occurrences: 1 }];
+  replacement.practices = [];
+  studio.replace(replacement, initial);
+  const restored = studio.undo(studio.read()).projection;
+  assert.equal(studio.previewWork('review', changedReview(restored, { minutesPerOccurrence: 60 }), restored).projection.result.plannedCommitmentCents, 240000);
+  assert.equal(studio.previewPerson('product-one', changedPerson(restored, { rateCentsPerHour: 10100 }), restored).projection.state.people[0].rateCentsPerHour, 10100);
+  const redone = studio.redo(restored).projection;
+  const personChange = studio.previewPerson('product-one', changedPerson(redone, { rateCentsPerHour: 10100 }), redone);
+  assert.equal(personChange.projection.state.people[3].id, 'product-one');
+  assert.equal(personChange.projection.state.people[3].rateCentsPerHour, 10100);
+  assert.equal(personChange.projection.result.plannedCommitmentCents, 10025);
+  const workChange = studio.updateWork('preparation', { ...redone.state.work[0], minutesPerOccurrence: 30 }, redone);
+  assert.equal(workChange.ok, true); assert.equal(workChange.projection.result.plannedCommitmentCents, 20000);
+  const baseline = studio.restoreBaseline(studio.read()).projection;
+  assert.equal(studio.updatePerson('product-one', changedPerson(baseline, { rateCentsPerHour: 10100 }), baseline).projection.result.plannedCommitmentCents, 120300);
+  const last = studio.read();
+  assert.equal(studio.updateWork('review', changedReview(last, { occurrences: 12 }), last).projection.result.plannedCommitmentCents, 240600);
+});
+
+test('reentrant admission preserves the newer publication, baseline, indexes and history atomically', () => {
+  const studio = createStudio(); const before = studio.read();
+  const replacement = createExamplePlan();
+  replacement.people.reverse();
+  replacement.work = [{ ...replacement.work[0], id: 'preparation', occurrences: 1 }];
+  replacement.practices = [];
+  let inner, baseline, acceptance, history;
+  const candidate = new Proxy(changedReview(before, { occurrences: 12 }), {
+    getOwnPropertyDescriptor(target, key) {
+      if (!inner) {
+        inner = studio.replace(replacement, before);
+        studio.setBaseline(inner.projection);
+        baseline = studio.readBaseline(); acceptance = studio.readAcceptance(); history = studio.readHistory();
+      }
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  expectHeld(studio.updateWork('review', candidate, before), inner?.projection ?? studio.read(), 'stale-edit');
+  assert.equal(inner.ok, true);
+  assert.strictEqual(studio.readAcceptance(), acceptance);
+  assert.strictEqual(studio.readBaseline(), baseline);
+  assert.deepEqual(studio.readHistory(), history);
+  assert.deepEqual(history, { undoCount: 1, redoCount: 0, limit: 20 });
+  assert.equal(studio.undo(studio.read()).projection.result.plannedCommitmentCents, 120000);
+  const restored = studio.redo(studio.read()).projection;
+  assert.equal(studio.updatePerson('product-one', changedPerson(restored, { rateCentsPerHour: 10100 }), restored).projection.result.plannedCommitmentCents, 20050);
+});
+
+test('a reentrant A-to-B-to-A traversal retires an outer no-op even though its payload returns', () => {
+  const studio = createStudio(); const before = studio.read();
+  let entered = false;
+  const candidate = new Proxy(changedReview(before), {
+    getOwnPropertyDescriptor(target, key) {
+      if (!entered) {
+        entered = true;
+        studio.updatePerson('product-one', changedPerson(before, { rateCentsPerHour: 10100 }), before);
+        studio.undo(studio.read());
+      }
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+  const result = studio.updateWork('review', candidate, before);
+  expectHeld(result, studio.read(), 'stale-edit');
+  assert.deepEqual(studio.read(), before);
+  assert.notStrictEqual(studio.read(), before);
+  assert.equal(studio.readAcceptance().sequence, 2);
+  assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 1, limit: 20 });
 });
