@@ -13,7 +13,11 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/controller.test.mjs',
   'tests/native-investment-studio/controller.browser.mjs',
   'tests/native-investment-studio/draft.test.mjs',
+  'tests/native-investment-studio/person-draft.test.mjs',
+  'tests/native-investment-studio/person-state.test.mjs',
   'tests/native-investment-studio/state.test.mjs',
+  'tests/native-investment-studio/team-controller.test.mjs',
+  'tests/native-investment-studio/team-controller.browser.mjs',
   'tests/context-canvas/about-studio-chapters.test.mjs',
   'tests/context-canvas/about-studio-chapters.browser.mjs',
   'tests/context-canvas/about-disclosure-readings.browser.mjs',
@@ -266,6 +270,47 @@ test('Visual Fidelity source ownership stays identical in package and suite rout
     aliasMembers,
   );
   for (const member of suite.members) await access(resolve(ROOT, member));
+});
+
+test('native Studio routes retain source and separate browser owners with executable alias parity', async () => {
+  const [catalog, pkg, files] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+    readdir(resolve(ROOT, 'tests/native-investment-studio')),
+  ]);
+  const sourceMembers = [
+    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs',
+    'person-draft.test.mjs', 'person-state.test.mjs', 'state.test.mjs',
+    'team-controller.test.mjs',
+  ].map(file => `tests/native-investment-studio/${file}`);
+  assert.deepEqual(
+    files.filter(file => file.endsWith('.test.mjs')).sort(),
+    sourceMembers.map(member => member.split('/').at(-1)).sort(),
+    'every native source module has an explicit execution route',
+  );
+  const routes = [
+    ['node.native-investment-studio', 'test:native-investment-studio:source', sourceMembers, 'source-unit'],
+    ['browser.native-investment-studio.coordination', 'test:native-investment-studio:coordination-browser',
+      ['tests/native-investment-studio/controller.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.team-assembly', 'test:native-investment-studio:team-browser',
+      ['tests/native-investment-studio/team-controller.browser.mjs'], 'focused-browser'],
+  ];
+  const admission = 'node tools/check-node-runtime.mjs --quiet && node --test ';
+  for (const [id, alias, members, bundle] of routes) {
+    const plan = createPlan(catalog, {suites: [id]});
+    assert.deepEqual(plan.suites[0].members, members, id);
+    assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', ...members], id);
+    assert.equal(pkg.scripts[alias], admission + members.join(' '), alias);
+    assert.deepEqual(catalog.inventory.rootScriptSelection.directNodeTestSelectors[alias], members, alias);
+    assert.deepEqual(catalog.suites.find(suite => suite.id === id).aliases, [alias], id);
+    assert.ok(createPlan(catalog, {bundles: [bundle]}).suites.some(suite => suite.id === id), id);
+    for (const member of members) await access(resolve(ROOT, member));
+  }
+  const sourcePlan = createPlan(catalog, {bundles: ['source-unit']});
+  for (const [id] of routes.slice(1)) {
+    assert.equal(sourcePlan.suites.some(suite => suite.id === id), false,
+      `${id} retains its explicit browser selection`);
+  }
 });
 
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {

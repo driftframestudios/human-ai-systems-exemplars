@@ -2133,3 +2133,15 @@ p#on-dark-iron-ore {
 @container (max-width: 12rem) {
     .native-coordination__duration-display { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Team Assembly extends the native instrument; About owns its palette and flow. */
+.native-team { padding: clamp(1rem, 3vw, 2.5rem); border-block-start: .125rem solid var(--native-ink); display: grid; gap: 1rem; }
+.about-page .native-team h3 { color: var(--native-text); font: 650 1.5rem/1.25 system-ui, sans-serif; }
+.native-team__roster { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
+.native-team__roster li { margin: 0; border: .125rem solid var(--native-ink); border-inline-start: .3rem solid var(--about-deep-teal); background: var(--about-mint-green); padding: .8rem; display: grid; gap: .5rem; align-content: start; min-inline-size: 0; }
+.native-team__roster button { text-align: start; overflow-wrap: anywhere; }
+.native-team__roster button[aria-pressed='true'] { background: var(--native-signal); border-style: double; }
+.native-team__roster p { font-size: .875rem; }
+.native-team .native-coordination__stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); --native-input-measure: calc(10ch + 1.25rem); inline-size: min(var(--native-input-measure), 100%); }
+.native-team input { padding-inline: .25rem; }
+.native-team [data-person-action='apply'] { background: var(--native-signal); }

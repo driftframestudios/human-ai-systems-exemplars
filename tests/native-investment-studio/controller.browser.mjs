@@ -93,7 +93,7 @@ async function setDuration(page, hours, minutes) {
 }
 
 async function assertCompactControls(page) {
-  const observations = await panel(page).locator('input').evaluateAll(inputs => inputs.map(input => {
+  const observations = await panel(page).locator('[data-native-configure] input').evaluateAll(inputs => inputs.map(input => {
     const style = getComputedStyle(input);
     const box = input.getBoundingClientRect();
     const context = document.createElement('canvas').getContext('2d');
@@ -111,12 +111,12 @@ async function assertCompactControls(page) {
     assert.ok(observation.textWidth <= observation.available + 1 && observation.scrollWidth <= observation.clientWidth + 1,
       `the complete ${observation.value} quantity fits without input scrolling: ${JSON.stringify(observation)}`);
   }
-  for (const button of await panel(page).locator('button[data-step]').all()) {
+  for (const button of await panel(page).locator('[data-native-configure] button[data-step]').all()) {
     const box = await button.boundingBox();
     assert.ok(box.width >= 43.95 && box.height >= 43.95,
       `each visible step control retains a 44px target within subpixel geometry precision: ${JSON.stringify(box)}`);
   }
-  const paintedGroups = await panel(page).locator('.native-coordination__controls > .native-coordination__control').evaluateAll(groups => groups.map(group => {
+  const paintedGroups = await panel(page).locator('[data-native-configure] .native-coordination__controls > .native-coordination__control').evaluateAll(groups => groups.map(group => {
     const paint = [...group.querySelectorAll('input,button')].map(node => {
       const box = node.getBoundingClientRect(), style = getComputedStyle(node);
       const [x = 0, y = 0, blur = 0, spread = 0] = (style.boxShadow.match(/-?[\d.]+px/gu) ?? []).map(Number.parseFloat);
@@ -157,17 +157,17 @@ async function assertFormContainerSeams(page) {
     for (let attempt = 0; attempt < 8; attempt += 1) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      observed = await panel(page).locator('.native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
+      observed = await panel(page).locator('[data-native-configure] .native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
       if (Math.abs(observed - target) <= .75) break;
       width += Math.round(target - observed);
     }
     assert.ok(Math.abs(observed - target) <= .75,
       `the form-content fixture reaches ${target}px beside its responsive seam; observed ${observed}px at viewport ${width}px`);
     await assertMaximumDigitsFit(page);
-    const settledWidth = await panel(page).locator('.native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
+    const settledWidth = await panel(page).locator('[data-native-configure] .native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
     assert.ok(Math.abs(settledWidth - target) <= .75,
       `the ${target}px form sample retains its measured width after editing: before ${observed}px, after ${settledWidth}px`);
-    const controls = await panel(page).locator('.native-coordination__controls > .native-coordination__control').evaluateAll(nodes =>
+    const controls = await panel(page).locator('[data-native-configure] .native-coordination__controls > .native-coordination__control').evaluateAll(nodes =>
       nodes.map(node => ({ top: node.getBoundingClientRect().top, width: node.getBoundingClientRect().width,
         inputTop: node.querySelector('input').getBoundingClientRect().top,
         buttonTop: node.querySelector('button').getBoundingClientRect().top })));
@@ -187,7 +187,7 @@ async function assertFormContainerSeams(page) {
 }
 
 async function assertInputPositionsThroughFeedback(page, capture = null) {
-  const positions = () => panel(page).locator('input').evaluateAll(inputs => inputs.map(input => ({
+  const positions = () => panel(page).locator('[data-native-configure] input').evaluateAll(inputs => inputs.map(input => ({
     name: input.name, top: input.getBoundingClientRect().top + scrollY,
   })));
   const baseline = await positions();
@@ -199,7 +199,7 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
         `${state} preserves ${actual[index].name} document position: ${JSON.stringify({ before: baseline[index], after: actual[index] })}`);
     }
     const order = await panel(page).evaluate(root => {
-      const lastInputBottom = Math.max(...[...root.querySelectorAll('input')].map(input => input.getBoundingClientRect().bottom));
+      const lastInputBottom = Math.max(...[...root.querySelectorAll('[data-native-configure] input')].map(input => input.getBoundingClientRect().bottom));
       return { lastInputBottom, feedbackTop: root.querySelector('.native-coordination__feedback').getBoundingClientRect().top,
         previewTop: root.querySelector('.native-coordination__preview').getBoundingClientRect().top };
     });
@@ -428,7 +428,7 @@ for (const engine of names) {
       const form = root.querySelector('form'), style = getComputedStyle(form);
       return { contentWidth: form.getBoundingClientRect().width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight),
         threshold: 31 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
-        tops: [...root.querySelectorAll('input')].map(input => input.getBoundingClientRect().top) };
+        tops: [...root.querySelectorAll('[data-native-configure] input')].map(input => input.getBoundingClientRect().top) };
     });
     assert.ok(wide.contentWidth >= wide.threshold, `the wide fixture reaches the three-control row: ${JSON.stringify(wide)}`);
     assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < .1, 'all three wide inputs share one top alignment');
