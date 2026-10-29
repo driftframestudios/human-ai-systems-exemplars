@@ -1,13 +1,21 @@
 import { createWorkDraftAdapter } from './draft.mjs';
 import { createPersonDraftAdapter } from './person-draft.mjs';
+import { createPurposeDraftAdapter } from './purpose-draft.mjs';
+import { PURPOSE_FIELDS } from './config.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
+const indexRows = rows => new Map(rows.map(row => [row.id, row]));
 const TYPES = Object.freeze({
-  work: Object.freeze({ id: 'workId', collection: 'work', fields: Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']),
+  work: Object.freeze({ id: 'workId', index: state => indexRows(state.work), step: true,
+    fields: Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']),
     create: studio => createWorkDraftAdapter(studio, null, { durationFormat: 'hours-minutes' }) }),
-  person: Object.freeze({ id: 'personId', collection: 'people', fields: Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']),
+  person: Object.freeze({ id: 'personId', index: state => indexRows(state.people), step: true,
+    fields: Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']),
     create: createPersonDraftAdapter }),
+  purpose: Object.freeze({ id: 'purposeId', index: state => new Map([['purpose', state.purpose]]),
+    fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
 });
+const KINDS = Object.freeze(Object.keys(TYPES));
 const EMPTY_ERRORS = Object.freeze([]);
 const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
@@ -19,8 +27,9 @@ const keyFor = (kind, targetId) => `${kind}:${targetId}`;
 export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts } = {}) {
   if (!studio || typeof studio.read !== 'function' || typeof studio.readAcceptance !== 'function'
     || typeof studio.updateWork !== 'function' || typeof studio.previewWork !== 'function'
-    || typeof studio.updatePerson !== 'function' || typeof studio.previewPerson !== 'function') {
-    throw new TypeError('Supply one Studio with accepted chronology and person/work editing.');
+    || typeof studio.updatePerson !== 'function' || typeof studio.previewPerson !== 'function'
+    || typeof studio.updatePurpose !== 'function' || typeof studio.previewPurpose !== 'function') {
+    throw new TypeError('Supply one Studio with accepted chronology and person, work, and purpose editing.');
   }
   if (!Number.isInteger(limit) || limit < 1 || limit > EDITING_LIMITS.drafts) {
     throw new TypeError(`Choose a draft limit from 1 through ${EDITING_LIMITS.drafts}.`);
@@ -31,8 +40,8 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     return existing;
   }
   const parked = new Map();
-  const selected = { work: null, person: null };
-  const errors = { work: null, person: null };
+  const selected = Object.fromEntries(KINDS.map(kind => [kind, null]));
+  const errors = Object.fromEntries(KINDS.map(kind => [kind, null]));
   let active = null;
   let disposed = false;
   let settling = false;
@@ -42,8 +51,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
 
   function rows(projection) {
     if (projection !== indexedProjection) {
-      indexes = Object.fromEntries(Object.entries(TYPES).map(([kind, type]) => [kind,
-        new Map(projection.state[type.collection].map(row => [row.id, row]))]));
+      indexes = Object.fromEntries(KINDS.map(kind => [kind, TYPES[kind].index(projection.state)]));
       indexedProjection = projection;
     }
     return indexes;
@@ -267,8 +275,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     const previous = active;
     active = null;
     parked.clear();
-    selected.work = null;
-    selected.person = null;
+    for (const kind of KINDS) { selected[kind] = null; errors[kind] = null; }
     indexedProjection = null;
     indexes = null;
     intent = Symbol('draft-intent');
@@ -282,7 +289,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
       read: () => readPort(kind),
       begin: (targetId, expected) => open(kind, targetId, expected),
       setText: (token, field, raw) => operate(kind, token, 'setText', [field, raw]),
-      step: (token, field, direction) => operate(kind, token, 'step', [field, direction]),
+      ...(TYPES[kind].step ? { step: (token, field, direction) => operate(kind, token, 'step', [field, direction]) } : {}),
       validate: token => operate(kind, token, 'validate'),
       preview: token => operate(kind, token, 'preview'),
       apply: token => operate(kind, token, 'apply'),
@@ -291,7 +298,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
       useCurrent: (token, expected) => recover(kind, token, expected, 'current'),
     });
   }
-  const coordinator = Object.freeze({ work: port('work'), person: port('person'), park, discard, read, dispose });
+  const coordinator = Object.freeze({ ...Object.fromEntries(KINDS.map(kind => [kind, port(kind)])), park, discard, read, dispose });
   INSTANCES.set(studio, coordinator);
   return coordinator;
 }

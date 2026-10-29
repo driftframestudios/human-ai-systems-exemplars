@@ -1,4 +1,4 @@
-import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS } from './config.mjs';
+import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -318,7 +318,8 @@ function prepareVersion(candidate, version) {
   });
   indexRecords(state.practices, 'plan.practices');
   const serialized = JSON.stringify(state);
-  if (serialized.length > LIMITS.bytes || encoder.encode(serialized).byteLength > LIMITS.bytes) reject('bytes', 'plan', 'Use a plan within the declared UTF-8 budget.');
+  const byteLimit = SCHEMA_BYTE_LIMITS[version];
+  if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
   return freeze({ state, result: calculate(state, peopleById), serialized });
 }
 
@@ -356,13 +357,18 @@ function admitIntegerTokens(source) {
 }
 
 export function prepareImport(text) {
-  if (typeof text !== 'string' || text.length > LIMITS.bytes || encoder.encode(text).byteLength > LIMITS.bytes) {
+  if (typeof text !== 'string' || text.length > LIMITS.bytes) {
     reject('bytes', 'import', 'Supply JSON text within the declared UTF-8 budget.');
   }
+  const transportBytes = encoder.encode(text).byteLength;
+  if (transportBytes > LIMITS.bytes) reject('bytes', 'import', 'Supply JSON text within the declared UTF-8 budget.');
   let raw;
   try { raw = JSON.parse(text); } catch { reject('json', 'import', 'Supply a complete JSON plan.'); }
   admitIntegerTokens(text);
   const sourceSchemaVersion = schemaVersion(raw);
+  if (transportBytes > SCHEMA_BYTE_LIMITS[sourceSchemaVersion]) {
+    reject('bytes', 'import', 'Supply JSON text within its source schema UTF-8 budget.');
+  }
   return Object.freeze({ projection: prepareSelectedVersion(raw, sourceSchemaVersion), sourceSchemaVersion });
 }
 

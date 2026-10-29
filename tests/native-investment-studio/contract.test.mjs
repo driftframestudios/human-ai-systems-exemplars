@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { preparePlan, preparePurpose, prepareImport, parsePlan, createExamplePlan, PlanError } from '../../collaboration/native-investment-studio/contract.mjs';
-import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS } from '../../collaboration/native-investment-studio/config.mjs';
+import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
 
 const legacyText = await readFile(new URL('./fixtures/plan-0.1.0.json', import.meta.url), 'utf8');
 const noPurpose = { changedAbility: null, affectedPopulation: null, observationSignal: null,
@@ -12,6 +12,56 @@ const noPurpose = { changedAbility: null, affectedPopulation: null, observationS
 function rejects(candidate, code) {
   assert.throws(() => preparePlan(candidate), error => error instanceof PlanError && error.code === code);
 }
+
+function legacyAtBytes(target) {
+  const id = (kind, index) => `${kind}${index}`.padEnd(64, 'x');
+  const people = Array.from({ length: 128 }, (_, index) => ({ id: id('p', index), label: 'a'.repeat(120), fundedMinutes: 0, rateCentsPerHour: 1 }));
+  const teams = Array.from({ length: 4 }, (_, index) => ({ id: id('t', index), label: 'a'.repeat(120), personIds: index ? [] : people.map(person => person.id) }));
+  const work = Array.from({ length: 256 }, (_, index) => ({ id: id('w', index), label: 'a'.repeat(120), teamId: teams[0].id,
+    personIds: people.slice(0, 15).map(person => person.id), minutesPerOccurrence: 1, occurrences: 1,
+    funding: 'additional', status: 'planned', timing: null }));
+  const practices = Array.from({ length: 128 }, (_, index) => ({ id: id('a', index), practiceId: 'expectation', teamId: teams[0].id, workIds: [work[index].id] }));
+  const plan = { kind: 'native-investment-plan', schemaVersion: '0.1.0', modelVersion: '0.1.0', planId: 'migration-boundary',
+    revision: 0, currency: 'USD', horizonWeeks: 1, people, teams, work, practices };
+  let remaining = target - Buffer.byteLength(JSON.stringify(plan));
+  for (const row of [...people, ...teams, ...work]) {
+    const count = Math.min(120, Math.floor(remaining / 2));
+    row.label = '漢'.repeat(count) + 'a'.repeat(120 - count);
+    remaining -= count * 2;
+    if (remaining === 1 && count < 120) { row.label = `${row.label.slice(0, -1)}é`; remaining -= 1; }
+  }
+  assert.equal(remaining, 0);
+  assert.equal(Buffer.byteLength(JSON.stringify(plan)), target);
+  return plan;
+}
+
+test('a complete legacy byte-budget plan migrates and current maximum purpose text round-trips', () => {
+  const legacy = legacyAtBytes(524288);
+  const legacyBytes = JSON.stringify(legacy);
+  const migrated = parsePlan(legacyBytes);
+  assert.equal(Buffer.byteLength(migrated.serialized), 524441);
+  assert.deepEqual(migrated.state.purpose, noPurpose);
+  assert.equal(parsePlan(migrated.serialized).serialized, migrated.serialized);
+  assert.equal(JSON.stringify(legacy), legacyBytes);
+  const fullPurpose = Object.fromEntries(Object.keys(noPurpose).map(field => [field, '\u0000'.repeat(600)]));
+  const current = preparePlan({ ...migrated.state, purpose: fullPurpose });
+  // Six 600-unit strings, each encoded as six-byte JSON escapes, plus the
+  // exact inserted purpose member place this valid current plan at its limit.
+  assert.equal(Buffer.byteLength(current.serialized), 546029);
+  assert.equal(SCHEMA_BYTE_LIMITS['0.1.0'], 524288);
+  assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
+  assert.equal(LIMITS.bytes, 546029);
+  assert.equal(parsePlan(current.serialized).serialized, current.serialized);
+  assert.equal(parsePlan(current.serialized).result.plannedCommitmentCents, migrated.result.plannedCommitmentCents);
+  assert.throws(() => parsePlan(`${current.serialized} `), { code: 'bytes' });
+});
+
+test('legacy schema keeps its original canonical and transport byte ceiling', () => {
+  rejects(legacyAtBytes(524289), 'bytes');
+  const exact = JSON.stringify(legacyAtBytes(524288));
+  assert.throws(() => prepareImport(`${exact} `), { code: 'bytes' });
+  assert.equal(prepareImport(exact).sourceSchemaVersion, '0.1.0');
+});
 
 test('genuine 0.1 input migrates deterministically while null, zero, rates and source identity retain meaning', () => {
   const source = JSON.parse(legacyText);
