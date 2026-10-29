@@ -13,14 +13,16 @@
   const estimate = summary?.querySelector(".estimate");
   const presets = document.getElementById("presets");
   const definitions = [
+    { key: "coordination", label: "Coordination", description: "Examine the horizon and rotate the interpretive lens to compare coordination demands.",
+      owners: ["horizon-title", "lens-title"] },
     { key: "plan", label: "Plan", description: "Choose a starting plan and name its horizon, goal, and decision boundary.",
       owners: ["preset-title", "shape-title", "goal-title"] },
     { key: "people", label: "People", description: "Edit roles and allocations, examine coverage, and name the human receiver for each AI contribution.",
       owners: ["roles-title", "staffing-title", "collaboration-title"] },
     { key: "work", label: "Work & recovery", description: "Edit activities, recovery effort, and quality attention. The planning band follows these same inputs.",
       owners: ["activities-title", "disruptions-title", "sigma-title", "quality-title"] },
-    { key: "coordination", label: "Coordination", description: "Examine the horizon, rotate the lens, and map change-model components into the working plan.",
-      owners: ["horizon-title", "lens-title", "components-title", "allocation-title", "investment-changes-title", "learning-title"] },
+    { key: "change-modeling", label: "Change Modeling", description: "Map change-model components, attention allocation, intended changes, and learning needs into the working plan.",
+      owners: ["components-title", "allocation-title", "investment-changes-title", "learning-title"] },
     { key: "comparison", label: "Comparison", description: "Inspect the planning breakdown, compare analytical scenarios, and carry an accepted account into a report.",
       owners: ["summary-title", "method-title", "investment-analysis-title"] },
   ];
@@ -214,6 +216,6 @@
   new MutationObserver(updatePlanName).observe(presets, { childList: true, subtree: true, attributes: true, attributeFilter: ["aria-pressed"] });
   updatePlanName();
   root.dataset.aboutStudioChapters = "ready";
-  selectChapter("plan");
+  selectChapter(definitions[0].key);
   revealFragment();
 })();

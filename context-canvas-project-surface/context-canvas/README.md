@@ -133,9 +133,10 @@ forming the new `investment-studio-chapters` route.
 The original Studio remains available through its current source and hosted
 identity. About receives the derived chapter route with the same sandbox and
 capabilities. Its live investment summary stays above the selected chapter;
-chapter switching preserves mounted inputs and planning state. Complete working
-Plan, People, Work & recovery, Coordination, and Comparison chapters demonstrate
-capabilities inside About. The full-view link supplements that experience.
+chapter switching preserves mounted inputs and planning state. Coordination
+opens first; Plan, People, Work & recovery, Change Modeling, and Comparison
+complete the six-chapter working view inside About. The full-view link
+supplements that experience.
 
 ```sh
 npm run build:about-studio-chapters

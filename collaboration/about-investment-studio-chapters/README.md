@@ -23,9 +23,10 @@ controls, while the active content participates in About’s vertical reading.
   owns the `investment-studio-chapters` hosted projection and checks derivation
   during packaging. The original full Studio route stays available separately.
 
-The presentation keeps one mounted document and one planning state. Plan,
-People, Work & recovery, Coordination, and Comparison expose the original
-controls; chapter changes select presentation rather than recreate data.
+The presentation keeps one mounted document and one planning state.
+Coordination opens first, followed by Plan, People, Work & recovery, Change
+Modeling, and Comparison. The six chapters expose the original controls;
+chapter changes select presentation rather than recreate data.
 Native buttons expose the current chapter. Inputs, assumptions, calculations,
 and provisional standing retain their original meaning.
 

@@ -7,7 +7,15 @@ import { expect } from '@playwright/test';
 import { assertTelemetry, monitor } from '../../tools/core-architecture-browser-helper.mjs';
 import { createAboutContentFitHarness, engines, fitted, wheelObservation, assertParentReading } from './about-content-fit-helper.mjs';
 
-const chapters = ['plan', 'people', 'work', 'coordination', 'comparison'];
+const chapters = ['coordination', 'plan', 'people', 'work', 'change-modeling', 'comparison'];
+const chapterOwners = Object.freeze({
+  coordination: ['horizon-title', 'lens-title'],
+  plan: ['preset-title', 'shape-title', 'goal-title'],
+  people: ['roles-title', 'staffing-title', 'collaboration-title'],
+  work: ['activities-title', 'disruptions-title', 'sigma-title', 'quality-title'],
+  'change-modeling': ['components-title', 'allocation-title', 'investment-changes-title', 'learning-title'],
+  comparison: ['summary-title', 'method-title', 'investment-analysis-title'],
+});
 const fullStudio = '/collaboration/initiative-costing-calculator/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/about-studio-chapters');
 // Independent arithmetic: 2 people × 10 h × 50% × $100 = $1,000;
@@ -31,6 +39,19 @@ async function assertChapter(frame, key) {
   await expect(button).toHaveAttribute('aria-controls', `about-studio-panel-${key}`);
   assert.equal(await frame.locator('#band').count(), 1, 'the original live amount retains one DOM owner');
   await expect(frame.locator('.about-studio-overview #band')).toBeVisible();
+}
+async function assertChapterStructure(frame) {
+  const observed = await frame.evaluate(ownerMap => Object.fromEntries(Object.entries(ownerMap)
+    .map(([chapter, ids]) => [chapter, ids.map(id => {
+      const node = document.getElementById(id);
+      return { id, chapter: node?.closest('[data-studio-panel]')?.dataset.studioPanel ?? null };
+    })])), chapterOwners);
+  for (const [chapter, readings] of Object.entries(observed)) {
+    assert.deepEqual(readings, chapterOwners[chapter].map(id => ({ id, chapter })), `${chapter} owns its complete card set`);
+  }
+  await expect(frame.locator('.lens-reading dt').first()).toHaveText('Important now');
+  assert.equal(await frame.getByText('Load-bearing now', { exact: true }).count(), 0,
+    'the interpretive lens uses its current visitor-facing label');
 }
 async function selectChapter(frame, key) {
   const button = frame.locator(`button[data-studio-chapter="${key}"]`);
@@ -87,7 +108,7 @@ async function assertWidth(frame) {
       const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width };
     }) }));
   assert.ok(reading.content <= reading.width + 2, `${reading.chapter} has local horizontal ownership: ${reading.content}/${reading.width}`);
-  assert.equal(reading.controls.length, 6);
+  assert.equal(reading.controls.length, 7);
   for (const box of reading.controls) assert.ok(box.width > 0 && box.left >= -1 && box.right <= reading.width + 1, 'summary and chapter controls fit the actual child viewport');
 }
 
@@ -96,7 +117,8 @@ for (const engine of Object.keys(engines)) {
     const observation = await session(engine);
     try {
       await expect(observation.frame.locator('html')).toHaveAttribute('data-about-studio-chapters', 'ready');
-      await fitted(observation); await assertChapter(observation.frame, 'plan');
+      await fitted(observation); await assertChapter(observation.frame, 'coordination');
+      await assertChapterStructure(observation.frame);
       await configureFixture(observation.frame, true); await assertArithmetic(observation.frame);
       const accepted = await observation.frame.evaluate(() => window.investmentStaffing.getState());
       for (const chapter of chapters) { await selectChapter(observation.frame, chapter); await fitted(observation); await assertArithmetic(observation.frame); }
@@ -152,7 +174,7 @@ for (const engine of Object.keys(engines)) {
       await observation.frame.locator('.horizon-jump[href="#roles-title"]').first().click();
       await assertChapter(observation.frame, 'people'); await assertFocusReach(observation, observation.frame.locator('#roles-title'));
       const count = await observation.frame.locator('[data-kind="activity"][data-field="name"]').count();
-      await selectChapter(observation.frame, 'coordination');
+      await selectChapter(observation.frame, 'change-modeling');
       await observation.frame.locator('[data-gap-add]').first().click();
       await assertFocusReach(observation, field(observation.frame, 'activity', count, 'name'));
       await assertChapter(observation.frame, 'work');
@@ -265,6 +287,7 @@ for (const engine of Object.keys(engines)) {
       }
 
       const count = await observation.frame.locator('[data-kind="activity"][data-field="name"]').count();
+      await selectChapter(observation.frame, 'change-modeling');
       await observation.frame.locator('[data-gap-add]').first().click();
       await assertChapter(observation.frame, 'work');
       await assertFocusReach(observation, field(observation.frame, 'activity', count, 'name'));
@@ -282,8 +305,8 @@ for (const engine of Object.keys(engines)) {
           await selectChapter(observation.frame, chapter);
           readings.push({ parentWidth: width, chapter, ...await fitted(observation) });
           await assertWidth(observation.frame);
-          const selector = { plan: '#shape-title', people: '#roles-title', work: '#activities-title',
-            coordination: '.horizon-canvas', comparison: '#investment-analysis-title' }[chapter];
+          const selector = { coordination: '.horizon-canvas', plan: '#shape-title', people: '#roles-title',
+            work: '#activities-title', 'change-modeling': '#components-title', comparison: '#investment-analysis-title' }[chapter];
           assertParentReading(await wheelObservation(observation, selector));
           if (engine === 'webkit' && ['plan', 'work'].includes(chapter)) {
             const overview = await observation.frame.locator('.about-studio-overview').boundingBox();
