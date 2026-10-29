@@ -19,7 +19,8 @@ and integration authority; publication remains held.
 
 - `config.mjs` owns the immutable units, input limits, contract vocabulary,
   six practice definitions, and bounded history defaults.
-- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `parsePlan`, `createExamplePlan`, and
+- `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareWork`, `preparePurpose`,
+  `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
 - `state.mjs` owns the `createStudio` facade, each instance's accepted
   chronology, bounded Undo/Redo and independent baseline capture.
@@ -27,8 +28,10 @@ and integration authority; publication remains held.
   the optional one-request scheduling boundary.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, and its cached proposal.
+- `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
+  and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
-  shared by the working-session and person controls.
+  shared by working sessions, people, and purpose.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -83,7 +86,7 @@ inspect today.
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
 | Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.1.0 round-trip, revision-bound edits, and exact captures. Existing exports remain usable in their original instruments. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.2.0 round-trip, admitted 0.1.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
 recovery rows. Its geometry supplies a visual precedent; actual native timing,
@@ -91,9 +94,9 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.1.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.2.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, one closed `purpose` record, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
@@ -107,6 +110,75 @@ Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
+
+### Purpose and schema migration
+
+Purpose has exactly six nullable fields: `changedAbility`, `affectedPopulation`,
+`observationSignal`, `accountableOwner`, `reviewBoundary`, and `openConditions`.
+Each string admits at most 600 raw UTF-16 units before trimming surrounding
+whitespace. Canonical output retains the trimmed, nonblank value; explicit
+`null` carries an unspecified field. Direct admission requires nonblank strings
+or explicit null. The purpose draft adapter converts blank input into null at
+Apply. Purpose text describes the initiative independently of monetary inputs.
+
+`preparePlan` selects schema `0.1.0` or `0.2.0` from the root's own enumerable
+schema-version data descriptor. It fully admits a genuine closed 0.1 root,
+every row and reference, its numeric meaning, and the owned byte budget before
+constructing a current record with all six purpose fields null. The migrated
+record then passes current admission. Surplus fields remain outside both closed
+schemas; migration never copies an unadmitted graph.
+
+`SCHEMA_BYTE_LIMITS` preserves the 524,288-byte source and owned-plan ceiling for
+0.1.0. The 0.2.0 ceiling is 546,029 bytes: the former budget plus 141 bytes for
+the inserted purpose member with six empty quoted values, and 21,600 bytes for
+six 600-unit strings at the maximum six JSON bytes per UTF-16 unit. This allows
+a full-size legacy plan to migrate and carry every bounded purpose field.
+Both original transport and canonical output use their schema's budget; a
+migrated export passes the current import boundary. The parser first bounds
+allocation with the current maximum, then applies the admitted source version's
+limit. The boundary tests exercise exact legacy and current limits, maximum
+escaped text, and one extra source byte.
+
+`prepareImport(text)` performs the existing bounded JSON and integer-token
+checks once and returns frozen `{ projection, sourceSchemaVersion }`.
+`parsePlan(text)` returns that same path's projection. Import previews can use
+the source version while exports always describe the actual current 0.2 state.
+Caller-owned legacy records and external captures retain their original version
+and contents. Construction, replacement, import, history and baseline retention
+inside a current Studio receive current-schema projections.
+
+`previewPurpose(candidate, expectedProjection)` validates and prepares a proposed
+purpose while preserving accepted state. `updatePurpose` publishes a material
+change through ordinary revision, acceptance and history rules. A normalized,
+validated no-op preserves exact accepted identity and Redo, including at the
+document revision ceiling. Purpose changes leave calculated monetary results
+unchanged. Stale and reentrant admission retains the newer accepted owner.
+
+The six bounded fields add O(6 × 600) normalization work. Current admission keeps
+the existing complete preparation path. A legacy import performs old admission
+and current admission once each; this finite migration has the same asymptotic
+bound with two owned preparation passes. The literal 0.1 fixture and focused
+contract/state cases cover migration, descriptor ownership, Unicode limits,
+unknown versus zero rates, deterministic round-trip, no-op history and recovery.
+
+`createPurposeDraftAdapter(studio)` owns one fixed `purpose` target. Call
+`begin('purpose', expectedProjection)` to receive a transaction token, then use
+`setText`, `validate`, `preview`, `apply`, or `cancel` with that token. Each raw
+field admits at most 600 UTF-16 units before normalization. Preview and Apply
+replace all six fields together; surrounding whitespace trims and blank text
+becomes null. Raw strings remain intact beside the accepted plan until Apply
+or Cancel. Text remains data through serialization and needs text-only DOM
+receivers when displayed.
+
+The adapter retains one complete preview keyed by the six canonical values.
+Equivalent whitespace edits reuse that preview while retaining their exact raw
+strings. A different accepted projection makes the draft stale; a different
+token belongs to a different edit. Reentrant preview work checks the transaction,
+accepted identity, and raw edit revision before caching its result. Disposal
+releases the transaction synchronously. The adapter owns no scheduler and adds
+O(6 × 600) bounded text work per read or edit; complete proposal preparation
+retains the state owner's ordinary cost. Its pure tests cover raw admission,
+semantic caching, exact ownership, history, recovery, and reentrant callbacks.
 
 ### Supported inputs
 
@@ -370,10 +442,11 @@ still carries the existing accepted projection, giving a future UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.1.0 export/import retains
-the supported state. Legacy Studio exports and unknown schema versions receive
-an explicit compatibility result; their original instruments remain the fitting
-receivers while a future adapter establishes a tested transformation.
+edit. Rejection preserves the prior snapshot. Native 0.2.0 export/import retains
+the supported state, and genuine native 0.1.0 plans migrate through their complete
+original admission. Full-Studio exports and unknown schema versions receive an
+explicit compatibility result; their original instruments retain those records
+while a future adapter establishes a tested transformation.
 
 UI drafts, open menus, reversed-card faces, focus targets, and reading position
 belong to their presentation adapters. A draft can remain editable while
@@ -589,7 +662,7 @@ browser receiver owns actual input, layout, focus, and reading observations.
 ## Shared editing and saved drafts
 
 `createDraftCoordinator(studio, { limit })` returns one coordinator for that
-Studio instance. Its `work` and `person` ports reuse the existing typed adapters
+Studio instance. Its `work`, `person`, and `purpose` ports reuse the typed adapters
 for validation, exact input conversion, preview and Apply. The parent receiver
 owns coordinator disposal; child receivers borrow their port and own their DOM
 listeners. A coordinator has at most one active adapter.
@@ -604,15 +677,17 @@ active target and selection remain available when that capacity check fails.
 Clean edits release their slot; changed raw spelling, unfinished text and invalid
 quantities retain their exact strings.
 
-Saved records contain a kind, target ID, fresh record token, three raw fields of
-at most 32 characters, and the tiny accepted-instance marker. They retain each
+Saved records contain a kind, target ID, fresh record token, bounded raw fields,
+and the tiny accepted-instance marker. Work and person edits have three fields
+of at most 32 UTF-16 units each; purpose has six fields of at most 600 units each.
+They retain each
 field's original meaning, including an unknown hourly rate represented by an
 empty string. Saved records carry neither prepared projections nor scheduled
 resources. A resumed edit receives a fresh lease; earlier tokens retain their
 original, closed ownership.
 
 When the accepted plan changes, saved text remains readable and becomes stale.
-`review(token, expectedProjection)` reopens all three saved fields against the
+`review(token, expectedProjection)` reopens the complete set of saved fields against the
 displayed current plan for inspection before Apply. It performs an explicit
 whole-edit review; it leaves field-by-field merging to a future declared policy.
 `useCurrent` deliberately replaces the saved fields with current values.
@@ -634,8 +709,10 @@ navigation. The current receiver uses explicit Apply and introduces no scheduled
 commit path.
 
 With D held edits, F fields and L characters per field, saved storage is
-O(D × F × L), bounded here by D ≤ 8, F ≤ 3 and L ≤ 32. Target indexes rebuild once
-per accepted projection in O(people + work); subsequent target lookups use Map
+O(D × F × L), conservatively bounded here by D ≤ 8, F ≤ 6 and L ≤ 600. The fixed
+purpose target admits one such edit; the remaining targets retain the smaller
+numeric field bounds. Target indexes rebuild once
+per accepted projection in O(people + work + 1); subsequent target lookups use Map
 lookup. A summary visits at most eight records. Typed preview retains the complete
 preparation route measured by #641 and computes only for the active editor.
 The accepted state's history and baseline remain with the state owner. Their
@@ -647,9 +724,9 @@ removed targets, disposal, reentry and draft-intent behavior.
 
 ## Native coordination receiver
 
-About loads `controller.mjs` as a module. Its ten transitive same-directory
+About loads `controller.mjs` as a module. Its fifteen transitive same-directory
 dependencies retain the canonical package geometry in local and production
-delivery. `deployment/cpanel/primary-route-manifest.json` declares all eleven files and
+delivery. `deployment/cpanel/primary-route-manifest.json` declares all sixteen files and
 their JavaScript media type. The production closure test builds an isolated
 artifact with the real builder and follows its parsed import graph; removing
 one dependency earns a failing closure observation. The shared local browser
@@ -665,7 +742,7 @@ then shows the new amount alongside any retained stale draft. Adjacent recovery
 controls offer Review saved edits, Use current values, and Discard saved edits;
 stale fields remain readable while Apply awaits a current editing lease.
 
-The receiver validates all required elements before installing eight listeners.
+The receiver validates its required elements before installing its listener group.
 Initialization failure releases installed resources. Disposal removes those
 listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
@@ -716,11 +793,69 @@ validation feedback and the investment preview follow all inputs, so their
 wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
 
+## Purpose and Investment receivers
+
+`purpose-controller.mjs` lends the amp head a compact Purpose disclosure.
+Six labelled text fields receive the shared `editing.purpose` port. Apply keeps
+the editor open; Cancel restores accepted text. Closing the disclosure parks
+unfinished text and resumes the selected chapter. A stale edit presents all six
+current fields beside its saved text before Review grants a new lease. The
+root owns the coordinator lifetime; the disclosure owns its DOM and listeners.
+Purpose text uses `textContent` and contributes no implicit price adjustment.
+
+`investment-controller.mjs` owns the Investment chapter: Undo/Redo, one baseline,
+native starting-plan previews, file input and captured downloads. Commands bind
+the displayed accepted projection; Restore also binds the displayed baseline.
+A state change parks active text before history moves, preserving its recovery
+route. Known-amount comparisons retain their incomplete pricing labels.
+
+`exchange.mjs` owns one pending file request or prepared replacement preview.
+A request binds accepted chronology and the coordinator's draft-intent marker.
+A later selection, raw edit or acceptance retires the earlier intent. File size
+is checked before acquisition and again against actual bytes; fatal UTF-8
+conversion precedes the schema-owned parser. Every FileReader acquisition and
+settlement route releases its listener group, including synchronous cancellation.
+A readable file produces a preview; Use this plan explicitly replaces accepted
+state. An active changed draft receives an Apply-or-discard response. Parked
+raw survives replacement under its original target and requires review.
+
+`presets.mjs` supplies two versioned, fresh-plan factories for current native
+fields. Shared working sessions price twelve person-hours as $1,200 of extra
+work. Sessions within funded time allocate the same effort inside $1,200 of
+staffing. The preview names affected fields, record counts and a legacy format
+conversion when one occurred. Later capability owners add the full Studio's six
+scenarios through this same catalogue and migration boundary.
+
+Download captures one accepted serialized string. The controller retains one
+object URL after the browser receives the click, then releases it on replacement
+or disposal. Rejected input leaves accepted state usable; its bounded diagnostic
+and source text stay local to the exchange owner. The original full Studio and
+its static counterpart retain their current carriers until Issue #638 places
+the native Studio and collapsed table together. Issue #656 owns a later table
+content refresh.
+
+File preflight takes O(1); decoding, admission and canonical preparation take
+O(B + N + R), where B is bounded bytes, N records and R references. Preview
+summaries use stable-ID maps and sets in O(N + R) time and transient space.
+They run once per prepared preview. Comparison DOM updates follow accepted
+projection or baseline changes; raw keystrokes retain those nodes. Exchange
+retains one pending controller, one preview or bounded rejected text, and tiny
+identity markers. Caller-retained immutable captures retain their own payloads.
+Apply re-admits the prepared plan through the existing state owner, preserving
+Issue #641's measured complete-preparation policy.
+
+The focused Investment browser receiver exercises purpose ownership, baseline
+and history, actual file selection, version rejection/recovery, captured download
+bytes, delayed-read identity, disposal/remount, and narrow scrolling across
+Chromium, Firefox and Playwright WebKit. Source tests own byte limits, hostile
+records, exact arithmetic and callback-acquisition faults. Native-device input
+and a visitor's comprehension remain separate observations.
+
 ## Native Studio chapters
 
-`shell.mjs` owns the amp head's manually activated Coordination and People
+`shell.mjs` owns the amp head's manually activated Coordination, People and Investment
 tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
-the shell after mounting both receivers against the same Studio instance. The
+the shell after mounting the receivers against the same Studio instance. The
 shell changes presentation and calls the parent receiver's selection callback.
 The parent parks the outgoing edit and resumes the incoming target through the
 shared coordinator. The amp head
@@ -739,7 +874,7 @@ before a new animation is acquired.
 
 An authored, labelled `[data-native-chapter-list]` begins hidden. Its named
 buttons use `data-native-chapter` and `aria-controls`; corresponding sections
-use `data-native-chapter-panel` and `native-studio-<key>` IDs. Both sections
+use `data-native-chapter-panel` and `native-studio-<key>` IDs. All working sections
 begin visible for the static reading. The shell validates their complete
 one-to-one relationship before adding tab semantics or hiding a panel. Future
 chapters enter with their working content and finite icon geometry.
@@ -772,7 +907,7 @@ copies H existing top-level history fields in O(H); the browser owns the
 structured clone of that entry. Fragment recovery follows the target's ancestor
 chain. Browser layout and paint retain their own costs.
 
-`icons.mjs` creates fresh decorative SVGs for the two implemented chapters.
+`icons.mjs` creates fresh decorative SVGs for the three implemented chapters.
 It carries the selected Lucide geometry and ISC notice in delivered bytes.
 The [upstream receipt](vendor/lucide/README.md) records the exact pin and
 complete licence. Visible button text supplies the accessible names. Each
@@ -874,6 +1009,7 @@ npm run test:native-investment-studio:source
 npm run test:native-investment-studio:coordination-browser
 npm run test:native-investment-studio:team-browser
 npm run test:native-investment-studio:chapters-browser
+npm run test:native-investment-studio:investment-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```

@@ -1,12 +1,177 @@
 import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { preparePlan, parsePlan, createExamplePlan, PlanError } from '../../collaboration/native-investment-studio/contract.mjs';
-import { CONTRACT, LIMITS, PRACTICES } from '../../collaboration/native-investment-studio/config.mjs';
+import { readFile } from 'node:fs/promises';
+import { preparePlan, preparePurpose, prepareImport, parsePlan, createExamplePlan, PlanError } from '../../collaboration/native-investment-studio/contract.mjs';
+import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+
+const legacyText = await readFile(new URL('./fixtures/plan-0.1.0.json', import.meta.url), 'utf8');
+const noPurpose = { changedAbility: null, affectedPopulation: null, observationSignal: null,
+  accountableOwner: null, reviewBoundary: null, openConditions: null };
 
 function rejects(candidate, code) {
   assert.throws(() => preparePlan(candidate), error => error instanceof PlanError && error.code === code);
 }
+
+function legacyAtBytes(target) {
+  const id = (kind, index) => `${kind}${index}`.padEnd(64, 'x');
+  const people = Array.from({ length: 128 }, (_, index) => ({ id: id('p', index), label: 'a'.repeat(120), fundedMinutes: 0, rateCentsPerHour: 1 }));
+  const teams = Array.from({ length: 4 }, (_, index) => ({ id: id('t', index), label: 'a'.repeat(120), personIds: index ? [] : people.map(person => person.id) }));
+  const work = Array.from({ length: 256 }, (_, index) => ({ id: id('w', index), label: 'a'.repeat(120), teamId: teams[0].id,
+    personIds: people.slice(0, 15).map(person => person.id), minutesPerOccurrence: 1, occurrences: 1,
+    funding: 'additional', status: 'planned', timing: null }));
+  const practices = Array.from({ length: 128 }, (_, index) => ({ id: id('a', index), practiceId: 'expectation', teamId: teams[0].id, workIds: [work[index].id] }));
+  const plan = { kind: 'native-investment-plan', schemaVersion: '0.1.0', modelVersion: '0.1.0', planId: 'migration-boundary',
+    revision: 0, currency: 'USD', horizonWeeks: 1, people, teams, work, practices };
+  let remaining = target - Buffer.byteLength(JSON.stringify(plan));
+  for (const row of [...people, ...teams, ...work]) {
+    const count = Math.min(120, Math.floor(remaining / 2));
+    row.label = '漢'.repeat(count) + 'a'.repeat(120 - count);
+    remaining -= count * 2;
+    if (remaining === 1 && count < 120) { row.label = `${row.label.slice(0, -1)}é`; remaining -= 1; }
+  }
+  assert.equal(remaining, 0);
+  assert.equal(Buffer.byteLength(JSON.stringify(plan)), target);
+  return plan;
+}
+
+test('a complete legacy byte-budget plan migrates and current maximum purpose text round-trips', () => {
+  const legacy = legacyAtBytes(524288);
+  const legacyBytes = JSON.stringify(legacy);
+  const migrated = parsePlan(legacyBytes);
+  assert.equal(Buffer.byteLength(migrated.serialized), 524441);
+  assert.deepEqual(migrated.state.purpose, noPurpose);
+  assert.equal(parsePlan(migrated.serialized).serialized, migrated.serialized);
+  assert.equal(JSON.stringify(legacy), legacyBytes);
+  const fullPurpose = Object.fromEntries(Object.keys(noPurpose).map(field => [field, '\u0000'.repeat(600)]));
+  const current = preparePlan({ ...migrated.state, purpose: fullPurpose });
+  // Six 600-unit strings, each encoded as six-byte JSON escapes, plus the
+  // exact inserted purpose member place this valid current plan at its limit.
+  assert.equal(Buffer.byteLength(current.serialized), 546029);
+  assert.equal(SCHEMA_BYTE_LIMITS['0.1.0'], 524288);
+  assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
+  assert.equal(LIMITS.bytes, 546029);
+  assert.equal(parsePlan(current.serialized).serialized, current.serialized);
+  assert.equal(parsePlan(current.serialized).result.plannedCommitmentCents, migrated.result.plannedCommitmentCents);
+  assert.throws(() => parsePlan(`${current.serialized} `), { code: 'bytes' });
+});
+
+test('legacy schema keeps its original canonical and transport byte ceiling', () => {
+  rejects(legacyAtBytes(524289), 'bytes');
+  const exact = JSON.stringify(legacyAtBytes(524288));
+  assert.throws(() => prepareImport(`${exact} `), { code: 'bytes' });
+  assert.equal(prepareImport(exact).sourceSchemaVersion, '0.1.0');
+});
+
+test('genuine 0.1 input migrates deterministically while null, zero, rates and source identity retain meaning', () => {
+  const source = JSON.parse(legacyText);
+  const before = JSON.stringify(source);
+  const projection = preparePlan(source);
+  assert.equal(projection.state.schemaVersion, '0.2.0');
+  assert.equal(projection.state.modelVersion, '0.1.0');
+  assert.deepEqual(projection.state.purpose, noPurpose);
+  assert.equal(projection.state.revision, 7);
+  assert.deepEqual(projection.state.people.map(person => person.rateCentsPerHour), [10000, null, 0]);
+  assert.equal(projection.result.knownCommitmentCents, 10000); // 60 min × $100 for the known-rate participant.
+  assert.equal(projection.result.plannedCommitmentCents, null);
+  assert.equal(projection.result.standing, 'incomplete');
+  assert.equal(JSON.stringify(source), before);
+  assert.equal(source.schemaVersion, '0.1.0');
+  assert.equal(Object.hasOwn(source, 'purpose'), false);
+  assert.deepEqual(parsePlan(legacyText), projection);
+  assert.deepEqual(parsePlan(projection.serialized), projection);
+  assert.ok(Object.isFrozen(projection.state.purpose));
+  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.2.0');
+  const receipt = prepareImport(legacyText);
+  assert.equal(receipt.sourceSchemaVersion, '0.1.0');
+  assert.deepEqual(receipt.projection, projection);
+  assert.ok(Object.isFrozen(receipt));
+  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.2.0');
+});
+
+test('legacy migration first admits the closed old root, rows, references, model and integer tokens', () => {
+  for (const [mutate, code] of [
+    [plan => { plan.purpose = noPurpose; }, 'fields'],
+    [plan => { plan.extra = { arbitrary: true }; }, 'fields'],
+    [plan => { plan.people[0].extra = true; }, 'fields'],
+    [plan => { plan.work[0].personIds = ['missing']; }, 'reference'],
+    [plan => { plan.modelVersion = '0.2.0'; }, 'unsupported-contract'],
+    [plan => { plan.people[0].fundedMinutes = -.5; }, 'integer'],
+  ]) {
+    const plan = JSON.parse(legacyText); mutate(plan); rejects(plan, code);
+  }
+  let reads = 0;
+  const surplus = JSON.parse(legacyText);
+  Object.defineProperty(surplus, 'purpose', { enumerable: true, get() { reads += 1; throw new Error('unused'); } });
+  rejects(surplus, 'fields');
+  assert.equal(reads, 0);
+  for (const token of ['2e0', '2.0', '2.00000000000000001']) {
+    const source = legacyText.replace('"occurrences": 2', `"occurrences": ${token}`);
+    assert.notEqual(source, legacyText);
+    assert.throws(() => parsePlan(source), { code: 'integer-token' });
+  }
+  assert.throws(() => parsePlan(' '.repeat(LIMITS.bytes) + legacyText), { code: 'bytes' });
+});
+
+test('schema selection uses the owned enumerable data descriptor and rechecks its admitted value', () => {
+  let reads = 0;
+  const accessor = JSON.parse(legacyText);
+  Object.defineProperty(accessor, 'schemaVersion', { enumerable: true, get() { reads += 1; return '0.1.0'; } });
+  rejects(accessor, 'data-property');
+  assert.equal(reads, 0);
+  const hidden = JSON.parse(legacyText);
+  Object.defineProperty(hidden, 'schemaVersion', { enumerable: false });
+  rejects(hidden, 'data-property');
+  const absent = JSON.parse(legacyText); delete absent.schemaVersion; rejects(absent, 'data-property');
+  const inherited = Object.assign(Object.create({ schemaVersion: '0.1.0' }), absent);
+  rejects(inherited, 'record');
+  for (const value of ['0.3.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
+    const plan = JSON.parse(legacyText); plan.schemaVersion = value; rejects(plan, 'unsupported-contract');
+  }
+  let descriptors = 0;
+  const changing = new Proxy(JSON.parse(legacyText), { getOwnPropertyDescriptor(target, key) {
+    const descriptor = Reflect.getOwnPropertyDescriptor(target, key);
+    return key === 'schemaVersion' && ++descriptors > 1 ? { ...descriptor, value: '0.2.0' } : descriptor;
+  } });
+  rejects(changing, 'unsupported-contract');
+});
+
+test('purpose owns six closed nullable fields and normalizes bounded surrounding whitespace', () => {
+  assert.deepEqual(PURPOSE_FIELDS, Object.keys(noPurpose));
+  const source = { ...noPurpose, changedAbility: '  Restore the reading route.\n',
+    affectedPopulation: 'Researchers', observationSignal: '1.5e+2 describes the observation, rather than a numeric field.' };
+  const purpose = preparePurpose(source);
+  assert.equal(purpose.changedAbility, 'Restore the reading route.');
+  assert.equal(source.changedAbility, '  Restore the reading route.\n');
+  assert.equal(purpose.accountableOwner, null);
+  const plan = createExamplePlan(); plan.purpose = source;
+  const projection = preparePlan(plan);
+  assert.deepEqual(projection.state.purpose, purpose);
+  assert.equal(projection.result.knownCommitmentCents, 120000);
+  assert.deepEqual(parsePlan(projection.serialized), projection);
+  assert.equal(Object.isFrozen(projection.state.purpose), true);
+  assert.equal(Object.isFrozen(source), false);
+});
+
+test('purpose length counts raw UTF-16 units before normalization and retains exact Unicode text', () => {
+  for (const value of ['x'.repeat(600), '🧭'.repeat(300), ` ${'x'.repeat(598)} `]) {
+    const purpose = preparePurpose({ ...noPurpose, changedAbility: value });
+    assert.equal(purpose.changedAbility, value.trim());
+  }
+  for (const value of ['', ' \t\n ', 'x'.repeat(601), '🧭'.repeat(301), ` ${'x'.repeat(600)}`, undefined, false, 0, [], {}]) {
+    assert.throws(() => preparePurpose({ ...noPurpose, changedAbility: value }), { code: 'purpose-text' });
+  }
+  const extra = { ...noPurpose, extra: 'surplus' };
+  assert.throws(() => preparePurpose(extra), { code: 'fields' });
+  const absent = { ...noPurpose }; delete absent.openConditions;
+  assert.throws(() => preparePurpose(absent), { code: 'fields' });
+  let reads = 0;
+  const accessor = { ...noPurpose };
+  Object.defineProperty(accessor, 'changedAbility', { enumerable: true, get() { reads += 1; return 'unused'; } });
+  assert.throws(() => preparePurpose(accessor), { code: 'data-property' });
+  assert.equal(reads, 0);
+  const plan = createExamplePlan(); delete plan.purpose; rejects(plan, 'fields');
+});
 
 test('coordination has an independent person-minute and cent oracle', () => {
   const { state, result } = preparePlan(createExamplePlan());

@@ -35,6 +35,14 @@ const GEOMETRY = new Map([
     ['path', { d: 'M22 21v-2a4 4 0 0 0-3-3.87' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
   ]],
+  ['investment', [
+    ['path', { d: 'M12 16v5' }],
+    ['path', { d: 'M16 14.639V21' }],
+    ['path', { d: 'M20 10.656V21' }],
+    ['path', { d: 'm22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15' }],
+    ['path', { d: 'M4 18.463V21' }],
+    ['path', { d: 'M8 14.656V21' }],
+  ]],
 ]);
 export const STUDIO_ICON_NAMES = Object.freeze([...GEOMETRY.keys()]);
 const SVG_ATTRIBUTES = Object.freeze({

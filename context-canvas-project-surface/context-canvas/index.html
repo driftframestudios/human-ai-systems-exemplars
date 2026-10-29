@@ -162,7 +162,28 @@
           <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
             <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
+            <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
           </div>
+          <details class="native-purpose" data-native-purpose>
+            <summary>Purpose <span data-purpose-summary>Describe the change you are planning.</span></summary>
+            <div class="native-coordination__recovery" data-purpose-recovery hidden>
+              <p>The plan changed. Review your saved text before applying it.</p>
+              <dl class="native-purpose__current" data-purpose-current></dl>
+              <div class="native-coordination__actions"><button type="button" data-purpose-action="review">Review saved edits</button><button type="button" data-purpose-action="useCurrent">Use current text</button><button type="button" data-purpose-action="cancel">Discard saved edits</button></div>
+            </div>
+            <form novalidate><fieldset disabled aria-label="Plan purpose">
+              <div class="native-purpose__fields">
+                  <div><label for="purpose-changedAbility">What changes?</label><textarea id="purpose-changedAbility" name="changedAbility" rows="2" maxlength="600" aria-describedby="purpose-changedAbility-error"></textarea><p class="native-coordination__error" id="purpose-changedAbility-error" data-purpose-error="changedAbility"></p></div>
+                  <div><label for="purpose-affectedPopulation">Who is affected?</label><textarea id="purpose-affectedPopulation" name="affectedPopulation" rows="2" maxlength="600" aria-describedby="purpose-affectedPopulation-error"></textarea><p class="native-coordination__error" id="purpose-affectedPopulation-error" data-purpose-error="affectedPopulation"></p></div>
+                  <div><label for="purpose-observationSignal">How will you tell?</label><textarea id="purpose-observationSignal" name="observationSignal" rows="2" maxlength="600" aria-describedby="purpose-observationSignal-error"></textarea><p class="native-coordination__error" id="purpose-observationSignal-error" data-purpose-error="observationSignal"></p></div>
+                  <div><label for="purpose-accountableOwner">Who decides?</label><textarea id="purpose-accountableOwner" name="accountableOwner" rows="2" maxlength="600" aria-describedby="purpose-accountableOwner-error"></textarea><p class="native-coordination__error" id="purpose-accountableOwner-error" data-purpose-error="accountableOwner"></p></div>
+                  <div><label for="purpose-reviewBoundary">When will you review?</label><textarea id="purpose-reviewBoundary" name="reviewBoundary" rows="2" maxlength="600" aria-describedby="purpose-reviewBoundary-error"></textarea><p class="native-coordination__error" id="purpose-reviewBoundary-error" data-purpose-error="reviewBoundary"></p></div>
+                  <div><label for="purpose-openConditions">What is still open?</label><textarea id="purpose-openConditions" name="openConditions" rows="2" maxlength="600" aria-describedby="purpose-openConditions-error"></textarea><p class="native-coordination__error" id="purpose-openConditions-error" data-purpose-error="openConditions"></p></div>
+              </div>
+              <div class="native-coordination__actions"><button type="submit">Apply purpose</button><button type="button" data-purpose-action="cancel">Cancel changes</button></div>
+            </fieldset></form>
+            <p class="native-coordination__status" data-purpose-status role="status" aria-live="polite" aria-atomic="true"></p>
+          </details>
           <details class="native-coordination__saved" data-native-saved hidden>
             <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
             <ul data-native-saved-list></ul>
@@ -311,6 +332,34 @@
             </form>
           </details>
           <p class="native-coordination__status" data-person-status role="status" aria-live="polite" aria-atomic="true"></p>
+        </section>
+        <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
+          <h3 id="native-investment-title">Keep and compare your plan.</h3>
+          <div class="native-investment__grid">
+            <section class="native-investment__card" aria-labelledby="native-history-title">
+              <h4 id="native-history-title">Try a change</h4>
+              <p data-investment-history>Undo follows applied changes.</p>
+              <div class="native-coordination__actions"><button type="button" data-investment-action="undo" disabled>Undo</button><button type="button" data-investment-action="redo" disabled>Redo</button></div>
+              <dl class="native-investment__comparison" data-investment-comparison></dl>
+              <div class="native-coordination__actions"><button type="button" data-investment-action="baseline">Save baseline</button><button type="button" data-investment-action="restore" disabled>Restore baseline</button></div>
+            </section>
+            <section class="native-investment__card" aria-labelledby="native-exchange-title">
+              <h4 id="native-exchange-title">Start from a plan</h4>
+              <label for="native-preset">Starting plan</label>
+              <select id="native-preset" data-investment-preset></select>
+              <button type="button" data-investment-action="preset">Preview starting plan</button>
+              <label for="native-plan-file">Open a saved plan</label>
+              <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json">
+              <button type="button" data-investment-action="download">Download current plan</button>
+            </section>
+          </div>
+          <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
+            <h4 id="native-plan-preview-title" tabindex="-1">Plan preview</h4>
+            <p data-investment-preview-total></p>
+            <ul data-investment-changes></ul>
+            <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
+          </section>
+          <p class="native-coordination__status" data-investment-status role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
         <p class="native-coordination__fallback" data-native-fallback hidden></p>
       </div>

@@ -17,6 +17,110 @@ function opened(editing, studio, kind, id) {
 }
 function rejected(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); }
 
+test('purpose uses one shared lease and parks six bounded raw fields independently of accepted state', () => {
+  const { studio, editing } = setup();
+  const before = studio.read();
+  assert.equal(Object.hasOwn(editing.purpose, 'step'), false);
+  const token = opened(editing, studio, 'purpose', 'purpose');
+  const inputs = { changedAbility: '  Find a sample  ', affectedPopulation: 'Research teams', observationSignal: '',
+    accountableOwner: '\nStudy lead\n', reviewBoundary: 'Next sprint', openConditions: '😀'.repeat(300) };
+  for (const [field, value] of Object.entries(inputs)) assert.equal(editing.purpose.setText(token, field, value).ok, true);
+  const intent = editing.read().intent;
+  assert.equal(editing.park().ok, true);
+  const saved = editing.read().parked[0];
+  assert.equal(saved.kind, 'purpose');
+  assert.equal(saved.targetId, 'purpose');
+  assert.equal(saved.targetExists, true);
+  assert.deepEqual(saved.raw, inputs);
+  assert.equal(Object.hasOwn(saved, 'projection'), false);
+  assert.equal(Object.hasOwn(saved, 'baseProjection'), false);
+  assert.strictEqual(editing.read().intent, intent);
+  const resumed = opened(editing, studio, 'purpose', 'purpose');
+  assert.deepEqual(editing.purpose.read().draft.raw, inputs);
+  assert.strictEqual(editing.read().intent, intent);
+  rejected(editing.purpose.apply(token), 'draft-token');
+  assert.strictEqual(studio.read(), before);
+  assert.equal(editing.purpose.preview(resumed).projection.result.plannedCommitmentCents, 120000);
+  assert.equal(editing.purpose.apply(resumed).ok, true);
+  assert.equal(studio.read().state.purpose.changedAbility, 'Find a sample');
+  assert.equal(studio.read().state.purpose.observationSignal, null);
+  assert.equal(studio.read().result.plannedCommitmentCents, 120000);
+  assert.equal(editing.read().slots, 0);
+});
+
+test('accepting purpose retains a saved work edit for explicit review against the newer plan', () => {
+  const { studio, editing } = setup();
+  const work = opened(editing, studio, 'work', 'review');
+  editing.work.setText(work, 'minutesPerSession', '45');
+  const purpose = opened(editing, studio, 'purpose', 'purpose');
+  editing.purpose.setText(purpose, 'changedAbility', 'Locate samples');
+  assert.equal(editing.purpose.apply(purpose).ok, true);
+  assert.equal(editing.work.read().status, 'stale');
+  assert.equal(editing.work.read().draft.raw.minutesPerSession, '45');
+  const saved = editing.work.read().draft.token;
+  rejected(editing.work.begin('review', studio.read()), 'review-required');
+  const reviewed = editing.work.review(saved, studio.read());
+  assert.equal(reviewed.ok, true);
+  assert.equal(editing.work.apply(reviewed.view.draft.token).ok, true);
+  assert.equal(studio.read().state.purpose.changedAbility, 'Locate samples');
+  assert.equal(studio.read().result.plannedCommitmentCents, 180000);
+});
+
+test('legacy import preserves parked purpose text for review or deliberate current-value recovery', () => {
+  const { studio, editing } = setup();
+  const purpose = opened(editing, studio, 'purpose', 'purpose');
+  editing.purpose.setText(purpose, 'changedAbility', 'Restore sample tracking');
+  editing.purpose.setText(purpose, 'reviewBoundary', '  Next sprint  ');
+  editing.park();
+  const saved = editing.purpose.read().draft.token;
+  const legacy = createExamplePlan();
+  legacy.schemaVersion = '0.1.0';
+  delete legacy.purpose;
+  assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
+  assert.equal(studio.read().state.schemaVersion, '0.2.0');
+  assert.equal(editing.purpose.read().status, 'stale');
+  rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
+  const reviewed = editing.purpose.review(saved, studio.read());
+  assert.equal(reviewed.ok, true);
+  assert.equal(reviewed.view.draft.raw.reviewBoundary, '  Next sprint  ');
+  assert.equal(editing.purpose.apply(reviewed.view.draft.token).ok, true);
+  assert.equal(studio.read().state.purpose.reviewBoundary, 'Next sprint');
+  const next = opened(editing, studio, 'purpose', 'purpose');
+  editing.purpose.setText(next, 'reviewBoundary', 'Later draft');
+  editing.park();
+  const parked = editing.purpose.read().draft.token;
+  studio.importText(JSON.stringify(legacy), studio.read());
+  const current = editing.purpose.useCurrent(parked, studio.read());
+  assert.equal(current.ok, true);
+  assert.equal(current.view.draft.raw.reviewBoundary, '');
+  assert.equal(editing.purpose.cancel(current.view.draft.token).ok, true);
+  assert.equal(studio.read().state.purpose.reviewBoundary, null);
+});
+
+test('purpose reserves a bounded slot, accepts only its fixed target, and releases all ownership on disposal', () => {
+  const { studio, editing } = setup({ limit: 1 });
+  rejected(editing.purpose.begin('__proto__', studio.read()), 'reference');
+  const purpose = opened(editing, studio, 'purpose', 'purpose');
+  const intent = editing.read().intent;
+  rejected(editing.purpose.setText(purpose, 'changedAbility', 'x'.repeat(601)), 'text');
+  assert.strictEqual(editing.read().intent, intent);
+  editing.purpose.setText(purpose, 'changedAbility', '  ');
+  assert.equal(editing.purpose.read().draft.changed, false);
+  rejected(editing.person.begin('product-one', studio.read()), 'draft-limit');
+  assert.equal(editing.park().ok, true);
+  assert.equal(editing.read().slots, 1);
+  assert.equal(editing.discard(editing.read().parked[0].token).ok, true);
+  const next = opened(editing, studio, 'purpose', 'purpose');
+  editing.purpose.setText(next, 'changedAbility', 'Still a draft');
+  const disposed = editing.dispose();
+  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null });
+  assert.equal(disposed.slots, 0);
+  assert.equal(disposed.active, null);
+  assert.equal(editing.purpose.read().status, 'disposed');
+  rejected(editing.purpose.apply(next), 'disposed');
+  assert.equal(studio.read().state.purpose.changedAbility, null);
+});
+
 test('parking one session edit, changing a rate and explicitly reviewing retain exact independent amounts', () => {
   const { studio, editing } = setup();
   const original = studio.read();

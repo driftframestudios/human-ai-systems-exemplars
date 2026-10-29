@@ -130,13 +130,13 @@ test('a disposing chapter receiver retires the selection before animation acquis
   assert.ok([...f.records.values()].every(record => !record.panel.hidden));
 });
 
-test('About authors two working chapter panels and retains the existing deep-link destinations', async () => {
+test('About authors three working chapter panels and retains the existing deep-link destinations', async () => {
   const about = await readFile(new URL('../../context-canvas-project-surface/context-canvas/index.html', import.meta.url), 'utf8');
   const controls = [...about.matchAll(/<button\b[^>]*\bdata-native-chapter="([^"]+)"[^>]*>/gu)];
   const panels = [...about.matchAll(/<section\b[^>]*\bdata-native-chapter-panel="([^"]+)"[^>]*>/gu)];
-  assert.deepEqual(controls.map(match => match[1]), ['coordination', 'people']);
-  assert.deepEqual(panels.map(match => match[1]), ['coordination', 'people']);
-  for (const key of ['coordination', 'people']) {
+  assert.deepEqual(controls.map(match => match[1]), ['coordination', 'people', 'investment']);
+  assert.deepEqual(panels.map(match => match[1]), ['coordination', 'people', 'investment']);
+  for (const key of ['coordination', 'people', 'investment']) {
     assert.ok(controls.find(match => match[1] === key)[0].includes(`aria-controls="native-studio-${key}"`));
     const panel = panels.find(match => match[1] === key)[0];
     assert.ok(panel.includes(`id="native-studio-${key}"`));
@@ -380,7 +380,7 @@ test('partial listener installation restores authored state and leaves the root 
 
 test('finite icon construction owns each SVG and retains exact local geometry and accessible control naming', async () => {
   const f = fixture();
-  assert.deepEqual(STUDIO_ICON_NAMES, ['coordination', 'people']);
+  assert.deepEqual(STUDIO_ICON_NAMES, ['coordination', 'people', 'investment']);
   assert.ok(Object.isFrozen(STUDIO_ICON_NAMES));
   const first = createStudioIcon(f.document, 'people');
   const second = createStudioIcon(f.document, 'people');

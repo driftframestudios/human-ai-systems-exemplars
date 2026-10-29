@@ -1,9 +1,12 @@
 import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { HISTORY, LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+
+const legacyPurposeFixture = await readFile(new URL('./fixtures/plan-0.1.0.json', import.meta.url), 'utf8');
 
 function changedReview(projection, overrides = {}) {
   return { ...projection.state.work.find(row => row.id === 'review'), ...overrides };
@@ -695,5 +698,121 @@ test('canonical row admission retains target identity when a descriptor view cha
     assert.equal(reads, 2);
     assert.strictEqual(studio.readAcceptance(), acceptance);
     assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 0, limit: 20 });
+  }
+});
+
+test('purpose preview and acceptance carry normalized meaning while money remains unchanged', () => {
+  const studio = createStudio();
+  const initial = studio.read(), chronology = studio.readAcceptance();
+  const purpose = { ...initial.state.purpose, changedAbility: '  Restore a usable route. ',
+    affectedPopulation: 'Research teams', observationSignal: 'A complete reading reaches the next decision.',
+    accountableOwner: 'Initiative sponsor', reviewBoundary: 'Review after the pilot.', openConditions: null };
+  const preview = studio.previewPurpose(purpose, initial);
+  assert.equal(preview.ok, true);
+  assert.equal(preview.projection.state.purpose.changedAbility, 'Restore a usable route.');
+  assert.deepEqual(preview.projection.result, initial.result);
+  assert.strictEqual(studio.read(), initial);
+  assert.strictEqual(studio.readAcceptance(), chronology);
+  assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 0, limit: 20 });
+  const updated = studio.updatePurpose(purpose, initial);
+  assert.equal(updated.ok, true);
+  assert.deepEqual(updated.projection, preview.projection);
+  assert.equal(studio.read().state.revision, 1);
+  assert.equal(studio.read().result.knownCommitmentCents, 120000);
+  assert.notEqual(studio.readAcceptance().token, chronology.token);
+  assert.equal(studio.readAcceptance().sequence, 1);
+  assert.equal(studio.readHistory().undoCount, 1);
+  assert.equal(initial.state.purpose.changedAbility, null);
+  assert.equal(JSON.parse(studio.exportText()).purpose.changedAbility, 'Restore a usable route.');
+  expectHeld(studio.updatePurpose(purpose, initial), studio.read(), 'stale-edit');
+  expectHeld(studio.previewPurpose(purpose, initial), studio.read(), 'stale-edit');
+});
+
+test('validated purpose no-ops preserve exact identity and Redo at the document revision ceiling', () => {
+  const plan = createExamplePlan();
+  plan.revision = LIMITS.revision - 1;
+  plan.purpose.changedAbility = 'Current ability';
+  const studio = createStudio(plan);
+  studio.updatePurpose({ ...studio.read().state.purpose, changedAbility: 'Next ability' }, studio.read());
+  const atCeiling = studio.read();
+  assert.equal(atCeiling.state.revision, LIMITS.revision);
+  const chronology = studio.readAcceptance();
+  const noOp = { ...atCeiling.state.purpose, changedAbility: ' Next ability\n' };
+  assert.strictEqual(studio.updatePurpose(noOp, atCeiling).projection, atCeiling);
+  assert.strictEqual(studio.previewPurpose(noOp, atCeiling).projection, atCeiling);
+  assert.strictEqual(studio.readAcceptance(), chronology);
+  const restored = studio.undo(atCeiling).projection;
+  const history = studio.readHistory(), afterUndo = studio.readAcceptance();
+  assert.strictEqual(studio.updatePurpose({ ...restored.state.purpose, changedAbility: ' Current ability ' }, restored).projection, restored);
+  assert.deepEqual(studio.readHistory(), history);
+  assert.strictEqual(studio.readAcceptance(), afterUndo);
+  expectHeld(studio.updatePurpose({ ...restored.state.purpose, extra: true }, restored), restored, 'fields');
+  expectHeld(studio.updatePurpose({ ...restored.state.purpose, openConditions: ' ' }, restored), restored, 'purpose-text');
+  assert.deepEqual(studio.readHistory(), history);
+  assert.equal(studio.redo(restored).projection.state.purpose.changedAbility, 'Next ability');
+});
+
+test('legacy admissions, current captures, history and baselines retain their actual schema identities', () => {
+  const oldState = JSON.parse(legacyPurposeFixture);
+  const externalCapture = Object.freeze({ state: Object.freeze(oldState), serialized: legacyPurposeFixture });
+  const studio = createStudio(externalCapture.state);
+  const initial = studio.read();
+  assert.equal(initial.state.schemaVersion, '0.2.0');
+  studio.setBaseline(initial);
+  studio.updatePurpose({ ...initial.state.purpose, changedAbility: 'Improve the reading.' }, initial);
+  assert.equal(studio.read().state.schemaVersion, '0.2.0');
+  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.2.0');
+  assert.equal(studio.importText(legacyPurposeFixture, studio.read()).ok, true);
+  assert.equal(studio.read().state.purpose.changedAbility, null);
+  assert.equal(studio.replace(externalCapture.state, studio.read()).ok, true);
+  studio.restoreBaseline(studio.read());
+  while (studio.readHistory().undoCount) {
+    assert.equal(studio.undo(studio.read()).ok, true);
+    assert.equal(studio.capture().state.schemaVersion, '0.2.0');
+    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.2.0');
+  }
+  while (studio.readHistory().redoCount) {
+    assert.equal(studio.redo(studio.read()).ok, true);
+    assert.equal(studio.read().state.schemaVersion, '0.2.0');
+  }
+  assert.equal(externalCapture.state.schemaVersion, '0.1.0');
+  assert.equal(Object.hasOwn(externalCapture.state, 'purpose'), false);
+  assert.equal(externalCapture.serialized, legacyPurposeFixture);
+  assert.deepEqual(externalCapture.state, JSON.parse(legacyPurposeFixture));
+});
+
+test('invalid purpose and legacy imports retain accepted bytes, baseline and history', () => {
+  const studio = createStudio(); const initial = studio.read(); studio.setBaseline(initial);
+  studio.updatePurpose({ ...initial.state.purpose, changedAbility: 'A useful ability.' }, initial);
+  const accepted = studio.read(), marker = studio.readAcceptance(), baseline = studio.readBaseline();
+  const history = studio.readHistory(), serialized = studio.exportText();
+  for (const value of [undefined, false, ' ', 'x'.repeat(601)]) {
+    expectHeld(studio.updatePurpose({ ...accepted.state.purpose, changedAbility: value }, accepted), accepted, 'purpose-text');
+  }
+  const invalidLegacy = JSON.parse(legacyPurposeFixture); invalidLegacy.purpose = accepted.state.purpose;
+  expectHeld(studio.importText(JSON.stringify(invalidLegacy), accepted), accepted, 'fields');
+  assert.strictEqual(studio.readAcceptance(), marker);
+  assert.strictEqual(studio.readBaseline(), baseline);
+  assert.deepEqual(studio.readHistory(), history);
+  assert.equal(studio.exportText(), serialized);
+});
+
+test('purpose preparation preserves a newer accepted edit made by a descriptor callback', () => {
+  for (const command of ['updatePurpose', 'previewPurpose']) {
+    const studio = createStudio(); const before = studio.read();
+    let inner = null;
+    const candidate = new Proxy({ ...before.state.purpose, changedAbility: 'Outer draft' }, {
+      getOwnPropertyDescriptor(target, key) {
+        if (!inner) inner = studio.updatePerson('product-one', changedPerson(before, { rateCentsPerHour: 10100 }), before);
+        return Reflect.getOwnPropertyDescriptor(target, key);
+      },
+    });
+    const outer = studio[command](candidate, before);
+    assert.equal(inner.ok, true);
+    expectHeld(outer, inner.projection, 'stale-edit');
+    assert.equal(studio.read().state.purpose.changedAbility, null);
+    assert.equal(studio.read().result.knownCommitmentCents, 120300);
+    assert.equal(studio.readAcceptance().sequence, 1);
+    assert.equal(studio.readHistory().undoCount, 1);
   }
 });

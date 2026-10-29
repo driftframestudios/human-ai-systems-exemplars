@@ -1,4 +1,4 @@
-import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
+import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -7,14 +7,19 @@ const PRACTICE_IDS = new Set(PRACTICES.map(record => record.id));
 const encoder = new TextEncoder();
 const FUNDING = Object.freeze(['allocated', 'additional']);
 const WORK_STATUS = Object.freeze(['planned', 'paused']);
+const LEGACY_SCHEMA = '0.1.0';
+const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: ['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices'],
+  plan: [...PLAN_FIELDS, 'purpose'],
+  legacyPlan: PLAN_FIELDS,
+  purpose: PURPOSE_FIELDS,
   person: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour'],
   team: ['id', 'label', 'personIds'],
   work: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing'],
   practice: ['id', 'practiceId', 'teamId', 'workIds'],
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
+const VERSION_FIELDS = new Map([[LEGACY_SCHEMA, 'legacyPlan'], [CONTRACT.schemaVersion, 'plan']]);
 
 export class PlanError extends Error {
   constructor(code, path, message) {
@@ -49,6 +54,22 @@ function record(value, kind, path) {
     owned[key] = descriptor.value;
   }
   return owned;
+}
+
+function schemaVersion(candidate) {
+  const prototype = candidate && typeof candidate === 'object' ? Object.getPrototypeOf(candidate) : undefined;
+  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)
+    || (prototype !== Object.prototype && prototype !== null)) {
+    reject('record', 'plan', 'Supply a plain record with the declared fields.');
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(candidate, 'schemaVersion');
+  if (!descriptor?.enumerable || !Object.hasOwn(descriptor, 'value')) {
+    reject('data-property', 'plan.schemaVersion', 'Supply an enumerable schema-version data value.');
+  }
+  if (typeof descriptor.value !== 'string' || !VERSION_FIELDS.has(descriptor.value)) {
+    reject('unsupported-contract', 'plan.schemaVersion', 'Use a supported native plan schema.');
+  }
+  return descriptor.value;
 }
 
 function list(value, max, path) {
@@ -212,6 +233,20 @@ export function preparePerson(candidate, path = 'person') {
     rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`) };
 }
 
+export function preparePurpose(candidate, path = 'purpose') {
+  const raw = record(candidate, 'purpose', path);
+  return Object.fromEntries(PURPOSE_FIELDS.map(field => {
+    const value = raw[field];
+    if (value === null) return [field, null];
+    if (typeof value !== 'string' || value.length > LIMITS.purposeText || !value.trim()) {
+      reject('purpose-text', `${path}.${field}`, `Supply null or nonblank text of at most ${LIMITS.purposeText} UTF-16 units.`);
+    }
+    return [field, value.trim()];
+  }));
+}
+
+function emptyPurpose() { return Object.fromEntries(PURPOSE_FIELDS.map(field => [field, null])); }
+
 function workFields(work, personIds, path) {
   if (work.timing !== null) reject('timing-version', `${path}.timing`, 'Keep timing explicitly unavailable until a scheduling contract is selected.');
   return { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`),
@@ -237,15 +272,17 @@ export function prepareWork(candidate, path = 'work') {
   return workFields(work, personIds, path);
 }
 
-export function preparePlan(candidate) {
-  const raw = record(candidate, 'plan', 'plan');
+function prepareVersion(candidate, version) {
+  const raw = record(candidate, VERSION_FIELDS.get(version), 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
-    if (raw[key] !== CONTRACT[key]) reject('unsupported-contract', `plan.${key}`, 'Use this native plan contract; retain other Studio records in their original instrument.');
+    const expected = key === 'schemaVersion' ? version : CONTRACT[key];
+    if (raw[key] !== expected) reject('unsupported-contract', `plan.${key}`, 'Use this native plan contract; retain other Studio records in their original instrument.');
   }
   const state = {
-    kind: CONTRACT.kind, schemaVersion: CONTRACT.schemaVersion, modelVersion: CONTRACT.modelVersion,
+    kind: CONTRACT.kind, schemaVersion: version, modelVersion: CONTRACT.modelVersion,
     planId: text(raw.planId, 'plan.planId', true), revision: integer(raw.revision, LIMITS.revision, 'plan.revision'),
     currency: CONTRACT.currency, horizonWeeks: integer(raw.horizonWeeks, LIMITS.horizonWeeks, 'plan.horizonWeeks', 1),
+    ...(version === CONTRACT.schemaVersion ? { purpose: preparePurpose(raw.purpose, 'plan.purpose') } : {}),
     people: [], teams: [], work: [], practices: [],
   };
   const budget = { remaining: LIMITS.references };
@@ -281,9 +318,21 @@ export function preparePlan(candidate) {
   });
   indexRecords(state.practices, 'plan.practices');
   const serialized = JSON.stringify(state);
-  if (serialized.length > LIMITS.bytes || encoder.encode(serialized).byteLength > LIMITS.bytes) reject('bytes', 'plan', 'Use a plan within the declared UTF-8 budget.');
+  const byteLimit = SCHEMA_BYTE_LIMITS[version];
+  if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
   return freeze({ state, result: calculate(state, peopleById), serialized });
 }
+
+function prepareSelectedVersion(candidate, version) {
+  const admitted = prepareVersion(candidate, version);
+  if (version === CONTRACT.schemaVersion) return admitted;
+  // The legacy record, every row/reference, its numeric meaning and its owned
+  // bytes are fully admitted before migration. Only this owned state is copied.
+  return prepareVersion({ ...admitted.state, schemaVersion: CONTRACT.schemaVersion,
+    purpose: emptyPurpose() }, CONTRACT.schemaVersion);
+}
+
+export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
 
 // JSON.parse owns syntax. This linear pass retains numeric spelling admission
 // across runtimes, including those without JSON reviver source context.
@@ -307,20 +356,29 @@ function admitIntegerTokens(source) {
   }
 }
 
-export function parsePlan(text) {
-  if (typeof text !== 'string' || text.length > LIMITS.bytes || encoder.encode(text).byteLength > LIMITS.bytes) {
+export function prepareImport(text) {
+  if (typeof text !== 'string' || text.length > LIMITS.bytes) {
     reject('bytes', 'import', 'Supply JSON text within the declared UTF-8 budget.');
   }
+  const transportBytes = encoder.encode(text).byteLength;
+  if (transportBytes > LIMITS.bytes) reject('bytes', 'import', 'Supply JSON text within the declared UTF-8 budget.');
   let raw;
   try { raw = JSON.parse(text); } catch { reject('json', 'import', 'Supply a complete JSON plan.'); }
   admitIntegerTokens(text);
-  return preparePlan(raw);
+  const sourceSchemaVersion = schemaVersion(raw);
+  if (transportBytes > SCHEMA_BYTE_LIMITS[sourceSchemaVersion]) {
+    reject('bytes', 'import', 'Supply JSON text within its source schema UTF-8 budget.');
+  }
+  return Object.freeze({ projection: prepareSelectedVersion(raw, sourceSchemaVersion), sourceSchemaVersion });
 }
+
+export function parsePlan(text) { return prepareImport(text).projection; }
 
 export function createExamplePlan() {
   return {
     kind: CONTRACT.kind, schemaVersion: CONTRACT.schemaVersion, modelVersion: CONTRACT.modelVersion,
     currency: CONTRACT.currency, planId: 'coordination-example', revision: 0, horizonWeeks: 6,
+    purpose: emptyPurpose(),
     people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000 })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'] }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null }],

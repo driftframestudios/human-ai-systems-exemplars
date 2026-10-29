@@ -14,8 +14,12 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/controller.browser.mjs',
   'tests/native-investment-studio/draft.test.mjs',
   'tests/native-investment-studio/editing.test.mjs',
+  'tests/native-investment-studio/exchange.test.mjs',
+  'tests/native-investment-studio/investment.browser.mjs',
   'tests/native-investment-studio/person-draft.test.mjs',
   'tests/native-investment-studio/person-state.test.mjs',
+  'tests/native-investment-studio/presets.test.mjs',
+  'tests/native-investment-studio/purpose-draft.test.mjs',
   'tests/native-investment-studio/shell.test.mjs',
   'tests/native-investment-studio/shell.browser.mjs',
   'tests/native-investment-studio/state.test.mjs',
@@ -282,8 +286,8 @@ test('native Studio routes retain source and separate browser owners with execut
     readdir(resolve(ROOT, 'tests/native-investment-studio')),
   ]);
   const sourceMembers = [
-    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs',
-    'person-draft.test.mjs', 'person-state.test.mjs', 'shell.test.mjs', 'state.test.mjs',
+    'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].map(file => `tests/native-investment-studio/${file}`);
   assert.deepEqual(
@@ -297,6 +301,8 @@ test('native Studio routes retain source and separate browser owners with execut
       ['tests/native-investment-studio/controller.browser.mjs'], 'focused-browser'],
     ['browser.native-investment-studio.team-assembly', 'test:native-investment-studio:team-browser',
       ['tests/native-investment-studio/team-controller.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.investment', 'test:native-investment-studio:investment-browser',
+      ['tests/native-investment-studio/investment.browser.mjs'], 'focused-browser'],
     ['browser.native-investment-studio.chapters', 'test:native-investment-studio:chapters-browser',
       ['tests/native-investment-studio/shell.browser.mjs'], 'focused-browser'],
   ];

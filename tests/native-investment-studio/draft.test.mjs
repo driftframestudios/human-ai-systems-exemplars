@@ -870,3 +870,69 @@ test('preview retains a newer raw edit or session created during cooperative hos
     retained(studio, before);
   }
 });
+
+test('successful work Apply releases scheduled work and retains newer raw text written during publication', () => {
+  const studio = createStudio(), clock = scheduler();
+  let adapter, token;
+  adapter = createWorkDraftAdapter({ ...studio, updateWork(...args) {
+    const result = studio.updateWork(...args);
+    adapter.setText(token, 'minutesPerOccurrence', '60');
+    return result;
+  } }, clock);
+  token = adapter.begin('review', studio.read()).view.draft.token;
+  adapter.setText(token, 'minutesPerOccurrence', '45');
+  assert.equal(adapter.queueApply(token).ok, true);
+  const result = adapter.apply(token);
+  assert.equal(result.ok, true);
+  assert.equal(clock.count(), 0);
+  assert.equal(result.view.pending, false);
+  assert.equal(studio.read().state.work[0].minutesPerOccurrence, 45);
+  assert.equal(studio.read().result.plannedCommitmentCents, 180000);
+  assert.equal(result.view.status, 'stale');
+  assert.strictEqual(result.view.draft.token, token);
+  assert.equal(result.view.draft.raw.minutesPerOccurrence, '60');
+  assert.equal(adapter.apply(token).error.code, 'stale-edit');
+  assert.equal(adapter.cancel(token).ok, true);
+});
+
+test('successful work Apply preserves a replacement editor and its diagnostic', () => {
+  const studio = createStudio();
+  let adapter, token, replacement;
+  adapter = createWorkDraftAdapter({ ...studio, updateWork(...args) {
+    const result = studio.updateWork(...args);
+    adapter.cancel(token);
+    replacement = adapter.begin('review', studio.read()).view.draft.token;
+    adapter.setText(replacement, 'minutesPerOccurrence', '60');
+    assert.equal(adapter.setText(replacement, 'minutesPerOccurrence', '9'.repeat(33)).error.code, 'text');
+    return result;
+  } });
+  token = adapter.begin('review', studio.read()).view.draft.token;
+  adapter.setText(token, 'minutesPerOccurrence', '45');
+  const result = adapter.apply(token);
+  assert.equal(result.ok, true);
+  assert.equal(studio.read().state.work[0].minutesPerOccurrence, 45);
+  assert.strictEqual(result.view.draft.token, replacement);
+  assert.equal(result.view.draft.raw.minutesPerOccurrence, '60');
+  assert.equal(result.view.error.code, 'text');
+});
+
+test('failed work publication returns its error while a newer editor retains its own diagnostic', () => {
+  const studio = createStudio();
+  let adapter, token, replacement;
+  adapter = createWorkDraftAdapter({ ...studio, updateWork(id, candidate, expected) {
+    const result = studio.updateWork(id, { ...candidate, extra: true }, expected);
+    adapter.cancel(token);
+    replacement = adapter.begin('review', studio.read()).view.draft.token;
+    assert.equal(adapter.setText(replacement, 'minutesPerOccurrence', '9'.repeat(33)).error.code, 'text');
+    return result;
+  } });
+  token = adapter.begin('review', studio.read()).view.draft.token;
+  adapter.setText(token, 'minutesPerOccurrence', '45');
+  const before = studio.read();
+  const result = adapter.apply(token);
+  assert.equal(result.ok, false);
+  assert.equal(result.error.code, 'fields');
+  assert.strictEqual(result.view.draft.token, replacement);
+  assert.equal(result.view.error.code, 'text');
+  retained(studio, before);
+});

@@ -7,7 +7,7 @@ const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
 export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive = () => true,
-  onAccepted = () => {}, onEditing = () => {} }) {
+  onAccepted = () => {}, onEditing = () => {}, onBegin = () => {} }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = selector => {
@@ -114,6 +114,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   }
 
   function select(personId, focus = true) {
+    if (disposed) return;
+    onBegin();
     if (disposed) return;
     const result = editor.begin(personId, studio.read());
     selectedId = editing.read().selected.person;
