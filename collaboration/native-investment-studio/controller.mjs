@@ -1,5 +1,5 @@
 import { createStudio } from './state.mjs';
-import { createWorkDraftAdapter } from './draft.mjs';
+import { createDraftCoordinator } from './editing.mjs';
 import { CONTRACT, LIMITS } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
@@ -40,12 +40,16 @@ export function mountCoordinationPanel(root, options = {}) {
     ['previewStanding', '[data-native-preview-standing]'], ['previewNote', '[data-native-preview-note]'],
     ['durationHours', '[data-native-duration-hours]'], ['durationMinutes', '[data-native-duration-minutes]'],
     ['sessionContext', '[data-native-session-context]'],
+    ['recovery', '[data-native-recovery]'], ['current', '[data-native-current]'],
+    ['saved', '[data-native-saved]'], ['savedCount', '[data-native-saved-count]'],
+    ['savedList', '[data-native-saved-list]'],
     ['fallback', '[data-native-fallback]'],
   ].map(([name, selector]) => [name, requireElement(selector)]));
   const inputs = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
   const ranges = Object.fromEntries(FIELDS.map(field => [field, requireElement(`[data-native-range="${field}"]`)]));
-  const editor = createWorkDraftAdapter(studio, null, { durationFormat: 'hours-minutes' });
+  const editing = createDraftCoordinator(studio);
+  const editor = editing.work;
   const cleanup = [];
   let renderedProjection = null;
   let work = null;
@@ -53,6 +57,10 @@ export function mountCoordinationPanel(root, options = {}) {
   let composing = false;
   let teamPanel = null;
   let chapterShell = null;
+  let activeChapter = 'coordination';
+  let renderedSaved = [];
+  let savedProjection = null;
+  const savedByKey = new Map();
 
   function listen(target, type, handler) {
     target.addEventListener(type, handler);
@@ -61,6 +69,46 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function announce(message) { text('status', message); }
+
+  function renderSaved(projection) {
+    const records = editing.read().parked;
+    if (projection === savedProjection && records.length === renderedSaved.length
+      && records.every((record, index) => record.token === renderedSaved[index])) return;
+    renderedSaved = records.map(record => record.token);
+    savedProjection = projection;
+    savedByKey.clear();
+    elements.saved.hidden = records.length === 0;
+    text('savedCount', String(records.length));
+    const fragment = document.createDocumentFragment();
+    const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
+      ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' };
+    const people = new Map(projection.state.people.map(person => [person.id, person.label]));
+    const works = new Map(projection.state.work.map(row => [row.id, row.label]));
+    for (const record of records) {
+      const key = `${record.kind}:${record.targetId}`;
+      savedByKey.set(key, record);
+      const item = document.createElement('li');
+      const title = document.createElement('strong');
+      title.textContent = (record.kind === 'person' ? people : works).get(record.targetId) ?? record.targetId;
+      const values = document.createElement('p');
+      values.textContent = Object.entries(record.raw).map(([field, raw]) => `${labels[field]}: ${raw || 'blank'}`).join(' · ');
+      item.append(title, values);
+      if (!record.targetExists) {
+        const removed = document.createElement('p');
+        removed.textContent = 'Record removed. The saved values remain here.';
+        item.append(removed);
+      } else if (record.kind === 'person' || record.targetId === workId) {
+        const open = document.createElement('button');
+        open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
+        item.append(open);
+      }
+      const discard = document.createElement('button');
+      discard.type = 'button'; discard.dataset.savedDiscard = key; discard.textContent = 'Discard edit';
+      item.append(discard);
+      fragment.append(item);
+    }
+    elements.savedList.replaceChildren(fragment);
+  }
 
   function renderAccepted(projection) {
     if (projection === renderedProjection) return;
@@ -142,8 +190,12 @@ export function mountCoordinationPanel(root, options = {}) {
     const view = editor.read();
     if (disposed) return view;
     renderAccepted(view.projection);
+    renderSaved(view.projection);
     root.dataset.nativeState = view.status;
-    elements.fieldset.disabled = view.draft === null;
+    elements.fieldset.disabled = view.status !== 'editing';
+    elements.recovery.hidden = view.status !== 'stale';
+    text('current', work ? `Current values: ${duration(work.minutesPerOccurrence)} per session · ${work.occurrences} working sessions.`
+      : 'This working session has been removed. The saved values remain below.');
     elements.apply.setAttribute('aria-disabled', view.draft?.changed ? 'false' : 'true');
     const acceptedValues = work ? {
       hoursPerSession: String(Math.floor(work.minutesPerOccurrence / MINUTES_PER_HOUR)),
@@ -160,7 +212,8 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     for (const [field, output] of [['hoursPerSession', 'durationHours'], ['minutesPerSession', 'durationMinutes']]) {
       const raw = view.draft?.raw[field] ?? acceptedValues[field];
-      const invalid = composing || raw === undefined || view.draft?.errors.some(error => error.path === `draft.${field}`);
+      const invalid = composing || raw === undefined || !/^[0-9]+$/.test(raw)
+        || view.draft?.errors.some(error => error.path === `draft.${field}`);
       text(output, invalid ? '—' : String(Number(raw)).padStart(2, '0'));
     }
     renderPreview(view);
@@ -170,7 +223,7 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function begin() {
     const view = editor.read();
-    if (view.draft === null) {
+    if (view.status !== 'editing') {
       const result = editor.begin(workId, view.projection);
       if (!result.ok) { render(); announce(result.error.message); return; }
     }
@@ -220,8 +273,40 @@ export function mountCoordinationPanel(root, options = {}) {
   function click(event) {
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
+    if (button.dataset.savedDiscard) {
+      const saved = savedByKey.get(button.dataset.savedDiscard);
+      if (!saved) return;
+      const result = editing.discard(saved.token);
+      render();
+      announce(result.ok ? 'Saved edit discarded.' : result.error.message);
+      (elements.savedList.querySelector('button')
+        ?? root.querySelector('[data-native-chapter][aria-selected="true"]') ?? elements.configureSummary).focus();
+      return;
+    }
+    if (button.dataset.savedOpen) {
+      const saved = savedByKey.get(button.dataset.savedOpen);
+      if (!saved) return;
+      chapterShell?.select(saved.kind === 'person' ? 'people' : 'coordination');
+      if (saved.kind === 'person') teamPanel?.select(saved.targetId);
+      else begin();
+      render();
+      return;
+    }
     if (button.closest('[data-native-team-editor]')) return;
     const action = button.dataset.action;
+    if (action === 'review' || action === 'use-current' || action === 'discard') {
+      const view = editor.read();
+      if (!view.draft) return;
+      const method = action === 'use-current' ? 'useCurrent' : action === 'discard' ? 'cancel' : 'review';
+      const result = editor[method](view.draft.token, renderedProjection);
+      render();
+      announce(result.ok ? '' : result.error.message);
+      if (result.ok) {
+        if (action === 'discard') { elements.configure.open = false; elements.configureSummary.focus(); }
+        else inputs.hoursPerSession.focus();
+      }
+      return;
+    }
     if (action === 'cancel') { settle('cancel'); return; }
     const field = button.dataset.field;
     if (!Object.hasOwn(inputs, field) || composing) return;
@@ -240,7 +325,8 @@ export function mountCoordinationPanel(root, options = {}) {
     teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
-    const view = editor.dispose().view;
+    editing.dispose();
+    const view = editor.read();
     elements.fieldset.disabled = true;
     elements.configure.open = false;
     elements.fallback.hidden = false;
@@ -265,13 +351,15 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(elements.form, 'compositionstart', () => { composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; editText(event); });
     listen(elements.configure, 'toggle', () => {
-      if (elements.configure.open && editor.read().draft === null) begin();
+      if (activeChapter === 'coordination' && elements.configure.open && editor.read().draft === null) begin();
     });
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     begin();
     const teamRoot = root.querySelector('[data-native-team-editor]');
-    if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, onAccepted: () => render() });
+    if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
+      isActive: () => activeChapter === 'people', onAccepted: () => render(),
+      onEditing: () => { const projection = studio.read(); renderAccepted(projection); renderSaved(projection); } });
     const chapterList = root.querySelector('[data-native-chapter-list]');
     if (chapterList) {
       for (const button of chapterList.querySelectorAll('[data-native-chapter]')) {
@@ -279,7 +367,14 @@ export function mountCoordinationPanel(root, options = {}) {
         button.prepend(icon);
         cleanup.push(() => icon.remove());
       }
-      chapterShell = mountChapterShell(root);
+      chapterShell = mountChapterShell(root, { onSelect: chapter => {
+        if (activeChapter !== chapter) editing.park();
+        activeChapter = chapter;
+        composing = false;
+        if (chapter === 'coordination' && elements.configure.open) begin();
+        else if (chapter === 'people') teamPanel?.resume();
+        render();
+      } });
     }
     elements.fallback.hidden = true;
     root.dataset.nativeReady = 'true';
