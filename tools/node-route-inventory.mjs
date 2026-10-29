@@ -46,6 +46,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/shell.mjs',
   'collaboration/native-investment-studio/state.mjs',
   'collaboration/native-investment-studio/team-controller.mjs',
+  'collaboration/native-investment-studio/work-controller.mjs',
   'context-canvas-project-surface/context-canvas/about-content-fit.js',
   'context-canvas-project-surface/context-canvas/about-heatmap.js',
   'context-canvas-project-surface/context-canvas/about-media.js',

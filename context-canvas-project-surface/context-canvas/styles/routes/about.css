@@ -2266,3 +2266,31 @@ p#on-dark-iron-ore {
     .native-assembly__team-list > li { box-shadow: none; }
     .native-assembly__team-list > li > button[aria-pressed='true'] { border-color: Highlight; }
 }
+
+/* Session selection and one complete draft share Coordination's native controls.
+   The form uses the chapter width; the accepted amount remains in the amp head. */
+.native-coordination__body[data-native-session-editor] { grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-session__toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
+.native-session__toolbar > div:first-child { display: grid; gap: .5rem; flex: 1 1 19rem; min-inline-size: 0; }
+[data-native-session-editor] select { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; min-block-size: 2.75rem; padding: .55rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }
+[data-native-session-editor] .native-coordination__configuration form { padding-inline: clamp(.25rem, 2vw, 1.15rem); }
+[data-native-session-editor] button, [data-native-session-editor] summary { padding-inline: clamp(.25rem, 2vw, .85rem); }
+[data-native-session-editor] .native-coordination__stepper button { padding: 0; }
+.native-session__settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
+.native-session__settings-grid > div { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
+.native-session__settings-grid input[name='label'] { font: inherit; text-align: start; padding-inline: .5rem; }
+.native-session__name-feedback, .native-session__choice-feedback { min-block-size: 3rem; align-content: start; margin-block: .5rem; }
+.native-session__quantity-feedback { min-block-size: 4.5rem; align-content: start; margin-block-end: .75rem; }
+.native-session__participant-group { display: grid; gap: .75rem; margin-block: 1rem 1.5rem; }
+.native-session__members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: .8rem; list-style: none; padding: 0; }
+.native-session__members > li { display: grid; align-content: start; gap: .75rem; min-inline-size: 0; margin: 0; padding: clamp(.4rem, 2vw, .75rem); background: var(--about-mint-green); border: .125rem solid var(--native-rule); box-shadow: .2rem .2rem 0 var(--native-key-shadow); }
+.native-session__members label { display: flex; align-items: center; gap: .65rem; min-block-size: 2.75rem; cursor: pointer; }
+.native-session__members label span { display: grid; gap: .3rem; min-inline-size: 0; overflow-wrap: anywhere; }
+.native-session__members label small { font-size: .875rem; font-weight: 400; }
+.native-session__members input[type='checkbox'] { flex: 0 0 1.2rem; inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; margin: 0; padding: 0; accent-color: var(--about-deep-teal); }
+.native-session__confirm { font-weight: 650; margin-block-end: 1rem; }
+.native-session__dependencies { margin-block: .75rem; padding-inline-start: 1.4rem; }
+.native-session__general-error { margin-block: .75rem; }
+@media (forced-colors: active) {
+    .native-session__members > li { box-shadow: none; }
+}

@@ -51,8 +51,11 @@ routes belong to Issue #645. `team-controller.mjs` owns that form,
 `person-draft.mjs` owns its raw draft, and `display.mjs` owns exact-value formatting.
 Issue #648 adds People and Teams creation, ordered memberships and removal
 recovery through `assembly-controller.mjs`, finite `command-draft.mjs` forms,
-and the shared eight-slot coordinator. Its assembly browser route owns those
-new interactions; the existing person route retains its focused checks. Existing Studio chapters
+and the shared eight-slot coordinator. `work-controller.mjs` adds complete
+working-session creation and editing: team, ordered participants, duration,
+count, funding and status. Its session browser route observes arithmetic,
+selection, stale recovery, removal and empty-plan entry. The assembly and
+existing person routes retain their focused checks. Existing Studio chapters
 retain their source and current iframe route.
 
 `collaboration/about-heatmap-comparison/index.html` owns the heatmap content.

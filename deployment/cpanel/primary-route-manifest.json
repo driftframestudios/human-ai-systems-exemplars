@@ -243,6 +243,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/work-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/work-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/open-lesson-field/index.html",
       "projected_path": "collaboration/open-lesson-field/index.html",
       "media_type": "text/html"

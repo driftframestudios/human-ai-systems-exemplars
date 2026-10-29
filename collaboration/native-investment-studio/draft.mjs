@@ -15,7 +15,8 @@ const FORMATS = Object.freeze({
   minutes: Object.freeze({ limits: FIELD_LIMITS, fields: Object.freeze(Object.keys(FIELD_LIMITS)) }),
   'hours-minutes': Object.freeze({ limits: DURATION_PART_LIMITS, fields: Object.freeze(Object.keys(DURATION_PART_LIMITS)) }),
 });
-const TEXT_LIMIT = 32;
+export const WORK_DRAFT_TEXT_LIMIT = 32;
+const TEXT_LIMIT = WORK_DRAFT_TEXT_LIMIT;
 const DIGITS = /^[0-9]+$/;
 const NEGATIVE = /^-[0-9]+$/;
 const UNFINISHED = /^(?:-|[0-9]+[eE][+-]?)$/;
@@ -32,6 +33,49 @@ function parseField(field, raw, max) {
   const value = Number(raw);
   if (!Number.isSafeInteger(value) || value > max) return { error: diagnostic('range', path, `Enter a whole number from 0 through ${max}.`) };
   return { value };
+}
+
+// Callers admit bounded raw strings before using this pure duration codec.
+export function prepareWorkDraftValues(raw, durationFormat = 'hours-minutes') {
+  const { limits, fields } = FORMATS[durationFormat];
+  const usesDurationParts = durationFormat === 'hours-minutes';
+  const parsedValues = {};
+  const errors = [];
+  for (const field of fields) {
+    const parsed = parseField(field, raw[field], limits[field]);
+    if (parsed.error) errors.push(parsed.error);
+    else parsedValues[field] = parsed.value;
+  }
+  if (!usesDurationParts) return { admitted: parsedValues, errors };
+  const admitted = { occurrences: parsedValues.occurrences };
+  if (Object.hasOwn(parsedValues, 'hoursPerSession') && Object.hasOwn(parsedValues, 'minutesPerSession')) {
+    const duration = parsedValues.hoursPerSession * MINUTES_PER_HOUR + parsedValues.minutesPerSession;
+    if (duration > LIMITS.minutesPerOccurrence) errors.push(diagnostic('range', 'draft.minutesPerSession',
+      `Keep the combined session duration within ${DURATION_PART_LIMITS.hoursPerSession} hours.`));
+    else admitted.minutesPerOccurrence = duration;
+  }
+  return { admitted, errors };
+}
+
+
+export function stepWorkDraftValues(raw, field, direction, durationFormat = 'hours-minutes') {
+  const { limits } = FORMATS[durationFormat];
+  if (typeof field !== 'string' || !Object.hasOwn(limits, field)) return { error: diagnostic('field', 'draft', 'Choose a duration field or the session count.') };
+  if (direction !== -1 && direction !== 1) return { error: diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.') };
+  if (durationFormat === 'hours-minutes' && field !== 'occurrences') {
+    const { admitted, errors } = prepareWorkDraftValues(raw, durationFormat);
+    const durationError = errors.find(item => item.path !== 'draft.occurrences');
+    if (durationError) return { error: durationError };
+    const next = admitted.minutesPerOccurrence + direction * (field === 'hoursPerSession' ? MINUTES_PER_HOUR : 1);
+    if (next < 0 || next > LIMITS.minutesPerOccurrence) return { error: diagnostic('range', `draft.${field}`,
+      `Keep the combined session duration from zero through ${DURATION_PART_LIMITS.hoursPerSession} hours.`) };
+    return { raw: { ...raw, hoursPerSession: String(Math.floor(next / MINUTES_PER_HOUR)), minutesPerSession: String(next % MINUTES_PER_HOUR) } };
+  }
+  const parsed = parseField(field, raw[field], limits[field]);
+  if (parsed.error) return { error: parsed.error };
+  const next = parsed.value + direction;
+  if (next < 0 || next > limits[field]) return { error: diagnostic('range', `draft.${field}`, `Keep the quantity from 0 through ${limits[field]}.`) };
+  return { raw: { ...raw, [field]: String(next) } };
 }
 
 // One editor owns bounded draft text; the Studio remains the accepted-state owner.
@@ -65,24 +109,7 @@ export function createWorkDraftAdapter(studio, scheduler = null, { durationForma
     } : Object.fromEntries(fields.map(field => [field, String(row[field])]));
   }
 
-  function values(draft) {
-    const parsedValues = {};
-    const errors = [];
-    for (const field of fields) {
-      const parsed = parseField(field, draft.raw[field], limits[field]);
-      if (parsed.error) errors.push(parsed.error);
-      else parsedValues[field] = parsed.value;
-    }
-    if (!usesDurationParts) return { admitted: parsedValues, errors };
-    const admitted = { occurrences: parsedValues.occurrences };
-    if (Object.hasOwn(parsedValues, 'hoursPerSession') && Object.hasOwn(parsedValues, 'minutesPerSession')) {
-      const duration = parsedValues.hoursPerSession * MINUTES_PER_HOUR + parsedValues.minutesPerSession;
-      if (duration > LIMITS.minutesPerOccurrence) errors.push(diagnostic('range', 'draft.minutesPerSession',
-        `Keep the combined session duration within ${DURATION_PART_LIMITS.hoursPerSession} hours.`));
-      else admitted.minutesPerOccurrence = duration;
-    }
-    return { admitted, errors };
-  }
+  function values(draft) { return prepareWorkDraftValues(draft.raw, durationFormat); }
 
   function read() {
     const projection = studio.read();
@@ -182,25 +209,9 @@ export function createWorkDraftAdapter(studio, scheduler = null, { durationForma
   function step(token, field, direction) {
     const error = guard(token) ?? fieldGuard(field);
     if (error) return fail(error);
-    if (direction !== -1 && direction !== 1) return fail(diagnostic('step', `draft.${field}`, 'Choose one increment or one decrement.'));
-    if (usesDurationParts && field !== 'occurrences') {
-      const { admitted, errors } = values(active);
-      const durationError = errors.find(item => item.path !== 'draft.occurrences');
-      if (durationError) return fail(durationError);
-      const next = admitted.minutesPerOccurrence + direction * (field === 'hoursPerSession' ? MINUTES_PER_HOUR : 1);
-      if (next < 0 || next > LIMITS.minutesPerOccurrence) return fail(diagnostic('range', `draft.${field}`,
-        `Keep the combined session duration from zero through ${DURATION_PART_LIMITS.hoursPerSession} hours.`));
-      active.raw.hoursPerSession = String(Math.floor(next / MINUTES_PER_HOUR));
-      active.raw.minutesPerSession = String(next % MINUTES_PER_HOUR);
-      active.rawRevision += 1;
-      active.preview = null;
-      return succeed();
-    }
-    const parsed = parseField(field, active.raw[field], limits[field]);
-    if (parsed.error) return fail(parsed.error);
-    const next = parsed.value + direction;
-    if (next < 0 || next > limits[field]) return fail(diagnostic('range', `draft.${field}`, `Keep the quantity from 0 through ${limits[field]}.`));
-    active.raw[field] = String(next);
+    const result = stepWorkDraftValues(active.raw, field, direction, durationFormat);
+    if (result.error) return fail(result.error);
+    active.raw = result.raw;
     active.rawRevision += 1;
     active.preview = null;
     return succeed();

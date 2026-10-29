@@ -20,7 +20,7 @@ test('native About coordination has one module receiver and retains both legacy 
   assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary>Session settings<\/summary>/u,
     'the native session disclosure remains the entry and return control');
   assert.doesNotMatch(nativePanel, /data-action="edit"/u, 'the live editor opens directly through its receiver');
-  assert.equal((nativePanel.slice(0, nativePanel.indexOf('<section class="native-team"')).match(/<input\b/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
+  assert.equal((nativePanel.slice(0, nativePanel.indexOf('<section class="native-team"')).match(/<input\b[^>]*\binputmode="numeric"/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
   for (const field of fields) {
     const input = about.match(new RegExp(`<input\\b(?=[^>]*\\bname="${field}")[^>]*>`, 'u'))?.[0];
     assert.ok(input, `${field} has its own input`);

@@ -31,12 +31,13 @@ and integration authority; publication remains held.
 - `person-draft.mjs` owns `createPersonDraftAdapter`, exact rate/time entry,
   one target-bound person draft, its cached proposal, and the pure numeric codec
   reused by person creation.
-- `command-draft.mjs` owns five finite assembly forms, ordered raw selections,
+- `command-draft.mjs` owns the closed assembly and session form families, ordered raw selections,
   stable target keys and explicit command preview/Apply.
 - `purpose-draft.mjs` owns six raw purpose fields, their canonical text proposal,
   and one explicit Apply/Cancel transaction.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
-  shared by working sessions, people, purpose, and assembly forms.
+  shared by duration edits, people, purpose, assembly forms, and full session forms.
+- `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -744,7 +745,7 @@ browser receiver owns actual input, layout, focus, and reading observations.
 ## Shared editing and saved drafts
 
 `createDraftCoordinator(studio, { limit })` returns one coordinator for that
-Studio instance. Its `work`, `person`, `purpose`, and `assembly` ports reuse the typed adapters
+Studio instance. Its `work`, `person`, `purpose`, `assembly`, and `session` ports reuse the typed adapters
 for validation, exact input conversion, preview and Apply. The parent receiver
 owns coordinator disposal; child receivers borrow their port and own their DOM
 listeners. A coordinator has at most one active adapter.
@@ -866,6 +867,70 @@ $1,440 creation, ordered selection ownership, numeric codec reuse, no-op and
 preview behavior, dependencies, eight-slot recovery, imported collisions,
 removed targets, scalar admission, synchronous reentry and disposal.
 
+
+### Complete session forms
+
+`editing.session` selects and edits a whole working-session row through the
+same active lease and eight-slot limit. Its selection is separate from the
+existing `editing.work` duration editor. Switching between these editors parks
+changed raw values; accepting either edit gives the other saved edit a current
+plan to review.
+
+`SESSION_FORMS`, `makeSessionTarget`, and `describeSessionTarget` describe three
+closed forms: `work.create`, `work.update`, and `work.remove`. Descriptors carry
+`form`, `id`, `collection`, `mode`, and field metadata. A typed draft carries its
+full scalar key in `sessionId` and the work row ID in `targetId`. The session
+port supplies the same explicit create, begin, setText, setIds, step, validate,
+preview, apply, cancel, review, useCurrent, and freshId operations as the assembly
+form family. The private form engine selects only those two source-owned
+families; callers receive their named finite adapters.
+
+Creation starts with an empty name and team, an empty ordered participant list,
+a 30-minute duration, one session, additional funding, and planned status.
+The visitor supplies a team and at least one participant before preview or
+Apply. Current admission requires every participant to belong to the selected
+team. The editor retains the selected people while the owner reports a missing
+reference or membership adjustment. Timing remains `null` under schema 0.2;
+updates carry the accepted row's timing value through the existing work owner.
+The later scheduling contract owns any new timing representation.
+
+The full form edits name, team, participants, hours, minutes, session count,
+funding, and planned/paused status together. `prepareWorkDraftValues` and
+`stepWorkDraftValues` share the existing duration parser and minute carry with
+`createWorkDraftAdapter`; that adapter retains its optional scheduler and its
+original duration-only API. The pure codecs receive caller-admitted bounded raw
+strings. Session updates use `previewWork` and `updateWork`; creation and removal
+use the accepted command boundary. A canonical no-op preserves the projection,
+acceptance marker, history, and any Redo entry. Pausing retains modeled effort;
+allocated work uses funded capacity and additional work adds a purchase.
+
+`TYPES` owns each coordinator family's descriptor, copy, equality, index,
+creation, and restore strategies. Session targets keep stable IDs across
+parking. Import collisions retain raw text and ordered participants until an
+explicit fresh-ID operation prepares a different record. Removed saved sessions
+remain available for inspection and discard. Removal confirmations carry no
+changed raw fields, so chapter parking releases their transient intent.
+Practice references keep a session in the accepted plan until an explicit
+reassignment or removal of those references succeeds.
+
+A session payload contains at most 8,504 UTF-16 value units and 128 ordered-ID
+slots: 120 name units, 64 team-ID units, three 32-unit numeric strings, two
+16-unit choice strings, and 128 IDs of at most 64 units. Eight such parked
+payloads hold at most 68,032 value units and 1,024 ID slots, plus fixed metadata
+and tiny acceptance markers. Copy and comparison visit those bounded values;
+reference indexes rebuild once per accepted projection. Fresh-ID allocation
+visits one bounded collection and the at-most-eight held drafts. Changed valid
+preview and material Apply retain complete plan preparation, while an unchanged
+raw revision reuses its cached preview. This preserves the measured preparation
+strategy rather than introducing incremental accounting.
+
+`session-draft.test.mjs` and `session-editing.test.mjs` distinguish literal
+$1,200-to-$1,250 creation, a $150 paused session, allocated funding, unknown and
+zero rates, no-op identity, ordered-array ownership, numeric bounds, complete
+replacement, stale recovery, dependency-safe removal, eight-slot replacement,
+and publication reentry. Existing duration tests continue to exercise scheduler
+cleanup and ownership through the shared codec.
+
 ## Native coordination receiver
 
 About loads `controller.mjs` as a module. Its parsed transitive graph retains
@@ -880,7 +945,7 @@ prove JavaScript media and exact module bytes. This module
 group leaves the existing iframe package inputs with their current owners.
 
 `mountCoordinationPanel(root, { studio, workId })` binds one cooperative Studio
-owner and working session to one root. Calling it again returns the mounted receiver.
+owner and preferred working session to one root. Calling it again returns the mounted receiver.
 Its `read`, `refresh`, and `dispose` methods support controlled integration and
 testing. A host that replaces accepted state calls `refresh`; the controller
 then shows the new amount alongside any retained stale draft. Adjacent recovery
@@ -895,11 +960,13 @@ history restoration; an actual departure disposes it.
 
 Mounting opens Session settings with a fresh draft. Its native summary handles
 later opening and closing; Cancel returns focus to that summary.
-Raw text and circular step buttons update one three-field draft. The in-card
+`work-controller.mjs` owns one complete session form: name, team, ordered
+participants, duration, count, funding and status. Raw text and circular step
+buttons share the `editing.session` lease with every other chapter. The in-card
 draft investment updates from complete preparation while the amp head retains
 the accepted amount. Explicit Apply commits one complete row, keeps Session settings
 open, begins a fresh draft, and preserves focus on Apply. Applying valid
-unchanged quantities preserves the accepted revision. Cancel retains the
+unchanged values preserves the accepted revision and editing lease. Cancel retains the
 accepted investment and closes Session settings. Composition input settles before
 preview or Apply. Closing the native configuration disclosure retains the
 draft, and responsive changes reuse the same elements and focus. This
@@ -915,17 +982,19 @@ length, calendar placement, and per-sprint allocation need a later timing
 contract. Integer-cent formatting retains exact cents through the admitted
 monetary range.
 
-One new accepted projection costs O(W + T + P) for receiver lookups and person
-trace construction, in addition to the model's complete preparation. Raw edits
-render three bounded fields in O(1), plus complete preparation for a changed
-valid preview; the accepted trace is retained until its projection changes.
+One new accepted projection costs O(W + T + P + A) for receiver lookups and person
+trace construction, where A is attached practices, in addition to the model's complete preparation. Raw text edits update a fixed set of fields; comparing
+ordered participant selections costs O(M), where M is selected people. A change
+to membership, team or accepted projection rebuilds participant choices in
+O(P + M). A changed valid draft earns one cached complete preparation; the
+accepted trace stays intact until its projection changes.
 The receiver retains one rendered projection, one shared draft owner with one cached
 preview, and one listener group. Issue #641 owns runtime cost observations and
 any later optimization decision.
 
 Industrial Ink supplies the dark amount plane and hard down-right shadows;
 About's Soft Color Blocking palette supplies paper controls and trace cards.
-The 52rem viewport seam pairs the session summary and settings. The form’s
+The complete session form uses the chapter width. The form’s
 20rem and 31rem container seams arrange its three quantity controls into two
 rows and then one row. Each input sits above its circular minus/plus buttons at
 every width. Below 12rem of available form width, the duration display stacks
@@ -933,10 +1002,34 @@ its hours and minutes. All three
 inputs display five digits with padding, including an accidental excess zero
 that the visitor needs to correct. A combined hours/minutes display projects
 the same draft into a compact radio-style reading. The duration group owns its
-short explanation; the session-count hint sits beside its count. Variable
-validation feedback and the investment preview follow all inputs, so their
-wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
+short explanation; the session-count hint sits beside its count. Quantity
+feedback follows the three numeric controls, preserving their document positions
+as messages wrap. Name/team and funding/status feedback follow their own rows;
+the investment preview follows the complete form. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
+The scriptless route keeps the static example and complete Studio link while
+the About fallback stylesheet hides controls that require a mounted editor.
+
+Session selection retains each unfinished edit under its own stable target.
+Changing chapters parks that target and returning resumes it. Creation offers
+all admitted people and identifies those outside the selected team; validation
+keeps the current membership contract explicit. Changing the team retains the
+selected people for correction. Paused sessions retain declared effort and
+cost. Included funding attributes the session to funded time while extra
+funding contributes to the commitment.
+
+Removal shows any practice that still references the session. An empty work
+collection keeps Add session available. Creation collisions offer a fresh ID
+with the entered values intact. Cancellation closes the settings and returns
+focus to the entry control; successful removal returns focus to selection or
+Add session. Callback guards preserve a successor editor's focus and resources.
+
+`session.browser.mjs` owns complete-session arithmetic, draft selection across
+chapters, stale recovery, reference-aware removal, empty-plan entry and
+responsive controls. The existing coordination browser route continues to
+exercise duration entry, composition, stale replacement and teardown against
+the complete form. The legacy duration adapter remains an independently
+exercised source API.
 
 ## People and Teams receiver
 
@@ -1209,6 +1302,7 @@ npm run test:native-investment-studio:team-browser
 npm run test:native-investment-studio:chapters-browser
 npm run test:native-investment-studio:investment-browser
 npm run test:native-investment-studio:assembly-browser
+npm run test:native-investment-studio:session-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```

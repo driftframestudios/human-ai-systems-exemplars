@@ -1,7 +1,8 @@
 import { createWorkDraftAdapter } from './draft.mjs';
 import { createPersonDraftAdapter } from './person-draft.mjs';
 import { createPurposeDraftAdapter } from './purpose-draft.mjs';
-import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describeAssemblyTarget, copyAssemblyRaw, sameAssemblyRaw } from './command-draft.mjs';
+import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describeAssemblyTarget, copyAssemblyRaw, sameAssemblyRaw,
+  createSessionDraftAdapter, SESSION_FORMS, makeSessionTarget, describeSessionTarget, copySessionRaw, sameSessionRaw } from './command-draft.mjs';
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
@@ -17,18 +18,24 @@ const TYPES = Object.freeze({
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
   assembly: Object.freeze({ id: 'assemblyId', step: true, ids: true,
     index: state => new Map(['people', 'teams'].flatMap(collection => state[collection].map(row => [`${collection}:${row.id}`, row]))),
-    create: createAssemblyDraftAdapter }),
+    create: createAssemblyDraftAdapter, forms: ASSEMBLY_FORMS, make: makeAssemblyTarget,
+    describe: describeAssemblyTarget, copy: copyAssemblyRaw, same: sameAssemblyRaw }),
+  session: Object.freeze({ id: 'sessionId', step: true, ids: true,
+    index: state => new Map(state.work.map(row => [`work:${row.id}`, row])),
+    create: createSessionDraftAdapter, forms: SESSION_FORMS, make: makeSessionTarget,
+    describe: describeSessionTarget, copy: copySessionRaw, same: sameSessionRaw }),
 });
 const KINDS = Object.freeze(Object.keys(TYPES));
 const EMPTY_ERRORS = Object.freeze([]);
+const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work' });
 const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;
 const keyFor = (kind, targetId) => `${kind}:${targetId}`;
-const fieldsFor = (kind, targetId) => kind === 'assembly' ? Object.keys(describeAssemblyTarget(targetId).fields) : TYPES[kind].fields;
-const sameRaw = (kind, targetId, left, right) => kind === 'assembly' ? sameAssemblyRaw(targetId, left, right)
+const fieldsFor = (kind, targetId) => TYPES[kind].describe ? Object.keys(TYPES[kind].describe(targetId).fields) : TYPES[kind].fields;
+const sameRaw = (kind, targetId, left, right) => TYPES[kind].same ? TYPES[kind].same(targetId, left, right)
   : fieldsFor(kind, targetId).every(field => left[field] === right[field]);
-const copyRaw = (kind, targetId, raw) => kind === 'assembly' ? copyAssemblyRaw(targetId, raw) : Object.freeze({ ...raw });
+const copyRaw = (kind, targetId, raw) => TYPES[kind].copy ? TYPES[kind].copy(targetId, raw) : Object.freeze({ ...raw });
 
 // One instance owns the active typed adapter. Saved edits contain bounded text
 // and a tiny acceptance marker; they retain neither projections nor resources.
@@ -76,22 +83,22 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
   }
 
   function targetExists(kind, targetId, projection) {
-    if (kind !== 'assembly') return rows(projection)[kind].has(targetId);
-    const descriptor = describeAssemblyTarget(targetId);
-    return Boolean(descriptor && (descriptor.mode === 'create' || rows(projection).assembly.has(`${descriptor.collection}:${descriptor.id}`)));
+    if (!TYPES[kind].describe) return rows(projection)[kind].has(targetId);
+    const descriptor = TYPES[kind].describe(targetId);
+    return Boolean(descriptor && (descriptor.mode === 'create' || rows(projection)[kind].has(`${descriptor.collection}:${descriptor.id}`)));
   }
 
   function creationConflict(kind, targetId, projection) {
-    if (kind !== 'assembly') return false;
-    const descriptor = describeAssemblyTarget(targetId);
-    return Boolean(descriptor?.mode === 'create' && rows(projection).assembly.has(`${descriptor.collection}:${descriptor.id}`));
+    if (!TYPES[kind].describe) return false;
+    const descriptor = TYPES[kind].describe(targetId);
+    return Boolean(descriptor?.mode === 'create' && rows(projection)[kind].has(`${descriptor.collection}:${descriptor.id}`));
   }
 
   function snapshotRecord(record, projection, current) {
     return Object.freeze({ ...record,
       status: sameAcceptance(record.baseAcceptance, current) ? 'parked' : 'stale',
       targetExists: targetExists(record.kind, record.targetId, projection),
-      ...(record.kind === 'assembly' ? { creationConflict: creationConflict(record.kind, record.targetId, projection) } : {}),
+      ...(TYPES[record.kind].describe ? { creationConflict: creationConflict(record.kind, record.targetId, projection) } : {}),
     });
   }
 
@@ -108,7 +115,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     const record = saved(kind);
     if (!record) return Object.freeze({ status: 'idle', projection, draft: null, pending: false, error: errors[kind] });
     const summary = snapshotRecord(record, projection, studio.readAcceptance());
-    const descriptor = kind === 'assembly' ? describeAssemblyTarget(record.targetId) : null;
+    const descriptor = TYPES[kind].describe?.(record.targetId) ?? null;
     return Object.freeze({ status: summary.status, projection, pending: false,
       draft: Object.freeze({ token: record.token, [TYPES[kind].id]: record.targetId, raw: record.raw,
         ...(descriptor ? { form: descriptor.form, targetId: descriptor.id } : {}),
@@ -179,10 +186,10 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
     if (typeof targetId !== 'string') return fail(kind, diagnostic('reference', 'Choose a record in the current plan.'));
     const key = keyFor(kind, targetId);
     const existing = parked.get(key);
-    // A saved removed assembly target remains selectable for inspection and
+    // A saved removed form target remains selectable for inspection and
     // discard. Review and Apply still require a current resolvable target.
-    const savedAssembly = kind === 'assembly' && mode === 'resume' && existing;
-    if (!targetExists(kind, targetId, expected) && !savedAssembly) {
+    const savedForm = TYPES[kind].describe && mode === 'resume' && existing;
+    if (!targetExists(kind, targetId, expected) && !savedForm) {
       return fail(kind, diagnostic('reference', 'Choose a record in the current plan.'));
     }
     const same = active?.kind === kind && active.targetId === targetId;
@@ -219,8 +226,9 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
         if (!opened.ok) { adapter.dispose(); return fail(kind, opened.error); }
         const initialRaw = opened.view.draft.raw;
         const raw = mode === 'current' ? null : previousRaw ?? record?.raw;
+        const formFields = TYPES[kind].describe?.(targetId).fields;
         if (raw) for (const field of fieldsFor(kind, targetId)) {
-          const method = kind === 'assembly' && describeAssemblyTarget(targetId).fields[field].kind === 'ids' ? 'setIds' : 'setText';
+          const method = formFields?.[field].kind === 'ids' ? 'setIds' : 'setText';
           const result = adapter[method](opened.view.draft.token, field, raw[field]);
           if (!result.ok) { adapter.dispose(); return fail(kind, result.error); }
         }
@@ -302,53 +310,54 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
       error: diagnostic('draft-token', 'Choose a saved edit currently held by this Studio.'), view: read() });
   }
 
-  function allocatedTarget(form, expected) {
-    const profile = typeof form === 'string' && Object.hasOwn(ASSEMBLY_FORMS, form) ? ASSEMBLY_FORMS[form] : null;
-    if (profile?.mode !== 'create') return { error: diagnostic('target', 'Choose a person or team creation form.') };
+  function allocatedTarget(kind, form, expected) {
+    const forms = TYPES[kind].forms;
+    const profile = typeof form === 'string' && Object.hasOwn(forms, form) ? forms[form] : null;
+    if (profile?.mode !== 'create') return { error: diagnostic('target', 'Choose a supported creation form.') };
     if (expected.state[profile.collection].length >= LIMITS[profile.collection]) return { error: diagnostic('collection', 'This collection is full. Remove a record before adding another.') };
     const used = new Set(expected.state[profile.collection].map(row => row.id));
     for (const record of parked.values()) {
-      const descriptor = record.kind === 'assembly' ? describeAssemblyTarget(record.targetId) : null;
+      const descriptor = TYPES[record.kind].describe?.(record.targetId) ?? null;
       if (descriptor?.collection === profile.collection && descriptor.mode === 'create') used.add(descriptor.id);
     }
-    const current = active?.kind === 'assembly' ? describeAssemblyTarget(active.targetId) : null;
+    const current = active ? TYPES[active.kind].describe?.(active.targetId) ?? null : null;
     if (current?.collection === profile.collection && current.mode === 'create') used.add(current.id);
-    const prefix = profile.collection === 'people' ? 'person' : 'team';
+    const prefix = ID_PREFIXES[profile.collection];
     // At most collection cap + eight held drafts occupy this finite namespace.
     for (let index = 1; index <= LIMITS[profile.collection] + limit + 1; index += 1) {
       const id = `${prefix}-${index}`;
-      if (!used.has(id)) return { target: makeAssemblyTarget(form, id) };
+      if (!used.has(id)) return { target: TYPES[kind].make(form, id) };
     }
     return { error: diagnostic('target', 'Review the held creation drafts before adding another.') };
   }
 
-  function create(form, expected) {
+  function create(kind, form, expected) {
     const error = unavailable() ?? currentPlan(expected);
-    if (error) return fail('assembly', error);
-    const allocated = allocatedTarget(form, expected);
-    return allocated.error ? fail('assembly', allocated.error) : open('assembly', allocated.target, expected);
+    if (error) return fail(kind, error);
+    const allocated = allocatedTarget(kind, form, expected);
+    return allocated.error ? fail(kind, allocated.error) : open(kind, allocated.target, expected);
   }
 
-  function freshId(token, expected) {
+  function freshId(kind, token, expected) {
     const error = unavailable();
-    if (error) return fail('assembly', error);
+    if (error) return fail(kind, error);
     settling = true;
     try {
       const freshness = currentPlan(expected);
-      if (freshness) return fail('assembly', freshness);
-      if (disposed) return fail('assembly', diagnostic('disposed', 'Open another Studio to edit.'));
-      const session = active?.kind === 'assembly' && active.token === token ? active : null;
-      const record = saved('assembly');
-      if (!session && record?.token !== token) return fail('assembly', diagnostic('draft-token', 'Choose the creation draft currently shown.'));
+      if (freshness) return fail(kind, freshness);
+      if (disposed) return fail(kind, diagnostic('disposed', 'Open another Studio to edit.'));
+      const session = active?.kind === kind && active.token === token ? active : null;
+      const record = saved(kind);
+      if (!session && record?.token !== token) return fail(kind, diagnostic('draft-token', 'Choose the creation draft currently shown.'));
       const targetId = session?.targetId ?? record.targetId;
-      const descriptor = describeAssemblyTarget(targetId);
-      if (descriptor.mode !== 'create') return fail('assembly', diagnostic('target', 'Choose a person or team creation draft.'));
+      const descriptor = TYPES[kind].describe(targetId);
+      if (descriptor.mode !== 'create') return fail(kind, diagnostic('target', 'Choose a supported creation draft.'));
       const view = session?.adapter.read();
-      if (disposed || (session && (active !== session || !view.draft))) return fail('assembly', diagnostic('draft-token', 'This creation edit has closed.'), false);
-      const raw = copyRaw('assembly', targetId, session ? view.draft.raw : record.raw);
-      const allocated = allocatedTarget(descriptor.form, expected);
-      if (allocated.error) return fail('assembly', allocated.error);
-      return open('assembly', allocated.target, expected, 'fresh', token, { targetId, key: keyFor('assembly', targetId), raw }, true);
+      if (disposed || (session && (active !== session || !view.draft))) return fail(kind, diagnostic('draft-token', 'This creation edit has closed.'), false);
+      const raw = copyRaw(kind, targetId, session ? view.draft.raw : record.raw);
+      const allocated = allocatedTarget(kind, descriptor.form, expected);
+      if (allocated.error) return fail(kind, allocated.error);
+      return open(kind, allocated.target, expected, 'fresh', token, { targetId, key: keyFor(kind, targetId), raw }, true);
     } finally { settling = false; }
   }
 
@@ -380,7 +389,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
       cancel: token => cancel(kind, token),
       review: (token, expected) => recover(kind, token, expected, 'review'),
       useCurrent: (token, expected) => recover(kind, token, expected, 'current'),
-      ...(kind === 'assembly' ? { create, freshId } : {}),
+      ...(TYPES[kind].forms ? { create: (form, expected) => create(kind, form, expected), freshId: (token, expected) => freshId(kind, token, expected) } : {}),
     });
   }
   const coordinator = Object.freeze({ ...Object.fromEntries(KINDS.map(kind => [kind, port(kind)])), park, discard, read, dispose });

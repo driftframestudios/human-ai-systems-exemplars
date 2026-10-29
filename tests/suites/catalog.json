@@ -315,6 +315,8 @@
         "tests/native-investment-studio/person-state.test.mjs",
         "tests/native-investment-studio/presets.test.mjs",
         "tests/native-investment-studio/purpose-draft.test.mjs",
+        "tests/native-investment-studio/session-draft.test.mjs",
+        "tests/native-investment-studio/session-editing.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
         "tests/native-investment-studio/state.test.mjs",
         "tests/native-investment-studio/team-controller.test.mjs"
@@ -2821,6 +2823,17 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.sessions",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": ["tests/native-investment-studio/session.browser.mjs"],
+      "profile": "browser",
+      "command": {"cwd": ".", "argv": ["node", "--test"], "appendMembers": true},
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Complete working sessions: participant and funding arithmetic, creation and removal, selected and parked edits, stale recovery, empty-plan entry, compact controls and ordinary About scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": ["test:native-investment-studio:session-browser"]
+    },
+    {
       "id": "browser.native-investment-studio.assembly",
       "family": "native-investment-studio",
       "kind": "node-test",
@@ -3005,6 +3018,7 @@
         "browser.native-investment-studio.coordination",
         "browser.native-investment-studio.chapters",
         "browser.native-investment-studio.investment",
+        "browser.native-investment-studio.sessions",
         "browser.native-investment-studio.assembly",
         "browser.native-investment-studio.team-assembly"
       ]
@@ -3394,6 +3408,8 @@
           "tests/native-investment-studio/person-state.test.mjs",
           "tests/native-investment-studio/presets.test.mjs",
           "tests/native-investment-studio/purpose-draft.test.mjs",
+          "tests/native-investment-studio/session-draft.test.mjs",
+          "tests/native-investment-studio/session-editing.test.mjs",
           "tests/native-investment-studio/shell.test.mjs",
           "tests/native-investment-studio/state.test.mjs",
           "tests/native-investment-studio/team-controller.test.mjs"
@@ -3403,6 +3419,9 @@
         ],
         "test:native-investment-studio:team-browser": [
           "tests/native-investment-studio/team-controller.browser.mjs"
+        ],
+        "test:native-investment-studio:session-browser": [
+          "tests/native-investment-studio/session.browser.mjs"
         ],
         "test:native-investment-studio:assembly-browser": [
           "tests/native-investment-studio/assembly.browser.mjs"
