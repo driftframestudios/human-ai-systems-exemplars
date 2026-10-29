@@ -95,6 +95,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
       throw new PlanError('target', 'edit.personId', 'Keep the replacement bound to its original person identity.');
     }
     const person = preparePersonRecord(candidate, `plan.people[${position}]`);
+    if (person.id !== personId) throw new PlanError('target', 'edit.personId', 'Keep the admitted person bound to its original identity.');
     const current = base.state.people[position];
     if (person.id === current.id && person.label === current.label
         && person.fundedMinutes === current.fundedMinutes && person.rateCentsPerHour === current.rateCentsPerHour) {
@@ -114,6 +115,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
       throw new PlanError('target', 'edit.workId', 'Keep the replacement bound to its original work identity.');
     }
     const row = prepareWorkRecord(candidate, `plan.work[${position}]`);
+    if (row.id !== workId) throw new PlanError('target', 'edit.workId', 'Keep the admitted work bound to its original identity.');
     const current = base.state.work[position];
     if (row.id === current.id && row.label === current.label && row.teamId === current.teamId
         && row.minutesPerOccurrence === current.minutesPerOccurrence && row.occurrences === current.occurrences

@@ -672,3 +672,28 @@ test('a reentrant A-to-B-to-A traversal retires an outer no-op even though its p
   assert.equal(studio.readAcceptance().sequence, 2);
   assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 1, limit: 20 });
 });
+
+
+test('canonical row admission retains target identity when a descriptor view changes between reads', () => {
+  const plan = createExamplePlan();
+  plan.practices = [];
+  plan.people.push({ id: 'unassigned', label: 'Unassigned participant', fundedMinutes: 0, rateCentsPerHour: 10000 });
+  const studio = createStudio(plan); const before = studio.read(); const acceptance = studio.readAcceptance();
+  for (const [command, id, row] of [
+    ['updateWork', 'review', changedReview(before)], ['previewWork', 'review', changedReview(before)],
+    ['updatePerson', 'unassigned', changedPerson(before, {}, 'unassigned')],
+    ['previewPerson', 'unassigned', changedPerson(before, {}, 'unassigned')],
+  ]) {
+    let reads = 0;
+    const candidate = new Proxy(row, {
+      getOwnPropertyDescriptor(target, key) {
+        const descriptor = Reflect.getOwnPropertyDescriptor(target, key);
+        return key === 'id' && ++reads > 1 ? { ...descriptor, value: 'renamed-record' } : descriptor;
+      },
+    });
+    expectHeld(studio[command](id, candidate, before), before, 'target');
+    assert.equal(reads, 2);
+    assert.strictEqual(studio.readAcceptance(), acceptance);
+    assert.deepEqual(studio.readHistory(), { undoCount: 0, redoCount: 0, limit: 20 });
+  }
+});
