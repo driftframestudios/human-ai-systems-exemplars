@@ -173,6 +173,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/editing.mjs",
+      "projected_path": "collaboration/native-investment-studio/editing.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/icons.mjs",
       "projected_path": "collaboration/native-investment-studio/icons.mjs",
       "media_type": "text/javascript"

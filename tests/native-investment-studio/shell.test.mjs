@@ -105,6 +105,31 @@ function fixture(hash = '') {
 
 const attributes = node => [...node.attributes.entries()].sort(([a], [b]) => a.localeCompare(b));
 
+test('chapter owner receives one initial selection and each accepted transition, including history', () => {
+  const f = fixture('#native-studio-people');
+  const observed = [];
+  const shell = mountChapterShell(f.root, { onSelect: key => observed.push(key) });
+  assert.deepEqual(observed, ['people']);
+  shell.select('people');
+  assert.deepEqual(observed, ['people']);
+  shell.select('coordination');
+  assert.deepEqual(observed, ['people', 'coordination']);
+  f.window.location.hash = '#native-studio-people';
+  f.window.send('hashchange');
+  assert.deepEqual(observed, ['people', 'coordination', 'people']);
+  shell.dispose();
+});
+
+test('a disposing chapter receiver retires the selection before animation acquisition', () => {
+  const f = fixture();
+  let shell;
+  shell = mountChapterShell(f.root, { onSelect: key => { if (key === 'people') shell.dispose(); } });
+  assert.equal(shell.select('people'), false);
+  assert.equal(shell.read().disposed, true);
+  assert.equal(f.animations.length, 0);
+  assert.ok([...f.records.values()].every(record => !record.panel.hidden));
+});
+
 test('About authors two working chapter panels and retains the existing deep-link destinations', async () => {
   const about = await readFile(new URL('../../context-canvas-project-surface/context-canvas/index.html', import.meta.url), 'utf8');
   const controls = [...about.matchAll(/<button\b[^>]*\bdata-native-chapter="([^"]+)"[^>]*>/gu)];

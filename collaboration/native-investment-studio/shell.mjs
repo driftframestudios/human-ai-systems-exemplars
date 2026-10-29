@@ -17,8 +17,9 @@ function restore({ element, attributes }) {
 
 // This owner changes presentation only. Mounted editors retain their own model,
 // raw drafts, listeners and disclosure state across chapter selection.
-export function mountChapterShell(root) {
+export function mountChapterShell(root, { onSelect = () => {} } = {}) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
+  if (typeof onSelect !== 'function') throw new TypeError('Supply a chapter selection callback.');
   const document = root?.ownerDocument;
   const window = document?.defaultView;
   if (!window) throw new TypeError('Supply a native Studio root with a document.');
@@ -74,6 +75,7 @@ export function mountChapterShell(root) {
   let focused = active;
   let animation = null;
   let disposed = false;
+  let initializing = true;
   let selectionGeneration = 0;
 
   function listen(target, type, callback) {
@@ -175,6 +177,8 @@ export function mountChapterShell(root) {
     next.panel.hidden = false;
     active = next;
     if (!moveFocus) focused = next;
+    if (!initializing) onSelect(next.key);
+    if (disposed || generation !== selectionGeneration) return false;
     if (motion) animatePanel(next.panel, generation);
     return !disposed && generation === selectionGeneration;
   }
@@ -304,6 +308,10 @@ export function mountChapterShell(root) {
     if (reducedMotion?.addEventListener) listen(reducedMotion, 'change', () => { if (reducedMotion.matches) cancelMotion(); });
     list.hidden = false;
     reconcileFragment({ restoreEntry: true });
+    if (disposed) return receiver;
+    initializing = false;
+    onSelect(active.key);
+    if (disposed) return receiver;
     root.setAttribute('data-native-chapters-ready', 'true');
     INSTANCES.set(root, receiver);
     return receiver;

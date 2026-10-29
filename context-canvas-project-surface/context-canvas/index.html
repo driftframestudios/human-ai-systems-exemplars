@@ -163,6 +163,10 @@
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
             <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
           </div>
+          <details class="native-coordination__saved" data-native-saved hidden>
+            <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
+            <ul data-native-saved-list></ul>
+          </details>
         </header>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-session-title">
           <div class="native-coordination__agreement">
@@ -176,6 +180,11 @@
           </div>
           <details class="native-coordination__configuration" data-native-configure>
             <summary>Session settings</summary>
+            <div class="native-coordination__recovery" data-native-recovery hidden>
+              <p>The plan changed. Your saved values are shown below.</p>
+              <p data-native-current></p>
+              <div class="native-coordination__actions"><button type="button" data-action="review">Review saved edits</button><button type="button" data-action="use-current">Use current values</button><button type="button" data-action="discard">Discard saved edits</button></div>
+            </div>
             <form novalidate>
               <fieldset disabled aria-label="Working session settings">
                 <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
@@ -251,6 +260,11 @@
           <p data-team-empty hidden>This plan has no people.</p>
           <details class="native-coordination__configuration" data-person-configure hidden>
             <summary>Settings for <span data-person-name></span></summary>
+            <div class="native-coordination__recovery" data-person-recovery hidden>
+              <p>The plan changed. Your saved values are shown below.</p>
+              <p data-person-current></p>
+              <div class="native-coordination__actions"><button type="button" data-person-action="review">Review saved edits</button><button type="button" data-person-action="use-current">Use current values</button><button type="button" data-person-action="discard">Discard saved edits</button></div>
+            </div>
             <form novalidate>
               <fieldset disabled aria-label="Person rate and funded time">
                 <div class="native-coordination__controls">

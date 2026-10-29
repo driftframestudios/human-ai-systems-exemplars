@@ -2071,6 +2071,11 @@ p#on-dark-iron-ore {
 .native-coordination[data-native-chapters-ready] .native-team { border-block-start: 0; }
 .native-coordination__body { display: grid; gap: 1.5rem; padding: clamp(1rem, 3vw, 2.5rem); }
 .native-coordination__body > * { min-inline-size: 0; }
+.native-coordination__recovery { display: grid; gap: .75rem; padding: 1rem; border-block-end: .125rem solid var(--native-rule); }
+.native-coordination__saved { grid-column: 1 / -1; background: var(--native-paper); color: var(--native-text); }
+.native-coordination__saved ul { display: grid; gap: 1rem; padding: 1rem; list-style: none; }
+.native-coordination__saved li { padding: .75rem; border: 1px solid var(--native-rule); }
+.native-coordination__saved li button { margin: .5rem .5rem 0 0; }
 .native-coordination__agreement { display: grid; gap: 1rem; align-content: start; }
 .about-page .native-coordination__agreement h3 { font: 650 1.5rem/1.25 system-ui, sans-serif; color: var(--native-text); }
 .native-coordination__connection {
