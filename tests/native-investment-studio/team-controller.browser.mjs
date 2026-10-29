@@ -16,10 +16,14 @@ const statePath = '/collaboration/native-investment-studio/state.mjs';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-team');
 let server;
 let aboutFixture;
+let fullAboutFixture;
 
 before(async () => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
+  const objectSource = 'data="../img/plot/about_prompt_conditions_cartography.svg"';
+  assert.equal(source.split(objectSource).length, 2);
+  fullAboutFixture = source.replace(objectSource, 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   const nativeStart = source.indexOf('<section class="about-field about-field--coordination"');
   const nativeEnd = source.indexOf('<section class="about-field about-field--studio"', nativeStart);
   const prefixEnd = source.indexOf('<main id="main">') + '<main id="main">'.length;
@@ -51,7 +55,7 @@ const preview = page => team(page).locator('[data-person-total]');
 const settings = page => team(page).locator('[data-person-configure]');
 const choose = (page, id = 'product-one') => team(page).locator(`[data-person-id="${id}"]`).click();
 
-async function open(t, engine) {
+async function open(t, engine, fullAbout = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage();
   const telemetry = monitor(page);
@@ -66,7 +70,7 @@ async function open(t, engine) {
   });
   await page.route('**/*', request => {
     const url = new URL(request.request().url());
-    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: aboutFixture });
+    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: fullAbout ? fullAboutFixture : aboutFixture });
     return url.origin === server.origin ? request.continue()
       : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate instrument owner</title>' });
   });
@@ -109,6 +113,7 @@ for (const engine of names) {
     await expect(team(page).locator('[data-person-id]')).toHaveCount(4);
     await choose(page);
     await expect(input(page, 'ratePerHour')).toBeFocused();
+    await expect(input(page, 'ratePerHour')).toBeInViewport();
     await input(page, 'ratePerHour').fill('101');
     // One person's three additional hours gain $1/hour; the other three stay $300 each.
     await expect(preview(page)).toHaveText('$1,203.00');
@@ -206,8 +211,11 @@ for (const engine of names) {
   });
 
   test(`${engine}: keyboard steps, readable errors and responsive controls preserve About scrolling`, { timeout: 45000 }, async t => {
-    const page = await open(t, engine);
+    // Full About reproduces WebKit's stale implicit label rows after resizing;
+    // keep that actual integration alongside the bounded native state cases.
+    const page = await open(t, engine, engine === 'webkit');
     await choose(page);
+    await expect(input(page, 'ratePerHour')).toBeInViewport();
     const increase = team(page).locator('[data-person-field="ratePerHour"][data-step="1"]');
     await increase.focus();
     await increase.press('Enter');
@@ -228,8 +236,20 @@ for (const engine of names) {
       await input(page, 'fundedHours').fill('00001');
       await input(page, 'fundedMinutes').fill('00000');
       await input(page, 'ratePerHour').fill('00101');
+      // WebKit settles the resized form's offscreen implicit rows when the
+      // next editing target enters view. Establish that visible state first.
+      await input(page, 'fundedHours').scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       await assertContained(page);
+      const labels = await team(page).locator('.native-coordination__control').evaluateAll(groups => groups.map(group => {
+        const range = document.createRange();
+        range.selectNodeContents(group.querySelector('label'));
+        return { name: group.querySelector('input').name,
+          textBottom: Math.max(...[...range.getClientRects()].map(rect => rect.bottom)),
+          inputTop: group.querySelector('input').getBoundingClientRect().top };
+      }));
+      for (const label of labels) assert.ok(label.textBottom <= label.inputTop,
+        `the complete ${label.name} label precedes its input at ${width}px: ${JSON.stringify(label)}`);
       if (width === 1440) {
         const bottoms = await team(page).locator('[data-team-roster] > li').evaluateAll(items =>
           items.map(item => item.getBoundingClientRect().bottom));
