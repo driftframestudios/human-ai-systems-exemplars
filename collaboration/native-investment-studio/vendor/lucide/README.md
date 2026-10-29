@@ -14,9 +14,10 @@ upstream licence and pin for subsequent source review.
 | Local job | Upstream file |
 | --- | --- |
 | Coordination chapter | [icons/network.svg](https://github.com/lucide-icons/lucide/blob/2ca268e74888d3506b3319fb8f94aaaaf70ceca9/icons/network.svg) |
+| Investment chapter | [icons/chart-no-axes-combined.svg](https://github.com/lucide-icons/lucide/blob/2ca268e74888d3506b3319fb8f94aaaaf70ceca9/icons/chart-no-axes-combined.svg) |
 | People chapter | [icons/users.svg](https://github.com/lucide-icons/lucide/blob/2ca268e74888d3506b3319fb8f94aaaaf70ceca9/icons/users.svg) |
 
-Both selected files use the ISC notice. The complete upstream licence also
+The three selected files use the ISC notice. The complete upstream licence also
 records Feather-derived MIT notices for other icons. When adding geometry,
 inspect that inventory and carry every applicable notice into the delivered
 module or asset. Preserve the SVG viewBox, shape coordinates, stroke geometry,

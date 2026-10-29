@@ -89,11 +89,12 @@ async function open(t, engine, { fragment = '', complete = false, ...options } =
 }
 
 async function selected(page, name) {
-  const other = name === 'people' ? 'coordination' : 'people';
   await expect(tab(page, name)).toHaveAttribute('aria-selected', 'true');
   await expect(chapter(page, name)).toBeVisible();
-  await expect(tab(page, other)).toHaveAttribute('aria-selected', 'false');
-  await expect(chapter(page, other)).toBeHidden();
+  for (const other of ['coordination', 'people', 'investment'].filter(key => key !== name)) {
+    await expect(tab(page, other)).toHaveAttribute('aria-selected', 'false');
+    await expect(chapter(page, other)).toBeHidden();
+  }
 }
 
 for (const engine of names) {
@@ -269,18 +270,18 @@ for (const engine of names) {
       const before = await position();
       await tab(page, 'coordination').focus();
       await tab(page, 'coordination').press('End');
-      await expect(tab(page, 'people')).toBeFocused();
+      await expect(tab(page, 'investment')).toBeFocused();
       await selected(page, 'coordination');
       const focused = await position();
       assert.ok(Math.abs(focused.top - before.top) < 1 && Math.abs(focused.scroll - before.scroll) < 1,
         `manual tab focus preserves About's vertical reading position: ${JSON.stringify({ before, focused })}`);
-      await tab(page, 'people').press('Enter');
-      await selected(page, 'people');
+      await tab(page, 'investment').press('Enter');
+      await selected(page, 'investment');
       await frame(page);
       const after = await position();
       assert.ok(Math.abs(after.top - before.top) < 1 && Math.abs(after.scroll - before.scroll) < 1,
         `explicit chapter selection preserves the amp head position: ${JSON.stringify({ before, after })}`);
-      const geometry = await tab(page, 'people').evaluate(button => {
+      const geometry = await tab(page, 'investment').evaluate(button => {
         const strip = button.parentElement, box = button.getBoundingClientRect(), frame = strip.getBoundingClientRect();
         const style = getComputedStyle(button);
         const label = button.querySelector('span'), textStyle = getComputedStyle(label);
@@ -303,7 +304,7 @@ for (const engine of names) {
       assert.ok(geometry.labelHeight <= geometry.lineHeight + 1 && geometry.stripScrollHeight <= geometry.stripHeight + 1,
         `readable chapter names keep one line and leave vertical scrolling to About: ${JSON.stringify(geometry)}`);
       assert.ok(geometry.outline !== 'none' && geometry.outlineWidth >= 2, 'keyboard selection retains a visible focus indicator');
-      await tab(page, 'people').hover();
+      await tab(page, 'investment').hover();
       const scrollBefore = await page.evaluate(() => scrollY);
       await page.mouse.wheel(0, 240);
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(scrollBefore + 100);

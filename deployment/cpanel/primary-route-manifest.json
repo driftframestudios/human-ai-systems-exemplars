@@ -178,13 +178,38 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/exchange.mjs",
+      "projected_path": "collaboration/native-investment-studio/exchange.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/icons.mjs",
       "projected_path": "collaboration/native-investment-studio/icons.mjs",
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/investment-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/presets.mjs",
+      "projected_path": "collaboration/native-investment-studio/presets.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/purpose-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/purpose-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/purpose-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/purpose-draft.mjs",
       "media_type": "text/javascript"
     },
     {

@@ -306,8 +306,11 @@
         "tests/native-investment-studio/controller.test.mjs",
         "tests/native-investment-studio/draft.test.mjs",
         "tests/native-investment-studio/editing.test.mjs",
+        "tests/native-investment-studio/exchange.test.mjs",
         "tests/native-investment-studio/person-draft.test.mjs",
         "tests/native-investment-studio/person-state.test.mjs",
+        "tests/native-investment-studio/presets.test.mjs",
+        "tests/native-investment-studio/purpose-draft.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
         "tests/native-investment-studio/state.test.mjs",
         "tests/native-investment-studio/team-controller.test.mjs"
@@ -2792,6 +2795,28 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.investment",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/investment.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native Purpose and Investment: purpose draft ownership, baseline and history, versioned preview and explicit replacement, FileReader races, byte and format recovery, captured downloads, responsive focus and page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:investment-browser"
+      ]
+    },
+    {
       "id": "browser.native-investment-studio.team-assembly",
       "family": "native-investment-studio",
       "kind": "node-test",
@@ -2953,6 +2978,7 @@
         "browser.context-canvas.about-studio-chapters",
         "browser.native-investment-studio.coordination",
         "browser.native-investment-studio.chapters",
+        "browser.native-investment-studio.investment",
         "browser.native-investment-studio.team-assembly"
       ]
     },
@@ -3332,8 +3358,11 @@
           "tests/native-investment-studio/controller.test.mjs",
           "tests/native-investment-studio/draft.test.mjs",
           "tests/native-investment-studio/editing.test.mjs",
+          "tests/native-investment-studio/exchange.test.mjs",
           "tests/native-investment-studio/person-draft.test.mjs",
           "tests/native-investment-studio/person-state.test.mjs",
+          "tests/native-investment-studio/presets.test.mjs",
+          "tests/native-investment-studio/purpose-draft.test.mjs",
           "tests/native-investment-studio/shell.test.mjs",
           "tests/native-investment-studio/state.test.mjs",
           "tests/native-investment-studio/team-controller.test.mjs"
@@ -3343,6 +3372,9 @@
         ],
         "test:native-investment-studio:team-browser": [
           "tests/native-investment-studio/team-controller.browser.mjs"
+        ],
+        "test:native-investment-studio:investment-browser": [
+          "tests/native-investment-studio/investment.browser.mjs"
         ],
         "test:native-investment-studio:chapters-browser": [
           "tests/native-investment-studio/shell.browser.mjs"

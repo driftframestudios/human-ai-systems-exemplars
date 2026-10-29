@@ -724,9 +724,9 @@ removed targets, disposal, reentry and draft-intent behavior.
 
 ## Native coordination receiver
 
-About loads `controller.mjs` as a module. Its ten transitive same-directory
+About loads `controller.mjs` as a module. Its fifteen transitive same-directory
 dependencies retain the canonical package geometry in local and production
-delivery. `deployment/cpanel/primary-route-manifest.json` declares all eleven files and
+delivery. `deployment/cpanel/primary-route-manifest.json` declares all sixteen files and
 their JavaScript media type. The production closure test builds an isolated
 artifact with the real builder and follows its parsed import graph; removing
 one dependency earns a failing closure observation. The shared local browser
@@ -742,7 +742,7 @@ then shows the new amount alongside any retained stale draft. Adjacent recovery
 controls offer Review saved edits, Use current values, and Discard saved edits;
 stale fields remain readable while Apply awaits a current editing lease.
 
-The receiver validates all required elements before installing eight listeners.
+The receiver validates its required elements before installing its listener group.
 Initialization failure releases installed resources. Disposal removes those
 listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
@@ -793,11 +793,69 @@ validation feedback and the investment preview follow all inputs, so their
 wrapping can grow the card while preserving each input’s document position. The native panel uses document scrolling,
 keyboard controls, visible focus, and system colors in forced-color mode.
 
+## Purpose and Investment receivers
+
+`purpose-controller.mjs` lends the amp head a compact Purpose disclosure.
+Six labelled text fields receive the shared `editing.purpose` port. Apply keeps
+the editor open; Cancel restores accepted text. Closing the disclosure parks
+unfinished text and resumes the selected chapter. A stale edit presents all six
+current fields beside its saved text before Review grants a new lease. The
+root owns the coordinator lifetime; the disclosure owns its DOM and listeners.
+Purpose text uses `textContent` and contributes no implicit price adjustment.
+
+`investment-controller.mjs` owns the Investment chapter: Undo/Redo, one baseline,
+native starting-plan previews, file input and captured downloads. Commands bind
+the displayed accepted projection; Restore also binds the displayed baseline.
+A state change parks active text before history moves, preserving its recovery
+route. Known-amount comparisons retain their incomplete pricing labels.
+
+`exchange.mjs` owns one pending file request or prepared replacement preview.
+A request binds accepted chronology and the coordinator's draft-intent marker.
+A later selection, raw edit or acceptance retires the earlier intent. File size
+is checked before acquisition and again against actual bytes; fatal UTF-8
+conversion precedes the schema-owned parser. Every FileReader acquisition and
+settlement route releases its listener group, including synchronous cancellation.
+A readable file produces a preview; Use this plan explicitly replaces accepted
+state. An active changed draft receives an Apply-or-discard response. Parked
+raw survives replacement under its original target and requires review.
+
+`presets.mjs` supplies two versioned, fresh-plan factories for current native
+fields. Shared working sessions price twelve person-hours as $1,200 of extra
+work. Sessions within funded time allocate the same effort inside $1,200 of
+staffing. The preview names affected fields, record counts and a legacy format
+conversion when one occurred. Later capability owners add the full Studio's six
+scenarios through this same catalogue and migration boundary.
+
+Download captures one accepted serialized string. The controller retains one
+object URL after the browser receives the click, then releases it on replacement
+or disposal. Rejected input leaves accepted state usable; its bounded diagnostic
+and source text stay local to the exchange owner. The original full Studio and
+its static counterpart retain their current carriers until Issue #638 places
+the native Studio and collapsed table together. Issue #656 owns a later table
+content refresh.
+
+File preflight takes O(1); decoding, admission and canonical preparation take
+O(B + N + R), where B is bounded bytes, N records and R references. Preview
+summaries use stable-ID maps and sets in O(N + R) time and transient space.
+They run once per prepared preview. Comparison DOM updates follow accepted
+projection or baseline changes; raw keystrokes retain those nodes. Exchange
+retains one pending controller, one preview or bounded rejected text, and tiny
+identity markers. Caller-retained immutable captures retain their own payloads.
+Apply re-admits the prepared plan through the existing state owner, preserving
+Issue #641's measured complete-preparation policy.
+
+The focused Investment browser receiver exercises purpose ownership, baseline
+and history, actual file selection, version rejection/recovery, captured download
+bytes, delayed-read identity, disposal/remount, and narrow scrolling across
+Chromium, Firefox and Playwright WebKit. Source tests own byte limits, hostile
+records, exact arithmetic and callback-acquisition faults. Native-device input
+and a visitor's comprehension remain separate observations.
+
 ## Native Studio chapters
 
-`shell.mjs` owns the amp head's manually activated Coordination and People
+`shell.mjs` owns the amp head's manually activated Coordination, People and Investment
 tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
-the shell after mounting both receivers against the same Studio instance. The
+the shell after mounting the receivers against the same Studio instance. The
 shell changes presentation and calls the parent receiver's selection callback.
 The parent parks the outgoing edit and resumes the incoming target through the
 shared coordinator. The amp head
@@ -816,7 +874,7 @@ before a new animation is acquired.
 
 An authored, labelled `[data-native-chapter-list]` begins hidden. Its named
 buttons use `data-native-chapter` and `aria-controls`; corresponding sections
-use `data-native-chapter-panel` and `native-studio-<key>` IDs. Both sections
+use `data-native-chapter-panel` and `native-studio-<key>` IDs. All working sections
 begin visible for the static reading. The shell validates their complete
 one-to-one relationship before adding tab semantics or hiding a panel. Future
 chapters enter with their working content and finite icon geometry.
@@ -849,7 +907,7 @@ copies H existing top-level history fields in O(H); the browser owns the
 structured clone of that entry. Fragment recovery follows the target's ancestor
 chain. Browser layout and paint retain their own costs.
 
-`icons.mjs` creates fresh decorative SVGs for the two implemented chapters.
+`icons.mjs` creates fresh decorative SVGs for the three implemented chapters.
 It carries the selected Lucide geometry and ISC notice in delivered bytes.
 The [upstream receipt](vendor/lucide/README.md) records the exact pin and
 complete licence. Visible button text supplies the accessible names. Each
@@ -951,6 +1009,7 @@ npm run test:native-investment-studio:source
 npm run test:native-investment-studio:coordination-browser
 npm run test:native-investment-studio:team-browser
 npm run test:native-investment-studio:chapters-browser
+npm run test:native-investment-studio:investment-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```

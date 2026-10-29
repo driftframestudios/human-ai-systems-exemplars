@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPlanExchange, readFileBytes } from '../../collaboration/native-investment-studio/exchange.mjs';

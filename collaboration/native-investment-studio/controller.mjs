@@ -5,6 +5,8 @@ import { INTEGER, money, duration } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
 import { mountChapterShell } from './shell.mjs';
 import { createStudioIcon } from './icons.mjs';
+import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
+import { mountInvestmentPanel } from './investment-controller.mjs';
 
 const MINUTES_PER_HOUR = CONTRACT.minutesPerHour;
 
@@ -35,7 +37,7 @@ export function mountCoordinationPanel(root, options = {}) {
     ['traceList', '[data-native-trace-list]'],
     ['traceSummary', '[data-native-trace-summary]'], ['status', '[data-native-status]'],
     ['configure', '[data-native-configure]'], ['configureSummary', '[data-native-configure] > summary'],
-    ['form', 'form'], ['fieldset', 'fieldset'],
+    ['form', '[data-native-configure] form'], ['fieldset', '[data-native-configure] fieldset'],
     ['apply', '[data-action="apply"]'], ['previewTotal', '[data-native-preview-total]'],
     ['previewStanding', '[data-native-preview-standing]'], ['previewNote', '[data-native-preview-note]'],
     ['durationHours', '[data-native-duration-hours]'], ['durationMinutes', '[data-native-duration-minutes]'],
@@ -57,6 +59,8 @@ export function mountCoordinationPanel(root, options = {}) {
   let composing = false;
   let teamPanel = null;
   let chapterShell = null;
+  let purposePanel = null;
+  let investmentPanel = null;
   let activeChapter = 'coordination';
   let renderedSaved = [];
   let savedProjection = null;
@@ -81,7 +85,7 @@ export function mountCoordinationPanel(root, options = {}) {
     text('savedCount', String(records.length));
     const fragment = document.createDocumentFragment();
     const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
-      ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' };
+      ratePerHour: 'Hourly rate · USD', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes', ...PURPOSE_LABELS };
     const people = new Map(projection.state.people.map(person => [person.id, person.label]));
     const works = new Map(projection.state.work.map(row => [row.id, row.label]));
     for (const record of records) {
@@ -89,7 +93,8 @@ export function mountCoordinationPanel(root, options = {}) {
       savedByKey.set(key, record);
       const item = document.createElement('li');
       const title = document.createElement('strong');
-      title.textContent = (record.kind === 'person' ? people : works).get(record.targetId) ?? record.targetId;
+      title.textContent = record.kind === 'purpose' ? 'Plan purpose'
+        : (record.kind === 'person' ? people : works).get(record.targetId) ?? record.targetId;
       const values = document.createElement('p');
       values.textContent = Object.entries(record.raw).map(([field, raw]) => `${labels[field]}: ${raw || 'blank'}`).join(' · ');
       item.append(title, values);
@@ -97,7 +102,7 @@ export function mountCoordinationPanel(root, options = {}) {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (record.kind === 'person' || record.targetId === workId) {
+      } else if (record.kind === 'purpose' || record.kind === 'person' || record.targetId === workId) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -218,6 +223,8 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     renderPreview(view);
     teamPanel?.refresh();
+    purposePanel?.refresh();
+    investmentPanel?.refresh();
     return view;
   }
 
@@ -286,13 +293,17 @@ export function mountCoordinationPanel(root, options = {}) {
     if (button.dataset.savedOpen) {
       const saved = savedByKey.get(button.dataset.savedOpen);
       if (!saved) return;
-      chapterShell?.select(saved.kind === 'person' ? 'people' : 'coordination');
-      if (saved.kind === 'person') teamPanel?.select(saved.targetId);
-      else begin();
+      if (saved.kind === 'purpose') purposePanel?.open();
+      else {
+        purposePanel?.close({ resume: false });
+        chapterShell?.select(saved.kind === 'person' ? 'people' : 'coordination');
+        if (saved.kind === 'person') teamPanel?.select(saved.targetId);
+        else begin();
+      }
       render();
       return;
     }
-    if (button.closest('[data-native-team-editor]')) return;
+    if (button.closest('[data-native-team-editor], [data-native-purpose], .native-investment')) return;
     const action = button.dataset.action;
     if (action === 'review' || action === 'use-current' || action === 'discard') {
       const view = editor.read();
@@ -322,6 +333,8 @@ export function mountCoordinationPanel(root, options = {}) {
     if (disposed) return editor.read();
     disposed = true;
     chapterShell?.dispose();
+    investmentPanel?.dispose();
+    purposePanel?.dispose();
     teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -351,15 +364,27 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(elements.form, 'compositionstart', () => { composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; editText(event); });
     listen(elements.configure, 'toggle', () => {
-      if (activeChapter === 'coordination' && elements.configure.open && editor.read().draft === null) begin();
+      if (activeChapter === 'coordination' && !purposePanel?.isOpen()
+        && elements.configure.open && editor.read().draft === null) begin();
     });
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     begin();
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
-      isActive: () => activeChapter === 'people', onAccepted: () => render(),
-      onEditing: () => { const projection = studio.read(); renderAccepted(projection); renderSaved(projection); } });
+      onBegin: () => purposePanel?.close({ resume: false }),
+      isActive: () => activeChapter === 'people' && !purposePanel?.isOpen(), onAccepted: () => render(),
+      onEditing: () => {
+        const projection = studio.read(); renderAccepted(projection); renderSaved(projection);
+        purposePanel?.refresh(); investmentPanel?.refresh();
+      } });
+    purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
+      onOpen: () => { editing.park(); composing = false; },
+      onClose: () => {
+        if (activeChapter === 'coordination' && elements.configure.open) begin();
+        else if (activeChapter === 'people') teamPanel?.resume();
+      }, onChange: () => render() });
+    investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
     const chapterList = root.querySelector('[data-native-chapter-list]');
     if (chapterList) {
       for (const button of chapterList.querySelectorAll('[data-native-chapter]')) {
@@ -368,6 +393,7 @@ export function mountCoordinationPanel(root, options = {}) {
         cleanup.push(() => icon.remove());
       }
       chapterShell = mountChapterShell(root, { onSelect: chapter => {
+        purposePanel?.close({ resume: false });
         if (activeChapter !== chapter) editing.park();
         activeChapter = chapter;
         composing = false;

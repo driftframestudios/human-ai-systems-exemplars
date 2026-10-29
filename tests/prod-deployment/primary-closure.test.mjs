@@ -29,8 +29,7 @@ const repositoryRoot = path.resolve(
 const canvasRoot = "context-canvas-project-surface/context-canvas";
 const nativeRoot = "collaboration/native-investment-studio";
 const nativeModules = [
-  "config.mjs", "contract.mjs", "controller.mjs", "display.mjs", "draft.mjs",
-  "editing.mjs", "icons.mjs", "person-draft.mjs", "shell.mjs", "state.mjs", "team-controller.mjs",
+  "config.mjs", "contract.mjs", "controller.mjs", "display.mjs", "draft.mjs", "editing.mjs", "exchange.mjs", "icons.mjs", "investment-controller.mjs", "person-draft.mjs", "presets.mjs", "purpose-controller.mjs", "purpose-draft.mjs", "shell.mjs", "state.mjs", "team-controller.mjs"
 ]
   .map((file) => `${nativeRoot}/${file}`);
 const nativeEntry = `${nativeRoot}/controller.mjs`;
@@ -299,7 +298,7 @@ test("native Studio modules retain exact static-import and media closure in the 
     sources.set(sourcePath, await readFile(path.join(repositoryRoot, sourcePath)));
   }
   assert.deepEqual(await parsedNativeGraph(sources, nativeEntry), nativeModules);
-  for (const required of ["config.mjs", "display.mjs", "editing.mjs", "icons.mjs", "person-draft.mjs", "shell.mjs", "team-controller.mjs"]) {
+  for (const required of ["config.mjs", "display.mjs", "editing.mjs", "exchange.mjs", "icons.mjs", "investment-controller.mjs", "person-draft.mjs", "presets.mjs", "purpose-controller.mjs", "purpose-draft.mjs", "shell.mjs", "team-controller.mjs"]) {
     const incomplete = new Map(sources);
     incomplete.delete(`${nativeRoot}/${required}`);
     await assert.rejects(parsedNativeGraph(incomplete, nativeEntry), /module closure supplies/u,

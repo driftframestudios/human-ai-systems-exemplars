@@ -2031,7 +2031,7 @@ p#on-dark-iron-ore {
     transform: translate(.14rem, .14rem);
 }
 .native-coordination button:is(:disabled, [aria-disabled='true']) { cursor: default; opacity: .6; }
-.native-coordination :is(button, input, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
+.native-coordination :is(button, input, textarea, select, summary):focus-visible { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
 .native-coordination__chapters {
     display: flex;
     gap: .8rem;
@@ -2076,6 +2076,38 @@ p#on-dark-iron-ore {
 .native-coordination__saved ul { display: grid; gap: 1rem; padding: 1rem; list-style: none; }
 .native-coordination__saved li { padding: .75rem; border: 1px solid var(--native-rule); }
 .native-coordination__saved li button { margin: .5rem .5rem 0 0; }
+.native-purpose { grid-column: 1 / -1; background: var(--native-paper); color: var(--native-text); }
+.native-purpose summary span { display: block; font-size: .875rem; font-weight: 400; margin-block-start: .25rem; }
+.native-purpose form { padding: 1rem; background: var(--about-mint-green); }
+.native-purpose__current { display: grid; gap: .75rem; }
+.native-purpose__current dt { font-weight: 650; }
+.native-purpose__current dd { margin: 0; }
+.native-purpose__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; margin-block-end: 1rem; }
+.native-purpose__fields > div { min-inline-size: 0; }
+.native-purpose label, .native-investment label { display: block; font-size: .875rem; font-weight: 650; margin-block-end: .35rem; }
+.native-purpose textarea, .native-investment select { display: block; box-sizing: border-box; min-inline-size: 0; inline-size: 100%; padding: .6rem; border: .125rem solid var(--native-rule); background: var(--native-paper); color: var(--native-text); font: inherit; }
+.native-purpose textarea { resize: vertical; min-block-size: 5rem; }
+.native-purpose textarea[aria-invalid='true'] { border-color: var(--native-error); border-style: dashed; }
+.native-investment { padding: clamp(1rem, 3vw, 2.5rem); }
+.about-page .native-investment :is(h3, h4) { color: var(--native-text); font: 650 1.3rem/1.3 system-ui, sans-serif; max-inline-size: none; margin-block: 0 .75rem; }
+.about-page .native-investment h4 { font-size: 1.1rem; }
+.native-investment__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem; }
+.native-investment__card, .native-investment__preview { min-inline-size: 0; padding: 1.1rem; background: var(--native-paper); border: .125rem solid var(--native-rule); box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
+.native-investment__card { display: grid; align-content: start; gap: .8rem; }
+.native-investment__card:first-child { background: var(--about-mint-green); }
+.native-investment input[type='file'] { inline-size: 100%; max-inline-size: 100%; padding: .4rem; font: .875rem/1.5 system-ui, sans-serif; }
+.native-investment__comparison { display: grid; gap: .6rem; border-block: .0625rem solid var(--native-rule); padding-block: .8rem; }
+.native-investment__comparison div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 1rem; }
+.native-investment__comparison dd { font: 650 1rem/1.5 ui-monospace, monospace; }
+.native-investment__preview { margin-block-start: 1.5rem; }
+.native-investment__preview ul { margin-block: .75rem 1rem; }
+.native-purpose .native-coordination__status { padding-inline: 1rem; }
+/* Fixed control words keep usable space as type grows within a narrow page. */
+.native-coordination__amp, .native-investment { padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-purpose form { padding-inline: clamp(.25rem, 2vw, 1rem); }
+.native-investment__card, .native-investment__preview { padding-inline: clamp(.25rem, 2vw, 1.1rem); }
+.native-purpose summary, .native-purpose button, .native-investment button { padding-inline: clamp(.25rem, 2vw, .85rem); }
+.native-investment input[type='file']::file-selector-button { max-inline-size: 100%; white-space: normal; font: inherit; }
 .native-coordination__agreement { display: grid; gap: 1rem; align-content: start; }
 .about-page .native-coordination__agreement h3 { font: 650 1.5rem/1.25 system-ui, sans-serif; color: var(--native-text); }
 .native-coordination__connection {
