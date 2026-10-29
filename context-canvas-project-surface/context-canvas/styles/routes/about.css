@@ -1591,11 +1591,11 @@ p#on-dark-iron-ore {
    Page-scoped additions live here so the shared expanded stylesheet remains a
    stable substrate for the rest of Context Canvas. */
 
-.about-page .about-folio-disclosure {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) {
   min-inline-size: 0;
 }
 
-.about-page .about-folio-disclosure > summary {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary {
   align-items: center;
   background: #fffdf5;
   border: .1rem solid var(--about-ink, #213252);
@@ -1623,11 +1623,11 @@ p#on-dark-iron-ore {
   box-shadow: .25rem .25rem 0 var(--about-tiffany, #56d8c9);
 }
 
-.about-page .about-folio-disclosure > summary::-webkit-details-marker {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary::-webkit-details-marker {
   display: none;
 }
 
-.about-page .about-folio-disclosure > summary svg {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary svg {
   block-size: 1.1rem;
   flex: 0 0 auto;
   inline-size: 1.1rem;
@@ -1641,11 +1641,11 @@ p#on-dark-iron-ore {
   transition: transform .2s ease;
 }
 
-.about-page .about-folio-disclosure[open] > summary svg {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart)[open] > summary svg {
   transform: rotate(0deg);
 }
 
-.about-page .about-folio-disclosure > summary:hover {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary:hover {
   background: #e7efff;
 }
 
@@ -1653,20 +1653,32 @@ p#on-dark-iron-ore {
   background: #d9f3ed;
 }
 
-.about-page .about-folio-disclosure > summary:focus-visible {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary:focus-visible {
   outline: .25rem solid var(--about-cobalt, #2855f3);
   outline-offset: .2rem;
+}
+
+.about-page .about-studio-counterpart {
+  margin-block-start: 1.25rem;
+}
+
+.about-page .about-studio-counterpart > summary {
+  box-shadow: .25rem .25rem 0 var(--about-cobalt, #2855f3);
+}
+
+.about-page .about-studio-counterpart > .about-table-wrap {
+  margin-block-start: .9rem;
 }
 
 .about-page .about-disclosure__hide {
   display: none;
 }
 
-.about-page :is(.about-folio-disclosure, .about-prompt-static)[open] > summary > .about-disclosure__show {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static)[open] > summary > .about-disclosure__show {
   display: none;
 }
 
-.about-page :is(.about-folio-disclosure, .about-prompt-static)[open] > summary > .about-disclosure__hide {
+.about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static)[open] > summary > .about-disclosure__hide {
   display: inline;
 }
 
@@ -1791,13 +1803,13 @@ p#on-dark-iron-ore {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-page .about-folio-disclosure > summary svg {
+  .about-page :is(.about-folio-disclosure, .about-studio-counterpart) > summary svg {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
-  .about-page :is(.about-folio-disclosure > summary, .about-prompt-explorer, .about-prompt-static) {
+  .about-page :is(.about-folio-disclosure > summary, .about-studio-counterpart > summary, .about-prompt-explorer, .about-prompt-static) {
     background: Canvas;
     border-color: CanvasText;
     box-shadow: none;
@@ -1815,14 +1827,18 @@ p#on-dark-iron-ore {
 }
 
 @media print {
-  .about-page :is(.about-folio-disclosure, .about-prompt-static) > summary,
+  .about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static) > summary,
   .about-page .about-prompt-explorer {
     display: none !important;
   }
 
   /* Reveal the native disclosure boundary for print while preserving screen choices. */
-  .about-page :is(.about-folio-disclosure, .about-prompt-static)::details-content {
+  .about-page :is(.about-folio-disclosure, .about-studio-counterpart, .about-prompt-static)::details-content {
     content-visibility: visible;
+  }
+
+  .about-page .about-studio-counterpart > .about-table-wrap {
+    margin-block-start: 0;
   }
 
   .about-page .about-folio-disclosure__body {
