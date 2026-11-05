@@ -1,8 +1,9 @@
 # About Studio chapters
 
-Visitors operate the existing Cross-Functional Investment Studio inside About
-through selected chapters. The live investment reading stays above the chapter
-controls, while the active content participates in About’s vertical reading.
+This retained chapter presentation exposes the full Cross-Functional Investment
+Studio through selected chapters. About now receives the
+[native showcase](../native-investment-studio/README.md). The original Studio
+and this derived artifact keep their independent routes and source owners.
 
 ## Source and receiving roles
 
@@ -31,8 +32,8 @@ Native buttons expose the current chapter. Inputs, assumptions, calculations,
 and provisional standing retain their original meaning.
 
 Cross-chapter jumps first expose the receiving panel and focus its target. The
-shared layout channel then carries only bounded target geometry to About, which
-positions that target using its own viewport and navigation. This parent-owned
+shared layout channel can carry bounded target geometry to a receiving host,
+which positions that target using its own viewport and navigation. This parent-owned
 reveal handles WebKit's observed cross-frame scrolling difference; the ordinary
 full Studio retains native document navigation.
 
@@ -57,11 +58,11 @@ npm run test:about-studio-chapters-browser
 ```
 
 The [About owner](../../context-canvas-project-surface/context-canvas/README.md)
-receives this artifact. Local browser checks substitute the freshly packaged
-child under the declared sandbox, preserving the distinction between source
-behavior and hosted delivery. The focused PR for Issue #625 carries accepted
-execution and independent review. Publication remains held.
+now uses the native instrument. Local browser checks preserve a separate host
+for this derived child under its declared sandbox. Issue #625 and its reviewed
+feature retain the earlier About integration record; #638 owns the native
+replacement. Tagged public delivery remains separately human-cued.
 
-Recovery returns About to its original full-Studio carrier. The original
-instrument’s source, state contracts, calculations, and other consumers retain
-their existing owners throughout this presentation experiment.
+The derived carrier remains available for a deliberate rollback or another
+receiver. The original instrument’s source, state contracts, calculations and
+other consumers retain their existing owners.

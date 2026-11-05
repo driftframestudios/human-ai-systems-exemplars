@@ -163,19 +163,34 @@
     "check:embedded-content-fit": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-embedded-content-fit.mjs --check",
     "build:about-studio-chapters": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-studio-chapters.mjs",
     "check:about-studio-chapters": "node tools/check-node-runtime.mjs --quiet && node tools/materialize-about-studio-chapters.mjs --check",
-    "test:about-studio-chapters-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-studio-chapters.browser.mjs"
+    "test:about-studio-chapters-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/context-canvas/about-studio-chapters.browser.mjs",
+    "test:native-investment-studio:source": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/*.test.mjs",
+    "test:native-investment-studio:coordination-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/controller.browser.mjs",
+    "test:native-investment-studio:team-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/team-controller.browser.mjs",
+    "test:native-investment-studio:chapters-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/shell.browser.mjs",
+    "test:native-investment-studio:investment-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/investment.browser.mjs",
+    "test:native-investment-studio:session-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/session.browser.mjs",
+    "test:native-investment-studio:assembly-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/assembly.browser.mjs",
+    "test:native-investment-studio:responsibility-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/responsibility.browser.mjs",
+    "test:native-investment-studio:connection-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/connection.browser.mjs",
+    "test:native-investment-studio:connection-template-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/connection-template.browser.mjs",
+    "test:native-investment-studio:capability-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/capability.browser.mjs",
+    "test:native-investment-studio:change-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/change.browser.mjs",
+    "test:native-investment-studio:assurance-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/assurance.browser.mjs",
+    "test:native-investment-studio:score-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/score.browser.mjs"
   },
   "overrides": {
-    "fast-uri": "4.1.5"
+    "fast-uri": "4.2.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
+    "acorn": "8.19.0",
     "ajv": "^8.20.0",
     "csso": "5.0.5",
     "esbuild": "0.28.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "sharp": "^0.35.5",
-    "wrangler": "4.149.0"
+    "wrangler": "4.155.0"
   }
 }

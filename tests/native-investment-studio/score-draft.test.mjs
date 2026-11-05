@@ -1,0 +1,101 @@
+import '../../tools/node-runtime-admission.mjs';
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
+import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
+import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
+import { createScoreDraftAdapter } from '../../collaboration/native-investment-studio/score-draft.mjs';
+import { describeScoreReference } from '../../collaboration/native-investment-studio/score-reference.mjs';
+import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+const set = (editor, token, key, value) => { const result = editor[Array.isArray(value) ? 'setIds' : 'setText'](token, key, value); assert.equal(result.ok, true, result.error?.message); };
+function proposed(editor, token) {
+  set(editor, token, 'stageIds', ['pilot']); set(editor, token, 'stage.pilot.label', 'Review the pilot'); set(editor, token, 'stage.pilot.workIds', ['review']);
+  set(editor, token, 'gateIds', ['review-gate']);
+  for (const [key, value] of Object.entries({ label: 'Review next work', afterStageId: 'pilot', reviewerPersonId: 'product-one', question: 'Is the receiving instruction ready?', modeledDecision: 'proceed' })) set(editor, token, `gate.review-gate.${key}`, value);
+  set(editor, token, 'proposalIds', ['followup']);
+  for (const [key, value] of Object.entries({ label: 'Clarify the receiving instruction', teamId: 'delivery', personIds: ['product-one'], gateId: 'review-gate' })) set(editor, token, `proposal.followup.${key}`, value);
+}
+test('raw arrangement previews authored intervals without changing cost, then accepts and restores the full preceding plan', () => {
+  const studio = createStudio(), before = studio.read(), editor = createDraftCoordinator(studio).score;
+  const token = editor.begin('score', before).view.draft.token;
+  set(editor, token, 'windowEnabled', 'yes'); set(editor, token, 'windowLabel', 'Pilot review day'); set(editor, token, 'windowEndMinute', '480');
+  set(editor, token, 'work.review.timed', 'yes'); set(editor, token, 'work.review.startMinute', '60'); set(editor, token, 'work.review.repeatEveryMinutes', '60');
+  set(editor, token, 'availability.product-one.known', 'yes'); set(editor, token, 'availability.product-one.intervalIds', ['morning']);
+  set(editor, token, 'availability.product-one.morning.startMinute', '60'); set(editor, token, 'availability.product-one.morning.endMinute', '480');
+  const proposal = editor.preview(token); assert.equal(proposal.ok, true, proposal.error?.message); assert.strictEqual(studio.read(), before);
+  assert.equal(proposal.summary.money.knownDeltaCents, 0); assert.deepEqual(proposal.projection.score.occurrences.map(row => row.startMinute), [60, 120, 180, 240, 300, 360]);
+  assert.equal(editor.apply(token).ok, true); assert.equal(studio.readHistory().undoCount, 1);
+  assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.read().serialized, before.serialized);
+});
+test('elapsed unit entries preserve exact raw recovery and accept only their minute conversion', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), editor = editing.score, before = studio.read();
+  let token = editor.begin('score', before).view.draft.token;
+  set(editor, token, 'work.review.timed', 'yes'); set(editor, token, 'work.review.startMinute', ' 11h30m '); set(editor, token, 'work.review.repeatEveryMinutes', '1h');
+  const proposal = editor.preview(token); assert.equal(proposal.ok, true, proposal.error?.message);
+  assert.deepEqual(proposal.projection.state.work[0].timing, { startMinute: 690, repeatEveryMinutes: 60 });
+  assert.equal(proposal.summary.money.knownDeltaCents, 0); assert.strictEqual(studio.read(), before);
+  assert.equal(editor.step(token, 'work.review.startMinute', 1).ok, true);
+  assert.equal(editor.read().draft.raw['work.review.startMinute'], '11h 31m');
+  set(editor, token, 'work.review.startMinute', ' 11h3 '); assert.equal(editor.preview(token).error.code, 'integer-text');
+  assert.equal(editing.park().ok, true);
+  const next = structuredClone(before.state); next.purpose.accountableOwner = 'Review owner'; assert.equal(studio.replace(next, before).ok, true);
+  editor.begin('score', studio.read()); const reviewed = editor.review(editor.read().draft.token, studio.read());
+  assert.equal(reviewed.ok, true); token = reviewed.view.draft.token;
+  assert.equal(editor.read().draft.raw['work.review.startMinute'], ' 11h3 ');
+  set(editor, token, 'work.review.startMinute', '11h30m'); assert.equal(editor.apply(token).ok, true);
+  assert.deepEqual(studio.read().state.work[0].timing, { startMinute: 690, repeatEveryMinutes: 60 });
+});
+test('bank choice and modeled proceed preserve money until explicit proposal selection, then publish exactly one ordinary work row', () => {
+  const studio = createStudio(), before = studio.read(), editor = createDraftCoordinator(studio).score;
+  const token = editor.begin('score', before).view.draft.token; proposed(editor, token);
+  assert.equal(editor.preview(token).summary.money.knownDeltaCents, 0); set(editor, token, 'proposal.followup.bank', 'options');
+  assert.equal(editor.preview(token).summary.money.knownDeltaCents, 0); set(editor, token, 'fundProposalIds', ['followup']);
+  const preview = editor.preview(token); assert.equal(preview.ok, true, preview.error?.message); assert.equal(preview.summary.money.knownDeltaCents, 5000);
+  assert.deepEqual(preview.summary.fundedWorkIds, ['followup']); assert.strictEqual(studio.read(), before);
+  assert.equal(editor.apply(token).ok, true); assert.equal(studio.read().state.work.length, 2); assert.deepEqual(studio.read().state.scoreSettings.proposals, []);
+  assert.equal(studio.read().state.work[1].funding, 'additional'); assert.equal(studio.readHistory().undoCount, 1);
+});
+test('invalid timing and ordered availability survive parking and stale review with literal raw text', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), editor = editing.score;
+  let token = editor.begin('score', studio.read()).view.draft.token;
+  set(editor, token, 'work.review.timed', 'yes'); set(editor, token, 'work.review.startMinute', ' later '); set(editor, token, 'work.review.repeatEveryMinutes', '60');
+  set(editor, token, 'availability.product-one.known', 'yes'); set(editor, token, 'availability.product-one.intervalIds', ['late', 'early']);
+  set(editor, token, 'availability.product-one.late.startMinute', '200'); set(editor, token, 'availability.product-one.late.endMinute', '300');
+  set(editor, token, 'availability.product-one.early.startMinute', '0'); set(editor, token, 'availability.product-one.early.endMinute', '100');
+  assert.equal(editing.park().ok, true); const replacement = structuredClone(studio.read().state); replacement.purpose.accountableOwner = 'Pilot reviewer';
+  assert.equal(studio.replace(replacement, studio.read()).ok, true); const current = studio.read();
+  assert.equal(editor.begin('score', current).error.code, 'review-required');
+  const reviewed = editor.review(editor.read().draft.token, current); assert.equal(reviewed.ok, true, reviewed.error?.message); token = reviewed.view.draft.token;
+  assert.equal(editor.read().draft.raw['work.review.startMinute'], ' later '); assert.equal(editor.preview(token).error.code, 'integer-text');
+  set(editor, token, 'work.review.startMinute', '30'); assert.equal(editor.apply(token).ok, true);
+  assert.deepEqual(studio.read().state.people[0].availability, [{ startMinute: 200, endMinute: 300 }, { startMinute: 0, endMinute: 100 }]);
+});
+test('a removed work target remains in the reviewed raw arrangement until its timing row is explicitly removed', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), editor = editing.score;
+  let token = editor.begin('score', studio.read()).view.draft.token; set(editor, token, 'work.review.timed', 'yes'); set(editor, token, 'work.review.repeatEveryMinutes', '60');
+  editing.park(); const candidate = structuredClone(studio.read().state); candidate.work = []; candidate.practices = [];
+  assert.equal(studio.replace(candidate, studio.read()).ok, true);
+  editor.begin('score', studio.read()); const reviewed = editor.review(editor.read().draft.token, studio.read()); assert.equal(reviewed.ok, true, reviewed.error?.message); token = reviewed.view.draft.token;
+  assert.equal(editor.read().draft.raw['work.review.timed'], 'yes'); assert.equal(editor.preview(token).error.code, 'reference');
+  set(editor, token, 'timedWorkIds', []); assert.equal(editor.preview(token).ok, true); assert.equal(editor.apply(token).ok, true);
+  assert.deepEqual(studio.read().state.work, []);
+});
+test('unchanged imported row and interval order preserves bytes, acceptance and history at the revision ceiling', () => {
+  const plan = createExamplePlan(); plan.revision = LIMITS.revision;
+  plan.people.reverse(); plan.people[0].availability = [{ startMinute: 100, endMinute: 200 }, { startMinute: 0, endMinute: 100 }]; plan.people[1].availability = [];
+  plan.scoreSettings.waits = ['later', 'earlier'].map((id, index) => ({ id, label: id, startMinute: index ? 0 : 200, endMinute: index ? 100 : 300, reason: null, receiverPersonId: null }));
+  const studio = createStudio(plan), editor = createDraftCoordinator(studio).score, before = studio.read(), acceptance = studio.readAcceptance();
+  const token = editor.begin('score', before).view.draft.token; assert.equal(editor.read().draft.changed, false);
+  assert.equal(editor.apply(token).ok, true); assert.strictEqual(studio.read(), before); assert.strictEqual(studio.readAcceptance(), acceptance); assert.equal(studio.readHistory().undoCount, 0);
+});
+test('malformed record lists and unowned dynamic fields preserve the active arrangement and reference routes name their families', () => {
+  const studio = createStudio(), editor = createScoreDraftAdapter(studio), before = studio.read();
+  const token = editor.begin('score', before).view.draft.token, raw = editor.read().draft.raw;
+  let reads = 0; const ids = []; Object.defineProperty(ids, '0', { enumerable: true, get() { reads += 1; return 'gate-one'; } });
+  assert.equal(editor.setIds(token, 'gateIds', ids).error.code, 'data-property'); assert.equal(reads, 0); assert.deepEqual(editor.read().draft.raw, raw);
+  assert.equal(editor.setText(token, 'gate.unowned.label', 'Unowned').error.code, 'field'); assert.strictEqual(studio.read(), before);
+  const settings = { stages: [{ id: 'shared', label: 'Review evidence' }], waits: [{ id: 'shared', label: 'Wait for response' }] };
+  const stage = describeScoreReference(settings, { collection: 'scoreSettings', id: 'shared', field: 'stages[0].workIds' });
+  const wait = describeScoreReference(settings, { collection: 'scoreSettings', id: 'shared', field: 'waits[0].receiverPersonId' });
+  assert.equal(stage.label, 'Stage: Review evidence · supporting sessions'); assert.equal(wait.label, 'Wait: Wait for response · receiver'); assert.notEqual(stage.key, wait.key);
+});

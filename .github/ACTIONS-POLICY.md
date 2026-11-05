@@ -119,8 +119,9 @@ eight-minute ceiling, single production concurrency group, branch-restricted
 `prod` environment, credential check, active-receiver condition, and repository
 variable `SCHEMA_WORKER_DEPENDENCY_GATE=open` keep the accepted
 `cloudflare/schemas-worker` bundle aligned with the existing Custom Domain. The
-reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` chain satisfies the
-dependency floor owned by Issue #402. The dependency gate remains a human-held
+reviewed Wrangler `4.155.0` / Miniflare `5.20261023.2-beta` / Undici
+`7.30.1` / Sharp `0.35.5` chain satisfies the dependency floor owned by
+Issue #659. The dependency gate remains a human-held
 activation control. Each admitted job finishes the selected deployment and
 records the accepted repository coordinate. Its deployment log names the new
 Worker version; Cloudflare deployment history and the linked Issue receipt

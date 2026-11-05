@@ -207,7 +207,7 @@ test('loads the complete source inventory as an immutable destination authority'
   const requiredKeys = await sourceTokens();
   const result = await loadPublicRouteReferenceBinding({ requiredKeys });
 
-  assert.equal(requiredKeys.length, 166);
+  assert.equal(requiredKeys.length, 167);
   assert.equal(result.destinations.size, requiredKeys.length);
   assert.equal(isPublicRouteReferenceDestinationAuthority(result.destinations), true);
   assert.equal(result.destinations.set, undefined);
@@ -215,13 +215,13 @@ test('loads the complete source inventory as an immutable destination authority'
     result.routes[0].url = 'https://vik.guru/unreviewed';
   }, TypeError);
   assert.deepEqual(result.receipt.authorityCounts, {
-    page: 85,
+    page: 86,
     asset: 39,
-    iframe: 6,
+    iframe: 5,
     schema: 2,
-    skill: 34,
+    skill: 35,
   });
-  assert.equal(result.receipt.bindingCount, 166);
+  assert.equal(result.receipt.bindingCount, 167);
   assert.deepEqual(Object.keys(result.receipt.sourceDigests), [
     'binding',
     'primary_manifest',
@@ -245,11 +245,11 @@ test('derives page, fragment, asset, iframe, schema, and skill destinations from
   const expected = new Map([
     ['PUBLIC_URL_PAGE_ABOUT', 'https://vik.guru/'],
     ['PUBLIC_URL_PAGE_ABOUT_ABOUT', 'https://vik.guru/#about'],
+    ['PUBLIC_URL_PAGE_ABOUT_STUDIO', 'https://vik.guru/#studio-title'],
     ['PUBLIC_URL_PAGE_EHR_THREE_FRONT_DOORS_ARTICLE', 'https://vik.guru/ehr-three-front-doors.html#article'],
     ['PUBLIC_URL_ASSET_PORTRAIT_OF_VVK_TECHNOLOGY_LEADER', 'https://vik.guru/portrait-of-vvk-technology-leader.jpg'],
     ['PUBLIC_URL_ASSET_VISUALIZATION_FIDELITY_CLEAN_EXEMPLAR', 'https://vik.guru/img/plot/visualization_fidelity_clean_exemplar.svg'],
     ['PUBLIC_URL_IFRAME_CORE_ARCHITECTURES', 'https://iframes.vik.guru/v1/core/'],
-    ['PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS', 'https://iframes.vik.guru/v1/canvas/investment-studio-chapters/'],
     ['PUBLIC_URL_SCHEMA_CONTEXT_CANVAS_CONTEXT', 'https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.context.jsonld'],
     ['PUBLIC_URL_SKILL_CATALOG', 'https://schemas.vik.guru/skills/'],
     ['PUBLIC_URL_SKILL_COLLABORATION_SKILLS_README', 'https://schemas.vik.guru/collaboration-skills/0.1.0/README.md'],

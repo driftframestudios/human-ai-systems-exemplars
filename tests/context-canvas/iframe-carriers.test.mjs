@@ -104,12 +104,6 @@ const expectedCarrierInventory = [
   ],
   [
     primaryIndexOwner,
-    "https://iframes.vik.guru/v1/canvas/investment-studio-chapters/",
-    "Interactive Cross-Functional Investment Studio chapters",
-    "eager",
-  ],
-  [
-    primaryIndexOwner,
     "https://iframes.vik.guru/v1/canvas/prompt-conditions-explorer/",
     "Prompt Conditions Routing Explorer",
     "lazy",
@@ -352,13 +346,13 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
     expectedCarrierInventory,
     "the authored owner, route, title, loading, and source order stay explicit",
   );
-  assert.equal(carriers.length, 27, "the visitor source owns 27 iframe occurrences");
-  assert.equal(new Set(carriers.map(({ src }) => src)).size, 24, "the carriers use 24 routes");
+  assert.equal(carriers.length, 26, "the visitor source owns 26 iframe occurrences");
+  assert.equal(new Set(carriers.map(({ src }) => src)).size, 23, "the carriers use 23 routes");
   assert.equal(new Set(carriers.map(({ owner }) => owner)).size, 18, "18 visitor files own carriers");
   const canvasCarriers = carriers.filter(({ src }) =>
     src.startsWith("https://iframes.vik.guru/v1/canvas/"));
-  assert.equal(canvasCarriers.length, 18, "the Canvas manifest owns 18 carrier occurrences");
-  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 16, "the Canvas carriers use 16 routes");
+  assert.equal(canvasCarriers.length, 17, "the Canvas manifest owns 17 carrier occurrences");
+  assert.equal(new Set(canvasCarriers.map(({ src }) => src)).size, 15, "the Canvas carriers use 15 routes");
   assert.deepEqual(
     routeCountEntries(carriers).filter(([, count]) => count > 1),
     expectedDuplicateRouteCounts,
@@ -473,7 +467,18 @@ test("the retained cobalt exemplar keeps its heatmap and parity for shared prima
   );
   const shared = exemplars.filter(({ src }) => src.endsWith('/ai-method-gallery/'));
   assert.equal(shared.length, 1, "Gallery retains its shared carrier boundary");
-  assert.ok(primary.some(({ src }) => src.endsWith('/investment-studio-chapters/')), "About receives the derived Studio chapters while the exemplar keeps the complete original");
+  assert.equal(primary.some(({ src }) => src.endsWith('/investment-studio-chapters/')), false,
+    "About receives the native Studio while the exemplar keeps the complete original");
+  const about = await readFile(join(repositoryRoot, primaryIndexOwner), "utf8");
+  assert.match(about, /<div\b[^>]*\bdata-native-coordination(?:\s|>)/u,
+    "the About receiver mounts the native plan in its ordinary document flow");
+  const canvasManifest = JSON.parse(await readFile(canvasRouteManifestPath, "utf8"));
+  assert.deepEqual(canvasManifest.routes.filter(({ id }) =>
+    ["cross-functional-investment-studio", "investment-studio-chapters"].includes(id))
+    .map(({ id, source_file }) => [id, source_file]), [
+      ["cross-functional-investment-studio", "collaboration/initiative-costing-calculator/index.html"],
+      ["investment-studio-chapters", "collaboration/about-investment-studio-chapters/index.html"],
+    ], "both established standalone Studio route owners remain available");
   assert.equal(primary.some(({ src }) => src.endsWith('/heatmap-comparison/')), false,
     "About receives the heatmap as native content");
   for (const exemplar of shared) {

@@ -275,8 +275,9 @@ signed-out response evidence.
 and portability role under `cloudflare/schema-delivery/`; production Custom
 Domain authority belongs to the schema Worker.
 
-Issue #402 owns the Wrangler dependency gate. Both reviewed locks now resolve
-Wrangler `4.149.0` through Miniflare `5.20261006.1-alpha` to stable Sharp
+Issue #659 owns the current Wrangler dependency gate; Issue #402 retains the
+preceding accepted coordinate. Both reviewed locks resolve Wrangler `4.155.0`
+through Miniflare `5.20261023.2-beta` to Undici `7.30.1` and stable Sharp
 `0.35.5`. The repository dependency test proves that exact lock topology and
 floor; schema-delivery CI also observes both installed trees. Human-controlled
 receiver and dependency gates hold production activation until an explicitly

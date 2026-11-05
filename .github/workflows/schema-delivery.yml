@@ -68,8 +68,8 @@ jobs:
 
       - name: Observe the installed Wrangler dependency path
         run: |
-          npm ls wrangler miniflare sharp --all
-          npm --prefix cloudflare/schemas-worker ls wrangler miniflare sharp --all
+          npm ls wrangler miniflare undici sharp workerd --all
+          npm --prefix cloudflare/schemas-worker ls wrangler miniflare undici sharp workerd --all
 
       - name: Check schema identities
         run: npm run check:schemas

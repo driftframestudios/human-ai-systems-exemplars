@@ -2952,15 +2952,28 @@ function projectedCssSource(
       `${error instanceof Error ? error.message : error}`,
     );
   }
+  // CSSO's pinned parser retains these modern, bounded forms as raw syntax.
+  // Only the exact argument owned by ::picker(select) receives this exception.
+  const pickerArguments = new WeakSet();
   cssSyntax.walk(ast, function inspectCssNode(node) {
+    if (
+      node.type === "PseudoElementSelector" &&
+      node.name === "picker" &&
+      node.children?.head === node.children?.tail
+    ) {
+      const argument = node.children?.head?.data;
+      if (argument?.type === "Raw" && argument.value === "select") {
+        pickerArguments.add(argument);
+      }
+    }
     const boundedContainerPrelude =
       node.type === "Raw" &&
       this.atrule?.name?.toLowerCase() === "container" &&
       this.atrule.prelude === node &&
-      /^[a-z_][a-z0-9_-]*\s+\(\s*(?:min-|max-)?(?:width|height|inline-size|block-size)\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ch|vw|vh|vmin|vmax)\s*\)$/i.test(
+      /^(?:[a-z_][a-z0-9_-]*\s+)?\(\s*(?:min-|max-)?(?:width|height|inline-size|block-size)\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ch|vw|vh|vmin|vmax)\s*\)$/i.test(
         node.value,
       );
-    if (node.type === "Raw" && !boundedContainerPrelude) {
+    if (node.type === "Raw" && !boundedContainerPrelude && !pickerArguments.has(node)) {
       fail(
         `Production CSS projection rejects invalid or unsupported raw CSS in ${sourcePath}.`,
       );

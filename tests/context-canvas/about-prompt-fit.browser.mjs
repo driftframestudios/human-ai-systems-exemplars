@@ -176,7 +176,8 @@ for (const engine of Object.keys(engines)) {
       await expect.poll(async () => (await fitted(gallery)).content).toBeGreaterThan(galleryHeight + 100);
       assert.equal(await observation.frame.evaluate(() => window.__siblingFitReports), 0, 'an admitted sibling receives no sizing port from another child');
       await observation.frame.evaluate(() => window.__siblingFitPort.close());
-      assert.equal(await observation.page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 1, 'About owns one separately fitted Studio chapter receiver');
+      assert.equal(await observation.page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 0, 'About uses its native Studio receiver');
+      assert.equal(await observation.page.locator('[data-native-coordination]').count(), 1);
     } finally { await observation.close(); }
     const fallback = await session(engine, { childObserverAvailable: false });
     try {

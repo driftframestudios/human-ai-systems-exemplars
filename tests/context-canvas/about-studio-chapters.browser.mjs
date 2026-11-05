@@ -26,7 +26,7 @@ const expected = Object.freeze({ horizonHours: 10, people: 2, allocatedHours: 10
   qualityHours: 0, qualityCost: 0, unknownCost: 0, complexityCost: 192, central: 2592,
   spread: 0.086, low: 2369.088, high: 2814.912 });
 let harness;
-before(async () => { await mkdir(captures, { recursive: true }); harness = await createAboutContentFitHarness(); });
+before(async () => { await mkdir(captures, { recursive: true }); harness = await createAboutContentFitHarness({ retainedStudioHost: true }); });
 after(async () => { await harness?.close(); });
 const session = (engine, options) => harness.session('studio-chapters', engine, options);
 const field = (frame, kind, index, name) => frame.locator(`[data-kind="${kind}"][data-index="${index}"][data-field="${name}"]`);
@@ -54,8 +54,12 @@ async function assertChapterStructure(frame) {
     'the interpretive lens uses its current visitor-facing label');
 }
 async function selectChapter(frame, key) {
+  // The retained source restores edited-field focus on the next frame. Let
+  // that existing render finish before beginning a separate chapter action.
+  await frame.evaluate(() => new Promise(requestAnimationFrame));
   const button = frame.locator(`button[data-studio-chapter="${key}"]`);
   await button.focus(); await button.press('Enter');
+  await frame.evaluate(() => new Promise(requestAnimationFrame));
   await assertChapter(frame, key); await expect(button).toBeFocused();
 }
 async function assertFocusReach(observation, target) {
@@ -68,8 +72,15 @@ async function assertFocusReach(observation, target) {
 }
 async function configureFixture(frame, chaptered) {
   const select = async key => { if (chaptered) await selectChapter(frame, key); };
+  const exclude = async control => {
+    if (await control.isChecked()) { await control.focus(); await control.press('Space'); }
+    await expect(control).not.toBeChecked();
+    await frame.evaluate(() => new Promise(requestAnimationFrame));
+  };
   await select('plan');
-  await frame.locator('[data-preset="1"]').click();
+  await frame.locator('[data-preset="1"]').focus();
+  await frame.locator('[data-preset="1"]').press('Enter');
+  await frame.evaluate(() => new Promise(requestAnimationFrame));
   await expect(frame.locator('[data-preset="1"]')).toHaveAttribute('aria-pressed', 'true');
   if (chaptered) {
     await expect(frame.locator('[data-studio-plan-name]')).toHaveText('Selected starting plan: Data / platform migration');
@@ -82,17 +93,17 @@ async function configureFixture(frame, chaptered) {
   await select('people');
   const roleCount = await frame.locator('[data-kind="role"][data-field="enabled"]').count();
   assert.ok(roleCount >= 2, 'the selected plan supplies a substantive staffing population');
-  for (let index = 1; index < roleCount; index += 1) await field(frame, 'role', index, 'enabled').uncheck();
+  for (let index = 1; index < roleCount; index += 1) await exclude(field(frame, 'role', index, 'enabled'));
   await field(frame, 'role', 0, 'name').fill('Fixture delivery team');
   for (const [name, value] of [['a', '2'], ['b', '100'], ['c', '50']]) await field(frame, 'role', 0, name).fill(value);
   await select('work');
   for (const [kind, values] of [['activity', ['3', '2']], ['disruption', ['2', '4']]]) {
     const count = await frame.locator(`[data-kind="${kind}"][data-field="enabled"]`).count();
     assert.ok(count >= 1);
-    for (let index = 1; index < count; index += 1) await field(frame, kind, index, 'enabled').uncheck();
+    for (let index = 1; index < count; index += 1) await exclude(field(frame, kind, index, 'enabled'));
     await field(frame, kind, 0, 'a').fill(values[0]); await field(frame, kind, 0, 'b').fill(values[1]);
   }
-  await frame.locator('#quality-enabled').uncheck();
+  await exclude(frame.locator('#quality-enabled'));
 }
 async function assertArithmetic(frame) {
   const result = await frame.evaluate(() => window.investmentStaffing.getResult());

@@ -95,13 +95,21 @@ the entry-point inventory below counts the three executable case files separatel
 
 ## Existing direct Core consumers
 
-These 52 current direct browser entry points retain their imports and case
+These 58 current direct browser entry points retain their imports and case
 ownership. The executable selections remain owned by
 `tests/suites/catalog.json`; this table records the broader source inventory
 and does not claim a new execution of every assertion.
 
 | Entry | Retained receiving responsibility |
 | --- | --- |
+| `tests/native-investment-studio/controller.browser.mjs` | Native About coordination controls: independently calculated money/effort, hours/minutes entry, live preview isolation, draft and accepted-state recovery, exact target/base ownership, lifecycle release, focus through disclosures and responsive rearrangement, narrow/enlarged text, forced colors, reduced motion, ordinary page wheel movement, and the preserved full-Studio route in three engines. |
+| `tests/native-investment-studio/assembly.browser.mjs` | Native People and Teams: exact creation amounts, ordered memberships, referenced removal, stale draft and imported collision recovery, compact input geometry, callback ownership, and About scrolling in three engines. |
+| `tests/native-investment-studio/session.browser.mjs` | Complete working sessions: exact participant and funding arithmetic, selection and saved edits across chapters, stale recovery, reference-aware removal, empty-plan creation, compact controls, receiver retirement and successor focus, and ordinary About scrolling in three engines. |
+| `tests/native-investment-studio/connection.browser.mjs` | Connection form and diagram/list agreement, stable references, pause accounting, saved-edit recovery, focus, local horizontal inspection and ordinary vertical reading across three engines. |
+| `tests/native-investment-studio/connection-template.browser.mjs` | Bounded coordination template configuration, atomic preview and Apply, stale intent, cancellation, exact recovery-work accounting and cross-engine reading. |
+| `tests/native-investment-studio/responsibility.browser.mjs` | People role details and human review assignments: complete-field meaning, stable human/session references, unchanged money, saved and stale recovery, ordered supporting work, narrow reading, focus and synchronous lifecycle ownership in three engines. |
+| `tests/native-investment-studio/team-controller.browser.mjs` | Native About Team Assembly: person rates and funded time, independently calculated investment and capacity, draft and accepted-state isolation, stale recovery, focus and keyboard editing, responsive containment, ordinary page scrolling, and the preserved full-Studio route in three engines. |
+| `tests/native-investment-studio/shell.browser.mjs` | Native About chapters: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, descendant fragments and history, visible focus, reduced motion, parent scrolling, and scriptless fallback in three engines. |
 | `tests/context-canvas/about-heatmap.browser.mjs` | Native About comparison state, exact figure identity, scriptless and print reading, enlarged-text containment, keyboard focus, page wheel movement, and controlled state/layout faults in three engines. |
 | `tests/context-canvas/about-gallery-fit.browser.mjs` | About Gallery natural body/footer height, disclosure growth/shrinkage, retained selections, per-document channel and fallback, parent wheel movement, local package substitution, and restored bounded-height fault in three engines. |
 | `tests/context-canvas/about-prompt-fit.browser.mjs` | Five-condition Explorer state, parent/document/local-region scroll ownership, natural height, narrow/enlarged text, keyboard, two-frame isolation, fallback, and static/print readings in three engines. |

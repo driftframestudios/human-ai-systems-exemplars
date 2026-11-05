@@ -149,8 +149,9 @@ an eight-minute ceiling, serializes in one production group, uses the
 branch-restricted `prod` GitHub environment, and also requires `prod` in
 `DEPLOYMENT_ACTIVE_RECEIVERS` plus the repository variable
 `SCHEMA_WORKER_DEPENDENCY_GATE=open`. The receiver's documented resting value is
-`[]`. The reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` locks satisfy
-the dependency floor owned by Issue #402; the dependency gate remains a separate
+`[]`. The reviewed Wrangler `4.155.0` / Miniflare `5.20261023.2-beta` /
+Undici `7.30.1` / Sharp `0.35.5` locks satisfy the dependency floor owned
+by Issue #659; the dependency gate remains a separate
 human-held activation control. Preserve that activation posture and the recorded 300-minute allocation for
 each branch per collaboration cycle. Current live variable values and remaining
 allocation require their own account observation.

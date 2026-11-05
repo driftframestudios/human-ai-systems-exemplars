@@ -324,8 +324,8 @@ async function settle(page) {
   await page.waitForTimeout(300);
 }
 
-async function renderedSnapshot(page) {
-  return page.evaluate(async () => {
+async function renderedSnapshot(page, projection, surface) {
+  return page.evaluate(async ({ routes, surface }) => {
     const round = value => Math.round(value * 64) / 64;
     const digest = async value => {
       const bytes = new TextEncoder().encode(value);
@@ -379,7 +379,25 @@ async function renderedSnapshot(page) {
       records[index].styleDigest = styleDigest;
     }
     const root = document.documentElement;
-    const bodyMarkup = document.body.outerHTML;
+    // Native onward links resolve against each surface's real base. Compare
+    // their exact manifest-owned destination while retaining every other byte.
+    const body = document.body.cloneNode(true);
+    const projectedPaths = new Map(routes);
+    const projectedOwners = new Set(projectedPaths.values());
+    const prefix = surface === "source" ? "/source/" : "/projected/";
+    for (const anchor of body.querySelectorAll("a[href]")) {
+      const authored = anchor.getAttribute("href");
+      if (!/^https?:\/\//iu.test(authored)) continue;
+      const url = new URL(authored);
+      if (url.username || url.password || url.origin !== location.origin || !url.pathname.startsWith(prefix)) continue;
+      const path = url.pathname.slice(prefix.length);
+      const projected = surface === "source" ? projectedPaths.get(path)
+        : projectedOwners.has(path) ? path : undefined;
+      if (projected !== undefined) {
+        anchor.setAttribute("href", `primary-route:${projected}${url.search}${url.hash}`);
+      }
+    }
+    const bodyMarkup = body.outerHTML;
     const bodyText = document.body.textContent?.replace(/\s+/gu, " ").trim() ?? "";
     return {
       structureDigest: await digest(bodyMarkup),
@@ -403,7 +421,7 @@ async function renderedSnapshot(page) {
         routeCards: document.querySelectorAll(".about-route-grid > a").length,
       },
     };
-  });
+  }, { routes: [...projection.projectedPaths], surface });
 }
 
 function compactSnapshot(snapshot) {
@@ -512,6 +530,20 @@ function assertTelemetry(telemetry, parentOrigin, label) {
   assert.deepEqual(classified.remainingRequestFailures, [], `${label}: no unexpected request failures`);
   assert.deepEqual(classified.policyObservations, [], `${label}: every encountered iframe refusal is complete`);
   return classified.expectedRefusals.map(observation => observation.url).sort();
+}
+
+async function exerciseIframeBoundary(page, observation) {
+  if (observation.telemetry.requestFailureDetails.some(failure =>
+    failure.url.startsWith("https://iframes.vik.guru/"))) return;
+  // About's remaining hosted receivers are lazy. Request one after the initial
+  // reading so this separate policy fixture still exercises its refusal.
+  const refused = page.waitForEvent("requestfailed", {
+    predicate: request => request.url().startsWith("https://iframes.vik.guru/"),
+  });
+  await page.locator('iframe[src^="https://iframes.vik.guru/"]').first()
+    .evaluate(frame => { frame.loading = "eager"; });
+  await refused;
+  await settle(page);
 }
 
 async function interactionReceipt(page) {
@@ -644,8 +676,8 @@ async function runScenario(browser, server, projection, viewport, mode) {
     await Promise.all([settle(sourcePage), settle(projectedPage)]);
 
     const [sourceSnapshot, projectedSnapshot] = await Promise.all([
-      renderedSnapshot(sourcePage),
-      renderedSnapshot(projectedPage),
+      renderedSnapshot(sourcePage, projection, "source"),
+      renderedSnapshot(projectedPage, projection, "projected"),
     ]);
     assertContained(sourceSnapshot, `${label}/source`);
     assertContained(projectedSnapshot, `${label}/projected`);
@@ -693,6 +725,18 @@ async function runScenario(browser, server, projection, viewport, mode) {
       mode.forcedColors === "none" &&
       mode.reducedMotion === "no-preference"
     ) {
+      const onward = projectedPage.locator(`a[href^="${server.origin}/projected/"]`).first();
+      const acceptedHref = await onward.getAttribute("href");
+      assert.ok(acceptedHref, `${label}: native onward routing participates in structural parity`);
+      try {
+        await onward.evaluate((anchor, href) => { anchor.setAttribute("href", href); },
+          `${server.origin}/projected/index.html#studio-title`);
+        const changed = await renderedSnapshot(projectedPage, projection, "projected");
+        assert.notEqual(changed.structureDigest, projectedSnapshot.structureDigest,
+          `${label}: a different manifest-owned destination remains a structural change`);
+      } finally {
+        await onward.evaluate((anchor, href) => { anchor.setAttribute("href", href); }, acceptedHref);
+      }
       const [sourceInteractions, projectedInteractions] = await Promise.all([
         interactionReceipt(sourcePage),
         interactionReceipt(projectedPage),
@@ -744,6 +788,10 @@ async function runScenario(browser, server, projection, viewport, mode) {
     assertStylesheetResponses(sourceObservation.stylesheets, sourceExpected, `${label}/source`);
     assertStylesheetResponses(projectedObservation.stylesheets, projectedExpected, `${label}/projected`);
 
+    await Promise.all([
+      exerciseIframeBoundary(sourcePage, sourceObservation),
+      exerciseIframeBoundary(projectedPage, projectedObservation),
+    ]);
     const sourceRefusals = assertTelemetry(sourceObservation.telemetry, server.origin, `${label}/source`);
     const projectedRefusals = assertTelemetry(projectedObservation.telemetry, server.origin, `${label}/projected`);
     assert.ok(

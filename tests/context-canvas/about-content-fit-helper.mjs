@@ -13,14 +13,15 @@ export const aboutPath = '/context-canvas-project-surface/context-canvas/index.h
 export const engines = { chromium, firefox, webkit };
 export const receivers = Object.freeze({
   gallery: { label: 'Gallery', path: '/v1/canvas/ai-method-gallery/' },
-  'studio-chapters': { label: 'Studio chapters', path: '/v1/canvas/investment-studio-chapters/' },
   'prompt-conditions': { label: 'Prompt Conditions Explorer', path: '/v1/canvas/prompt-conditions-explorer/' },
 });
+const retainedStudio = { label: 'Retained Studio chapters', path: '/v1/canvas/investment-studio-chapters/' };
 
 // These About receivers share their packaged transport, opaque sandbox,
 // telemetry, geometry and cleanup mechanics. Cases retain content expectations.
-export async function createAboutContentFitHarness() {
+export async function createAboutContentFitHarness({ retainedStudioHost = false } = {}) {
   const browsers = new Map();
+  const hostedReceivers = retainedStudioHost ? { ...receivers, 'studio-chapters': retainedStudio } : receivers;
   let parentServer, childServer, temporaryRoot;
   async function close() {
     try { await Promise.all([...browsers.values()].map(browser => browser.close())); }
@@ -34,13 +35,33 @@ export async function createAboutContentFitHarness() {
   }
   try {
     let parentHtml = await readFile(join(root, aboutPath), 'utf8');
+    // The closed cartography object has a separate static-reading owner. Keep
+    // its DOM while limiting these fit journeys to their named child packages.
+    parentHtml = parentHtml.replace('data="../img/plot/about_prompt_conditions_cartography.svg"',
+      'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
+    if (retainedStudioHost) {
+      // The retained package keeps its transport contract in an explicit host
+      // fixture. Production About now receives the native Studio directly.
+      const opening = '<section class="about-field about-field--studio"';
+      const start = parentHtml.indexOf(opening), end = parentHtml.indexOf('<section class="about-field ', start + opening.length);
+      assert.ok(start > 0 && end > start);
+      const host = `<section class="about-field about-field--studio"><div class="about-reading">
+        <h2>Retained Studio chapter package</h2><div class="about-embed">
+        <iframe title="Retained Investment Studio chapters" data-about-content-fit="studio-chapters"
+          src="https://iframes.vik.guru${retainedStudio.path}" loading="eager"
+          sandbox="allow-downloads allow-popups allow-popups-to-escape-sandbox allow-scripts"
+          allow="clipboard-write" referrerpolicy="no-referrer"></iframe></div>
+        <a href="../../collaboration/initiative-costing-calculator/index.html">Open the full studio</a>
+        </div></section>`;
+      parentHtml = parentHtml.slice(0, start) + host + parentHtml.slice(end);
+    }
     const plan = await createCanvasPackagePlan();
     temporaryRoot = await mkdtemp(join(tmpdir(), 'about-content-fit-package-'));
     await writePackagePlan(plan, join(temporaryRoot, 'v1/canvas'));
     parentServer = await startStaticServer(root);
     childServer = await startStaticServer(temporaryRoot);
     assert.notEqual(parentServer.origin, childServer.origin, 'the packaged children have a distinct receiving origin');
-    for (const [key, receiver] of Object.entries(receivers)) {
+    for (const [key, receiver] of Object.entries(hostedReceivers)) {
       assert.ok(parentHtml.includes(`data-about-content-fit="${key}"`), `${receiver.label} explicitly opts into About content fitting`);
       const source = `src="https://iframes.vik.guru${receiver.path}"`;
       assert.equal(parentHtml.split(source).length, 2, `${receiver.label} retains one exact hosted carrier`);
@@ -90,10 +111,10 @@ export async function createAboutContentFitHarness() {
       }
     }
     async function session(key, engine, options = {}) {
-      assert.ok(Object.hasOwn(receivers, key), 'the harness admits a named About receiver');
+      assert.ok(Object.hasOwn(hostedReceivers, key), 'the harness admits a named receiver');
       const parent = await parentSession(engine, options);
       try { return { ...parent, ...await receiverInPage(parent.page, key) }; }
-      catch (error) { await parent.close(); throw new Error(`${receivers[key].label} child setup`, { cause: error }); }
+      catch (error) { await parent.close(); throw new Error(`${hostedReceivers[key].label} child setup`, { cause: error }); }
     }
     return { browsers, parentServer, childServer, session, parentSession, close };
   } catch (error) { await close(); throw error; }
@@ -104,7 +125,7 @@ export async function receiverInPage(page, key) {
   await carrier.scrollIntoViewIfNeeded();
   const frame = await (await carrier.elementHandle()).contentFrame();
   await frame.locator('main').waitFor();
-  return { page, carrier, frame, label: receivers[key].label };
+  return { page, carrier, frame, label: (receivers[key] ?? (key === 'studio-chapters' ? retainedStudio : null)).label };
 }
 
 export async function fitted(observation) {

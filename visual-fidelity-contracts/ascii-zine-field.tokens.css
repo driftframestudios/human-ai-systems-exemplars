@@ -1,0 +1,98 @@
+/* ASCII Zine Field: reference mappings; each receiving route owns its adapters. */
+:root {
+  --azf-paper: #fff8ec;
+  --azf-panel: #fffdf7;
+  --azf-ink: #172f42;
+  --azf-muted: #4d5d61;
+  --azf-cobalt: #1d47bd;
+  --azf-tiffany: #d0f1e9;
+  --azf-tiffany-ink: #126059;
+  --azf-rose: #f2d2d8;
+  --azf-rose-ink: #803747;
+  --azf-line: #71817e;
+  --azf-font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --azf-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --azf-measure: 66ch;
+  --azf-space: clamp(1rem, 2.6vw, 2rem);
+  --azf-shadow: .3rem .3rem 0 var(--azf-ink);
+  --azf-rule: 2px solid var(--azf-ink);
+  --azf-select-caret-inset: 20px;
+}
+
+.azf-field { color-scheme: light; background: var(--azf-paper); color: var(--azf-ink); font: 1rem/1.55 var(--azf-font-body); }
+.azf-field *, .azf-field *::before, .azf-field *::after { box-sizing: border-box; }
+.azf-field :where(h1, h2, h3, p, pre) { margin-block-start: 0; }
+.azf-field :where(p, li, dd, figcaption) { max-inline-size: var(--azf-measure); }
+.azf-field :where(h1, h2, h3) { line-height: 1.08; text-wrap: balance; overflow-wrap: anywhere; }
+.azf-field a { color: var(--azf-cobalt); text-underline-offset: .2em; }
+.azf-field :focus-visible { outline: 3px solid var(--azf-cobalt); outline-offset: 4px; }
+.azf-masthead { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--azf-space); align-items: start; padding-block: var(--azf-space); border-block-start: 8px solid var(--azf-ink); border-block-end: var(--azf-rule); }
+.azf-masthead > *, .azf-grid > * { min-inline-size: 0; }
+.azf-masthead h1 { max-inline-size: 13ch; margin-block-end: 1rem; font-size: clamp(2.5rem, 7vw, 5.8rem); letter-spacing: -.06em; }
+.azf-stamp { display: inline-block; margin-block-end: .8rem; padding: .2rem .5rem; border-block: 1px solid currentColor; font: 700 .8125rem/1.5 var(--azf-font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.azf-amp { padding: var(--azf-space); border: var(--azf-rule); background: var(--azf-ink); color: var(--azf-paper); box-shadow: .4rem .4rem 0 var(--azf-tiffany-ink); }
+.azf-amp h2 { font-size: 1.8rem; }
+.azf-amp .azf-ornament { color: var(--azf-tiffany); }
+.azf-amp a { color: var(--azf-tiffany); }
+.azf-amp :focus-visible { outline-color: var(--azf-paper); }
+.azf-ornament { display: block; max-inline-size: 100%; overflow: hidden; margin-block-end: 0; color: var(--azf-tiffany-ink); font: 700 .8125rem/1.15 var(--azf-font-mono); white-space: pre; user-select: none; }
+.azf-rule { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-block: 2rem 1rem; padding-block-end: .7rem; border-block-end: 1px dashed var(--azf-ink); }
+.azf-rule h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+.azf-rule .azf-ornament { margin-inline-start: auto; }
+.azf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.azf-card { min-inline-size: 0; padding: var(--azf-space); border: var(--azf-rule); background: var(--azf-panel); box-shadow: var(--azf-shadow); }
+.azf-card h3 { font-size: 1.35rem; }
+.azf-card > :last-child, .azf-amp > :last-child { margin-block-end: 0; }
+.azf-card--tiffany { background: var(--azf-tiffany); }
+.azf-patch { padding: 1rem; border: 2px dashed var(--azf-ink); border-inline-start-width: .45rem; background: var(--azf-tiffany); }
+.azf-patch h3, .azf-slip h3 { margin-block-end: .5rem; }
+.azf-slip { padding: 1rem; border: 2px solid var(--azf-rose-ink); border-block-start: .5rem solid var(--azf-rose-ink); background: var(--azf-rose); color: var(--azf-ink); }
+.azf-slip .azf-stamp { color: var(--azf-rose-ink); }
+.azf-note { color: var(--azf-muted); font-size: .9375rem; }
+.azf-field label { display: block; }
+.azf-field :where(input, select, textarea, button) { max-inline-size: 100%; font: inherit; }
+.azf-field :where(select, input[type="text"], textarea) { inline-size: 100%; min-block-size: 44px; margin-block: .4rem 1rem; padding: .55rem .65rem; border: 2px solid var(--azf-line); border-radius: .2rem; background: var(--azf-panel); color: var(--azf-ink); }
+.azf-select { position: relative; margin-block: .4rem 1rem; }
+.azf-select select { appearance: none; margin: 0; padding-inline-end: calc(var(--azf-select-caret-inset) + 1.5rem); }
+.azf-select::after { content: ""; position: absolute; inset-inline-end: var(--azf-select-caret-inset); inset-block-start: 50%; inline-size: .5rem; block-size: .5rem; border-inline-end: 2px solid var(--azf-ink); border-block-end: 2px solid var(--azf-ink); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.azf-field [aria-invalid="true"] { border-color: var(--azf-rose-ink); border-style: dashed; }
+.azf-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: .75rem; align-items: stretch; margin-block: 1rem; }
+.azf-button { min-block-size: 44px; padding: .6rem .85rem; border: var(--azf-rule); border-radius: .35rem; background: var(--azf-panel); color: var(--azf-ink); box-shadow: .15rem .15rem 0 var(--azf-ink); font-weight: 750 !important; text-align: center; overflow-wrap: anywhere; cursor: pointer; }
+.azf-button:hover { text-decoration: underline; text-underline-offset: .2em; }
+.azf-button:active { box-shadow: inset 2px 2px 0 currentColor; }
+.azf-button--primary { border-color: var(--azf-cobalt); background: var(--azf-cobalt); color: var(--azf-panel); }
+.azf-button--remove { border-color: var(--azf-rose-ink); background: var(--azf-rose); color: var(--azf-rose-ink); }
+.azf-disclosure { margin-block: 1rem; border-block: 1px solid var(--azf-line); }
+.azf-disclosure summary { min-block-size: 44px; padding: .7rem .15rem; cursor: pointer; font-weight: 700; }
+.azf-disclosure summary > span { display: block; margin-inline-start: 1.2rem; color: var(--azf-muted); font-size: .9375rem; font-weight: 400; }
+.azf-disclosure > :not(summary) { margin-inline: 1.2rem; }
+.azf-choice { display: flex !important; align-items: center; gap: .7rem; min-block-size: 44px; padding-block: .5rem; }
+.azf-choice input { flex: 0 0 auto; inline-size: 1.2rem; block-size: 1.2rem; accent-color: var(--azf-cobalt); }
+.azf-status { min-block-size: 3.2em; margin-block-end: 0; overflow-wrap: anywhere; font-weight: 650; }
+.azf-inspection { max-inline-size: 100%; overflow: auto; padding: .5rem; border: 1px solid var(--azf-line); }
+.azf-inspection pre { inline-size: max-content; min-inline-size: 100%; margin: 0; font: .875rem/1.4 var(--azf-font-mono); }
+
+@media (max-width: 42rem) {
+  .azf-masthead, .azf-grid { grid-template-columns: minmax(0, 1fr); }
+  .azf-rule .azf-ornament { margin-inline-start: 0; }
+}
+@media (forced-colors: active) {
+  .azf-field, .azf-card, .azf-amp, .azf-patch, .azf-slip { color: CanvasText; background: Canvas; border-color: CanvasText; box-shadow: none; }
+  .azf-ornament { display: none; }
+  .azf-button { color: ButtonText; background: ButtonFace; border-color: ButtonText; box-shadow: none; }
+  .azf-button--primary { border-width: 3px; }
+  .azf-button--remove { border-style: dashed; }
+  .azf-select select { appearance: auto; padding-inline-end: .65rem; }
+  .azf-select::after { display: none; }
+  .azf-field a, .azf-amp a { color: LinkText; }
+  .azf-field :focus-visible, .azf-amp :focus-visible { outline-color: Highlight; }
+}
+@media print {
+  .azf-field, .azf-card, .azf-amp, .azf-patch, .azf-slip { color: #000; background: #fff; border-color: #000; box-shadow: none; }
+  .azf-ornament, .azf-actions { display: none; }
+  .azf-grid, .azf-masthead { grid-template-columns: minmax(0, 1fr); }
+  .azf-card, .azf-patch, .azf-slip { break-inside: avoid; }
+  .azf-disclosure::details-content { content-visibility: visible; display: block; }
+  .azf-disclosure > :not(summary) { display: block; }
+  .azf-field a, .azf-note, .azf-slip .azf-stamp { color: #000; }
+}

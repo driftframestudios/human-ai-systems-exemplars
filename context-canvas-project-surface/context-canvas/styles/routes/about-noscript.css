@@ -2,3 +2,8 @@
 .about-page .about-prompt-explorer {
   display: none;
 }
+
+/* The static Studio retains its example and full-view route. */
+.native-coordination :is(button, input, select, textarea) {
+  display: none;
+}
