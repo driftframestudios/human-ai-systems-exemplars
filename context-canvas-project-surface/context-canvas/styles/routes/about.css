@@ -1387,7 +1387,7 @@ p#on-dark-iron-ore {
     text-transform: uppercase;
 }
 
-.about-folio-case dt:nth-of-type(4) {
+.about-folio-case dt:nth-of-type(3) {
     border-inline-start: .24rem solid var(--about-coral);
     color: var(--about-ink-strong);
     padding-inline-start: .35rem;
