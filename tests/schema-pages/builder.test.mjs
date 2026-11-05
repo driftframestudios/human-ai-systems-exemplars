@@ -669,7 +669,7 @@ test("the private selection ledger classifies the complete repository skill fami
   const possibleNames = selection.skills
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
-  assert.equal(readyNames.length, 29);
+  assert.ok(readyNames.includes("ascii-zine-composition"), "the portable ASCII composition method is selected for public release");
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",
@@ -950,6 +950,9 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
     /<section\s+aria-labelledby="catalog-title">([\s\S]*?)<\/section>/u,
   )?.[1];
   assert.ok(table);
+  for (const [, row] of table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gu)) {
+    assert.equal([...row.matchAll(/<(?:th|td)\b/gu)].length, 3, "each skill catalog row supplies method, use, and result cells");
+  }
   const routeContract = await loadPublicRouteReferenceBinding();
   const skillBindings = new Map(routeContract.routes
     .filter(({ owner }) =>

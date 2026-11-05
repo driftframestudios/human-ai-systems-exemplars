@@ -23,6 +23,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     ['status', '[data-person-status]'], ['empty', '[data-team-empty]'],
     ['recovery', '[data-person-recovery]'], ['current', '[data-person-current]'],
   ].map(([key, selector]) => [key, find(selector)]));
+  const summaryPreview = document.createElement('span');
+  summaryPreview.className = 'native-coordination__summary-preview';
+  elements.summary.append(summaryPreview);
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
@@ -114,6 +117,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     elements.fieldset.disabled = view.status !== 'editing';
     elements.recovery.hidden = view.status !== 'stale';
     const currentPerson = people.get(selectedId);
+    summaryPreview.textContent = currentPerson
+      ? ` · ${currentPerson.rateCentsPerHour === null ? 'Add an hourly rate' : `${money(currentPerson.rateCentsPerHour)}/hour`} · ${duration(currentPerson.fundedMinutes)} funded${view.draft?.changed ? ' · Unsaved edits' : ''}`
+      : ' · Choose a person';
     elements.current.textContent = currentPerson
       ? `Current values: ${currentPerson.rateCentsPerHour === null ? 'hourly rate unknown' : `${money(currentPerson.rateCentsPerHour)}/hour`} · ${duration(currentPerson.fundedMinutes)} funded.`
       : 'This person has been removed. The saved values remain below.';
@@ -246,6 +252,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const active = editing.read().active;
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
+    summaryPreview.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
     if (!sharedEditing) editing.dispose();

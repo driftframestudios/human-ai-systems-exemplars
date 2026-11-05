@@ -7,7 +7,7 @@ import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
-import { describeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
@@ -60,6 +60,12 @@ export function mountCoordinationPanel(root, options = {}) {
   let renderedSaved = [];
   let savedProjection = null;
   const savedByKey = new Map();
+  const returnRoutes = [];
+  const returnRegion = root.querySelector('[data-native-return-route]');
+  const returnNote = returnRegion?.querySelector('[data-native-return-note]');
+  const returnButton = returnRegion?.querySelector('[data-native-return-action]');
+  const returnTeamButton = returnRegion?.querySelector('[data-native-return-team]');
+  let pendingReturnFocus = null;
 
   function listen(target, type, handler) {
     target.addEventListener(type, handler);
@@ -85,6 +91,131 @@ export function mountCoordinationPanel(root, options = {}) {
     if (kind !== 'session') workPanel?.close({ park: false });
     if (kind !== 'connection') connectionPanel?.close({ park: false });
     if (kind !== 'template') templatePanel?.close();
+  }
+
+  function renderReturnRoute() {
+    const drafts = editing.read();
+    const retained = route => drafts.active?.kind === route.kind && drafts.active.targetId === route.target
+      || drafts.parked.some(record => record.kind === route.kind && record.targetId === route.target);
+    for (let index = returnRoutes.length - 1; index >= 0; index -= 1) {
+      const route = returnRoutes[index], descriptor = TARGET_READERS[route.kind]?.(route.target);
+      if (route.held && !retained(route) || !route.held && descriptor?.mode !== 'create' && descriptor
+        && !studio.read().state[descriptor.collection].some(row => row.id === descriptor.id)) returnRoutes.splice(index, 1);
+    }
+    if (pendingReturnFocus && !retained(pendingReturnFocus)) pendingReturnFocus = null;
+    if (!returnRegion || !returnNote || !returnButton) return;
+    const route = returnRoutes.at(-1);
+    returnRegion.hidden = !route;
+    if (returnTeamButton) returnTeamButton.hidden = true;
+    if (!route) return;
+    const state = studio.read().state;
+    const collection = { person: 'people', team: 'teams', session: 'work' }[route.createdKind];
+    const created = collection ? state[collection].find(row => row.id === route.createdId) : null;
+    const createdLabel = created?.label;
+    const team = state.teams.find(row => row.id === route.requiredTeamId);
+    const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement' }[route.kind];
+    returnButton.textContent = `Return to ${destination}`;
+    returnNote.textContent = createdLabel
+      ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
+      : `Your ${destination} entries are saved while you ${route.creating === 'team' ? 'create a team' : route.creating === 'session' ? 'add a session' : 'add a person'}.`;
+    if (route.createdId && !created) returnNote.textContent = `The added ${route.createdKind} is outside the current plan. Your ${destination} entries remain saved. Return to choose an available ${route.createdKind} or create another.`;
+    if (createdLabel && route.field && route.createdKind === 'team') returnNote.textContent = `${createdLabel} is ready. Return to review your saved entries and select it as the ${route.field === 'senderTeamId' ? 'sending team' : route.field === 'receiverTeamId' ? 'receiving team' : 'session team'}.`;
+    if (needsMembership && returnTeamButton) {
+      returnNote.textContent = `${createdLabel} is ready. Include them in ${team.label}, then return to choose them as the receiving person.`;
+      returnTeamButton.hidden = false; returnTeamButton.textContent = `Add ${createdLabel} to ${team.label}`;
+    }
+  }
+  function retainReturnAncestors(kind, target) {
+    const repeated = returnRoutes.findIndex(route => route.kind === kind && route.target === target);
+    if (repeated >= 0) { returnRoutes.splice(repeated); return; }
+    const descriptor = TARGET_READERS[kind]?.(target);
+    const parent = returnRoutes.findLastIndex(route => {
+      const destinationKind = route.creating === 'session' ? 'session' : 'assembly';
+      return destinationKind === kind && (route.creationTarget === target
+        || route.createdId && descriptor?.id === route.createdId
+          && descriptor.collection === (route.creating === 'person' ? 'people' : route.creating === 'team' ? 'teams' : 'work'))
+        || kind === 'assembly' && route.continuationTarget === target;
+    });
+    // Return routes describe the current detour. Saved drafts keep their own
+    // recovery owner when a visitor starts a different task or resumes an ancestor.
+    returnRoutes.splice(parent + 1);
+  }
+  function createPrerequisite(button) {
+    const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
+    if (!['session', 'connection', 'assembly', 'contribution', 'template'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
+    const view = kind === 'template' ? null : editing[kind].read();
+    const target = view?.draft?.[{ session: 'sessionId', connection: 'connectionId', assembly: 'assemblyId', contribution: 'contributionId' }[kind]];
+    if (kind !== 'template' && !target) { announce('Open the settings you want to continue, then add what they need.'); return; }
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const held = editing.read().parked.some(record => record.kind === kind && record.targetId === target);
+    chapterShell?.select(creating === 'session' ? 'coordination' : 'people');
+    const result = creating === 'session' ? workPanel?.create() : assemblyPanel?.create(`${creating}.create`);
+    if (!result?.ok) { announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
+    pendingReturnFocus = null;
+    retainReturnAncestors(kind, target);
+    returnRoutes.push({ kind, target, creating, held, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
+      field: button.dataset.nativeReturnField ?? (kind === 'session' && creating === 'team' ? 'teamId' : kind === 'connection' && creating === 'person' ? 'receiverPersonId' : null),
+      requiredTeamId: kind === 'connection' && creating === 'person' ? view.draft.raw.receiverTeamId : null });
+    renderReturnRoute();
+    announce(`Your ${kind === 'assembly' ? 'team' : kind === 'template' ? 'arrangement' : kind} entries are saved.`);
+  }
+  function returnToDraft() {
+    const route = returnRoutes.at(-1);
+    if (!route) return;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    chapterShell?.select(['assembly', 'contribution'].includes(route.kind) ? 'people' : 'coordination');
+    if (route.kind === 'template') {
+      if (!templatePanel?.open()) return;
+      returnRoutes.pop(); render(); renderReturnRoute();
+      root.querySelector('[data-template-choice]')?.focus();
+      announce('Your arrangement entries are ready. Choose the added person and preview the arrangement.');
+      return;
+    }
+    const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel }[route.kind];
+    const result = panel.open(route.target);
+    if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
+    pendingReturnFocus = route.field ? { kind: route.kind, target: route.target, field: route.field } : null;
+    returnRoutes.pop(); render(); renderReturnRoute();
+    focusReturnedField();
+    announce(result.view.status === 'stale' ? 'Your entries are here. Review them against the updated plan, then continue.' : 'Your entries are ready to continue.');
+  }
+  function prerequisiteCreated(descriptor) {
+    const route = returnRoutes.at(-1);
+    if (!route || (describeAssemblyTarget(route.creationTarget) ?? describeSessionTarget(route.creationTarget))?.id !== descriptor.id) return;
+    route.createdId = descriptor.id;
+    route.createdKind = descriptor.collection === 'people' ? 'person' : descriptor.collection === 'work' ? 'session' : 'team';
+    renderReturnRoute();
+  }
+
+  function addCreatedPersonToTeam() {
+    const route = returnRoutes.at(-1), team = studio.read().state.teams.find(row => row.id === route?.requiredTeamId);
+    const person = studio.read().state.people.find(row => row.id === route?.createdId);
+    if (!route || !team || !person) return;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    chapterShell?.select('people');
+    const target = makeAssemblyTarget('team.update', team.id);
+    const result = assemblyPanel?.open(target);
+    if (!result?.ok || result.view.status !== 'editing') { announce(`Review the saved team entries, then select ${person.label}.`); return; }
+    route.continuationTarget = target;
+    const ids = result.view.draft.raw.personIds;
+    if (!ids.includes(route.createdId)) editing.assembly.setIds(result.view.draft.token, 'personIds', [...ids, route.createdId]);
+    render();
+    root.querySelector('[data-assembly-apply]')?.focus();
+    announce(`Review the selected people, then Apply team to include ${person.label}.`);
+  }
+  function focusReturnedField() {
+    if (!pendingReturnFocus) return;
+    const { kind, target, field } = pendingReturnFocus, view = editing[kind].read();
+    const key = { session: 'sessionId', connection: 'connectionId', contribution: 'contributionId', assembly: 'assemblyId' }[kind];
+    if (view.status !== 'editing' || view.draft?.[key] !== target) return;
+    const scope = { session: '[data-native-session-editor]', connection: '[data-native-connection-editor]', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]' }[kind];
+    const input = root.querySelector(`${scope} [name="${field}"]`);
+    if (input) input.focus();
+    pendingReturnFocus = null;
   }
 
   function renderSaved(projection) {
@@ -205,6 +336,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!current()) return editor.read();
     renderAccepted(view.projection);
     renderSaved(view.projection);
+    renderReturnRoute();
     root.dataset.nativeState = view.status;
     teamPanel?.refresh();
     if (!current()) return editor.read();
@@ -229,10 +361,19 @@ export function mountCoordinationPanel(root, options = {}) {
   function click(event) {
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
+    if (button.hasAttribute('data-native-create')) { createPrerequisite(button); return; }
+    if (button.hasAttribute('data-native-return-action')) { returnToDraft(); return; }
+    if (button.hasAttribute('data-native-return-team')) { addCreatedPersonToTeam(); return; }
+    if (['review', 'use-current', 'useCurrent'].includes(button.dataset.action ?? button.dataset.sessionAction ?? button.dataset.connectionAction ?? button.dataset.responsibilityAction ?? button.dataset.assemblyAction)) focusReturnedField();
     if (button.dataset.savedDiscard) {
       const saved = savedByKey.get(button.dataset.savedDiscard);
       if (!saved) return;
       const result = editing.discard(saved.token);
+      if (result.ok) {
+        for (let index = returnRoutes.length - 1; index >= 0; index -= 1)
+          if (returnRoutes[index].kind === saved.kind && returnRoutes[index].target === saved.targetId) returnRoutes.splice(index, 1);
+        if (pendingReturnFocus?.kind === saved.kind && pendingReturnFocus.target === saved.targetId) pendingReturnFocus = null;
+      }
       render();
       announce(result.ok ? 'Saved edit discarded.' : result.error.message);
       (elements.savedList.querySelector('button')
@@ -242,15 +383,21 @@ export function mountCoordinationPanel(root, options = {}) {
     if (button.dataset.savedOpen) {
       const saved = savedByKey.get(button.dataset.savedOpen);
       if (!saved) return;
+      let opened;
       if (saved.kind === 'purpose') purposePanel?.open();
       else {
         purposePanel?.close({ resume: false });
         chapterShell?.select(['person', 'assembly', 'role', 'contribution'].includes(saved.kind) ? 'people' : 'coordination');
-        if (saved.kind === 'assembly') assemblyPanel?.open(saved.targetId);
+        if (saved.kind === 'assembly') opened = assemblyPanel?.open(saved.targetId);
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
-        else if (saved.kind === 'session') workPanel?.open(saved.targetId);
-        else if (saved.kind === 'role' || saved.kind === 'contribution') responsibilityPanel?.open(saved.targetId);
-        else if (saved.kind === 'connection') connectionPanel?.open(saved.targetId);
+        else if (saved.kind === 'session') opened = workPanel?.open(saved.targetId);
+        else if (saved.kind === 'role' || saved.kind === 'contribution') opened = responsibilityPanel?.open(saved.targetId);
+        else if (saved.kind === 'connection') opened = connectionPanel?.open(saved.targetId);
+      }
+      if (opened?.view?.draft?.[`${saved.kind}Id`] === saved.targetId) {
+        const returned = returnRoutes.findIndex(route => route.kind === saved.kind && route.target === saved.targetId);
+        if (returned >= 0) returnRoutes.splice(returned);
+        pendingReturnFocus = null;
       }
       render();
       return;
@@ -273,6 +420,7 @@ export function mountCoordinationPanel(root, options = {}) {
     teamPanel?.dispose();
     for (const release of cleanup) release();
     cleanup.length = 0;
+    returnRoutes.length = 0; pendingReturnFocus = null; renderReturnRoute();
     editing.dispose();
     const view = editor.read();
     elements.fallback.hidden = false;
@@ -291,7 +439,7 @@ export function mountCoordinationPanel(root, options = {}) {
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
-      onBegin: () => beginCoordination('session'),
+      onBegin: () => beginCoordination('session'), onRecordCreated: prerequisiteCreated,
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
@@ -331,6 +479,7 @@ export function mountCoordinationPanel(root, options = {}) {
       canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'people' && peopleEditor === 'assembly' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
+      onRecordCreated: prerequisiteCreated,
       onPersonCreated: id => teamPanel?.select(id),
     });
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,

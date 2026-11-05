@@ -36,7 +36,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   let disposed = false, generation = 0, retiredToken = null, composing = false, acknowledgedOpen = false;
   let target = null, projection = null, people = new Map(), teams = new Map(), works = new Map(), connections = new Map();
   let referenceLabels = new Map(), memberControls = new Map(), membersProjection = null, membersIds = null;
-  let receiverProjection = null, receiverTeam = null, receiverPerson = null;
+  let receiverProjection = null, receiverTeam = null, receiverPerson = null, membersTarget = null, memberOrder = [];
 
   function listen(element, type, handler) { element.addEventListener(type, handler); cleanup.push(() => element.removeEventListener(type, handler)); }
   function owns(epoch) { return !disposed && generation === epoch; }
@@ -88,27 +88,42 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     inputs.receiverPersonId.replaceChildren(...options);
   }
   function renderMembers(ids) {
+    if (membersTarget !== target) { membersTarget = target; memberOrder = []; membersIds = null; }
     if (membersProjection === projection && membersIds?.length === ids.length && ids.every((id, position) => id === membersIds[position])) return;
     membersProjection = projection; membersIds = [...ids];
     const positions = new Map(ids.map((id, position) => [id, position]));
-    const ordered = [...ids, ...projection.state.work.filter(row => !positions.has(row.id)).map(row => row.id)];
-    memberControls = new Map(); const fragment = document.createDocumentFragment();
+    const available = new Set([...works.keys(), ...ids]);
+    memberOrder = memberOrder.filter(id => available.has(id));
+    const shown = new Set(memberOrder);
+    for (const id of [...ids, ...works.keys()]) if (!shown.has(id)) { memberOrder.push(id); shown.add(id); }
+    const ordered = memberOrder;
+    const previous = memberControls; memberControls = new Map(); const rows = [];
     for (const id of ordered) {
-      const row = works.get(id), item = document.createElement('li'), label = document.createElement('label');
-      const checkbox = document.createElement('input'), text = document.createElement('span');
-      checkbox.type = 'checkbox'; checkbox.dataset.connectionWork = id; checkbox.checked = positions.has(id);
-      text.textContent = row ? named(row) : `${id} · removed session`;
-      label.append(checkbox, text); item.append(label);
-      if (positions.has(id)) {
-        const actions = document.createElement('div'), position = positions.get(id); actions.className = 'native-coordination__actions';
-        const up = button('Move up', 'work-up', id, position === 0), down = button('Move down', 'work-down', id, position === ids.length - 1);
-        up.setAttribute('aria-label', `Move ${row?.label ?? id} up`); down.setAttribute('aria-label', `Move ${row?.label ?? id} down`);
-        actions.append(up, down); item.append(actions);
+      const row = works.get(id), checkbox = previous.get(id) ?? document.createElement('input');
+      let item = checkbox.closest('li');
+      if (!item) {
+        item = document.createElement('li'); item.className = 'native-coordination__member';
+        const label = document.createElement('label'), words = document.createElement('span');
+        const text = document.createElement('span'), state = document.createElement('small');
+        text.dataset.memberName = ''; state.className = 'native-coordination__member-status';
+        checkbox.type = 'checkbox'; checkbox.dataset.connectionWork = id;
+        words.append(text, state); label.append(checkbox, words);
+        const actions = document.createElement('div'); actions.className = 'native-coordination__actions native-coordination__manipulation';
+        actions.append(button('Move up', 'work-up', id, true), button('Move down', 'work-down', id, true)); item.append(label, actions);
       }
-      fragment.append(item); memberControls.set(id, checkbox);
+      const position = positions.get(id);
+      item.dataset.selected = String(positions.has(id)); checkbox.checked = positions.has(id);
+      item.querySelector('[data-member-name]').textContent = row ? named(row) : `${id} · removed session`;
+      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Available';
+      const [up, down] = item.querySelectorAll('button');
+      up.disabled = position === undefined || position === 0; down.disabled = position === undefined || position === ids.length - 1;
+      up.setAttribute('aria-label', `Move up: ${row?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${row?.label ?? id}`);
+      rows.push(item); memberControls.set(id, checkbox);
     }
-    elements.members.replaceChildren(fragment);
+    if (rows.length !== elements.members.children.length || rows.some((row, index) => row !== elements.members.children[index]))
+      elements.members.replaceChildren(...rows);
   }
+
   function currentText(row, descriptor, conflict) {
     if (conflict) return 'This connection already exists. Use these entries to prepare a new connection.';
     if (row) {
@@ -165,6 +180,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     }));
     elements.apply.disabled = references.length > 0;
     elements.apply.setAttribute('aria-disabled', String(!draft?.changed));
+    elements.apply.classList.toggle('native-control--remove', removing);
     elements.apply.textContent = removing ? 'Remove connection' : descriptor?.mode === 'create' ? 'Add connection' : 'Apply changes';
     elements.cost.textContent = raw.status === 'paused'
       ? `Paused connections keep their session costs. Known planned investment: ${money(projection.result.knownCommitmentCents)}.`
@@ -258,6 +274,8 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const destination = position + delta;
       if (position < 0 || destination < 0 || destination >= ids.length) return;
       [ids[position], ids[destination]] = [ids[destination], ids[position]];
+      const selected = new Set(ids); let next = 0;
+      memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
     changed(operate('setIds', view.draft.token, 'workIds', ids), epoch, () =>
       (memberControls.get(id) ?? elements.members.querySelector('input') ?? elements.apply).focus());

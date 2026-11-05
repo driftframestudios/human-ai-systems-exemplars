@@ -2301,6 +2301,31 @@
       "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js",
       "projected_path": "who-to-believe-system-graph.js",
       "media_type": "text/javascript"
+    },
+    {
+      "source_path": "visual-fidelity-contracts/ascii-zine-field/index.html",
+      "projected_path": "visual-fidelity-contracts/ascii-zine-field/index.html",
+      "media_type": "text/html"
+    },
+    {
+      "source_path": "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+      "projected_path": "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+      "media_type": "text/html"
+    },
+    {
+      "source_path": "visual-fidelity-contracts/ascii-zine-field.tokens.css",
+      "projected_path": "visual-fidelity-contracts/ascii-zine-field.tokens.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "visual-fidelity-contracts/ascii-zine-field.md",
+      "projected_path": "visual-fidelity-contracts/ascii-zine-field.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "visual-fidelity-contracts/catalog.v1.json",
+      "projected_path": "visual-fidelity-contracts/catalog.v1.json",
+      "media_type": "application/json"
     }
   ]
 }

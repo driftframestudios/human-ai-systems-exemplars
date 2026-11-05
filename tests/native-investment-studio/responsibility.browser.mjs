@@ -101,11 +101,14 @@ for (const engine of names) {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
     await role(page);
+    await expect(settings(page, 'role').locator('summary')).toHaveText('Roles · product-one · Add role details');
     for (const [name, value] of Object.entries(expectedRole)) await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
     await apply(page, 'role').click();
     await expect(settings(page, 'role')).toHaveAttribute('open', '');
     await expect(apply(page, 'role')).toBeFocused();
     assert.deepEqual((await state(page)).people[0].role, expectedRole);
+    await expect(settings(page, 'role').locator('summary')).toContainText('Engineering');
+    await expect(settings(page, 'role').locator('summary')).not.toContainText('Unsaved edits');
     const sequence = await page.evaluate(() => window.responsibilityFixture.studio.readAcceptance().sequence);
     await apply(page, 'role').evaluate(button => button.click());
     assert.equal(await page.evaluate(() => window.responsibilityFixture.studio.readAcceptance().sequence), sequence, 'unchanged Apply preserves acceptance');

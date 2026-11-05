@@ -156,7 +156,15 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         options: () => [['new', 'Create a team'], ...projection.state.teams.map(team => [`team:${team.id}`, named(team)])] });
       const labelInput = field(group, `teams.${row.slotId}.label`, 'Team name', row, 'label', { max: LIMITS.label });
       const members = field(group, `teams.${row.slotId}.personIds`, 'People', row, 'personIds', { options: peopleOptions, multiple: true });
+      const creationHelp = element('p', 'Name the team and choose its people here. Preview the arrangement, then Apply arrangement to add the team and its connections together.', 'native-coordination__hint');
+      group.prepend(creationHelp);
+      const addPerson = element('button', 'Add a person'); addPerson.type = 'button';
+      addPerson.className = 'native-control--create'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
+      group.append(addPerson);
       dynamic.push(() => {
+        creationHelp.hidden = row.selection !== 'new';
+        const selectedNames = row.personIds.map(id => projection.state.people.find(person => person.id === id)?.label ?? id);
+        group.parentElement.querySelector('summary').textContent = `${definition.label} · ${row.selection === 'new' ? 'New team: ' : ''}${teamLabel(row)} · ${selectedNames.slice(0, 2).join(', ') || 'Choose people'}${selectedNames.length > 2 ? ` + ${selectedNames.length - 2} more` : ''}`;
         labelInput.closest('.native-coordination__control').hidden = row.selection !== 'new';
         members.labels[0].textContent = row.selection === 'new' ? 'People' : 'Add people';
       });

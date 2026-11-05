@@ -2230,6 +2230,21 @@
       "selection_basis": "The schemas Worker publication manifest exposes this Context Canvas resource through its stable companion route."
     },
     {
+      "token": "PUBLIC_URL_SKILL_ASCII_ZINE_COMPOSITION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "ascii-zine-composition"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/ascii-zine-composition/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
+    },
+    {
       "token": "PUBLIC_URL_SKILL_AUDIT_ANTHROPOMORPHIC_CUES",
       "authority_class": "skill",
       "role": "skill_retrieval",

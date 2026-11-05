@@ -14,7 +14,7 @@ const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice
 // One complete session form borrows the host's shared draft coordinator. The
 // accepted plan, history and all other chapter drafts keep their existing owners.
 export function mountWorkPanel(root, { studio, editing, workId = 'review', onBegin = () => {},
-  onEditing = () => {}, onAccepted = () => {}, isActive = () => true }) {
+  onEditing = () => {}, onAccepted = () => {}, onRecordCreated = () => {}, isActive = () => true }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.session;
   const requireElement = selector => {
@@ -47,7 +47,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   let membersProjection = null, membersIds = null, membersTeam = null, memberControls = new Map();
   let renderedSelection = undefined, renderedDraftToken = null, renderedTeam = undefined;
   let composing = false, disposed = false, acknowledgedOpen = false, generation = 0;
-  let retiredToken = null;
+  let retiredToken = null, membersTarget = null, memberOrder = [];
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -120,30 +120,49 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     element.setAttribute('aria-label', `${label}: ${people.get(id)?.label ?? id}`); return element;
   }
   function renderMembers(ids, teamId) {
+    if (membersTarget !== selectedTarget) {
+      membersTarget = selectedTarget; memberOrder = []; membersIds = null;
+    }
     if (membersProjection === projection && membersTeam === teamId && membersIds?.length === ids.length
       && ids.every((id, index) => id === membersIds[index])) return;
     membersProjection = projection; membersTeam = teamId; membersIds = [...ids];
     const positions = new Map(ids.map((id, index) => [id, index]));
     const teamMembers = new Set(teams.get(teamId)?.personIds ?? []);
-    const ordered = [...ids, ...projection.state.people.filter(person => !positions.has(person.id)).map(person => person.id)];
-    memberControls = new Map();
-    const fragment = document.createDocumentFragment();
+    const available = new Set([...people.keys(), ...ids]);
+    memberOrder = memberOrder.filter(id => available.has(id));
+    const shown = new Set(memberOrder);
+    for (const id of [...ids, ...people.keys()]) if (!shown.has(id)) { memberOrder.push(id); shown.add(id); }
+    const ordered = memberOrder;
+    const previous = memberControls; memberControls = new Map();
+    const rows = [];
     for (const id of ordered) {
-      const person = people.get(id), item = document.createElement('li'), label = document.createElement('label');
-      const checkbox = document.createElement('input'), words = document.createElement('span'), name = document.createElement('strong'), rate = document.createElement('small');
-      checkbox.type = 'checkbox'; checkbox.dataset.sessionPerson = id; checkbox.checked = positions.has(id);
-      name.textContent = person?.label ?? `${id} · removed person`;
-      rate.textContent = !person ? 'Remove this selection.' : `${person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`}${teamId && !teamMembers.has(id) ? ' · outside this team' : ''}`;
-      words.append(name, rate); label.append(checkbox, words); item.append(label);
-      if (positions.has(id)) {
-        const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
-        const index = positions.get(id);
-        actions.append(memberButton('Move up', 'person-up', id, index === 0), memberButton('Move down', 'person-down', id, index === ids.length - 1));
-        item.append(actions);
+      const person = people.get(id), selected = positions.has(id);
+      const checkbox = previous.get(id) ?? document.createElement('input');
+      let item = checkbox.closest('li');
+      if (!item) {
+        item = document.createElement('li'); item.className = 'native-coordination__member';
+        const label = document.createElement('label'), words = document.createElement('span');
+        const name = document.createElement('strong'), rate = document.createElement('small'), state = document.createElement('small');
+        state.className = 'native-coordination__member-status';
+        checkbox.type = 'checkbox'; checkbox.dataset.sessionPerson = id;
+        words.append(name, rate, state); label.append(checkbox, words);
+        const actions = document.createElement('div'); actions.className = 'native-coordination__actions native-coordination__manipulation';
+        actions.append(memberButton('Move up', 'person-up', id, true), memberButton('Move down', 'person-down', id, true));
+        item.append(label, actions);
       }
-      fragment.append(item); memberControls.set(id, checkbox);
+      item.dataset.selected = String(selected); checkbox.checked = selected;
+      item.querySelector('strong').textContent = person?.label ?? `${id} · removed person`;
+      item.querySelector('small').textContent = !person ? 'Remove this selection.' : `${person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`}${teamId && !teamMembers.has(id) ? ' · outside this team' : ''}`;
+      item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Available';
+      const [up, down] = item.querySelectorAll('button'), index = positions.get(id);
+      up.disabled = index === undefined || index === 0; down.disabled = index === undefined || index === ids.length - 1;
+      up.setAttribute('aria-label', `Move up: ${person?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${person?.label ?? id}`);
+      rows.push(item); memberControls.set(id, checkbox);
     }
-    elements.members.replaceChildren(fragment);
+    // Membership changes keep mounted controls. Explicit order changes and
+    // newly available people update the row sequence through the same owner.
+    if (rows.length !== elements.members.children.length || rows.some((row, index) => row !== elements.members.children[index]))
+      elements.members.replaceChildren(...rows);
     elements.emptyPeople.hidden = projection.state.people.length > 0;
   }
   function renderDependencies(error) {
@@ -226,6 +245,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.previewNote.textContent = composing ? 'Finish entering the value.'
       : view.status === 'stale' ? 'Review the saved entries against the current plan.'
         : error ? 'Check the settings above.' : draft?.changed ? 'Apply to update the total.' : '';
+    elements.apply.classList.toggle('native-control--remove', removing);
     elements.apply.textContent = removing ? 'Remove session' : descriptor?.mode === 'create' && draft ? 'Add session' : 'Apply changes';
     elements.apply.disabled = Boolean(error?.references?.length);
     elements.apply.setAttribute('aria-disabled', String(!draft?.changed));
@@ -316,6 +336,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       if (owns(closedAt)) (selectedId === null ? elements.add : elements.select).focus();
       return;
     }
+    if (descriptor.mode === 'create') onRecordCreated(descriptor);
+    if (!owns(epoch)) return;
     selectedId = descriptor.id; lastAcceptedId = descriptor.id;
     const next = operate('begin', makeSessionTarget('work.update', descriptor.id), studio.read());
     if (!owns(epoch)) return;
@@ -340,6 +362,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       const destination = index + delta;
       if (index < 0 || destination < 0 || destination >= ids.length) return;
       [ids[index], ids[destination]] = [ids[destination], ids[index]];
+      const selected = new Set(ids); let next = 0;
+      memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
     changed(operate('setIds', view.draft.token, 'personIds', ids), epoch, () => memberControls.get(id)?.focus());
   }

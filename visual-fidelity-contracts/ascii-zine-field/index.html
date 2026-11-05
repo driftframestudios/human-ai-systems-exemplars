@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <meta name="description" content="Give a studio, workshop, or editable artifact print-shop character while its controls, meaning, and recovery stay clear.">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <title>ASCII Zine Field — a practical composition guide</title>
+  <link rel="stylesheet" href="../ascii-zine-field.tokens.css">
+  <style>
+    body { margin: 0; }
+    .guide { inline-size: min(100% - 2rem, 74rem); margin-inline: auto; padding-block: 1.5rem 3rem; }
+    .skip-link { position: fixed; z-index: 10; inset: .5rem auto auto .5rem; max-inline-size: calc(100% - 1rem); overflow-wrap: anywhere; translate: 0 -200%; padding: .7rem; background: var(--azf-panel); color: var(--azf-ink); border: var(--azf-rule); }
+    .skip-link:focus { translate: 0; }
+    .guide-nav { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; margin-block-end: 1.5rem; }
+    .guide-section { margin-block: 2.5rem; }
+    .guide-section > h2 { padding-block-end: .65rem; border-block-end: 2px dashed var(--azf-ink); }
+    .guide li + li { margin-block-start: .7rem; }
+    .guide code { overflow-wrap: anywhere; font: .9em/1.5 var(--azf-font-mono); }
+    .guide dd { margin-inline-start: 0; margin-block-end: 1rem; }
+    .guide dt { font-weight: 700; }
+    .guide-footer { margin-block-start: 3rem; padding-block-start: 1rem; border-block-start: var(--azf-rule); font-size: .875rem; }
+    @media (max-width: 42rem) { .guide { inline-size: calc(100% - 1.5rem); } }
+    @media print { .guide { inline-size: 100%; } .guide-nav { display: none; } }
+  </style>
+</head>
+<body class="azf-field">
+  <a class="skip-link" href="#guidance">Skip to the guidance</a>
+  <main class="guide">
+    <nav class="guide-nav" aria-label="Family routes">
+      <a href="../ascii-zine-field.specimen.html">Try the working specimen</a>
+      <a href="../ascii-zine-field.md">Read the full family source</a>
+      <a href="https://kindlight.systems/visual-fidelity-contracts">Explore Visual Fidelity Contracts</a>
+    </nav>
+    <header class="azf-masthead">
+      <div>
+        <p class="azf-stamp">A reusable composition / version 0.1.0</p>
+        <h1>ASCII Zine Field</h1>
+        <p>Give a studio, workshop, or editable artifact the character of an independent publication. Keep the work easy to read, change, and recover.</p>
+        <p>Warm paper, ink rules, compact annotations, and a little typewriter texture can carry the character. Begin with a useful task and a small dose.</p>
+      </div>
+      <aside class="azf-amp" aria-labelledby="start-title">
+        <h2 id="start-title">Start with one useful change</h2>
+        <p>Choose one masthead, one section rule, and one annotation treatment. Let the existing interface keep its ordinary control and reading patterns.</p>
+        <pre class="azf-ornament" data-ascii-art aria-hidden="true">/ / / / / / / / /
+: . : . : . : . :
+/ / / / / / / / /</pre>
+      </aside>
+    </header>
+
+    <section class="guide-section" id="guidance" aria-labelledby="compose-title">
+      <h2 id="compose-title">Give each element a job</h2>
+      <div class="azf-grid">
+        <article class="azf-card">
+          <h3>Make the reading inviting</h3>
+          <p>A masthead establishes purpose. A rule separates an actual section. A field-note card groups related work. Ordinary words carry headings; a plus sign belongs to addition or deliberate diagram structure.</p>
+          <p>Use monospace for short labels and texture. Give longer reading ordinary text, enough space, and a comfortable line length.</p>
+        </article>
+        <article class="azf-card azf-card--tiffany">
+          <h3>Help a person continue</h3>
+          <p>A patch annotation explains a relationship or next step. A rose recovery slip names the affected work and a useful action. A stamp describes a real category or state.</p>
+          <p>Keep decorative marks distinct from progress, confidence, capacity, or approval. Those meanings come from the application or evidence.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="guide-section" aria-labelledby="controls-title">
+      <h2 id="controls-title">Keep controls familiar</h2>
+      <dl>
+        <dt>Buttons take actions</dt><dd>A complete outline, stable shadow, and verb plus object make the operation recognizable. Related actions can share practical dimensions while long labels wrap.</dd>
+        <dt>Fields choose values</dt><dd>Use labeled native inputs, selects, and checkboxes. A custom select caret keeps comfortable space from the text and returns to its native treatment in forced colors.</dd>
+        <dt>Disclosures reveal detail</dt><dd>A heading and a useful preview explain why to open the section. Keep accepted facts distinct from unfinished edits.</dd>
+        <dt>Recovery names the relationship</dt><dd>Describe what will change and how the visitor returns. Rose color supports the words and border; it carries neither the whole warning nor the whole state.</dd>
+      </dl>
+      <p>In the <a href="../ascii-zine-field.specimen.html#try-title">working specimen</a>, edit a note, select an artifact, and try removal and restoration. The example teaches the composition; a receiving application owns persistence and authorization.</p>
+    </section>
+
+    <section class="guide-section" aria-labelledby="materials-title">
+      <h2 id="materials-title">Map the family into the receiving page</h2>
+      <p>Paper and ink hold reading. Cobalt gives focus and primary actions a clear place. Tiffany supports annotations; rose supports changed work and recovery. Fixed light comes from the upper left, with small hard shadows falling down and right.</p>
+      <p>The <a href="../ascii-zine-field.tokens.css">reference stylesheet</a> supplies named roles and specimen classes. Map the needed roles into the page's existing style owner. Its palette is a starting contract, with the actual receiving colors, contrast, and states checked where they are used.</p>
+      <p>The portable core uses printable ASCII. Unicode boxes and block glyphs are a named extension with their own font and layout observation. Short original patterns can crop or disappear as space contracts.</p>
+    </section>
+
+    <section class="guide-section" aria-labelledby="access-title">
+      <h2 id="access-title">Keep the complete meaning available</h2>
+      <ol>
+        <li>Classify each mark as decoration, text, or data. Hide decoration from the accessible reading. Give meaningful artwork an equivalent ordinary-text description or suitable named image role.</li>
+        <li>Read the page with the decoration removed. Every material fact, control, and recovery route should remain available.</li>
+        <li>Try narrow width and enlarged text. Let decoration yield space before meaningful labels or controls. A real two-dimensional diagram can use local inspection alongside its semantic equivalent.</li>
+        <li>Inspect keyboard focus, forced colors, reduced motion, and print where they affect the design. Keep a useful static reading and a visible return from each changed action.</li>
+      </ol>
+      <p>W3C's <a href="https://www.w3.org/WAI/WCAG22/Techniques/html/H86">ASCII-art text-alternative technique</a> gives concrete examples. Its <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">button</a> and <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">disclosure</a> patterns explain control semantics. These guide implementation; a receiving artifact retains its own usability and accessibility observations.</p>
+    </section>
+
+    <section class="guide-section azf-patch" aria-labelledby="source-title">
+      <h2 id="source-title">Use the complete source</h2>
+      <p>This guide is a concise reading of <code>vfc:ascii-zine-field</code>, version <code>0.1.0</code>, with review-candidate standing. The full contract owns its detailed vocabulary, permitted variation, motion, print, recovery, and verification guidance.</p>
+      <p><a href="../ascii-zine-field.md">Full family contract (Markdown)</a> · <a href="../catalog.v1.json">Versioned contract catalog (JSON)</a> · <a href="../ascii-zine-field.tokens.css">Reference tokens and classes (CSS)</a></p>
+      <p>The Markdown and catalog preserve repository source coordinates. Relative paths in those downloads describe the repository layout; this page and the <a href="../ascii-zine-field.specimen.html">specimen</a> provide the selected browser routes.</p>
+    </section>
+    <footer class="guide-footer artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+  </main>
+</body>
+</html>

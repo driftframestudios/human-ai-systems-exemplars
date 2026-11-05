@@ -88,6 +88,28 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: team membership toggles retain row geometry and checkbox focus`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await people(page).locator('[data-assembly-team="delivery"]').click();
+    await expect(people(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
+    const list = people(page).locator('[data-assembly-members]');
+    const geometry = () => list.evaluate(element => {
+      const origin = element.getBoundingClientRect().top;
+      return [...element.children].map(row => ({ id: row.querySelector('input').dataset.assemblyMember,
+        y: Math.round((row.getBoundingClientRect().top - origin) * 1000) / 1000, height: Math.round(row.getBoundingClientRect().height * 1000) / 1000 }));
+    });
+    const checkbox = people(page).locator('[data-assembly-member="product-one"]');
+    const accepted = await bytes(page);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 }); await checkbox.focus(); await frames(page);
+      const before = await geometry();
+      await page.keyboard.press('Space');
+      await expect(checkbox).not.toBeChecked(); await expect(checkbox).toBeFocused();
+      assert.deepEqual(await geometry(), before);
+      await page.keyboard.press('Space'); assert.deepEqual(await geometry(), before);
+      assert.equal(await bytes(page), accepted);
+    }
+  });
   test(`${engine}: people and teams publish exact funded amounts, keep membership order and resolve removal dependencies`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const original = await bytes(page);

@@ -9,7 +9,7 @@ const REFERENCE_LABELS = Object.freeze({ people: 'Person', teams: 'Team', work: 
 // The host lends its accepted owner and assembly draft port. This receiver owns
 // only the People chapter's creation, membership, ordering and removal controls.
 export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, onPersonCreated = () => {}, isActive = () => true, canOpen = isActive }) {
+  onAccepted = () => {}, onRecordCreated = () => {}, onPersonCreated = () => {}, isActive = () => true, canOpen = isActive }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = name => {
@@ -27,7 +27,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   const cleanup = [];
   let projection = null, people = new Map(), personPositions = new Map(), teams = new Map(), references = new Map();
   let selectedPerson = null, selectedTarget = null, memberProjection = null, memberIds = null;
-  let memberControls = new Map(), teamControls = new Map();
+  let memberControls = new Map(), teamControls = new Map(), memberOrder = [], membersTarget = null;
   let disposed = false, composing = false, acknowledgedOpen = false, generation = 0;
 
   function listen(target, name, callback) {
@@ -47,6 +47,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.person.disabled = index < 0;
     for (const control of elements['people-tools'].querySelectorAll('[data-assembly-action]')) {
       const action = control.dataset.assemblyAction;
+      if (action === 'person-remove') control.setAttribute('aria-label', `Remove from plan: ${people.get(selectedPerson)?.label ?? 'selected person'}`);
       control.disabled = index < 0 || action === 'person-up' && index === 0
         || action === 'person-down' && index === projection.state.people.length - 1;
     }
@@ -80,7 +81,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       up.disabled = index === 0; down.disabled = index === next.state.teams.length - 1;
       up.setAttribute('aria-label', `Move ${team.label} up`); down.setAttribute('aria-label', `Move ${team.label} down`);
       const remove = button('Remove team', 'team-remove', team.id);
-      remove.setAttribute('aria-label', `Remove ${team.label}`);
+      remove.className = 'native-control--remove';
+      remove.setAttribute('aria-label', `Remove team: ${team.label}`);
       actions.append(up, down, remove); item.append(choose, members, actions); fragment.append(item);
       teamControls.set(team.id, choose);
     });
@@ -88,33 +90,43 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.empty.hidden = next.state.teams.length > 0;
   }
   function renderMembers(ids) {
+    if (membersTarget !== selectedTarget) { membersTarget = selectedTarget; memberOrder = []; memberIds = null; }
     if (memberProjection === projection && memberIds?.length === ids.length
         && ids.every((id, index) => id === memberIds[index])) return;
     memberProjection = projection; memberIds = ids.slice();
     const positions = new Map(ids.map((id, index) => [id, index]));
-    const selected = new Set(ids), ordered = [...ids, ...projection.state.people.filter(person => !selected.has(person.id)).map(person => person.id)];
-    memberControls = new Map();
-    const fragment = document.createDocumentFragment();
-    ordered.forEach(id => {
-      const item = document.createElement('li'), label = document.createElement('label');
-      const checkbox = document.createElement('input'), name = document.createElement('span');
-      checkbox.type = 'checkbox'; checkbox.dataset.assemblyMember = id; checkbox.checked = selected.has(id);
-      name.textContent = people.get(id)?.label ?? `${id} (removed)`;
-      label.append(checkbox, name); item.append(label);
-      const controls = { checkbox };
-      if (selected.has(id)) {
-        const index = positions.get(id), actions = document.createElement('div');
-        actions.className = 'native-coordination__actions';
-        controls.up = button('Move up', 'member-up', id); controls.down = button('Move down', 'member-down', id);
-        controls.up.disabled = index === 0; controls.down.disabled = index === ids.length - 1;
-        controls.up.setAttribute('aria-label', `Move ${name.textContent} up in the team`);
-        controls.down.setAttribute('aria-label', `Move ${name.textContent} down in the team`);
-        actions.append(controls.up, controls.down); item.append(actions);
+    const selected = new Set(ids), available = new Set([...people.keys(), ...ids]);
+    memberOrder = memberOrder.filter(id => available.has(id));
+    const shown = new Set(memberOrder);
+    for (const id of [...ids, ...people.keys()]) if (!shown.has(id)) { memberOrder.push(id); shown.add(id); }
+    const ordered = memberOrder;
+    const previous = memberControls; memberControls = new Map();
+    const rows = [];
+    for (const id of ordered) {
+      let controls = previous.get(id), item = controls?.checkbox.closest('li');
+      if (!item) {
+        item = document.createElement('li'); item.className = 'native-coordination__member';
+        const label = document.createElement('label'), words = document.createElement('span');
+        const checkbox = document.createElement('input'), name = document.createElement('span'), state = document.createElement('small');
+        checkbox.type = 'checkbox'; checkbox.dataset.assemblyMember = id; name.dataset.memberName = '';
+        state.className = 'native-coordination__member-status';
+        words.append(name, state); label.append(checkbox, words);
+        controls = { checkbox, up: button('Move up', 'member-up', id), down: button('Move down', 'member-down', id) };
+        const actions = document.createElement('div'); actions.className = 'native-coordination__actions native-coordination__manipulation';
+        actions.append(controls.up, controls.down); item.append(label, actions);
       }
-      memberControls.set(id, controls); fragment.append(item);
-    });
-    elements.members.replaceChildren(fragment);
+      const name = people.get(id)?.label ?? `${id} (removed)`, index = positions.get(id);
+      item.dataset.selected = String(selected.has(id)); controls.checkbox.checked = selected.has(id);
+      item.querySelector('[data-member-name]').textContent = name;
+      item.querySelector('.native-coordination__member-status').textContent = selected.has(id) ? `Included · ${index + 1}` : 'Available';
+      controls.up.disabled = index === undefined || index === 0; controls.down.disabled = index === undefined || index === ids.length - 1;
+      controls.up.setAttribute('aria-label', `Move up: ${name} in the team`); controls.down.setAttribute('aria-label', `Move down: ${name} in the team`);
+      memberControls.set(id, controls); rows.push(item);
+    }
+    if (rows.length !== elements.members.children.length || rows.some((row, index) => row !== elements.members.children[index]))
+      elements.members.replaceChildren(...rows);
   }
+
   function renderReferences(error) {
     const dependencies = error?.references ?? [];
     elements.dependencies.hidden = dependencies.length === 0;
@@ -145,7 +157,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const target = descriptor?.collection === 'people' ? people.get(descriptor.id) : teams.get(descriptor?.id);
     elements.summary.textContent = !descriptor ? 'Settings' : descriptor.mode === 'create'
       ? descriptor.collection === 'people' ? 'Add a person' : 'Add a team'
-      : `${removing ? 'Remove' : 'Settings for'} ${target?.label ?? descriptor.id}`;
+      : `${removing ? 'Remove' : 'Settings'} · ${target?.label ?? descriptor.id}`;
     elements['name-group'].hidden = !descriptor || removing;
     elements['name-label'].textContent = personForm ? 'Name' : 'Team name';
     elements['person-fields'].hidden = !personForm;
@@ -183,7 +195,10 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.preview.hidden = !descriptor || removing;
     elements.total.textContent = preview?.ok ? money(preview.projection.result.knownCommitmentCents) : '—';
     elements['preview-note'].textContent = preview?.ok ? 'Apply to update the plan.' : 'Complete the settings to preview the total.';
-    elements.apply.textContent = removing ? descriptor.collection === 'people' ? 'Remove person' : 'Remove team'
+    elements.apply.classList.toggle('native-control--remove', removing);
+    if (removing) elements.apply.setAttribute('aria-label', `${descriptor.collection === 'people' ? 'Remove from plan' : 'Remove team'}: ${target?.label ?? descriptor.id}`);
+    else elements.apply.removeAttribute('aria-label');
+    elements.apply.textContent = removing ? descriptor.collection === 'people' ? 'Remove from plan' : 'Remove team'
       : descriptor?.mode === 'create' ? personForm ? 'Add person' : 'Add team' : 'Apply team';
     elements.apply.disabled = Boolean(error?.references?.length);
     elements.apply.setAttribute('aria-disabled', String(!draft?.changed));
@@ -265,6 +280,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     }
     onAccepted(result.projection ?? studio.read());
     if (!currentOperation(epoch)) return;
+    if (descriptor.mode === 'create') onRecordCreated(descriptor);
+    if (!currentOperation(epoch)) return;
     if (descriptor.form === 'person.create') {
       selectedPerson = descriptor.id; close({ park: false }); render(); announce('Person added.');
       onPersonCreated(descriptor.id);
@@ -314,6 +331,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const destination = index + direction;
       if (index < 0 || destination < 0 || destination >= ids.length) return;
       [ids[index], ids[destination]] = [ids[destination], ids[index]];
+      const selected = new Set(ids); let next = 0;
+      memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
     const result = editor.setIds(view.draft.token, 'personIds', ids);
     changed(result, epoch, () => memberControls.get(id)?.checkbox.focus());

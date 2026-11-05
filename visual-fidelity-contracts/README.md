@@ -16,6 +16,7 @@ executable, versioned contract material listed here.
 | A guided workflow, operational application, or approachable technical diagram | [Soft Color Blocking](./contracts/soft-color-blocking/README.md) | Large semantic fields, square geometry, clear labels, and explicit state |
 | A relationship-heavy operating map | [Cobalt Operating Field](./cobalt-operating-field.md) | System boundaries, work, investment, direction, and recovery |
 | A consequential chronology | [Cobalt Temporal Field](./cobalt-temporal-field.md) | Source-supported intervals, returns, recurrence, and changed meaning |
+| A workshop or studio with print-shop character | [ASCII Zine Field](./ascii-zine-field.md) | Expressive mastheads, quiet texture, recognizable controls, and clear recovery |
 | A source-led account followed by an implementation reading | [Dual-Track Debrief Composition](./dual-track-debrief-composition.md) | Selection guidance for paired, program, comparative, temporal, and single-field readings |
 | A question about state ownership, contrast, reflow, print, or publication | [Shared foundations](#use-the-shared-foundations) | Reusable implementation and verification rules |
 | A Figma, DTCG, compiler, or component-token integration | [Design-token pipeline](./foundations/design-token-pipeline.md) | Source authority, compatibility, generated artifacts, runtime adapters, recovery, and receipts |
@@ -43,6 +44,12 @@ executable, versioned contract material listed here.
 
 ### Repository composition contracts
 
+- [ASCII Zine Field guide](./ascii-zine-field/index.html) — a review candidate
+  for warm-paper studios and workshop artifacts, with ASCII ornament, native
+  controls, an [interactive specimen](./ascii-zine-field.specimen.html), and the
+  [full contract](./ascii-zine-field.md). The
+  [ASCII zine composition skill](../.agents/skills/ascii-zine-composition/README.md)
+  carries the reusable authoring method.
 - [Cobalt Operating Field](./cobalt-operating-field.md) — light-field system
   cartography for workbenches, operating maps, architecture handoffs, and
   changed-work narratives.
@@ -68,6 +75,12 @@ executable, versioned contract material listed here.
 The versioned [catalog](./catalog.v1.json) gives each contract a stable ID and
 maps its source, standing, public route, examples, tokens, and tests. Established
 flat paths stay available while the typed hub develops around them.
+
+The ASCII family guide, specimen, stylesheet, full Markdown source, and catalog
+are selected in the primary production manifest for the next reviewed release.
+The portable skill is selected separately for the next tagged GitHub Pages
+projection. These registrations prepare both receivers; the release record
+establishes their accepted source coordinates and actual publication.
 
 ## Run a lab
 
@@ -184,6 +197,7 @@ records the supporting evidence and implementation boundary.
 
 ## Reference implementations
 
+- [ASCII Zine Field working specimen](./ascii-zine-field.specimen.html)
 - [Industrial Ink technical-workbench specimen](./contracts/industrial-ink/specimen.html)
 - [Soft Color Blocking contract specimen](./contracts/soft-color-blocking/specimen.html)
 - [Context Tree visual variants](../collaboration/context-tree-visual-variants/index.html)

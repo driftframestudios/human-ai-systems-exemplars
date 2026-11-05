@@ -89,6 +89,186 @@ async function prepareSession(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: participant toggles keep cards in place and explicit moves own the order`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const list = sessions(page).locator('[data-native-session-members]');
+    const geometry = () => list.evaluate(element => {
+      const origin = element.getBoundingClientRect().top;
+      return [...element.children].map(row => ({ id: row.querySelector('input').dataset.sessionPerson,
+        y: Math.round((row.getBoundingClientRect().top - origin) * 1000) / 1000, height: Math.round(row.getBoundingClientRect().height * 1000) / 1000 }));
+    });
+    const accepted = await bytes(page);
+    for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(enlarged => { document.documentElement.style.fontSize = enlarged ? '200%' : ''; }, enlarged);
+      await member(page, 'product-one').scrollIntoViewIfNeeded();
+      await member(page, 'product-one').focus(); await frames(page);
+      const before = await geometry();
+      if (enlarged) {
+        const fontSize = await list.locator('label').first().evaluate(label => parseFloat(getComputedStyle(label).fontSize));
+        assert.ok(fontSize >= 31.99, `authored text enlargement remains available: ${fontSize}px`);
+      }
+      await page.keyboard.press('Space');
+      await expect(member(page, 'product-one')).not.toBeChecked();
+      await expect(member(page, 'product-one').locator('xpath=ancestor::li').locator('.native-coordination__member-status')).toHaveText('Available');
+      await expect(member(page, 'product-one')).toBeFocused();
+      assert.deepEqual(await geometry(), before, 'deselection retains every row position and height');
+      await page.keyboard.press('Space');
+      assert.deepEqual(await geometry(), before, 'reselection retains the spatial arrangement');
+      assert.equal(await bytes(page), accepted, 'membership remains a draft until Apply');
+    }
+    await sessions(page).locator('[data-session-action="person-up"][data-person-id="product-one"]').click();
+    assert.notDeepEqual((await geometry()).map(row => row.id), ['product-one', 'product-two', 'engineering-one', 'engineering-two']);
+    await legacy(page, 'cancel').click();
+    assert.equal(await bytes(page), accepted);
+  });
+
+  test(`${engine}: an empty plan can create people and a team then return to its unfinished session`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.sessionFixture;
+      const plan = JSON.parse(studio.exportText());
+      for (const collection of ['people', 'teams', 'work', 'practices', 'contributions', 'connections']) plan[collection] = [];
+      const result = studio.importText(JSON.stringify(plan), studio.read());
+      if (!result.ok) throw Error(result.error.code);
+      controller.refresh();
+    });
+    await action(page, 'create').click();
+    await field(page, 'label').fill('First working session');
+    await field(page, 'minutesPerSession').fill('45');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-native-assembly]');
+    const assemblyForm = assembly.locator('[data-assembly-form]');
+    await assemblyForm.locator('[name="label"]').fill('First team');
+    await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await assemblyForm.locator('[name="label"]').fill('Taylor');
+    await assemblyForm.locator('[name="ratePerHour"]').fill('120');
+    await assemblyForm.locator('[name="fundedHours"]').fill('1');
+    await assembly.locator('[data-assembly-apply]').click();
+    const returnButton = root(page).locator('[data-native-return-action]');
+    await expect(returnButton).toHaveText('Return to team');
+    await returnButton.click();
+    await expect(assemblyForm.locator('[name="label"]')).toHaveValue('First team');
+    await expect(assembly.locator('[data-assembly-action="review"]')).toBeFocused();
+    await assembly.locator('[data-assembly-action="review"]').click();
+    await assembly.locator('[data-assembly-member]').check();
+    await assembly.locator('[data-assembly-apply]').click();
+    await expect(returnButton).toHaveText('Return to session');
+    await returnButton.click();
+    await expect(field(page, 'label')).toHaveValue('First working session');
+    await expect(field(page, 'minutesPerSession')).toHaveValue('45');
+    await expect(legacy(page, 'review')).toBeFocused();
+    await legacy(page, 'review').click();
+    await expect(field(page, 'teamId')).toBeFocused();
+    const teamId = await page.evaluate(() => window.sessionFixture.studio.read().state.teams[0].id);
+    await field(page, 'teamId').selectOption(teamId);
+    await sessions(page).locator('[data-session-person]').check();
+    await legacy(page, 'apply').click();
+    const plan = await page.evaluate(() => window.sessionFixture.studio.read().state);
+    assert.equal(plan.work[0].label, 'First working session');
+    assert.equal(plan.work[0].minutesPerOccurrence, 45);
+    assert.equal(plan.work[0].teamId, teamId);
+    assert.deepEqual(plan.work[0].personIds, [plan.people[0].id]);
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+  });
+  test(`${engine}: restarting a prerequisite retires its obsolete route and descendants while retaining their drafts`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await field(page, 'label').fill('Session to resume');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-native-assembly]');
+    const creation = assembly.locator('[data-assembly-form]');
+    await creation.locator('[name="label"]').fill('Earlier team draft');
+    await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await creation.locator('[name="label"]').fill('Earlier person draft');
+    const saved = root(page).locator('[data-native-saved]');
+    await saved.locator('summary').click();
+    await saved.locator('[data-saved-open^="session:"]').click();
+    await expect(field(page, 'label')).toHaveValue('Session to resume');
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await sessions(page).locator('[data-native-create="team"]').click();
+    await creation.locator('[name="label"]').fill('Receiving team');
+    await assembly.locator('[data-assembly-apply]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await expect(field(page, 'label')).toHaveValue('Session to resume');
+    await expect(saved).toContainText('Earlier team draft');
+    await expect(saved).toContainText('Earlier person draft');
+    await expect(legacy(page, 'review')).toBeFocused();
+  });
+
+  test(`${engine}: resuming a nested origin through Saved edits retains its earlier return destination`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await field(page, 'label').fill('Session waiting for a team');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-native-assembly]'), creation = assembly.locator('[data-assembly-form]');
+    await creation.locator('[name="label"]').fill('Team waiting for a person');
+    await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await creation.locator('[name="label"]').fill('Person still being drafted');
+    const saved = root(page).locator('[data-native-saved]');
+    await saved.locator('summary').click();
+    await saved.locator('[data-native-saved-list] > li').filter({ hasText: 'Team waiting for a person' }).locator('[data-saved-open]').click();
+    await expect(creation.locator('[name="label"]')).toHaveValue('Team waiting for a person');
+    await expect(root(page).locator('[data-native-return-action]')).toHaveText('Return to session');
+    await assembly.locator('[data-assembly-apply]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(field(page, 'label')).toHaveValue('Session waiting for a team');
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await expect(saved).toContainText('Person still being drafted');
+  });
+
+  test(`${engine}: discarding the saved origin releases its return route and keeps the current creation form`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await field(page, 'label').fill('Unfinished session');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-assembly-form]');
+    await assembly.locator('[name="label"]').fill('Current team draft');
+    const saved = root(page).locator('[data-native-saved]');
+    await saved.locator('summary').click();
+    await saved.locator('[data-saved-discard^="session:"]').click();
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await expect(assembly.locator('[name="label"]')).toHaveValue('Current team draft');
+    await expect(assembly.locator('fieldset')).toBeEnabled();
+  });
+
+  test(`${engine}: contribution prerequisites and arrangement people return to their owning drafts`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await tab(page, 'people').click();
+    await root(page).locator('[data-responsibility-action="create"]').click();
+    const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
+    await contribution.locator('[name="categoryId"]').selectOption('draft-artifacts');
+    await contribution.locator('[name="reviewBoundary"]').fill('Review the working notes.');
+    await contribution.locator('[data-native-create="session"]').click();
+    await field(page, 'label').fill('Notes review');
+    await field(page, 'teamId').selectOption('delivery');
+    await member(page, 'product-one').check();
+    await legacy(page, 'apply').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(contribution.locator('[name="reviewBoundary"]')).toHaveValue('Review the working notes.');
+    await expect(contribution.locator('[data-responsibility-action="review"]')).toBeFocused();
+    await contribution.locator('[data-responsibility-action="review"]').click();
+    const workId = await page.evaluate(() => window.sessionFixture.studio.read().state.work.find(row => row.label === 'Notes review').id);
+    await contribution.locator(`[data-responsibility-work="${workId}"]`).check();
+    await contribution.locator('[data-responsibility-apply]').click();
+    assert.deepEqual(await page.evaluate(() => window.sessionFixture.studio.read().state.contributions[0].workIds), [workId]);
+
+    await tab(page, 'coordination').click();
+    const arrangement = root(page).locator('[data-connection-templates]');
+    await arrangement.locator(':scope > summary').click();
+    const team = arrangement.locator('[data-template-card^="team:"]').first();
+    await team.locator('summary').click();
+    await team.locator('[data-template-field$=".label"]').fill('Local design team');
+    await team.locator('[data-native-create="person"]').click();
+    const assembly = root(page).locator('[data-native-assembly]');
+    await assembly.locator('[data-assembly-form] [name="label"]').fill('Robin');
+    await assembly.locator('[data-assembly-apply]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(arrangement).toHaveAttribute('open', '');
+    await expect(team.locator('[data-template-field$=".label"]')).toHaveValue('Local design team');
+    await expect(team.locator('summary')).toContainText('Local design team');
+    await expect(team.locator('[data-template-field$=".personIds"] option').filter({ hasText: 'Robin' })).toHaveCount(1);
+    await expect(arrangement.locator('[data-template-choice]')).toBeFocused();
+  });
+
   test(`${engine}: a complete session publishes once and reconciles participant, pause and funding choices`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await prepareSession(page);
@@ -100,7 +280,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,600.00');
     const added = await page.evaluate(() => window.sessionFixture.studio.read().state.work.at(-1));
     assert.deepEqual({ ...added, id: 'new-id' }, { id: 'new-id', label: 'Planning together', teamId: 'delivery',
-      personIds: ['product-one', 'product-two'], minutesPerOccurrence: 60, occurrences: 2, funding: 'additional', status: 'planned', timing: null });
+      personIds: ['product-one', 'product-two'], minutesPerOccurrence: 60, occurrences: 2, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' });
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.readAcceptance().sequence), before + 1);
     await expect(legacy(page, 'apply')).toBeFocused();
     await field(page, 'status').selectOption('paused'); await legacy(page, 'apply').click();

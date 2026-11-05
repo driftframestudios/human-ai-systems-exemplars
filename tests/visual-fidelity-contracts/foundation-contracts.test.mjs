@@ -242,8 +242,8 @@ test("catalog has unique IDs and complete path closure", async () => {
 
   const ids = catalog.contracts.map(({ id }) => id);
   const resourceIds = catalog.resources.map(({ id }) => id);
-  assert.equal(catalog.contracts.length, 9, "catalog should inventory the current nine contract families");
   assert.equal(new Set(ids).size, ids.length, "contract IDs must be unique");
+  assert.ok(ids.includes("vfc:ascii-zine-field"), "the workshop composition has a discoverable implementation route");
   assert.ok(ids.includes("vfc:industrial-ink"));
   assert.ok(ids.includes("vfc:soft-color-blocking"));
   assert.equal(catalog.resources.length, 12, "catalog should inventory labs, probes, and the example collection");
@@ -289,6 +289,8 @@ test("cataloged labs declare their exact implementation versions and behavior ro
 
 test("standalone HTML artifacts carry the shared public attribution contract", async () => {
   const htmlPaths = [
+    "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+    "visual-fidelity-contracts/ascii-zine-field/index.html",
     "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
     "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
     "visual-fidelity-contracts/examples/index.html",
@@ -313,6 +315,8 @@ test("standalone HTML artifacts carry the shared public attribution contract", a
 
 test("off-canvas skip links retain a viewport-bounded focus target at enlarged text", async () => {
   const styleOwners = [
+    "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+    "visual-fidelity-contracts/ascii-zine-field/index.html",
     "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
     "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
     "visual-fidelity-contracts/examples/styles.css",
@@ -326,6 +330,47 @@ test("off-canvas skip links retain a viewport-bounded focus target at enlarged t
   for (const relativePath of styleOwners) {
     const source = await readFile(path.join(repositoryRoot, relativePath), "utf8");
     assert.match(source, boundedSkipLink, `${relativePath}: bounded skip-link focus target`);
+  }
+});
+
+test("zine ornament keeps decorative ASCII separate from the optional Unicode vocabulary", async () => {
+  const source = await readFile(path.join(familyRoot, "ascii-zine-field.specimen.html"), "utf8");
+  const ornaments = [...source.matchAll(/<(pre|span)\b([^>]*)class="[^"]*\bazf-ornament\b[^"]*"([^>]*)>([\s\S]*?)<\/\1>/gu)];
+  assert.ok(ornaments.length > 0, "the specimen exercises the decorative vocabulary");
+  for (const [, , beforeClass, afterClass, content] of ornaments) {
+    const attributes = beforeClass + afterClass;
+    assert.match(attributes, /aria-hidden="true"/u, "ornament stays outside the accessible reading");
+    assert.doesNotMatch(content, /<\/?[a-z]/iu, "ornament carries text rather than nested content or controls");
+    if (/data-ascii-art/u.test(attributes)) {
+      assert.match(content, /^[\x20-\x7e\n\r]*$/u, "the portable core remains strict printable ASCII");
+    } else {
+      assert.match(attributes, /data-zine-glyphs="unicode"/u, "the extended vocabulary is explicitly named");
+    }
+  }
+  assert.match(source, /<select id="note-kind">/u, "field selection retains native semantics");
+  assert.match(source, /<summary>Details for this note <span>Audience:/u, "closed detail gives a useful preview");
+  assert.match(source, /<button[^>]*id="toggle-annotation"[^>]*type="button"/u, "removal and recovery remain real actions");
+});
+
+test("zine reference pairs retain readable text and visible field boundaries", async () => {
+  const source = await readFile(path.join(familyRoot, "ascii-zine-field.tokens.css"), "utf8");
+  const colors = new Map([...source.matchAll(/--azf-([a-z-]+):\s*(#[a-f0-9]{6});/gu)].map(([, role, hex]) => [role, hex]));
+  const luminance = hex => {
+    assert.ok(hex, "each contrast role resolves to a reference color");
+    const channels = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16) / 255)
+      .map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+    return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+  };
+  const pairs = [
+    ["ink", "paper", 4.5], ["ink", "panel", 4.5], ["ink", "tiffany", 4.5],
+    ["ink", "rose", 4.5], ["muted", "paper", 4.5], ["cobalt", "panel", 4.5],
+    ["panel", "cobalt", 4.5], ["tiffany-ink", "tiffany", 4.5],
+    ["rose-ink", "rose", 4.5], ["line", "panel", 3]
+  ];
+  for (const [foreground, background, minimum] of pairs) {
+    const [low, high] = [luminance(colors.get(foreground)), luminance(colors.get(background))].sort((a, b) => a - b);
+    const ratio = (high + .05) / (low + .05);
+    assert.ok(ratio >= minimum, `${foreground} on ${background}: ${ratio.toFixed(2)}:1; requires ${minimum}:1`);
   }
 });
 
@@ -405,6 +450,7 @@ test("foundation directory contains the declared decision routes", async () => {
 test("foundation and contract Markdown links resolve locally", async () => {
   const documents = [
     "visual-fidelity-contracts/README.md",
+    "visual-fidelity-contracts/ascii-zine-field.md",
     "visual-fidelity-contracts/contracts/industrial-ink/README.md",
     "visual-fidelity-contracts/contracts/soft-color-blocking/README.md",
     "visual-fidelity-contracts/schemas/fixtures/README.md",

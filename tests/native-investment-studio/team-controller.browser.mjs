@@ -117,13 +117,18 @@ for (const engine of names) {
     await choose(page);
     await expect(input(page, 'ratePerHour')).toBeFocused();
     await expect(input(page, 'ratePerHour')).toBeInViewport();
+    await expect(settings(page).locator('summary')).toContainText('$100.00/hour');
     await input(page, 'ratePerHour').fill('101');
+    await expect(settings(page).locator('summary')).toContainText('$100.00/hour');
+    await expect(settings(page).locator('summary')).toContainText('Unsaved edits');
     // One person's three additional hours gain $1/hour; the other three stay $300 each.
     await expect(preview(page)).toHaveText('$1,203.00');
     await expect(accepted(page)).toHaveText('$1,200.00');
     await expect(panel(page).locator('input[name="minutesPerSession"]')).toHaveValue('30');
     await action(page, 'apply').click();
     await expect(accepted(page)).toHaveText('$1,203.00');
+    await expect(settings(page).locator('summary')).toContainText('$101.00/hour');
+    await expect(settings(page).locator('summary')).not.toContainText('Unsaved edits');
     await expect(action(page, 'apply')).toBeFocused();
     await expect(settings(page)).toHaveAttribute('open', '');
     await input(page, 'fundedHours').fill('1');

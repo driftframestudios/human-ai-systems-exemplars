@@ -235,6 +235,35 @@ test("the production manifest carries the accepted 40-route primary collection a
   }
 });
 
+test("the ASCII family guide carries its complete source and working-example closure", async () => {
+  const manifest = await loadPrimaryManifest();
+  const byPath = new Map(manifest.files.map(file => [file.projected_path, file]));
+  const family = "visual-fidelity-contracts/";
+  const expected = new Map([
+    ["ascii-zine-field/index.html", "text/html"],
+    ["ascii-zine-field.specimen.html", "text/html"],
+    ["ascii-zine-field.tokens.css", "text/css"],
+    ["ascii-zine-field.md", "text/markdown"],
+    ["catalog.v1.json", "application/json"],
+  ]);
+  for (const [name, media] of expected) {
+    const route = family + name;
+    assert.equal(byPath.get(route)?.source_path, route, `${name} retains its repository source`);
+    assert.equal(byPath.get(route)?.media_type, media, `${name} has its declared receiving media`);
+  }
+  for (const name of ["ascii-zine-field/index.html", "ascii-zine-field.specimen.html"]) {
+    const html = await readFile(path.join(repositoryRoot, family + name), "utf8");
+    for (const [, reference] of html.matchAll(/(?:href|src)="([^"]+)"/gu)) {
+      if (/^(?:https?:|#)/u.test(reference)) continue;
+      const resolved = path.posix.normalize(path.posix.join(family, path.posix.dirname(name), reference.split("#")[0]));
+      assert.ok(byPath.has(resolved), `${name}: ${reference} has a selected receiver`);
+    }
+  }
+  const guide = await readFile(path.join(repositoryRoot, family, "ascii-zine-field/index.html"), "utf8");
+  assert.ok(guide.includes('href="../ascii-zine-field.md"'), "readers can retrieve the full family rather than only its summary");
+  assert.ok(guide.includes('href="../catalog.v1.json"'), "readers can retrieve the exact contract registration");
+});
+
 test("every local stylesheet linked by production-selected HTML belongs to the explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const selectedSources = new Set(manifest.files.map(({ source_path }) => source_path));
