@@ -169,7 +169,9 @@ export function mountConnectionView(root, { projection, onSelect = () => {} }) {
   };
   const button = (text, action) => {
     const node = element('button', 'native-connections__button', text); node.type = 'button';
-    node.dataset.connectionAction = action; return node;
+    node.dataset.connectionAction = action;
+    if (action === 'select') node.className += ' native-control--navigate';
+    return node;
   };
   const host = element('div', 'native-connections');
   const heading = element('p', 'native-connections__count');

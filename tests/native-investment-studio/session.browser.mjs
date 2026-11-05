@@ -538,7 +538,28 @@ for (const engine of names) {
       personIds: ['product-one', 'product-two'], minutesPerOccurrence: 60, occurrences: 2, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' });
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.readAcceptance().sequence), before + 1);
     await expect(legacy(page, 'apply')).toBeFocused();
-    await field(page, 'status').selectOption('paused'); await legacy(page, 'apply').click();
+    const acceptedSession = await bytes(page);
+    await form(page).getByRole('radio', { name: 'Planned', exact: true }).focus(); await page.keyboard.press('ArrowRight');
+    await expect(form(page).getByRole('radio', { name: 'Paused', exact: true })).toBeChecked();
+    await expect(sessions(page).locator('[data-native-session-pause-note]')).toBeVisible();
+    assert.equal(await bytes(page), acceptedSession, 'choosing a status previews the session while accepted work stays exact');
+    await legacy(page, 'cancel').click(); await sessions(page).locator('[data-native-configure] > summary').click();
+    await expect(form(page).getByRole('radio', { name: 'Planned', exact: true })).toBeChecked();
+    await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeChecked();
+    await page.evaluate(() => {
+      const { editing, controller } = window.sessionFixture;
+      editing.session.setText(editing.session.read().draft.token, 'funding', 'unknown');
+      if (editing.session.read().draft.raw.funding !== 'unknown') throw Error('The saved-choice fixture must reach field validation.');
+      controller.refresh();
+    });
+    await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toHaveAttribute('aria-invalid', 'true');
+    await expect(form(page).getByRole('radio', { name: 'Included in funded time', exact: true })).toHaveAttribute('aria-invalid', 'true');
+    await legacy(page, 'apply').click();
+    await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeFocused();
+    assert.equal(await bytes(page), acceptedSession, 'an invalid saved choice is recoverable and cannot publish');
+    await form(page).getByRole('radio', { name: 'Extra investment', exact: true }).check();
+    await expect(form(page).getByRole('radio', { name: 'Included in funded time', exact: true })).toHaveAttribute('aria-invalid', 'false');
+    await form(page).getByRole('radio', { name: 'Paused', exact: true }).check(); await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,600.00');
     await expect(sessions(page).locator('[data-native-session-standing]')).toContainText('Paused');
     await page.evaluate(() => {
@@ -551,7 +572,7 @@ for (const engine of names) {
       controller.refresh();
     });
     await legacy(page, 'review').click();
-    await field(page, 'funding').selectOption('allocated'); await legacy(page, 'apply').click();
+    await form(page).getByRole('radio', { name: 'Included in funded time', exact: true }).check(); await legacy(page, 'apply').click();
     // $400 funded staffing + $1,200 original extra work; this session uses the funded pool.
     await expect(total(page)).toHaveText('$1,600.00');
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().result.allocatedKnownCents), 40000);
@@ -622,6 +643,16 @@ for (const engine of names) {
   test(`${engine}: complete session settings retain compact controls, stable feedback and About scrolling`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, true);
     await prepareSession(page);
+    await expect(action(page, 'create')).toHaveClass(/native-control--create/);
+    await expect(legacy(page, 'apply')).not.toHaveClass(/native-control--create/);
+    await page.setViewportSize({ width: 1259, height: 1289 });
+    const members = sessions(page).locator('.native-session__members');
+    const memberGeometry = await members.locator('label').evaluateAll(labels => labels.map(label => {
+      const toggle = label.querySelector('input').getBoundingClientRect(), words = label.querySelector('span').getBoundingClientRect();
+      return { toggle: toggle.width, words: words.width, label: label.getBoundingClientRect().width };
+    }));
+    assert.ok(memberGeometry.every(row => row.toggle < row.label * .25 && row.words > row.label * .6), 'Membership switches leave most of each card width for its role and rate.');
+    await members.screenshot({ path: resolve(captures, `${engine}-participants-1259.png`) });
     await sessions(page).screenshot({ path: resolve(captures, `${engine}-wide.png`) });
     for (const [width, enlarged] of [[1440, true], [768, false], [320, true]]) {
       await page.setViewportSize({ width, height: 1000 });

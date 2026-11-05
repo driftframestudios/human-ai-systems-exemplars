@@ -182,11 +182,11 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       const score = describeScoreReference(projection.state.scoreSettings, reference);
       if (score) {
-        const link = document.createElement('a'); link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
         link.textContent = 'Review in the coordination horizon'; item.append(`${score.label}. `, link); return item;
       }
       if (assurance) {
-        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
         link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
         item.append(`${assurance}. `, link); return item;
       }

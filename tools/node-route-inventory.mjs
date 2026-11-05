@@ -42,6 +42,8 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/change-methods.mjs',
   'collaboration/native-investment-studio/change-models.mjs',
   'collaboration/native-investment-studio/time-controls.mjs',
+  'collaboration/native-investment-studio/motion.mjs',
+  'collaboration/native-investment-studio/rate-controls.mjs',
   'collaboration/native-investment-studio/change-proposals.mjs',
   'collaboration/native-investment-studio/command-draft.mjs',
   'collaboration/native-investment-studio/commands.mjs',

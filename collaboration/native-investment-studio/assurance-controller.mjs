@@ -2,6 +2,7 @@ import { createTimeControls, mountDurationDials, renderTimeReadout } from './tim
 import { ASSURANCE_FIELDS, assuranceField, assuranceSettingsFromRaw, startingAssuranceRaw } from './assurance-draft.mjs';
 import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalDefinitions, getLearningPromptDefinition, projectAssurance, sourcePresetEstimate } from './assurance-models.mjs';
 import { money } from './display.mjs';
+import { mountRateControls } from './rate-controls.mjs';
 
 const INSTANCES = new WeakMap();
 let instanceSequence = 0;
@@ -27,11 +28,17 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const editor = editing.assurance;
   const concepts = listQualityConcepts(), definitions = listRehearsalDefinitions();
   let selectedConcept = concepts[0].id, selectedScenario = definitions[0].id;
+  let renderedSigma = null;
   for (const name of ['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'manual']) elements[name].replaceChildren();
   let disposed = false, generation = 0, sequence = 0, composing = false, lastProjection = null, promptSignature = '';
   const owns = epoch => !disposed && generation === epoch;
   const listen = (element, event, handler) => { element.addEventListener(event, handler); cleanup.push(() => element.removeEventListener(event, handler)); };
-  const button = (text, action, data = {}) => { const element = node('button', text); element.type = 'button'; Object.assign(element.dataset, { assuranceAction: action, ...data }); return element; };
+  const button = (text, action, data = {}) => {
+    const element = node('button', text); element.type = 'button'; Object.assign(element.dataset, { assuranceAction: action, ...data });
+    if (action === 'add-event') element.classList.add('native-control--create');
+    if (['work', 'propose', 'learning', 'rehearse', 'add-event'].includes(action)) element.classList.add('native-control--navigate');
+    return element;
+  };
   const actionRow = (...children) => { const group = node('div', undefined, 'native-coordination__actions'); group.append(...children); return group; };
   const announce = text => { if (!disposed) elements.status.textContent = text; };
   function options(source, selected) {
@@ -56,7 +63,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
   }
   function field(parent, key, labelOverride) {
-    const metadata = assuranceField(key), radio = key === 'horizonUnit', grouped = metadata.kind === 'ids' || radio;
+    const metadata = assuranceField(key), fixedChoices = choices[key] ?? choices[key.split('.').at(-1)] ?? metadata.choices;
+    const radio = !metadata.source && !metadata.checkbox && fixedChoices?.length >= 2 && fixedChoices.length <= 4, grouped = metadata.kind === 'ids' || radio;
     const group = node(grouped ? 'fieldset' : 'div', undefined, `native-assurance__field${metadata.numeric || metadata.decimal ? ' native-assurance__quantity' : ''}${metadata.checkbox ? ' native-assurance__check-field' : ''}`);
     group.dataset.assuranceControl = key;
     const label = node(grouped ? 'legend' : 'label', labelOverride ?? metadata.label);
@@ -79,7 +87,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     } else group.append(input);
     if (metadata.source && targets[metadata.source]) {
       const kind = targets[metadata.source], create = node('button', `Add ${kind === 'person' ? 'a person' : kind === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
-      create.type = 'button'; Object.assign(create.dataset, { nativeCreate: kind, nativeReturn: 'assurance', nativeReturnField: key }); group.append(actionRow(create));
+      create.type = 'button'; create.classList.add('native-control--navigate'); Object.assign(create.dataset, { nativeCreate: kind, nativeReturn: 'assurance', nativeReturnField: key }); group.append(actionRow(create));
     }
     group.append(error); parent.append(group); const control = { input, metadata, key, group, error, radio }; controls.set(key, control); return control;
   }
@@ -125,7 +133,11 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   sigmaSelect.input.setAttribute('aria-label', 'Choose sigma attention');
   const sigmaValues = node('details'); sigmaValues.append(node('summary', 'Read the reference values')); const sigmaValuesBody = node('dl'); sigmaValues.append(sigmaValuesBody);
   const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), attentionList = node('dl', undefined, 'native-assurance__attention');
-  elements.statistics.append(sigmaPlot, sigmaReading, sigmaValues, attentionList);
+  const scope = node('section', undefined, 'native-assurance__scope'), scopeHead = node('div', undefined, 'native-assurance__scope-head');
+  scopeHead.append(node('span', 'NORMAL REFERENCE / TWO-SIDED TAILS'));
+  const scopeValue = node('strong'); scopeHead.append(scopeValue);
+  const scopeControls = node('div', undefined, 'native-assurance__scope-controls'); scopeControls.append(sigmaControl, sigmaSelect.group);
+  scope.append(scopeHead, sigmaPlot); elements.statistics.append(scope, scopeControls, sigmaReading, sigmaValues, attentionList);
   elements.events.append(node('h4', 'Prepare for recovery'), node('p', 'Describe an event, name who receives the recovery, and link the sessions that carry it. Aggregate person-minutes express everyone’s effort together.'), actionRow(button('Add a recovery event', 'add-event')));
   const eventList = node('div'); elements.events.append(eventList);
   elements.learning.append(node('h4', 'Turn a learning question into planned work'));
@@ -160,6 +172,14 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       enabled: !disposed && !composing && isActive() && view.status === 'editing' && view.draft?.raw['proposal.mode'] !== 'none'
         && active?.kind === 'assurance' && active.token === view.draft.token };
   }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
+  const rateControls = mountRateControls({ host: controls.get('independentRate').group, precision: controls.get('independentRate').input, label: 'Independent quality hourly rate',
+    read() {
+      const view = editor.read(), active = editing.read().active, raw = view.draft?.raw.independentRate;
+      const valid = raw?.trim() && !view.draft?.errors.some(error => error.path === 'draft.independentRate');
+      return { token: view.draft?.token, raw, cents: valid ? Math.round(Number(raw) * 100) : null,
+        enabled: !disposed && !composing && isActive() && view.status === 'editing'
+          && active?.kind === 'assurance' && active.token === view.draft?.token };
+    }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'independentRate', value), epoch); } });
   const manual = node('div'); manual.append(
     node('p', 'Plan quality, recovery and learning against the current purpose. Link existing sessions when they already carry the work. A new session asks for its participants, duration, occurrences and funding before Apply accepts it.'),
     node('p', 'The quality illustration uses reference hours × allocation × (0.65 + 0.15 × sigma attention), then applies the independent hourly rate and additional share. The recovery illustration uses aggregate person-time and the selected people’s mean rate. These illustrations remain separate from the native session ledger.'),
@@ -192,21 +212,25 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     cards.set(key, { details, summary, links });
   }
   function renderSigma(reading) {
-    const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 700 310'); svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', `Centered normal reference with thresholds at minus and plus ${reading.sigma} sigma`);
-    const shape = (tag, attributes) => { const child = document.createElementNS(ns, tag); for (const [name, value] of Object.entries(attributes)) child.setAttribute(name, value); svg.append(child); return child; };
-    const defs = document.createElementNS(ns, 'defs'), pattern = document.createElementNS(ns, 'pattern'), hatch = document.createElementNS(ns, 'path');
-    pattern.id = `${instance}-sigma-tail`; pattern.setAttribute('patternUnits', 'userSpaceOnUse'); pattern.setAttribute('width', '8'); pattern.setAttribute('height', '8');
-    hatch.setAttribute('d', 'M-2 2L2 -2M0 8L8 0M6 10L10 6'); hatch.setAttribute('stroke', 'currentColor'); hatch.setAttribute('stroke-width', '1.5'); pattern.append(hatch); defs.append(pattern); svg.append(defs);
-    for (const region of reading.regions) shape('rect', { x: region.x, y: 20, width: region.width, height: 255, class: 'native-assurance__sigma-region' });
-    shape('path', { d: reading.leftTailPath, fill: `url(#${instance}-sigma-tail)`, class: 'native-assurance__sigma-tail' }); shape('path', { d: reading.rightTailPath, fill: `url(#${instance}-sigma-tail)`, class: 'native-assurance__sigma-tail' });
-    shape('path', { d: reading.curvePath, fill: 'none', class: 'native-assurance__sigma-curve' });
-    shape('line', { x1: 45, y1: 275, x2: 655, y2: 275, class: 'native-assurance__sigma-axis' });
-    for (const [side, point] of Object.entries(reading.thresholds)) {
-      shape('line', { x1: point.x, y1: point.y, x2: point.x, y2: 275, class: 'native-assurance__sigma-threshold' });
-      shape('text', { x: point.x, y: 298, 'text-anchor': 'middle' }).textContent = `${side === 'left' ? '−' : '+'}${reading.sigma}σ`;
+    scopeValue.textContent = `Threshold ±${reading.sigma}σ`;
+    if (renderedSigma !== reading.sigma) {
+      const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 700 310'); svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', `Centered normal reference with thresholds at minus and plus ${reading.sigma} sigma`);
+      const shape = (tag, attributes) => { const child = document.createElementNS(ns, tag); for (const [name, value] of Object.entries(attributes)) child.setAttribute(name, value); svg.append(child); return child; };
+      const defs = document.createElementNS(ns, 'defs'), pattern = document.createElementNS(ns, 'pattern'), hatch = document.createElementNS(ns, 'path');
+      pattern.id = `${instance}-sigma-tail`; pattern.setAttribute('patternUnits', 'userSpaceOnUse'); pattern.setAttribute('width', '8'); pattern.setAttribute('height', '8');
+      hatch.setAttribute('d', 'M-2 2L2 -2M0 8L8 0M6 10L10 6'); hatch.setAttribute('stroke', 'currentColor'); hatch.setAttribute('stroke-width', '1.5'); pattern.append(hatch); defs.append(pattern); svg.append(defs);
+      for (const region of reading.regions) shape('rect', { x: region.x, y: 20, width: region.width, height: 255, class: 'native-assurance__sigma-region' });
+      shape('path', { d: reading.leftTailPath, fill: `url(#${instance}-sigma-tail)`, class: 'native-assurance__sigma-tail' }); shape('path', { d: reading.rightTailPath, fill: `url(#${instance}-sigma-tail)`, class: 'native-assurance__sigma-tail' });
+      shape('path', { d: reading.curvePath, fill: 'none', class: 'native-assurance__sigma-curve' });
+      shape('line', { x1: 45, y1: 275, x2: 655, y2: 275, class: 'native-assurance__sigma-axis' });
+      for (const [side, point] of Object.entries(reading.thresholds)) {
+        shape('line', { x1: point.x, y1: point.y, x2: point.x, y2: 275, class: 'native-assurance__sigma-threshold' });
+        shape('text', { x: point.x, y: 298, 'text-anchor': 'middle' }).textContent = `${side === 'left' ? '−' : '+'}${reading.sigma}σ`;
+      }
+      sigmaPlot.replaceChildren(svg);
+      renderedSigma = reading.sigma;
     }
-    sigmaPlot.replaceChildren(svg);
     sigmaReading.textContent = `${reading.basis} About ${Number(reading.tailPerMillion.toFixed(2)).toLocaleString('en-US')} reference values per million lie beyond the selected thresholds. Quality effort multiplier: ${reading.multiplier === null ? 'set the reference horizon' : Number(reading.multiplier.toFixed(3))}.`;
     attentionList.replaceChildren(...reading.attention.map(row => { const group = node('div'); group.append(node('dt', row.label), node('dd', `${row.description} ${row.hours === null ? 'Set a reference horizon to illustrate effort.' : `${hourText(row.hours)} of the quality illustration.`}`)); return group; }));
   }
@@ -233,6 +257,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
     renderTimeReadout(time, raw, { errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
     durationDials.refresh();
+    rateControls.refresh();
     lastProjection = view.projection;
     sigmaInput.value = String(reading.sigma.sigma); sigmaInput.setAttribute('aria-valuetext', `${reading.sigma.sigma} sigma attention`); sigmaValue.textContent = `${reading.sigma.sigma}σ`;
     renderSigma(reading.sigma);
@@ -295,6 +320,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = true; card.details.querySelector('input,textarea,select')?.focus(); return id;
   }
   function settle(method) {
+    rateControls.release();
     const view = editor.read(); if (disposed || !view.draft) return; if (composing && method === 'apply') { announce('Finish entering the text, then apply.'); return; }
     const epoch = ++generation, result = editor[method](view.draft.token); if (!owns(epoch)) return; if (!result.ok) { changed(result, epoch); return; }
     if (method === 'cancel') { opened(editor.begin('assurance', studio.read()), epoch, false); announce('Changes cancelled.'); return; }
@@ -363,8 +389,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   }
   listen(elements.form, 'input', input); listen(elements.form, 'change', input);
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
-  listen(elements.form, 'compositionstart', () => { composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
-  function close({ park = true } = {}) { if (disposed) return; durationDials.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
-  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
+  listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
+  function close({ park = true } = {}) { if (disposed) return; durationDials.release(); rateControls.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
+  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
   render(); const controller = Object.freeze({ open, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
 }

@@ -25,7 +25,7 @@ after(async () => { try { await Promise.all([...browsers.values()].map(browser =
 const root = page => page.locator('[data-native-coordination]');
 const score = page => root(page).locator('[data-native-score]');
 const field = (page, key) => score(page).locator(`[data-score-field="${key}"]`).filter({ hasNot: page.locator('button') });
-const input = (page, key) => score(page).locator(`input[data-score-field="${key}"],select[data-score-field="${key}"]`);
+const input = (page, key) => score(page).locator(`input[data-score-field="${key}"],select[data-score-field="${key}"],textarea[data-score-field="${key}"]`);
 const action = (page, name) => score(page).locator(`[data-score-action="${name}"]`);
 async function open(t, engine, options = {}) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...options });
@@ -57,7 +57,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await expect(score(page).locator('[data-score-readout]')).toContainText('825 min');
     const accepted = await bytes(page);
-    await score(page).locator('.native-score__transport select').selectOption('2');
+    await score(page).getByRole('button', { name: '2×', exact: true }).click();
     assert.equal(await bytes(page), accepted, 'view zoom leaves accepted serialization exact');
     await inspect(page, 'work', 'review');
     await input(page, 'work.review.startMinute').fill('500');
@@ -75,7 +75,7 @@ for (const engine of names) {
   test(`${engine}: a modeled gate and explicit funding accept one next session with Undo`, async t => {
     const page = await open(t, engine), before = await bytes(page);
     await inspect(page, 'gate', 'pilot-decision');
-    await input(page, 'gate.pilot-decision.modeledDecision').selectOption('proceed');
+    await score(page).getByRole('radio', { name: 'Proceed in this model', exact: true }).check();
     await expect(score(page).locator('[data-score-preview]')).toContainText('proposed investment $3,980.00');
     await inspect(page, 'proposal', 'confirm-recovery');
     await score(page).locator('[data-score-fund="confirm-recovery"]').check();
@@ -93,6 +93,10 @@ for (const engine of names) {
   test(`${engine}: score navigation retains raw entries and exposes stale review after a session edit`, async t => {
     const page = await open(t, engine);
     await inspect(page, 'work', 'review'); await input(page, 'work.review.startMinute').fill('00660');
+    await expect(action(page, 'source')).toHaveClass(/native-control--navigate/u);
+    await expect(action(page, 'source')).toHaveAccessibleName('Open session settings');
+    await expect(score(page).getByRole('button', { name: 'Go to Change', exact: true })).toHaveClass(/native-control--navigate/u);
+    await expect(score(page).getByRole('button', { name: '2×', exact: true })).not.toHaveClass(/native-control--navigate/u);
     await action(page, 'source').click();
     await expect(root(page).locator('[data-native-return-action]')).toHaveText('Return to coordination horizon');
     const settings = root(page).locator('[data-native-configure]'); if (!await settings.evaluate(el => el.open)) await settings.locator('summary').click();
@@ -154,7 +158,7 @@ for (const engine of names) {
     await score(page).locator('.native-score__exact summary').click();
     await expect(score(page).locator('.native-score__exact table')).toContainText('4 × 30 min');
     const before = await bytes(page);
-    await action(page, 'whole').focus(); await page.keyboard.press('Enter'); assert.equal(await bytes(page), before);
+    await score(page).getByRole('button', { name: 'Whole plan', exact: true }).focus(); await page.keyboard.press('Enter'); assert.equal(await bytes(page), before);
     await page.emulateMedia({ forcedColors: 'active' });
     await page.keyboard.press('Tab');
     await score(page).locator('.native-score__scroll').focus();
@@ -349,5 +353,109 @@ for (const engine of names) {
         `The ending elapsed-minute label stays on one line at ${width}px`);
     }
     assert.equal(await bytes(page), accepted, 'availability inspection preserves accepted state');
+  });
+  test(`${engine}: direct horizon controls retain draft text and distinguish inspection from navigation`, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    const scales = score(page).getByRole('group', { name: 'View scale', exact: true });
+    assert.deepEqual(await scales.getByRole('button').allTextContents(), ['Whole plan', '2×', '4×']);
+    await expect(scales.getByRole('button', { name: 'Whole plan', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(score(page).locator('.native-score__transport select')).toHaveCount(0);
+    await expect(action(page, 'reset-focus')).toBeHidden();
+    await inspect(page, 'work', 'review'); await input(page, 'work.review.startMinute').fill('00660');
+    await action(page, 'focus').click();
+    await expect(score(page).locator('.native-score__track-label[data-score-kind="work"]')).toHaveCount(1);
+    const closer = scales.getByRole('button', { name: '4×', exact: true }); await closer.focus(); await page.keyboard.press('Enter');
+    await expect(closer).toBeFocused(); await expect(closer).toHaveAttribute('aria-pressed', 'true');
+    await expect(action(page, 'reset-focus')).toBeVisible(); await action(page, 'reset-focus').focus(); await page.keyboard.press('Enter');
+    await expect(score(page).locator('.native-score__track-label[data-score-kind="work"]')).toHaveCount(4);
+    await expect(closer).toHaveAttribute('aria-pressed', 'true'); await expect(closer).toBeFocused();
+    await action(page, 'focus').click(); await scales.getByRole('button', { name: 'Whole plan', exact: true }).click();
+    await expect(action(page, 'reset-focus')).toBeHidden();
+    await expect(score(page).locator('.native-score__track-label[data-score-kind="work"]')).toHaveCount(4);
+    await expect(input(page, 'work.review.startMinute')).toHaveValue('00660');
+
+    const person = score(page).locator('[data-score-person="noor"]');
+    await expect(person.getByRole('heading', { name: 'Quality reviewer', exact: true })).toBeVisible();
+    await expect(person.locator('h5 button')).toHaveCount(0); await expect(person.getByRole('button')).toHaveCount(2);
+    await person.getByRole('button', { name: 'Inspect availability for Quality reviewer', exact: true }).click();
+    await expect(score(page).locator('.native-score__picker select')).toHaveValue('noor');
+    await expect(score(page).locator('.native-score__inspector')).toHaveAttribute('data-native-arrival', 'inspection');
+    await person.getByRole('button', { name: 'Go to person settings for Quality reviewer', exact: true }).click();
+    await expect(root(page).locator('[data-native-chapter-panel="people"]')).toBeVisible();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    const handoff = score(page).locator('.native-score__dependencies li').last();
+    await expect(handoff.locator('h5 button')).toHaveCount(0);
+    await handoff.getByRole('button', { name: /^Inspect handoff from /u }).click();
+    await expect(score(page).locator('[data-score-kind="dependency"][data-score-action="kind"]')).toHaveAttribute('aria-pressed', 'true');
+    const onward = score(page).getByRole('group', { name: 'Go to chapter', exact: true });
+    await onward.getByRole('button', { name: 'Go to Change', exact: true }).click();
+    await expect(root(page).locator('[data-native-chapter-panel="change"]')).toBeVisible();
+    await expect(root(page).locator('[data-native-chapter-panel="change"]')).toHaveAttribute('data-native-arrival', 'context');
+    await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
+    await root(page).locator('[data-native-return-action]').click();
+    await inspect(page, 'work', 'review'); await expect(input(page, 'work.review.startMinute')).toHaveValue('00660');
+    assert.equal(await bytes(page), accepted, 'view controls and labelled onward routes retain both accepted state and draft text');
+  });
+  test(`${engine}: decision and waiting prose reads in full while native choices retain draft and Apply ownership`, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    const question = '  Can the receiving team recover an interrupted request?\nDescribe the observed handoff, including the person who received it, the delay and the next useful decision.  ';
+    const evidence = '  Reviewer observation: the receiving team completed the recovery rehearsal.\nRetain the unexpected steps and unanswered questions as evidence for the next review, including the final receiving acknowledgement.  ';
+    const reason = '  Wait for the receiving team to examine the recovery evidence.\nThis interval holds elapsed time only; the working session accounts for the people’s effort.  ';
+    await inspect(page, 'gate', 'pilot-decision');
+    for (const [key, raw, name] of [['question', question, 'Edit question to resolve'], ['evidence', evidence, 'Edit evidence for review']]) {
+      const field = input(page, `gate.pilot-decision.${key}`);
+      await score(page).getByText(name, { exact: true }).click(); await expect(field).toHaveAttribute('rows', '4'); await field.fill(raw);
+      await score(page).getByText(name, { exact: true }).click();
+      assert.equal(await score(page).locator(`[data-score-prose="gate.pilot-decision.${key}"]`).textContent(), raw);
+    }
+    const openDecision = score(page).getByRole('radio', { name: 'Open for review', exact: true });
+    await openDecision.focus(); await page.keyboard.press('ArrowRight');
+    await expect(score(page).getByRole('radio', { name: 'Proceed in this model', exact: true })).toBeChecked();
+    await inspect(page, 'wait', 'review-preparation');
+    await score(page).getByText('Edit reason for the wait', { exact: true }).click(); await input(page, 'wait.review-preparation.reason').fill(reason);
+    await score(page).getByText('Edit reason for the wait', { exact: true }).click();
+    assert.equal(await score(page).locator('[data-score-prose="wait.review-preparation.reason"]').textContent(), reason);
+    await inspect(page, 'gate', 'pilot-decision');
+    for (const [key, raw] of [['question', question], ['evidence', evidence]]) {
+      await expect(input(page, `gate.pilot-decision.${key}`)).toHaveValue(raw);
+      assert.equal(await score(page).locator(`[data-score-prose="gate.pilot-decision.${key}"]`).textContent(), raw);
+    }
+    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    const fullReading = score(page).locator('[data-score-prose="gate.pilot-decision.evidence"]');
+    const geometry = await fullReading.evaluate(element => { const rect = element.getBoundingClientRect(); return { left: rect.left, right: rect.right, viewport: innerWidth, content: element.scrollHeight, height: element.clientHeight, whitespace: getComputedStyle(element).whiteSpace }; });
+    assert.ok(geometry.left >= 0 && geometry.right <= geometry.viewport + 1 && geometry.content <= geometry.height + 1, JSON.stringify(geometry));
+    assert.equal(geometry.whitespace, 'pre-wrap', 'the complete reading retains authored line breaks');
+    assert.equal(await bytes(page), accepted, 'prose and modeled decision remain draft changes until Apply');
+    await action(page, 'apply').click();
+    const state = await page.evaluate(() => window.scoreFixture.studio.read().state);
+    assert.equal(state.scoreSettings.gates[0].question, question.trim()); assert.equal(state.scoreSettings.gates[0].evidence, evidence.trim());
+    assert.equal(state.scoreSettings.gates[0].modeledDecision, 'proceed'); assert.equal(state.scoreSettings.waits[0].reason, reason.trim());
+    await page.evaluate(() => { window.scoreFixture.studio.undo(window.scoreFixture.studio.read()); window.scoreFixture.controller.refresh(); });
+    assert.equal(await bytes(page), accepted);
+  });
+  test(`${engine}: a stage adds a decision to the retained arrangement and Apply accepts both edits together`, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    await inspect(page, 'work', 'review'); await input(page, 'work.review.startMinute').fill('00500');
+    await score(page).getByRole('button', { name: 'Add a decision after Understand the request', exact: true }).click();
+    await expect(input(page, 'gate.gate-1.label')).toBeFocused();
+    await expect(input(page, 'gate.gate-1.label')).toHaveValue('Decision after Understand the request');
+    await expect(input(page, 'gate.gate-1.afterStageId')).toHaveValue('understand');
+    await input(page, 'gate.gate-1.label').fill('Research handoff decision');
+    await inspect(page, 'work', 'review'); await expect(input(page, 'work.review.startMinute')).toHaveValue('00500');
+    assert.equal(await bytes(page), accepted, 'the stage action adds to the current raw proposal, not the accepted plan');
+    await action(page, 'apply').click();
+    const state = await page.evaluate(() => window.scoreFixture.studio.read().state);
+    assert.equal(state.scoreSettings.gates.length, 2);
+    assert.equal(state.scoreSettings.gates.find(row => row.id === 'gate-1').afterStageId, 'understand');
+    assert.equal(state.scoreSettings.gates.find(row => row.id === 'gate-1').label, 'Research handoff decision');
+    assert.equal(state.work.find(row => row.id === 'review').timing.startMinute, 500);
+    await expect(root(page).locator('[data-native-total]')).toHaveText('$3,980.00');
+    await page.evaluate(() => { window.scoreFixture.studio.undo(window.scoreFixture.studio.read()); window.scoreFixture.controller.refresh(); });
+    assert.equal(await bytes(page), accepted, 'Undo restores the exact plan before the combined arrangement');
+    await score(page).getByRole('button', { name: 'Add a decision after Build and rehearse', exact: true }).click();
+    await expect(score(page).locator('[data-score-status]')).toHaveText('Review the saved arrangement before adding a decision.');
+    await expect(action(page, 'review')).toBeFocused();
+    assert.equal(await bytes(page), accepted);
   });
 }

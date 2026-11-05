@@ -7,6 +7,7 @@ const COLLECTION = Object.freeze({ ability: 'abilities', practice: 'practices' }
 const STAGES = Object.freeze({ proposed: 'Proposed', supported: 'Supported', rehearsed: 'Rehearsed', 'observed-in-context': 'Observed in context' });
 const CHOICES = Object.freeze({ '': 'Keep the current observations', yes: 'Add a session', no: 'Use existing work only',
   allocated: 'Within funded time', additional: 'Extra investment', active: 'Active', retired: 'Retired', ...STAGES });
+const SUPPORT_COLUMNS = Object.freeze([['responsibility', 'Responsibility'], ['preparation', 'Preparation'], ['review', 'Review'], ['observation', 'Observation']]);
 let nextInstance = 0;
 
 // Presentation owns one selected card and one mounted editor. All raw edits,
@@ -34,7 +35,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const item = document.createElement(tag); if (content !== undefined) item.textContent = content;
     if (className) item.className = className; return item;
   }
-  function button(label, action) { const item = node('button', label); item.type = 'button'; item.dataset.capabilityAction = action; return item; }
+  function button(label, action) {
+    const item = node('button', label); item.type = 'button'; item.dataset.capabilityAction = action;
+    if (['select', 'support-cell', 'prerequisite', 'work'].includes(action)) item.classList.add('native-control--navigate');
+    return item;
+  }
   function announce(message) { if (!disposed) elements.status.textContent = message; }
   function investmentAmount(label, result) {
     const title = result.standing === 'priced' ? label : `Known ${label.toLowerCase()}`;
@@ -48,6 +53,32 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     target = makeCapabilityTarget(descriptor.form, descriptor.id);
   }
   function supportLabel(summary) { return summary ? summary.gaps.length ? 'Review the remaining support questions' : 'Supporting work is planned' : 'Plan its people and supporting work'; }
+  function supportCell(definition, row, summary, phase) {
+    if (phase === 'responsibility') {
+      const gaps = summary?.gaps.filter(gap => ['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId'].includes(gap.field)) ?? [];
+      const missing = gaps.some(gap => gap.code.endsWith('-needed'));
+      const owner = projection.state.people.find(person => person.id === row?.decisionOwnerPersonId);
+      const team = projection.state.teams.find(team => team.id === row?.teamId);
+      return { state: !row ? 'available' : missing ? 'gap' : gaps.length ? 'attention' : 'linked',
+        label: !row || missing ? 'Choose people' : gaps.length ? 'Review responsibility' : 'People assigned',
+        detail: gaps[0]?.message ?? (row ? `${team?.label ?? 'Team to choose'} · ${owner?.label ?? 'Decision owner to choose'} decides` : 'Name the team, people and decision owner.') };
+    }
+    if (phase === 'observation') {
+      const latest = projection.state.capabilityEvidence.find(item => item.id === summary?.evidenceIds.at(-1));
+      return latest ? { state: 'recorded', label: `${STAGES[latest.stage]} recorded`, detail: latest.observation }
+        : { state: row ? 'gap' : 'available', label: 'Add when available', detail: 'Record what people observed and where it applies.' };
+    }
+    const requirements = definition.supportRequirements.filter(requirement => requirement.phase === phase);
+    if (!requirements.length) return { state: 'unspecified', label: 'Not specified', detail: `This definition describes its other supporting work in the card.`, requirement: null };
+    const readings = requirements.map(requirement => ({ requirement, reading: summary?.requirements.find(item => item.requirementId === requirement.id) }));
+    const receiver = readings.find(({ reading }) => !reading?.complete) ?? readings[0];
+    const workIds = [...new Set(readings.flatMap(({ reading }) => reading?.workIds ?? []))];
+    const gaps = summary?.gaps.filter(gap => requirements.some(requirement => requirement.id === gap.requirementId)) ?? [];
+    return { state: !row ? 'available' : !workIds.length ? 'gap' : gaps.length ? 'attention' : 'linked',
+      label: !workIds.length ? 'Choose work' : gaps.length ? 'Review support' : 'Work linked',
+      detail: gaps[0]?.message ?? (workIds.length ? workIds.map(id => projection.state.work.find(work => work.id === id)?.label ?? id).join(' · ') : receiver.requirement.description),
+      requirement: receiver.requirement.id };
+  }
   function renderCatalogues(next) {
     if (projection === next) return;
     projection = next;
@@ -64,14 +95,33 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       for (const row of rows) if (!choices.some(choice => choice.row?.id === row.id)) {
         choices.push({ definition: getCapabilityDefinition(kind, row.definitionId, row.definitionVersion), row });
       }
-      list.replaceChildren(...choices.map(({ definition, row }) => {
-        const li = node('li'), control = button('', 'select'); control.className = 'native-capabilities__choice';
-        Object.assign(control.dataset, { capabilityKind: kind, capabilityDefinition: definition.id,
-          capabilityVersion: definition.version, capabilityId: row?.id ?? '' });
-        control.append(node('strong', definition.action), node('span', row
-          ? row.lifecycle === 'retired' ? 'Retired from the plan' : supportLabel(summaryFor(kind, row.id)) : 'Ready to plan'));
-        li.append(control); return li;
-      }));
+      const table = node('table'), head = node('thead'), heading = node('tr'), body = node('tbody');
+      table.append(node('caption', `${kind === 'ability' ? 'Customer abilities' : 'Team practices'} · support in the accepted plan`));
+      for (const label of [kind === 'ability' ? 'What people can do' : 'How the team works', ...SUPPORT_COLUMNS.map(([, label]) => label)]) {
+        const cell = node('th', label); cell.scope = 'col'; heading.append(cell);
+      }
+      head.append(heading); table.append(head, body);
+      for (const { definition, row } of choices) {
+        const tr = node('tr'), title = node('th'), control = button('', 'select');
+        title.scope = 'row'; control.classList.add('native-capabilities__choice');
+        const identity = { capabilityKind: kind, capabilityDefinition: definition.id,
+          capabilityVersion: definition.version, capabilityId: row?.id ?? '' };
+        Object.assign(control.dataset, identity); Object.assign(tr.dataset, identity); tr.dataset.capabilityRow = '';
+        control.append(node('strong', definition.action), node('span', row ? row.lifecycle === 'retired' ? 'Retired from the plan' : 'Included in this plan' : 'Available to plan'));
+        title.append(control); tr.append(title);
+        for (const [phase, label] of SUPPORT_COLUMNS) {
+          const reading = supportCell(definition, row, row ? summaryFor(kind, row.id) : null, phase), cell = node('td');
+          const item = reading.state === 'unspecified' ? node('span') : button('', 'support-cell');
+          item.classList.add('native-capability__cell'); item.dataset.supportState = reading.state;
+          Object.assign(item.dataset, identity, { capabilityPhase: phase });
+          if (reading.requirement) item.dataset.capabilityRequirementTarget = reading.requirement;
+          if (item.tagName === 'BUTTON') item.setAttribute('aria-label', `${definition.action} · ${label}: ${reading.label}. ${reading.detail}`);
+          item.append(node('strong', reading.label, 'native-capability__cell-status'), node('span', reading.detail, 'native-capability__cell-detail'));
+          cell.append(item); tr.append(cell);
+        }
+        body.append(tr);
+      }
+      list.replaceChildren(table);
     }
   }
   function section(title, content, preview = null) {
@@ -99,9 +149,13 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     actions.get('beside').setAttribute('aria-pressed', String(beside));
     actions.get('beside').textContent = beside ? 'Use one reading' : 'Open beside';
     actions.get('configure').textContent = row ? 'Edit support' : `Plan this ${selection.kind}`;
+    actions.get('configure').classList.toggle('native-control--create', !row);
     for (const control of root.querySelectorAll('[data-capability-action="select"]')) control.setAttribute('aria-pressed', String(
       control.dataset.capabilityKind === selection.kind && control.dataset.capabilityDefinition === def.id
       && control.dataset.capabilityVersion === def.version && control.dataset.capabilityId === (row?.id ?? '')));
+    for (const item of root.querySelectorAll('[data-capability-row]')) item.dataset.selected = String(
+      item.dataset.capabilityKind === selection.kind && item.dataset.capabilityDefinition === def.id
+      && item.dataset.capabilityVersion === def.version && item.dataset.capabilityId === (row?.id ?? ''));
     const overview = [node('h5', 'What becomes possible'), node('p', def.explanation), node('p', def.actor),
       node('p', row?.context ?? (proposal?.raw.context.trim() || 'Name where people will use this action.')),
       node('p', proposal ? 'Proposed for this plan. Apply accepts its people and supporting work.' : supportLabel(summary))];
@@ -138,6 +192,9 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       }) ? 'Selected' : 'Choose or plan this prerequisite'}`);
       const plan = button(`Plan ${name.toLowerCase()}`, 'prerequisite');
       Object.assign(plan.dataset, { capabilityKind: required.kind, capabilityDefinition: required.definitionId, capabilityVersion: required.definitionVersion });
+      const existing = projection.state[COLLECTION[required.kind]].find(item => item.definitionId === required.definitionId && item.definitionVersion === required.definitionVersion && item.lifecycle === 'active');
+      if (existing) { plan.dataset.capabilityId = existing.id; plan.textContent = `Inspect ${name.toLowerCase()}`; }
+      else plan.classList.add('native-control--create');
       li.append(plan); prerequisites.append(li);
     }
     detail.push(section('Prerequisites', prerequisites.children.length ? prerequisites : 'This definition has no required prerequisite definition.',
@@ -197,7 +254,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (['people', 'teams', 'work'].includes(metadata.source)) {
       const type = { people: 'person', teams: 'team', work: 'session' }[metadata.source];
       const create = node('button', `Add ${type === 'person' ? 'a person' : type === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
-      create.type = 'button'; create.dataset.nativeCreate = type; create.dataset.nativeReturn = 'capability'; create.dataset.nativeReturnField = key; group.append(create);
+      create.type = 'button'; create.classList.add('native-control--navigate'); create.dataset.nativeCreate = type; create.dataset.nativeReturn = 'capability'; create.dataset.nativeReturnField = key; group.append(create);
     }
     group.append(error); parent.append(group); controls.set(key, { input, error, metadata, checkboxes });
   }
@@ -226,6 +283,8 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       group.append(newWork); elements.fields.append(group); workGroups.set(requirement.id, { group, newWork });
     }
     const evidence = node('details', undefined, 'native-capability__section'); evidence.append(node('summary', 'Record an observation · add evidence when available'));
+    const latest = projection.state.capabilityEvidence.filter(item => item.subject.kind === descriptor.kind && item.subject.instanceId === descriptor.id).at(-1);
+    if (latest) evidence.append(node('p', `${STAGES[latest.stage]} recorded: ${latest.observation} Context: ${latest.context}. Applies to: ${latest.reviewBoundary}.`));
     field(evidence, 'evidenceStage', descriptor.fields.evidenceStage, raw.evidenceStage);
     observationGroup = node('div');
     for (const key of ['evidenceContext', 'evidenceObservation', 'evidenceRecorder', 'evidenceReviewBoundary']) field(observationGroup, key, descriptor.fields[key], raw[key]);
@@ -285,7 +344,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     elements.dependencies.replaceChildren(...(error?.references ?? []).map(ref => {
       if (ref.collection !== 'changeSettings') return node('li', `${ref.collection ?? ref.kind}: ${ref.id ?? ref.instanceId}`);
       const item = node('li'), link = node('a', 'Review this card’s links in Change');
-      link.href = '#native-studio-change'; link.dataset.nativeOpenChange = ''; item.append(link); return item;
+      link.href = '#native-studio-change'; link.classList.add('native-control--navigate'); link.dataset.nativeOpenChange = ''; item.append(link); return item;
     }));
     if (preview?.ok) {
       const needsRates = preview.projection.result.plannedCommitmentCents === null || projection.result.plannedCommitmentCents === null;
@@ -352,7 +411,27 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   function selectCard(control) {
     const { capabilityKind: kind, capabilityDefinition: id, capabilityVersion: version, capabilityId: instanceId } = control.dataset;
     if (instanceId) return open(makeCapabilityTarget(capabilityForm(kind, 'update', id, version), instanceId), false);
+    const held = editing.read(), targets = [held.active?.kind === 'capability' ? held.active.targetId : null,
+      ...held.parked.filter(row => row.kind === 'capability').map(row => row.targetId)].filter(Boolean);
+    const saved = targets.find(target => {
+      const descriptor = describeCapabilityTarget(target);
+      return descriptor?.mode === 'create' && descriptor.kind === kind && descriptor.definition.id === id && descriptor.definition.version === version;
+    });
+    if (saved) return open(saved, false);
     return create(kind, id, version, false);
+  }
+  function inspectSupport(control) {
+    const result = selectCard(control), current = editor.read();
+    if (disposed || !result?.view.draft || result.view.draft.token !== current.draft?.token
+      || editing.read().active && editing.read().active.kind !== 'capability') return;
+    if (current.status !== 'editing') { focusEditor(); return; }
+    const phase = control.dataset.capabilityPhase;
+    const region = phase === 'responsibility' ? peopleGroup : phase === 'observation' ? observationGroup?.closest('details')
+      : workGroups.get(control.dataset.capabilityRequirementTarget)?.group;
+    if (!region) return;
+    region.open = true;
+    const key = phase === 'responsibility' ? 'teamId' : phase === 'observation' ? 'evidenceStage' : `support.${control.dataset.capabilityRequirementTarget}`;
+    controls.get(key)?.input.focus();
   }
   function renderManual() {
     const groups = [];
@@ -374,18 +453,21 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const action = control.dataset.capabilityAction;
     if (action === 'apply') return;
     if (action === 'select') { selectCard(control); return; }
+    if (action === 'support-cell') { inspectSupport(control); return; }
     if (action === 'reverse') { reversed = !reversed && !beside; beside = false; renderCard(); return; }
     if (action === 'beside') { beside = !beside; reversed = false; renderCard(); return; }
     if (action === 'configure' && selection) {
-      if (record()) open(makeCapabilityTarget(capabilityForm(selection.kind, 'update', selection.definitionId, selection.version), selection.id));
-      else create(selection.kind, selection.definitionId, selection.version); return;
+      const result = selectCard({ dataset: { capabilityKind: selection.kind, capabilityDefinition: selection.definitionId,
+        capabilityVersion: selection.version, capabilityId: record()?.id ?? '' } });
+      if (result?.view.draft?.token === editor.read().draft?.token && editing.read().active?.kind === 'capability') focusEditor();
+      return;
     }
     if (action === 'remove' && record()) { open(makeCapabilityTarget(capabilityForm(selection.kind, 'remove', selection.definitionId, selection.version), selection.id)); return; }
     if (action === 'work') {
       const row = record(), origin = target ?? (row ? makeCapabilityTarget(capabilityForm(selection.kind, 'update', row.definitionId, row.definitionVersion), row.id) : null);
       onSourceWork(control.dataset.capabilityWork, { targetId: origin }); return;
     }
-    if (action === 'prerequisite') { create(control.dataset.capabilityKind, control.dataset.capabilityDefinition, control.dataset.capabilityVersion); return; }
+    if (action === 'prerequisite') { selectCard(control); return; }
     if (action === 'cancel' || action === 'discard') { settle('cancel'); return; }
     const view = editor.read(); if (!view.draft) return;
     const epoch = ++generation;

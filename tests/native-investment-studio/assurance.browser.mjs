@@ -93,7 +93,7 @@ for (const engine of names) {
     assert.equal(await minutesDial.evaluate(node => node.hasPointerCapture(window.assuranceFixture.pointerId)), false);
     await minutesDial.evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', { pointerId: window.assuranceFixture.pointerId, clientX: 0, clientY: 0, bubbles: true })));
     await page.mouse.up(); await tab(page, 'assurance').click(); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
-    await field(page, 'proposal.minutesPerSession').fill('30'); await field(page, 'proposal.funding').selectOption('additional');
+    await field(page, 'proposal.minutesPerSession').fill('30'); await check(page, 'proposal.funding', 'additional').check();
     const time = panel(page).locator('.native-time-controls');
     for (const width of [1280, 1920]) {
       await page.setViewportSize({ width, height: 1100 });
@@ -139,6 +139,7 @@ for (const engine of names) {
     await selectConcept(page, 'independent-review'); await selectScenario(page, 'recovery-failure');
     await action(page, 'apply').click(); assert.equal(await bytes(page), initial);
     assert.equal(await page.evaluate(() => window.assuranceFixture.studio.readHistory().undoCount), 0);
+    await panel(page).locator('.native-assurance__scope').screenshot({ path: resolve(captures, `${engine}-crt-reference.png`) });
     await field(page, 'sourcePresetId').selectOption('regulated-workflow');
     await expect(check(page, 'horizonUnit', 'quarters')).toBeChecked();
     const quarterHours = await page.evaluate(async () => { const {estimateQualityReference} = await import('/collaboration/investment-analysis/staffing-adapter.mjs'); const estimate = estimateQualityReference({ included: true, allocationPercent: 100, independentRateCentsPerHour: 0, sigmaHalfSteps: 2, additionalShareBasisPoints: 10000 }, { quantity: 1, unit: 'quarters' }); return estimate.hours / estimate.multiplier; });
@@ -164,8 +165,14 @@ for (const engine of names) {
     await expect(panel(page).locator('[data-assurance-concept]:visible')).toHaveCount(1); await selectConcept(page, 'independent-review');
     await expect(field(page, 'concept.independent-review.included')).not.toBeChecked(); await expect(check(page, 'concept.independent-review.workIds', 'review')).toBeChecked();
     await expect(check(page, 'concept.independent-review.workIds', 'research')).not.toBeChecked();
-    await field(page, 'independentRate').fill('10.25'); await panel(page).getByRole('button', { name: 'Increase independent quality rate per hour', exact: true }).click();
-    await expect(field(page, 'independentRate')).toHaveValue('11.25');
+    const coarseRate = panel(page).locator('[data-rate-step="10"]'), fineRate = panel(page).locator('[data-rate-step="5"]');
+    await field(page, 'independentRate').fill(''); await expect(coarseRate).toBeDisabled(); await expect(fineRate).toBeDisabled();
+    await field(page, 'independentRate').fill('100.25');
+    await coarseRate.focus(); await page.keyboard.press('ArrowRight'); await expect(field(page, 'independentRate')).toHaveValue('110.25');
+    await fineRate.focus(); await page.keyboard.press('ArrowLeft'); await expect(field(page, 'independentRate')).toHaveValue('105.25');
+    await panel(page).getByRole('button', { name: 'Increase independent quality rate per hour', exact: true }).click();
+    await expect(field(page, 'independentRate')).toHaveValue('106.25');
+    assert.equal(await bytes(page), initial, 'rate illustration edits remain in the Assurance draft');
     const prompt = panel(page).locator('[data-assurance-learning] details').first(); await prompt.locator('summary').click(); await prompt.locator('[data-assurance-action="learning"]').click();
     await field(page, 'learning.learning-1.context').fill('Find the observation that could change pilot readiness.');
     await field(page, 'learning.learning-1.decisionOwnerPersonId').selectOption('maya'); await check(page, 'learning.learning-1.workIds', 'research').check();
@@ -203,6 +210,7 @@ for (const engine of names) {
     await expect(panel(page).locator('[data-assurance-preview]')).toContainText('paused');
     await action(page, 'apply').click();
     await expect(panel(page).locator('[data-assurance-error]')).toHaveText('');
+    assert.equal(await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.independentRateCentsPerHour), 10625);
     assert.equal(await page.evaluate(() => window.assuranceFixture.studio.read().state.connections.find(row => row.id === 'readiness').status), 'paused');
     const concepts = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.concepts);
     assert.deepEqual(concepts.find(row => row.conceptId === 'independent-review').workIds, ['review']); assert.equal(concepts.find(row => row.conceptId === 'independent-review').included, false);
@@ -246,7 +254,7 @@ for (const engine of names) {
     await expect(field(page, 'rehearsal.rehearsal-1.context')).toHaveValue('Find a reviewer for the planned pilot');
     await expect(field(page, 'rehearsal.rehearsal-1.reviewerPersonId')).toBeFocused();
     await field(page, 'rehearsal.rehearsal-1.reviewerPersonId').selectOption({ label: 'Additional reviewer' });
-    await specialistResponse.locator('[data-assurance-action="propose"]').click(); await field(page, 'proposal.mode').selectOption('update');
+    await specialistResponse.locator('[data-assurance-action="propose"]').click(); await check(page, 'proposal.mode', 'update').check();
     await field(page, 'proposal.existingWorkId').selectOption('rehearsal'); await field(page, 'proposal.minutesPerSession').fill('30'); await field(page, 'proposal.hoursPerSession').fill('0'); await field(page, 'proposal.occurrences').fill('1');
     await expect(panel(page).locator('[data-assurance-preview]')).toContainText('Proposed investment: $3,680.00');
     await expect(total(page)).toHaveText('$3,980.00'); await action(page, 'apply').click(); await expect(total(page)).toHaveText('$3,680.00');

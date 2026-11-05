@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { mountChapterShell } from '../../collaboration/native-investment-studio/shell.mjs';
+import { mountStudioMotion } from '../../collaboration/native-investment-studio/motion.mjs';
 import { createStudioIcon, STUDIO_ICON_NAMES } from '../../collaboration/native-investment-studio/icons.mjs';
 
 // This fixture observes attribute/state ownership and resource lifecycles. Native
@@ -86,10 +87,10 @@ function fixture(hash = '') {
     button.textContent = key === 'people' ? 'People' : 'Coordination';
     button.box = key === 'people' ? { left: 240, right: 360 } : { left: 0, right: 180 };
     const panel = element('section', { id: `native-studio-${key}`, 'data-native-chapter-panel': key });
-    panel.animate = () => {
+    panel.animate = (frames, options) => {
       let resolve, reject;
       const finished = new Promise((a, b) => { resolve = a; reject = b; });
-      const animation = { finished, resolve, cancelled: false, cancel() { this.cancelled = true; reject(new Error('Cancelled')); } };
+      const animation = { frames, options, finished, resolve, cancelled: false, cancel() { this.cancelled = true; reject(new Error('Cancelled')); } };
       animations.push(animation); return animation;
     };
     const input = element('input'); input.value = '0045';
@@ -312,7 +313,8 @@ test('synchronous focus disposal preserves the authored fallback and acquires no
 });
 
 test('reentrant disposal during animation acquisition cancels and settles the retired handle', async () => {
-  const f = fixture(); const shell = mountChapterShell(f.root);
+  const f = fixture(), motion = mountStudioMotion(f.root); motion.set('full');
+  const shell = mountChapterShell(f.root, { motion });
   const target = f.records.get('people').panel;
   const animate = target.animate;
   target.animate = (...args) => { const handle = animate(...args); shell.dispose(); return handle; };
@@ -321,11 +323,13 @@ test('reentrant disposal during animation acquisition cancels and settles the re
   assert.ok([...f.records.values()].every(({ panel }) => !panel.hidden));
   assert.equal(f.animations.length, 1);
   assert.equal(f.animations[0].cancelled, true);
+  motion.dispose();
   await Promise.resolve();
 });
 
 test('rapid transitions cancel the previous animation and reduced motion releases the current resource', async () => {
-  const f = fixture(); const shell = mountChapterShell(f.root);
+  const f = fixture(), motion = mountStudioMotion(f.root); motion.set('full');
+  const shell = mountChapterShell(f.root, { motion });
   shell.select('people');
   const first = f.animations[0];
   shell.select('coordination');
@@ -337,11 +341,60 @@ test('rapid transitions cancel the previous animation and reduced motion release
   shell.select('people');
   assert.equal(f.animations.length, 2);
   assert.equal(shell.read().activeChapter, 'people');
-  f.media.matches = false;
+  f.media.matches = false; f.media.send('change');
   shell.select('coordination');
   f.document.visibilityState = 'hidden'; f.document.send('visibilitychange');
   assert.equal(f.animations[2].cancelled, true);
-  shell.dispose();
+  shell.dispose(); motion.dispose();
+});
+
+test('Studio motion starts lower, preserves explicit preference under system reduction, and retires live effects', async () => {
+  const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
+  assert.strictEqual(mountStudioMotion(f.root), motion);
+  assert.deepEqual(motion.read(), { requested: 'lower', effective: 'lower', systemReduced: false, disposed: false });
+  shell.select('people'); assert.equal(f.animations.length, 0);
+  assert.equal(f.root.getAttribute('data-native-motion'), 'lower');
+  motion.set('full'); shell.select('coordination'); assert.equal(f.animations.length, 1);
+  motion.set('lower'); assert.equal(f.animations[0].cancelled, true);
+  motion.set('full'); shell.select('people');
+  f.media.matches = true; f.media.send('change');
+  assert.equal(f.animations[1].cancelled, true);
+  assert.deepEqual(motion.read(), { requested: 'full', effective: 'lower', systemReduced: true, disposed: false });
+  shell.select('coordination'); assert.equal(f.animations.length, 2);
+  f.media.matches = false; f.media.send('change');
+  assert.equal(motion.read().effective, 'full'); shell.select('people');
+  motion.dispose(); assert.equal(f.animations[2].cancelled, true);
+  assert.equal(motion.read().effective, 'lower'); assert.equal(f.root.getAttribute('data-native-motion'), null);
+  assert.equal(motion.set('full'), false); shell.dispose();
+  assert.equal(f.media.listenerCount(), 0);
+  const fresh = mountStudioMotion(f.root); assert.equal(fresh.read().requested, 'lower'); fresh.dispose();
+  await Promise.resolve();
+});
+
+test('chapter selection, contextual arrival and local inspection retain distinct bounded motion and static cues', async () => {
+  const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
+  shell.select('people', { kind: 'context' });
+  assert.equal(f.records.get('people').panel.getAttribute('data-native-arrival'), 'context');
+  assert.equal(f.animations.length, 0);
+  motion.set('full');
+  f.list.send('click', { target: f.records.get('coordination').button });
+  assert.equal(f.animations[0].options.duration, 160); assert.equal(f.animations[0].frames[0].transform, undefined);
+  assert.equal(f.root.getAttribute('data-native-route-kind'), 'chapter');
+  shell.select('people', { kind: 'context' });
+  assert.equal(f.animations[0].cancelled, true); assert.equal(f.animations[1].options.duration, 280);
+  assert.equal(f.animations[1].frames[0].transform, 'translateY(12px)');
+  const inspector = f.element('section'); f.records.get('people').panel.append(inspector);
+  inspector.animate = f.records.get('people').panel.animate;
+  motion.indicate(inspector); assert.equal(f.animations[2].options.duration, 180);
+  assert.equal(inspector.getAttribute('data-native-arrival'), 'inspection');
+  motion.indicate(inspector); assert.equal(f.animations[2].cancelled, true);
+  motion.set('lower'); assert.equal(f.animations[3].cancelled, true);
+  motion.indicate(inspector); assert.equal(f.animations.length, 4);
+  assert.equal(inspector.getAttribute('data-native-arrival'), 'inspection');
+  motion.set('full'); motion.indicate(inspector);
+  f.document.visibilityState = 'hidden'; f.document.send('visibilitychange'); assert.equal(f.animations[4].cancelled, true);
+  shell.dispose(); motion.dispose(); assert.equal(inspector.getAttribute('data-native-arrival'), null);
+  assert.equal(f.document.listenerCount(), 0); await Promise.resolve();
 });
 
 test('disposal restores authored attributes, releases listeners, and allows a fresh mount', () => {

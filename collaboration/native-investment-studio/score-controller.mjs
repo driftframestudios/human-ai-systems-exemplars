@@ -18,7 +18,7 @@ const FIELDS = Object.freeze({
 const CHOICE_LABELS = Object.freeze({ next: 'Next', options: 'Option', allocated: 'Within funded time', additional: 'Extra investment', planned: 'Planned', paused: 'Paused',
   open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 
-export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {}, onNavigate = () => {},
+export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {}, onNavigate = () => {}, onInspect = () => {},
   canOpen = () => true, isActive = canOpen }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, instance = `score-${++sequence}`, cleanup = [], controls = new Map(), editor = editing.score;
@@ -45,15 +45,26 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   const node = (tag, text, className) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; };
   const listen = (el, type, fn) => { el.addEventListener(type, fn); cleanup.push(() => el.removeEventListener(type, fn)); };
-  function button(text, action) { const el = node('button', text); el.type = 'button'; el.dataset.scoreAction = action; return el; }
+  function button(text, action) {
+    const el = node('button', text); el.type = 'button'; el.dataset.scoreAction = action;
+    if (['chapter', 'source', 'open'].includes(action)) el.classList.add('native-control--navigate');
+    return el;
+  }
   function announce(text) { if (!disposed) status.textContent = text; }
   const toolbar = node('div', undefined, 'native-score__transport'); toolbar.setAttribute('aria-label', 'Horizon view');
-  const zoomLabel = node('label', 'View scale'), zoom = node('select'); zoom.id = `${instance}-zoom`; zoomLabel.htmlFor = zoom.id;
-  for (const [value, label] of [['1', 'Whole plan'], ['2', 'Closer · 2×'], ['4', 'Closer · 4×']]) { const option = node('option', label); option.value = value; zoom.append(option); }
-  const whole = button('Show whole plan', 'whole'), arrange = button('Arrange timing', 'open');
-  const links = node('div', undefined, 'native-score__chapter-links');
-  for (const [kind, label] of [['change', 'Change'], ['assurance', 'Quality & recovery'], ['investment', 'Investment']]) { const link = button(label, 'chapter'); link.dataset.scoreChapter = kind; links.append(link); }
-  toolbar.append(zoomLabel, zoom, whole, arrange, links);
+  const viewChoices = node('div', undefined, 'native-score__view-choices'); viewChoices.setAttribute('role', 'group'); viewChoices.setAttribute('aria-label', 'View scale');
+  const scaleButtons = new Map();
+  for (const [value, label] of [[1, 'Whole plan'], [2, '2×'], [4, '4×']]) {
+    const choice = button(label, 'scale'); choice.dataset.scoreScale = String(value); viewChoices.append(choice); scaleButtons.set(value, choice);
+  }
+  const resetFocus = button('Show all sessions', 'reset-focus'), arrange = button('Arrange timing', 'open'); resetFocus.hidden = true;
+  const links = node('div', undefined, 'native-score__chapter-links'); links.setAttribute('role', 'group'); links.setAttribute('aria-label', 'Go to chapter');
+  links.append(node('span', 'Go to chapter', 'native-score__group-label'));
+  for (const [kind, label] of [['change', 'Change'], ['assurance', 'Quality & recovery'], ['investment', 'Investment']]) {
+    const link = button(label, 'chapter');
+    link.classList.add('native-score__navigate'); link.setAttribute('aria-label', `Go to ${label}`); link.dataset.scoreChapter = kind; links.append(link);
+  }
+  toolbar.append(viewChoices, resetFocus, arrange, links);
   const projectionRoot = node('div', undefined, 'native-score__projection'); projectionRoot.dataset.scoreProjection = '';
   const inspector = node('section', undefined, 'native-score__inspector'); inspector.setAttribute('aria-labelledby', `${instance}-inspect-title`);
   const title = node('h4', 'Inspect the arrangement'); title.id = `${instance}-inspect-title`;
@@ -67,7 +78,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const editFields = node('fieldset'); editFields.dataset.scoreFields = ''; editFields.setAttribute('aria-label', 'Arrangement settings');
   const fields = node('div', undefined, 'native-score__fields'), recordActions = node('div', undefined, 'native-coordination__actions');
   const add = button('Add record', 'add'), remove = button('Remove record', 'remove'), addInterval = button('Add available interval', 'add-interval');
-  remove.className = 'native-control--remove'; recordActions.append(add, remove, addInterval);
+  remove.className = 'native-control--remove'; add.className = addInterval.className = 'native-control--create'; recordActions.append(add, remove, addInterval);
   const detail = node('p', '', 'native-score__record-note'); detail.dataset.scoreRecordNote = '';
   const navigation = node('div', undefined, 'native-coordination__actions');
   const overlapReading = node('div', undefined, 'native-score__overlap');
@@ -89,7 +100,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     node('p', 'Next and Options retain proposed work separately. A modeled Proceed decision makes a linked proposal eligible; select Add to planned work and Apply to fund it. Real decisions remain with the named people and their evidence.'),
     node('p', 'The quality reference uses 80 hours per sprint and 520 hours per quarter. Those staffing reference conversions are separate from elapsed minutes in this horizon. Changing the view scale changes only what you see.'));
   root.append(toolbar, projectionRoot, inspector, manual);
-  const view = createScoreView(projectionRoot, { onSelect(target) { select(target, true); }, onNavigate(target) { navigate(target); } });
+  const view = createScoreView(projectionRoot, { onSelect(target) { select(target, true); }, onNavigate(target) { navigate(target); }, onAddDecision: addDecision });
 
   function labels(kind, raw, state) {
     if (kind === 'window') return [['window', 'Time basis']];
@@ -108,18 +119,20 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   function field(parent, key, raw, state) {
     const metadata = scoreField(key); if (!metadata) return;
-    const group = node(metadata.kind === 'ids' ? 'fieldset' : 'div', undefined, 'native-score__field');
-    const caption = node(metadata.kind === 'ids' ? 'legend' : 'label', metadata.label), input = node(metadata.kind === 'ids' ? 'div' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : 'input');
+    const radio = !metadata.checkbox && !metadata.source && metadata.choices?.length >= 2 && metadata.choices.length <= 4;
+    const grouped = metadata.kind === 'ids' || radio, prose = ['question', 'evidence', 'reason'].includes(key.split('.').at(-1));
+    const group = node(grouped ? 'fieldset' : 'div', undefined, `native-score__field${prose ? ' native-score__field--prose' : ''}`);
+    const caption = node(grouped ? 'legend' : 'label', metadata.label), input = node(grouped ? 'div' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : prose ? 'textarea' : 'input');
     input.id = `${instance}-field-${++fieldSequence}`; input.dataset.scoreField = key; input.name = key;
-    if (metadata.kind !== 'ids') caption.htmlFor = input.id;
+    if (!grouped) caption.htmlFor = input.id;
     const message = node('p', '', 'native-coordination__error'); message.id = `${input.id}-error`;
     input.setAttribute('aria-describedby', message.id);
-    if (metadata.kind === 'ids') {
-      input.className = 'native-score__choices';
+    if (grouped) {
+      input.className = radio ? 'native-score__segments' : 'native-score__choices';
       const rows = options(metadata, raw, state), present = new Set(rows.map(([id]) => id));
-      for (const id of raw[key] ?? []) if (!present.has(id)) rows.push([id, `${id} · removed; choose a current record`]);
+      if (!radio) for (const id of raw[key] ?? []) if (!present.has(id)) rows.push([id, `${id} · removed; choose a current record`]);
       for (const [id, name] of rows) {
-        const label = node('label'), check = node('input'); check.type = 'checkbox'; check.value = id; check.dataset.scoreField = key; check.name = key;
+        const label = node('label'), check = node('input'); check.type = radio ? 'radio' : 'checkbox'; check.value = id; check.dataset.scoreField = key; check.name = `${instance}-${key}`;
         check.setAttribute('aria-describedby', message.id); label.append(check, node('span', name)); input.append(label);
       }
     } else if (input.tagName === 'SELECT') {
@@ -127,16 +140,23 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (raw[key] && !rows.some(([id]) => id === raw[key])) rows.push([raw[key], `${raw[key]} · removed; choose a current record`]);
       for (const [id, name] of rows) { const option = node('option', name); option.value = id; input.append(option); }
     } else {
-      input.type = metadata.checkbox ? 'checkbox' : 'text'; input.maxLength = metadata.maxLength;
+      if (input.tagName === 'INPUT') input.type = metadata.checkbox ? 'checkbox' : 'text';
+      input.maxLength = metadata.maxLength;
+      if (prose) input.rows = 4;
       if (metadata.numeric) { input.inputMode = 'numeric'; input.className = 'native-score__number'; }
     }
-    group.append(caption, input);
+    let reading = null;
+    if (prose) {
+      reading = node('p', '', 'native-score__prose-reading'); reading.dataset.scoreProse = key;
+      const edit = node('details', undefined, 'native-score__prose-editor'); edit.append(node('summary', `Edit ${metadata.label.toLowerCase()}`), caption, input);
+      group.append(node('h5', metadata.label), reading, edit);
+    } else group.append(caption, input);
     if (metadata.numeric) {
       const steps = node('div', undefined, 'native-score__steps');
       for (const direction of [-1, 1]) { const step = button(direction < 0 ? '−' : '+', 'step'); Object.assign(step.dataset, { scoreField: key, scoreStep: String(direction) }); step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${metadata.label.toLowerCase()}`); steps.append(step); }
       group.append(steps);
     }
-    group.append(message); parent.append(group); controls.set(key, { input, message, metadata });
+    group.append(message); parent.append(group); controls.set(key, { input, message, metadata, radio, reading });
   }
   function buildFields(raw, state, projection) {
     const intervals = selected.kind === 'person' ? raw[`availability.${selected.id}.intervalIds`] ?? [] : [];
@@ -162,6 +182,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     const current = editor.read(); if (disposed) return current;
     const raw = current.draft?.raw ?? startingScoreRaw(current.projection.state), state = current.projection.state;
     const editable = current.status === 'editing', rows = labels(selected.kind, raw, state);
+    if (focusWorkId && !state.work.some(row => row.id === focusWorkId)) focusWorkId = null;
+    for (const [value, choice] of scaleButtons) choice.setAttribute('aria-pressed', String(scale === value));
+    resetFocus.hidden = !focusWorkId;
     if (!rows.some(([id]) => id === selected.id)) selected = { kind: selected.kind, id: rows[0]?.[0] ?? '' };
     const selectionOptions = JSON.stringify(rows);
     if (picker.dataset.options !== selectionOptions) { picker.replaceChildren(...rows.map(([id, label]) => { const option = node('option', label); option.value = id; return option; })); picker.dataset.options = selectionOptions; }
@@ -169,10 +192,11 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     pickerRow.hidden = selected.kind === 'window';
     for (const key of rail.children) key.setAttribute('aria-pressed', String(key.dataset.scoreKind === selected.kind));
     buildFields(raw, state, current.projection);
-    for (const [key, { input, message, metadata }] of controls) {
+    for (const [key, { input, message, metadata, radio, reading }] of controls) {
       const value = raw[key];
-      if (metadata.kind === 'ids') for (const check of input.querySelectorAll('input')) check.checked = (value ?? []).includes(check.value);
+      if (metadata.kind === 'ids' || radio) for (const check of input.querySelectorAll('input')) check.checked = radio ? value === check.value : (value ?? []).includes(check.value);
       else if (metadata.checkbox) input.checked = value === 'yes'; else if (input.value !== value) input.value = value ?? '';
+      if (reading) reading.textContent = value?.trim() ? value : 'Add this context when it is known.';
       const error = current.draft?.errors.find(row => row.path === `draft.${key}`); message.textContent = error?.message ?? ''; input.setAttribute('aria-invalid', String(Boolean(error)));
     }
     const fund = fields.querySelector('[data-score-fund]'); if (fund) fund.checked = raw.fundProposalIds.includes(selected.id);
@@ -242,13 +266,14 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (completion && retains(completion.epoch, completion.mark) && reveal) {
       inspector.scrollIntoView({ block: 'nearest' });
       (fields.querySelector('input, select') ?? picker).focus({ preventScroll: true });
+      if (retains(completion.epoch, completion.mark)) onInspect(inspector);
     }
   }
   function changed(result, epoch) { if (!owns(epoch)) return; render(); if (!owns(epoch)) return; announce(result.ok ? '' : result.error.message); onEditing(); }
-  function navigate(target) {
+  function navigate(target, routeKind) {
     if (disposed) return;
     const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
-    onNavigate(target, { kind: 'score', targetId: 'score' });
+    onNavigate(target, { kind: 'score', targetId: 'score', ...(routeKind ? { routeKind } : {}) });
   }
   function settle(method) {
     const current = editor.read(); if (disposed || !current.draft) return;
@@ -261,14 +286,44 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (opened(operate('begin', 'score', accepted), epoch)) announce('Arrangement applied.');
   }
   function freshId(kind, existing) { const taken = new Set(existing); let ordinal = 1; while (taken.has(`${kind}-${ordinal}`)) ordinal++; return `${kind}-${ordinal}`; }
+  function addDecision(stageId) {
+    if (disposed || !isActive()) return;
+    if (!editor.read().draft || editing.read().active?.kind !== 'score') {
+      const completion = beginOpen('score', false);
+      if (!completion || !retains(completion.epoch, completion.mark)) return;
+    }
+    const current = editor.read();
+    if (current.status !== 'editing') { announce('Review the saved arrangement before adding a decision.'); recovery.querySelector('button')?.focus(); return; }
+    const { raw, token } = current.draft;
+    if (!raw.stageIds.includes(stageId)) { announce('Choose a stage in the current arrangement before adding a decision.'); return; }
+    const epoch = ++generation, id = freshId('gate', raw.gateIds);
+    let result = operate('setIds', token, 'gateIds', [...raw.gateIds, id]);
+    if (result.ok) result = operate('setText', token, `gate.${id}.afterStageId`, stageId);
+    if (result.ok) result = operate('setText', token, `gate.${id}.label`, `Decision after ${raw[`stage.${stageId}.label`]}`.slice(0, scoreField(`gate.${id}.label`).maxLength));
+    if (!owns(epoch)) return;
+    if (result.ok) { selected = { kind: 'gate', id }; fieldSignature = null; }
+    const mark = boundary(); changed(result, epoch);
+    if (result.ok && retains(epoch, mark)) {
+      inspector.scrollIntoView({ block: 'nearest' }); controls.get(`gate.${id}.label`)?.input.focus({ preventScroll: true });
+      if (retains(epoch, mark)) onInspect(inspector);
+    }
+  }
   function click(event) {
     const control = event.target.closest('[data-score-action]');
     if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.scoreAction;
     if (action === 'apply') return;
     if (action === 'open') { open(); return; }
-    if (action === 'whole') { scale = 1; zoom.value = '1'; focusWorkId = null; render(); return; }
-    if (action === 'chapter') { navigate({ kind: 'chapter', id: control.dataset.scoreChapter }); return; }
+    if (action === 'scale') {
+      const next = Number(control.dataset.scoreScale); if (!scaleButtons.has(next)) return;
+      scale = next; if (scale === 1) focusWorkId = null; render(); return;
+    }
+    if (action === 'reset-focus') {
+      const epoch = generation, mark = boundary(); focusWorkId = null; render();
+      if (retains(epoch, mark)) scaleButtons.get(scale).focus();
+      return;
+    }
+    if (action === 'chapter') { navigate({ kind: 'chapter', id: control.dataset.scoreChapter }, 'context'); return; }
     if (action === 'kind') { select({ kind: control.dataset.scoreKind, id: '' }); return; }
     if (action === 'focus') { focusWorkId = selected.id; render(); scrollIntoView(); return; }
     if (action === 'source') { navigate(selected); return; }
@@ -301,8 +356,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (event.target.checked) ids.push(event.target.dataset.scoreFund);
       const epoch = ++generation; changed(operate('setIds', current.draft.token, 'fundProposalIds', ids), epoch); return;
     }
-    if (!control || control.input !== event.target && !(control.metadata.kind === 'ids' && control.input.contains(event.target))) return;
-    const discrete = control.metadata.checkbox || control.metadata.kind === 'ids' || control.input.tagName === 'SELECT';
+    if (!control || control.input !== event.target && !((control.metadata.kind === 'ids' || control.radio) && control.input.contains(event.target))) return;
+    const discrete = control.metadata.checkbox || control.metadata.kind === 'ids' || control.radio || control.input.tagName === 'SELECT';
     if (discrete ? event.type !== 'change' : !['input', 'compositionend'].includes(event.type)) return;
     const epoch = ++generation;
     const result = control.metadata.kind === 'ids' ? operate('setIds', current.draft.token, key, [...control.input.querySelectorAll('input:checked')].map(check => check.value))
@@ -313,7 +368,6 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   listen(form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(form, 'compositionstart', () => { composing = true; render(); }); listen(form, 'compositionend', event => { composing = false; input(event); });
   listen(picker, 'change', () => { if (!disposed) select({ kind: selected.kind, id: picker.value }); });
-  listen(zoom, 'change', () => { scale = Number(zoom.value); render(); });
   listen(overlapChoice, 'change', () => { overlapIndex = Number(overlapChoice.value); render(); });
   function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; if (park && editing.read().active?.kind === 'score') editing.park(); }
   function dispose() { if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
