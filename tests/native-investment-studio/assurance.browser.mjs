@@ -136,6 +136,7 @@ for (const engine of names) {
 
   test(`${engine}: illustrative controls, linked quality, learning and a rehearsal remain recoverable at narrow width`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'assurance').click();
     await selectConcept(page, 'independent-review'); await selectScenario(page, 'recovery-failure');
     await action(page, 'apply').click(); assert.equal(await bytes(page), initial);
     assert.equal(await page.evaluate(() => window.assuranceFixture.studio.readHistory().undoCount), 0);
@@ -179,6 +180,35 @@ for (const engine of names) {
     const complication = panel(page).locator('[data-assurance-complication="recovery-failure"]'); await selectScenario(page, 'recovery-failure'); await complication.locator('[data-assurance-action="rehearse"]').click();
     await field(page, 'rehearsal.rehearsal-1.context').fill('Try a deliberately interrupted service request.');
     await field(page, 'rehearsal.rehearsal-1.response').fill('Clarify the restart instruction and repeat the observation.');
+    await field(page, 'rehearsal.rehearsal-1.reviewerPersonId').selectOption('noor');
+    await complication.locator('[data-assurance-rehearsal="rehearsal-1"] details > summary').click();
+    await field(page, 'rehearsal.rehearsal-1.observation').fill('The reviewer observed the saved request resume after the restart instruction was clarified.');
+    await field(page, 'rehearsal.rehearsal-1.assumptions').fill('Assume the saved request cannot resume; plan one additional 30-minute repair with Quality and Operations.');
+    await check(page, 'rehearsal.rehearsal-1.workIds', 'rehearsal').check();
+    await selectConcept(page, 'reconciliation-replay'); await check(page, 'concept.reconciliation-replay.workIds', 'rehearsal').check();
+    const effect = panel(page).locator('[data-assurance-consequence]');
+    await expect(effect.locator('.native-assurance__effect').last().getByText('240 person-minutes', { exact: true })).toBeVisible();
+    await expect(effect.locator('.native-assurance__effect').last()).toContainText('Attributed session cost$400.00');
+    await expect(effect).toContainText('Elapsed span: 150 minutes, from minute 480 to 630');
+    await field(page, 'concept.reconciliation-replay.included').uncheck();
+    await expect(effect).toContainText('Reconciliation and replay is deferred');
+    await expect(effect).toContainText('Planned supporting sessions are linked');
+    await expect(total(page)).toHaveText('$3,980.00'); assert.equal(await bytes(page), initial);
+    await field(page, 'qualityIncluded').uncheck(); await expect(effect).toContainText('quality reference illustration is switched off');
+    await expect(effect.locator('.native-assurance__effect').last()).toContainText('Attributed session cost$400.00');
+    await field(page, 'qualityIncluded').check();
+    await effect.locator('[data-assurance-action="scenario"]').click();
+    const comparison = panel(page).locator('[data-assurance-scenario-comparison="rehearsal-1"]');
+    await expect(comparison).toContainText('Combined linked work: 240 person-minutes; $400.00 attributed session cost');
+    await expect(comparison).toContainText('Shared work: Operations rehearsal');
+    await complication.locator('[data-assurance-action="propose"]').click();
+    await field(page, 'proposal.label').fill('Repair and repeat the interrupted request'); await field(page, 'proposal.teamId').selectOption('operations');
+    await check(page, 'proposal.personIds', 'noor').check(); await check(page, 'proposal.personIds', 'sam').check();
+    await field(page, 'proposal.minutesPerSession').fill('30'); await check(page, 'proposal.funding', 'additional').check();
+    await expect(comparison).toContainText('Combined linked work: 300 person-minutes; $500.00 attributed session cost');
+    await expect(comparison).toContainText('Elapsed span awaits session timing');
+    await expect(panel(page).locator('[data-assurance-preview]')).toContainText('Change: $100.00');
+    assert.equal(await bytes(page), initial);
     await selectScenario(page, 'review-change'); await expect(complication).toBeHidden();
     await expect(panel(page).locator('[data-assurance-complication]:visible')).toHaveCount(1);
     await panel(page).locator('[data-assurance-complication="review-change"] [data-assurance-action="rehearse"]').click();
@@ -196,6 +226,7 @@ for (const engine of names) {
     await field(page, 'namedUnknowns').fill('4');
     await panel(page).locator('[data-assurance-quality]').screenshot({ path: resolve(captures, `${engine}-compact-assumptions.png`) });
     await panel(page).locator('[data-assurance-concepts]').screenshot({ path: resolve(captures, `${engine}-concept-inspector.png`) });
+    await comparison.screenshot({ path: resolve(captures, `${engine}-recovery-consequences-desktop.png`) });
     const quantities = await panel(page).locator('.native-assurance__quantity input').evaluateAll(inputs => inputs.filter(input => input.getBoundingClientRect().width).map(input => ({ input: input.getBoundingClientRect().width, field: input.closest('.native-assurance__field').getBoundingClientRect().width })));
     assert.ok(quantities.every(row => row.input <= 220 && row.input <= row.field), JSON.stringify(quantities));
     await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
@@ -204,10 +235,36 @@ for (const engine of names) {
     assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 320.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
     const compactBoxes = await panel(page).locator('[data-assurance-quality] input, [data-assurance-quality] label, .native-assurance__rail label, [data-assurance-concept-inspector] button').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));
     assert.ok(compactBoxes.every(box => box.left >= -.5 && box.right <= 320.5), JSON.stringify(compactBoxes));
+    const consequenceBoxes = await panel(page).locator('[data-assurance-consequence] button, [data-assurance-scenario-comparison] button, .native-assurance__metrics').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));
+    assert.ok(consequenceBoxes.every(box => box.left >= -.5 && box.right <= 320.5), JSON.stringify(consequenceBoxes));
+    for (const literal of ['$400.00', '$3,980.00', '$4,080.00']) {
+      const amount = comparison.getByText(literal, { exact: true }).first();
+      const amountReading = await amount.evaluate(element => {
+        const text = element.firstChild, lines = new Set();
+        for (let index = 0; index < text.textContent.length; index += 1) {
+          const range = document.createRange(); range.setStart(text, index); range.setEnd(text, index + 1); lines.add(Math.round(range.getBoundingClientRect().top));
+        }
+        const parents = []; for (let parent = element; parent && parents.length < 7; parent = parent.parentElement) {
+          const style = getComputedStyle(parent); parents.push({ tag: parent.tagName, class: parent.className, width: parent.getBoundingClientRect().width, padding: style.paddingInline });
+        }
+        return { lines: lines.size, parents };
+      });
+      assert.equal(amountReading.lines, 1, `${literal} remains one readable value at 320px and doubled text: ${JSON.stringify(amountReading)}`);
+    }
+    const routeLines = await comparison.locator('.native-assurance__effect').first().getByRole('button', { name: 'Inspect Operations rehearsal', exact: true }).evaluate(button => {
+      const text = button.firstChild, lines = new Set();
+      for (let index = 0; index < 'Inspect'.length; index += 1) {
+        const range = document.createRange(); range.setStart(text, index); range.setEnd(text, index + 1); lines.add(Math.round(range.getBoundingClientRect().top));
+      }
+      return lines.size;
+    });
+    assert.equal(routeLines, 1, 'the session route retains readable ordinary words at 320px and doubled text');
+    await comparison.screenshot({ path: resolve(captures, `${engine}-recovery-consequences-narrow.png`) });
     await page.emulateMedia({ forcedColors: 'active' }); await sigma.focus(); await page.keyboard.press('ArrowLeft'); await expect(field(page, 'sigmaHalfSteps')).toHaveValue('6');
     await panel(page).locator('[data-assurance-statistics]').screenshot({ path: resolve(captures, `${engine}-narrow-forced.png`) });
     await expect(panel(page).locator('[data-assurance-error]')).toHaveText('');
     await expect(panel(page).locator('[data-assurance-preview]')).toContainText('paused');
+    const beforeApply = await bytes(page);
     await action(page, 'apply').click();
     await expect(panel(page).locator('[data-assurance-error]')).toHaveText('');
     assert.equal(await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.independentRateCentsPerHour), 10625);
@@ -217,15 +274,37 @@ for (const engine of names) {
     assert.deepEqual(concepts.find(row => row.conceptId === 'accessibility').workIds, ['research']);
     const responses = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.rehearsals.map(row => [row.definitionId, row.response]));
     assert.deepEqual(responses, [['recovery-failure', 'Clarify the restart instruction and repeat the observation.'], ['review-change', 'Ask the decision owner to confirm the new observation.']]);
-    await expect(total(page)).toHaveText('$3,980.00');
+    await expect(total(page)).toHaveText('$4,080.00');
+    await expect(comparison).toHaveAttribute('data-assurance-effect', 'accepted');
+    await page.setViewportSize({ width: 1440, height: 1100 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; }); await page.emulateMedia({ forcedColors: 'none' });
+    await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
+    await tab(page, 'people').click();
+    await root(page).locator('[data-team-roster] [data-person-id="noor"]').click();
+    const rate = root(page).locator('[data-person-configure] [name="ratePerHour"]'); await rate.fill('00100.25');
+    const badge = root(page).locator('[data-support-owner-kind="person"][data-support-owner-id="noor"] [data-support-kind="rehearsal"][data-support-id="rehearsal-1"][data-support-standing="observation"]');
+    await root(page).locator('[data-team-roster] > li:has([data-person-id="noor"])').screenshot({ path: resolve(captures, `${engine}-people-support-badges.png`) });
+    await badge.click(); await expect(field(page, 'rehearsal.rehearsal-1.observation')).toBeFocused();
+    await expect(field(page, 'rehearsal.rehearsal-1.assumptions')).toHaveValue('Assume the saved request cannot resume; plan one additional 30-minute repair with Quality and Operations.');
+    await root(page).locator('[data-native-return-action]').click(); await expect(badge).toBeFocused(); await expect(rate).toHaveValue('00100.25');
+    await badge.click(); await field(page, 'rehearsal.rehearsal-1.response').fill('Retain this unfinished response while inspecting its session.');
+    await complication.locator('[data-assurance-action="work"][data-assurance-work="assurance-work-1"]').first().click();
+    const session = root(page).locator('[data-native-session-editor]'); await session.locator('[name="minutesPerSession"]').fill('31'); await session.locator('[data-action="apply"]').click();
+    await root(page).locator('[data-native-return-action]').click(); await expect(panel(page)).toHaveAttribute('data-assurance-state', 'stale');
+    await expect(field(page, 'rehearsal.rehearsal-1.response')).toHaveValue('Retain this unfinished response while inspecting its session.');
+    await expect(action(page, 'review')).toBeFocused();
+    await root(page).locator('[data-native-return-action]').click(); await expect(root(page).locator('[data-person-action="review"]')).toBeFocused();
+    await expect(rate).toHaveValue('00100.25');
     const accepted = await bytes(page);
     await tab(page, 'coordination').click(); await root(page).locator('.native-connections__list button[data-connection-select="readiness"]').click();
     const connection = root(page).locator('[data-native-connection-editor]'); await connection.locator('[data-connection-action="remove"]').click();
     await expect(connection.locator('[data-connection-dependencies]')).toContainText('Rehearsal: A recovery rehearsal reveals a gap');
     await expect(connection.locator('[data-connection-apply]')).toBeDisabled();
     await connection.locator('[data-connection-dependencies] [data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();
-    assert.equal(await bytes(page), accepted); await page.evaluate(() => window.assuranceFixture.controller.dispose());
-    await field(page, 'namedUnknowns').evaluate(input => { input.value = '10'; input.dispatchEvent(new Event('input', { bubbles: true })); }); assert.equal(await bytes(page), accepted);
+    assert.equal(await bytes(page), accepted);
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), beforeApply);
+    await tab(page, 'people').click(); await expect(badge).toHaveCount(0);
+    await page.evaluate(() => window.assuranceFixture.controller.dispose());
+    await field(page, 'namedUnknowns').evaluate(input => { input.value = '10'; input.dispatchEvent(new Event('input', { bubbles: true })); }); assert.equal(await bytes(page), beforeApply);
   });
 
   test(`${engine}: Cancel and Undo move a reused rehearsal ID to its current scenario, and a missing reviewer returns to the saved response`, { timeout: 60000 }, async t => {
@@ -267,5 +346,24 @@ for (const engine of names) {
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('Rehearsal: A specialist is unavailable for the planned review');
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('reviewer'); await expect(people.locator('[data-assembly-apply]')).toBeDisabled();
     await people.locator('[data-assembly-dependencies] [data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();
+    const ownership = await page.evaluate(async () => {
+      const fixture = window.assuranceFixture; fixture.controller.dispose();
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const { mountAssurancePanel } = await import('/collaboration/native-investment-studio/assurance-controller.mjs');
+      const editing = createDraftCoordinator(fixture.studio), element = document.querySelector('[data-native-assurance]');
+      const successor = document.createElement('button'); successor.textContent = 'Successor editor'; element.before(successor);
+      let reenter = false;
+      const controller = mountAssurancePanel(element, { studio: fixture.studio, editing, onEditing() {
+        if (reenter) { editing.purpose.begin('purpose', fixture.studio.read()); successor.focus(); }
+      } });
+      controller.open(); const selected = controller.selectSupport({ kind: 'concept', id: 'independent-review' });
+      const focused = document.activeElement.name === 'concept.independent-review.included';
+      editing.assurance.setText(editing.assurance.read().draft.token, 'allocationPercent', '23');
+      reenter = true; const displaced = controller.selectSupport({ kind: 'rehearsal', id: 'rehearsal-1' });
+      const answer = { selected, focused, displaced, active: editing.read().active.kind, successorFocused: document.activeElement === successor,
+        retained: editing.read().parked.find(row => row.kind === 'assurance').raw.allocationPercent };
+      controller.dispose(); editing.dispose(); successor.remove(); return answer;
+    });
+    assert.deepEqual(ownership, { selected: true, focused: true, displaced: false, active: 'purpose', successorFocused: true, retained: '23' });
   });
 }

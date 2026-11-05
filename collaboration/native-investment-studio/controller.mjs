@@ -130,6 +130,9 @@ export function mountCoordinationPanel(root, options = {}) {
       || drafts.parked.some(record => record.kind === route.kind && record.targetId === route.target);
     for (let index = returnRoutes.length - 1; index >= 0; index -= 1) {
       const route = returnRoutes[index], descriptor = TARGET_READERS[route.kind]?.(route.target);
+      if (route.kind === 'peopleSupportView' && !studio.read().state[route.ownerKind === 'person' ? 'people' : 'teams'].some(row => row.id === route.ownerId)) {
+        returnRoutes.splice(index, 1); continue;
+      }
       if (route.held && !retained(route) || !route.held && descriptor?.mode !== 'create' && descriptor
         && !studio.read().state[descriptor.collection].some(row => row.id === descriptor.id)) returnRoutes.splice(index, 1);
     }
@@ -145,13 +148,14 @@ export function mountCoordinationPanel(root, options = {}) {
     const createdLabel = created?.label;
     const team = state.teams.find(row => row.id === route.requiredTeamId);
     const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
-    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon', connectionsView: 'connections' }[route.kind];
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon', connectionsView: 'connections', peopleSupportView: 'people and teams' }[route.kind];
     returnButton.textContent = `Return to ${destination}`;
     returnNote.textContent = createdLabel
       ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
       : `Your ${destination} entries are saved while you ${route.creating === 'team' ? 'create a team' : route.creating === 'session' ? 'add a session' : 'add a person'}.`;
     if (route.inspectedWorkId) returnNote.textContent = `Review the supporting session, then return to your ${destination} and its saved entries.`;
     if (route.kind === 'connectionsView') returnNote.textContent = 'Inspect the related team, person or work, then return to the connections and their arrangement.';
+    if (route.kind === 'peopleSupportView') returnNote.textContent = 'Inspect the supporting work or recorded observation, then return to the person or team. Your unfinished entries stay saved.';
     if (route.kind === 'score') returnNote.textContent = 'Inspect the related work, then return to the coordination horizon and your saved arrangement.';
     if (route.createdId && !created) returnNote.textContent = `The added ${route.createdKind} is outside the current plan. Your ${destination} entries remain saved. Return to choose an available ${route.createdKind} or create another.`;
     if (createdLabel && route.field && route.createdKind === 'team') returnNote.textContent = `${createdLabel} is ready. Return to review your saved entries and select it as the ${route.field === 'senderTeamId' ? 'sending team' : route.field === 'receiverTeamId' ? 'receiving team' : 'session team'}.`;
@@ -166,7 +170,8 @@ export function mountCoordinationPanel(root, options = {}) {
     const descriptor = TARGET_READERS[kind]?.(target);
     const parent = returnRoutes.findLastIndex(route => {
       const destinationKind = route.creating === 'session' ? 'session' : 'assembly';
-      return destinationKind === kind && (route.creationTarget === target
+      return route.kind === 'peopleSupportView' && kind === 'assurance' && target === 'assurance'
+        || destinationKind === kind && (route.creationTarget === target
         || route.createdId && descriptor?.id === route.createdId
           && descriptor.collection === (route.creating === 'person' ? 'people' : route.creating === 'team' ? 'teams' : 'work'))
         || kind === 'assembly' && route.continuationTarget === target;
@@ -200,7 +205,23 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!route) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution'].includes(route.kind) ? 'people' : 'coordination');
+    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination');
+    if (route.kind === 'peopleSupportView') {
+      if (route.origin?.kind === 'person') teamPanel?.select(route.origin.targetId);
+      else if (route.origin?.kind === 'assembly') assemblyPanel?.open(route.origin.targetId);
+      else if (['role', 'contribution'].includes(route.origin?.kind)) responsibilityPanel?.open(route.origin.targetId);
+      returnRoutes.pop(); render(); renderReturnRoute();
+      if (route.origin && editing[route.origin.kind].read().status === 'stale') {
+        document.activeElement?.scrollIntoView({ block: 'center' }); return;
+      }
+      const list = [...root.querySelectorAll('[data-support-owner-kind]')].find(element => element.dataset.supportOwnerKind === route.ownerKind && element.dataset.supportOwnerId === route.ownerId);
+      const candidates = [...(list?.querySelectorAll('[data-support-kind]') ?? [])].filter(element => element.dataset.supportKind === route.sourceKind && element.dataset.supportId === route.sourceId);
+      const badge = candidates.find(element => element.dataset.supportStanding === route.sourceStanding) ?? candidates[0];
+      const fallback = [...root.querySelectorAll(route.ownerKind === 'person' ? '[data-team-roster] [data-person-id]' : '[data-assembly-team]')].find(element => (element.dataset.personId ?? element.dataset.assemblyTeam) === route.ownerId);
+      const destination = badge ?? fallback;
+      destination?.scrollIntoView({ block: 'center' }); destination?.focus({ preventScroll: true });
+      return;
+    }
     if (route.kind === 'connectionsView') {
       returnRoutes.pop(); render(); renderReturnRoute();
       const destination = root.querySelector('[data-native-connection-view]');
@@ -255,6 +276,24 @@ export function mountCoordinationPanel(root, options = {}) {
     // Each receiving panel selects the right field or stale-edit recovery.
     // Retain a successor's focus when a callback has already opened other work.
     if (destination?.contains(document.activeElement)) destination.scrollIntoView({ block: 'start' });
+  }
+  function inspectAssuranceSupport(button) {
+    if (disposed) return;
+    const owner = button.closest('[data-support-owner-kind]');
+    const ownerKind = owner?.dataset.supportOwnerKind, ownerId = owner?.dataset.supportOwnerId;
+    const collection = { person: 'people', team: 'teams' }[ownerKind];
+    if (!collection || !studio.read().state[collection].some(row => row.id === ownerId)) return;
+    const active = editing.read().active;
+    const origin = ['person', 'assembly', 'role', 'contribution'].includes(active?.kind) ? { kind: active.kind, targetId: active.targetId } : null;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    const target = `${ownerKind}/${ownerId}`;
+    retainReturnAncestors('peopleSupportView', target);
+    returnRoutes.push({ kind: 'peopleSupportView', target, held: false, ownerKind, ownerId, origin,
+      sourceKind: button.dataset.supportKind, sourceId: button.dataset.supportId, sourceStanding: button.dataset.supportStanding });
+    chapterShell?.select('assurance', { kind: 'context' });
+    assurancePanel?.selectSupport({ kind: button.dataset.supportKind, id: button.dataset.supportId, standing: button.dataset.supportStanding });
+    renderReturnRoute();
   }
   function navigateFromScore(target, origin = {}) {
     if (disposed) return;
@@ -497,6 +536,8 @@ export function mountCoordinationPanel(root, options = {}) {
   }
 
   function click(event) {
+    const supportLink = event.target.closest('[data-support-kind]');
+    if (supportLink && root.contains(supportLink)) { event.preventDefault(); inspectAssuranceSupport(supportLink); return; }
     const arrangementLink = event.target.closest('[data-native-open-arrangement]');
     if (arrangementLink && root.contains(arrangementLink)) {
       event.preventDefault(); chapterShell?.select('coordination', { kind: 'context' });

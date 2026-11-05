@@ -2172,3 +2172,29 @@ origin falls back to an available stage entry. Apply returns to the accepted
 marker. Full questions and evidence retain the existing display/edit pattern
 once accepted. This distinction makes beginning, inspecting and confirming an
 item observable while preserving one draft and acceptance owner.
+
+## Quality work consequences and support routes
+
+`assurance-consequences.mjs` reads admitted accepted projections and successful
+Assurance previews. It exposes distinct linked work, native ledger attribution,
+authored timing, recovery assumptions, rehearsal records and grounded badges.
+`assurance-proposals.mjs` continues to own the exact accepted/proposed investment
+delta. Reference estimates retain their existing calculation and labels.
+
+Individual session lines retain their rounding basis; the settled total retains
+the native pooled-rounding adjustment. A display of linked work therefore names
+its line attribution, while the overall change comes directly from the proposal
+summary. Concept inclusion and session lifecycle describe support standing;
+the existing accounting contract owns the retained monetary commitments.
+
+The Assurance receiver shares one selected-concept inspector. A recovery
+comparison uses the existing scenario identity, event assumptions and explicitly
+linked response sessions. Elapsed span is shown only when work has authored
+timing. Aggregate person-effort and hypothetical event effort keep separate units.
+
+`assurance-badges.mjs` supplies the same compact controls to People and team
+cards. The pure model derives planned-support badges from actual work participants
+and the work-owning team. Recorded-observation badges route to the named reviewer
+and linked subject team. Each control names both its evidence standing and source.
+The root coordinator retains the originating editor and nested inspection route;
+return restores its raw entries, with stale recovery retaining focus when needed.

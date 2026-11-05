@@ -303,6 +303,7 @@
       "kind": "node-test",
       "members": [
         "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/assurance-consequences.test.mjs",
         "tests/native-investment-studio/assurance-contract.test.mjs",
         "tests/native-investment-studio/assurance-draft.test.mjs",
         "tests/native-investment-studio/assurance-models.test.mjs",

@@ -3,6 +3,7 @@ import { ASSURANCE_FIELDS, assuranceField, assuranceSettingsFromRaw, startingAss
 import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalDefinitions, getLearningPromptDefinition, projectAssurance, sourcePresetEstimate } from './assurance-models.mjs';
 import { money } from './display.mjs';
 import { mountRateControls } from './rate-controls.mjs';
+import { projectAssuranceConsequences, summarizeAssuranceWork } from './assurance-consequences.mjs';
 
 const INSTANCES = new WeakMap();
 let instanceSequence = 0;
@@ -36,7 +37,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const button = (text, action, data = {}) => {
     const element = node('button', text); element.type = 'button'; Object.assign(element.dataset, { assuranceAction: action, ...data });
     if (action === 'add-event') element.classList.add('native-control--create');
-    if (['work', 'propose', 'learning', 'rehearse', 'add-event'].includes(action)) element.classList.add('native-control--navigate');
+    if (['work', 'propose', 'learning', 'rehearse', 'add-event', 'scenario', 'preparation', 'proposal-settings'].includes(action)) element.classList.add('native-control--navigate');
     return element;
   };
   const actionRow = (...children) => { const group = node('div', undefined, 'native-coordination__actions'); group.append(...children); return group; };
@@ -96,6 +97,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const items = new Map(); rail.append(legend, choices); parent.append(rail);
     for (const row of rows) {
       const choice = node('label'), radio = node('input'), text = node('span'), status = node('small');
+      choice.dataset.assurancePad = row.id;
       radio.type = 'radio'; radio.name = `${instance}-${kind}`; radio.value = row.id; radio.dataset.assuranceSelection = kind;
       text.append(node('strong', row.label ?? row.name), status); choice.append(radio, text); choices.append(choice); items.set(row.id, { radio, status });
     }
@@ -115,6 +117,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   elements.concepts.append(node('h4', 'Connect quality intentions to work'));
   const conceptChoices = selectionRail(elements.concepts, 'Inspect a quality concept', concepts, 'concept');
   const conceptInspector = node('div'); conceptInspector.dataset.assuranceConceptInspector = ''; elements.concepts.append(conceptInspector);
+  const consequence = node('section', undefined, 'native-assurance__consequence'); consequence.dataset.assuranceConsequence = ''; elements.concepts.append(consequence);
   for (const concept of concepts) {
     const details = node('section', undefined, 'native-assurance__card'); details.dataset.assuranceConcept = concept.id;
     const summary = node('h5', concept.label), body = node('div');
@@ -202,6 +205,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
         : ['context', 'assumptions', 'response', 'reviewerPersonId', 'workIds', 'connectionIds', 'personIds'];
     for (const name of keys) field(body, prefix + name);
     const links = actionRow(); body.append(links, actionRow(button(kind === 'rehearsal' ? 'Plan response work' : 'Plan supporting work', 'propose', { assuranceTarget: key })));
+    const comparison = node('section', undefined, 'native-assurance__consequence'); comparison.dataset.assuranceScenarioComparison = id;
+    if (kind === 'rehearsal') body.append(comparison);
     if (kind === 'rehearsal') {
       body.append(actionRow(button('Pause selected connections in this proposal', 'pause-connections', { assuranceRecord: id }), button('Keep selected connections as accepted', 'keep-connections', { assuranceRecord: id })));
       const evidence = node('details'); evidence.append(node('summary', 'Record an observed rehearsal result'));
@@ -209,7 +214,90 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
     details.append(summary, body);
     (kind === 'event' ? eventList : kind === 'learning' ? learningList : rehearsalGroups.get(raw[prefix + 'definitionId'])).append(details);
-    cards.set(key, { details, summary, links });
+    cards.set(key, { details, summary, links, comparison });
+  }
+  function supportReading(reading, workIds, title, plan) {
+    const summary = summarizeAssuranceWork(reading, workIds), section = node('section', undefined, 'native-assurance__effect');
+    section.append(node('h6', title));
+    if (!summary.rows.length) { section.append(node('p', 'Choose a supporting session to make the people, effort and investment explicit.')); return section; }
+    section.append(metrics([['Participant effort', `${summary.personMinutes} person-minutes`], ['Attributed session cost', attributedAmount(summary)],
+      ['Within funded time', attributedAmount(summary.allocated)], ['Extra work', attributedAmount(summary.additional)]]));
+    const timing = summary.timing;
+    section.append(node('p', timing.placement === 'placed' ? `Elapsed span: ${timing.elapsedMinutes} minutes, from minute ${timing.startMinute} to ${timing.endMinute}. This includes gaps between sessions.`
+      : timing.placement === 'empty' ? 'These sessions have no occurrences to place.' : 'Elapsed span awaits session timing in the Coordination horizon. Participant effort remains explicit.'));
+    const list = node('ul', undefined, 'native-assurance__work-reading');
+    for (const row of summary.rows) {
+      const item = node('li'); item.dataset.assuranceConsequenceWork = row.workId;
+      const names = row.personIds.map(id => plan.people.find(person => person.id === id)?.label ?? id);
+      const accepted = studio.read().state.work.some(work => work.id === row.workId);
+      item.append(button(accepted ? `Inspect ${row.label}` : `Edit proposal: ${row.label}`, accepted ? 'work' : 'proposal-settings', { assuranceWork: row.workId }),
+        node('p', `${names.join(', ') || 'Choose participants'}. ${row.minutesPerOccurrence} minutes per person × ${row.occurrences} sessions = ${row.personMinutes} person-minutes. ${row.funding === 'additional' ? 'Extra investment' : 'Within funded time'} · ${row.status}${row.lifecycle === 'retired' ? ' · retired' : ''}.`));
+      list.append(item);
+    }
+    section.append(list); return section;
+  }
+  function attributedAmount(summary) {
+    return summary.lineAmountStatus === 'outside-display-range' ? 'Inspect individual session amounts'
+      : `${money(summary.knownLineCents)}${summary.totalLineCents === null ? ' known; choose missing hourly rates to complete it' : ''}`;
+  }
+  function metrics(values) {
+    const list = node('dl', undefined, 'native-assurance__metrics');
+    for (const [label, value] of values) { const item = node('div'); item.append(node('dt', label), node('dd', value)); list.append(item); }
+    return list;
+  }
+  function investmentReading(projected) {
+    const section = node('section', undefined, 'native-assurance__investment'); section.dataset.assuranceConsequenceInvestment = '';
+    const accepted = projected.accepted.investment, proposed = projected.proposed?.investment;
+    const values = [[accepted.totalCents === null ? 'Known accepted investment' : 'Accepted investment', money(accepted.knownCents)]];
+    if (proposed) values.push([proposed.totalCents === null ? 'Known proposed investment' : 'Proposed investment', money(proposed.knownCents)],
+      [projected.change.money.totalDeltaCents === null ? 'Change in known investment' : 'Investment change', money(projected.change.money.knownDeltaCents)]);
+    section.append(metrics(values));
+    const adjustments = (proposed ?? accepted).lineRoundingAdjustments;
+    if (adjustments.allocatedCents || adjustments.additionalCents) section.append(node('p', `The complete ${proposed ? 'proposed' : 'accepted'} plan settles its funding pools after summing unrounded work. Compared with individually rounded session lines, its rounding adjustment is ${money(adjustments.allocatedCents)} within funded time and ${money(adjustments.additionalCents)} for extra investment. This explains a difference between line attribution and settled investment.`));
+    return section;
+  }
+  function preparationStanding(concept) {
+    const selection = concept.included ? 'Selected for preparation.' : 'Available to select for preparation.';
+    return `${selection} ${concept.activeWorkIds.length ? 'Planned supporting sessions are linked.' : concept.workIds.length ? 'Linked sessions currently supply no active planned effort.' : 'Link the work people will do.'}`;
+  }
+  function renderConsequences(view, preview) {
+    const projected = projectAssuranceConsequences(view.projection, preview?.ok && view.draft?.changed ? preview : null);
+    const current = projected.proposed ?? projected.accepted, plan = projected.proposed ? preview.projection.state : view.projection.state;
+    const concept = current.concepts.find(row => row.conceptId === selectedConcept), acceptedConcept = projected.accepted.concepts.find(row => row.conceptId === selectedConcept);
+    consequence.dataset.assuranceEffect = projected.proposed ? 'proposed' : 'accepted';
+    consequence.replaceChildren(node('h5', `${concept.label}: planned consequences`),
+      node('p', projected.proposed ? 'Proposed support before Apply.' : `Accepted support.${view.draft?.changed ? ' Correct the unfinished entries to compare the complete proposal.' : ''}`),
+      node('p', `${preparationStanding(concept)} Linked sessions retain their own effort and funding when this choice changes.`));
+    const grid = node('div', undefined, 'native-assurance__effect-grid');
+    grid.append(supportReading(projected.accepted, acceptedConcept.workIds, 'Accepted preparation', view.projection.state));
+    if (projected.proposed) grid.append(supportReading(current, concept.workIds, 'Proposed preparation', plan));
+    consequence.append(grid, investmentReading(projected));
+    if (selectedConcept === 'reconciliation-replay') consequence.append(node('p', concept.included
+      ? 'Reconciliation and replay is selected for preparation. Rehearse an interruption to examine the remaining recovery assumptions.'
+      : 'Reconciliation and replay is deferred. Explore the authored condition that the current instructions cannot resume an interrupted task.'),
+      actionRow(button('Explore the recovery scenario', 'scenario', { assuranceDefinition: 'recovery-failure' })));
+    consequence.append(node('p', `The quality reference illustration is ${plan.assuranceSettings.quality.included ? 'enabled' : 'switched off'}; selected concepts and their working sessions retain their own state.`),
+      node('p', 'Session costs attribute the existing ledger to this work. The overall investment and proposal change retain the complete plan’s accounting. Quality reference estimates remain separate.'));
+    for (const [key, card] of cards) {
+      if (!key.startsWith('rehearsal/')) continue;
+      const id = key.slice('rehearsal/'.length), rehearsal = current.rehearsals.find(row => row.id === id);
+      card.comparison.hidden = !rehearsal || rehearsal.definitionId !== 'recovery-failure' || rehearsal.definitionVersion !== '1.0.0';
+      if (card.comparison.hidden) continue;
+      const preparation = current.concepts.find(row => row.conceptId === 'reconciliation-replay');
+      card.comparison.dataset.assuranceEffect = projected.proposed ? 'proposed' : 'accepted';
+      const comparison = node('div', undefined, 'native-assurance__effect-grid');
+      comparison.append(supportReading(current, preparation.workIds, 'Preparation: reconciliation and replay', plan), supportReading(current, rehearsal.workIds, 'Response to the authored interruption', plan));
+      const union = summarizeAssuranceWork(current, [...preparation.workIds, ...rehearsal.workIds]);
+      const shared = preparation.workIds.filter(id => rehearsal.workIds.includes(id));
+      card.comparison.replaceChildren(node('h5', `${projected.proposed ? 'Proposed' : 'Accepted'} preparation and response`),
+        node('p', `${preparationStanding(preparation)} The authored interruption assumes the current instructions cannot resume the task.`),
+        node('p', `Assumptions to try: ${rehearsal.assumptions || 'Describe the conditions for this rehearsal above.'}`, 'native-assurance__assumptions-reading'), comparison,
+        node('p', `Combined linked work: ${union.personMinutes} person-minutes; ${attributedAmount(union)} attributed session cost. Shared sessions enter this combined reading once.${shared.length ? ` Shared work: ${shared.map(id => current.work.find(row => row.workId === id).label).join(', ')}.` : ''}`),
+        investmentReading(projected),
+        node('p', 'The response session’s participants, minutes, occurrences and funding are the numeric assumptions for this scenario. Edit them in Plan response work before Apply. An observed rehearsal result records what a named person established; the normal reference curve supplies a separate mathematical illustration.'),
+        node('p', 'Recovery rehearsal scenario · recovery-failure · version 1.0.0.'),
+        actionRow(button('Inspect preparation', 'preparation')));
+    }
   }
   function renderSigma(reading) {
     scopeValue.textContent = `Threshold ±${reading.sigma}σ`;
@@ -272,7 +360,9 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
     for (const [id, choice] of conceptChoices) {
       choice.radio.checked = id === selectedConcept;
-      choice.status.textContent = raw[`concept.${id}.included`] === 'yes' ? 'Included' : 'Not included';
+      const included = raw[`concept.${id}.included`] === 'yes', linked = raw[`concept.${id}.workIds`].length > 0;
+      choice.radio.parentElement.dataset.included = String(included); choice.radio.parentElement.dataset.support = linked ? 'linked' : 'open';
+      choice.status.textContent = `${included ? 'Included' : 'Available'} · ${linked ? 'Supporting work linked' : 'Choose supporting work'}`;
     }
     for (const [id, choice] of scenarioChoices) {
       choice.radio.checked = id === selectedScenario; scenarioCards.get(id).hidden = id !== selectedScenario;
@@ -304,10 +394,39 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       elements.preview.textContent = `${result.plannedCommitmentCents === null ? 'Known proposed investment' : 'Proposed investment'}: ${money(result.knownCommitmentCents)}. ${accepted.plannedCommitmentCents === null ? 'Known accepted investment' : 'Accepted investment'}: ${money(accepted.knownCommitmentCents)}. Change: ${money(preview.summary.money.knownDeltaCents)}.${result.plannedCommitmentCents === null || accepted.plannedCommitmentCents === null ? ' Add missing hourly rates in People to complete these amounts.' : ''} Apply accepts the settings and proposed plan changes together.${preview.summary.updatedConnectionIds.length ? ` Proposed connection changes: ${preview.summary.updatedConnectionIds.map(id => { const row = preview.projection.state.connections.find(row => row.id === id); return `${row.sharedObject}: ${row.status}`; }).join('; ')}.` : ''}`;
       const row = preview.summary.work[0]; workPreview.textContent = row ? `${row.after.minutesPerOccurrence} minutes per person × ${row.after.participantCount} people × ${row.after.occurrences} occurrences = ${row.after.personMinutes} aggregate person-minutes. ${row.after.funding === 'additional' ? 'Extra investment' : 'Within funded time'}.` : '';
     } else { elements.preview.textContent = composing ? 'Finish entering the value.' : 'Review the entries before applying this proposal.'; workPreview.textContent = ''; }
+    renderConsequences(view, preview);
     return view;
   }
   function opened(result, epoch, focus) { if (!owns(epoch)) return result; composing = false; render(); if (!owns(epoch)) return result; announce(result.ok ? '' : result.error.message); onEditing(); if (owns(epoch) && focus) (editor.read().status === 'stale' ? actions.get('review') : controls.get('sourcePresetId').input).focus(); return result; }
   function open(target = 'assurance', focus = true) { if (disposed || !canOpen()) return; const epoch = ++generation; onBegin(); if (!owns(epoch)) return; return opened(editor.begin(target, studio.read()), epoch, focus); }
+  function selectSupport(target) {
+    if (disposed || !target || !['concept', 'rehearsal'].includes(target.kind)) return false;
+    const before = editor.read(), known = target.kind === 'concept' ? conceptChoices.has(target.id)
+      : before.draft?.raw.rehearsalIds.includes(target.id) || before.projection.state.assuranceSettings.rehearsals.some(row => row.id === target.id);
+    if (!known) return false;
+    const epoch = generation + 1, result = open('assurance', false); if (!result || !owns(epoch)) return false;
+    const view = editor.read(), raw = view.draft?.raw, ownership = editing.read(), active = ownership.active;
+    if (active?.kind !== 'assurance' && (active || view.status === 'editing')) return false;
+    const retains = () => {
+      const current = editing.read(); return owns(epoch) && current.intent === ownership.intent
+        && (active ? current.active?.kind === active.kind && current.active?.token === active.token && current.active?.targetId === active.targetId : current.active === null);
+    };
+    if (target.kind === 'concept') selectedConcept = target.id;
+    else {
+      const definitionId = raw?.[`rehearsal.${target.id}.definitionId`] ?? view.projection.state.assuranceSettings.rehearsals.find(row => row.id === target.id)?.definitionId;
+      if (!scenarioCards.has(definitionId)) return false; selectedScenario = definitionId;
+    }
+    render(); if (!retains()) return false;
+    if (view.status !== 'editing') { actions.get('review').focus(); return true; }
+    const card = cards.get(`${target.kind}/${target.id}`); if (!card || card.details.hidden) return false;
+    if (target.kind === 'rehearsal') card.details.open = true;
+    const field = target.kind === 'concept' ? `concept.${target.id}.included`
+      : `rehearsal.${target.id}.${target.standing === 'observation' && raw?.[`rehearsal.${target.id}.observation`]?.trim() ? 'observation' : 'context'}`;
+    const control = controls.get(field);
+    for (let parent = control.input.parentElement; parent && card.details.contains(parent); parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+    control.input.focus(); if (retains() && card.details.contains(document.activeElement)) card.details.scrollIntoView({ block: 'nearest' });
+    return true;
+  }
   function changed(result, epoch) { if (!owns(epoch)) return; render(); if (!owns(epoch)) return; announce(result.ok ? '' : result.error.message); onEditing(); }
   function edit(entries) {
     const view = editor.read(); if (!view.draft || view.status !== 'editing') return; const epoch = ++generation; let result;
@@ -339,6 +458,12 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const view = editor.read(); if (!view.draft) return;
     if (action === 'review' || action === 'current') { const epoch = ++generation; opened(editor[action === 'review' ? 'review' : 'useCurrent'](view.draft.token, studio.read()), epoch, true); return; }
     if (view.status !== 'editing') return;
+    if (action === 'preparation') { selectSupport({ kind: 'concept', id: 'reconciliation-replay' }); return; }
+    if (action === 'scenario') {
+      selectedScenario = control.dataset.assuranceDefinition; render(); const card = scenarioCards.get(selectedScenario);
+      if (card && !disposed) { const heading = card.querySelector('h5'); heading.tabIndex = -1; heading.focus(); } return;
+    }
+    if (action === 'proposal-settings') { controls.get('proposal.label').input.focus(); return; }
     if (action === 'step') { const epoch = ++generation; changed(editor.step(view.draft.token, control.dataset.assuranceField, Number(control.dataset.assuranceStep)), epoch); return; }
     if (action === 'work') { onSourceWork(control.dataset.assuranceWork, { targetId: 'assurance' }); return; }
     if (action === 'add-event') { addRecord('event', { label: 'Recovery after an interrupted task', included: 'yes', lifecycle: 'active', eventCount: '1', aggregateMinutesPerEvent: '60', receiverPersonId: '', reviewBoundary: '', workIds: [] }); return; }
@@ -392,5 +517,5 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
   function close({ park = true } = {}) { if (disposed) return; durationDials.release(); rateControls.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
   function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
-  render(); const controller = Object.freeze({ open, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
+  render(); const controller = Object.freeze({ open, selectSupport, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
 }
