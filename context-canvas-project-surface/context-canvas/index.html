@@ -336,7 +336,8 @@
                   <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="engineering">Engineering</option></select><button type="button" class="native-control--create" data-native-create="team" data-native-return="session">Create a team</button></div>
                 </div>
                 <div class="native-coordination__feedback native-session__name-feedback" aria-label="Session name and team feedback"><p class="native-coordination__error" id="native-session-name-error" data-native-error="label"></p><p class="native-coordination__error" id="native-session-team-error" data-native-error="teamId"></p></div>
-                <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
+                <div class="native-time-controls">
+                <div class="native-coordination__duration-group native-time__overview" role="group" aria-labelledby="native-duration-label">
                   <p id="native-duration-label" class="native-coordination__control-title">Time per person, per session</p>
                   <output class="native-coordination__duration-display" for="native-hours native-minutes" aria-label="Draft time per person in one working session" aria-live="off">
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
@@ -353,7 +354,7 @@
                   <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap the dial, use arrow keys, or enter minutes below. Escape restores the value where a turn began.</p>
                   <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
-                <div class="native-coordination__controls">
+                <div class="native-coordination__controls native-time__quantities">
                   <div class="native-coordination__control native-coordination__control--hours">
                     <label for="native-hours">Hours</label>
                     <div class="native-coordination__stepper">
@@ -383,11 +384,12 @@
                     <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
                   </div>
                 </div>
-                <div class="native-coordination__feedback native-session__quantity-feedback" role="group" aria-label="Quantity feedback">
+                <div class="native-coordination__feedback native-session__quantity-feedback native-time__feedback" role="group" aria-label="Quantity feedback">
                   <p class="native-coordination__hint" data-native-knob-note hidden>Enter minutes above to use the dial.</p>
                   <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
                   <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
                   <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
+                </div>
                 </div>
                 <div class="native-session__participant-group" role="group" aria-labelledby="native-session-people-label">
                   <p id="native-session-people-label" class="native-coordination__control-title">Participants</p>

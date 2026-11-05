@@ -53,6 +53,9 @@ then identifies each behavior's implementation owner.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
   shared by duration edits, people, purpose, assembly forms, full sessions, roles and contributions.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
+- `time-controls.mjs` owns the shared Minutes dial gesture and the semantic
+  Hours/Minutes/Working sessions cluster used by supporting-work proposals.
+  Each receiving editor retains its raw draft, validation and acceptance.
 - `responsibility-controller.mjs` owns selected-person role details and human
   contribution records within the People chapter. Both forms use the shared
   command-draft engine and its single active coordinator lease.
@@ -60,6 +63,10 @@ then identifies each behavior's implementation owner.
 - `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
 - `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
 - `change-models.mjs` transfers the original framework, lens, attention and Four Actions definitions into a finite immutable catalogue; its pure projection reads admitted Change settings.
+- `change-methods.mjs` explains each offered suggestion with its useful result,
+  inputs, question and example. It records prototype adaptations separately from
+  Studio-authored guidance. Context Canvas routes follow their own receiving
+  versions; source metadata stays in the catalogue and deeper manual.
 - `change-proposals.mjs` prepares settings and explicitly configured support work together. `change-draft.mjs` retains raw entries, and `change-controller.mjs` receives the framework matrix, viewpoints, mixer and support proposal.
 - `assurance-models.mjs` preserves quality concepts, original scenario assumptions, learning prompts and authored rehearsals. `investment-analysis/staffing-adapter.mjs` receives the original staffing formula for separate quality/recovery illustrations. `assurance-proposals.mjs`, `assurance-draft.mjs` and `assurance-controller.mjs` connect those readings to explicit, recoverable work proposals.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,

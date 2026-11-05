@@ -99,3 +99,18 @@ test('removal references name the actual quality, recovery, learning and rehears
   ]);
   assert.strictEqual(studio.read(), before);
 });
+
+test('supporting-session steps carry minutes across hours and zero occurrences preserve the exact staffing amount', () => {
+  const studio = createStudio(createShowcasePlan()), editor = createDraftCoordinator(studio).assurance, before = studio.read();
+  const token = editor.begin('assurance', before).view.draft.token; event(editor, token); session(editor, token);
+  set(editor, token, 'proposal.minutesPerSession', '59');
+  assert.equal(editor.step(token, 'proposal.minutesPerSession', 1).ok, true);
+  assert.equal(editor.read().draft.raw['proposal.hoursPerSession'], '1'); assert.equal(editor.read().draft.raw['proposal.minutesPerSession'], '0');
+  assert.equal(editor.preview(token).summary.money.knownDeltaCents, 20000);
+  assert.equal(editor.step(token, 'proposal.minutesPerSession', -1).ok, true);
+  assert.equal(editor.read().draft.raw['proposal.hoursPerSession'], '0'); assert.equal(editor.read().draft.raw['proposal.minutesPerSession'], '59');
+  assert.equal(editor.preview(token).summary.money.knownDeltaCents, 19667);
+  set(editor, token, 'proposal.occurrences', '0'); const proposal = editor.preview(token); assert.equal(proposal.ok, true, proposal.error?.message);
+  assert.equal(proposal.summary.money.knownDeltaCents, 0); assert.equal(proposal.projection.result.knownCommitmentCents, 398000); assert.strictEqual(studio.read(), before);
+  assert.equal(editor.apply(token).ok, true); assert.equal(studio.read().state.work.find(row => row.id === 'assurance-work-1').occurrences, 0);
+});

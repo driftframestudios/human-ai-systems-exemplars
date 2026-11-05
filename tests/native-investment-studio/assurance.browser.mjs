@@ -71,8 +71,37 @@ for (const engine of names) {
     await event.locator('[data-assurance-action="propose"]').click();
     await field(page, 'proposal.label').fill('Repeat the interrupted request');
     await field(page, 'proposal.teamId').selectOption('operations');
-    await check(page, 'proposal.personIds', 'noor').check(); await check(page, 'proposal.personIds', 'sam').check();
+    await check(page, 'proposal.personIds', 'noor').check();
+    await check(page, 'proposal.personIds', 'sam').check();
+    const minutesDial = panel(page).locator('[data-native-minutes-knob]');
+    await expect(panel(page).getByLabel('Working sessions', { exact: true })).toHaveValue('1');
+    await minutesDial.focus(); await page.keyboard.press('End'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('59');
+    await panel(page).locator('[data-assurance-action="step"][data-assurance-field="proposal.minutesPerSession"][data-assurance-step="1"]').click();
+    await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('1'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('0'); await expect(minutesDial).toHaveValue('0');
+    await field(page, 'proposal.minutesPerSession').fill(' later '); await expect(minutesDial).toBeDisabled();
+    await field(page, 'proposal.hoursPerSession').fill('0'); await field(page, 'proposal.minutesPerSession').fill('30');
+    await minutesDial.scrollIntoViewIfNeeded(); await minutesDial.evaluate(node => node.addEventListener('pointerdown', event => { window.assuranceFixture.pointerId = event.pointerId; }, { once: true }));
+    const dialBox = await minutesDial.boundingBox(); await page.mouse.move(dialBox.x + dialBox.width * .9, dialBox.y + dialBox.height / 2); await page.mouse.down();
+    await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
+    await tab(page, 'people').focus(); await page.keyboard.press('Enter');
+    assert.equal(await minutesDial.evaluate(node => node.hasPointerCapture(window.assuranceFixture.pointerId)), false);
+    await minutesDial.evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', { pointerId: window.assuranceFixture.pointerId, clientX: 0, clientY: 0, bubbles: true })));
+    await page.mouse.up(); await tab(page, 'assurance').click(); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
     await field(page, 'proposal.minutesPerSession').fill('30'); await field(page, 'proposal.funding').selectOption('additional');
+    const time = panel(page).locator('.native-time-controls');
+    for (const width of [1280, 1920]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const boxes = await time.evaluate(node => { const box = element => { const r=element.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, width:r.width }; }; return { all:box(node), overview:box(node.querySelector('.native-time__overview')), quantities:box(node.querySelector('.native-time__quantities')) }; });
+      assert.ok(boxes.quantities.x > boxes.overview.x && Math.abs(boxes.quantities.y - boxes.overview.y) < 1, 'time entry uses the available row beside the display and dial');
+      assert.ok(boxes.quantities.right <= boxes.all.right + 1 && boxes.all.right <= width, JSON.stringify(boxes));
+      await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-${width}.png`) });
+      await panel(page).locator('[data-assurance-work]').screenshot({ path: resolve(captures, `${engine}-supporting-session-${width}.png`) });
+    }
+    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    const narrowTime = await time.evaluate(node => { const outer=node.getBoundingClientRect(); return [...node.querySelectorAll('input,button,label,.native-knob')].map(input => { const b=input.getBoundingClientRect(); return {left:b.left,right:b.right,width:b.width,height:b.height,outerLeft:outer.left,outerRight:outer.right}; }); });
+    assert.ok(narrowTime.every(box => box.left >= box.outerLeft - .5 && box.right <= box.outerRight + .5 && box.left >= -.5 && box.right <= 320.5 && box.width > 0 && box.height > 0), JSON.stringify(narrowTime));
+    await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-narrow.png`) });
+    await page.setViewportSize({ width: 1440, height: 1100 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
     await expect(panel(page).locator('[data-assurance-work-preview]')).toContainText('30 minutes per person × 2 people × 1 occurrences = 60 aggregate person-minutes');
     await expect(panel(page).locator('[data-assurance-preview]')).toContainText('Proposed investment: $4,080.00. Accepted investment: $3,980.00. Change: $100.00');
     await expect(total(page)).toHaveText('$3,980.00'); assert.equal(await bytes(page), initial);

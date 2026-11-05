@@ -612,3 +612,49 @@ reconciliation. #649/#638/#656 complete scenarios, reports and final placement.
 The full original Studio remains discoverable. The tagged public release
 follows the human cue through #686. Pause at performance refinement after the
 holistic showcase.
+
+## 2026-11-05 — Understand the method before planning its work
+
+**Accepted ground.** PR #692 completed Quality & recovery on `dev@35223fe`,
+with a tree equal to independently reviewed head `009e909`. #691 now receives
+the human's request for understandable suggestions, shared time controls and
+more useful laptop and wide composition.
+
+**The decision to support.** A method card explains what its work can accomplish
+before offering a session. PODA connects purpose, objectives, discoverables and
+activities. Impact Map connects a goal to affected people, intended change and
+an investigation. Strategy Canvas compares anchored current, good-enough and
+desired support; consequence weighting stays distinct. Small examples and
+useful discussion inputs sit inside native disclosures. Existing companions
+open in a separate tab so the Studio's unfinished work remains available.
+
+**Source and authorship.** The method catalogue preserves the original
+suggestion IDs and labels while supplying readable display labels and
+outcome-led session names. Canonical prototypes and their separately adapted
+Context Canvas versions retain their own manifest owners. Expectation
+Architecture and other suggestions with limited local definitions receive
+explicit Studio-authored planning guidance. The deeper manual carries that
+standing. Examples describe possible planning work; the visitor supplies the
+initiative's evidence and decisions.
+
+**Composition and controls.** Component settings share available width, and
+method cards form readable columns at laptop and wide sizes. Their flat
+caret disclosures reveal guidance; shadowed buttons begin a work proposal.
+The supporting-session form groups identity, people, time and funding into
+complete regions. Session settings, Change and Quality & recovery share the
+Minutes dial behavior and the same Hours, Minutes and Working sessions
+semantics. Each editor retains its own draft and Apply boundary. Direct entry,
+step buttons and native keyboard operation remain available beside the dial.
+
+Fresh browser observation exposed a proposal collapse after its preview became
+valid. Removing both new nested containment boundaries restored the controls;
+changing only their display type left the fault in place. Responsive composition
+therefore uses the existing chapter and Session boundaries. The planning journey
+checks visible controls after participant selection as well as exact amounts.
+
+**Continuation.** The receiving feature PR owns verification and independent
+review. #653 next supplies the explicit coordination score, agenda, capacity
+and decision gates. #654, #649, #638 and #656 complete the remaining visual
+analysis, scenarios, carry-away results and final placement. #686 retains the
+future human-cued tagged release. The requested pause begins at performance
+refinement after the complete showcase.

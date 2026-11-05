@@ -1,7 +1,7 @@
 import { LIMITS } from './config.mjs';
 import { listQualityConcepts, createAssuranceSettings } from './assurance-models.mjs';
 import { prepareAssuranceProposal, applyAssuranceProposal } from './assurance-proposals.mjs';
-import { prepareWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
+import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 
 const text = (label, extra = {}) => Object.freeze({ kind: 'text', label, maxLength: LIMITS.relationshipText, ...extra });
 const ids = (label, source, maxItems) => Object.freeze({ kind: 'ids', label, source, maxItems });
@@ -23,9 +23,9 @@ const fields = {
   'proposal.label': text('Session name', { maxLength: LIMITS.label }),
   'proposal.teamId': text('Session team', { source: 'teams', maxLength: LIMITS.identifier }),
   'proposal.personIds': ids('People in this session', 'people', LIMITS.people),
-  'proposal.hoursPerSession': numeric('Hours per session', 0, 24),
-  'proposal.minutesPerSession': numeric('Minutes per session', 0, 59),
-  'proposal.occurrences': numeric('Occurrences', 1, LIMITS.occurrences),
+  'proposal.hoursPerSession': numeric('Hours', 0, 24),
+  'proposal.minutesPerSession': numeric('Minutes', 0, 59),
+  'proposal.occurrences': numeric('Working sessions', 0, LIMITS.occurrences),
   'proposal.funding': text('Funding', { choices: ['allocated', 'additional'] }),
 };
 for (const concept of listQualityConcepts()) {
@@ -202,6 +202,13 @@ export function createAssuranceDraftAdapter(studio) {
   function step(token, key, direction) {
     const error = guard(token); if (error) return fail(error);
     if (![1, -1].includes(direction)) return fail(diagnostic('step', `draft.${key}`, 'Choose a single upward or downward step.'));
+    if (['proposal.hoursPerSession', 'proposal.minutesPerSession', 'proposal.occurrences'].includes(key)) {
+      const raw = Object.fromEntries(['hoursPerSession', 'minutesPerSession', 'occurrences'].map(name => [name, active.raw[`proposal.${name}`]]));
+      const result = stepWorkDraftValues(raw, key.slice('proposal.'.length), direction);
+      if (result.error) return fail(diagnostic(result.error.code, `draft.${key}`, result.error.message));
+      for (const name of Object.keys(raw)) active.raw[`proposal.${name}`] = result.raw[name];
+      active.revision += 1; return succeed();
+    }
     const metadata = assuranceField(key), value = Number(active.raw[key]?.trim());
     if (!metadata?.numeric || !Number.isInteger(value)) return fail(diagnostic('integer-text', `draft.${key}`, 'Enter a whole number before using the step controls.'));
     return setText(token, key, String(Math.max(metadata.min ?? 0, Math.min(metadata.max ?? LIMITS.occurrences, value + direction))));
