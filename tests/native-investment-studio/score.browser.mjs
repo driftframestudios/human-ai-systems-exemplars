@@ -435,6 +435,31 @@ for (const engine of names) {
     await expect(score(page).locator('.native-score__transport select')).toHaveCount(0);
     await expect(action(page, 'reset-focus')).toBeHidden();
     await inspect(page, 'work', 'review'); await input(page, 'work.review.startMinute').fill('00660');
+    const invalidNavigation = await score(page).getByRole('button', { name: 'Go to Change', exact: true }).evaluate(async control => {
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      const { studio } = window.scoreFixture, editing = createDraftCoordinator(studio);
+      const host = control.closest('[data-native-coordination]'), destination = control.dataset.scoreChapter;
+      control.focus();
+      const draft = editing.score.read().draft, active = editing.read().active;
+      const raw = JSON.stringify(draft.raw), parked = JSON.stringify(editing.read().parked), accepted = studio.read();
+      const chapter = host.querySelector('[data-native-chapter][aria-selected="true"]');
+      const returnRoute = host.querySelector('[data-native-return-route]').outerHTML;
+      try {
+        control.dataset.scoreChapter = 'unsupported-chapter'; control.click();
+        const current = editing.read();
+        return { initialKind: active.kind, initialRaw: draft.raw['work.review.startMinute'],
+          sameActive: current.active?.kind === active.kind && current.active?.targetId === active.targetId && current.active?.token === active.token,
+          sameDraft: editing.score.read().draft?.token === draft.token && JSON.stringify(editing.score.read().draft?.raw) === raw,
+          sameParked: JSON.stringify(current.parked) === parked,
+          sameChapter: host.querySelector('[data-native-chapter][aria-selected="true"]') === chapter,
+          sameFocus: document.activeElement === control,
+          sameReturn: host.querySelector('[data-native-return-route]').outerHTML === returnRoute,
+          sameAccepted: studio.read() === accepted };
+      } finally { control.dataset.scoreChapter = destination; }
+    });
+    assert.deepEqual(invalidNavigation, { initialKind: 'score', initialRaw: '00660', sameActive: true, sameDraft: true,
+      sameParked: true, sameChapter: true, sameFocus: true, sameReturn: true, sameAccepted: true },
+    'an unsupported destination is rejected before the active draft is parked or a return route is changed');
     await action(page, 'focus').click();
     await expect(score(page).locator('.native-score__track-label[data-score-kind="work"]')).toHaveCount(1);
     const closer = scales.getByRole('button', { name: '4×', exact: true }); await closer.focus(); await page.keyboard.press('Enter');

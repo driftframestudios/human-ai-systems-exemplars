@@ -303,6 +303,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/navigation-policy.mjs",
+      "projected_path": "collaboration/native-investment-studio/navigation-policy.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/controller.mjs",
       "projected_path": "collaboration/native-investment-studio/controller.mjs",
       "media_type": "text/javascript"

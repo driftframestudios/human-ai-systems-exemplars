@@ -57,6 +57,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/connection-view.mjs',
   'collaboration/native-investment-studio/config.mjs',
   'collaboration/native-investment-studio/contract.mjs',
+  'collaboration/native-investment-studio/navigation-policy.mjs',
   'collaboration/native-investment-studio/controller.mjs',
   'collaboration/native-investment-studio/display.mjs',
   'collaboration/native-investment-studio/draft.mjs',

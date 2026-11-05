@@ -2,6 +2,7 @@ import { createScoreView, scoreMinute } from './score-view.mjs';
 import { scoreField, startingScoreRaw } from './score-draft.mjs';
 import { selectScoreIntervalWork } from './score-models.mjs';
 import { money } from './display.mjs';
+import { resolveScoreDestination } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
 let sequence = 0;
@@ -298,6 +299,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function changed(result, epoch) { if (!owns(epoch)) return; render(); if (!owns(epoch)) return; announce(result.ok ? '' : result.error.message); onEditing(); }
   function navigate(target, routeKind) {
     if (disposed) return;
+    if (!resolveScoreDestination(target, studio.read().state)) return;
     const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
     onNavigate(target, { kind: 'score', targetId: 'score', ...(routeKind ? { routeKind } : {}) });
   }

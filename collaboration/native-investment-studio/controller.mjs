@@ -25,6 +25,7 @@ import { mountAssurancePanel } from './assurance-controller.mjs';
 import { summarizeAssuranceDraft } from './assurance-draft.mjs';
 import { mountScorePanel } from './score-controller.mjs';
 import { summarizeScoreDraft } from './score-draft.mjs';
+import { hasReturnDraft, isReturnRouteRetained, returnRoutePrefixLength, resolveScoreDestination } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
 const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
@@ -128,23 +129,17 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function renderReturnRoute() {
     const drafts = editing.read();
-    const retained = route => drafts.active?.kind === route.kind && drafts.active.targetId === route.target
-      || drafts.parked.some(record => record.kind === route.kind && record.targetId === route.target);
+    const state = studio.read().state;
     for (let index = returnRoutes.length - 1; index >= 0; index -= 1) {
       const route = returnRoutes[index], descriptor = TARGET_READERS[route.kind]?.(route.target);
-      if (route.kind === 'peopleSupportView' && !studio.read().state[route.ownerKind === 'person' ? 'people' : 'teams'].some(row => row.id === route.ownerId)) {
-        returnRoutes.splice(index, 1); continue;
-      }
-      if (route.held && !retained(route) || !route.held && descriptor?.mode !== 'create' && descriptor
-        && !studio.read().state[descriptor.collection].some(row => row.id === descriptor.id)) returnRoutes.splice(index, 1);
+      if (!isReturnRouteRetained(route, drafts, state, descriptor)) returnRoutes.splice(index, 1);
     }
-    if (pendingReturnFocus && !retained(pendingReturnFocus)) pendingReturnFocus = null;
+    if (pendingReturnFocus && !hasReturnDraft(pendingReturnFocus, drafts)) pendingReturnFocus = null;
     if (!returnRegion || !returnNote || !returnButton) return;
     const route = returnRoutes.at(-1);
     returnRegion.hidden = !route;
     if (returnTeamButton) returnTeamButton.hidden = true;
     if (!route) return;
-    const state = studio.read().state;
     const collection = { person: 'people', team: 'teams', session: 'work' }[route.createdKind];
     const created = collection ? state[collection].find(row => row.id === route.createdId) : null;
     const createdLabel = created?.label;
@@ -168,20 +163,10 @@ export function mountCoordinationPanel(root, options = {}) {
     }
   }
   function retainReturnAncestors(kind, target) {
-    const repeated = returnRoutes.findIndex(route => route.kind === kind && route.target === target);
-    if (repeated >= 0) { returnRoutes.splice(repeated); return; }
     const descriptor = TARGET_READERS[kind]?.(target);
-    const parent = returnRoutes.findLastIndex(route => {
-      const destinationKind = route.creating === 'session' ? 'session' : 'assembly';
-      return route.kind === 'peopleSupportView' && kind === 'assurance' && target === 'assurance'
-        || destinationKind === kind && (route.creationTarget === target
-        || route.createdId && descriptor?.id === route.createdId
-          && descriptor.collection === (route.creating === 'person' ? 'people' : route.creating === 'team' ? 'teams' : 'work'))
-        || kind === 'assembly' && route.continuationTarget === target;
-    });
     // Return routes describe the current detour. Saved drafts keep their own
     // recovery owner when a visitor starts a different task or resumes an ancestor.
-    returnRoutes.splice(parent + 1);
+    returnRoutes.splice(returnRoutePrefixLength(returnRoutes, kind, target, descriptor));
   }
   function createPrerequisite(button) {
     const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
@@ -305,21 +290,19 @@ export function mountCoordinationPanel(root, options = {}) {
   }
   function navigateFromScore(target, origin = {}) {
     if (disposed) return;
-    const state = studio.read().state;
-    if (target.kind === 'work' && !state.work.some(row => row.id === target.id)
-      || target.kind === 'person' && !state.people.some(row => row.id === target.id)
-      || target.kind === 'connection' && !state.connections.some(row => row.id === target.id)) return;
+    const navigation = resolveScoreDestination(target, studio.read().state);
+    if (!navigation) return;
     const held = editing.read().parked.some(row => row.kind === 'score');
     retainReturnAncestors('score', 'score');
-    returnRoutes.push({ kind: 'score', target: 'score', held, inspectedWorkId: target.kind === 'work' ? target.id : null });
-    if (target.kind === 'person') { chapterShell?.select('people'); teamPanel?.select(target.id); }
-    else if (target.kind === 'work') { chapterShell?.select('coordination'); workPanel?.select(target.id, false); }
-    else if (target.kind === 'connection') { chapterShell?.select('coordination'); connectionPanel?.select(target.id); }
-    else if (target.kind === 'chapter' && ['change', 'assurance', 'investment'].includes(target.id)) chapterShell?.select(target.id, { kind: origin.routeKind ?? 'context' });
+    returnRoutes.push({ kind: 'score', target: 'score', held, inspectedWorkId: navigation.kind === 'work' ? navigation.id : null });
+    chapterShell?.select(navigation.chapter, navigation.kind === 'chapter' ? { kind: origin.routeKind ?? 'context' } : undefined);
+    if (navigation.kind === 'person') teamPanel?.select(navigation.id);
+    else if (navigation.kind === 'work') workPanel?.select(navigation.id, false);
+    else if (navigation.kind === 'connection') connectionPanel?.select(navigation.id);
     render();
-    const destination = target.kind === 'person' ? root.querySelector('[data-native-team-editor]')
-      : target.kind === 'work' ? root.querySelector('[data-native-session-editor]')
-        : target.kind === 'connection' ? root.querySelector('[data-native-connection-editor]') : root.querySelector(`[data-native-chapter-panel="${target.id}"]`);
+    const destination = navigation.kind === 'person' ? root.querySelector('[data-native-team-editor]')
+      : navigation.kind === 'work' ? root.querySelector('[data-native-session-editor]')
+        : navigation.kind === 'connection' ? root.querySelector('[data-native-connection-editor]') : root.querySelector(`[data-native-chapter-panel="${navigation.id}"]`);
     destination?.scrollIntoView({ block: 'start' });
     destination?.querySelector('select, button, summary, input')?.focus({ preventScroll: true });
   }
