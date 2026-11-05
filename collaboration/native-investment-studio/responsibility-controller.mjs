@@ -3,6 +3,7 @@ import { ROLE_FORMS, CONTRIBUTION_FORMS, makeRoleTarget, describeRoleTarget,
   makeContributionTarget, describeContributionTarget } from './command-draft.mjs';
 
 const INSTANCES = new WeakMap();
+let nextInstance = 0;
 export const RESPONSIBILITY_LABELS = Object.freeze({
   functionId: 'Function', seniorityId: 'Seniority', postureId: 'Working posture', enablerId: 'Ability enabler',
   change: 'Change model and component', qualityId: 'Quality role', aiId: 'AI role', decisionId: 'Decision boundary',
@@ -30,7 +31,7 @@ const named = row => row ? `${row.label}${row.lifecycle === 'retired' ? ' · ret
 export function mountResponsibilityPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
   onAccepted = () => {}, isActive = () => true, canOpen = isActive }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
-  const document = root.ownerDocument;
+  const document = root.ownerDocument, instance = `responsibility-${++nextInstance}`;
   const find = selector => {
     const element = root.querySelector(selector);
     if (!element) throw new TypeError('Supply the complete role and responsibility panel.');
@@ -41,6 +42,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   const add = find('[data-responsibility-action="create"]');
   const groups = Object.fromEntries(['role', 'contribution'].map(kind => {
     const configure = find(`[data-responsibility-configure="${kind}"]`);
+    if (!configure.id) configure.id = `${instance}-${kind}-settings`;
     const query = selector => configure.querySelector(selector);
     const fields = kind === 'role' ? ROLE_FIELDS : CONTRIBUTION_FIELDS;
     const form = query('form');
@@ -132,6 +134,9 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     for (const row of next.state.contributions) {
       const item = document.createElement('li'), open = button(CATEGORY_LABELS.get(row.categoryId), 'open', row.id);
       open.dataset.contributionId = row.id;
+      open.className = 'native-responsibility__selector';
+      open.setAttribute('aria-controls', contribution.configure.id);
+      open.setAttribute('aria-expanded', 'false');
       const detail = document.createElement('p');
       detail.textContent = `Receiver: ${named(people.get(row.receiverPersonId))}. Who decides: ${named(people.get(row.decisionOwnerPersonId))}.`;
       const sessions = document.createElement('p');
@@ -253,7 +258,13 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     renderGroup(groups.role);
     if (!owns(epoch)) return editing[mode].read();
     renderGroup(contribution);
+    renderDisclosureState();
     return editing[mode].read();
+  }
+  function renderDisclosureState() {
+    const descriptor = describe(contribution.target);
+    for (const [id, control] of contributionButtons) control.setAttribute('aria-expanded', String(
+      contribution.configure.open && descriptor?.mode === 'update' && descriptor.id === id));
   }
   function focusForm(kind) {
     const view = editing[kind].read(), group = groups[kind], descriptor = describe(keyFor(kind, view.draft));
@@ -300,6 +311,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (park && ['role', 'contribution'].includes(editing.read().active?.kind)) editing.park();
     if (!owns(epoch)) return;
     for (const group of Object.values(groups)) { group.acknowledged = false; group.configure.open = false; }
+    renderDisclosureState();
   }
   function changed(kind, result, epoch, focus = null) {
     if (!owns(epoch)) return;
@@ -388,7 +400,12 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (!control || !root.contains(control) || control.disabled || disposed) return;
     const action = control.dataset.responsibilityAction, id = control.dataset.responsibilityId;
     if (action === 'create') { create(); return; }
-    if (action === 'open' || action === 'remove') { open(makeContributionTarget(action === 'open' ? 'contribution.update' : 'contribution.remove', id)); return; }
+    if (action === 'open' || action === 'remove') {
+      const target = makeContributionTarget(action === 'open' ? 'contribution.update' : 'contribution.remove', id);
+      if (action === 'open' && contribution.configure.open && contribution.target === target) { close(); onEditing(); }
+      else open(target);
+      return;
+    }
     if (action === 'work-up' || action === 'work-down') { membership(id, action === 'work-up' ? -1 : 1); return; }
     const kind = control.closest('[data-responsibility-configure]')?.dataset.responsibilityConfigure;
     if (!kind) return;

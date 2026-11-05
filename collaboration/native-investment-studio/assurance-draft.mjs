@@ -209,8 +209,16 @@ export function createAssuranceDraftAdapter(studio) {
       for (const name of Object.keys(raw)) active.raw[`proposal.${name}`] = result.raw[name];
       active.revision += 1; return succeed();
     }
-    const metadata = assuranceField(key), value = Number(active.raw[key]?.trim());
-    if (!metadata?.numeric || !Number.isInteger(value)) return fail(diagnostic('integer-text', `draft.${key}`, 'Enter a whole number before using the step controls.'));
+    const metadata = activeField(key), text = active.raw[key]?.trim(), value = Number(text);
+    if (metadata?.decimal) {
+      const maximum = key === 'independentRate' ? LIMITS.rateCentsPerHour : 10000;
+      if (!/^\d+(?:\.\d{1,2})?$/.test(text) || Math.round(value * 100) > maximum)
+        return fail(diagnostic('decimal-text', `draft.${key}`, 'Enter an amount within the field range before using the step controls.'));
+      const next = Math.max(0, Math.min(maximum, Math.round(value * 100) + direction * 100));
+      return setText(token, key, String(next / 100));
+    }
+    if (!metadata?.numeric || !/^\d+$/.test(text) || !Number.isInteger(value) || value < metadata.min || value > metadata.max)
+      return fail(diagnostic('integer-text', `draft.${key}`, 'Enter a whole number within the field range before using the step controls.'));
     return setText(token, key, String(Math.max(metadata.min ?? 0, Math.min(metadata.max ?? LIMITS.occurrences, value + direction))));
   }
   function prepare(token) {

@@ -168,8 +168,18 @@
             <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
             <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
           </div>
-          <details class="native-purpose" data-native-purpose>
+          <div class="native-amp-tools" data-native-amp-tools hidden aria-label="Plan reference and saved work">
+            <button type="button" data-amp-panel="purpose" aria-controls="native-amp-purpose" aria-expanded="false">Purpose</button>
+            <button type="button" data-amp-panel="saved" aria-controls="native-amp-saved" aria-expanded="false" disabled>Saved edits <span data-amp-saved-count>(0)</span></button>
+            <button type="button" data-amp-panel="manual" aria-controls="native-amp-manual" aria-expanded="false">Operating manual</button>
+          </div>
+          <p class="native-amp-purpose-preview" data-amp-purpose-preview>Operations staff can route a service request, see who owns it, and recover a missed handoff.</p>
+          <details class="native-purpose" id="native-amp-purpose" data-native-purpose>
             <summary>Purpose <span data-purpose-summary>Describe the change you are planning.</span></summary>
+            <div class="native-purpose__reading" data-purpose-reading>
+              <dl class="native-purpose__current native-purpose__fields" data-purpose-reading-values></dl>
+              <button type="button" data-purpose-action="edit" disabled>Edit purpose</button>
+            </div>
             <div class="native-coordination__recovery" data-purpose-recovery hidden>
               <p>The plan changed. Review your saved text before applying it.</p>
               <dl class="native-purpose__current" data-purpose-current></dl>
@@ -188,11 +198,11 @@
             </fieldset></form>
             <p class="native-coordination__status" data-purpose-status role="status" aria-live="polite" aria-atomic="true"></p>
           </details>
-          <details class="native-coordination__saved" data-native-saved hidden>
+          <details class="native-coordination__saved" id="native-amp-saved" data-native-saved hidden>
             <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
             <ul data-native-saved-list></ul>
           </details>
-          <details class="native-manual">
+          <details class="native-manual" id="native-amp-manual">
             <summary>Operating manual <span>Try a change, compare it, and keep what works.</span></summary>
             <div class="native-manual__reading">
               <p>The starting plan is an illustrative service-request pilot. Its people, rates, and funded time are editable assumptions.</p>
@@ -215,23 +225,6 @@
           <button type="button" data-native-return-action>Return to session</button>
         </aside>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-patch-bay-title">
-          <aside class="native-showcase" data-native-showcase aria-labelledby="native-showcase-title">
-            <div class="native-showcase__brief">
-              <p class="native-coordination__plate">A plan to try · illustrative four-week pilot</p>
-              <h3 id="native-showcase-title">Make a service request easier to complete.</h3>
-              <p>Product and Research, Engineering, and Quality and Operations are preparing a small pilot. Their shared work connects evidence, a prototype, and a decision about readiness.</p>
-              <p><strong>First adjustment:</strong> give each decision review 45 minutes. Inspect the extra effort and proposed investment, then Apply or Cancel.</p>
-              <div class="native-coordination__actions"><button type="button" data-native-showcase-action="baseline" disabled>Save a baseline</button><button type="button" data-native-showcase-action="review" disabled>Adjust review time</button></div>
-            </div>
-            <details class="native-showcase__request">
-              <summary>Try a review request <span>Clarify the recovery instructions before the pilot.</span></summary>
-              <div>
-                <p>The quality reviewer finds incomplete recovery instructions. Open the readiness connection, pause it while the work is clarified, and name the response the team needs.</p>
-                <p>The review sessions keep their planned time and cost. Compare your response with the baseline, then keep it or use Undo.</p>
-                <button type="button" data-native-showcase-action="readiness" disabled>Open readiness connection</button>
-              </div>
-            </details>
-          </aside>
           <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
             <h3 id="native-patch-bay-title" class="native-zine__heading">Coordination connections</h3>
             <p class="native-coordination__hint">Connect teams through the work they share.</p>
@@ -306,18 +299,38 @@
               <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
             </section>
           </section>
+          <details class="native-showcase" data-native-showcase><summary>Try the service-request pilot <span>Clarify a review and compare the work it needs.</span></summary><div class="native-showcase__content">
+            <div class="native-showcase__brief">
+              <p class="native-coordination__plate">A plan to try · illustrative four-week pilot</p>
+              <h3 id="native-showcase-title">Make a service request easier to complete.</h3>
+              <p>Product and Research, Engineering, and Quality and Operations are preparing a small pilot. Their shared work connects evidence, a prototype, and a decision about readiness.</p>
+              <p>Choose Pilot decision review in Working sessions below, then open its settings to try 45 minutes. Compare the proposal before Apply. Investment holds baseline comparison and Undo.</p>
+            </div>
+            <details class="native-showcase__request">
+              <summary>Try a review request <span>Clarify the recovery instructions before the pilot.</span></summary>
+              <div>
+                <p>The quality reviewer finds incomplete recovery instructions. Open the readiness connection, pause it while the work is clarified, and name the response the team needs.</p>
+                <p>The review sessions keep their planned time and cost. Compare your response with the baseline, then keep it or use Undo.</p>
+                <button type="button" data-native-showcase-action="readiness" disabled>Open readiness connection</button>
+              </div>
+            </details>
+          </div></details>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
             <div class="native-coordination__actions"><button type="button" data-session-action="create" disabled>Add session</button><button type="button" class="native-control--remove" data-session-action="remove" disabled>Remove session</button></div>
           </div>
           <div class="native-coordination__agreement">
-            <h3 id="native-session-title" data-native-agreement>Pilot decision review</h3>
-            <div class="native-coordination__connection" aria-label="Working session participants">
-              <span><i aria-hidden="true"></i><b data-native-team>Engineering</b></span>
-              <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
-              <span><i aria-hidden="true"></i>Participants <small data-native-participants>3 people</small></span>
-            </div>
+            <figure class="native-session-map" aria-labelledby="native-session-title">
+              <figcaption>Accepted session · people and planned support</figcaption>
+              <div class="native-session-map__flow">
+                <section class="native-session-map__people" aria-label="Participating people"><h4>Who joins</h4><p data-native-participants>3 people</p><ul data-native-session-map-people><li>Product lead</li><li>Engineering lead</li><li>Quality reviewer</li></ul></section>
+                <span class="native-session-map__link" aria-hidden="true">join</span>
+                <section class="native-session-map__hub"><h3 id="native-session-title" data-native-agreement>Pilot decision review</h3><p>Hosted by <strong data-native-team>Engineering</strong></p><p class="native-session-map__time" data-native-session-map-time>30 min · 4 working sessions</p></section>
+                <span class="native-session-map__link" aria-hidden="true">supports</span>
+                <section class="native-session-map__support" aria-label="Planned support"><h4>What it supports</h4><ul data-native-session-map-support><li>Review the pilot evidence and readiness.</li></ul></section>
+              </div>
+            </figure>
             <p class="native-coordination__effort" data-native-effort>3 people × 30 min per session × 4 working sessions = 6 h of participant effort.</p>
             <p class="native-coordination__hint" data-native-session-standing>Planned · Extra investment</p>
           </div>
@@ -419,7 +432,7 @@
           </details>
           <p class="native-coordination__status" data-native-status data-native-session-status role="status" aria-live="polite" aria-atomic="true"></p>
           <details class="native-coordination__trace" data-native-trace>
-            <summary>Cost breakdown</summary>
+            <summary>Whole-plan cost breakdown</summary>
             <div class="native-coordination__trace-body">
               <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
               <ul class="native-coordination__ledger" data-native-trace-list>
@@ -792,9 +805,9 @@
           </div>
           <form data-assurance-form novalidate>
             <fieldset data-assurance-fields disabled aria-label="Quality, recovery, learning and rehearsal">
+              <section class="native-assurance__statistics" data-assurance-statistics aria-label="Illustrative quality attention"></section>
               <section class="native-assurance__quality" data-assurance-quality aria-label="Quality planning assumptions"></section>
               <section class="native-assurance__concepts" data-assurance-concepts aria-label="Quality checks and supporting work"></section>
-              <section class="native-assurance__statistics" data-assurance-statistics aria-label="Illustrative quality attention"></section>
               <section class="native-assurance__events" data-assurance-events aria-label="Recovery assumptions and support"></section>
               <section class="native-assurance__learning" data-assurance-learning aria-label="Choose the next learning observation"></section>
               <section class="native-assurance__rehearsal" data-assurance-rehearsal aria-label="Rehearse a complication"></section>

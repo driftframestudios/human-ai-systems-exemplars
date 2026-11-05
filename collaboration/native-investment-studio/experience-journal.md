@@ -658,3 +658,56 @@ and decision gates. #654, #649, #638 and #656 complete the remaining visual
 analysis, scenarios, carry-away results and final placement. #686 retains the
 future human-cued tagged release. The requested pause begins at performance
 refinement after the complete showcase.
+
+## 2026-11-05 — Inspect a compact, stable showcase
+
+**Accepted ground.** #693 is integrated at `dev@8bdbacc`, with a tree equal to
+independently reviewed head `4d0f490`. The human's annotated browser review
+changed the immediate receiver to #694 before #653. Its purpose is to let a
+visitor understand and try the example without first filling out a form.
+
+**Stable composition.** Opening Session settings had changed the layout from
+one to two columns and moved the whole-plan ledger into a narrow left column.
+The diagram now retains its full-width position. Settings and whole-plan costs
+expand underneath. The diagram names actual session participants, the hosting
+team and explicit support references. Connector words carry the relationships;
+color and arrows reinforce them. The accepted diagram and the editable proposal
+retain their distinct values. The pilot starts at $3,980, and changing its four
+reviews from 30 to 45 minutes proposes $4,350.
+
+**Read before editing.** The amp's Purpose, Saved edits and Operating manual
+controls share a compact secondary row. Purpose presents complete text before
+Edit; the shared editor still owns Apply, Cancel, parked entries and stale
+review. The purpose preview remains visible when the panel is closed. Saved
+edits keep their recovery value and their position even when there are none.
+The connection diagram leads Coordination; the optional pilot brief follows it.
+Session controls are beside their receiving work, and Investment owns baseline
+comparison. The quality visualization leads its chapter's deeper settings.
+
+**Control meaning.** The lens keeps its position during a press and turns its
+reel when selection changes. The decorative rotor passes pointer input to the
+real choices. Contribution inspectors use expanded-state carets. Supporting
+sessions become compact checkbox choices. Showcase ability proposals receive
+editable, explicitly illustrative context and existing support; ordinary new
+plans retain their authorship. The stored review-status identity stays stable
+while its label becomes Needs review.
+
+Quality assumptions use compact precision controls. Horizon units, quality
+concepts and rehearsal scenarios use direct exclusive choices. One inspected
+concept or rehearsal has room to read while its siblings keep their saved
+entries. Sigma occupies its full range with visible values. Headings and
+attention terms gain consistent typographic emphasis. The bounded research
+record explains these choices and their evidence limits.
+
+**Continuation.** The receiving PR owns verification and exact independent
+review. Continue the authored score through #653, then #654, #649, #638 and
+#656 for the holistic showcase. #686 retains the future human-cued tagged
+public release. Pause at performance refinement after the complete experience.
+
+Independent review found a callback after the read-first Purpose receiver had
+retired and a diagram that initially omitted Change and Quality & recovery
+support. The receiving repair checks the current operation after the opening
+callback and includes those explicit mappings in the diagram. Literal browser
+fixtures exercise receiver replacement and every support family. The shared
+time controls also align their precision fields when a label wraps. Enlarged
+amp counts and the diagram's center panel retain readable words.

@@ -2,6 +2,7 @@ import { LIMITS } from './config.mjs';
 import { listCapabilityVersions } from './capabilities.mjs';
 import { prepareCapabilityProposal, applyCapabilityProposal } from './capability-proposals.mjs';
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
+import { showcaseCapabilityDefaults } from './presets.mjs';
 
 const identifier = /^[a-z][a-z0-9-]*$/;
 const validId = value => typeof value === 'string' && value.length <= LIMITS.identifier && identifier.test(value);
@@ -164,7 +165,8 @@ export function createCapabilityDraftAdapter(studio) {
     if (descriptor.mode === 'create' && row) return fail(diagnostic('creation-conflict', 'draft', 'Use these entries for a new instance.'));
     if (descriptor.mode !== 'create' && (!row || row.definitionId !== descriptor.definition.id || row.definitionVersion !== descriptor.definition.version))
       return fail(diagnostic('reference', 'draft', 'Choose this definition in the current plan.'));
-    const raw = startingRaw(descriptor, row);
+    const defaults = descriptor.mode === 'create' ? showcaseCapabilityDefaults(expected.state, descriptor.definition) : null;
+    const raw = startingRaw(descriptor, row ?? defaults);
     active = { target, descriptor, baseProjection: expected, token: Object.freeze({}), raw,
       initialRaw: copyCapabilityRaw(target, raw), rawRevision: 0, preview: null };
     return succeed();

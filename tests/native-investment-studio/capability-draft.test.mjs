@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
+import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
 import { capabilityForm, makeCapabilityTarget, createCapabilityDraftAdapter } from '../../collaboration/native-investment-studio/capability-draft.mjs';
 
@@ -27,6 +28,40 @@ function common(editing, token) {
   ids(editing, token, 'support.preparation', ['review']); ids(editing, token, 'support.review', ['review']);
 }
 function rejected(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); }
+
+test('the pilot supplies editable context and shared support, accepted together without new cost, while ordinary plans start empty', () => {
+  const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio), before = studio.read();
+  const token = create(editing, studio), raw = editing.capability.read().draft.raw;
+  assert.equal(raw.context, 'Help pilot reviewers find an earlier service-request decision and recover why it changed.');
+  assert.equal(raw.teamId, 'engineering');
+  assert.deepEqual(raw.responsiblePersonIds, ['ari', 'jules', 'maya', 'noor']);
+  assert.deepEqual(raw['support.preparation'], ['pairing']); assert.deepEqual(raw['support.review'], ['review']);
+  assert.equal(raw['new.review.enabled'], 'no');
+  assert.strictEqual(studio.read(), before);
+  text(editing, token, 'context', 'Review the history of a missed handoff.');
+  assert.equal(editing.capability.apply(token).ok, true);
+  assert.equal(studio.read().state.abilities[0].context, 'Review the history of a missed handoff.');
+  assert.equal(studio.read().state.work.length, before.state.work.length);
+  assert.equal(studio.read().result.knownCommitmentCents, 398000);
+  assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.read().serialized, before.serialized);
+  const ordinary = createStudio(fixture()), ordinaryEditing = createDraftCoordinator(ordinary);
+  create(ordinaryEditing, ordinary);
+  const empty = ordinaryEditing.capability.read().draft.raw;
+  assert.equal(empty.context, ''); assert.equal(empty.teamId, ''); assert.deepEqual(empty.responsiblePersonIds, []);
+  assert.deepEqual(empty['support.preparation'], []); assert.deepEqual(empty['support.review'], []);
+});
+
+test('pilot proposals use available existing support and retain genuine maintenance gaps', () => {
+  const plan = createShowcasePlan();
+  plan.work.find(row => row.id === 'review').status = 'paused';
+  plan.people.find(row => row.id === 'maya').lifecycle = 'retired';
+  const studio = createStudio(plan), editing = createDraftCoordinator(studio);
+  const token = create(editing, studio, 'recover-interrupted-work'), raw = editing.capability.read().draft.raw;
+  assert.deepEqual(raw.responsiblePersonIds, ['noor', 'sam']); assert.equal(raw.decisionOwnerPersonId, '');
+  assert.deepEqual(raw['support.preparation'], ['rehearsal']); assert.deepEqual(raw['support.review'], []);
+  assert.deepEqual(raw['support.maintenance'], []); assert.deepEqual(raw.prerequisites, []);
+  assert.equal(editing.capability.preview(token).ok, true);
+});
 
 test('one capability proposal keeps $400 allocated inside $16,000 staffing, then accepts $150 review with one Undo', () => {
   const studio = createStudio(fixture()), editing = createDraftCoordinator(studio), before = studio.read();

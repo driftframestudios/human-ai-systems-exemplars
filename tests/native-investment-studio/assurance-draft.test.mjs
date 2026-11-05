@@ -114,3 +114,25 @@ test('supporting-session steps carry minutes across hours and zero occurrences p
   assert.equal(proposal.summary.money.knownDeltaCents, 0); assert.equal(proposal.projection.result.knownCommitmentCents, 398000); assert.strictEqual(studio.read(), before);
   assert.equal(editor.apply(token).ok, true); assert.equal(studio.read().state.work.find(row => row.id === 'assurance-work-1').occurrences, 0);
 });
+
+test('rate and share steppers retain decimal precision, respect bounds and preserve incomplete raw entries', () => {
+  const studio = createStudio(createShowcasePlan()), editor = createDraftCoordinator(studio).assurance, before = studio.read();
+  const token = editor.begin('assurance', before).view.draft.token;
+  set(editor, token, 'independentRate', '10.25'); set(editor, token, 'qualityAdditionalPercent', '18.25');
+  assert.equal(editor.step(token, 'independentRate', 1).ok, true);
+  assert.equal(editor.step(token, 'qualityAdditionalPercent', 1).ok, true);
+  const proposal = editor.preview(token); assert.equal(proposal.ok, true, proposal.error?.message);
+  assert.equal(proposal.projection.state.assuranceSettings.quality.independentRateCentsPerHour, 1125);
+  assert.equal(proposal.projection.state.assuranceSettings.quality.additionalShareBasisPoints, 1925);
+  assert.strictEqual(studio.read(), before);
+  set(editor, token, 'qualityAdditionalPercent', '99.75'); editor.step(token, 'qualityAdditionalPercent', 1);
+  assert.equal(editor.read().draft.raw.qualityAdditionalPercent, '100');
+  set(editor, token, 'recoveryAdditionalPercent', '0.25'); editor.step(token, 'recoveryAdditionalPercent', -1);
+  assert.equal(editor.read().draft.raw.recoveryAdditionalPercent, '0');
+  for (const value of ['', ' later ', '1.234', '-1']) {
+    set(editor, token, 'independentRate', value); assert.equal(editor.step(token, 'independentRate', 1).ok, false);
+    assert.equal(editor.read().draft.raw.independentRate, value);
+  }
+  set(editor, token, 'namedUnknowns', ' later '); assert.equal(editor.step(token, 'namedUnknowns', 1).ok, false);
+  assert.equal(editor.read().draft.raw.namedUnknowns, ' later '); assert.strictEqual(studio.read(), before);
+});

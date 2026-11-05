@@ -8,9 +8,13 @@ export const PURPOSE_LABELS = Object.freeze({
 
 // The root lends one editing port. This receiver owns its disclosure and DOM;
 // accepted purpose and parked text retain the shared Studio owners.
-export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onChange }) {
+export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onChange, trigger = null }) {
   const editor = editing.purpose;
-  const summary = root.querySelector('summary');
+  const summary = trigger ?? root.querySelector('summary');
+  const reading = root.querySelector('[data-purpose-reading]');
+  const readingValues = root.querySelector('[data-purpose-reading-values]');
+  const editButton = root.querySelector('[data-purpose-action="edit"]');
+  const ampPreview = root.parentElement.querySelector('[data-amp-purpose-preview]');
   const form = root.querySelector('form');
   const fieldset = root.querySelector('fieldset');
   const recovery = root.querySelector('[data-purpose-recovery]');
@@ -23,6 +27,7 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   let projection = null;
   let disposed = false;
   let composing = false;
+  let editingShown = false, readingProjection = null;
   let acknowledgedOpen = root.open;
   let generation = 0, retiredToken = null;
 
@@ -52,15 +57,30 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
     if (disposed) return;
     const epoch = generation;
     let view = editor.read();
-    if (root.open && ['idle', 'parked'].includes(view.status) && editing.read().active === null) {
+    if (root.open && editingShown && ['idle', 'parked'].includes(view.status) && editing.read().active === null) {
       operate('begin', 'purpose', view.projection);
       if (!owns(epoch)) return;
       view = editor.read();
     }
     projection = view.projection;
     accepted.textContent = projection.state.purpose.changedAbility ?? 'Describe the change you are planning.';
-    fieldset.disabled = view.status !== 'editing';
-    recovery.hidden = view.status !== 'stale';
+    if (ampPreview) ampPreview.textContent = accepted.textContent;
+    if (readingProjection !== projection) {
+      readingValues.replaceChildren(...PURPOSE_FIELDS.map(field => {
+        const row = root.ownerDocument.createElement('div');
+        const label = root.ownerDocument.createElement('dt'), value = root.ownerDocument.createElement('dd');
+        label.textContent = PURPOSE_LABELS[field];
+        value.textContent = projection.state.purpose[field] ?? 'Ready to describe when the plan needs it.';
+        row.append(label, value); return row;
+      }));
+      readingProjection = projection;
+    }
+    reading.hidden = editingShown;
+    form.hidden = !editingShown;
+    editButton.disabled = false;
+    editButton.textContent = view.draft?.changed ? 'Continue purpose edit' : 'Edit purpose';
+    fieldset.disabled = !editingShown || view.status !== 'editing';
+    recovery.hidden = !editingShown || view.status !== 'stale';
     if (view.status === 'stale') {
       current.replaceChildren(...PURPOSE_FIELDS.map(field => {
         const row = root.ownerDocument.createElement('div');
@@ -80,6 +100,7 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   }
   function begin() {
     if (disposed) return;
+    editingShown = true;
     const epoch = ++generation, before = boundary();
     acknowledgedOpen = root.open;
     onOpen();
@@ -112,6 +133,7 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
     if (editing.read().active?.kind === 'purpose') editing.park();
     if (!owns(epoch)) return;
     root.open = false;
+    editingShown = false;
     refresh();
     if (!owns(epoch)) return;
     const focused = root.ownerDocument.activeElement;
@@ -139,7 +161,17 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   listen(root, 'toggle', () => {
     if (disposed) return;
     if (root.open) {
-      if (editing.read().active?.kind !== 'purpose') begin();
+      if (!acknowledgedOpen) {
+        const epoch = ++generation, before = boundary();
+        acknowledgedOpen = true;
+        onOpen();
+        const active = editing.read().active;
+        if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
+          || (active && active.token !== before.token)) return;
+        refresh();
+        if (!owns(epoch)) return;
+        onChange();
+      }
     } else if (acknowledgedOpen) close();
   });
   listen(form, 'compositionstart', () => { generation += 1; composing = true; });
@@ -165,9 +197,10 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
   listen(root, 'click', event => {
     const button = event.target.closest('button[data-purpose-action]');
     if (disposed || !button || !root.contains(button)) return;
+    const action = button.dataset.purposeAction;
+    if (action === 'edit') { open(); return; }
     const view = editor.read();
     if (!view.draft) return;
-    const action = button.dataset.purposeAction;
     if (!['cancel', 'review', 'useCurrent'].includes(action)) return;
     const epoch = ++generation, result = operate(action, view.draft.token, projection);
     if (!owns(epoch)) return;
@@ -188,6 +221,8 @@ export function mountPurposePanel(root, { studio, editing, onOpen, onClose, onCh
       for (const release of cleanup) release();
       cleanup.length = 0;
       fieldset.disabled = true;
+      editButton.disabled = true;
+      editingShown = false;
       root.open = false;
     },
   });

@@ -125,6 +125,16 @@ for (const engine of names) {
     assert.deepEqual(await page.evaluate(() => window.responsibilityFixture.studio.read().result), before);
     await expect(people(page).locator('[data-responsibility-list] > li')).toHaveCount(6);
     await expect(people(page).locator('[data-responsibility-list]')).toContainText('Who decides: engineering-one');
+    const opener = people(page).locator('[data-responsibility-action="open"]').last();
+    await expect(opener).toHaveAttribute('aria-expanded', 'true');
+    assert.equal(await opener.getAttribute('aria-controls'), await settings(page, 'contribution').getAttribute('id'));
+    await field(page, 'contribution', 'reviewBoundary').fill('Keep this proposed review.');
+    await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'false');
+    await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
+    await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'true');
+    await expect(field(page, 'contribution', 'reviewBoundary')).toHaveValue('Keep this proposed review.');
+    assert.deepEqual((await state(page)).contributions, accepted.contributions);
+    await action(page, 'contribution', 'cancel').click();
     await tab(page, 'investment').click();
     await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal((await state(page)).contributions.length, 5);
@@ -152,7 +162,7 @@ for (const engine of names) {
       if (!result.ok) throw new Error(result.error.message);
       controller.refresh();
     }, id);
-    await root(page).locator('[data-native-saved] > summary').click();
+    await root(page).locator('[data-amp-panel="saved"]').click();
     await root(page).locator('[data-saved-open="role:role.update:product-one"]').click();
     await expect(settings(page, 'role').locator('fieldset')).toHaveAttribute('disabled', '');
     await expect(field(page, 'role', 'functionId')).toHaveValue('data-ml');

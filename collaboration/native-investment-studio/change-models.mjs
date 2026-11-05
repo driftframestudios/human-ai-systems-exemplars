@@ -14,7 +14,7 @@ export const CHANGE_SOURCE = freeze({
 });
 export const CHANGE_STATUSES = freeze([
   { id: 'planned', label: 'Planned' }, { id: 'partial', label: 'Partial' },
-  { id: 'look', label: 'Look here' }, { id: 'outside', label: 'Intentionally outside scope' },
+  { id: 'look', label: 'Needs review' }, { id: 'outside', label: 'Intentionally outside scope' },
 ]);
 export const CHANGE_SOURCE_FILTERS = freeze([
   { id: 'all', label: 'All sources' }, { id: 'core', label: 'Core Architectures' },

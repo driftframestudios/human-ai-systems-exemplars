@@ -45,6 +45,8 @@ after(async () => {
 
 const root = page => page.locator('[data-native-coordination]');
 const purpose = page => root(page).locator('[data-native-purpose]');
+const amp = (page, name) => root(page).locator(`[data-amp-panel="${name}"]`);
+const editPurpose = page => purpose(page).locator('[data-purpose-action="edit"]').click();
 const field = (page, name) => purpose(page).locator(`[name="${name}"]`);
 const chapter = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const investment = page => root(page).locator('[data-native-chapter-panel="investment"]');
@@ -108,7 +110,7 @@ async function containment(page) {
   const observation = await root(page).evaluate(element => ({
     viewport: document.documentElement.clientWidth,
     width: document.documentElement.scrollWidth,
-    words: [...element.querySelectorAll('.native-purpose button, .native-purpose summary, .native-investment button')]
+    words: [...element.querySelectorAll('[data-amp-panel], .native-purpose button, .native-purpose summary, .native-investment button')]
       .filter(node => node.getClientRects().length && !node.closest('[hidden]'))
       .flatMap(node => {
         const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT), observations = [];
@@ -123,7 +125,7 @@ async function containment(page) {
         }
         return observations;
       }),
-    controls: [...element.querySelectorAll('.native-purpose :is(textarea,button,label,summary,p), .native-investment :is(button,input,select,label,p,h3,h4,dt,dd,li)')]
+    controls: [...element.querySelectorAll('[data-amp-panel], .native-purpose :is(textarea,button,label,summary,p,dt,dd), .native-investment :is(button,input,select,label,p,h3,h4,dt,dd,li)')]
       .filter(node => node.getClientRects().length && !node.closest('[hidden]'))
       .map(node => {
         const box = node.getBoundingClientRect();
@@ -143,23 +145,33 @@ for (const engine of names) {
   test(`${engine}: authored showcase enters through the shared plan, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, false, true);
     const brief = root(page).locator('[data-native-showcase]');
+    const reviewSession = async () => {
+      await root(page).locator('[data-native-session-select]').selectOption('review');
+      const settings = root(page).locator('[data-native-configure]');
+      if (!await settings.evaluate(node => node.open)) await settings.locator(':scope > summary').click();
+      await expect(work(page, 'minutesPerSession')).toBeEditable();
+    };
+    const readiness = async () => {
+      if (!await brief.evaluate(node => node.open)) await brief.locator(':scope > summary').click();
+      const request = brief.locator('.native-showcase__request');
+      if (!await request.evaluate(node => node.open)) await request.locator(':scope > summary').click();
+      await request.locator('[data-native-showcase-action="readiness"]').click();
+    };
     await expect(brief).toBeVisible();
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');
     await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,480.00');
     await expect(work(page, 'occurrences')).toHaveValue('4');
-    await brief.locator('[data-native-showcase-action="baseline"]').click();
-    await brief.locator('[data-native-showcase-action="review"]').click();
-    await expect(root(page).locator('[data-native-minutes-knob]')).toBeFocused();
+    await chapter(page, 'investment').click(); await action(page, 'baseline').click();
+    await chapter(page, 'coordination').click(); await reviewSession();
     await work(page, 'minutesPerSession').fill('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
     await expect(total(page)).toHaveText('$3,980.00');
-    await brief.locator('summary').click();
-    await brief.locator('[data-native-showcase-action="readiness"]').click();
+    await readiness();
     await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
     await expect(total(page)).toHaveText('$3,980.00');
-    await brief.locator('[data-native-showcase-action="review"]').click();
+    await reviewSession();
     await expect(work(page, 'minutesPerSession')).toHaveValue('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
     await root(page).locator('[data-action="apply"]').click();
@@ -176,7 +188,7 @@ for (const engine of names) {
     await action(page, 'redo').click();
     await expect(total(page)).toHaveText('$4,350.00');
     await chapter(page, 'coordination').click();
-    await brief.locator('[data-native-showcase-action="readiness"]').click();
+    await readiness();
     const connection = root(page).locator('[data-native-connection-editor]');
     await expect(connection.locator('[name="sharedObject"]')).toHaveValue('Prototype, acceptance evidence and exception log');
     await expect(connection.locator('[name="receiverPersonId"]')).toHaveValue('noor');
@@ -221,7 +233,22 @@ for (const engine of names) {
 
   test(`${engine}: Purpose edits apply, cancel and recover saved text through the shared owner`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
-    await purpose(page).locator('summary').click();
+    const initial = await bytes(page);
+    const railPosition = () => root(page).locator('[data-amp-panel]').evaluateAll(buttons => buttons.map(button => { const box = button.getBoundingClientRect(); return { x: box.x, y: box.y + window.scrollY, width: box.width, height: box.height }; }));
+    const closedRail = await railPosition();
+    await amp(page, 'purpose').click();
+    await expect(amp(page, 'purpose')).toHaveAttribute('aria-expanded', 'true');
+    await expect(purpose(page).locator('[data-purpose-reading]')).toBeVisible();
+    await expect(purpose(page).locator('form')).toBeHidden();
+    assert.equal(await bytes(page), initial);
+    assert.deepEqual(await railPosition(), closedRail);
+    await amp(page, 'manual').click();
+    await expect(amp(page, 'purpose')).toHaveAttribute('aria-expanded', 'false');
+    await expect(amp(page, 'manual')).toHaveAttribute('aria-expanded', 'true');
+    await expect(root(page).locator('#native-amp-manual .native-manual__reading')).toBeVisible();
+    assert.deepEqual(await railPosition(), closedRail);
+    await amp(page, 'purpose').click(); await expect(amp(page, 'manual')).toHaveAttribute('aria-expanded', 'false');
+    await editPurpose(page);
     await expect(field(page, 'changedAbility')).toBeEditable();
     await field(page, 'changedAbility').fill('  Share the decision  ');
     await field(page, 'accountableOwner').fill('Delivery lead');
@@ -234,10 +261,11 @@ for (const engine of names) {
     await field(page, 'changedAbility').fill('Cancelled wording');
     await purpose(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
     await expect(purpose(page)).not.toHaveAttribute('open', '');
-    await expect(purpose(page).locator('summary')).toBeFocused();
+    await expect(amp(page, 'purpose')).toBeFocused();
+    await expect(amp(page, 'purpose')).toHaveAttribute('aria-expanded', 'false');
     assert.equal(JSON.parse(await bytes(page)).purpose.changedAbility, 'Share the decision');
 
-    await purpose(page).locator('summary').click();
+    await amp(page, 'purpose').click(); await editPurpose(page);
     await field(page, 'openConditions').fill('Choose a review date');
     await chapter(page, 'people').click();
     await expect(purpose(page)).not.toHaveAttribute('open', '');
@@ -246,7 +274,9 @@ for (const engine of names) {
     await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,215.00');
-    await purpose(page).locator('summary').click();
+    await amp(page, 'saved').click(); await expect(amp(page, 'saved')).toHaveAttribute('aria-expanded', 'true');
+    await root(page).locator('[data-native-saved-list] [data-saved-open]').click();
+    await expect(amp(page, 'purpose')).toHaveAttribute('aria-expanded', 'true');
     await expect(field(page, 'openConditions')).toHaveValue('Choose a review date');
     await expect(field(page, 'openConditions')).toBeDisabled();
     await expect(purpose(page).locator('[data-purpose-recovery]')).toBeVisible();
@@ -449,13 +479,16 @@ for (const engine of names) {
       await expect(action(page, 'preset')).toBeFocused();
       await expect(action(page, 'preset')).toBeInViewport();
       await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment.png`) });
-      await purpose(page).locator('summary').click();
+      await amp(page, 'purpose').click();
+      await expect(purpose(page).locator('[data-purpose-reading]')).toBeVisible();
+      await expect(purpose(page).locator('form')).toBeHidden();
+      await containment(page); await editPurpose(page);
       await field(page, 'changedAbility').fill('Plan the next working session.');
       await field(page, 'changedAbility').scrollIntoViewIfNeeded();
       await containment(page);
       await expect(field(page, 'changedAbility')).toHaveAttribute('maxlength', '600');
       await page.screenshot({ path: resolve(captures, `${engine}-${width}-purpose.png`) });
-      await purpose(page).locator('summary').click();
+      await amp(page, 'purpose').click();
       await investment(page).locator('h3').scrollIntoViewIfNeeded();
       const box = await investment(page).boundingBox();
       const before = await page.evaluate(() => window.scrollY);
@@ -467,6 +500,44 @@ for (const engine of names) {
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toHaveCount(1);
     await expect(page.locator('table[data-label="Cross-Functional Investment Studio: static counterpart to the editable analysis"]')).toHaveCount(1);
   });
+  test(`${engine}: reading Purpose yields native-toggle callbacks to a newer receiver`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const observed = await page.evaluate(async () => {
+      const { mountPurposePanel } = await import('/collaboration/native-investment-studio/purpose-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.investmentFixture.controller.dispose(); window.investmentFixture.editing.dispose();
+      const root = document.querySelector('[data-native-purpose]'), observations = [];
+      for (const handoff of ['retire', 'successor']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, successor, callbacks = 0, enter;
+        const entered = new Promise(resolve => { enter = resolve; });
+        receiver = mountPurposePanel(root, { studio, editing, onClose() {}, onChange() { callbacks += 1; }, onOpen() {
+          receiver.dispose();
+          if (handoff === 'successor') {
+            successor = mountPurposePanel(root, { studio, editing, onOpen() {}, onClose() {}, onChange() {} });
+            successor.open();
+            editing.purpose.setText(editing.purpose.read().draft.token, 'changedAbility', 'The receiving editor owns this text.');
+            successor.refresh(); root.querySelector('[name="accountableOwner"]').focus();
+          }
+          enter();
+        } });
+        root.open = true;
+        await entered;
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        observations.push({ handoff, callbacks, open: root.open, disabled: root.querySelector('fieldset').disabled,
+          raw: editing.purpose.read().draft?.raw.changedAbility ?? null,
+          focused: document.activeElement.name ?? null });
+        successor?.dispose(); editing.dispose();
+        await new Promise(resolve => requestAnimationFrame(resolve));
+      }
+      return observations;
+    });
+    assert.equal(observed[0].callbacks, 0); assert.equal(observed[0].open, false); assert.equal(observed[0].disabled, true);
+    assert.deepEqual(observed[1], { handoff: 'successor', callbacks: 0, open: true, disabled: false,
+      raw: 'The receiving editor owns this text.', focused: 'accountableOwner' });
+  });
+
   test(`${engine}: Purpose receiver preserves successor focus, text and accepted publication`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     const observed = await page.evaluate(async () => {

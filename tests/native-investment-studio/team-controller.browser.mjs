@@ -85,6 +85,13 @@ async function open(t, engine, fullAbout = false) {
   await page.evaluate(() => document.fonts.ready);
   await expect(panel(page)).toHaveAttribute('data-native-ready', 'true');
   await expect(team(page)).toHaveAttribute('data-team-ready', 'true');
+  await page.evaluate(async () => {
+    const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+    const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+    const root = document.querySelector('[data-native-coordination]');
+    mountCoordinationPanel(root).dispose();
+    mountCoordinationPanel(root, { studio: createStudio() });
+  });
   await settle();
   return page;
 }
@@ -199,7 +206,7 @@ for (const engine of names) {
     await expect(team(page).locator('[data-person-name]')).toHaveText('product-two');
     await expect(input(page, 'ratePerHour')).toHaveValue('100.00');
     await expect(team(page).locator('[data-person-saved="product-one"]')).toBeVisible();
-    await expect(panel(page).locator('[data-native-saved]')).toBeVisible();
+    await expect(panel(page).locator('[data-amp-panel="saved"]')).toBeEnabled();
     await expect(panel(page).locator('[data-native-saved-count]')).toHaveText('1');
     await input(page, 'fundedHours').fill('1');
     await choose(page, 'product-one');
@@ -291,8 +298,8 @@ for (const engine of names) {
     });
     await expect(accepted(page)).toHaveText('$900.00');
     const saved = panel(page).locator('[data-native-saved]');
-    await expect(saved).toBeVisible();
-    await saved.locator('summary').click();
+    await expect(page.locator('[data-amp-panel="saved"]')).toBeEnabled();
+    await page.locator('[data-amp-panel="saved"]').click();
     const removed = saved.locator('li').filter({ has: page.locator('[data-saved-discard="person:product-one"]') });
     await expect(removed).toContainText('115');
     await expect(removed).toContainText('Record removed');

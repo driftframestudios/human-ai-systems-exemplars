@@ -25,6 +25,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const elements = Object.fromEntries(['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'preview', 'error', 'status', 'manual', 'form', 'fields', 'recovery', 'current'].map(name => [name, find(name)]));
   const actions = new Map([...root.querySelectorAll('[data-assurance-action]')].map(element => [element.dataset.assuranceAction, element]));
   const editor = editing.assurance;
+  const concepts = listQualityConcepts(), definitions = listRehearsalDefinitions();
+  let selectedConcept = concepts[0].id, selectedScenario = definitions[0].id;
   for (const name of ['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'manual']) elements[name].replaceChildren();
   let disposed = false, generation = 0, sequence = 0, composing = false, lastProjection = null, promptSignature = '';
   const owns = epoch => !disposed && generation === epoch;
@@ -39,12 +41,12 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     return rows;
   }
   function populate(control, value) {
-    const { input, metadata, key } = control, selected = metadata.kind === 'ids' ? value : [value];
+    const { input, metadata, key, radio } = control, selected = metadata.kind === 'ids' ? value : [value];
     const rows = metadata.source ? options(metadata.source, selected) : choices[key] ?? choices[key.split('.').at(-1)] ?? metadata.choices.map(id => [id, id]);
     input.replaceChildren();
-    if (metadata.kind === 'ids') {
+    if (metadata.kind === 'ids' || radio) {
       for (const [id, label] of rows) {
-        const li = node('li'), wrapper = node('label'), checkbox = node('input'); checkbox.type = 'checkbox'; checkbox.name = key; checkbox.value = id;
+        const li = node('li'), wrapper = node('label'), checkbox = node('input'); checkbox.type = radio ? 'radio' : 'checkbox'; checkbox.name = key; checkbox.value = id;
         checkbox.dataset.assuranceField = key; checkbox.setAttribute('aria-describedby', control.error.id); wrapper.append(checkbox, node('span', label)); li.append(wrapper); input.append(li);
       }
       if (!rows.length) input.append(node('li', 'Add a record below to make it available here.'));
@@ -54,63 +56,89 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
   }
   function field(parent, key, labelOverride) {
-    const metadata = assuranceField(key), group = node(metadata.kind === 'ids' ? 'fieldset' : 'div', undefined, 'native-assurance__field');
-    const label = node(metadata.kind === 'ids' ? 'legend' : 'label', labelOverride ?? metadata.label);
+    const metadata = assuranceField(key), radio = key === 'horizonUnit', grouped = metadata.kind === 'ids' || radio;
+    const group = node(grouped ? 'fieldset' : 'div', undefined, `native-assurance__field${metadata.numeric || metadata.decimal ? ' native-assurance__quantity' : ''}${metadata.checkbox ? ' native-assurance__check-field' : ''}`);
+    group.dataset.assuranceControl = key;
+    const label = node(grouped ? 'legend' : 'label', labelOverride ?? metadata.label);
     const longText = ['context', 'reviewBoundary', 'assumptions', 'response', 'observation'].includes(key.split('.').at(-1));
-    const input = node(metadata.kind === 'ids' ? 'ul' : choices[key] || metadata.source || metadata.choices && !metadata.checkbox ? 'select' : longText ? 'textarea' : 'input');
+    const input = node(grouped ? 'ul' : choices[key] || metadata.source || metadata.choices && !metadata.checkbox ? 'select' : longText ? 'textarea' : 'input');
     input.id = `${instance}-${++sequence}`; input.name = key; input.dataset.assuranceField = key; label.htmlFor = input.id;
-    if (metadata.kind === 'ids') input.className = 'native-assurance__choices';
+    if (grouped) input.className = radio ? 'native-assurance__exclusive' : 'native-assurance__choices';
     if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {
       if (input.tagName === 'INPUT') input.type = metadata.checkbox ? 'checkbox' : 'text';
       input.maxLength = metadata.maxLength; if (metadata.numeric || metadata.decimal) { input.inputMode = metadata.decimal ? 'decimal' : 'numeric'; input.spellcheck = false; }
     }
     const error = node('p', '', 'native-coordination__error'); error.id = input.id + '-error'; input.setAttribute('aria-describedby', error.id);
-    group.append(label, input);
-    if (metadata.numeric && key !== 'sigmaHalfSteps') group.append(actionRow(...[-1, 1].map(direction => {
+    group.append(label);
+    if ((metadata.numeric || metadata.decimal) && key !== 'sigmaHalfSteps') {
+      const stepper = node('div', undefined, 'native-coordination__stepper');
+      stepper.append(input, ...[-1, 1].map(direction => {
       const step = button(direction < 0 ? '−' : '+', 'step', { assuranceField: key, assuranceStep: String(direction) });
       step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${(labelOverride ?? metadata.label).toLowerCase()}`); return step;
-    })));
+      })); group.append(stepper);
+    } else group.append(input);
     if (metadata.source && targets[metadata.source]) {
       const kind = targets[metadata.source], create = node('button', `Add ${kind === 'person' ? 'a person' : kind === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
       create.type = 'button'; Object.assign(create.dataset, { nativeCreate: kind, nativeReturn: 'assurance', nativeReturnField: key }); group.append(actionRow(create));
     }
-    group.append(error); parent.append(group); const control = { input, metadata, key, group, error }; controls.set(key, control); return control;
+    group.append(error); parent.append(group); const control = { input, metadata, key, group, error, radio }; controls.set(key, control); return control;
   }
-  const qualityGrid = node('div', undefined, 'native-assurance__grid');
+  function selectionRail(parent, label, rows, kind) {
+    const rail = node('fieldset', undefined, 'native-assurance__selection'), legend = node('legend', label), choices = node('div', undefined, 'native-assurance__rail');
+    const items = new Map(); rail.append(legend, choices); parent.append(rail);
+    for (const row of rows) {
+      const choice = node('label'), radio = node('input'), text = node('span'), status = node('small');
+      radio.type = 'radio'; radio.name = `${instance}-${kind}`; radio.value = row.id; radio.dataset.assuranceSelection = kind;
+      text.append(node('strong', row.label ?? row.name), status); choice.append(radio, text); choices.append(choice); items.set(row.id, { radio, status });
+    }
+    return items;
+  }
+  const qualityGrid = node('div', undefined, 'native-assurance__assumptions');
   elements.quality.append(node('h4', 'Plan quality work and examine its assumptions'),
     node('p', 'The illustration estimates effort from a reference horizon. Linked working sessions supply the accepted investment. Choose people, duration and funding when planning those sessions.'), qualityGrid);
-  for (const key of ['sourcePresetId', 'horizonQuantity', 'horizonUnit', 'namedUnknowns', 'qualityIncluded', 'allocationPercent', 'independentRate', 'qualityAdditionalPercent', 'recoveryAdditionalPercent', 'recoveryRatePersonIds']) field(qualityGrid, key);
+  field(qualityGrid, 'sourcePresetId');
+  const horizon = node('div', undefined, 'native-assurance__horizon'); qualityGrid.append(horizon);
+  field(horizon, 'horizonQuantity'); field(horizon, 'horizonUnit');
+  const quantities = node('div', undefined, 'native-assurance__quantities'); qualityGrid.append(quantities);
+  for (const key of ['namedUnknowns', 'allocationPercent', 'independentRate', 'qualityAdditionalPercent', 'recoveryAdditionalPercent']) field(quantities, key);
+  field(qualityGrid, 'qualityIncluded'); field(qualityGrid, 'recoveryRatePersonIds');
   const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the illustrative source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); elements.quality.append(sourceReading);
   const estimates = node('div', undefined, 'native-assurance__estimates'); estimates.dataset.assuranceEstimates = ''; elements.quality.append(estimates);
   elements.concepts.append(node('h4', 'Connect quality intentions to work'));
-  for (const concept of listQualityConcepts()) {
-    const details = node('details', undefined, 'native-assurance__card'); details.dataset.assuranceConcept = concept.id;
-    const summary = node('summary', concept.label), body = node('div');
+  const conceptChoices = selectionRail(elements.concepts, 'Inspect a quality concept', concepts, 'concept');
+  const conceptInspector = node('div'); conceptInspector.dataset.assuranceConceptInspector = ''; elements.concepts.append(conceptInspector);
+  for (const concept of concepts) {
+    const details = node('section', undefined, 'native-assurance__card'); details.dataset.assuranceConcept = concept.id;
+    const summary = node('h5', concept.label), body = node('div');
     field(body, `concept.${concept.id}.included`); field(body, `concept.${concept.id}.workIds`);
     const links = actionRow(); body.append(links, actionRow(button('Plan supporting work', 'propose', { assuranceTarget: `concept/${concept.id}`, assuranceLabel: concept.label })));
-    details.append(summary, body); elements.concepts.append(details); cards.set(`concept/${concept.id}`, { details, summary, links, label: concept.label });
+    details.append(summary, body); conceptInspector.append(details); cards.set(`concept/${concept.id}`, { details, summary, links, label: concept.label });
   }
   elements.statistics.append(node('h4', 'Explore quality attention'));
-  const sigmaControl = node('div', undefined, 'native-assurance__field'), sigmaLabel = node('label', 'Sigma attention');
-  const sigmaInput = node('input'); sigmaInput.type = 'range'; sigmaInput.min = '2'; sigmaInput.max = '12'; sigmaInput.step = '1'; sigmaInput.id = `${instance}-sigma`; sigmaInput.dataset.assuranceField = 'sigmaHalfSteps'; sigmaLabel.htmlFor = sigmaInput.id;
-  const sigmaValue = node('output'); sigmaValue.setAttribute('for', sigmaInput.id); sigmaControl.append(sigmaLabel, sigmaInput, sigmaValue); elements.statistics.append(sigmaControl);
+  const sigmaControl = node('div', undefined, 'native-assurance__sigma-control'), sigmaLabel = node('label', 'Sigma attention');
+  const sigmaInput = node('input'); sigmaInput.type = 'range'; sigmaInput.min = '1'; sigmaInput.max = '6'; sigmaInput.step = '0.5'; sigmaInput.id = `${instance}-sigma`; sigmaInput.dataset.assuranceField = 'sigmaHalfSteps'; sigmaLabel.htmlFor = sigmaInput.id;
+  const sigmaValue = node('output'); sigmaValue.setAttribute('for', sigmaInput.id);
+  const sigmaScale = node('div', undefined, 'native-assurance__sigma-scale'); sigmaScale.setAttribute('aria-hidden', 'true');
+  for (let value = 1; value <= 6; value += 1) sigmaScale.append(node('span', `${value}σ`));
+  sigmaControl.append(sigmaLabel, sigmaValue, sigmaInput, sigmaScale); elements.statistics.append(sigmaControl);
   const sigmaSelect = field(elements.statistics, 'sigmaHalfSteps', 'Choose sigma attention');
   sigmaSelect.input.setAttribute('aria-label', 'Choose sigma attention');
   const sigmaValues = node('details'); sigmaValues.append(node('summary', 'Read the reference values')); const sigmaValuesBody = node('dl'); sigmaValues.append(sigmaValuesBody);
-  const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), attentionList = node('dl', undefined, 'native-assurance__grid');
+  const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), attentionList = node('dl', undefined, 'native-assurance__attention');
   elements.statistics.append(sigmaPlot, sigmaReading, sigmaValues, attentionList);
   elements.events.append(node('h4', 'Prepare for recovery'), node('p', 'Describe an event, name who receives the recovery, and link the sessions that carry it. Aggregate person-minutes express everyone’s effort together.'), actionRow(button('Add a recovery event', 'add-event')));
   const eventList = node('div'); elements.events.append(eventList);
   elements.learning.append(node('h4', 'Turn a learning question into planned work'));
   const prompts = node('div', undefined, 'native-assurance__grid'), learningList = node('div'); elements.learning.append(prompts, learningList);
   elements.rehearsal.append(node('h4', 'Rehearse a professional complication'), node('p', 'Use a scenario to examine a response before accepting changes. Record an observation after a person has performed and reviewed the rehearsal.'));
-  const rehearsalGroups = new Map();
-  for (const definition of listRehearsalDefinitions()) {
+  const scenarioChoices = selectionRail(elements.rehearsal, 'Choose a complication', definitions, 'scenario');
+  const rehearsalGroups = new Map(), scenarioCards = new Map();
+  for (const definition of definitions) {
     const card = node('section', undefined, 'native-assurance__card'); card.dataset.assuranceComplication = definition.id;
     card.append(node('h5', definition.name), node('p', definition.setup), node('p', definition.prompt));
     const assumptions = node('ul'); for (const assumption of definition.assumptions) assumptions.append(node('li', assumption));
     card.append(assumptions, actionRow(button('Prepare this rehearsal', 'rehearse', { assuranceDefinition: definition.id })));
-    const records = node('div'); card.append(records); rehearsalGroups.set(definition.id, records); elements.rehearsal.append(card);
+    const records = node('div'); card.append(records); rehearsalGroups.set(definition.id, records); scenarioCards.set(definition.id, card); elements.rehearsal.append(card);
   }
   elements.work.append(node('h4', 'Propose the work people will do'));
   const workNote = node('p'), workFields = node('div', undefined, 'native-support-proposal'); elements.work.append(workNote, workFields);
@@ -191,28 +219,39 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     for (const name of ['review', 'current', 'discard']) actions.get(name).disabled = !view.draft;
     root.dataset.assuranceState = view.status;
     const errors = view.draft?.errors ?? [], settings = assuranceSettingsFromRaw(raw, view.projection.state.assuranceSettings);
-    let reading; try { reading = projectAssurance(errors.length ? view.projection.state.assuranceSettings : settings, view.projection.state); }
+    const sigmaHalfSteps = Number(raw.sigmaHalfSteps), validSigma = Number.isInteger(sigmaHalfSteps) && sigmaHalfSteps >= 2 && sigmaHalfSteps <= 12;
+    const fallback = validSigma ? { ...view.projection.state.assuranceSettings, quality: { ...view.projection.state.assuranceSettings.quality, sigmaHalfSteps } } : view.projection.state.assuranceSettings;
+    let reading; try { reading = projectAssurance(errors.length ? fallback : settings, view.projection.state); }
     catch { reading = projectAssurance(view.projection.state.assuranceSettings, view.projection.state); }
     for (const [kind, list] of Object.entries(collectionKeys)) for (const id of raw[list]) addRecordCard(kind, id, raw);
     for (const [key, control] of controls) {
       const value = raw[key] ?? (control.metadata.kind === 'ids' ? [] : '');
       if (['SELECT', 'UL'].includes(control.input.tagName) && (lastProjection !== view.projection || !control.input.children.length)) populate(control, value);
-      if (control.metadata.kind === 'ids') for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = value.includes(checkbox.value);
+      if (control.metadata.kind === 'ids' || control.radio) for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = control.radio ? checkbox.value === value : value.includes(checkbox.value);
       else if (control.metadata.checkbox) control.input.checked = value === 'yes'; else if (control.input.value !== value) control.input.value = value;
       const error = errors.find(error => error.path === `draft.${key}`); control.error.textContent = error?.message ?? ''; control.input.setAttribute('aria-invalid', String(Boolean(error)));
     }
     renderTimeReadout(time, raw, { errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
     minutesDial.refresh();
     lastProjection = view.projection;
-    sigmaInput.value = String(reading.sigma.sigma * 2); sigmaInput.setAttribute('aria-valuetext', `${reading.sigma.sigma} sigma attention`); sigmaValue.textContent = `${reading.sigma.sigma}σ`;
+    sigmaInput.value = String(reading.sigma.sigma); sigmaInput.setAttribute('aria-valuetext', `${reading.sigma.sigma} sigma attention`); sigmaValue.textContent = `${reading.sigma.sigma}σ`;
     renderSigma(reading.sigma);
     sigmaValuesBody.replaceChildren(...[['Sigma threshold', reading.sigma.sigma], ['Two-sided tail probability', reading.sigma.tailProbability], ['Reference values per million beyond the thresholds', reading.sigma.tailPerMillion], ['Quality illustration hours', reading.quality.estimate.hours ?? 'Choose a reference horizon'], ['Recovery illustration hours', reading.recovery.estimate.hours ?? 'Choose the recovery assumptions']].map(([label, value]) => { const group = node('div'); group.append(node('dt', label), node('dd', String(value))); return group; }));
     for (const [key, card] of cards) {
-      const [kind, id] = key.split('/'), present = kind === 'concept' || raw[collectionKeys[kind]].includes(id); card.details.hidden = !present; if (!present) continue;
+      const [kind, id] = key.split('/'), present = kind === 'concept' || raw[collectionKeys[kind]].includes(id);
+      card.details.hidden = !present || kind === 'concept' && id !== selectedConcept; if (!present) continue;
       const prefix = `${kind}.${id}.`, workIds = raw[prefix + 'workIds'] ?? [], labels = workIds.map(id => view.projection.state.work.find(row => row.id === id)?.label ?? id);
       const label = kind === 'concept' ? card.label : kind === 'event' ? raw[prefix + 'label'] || 'Name the recovery event' : kind === 'learning' ? getLearningPromptDefinition(raw[prefix + 'promptId'])?.label ?? 'Learning action' : 'Rehearsal response';
       card.summary.textContent = `${label}${kind === 'event' && raw[prefix + 'lifecycle'] === 'retired' ? ' · retired' : ''}${labels.length ? ` · ${labels.join(', ')}` : ' · choose supporting work'}`;
       card.links.replaceChildren(...workIds.map(id => button(`Inspect ${view.projection.state.work.find(row => row.id === id)?.label ?? id}`, 'work', { assuranceWork: id })));
+    }
+    for (const [id, choice] of conceptChoices) {
+      choice.radio.checked = id === selectedConcept;
+      choice.status.textContent = raw[`concept.${id}.included`] === 'yes' ? 'Included' : 'Not included';
+    }
+    for (const [id, choice] of scenarioChoices) {
+      choice.radio.checked = id === selectedScenario; scenarioCards.get(id).hidden = id !== selectedScenario;
+      choice.status.textContent = raw.rehearsalIds.some(recordId => raw[`rehearsal.${recordId}.definitionId`] === id) ? 'Continue this rehearsal' : 'Explore this situation';
     }
     const nextPromptSignature = JSON.stringify(reading.learning);
     if (promptSignature !== nextPromptSignature) {
@@ -299,17 +338,24 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
   });
   function input(event) {
+    const selection = event.target.dataset.assuranceSelection;
+    if (selection) {
+      if (event.type !== 'change' || disposed || !isActive() || editor.read().status !== 'editing' || !event.target.checked) return;
+      if (selection === 'concept' && conceptChoices.has(event.target.value)) selectedConcept = event.target.value;
+      if (selection === 'scenario' && scenarioChoices.has(event.target.value)) selectedScenario = event.target.value;
+      render(); return;
+    }
     const key = event.target.dataset.assuranceField, control = controls.get(key), view = editor.read();
     if (disposed || !isActive() || !control || !view.draft || view.status !== 'editing') return;
     const range = event.target === sigmaInput;
-    if (!range && control.input !== event.target && !(control.metadata.kind === 'ids' && control.input.contains(event.target))) return;
-    if (event.type === 'input' && (control.input.tagName === 'SELECT' || control.metadata.checkbox || control.metadata.kind === 'ids') && !range
-      || event.type === 'change' && control.input.tagName !== 'SELECT' && !control.metadata.checkbox && control.metadata.kind !== 'ids') return;
+    if (!range && control.input !== event.target && !((control.metadata.kind === 'ids' || control.radio) && control.input.contains(event.target))) return;
+    if (event.type === 'input' && (control.input.tagName === 'SELECT' || control.metadata.checkbox || control.metadata.kind === 'ids' || control.radio) && !range
+      || event.type === 'change' && control.input.tagName !== 'SELECT' && !control.metadata.checkbox && control.metadata.kind !== 'ids' && !control.radio) return;
     if (control.metadata.kind === 'ids') {
       const chosen = new Set([...control.input.querySelectorAll('input:checked')].map(row => row.value));
       edit([[key, [...view.draft.raw[key].filter(id => chosen.has(id)), ...chosen].filter((id, index, ids) => ids.indexOf(id) === index)]]);
     } else {
-      const value = control.metadata.checkbox ? control.input.checked ? 'yes' : 'no' : event.target.value;
+      const value = range ? String(Number(event.target.value) * 2) : control.metadata.checkbox ? control.input.checked ? 'yes' : 'no' : event.target.value;
       if (key === 'sourcePresetId') { const preset = getSourcePreset(value); edit([[key, value], ...(preset ? [['horizonQuantity', String(preset.horizon.quantity)], ['horizonUnit', preset.horizon.unit], ['namedUnknowns', String(preset.namedUnknowns)]] : [])]); }
       else if (key === 'proposal.existingWorkId') loadWork(value);
       else edit([[key, value]]);

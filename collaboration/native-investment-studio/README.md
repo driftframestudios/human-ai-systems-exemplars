@@ -15,9 +15,11 @@ adds framework mappings, viewpoints and relative attention. The
 [Quality & recovery feature, #692](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/692)
 adds reference estimates, learning prompts and a recoverable response rehearsal.
 
-The current [method and controls work, #691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691)
+The accepted [method and controls feature, #693](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/693)
 explains suggested work and gives supporting-session proposals the familiar
-Hours, Minutes and Working sessions controls. Stable choices, nearby creation,
+Hours, Minutes and Working sessions controls. The current
+[showcase refinement, #694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694)
+leads with diagrams, readable examples and compact inspection controls. Stable choices, nearby creation,
 useful collapsed previews and ASCII zine styling support these visitor tasks.
 The complete showcase continues through explicit timing, visual analysis,
 scenarios and final composition. Performance refinement follows that experience.
@@ -35,9 +37,12 @@ its broader planning capabilities while the native experience grows.
 
 ## Try a useful sequence
 
-1. Read the service-request pilot brief and save a baseline.
-2. Choose **Adjust review time**, then try 45 minutes with the dial, arrow keys,
-   step buttons, or precision field. Inspect the draft before Apply.
+1. Inspect the team connections, then open **Purpose** to read what the pilot
+   should change. Investment lets you save a baseline before experimenting.
+2. In Coordination, choose **Pilot decision review** under Working session.
+   Its diagram names who joins and what their work supports. Open **Session
+   settings**, then try 45 minutes with the dial, arrow keys, step buttons, or
+   precision field. Inspect the draft before Apply.
 3. Try the review request. Inspect the readiness connection, pause it while the
    instructions are clarified, and name the response the team needs.
 4. Use Investment to compare the baseline, Undo, or download the accepted plan.
@@ -123,7 +128,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691),
+source, the worktree, [#694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.
@@ -135,6 +140,8 @@ Quality, recovery, learning, and professional play continue through
 [#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652);
 method explanations, shared session controls and roomy Change layouts through
 [#691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691);
+compact showcase composition through
+[#694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694);
 coordination score, capacity, and decision gates through
 [#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653).
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
