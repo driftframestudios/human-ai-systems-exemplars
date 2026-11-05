@@ -368,6 +368,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/browser-download.mjs",
+      "projected_path": "collaboration/native-investment-studio/browser-download.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/reports-controller.mjs",
       "projected_path": "collaboration/native-investment-studio/reports-controller.mjs",
       "media_type": "text/javascript"

@@ -992,3 +992,24 @@ independent-review evidence. Main integration completes the working showcase
 construction. The next task boundary is the human-requested pause before
 performance refinement. Tagged Pages and production delivery remain #686's
 separately human-cued events.
+
+
+## 2026-11-05 — Download selection and resource ownership
+
+The core-quality pass in #708 follows the working showcase accepted through
+#707. Each change has a narrow Issue and reviewed PR; #679 retains performance
+refinement and #686 retains the separately human-cued tagged release.
+
+Report actions select one declared format before capturing the accepted plan.
+Reports and plan JSON share a browser resource owner that retains the preceding
+successful URL while another attempt runs, releases an unsuccessful attempt and
+its temporary link, and closes once on disposal. Status copy describes preparing
+a download. The browser supplies the completion observation. Snapshot generation,
+import, accounting and unfinished editor state keep their existing owners.
+
+This choice follows the operation's recovery behavior: one local recovery
+message serves the caller, while one reusable adapter owns the repeated resource
+lifecycle. A generic error factory would add a second vocabulary without a new
+recovery decision. Focused cases exercise allocation, attachment and dispatch
+failure, replacement and disposal. The existing download journey receives
+content and retained-draft evidence. #709 owns this change.

@@ -336,6 +336,7 @@
         "tests/native-investment-studio/presets.test.mjs",
         "tests/native-investment-studio/purpose-draft.test.mjs",
         "tests/native-investment-studio/relationships.test.mjs",
+        "tests/native-investment-studio/browser-download.test.mjs",
         "tests/native-investment-studio/reports.test.mjs",
         "tests/native-investment-studio/responsibility-draft.test.mjs",
         "tests/native-investment-studio/responsibility-editing.test.mjs",

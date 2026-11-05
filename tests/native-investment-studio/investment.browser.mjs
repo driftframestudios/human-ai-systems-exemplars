@@ -145,17 +145,55 @@ for (const engine of names) {
     await amp(page, 'purpose').click(); await editPurpose(page);
     await field(page, 'changedAbility').fill('Unfinished visitor purpose');
     await chapter(page, 'investment').click();
+    const reports = investment(page).locator('[data-studio-reports]');
+    const reportButton = reports.getByRole('button', { name: 'Download report', exact: true });
+    await page.evaluate(() => {
+      const create = URL.createObjectURL.bind(URL), revoke = URL.revokeObjectURL.bind(URL);
+      window.reportDownloads = { created: [], revoked: [] };
+      URL.createObjectURL = blob => {
+        const url = create(blob); window.reportDownloads.created.push({ url, type: blob.type }); return url;
+      };
+      URL.revokeObjectURL = url => { window.reportDownloads.revoked.push(url); revoke(url); };
+    });
+    for (const unsupported of ['constructor', 'json', 'not-a-format']) {
+      await reportButton.evaluate((button, value) => { button.dataset.studioReport = value; }, unsupported);
+      await reportButton.click();
+    }
+    assert.deepEqual(await page.evaluate(() => window.reportDownloads.created), [],
+      'unsupported, inherited and unoffered fields create no download');
+    await reportButton.evaluate(button => { button.dataset.studioReport = 'html'; });
     const captured = {};
-    for (const kind of ['html', 'capsule']) {
+    for (const [kind, filename] of [['html', 'discovery-alignment-report.html'], ['capsule', 'discovery-alignment-brief.txt']]) {
       const pending = page.waitForEvent('download');
       await investment(page).locator(`[data-studio-report="${kind}"]`).click();
       const download = await pending, chunks = [];
       assert.equal(await download.failure(), null);
       for await (const chunk of await download.createReadStream()) chunks.push(chunk);
       captured[kind] = Buffer.concat(chunks).toString('utf8');
-      assert.ok(download.suggestedFilename().startsWith('discovery-alignment-'));
+      assert.equal(download.suggestedFilename(), filename);
       assert.ok(!captured[kind].includes('Unfinished visitor purpose'));
     }
+    const successful = await page.evaluate(() => window.reportDownloads);
+    assert.deepEqual(successful.created.map(row => row.type), ['text/html;charset=utf-8', 'text/plain;charset=utf-8']);
+    assert.deepEqual(successful.revoked, [successful.created[0].url]);
+    await expect(reports.getByRole('status')).toHaveText(`Prepared the accepted plan at revision ${JSON.parse(accepted).revision} for download.`);
+    await page.evaluate(() => {
+      window.originalReportClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () {
+        if (this.download && this.href.startsWith('blob:')) throw new Error('Controlled report dispatch failure');
+        return window.originalReportClick.call(this);
+      };
+    });
+    try {
+      await reportButton.click();
+      await expect(reports.getByRole('status')).toHaveText('The download could not be prepared. Try again from the accepted plan.');
+    } finally {
+      await page.evaluate(() => { HTMLAnchorElement.prototype.click = window.originalReportClick; });
+    }
+    const afterFailure = await page.evaluate(() => window.reportDownloads);
+    assert.deepEqual(afterFailure.revoked, [successful.created[0].url, afterFailure.created[2].url],
+      'the failed request releases its own URL and retains the preceding successful download');
+    await expect(reports.locator('a[download]')).toHaveCount(0);
     assert.ok(captured.capsule.endsWith(`${accepted}\n`));
     const report = await page.context().newPage();
     await report.setViewportSize({ width: 390, height: 844 });
@@ -170,6 +208,13 @@ for (const engine of names) {
     await amp(page, 'purpose').click();
     await expect(field(page, 'changedAbility')).toHaveValue('Unfinished visitor purpose');
     assert.equal(await bytes(page), accepted);
+    const released = await page.evaluate(() => {
+      const button = document.querySelector('[data-studio-report="html"]');
+      window.investmentFixture.controller.dispose(); window.investmentFixture.controller.dispose(); button.click();
+      return window.reportDownloads;
+    });
+    assert.deepEqual([...released.revoked].sort(), released.created.map(row => row.url).sort(),
+      'idempotent root disposal releases each owned report URL and removes its action listener');
   });
   test(`${engine}: contribution channels follow exact sources, retain the held baseline and explain an accepted change on mobile`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
