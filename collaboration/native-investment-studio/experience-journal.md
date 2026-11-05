@@ -372,3 +372,52 @@ This targeted extension remains in #647 with its other meaningful transitions.
 affected-browser, publication-closure, and independent-review return. This
 entry preserves the design corrections and next task; the PR records the exact
 source accepted for integration.
+
+## 2026-11-05 — Build the populated pilot and first working dial
+
+**Accepted ground.** #675 and #687 are integrated on `dev@8451f656`. Their
+merge trees equal their independently reviewed heads. #668 and #685 are
+complete. The current source branch is `codex/studio-showcase-controls`;
+#649 and #647 own its outcome. #686 preserves next-release inclusion. The
+human explicitly places the full tagged Pages release in a future human-cued
+step. This session continues through the holistic showcase, then pauses at
+performance-refinement Issues.
+
+**Scenario.** The service-request pilot uses fictional people and illustrative
+rates across Product and Research, Engineering, and Quality and Operations.
+Shared people retain one account. Its brief asks the visitor to try four
+45-minute decision reviews instead of four 30-minute reviews. The starting
+$3,980 consists of $2,840 staffing and $1,140 extra work; $1,480 of work is
+already included in staffing. The proposed extra hour across reviewers at
+$120, $140, and $110 per hour adds $370. The ordinary small examples remain
+teaching fixtures; the native page supplies this larger plan explicitly.
+
+**Interaction and meaning.** Save a baseline, open the review, adjust the
+minutes dial or precise value, inspect the draft, and Apply or Cancel. The
+review request asks the visitor to pause the readiness connection while Noor's
+recovery-instruction concern is clarified. Existing work keeps its time and
+price. The response is an authored rehearsal with ordinary controls and
+recoverable consequences; it awards no automatic score or readiness claim.
+The brief disappears when another plan is loaded. Its record-specific actions
+remain available only while the named records exist.
+
+**Composition.** The dark amp keeps accepted money legible. The duration
+readout, actual minutes knob, and short help share a row above exact fields at
+wide widths, then reflow naturally. A trial with the sole knob inside one of
+three aligned field columns left large empty regions; moving it to the shared
+readout group made the same operating relationship more compact. The housing
+and highlight remain stationary while the pointer turns. The existing session
+disclosure becomes the first Remote, with the literal selected session name,
+one draft, and wide-side/narrow-inline placement. Its state owner stays intact
+through resizing. The amp's manual disclosure offers a short operating route.
+Independent review exposed clipping at enlarged desktop text. The Remote now
+uses its chapter's available inline space to choose side-by-side placement;
+the same controls return to ordinary flow when enlarged text needs the width.
+The browser journey checks actual editor and control containment at that size.
+
+**Source and verification boundary.** The preset factory and accepted source
+own the starting values; the authored HTML supplies the matching scriptless
+reading. The Investment preview now includes named contribution and connection
+changes through its existing exchange difference. The knob stays in the working
+session controller and adds no module or runtime dependency. The receiving PR
+will own the final source, browser, visual, and independent-review return.

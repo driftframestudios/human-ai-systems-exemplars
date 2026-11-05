@@ -153,12 +153,12 @@
           </div>
           <div class="native-coordination__readout">
             <span class="native-coordination__plate" data-native-standing>Total · USD</span>
-            <strong data-native-total>$1,200.00</strong>
+            <strong data-native-total>$3,980.00</strong>
           </div>
           <dl class="native-coordination__funding">
-            <div><dt>Staffing</dt><dd data-native-funded>$0.00</dd></div>
-            <div><dt>Extra work</dt><dd data-native-additional>$1,200.00</dd></div>
-            <div><dt>Included in staffing</dt><dd data-native-allocated>$0.00</dd></div>
+            <div><dt>Staffing</dt><dd data-native-funded>$2,840.00</dd></div>
+            <div><dt>Extra work</dt><dd data-native-additional>$1,140.00</dd></div>
+            <div><dt>Included in staffing</dt><dd data-native-allocated>$1,480.00</dd></div>
           </dl>
           <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
@@ -189,6 +189,19 @@
             <summary>Saved edits (<span data-native-saved-count>0</span>)</summary>
             <ul data-native-saved-list></ul>
           </details>
+          <details class="native-manual">
+            <summary>Operating manual <span>Try a change, compare it, and keep what works.</span></summary>
+            <div class="native-manual__reading">
+              <p>The starting plan is an illustrative service-request pilot. Its people, rates, and funded time are editable assumptions.</p>
+              <ol>
+                <li><strong>Choose the work.</strong> Coordination connects teams and their sessions. People holds rates, funded time, roles, and human review.</li>
+                <li><strong>Try an adjustment.</strong> Turn a dial, use its arrow keys, tap a step button, or enter a precise value. The editor previews your proposal.</li>
+                <li><strong>Keep the change.</strong> Apply updates the plan and amp total. Cancel returns to the accepted values. Saved edits retain unfinished entries when you change tasks.</li>
+                <li><strong>Compare and recover.</strong> Save a baseline before experimenting. Investment holds the comparison, Undo/Redo, examples, and plan download.</li>
+              </ol>
+              <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
+            </div>
+          </details>
         </header>
         <aside class="native-zine__return" data-native-return-route hidden aria-label="Return to your unfinished work">
           <p data-native-return-note></p>
@@ -196,6 +209,23 @@
           <button type="button" data-native-return-action>Return to session</button>
         </aside>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-patch-bay-title">
+          <aside class="native-showcase" data-native-showcase aria-labelledby="native-showcase-title">
+            <div class="native-showcase__brief">
+              <p class="native-coordination__plate">A plan to try · illustrative four-week pilot</p>
+              <h3 id="native-showcase-title">Make a service request easier to complete.</h3>
+              <p>Product and Research, Engineering, and Quality and Operations are preparing a small pilot. Their shared work connects evidence, a prototype, and a decision about readiness.</p>
+              <p><strong>First adjustment:</strong> give each decision review 45 minutes. Inspect the extra effort and proposed investment, then Apply or Cancel.</p>
+              <div class="native-coordination__actions"><button type="button" data-native-showcase-action="baseline" disabled>Save a baseline</button><button type="button" data-native-showcase-action="review" disabled>Adjust review time</button></div>
+            </div>
+            <details class="native-showcase__request">
+              <summary>Try a review request <span>A useful complication for your plan.</span></summary>
+              <div>
+                <p>Noor finds incomplete recovery instructions. Open the readiness connection, pause it while the work is clarified, and name the response the team needs.</p>
+                <p>The review sessions keep their planned time and cost. Compare your response with the baseline, then keep it or use Undo.</p>
+                <button type="button" data-native-showcase-action="readiness" disabled>Open readiness connection</button>
+              </div>
+            </details>
+          </aside>
           <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
             <h3 id="native-patch-bay-title" class="native-zine__heading">Coordination connections</h3>
             <p class="native-coordination__hint">Connect teams through the work they share.</p>
@@ -272,21 +302,21 @@
           </section>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
-            <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Weekly working session</option></select></div>
+            <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
             <div class="native-coordination__actions"><button type="button" data-session-action="create" disabled>Add session</button><button type="button" class="native-control--remove" data-session-action="remove" disabled>Remove session</button></div>
           </div>
           <div class="native-coordination__agreement">
-            <h3 id="native-session-title" data-native-agreement>Weekly working session</h3>
+            <h3 id="native-session-title" data-native-agreement>Pilot decision review</h3>
             <div class="native-coordination__connection" aria-label="Working session participants">
-              <span><i aria-hidden="true"></i><b data-native-team>Product and Engineering</b></span>
+              <span><i aria-hidden="true"></i><b data-native-team>Engineering</b></span>
               <svg aria-hidden="true" viewBox="0 0 100 24" fill="none" stroke="currentColor"><path d="M2 12h96M10 4l-8 8 8 8M90 4l8 8-8 8"/></svg>
-              <span><i aria-hidden="true"></i>Participants <small data-native-participants>4 people</small></span>
+              <span><i aria-hidden="true"></i>Participants <small data-native-participants>3 people</small></span>
             </div>
-            <p class="native-coordination__effort" data-native-effort>4 people × 30 min per session × 6 working sessions = 12 h of participant effort.</p>
+            <p class="native-coordination__effort" data-native-effort>3 people × 30 min per session × 4 working sessions = 6 h of participant effort.</p>
             <p class="native-coordination__hint" data-native-session-standing>Planned · Extra investment</p>
           </div>
-          <details class="native-coordination__configuration" data-native-configure>
-            <summary>Session settings</summary>
+          <details class="native-coordination__configuration native-remote" data-native-configure>
+            <summary><span data-native-remote-title>Session settings · Pilot decision review</span></summary>
             <div class="native-coordination__recovery" data-native-recovery hidden>
               <p>The plan changed. Your saved values are shown below.</p>
               <p data-native-current></p>
@@ -296,8 +326,8 @@
               <fieldset disabled aria-label="Working session settings">
                 <div data-native-session-fields>
                 <div class="native-session__settings-grid">
-                  <div><label for="native-session-name">Session name</label><input id="native-session-name" name="label" type="text" value="Weekly working session" maxlength="120" autocomplete="off" aria-describedby="native-session-name-error"></div>
-                  <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="delivery">Product and Engineering</option></select><button type="button" class="native-control--create" data-native-create="team" data-native-return="session">Create a team</button></div>
+                  <div><label for="native-session-name">Session name</label><input id="native-session-name" name="label" type="text" value="Pilot decision review" maxlength="120" autocomplete="off" aria-describedby="native-session-name-error"></div>
+                  <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="engineering">Engineering</option></select><button type="button" class="native-control--create" data-native-create="team" data-native-return="session">Create a team</button></div>
                 </div>
                 <div class="native-coordination__feedback native-session__name-feedback" aria-label="Session name and team feedback"><p class="native-coordination__error" id="native-session-name-error" data-native-error="label"></p><p class="native-coordination__error" id="native-session-team-error" data-native-error="teamId"></p></div>
                 <div class="native-coordination__duration-group" role="group" aria-labelledby="native-duration-label">
@@ -306,6 +336,12 @@
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
                     <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
                   </output>
+                  <div class="native-knob" data-native-minutes-dial hidden>
+                    <div class="native-knob__ticks" aria-hidden="true"></div>
+                    <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
+                    <input type="range" min="0" max="59" step="1" value="30" data-native-minutes-knob aria-label="Minutes rotary control" aria-describedby="native-minutes-knob-help native-minutes-error">
+                  </div>
+                  <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap the dial, use arrow keys, or enter minutes below. Escape restores the value where a turn began.</p>
                   <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
                 <div class="native-coordination__controls">
@@ -331,14 +367,15 @@
                     <label for="native-occurrences">Working sessions</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease working sessions by one">−</button>
-                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false" aria-describedby="native-session-context native-occurrences-range native-occurrences-error">
+                      <input id="native-occurrences" name="occurrences" type="text" inputmode="numeric" value="4" autocomplete="off" spellcheck="false" aria-describedby="native-session-context native-occurrences-range native-occurrences-error">
                       <button type="button" data-field="occurrences" data-step="1" aria-label="Increase working sessions by one">+</button>
                     </div>
-                    <p class="native-coordination__hint" id="native-session-context" data-native-session-context>Across this 6-week plan.</p>
+                    <p class="native-coordination__hint" id="native-session-context" data-native-session-context>Across this 4-week plan.</p>
                     <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
                   </div>
                 </div>
                 <div class="native-coordination__feedback native-session__quantity-feedback" role="group" aria-label="Quantity feedback">
+                  <p class="native-coordination__hint" data-native-knob-note hidden>Enter minutes above to use the dial.</p>
                   <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
                   <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>
                   <p class="native-coordination__error" id="native-occurrences-error" data-native-error="occurrences"></p>
@@ -362,7 +399,7 @@
                 <p class="native-coordination__error native-session__general-error" data-native-session-error></p>
                 <div class="native-coordination__preview" data-native-session-preview>
                   <span class="native-coordination__plate" data-native-preview-standing>Draft total · USD</span>
-                  <output data-native-preview-total aria-live="off" aria-label="Draft total">$1,200.00</output>
+                  <output data-native-preview-total aria-live="off" aria-label="Draft total">$3,980.00</output>
                   <p class="native-coordination__hint" data-native-preview-note>Apply to update the total.</p>
                 </div>
                 <div class="native-coordination__actions"><button type="submit" data-action="apply">Apply changes</button><button type="button" data-action="cancel">Cancel changes</button></div>
@@ -373,12 +410,14 @@
           <details class="native-coordination__trace" data-native-trace>
             <summary>Cost breakdown</summary>
             <div class="native-coordination__trace-body">
-              <p data-native-trace-summary>Four people each spend 3 hours at $100 per hour: $300 each, or $1,200 total.</p>
+              <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
               <ul class="native-coordination__ledger" data-native-trace-list>
-                <li><h4>product-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
-                <li><h4>product-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
-                <li><h4>engineering-one</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
-                <li><h4>engineering-two</h4><p>180 minutes · $100 per hour · $300.00 additional</p></li>
+                <li><h4>Maya · Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
+                <li><h4>Leo · Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
+                <li><h4>Ari · Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
+                <li><h4>Jules · Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
+                <li><h4>Noor · Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
+                <li><h4>Sam · Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
               </ul>
             </div>
           </details>

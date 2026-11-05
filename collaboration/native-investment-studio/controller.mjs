@@ -1,4 +1,5 @@
 import { createStudio } from './state.mjs';
+import { createShowcasePlan } from './presets.mjs';
 import { createDraftCoordinator } from './editing.mjs';
 import { INTEGER, money } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
@@ -288,6 +289,22 @@ export function mountCoordinationPanel(root, options = {}) {
     elements.savedList.replaceChildren(fragment);
   }
 
+  function renderShowcase(state) {
+    const showcase = root.querySelector('[data-native-showcase]');
+    if (showcase) {
+      showcase.hidden = state.planId !== 'service-request-pilot';
+      for (const [action, available] of [
+        ['review', state.work.some(row => row.id === 'review')],
+        ['readiness', state.connections.some(row => row.id === 'readiness')],
+      ]) {
+        const button = showcase.querySelector(`[data-native-showcase-action="${action}"]`);
+        if (button) { button.hidden = !available; button.disabled = !available; }
+      }
+      const baseline = showcase.querySelector('[data-native-showcase-action="baseline"]');
+      if (baseline) { baseline.textContent = studio.readBaseline() ? 'Replace baseline' : 'Save baseline'; baseline.disabled = false; }
+    }
+  }
+
   function renderAccepted(projection) {
     if (projection === renderedProjection) return;
     const { state, result } = projection;
@@ -335,6 +352,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const view = workPanel?.refresh() ?? editor.read();
     if (!current()) return editor.read();
     renderAccepted(view.projection);
+    renderShowcase(view.projection.state);
     renderSaved(view.projection);
     renderReturnRoute();
     root.dataset.nativeState = view.status;
@@ -361,6 +379,28 @@ export function mountCoordinationPanel(root, options = {}) {
   function click(event) {
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
+    if (button.dataset.nativeShowcaseAction && studio.read().state.planId === 'service-request-pilot') {
+      const action = button.dataset.nativeShowcaseAction;
+      if (action === 'baseline') {
+        const result = studio.setBaseline(studio.read());
+        investmentPanel?.refresh();
+        button.textContent = studio.readBaseline() ? 'Replace baseline' : 'Save baseline';
+        announce(result.ok ? 'Baseline saved. Apply a change, then compare it in Investment.' : result.error.message);
+        return;
+      }
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      chapterShell?.select('coordination');
+      const result = action === 'review' ? workPanel?.select('review', false)
+        : action === 'readiness' ? connectionPanel?.select('readiness') : null;
+      render();
+      if (result?.ok && action === 'review') {
+        const knob = root.querySelector('[data-native-minutes-knob]');
+        (knob && !knob.disabled ? knob : root.querySelector('[data-native-session-editor] [name="minutesPerSession"]'))?.focus();
+      }
+      if (result?.view?.status === 'stale') announce('Your saved entries are here. Review them against the current plan, then continue.');
+      return;
+    }
     if (button.hasAttribute('data-native-create')) { createPrerequisite(button); return; }
     if (button.hasAttribute('data-native-return-action')) { returnToDraft(); return; }
     if (button.hasAttribute('data-native-return-team')) { addCreatedPersonToTeam(); return; }
@@ -422,6 +462,7 @@ export function mountCoordinationPanel(root, options = {}) {
     cleanup.length = 0;
     returnRoutes.length = 0; pendingReturnFocus = null; renderReturnRoute();
     editing.dispose();
+    for (const button of root.querySelectorAll('[data-native-showcase-action]')) button.disabled = true;
     const view = editor.read();
     elements.fallback.hidden = false;
     elements.fallback.textContent = 'Editing closed.';
@@ -528,7 +569,7 @@ export function mountCoordinationPanel(root, options = {}) {
 
 if (typeof document !== 'undefined') {
   for (const root of document.querySelectorAll('[data-native-coordination]')) {
-    try { mountCoordinationPanel(root); }
+    try { mountCoordinationPanel(root, { studio: createStudio(createShowcasePlan()) }); }
     catch {
       const fallback = root.querySelector('[data-native-fallback]');
       if (fallback) { fallback.hidden = false; fallback.textContent = 'Editing is unavailable.'; }

@@ -41,12 +41,14 @@ const legacy = (page, name) => sessions(page).locator(`[data-action="${name}"]`)
 const select = page => sessions(page).locator('[data-native-session-select]');
 const member = (page, id) => sessions(page).locator(`[data-session-person="${id}"]`);
 const total = page => root(page).locator('[data-native-total]');
+const knob = page => sessions(page).locator('[data-native-minutes-knob]');
+const dial = page => sessions(page).locator('[data-native-minutes-dial]');
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.sessionFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 
-async function open(t, engine, full = false) {
-  const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+async function open(t, engine, full = false, contextOptions = {}) {
+  const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...contextOptions });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request));
   page.on('requestfinished', request => pending.delete(request));
@@ -88,7 +90,143 @@ async function prepareSession(page) {
   await field(page, 'occurrences').fill('2');
 }
 
+async function dialPoint(page, degrees) {
+  const box = await knob(page).boundingBox();
+  assert.ok(box, 'the mounted dial has a visible pointer target');
+  const radians = degrees * Math.PI / 180, radius = Math.min(box.width, box.height) * .38;
+  return { x: box.x + box.width / 2 + Math.sin(radians) * radius,
+    y: box.y + box.height / 2 - Math.cos(radians) * radius };
+}
+async function beginTurn(page, degrees) {
+  await knob(page).scrollIntoViewIfNeeded();
+  await knob(page).evaluate(node => node.addEventListener('pointerdown', event => {
+    window.sessionFixture.knobPointerId = event.pointerId;
+  }, { once: true }));
+  const point = await dialPoint(page, degrees);
+  await page.mouse.move(point.x, point.y); await page.mouse.down();
+}
+const captured = page => knob(page).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
+
 for (const engine of names) {
+  test(`${engine}: the native minutes knob shares precision text, preview, Apply and recovery`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    await expect(dial(page)).toBeVisible();
+    await expect(knob(page)).toHaveAttribute('type', 'range');
+    await expect(knob(page)).toHaveAttribute('min', '0');
+    await expect(knob(page)).toHaveAttribute('max', '59');
+    await expect(sessions(page).locator('[data-native-remote-title]')).toHaveText('Session settings · Weekly working session');
+    await knob(page).focus();
+    for (const [key, value] of [['Home', '0'], ['ArrowUp', '1'], ['ArrowRight', '2'], ['ArrowDown', '1'], ['ArrowLeft', '0'], ['End', '59']]) {
+      await page.keyboard.press(key);
+      await expect(field(page, 'minutesPerSession')).toHaveValue(value);
+      await expect(knob(page)).toHaveAttribute('aria-valuetext', `${value} minutes per session`);
+    }
+    await field(page, 'minutesPerSession').fill('45');
+    await expect(knob(page)).toHaveValue('45');
+    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
+    await expect(total(page)).toHaveText('$1,200.00');
+    assert.equal(await bytes(page), accepted, 'a turn and typed value remain draft work');
+    for (const text of ['', 'later', '60']) {
+      await field(page, 'minutesPerSession').fill(text);
+      await expect(knob(page)).toBeDisabled();
+      await expect(dial(page)).toHaveAttribute('data-value-state', 'unavailable');
+      await expect(sessions(page).locator('[data-native-knob-note]')).toBeVisible();
+      await expect(field(page, 'minutesPerSession')).toHaveValue(text);
+    }
+    await field(page, 'minutesPerSession').fill('44');
+    await sessions(page).locator('[data-field="minutesPerSession"][data-step="1"]').click();
+    await expect(knob(page)).toHaveValue('45');
+    await legacy(page, 'apply').click();
+    await expect(total(page)).toHaveText('$1,800.00');
+    assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work[0].minutesPerOccurrence), 45);
+    await tab(page, 'investment').click();
+    await root(page).locator('[data-investment-action="undo"]').click();
+    await expect(total(page)).toHaveText('$1,200.00');
+    await tab(page, 'coordination').click();
+    await select(page).selectOption('review');
+    if (await legacy(page, 'review').isVisible()) await legacy(page, 'review').click();
+    await knob(page).focus(); await page.keyboard.press('End');
+    await legacy(page, 'cancel').click();
+    await expect(total(page)).toHaveText('$1,200.00');
+    assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work[0].minutesPerOccurrence), 30);
+  });
+
+  test(`${engine}: rotary tap, drag, cancellation and native high-contrast input retain the same draft`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, false, { hasTouch: engine === 'chromium' }), accepted = await bytes(page);
+    await knob(page).scrollIntoViewIfNeeded();
+    const fortyFive = await dialPoint(page, -135 + 45 * 270 / 59);
+    await page.mouse.click(fortyFive.x, fortyFive.y);
+    await expect(field(page, 'minutesPerSession')).toHaveValue('45');
+    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
+    if (engine === 'chromium') {
+      const ten = await dialPoint(page, -90);
+      await page.touchscreen.tap(ten.x, ten.y);
+      await expect(field(page, 'minutesPerSession')).toHaveValue('10');
+      await page.touchscreen.tap(fortyFive.x, fortyFive.y);
+      await expect(field(page, 'minutesPerSession')).toHaveValue('45');
+      assert.equal(await dial(page).getAttribute('data-dragging'), null, 'a touch tap ends its captured turn');
+    }
+    await beginTurn(page, 0);
+    assert.equal(await captured(page), true, 'the owned turn captures its pointer');
+    for (const angle of [90, 135, 175, -175]) {
+      const point = await dialPoint(page, angle); await page.mouse.move(point.x, point.y);
+    }
+    await expect(field(page, 'minutesPerSession')).toHaveValue('59');
+    await page.keyboard.press('Escape');
+    await expect(field(page, 'minutesPerSession')).toHaveValue('45');
+    assert.equal(await captured(page), false, 'Escape releases the pointer and restores its starting value');
+    await page.mouse.up();
+    await field(page, 'minutesPerSession').fill('0030');
+    await beginTurn(page, 90);
+    await knob(page).evaluate(node => node.dispatchEvent(new PointerEvent('pointercancel', {
+      pointerId: window.sessionFixture.knobPointerId, bubbles: true,
+    })));
+    await expect(field(page, 'minutesPerSession')).toHaveValue('0030');
+    assert.equal(await captured(page), false, 'pointer cancellation releases capture and preserves the exact precision text');
+    await page.mouse.up();
+
+    await knob(page).scrollIntoViewIfNeeded(); await knob(page).focus();
+    const center = await knob(page).boundingBox(), scrollBefore = await page.evaluate(() => scrollY);
+    await page.mouse.move(center.x + center.width / 2, center.y + center.height / 2);
+    await page.mouse.wheel(0, 360);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(scrollBefore + 100);
+    await expect(field(page, 'minutesPerSession')).toHaveValue('0030');
+
+    await page.emulateMedia({ forcedColors: 'active' });
+    await knob(page).scrollIntoViewIfNeeded();
+    assert.equal(await knob(page).evaluate(node => getComputedStyle(node).opacity), '1', 'forced colors exposes the native range');
+    const range = await knob(page).boundingBox();
+    await knob(page).click({ position: { x: range.width * .9, y: range.height / 2 } });
+    assert.ok(Number(await knob(page).inputValue()) > 30, `native pointer selection remains available: ${await knob(page).inputValue()}`);
+    await expect(field(page, 'minutesPerSession')).toHaveValue(await knob(page).inputValue());
+    assert.equal(await dial(page).getAttribute('data-dragging'), null, 'forced colors uses the browser pointer interaction');
+    assert.equal(await bytes(page), accepted);
+  });
+
+  test(`${engine}: parking and disposal release rotary capture before later pointer events`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    await beginTurn(page, 90);
+    await expect(field(page, 'minutesPerSession')).toHaveValue('49');
+    await tab(page, 'people').focus(); await page.keyboard.press('Enter');
+    assert.equal(await captured(page), false, 'chapter departure releases the turn before parking');
+    await knob(page).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
+      pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
+    })));
+    await page.mouse.up();
+    await tab(page, 'coordination').click();
+    await expect(field(page, 'minutesPerSession')).toHaveValue('49');
+    await beginTurn(page, 0);
+    await page.evaluate(() => window.sessionFixture.controller.dispose());
+    assert.equal(await captured(page), false, 'receiver retirement releases its pointer');
+    await expect(dial(page)).toBeHidden();
+    await expect(sessions(page).locator('#native-minutes-knob-help')).toBeHidden();
+    await knob(page).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
+      pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
+    })));
+    await page.mouse.up();
+    assert.equal(await bytes(page), accepted, 'retired events cannot accept or alter the plan');
+  });
+
   test(`${engine}: participant toggles keep cards in place and explicit moves own the order`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const list = sessions(page).locator('[data-native-session-members]');
@@ -368,7 +506,7 @@ for (const engine of names) {
     const page = await open(t, engine, true);
     await prepareSession(page);
     await sessions(page).screenshot({ path: resolve(captures, `${engine}-wide.png`) });
-    for (const [width, enlarged] of [[768, false], [320, true]]) {
+    for (const [width, enlarged] of [[1440, true], [768, false], [320, true]]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(enlarged => { document.documentElement.style.fontSize = enlarged ? '200%' : ''; }, enlarged);
       await field(page, 'hoursPerSession').scrollIntoViewIfNeeded(); await frames(page);
@@ -383,6 +521,19 @@ for (const engine of names) {
       assert.equal(geometry.length, 3);
       assert.ok(geometry.every(box => box.left >= -.5 && box.right <= box.width + .5 && box.content >= box.digits),
         `Five-digit controls stay in the ${width}px viewport: ${JSON.stringify(geometry)}`);
+      const containment = await sessions(page).evaluate(element => {
+        const chapter = element.closest('[data-native-chapter-panel]').getBoundingClientRect();
+        const remote = element.querySelector('[data-native-configure]');
+        return [remote, remote.querySelector('form'), ...remote.querySelectorAll('input, select, button, textarea')]
+          .filter(control => control.getClientRects().length > 0)
+          .map(control => {
+            const box = control.getBoundingClientRect();
+            return { label: control.name || control.dataset.action || control.tagName,
+              left: box.left, right: box.right, chapterLeft: chapter.left, chapterRight: chapter.right };
+          });
+      });
+      assert.ok(containment.every(box => box.left >= box.chapterLeft - .5 && box.right <= box.chapterRight + .5),
+        `Remote, form and controls stay in their chapter at ${width}px/${enlarged ? '200' : '100'}%: ${JSON.stringify(containment)}`);
       const before = await field(page, 'occurrences').evaluate(input => input.getBoundingClientRect().top + scrollY);
       await field(page, 'minutesPerSession').fill('-1'); await frames(page);
       await expect(field(page, 'minutesPerSession')).toHaveAttribute('aria-invalid', 'true');

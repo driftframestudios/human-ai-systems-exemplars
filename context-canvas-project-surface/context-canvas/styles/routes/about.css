@@ -2272,7 +2272,7 @@ p#on-dark-iron-ore {
 
 /* Session selection and one complete draft share Coordination's native controls.
    The form uses the chapter width; the accepted amount remains in the amp head. */
-.native-coordination__body[data-native-chapter-panel='coordination'] { grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
+.native-coordination__body[data-native-chapter-panel='coordination'] { container: native-coordination-chapter / inline-size; grid-template-columns: minmax(0, 1fr); padding-inline: clamp(.25rem, 3vw, 2.5rem); }
 .native-session { display: grid; gap: 1.5rem; min-inline-size: 0; }
 .native-session > * { min-inline-size: 0; }
 
@@ -2435,6 +2435,69 @@ p#on-dark-iron-ore {
     letter-spacing: .14em;
 }
 .native-zine__heading { border-block-end: .125rem solid var(--native-rule); padding-block-end: .65rem; }
+
+/* The first populated scenario and Remote share the existing accepted plan.
+   Keep this adapter beside native controls; the ASCII family supplies ornament. */
+.native-manual { grid-column: 1 / -1; color: var(--native-text); background: var(--native-paper); }
+.native-manual summary span, .native-showcase__request summary span { display: block; margin-block-start: .25rem; font-size: .875rem; font-weight: 400; }
+.native-manual__reading { display: grid; gap: 1rem; padding: clamp(.65rem, 2vw, 1.3rem); max-inline-size: 78ch; }
+.native-manual__reading ol { margin: 0; padding-inline-start: 1.5rem; }
+.native-manual__reading li { font-size: 1rem; margin-block-end: .65rem; }
+.native-showcase { display: grid; gap: 1.2rem; padding: clamp(.6rem, 2vw, 1.5rem); border: .125rem solid var(--native-ink); border-block-start: .4rem solid var(--about-deep-teal); background: var(--native-zine-field); box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
+.native-showcase__brief { display: grid; gap: .9rem; min-inline-size: 0; }
+.about-page .native-showcase h3 { color: var(--native-text); font: 700 clamp(1.3rem, 2.5vw, 1.8rem)/1.25 system-ui, sans-serif; }
+.native-showcase p { font-size: 1rem; }
+.native-showcase .native-coordination__plate { font-size: .75rem; }
+.native-showcase__request { min-inline-size: 0; border-style: dashed; background: var(--native-zine-rose); }
+.native-showcase__request > div { display: grid; gap: .9rem; padding: .8rem; }
+.native-showcase__request button { justify-self: start; }
+.native-remote > summary { border-inline-start: .4rem solid var(--about-cobalt); }
+.native-remote > summary::after { content: 'REMOTE / SESSION'; display: block; margin-block-start: .35rem; color: var(--about-deep-teal); font: 650 .7rem/1.5 ui-monospace, monospace; letter-spacing: .08em; }
+.native-knob { --native-knob-angle: 2.29deg; position: relative; inline-size: 7.5rem; max-inline-size: 100%; aspect-ratio: 1; margin-block: .55rem .8rem; border: .125rem solid var(--native-ink); border-radius: 50%; background: var(--native-paper); }
+.native-knob__ticks { position: absolute; inset: .35rem; border: .1rem dashed var(--native-ink); border-radius: 50%; }
+.native-knob__face { position: absolute; inset: 1rem; border: .125rem solid var(--native-ink); border-radius: 50%; background: linear-gradient(135deg, #b5d6d0 0%, #36534e 42%, #1f2421 70%); box-shadow: .2rem .25rem 0 #45534b, inset .1rem .12rem 0 #e6f2de; }
+.native-knob__pointer { position: absolute; inset: .35rem; border-radius: 50%; transform: rotate(var(--native-knob-angle)); }
+.native-knob__pointer::before { content: ''; position: absolute; inset-block-start: .15rem; inset-inline-start: calc(50% - .13rem); inline-size: .26rem; block-size: 1.35rem; border-radius: .125rem; background: #f8f1d9; box-shadow: .07rem .07rem 0 #1f2421; }
+.native-coordination .native-knob input[type='range'] { position: absolute; inset: 0; margin: 0; inline-size: 100%; block-size: 100%; min-block-size: 0; max-inline-size: none; padding: 0; border: 0; opacity: 0; cursor: grab; touch-action: none; }
+.native-knob:has(input:focus-visible) { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
+.native-knob[data-dragging='true'] input[type='range'] { cursor: grabbing; }
+.native-knob[data-dragging='true'] .native-knob__face { box-shadow: .1rem .12rem 0 #45534b, inset .1rem .12rem 0 #e6f2de; }
+.native-knob[data-value-state='unavailable'] .native-knob__pointer { visibility: hidden; }
+.native-coordination .native-knob input:disabled { cursor: default; }
+.native-knob__help { max-inline-size: 30ch; margin-block-end: .7rem !important; }
+@container (min-width: 20rem) {
+    .native-coordination__duration-group { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; align-items: center; }
+    .native-coordination__duration-group > .native-coordination__control-title { grid-column: 1 / -1; }
+    .native-coordination__duration-group > .native-knob__help, .native-coordination__duration-group > #native-duration-limit { grid-column: 1 / -1; }
+    .native-coordination__duration-group > .native-knob { margin: 0; }
+}
+@container (min-width: 31rem) {
+    .native-coordination__duration-group { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+    .native-coordination__duration-group > .native-knob__help { grid-column: 3; margin: 0 !important; }
+}
+@media (min-width: 80rem) {
+    .native-showcase { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+}
+@container native-coordination-chapter (min-width: 48rem) {
+    .native-session:has(> .native-remote[open]) { grid-template-columns: minmax(14rem, .8fr) minmax(28rem, 1.7fr); align-items: start; }
+    .native-session:has(> .native-remote[open]) > .native-session__toolbar { grid-column: 1 / -1; }
+    .native-session:has(> .native-remote[open]) > .native-coordination__agreement { grid-column: 1; grid-row: 2; }
+    .native-session > .native-remote[open] { grid-column: 2; grid-row: 2 / span 3; }
+    .native-session:has(> .native-remote[open]) > .native-coordination__status { grid-column: 1; grid-row: 3; }
+    .native-session:has(> .native-remote[open]) > .native-coordination__trace { grid-column: 1; grid-row: 4; }
+}
+@media (forced-colors: active) {
+    .native-showcase { box-shadow: none; }
+    .native-knob { border-radius: .2rem; block-size: 2.75rem; inline-size: 100%; aspect-ratio: auto; }
+    .native-knob__ticks, .native-knob__face { display: none; }
+    .native-coordination .native-knob input[type='range'] { opacity: 1; appearance: auto; }
+    .native-remote > summary { border-color: Highlight; }
+}
+@media print {
+    .native-showcase { box-shadow: none; }
+    .native-knob { display: none; }
+    .native-session:has(> .native-remote[open]) { display: block; }
+}
 .native-zine__return {
     display: flex;
     flex-wrap: wrap;

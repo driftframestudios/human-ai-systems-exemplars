@@ -68,6 +68,15 @@ async function open(t, engine, options = {}) {
     })));
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator(selector)).toHaveAttribute('data-native-ready', 'true');
+    // These editor/layout cases retain the smaller teaching fixture. The
+    // investment integration suite exercises the authored showcase autoboot.
+    await page.evaluate(async ({ controllerPath, statePath, selector }) => {
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const { createStudio } = await import(statePath);
+      const root = document.querySelector(selector);
+      mountCoordinationPanel(root).dispose();
+      mountCoordinationPanel(root, { studio: createStudio() });
+    }, { controllerPath, statePath, selector });
     await expect(page.locator(`${selector} [data-native-configure]`)).toHaveAttribute('open', '');
     await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeEditable();
   }
@@ -126,7 +135,7 @@ async function assertCompactControls(page) {
         top: Math.min(box.top - outline, box.top + y - blur - spread),
         bottom: Math.max(box.bottom + outline, box.bottom + y + blur + spread) };
     });
-    return { field: group.querySelector('input').name, left: Math.min(...paint.map(box => box.left)),
+    return { field: group.querySelector('input[inputmode]').name, left: Math.min(...paint.map(box => box.left)),
       right: Math.max(...paint.map(box => box.right)), top: Math.min(...paint.map(box => box.top)), bottom: Math.max(...paint.map(box => box.bottom)) };
   }));
   for (let first = 0; first < paintedGroups.length; first += 1) for (let second = first + 1; second < paintedGroups.length; second += 1) {
@@ -169,7 +178,7 @@ async function assertFormContainerSeams(page) {
       `the ${target}px form sample retains its measured width after editing: before ${observed}px, after ${settledWidth}px`);
     const controls = await panel(page).locator('[data-native-configure] .native-coordination__controls > .native-coordination__control').evaluateAll(nodes =>
       nodes.map(node => ({ top: node.getBoundingClientRect().top, width: node.getBoundingClientRect().width,
-        inputTop: node.querySelector('input').getBoundingClientRect().top,
+        inputTop: node.querySelector('input[inputmode]').getBoundingClientRect().top,
         buttonTop: node.querySelector('button').getBoundingClientRect().top })));
     assert.equal(controls.length, 3);
     if (target > 31 * rem) assert.ok(Math.max(...controls.map(item => item.inputTop)) - Math.min(...controls.map(item => item.inputTop)) < .1,
@@ -201,10 +210,10 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
     const order = await panel(page).evaluate(root => {
       const lastInputBottom = Math.max(...[...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().bottom));
       return { lastInputBottom, feedbackTop: root.querySelector('.native-session__quantity-feedback').getBoundingClientRect().top,
-        previewTop: root.querySelector('.native-coordination__preview').getBoundingClientRect().top };
+        previewTop: root.querySelector('[data-native-session-preview]').getBoundingClientRect().top };
     });
     assert.ok(order.feedbackTop >= order.lastInputBottom && order.previewTop >= order.lastInputBottom,
-      'variable field feedback and investment preview follow every quantity control');
+      `variable field feedback and investment preview follow every quantity control: ${JSON.stringify(order)}`);
   };
   for (const raw of ['', '-1']) {
     await input(page).fill(raw);
@@ -316,8 +325,8 @@ async function injectOwner(page) {
 }
 
 for (const engine of names) {
-  test(`${engine}: the auto-booted Studio carries people, sessions, roles and connections through one investment history`, { timeout: 60000 }, async t => {
-    // Retain the real About entry script and its one model/coordinator. Every
+  test(`${engine}: the teaching plan carries people, sessions, roles and connections through one investment history`, { timeout: 60000 }, async t => {
+    // The explicit teaching fixture uses the complete About controller. Every
     // mutation enters through a visitor control; the download is the final read.
     const page = await open(t, engine);
     const tab = chapter => panel(page).locator(`[data-native-chapter="${chapter}"]`);
@@ -390,7 +399,7 @@ for (const engine of names) {
   test(`${engine}: one coordination transaction preserves unfinished input and independently priced accepted amounts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await assertAmount(page, '$1,200.00');
-    await expect(settingsSummary(page)).toHaveText('Session settings');
+    await expect(settingsSummary(page)).toHaveText('Session settings · Weekly working session');
     await begin(page);
     await expect(input(page, 'hoursPerSession')).toHaveValue('0');
     await expect(input(page)).toHaveValue('30');
@@ -499,7 +508,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await begin(page); await input(page).fill('45');
     const wide = await panel(page).evaluate(root => {
-      const form = root.querySelector('form'), style = getComputedStyle(form);
+      const form = root.querySelector('[data-native-configure] form'), style = getComputedStyle(form);
       return { contentWidth: form.getBoundingClientRect().width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight),
         threshold: 31 * Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
         tops: [...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().top) };
@@ -658,10 +667,10 @@ for (const engine of names) {
       'one remounted controller produces exactly one accepted revision after the fixture import');
   });
 
-  test(`${engine}: scriptless About preserves the coordination example and complete Studio route`, { timeout: 30000 }, async t => {
+  test(`${engine}: scriptless About preserves the showcase investment and complete Studio route`, { timeout: 30000 }, async t => {
     const page = await open(t, engine, { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     await expect(panel(page)).toBeVisible();
-    await assertAmount(page, '$1,200.00');
+    await assertAmount(page, '$3,980.00');
     for (const node of await panel(page).locator('button,input').all()) assert.equal(await node.isVisible(), false, `Inactive editing controls stay outside the static reading: ${await node.evaluate(element => element.outerHTML)}`);
     await expect(page.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toBeVisible();
     assert.equal(await page.locator('iframe[data-about-content-fit="studio-chapters"]').count(), 1);

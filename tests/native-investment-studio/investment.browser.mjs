@@ -54,7 +54,7 @@ const work = (page, name) => root(page).locator(`[data-native-configure] input[n
 const frame = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 const bytes = page => page.evaluate(() => window.investmentFixture.studio.exportText());
 
-async function open(t, engine, complete = false) {
+async function open(t, engine, complete = false, showcase = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true });
   const page = await context.newPage();
   const telemetry = monitor(page), requests = new Set();
@@ -77,7 +77,7 @@ async function open(t, engine, complete = false) {
   await page.locator('img').evaluateAll(images => Promise.all(images.map(image => { image.loading = 'eager'; return image.decode(); })));
   await page.evaluate(() => document.fonts.ready);
   await expect(root(page)).toHaveAttribute('data-native-ready', 'true');
-  await page.evaluate(async ({ controllerPath, statePath, editingPath }) => {
+  if (!showcase) await page.evaluate(async ({ controllerPath, statePath, editingPath }) => {
     const { mountCoordinationPanel } = await import(controllerPath);
     const { createStudio } = await import(statePath);
     const { createDraftCoordinator } = await import(editingPath);
@@ -140,6 +140,85 @@ async function containment(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: authored showcase enters through the shared plan, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine, false, true);
+    const brief = root(page).locator('[data-native-showcase]');
+    await expect(brief).toBeVisible();
+    await expect(total(page)).toHaveText('$3,980.00');
+    await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
+    await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');
+    await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,480.00');
+    await expect(work(page, 'occurrences')).toHaveValue('4');
+    await brief.locator('[data-native-showcase-action="baseline"]').click();
+    await brief.locator('[data-native-showcase-action="review"]').click();
+    await expect(root(page).locator('[data-native-minutes-knob]')).toBeFocused();
+    await work(page, 'minutesPerSession').fill('45');
+    await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
+    await expect(total(page)).toHaveText('$3,980.00');
+    await brief.locator('summary').click();
+    await brief.locator('[data-native-showcase-action="readiness"]').click();
+    await expect(root(page).locator('[data-native-saved-count]')).toHaveText('1');
+    await expect(total(page)).toHaveText('$3,980.00');
+    await brief.locator('[data-native-showcase-action="review"]').click();
+    await expect(work(page, 'minutesPerSession')).toHaveValue('45');
+    await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
+    await root(page).locator('[data-action="apply"]').click();
+    await expect(total(page)).toHaveText('$4,350.00');
+    await chapter(page, 'investment').click();
+    await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Baseline total$3,980.00');
+    await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Change$370.00');
+    const accepted = JSON.parse(await downloadText(page));
+    assert.equal(accepted.planId, 'service-request-pilot');
+    assert.deepEqual(accepted.work.find(row => row.id === 'review').personIds, ['maya', 'ari', 'noor']);
+    assert.equal(accepted.work.find(row => row.id === 'review').minutesPerOccurrence, 45);
+    await action(page, 'undo').click();
+    await expect(total(page)).toHaveText('$3,980.00');
+    await action(page, 'redo').click();
+    await expect(total(page)).toHaveText('$4,350.00');
+    await chapter(page, 'coordination').click();
+    await brief.locator('[data-native-showcase-action="readiness"]').click();
+    const connection = root(page).locator('[data-native-connection-editor]');
+    await expect(connection.locator('[name="sharedObject"]')).toHaveValue('Prototype, acceptance evidence and exception log');
+    await expect(connection.locator('[name="receiverPersonId"]')).toHaveValue('noor');
+    await connection.locator('[name="status"]').selectOption('paused');
+    await connection.locator('[data-connection-apply]').click();
+    await expect(total(page)).toHaveText('$4,350.00');
+    await chapter(page, 'investment').click();
+    const reviewed = JSON.parse(await downloadText(page));
+    assert.equal(reviewed.connections.find(row => row.id === 'readiness').status, 'paused');
+    assert.deepEqual(reviewed.connections.find(row => row.id === 'readiness').workIds, ['review', 'rehearsal']);
+  });
+
+  test(`${engine}: replacement preview names the contribution and connections before acceptance and on removal`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const before = await bytes(page);
+    await chapter(page, 'investment').click();
+    await investment(page).locator('[data-investment-preset]').selectOption('service-request-pilot');
+    await action(page, 'preset').click();
+    const changes = investment(page).locator('[data-investment-changes]');
+    await expect(changes).toContainText('Contribution added: Cross-source synthesis · Leo reviews · Maya decides.');
+    await expect(changes).toContainText('Connection added: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Noor receives.');
+    assert.equal(await bytes(page), before);
+    await action(page, 'apply').click();
+    await expect(total(page)).toHaveText('$3,980.00');
+    const pilot = await bytes(page), revised = JSON.parse(pilot);
+    revised.contributions[0].receiverPersonId = 'noor';
+    revised.connections.find(row => row.id === 'readiness').status = 'paused';
+    await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'review-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(revised)) });
+    await expect(changes).toContainText('Contribution changed: Cross-source synthesis · Leo reviews · Maya decides → Cross-source synthesis · Noor reviews · Maya decides (receiving person).');
+    await expect(changes).toContainText('Connection changed: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Noor receives (connection status).');
+    assert.equal(await bytes(page), pilot);
+    await action(page, 'clear').click();
+    await investment(page).locator('[data-investment-preset]').selectOption('shared-working-sessions');
+    await action(page, 'preset').click();
+    await expect(changes).toContainText('Contribution removed: Cross-source synthesis · Leo reviews · Maya decides.');
+    await expect(changes).toContainText('Connection removed: Readiness findings and rollout conditions · Quality and Operations → Product and Research · Maya receives.');
+    await expect(total(page)).toHaveText('$3,980.00');
+    await action(page, 'clear').click();
+    await action(page, 'undo').click();
+    assert.equal(await bytes(page), before);
+  });
+
   test(`${engine}: Purpose edits apply, cancel and recover saved text through the shared owner`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await purpose(page).locator('summary').click();
@@ -264,7 +343,8 @@ for (const engine of names) {
       fixture.editing = createDraftCoordinator(fixture.studio);
     }, { controllerPath, editingPath });
     await chapter(page, 'investment').click();
-    await expect(investment(page).locator('[data-investment-preset] option')).toHaveCount(2);
+    assert.deepEqual(await investment(page).locator('[data-investment-preset] option').evaluateAll(options => options.map(option => option.value)),
+      ['service-request-pilot', 'shared-working-sessions', 'funded-working-sessions']);
     await expect(total(page)).toHaveText('$1,275.00');
     assert.equal(await bytes(page), accepted);
     assert.equal(await page.evaluate(() => window.investmentFixture.studio.read() === window.investmentFixture.retained), true);
