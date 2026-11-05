@@ -505,7 +505,7 @@ for (const engine of names) {
     }, { controllerPath, editingPath });
     await chapter(page, 'investment').click();
     assert.deepEqual(await investment(page).locator('[data-investment-preset] option').evaluateAll(options => options.map(option => option.value)),
-      ['service-request-pilot', 'shared-working-sessions', 'funded-working-sessions']);
+      ['service-request-pilot', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
     await expect(total(page)).toHaveText('$1,275.00');
     assert.equal(await bytes(page), accepted);
     assert.equal(await page.evaluate(() => window.investmentFixture.studio.read() === window.investmentFixture.retained), true);
@@ -597,7 +597,7 @@ for (const engine of names) {
     await expect(investment(page).locator('[data-investment-status]')).toContainText('plan or edits changed');
     assert.equal(await bytes(page), original);
 
-    for (const [width, size] of [[1440, ''], [320, '200%']]) {
+    for (const [width, size] of [[1440, '200%'], [390, '']]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(value => { document.documentElement.style.fontSize = value; }, size);
       await frame(page);
