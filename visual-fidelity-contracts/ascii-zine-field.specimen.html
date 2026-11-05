@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <title>ASCII Zine Field — a working specimen</title>
+  <link rel="stylesheet" href="ascii-zine-field.tokens.css">
+  <style>
+    body { margin: 0; }
+    .shell { max-inline-size: 78rem; margin-inline: auto; padding: clamp(1rem, 4vw, 3rem); }
+    .skip-link { position: fixed; z-index: 10; inset: .5rem auto auto .5rem; max-inline-size: calc(100% - 1rem); overflow-wrap: anywhere; translate: 0 -200%; padding: .7rem; background: var(--azf-panel); color: var(--azf-ink); border: var(--azf-rule); }
+    .skip-link:focus { translate: 0; }
+    .edition { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; margin-block-end: .8rem; font: 700 .8125rem/1.5 var(--azf-font-mono); }
+    .lead { font-size: clamp(1.1rem, 2vw, 1.35rem); max-inline-size: 42ch; }
+    .amp-grille { margin-block: 1.8rem; border-block: 1px solid var(--azf-tiffany); padding-block: 1rem; }
+    .amp-grille .azf-ornament { font-size: clamp(.8rem, 1.6vw, 1.2rem); letter-spacing: .12em; }
+    .annotation-slot { min-block-size: 5em; }
+    .annotation-slot[data-included="false"] { text-decoration: line-through; text-decoration-thickness: 2px; }
+    .texture-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+    .texture-grid figure { min-inline-size: 0; margin: 0; }
+    .texture-grid pre { padding: 1rem; border-block: 1px solid var(--azf-line); }
+    .texture-grid figcaption { margin-block-start: .7rem; font-size: .9375rem; }
+    .footer { margin-block-start: 2rem; padding-block-start: 1rem; border-block-start: var(--azf-rule); }
+    .artifact-attribution { margin-block-start: 2rem; font-size: .8125rem; }
+    @media (max-width: 42rem) { .texture-grid { grid-template-columns: minmax(0, 1fr); } }
+    @media print { .skip-link, .edition a { display: none; } .shell { padding: 0; } .annotation-slot { min-block-size: 0; } }
+  </style>
+</head>
+<body class="azf-field">
+  <a class="skip-link" href="#try-title">Skip to the working example</a>
+  <main class="shell">
+    <div class="edition"><span>COMPOSITION STUDY / ASCII ZINE FIELD</span><a href="README.md">Visual Fidelity Contracts</a></div>
+    <header class="azf-masthead">
+      <div>
+        <p class="azf-stamp">Working specimen / review candidate</p>
+        <h1>Make room for good work.</h1>
+        <p class="lead">A little print-shop energy. Clear controls. Enough room to try a change and find your way back.</p>
+        <pre class="azf-ornament" data-ascii-art aria-hidden="true">+--+--+--+--+--+--+--+--+
+|  :  |  :  |  :  |  :  |
++--+--+--+--+--+--+--+--+</pre>
+      </div>
+      <aside class="azf-amp" aria-labelledby="amp-title">
+        <p class="azf-stamp">The studio label</p>
+        <h2 id="amp-title">Small marks.<br>Clear intentions.</h2>
+        <div class="amp-grille"><pre class="azf-ornament" data-ascii-art aria-hidden="true">##..##..##..##..##
+..##..##..##..##..
+##..##..##..##..##
+..##..##..##..##..</pre></div>
+        <p>Ink establishes the frame. Tiffany gives notes a quieter place. Rose marks a change you can revisit.</p>
+      </aside>
+    </header>
+
+    <section aria-labelledby="try-title">
+      <header class="azf-rule"><h2 id="try-title" tabindex="-1">Try a small change</h2><span class="azf-ornament" data-ascii-art aria-hidden="true">/ / / / / / / /</span></header>
+      <div class="azf-grid">
+        <article class="azf-card" aria-labelledby="note-title">
+          <p class="azf-stamp">Field-note card</p>
+          <h3 id="note-title">Shape a workshop note</h3>
+          <p>This teaching example keeps changes in the current page. A refresh returns the starting values.</p>
+          <label for="note-name">Note title</label>
+          <input id="note-name" type="text" value="A better first conversation" maxlength="100" aria-describedby="note-status">
+          <label for="note-kind">Draft artifact</label>
+          <select id="note-kind"><option>Workshop note</option><option>Research question</option><option>Decision summary</option></select>
+          <details class="azf-disclosure" open>
+            <summary>Details for this note <span>Audience: new collaborators. Purpose: choose a first question.</span></summary>
+            <p>Start with the decision the group wants to make. Keep the question close to the work people can actually discuss.</p>
+            <label class="azf-choice"><input type="checkbox" checked> Include a question for the group</label>
+          </details>
+          <div class="azf-actions"><button class="azf-button azf-button--primary" id="save-note" type="button" hidden>Save example</button><button class="azf-button" id="restore-title" type="button" hidden>Restore starting title</button></div>
+          <p class="azf-status" id="note-status" role="status">Starting example: “A better first conversation.”</p>
+          <noscript><p>The fields and disclosure remain available. Open the details before printing to include the complete note. Enable JavaScript to try the local save and restore actions.</p></noscript>
+        </article>
+        <div class="azf-card azf-card--tiffany">
+          <aside class="azf-patch" aria-labelledby="patch-title">
+            <p class="azf-stamp">Patch annotation</p>
+            <h3 id="patch-title">Give a next step a place</h3>
+            <p>A note can start with a loose question. Add the people who can help when the purpose is clearer.</p>
+            <p><a href="#group-title">See the group prompt</a></p>
+          </aside>
+          <h3 id="group-title" style="margin-block-start:1.5rem">A group prompt</h3>
+          <p id="sample-annotation" class="annotation-slot" data-included="true">What would make the first conversation useful for everyone joining?</p>
+          <div class="azf-slip" aria-labelledby="return-title">
+            <p class="azf-stamp">Recovery slip / local example</p>
+            <h3 id="return-title">Try taking out a prompt</h3>
+            <p>The prompt keeps its place while you try the change. The same control offers the return.</p>
+            <div class="azf-actions"><button class="azf-button azf-button--remove" id="toggle-annotation" type="button" hidden>Remove sample prompt</button></div>
+            <p class="azf-status" id="annotation-status" role="status">The sample prompt is included.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="texture-title">
+      <header class="azf-rule"><h2 id="texture-title">Texture with a quiet job</h2><span class="azf-ornament" data-ascii-art aria-hidden="true">+--+--+--+--+</span></header>
+      <p>These marks separate and frame. Their patterns are decorative; the captions name each treatment.</p>
+      <div class="texture-grid">
+        <figure><pre class="azf-ornament" data-ascii-art aria-hidden="true">: . : . : . : . :
+. : . : . : . : .
+: . : . : . : . :</pre><figcaption><strong>Loose weave.</strong> A small annotation or a quiet end to a section.</figcaption></figure>
+        <figure><pre class="azf-ornament" data-ascii-art aria-hidden="true">/ / / / / / / / /
+ / / / / / / / / 
+/ / / / / / / / /</pre><figcaption><strong>Diagonal stitch.</strong> A boundary with a little movement in its rhythm.</figcaption></figure>
+        <figure><pre class="azf-ornament" data-zine-glyphs="unicode" aria-hidden="true">┌────────────────┐
+│ ░▒▓  ░▒▓  ░▒▓  │
+└────────────────┘</pre><figcaption><strong>Optional Unicode.</strong> Box drawing and blocks are an explicitly separate character set.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="footer" aria-labelledby="use-title">
+      <h2 id="use-title">Bring a small dose into real work</h2>
+      <p>A masthead and one border rhythm can carry the character. Keep each real action, selected value, disclosure, and recovery message easy to read on its own.</p>
+      <p>This specimen establishes an inspectable composition and a local interaction example. The receiving application owns persistence, permissions, and its actual workflow.</p>
+      <p><a href="ascii-zine-field.md">Read the composition contract</a> · <a href="ascii-zine-field.tokens.css">Inspect the reference tokens</a></p>
+    </section>
+    <footer class="artifact-attribution"><p>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer>
+  </main>
+  <script>
+    document.querySelectorAll('.azf-actions button').forEach(button => { button.hidden = false; });
+    const nameField = document.getElementById('note-name');
+    const startingTitle = nameField.value;
+    const noteStatus = document.getElementById('note-status');
+    document.getElementById('save-note').addEventListener('click', () => {
+      const title = nameField.value.trim();
+      noteStatus.textContent = title ? `Saved in this example: “${title}.”` : 'Give the note a title, then save the example.';
+      nameField.setAttribute('aria-invalid', String(!title));
+      if (!title) nameField.focus();
+    });
+    document.getElementById('restore-title').addEventListener('click', () => {
+      nameField.value = startingTitle;
+      nameField.removeAttribute('aria-invalid');
+      noteStatus.textContent = 'The starting title is restored. Your artifact choice stays as selected.';
+    });
+    const annotation = document.getElementById('sample-annotation');
+    const toggle = document.getElementById('toggle-annotation');
+    let included = true;
+    toggle.addEventListener('click', () => {
+      included = !included;
+      annotation.dataset.included = String(included);
+      toggle.textContent = included ? 'Remove sample prompt' : 'Restore sample prompt';
+      toggle.classList.toggle('azf-button--remove', included);
+      document.getElementById('annotation-status').textContent = included ? 'The sample prompt is restored.' : 'The sample prompt is removed. Restore it whenever you are ready.';
+    });
+    const disclosureState = new Map();
+    window.addEventListener('beforeprint', () => {
+      document.querySelectorAll('details').forEach(details => {
+        if (!disclosureState.has(details)) disclosureState.set(details, details.open);
+        details.open = true;
+      });
+    });
+    window.addEventListener('afterprint', () => {
+      disclosureState.forEach((open, details) => { details.open = open; });
+      disclosureState.clear();
+    });
+  </script>
+</body>
+</html>

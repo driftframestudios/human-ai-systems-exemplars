@@ -61,7 +61,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   let projection = null, people = new Map(), works = new Map(), contributions = new Map(), referenceLabels = new Map();
   let selectedPerson = null, mode = 'role', generation = 0, disposed = false, retired = null;
   let membershipProjection = null, membershipIds = null, memberControls = new Map();
-  let contributionButtons = new Map();
+  let contributionButtons = new Map(), membersTarget = null, memberOrder = [];
 
   function listen(element, type, handler) { element.addEventListener(type, handler); cleanup.push(() => element.removeEventListener(type, handler)); }
   function owns(epoch) { return !disposed && epoch === generation; }
@@ -98,7 +98,11 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     return ROLE_FIELDS.filter(field => raw[field]).map(field => responsibilityValue(field, raw[field])).join(' · ') || 'Role details are unassigned.';
   }
   function summaryText(kind, row, descriptor, draft) {
-    if (kind === 'role') return `Role details for ${named(row)}`;
+    if (kind === 'role') {
+      const raw = roleRaw(row);
+      const facts = ROLE_FIELDS.filter(field => raw[field]).slice(0, 2).map(field => responsibilityValue(field, raw[field]));
+      return `Roles for ${named(row)} · ${facts.join(' · ') || 'Add role details'}${draft?.changed ? ' · Unsaved edits' : ''}`;
+    }
     if (descriptor?.mode === 'remove' && draft) return `Remove ${CATEGORY_LABELS.get(row?.categoryId) ?? 'contribution'}`;
     if (descriptor?.mode === 'create' && draft) return 'New contribution';
     return 'Contribution settings';
@@ -133,35 +137,49 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const sessions = document.createElement('p');
       sessions.textContent = row.workIds.length ? row.workIds.map(id => named(works.get(id))).join(' · ') : 'Supporting sessions are unassigned.';
       const remove = button('Remove contribution', 'remove', row.id);
-      remove.setAttribute('aria-label', `Remove ${CATEGORY_LABELS.get(row.categoryId)}`);
+      remove.className = 'native-control--remove';
+      remove.setAttribute('aria-label', `Remove contribution: ${CATEGORY_LABELS.get(row.categoryId)}`);
       item.append(open, detail, sessions, remove); fragment.append(item); contributionButtons.set(row.id, open);
     }
     list.replaceChildren(fragment); empty.hidden = contributions.size > 0;
   }
   function renderMembers(ids) {
+    if (membersTarget !== contribution.target) { membersTarget = contribution.target; memberOrder = []; membershipIds = null; }
     if (membershipProjection === projection && membershipIds?.length === ids.length && ids.every((id, position) => id === membershipIds[position])) return;
     membershipProjection = projection; membershipIds = [...ids];
     const positions = new Map(ids.map((id, position) => [id, position]));
-    const ordered = [...ids, ...projection.state.work.filter(row => !positions.has(row.id)).map(row => row.id)];
-    memberControls = new Map();
-    const fragment = document.createDocumentFragment();
+    const available = new Set([...works.keys(), ...ids]);
+    memberOrder = memberOrder.filter(id => available.has(id));
+    const shown = new Set(memberOrder);
+    for (const id of [...ids, ...works.keys()]) if (!shown.has(id)) { memberOrder.push(id); shown.add(id); }
+    const ordered = memberOrder;
+    const previous = memberControls; memberControls = new Map(); const rows = [];
     for (const id of ordered) {
-      const row = works.get(id), item = document.createElement('li'), label = document.createElement('label');
-      const input = document.createElement('input'), text = document.createElement('span');
-      input.type = 'checkbox'; input.dataset.responsibilityWork = id; input.checked = positions.has(id);
-      text.textContent = row ? named(row) : `${id} · removed session`;
-      label.append(input, text); item.append(label);
-      if (positions.has(id)) {
-        const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
-        const position = positions.get(id), up = button('Move up', 'work-up', id), down = button('Move down', 'work-down', id);
-        up.disabled = position === 0; down.disabled = position === ids.length - 1;
-        up.setAttribute('aria-label', `Move ${row?.label ?? id} up`); down.setAttribute('aria-label', `Move ${row?.label ?? id} down`);
-        actions.append(up, down); item.append(actions);
+      const row = works.get(id), input = previous.get(id) ?? document.createElement('input');
+      let item = input.closest('li');
+      if (!item) {
+        item = document.createElement('li'); item.className = 'native-coordination__member';
+        const label = document.createElement('label'), words = document.createElement('span');
+        const text = document.createElement('span'), state = document.createElement('small');
+        text.dataset.memberName = ''; state.className = 'native-coordination__member-status';
+        input.type = 'checkbox'; input.dataset.responsibilityWork = id;
+        words.append(text, state); label.append(input, words);
+        const actions = document.createElement('div'); actions.className = 'native-coordination__actions native-coordination__manipulation';
+        actions.append(button('Move up', 'work-up', id), button('Move down', 'work-down', id)); item.append(label, actions);
       }
-      fragment.append(item); memberControls.set(id, input);
+      const position = positions.get(id);
+      item.dataset.selected = String(positions.has(id)); input.checked = positions.has(id);
+      item.querySelector('[data-member-name]').textContent = row ? named(row) : `${id} · removed session`;
+      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Left out';
+      const [up, down] = item.querySelectorAll('button');
+      up.disabled = position === undefined || position === 0; down.disabled = position === undefined || position === ids.length - 1;
+      up.setAttribute('aria-label', `Move up: ${row?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${row?.label ?? id}`);
+      rows.push(item); memberControls.set(id, input);
     }
-    contribution.members.replaceChildren(fragment);
+    if (rows.length !== contribution.members.children.length || rows.some((row, index) => row !== contribution.members.children[index]))
+      contribution.members.replaceChildren(...rows);
   }
+
   function renderGroup(group) {
     const epoch = generation, view = editing[group.kind].read();
     const draft = keyFor(group.kind, view.draft) === group.target ? view.draft : null;
@@ -173,6 +191,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     group.recovery.hidden = !draft || view.status !== 'stale';
     group.configure.hidden = group.kind === 'role' ? selectedPerson === null && !draft : !group.target && !draft;
     group.summary.textContent = summaryText(group.kind, row, descriptor, draft);
+    group.apply.classList.toggle('native-control--remove', removing);
     group.current.textContent = currentText(group.kind, row, descriptor, view.creationConflict);
     group.accepted.textContent = group.kind === 'role' ? summaryWords(roleRaw(row)) : '';
     for (const field of group.fields) {
@@ -351,6 +370,8 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const destination = position + delta;
       if (position < 0 || destination < 0 || destination >= ids.length) return;
       [ids[position], ids[destination]] = [ids[destination], ids[position]];
+      const selected = new Set(ids); let next = 0;
+      memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
     changed('contribution', operate('contribution', 'setIds', view.draft.token, 'workIds', ids), epoch, () => memberControls.get(id)?.focus());
   }

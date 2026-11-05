@@ -94,6 +94,55 @@ async function fill(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: a new receiving person joins the chosen team through an explicit draft and returns to the chooser`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await fill(page);
+    await editor(page).locator('[data-native-create="person"]').click();
+    const assembly = root(page).locator('[data-native-assembly]');
+    await assembly.locator('[data-assembly-form] [name="label"]').fill('Taylor');
+    await assembly.locator('[data-assembly-apply]').click();
+    const personId = await page.evaluate(() => window.connectionFixture.studio.read().state.people.find(row => row.label === 'Taylor').id);
+    await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
+    await root(page).locator('[data-native-chapter="investment"]').click();
+    await root(page).locator('[data-investment-action="undo"]').click();
+    await expect(root(page).locator('[data-native-return-note]')).toContainText('outside the current plan');
+    await expect(root(page).locator('[data-native-return-team]')).toBeHidden();
+    await root(page).locator('[data-investment-action="redo"]').click();
+    await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
+    await root(page).locator('[data-native-return-team]').click();
+    await expect(assembly.locator(`[data-assembly-member="${personId}"]`)).toBeChecked();
+    assert.equal((await state(page)).teams.find(row => row.id === 'receiving').personIds.includes(personId), false,
+      'the proposed membership waits for Apply');
+    await assembly.locator('[data-assembly-apply]').click();
+    await expect(root(page).locator('[data-native-return-team]')).toBeHidden();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(field(page, 'sharedObject')).toHaveValue('Review the migration plan');
+    await action(page, 'review').click();
+    await expect(field(page, 'receiverPersonId')).toBeFocused();
+    await field(page, 'receiverPersonId').selectOption(personId);
+    await apply(page).click();
+    assert.equal((await state(page)).connections[0].receiverPersonId, personId);
+  });
+  test(`${engine}: supporting-session toggles preserve mounted controls and narrow row geometry`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await fill(page); await page.setViewportSize({ width: 390, height: 1000 });
+    await member(page, 'review').focus(); await frames(page);
+    const list = editor(page).locator('ul[data-connection-work]');
+    const geometry = () => list.evaluate(element => {
+      const origin = element.getBoundingClientRect().top;
+      return [...element.children].map(row => ({ id: row.querySelector('input').dataset.connectionWork,
+        y: Math.round((row.getBoundingClientRect().top - origin) * 1000) / 1000, height: Math.round(row.getBoundingClientRect().height * 1000) / 1000 }));
+    });
+    const before = await geometry(), accepted = await state(page);
+    await member(page, 'review').evaluate(input => { window.retainedSessionControl = input; });
+    await page.keyboard.press('Space');
+    await expect(member(page, 'review')).not.toBeChecked(); await expect(member(page, 'review')).toBeFocused();
+    assert.deepEqual(await geometry(), before);
+    assert.equal(await member(page, 'review').evaluate(input => input === window.retainedSessionControl), true);
+    await page.keyboard.press('Space'); assert.deepEqual(await geometry(), before);
+    assert.deepEqual(await state(page), accepted);
+  });
+
   test(`${engine}: one connection form retains explicit membership, ordered sessions and unchanged investment`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await fill(page);

@@ -1968,6 +1968,9 @@ p#on-dark-iron-ore {
     color: var(--native-text);
     color-scheme: light;
     font: 1rem/1.5 system-ui, sans-serif;
+    /* Keep WebKit's automatic inflation stable; rem sizing still follows text zoom. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     margin-block: 1.5rem;
     overflow-wrap: anywhere;
 }
@@ -2405,4 +2408,121 @@ p#on-dark-iron-ore {
 @media (forced-colors: active) { .native-responsibility__list > li { box-shadow: none; } }
 @media (forced-colors: active) {
     .native-session__members > li { box-shadow: none; }
+}
+
+/* ASCII Zine Field receiving adapter — visual-fidelity-contracts/
+   ascii-zine-field.md owns the composition. About keeps its palette and load
+   position here; index.html owns decorative rails and real control semantics.
+   Extend native-zine__* for ornament, native-control--* for control jobs. */
+.native-coordination {
+    --native-zine-rose: #f3d8df;
+    --native-zine-rose-ink: #75394b;
+    --native-zine-field: #fffdf5;
+}
+.native-zine__rail {
+    grid-column: 1 / -1;
+    color: var(--native-signal);
+    font: 600 .75rem/1.4 ui-monospace, monospace;
+    letter-spacing: .06em;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-block: .4rem;
+    border-block: 1px solid currentColor;
+    user-select: none;
+}
+.native-coordination__amp .native-zine__stamp {
+    display: inline-block;
+    padding: .35rem .6rem;
+    border: 1px solid currentColor;
+    box-shadow: .18rem .18rem 0 var(--native-chapter-shadow);
+    letter-spacing: .14em;
+}
+.native-zine__heading { border-block-end: .125rem solid var(--native-rule); padding-block-end: .65rem; }
+.native-zine__heading > span { font: 700 .8em/1 ui-monospace, monospace; color: var(--about-deep-teal); white-space: nowrap; }
+.native-zine__return {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem 1.5rem;
+    align-items: center;
+    margin: 1rem;
+    padding: 1rem;
+    border: .125rem dashed var(--native-zine-rose-ink);
+    border-inline-start: .4rem solid var(--native-zine-rose-ink);
+    background: var(--native-zine-rose);
+}
+.native-zine__return p { flex: 1 1 22rem; }
+.native-coordination__recovery {
+    border-block-start: .125rem dashed var(--native-zine-rose-ink);
+    background: var(--native-zine-rose);
+    color: var(--native-text);
+}
+/* Fields sit inside the paper; action keys cast a fixed lower-right shadow. */
+.native-coordination select {
+    background-color: var(--native-zine-field);
+    border-radius: .15rem;
+    border-color: var(--native-rule);
+    box-shadow: inset .12rem .12rem 0 #d3d7cf;
+    font-weight: 400;
+}
+.native-coordination summary {
+    background: var(--native-zine-field);
+    border-inline-start: .3rem solid var(--native-rule);
+    border-block-end: 1px dotted var(--native-rule);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.native-coordination details[open] > summary { border-inline-start-color: var(--about-deep-teal); }
+.native-coordination summary::marker { color: var(--native-text); }
+.native-coordination__actions > button { min-inline-size: min(9rem, 100%); }
+.native-coordination button.native-control--create { justify-self: start; inline-size: fit-content; min-inline-size: min(9rem, 100%); max-inline-size: 100%; }
+.native-coordination button.native-control--remove,
+.native-coordination button[data-removal='true'] {
+    background: var(--native-zine-rose);
+    border-color: var(--native-zine-rose-ink);
+    border-inline-start-width: .35rem;
+    color: var(--native-zine-rose-ink);
+}
+/* Membership toggles keep both geometry and the explicit ordering controls. */
+.native-coordination .native-coordination__member {
+    align-content: start;
+    transition: none;
+}
+.native-coordination .native-coordination__member[data-selected='false'] {
+    background: var(--native-zine-field);
+    border-style: dashed;
+    box-shadow: none;
+}
+.native-coordination__member-status { display: block; min-block-size: 1.5em; font: 600 .8rem/1.5 ui-monospace, monospace; }
+.native-coordination__manipulation { display: flex; flex-wrap: wrap; gap: .5rem; }
+.native-coordination .native-coordination__manipulation > button,
+.native-coordination button[data-assembly-action='person-up'],
+.native-coordination button[data-assembly-action='person-down'] {
+    min-inline-size: 0;
+    border-radius: .25rem;
+    box-shadow: .12rem .12rem 0 var(--native-key-shadow);
+    font-size: .875rem;
+    padding: .45rem .65rem;
+}
+.native-coordination__summary-preview { display: block; font-size: .875rem; font-weight: 400; }
+@media (max-width: 42rem) {
+    /* Fixed outer gutters leave enlarged text room inside the nested editors. */
+    .about-field--coordination > .about-reading { inline-size: calc(100% - 24px); }
+    .native-coordination__connection { padding-inline: .4rem; }
+    .native-coordination__connection > span { flex-basis: 100%; }
+    .native-coordination__preview { padding-inline: .4rem; }
+    .native-coordination__preview output { font-size: 1.125rem; }
+}
+@container (max-width: 12rem) {
+    .native-session__members label, .native-assembly__members label { display: grid; grid-template-columns: minmax(0, 1fr); gap: .3rem; }
+}
+@media (forced-colors: active) {
+    .native-coordination { --native-zine-field: Canvas; --native-zine-rose: Canvas; --native-zine-rose-ink: ButtonText; }
+    .native-zine__rail { display: none; }
+    .native-coordination select, .native-coordination__amp .native-zine__stamp { box-shadow: none; }
+    .native-coordination button.native-control--remove { border-style: double; }
+    .native-coordination .native-coordination__member[data-selected='false'] { border-style: dashed; }
+}
+@media print {
+    .native-zine__rail { display: none; }
+    .native-coordination__amp .native-zine__stamp { box-shadow: none; }
 }

@@ -16,6 +16,7 @@ executable, versioned contract material listed here.
 | A guided workflow, operational application, or approachable technical diagram | [Soft Color Blocking](./contracts/soft-color-blocking/README.md) | Large semantic fields, square geometry, clear labels, and explicit state |
 | A relationship-heavy operating map | [Cobalt Operating Field](./cobalt-operating-field.md) | System boundaries, work, investment, direction, and recovery |
 | A consequential chronology | [Cobalt Temporal Field](./cobalt-temporal-field.md) | Source-supported intervals, returns, recurrence, and changed meaning |
+| A workshop or studio with print-shop character | [ASCII Zine Field](./ascii-zine-field.md) | Expressive mastheads, quiet texture, recognizable controls, and clear recovery |
 | A source-led account followed by an implementation reading | [Dual-Track Debrief Composition](./dual-track-debrief-composition.md) | Selection guidance for paired, program, comparative, temporal, and single-field readings |
 | A question about state ownership, contrast, reflow, print, or publication | [Shared foundations](#use-the-shared-foundations) | Reusable implementation and verification rules |
 | A Figma, DTCG, compiler, or component-token integration | [Design-token pipeline](./foundations/design-token-pipeline.md) | Source authority, compatibility, generated artifacts, runtime adapters, recovery, and receipts |
@@ -43,6 +44,9 @@ executable, versioned contract material listed here.
 
 ### Repository composition contracts
 
+- [ASCII Zine Field](./ascii-zine-field.md) — a review candidate for warm-paper
+  studios and workshop artifacts, with ASCII ornament, native controls, and an
+  [interactive specimen](./ascii-zine-field.specimen.html).
 - [Cobalt Operating Field](./cobalt-operating-field.md) — light-field system
   cartography for workbenches, operating maps, architecture handoffs, and
   changed-work narratives.
@@ -184,6 +188,7 @@ records the supporting evidence and implementation boundary.
 
 ## Reference implementations
 
+- [ASCII Zine Field working specimen](./ascii-zine-field.specimen.html)
 - [Industrial Ink technical-workbench specimen](./contracts/industrial-ink/specimen.html)
 - [Soft Color Blocking contract specimen](./contracts/soft-color-blocking/specimen.html)
 - [Context Tree visual variants](../collaboration/context-tree-visual-variants/index.html)
