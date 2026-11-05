@@ -337,6 +337,9 @@ ordinary control semantics, and fitting verification; the family owns its
 palette, tokens, and specimen. The public skill projection and production
 family guide have separate receiving paths. Their source registration prepares
 the next release; human review retains publication authority.
+[Issue #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
+owns both release handoffs, including exact source and generated-artifact review
+and the later delivered-route observation.
 
 **Refined browser finding.** The earlier text-size-adjust account was a
 provisional explanation. The pinned WebKit reports those adjustment properties

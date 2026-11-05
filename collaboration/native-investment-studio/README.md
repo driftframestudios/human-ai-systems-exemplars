@@ -23,6 +23,10 @@ brings clearer controls, stable choices, prerequisite creation, useful collapsed
 previews, and ASCII zine styling to those working chapters. Its receiving PR owns
 verification and integration status; publication retains its separate review.
 
+The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
+tracks the ASCII composition method's public Pages projection and the visual
+family's production guide, full source, and working specimen.
+
 The [experience journal](experience-journal.md) preserves design intent and
 implementation continuity. The [task audit](usability-research.md#task-focused-audit-and-receiving-work)
 separates implemented capabilities, the current repair, and remaining work.

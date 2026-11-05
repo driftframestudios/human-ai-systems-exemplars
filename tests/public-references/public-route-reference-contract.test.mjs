@@ -207,7 +207,7 @@ test('loads the complete source inventory as an immutable destination authority'
   const requiredKeys = await sourceTokens();
   const result = await loadPublicRouteReferenceBinding({ requiredKeys });
 
-  assert.equal(requiredKeys.length, 166);
+  assert.equal(requiredKeys.length, 167);
   assert.equal(result.destinations.size, requiredKeys.length);
   assert.equal(isPublicRouteReferenceDestinationAuthority(result.destinations), true);
   assert.equal(result.destinations.set, undefined);
@@ -219,9 +219,9 @@ test('loads the complete source inventory as an immutable destination authority'
     asset: 39,
     iframe: 6,
     schema: 2,
-    skill: 34,
+    skill: 35,
   });
-  assert.equal(result.receipt.bindingCount, 166);
+  assert.equal(result.receipt.bindingCount, 167);
   assert.deepEqual(Object.keys(result.receipt.sourceDigests), [
     'binding',
     'primary_manifest',

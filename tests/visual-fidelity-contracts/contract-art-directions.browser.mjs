@@ -82,13 +82,17 @@ for (const [engineName, engine] of Object.entries(engines)) {
     }
   });
 
-  test(`${engineName} keeps the ASCII guide readable and its full-source routes reachable`, async t => {
+  test(`${engineName} keeps the ASCII guide readable and its full-source routes reachable`, { timeout: 30_000 }, async t => {
     const browser = await engine.launch();
     t.after(() => browser.close());
     const page = await browser.newPage({ viewport: { width: 320, height: 900 }, javaScriptEnabled: false });
     const telemetry = monitor(page);
+    // Supply enlarged text through CSS so the reading stays scriptless.
+    await page.route('**/ascii-zine-field.tokens.css', async route => {
+      const response = await route.fetch();
+      await route.fulfill({ response, body: `${await response.text()}\n:root { font-size: 200% !important; }` });
+    });
     await page.goto(`${server.origin}/visual-fidelity-contracts/ascii-zine-field/index.html`);
-    await page.addStyleTag({ content: ':root { font-size: 200% !important; }' });
     assert.equal(await page.getByRole('heading', { level: 1 }).textContent(), 'ASCII Zine Field');
     const overflow = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
     assert.ok(overflow.scroll <= overflow.client + 1, JSON.stringify(overflow));
