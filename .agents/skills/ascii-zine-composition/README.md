@@ -4,6 +4,8 @@ Use this method when a working interface or publication should feel like an
 independent print artifact while its labels, controls, and state stay clear.
 Read the [portable contract](SKILL.md) for the method and completion boundary.
 
+## Concrete example
+
 For example, an investment studio can add a masthead, quiet ASCII grille, and
 rose recovery slip around its existing controls. The visitor still chooses
 people, previews a change, and applies it through ordinary semantic controls.

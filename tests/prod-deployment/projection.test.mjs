@@ -3563,6 +3563,9 @@ test("the About CSS projection rejects unavailable dependencies, path escape, CS
     ["percent-encoded local URL pathname", '.x{background:url("%2e%2e/out.png")}', /local URL pathname .* must not contain percent encoding/],
     ["backslash local URL pathname", String.raw`.x{background:url("img\\outside.png")}`, /local URL pathname .* must not contain backslashes/],
     ["malformed container prelude", "@container canvas-reading (min-width: 80) {.x{display:grid}}", /unsupported raw CSS/],
+    ["malformed anonymous container prelude", "@container (max-width: 31) {.x{display:grid}}", /unsupported raw CSS/],
+    ["different picker argument", "select::picker(button) {color:red}", /unsupported raw CSS/],
+    ["raw argument on another pseudo-element", "select::unreviewed(select) {color:red}", /unsupported raw CSS/],
     ["invalid CSS", ".x{color:red", /could not parse|unbalanced syntax|unsupported raw CSS/],
   ];
   for (const [label, css, expected] of invalidCases) {
@@ -3614,11 +3617,12 @@ test("the About CSS projection rejects unavailable dependencies, path escape, CS
   );
 });
 
-test("the About CSS projection admits the bounded container-query form used by current source", () => {
+test("the About CSS projection retains named and nearest-container size queries", () => {
   const fixture = cssProjectionFixture();
   fixture.cssSources.set(cssSourcePaths[1], {
     bytes: Buffer.from(
-      "@container canvas-reading (min-width: 80rem) {.fixture{display:grid}}\n",
+      "@container canvas-reading (min-width: 80rem) {.fixture{display:grid}}\n" +
+      "@container (max-width: 31rem) {.fixture{display:block}}\n",
       "utf8",
     ),
     git_blob_id: "c".repeat(40),
@@ -3628,6 +3632,24 @@ test("the About CSS projection admits the bounded container-query form used by c
     result.outputs[0].bytes.toString("utf8"),
     /@container canvas-reading \(min-width:\s*80rem\)\{\.fixture\{display:grid\}\}/,
   );
+  assert.match(
+    result.outputs[0].bytes.toString("utf8"),
+    /@container \(max-width:\s*31rem\)\{\.fixture\{display:block\}\}/,
+  );
+});
+
+test("the About CSS projection retains the browser's exact native select picker", () => {
+  const fixture = cssProjectionFixture();
+  fixture.cssSources.set(cssSourcePaths[1], {
+    bytes: Buffer.from(
+      "@supports (appearance:base-select) {select::picker(select) {appearance:base-select;color:red}}\n",
+      "utf8",
+    ),
+    git_blob_id: "d".repeat(40),
+  });
+  const result = runCssProjection(fixture);
+  assert.match(result.outputs[0].bytes.toString("utf8"),
+    /@supports \(appearance:base-select\)\{select::picker\(select\)\{appearance:base-select;color:red\}\}/);
 });
 
 test("a CSS source change changes only its owned projection path and lineage", () => {
