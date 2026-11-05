@@ -15,6 +15,7 @@ const ROW_FIELDS = Object.freeze({
   capabilityEvidence: Object.freeze(['subject', 'stage', 'context', 'observation', 'recorderPersonId', 'reviewBoundary', 'observedPlanRevision']),
   contributions: Object.freeze(['categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary']),
   connections: Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status']),
+  arrangements: Object.freeze(['templateId', 'templateVersion', 'teamBindings', 'connectionBindings']),
 });
 const diagnostic = (code, message, path = 'exchange') => Object.freeze({ code, path, message });
 const staleDiagnostic = () => diagnostic('stale-preview', 'The plan or edits changed. Preview this plan again.');

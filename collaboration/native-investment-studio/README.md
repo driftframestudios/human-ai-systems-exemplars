@@ -22,7 +22,8 @@ Hours, Minutes and Working sessions controls. The current
 leads with diagrams, readable examples and compact inspection controls. Stable choices, nearby creation,
 useful collapsed previews and ASCII zine styling support these visitor tasks.
 The coordination horizon now joins authored timing, availability, waits and
-modeled decisions to the accepted plan. The complete showcase continues through
+modeled decisions to the accepted plan. Arrangement templates now keep their accepted identity and show their actual
+work directions. The complete showcase continues through quality consequences,
 visual analysis, scenarios and final composition. Performance refinement follows that experience.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
@@ -90,6 +91,26 @@ Quality and recovery illustrations retain their own horizon, rates and effort.
 The accepted total changes when a visitor explicitly accepts people or work.
 The short manuals explain those quantities beside their controls.
 
+## Compare team arrangements
+
+Open **Try a team arrangement** in Coordination. Pod, Guild, Project team and
+Shared service each show their roles and directed work immediately. Choose
+people and receiving responsibilities, Preview the complete proposal, then
+Apply. The accepted arrangement name and diagram remain visible when the form
+is collapsed. Select a team, connection or supporting session to inspect it;
+the return control brings you back to Connections.
+
+Editing a connection's endpoints produces an **Adapted arrangement** reading.
+**Use these connections without the template** removes the grouping after an
+explicit preview and Apply; the teams, sessions, connections and cost stay in
+the plan. Older plans keep a Custom connections reading until an arrangement
+is explicitly authored. Export, import and Undo preserve these distinctions.
+
+Where an AI contribution shares a working session with a connection, the
+reading names its function, human reviewer and decision owner. The associated
+sessions explain planned support. Review instructions and decision boundaries
+remain inspectable alongside any missing context.
+
 ## Arrange the work in time
 
 The **Coordination horizon** shows the pilot's authored rehearsal sequence.
@@ -100,8 +121,11 @@ your unfinished entries intact.
 
 Hover over or focus a clip to preview its participants, duration, funding and
 preceding work. The visible scale keys keep their selected state. **Go to chapter**
-opens a related part of the Studio. Each stage has **Add a decision**, and the
-decision inspector shows complete questions and evidence before editing. The compact chronological table keeps sessions, waits and
+opens a related part of the Studio. Each stage has **Add a decision**. It opens
+**New decision** with the stage chosen and empty context ready to
+edit. **Add decision to plan** accepts the arrangement; **Discard this decision**
+keeps other unfinished entries. Both return to the stage. Existing decisions
+show complete questions and evidence before editing. The compact chronological table keeps sessions, waits and
 decisions in time order; the session table compares effort and funding across
 their full series.
 
@@ -189,7 +213,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#696](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/696),
+source, the worktree, [#697](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/697),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.

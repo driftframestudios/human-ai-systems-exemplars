@@ -1,7 +1,7 @@
 import { LIMITS } from './config.mjs';
 import { PlanError, preparePlan, prepareTeam, prepareWork, prepareConnection } from './contract.mjs';
-
-const VERSION = '1.0.0';
+import { getCoordinationTemplate } from './coordination-arrangements.mjs';
+export { listCoordinationTemplates } from './coordination-arrangements.mjs';
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const PROPOSALS = new WeakMap();
 const FIELDS = Object.freeze({
@@ -18,27 +18,6 @@ const freeze = value => {
   }
   return value;
 };
-const catalogue = (id, label, description, teams, connections) => freeze({ id, version: VERSION, label, description,
-  teams: teams.map(([id, label]) => ({ id, label })),
-  connections: connections.map(([id, label, senderSlotId, receiverSlotId]) => ({ id, label, senderSlotId, receiverSlotId })),
-});
-const CATALOGUE = new Map([
-  catalogue('pod', 'Pod', 'Connect a delivery group and a partner around a shared object and feedback.',
-    [['pod', 'Delivery group'], ['partner', 'Partner group']],
-    [['handoff', 'Share the work', 'pod', 'partner'], ['feedback', 'Return feedback', 'partner', 'pod']]),
-  catalogue('guild', 'Guild', 'Connect a practice group and a delivery group around guidance and learning.',
-    [['practice', 'Practice group'], ['delivery', 'Delivery group']],
-    [['guidance', 'Share guidance', 'practice', 'delivery'], ['learning', 'Return learning', 'delivery', 'practice']]),
-  catalogue('project-team', 'Project team', 'Connect direction, delivery and the group receiving the work.',
-    [['sponsor', 'Sponsoring group'], ['project', 'Project group'], ['operations', 'Receiving group']],
-    [['direction', 'Agree direction', 'sponsor', 'project'], ['handover', 'Hand over the work', 'project', 'operations'], ['feedback', 'Return feedback', 'operations', 'project']]),
-  catalogue('shared-service', 'Shared service', 'Connect a requesting group and a service through requests and responses.',
-    [['requester', 'Requesting group'], ['service', 'Service group']],
-    [['request', 'Send a request', 'requester', 'service'], ['response', 'Return a response', 'service', 'requester']]),
-].map(row => [row.id, row]));
-const LIST = Object.freeze([...CATALOGUE.values()]);
-
-export function listCoordinationTemplates() { return LIST; }
 function fail(code, path, message) { throw new PlanError(code, path, message); }
 function record(value, kind, path) {
   const prototype = value && typeof value === 'object' ? Object.getPrototypeOf(value) : undefined;
@@ -124,7 +103,7 @@ function money(before, after) {
 // reference, calculation and serialized byte before a proposal can be applied.
 export function prepareCoordinationTemplate(base, candidate) {
   const raw = record(candidate, 'request', 'template');
-  const template = typeof raw.templateId === 'string' ? CATALOGUE.get(raw.templateId) : undefined;
+  const template = typeof raw.templateId === 'string' ? getCoordinationTemplate(raw.templateId) : null;
   if (!template) fail('template', 'template.templateId', 'Choose a listed coordination template.');
   if (raw.version !== template.version) fail('template-version', 'template.version', 'Use the listed template version.');
   const proposalId = identifier(raw.proposalId, 'template.proposalId');
@@ -134,8 +113,9 @@ export function prepareCoordinationTemplate(base, candidate) {
   const teams = state.teams.slice(), teamIndex = indexRows(teams), teamPositions = new Map(teams.map((row, index) => [row.id, index]));
   const work = state.work.slice(), workIndex = indexRows(work), originalWork = indexRows(state.work);
   const connections = state.connections.slice(), connectionIndex = indexRows(connections);
+  const arrangements = state.arrangements.slice(), arrangementIndex = indexRows(arrangements);
   const bindings = new Map(), boundTeams = new Set();
-  const summary = { newTeamIds: [], memberships: [], newConnectionIds: [], newRecoveryWorkIds: [] };
+  const summary = { newTeamIds: [], memberships: [], newConnectionIds: [], newRecoveryWorkIds: [], newArrangementIds: [] };
   const generated = (kind, slot) => identifier(`${proposalId}-${kind}-${slot}`, 'template.proposalId');
   for (const slot of template.teams) {
     const input = teamInputs.get(slot.id), path = `template.teams.${slot.id}`;
@@ -174,10 +154,14 @@ export function prepareCoordinationTemplate(base, candidate) {
       sharedObject: input.sharedObject, responseExpectation: input.responseExpectation, workIds, status: input.status }, path);
     include(connections, connectionIndex, row, summary.newConnectionIds, path, LIMITS.connections);
   }
-  const changed = summary.newTeamIds.length || summary.memberships.length || summary.newConnectionIds.length || summary.newRecoveryWorkIds.length;
+  include(arrangements, arrangementIndex, { id: proposalId, templateId: template.id, templateVersion: template.version,
+    teamBindings: template.teams.map(slot => ({ slotId: slot.id, teamId: bindings.get(slot.id) })),
+    connectionBindings: template.connections.map(slot => ({ slotId: slot.id, connectionId: generated('connection', slot.id) })) },
+    summary.newArrangementIds, 'template.proposalId', LIMITS.arrangements);
+  const changed = summary.newArrangementIds.length || summary.newTeamIds.length || summary.memberships.length || summary.newConnectionIds.length || summary.newRecoveryWorkIds.length;
   // Even an identical proposal admits all supplied fields before retaining the
   // accepted projection. This also preserves no-op behavior at the revision cap.
-  const projection = changed ? preparePlan({ ...state, revision: state.revision + 1, teams, work, connections }) : base;
+  const projection = changed ? preparePlan({ ...state, revision: state.revision + 1, teams, work, connections, arrangements }) : base;
   const proposal = freeze({ template, proposalId, projection, summary: { ...summary, money: money(base.result, projection.result) } });
   PROPOSALS.set(proposal, base);
   return proposal;

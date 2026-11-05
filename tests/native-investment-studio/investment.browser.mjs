@@ -231,6 +231,38 @@ for (const engine of names) {
     assert.equal(await bytes(page), before);
   });
 
+  test(`${engine}: arrangement import and baseline describe grouping while detachment preserves the same investment`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine), before = await bytes(page);
+    await chapter(page, 'investment').click(); await action(page, 'baseline').click();
+    const proposed = await page.evaluate(async () => {
+      const { prepareCoordinationTemplate } = await import('/collaboration/native-investment-studio/connection-templates.mjs');
+      return prepareCoordinationTemplate(window.investmentFixture.studio.read(), { templateId: 'pod', version: '1.0.0', proposalId: 'review-pod',
+        teams: [{ slotId: 'pod', kind: 'existing', teamId: 'delivery', addPersonIds: [] },
+          { slotId: 'partner', kind: 'new', label: 'Reviewing team', personIds: ['product-one'] }],
+        connections: ['handoff', 'feedback'].map(slotId => ({ slotId, receiverPersonId: 'product-one', sharedObject: 'Pilot plan',
+          responseExpectation: 'Review before proceeding.', workIds: ['review'], status: 'active', recoveryWork: null })) }).projection.serialized;
+    });
+    const upload = text => investment(page).locator('[data-investment-file]').setInputFiles({ name: 'arranged-plan.json', mimeType: 'application/json', buffer: Buffer.from(text) });
+    const changes = investment(page).locator('[data-investment-changes]'), comparison = investment(page).locator('[data-investment-comparison]');
+    await upload(proposed);
+    await expect(changes).toContainText('Pod arrangement added: Delivery group: Product and Engineering; Partner group: Reviewing team.');
+    await expect(changes).toContainText('Return feedback: Reviewing team → Product and Engineering.');
+    assert.equal(await bytes(page), before); await expect(total(page)).toHaveText('$1,200.00');
+    await action(page, 'apply').click();
+    const accepted = await bytes(page);
+    await expect(comparison).toContainText('Team arrangementsPod arrangement added:');
+    await expect(comparison).toContainText('Change$0.00');
+    const detached = JSON.parse(accepted); detached.arrangements = [];
+    await upload(JSON.stringify(detached));
+    await expect(changes).toContainText('Pod template grouping removed: Delivery group: Product and Engineering; Partner group: Reviewing team.');
+    assert.equal(await bytes(page), accepted);
+    await action(page, 'apply').click();
+    const after = JSON.parse(await bytes(page)), prior = JSON.parse(accepted);
+    for (const key of ['people', 'teams', 'work', 'connections']) assert.deepEqual(after[key], prior[key]);
+    await expect(total(page)).toHaveText('$1,200.00');
+    await action(page, 'undo').click(); assert.equal(await bytes(page), accepted);
+  });
+
   test(`${engine}: Purpose edits apply, cancel and recover saved text through the shared owner`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     const initial = await bytes(page);
@@ -336,7 +368,7 @@ for (const engine of names) {
     const initial = await bytes(page);
     const legacy = JSON.parse(initial);
     delete legacy.purpose; delete legacy.contributions; delete legacy.connections;
-    delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings; delete legacy.scoreSettings;
+    delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings; delete legacy.scoreSettings; delete legacy.arrangements;
     legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
       teamId: row.teamId, workIds: [...new Set(row.supportBindings.flatMap(binding => binding.workIds))] }));
     for (const person of legacy.people) { delete person.role; delete person.lifecycle; delete person.availability; }
@@ -345,13 +377,13 @@ for (const engine of names) {
     legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.7.0.');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.8.0.');
     assert.equal(await bytes(page), initial);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
-    assert.equal(admitted.schemaVersion, '0.7.0');
+    assert.equal(admitted.schemaVersion, '0.8.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
     await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');

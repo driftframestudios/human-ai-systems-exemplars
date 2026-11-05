@@ -75,6 +75,127 @@ async function existingGroups(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: authored arrangements retain distinct topology, actual endpoints and human handoffs through Apply, return and detach`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const fixture = window.templateFixture; fixture.controller.dispose();
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      mountCoordinationPanel(document.querySelector('[data-native-coordination]')).dispose();
+      const plan = JSON.parse(fixture.studio.exportText());
+      plan.contributions.push({ id: 'drafting-support', categoryId: 'draft-artifacts', receiverPersonId: 'product-one', decisionOwnerPersonId: 'product-one',
+        workIds: ['review'], reviewBoundary: 'Check the draft against the working plan.', decisionBoundary: 'Decide which changes enter the handoff.' });
+      const imported = fixture.studio.importText(JSON.stringify(plan), fixture.studio.read()); if (!imported.ok) throw Error(imported.error.code);
+      fixture.nativeController = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: fixture.studio });
+    });
+    const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
+    await expect(accepted).toContainText('Custom connections');
+    await panel(page).locator(':scope > summary').click();
+    const original = await bytes(page), sketch = panel(page).locator('[data-template-structure]');
+    const expected = {
+      pod: ['pod>partner', 'partner>pod'], guild: ['practice>delivery', 'delivery>practice'],
+      'project-team': ['sponsor>project', 'project>operations', 'operations>project'],
+      'shared-service': ['requester>service', 'service>requester'],
+    };
+    const signatures = [];
+    for (const [id, edges] of Object.entries(expected)) {
+      await panel(page).locator('[data-template-choice]').selectOption(id);
+      await expect(sketch.locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
+      await expect(sketch).toContainText('Proposed structure');
+      assert.deepEqual(await sketch.locator('[data-arrangement-connection]').evaluateAll(rows => rows.map(row => `${row.dataset.senderTeam.replace('proposal-slot-', '')}>${row.dataset.receiverTeam.replace('proposal-slot-', '')}`)), edges);
+      signatures.push(await sketch.locator('.native-arrangement__diagram').evaluate(svg => [...svg.querySelectorAll('[data-arrangement-boundary]')].map(row => row.dataset.arrangementBoundary).join('|')));
+      assert.equal(await bytes(page), original);
+      await sketch.locator('.native-arrangement__viewport').screenshot({ path: resolve(captures, `${engine}-${id}-structure.png`) });
+    }
+    assert.equal(new Set(signatures).size, 4, 'each arrangement explains a different source-owned grouping before acceptance');
+    await panel(page).locator('[data-template-choice]').selectOption('pod');
+    await sketch.locator('[data-arrangement-team="proposal-slot-pod"]').click();
+    await expect(field(page, 'teams.pod.selection')).toBeFocused();
+    await field(page, 'teams.pod.label').fill('Shared delivery');
+    await panel(page).locator('[data-template-choice]').selectOption('guild');
+    await panel(page).locator('[data-template-choice]').selectOption('pod'); await card(page, 'team:pod');
+    await expect(field(page, 'teams.pod.label')).toHaveValue('Shared delivery');
+    await action(page, 'preview').click(); await action(page, 'apply').click();
+    await panel(page).locator(':scope > summary').click();
+    const arrangementId = await page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0].id);
+    const reading = accepted.locator('[data-arrangement-reading="accepted"]');
+    await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId); await expect(reading).toContainText('Accepted arrangement · Pod');
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().result.plannedCommitmentCents), 1600000);
+    await root.locator('[data-native-chapter="change"]').click(); await root.locator('[data-native-chapter="coordination"]').click();
+    await expect(reading).toContainText('Shared delivery');
+    await page.evaluate(() => { const f = window.templateFixture, result = f.studio.importText(f.studio.exportText(), f.studio.read()); if (!result.ok) throw Error(result.error.code); f.nativeController.refresh(); });
+    await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId);
+    const beforeInspection = await bytes(page);
+    await reading.locator('button[data-arrangement-target-kind="team"]').first().click();
+    await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
+    await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toBeFocused();
+    await root.locator('[data-native-assembly] [data-assembly-form] [name="label"]').fill('Shared delivery · unfinished name');
+    await root.locator('[data-native-return-action]').click(); await expect(reading).toBeVisible();
+    await reading.locator('button[data-arrangement-target-kind="team"]').first().click();
+    await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toHaveValue('Shared delivery · unfinished name');
+    await root.locator('[data-native-return-action]').click(); assert.equal(await bytes(page), beforeInspection);
+    const cable = reading.locator('.native-arrangement__cable').first(); await cable.scrollIntoViewIfNeeded();
+    const hit = await cable.evaluate(path => {
+      const point = path.getPointAtLength(path.getTotalLength() / 2); point.y += 6;
+      const screen = point.matrixTransform(path.getScreenCTM()); return { x: screen.x, y: screen.y };
+    });
+    await page.mouse.click(hit.x, hit.y);
+    const connection = root.locator('[data-native-connection-editor]');
+    await expect(connection.locator('[name="senderTeamId"]')).toBeFocused();
+    await connection.locator('[name="senderTeamId"]').selectOption('delivery'); await connection.locator('[data-connection-apply]').click();
+    await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
+    await expect(reading.locator('[data-arrangement-connection]').first()).toHaveAttribute('data-sender-team', 'delivery');
+    await expect(reading.locator('[data-arrangement-slot="external"]')).toHaveCount(1);
+    const beforeBlockedRemoval = await bytes(page);
+    await connection.locator('[data-connection-action="remove"]').click();
+    const grouping = connection.locator('[data-connection-dependencies] [data-native-open-arrangement]');
+    await expect(grouping).toHaveText('Review Pod arrangement'); await grouping.click();
+    await expect(accepted.locator('[data-arrangement-choice]')).toBeFocused();
+    assert.equal(await bytes(page), beforeBlockedRemoval);
+    const handoff = accepted.locator('[data-connection-contributions]');
+    await expect(handoff).toContainText('Check the draft against the working plan.');
+    await expect(handoff).toContainText('Decide which changes enter the handoff.');
+    await expect(handoff).toContainText('Human review'); await expect(handoff).toContainText('Decision');
+    await handoff.locator('[data-connection-target-kind="contribution"]').click();
+    await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
+    await expect(root.locator('[data-responsibility-configure="contribution"] [name="categoryId"]')).toBeFocused();
+    await root.locator('[data-native-return-action]').click();
+    const beforePeople = await bytes(page);
+    await handoff.locator('[data-connection-target-kind="person"]').first().click();
+    await expect(root.locator('[data-person-configure] [name="ratePerHour"]')).toBeFocused();
+    await root.locator('[data-native-return-action]').click();
+    await handoff.locator('[data-connection-target-kind="work"]').click();
+    await expect(root.locator('[data-native-session-editor] [name="hoursPerSession"]')).toBeFocused();
+    await root.locator('[data-native-return-action]').click(); assert.equal(await bytes(page), beforePeople);
+    const beforeDetach = await bytes(page);
+    await accepted.locator('[data-connection-action="detach-arrangement"]').click();
+    await expect(panel(page).locator('[data-template-preview]')).toContainText('teams, current connections and working sessions remain available');
+    assert.equal(await bytes(page), beforeDetach); await action(page, 'apply').click();
+    const detached = await page.evaluate(() => window.templateFixture.studio.read().state);
+    assert.equal(detached.arrangements.length, 0); assert.equal(detached.connections.length, 2); assert.equal(detached.work.length, 1);
+    await expect(accepted).toContainText('Custom connections');
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
+    assert.equal(await bytes(page), beforeDetach); await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
+    await panel(page).locator(':scope > summary').click();
+    await reading.screenshot({ path: resolve(captures, `${engine}-accepted-desktop.png`) });
+    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    const viewport = reading.locator('.native-arrangement__viewport'); await viewport.focus(); await expect(viewport).toBeFocused();
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    const human = handoff.locator('[data-connection-target-kind="person"]').first();
+    const nameReading = await human.evaluate(button => {
+      const text = button.firstChild, start = text.textContent.indexOf('product'), lines = new Set();
+      for (let index = start; index < start + 'product'.length; index += 1) {
+        const range = document.createRange(); range.setStart(text, index); range.setEnd(text, index + 1);
+        lines.add(Math.round(range.getBoundingClientRect().top));
+      }
+      const style = getComputedStyle(button);
+      return { lines: lines.size, width: button.getBoundingClientRect().width, fontSize: style.fontSize,
+        paddingStart: style.paddingInlineStart, paddingEnd: style.paddingInlineEnd };
+    });
+    assert.equal(nameReading.lines, 1, `the named human remains word-readable at 320px and doubled text: ${JSON.stringify(nameReading)}`);
+    await handoff.screenshot({ path: resolve(captures, `${engine}-human-handoff-narrow.png`) });
+    await viewport.evaluate(element => { element.scrollLeft = element.scrollWidth; }); assert.ok(await viewport.evaluate(element => element.scrollLeft) > 0);
+    await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
+  });
   test(`${engine}: templates preview literal staffing and allocation, add explicit review work, and publish one Undo step`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), original = await bytes(page);
     await existingGroups(page); await action(page, 'preview').click();

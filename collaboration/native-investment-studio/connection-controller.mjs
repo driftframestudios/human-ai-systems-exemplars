@@ -1,4 +1,5 @@
 import { describeAssuranceReference } from './assurance-models.mjs';
+import { describeArrangementReference } from './coordination-arrangements.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
@@ -179,6 +180,12 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     elements.dependencies.hidden = references.length === 0;
     elements.dependencies.replaceChildren(...references.map(reference => {
       const item = document.createElement('li');
+      const arrangement = describeArrangementReference(projection.state, reference);
+      if (arrangement) {
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination';
+        link.dataset.nativeOpenArrangement = arrangement.id; link.textContent = `Review ${arrangement.label}`;
+        item.append(`${arrangement.label} keeps this connection in a named role. `, link); return item;
+      }
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       const score = describeScoreReference(projection.state.scoreSettings, reference);
       if (score) {

@@ -50,6 +50,8 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/connection-controller.mjs',
   'collaboration/native-investment-studio/connection-template-controller.mjs',
   'collaboration/native-investment-studio/connection-templates.mjs',
+  'collaboration/native-investment-studio/coordination-arrangements.mjs',
+  'collaboration/native-investment-studio/contribution-view-model.mjs',
   'collaboration/native-investment-studio/connection-view.mjs',
   'collaboration/native-investment-studio/config.mjs',
   'collaboration/native-investment-studio/contract.mjs',

@@ -4,6 +4,7 @@ import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityW
 import { CHANGE_CATALOGUE_VERSION, listChangeFrameworks, getChangeFramework, getInterpretiveLens, listAttentionChannels, createChangeSettings, projectChange } from './change-models.mjs';
 import { createAssuranceSettings, listQualityConcepts, getSourcePreset, getRehearsalDefinition, getLearningPromptDefinition, projectAssurance } from './assurance-models.mjs';
 import { createScoreSettings, projectScore } from './score-models.mjs';
+import { getCoordinationTemplate } from './coordination-arrangements.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -19,7 +20,8 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings', 'arrangements'],
+  scorePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings'],
   assurancePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings'],
   changePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings'],
   capabilityPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
@@ -48,6 +50,9 @@ const FIELDS = Object.freeze({
   workTimingPatch: ['workId', 'timing'], availabilityPatch: ['personId', 'intervals'],
   contribution: ['id', 'categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary'],
   connection: ['id', 'senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status'],
+  arrangement: ['id', 'templateId', 'templateVersion', 'teamBindings', 'connectionBindings'],
+  arrangementTeam: ['slotId', 'teamId'],
+  arrangementConnection: ['slotId', 'connectionId'],
   practice: ['id', 'practiceId', 'teamId', 'workIds'],
   capability: ['id', 'definitionId', 'definitionVersion', 'context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle', 'prerequisites', 'supportBindings'],
   capabilityReference: ['kind', 'instanceId'],
@@ -77,7 +82,8 @@ const PROFILES = new Map([
   ['0.4.0', { fields: 'capabilityPlan', purpose: true, relationships: true, capabilities: true, references: 16384 }],
   ['0.5.0', { fields: 'changePlan', purpose: true, relationships: true, capabilities: true, change: true, references: 16384 }],
   ['0.6.0', { fields: 'assurancePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, references: 16384 }],
-  ['0.7.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, references: LIMITS.references }],
+  ['0.7.0', { fields: 'scorePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, references: 16384 }],
+  ['0.8.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, arrangements: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
@@ -100,6 +106,7 @@ const COMMAND_FIELDS = Object.freeze({
   'connection.update': ['type', 'connectionId', 'connection'],
   'connection.remove': ['type', 'connectionId'],
   'connection.status.set': ['type', 'connectionId', 'status'],
+  'arrangement.remove': ['type', 'arrangementId'],
   'person.remove': ['type', 'personId'],
   'team.remove': ['type', 'teamId'],
   'work.remove': ['type', 'workId'],
@@ -113,7 +120,7 @@ const COMMAND_FIELDS = Object.freeze({
   'score.arrangement.replace': ['type', 'scoreSettings', 'workTiming', 'availability', 'fundProposalIds'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
-const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence']);
+const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'arrangements']);
 
 export class PlanError extends Error {
   constructor(code, path, message) {
@@ -419,6 +426,7 @@ export function prepareAssemblyCommand(candidate) {
     case 'connection.create': return { type, connection: prepareConnection(raw.connection, `${path}.connection`) };
     case 'connection.update': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true), connection: prepareConnection(raw.connection, `${path}.connection`) };
     case 'connection.remove': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true) };
+    case 'arrangement.remove': return { type, arrangementId: text(raw.arrangementId, `${path}.arrangementId`, true) };
     case 'connection.status.set': return { type, connectionId: text(raw.connectionId, `${path}.connectionId`, true), status: choice(raw.status, CONNECTION_STATUS, `${path}.status`) };
     case 'person.remove': return { type, personId: text(raw.personId, `${path}.personId`, true) };
     case 'team.remove': return { type, teamId: text(raw.teamId, `${path}.teamId`, true) };
@@ -957,6 +965,34 @@ function relationshipObservations(state, peopleById, teamsById, workById, result
   return observations;
 }
 
+function prepareArrangements(candidate, teams, connections, budget) {
+  const bindings = (candidate, definitions, kind, field, index, path) => {
+    const rows = list(candidate, definitions.length, path), allowed = new Set(definitions.map(row => row.id));
+    if (rows.length !== definitions.length) reject('arrangement-slots', path, 'Bind each authored template slot once.');
+    const slots = new Map(), targets = new Set();
+    for (const [ordinal, value] of rows.entries()) {
+      const rowPath = `${path}[${ordinal}]`, row = record(value, kind, rowPath);
+      const slotId = text(row.slotId, `${rowPath}.slotId`, true), id = text(row[field], `${rowPath}.${field}`, true);
+      if (!allowed.has(slotId)) reject('arrangement-slot', `${rowPath}.slotId`, 'Choose a slot from this exact template.');
+      if (slots.has(slotId)) reject('duplicate-slot', rowPath, 'Bind each authored template slot once.');
+      if (targets.has(id)) reject('duplicate-binding', rowPath, 'Bind a distinct record to each slot within this arrangement.');
+      reference(id, index, `${rowPath}.${field}`, budget);
+      slots.set(slotId, { slotId, [field]: id }); targets.add(id);
+    }
+    return definitions.map(slot => slots.get(slot.id));
+  };
+  const rows = list(candidate, LIMITS.arrangements, 'plan.arrangements').map((value, index) => {
+    const path = `plan.arrangements[${index}]`, row = record(value, 'arrangement', path);
+    const template = getCoordinationTemplate(row.templateId, row.templateVersion);
+    if (typeof row.templateVersion !== 'string' || !template) reject('arrangement-template', path, 'Use an exact supported arrangement template and version.');
+    return { id: text(row.id, `${path}.id`, true), templateId: template.id, templateVersion: template.version,
+      teamBindings: bindings(row.teamBindings, template.teams, 'arrangementTeam', 'teamId', teams, `${path}.teamBindings`),
+      connectionBindings: bindings(row.connectionBindings, template.connections, 'arrangementConnection', 'connectionId', connections, `${path}.connectionBindings`) };
+  });
+  indexRecords(rows, 'plan.arrangements');
+  return rows;
+}
+
 function prepareVersion(candidate, version) {
   const profile = PROFILES.get(version), raw = record(candidate, profile.fields, 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
@@ -1030,6 +1066,8 @@ function prepareVersion(candidate, version) {
     });
     indexRecords(state.connections, 'plan.connections');
   }
+  if (profile.arrangements) state.arrangements = prepareArrangements(raw.arrangements, teamsById,
+    new Map(state.connections.map(row => [row.id, row])), budget);
   const graph = profile.capabilities ? prepareCapabilities(raw, state, peopleById, teamsById, workById, budget) : null;
   if (profile.change) {
     state.changeSettings = prepareChangeSettings(raw.changeSettings);
@@ -1077,7 +1115,8 @@ function prepareSelectedVersion(candidate, version) {
     abilities: admitted.state.abilities ?? [], capabilityEvidence: admitted.state.capabilityEvidence ?? [],
     changeSettings: admitted.state.changeSettings ?? createChangeSettings(),
     assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings(),
-    scoreSettings: createScoreSettings() }, CONTRACT.schemaVersion);
+    scoreSettings: admitted.state.scoreSettings ?? createScoreSettings(),
+    arrangements: [] }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -1130,6 +1169,7 @@ export function createExamplePlan() {
     changeSettings: createChangeSettings(),
     assuranceSettings: createAssuranceSettings(),
     scoreSettings: createScoreSettings(),
+    arrangements: [],
     people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active', availability: null })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],

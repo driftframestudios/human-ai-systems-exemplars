@@ -459,3 +459,51 @@ unchanged until Apply. At narrow and laptop widths, inspect role labels, matrix
 header contrast, selected-state shapes and the complete gate question/evidence.
 These observations establish the exercised behavior; visitor interpretation
 of the art direction remains a receiving human judgment.
+
+
+### 12. Make a stage's creation entry a complete task
+
+**Decision.** A stage's **Add a decision** opens an explicitly named new-decision
+form. The stage is preselected; question and evidence fields are immediately
+editable. **Add decision to plan** accepts the retained arrangement, and
+**Discard this decision** removes that new draft while keeping other entries.
+Confirmation returns to the accepted decision's stage; discard returns to the
+originating stage's Add entry. Each has a meaningful focus target. The
+confirmation carries the ordinary commit treatment.
+
+**Observed problem.** The human could not distinguish the new record from an
+existing decision. A receiving-browser inspection confirmed that the controller
+created and selected a fresh ID, while the generic inspector title, existing-record
+picker, collapsed empty fields and distant Apply action concealed that result.
+Scrolling the tall inspector with nearest-edge alignment also left its heading
+above the visible area. The prior test established record creation and focus,
+while leaving the visitor's complete landing view unspecified.
+
+**Evidence and transfer.** HMRC's official
+[Add to a list pattern](https://design.tax.service.gov.uk/hmrc-design-patterns/add-to-a-list/)
+separates adding, checking, changing and removing entries and gives visitors a
+summary of what they have added. GOV.UK's
+[Check answers guidance](https://design-system.service.gov.uk/patterns/check-answers/)
+calls for a submission label that describes the actual action, retained answers
+when editing, and a direct return after an edit. W3C's
+[Focus Order explanation](https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html)
+connects logical focus order with understandable operation, including dynamically
+changed content. These are official practiced patterns and accessibility guidance;
+they support the task structure without prescribing this Studio's exact layout.
+
+**Implementation bridge.** Derive new-record status from draft identity versus
+the accepted plan. Show **New decision**, keep the full proposed
+name readable, move the heading below the fixed navigation, focus the name, and
+explain that confirmation accepts other arrangement edits together. Empty context
+is editable at once; existing decision prose retains its read/edit pattern.
+After acceptance, focus the decision in its lane. After discarding, focus that
+lane's creation entry. Optional fields retain their actual unknown standing.
+
+**Challenge and observation.** A modal could make the creation boundary stronger,
+but it would split an already retained arrangement into a second transaction.
+The local design keeps one owner and makes that boundary visible. Exercise each
+stage, multiple sequential additions, an unfinished timing edit, discard, Apply,
+Undo and keyboard entry at laptop and narrow widths. The test must observe the
+new heading, selected stage, visible fields, confirmation and return focus as
+well as serialized state. Human walkthrough remains the evidence for whether
+these cues resolve the reported confusion.

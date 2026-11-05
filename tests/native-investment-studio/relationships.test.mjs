@@ -36,7 +36,7 @@ function held(studio, command, code) {
 }
 function oldPlan(version = '0.2.0') {
   const plan = createExamplePlan(); plan.schemaVersion = version;
-  delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
+  delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; delete plan.arrangements; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
   plan.practices = [{ id: 'shared-expectations', practiceId: 'expectation', teamId: 'delivery', workIds: ['review'] }];
   delete plan.contributions; delete plan.connections;
   if (version === '0.1.0') delete plan.purpose;
@@ -66,7 +66,7 @@ test('complete old versions migrate owned defaults while explicit current fields
     const source = oldPlan(version), serialized = JSON.stringify(source);
     source.people[0].rateCentsPerHour = null; source.people[1].rateCentsPerHour = 0;
     const input = JSON.stringify(source), receipt = prepareImport(input), current = receipt.projection;
-    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.7.0');
+    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.8.0');
     assert.equal(current.state.modelVersion, '0.1.0');
     assert.deepEqual(current.state.people[0].role, emptyRole());
     assert.ok(current.state.people.every(row => row.lifecycle === 'active'));
@@ -265,7 +265,7 @@ test('new commands reject surplus, accessors, stale and reentrant proposals befo
 
 test('the 0.3.0 reference profile counts every scalar and list edge, with exact and one-over fixtures', () => {
   const plan = createExamplePlan(); plan.practices = [];
-  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
+  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; delete plan.arrangements; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
   plan.people = Array.from({ length: 128 }, (_, i) => ({ ...plan.people[0], id: `person-${i}` }));
   const ids = plan.people.map(row => row.id);
   plan.teams = Array.from({ length: 32 }, (_, i) => ({ id: `team-${i}`, label: 'Team', personIds: ids.slice(), lifecycle: 'active' }));
@@ -318,7 +318,7 @@ test('exchange names role, lifecycle, human-responsibility and connection change
 
 test('version-owned byte ceilings stay exact while the current bounded transport accepts its own export', () => {
   assert.equal(SCHEMA_BYTE_LIMITS['0.1.0'], 524288); assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
-  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.7.0']); assert.ok(LIMITS.bytes > SCHEMA_BYTE_LIMITS['0.3.0']);
+  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.8.0']); assert.ok(LIMITS.bytes > SCHEMA_BYTE_LIMITS['0.3.0']);
   const current = preparePlan(connectedPlan());
   const exactTransport = current.serialized + ' '.repeat(LIMITS.bytes - Buffer.byteLength(current.serialized));
   assert.equal(prepareImport(exactTransport).projection.serialized, current.serialized);
@@ -328,7 +328,7 @@ test('version-owned byte ceilings stay exact while the current bounded transport
 
 test('maximum-shaped 0.3.0 records and escaped metadata migrate and round-trip within the finite envelope', () => {
   const plan = createExamplePlan(), id = (kind, i) => `${kind}-${i}`.padEnd(64, 'x');
-  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
+  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence; delete plan.changeSettings; delete plan.assuranceSettings; delete plan.scoreSettings; delete plan.arrangements; plan.people = plan.people.map(({ availability, ...row }) => row); plan.work = plan.work.map(row => ({ ...row, timing: null }));
   const maxText = '\u0000'.repeat(600), maxLabel = '\u0000'.repeat(120);
   const role = Object.fromEntries(Object.entries(ROLE_CATALOGUES).map(([field, rows]) => [field, rows.reduce((a, b) => a.id.length > b.id.length ? a : b).id]));
   role.change = { frameworkId: 'npt', componentId: 'cognitive-participation' };

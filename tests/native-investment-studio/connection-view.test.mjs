@@ -4,7 +4,8 @@ import test from 'node:test';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { CONNECTION_PAGE_SIZE, CONNECTION_GEOMETRY, createConnectionViewModel,
-  createConnectionViewState, connectionPageGeometry, mountConnectionView } from '../../collaboration/native-investment-studio/connection-view.mjs';
+  createConnectionViewState, connectionPageGeometry, mountConnectionView, arrangementGeometry } from '../../collaboration/native-investment-studio/connection-view.mjs';
+import { projectCoordinationArrangements } from '../../collaboration/native-investment-studio/coordination-arrangements.mjs';
 
 function plan(count = 2) {
   const result = createExamplePlan();
@@ -16,6 +17,22 @@ function plan(count = 2) {
   return result;
 }
 const projection = count => createStudio(plan(count)).read();
+
+test('adapted arrangement relationships sharing endpoints retain distinct visible cables and ports', () => {
+  const source = plan(3);
+  source.teams.push({ id: 'sponsor', label: 'Sponsor', personIds: [], lifecycle: 'active' });
+  for (const connection of source.connections) { connection.senderTeamId = 'delivery'; connection.receiverTeamId = 'receiving'; }
+  source.arrangements = [{ id: 'project', templateId: 'project-team', templateVersion: '1.0.0',
+    teamBindings: [{ slotId: 'sponsor', teamId: 'sponsor' }, { slotId: 'project', teamId: 'delivery' }, { slotId: 'operations', teamId: 'receiving' }],
+    connectionBindings: [{ slotId: 'direction', connectionId: 'connection-0' }, { slotId: 'handover', connectionId: 'connection-1' }, { slotId: 'feedback', connectionId: 'connection-2' }] }];
+  const accepted = createStudio(source).read().state, arrangement = projectCoordinationArrangements(accepted).arrangements[0];
+  const geometry = arrangementGeometry(arrangement, accepted);
+  assert.equal(new Set(geometry.edges.map(edge => edge.path)).size, 3);
+  assert.equal(new Set(geometry.edges.map(edge => edge.path.split(' C ')[0])).size, 3);
+  assert.equal(new Set(geometry.edges.map(edge => edge.arrow.split(' ')[0])).size, 3);
+  assert.deepEqual(geometry.edges.map(edge => [edge.connection.senderTeamId, edge.connection.receiverTeamId]),
+    [['delivery', 'receiving'], ['delivery', 'receiving'], ['delivery', 'receiving']]);
+});
 
 test('one accepted model preserves exact directed endpoints, human/work references and source-owned standing', () => {
   const source = plan(); source.teams[1].lifecycle = 'retired';

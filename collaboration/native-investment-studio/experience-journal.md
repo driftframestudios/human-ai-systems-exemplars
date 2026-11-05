@@ -846,3 +846,41 @@ and exact cents, draft recovery, session accounting, support navigation, motion,
 contrast and narrow composition. Independent engineering reviews accepted the
 separate authored slices. These observations establish the exercised behaviors;
 the feature continues through the ordinary dev pull-request review route.
+
+
+### New decisions need a visible beginning and return
+
+A stage creation entry produced a new decision but landed in a generic editor
+that looked like an existing record. The repaired flow names **New decision**, reveals empty context fields, and places its heading below the
+fixed page navigation. **Add decision to plan** confirms the retained arrangement;
+its explanatory text names that scope. **Discard this decision** preserves other
+arrangement entries. Acceptance returns to the new lane marker; discarding returns
+to that lane's Add entry. The research bridge is in the usability record.
+
+The same receiving walkthrough found misaligned horizon controls and overlapping
+navigation carets. The transport now centers its controls vertically, keeps
+**Go to chapter** beside its links, and reserves separate space for centered
+carets. The affected layout has been checked at laptop, narrow and enlarged-text
+widths in Chromium, Firefox and WebKit.
+
+
+### Arrangements carry roles and actual work directions
+
+Pod now depicts shared work between its delivery and partner groups; Guild
+separates practice guidance from delivery and learning. Project team shows the
+sponsoring, project and receiving groups with the actual feedback direction.
+Shared service places the service responsibility beside its real requester.
+The diagrams use the accepted or proposed endpoints, and the HTML companion
+keeps names, directions and onward routes available at narrow widths.
+
+Schema 0.8 records authored template identity and slot bindings. Existing plans
+keep their actual connections without an inferred template. A changed endpoint
+shows an adapted reading; removing only the template grouping keeps the work
+and cost. The contribution reading associates actual shared sessions with a
+functional AI contribution, its human reviewer and decision owner. These cues
+show planned responsibility and retain explicit review boundaries.
+
+Issue #697 owns this slice. The receiving sequence continues to #698's explicit
+quality preparation and recovery consequences, followed by the remaining visual
+analysis, scenarios and final About composition. Performance refinement and the
+human-cued public release retain their separate receiving issues.

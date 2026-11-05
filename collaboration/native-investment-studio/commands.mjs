@@ -8,6 +8,7 @@ const REMOVAL_TARGETS = new Map([
   ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']], ['work.remove', ['work', 'workId']],
   ['contribution.remove', ['contributions', 'contributionId']], ['connection.remove', ['connections', 'connectionId']],
   ['capability.evidence.remove', ['capabilityEvidence', 'evidenceId']],
+  ['arrangement.remove', ['arrangements', 'arrangementId']],
 ]);
 
 function sameIds(left, right) {
@@ -68,6 +69,14 @@ function dependencies(state, collection, id) {
   } else if (collection === 'work') {
     include(state.contributions, 'contributions', 'workIds', row => row.workIds.includes(id));
     include(state.connections, 'connections', 'workIds', row => row.workIds.includes(id));
+  }
+  if (collection === 'teams' || collection === 'connections') {
+    const field = collection === 'teams' ? 'teamBindings' : 'connectionBindings';
+    const target = collection === 'teams' ? 'teamId' : 'connectionId';
+    for (const row of state.arrangements) row[field].forEach((binding, index) => {
+      if (binding[target] === id) references.push(Object.freeze({ collection: 'arrangements', id: row.id,
+        field: `${field}[${index}].${target}` }));
+    });
   }
   for (const name of ['abilities', 'practices']) {
     if (collection === 'people') {
@@ -304,6 +313,7 @@ export function prepareAssembly(base, candidate) {
     case 'work.remove':
     case 'contribution.remove':
     case 'connection.remove':
+    case 'arrangement.remove':
     case 'capability.evidence.remove': {
       const [targetCollection, targetField] = REMOVAL_TARGETS.get(command.type);
       const next = removal(base, targetCollection, command[targetField], targetField);

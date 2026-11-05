@@ -94,7 +94,7 @@ test('typed component links resolve against their own collections without becomi
 });
 
 test('exact 0.4 admission preserves capabilities, observations and relationship meaning before adding settings', () => {
-  const old = createExamplePlan(); old.schemaVersion = '0.4.0'; delete old.changeSettings; delete old.assuranceSettings; delete old.scoreSettings; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
+  const old = createExamplePlan(); old.schemaVersion = '0.4.0'; delete old.changeSettings; delete old.assuranceSettings; delete old.scoreSettings; delete old.arrangements; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
   old.revision = 7; old.abilities = [ability()]; old.people[0].lifecycle = 'retired';
   old.people[0].role.change = { frameworkId: 'weick', componentId: 'retention' };
   old.capabilityEvidence = [{ id: 'observed', subject: { kind: 'ability', instanceId: 'history' }, stage: 'rehearsed',
@@ -102,9 +102,9 @@ test('exact 0.4 admission preserves capabilities, observations and relationship 
     reviewBoundary: 'Repeat with an unfamiliar request.', observedPlanRevision: 6 }];
   const bytes = JSON.stringify(old), receipt = prepareImport(bytes), next = receipt.projection;
   assert.equal(receipt.sourceSchemaVersion, '0.4.0');
-  assert.equal(next.state.schemaVersion, '0.7.0');
+  assert.equal(next.state.schemaVersion, '0.8.0');
   assert.equal(next.state.modelVersion, '0.1.0');
-  const { changeSettings, assuranceSettings, scoreSettings, ...restored } = next.state;
+  const { changeSettings, assuranceSettings, scoreSettings, arrangements, ...restored } = next.state;
   assert.deepEqual({ ...restored, people: restored.people.map(({ availability, ...row }) => row), schemaVersion: '0.4.0' }, old);
   assert.equal(scoreSettings.window, null); assert.ok(restored.people.every(row => row.availability === null));
   assert.deepEqual(changeSettings, createChangeSettings());
@@ -129,8 +129,8 @@ test('current component links share the exact 16384-reference budget while the a
   plan.teams = Array.from({ length: 32 }, (_, i) => ({ id: `team-${i}`, label: 'Team', personIds: ids, lifecycle: 'active' }));
   plan.work = Array.from({ length: 96 }, (_, i) => ({ ...plan.work[0], id: `session-${i}`, teamId: 'team-0', personIds: i === 95 ? ids.slice(0, 32) : ids }));
   // 4096 memberships +12192 participants +96 owners =16384 references.
-  const old = { ...plan, schemaVersion: '0.4.0' }; delete old.changeSettings; delete old.assuranceSettings; delete old.scoreSettings; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
-  assert.equal(preparePlan(old).state.schemaVersion, '0.7.0');
+  const old = { ...plan, schemaVersion: '0.4.0' }; delete old.changeSettings; delete old.assuranceSettings; delete old.scoreSettings; delete old.arrangements; old.people = old.people.map(({ availability, ...row }) => row); old.work = old.work.map(row => ({ ...row, timing: null }));
+  assert.equal(preparePlan(old).state.schemaVersion, '0.8.0');
   old.abilities[0].teamId = 'team-0'; assert.throws(() => preparePlan(old), { code: 'reference-budget' });
   old.abilities[0].teamId = null;
   const row = component(plan.changeSettings); row.workIds = ['session-0'];
@@ -157,7 +157,7 @@ test('full typed component lists with maximum identifiers remain self-importable
     row.workIds = workIds; row.capabilityRefs = capabilityRefs; row.mapped = false; row.status = 'outside';
   }));
   const current = preparePlan(plan);
-  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.7.0']);
+  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.8.0']);
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(component(current.state.changeSettings).capabilityRefs.at(-1).instanceId, id('practice-127'));
 });

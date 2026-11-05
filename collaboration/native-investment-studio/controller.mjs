@@ -9,7 +9,7 @@ import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
-import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
@@ -145,12 +145,13 @@ export function mountCoordinationPanel(root, options = {}) {
     const createdLabel = created?.label;
     const team = state.teams.find(row => row.id === route.requiredTeamId);
     const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
-    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon' }[route.kind];
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon', connectionsView: 'connections' }[route.kind];
     returnButton.textContent = `Return to ${destination}`;
     returnNote.textContent = createdLabel
       ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
       : `Your ${destination} entries are saved while you ${route.creating === 'team' ? 'create a team' : route.creating === 'session' ? 'add a session' : 'add a person'}.`;
     if (route.inspectedWorkId) returnNote.textContent = `Review the supporting session, then return to your ${destination} and its saved entries.`;
+    if (route.kind === 'connectionsView') returnNote.textContent = 'Inspect the related team, person or work, then return to the connections and their arrangement.';
     if (route.kind === 'score') returnNote.textContent = 'Inspect the related work, then return to the coordination horizon and your saved arrangement.';
     if (route.createdId && !created) returnNote.textContent = `The added ${route.createdKind} is outside the current plan. Your ${destination} entries remain saved. Return to choose an available ${route.createdKind} or create another.`;
     if (createdLabel && route.field && route.createdKind === 'team') returnNote.textContent = `${createdLabel} is ready. Return to review your saved entries and select it as the ${route.field === 'senderTeamId' ? 'sending team' : route.field === 'receiverTeamId' ? 'receiving team' : 'session team'}.`;
@@ -200,6 +201,13 @@ export function mountCoordinationPanel(root, options = {}) {
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution'].includes(route.kind) ? 'people' : 'coordination');
+    if (route.kind === 'connectionsView') {
+      returnRoutes.pop(); render(); renderReturnRoute();
+      const destination = root.querySelector('[data-native-connection-view]');
+      destination?.scrollIntoView({ block: 'start' });
+      destination?.querySelector('button, select')?.focus({ preventScroll: true });
+      return;
+    }
     if (route.kind === 'template') {
       if (!templatePanel?.open()) return;
       returnRoutes.pop(); render(); renderReturnRoute();
@@ -227,6 +235,26 @@ export function mountCoordinationPanel(root, options = {}) {
     retainReturnAncestors(kind, target);
     returnRoutes.push({ kind, target, held, inspectedWorkId: id });
     render(); root.querySelector('[data-native-session-select]')?.focus();
+  }
+  function navigateFromConnections(target) {
+    if (disposed) return;
+    const collection = { team: 'teams', work: 'work', person: 'people', contribution: 'contributions' }[target.kind];
+    if (!collection || !studio.read().state[collection].some(row => row.id === target.id)) return;
+    const parked = editing.park();
+    if (!parked.ok) { announce(parked.error.message); return; }
+    retainReturnAncestors('connectionsView', 'connections');
+    returnRoutes.push({ kind: 'connectionsView', target: 'connections', held: false });
+    chapterShell?.select(target.kind === 'work' ? 'coordination' : 'people', { kind: 'context' });
+    if (target.kind === 'team') assemblyPanel?.open(makeAssemblyTarget('team.update', target.id));
+    else if (target.kind === 'person') teamPanel?.select(target.id);
+    else if (target.kind === 'contribution') responsibilityPanel?.open(makeContributionTarget('contribution.update', target.id));
+    else workPanel?.select(target.id);
+    render();
+    const destination = root.querySelector(target.kind === 'team' ? '[data-assembly-configure]' : target.kind === 'person' ? '[data-person-configure]'
+      : target.kind === 'contribution' ? '[data-responsibility-configure="contribution"]' : '[data-native-session-editor] [data-native-configure]');
+    // Each receiving panel selects the right field or stale-edit recovery.
+    // Retain a successor's focus when a callback has already opened other work.
+    if (destination?.contains(document.activeElement)) destination.scrollIntoView({ block: 'start' });
   }
   function navigateFromScore(target, origin = {}) {
     if (disposed) return;
@@ -469,6 +497,14 @@ export function mountCoordinationPanel(root, options = {}) {
   }
 
   function click(event) {
+    const arrangementLink = event.target.closest('[data-native-open-arrangement]');
+    if (arrangementLink && root.contains(arrangementLink)) {
+      event.preventDefault(); chapterShell?.select('coordination', { kind: 'context' });
+      connectionView?.selectArrangement(arrangementLink.dataset.nativeOpenArrangement);
+      const destination = root.querySelector('[data-native-connection-view]');
+      destination?.scrollIntoView({ block: 'start' });
+      destination?.querySelector('button, select')?.focus({ preventScroll: true }); return;
+    }
     const scoreLink = event.target.closest('[data-native-open-score]');
     if (scoreLink && root.contains(scoreLink)) {
       event.preventDefault(); chapterShell?.select('coordination');
@@ -624,7 +660,8 @@ export function mountCoordinationPanel(root, options = {}) {
       onAccepted: () => render(), onEditing: () => render(),
     });
     connectionView = mountConnectionView(requireElement('[data-native-connection-view]'), { projection: studio.read(),
-      onSelect: id => { if (!disposed && connectionPanel?.select(id) === false) render(); } });
+      onSelect: id => { if (!disposed && connectionPanel?.select(id) === false) render(); },
+      onNavigate: navigateFromConnections, onDetachArrangement: id => templatePanel?.detach(id) });
     connectionPanel = mountConnectionPanel(requireElement('[data-native-connection-editor]'), { studio, editing,
       onBegin: () => beginCoordination('connection'),
       canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
