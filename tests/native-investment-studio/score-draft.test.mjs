@@ -27,6 +27,24 @@ test('raw arrangement previews authored intervals without changing cost, then ac
   assert.equal(editor.apply(token).ok, true); assert.equal(studio.readHistory().undoCount, 1);
   assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.read().serialized, before.serialized);
 });
+test('elapsed unit entries preserve exact raw recovery and accept only their minute conversion', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), editor = editing.score, before = studio.read();
+  let token = editor.begin('score', before).view.draft.token;
+  set(editor, token, 'work.review.timed', 'yes'); set(editor, token, 'work.review.startMinute', ' 11h30m '); set(editor, token, 'work.review.repeatEveryMinutes', '1h');
+  const proposal = editor.preview(token); assert.equal(proposal.ok, true, proposal.error?.message);
+  assert.deepEqual(proposal.projection.state.work[0].timing, { startMinute: 690, repeatEveryMinutes: 60 });
+  assert.equal(proposal.summary.money.knownDeltaCents, 0); assert.strictEqual(studio.read(), before);
+  assert.equal(editor.step(token, 'work.review.startMinute', 1).ok, true);
+  assert.equal(editor.read().draft.raw['work.review.startMinute'], '11h 31m');
+  set(editor, token, 'work.review.startMinute', ' 11h3 '); assert.equal(editor.preview(token).error.code, 'integer-text');
+  assert.equal(editing.park().ok, true);
+  const next = structuredClone(before.state); next.purpose.accountableOwner = 'Review owner'; assert.equal(studio.replace(next, before).ok, true);
+  editor.begin('score', studio.read()); const reviewed = editor.review(editor.read().draft.token, studio.read());
+  assert.equal(reviewed.ok, true); token = reviewed.view.draft.token;
+  assert.equal(editor.read().draft.raw['work.review.startMinute'], ' 11h3 ');
+  set(editor, token, 'work.review.startMinute', '11h30m'); assert.equal(editor.apply(token).ok, true);
+  assert.deepEqual(studio.read().state.work[0].timing, { startMinute: 690, repeatEveryMinutes: 60 });
+});
 test('bank choice and modeled proceed preserve money until explicit proposal selection, then publish exactly one ordinary work row', () => {
   const studio = createStudio(), before = studio.read(), editor = createDraftCoordinator(studio).score;
   const token = editor.begin('score', before).view.draft.token; proposed(editor, token);

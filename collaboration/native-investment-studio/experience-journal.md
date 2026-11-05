@@ -930,3 +930,42 @@ visible timing explanation; and consistent compact steppers. Enterprise timing
 needs an explicit business-time interpretation that preserves existing plan
 units. Revisit that design with the human's next direction before implementation.
 Public release and performance refinement retain their separate receiving work.
+
+
+## 2026-11-05 — Resumed showcase construction and main delivery
+
+The human resumed construction and authorized a working version on main after
+independent review. Ordinary mobile widths belong to this delivery. Performance
+refinement and the tagged public release keep their separate receiving events.
+The prior pause is historical; #703 delivered the accepted quality consequences
+to dev before this construction slice.
+
+Coordination now leads with the horizon while capacity, prerequisites and the
+arrangement editor use native disclosure. Clip previews state effort and the
+preceding activity. Cancel controls use shadow-free ghost styling. Exact timing
+entries accept hours and minutes while the plan retains integer elapsed minutes.
+A calendar or sprint conversion needs authored working-time assumptions; the
+current control describes elapsed sequence timing, while session duration and
+funded time retain their existing owners.
+
+Investment now has held A, accepted B and Difference channels. The plot and exact
+table attribute staffing and extra work to people; allocated work remains part
+of staffing. Source inspection returns to the same comparison and retains raw
+editor drafts. Plan identity qualifies people when comparing different scenarios.
+
+Six authored native scenarios join purpose, prerequisites, sessions, change
+support and quality work. They preserve their explicit native assumptions.
+Readable HTML reports and collaboration briefs capture the same accepted
+snapshot and include exact JSON. Human observations retain their reviewer and
+observed revision; planned rehearsals remain distinguishable from observations.
+The broader original-model translation continues in #705 with the full Studio
+as its current working receiver.
+
+Independent review identified and resolved a deferred disclosure event that
+could reclaim focus from a newer editor, mobile trace radio sizing, and report
+scroll-region accessibility. Focused source and three-engine browser checks
+cover accepted values, retained drafts, source returns, mobile controls and
+report downloads. The feature PR receives the final exact-head evidence. #638
+then receives main's newer About prose and closed static counterpart together
+with the native instrument. #679 receives later performance work; #686 receives
+the separately human-cued tagged release.

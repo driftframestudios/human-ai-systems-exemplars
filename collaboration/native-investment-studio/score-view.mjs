@@ -1,8 +1,9 @@
 import { money, INTEGER } from './display.mjs';
+import { formatScoreTime } from './score-time.mjs';
 
 const STATUS = Object.freeze({ satisfied: 'Ready in this arrangement', 'starts-before-ready': 'Starts before the preceding work is ready',
   'connection-paused': 'Connection paused', 'work-inactive': 'Supporting work paused or retired', 'needs-timing': 'Timing to choose' });
-export const scoreMinute = value => value === null ? 'Timing to choose' : `${INTEGER.format(value)} min`;
+export const scoreMinute = value => value === null ? 'Timing to choose' : formatScoreTime(value);
 const interval = row => `${scoreMinute(row.startMinute)}–${scoreMinute(row.endMinute)}`;
 
 // The view projects admitted records. Position means elapsed minutes; the
@@ -29,9 +30,9 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
   const stages = node('div', undefined, 'native-score__stages'); stages.setAttribute('aria-label', 'Stages and modeled decisions');
   const scroll = node('div', undefined, 'native-score__scroll'); scroll.tabIndex = 0; scroll.setAttribute('role', 'region'); scroll.setAttribute('aria-label', 'Coordination horizon. Scroll horizontally for a closer view.');
   const timeline = node('div', undefined, 'native-score__timeline'); scroll.append(timeline);
-  const clipPreview = node('p', 'Hover over or focus a clip to read its people, timing and purpose before opening it.', 'native-score__clip-preview');
+  const clipPreview = node('p', 'Focus a clip to see the effort and preceding activity.', 'native-score__clip-preview');
   clipPreview.dataset.scoreClipPreview = '';
-  const note = node('p', undefined, 'native-score__basis'); note.dataset.scoreBasis = '';
+  const origin = node('p', undefined, 'native-score__origin'); origin.dataset.scoreOrigin = '';
   const legend = node('ul', undefined, 'native-score__legend'); legend.setAttribute('aria-label', 'Horizon marks');
   for (const [kind, label] of [['allocated', 'Within funded time'], ['additional', 'Extra investment'], ['wait', 'Waiting'], ['gate', 'Modeled decision']]) {
     const item = node('li', label); item.dataset.kind = kind; legend.append(item);
@@ -46,12 +47,12 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
   const exact = node('details', undefined, 'native-score__exact'); exact.append(node('summary', 'Read exact timing and effort'));
   const tableRegion = node('div', undefined, 'native-score__table-scroll'); tableRegion.tabIndex = 0;
   const table = node('table'); tableRegion.append(table); exact.append(tableRegion);
-  const capacity = node('section', undefined, 'native-score__capacity'); capacity.append(node('h4', 'People and available time'));
+  const capacity = node('details', undefined, 'native-score__capacity'); capacity.append(node('summary', 'People and available time'));
   const capacityRows = node('div', undefined, 'native-score__capacity-grid'); capacity.append(capacityRows);
-  const dependencies = node('section', undefined, 'native-score__dependencies'); dependencies.append(node('h4', 'What must be ready first'));
+  const dependencies = node('details', undefined, 'native-score__dependencies'); dependencies.append(node('summary', 'What must be ready first'));
   const edges = node('ul'); dependencies.append(edges);
   const banks = node('div', undefined, 'native-score__banks'); banks.dataset.scoreBanks = '';
-  root.replaceChildren(readout, stages, scroll, clipPreview, legend, note, agenda, exact, capacity, dependencies, banks);
+  root.replaceChildren(readout, stages, origin, scroll, clipPreview, legend, agenda, exact, capacity, dependencies, banks);
   let disposed = false;
   function click(event) {
     const button = event.target.closest('[data-score-view-action]');
@@ -71,14 +72,16 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
   function refresh(projection, { selected = null, scale = 1, focusWorkId = null, preview = false } = {}) {
     if (disposed) return;
     const { state, result, score } = projection;
-    clipPreview.textContent = 'Hover over or focus a clip to read its people, timing and purpose before opening it.';
+    clipPreview.textContent = 'Focus a clip to see the effort and preceding activity.';
     const people = new Map(state.people.map(row => [row.id, row.label]));
     const work = new Map(score.workRows.map(row => [row.workId, row]));
-    const incoming = new Map(), outgoing = new Map();
+    const incoming = new Map(), preceding = new Map(), outgoing = new Map();
     for (const edge of score.dependencies) {
       if (!incoming.has(edge.toWorkId)) incoming.set(edge.toWorkId, []);
+      if (!preceding.has(edge.toWorkId)) preceding.set(edge.toWorkId, []);
       if (!outgoing.has(edge.fromWorkId)) outgoing.set(edge.fromWorkId, []);
       incoming.get(edge.toWorkId).push(`${work.get(edge.fromWorkId).label}: ${STATUS[edge.status].toLowerCase()}`);
+      preceding.get(edge.toWorkId).push(work.get(edge.fromWorkId).label);
       outgoing.get(edge.fromWorkId).push(work.get(edge.toWorkId).label);
     }
     const start = Math.min(score.window?.startMinute ?? Infinity, score.span.startMinute ?? Infinity);
@@ -110,11 +113,11 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
     stages.hidden = !score.stages.length;
     timeline.replaceChildren(); timeline.style.setProperty('--score-scale', String(scale));
     const axis = node('div', undefined, 'native-score__row native-score__axis');
-    axis.append(node('strong', 'Elapsed minutes'));
+    axis.append(node('strong', 'Elapsed time'));
     const ticks = node('div', undefined, 'native-score__track');
-    for (let step = 0; step <= 4; step++) { const tick = node('span', INTEGER.format(Math.round(from + length * step / 4))); tick.style.left = `${step * 25}%`; ticks.append(tick); }
+    for (let step = 0; step <= 4; step++) { const tick = node('span', scoreMinute(Math.round(from + length * step / 4))); tick.style.left = `${step * 25}%`; ticks.append(tick); }
     axis.append(ticks); timeline.append(axis);
-    function lane(label, kind, id, spans, className = '', explanation = '') {
+    function lane(label, kind, id, spans, className = '', explanation = '', previewText = explanation) {
       const row = node('div', undefined, `native-score__row ${className}`), labelButton = control(label, kind, id);
       labelButton.className = 'native-score__track-label'; labelButton.setAttribute('aria-pressed', String(selectedIs(kind, id)));
       const track = node('div', undefined, 'native-score__track');
@@ -126,7 +129,7 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
         bar.dataset.milestone = String(span.endMinute === span.startMinute);
         bar.dataset.active = String(span.active !== false); bar.dataset.funding = span.funding ?? kind;
         bar.setAttribute('aria-label', `${span.label ?? label}: ${interval(span)}${span.occurrenceIndex === undefined ? '' : `, occurrence ${span.occurrenceIndex + 1}`}${span.active === false ? ', paused or retired' : ''}`);
-        bar.dataset.scorePreviewText = `${bar.getAttribute('aria-label')}. ${explanation}`;
+        bar.dataset.scorePreviewText = `${label} · ${previewText}`;
         bar.setAttribute('aria-description', explanation); track.append(bar);
       }
       row.append(labelButton, track); timeline.append(row);
@@ -136,13 +139,15 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
       const explanation = `${participants}. ${scoreMinute(row.durationMinutes)} per person, each session. ${row.funding === 'allocated' ? 'Within funded time' : 'Extra investment'}.` +
         (incoming.has(row.workId) ? ` Needs ${incoming.get(row.workId).join('; ')}.` : '') +
         (outgoing.has(row.workId) ? ` Supports ${outgoing.get(row.workId).join(', ')}.` : '');
-      lane(row.label, 'work', row.workId, row.occurrences, '', explanation);
+      const previewText = `${INTEGER.format(row.durationMinutes)} minutes per person.` +
+        (preceding.has(row.workId) ? ` Needs ${preceding.get(row.workId).join(', ')}.` : ' Preceding activity: unspecified.');
+      lane(row.label, 'work', row.workId, row.occurrences, '', explanation, previewText);
     }
     for (const wait of score.waits) lane(wait.label, 'wait', wait.id, [wait], 'native-score__wait-row',
       `Waiting carries no participant effort. ${wait.reason ?? 'Describe the response being awaited.'}${wait.receiverPersonId ? ` Received by ${people.get(wait.receiverPersonId)}.` : ''}`);
     for (const gate of score.gates) lane(gate.label, 'gate', gate.id, gate.minute === null ? [] : [{ startMinute: gate.minute, endMinute: gate.minute, label: `${gate.label} · ${gate.modeledDecision}` }], 'native-score__gate-row',
       `${gate.question ?? 'Describe the decision to resolve.'} ${gate.reviewerPersonId ? `Reviewer: ${people.get(gate.reviewerPersonId)}. ` : ''}Funding remains an explicit choice after a modeled Proceed decision.`);
-    note.textContent = `${score.window?.label ?? 'Choose a time basis to position the work.'} ${preview ? 'This horizon previews your draft.' : 'This horizon shows the accepted arrangement.'} Positions use elapsed minutes from the chosen starting point. Staffing weeks and paid effort retain their own units. Select a clip or name to inspect it.`;
+    origin.textContent = score.window?.label ?? 'Elapsed from the beginning of this plan';
     agendaRows.replaceChildren();
     for (const row of score.agenda) {
       if (focusWorkId && row.workId && row.workId !== focusWorkId) continue;

@@ -1,3 +1,4 @@
+import '../../tools/node-runtime-admission.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { emptyRole } from '../../collaboration/native-investment-studio/roles.mjs';
 

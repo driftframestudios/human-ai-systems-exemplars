@@ -8,7 +8,7 @@ import { createStudio } from '../../collaboration/native-investment-studio/state
 const VERSION = '1.0.0';
 test('the finite native catalogue names its exact version and creates independently owned projections', () => {
   const list = listPresets();
-  assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'shared-working-sessions', 'funded-working-sessions']);
+  assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'discovery-alignment', 'data-platform-migration', 'regulated-workflow', 'ai-assisted-product', 'enterprise-integration', 'operational-modernization', 'shared-working-sessions', 'funded-working-sessions']);
   assert.equal(Object.isFrozen(list), true);
   assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.8.0'));
   const first = preparePreset(list[0].id, VERSION);

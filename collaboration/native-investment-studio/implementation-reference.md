@@ -2096,6 +2096,21 @@ cards. `score-reference.mjs` supplies truthful removal routes and readable
 comparison descriptions. The root controller retains chapter, saved-edit and
 return-navigation ownership; `about.css` owns the scoped instrument composition.
 
+Capacity, dependency details and the inspector begin as closed native
+disclosures. Their DOM owners retain open state through preview and refresh;
+clip selection and return navigation reveal the same inspector before focus.
+The clip preview leads with minutes per person and the preceding activity.
+The horizon names its starting context once; the manual retains the fuller
+explanation of time, effort and funding.
+
+`score-time.mjs` supplies exact elapsed-unit parsing and display. Entries such
+as `11h30m`, `690 minutes` and `690` produce the same canonical 690 minutes.
+Hours may extend past 24; draft text remains literal through invalid input,
+parking and stale review. Step controls move by one minute. The schema and
+arrangement arithmetic retain integer elapsed minutes. Working-calendar
+interpretation requires authored working days, hours and exceptions, as in
+[Microsoft's calendar guidance](https://support.microsoft.com/en-au/project/set-the-general-working-days-and-times-for-a-project).
+
 The showcase's rehearsal sequence is an explicit authored example: minute 0
 through 825, with a 900-minute planning window. It costs the same $3,980 as its
 untimed predecessor. Quality's 80-hour sprint and 520-hour quarter conversions
@@ -2121,7 +2136,9 @@ position and treatment distinguish beginning the task from completing it.
 Class assignment follows the operation and editor mode, rather than matching
 an “Add” word. Nested Add actions inside a form still begin their own item and
 keep the plus. A final submit that accepts that form does not restart creation.
-Removal keeps its rose treatment, and Cancel retains its neutral recovery key.
+Removal keeps its rose treatment. Cancel is an underlined, shadow-free text
+action in both resting and pressed states; the shared keyboard focus outline
+remains visible. Apply retains its confirmation treatment.
 This applies across People, teams, sessions, connections, contributions,
 abilities, Change, Assurance and the horizon's authored records.
 
@@ -2198,3 +2215,19 @@ and the work-owning team. Recorded-observation badges route to the named reviewe
 and linked subject team. Each control names both its evidence standing and source.
 The root coordinator retains the originating editor and nested inspection route;
 return restores its raw entries, with stale recovery retaining focus when needed.
+
+
+### Investment trace and portable results
+
+`investment-trace.mjs` derives held and accepted per-person funding pools;
+`investment-trace-view.mjs` renders the channels, plot and exact table.
+`investment-controller.mjs` owns selection and baseline actions. The root
+controller parks drafts when following sources and restores the comparison.
+
+`showcase-scenarios.mjs` authors six native rehearsal families through the
+existing admitted plan. `reports.mjs` synchronously derives HTML and text from
+one immutable accepted projection; `reports-controller.mjs` owns downloads and
+object-URL lifetime. Both reports preserve the exact JSON. Authored strings are
+escaped into static HTML; scrollable tables have named keyboard regions.
+These new runtime owners are registered in the Node inventory and primary route
+manifest. Full original-model conversion remains #705.

@@ -8,6 +8,8 @@ import { getQualityConcept, getSourcePreset, getRehearsalDefinition } from './as
 import { getChangeFramework, getInterpretiveLens, listAttentionChannels } from './change-models.mjs';
 import { describeScoreChanges } from './score-reference.mjs';
 import { describeArrangementChanges } from './coordination-arrangements.mjs';
+import { projectInvestmentTrace } from './investment-trace.mjs';
+import { mountInvestmentTrace } from './investment-trace-view.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -107,7 +109,7 @@ function relationshipDescriptions(state) {
   };
 }
 
-export function mountInvestmentPanel(root, { studio, editing, onChange }) {
+export function mountInvestmentPanel(root, { studio, editing, onChange, onSource = () => {} }) {
   const document = root.ownerDocument, window = document.defaultView;
   const exchange = createPlanExchange(studio, editing);
   const get = name => root.querySelector(`[data-investment-${name}]`);
@@ -119,6 +121,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
   const cleanup = [];
   let projection = null, baseline = null, renderedPreview = null;
   let disposed = false, fileSelection = 0, downloadUrl = null;
+  const trace = mountInvestmentTrace(root, { onSource, onHold: () => historyAction('baseline') });
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -176,12 +179,13 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     buttons.restore.disabled = baseline === null;
     buttons.baseline.textContent = baseline ? 'Replace baseline' : 'Save baseline';
     if (changed) {
+      trace.refresh(projectInvestmentTrace(projection, baseline?.projection ?? null));
       const rows = [
-        [projection.result.standing === 'priced' ? 'Current total' : 'Current known total', money(projection.result.knownCommitmentCents)],
-        [baseline?.projection.result.standing === 'priced' ? 'Baseline total' : 'Baseline known total', baseline ? money(baseline.projection.result.knownCommitmentCents) : 'Save a baseline to compare'],
+        [projection.result.plannedCommitmentCents === null ? 'Current known total' : 'Current total', money(projection.result.knownCommitmentCents)],
+        [baseline?.projection.result.plannedCommitmentCents === null ? 'Baseline known total' : 'Baseline total', baseline ? money(baseline.projection.result.knownCommitmentCents) : 'Save a baseline to compare'],
       ];
       if (baseline) rows.push([
-        projection.result.standing === 'priced' && baseline.projection.result.standing === 'priced' ? 'Change' : 'Change in known amount',
+        projection.result.plannedCommitmentCents !== null && baseline.projection.result.plannedCommitmentCents !== null ? 'Change' : 'Change in known amount',
         money(projection.result.knownCommitmentCents - baseline.projection.result.knownCommitmentCents),
       ]);
       if (baseline) rows.push(['Change planning', changeDescriptions(baseline.projection.state, projection.state).join(' · ')
@@ -204,7 +208,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
       renderedPreview = view.preview;
       if (view.preview) {
         const result = view.preview.projection.result;
-        get('preview-total').textContent = `${result.standing === 'priced' ? 'Total' : 'Known total'}: ${money(result.knownCommitmentCents)}`;
+        get('preview-total').textContent = `${result.plannedCommitmentCents === null ? 'Known total' : 'Total'}: ${money(result.knownCommitmentCents)}`;
         summary(view.preview);
       }
     }
@@ -283,12 +287,12 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     if (result.ok) root.querySelector('#native-plan-preview-title').focus({ preventScroll: true });
   });
   refresh();
-  return Object.freeze({ refresh, dispose() {
+  return Object.freeze({ refresh, restoreTrace: origin => trace.restore(origin), dispose() {
     if (disposed) return;
     disposed = true; fileSelection += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
-    exchange.dispose(); releaseDownload();
+    exchange.dispose(); releaseDownload(); trace.dispose();
     select.replaceChildren();
     for (const button of Object.values(buttons)) button.disabled = true;
     file.disabled = true;

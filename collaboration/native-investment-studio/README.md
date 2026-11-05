@@ -24,14 +24,16 @@ useful collapsed previews and ASCII zine styling support these visitor tasks.
 The coordination horizon now joins authored timing, availability, waits and
 modeled decisions to the accepted plan. Arrangement templates now keep their accepted identity and show their actual
 work directions through [#702](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/702).
-The current [quality consequences feature, #698](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/698)
+The accepted [quality consequences feature, #703](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/703)
 connects preparation and recovery to explicit work. The complete showcase continues through
 visual analysis, scenarios and final composition. Performance refinement follows that experience.
 
-**Human-requested pause:** #698 has completed its current local checks on
-`codex/studio-quality-consequences`. Its feature delivery remains pending. The
+**The complete-showcase work has resumed.**
+[Consolidation, #704](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/704)
+brings the working experience together for review and delivery to `main`, with
+normal mobile layouts in scope. The earlier
 [journal checkpoint](experience-journal.md#2026-11-05--checked-checkpoint-and-human-requested-pause)
-records the verified behavior and the queued Coordination refinements.
+records the pause and the Coordination refinements now being completed.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
 tracks the ASCII composition method's public Pages projection and the visual
@@ -113,6 +115,29 @@ and recorded observations. Select a badge to inspect its source, then return to
 the same card with unfinished edits retained. An observation identifies its
 reviewer and observed plan revision; its text explains what was actually found.
 
+## Compare investment and keep a result
+
+In **Investment**, hold the accepted plan as **Channel A**, then change people
+or work. **Channel B** shows the current accepted plan; **Difference** shows
+each person's contribution to the change. Select a contribution to inspect its
+funded time and extra work, then follow the source and return to the same
+comparison. The exact table accompanies the visual display.
+
+Choose a starting plan to explore discovery, migration, regulated workflows,
+AI-assisted products, integration or operational recovery. Preview the replacement
+before **Use this plan**. Each is an authored native rehearsal with explicit
+people, sessions and review conditions. Undo restores the previous accepted plan.
+
+**Download report** produces a self-contained HTML reading with exact values,
+purpose, work, review observations and the accepted JSON. **Download collaboration
+brief** carries the same snapshot as plain text for a later conversation. Unfinished
+editor entries remain available in the Studio. Save the ordinary plan JSON to
+continue editing through the importer.
+
+The [full Studio](../initiative-costing-calculator/index.html) retains broader
+role-pool, service, capital, reserve and commercial models. Their explicit native
+translation continues in [#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
+
 ## Compare team arrangements
 
 Open **Try a team arrangement** in Coordination. Pod, Guild, Project team and
@@ -141,8 +166,10 @@ chronological agenda, exact table and available-time reading. Change the view
 scale or follow a session, person or chapter link; return to the horizon with
 your unfinished entries intact.
 
-Hover over or focus a clip to preview its participants, duration, funding and
-preceding work. The visible scale keys keep their selected state. **Go to chapter**
+Hover over or focus a clip to preview its minutes per person and preceding
+activity. People and available time, handoff details and the arrangement editor
+begin collapsed; opening them keeps the same records and controls. The visible
+scale keys keep their selected state. **Go to chapter**
 opens a related part of the Studio. Each stage has **Add a decision**. It opens
 **New decision** with the stage chosen and empty context ready to
 edit. **Add decision to plan** accepts the arrangement; **Discard this decision**
@@ -151,7 +178,8 @@ show complete questions and evidence before editing. The compact chronological t
 decisions in time order; the session table compares effort and funding across
 their full series.
 
-Try moving the first Pilot decision review from minute 660 to minute 500.
+Try moving the first Pilot decision review from **11h** to **8h20m** in
+**Session starts after**.
 The proposed horizon shows the review starting before its supporting work is
 ready and overlapping the Quality reviewer's rehearsal. The $3,980 accepted
 investment stays visible. Apply accepts the arrangement; Cancel restores the
@@ -163,13 +191,18 @@ choice to Proceed, inspect **Confirm the recovery instructions**, and select
 the Quality reviewer and Operations specialist adds $100. Apply accepts the gate
 choice and funded session together; Undo restores the earlier plan.
 
-Timing uses elapsed minutes from a named starting point. Participant effort,
+Enter elapsed hours and minutes, such as **11h30m** or **690 minutes**. The
+stored arrangement retains exact integer minutes from the beginning of the
+plan; elapsed time continues through off-hours. **Time between session starts**
+sets the repeat interval. Compact step buttons change a value by one minute,
+and saved edits retain the entered text. Participant effort,
 funded time and temporal availability retain separate meanings. A wait adds
 elapsed time and has zero participant effort. Older imported plans keep timing
 and availability unspecified until a visitor supplies them. The example's times,
 rates and modeled decisions remain editable assumptions.
 
-Hours and Minutes each have a dial beside their precision field. Hours uses the
+In Session settings and supporting-session proposals, Hours and Minutes each
+have a dial beside their precision field. Hours uses the
 larger dial; both also accept keyboard arrows, taps, step buttons and direct
 entry. Turning Hours preserves Minutes. At 23:30, set Minutes to zero before
 choosing 24 hours.
@@ -191,6 +224,8 @@ A small arrow marks a move to another view or inspector.
 A plus mark starts adding an item. The final Add or Apply button confirms the
 item already being prepared. Physical-looking switches keep native checkbox
 behavior, and small fixed choice sets show their available options directly.
+Cancel uses an underlined, shadow-free text action with a visible keyboard focus
+outline; Apply keeps the confirmation treatment.
 
 ## Run a local preview
 

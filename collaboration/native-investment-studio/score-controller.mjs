@@ -67,8 +67,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   toolbar.append(viewChoices, resetFocus, arrange, links);
   const projectionRoot = node('div', undefined, 'native-score__projection'); projectionRoot.dataset.scoreProjection = '';
-  const inspector = node('section', undefined, 'native-score__inspector'); inspector.setAttribute('aria-labelledby', `${instance}-inspect-title`);
-  const title = node('h4', 'Inspect the arrangement'); title.id = `${instance}-inspect-title`;
+  const inspector = node('details', undefined, 'native-score__inspector');
+  const inspectorSummary = node('summary'), title = node('h4', 'Inspect the arrangement'); title.id = `${instance}-inspect-title`; inspectorSummary.append(title);
   const rail = node('div', undefined, 'native-score__keys'); rail.setAttribute('aria-label', 'Inspect the arrangement');
   for (const [kind, label] of Object.entries(KINDS)) { const key = button(label, 'kind'); key.dataset.scoreKind = kind; rail.append(key); }
   const form = node('form'); form.noValidate = true; form.dataset.scoreForm = '';
@@ -95,10 +95,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   actions.append(apply, cancel, keepDecision);
   const status = node('p', '', 'native-coordination__status'); status.dataset.scoreStatus = ''; status.setAttribute('role', 'status');
   form.append(recovery, pickerRow, detail, navigation, overlapReading, editFields, preview, error, actions, status);
-  inspector.append(title, rail, form);
+  inspector.append(inspectorSummary, rail, form);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   const manual = node('details', undefined, 'native-score__manual'); manual.append(node('summary', 'How time, effort and decisions relate'),
-    node('p', 'Place sessions in elapsed minutes from a named starting point. A repeated session uses minutes between starts. Availability describes when a person can join; funded time describes how much effort is already paid for.'),
+    node('p', 'Place sessions in elapsed hours and minutes from the beginning of this plan. Time between session starts sets the repeat interval. Elapsed time continues through off-hours; availability describes when a person can join. Funded time describes how much effort is already paid for.'),
     node('p', 'Waiting occupies elapsed time and carries no participant effort. Model response work as a session when people must spend time on it. A dependency connects the last finish of earlier work to the first start of later work.'),
     node('p', 'Next and Options retain proposed work separately. A modeled Proceed decision makes a linked proposal eligible; select Add to planned work and Apply to fund it. Real decisions remain with the named people and their evidence.'),
     node('p', 'The quality reference uses 80 hours per sprint and 520 hours per quarter. Those staffing reference conversions are separate from elapsed minutes in this horizon. Changing the view scale changes only what you see.'));
@@ -148,7 +148,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (input.tagName === 'INPUT') input.type = metadata.checkbox ? 'checkbox' : 'text';
       input.maxLength = metadata.maxLength;
       if (prose) input.rows = 4;
-      if (metadata.numeric) { input.inputMode = 'numeric'; input.className = 'native-score__number'; }
+      if (metadata.numeric) { input.inputMode = metadata.time ? 'text' : 'numeric'; input.className = 'native-score__number'; }
     }
     let reading = null;
     if (prose && isNewDecision(raw, state)) {
@@ -161,7 +161,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (metadata.numeric) {
       const steps = node('div', undefined, 'native-score__steps');
       for (const direction of [-1, 1]) { const step = button(direction < 0 ? '−' : '+', 'step'); Object.assign(step.dataset, { scoreField: key, scoreStep: String(direction) }); step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${metadata.label.toLowerCase()}`); steps.append(step); }
-      group.append(steps);
+      steps.insertBefore(input, steps.lastElementChild); group.append(steps);
+      if (metadata.time) {
+        const hint = node('small', '', 'native-score__time-hint'); hint.id = `${input.id}-time-hint`;
+        hint.textContent = 'Enter 11h30m or 690 minutes.';
+        input.setAttribute('aria-describedby', `${hint.id} ${message.id}`); group.append(hint);
+      }
     }
     group.append(message); parent.append(group); controls.set(key, { input, message, metadata, radio, reading });
   }
@@ -224,6 +229,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     remove.hidden = creatingDecision || ['window'].includes(selected.kind) || !selected.id || ['work', 'person'].includes(selected.kind) && (selected.kind === 'work' ? state.work : state.people).some(row => row.id === selected.id);
     remove.textContent = ['work', 'person'].includes(selected.kind) ? 'Remove this missing reference' : `Remove this ${selected.kind === 'dependency' ? 'handoff' : selected.kind === 'gate' ? 'decision' : selected.kind}`;
     addInterval.hidden = selected.kind !== 'person' || !selected.id;
+    recordActions.hidden = add.hidden && remove.hidden && addInterval.hidden;
     source.hidden = !['work', 'person'].includes(selected.kind) || !selected.id; source.textContent = selected.kind === 'person' ? 'Open person settings' : 'Open session settings';
     focus.hidden = selected.kind !== 'work' || !selected.id;
     const selectedWork = state.work.find(row => row.id === selected.id);
@@ -234,6 +240,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
             : selected.kind === 'wait' ? 'Waiting extends elapsed time. Add a working session when people must spend time responding.'
               : selected.kind === 'dependency' ? 'The later session starts after every occurrence of the earlier work and any waiting minutes. A linked paused connection suspends this obligation.'
                 : 'Select a record to inspect it, or arrange timing to try a change.';
+    if (['work', 'person', 'wait', 'window', 'proposal'].includes(selected.kind) && !creatingDecision) detail.textContent += ' Elapsed from the beginning of this plan.';
     let proposed = null;
     if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
@@ -262,6 +269,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     announce(result?.ok ? '' : result?.error?.message ?? '');
     const mark = boundary(); onEditing();
     if (!retains(epoch, mark)) return;
+    inspector.open = true;
     if (focusField) (recovery.hidden ? fields.querySelector('input, select') ?? add : recovery.querySelector('button'))?.focus();
     return { result, epoch, mark };
   }
@@ -281,6 +289,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!editor.read().draft || editing.read().active?.kind !== 'score') completion = beginOpen('score', false);
     else { const epoch = generation, mark = boundary(); render(); if (retains(epoch, mark)) completion = { epoch, mark }; }
     if (completion && retains(completion.epoch, completion.mark) && reveal) {
+      inspector.open = true;
       inspector.scrollIntoView({ block: 'nearest' });
       (fields.querySelector('input, select') ?? picker).focus({ preventScroll: true });
       if (retains(completion.epoch, completion.mark)) onInspect(inspector);
@@ -343,6 +352,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (result.ok) { decisionOrigins.set(id, stageId); selected = { kind: 'gate', id }; fieldSignature = null; }
     const mark = boundary(); changed(result, epoch);
     if (result.ok && retains(epoch, mark)) {
+      inspector.open = true;
       inspector.scrollIntoView({ block: 'start' });
       const name = controls.get(`gate.${id}.label`)?.input; name?.focus({ preventScroll: true });
       if (retains(epoch, mark)) name?.select();
@@ -412,6 +422,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     changed(result, epoch);
   }
   listen(root, 'click', click); listen(form, 'input', input); listen(form, 'change', input);
+  listen(inspectorSummary, 'click', event => {
+    if (disposed || inspector.open || !isActive()) return;
+    if (!editor.read().draft || editing.read().active?.kind !== 'score') {
+      event.preventDefault(); beginOpen('score', false);
+    }
+  });
   listen(form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(form, 'compositionstart', () => { composing = true; render(); }); listen(form, 'compositionend', event => { composing = false; input(event); });
   listen(picker, 'change', () => { if (!disposed) select({ kind: selected.kind, id: picker.value }); });
