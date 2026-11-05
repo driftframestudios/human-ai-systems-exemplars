@@ -10,7 +10,7 @@ const personFields = Object.freeze({ label: textField('Name'), ratePerHour: text
   fundedHours: textField('Funded hours', PERSON_DRAFT_TEXT_LIMIT), fundedMinutes: textField('Funded minutes', PERSON_DRAFT_TEXT_LIMIT) });
 const teamFields = Object.freeze({ label: textField('Team name'), personIds: membership });
 const emptyFields = Object.freeze({});
-const TARGET_FIELDS = Object.freeze({ people: 'personId', teams: 'teamId', work: 'workId', contributions: 'contributionId' });
+const TARGET_FIELDS = Object.freeze({ people: 'personId', teams: 'teamId', work: 'workId', contributions: 'contributionId', connections: 'connectionId' });
 export const ASSEMBLY_FORMS = Object.freeze({
   'person.create': Object.freeze({ label: 'Add person', collection: 'people', mode: 'create', fields: personFields }),
   'team.create': Object.freeze({ label: 'Add team', collection: 'teams', mode: 'create', fields: teamFields }),
@@ -50,6 +50,21 @@ const contributionFields = Object.freeze({
   reviewBoundary: textField('Review before use', LIMITS.relationshipText),
   decisionBoundary: textField('Decision boundary', LIMITS.relationshipText),
 });
+const connectionFields = Object.freeze({
+  senderTeamId: textField('Sending team', LIMITS.identifier),
+  receiverTeamId: textField('Receiving team', LIMITS.identifier),
+  receiverPersonId: textField('Receiving person', LIMITS.identifier),
+  sharedObject: textField('Shared object or decision', LIMITS.relationshipText),
+  responseExpectation: textField('Expected response', LIMITS.relationshipText),
+  workIds: Object.freeze({ kind: 'ids', label: 'Supporting sessions', maxItems: LIMITS.work }),
+  status: Object.freeze({ ...textField('Status', 16), choices: Object.freeze(['active', 'paused']) }),
+});
+export const CONNECTION_FORMS = Object.freeze({
+  'connection.create': Object.freeze({ label: 'Add connection', collection: 'connections', mode: 'create', fields: connectionFields }),
+  'connection.update': Object.freeze({ label: 'Connection settings', collection: 'connections', mode: 'update', fields: connectionFields }),
+  'connection.remove': Object.freeze({ label: 'Remove connection', collection: 'connections', mode: 'remove', fields: emptyFields }),
+});
+
 export const ROLE_FORMS = Object.freeze({
   'role.update': Object.freeze({ label: 'Role details', collection: 'people', mode: 'update', fields: roleFields }),
 });
@@ -110,6 +125,11 @@ export const describeContributionTarget = key => describeTarget(CONTRIBUTION_FOR
 export const copyContributionRaw = (target, raw) => copyRaw(describeContributionTarget, target, raw);
 export const sameContributionRaw = (target, left, right) => sameRaw(describeContributionTarget, target, left, right);
 
+export const makeConnectionTarget = (form, id) => makeTarget(CONNECTION_FORMS, form, id);
+export const describeConnectionTarget = key => describeTarget(CONNECTION_FORMS, key);
+export const copyConnectionRaw = (target, raw) => copyRaw(describeConnectionTarget, target, raw);
+export const sameConnectionRaw = (target, left, right) => sameRaw(describeConnectionTarget, target, left, right);
+
 function admittedIds(candidate, maximum, field) {
   const path = `draft.${field}`;
   if (!Array.isArray(candidate) || Object.getPrototypeOf(candidate) !== Array.prototype) {
@@ -141,6 +161,11 @@ function initialRaw(descriptor, row) {
     categoryId: row?.categoryId ?? '', receiverPersonId: row?.receiverPersonId ?? '',
     decisionOwnerPersonId: row?.decisionOwnerPersonId ?? '', workIds: row ? [...row.workIds] : [],
     reviewBoundary: row?.reviewBoundary ?? '', decisionBoundary: row?.decisionBoundary ?? '',
+  };
+  if (descriptor.collection === 'connections') return {
+    senderTeamId: row?.senderTeamId ?? '', receiverTeamId: row?.receiverTeamId ?? '',
+    receiverPersonId: row?.receiverPersonId ?? '', sharedObject: row?.sharedObject ?? '',
+    responseExpectation: row?.responseExpectation ?? '', workIds: row ? [...row.workIds] : [], status: row?.status ?? 'active',
   };
   if (descriptor.collection === 'work') return { label: row?.label ?? '', teamId: row?.teamId ?? '',
     personIds: row ? [...row.personIds] : [],
@@ -179,6 +204,19 @@ function contributionValues(id, raw, errors) {
   return contribution;
 }
 
+function connectionValues(id, raw, errors) {
+  for (const field of ['senderTeamId', 'receiverTeamId']) {
+    if (!validId(raw[field])) errors.push(diagnostic('reference', `draft.${field}`, `Choose a ${field === 'senderTeamId' ? 'sending' : 'receiving'} team.`));
+  }
+  const receiverPersonId = raw.receiverPersonId === '' ? null : raw.receiverPersonId;
+  if (receiverPersonId !== null && !validId(receiverPersonId)) errors.push(diagnostic('reference', 'draft.receiverPersonId', 'Choose a receiving person or leave this unassigned.'));
+  const sharedObject = raw.sharedObject.trim();
+  if (!sharedObject) errors.push(diagnostic('relationship-text', 'draft.sharedObject', 'Name the shared object or decision.'));
+  if (!connectionFields.status.choices.includes(raw.status)) errors.push(diagnostic('choice', 'draft.status', 'Choose active or paused.'));
+  return { id, senderTeamId: raw.senderTeamId, receiverTeamId: raw.receiverTeamId, receiverPersonId,
+    sharedObject, responseExpectation: raw.responseExpectation.trim() || null, workIds: [...raw.workIds], status: raw.status };
+}
+
 function values(session) {
   const { descriptor, raw } = session;
   const errors = [];
@@ -197,6 +235,10 @@ function values(session) {
     const contribution = contributionValues(descriptor.id, raw, errors);
     command = descriptor.mode === 'create' ? { type: descriptor.form, contribution }
       : { type: descriptor.form, contributionId: descriptor.id, contribution };
+  } else if (descriptor.collection === 'connections') {
+    const connection = connectionValues(descriptor.id, raw, errors);
+    command = descriptor.mode === 'create' ? { type: descriptor.form, connection }
+      : { type: descriptor.form, connectionId: descriptor.id, connection };
   } else if (descriptor.collection === 'work') {
     const parsed = prepareWorkDraftValues(raw);
     errors.push(...parsed.errors);
@@ -225,6 +267,8 @@ function changedRow(session, command) {
   }
   if (session.descriptor.collection === 'contributions') return Object.keys(contributionFields).some(field => field === 'workIds'
     ? !sameIds(command.contribution.workIds, row.workIds) : command.contribution[field] !== row[field]);
+  if (session.descriptor.collection === 'connections') return Object.keys(connectionFields).some(field => field === 'workIds'
+    ? !sameIds(command.connection.workIds, row.workIds) : command.connection[field] !== row[field]);
   if (session.descriptor.collection !== 'work') return command.team.label !== row.label || !sameIds(command.team.personIds, row.personIds);
   const work = command.work;
   return work.label !== row.label || work.teamId !== row.teamId || !sameIds(work.personIds, row.personIds)
@@ -239,11 +283,13 @@ const FAMILIES = Object.freeze({
   session: Object.freeze({ id: 'sessionId', describe: describeSessionTarget, copy: copySessionRaw }),
   role: Object.freeze({ id: 'roleId', describe: describeRoleTarget, copy: copyRoleRaw }),
   contribution: Object.freeze({ id: 'contributionId', describe: describeContributionTarget, copy: copyContributionRaw }),
+  connection: Object.freeze({ id: 'connectionId', describe: describeConnectionTarget, copy: copyConnectionRaw }),
 });
 export const createAssemblyDraftAdapter = studio => createFormDraftAdapter(studio, FAMILIES.assembly);
 export const createSessionDraftAdapter = studio => createFormDraftAdapter(studio, FAMILIES.session);
 export const createRoleDraftAdapter = studio => createFormDraftAdapter(studio, FAMILIES.role);
 export const createContributionDraftAdapter = studio => createFormDraftAdapter(studio, FAMILIES.contribution);
+export const createConnectionDraftAdapter = studio => createFormDraftAdapter(studio, FAMILIES.connection);
 
 function createFormDraftAdapter(studio, family) {
   if (!studio || typeof studio.read !== 'function' || typeof studio.previewCommand !== 'function'

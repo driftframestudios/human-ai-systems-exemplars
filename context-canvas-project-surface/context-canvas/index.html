@@ -189,7 +189,78 @@
             <ul data-native-saved-list></ul>
           </details>
         </header>
-        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" data-native-session-editor aria-labelledby="native-session-title">
+        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-patch-bay-title">
+          <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
+            <h3 id="native-patch-bay-title">Coordination connections</h3>
+            <p class="native-coordination__hint">Connect teams through the work they share.</p>
+            <details class="native-connection-template" data-connection-templates hidden>
+              <summary>Try a team arrangement</summary>
+              <div data-connection-template-body></div>
+              <p class="native-coordination__status" data-connection-template-status role="status" aria-live="polite" aria-atomic="true"></p>
+            </details>
+            <div data-native-connection-view></div>
+            <section class="native-connection" data-native-connection-editor aria-labelledby="native-connection-title">
+              <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" data-connection-action="create" disabled>Add connection</button></div>
+              <details class="native-coordination__configuration native-connection__configuration" data-connection-configure hidden>
+                <summary>Connection settings</summary>
+                <div class="native-coordination__recovery" data-connection-recovery hidden>
+                  <p data-connection-current></p>
+                  <div class="native-coordination__actions"><button type="button" data-connection-action="review">Review saved edits</button><button type="button" data-connection-action="useCurrent">Use current values</button><button type="button" data-connection-action="freshId" hidden>Use these entries for a new connection</button><button type="button" data-connection-action="cancel">Discard saved edits</button></div>
+                </div>
+                <form novalidate>
+                  <fieldset disabled aria-label="Connection settings">
+                    <div data-connection-fields>
+                      <div class="native-connection__grid">
+                        <div class="native-connection__field">
+                          <label for="connection-senderTeamId">Sending team</label>
+                          <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
+                          <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
+                        </div>
+                        <div class="native-connection__field">
+                          <label for="connection-receiverTeamId">Receiving team</label>
+                          <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
+                          <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
+                        </div>
+                        <div class="native-connection__field">
+                          <label for="connection-receiverPersonId">Receiving person</label>
+                          <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
+                          <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
+                        </div>
+                        <div class="native-connection__field">
+                          <label for="connection-status">Status</label>
+                          <select id="connection-status" name="status" aria-describedby="connection-status-error"></select>
+                          <p class="native-coordination__error" id="connection-status-error" data-connection-error="status"></p>
+                        </div>
+                        <div class="native-connection__field">
+                          <label for="connection-sharedObject">Shared object or decision</label>
+                          <textarea id="connection-sharedObject" name="sharedObject" rows="3" aria-describedby="connection-sharedObject-error"></textarea>
+                          <p class="native-coordination__error" id="connection-sharedObject-error" data-connection-error="sharedObject"></p>
+                        </div>
+                        <div class="native-connection__field">
+                          <label for="connection-responseExpectation">Expected response</label>
+                          <textarea id="connection-responseExpectation" name="responseExpectation" rows="3" aria-describedby="connection-responseExpectation-error"></textarea>
+                          <p class="native-coordination__error" id="connection-responseExpectation-error" data-connection-error="responseExpectation"></p>
+                        </div>
+                      </div>
+                      <div class="native-connection__sessions" role="group" aria-labelledby="connection-work-label">
+                        <p class="native-coordination__control-title" id="connection-work-label">Supporting sessions</p>
+                        <ul class="native-connection__work" data-connection-work aria-describedby="connection-workIds-error"></ul>
+                        <p class="native-coordination__error" id="connection-workIds-error" data-connection-error="workIds"></p>
+                      </div>
+                      <p class="native-coordination__hint" data-connection-cost></p>
+                      <button type="button" data-connection-action="remove" disabled hidden>Remove this connection</button>
+                    </div>
+                    <p class="native-connection__confirm" data-connection-confirm hidden></p>
+                    <ul class="native-connection__dependencies" data-connection-dependencies hidden></ul>
+                    <p class="native-coordination__error native-connection__general-error" data-connection-general-error></p>
+                    <div class="native-coordination__actions"><button type="submit" data-connection-apply>Apply changes</button><button type="button" data-connection-action="cancel">Cancel changes</button></div>
+                  </fieldset>
+                </form>
+              </details>
+              <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
+            </section>
+          </section>
+          <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Weekly working session</option></select></div>
             <div class="native-coordination__actions"><button type="button" data-session-action="create" disabled>Add session</button><button type="button" data-session-action="remove" disabled>Remove session</button></div>
@@ -301,6 +372,7 @@
               </ul>
             </div>
           </details>
+          </section>
         </section>
         <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
           <h3 id="native-team-title">People and teams</h3>

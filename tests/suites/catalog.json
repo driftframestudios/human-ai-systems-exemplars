@@ -305,6 +305,10 @@
         "tests/native-investment-studio/assembly-editing.test.mjs",
         "tests/native-investment-studio/command-draft.test.mjs",
         "tests/native-investment-studio/commands.test.mjs",
+        "tests/native-investment-studio/connection-draft.test.mjs",
+        "tests/native-investment-studio/connection-editing.test.mjs",
+        "tests/native-investment-studio/connection-templates.test.mjs",
+        "tests/native-investment-studio/connection-view.test.mjs",
         "tests/native-investment-studio/contract.test.mjs",
         "tests/native-investment-studio/controller.test.mjs",
         "tests/native-investment-studio/draft.test.mjs",
@@ -2775,7 +2779,10 @@
       "profile": "browser",
       "command": {
         "cwd": ".",
-        "argv": ["node", "--test"],
+        "argv": [
+          "node",
+          "--test"
+        ],
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
@@ -2794,7 +2801,10 @@
       "profile": "browser",
       "command": {
         "cwd": ".",
-        "argv": ["node", "--test"],
+        "argv": [
+          "node",
+          "--test"
+        ],
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
@@ -2829,12 +2839,23 @@
       "id": "browser.native-investment-studio.sessions",
       "family": "native-investment-studio",
       "kind": "node-test",
-      "members": ["tests/native-investment-studio/session.browser.mjs"],
+      "members": [
+        "tests/native-investment-studio/session.browser.mjs"
+      ],
       "profile": "browser",
-      "command": {"cwd": ".", "argv": ["node", "--test"], "appendMembers": true},
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
       "owner": "collaboration/native-investment-studio/README.md",
       "scope": "Complete working sessions: participant and funding arithmetic, creation and removal, selected and parked edits, stale recovery, empty-plan entry, compact controls and ordinary About scrolling across Chromium, Firefox and Playwright WebKit.",
-      "aliases": ["test:native-investment-studio:session-browser"]
+      "aliases": [
+        "test:native-investment-studio:session-browser"
+      ]
     },
     {
       "id": "browser.native-investment-studio.responsibility",
@@ -2890,7 +2911,10 @@
       "profile": "browser",
       "command": {
         "cwd": ".",
-        "argv": ["node", "--test"],
+        "argv": [
+          "node",
+          "--test"
+        ],
         "appendMembers": true
       },
       "owner": "collaboration/native-investment-studio/README.md",
@@ -2919,6 +2943,50 @@
       "scope": "About Studio chapter editing, independent staffing arithmetic, original/variant parity, retained state, cross-chapter focus, active-content height and parent-owned vertical scrolling in three engines. Full Studio and hosted publication retain their source owners.",
       "aliases": [
         "test:about-studio-chapters-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.connections",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Connection form and diagram/list agreement, stable references, pause accounting, saved-edit recovery, focus, local horizontal inspection and ordinary vertical reading across three engines.",
+      "aliases": [
+        "test:native-investment-studio:connection-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.connection-templates",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection-template.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Bounded coordination template configuration, atomic preview and Apply, stale intent, cancellation, exact recovery-work accounting and cross-engine reading.",
+      "aliases": [
+        "test:native-investment-studio:connection-template-browser"
       ]
     }
   ],
@@ -3046,7 +3114,9 @@
         "browser.native-investment-studio.responsibility",
         "browser.native-investment-studio.sessions",
         "browser.native-investment-studio.assembly",
-        "browser.native-investment-studio.team-assembly"
+        "browser.native-investment-studio.team-assembly",
+        "browser.native-investment-studio.connections",
+        "browser.native-investment-studio.connection-templates"
       ]
     },
     {
@@ -3424,6 +3494,10 @@
           "tests/native-investment-studio/assembly-editing.test.mjs",
           "tests/native-investment-studio/command-draft.test.mjs",
           "tests/native-investment-studio/commands.test.mjs",
+          "tests/native-investment-studio/connection-draft.test.mjs",
+          "tests/native-investment-studio/connection-editing.test.mjs",
+          "tests/native-investment-studio/connection-templates.test.mjs",
+          "tests/native-investment-studio/connection-view.test.mjs",
           "tests/native-investment-studio/contract.test.mjs",
           "tests/native-investment-studio/controller.test.mjs",
           "tests/native-investment-studio/draft.test.mjs",
@@ -3526,6 +3600,12 @@
         ],
         "test:about-studio-chapters-browser": [
           "tests/context-canvas/about-studio-chapters.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-browser": [
+          "tests/native-investment-studio/connection.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-template-browser": [
+          "tests/native-investment-studio/connection-template.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {
