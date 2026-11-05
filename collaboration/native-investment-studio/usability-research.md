@@ -507,3 +507,20 @@ Undo and keyboard entry at laptop and narrow widths. The test must observe the
 new heading, selected stage, visible fields, confirmation and return focus as
 well as serialized state. Human walkthrough remains the evidence for whether
 these cues resolve the reported confusion.
+
+
+## Elapsed timing, effort and working calendars
+
+**Receiving decision.** Keep exact elapsed sequence timing distinct from session
+effort, staffing weeks and a working calendar. The inspector accepts `11h 30m`,
+`30m` or integer minutes, names the plan's beginning, and retains raw entries
+through review and recovery. A sprint or business-quarter conversion belongs
+to an explicitly configured calendar.
+
+Microsoft's [effort and duration guidance](https://support.microsoft.com/en-us/project/effort-and-duration-in-project-for-the-web)
+and [working-calendar guidance](https://support.microsoft.com/en-au/project/set-the-general-working-days-and-times-for-a-project)
+distinguish these planning quantities and the calendar settings used to translate
+them. The local design applies that distinction to a small authored rehearsal
+sequence. It supports clearer entry while preserving existing plan meaning.
+The focused observation checks hours/minutes parsing, retained invalid text,
+Apply/Undo and the actual receiving inspector at ordinary mobile width.

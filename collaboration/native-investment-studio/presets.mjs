@@ -1,6 +1,7 @@
 import { CONTRACT } from './config.mjs';
 import { createExamplePlan, preparePlan, PlanError } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
+import { SHOWCASE_SCENARIOS, createScenarioPlan } from './showcase-scenarios.mjs';
 
 const PRESET_VERSION = '1.0.0';
 
@@ -154,6 +155,7 @@ export function createShowcasePlan() {
 
 const CATALOGUE = new Map([
   ['service-request-pilot', 'Service request pilot', 'Three teams prepare a pilot, review its evidence, and plan the funded time together.', createShowcasePlan],
+  ...SHOWCASE_SCENARIOS.map(scenario => [scenario.id, scenario.label, scenario.description, () => createScenarioPlan(createShowcasePlan(), scenario)]),
   ['shared-working-sessions', 'Shared working sessions', 'Four people meet for half an hour, six times.', workingSessions],
   ['funded-working-sessions', 'Sessions within funded time', 'The same sessions use three funded hours per person.', fundedSessions],
 ].map(([id, label, description, create]) => [id, Object.freeze({

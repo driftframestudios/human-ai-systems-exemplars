@@ -338,6 +338,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/investment-trace-view.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-trace-view.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/investment-trace.mjs",
+      "projected_path": "collaboration/native-investment-studio/investment-trace.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
       "media_type": "text/javascript"
@@ -358,6 +368,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/reports-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/reports-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/reports.mjs",
+      "projected_path": "collaboration/native-investment-studio/reports.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/responsibility-controller.mjs",
       "projected_path": "collaboration/native-investment-studio/responsibility-controller.mjs",
       "media_type": "text/javascript"
@@ -370,6 +390,11 @@
     {
       "source_path": "collaboration/native-investment-studio/shell.mjs",
       "projected_path": "collaboration/native-investment-studio/shell.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/showcase-scenarios.mjs",
+      "projected_path": "collaboration/native-investment-studio/showcase-scenarios.mjs",
       "media_type": "text/javascript"
     },
     {
@@ -2455,6 +2480,11 @@
     {
       "source_path": "collaboration/native-investment-studio/score-reference.mjs",
       "projected_path": "collaboration/native-investment-studio/score-reference.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-time.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-time.mjs",
       "media_type": "text/javascript"
     },
     {

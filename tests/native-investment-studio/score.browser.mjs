@@ -49,22 +49,37 @@ async function open(t, engine, options = {}) {
 }
 const bytes = page => page.evaluate(() => window.scoreFixture.studio.exportText());
 async function inspect(page, kind, id) {
+  const inspector = score(page).locator('.native-score__inspector');
+  if (!await inspector.evaluate(element => element.open)) await inspector.locator(':scope > summary').click();
   await score(page).locator(`[data-score-action="kind"][data-score-kind="${kind}"]`).click();
   if (id) await score(page).locator('.native-score__picker select').selectOption(id);
 }
 for (const engine of names) {
   test(`${engine}: horizon changes timing and capacity while funding remains explicit`, async t => {
     const page = await open(t, engine);
-    await expect(score(page).locator('[data-score-readout]')).toContainText('825 min');
+    await expect(score(page).locator('[data-score-readout]')).toContainText('13h 45m');
     const accepted = await bytes(page);
+    for (const name of ['capacity', 'dependencies', 'inspector']) assert.equal(await score(page).locator(`.native-score__${name}`).evaluate(element => element.open), false);
+    await expect(score(page).locator('[data-score-basis]')).toHaveCount(0);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await score(page).screenshot({ path: resolve(captures, `${engine}-initial-${width}.png`) });
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
     await score(page).getByRole('button', { name: '2×', exact: true }).click();
     assert.equal(await bytes(page), accepted, 'view zoom leaves accepted serialization exact');
+    await score(page).locator('.native-score__capacity > summary').click();
+    await score(page).locator('.native-score__dependencies > summary').click();
+    assert.equal(await bytes(page), accepted, 'opening details preserves accepted serialization');
+    await score(page).locator('.native-score__inspector > summary').focus(); await page.keyboard.press('Enter');
+    await expect(score(page)).toHaveAttribute('data-score-state', 'editing');
     await inspect(page, 'work', 'review');
-    await input(page, 'work.review.startMinute').fill('500');
+    await input(page, 'work.review.startMinute').fill('8h20m');
     await expect(score(page).locator('[data-score-projection]')).toHaveAttribute('data-score-reading', 'proposed');
     await expect(score(page).locator('.native-score__person[data-attention="true"]')).toContainText('Quality reviewer');
     await expect(score(page).locator('.native-score__dependencies')).toContainText('Starts before');
     await expect(root(page).locator('[data-native-total]')).toHaveText('$3,980.00');
+    for (const name of ['capacity', 'dependencies', 'inspector']) assert.equal(await score(page).locator(`.native-score__${name}`).evaluate(element => element.open), true, 'preview retains each open disclosure');
     assert.equal(await bytes(page), accepted, 'timing preview leaves accepted state exact');
     await action(page, 'apply').click();
     assert.equal(await page.evaluate(() => window.scoreFixture.studio.read().state.work.find(row => row.id === 'review').timing.startMinute), 500);
@@ -158,9 +173,9 @@ for (const engine of names) {
     assert.ok(await agendaTable.getByRole('columnheader').evaluateAll(cells => cells.every(cell => cell.scope === 'col')));
     assert.ok(await agendaTable.getByRole('rowheader').evaluateAll(cells => cells.length > 0 && cells.every(cell => cell.scope === 'row')));
     assert.deepEqual(await agendaTable.locator('tbody tr > td:first-child').allTextContents(), [
-      '0 min–60 min', '90 min–150 min', '150 min–210 min', '240 min–300 min', '330 min–390 min', '420 min–480 min',
-      '480 min–540 min', '570 min–630 min', '630 min–660 min', '660 min–690 min', '705 min–735 min', '750 min–780 min',
-      '795 min–825 min', '825 min–825 min',
+      '0m–1h', '1h 30m–2h 30m', '2h 30m–3h 30m', '4h–5h', '5h 30m–6h 30m', '7h–8h',
+      '8h–9h', '9h 30m–10h 30m', '10h 30m–11h', '11h–11h 30m', '11h 45m–12h 15m', '12h 30m–13h',
+      '13h 15m–13h 45m', '13h 45m–13h 45m',
     ]);
     const firstAgendaRow = agendaTable.locator('tbody tr').first();
     await expect(firstAgendaRow.getByRole('rowheader')).toHaveText('Research synthesis');
@@ -191,7 +206,7 @@ for (const engine of names) {
       await agenda.screenshot({ path: resolve(captures, `${engine}-agenda-${width}.png`) });
     }
     await score(page).locator('.native-score__exact summary').click();
-    await expect(score(page).locator('.native-score__exact table')).toContainText('4 × 30 min');
+    await expect(score(page).locator('.native-score__exact table')).toContainText('4 × 30m');
     const before = await bytes(page);
     await score(page).getByRole('button', { name: 'Whole plan', exact: true }).focus(); await page.keyboard.press('Enter'); assert.equal(await bytes(page), before);
     await page.emulateMedia({ forcedColors: 'active' });
@@ -209,7 +224,7 @@ for (const engine of names) {
       window.scoreFixture.controller.dispose();
       const element = document.querySelector('[data-native-score]'), observations = [];
       const external = document.createElement('input'); external.name = 'newer-purpose-focus'; document.body.append(external);
-      for (const callback of ['onBegin', 'onEditing', 'select', 'decision-focus']) {
+      for (const callback of ['onBegin', 'onEditing', 'select', 'decision-focus', 'open-focus']) {
         const studio = createStudio(createShowcasePlan()), accepted = studio.read(), editing = createDraftCoordinator(studio);
         let armed = true, successorToken;
         function transfer() {
@@ -222,26 +237,30 @@ for (const engine of names) {
         const receiver = mountScorePanel(element, { studio, editing,
           onBegin: callback === 'onBegin' ? transfer : () => {},
           onEditing: ['onEditing', 'select'].includes(callback) ? transfer : () => {} });
-        const decisionFocus = event => { if (event.target.dataset.scoreField === 'gate.gate-1.label') transfer(); };
-        if (callback === 'decision-focus') {
+        const decisionFocus = event => { if (event.target.dataset.scoreField === (callback === 'open-focus' ? 'work.review.timed' : 'gate.gate-1.label')) transfer(); };
+        const queuedToggle = ['decision-focus', 'open-focus'].includes(callback)
+          ? new Promise(resolve => element.querySelector('.native-score__inspector').addEventListener('toggle', resolve, { once: true })) : null;
+        if (['decision-focus', 'open-focus'].includes(callback)) {
           element.addEventListener('focusin', decisionFocus);
-          element.querySelector('[data-score-view-action="add-decision"]').click();
+          if (callback === 'decision-focus') element.querySelector('[data-score-view-action="add-decision"]').click();
+          else receiver.open();
         } else if (callback === 'select') receiver.select({ kind: 'work', id: 'review' }, true);
         else receiver.open();
         const retained = () => ({ active: editing.read().active?.kind ?? null,
           sameLease: editing.read().active?.token === successorToken,
           raw: editing.purpose.read().draft?.raw.changedAbility ?? null,
           focus: document.activeElement.name, acceptedUnchanged: studio.read() === accepted });
+        const beforeToggle = retained(); if (queuedToggle) await queuedToggle;
         const beforeDisposal = retained(); receiver.dispose();
         element.removeEventListener('focusin', decisionFocus);
-        observations.push({ callback, beforeDisposal, afterDisposal: retained() });
+        observations.push({ callback, beforeToggle, beforeDisposal, afterDisposal: retained() });
         editing.dispose();
       }
       external.remove(); return observations;
     });
     const expected = { active: 'purpose', sameLease: true,
       raw: 'The receiving team can recover an interrupted request.', focus: 'newer-purpose-focus', acceptedUnchanged: true };
-    assert.deepEqual(observations, ['onBegin', 'onEditing', 'select', 'decision-focus'].map(callback => ({ callback, beforeDisposal: expected, afterDisposal: expected })));
+    assert.deepEqual(observations, ['onBegin', 'onEditing', 'select', 'decision-focus', 'open-focus'].map(callback => ({ callback, beforeToggle: expected, beforeDisposal: expected, afterDisposal: expected })));
   });
   test(`${engine}: score disposal during preview releases its lease and removes its owned controls`, async t => {
     const page = await open(t, engine);
@@ -310,13 +329,13 @@ for (const engine of names) {
     const clip = score(page).locator('.native-score__timeline [data-score-view-action="select"][data-score-kind="work"][data-score-id="review"]').first();
     await clip.focus(); await page.keyboard.press('Enter');
     await expect(input(page, 'work.review.timed')).toBeFocused();
-    await expect(input(page, 'work.review.startMinute')).toHaveValue('660');
+    await expect(input(page, 'work.review.startMinute')).toHaveValue('11h');
     await score(page).locator('.native-score__exact summary').click();
     const table = score(page).locator('.native-score__exact table');
     await expect(table.getByRole('columnheader', { name: 'Activity', exact: true })).toBeVisible();
     await expect(table.getByRole('row').filter({ has: page.getByRole('rowheader', { name: 'Pilot decision review', exact: true }) })).toContainText('Paused · outside active effort');
     await expect(table.getByRole('row').filter({ has: page.getByRole('rowheader', { name: 'Research synthesis', exact: true }) })).toContainText('Retired · outside active effort');
-    await expect(score(page).locator('[data-score-readout]')).toContainText('720 min');
+    await expect(score(page).locator('[data-score-readout]')).toContainText('12h');
     await expect(root(page).locator('[data-native-total]')).toHaveText('$3,980.00');
     assert.equal(await bytes(page), accepted, 'keyboard inspection leaves the retained commitment and activity records exact');
   });
@@ -366,17 +385,14 @@ for (const engine of names) {
     const review = score(page).locator('.native-score__clip[data-score-kind="work"][data-score-id="review"]').first();
     await review.hover();
     await expect(preview).toBeVisible();
-    await expect(preview).toContainText('Pilot decision review: 660 min–690 min, occurrence 1');
-    await expect(preview).toContainText('Product lead, Engineering lead, Quality reviewer. 30 min per person, each session. Extra investment.');
-    await expect(preview).toContainText('Needs Operations rehearsal: ready in this arrangement.');
+    await expect(preview).toHaveText('Pilot decision review · 30 minutes per person. Needs Operations rehearsal.');
     const pairing = score(page).locator('.native-score__clip[data-score-kind="work"][data-score-id="pairing"]').first();
     await pairing.focus();
-    await expect(preview).toContainText('Engineering lead, Engineer. 60 min per person, each session. Within funded time.');
-    await expect(preview).toContainText('Needs Research synthesis: ready in this arrangement. Supports Operations rehearsal.');
+    await expect(preview).toHaveText('Prototype pairing · 60 minutes per person. Needs Research synthesis.');
     await expect(pairing).toHaveAttribute('aria-description', /Engineering lead, Engineer.*Supports Operations rehearsal/u);
     assert.equal(await bytes(page), accepted, 'hover and keyboard focus explain the arrangement without changing it');
     await inspect(page, 'person', 'noor');
-    for (const width of [1440, 320]) {
+    for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
       const remove = action(page, 'remove-interval').first();
       await remove.scrollIntoViewIfNeeded();
@@ -388,10 +404,28 @@ for (const engine of names) {
       assert.ok(dimensions.remove <= dimensions.cancel + dimensions.line + 2,
         `Remove interval stays a compact action with room for one wrapped line at ${width}px: ${JSON.stringify(dimensions)}`);
       const lastTick = score(page).locator('.native-score__axis .native-score__track > span').last();
-      await expect(lastTick).toHaveText('900');
+      await expect(lastTick).toHaveText('15h');
       assert.equal(await lastTick.evaluate(element => { const range = document.createRange(); range.selectNodeContents(element); return range.getClientRects().length; }), 1,
         `The ending elapsed-minute label stays on one line at ${width}px`);
     }
+    await inspect(page, 'work', 'review');
+    const starts = input(page, 'work.review.startMinute'); await starts.fill('11h30m');
+    await score(page).getByRole('button', { name: 'Increase session starts after', exact: true }).click();
+    await expect(starts).toHaveValue('11h 31m');
+    const stepper = starts.locator('..');
+    const geometry = await stepper.evaluate(element => {
+      const box = element.getBoundingClientRect(), controls = [...element.children].map(child => { const rect = child.getBoundingClientRect(); return { center: rect.top + rect.height / 2, left: rect.left, right: rect.right, height: rect.height }; });
+      return { left: box.left, right: box.right, controls, width: innerWidth };
+    });
+    assert.equal(geometry.controls.length, 3);
+    assert.ok(Math.max(...geometry.controls.map(row => row.center)) - Math.min(...geometry.controls.map(row => row.center)) <= 1, 'stepper centers its two actions beside the exact entry');
+    assert.ok(geometry.left >= 0 && geometry.right <= geometry.width && geometry.controls.every(row => row.height >= 40), JSON.stringify(geometry));
+    await score(page).locator('.native-score__inspector > summary').click();
+    assert.equal(await score(page).locator('.native-score__inspector').evaluate(element => element.open), false);
+    await score(page).locator('.native-score__inspector > summary').click();
+    await expect(starts).toHaveValue('11h 31m');
+    await score(page).locator('.native-score__inspector').screenshot({ path: resolve(captures, `${engine}-elapsed-entry-390.png`) });
+    await action(page, 'cancel').last().click(); await expect(starts).toHaveValue('11h');
     assert.equal(await bytes(page), accepted, 'availability inspection preserves accepted state');
   });
   test(`${engine}: direct horizon controls retain draft text and distinguish inspection from navigation`, async t => {
@@ -415,6 +449,7 @@ for (const engine of names) {
     await expect(input(page, 'work.review.startMinute')).toHaveValue('00660');
 
     const person = score(page).locator('[data-score-person="noor"]');
+    await score(page).locator('.native-score__capacity > summary').click();
     await expect(person.getByRole('heading', { name: 'Quality reviewer', exact: true })).toBeVisible();
     await expect(person.locator('h5 button')).toHaveCount(0); await expect(person.getByRole('button')).toHaveCount(2);
     await person.getByRole('button', { name: 'Inspect availability for Quality reviewer', exact: true }).click();
@@ -425,6 +460,7 @@ for (const engine of names) {
     await root(page).locator('[data-native-return-action]').click();
     await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
     const handoff = score(page).locator('.native-score__dependencies li').last();
+    await score(page).locator('.native-score__dependencies > summary').click();
     await expect(handoff.locator('h5 button')).toHaveCount(0);
     await handoff.getByRole('button', { name: /^Inspect handoff from /u }).click();
     await expect(score(page).locator('[data-score-kind="dependency"][data-score-action="kind"]')).toHaveAttribute('aria-pressed', 'true');

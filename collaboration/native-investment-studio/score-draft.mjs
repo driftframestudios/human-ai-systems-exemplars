@@ -1,37 +1,40 @@
 import { LIMITS } from './config.mjs';
 import { createScoreSettings } from './score-models.mjs';
+import { parseScoreTime, formatScoreTime } from './score-time.mjs';
 
 const text = (label, extra = {}) => Object.freeze({ kind: 'text', label, maxLength: LIMITS.relationshipText, ...extra });
 const id = (label, source, optional = false) => text(label, { source, optional, maxLength: LIMITS.identifier });
 const ids = (label, source, maxItems) => Object.freeze({ kind: 'ids', label, source, maxItems });
 const number = (label, max = LIMITS.scoreMinute, extra = {}) => text(label, { numeric: true, min: 0, max, maxLength: 32, ...extra });
+const time = (label, max = LIMITS.scoreMinute, extra = {}) => number(label, max, { time: true, ...extra });
+const numberFromRaw = (value, metadata) => metadata.time ? parseScoreTime(value) : Number(value);
 const yesno = label => text(label, { checkbox: true, choices: ['yes', 'no'] });
 const label = name => text(name, { maxLength: LIMITS.label });
 export const SCORE_FIELDS = Object.freeze({
   windowEnabled: yesno('Describe a coordination window'), windowLabel: label('Window label'),
-  windowStartMinute: number('Window start minute'), windowEndMinute: number('Window end minute'),
+  windowStartMinute: time('Window starts after'), windowEndMinute: time('Window ends after'),
   timedWorkIds: ids('Work timing records', 'work', LIMITS.work), availabilityPersonIds: ids('Availability records', 'people', LIMITS.people),
   dependencyIds: ids('Dependencies', null, LIMITS.scoreDependencies), stageIds: ids('Stages', null, LIMITS.scoreStages),
   waitIds: ids('Waits', null, LIMITS.scoreWaits), gateIds: ids('Decision gates', null, LIMITS.scoreGates),
   proposalIds: ids('Proposed sessions', null, LIMITS.scoreProposals), fundProposalIds: ids('Proposals to add to planned work', 'proposals', LIMITS.scoreProposals),
 });
-const timingFields = Object.freeze({ timed: yesno('Place this work in time'), startMinute: number('Start minute'),
-  repeatEveryMinutes: number('Minutes between starts', LIMITS.scoreMinute, { optional: true, min: 1 }) });
+const timingFields = Object.freeze({ timed: yesno('Place this work in time'), startMinute: time('Session starts after'),
+  repeatEveryMinutes: time('Time between session starts', LIMITS.scoreMinute, { optional: true, min: 1 }) });
 const records = Object.freeze({
   work: timingFields,
-  dependency: { fromWorkId: id('Earlier session', 'work'), toWorkId: id('Later session', 'work'), lagMinutes: number('Waiting minutes after earlier work'), connectionId: id('Related connection', 'connections', true) },
+  dependency: { fromWorkId: id('Earlier session', 'work'), toWorkId: id('Later session', 'work'), lagMinutes: time('Wait after earlier work'), connectionId: id('Related connection', 'connections', true) },
   stage: { label: label('Stage name'), workIds: ids('Sessions in this stage', 'work', LIMITS.work) },
-  wait: { label: label('Wait name'), startMinute: number('Wait start minute'), endMinute: number('Wait end minute'), reason: text('Reason for the wait'), receiverPersonId: id('Person receiving the result', 'people', true) },
+  wait: { label: label('Wait name'), startMinute: time('Wait starts after'), endMinute: time('Wait ends after'), reason: text('Reason for the wait'), receiverPersonId: id('Person receiving the result', 'people', true) },
   gate: { label: label('Decision name'), afterStageId: id('Stage before the decision', 'stages'), reviewerPersonId: id('Person reviewing the decision', 'people', true),
     question: text('Question to resolve'), evidence: text('Evidence for review'), modeledDecision: text('Modeled decision', { choices: ['open', 'proceed', 'revise', 'hold'] }) },
   proposal: { bank: text('Proposal bank', { choices: ['next', 'options'] }), gateId: id('Gate before commitment', 'gates', true),
     workId: id('Proposed session identifier'), label: label('Proposed session name'), teamId: id('Hosting team', 'teams'), personIds: ids('Participating people', 'people', LIMITS.people),
-    minutesPerOccurrence: number('Minutes per person', LIMITS.minutesPerOccurrence), occurrences: number('Working sessions', LIMITS.occurrences),
+    minutesPerOccurrence: time('Time per person', LIMITS.minutesPerOccurrence), occurrences: number('Working sessions', LIMITS.occurrences),
     funding: text('Funding', { choices: ['allocated', 'additional'] }), status: text('Session status', { choices: ['planned', 'paused'] }),
     lifecycle: text('Session state', { choices: ['active', 'retired'] }), ...timingFields },
 });
 const availabilityFields = Object.freeze({ known: yesno('Describe availability'), intervalIds: ids('Available intervals', null, LIMITS.availabilityIntervals) });
-const intervalFields = Object.freeze({ startMinute: number('Available from minute'), endMinute: number('Available through minute') });
+const intervalFields = Object.freeze({ startMinute: time('Available from'), endMinute: time('Available until') });
 const collectionKeys = Object.freeze({ work: 'timedWorkIds', dependency: 'dependencyIds', stage: 'stageIds', wait: 'waitIds', gate: 'gateIds', proposal: 'proposalIds' });
 const validId = value => typeof value === 'string' && value.length <= LIMITS.identifier && /^[a-z][a-z0-9-]*$/.test(value);
 const diagnostic = (code, path, message) => Object.freeze({ code, path, message });
@@ -54,12 +57,12 @@ export function scoreRecordDefaults(kind, recordId) {
   if (kind === 'proposal') Object.assign(result, { workId: recordId, label: 'Proposed working session', minutesPerOccurrence: '30', occurrences: '1', funding: 'additional' });
   return result;
 }
-const timingRaw = timing => ({ timed: timing === null ? 'no' : 'yes', startMinute: String(timing?.startMinute ?? 0), repeatEveryMinutes: timing?.repeatEveryMinutes == null ? '' : String(timing.repeatEveryMinutes) });
-const put = (raw, prefix, values) => { for (const [key, value] of Object.entries(values)) raw[prefix + key] = Array.isArray(value) ? [...value] : value == null ? '' : String(value); };
+const timingRaw = timing => ({ timed: timing === null ? 'no' : 'yes', startMinute: formatScoreTime(timing?.startMinute ?? 0), repeatEveryMinutes: timing?.repeatEveryMinutes == null ? '' : formatScoreTime(timing.repeatEveryMinutes) });
+const put = (raw, prefix, values) => { for (const [key, value] of Object.entries(values)) raw[prefix + key] = Array.isArray(value) ? [...value] : value == null ? '' : typeof value === 'number' && scoreField(prefix + key)?.time ? formatScoreTime(value) : String(value); };
 export function startingScoreRaw(plan) {
   const settings = plan.scoreSettings;
   const raw = { windowEnabled: settings.window === null ? 'no' : 'yes', windowLabel: settings.window?.label ?? '',
-    windowStartMinute: String(settings.window?.startMinute ?? 0), windowEndMinute: String(settings.window?.endMinute ?? 0),
+    windowStartMinute: formatScoreTime(settings.window?.startMinute ?? 0), windowEndMinute: formatScoreTime(settings.window?.endMinute ?? 0),
     timedWorkIds: plan.work.map(row => row.id), availabilityPersonIds: plan.people.map(row => row.id),
     dependencyIds: settings.dependencies.map(row => row.id), stageIds: settings.stages.map(row => row.id), waitIds: settings.waits.map(row => row.id),
     gateIds: settings.gates.map(row => row.id), proposalIds: settings.proposals.map(row => row.id), fundProposalIds: [] };
@@ -80,26 +83,26 @@ export function startingScoreRaw(plan) {
 export function copyScoreRaw(_target, raw) { return Object.freeze(Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Array.isArray(value) ? Object.freeze([...value]) : value]))); }
 export function sameScoreRaw(_target, a, b) { return Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(key => Object.hasOwn(b, key) && (Array.isArray(a[key]) ? equalIds(a[key], b[key]) : a[key] === b[key])); }
 const nullable = value => value?.trim() || null;
-const timingFromRaw = (raw, prefix) => raw[prefix + 'timed'] !== 'yes' ? null : { startMinute: Number(raw[prefix + 'startMinute']), repeatEveryMinutes: nullable(raw[prefix + 'repeatEveryMinutes']) === null ? null : Number(raw[prefix + 'repeatEveryMinutes']) };
+const timingFromRaw = (raw, prefix) => raw[prefix + 'timed'] !== 'yes' ? null : { startMinute: parseScoreTime(raw[prefix + 'startMinute']), repeatEveryMinutes: nullable(raw[prefix + 'repeatEveryMinutes']) === null ? null : parseScoreTime(raw[prefix + 'repeatEveryMinutes']) };
 export function scoreArrangementFromRaw(raw, plan) {
-  const settings = { ...createScoreSettings(), window: raw.windowEnabled === 'yes' ? { label: raw.windowLabel.trim(), startMinute: Number(raw.windowStartMinute), endMinute: Number(raw.windowEndMinute) } : null };
+  const settings = { ...createScoreSettings(), window: raw.windowEnabled === 'yes' ? { label: raw.windowLabel.trim(), startMinute: parseScoreTime(raw.windowStartMinute), endMinute: parseScoreTime(raw.windowEndMinute) } : null };
   for (const [kind, collection] of [['dependency', 'dependencies'], ['stage', 'stages'], ['wait', 'waits'], ['gate', 'gates']]) {
     settings[collection] = raw[collectionKeys[kind]].map(id => ({ id, ...Object.fromEntries(Object.entries(records[kind]).map(([key, metadata]) => {
       const value = raw[`${kind}.${id}.${key}`];
-      return [key, metadata.kind === 'ids' ? [...value] : metadata.numeric ? Number(value) : metadata.optional || ['reason', 'question', 'evidence'].includes(key) ? nullable(value) : value.trim()];
+      return [key, metadata.kind === 'ids' ? [...value] : metadata.numeric ? numberFromRaw(value, metadata) : metadata.optional || ['reason', 'question', 'evidence'].includes(key) ? nullable(value) : value.trim()];
     })) }));
   }
   settings.proposals = raw.proposalIds.map(id => {
     const prefix = `proposal.${id}.`;
     return { id, bank: raw[prefix + 'bank'], gateId: nullable(raw[prefix + 'gateId']), work: {
       id: raw[prefix + 'workId'].trim(), label: raw[prefix + 'label'].trim(), teamId: raw[prefix + 'teamId'].trim(), personIds: [...raw[prefix + 'personIds']],
-      minutesPerOccurrence: Number(raw[prefix + 'minutesPerOccurrence']), occurrences: Number(raw[prefix + 'occurrences']), funding: raw[prefix + 'funding'],
+      minutesPerOccurrence: parseScoreTime(raw[prefix + 'minutesPerOccurrence']), occurrences: Number(raw[prefix + 'occurrences']), funding: raw[prefix + 'funding'],
       status: raw[prefix + 'status'], timing: timingFromRaw(raw, prefix), lifecycle: raw[prefix + 'lifecycle'] } };
   });
   return { type: 'score.arrangement.replace', scoreSettings: settings,
     workTiming: raw.timedWorkIds.map(workId => ({ workId, timing: timingFromRaw(raw, `work.${workId}.`) })),
     availability: raw.availabilityPersonIds.map(personId => ({ personId, intervals: raw[`availability.${personId}.known`] === 'yes'
-      ? raw[`availability.${personId}.intervalIds`].map(id => ({ startMinute: Number(raw[`availability.${personId}.${id}.startMinute`]), endMinute: Number(raw[`availability.${personId}.${id}.endMinute`]) })) : null })),
+      ? raw[`availability.${personId}.intervalIds`].map(id => ({ startMinute: parseScoreTime(raw[`availability.${personId}.${id}.startMinute`]), endMinute: parseScoreTime(raw[`availability.${personId}.${id}.endMinute`]) })) : null })),
     fundProposalIds: [...raw.fundProposalIds] };
 }
 export function summarizeScoreDraft(raw) { return `${raw.windowEnabled === 'yes' && raw.windowLabel.trim() ? raw.windowLabel.trim() : 'Authored arrangement'}. Review session timing, availability and modeled decisions${raw.fundProposalIds.length ? ' before adding the selected proposals to planned work' : ''}.`; }
@@ -113,8 +116,11 @@ function errorsFor(raw) {
     if ((kind === 'work' || kind === 'proposal') && ['startMinute', 'repeatEveryMinutes'].includes(part) && raw[`${kind}.${id}.timed`] !== 'yes') continue;
     if (kind === 'availability' && key.split('.').length === 4 && raw[`availability.${id}.known`] !== 'yes') continue;
     if (metadata.choices && !metadata.choices.includes(value)) errors.push(diagnostic('choice', `draft.${key}`, 'Choose one of the listed values.'));
-    if (metadata.numeric && !(metadata.optional && value.trim() === '') && (!/^\d+$/.test(value.trim()) || Number(value) < metadata.min || Number(value) > metadata.max))
-      errors.push(diagnostic('integer-text', `draft.${key}`, `Enter a whole number from ${metadata.min} through ${metadata.max}.`));
+    if (metadata.numeric && !(metadata.optional && value.trim() === '')) {
+      const numeric = numberFromRaw(value, metadata);
+      if ((metadata.time ? numeric === null : !/^\d+$/.test(value.trim())) || numeric < metadata.min || numeric > metadata.max)
+        errors.push(diagnostic('integer-text', `draft.${key}`, metadata.time ? `Enter elapsed hours and minutes from ${formatScoreTime(metadata.min)} through ${formatScoreTime(metadata.max)}; for example, 11h30m or 690 minutes.` : `Enter a whole number from ${metadata.min} through ${metadata.max}.`));
+    }
   }
   return errors;
 }
@@ -188,9 +194,11 @@ export function createScoreDraftAdapter(studio) {
     const error = guard(token); if (error) return fail(error);
     const metadata = activeField(key), value = active.raw[key]?.trim();
     if (![1, -1].includes(direction)) return fail(diagnostic('step', `draft.${key}`, 'Choose a single upward or downward step.'));
-    if (!metadata?.numeric || !/^\d+$/.test(value) || Number(value) < metadata.min || Number(value) > metadata.max)
-      return fail(diagnostic('integer-text', `draft.${key}`, 'Enter a whole number within the field range before using the step controls.'));
-    return setText(token, key, String(Math.max(metadata.min, Math.min(metadata.max, Number(value) + direction))));
+    const numeric = metadata?.numeric ? numberFromRaw(value, metadata) : null;
+    if (!metadata?.numeric || (metadata.time ? numeric === null : !/^\d+$/.test(value)) || numeric < metadata.min || numeric > metadata.max)
+      return fail(diagnostic('integer-text', `draft.${key}`, metadata?.time ? 'Enter elapsed hours and minutes within the field range before using the step controls.' : 'Enter a whole number within the field range before using the step controls.'));
+    const next = Math.max(metadata.min, Math.min(metadata.max, numeric + direction));
+    return setText(token, key, metadata.time && !/^\d+$/.test(value) ? formatScoreTime(next) : String(next));
   }
   function prepare(token) {
     const error = guard(token); if (error) return { error };
