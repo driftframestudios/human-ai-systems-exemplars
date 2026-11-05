@@ -10,6 +10,7 @@ import { describeScoreChanges } from './score-reference.mjs';
 import { describeArrangementChanges } from './coordination-arrangements.mjs';
 import { projectInvestmentTrace } from './investment-trace.mjs';
 import { mountInvestmentTrace } from './investment-trace-view.mjs';
+import { createDownloadOwner } from './browser-download.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -110,7 +111,7 @@ function relationshipDescriptions(state) {
 }
 
 export function mountInvestmentPanel(root, { studio, editing, onChange, onSource = () => {} }) {
-  const document = root.ownerDocument, window = document.defaultView;
+  const document = root.ownerDocument;
   const exchange = createPlanExchange(studio, editing);
   const get = name => root.querySelector(`[data-investment-${name}]`);
   const status = get('status'), previewElement = get('preview'), changes = get('changes');
@@ -120,7 +121,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onSource
   const presets = new Map(listPresets().map(preset => [preset.id, preset]));
   const cleanup = [];
   let projection = null, baseline = null, renderedPreview = null;
-  let disposed = false, fileSelection = 0, downloadUrl = null;
+  let disposed = false, fileSelection = 0;
+  const downloads = createDownloadOwner(root);
   const trace = mountInvestmentTrace(root, { onSource, onHold: () => historyAction('baseline') });
 
   function listen(element, name, callback) {
@@ -128,10 +130,6 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onSource
     cleanup.push(() => element.removeEventListener(name, callback));
   }
   function announce(message) { status.textContent = message; }
-  function releaseDownload() {
-    if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
-    downloadUrl = null;
-  }
   function summary(preview) {
     const fragment = document.createDocumentFragment();
     const add = text => { const item = document.createElement('li'); item.textContent = text; fragment.append(item); };
@@ -218,16 +216,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onSource
   function refreshAll() { onChange(); refresh(); }
   function download() {
     const captured = exchange.captureExport();
-    const url = window.URL.createObjectURL(new window.Blob([captured.text], { type: 'application/json' }));
-    releaseDownload();
-    downloadUrl = url;
-    const link = document.createElement('a');
-    link.href = url; link.download = 'investment-plan.json'; link.hidden = true;
-    root.append(link);
-    try { link.click(); if (!disposed) announce('Current plan downloaded.'); }
-    finally { link.remove(); }
-    // Keep the one owned URL alive after click. A later download or disposal
-    // releases it, allowing the browser to capture the complete file first.
+    if (downloads.request({ text: captured.text, type: 'application/json', filename: 'investment-plan.json' }) && !disposed)
+      announce('Current plan prepared for download.');
   }
   function historyAction(action) {
     if (projection !== studio.read() || action === 'restore' && baseline !== studio.readBaseline()) {
@@ -253,7 +243,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onSource
     if (!button || !root.contains(button) || button.disabled || disposed) return;
     const action = button.dataset.investmentAction;
     if (['undo', 'redo', 'baseline', 'restore'].includes(action)) { historyAction(action); return; }
-    if (action === 'download') { try { download(); } catch { announce('Try downloading the plan again.'); } return; }
+    if (action === 'download') { try { download(); } catch { if (!disposed) announce('Try downloading the plan again.'); } return; }
     fileSelection += 1;
     if (action === 'preset') {
       const preset = presets.get(select.value);
@@ -292,7 +282,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange, onSource
     disposed = true; fileSelection += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
-    exchange.dispose(); releaseDownload(); trace.dispose();
+    exchange.dispose(); downloads.dispose(); trace.dispose();
     select.replaceChildren();
     for (const button of Object.values(buttons)) button.disabled = true;
     file.disabled = true;

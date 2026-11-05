@@ -308,6 +308,7 @@
         "tests/native-investment-studio/assurance-draft.test.mjs",
         "tests/native-investment-studio/assurance-models.test.mjs",
         "tests/native-investment-studio/assurance-proposals.test.mjs",
+        "tests/native-investment-studio/browser-download.test.mjs",
         "tests/native-investment-studio/capabilities.test.mjs",
         "tests/native-investment-studio/capability-draft.test.mjs",
         "tests/native-investment-studio/capability-proposals.test.mjs",
