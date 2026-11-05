@@ -1031,3 +1031,18 @@ such as adding a person to the receiving team, remains explicit in the controlle
 Focused policy cases and the existing nested-return journeys receive the proof.
 Issue #710 owns this change; the accepted state and draft lease machinery remain
 the transaction authority.
+
+
+## 2026-11-05 — Shared admission limits
+
+Collection capacities and value bounds now have one named source in config.
+Encoded schema envelopes and exported admission limits use those same semantic
+values. Structural row allowances stay beside the schema that introduced them;
+the base envelope and earlier relationship-reference allowance remain explicit.
+The change preserves every exported value and all versioned byte budgets.
+
+This is a maintenance repair for changing one bound consistently. Existing
+contract and migration observations exercise admission and compatibility; a
+direct before/after comparison establishes this refactor's value preservation.
+Additional arithmetic fixtures would repeat the implementation. Issue #711
+owns this change.
