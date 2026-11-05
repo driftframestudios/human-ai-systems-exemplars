@@ -178,7 +178,7 @@ choice and funded session together; Undo restores the earlier plan.
 Enter elapsed hours and minutes, such as **11h30m** or **690 minutes**. The
 stored arrangement retains exact integer minutes from the beginning of the
 plan; elapsed time continues through off-hours. **Schedule within this plan**
-includes a session in the horizon. **Start a session every** sets the time from
+enables start and repeat timing for the session. **Start a session every** sets the time from
 one start to the next; the session count sets how many run. Compact step buttons change a value by one minute,
 and saved edits retain the entered text. Participant effort,
 funded time and temporal availability retain separate meanings. A wait adds
