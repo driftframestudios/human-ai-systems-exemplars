@@ -6,6 +6,7 @@ import { createDraftCoordinator } from '../../collaboration/native-investment-st
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
 const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
   change: null, qualityId: null, aiId: null, decisionId: null });
 
@@ -35,6 +36,30 @@ function fixture(reader) {
 }
 function file(text = planText()) { return { size: encoder.encode(text).byteLength }; }
 function expectHeld(result, code) { assert.equal(result.ok, false); assert.equal(result.error.code, code); }
+
+test('capability replacement compares owned nested values and names support and observation changes', () => {
+  const studio = createStudio(createShowcasePlan()), exchange = createPlanExchange(studio, editingFixture());
+  const initial = JSON.parse(studio.exportText());
+  initial.horizonWeeks += 1;
+  const unchanged = exchange.previewText(JSON.stringify(initial));
+  assert.equal(unchanged.ok, true);
+  assert.deepEqual(unchanged.view.preview.changes.practices.changed, [], 'recreated prerequisite and support arrays retain their meaning');
+  initial.practices[0].context = 'Review the changed handoff with the receiving team.';
+  initial.practices[0].supportBindings[0].workIds.push('rehearsal');
+  initial.capabilityEvidence.push({ id: 'pilot-rehearsal', subject: { kind: 'practice', instanceId: 'shared-expectations' },
+    stage: 'rehearsed', context: 'A fictional missed handoff walkthrough', observation: 'The receiver identified the response and its decision owner.',
+    recorderPersonId: 'noor', reviewBoundary: 'This authored walkthrough', observedPlanRevision: initial.revision });
+  const proposal = exchange.previewText(JSON.stringify(initial));
+  assert.equal(proposal.ok, true);
+  assert.deepEqual(proposal.view.preview.changes.practices.changed, [{ id: 'shared-expectations', fields: ['context', 'supportBindings'] }]);
+  assert.deepEqual(proposal.view.preview.changes.capabilityEvidence.added, ['pilot-rehearsal']);
+  assert.equal(proposal.view.preview.projection.result.plannedCommitmentCents, 398000, 'support references retain the existing session account');
+  assert.equal(exchange.apply(proposal.view.preview.token).ok, true);
+  assert.deepEqual(JSON.parse(studio.exportText()).capabilityEvidence, initial.capabilityEvidence);
+  const roundtrip = exchange.previewText(studio.exportText());
+  assert.deepEqual(roundtrip.view.preview.changes.capabilityEvidence.changed, []);
+  assert.deepEqual(roundtrip.view.preview.changes.practices.changed, []);
+});
 
 test('text preview is inert, reports keyed changes, and explicit Apply publishes one accepted event', () => {
   const { studio, exchange } = fixture();
@@ -93,15 +118,17 @@ test('legacy preview carries truthful source version while accepted export remai
   const legacy = createExamplePlan();
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
+  delete legacy.abilities; delete legacy.capabilityEvidence;
+  legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId, teamId: row.teamId, workIds: row.supportBindings[0].workIds }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   legacy.schemaVersion = '0.1.0';
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.3.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.4.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.3.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.4.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

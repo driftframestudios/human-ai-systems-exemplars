@@ -7,6 +7,8 @@ import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describ
   createContributionDraftAdapter, CONTRIBUTION_FORMS, makeContributionTarget, describeContributionTarget, copyContributionRaw, sameContributionRaw,
   createConnectionDraftAdapter, CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget, copyConnectionRaw, sameConnectionRaw } from './command-draft.mjs';
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
+import { createCapabilityDraftAdapter, CAPABILITY_FORMS, makeCapabilityTarget, describeCapabilityTarget,
+  copyCapabilityRaw, sameCapabilityRaw } from './capability-draft.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
 const indexRows = rows => new Map(rows.map(row => [row.id, row]));
@@ -38,10 +40,14 @@ const TYPES = Object.freeze({
     index: state => new Map(state.connections.map(row => [`connections:${row.id}`, row])),
     create: createConnectionDraftAdapter, forms: CONNECTION_FORMS, make: makeConnectionTarget,
     describe: describeConnectionTarget, copy: copyConnectionRaw, same: sameConnectionRaw }),
+  capability: Object.freeze({ id: 'capabilityId', ids: true, step: true,
+    index: state => new Map(['abilities', 'practices'].flatMap(collection => state[collection].map(row => [`${collection}:${row.id}`, row]))),
+    create: createCapabilityDraftAdapter, forms: CAPABILITY_FORMS, make: makeCapabilityTarget,
+    describe: describeCapabilityTarget, copy: copyCapabilityRaw, same: sameCapabilityRaw }),
 });
 const KINDS = Object.freeze(Object.keys(TYPES));
 const EMPTY_ERRORS = Object.freeze([]);
-const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work', contributions: 'contribution', connections: 'connection' });
+const ID_PREFIXES = Object.freeze({ people: 'person', teams: 'team', work: 'work', contributions: 'contribution', connections: 'connection', abilities: 'ability', practices: 'practice' });
 const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;

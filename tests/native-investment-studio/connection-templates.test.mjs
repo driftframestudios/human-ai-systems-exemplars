@@ -280,20 +280,20 @@ test('exact people and supporting-work list limits remain usable with one canoni
   assert.equal(proposal.projection.result.allocatedKnownCents, 40000);
 });
 
-test('the full candidate admits exactly 8192 references and rejects one additional reference atomically', () => {
+test('the full current candidate admits exactly 16384 references and rejects one additional reference atomically', () => {
   for (const excess of [0, 1]) {
     const plan = funded();
-    while (plan.work.length < 32) plan.work.push({ ...plan.work[0], id: `work-${plan.work.length}`, minutesPerOccurrence: 0 });
+    while (plan.work.length < 64) plan.work.push({ ...plan.work[0], id: `work-${plan.work.length}`, minutesPerOccurrence: 0 });
     const workIds = plan.work.map(row => row.id);
     const edge = id => ({ id, senderTeamId: 'delivery', receiverTeamId: 'receiving', receiverPersonId: null,
       sharedObject: 'Object', responseExpectation: null, workIds, status: 'active' });
-    for (let index = 0; index < 238; index += 1) plan.connections.push(edge(`existing-${index}`));
-    plan.connections.push({ ...edge('partial'), workIds: workIds.slice(0, 22 + excess) });
-    // 68 existing membership/work/practice references + 238*34 + 24 = 8184.
+    for (let index = 0; index < 246; index += 1) plan.connections.push(edge(`existing-${index}`));
+    plan.connections.push({ ...edge('partial'), workIds: workIds.slice(0, 6 + excess) });
+    // 132 membership/work/practice references + 246*66 + 8 = 16376.
     // The template adds two edges, each with two groups, one receiver, one work.
     const studio = createStudio(plan);
     if (excess) unchanged(studio, () => prepareCoordinationTemplate(studio.read(), existingRequest()), 'reference-budget');
-    else assert.equal(prepareCoordinationTemplate(studio.read(), existingRequest()).projection.state.connections.length, 241);
+    else assert.equal(prepareCoordinationTemplate(studio.read(), existingRequest()).projection.state.connections.length, 249);
   }
 });
 

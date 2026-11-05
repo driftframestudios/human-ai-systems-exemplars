@@ -143,6 +143,30 @@ for (const engine of names) {
     assert.deepEqual(await state(page), accepted);
   });
 
+  test(`${engine}: removal and form actions keep distinct painted rows as text enlarges`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await fill(page); await apply(page).click();
+    const remove = action(page, 'remove');
+    for (const [width, textSize] of [[1440, '100%'], [390, '100%'], [320, '200%']]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(size => { document.documentElement.style.fontSize = size; }, textSize);
+      await apply(page).scrollIntoViewIfNeeded(); await frames(page);
+      const removalBox = await remove.boundingBox(), applyBox = await apply(page).boundingBox();
+      const cancelBox = await action(page, 'cancel').boundingBox();
+      const rem = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+      assert.ok(applyBox.y >= removalBox.y + removalBox.height + .3 * rem + 4,
+        'the removal key shadow has a visible gap before Apply');
+      const sharedRow = Math.abs(applyBox.y - cancelBox.y) < 1;
+      assert.ok(sharedRow ? cancelBox.x >= applyBox.x + applyBox.width + .3 * rem + 4
+        : cancelBox.y >= applyBox.y + applyBox.height + .3 * rem + 4,
+      'Apply and Cancel remain separate when they wrap');
+      const bounds = await settings(page).boundingBox();
+      assert.ok(cancelBox.x + cancelBox.width + .3 * rem <= bounds.x + bounds.width + 1,
+        'the final action shadow stays inside settings');
+    }
+    await page.screenshot({ path: resolve(captures, `${engine}-form-actions.png`) });
+  });
+
   test(`${engine}: one connection form retains explicit membership, ordered sessions and unchanged investment`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await fill(page);

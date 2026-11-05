@@ -163,6 +163,7 @@
           <div class="native-coordination__chapters" data-native-chapter-list aria-label="Studio chapters" hidden>
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
             <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
+            <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
             <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
           </div>
           <details class="native-purpose" data-native-purpose>
@@ -200,6 +201,7 @@
                 <li><strong>Compare and recover.</strong> Save a baseline before experimenting. Investment holds the comparison, Undo/Redo, examples, and plan download.</li>
               </ol>
               <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
+              <p><a href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
             </div>
           </details>
         </header>
@@ -218,9 +220,9 @@
               <div class="native-coordination__actions"><button type="button" data-native-showcase-action="baseline" disabled>Save a baseline</button><button type="button" data-native-showcase-action="review" disabled>Adjust review time</button></div>
             </div>
             <details class="native-showcase__request">
-              <summary>Try a review request <span>A useful complication for your plan.</span></summary>
+              <summary>Try a review request <span>Clarify the recovery instructions before the pilot.</span></summary>
               <div>
-                <p>Noor finds incomplete recovery instructions. Open the readiness connection, pause it while the work is clarified, and name the response the team needs.</p>
+                <p>The quality reviewer finds incomplete recovery instructions. Open the readiness connection, pause it while the work is clarified, and name the response the team needs.</p>
                 <p>The review sessions keep their planned time and cost. Compare your response with the baseline, then keep it or use Undo.</p>
                 <button type="button" data-native-showcase-action="readiness" disabled>Open readiness connection</button>
               </div>
@@ -412,12 +414,12 @@
             <div class="native-coordination__trace-body">
               <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
               <ul class="native-coordination__ledger" data-native-trace-list>
-                <li><h4>Maya · Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
-                <li><h4>Leo · Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
-                <li><h4>Ari · Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
-                <li><h4>Jules · Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
-                <li><h4>Noor · Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
-                <li><h4>Sam · Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
+                <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
+                <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
+                <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
+                <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
+                <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
+                <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
               </ul>
             </div>
           </details>
@@ -677,6 +679,58 @@
             </details>
             <p class="native-coordination__status" data-responsibility-status role="status" aria-live="polite" aria-atomic="true"></p>
           </section>
+        </section>
+        <section class="native-capabilities" id="native-studio-work" data-native-chapter-panel="work" data-native-capabilities aria-labelledby="native-capabilities-title">
+          <header class="native-capabilities__heading">
+            <p class="native-coordination__plate">Plan what your users can do</p>
+            <h3 id="native-capabilities-title" class="native-zine__heading">Customer abilities and team practices</h3>
+            <p>Choose an action, turn its card over, and plan the work that supports it. Several cards can share the same session and its cost.</p>
+          </header>
+          <div class="native-capabilities__catalogues">
+            <section aria-labelledby="native-ability-catalogue-title">
+              <h4 id="native-ability-catalogue-title">What people can do</h4>
+              <p>Help customers compare, recover, approve, trace, edit, coordinate, or inspect.</p>
+              <ul class="native-capabilities__catalogue" data-capability-catalogue="ability"></ul>
+            </section>
+            <section aria-labelledby="native-practice-catalogue-title">
+              <h4 id="native-practice-catalogue-title">How the team works</h4>
+              <p>Agree expectations, focus decisions, experiment, price opportunities, carry handoffs, and check outcomes.</p>
+              <ul class="native-capabilities__catalogue" data-capability-catalogue="practice"></ul>
+            </section>
+          </div>
+          <article class="native-capability-card" data-capability-selected hidden aria-labelledby="native-capability-title">
+            <header><h4 id="native-capability-title" data-capability-title></h4></header>
+            <div class="native-coordination__actions native-capability-card__actions">
+              <button type="button" data-capability-action="reverse" disabled>Inspect reverse</button>
+              <button type="button" data-capability-action="beside" disabled>Open beside</button>
+              <button type="button" data-capability-action="configure" disabled>Plan this ability</button>
+              <button type="button" class="native-control--remove" data-capability-action="remove" disabled>Remove from plan</button>
+            </div>
+            <div class="native-capability-card__faces">
+              <section class="native-capability-card__front" data-capability-front aria-label="Card overview"></section>
+              <section class="native-capability-card__reverse" data-capability-reverse aria-label="Supporting work and observations" hidden></section>
+            </div>
+          </article>
+          <details class="native-capability-settings" data-capability-configure>
+            <summary data-capability-summary>Plan an ability or practice <span>Choose a card to prepare its support.</span></summary>
+            <div class="native-coordination__recovery" data-capability-recovery hidden>
+              <p data-capability-current></p>
+              <div class="native-coordination__actions"><button type="button" data-capability-action="review">Review saved edits</button><button type="button" data-capability-action="current">Use current values</button><button type="button" data-capability-action="discard">Discard saved edits</button><button type="button" data-capability-action="fresh-id">Use a new identifier</button></div>
+            </div>
+            <form data-capability-form novalidate>
+              <fieldset data-capability-fields disabled aria-label="Ability or practice settings"></fieldset>
+              <div class="native-coordination__preview" data-capability-preview aria-live="polite" aria-atomic="true">Choose a card to inspect a proposal.</div>
+              <ul class="native-responsibility__dependencies" data-capability-dependencies hidden></ul>
+              <p class="native-coordination__error" data-capability-error></p>
+              <div class="native-coordination__actions"><button type="submit" data-capability-action="apply" disabled>Apply proposal</button><button type="button" data-capability-action="cancel" disabled>Cancel changes</button></div>
+            </form>
+          </details>
+          <p class="native-coordination__status" data-capability-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <details class="native-capability-manual" data-capability-manual>
+            <summary>Abilities and practices manual <span>What a card enables, what supports it, and how to check it.</span></summary>
+            <div data-capability-manual-body></div>
+          </details>
+          <noscript><p>Interactive cards become available with scripting. Each card connects a customer action or team practice to named people and working sessions. The accepted ledger above remains a readable example; the full Studio link below offers the complete planning instrument.</p></noscript>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title" class="native-zine__heading">Keep and compare your plan.</h3>

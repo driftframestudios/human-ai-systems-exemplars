@@ -10,7 +10,9 @@ const ROW_FIELDS = Object.freeze({
   people: Object.freeze(['label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle']),
   teams: Object.freeze(['label', 'personIds', 'lifecycle']),
   work: Object.freeze(['label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle']),
-  practices: Object.freeze(['practiceId', 'teamId', 'workIds']),
+  abilities: Object.freeze(['definitionId', 'definitionVersion', 'context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle', 'prerequisites', 'supportBindings']),
+  practices: Object.freeze(['definitionId', 'definitionVersion', 'context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle', 'prerequisites', 'supportBindings']),
+  capabilityEvidence: Object.freeze(['subject', 'stage', 'context', 'observation', 'recorderPersonId', 'reviewBoundary', 'observedPlanRevision']),
   contributions: Object.freeze(['categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary']),
   connections: Object.freeze(['senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status']),
 });
@@ -101,9 +103,8 @@ export function readFileBytes(file, { signal, createReader = () => new FileReade
 }
 
 function equalField(left, right) {
-  if (left && right && typeof left === 'object' && typeof right === 'object' && !Array.isArray(left)) return JSON.stringify(left) === JSON.stringify(right);
-  return Array.isArray(left) ? Array.isArray(right) && left.length === right.length
-    && left.every((value, index) => value === right[index]) : left === right;
+  if (left && right && typeof left === 'object' && typeof right === 'object') return JSON.stringify(left) === JSON.stringify(right);
+  return left === right;
 }
 function changesBetween(before, after) {
   const changes = {

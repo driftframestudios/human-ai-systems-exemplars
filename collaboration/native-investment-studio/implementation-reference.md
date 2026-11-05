@@ -56,6 +56,9 @@ then identifies each behavior's implementation owner.
 - `responsibility-controller.mjs` owns selected-person role details and human
   contribution records within the People chapter. Both forms use the shared
   command-draft engine and its single active coordinator lease.
+- `capabilities.mjs` owns the versioned ability/practice definitions and legacy interpretation.
+- `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
+- `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -112,7 +115,7 @@ inspect today.
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
 | Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.3.0 round-trip, admitted 0.1.0 and 0.2.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.4.0 round-trip, admitted 0.1.0, 0.2.0 and 0.3.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
 recovery rows. Its geometry supplies a visual precedent; actual native timing,
@@ -120,7 +123,7 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.3.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.4.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
 `horizonWeeks`, one closed `purpose` record, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
@@ -130,7 +133,8 @@ labels and array positions carry presentation.
 | `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. |
 | `teams` | `id`, `label`, `personIds`, `lifecycle` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
 | `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; this version's `timing` is null. |
-| `practices` | `id`, `practiceId`, `teamId`, `workIds` | Assignment of a catalogue practice to a team, supported by existing work identities. Multiple references to one work item retain one calculation. |
+| `abilities`, `practices` | `id`, `definitionId`, `definitionVersion`, `context`, `teamId`, `responsiblePersonIds`, `decisionOwnerPersonId`, `lifecycle`, `prerequisites`, `supportBindings` | Separate customer abilities and team arrangements bind exact definitions to shared work. Ordered requirement bindings are authoritative; their unique work union is derived. |
+| `capabilityEvidence` | `id`, `subject`, `stage`, `context`, `observation`, `recorderPersonId`, `reviewBoundary`, `observedPlanRevision` | An explicit observation of a typed ability/practice subject, retained independently of current support checks. |
 | `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
 | `connections` | `id`, `senderTeamId`, `receiverTeamId`, `receiverPersonId`, `sharedObject`, `responseExpectation`, `workIds`, `status` | A directed team handoff with a receiving person, stated object, response expectation and active/paused state. |
 
@@ -149,12 +153,16 @@ whitespace. Canonical output retains the trimmed, nonblank value; explicit
 or explicit null. The purpose draft adapter converts blank input into null at
 Apply. Purpose text describes the initiative independently of monetary inputs.
 
-`preparePlan` selects schema `0.1.0`, `0.2.0`, or `0.3.0` from the root's own
+`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, or `0.4.0` from the root's own
 enumerable schema-version data descriptor. It fully admits each source version's
 closed root, rows, references, numeric meaning and byte budget before constructing
-a current record. Version 0.1 receives six null purpose fields; both older
-versions receive unassigned role fields, active lifecycle values, and empty
+a current record. Version 0.1 receives six null purpose fields; versions 0.1 and 0.2
+receive unassigned role fields, active lifecycle values, and empty
 contribution/connection collections. A 0.2 purpose retains its admitted values.
+Version 0.3 retains its roles, lifecycle, purpose, contributions and connections.
+Every older practice becomes the immutable legacy definition version with an
+ordered `general-support` binding; earlier work references retain their order.
+Older plans receive empty abilities and capability-evidence collections.
 The owned migrated record then passes current admission. Current envelopes
 supply every declared current field; finite row-command compatibility has its
 own explicit construction boundary.
@@ -172,18 +180,87 @@ space for every new field while retaining the complete older envelope.
 Original transport and owned output use their source schema's budget. The
 parser bounds allocation with the current maximum, then applies the admitted
 source version's ceiling. Literal tests fill a genuine 0.1 envelope to 524,288
-bytes and a genuine 0.2 envelope to 546,029 bytes; their current exports contain
-550,673 and 572,261 bytes respectively and re-import exactly. Separate current
+bytes and a genuine 0.2 envelope to 546,029 bytes; their migrated exports re-import exactly. Separate current
 fixtures exercise every collection limit, escaped text, and the complete
 reference budget. Each old version still rejects its extra transport byte.
 
 `prepareImport(text)` performs the existing bounded JSON and integer-token
 checks once and returns frozen `{ projection, sourceSchemaVersion }`.
 `parsePlan(text)` returns that same path's projection. Import previews can use
-the source version while exports always describe the actual current 0.3 state.
+the source version while exports always describe the actual current 0.4 state.
 Caller-owned legacy records and external captures retain their original version
 and contents. Construction, replacement, import, history and baseline retention
 inside a current Studio receive current-schema projections.
+
+### Abilities, practices and their support
+
+The Abilities chapter lets a visitor choose a customer action or team practice,
+inspect its support, and apply a coherent proposal. `capabilities.mjs` holds
+the immutable definitions, their acceptance questions, assumptions, editable
+duration suggestions, prerequisite definitions and replacement meanings.
+Instances preserve exact definition versions. Earlier practice assignments
+retain version `0.0.0` and their original general-support interpretation;
+current authored definitions use `1.0.0`.
+
+The schema keeps abilities, practices, and human decision responsibilities
+separate. An instance's ordered `supportBindings` maps requirement IDs to work
+IDs. A derived unique union supports the reverse reading. Several requirements
+and cards can point to the same session while that session keeps its original
+pricing and capacity account. Typed prerequisite references carry `kind` and
+`instanceId`. Missing record references and cycles reject with correction
+guidance; unassigned people, context or requirements remain visible planning
+questions.
+
+Current support derives from the accepted plan. An observation retains its
+subject, context, recorder, result, review boundary and observed revision when
+that support changes. Proposed, Supported, Rehearsed and Observed in context
+describe the record the visitor chooses to enter. They provide independent
+entry points for relevant evidence. A practice label itself establishes a
+planned arrangement; participating people retain competence and authority.
+
+`prepareCapabilityProposal(base, request)` owns a create/update/remove proposal.
+Create and update requests contain the instance, explicitly configured new
+work, and observations. Existing work is referenced by identity. Complete
+admission prepares the resulting plan before `applyCapabilityProposal` publishes
+once through the accepted state owner. Repeated identical requests retain
+acceptance and history. Stale requests, conflicting identities and referenced
+removals preserve the preceding plan. Updates retain definition/version identity;
+a different definition enters through a new instance. Retirement retains work,
+funding and observations. Undo/Redo recovers the accepted instance and support
+summaries together.
+
+The raw adapter keeps one typed editor within the shared eight saved slots.
+Card selection, reverse and Open beside use the same record. The active face
+owns reading and focus; the stable inspection action stays outside both faces.
+Natural-height support reading becomes a sequential disclosure at narrow widths.
+The manual reads the same definitions. Inspecting a supporting session keeps a
+return route to the card and any unfinished entries. Missing people, teams or
+sessions can be created through the existing editors and selected on return.
+
+Card amounts describe their selected direct work. Each scope rounds per person
+and funding treatment; these views can overlap and are non-additive. Two
+separate one-minute scopes at $1/hour each display 2¢ while the whole plan
+settles the combined two minutes at 3¢. The global ledger retains the −1¢ line
+rounding adjustment. The accepted plan total owns the funding decision; a
+proposal preview shows the actual change to that total. Missing rates preserve
+known amounts and an explicit incomplete-pricing state.
+
+Schema 0.4 admits 128 abilities, 128 practices, eight requirements per instance,
+512 prerequisite edges, and 256 observations within its finite encoded-byte
+allowance and 16,384 total plan-reference budget. Earlier schemas retain their
+own complete admission and ceilings. Graph validation visits vertices and
+prerequisite edges in O(V + E) time. Support attribution additionally traverses
+each instance's bound work and those sessions' participants; call that work Q.
+Full preparation includes Q plus admitted records, references, strings and
+encoded bytes. The implementation preserves complete preparation for accepted
+changes; performance refinements remain with the later measured-workload Issues.
+
+The focused capability, proposal and draft source tests own migration, shared
+accounting, observation retention, atomic changes and recovery. The capability
+browser route owns the actual install, reverse, support inspection, saved edit,
+enlarged layout and lifecycle journeys. The literal accounting example is
+$16,000 staffing, $400 attributed inside that funding, and a $150 additional
+review yielding $16,150 total.
 
 `previewPurpose(candidate, expectedProjection)` validates and prepares a proposed
 purpose while preserving accepted state. `updatePurpose` publishes a material
@@ -407,17 +484,17 @@ The discriminant is checked again after reflection. The complete person, team
 and work validators remain shared with their plan contract. Changed plans
 receive the complete reference, membership, cardinality, byte-budget and exact
 accounting preparation used by other native edits. Command construction leaves
-the current schema at 0.3 and the pricing model at 0.1.
+the current schema at 0.4 and the pricing model at 0.1.
 
 A referenced removal returns `ok: false` with `error.code: 'dependencies'` and
 an immutable `error.references` array. Each entry has `{collection, id, field}`;
 entries follow accepted collection order. The receiver can show the precise
-teams, work, practices, contributions or connections that still use the target. State, export, baseline,
+teams, work, abilities, practices, observations, contributions or connections that still use the target. State, export, baseline,
 chronology and history remain intact. A receiver can submit an explicitly
 reviewed, atomic reassignment through the existing whole-plan `replace` method,
 then retry the removal. Person records survive removal of their team; team and
-person records survive removal of their work. Retirement, role metadata and
-richer lifecycle states retain their planned schema-transition owner.
+person records survive removal of their work. Retirement preserves independently owned work and funding. Current roles and
+lifecycle values retain their source-owned admission.
 
 Three API shapes were considered: separate public methods for every operation,
 an unrestricted path patcher, and the selected finite command facade. The finite
@@ -426,14 +503,13 @@ existing focused update methods retain their compatibility. The command module
 owns pure transition preparation; `state.mjs` owns accepted publication and
 rebuilds person/work position indexes after material assembly changes.
 
-For P people, T teams, W work records, A practices, R reference edges and B
-serialized bytes, a material command retains full O(P + T + W + A + R + B)
-preparation and space. Target scans and path copies occur once per command;
-reordering builds one temporary ID map. Removal scans each relevant reference
-list once and returns at most T + W references for a person, W + A for a team,
-or A for work. Command admission and validated no-op checks scale with their
-bounded input. These source bounds retain Issue #641's complete-preparation
-decision; runtime responsiveness remains a measurement question for its receiver.
+Material commands retain complete preparation over admitted records, references,
+strings, encoded bytes and the support-attribution traversal described above.
+Target scans and path copies occur once per command; reordering builds one
+temporary ID map. Removal scans the relevant reference lists and returns the
+affected records and fields. Command admission and validated no-op checks scale
+with their bounded input. Runtime responsiveness remains a measurement question
+for the receiving visitor task.
 
 ### Accepted chronology, history and baseline
 
@@ -556,7 +632,7 @@ still carries the existing accepted projection, giving a future UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.3.0 export/import retains
+edit. Rejection preserves the prior snapshot. Native 0.4.0 export/import retains
 the supported state, and genuine native 0.1.0/0.2.0 plans migrate through their complete
 original admission. Full-Studio exports and unknown schema versions receive an
 explicit compatibility result; their original instruments retain those records
@@ -679,18 +755,20 @@ acceptance, history and Redo, including at the revision ceiling.
 ### Bounds, ownership and observations
 
 The current plan admits at most 128 people, 32 teams, 256 work rows, 128
-practices, 128 contributions and 256 connections. Its 8,192-reference budget
+abilities, 128 practices, 256 capability observations, 128 contributions and
+256 connections. Its 16,384-reference budget
 counts ordered membership/supporting-work lists and scalar plan-entity
-references. Versions 0.1 and 0.2 keep their original 4,096 list-reference
-budget. A complete older plan therefore fits the current reference budget
+references. Version 0.3 retains its exact 8,192-reference budget; versions 0.1 and
+0.2 keep their original 4,096 list-reference budget. A complete older plan therefore fits the current reference budget
 when migrated with empty new collections.
 
 Admission constructs identity maps and membership sets once per preparation.
 Reference checks, retirement companions and monetary calculation traverse
 bounded records and total edges. With expected constant-time Map/Set lookup,
-full preparation takes O(P + T + W + A + C + E + R + S) time and space, where
-A is practices, C contributions, E connections, R total references and S
-admitted string/serialization size. A changed command adds one collection scan
+full preparation takes O(N + R + B + Q) time: admitted records, references,
+encoded text and the additional per-card support traversal described above.
+Retained state and projections hold the admitted records and derived readings.
+A changed command adds one collection scan
 or copy before that same complete preparation. A same-record comparison costs
 its bounded canonical record size; roles have a fixed field count. An older
 import performs two complete preparation passes with the same asymptotic
@@ -1264,7 +1342,7 @@ a 30-minute duration, one session, additional funding, and planned status.
 The visitor supplies a team and at least one participant before preview or
 Apply. Current admission requires every participant to belong to the selected
 team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Timing remains `null` under schema 0.3;
+reference or membership adjustment. Timing remains `null` under schema 0.4;
 updates carry the accepted row's timing value through the existing work owner.
 The later scheduling contract owns any new timing representation.
 
@@ -1575,7 +1653,8 @@ the native Studio and collapsed table together. Issue #656 owns a later table
 content refresh.
 
 File preflight takes O(1); decoding, admission and canonical preparation take
-O(B + N + R), where B is bounded bytes, N records and R references. Preview
+O(B + N + R + Q), where B is bounded bytes, N records, R references and Q the
+capability-to-work-to-participant traversal described above. Preview
 summaries use stable-ID maps and sets in O(N + R) time and transient space.
 They run once per prepared preview. Comparison DOM updates follow accepted
 projection or baseline changes; raw keystrokes retain those nodes. Exchange
@@ -1647,8 +1726,9 @@ copies H existing top-level history fields in O(H); the browser owns the
 structured clone of that entry. Fragment recovery follows the target's ancestor
 chain. Browser layout and paint retain their own costs.
 
-`icons.mjs` creates fresh decorative SVGs for the three implemented chapters.
-It carries the selected Lucide geometry and ISC notice in delivered bytes.
+`icons.mjs` creates fresh decorative SVGs for the implemented chapters.
+It carries the selected Lucide geometry and ISC notice in delivered bytes;
+the Abilities chapter uses a separately authored folded-card drawing.
 The [upstream receipt](vendor/lucide/README.md) records the exact pin and
 complete licence. Visible button text supplies the accessible names. Each
 controller mount inserts its icons once and removes those owned nodes at
@@ -1692,13 +1772,15 @@ part of an accepted plan.
 
 ## Cost and input-frequency contract
 
-Let P be people, T teams, W work items, R all participant/support reference
-edges, A practice assignments, and B the bounded text and serialized payload. Admission, index
-construction, reference validation, calculation, and field-owned projection
-take O(P + T + W + A + R + B) time under ordinary expected Map/Set lookup. Prepared
-state, indexes, results, and serialization take proportional memory. A complete
-accepted edit prepares the admitted revision; the contract describes that
-linear work explicitly.
+Let N be admitted records, R their references, and B the bounded text and
+serialized payload. Admission, indexes, graph validation and the global money
+calculation take O(N + R + B) time under ordinary expected Map/Set lookup.
+Capability support additionally visits each instance's bound sessions and those
+sessions' participants; call those visits Q. Full preparation therefore takes
+O(N + R + B + Q). Shared sessions retain one global money account while each
+card receives its own direct-support reading. Prepared state, indexes, results,
+and serialization retain proportional memory. Every accepted edit currently
+prepares the complete admitted revision.
 
 Every accepted revision currently carries its complete serialized state.
 Producing that string costs at least its output length, even if a later

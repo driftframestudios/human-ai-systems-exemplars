@@ -3,6 +3,7 @@ import { listPresets } from './presets.mjs';
 import { money } from './display.mjs';
 import { PURPOSE_LABELS } from './purpose-controller.mjs';
 import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { getCapabilityDefinition } from './capabilities.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -13,8 +14,11 @@ const CHANGE_LABELS = Object.freeze({
   role: 'roles', lifecycle: 'availability', categoryId: 'contribution kind', receiverPersonId: 'receiving person',
   decisionOwnerPersonId: 'decision owner', reviewBoundary: 'human review', decisionBoundary: 'human decision',
   senderTeamId: 'sending team', receiverTeamId: 'receiving team', sharedObject: 'what is shared', responseExpectation: 'expected response',
+  definitionId: 'chosen action', definitionVersion: 'definition version', context: 'use context', responsiblePersonIds: 'responsible people',
+  prerequisites: 'prerequisites', supportBindings: 'supporting work', subject: 'observed ability or practice', stage: 'observation type',
+  observation: 'observation', recorderPersonId: 'recorded by', observedPlanRevision: 'observed plan revision',
 });
-const COLLECTION_LABELS = Object.freeze({ people: 'People', teams: 'Teams', work: 'Work', practices: 'Practices' });
+const COLLECTION_LABELS = Object.freeze({ people: 'People', teams: 'Teams', work: 'Work' });
 const CONTRIBUTION_LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
 
 function relationshipDescriptions(state) {
@@ -22,6 +26,9 @@ function relationshipDescriptions(state) {
   const teams = new Map(state.teams.map(row => [row.id, row.label]));
   const human = (id, action, unassigned) => id === null ? unassigned : `${people.get(id)} ${action}`;
   return {
+    abilities: new Map(state.abilities.map(row => [row.id, getCapabilityDefinition('ability', row.definitionId, row.definitionVersion).action])),
+    practices: new Map(state.practices.map(row => [row.id, getCapabilityDefinition('practice', row.definitionId, row.definitionVersion).action])),
+    capabilityEvidence: new Map(state.capabilityEvidence.map(row => [row.id, `${row.stage} · ${row.observation} · ${people.get(row.recorderPersonId)}`])),
     contributions: new Map(state.contributions.map(row => [row.id,
       `${CONTRIBUTION_LABELS.get(row.categoryId)} · ${human(row.receiverPersonId, 'reviews', 'Reviewer to choose')} · ${human(row.decisionOwnerPersonId, 'decides', 'Decision owner to choose')}`])),
     connections: new Map(state.connections.map(row => [row.id,
@@ -68,7 +75,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     }
     const before = relationshipDescriptions(projection.state);
     const after = relationshipDescriptions(preview.projection.state);
-    for (const [kind, label] of [['contributions', 'Contribution'], ['connections', 'Connection']]) {
+    for (const [kind, label] of [['contributions', 'Contribution'], ['connections', 'Connection'], ['abilities', 'Customer ability'], ['practices', 'Team practice'], ['capabilityEvidence', 'Observation']]) {
       const change = preview.changes[kind];
       for (const id of change.added) add(`${label} added: ${after[kind].get(id)}.`);
       for (const id of change.removed) add(`${label} removed: ${before[kind].get(id)}.`);
@@ -76,7 +83,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
         const current = before[kind].get(row.id), proposed = after[kind].get(row.id);
         add(`${label} changed: ${current}${current === proposed ? '' : ` → ${proposed}`} (${row.fields.map(name => kind === 'connections' && name === 'status' ? 'connection status' : CHANGE_LABELS[name] ?? name).join(', ')}).`);
       }
-      if (change.orderChanged) add(`${kind === 'contributions' ? 'Contributions' : 'Connections'}: updated order.`);
+      if (change.orderChanged) add(`${label}: updated order.`);
     }
     if (!fragment.childNodes.length) add('The plan values match the current plan.');
     changes.replaceChildren(fragment);

@@ -13,9 +13,11 @@ through Undo, saved edits, or a baseline comparison.
 foundation and usability repair are integrated through
 [#675](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/675)
 and [#687](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/687)
-after independent engineering review. The current implementation adds an
-authored service-request pilot, a working minutes knob, and a contextual session
-editor through #649 and #647.
+after independent engineering review.
+[#688](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/688)
+adds the service-request pilot, working minutes dial, and contextual session
+editor. The current implementation connects ability and practice cards to their
+shared supporting work through #650, #677, and #678.
 
 Purpose, people, teams, working sessions, roles, human review, connections,
 arrangement previews, and plan exchange have native owners. The complete
@@ -45,8 +47,12 @@ its broader planning capabilities while the native experience grows.
 3. Try the review request. Inspect the readiness connection, pause it while the
    instructions are clarified, and name the response the team needs.
 4. Use Investment to compare the baseline, Undo, or download the accepted plan.
+5. Open **Abilities**. Inspect a team practice's reverse, or choose **Inspect
+   history** to plan a customer ability. Reuse a working session, or propose
+   additional work with named people and funding. Apply accepts the whole proposal;
+   Undo restores the preceding plan.
 
-The starter uses fictional people and illustrative rates. It begins at $3,980;
+The starter names participants by their work and uses illustrative rates. It begins at $3,980;
 four 45-minute decision reviews instead of 30-minute reviews add $370. Pausing
 a connection keeps its supporting work and cost. In People, change the roles,
 rates, and funded time to explore another plan. Nearby creation actions can
@@ -56,6 +62,14 @@ A field edit stays in its editor until Apply. Collapsing a section and switching
 chapters can retain unfinished work. A saved edit may need review after another
 change updates the accepted plan. The amp amount describes accepted investment;
 a form preview describes that form's proposal.
+
+Cards describe what people can do and how a team plans to work. Their reverse
+shows responsibility, supporting sessions, current gaps, and recorded
+observations. **Open beside** keeps overview and support together at roomy
+widths. Shared sessions retain one cost account; retiring a card keeps its
+separately owned work. The card manual explains each action and its acceptance
+question. Recording an observation preserves who saw what, where, and against
+which plan revision.
 
 ## Run a local preview
 
@@ -84,6 +98,7 @@ Run source checks and the browser route for the affected task. For example:
 npm run test:native-investment-studio:source
 npm run test:native-investment-studio:session-browser
 npm run test:native-investment-studio:assembly-browser
+npm run test:native-investment-studio:capability-browser
 ```
 
 Browser routes require the repository's locked Playwright browsers. The
@@ -96,8 +111,8 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#649](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/649),
-and [#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
+source, the worktree, [#650](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/650),
+and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.
 

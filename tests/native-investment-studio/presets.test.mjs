@@ -10,7 +10,7 @@ test('the finite native catalogue names its exact version and creates independen
   const list = listPresets();
   assert.deepEqual(list.map(row => row.id), ['service-request-pilot', 'shared-working-sessions', 'funded-working-sessions']);
   assert.equal(Object.isFrozen(list), true);
-  assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.3.0'));
+  assert.ok(list.every(row => Object.isFrozen(row) && row.version === VERSION && row.schemaVersion === '0.4.0'));
   const first = preparePreset(list[0].id, VERSION);
   const second = preparePreset(list[0].id, VERSION);
   assert.notStrictEqual(first.projection, second.projection);
@@ -29,7 +29,7 @@ test('the synthetic pilot joins named people, shared work and human review with 
     ['ari', 'engineering', 'recommends'], ['jules', 'engineering', 'operates'],
     ['noor', 'quality-regulatory', 'recommends'], ['sam', 'ops-support', 'operates'],
   ]);
-  assert.equal(state.purpose.accountableOwner, 'Maya decides pilot scope and readiness after the human reviews.');
+  assert.equal(state.purpose.accountableOwner, 'The product lead decides pilot scope and readiness after the human reviews.');
   assert.deepEqual(state.contributions.map(row => [row.receiverPersonId, row.decisionOwnerPersonId, row.workIds]), [['leo', 'maya', ['research', 'review']]]);
   assert.deepEqual(state.connections.map(row => [row.id, row.senderTeamId, row.receiverTeamId, row.receiverPersonId]), [
     ['scope', 'product', 'engineering', 'ari'], ['readiness', 'engineering', 'operations', 'noor'], ['decision', 'operations', 'product', 'maya'],
@@ -45,7 +45,7 @@ test('the synthetic pilot joins named people, shared work and human review with 
   ]);
   assert.equal(parsePlan(projection.serialized).serialized, projection.serialized);
   const independent = createShowcasePlan(); independent.people[0].label = 'Changed in this copy';
-  assert.equal(createShowcasePlan().people[0].label, 'Maya');
+  assert.equal(createShowcasePlan().people[0].label, 'Product lead');
   assert.equal(createStudio().read().result.plannedCommitmentCents, 120000, 'the explicit showcase entrance preserves the smaller teaching default');
 });
 

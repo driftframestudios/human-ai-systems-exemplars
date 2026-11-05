@@ -421,3 +421,74 @@ reading. The Investment preview now includes named contribution and connection
 changes through its existing exchange difference. The knob stays in the working
 session controller and adds no module or runtime dependency. The receiving PR
 will own the final source, browser, visual, and independent-review return.
+
+## 2026-11-05 — Connect abilities to the work that supports them
+
+**Accepted ground and current task.** PR #688 is integrated on `dev@7035bc2`;
+its merge tree matches the independently reviewed source. The current branch,
+`codex/studio-capability-cards`, receives #650, #677 and #678 together. A visitor
+can choose a customer action or team practice, inspect its support, configure
+responsibility and work, preview the whole proposal, and Apply or Undo it.
+
+**Human language direction.** The starter now identifies people by their work:
+Product lead, Researcher, Engineering lead, Engineer, Quality reviewer and
+Operations specialist. These labels keep the people recognizable without
+assigning fictional personal identities. Stable record IDs preserve existing
+relationships. The preceding entry records the earlier naming; current source
+owns the revised display labels.
+
+The human also asked for descriptions that explain useful outcomes. The
+selected-card kicker was redundant beside its action, so it was removed.
+The chapter introduction says “Plan what your users can do.” Collapsed support
+sections name their selected or proposed sessions; empty sections invite the
+visitor to choose support. Reverse readings and the manual explain the action
+and its acceptance question before definition metadata. Counts remain useful
+where they communicate an actual quantity or limit.
+
+**Composition and continuity.** The Abilities chapter keeps catalogue choices,
+the selected card, its reverse, settings and manual in normal page flow.
+“Open beside” exposes both readings when available width supports them. The
+same editor owns the draft through reverse reading, chapter changes, saved
+edits and prerequisite creation. Inspecting a supporting session offers a
+return to the selected card. Narrow and enlarged layouts retain the same
+controls and readable precision fields. The amp manual opens the catalogue's
+shared operating explanations.
+
+**Meaning and accounting.** Schema 0.4 records ability/practice instances,
+versioned definitions, human responsibilities, shared support and observations.
+Older plans pass their original admission profile before migration; their
+practice work retains its original general-support meaning. Proposed,
+Supported, Rehearsed and Observed in context describe explicit observations.
+Current support gaps can change while earlier records remain recoverable.
+
+Installing or editing a card publishes its configured work and evidence in one
+history step. Shared sessions retain one global price and capacity account.
+Card amounts describe their selected work and round independently; the plan
+prices complete funding pools. Two separate one-minute sessions at $1 per hour
+can therefore show two cents each on their cards while the plan settles three
+cents. The reverse explains that distinction. A missing hourly rate produces
+known-amount wording and a route to People to complete the estimate.
+
+**Repairs discovered through use.** Independent review found that successive
+new-session proposals could reuse an ID; allocation now checks existing work
+and all work in the same proposal. A three-engine interaction exposed Firefox's
+composition-end ordering; the editor captures that final field before drawing
+its preview. The real page bootstrap also exposed an unregistered chapter icon;
+the source-owned folded-card icon now completes the shell. Each repair has an
+observation at its affected boundary.
+
+The human's connection-editor screenshot also exposed removal and commit
+buttons touching when empty feedback disappeared. The shared form-action rule
+now reserves a gap above Apply/Cancel and space for their fixed shadows. Its
+browser observation covers wide, narrow and enlarged-text rows, including
+wrapped actions. This repair belongs with the working interaction. Returning
+from adding a person also opens the original nested support section before
+focusing its chooser, preserving both the draft and the visitor's place.
+
+**Next receiver.** The receiving feature PR owns final verification and exact
+independent acceptance. After integration, #651 carries the original change
+frameworks, interpretive lenses and relative attention controls into this
+accepted plan. Quality, recovery, score, traces, scenarios and final About
+composition follow the approved route in #637. The complete original Studio
+remains available. #686 holds the later human-cued tagged release; performance
+refinement begins after the complete showcase and the requested pause.

@@ -253,7 +253,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.dependencies.replaceChildren(...references.map(reference => {
       const row = document.createElement('li');
       const practice = practices.get(reference.id);
-      const name = PRACTICE_LABELS.get(practice?.practiceId) ?? reference.id;
+      const name = PRACTICE_LABELS.get(practice?.definitionId) ?? reference.id;
       row.textContent = `Practice: ${name}${practice ? ` · ${teams.get(practice.teamId).label}` : ''}`;
       return row;
     }));

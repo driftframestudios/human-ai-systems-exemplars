@@ -153,6 +153,26 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/capabilities.mjs",
+      "projected_path": "collaboration/native-investment-studio/capabilities.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/capability-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/capability-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/capability-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/capability-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/capability-proposals.mjs",
+      "projected_path": "collaboration/native-investment-studio/capability-proposals.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/command-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/command-draft.mjs",
       "media_type": "text/javascript"
