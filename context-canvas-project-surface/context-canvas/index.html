@@ -213,16 +213,16 @@
                 <li><strong>Compare and recover.</strong> Save a baseline before experimenting. Investment holds the comparison, Undo/Redo, examples, and plan download.</li>
               </ol>
               <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
-              <p><a href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
-              <p><a href="#native-studio-assurance" data-native-open-assurance>Prepare a review or recovery rehearsal</a> and compare the work before you accept it.</p>
-              <p><a href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention and explicit supporting sessions.</p>
+              <p><a class="native-control--navigate" href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
+              <p><a class="native-control--navigate" href="#native-studio-assurance" data-native-open-assurance>Prepare a review or recovery rehearsal</a> and compare the work before you accept it.</p>
+              <p><a class="native-control--navigate" href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention and explicit supporting sessions.</p>
             </div>
           </details>
         </header>
         <aside class="native-zine__return" data-native-return-route hidden aria-label="Return to your unfinished work">
           <p data-native-return-note></p>
           <button type="button" data-native-return-team hidden>Add to receiving team</button>
-          <button type="button" data-native-return-action>Return to session</button>
+          <button class="native-control--navigate" type="button" data-native-return-action>Return to session</button>
         </aside>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-score-title">
           <section class="native-score" data-native-score aria-labelledby="native-score-title">
@@ -239,7 +239,7 @@
             </details>
             <div data-native-connection-view></div>
             <section class="native-connection" data-native-connection-editor aria-labelledby="native-connection-title">
-              <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" data-connection-action="create" disabled>Add connection</button></div>
+              <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" class="native-control--create" data-connection-action="create" disabled>Add connection</button></div>
               <details class="native-coordination__configuration native-connection__configuration" data-connection-configure hidden>
                 <summary>Connection settings</summary>
                 <div class="native-coordination__recovery" data-connection-recovery hidden>
@@ -253,19 +253,19 @@
                         <div class="native-connection__field">
                           <label for="connection-senderTeamId">Sending team</label>
                           <select id="connection-senderTeamId" name="senderTeamId" aria-describedby="connection-senderTeamId-error"></select>
-                          <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
+                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="senderTeamId">Create a team</button>
                           <p class="native-coordination__error" id="connection-senderTeamId-error" data-connection-error="senderTeamId"></p>
                         </div>
                         <div class="native-connection__field">
                           <label for="connection-receiverTeamId">Receiving team</label>
                           <select id="connection-receiverTeamId" name="receiverTeamId" aria-describedby="connection-receiverTeamId-error"></select>
-                          <button type="button" class="native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
+                          <button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="connection" data-native-return-field="receiverTeamId">Create a team</button>
                           <p class="native-coordination__error" id="connection-receiverTeamId-error" data-connection-error="receiverTeamId"></p>
                         </div>
                         <div class="native-connection__field">
                           <label for="connection-receiverPersonId">Receiving person</label>
                           <select id="connection-receiverPersonId" name="receiverPersonId" aria-describedby="connection-receiverPersonId-error"></select>
-                          <button type="button" class="native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
+                          <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="connection" data-native-return-field="receiverPersonId">Add a person</button>
                           <p class="native-coordination__error" id="connection-receiverPersonId-error" data-connection-error="receiverPersonId"></p>
                         </div>
                         <div class="native-connection__field">
@@ -287,7 +287,7 @@
                       <div class="native-connection__sessions" role="group" aria-labelledby="connection-work-label">
                         <p class="native-coordination__control-title" id="connection-work-label">Supporting sessions</p>
                         <ul class="native-connection__work" data-connection-work aria-describedby="connection-workIds-error"></ul>
-                        <button type="button" class="native-control--create" data-native-create="session" data-native-return="connection">Add a session</button>
+                        <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="connection">Add a session</button>
                         <p class="native-coordination__error" id="connection-workIds-error" data-connection-error="workIds"></p>
                       </div>
                       <p class="native-coordination__hint" data-connection-cost></p>
@@ -322,7 +322,7 @@
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
-            <div class="native-coordination__actions"><button type="button" data-session-action="create" disabled>Add session</button><button type="button" class="native-control--remove" data-session-action="remove" disabled>Remove session</button></div>
+            <div class="native-coordination__actions"><button type="button" class="native-control--create" data-session-action="create" disabled>Add session</button><button type="button" class="native-control--remove" data-session-action="remove" disabled>Remove session</button></div>
           </div>
           <div class="native-coordination__agreement">
             <figure class="native-session-map" aria-labelledby="native-session-title">
@@ -350,7 +350,7 @@
                 <div data-native-session-fields>
                 <div class="native-session__settings-grid">
                   <div><label for="native-session-name">Session name</label><input id="native-session-name" name="label" type="text" value="Pilot decision review" maxlength="120" autocomplete="off" aria-describedby="native-session-name-error"></div>
-                  <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="engineering">Engineering</option></select><button type="button" class="native-control--create" data-native-create="team" data-native-return="session">Create a team</button></div>
+                  <div><label for="native-session-team">Team</label><select id="native-session-team" name="teamId" aria-describedby="native-session-team-error"><option value="engineering">Engineering</option></select><button type="button" class="native-control--navigate native-control--create" data-native-create="team" data-native-return="session">Create a team</button></div>
                 </div>
                 <div class="native-coordination__feedback native-session__name-feedback" aria-label="Session name and team feedback"><p class="native-coordination__error" id="native-session-name-error" data-native-error="label"></p><p class="native-coordination__error" id="native-session-team-error" data-native-error="teamId"></p></div>
                 <div class="native-time-controls">
@@ -419,12 +419,18 @@
                   <p id="native-session-people-label" class="native-coordination__control-title">Participants</p>
                   <p class="native-coordination__hint">Choose people from this team.</p>
                   <ul class="native-session__members" data-native-session-members aria-describedby="native-session-people-error"></ul>
-                  <p class="native-coordination__hint" data-native-session-people-empty hidden>This team needs participants. <button type="button" class="native-control--create" data-native-create="person" data-native-return="session">Add a person</button></p>
+                  <p class="native-coordination__hint" data-native-session-people-empty hidden>This team needs participants. <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="session">Add a person</button></p>
                   <p class="native-coordination__error" id="native-session-people-error" data-native-error="personIds"></p>
                 </div>
                 <div class="native-session__settings-grid">
-                  <div><label for="native-session-funding">Funding</label><select id="native-session-funding" name="funding" aria-describedby="native-session-funding-error"><option value="additional">Extra investment</option><option value="allocated">Included in funded time</option></select></div>
-                  <div><label for="native-session-status">Status</label><select id="native-session-status" name="status" aria-describedby="native-session-status-error native-session-pause-note"><option value="planned">Planned</option><option value="paused">Paused</option></select></div>
+                  <fieldset id="native-session-funding"><legend>Funding</legend><ul class="native-session__exclusive">
+                    <li><label><input type="radio" name="funding" value="additional" aria-describedby="native-session-funding-error" checked><span>Extra investment</span></label></li>
+                    <li><label><input type="radio" name="funding" value="allocated" aria-describedby="native-session-funding-error"><span>Included in funded time</span></label></li>
+                  </ul></fieldset>
+                  <fieldset id="native-session-status"><legend>Status</legend><ul class="native-session__exclusive">
+                    <li><label><input type="radio" name="status" value="planned" aria-describedby="native-session-status-error native-session-pause-note" checked><span>Planned</span></label></li>
+                    <li><label><input type="radio" name="status" value="paused" aria-describedby="native-session-status-error native-session-pause-note"><span>Paused</span></label></li>
+                  </ul></fieldset>
                 </div>
                 <p class="native-coordination__hint" id="native-session-pause-note" data-native-session-pause-note hidden>Paused sessions keep their planned time and cost.</p>
                 <div class="native-coordination__feedback native-session__choice-feedback" aria-label="Funding and status feedback"><p class="native-coordination__error" id="native-session-funding-error" data-native-error="funding"></p><p class="native-coordination__error" id="native-session-status-error" data-native-error="status"></p></div>
@@ -462,7 +468,7 @@
           <h3 id="native-team-title" class="native-zine__heading">People and teams</h3>
           <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
           <div class="native-assembly__toolbar">
-            <button type="button" data-assembly-action="person-create" disabled>Add person</button>
+            <button type="button" class="native-control--create" data-assembly-action="person-create" disabled>Add person</button>
             <div class="native-assembly__arrange" data-assembly-people-tools>
               <label for="assembly-person-order">Person to arrange</label>
               <select id="assembly-person-order" data-assembly-person disabled></select>
@@ -581,7 +587,7 @@
             </form>
           </details>
           <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
-            <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" data-assembly-action="team-create" disabled>Add team</button></div>
+            <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" class="native-control--create" data-assembly-action="team-create" disabled>Add team</button></div>
             <ul class="native-assembly__team-list" data-assembly-teams></ul>
             <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
           </section>
@@ -629,7 +635,7 @@
                 <div class="native-assembly__membership" data-assembly-members-group hidden role="group" aria-labelledby="assembly-members-label">
                   <p id="assembly-members-label" class="native-coordination__control-title">People in this team</p>
                   <ul class="native-assembly__members" data-assembly-members aria-describedby="assembly-personIds-error"></ul>
-                  <button type="button" class="native-control--create" data-native-create="person" data-native-return="assembly">Add a person</button>
+                  <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="assembly">Add a person</button>
                 </div>
                 <p class="native-assembly__confirm" data-assembly-confirm hidden></p>
                 <ul class="native-assembly__dependencies" data-assembly-dependencies hidden></ul>
@@ -652,7 +658,7 @@
           </details>
           <p class="native-coordination__status" data-assembly-status role="status" aria-live="polite" aria-atomic="true"></p>
           <section class="native-responsibility" aria-labelledby="native-responsibility-title">
-            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Human review</h4><button type="button" data-responsibility-action="create" disabled>Add contribution</button></div>
+            <div class="native-responsibility__heading" data-responsibility-toolbar hidden><h4 id="native-responsibility-title">Human review</h4><button type="button" class="native-control--create" data-responsibility-action="create" disabled>Add contribution</button></div>
             <ul class="native-responsibility__list" data-responsibility-list hidden></ul>
             <p class="native-coordination__hint" data-responsibility-empty hidden>Add an output and name who reviews it.</p>
             <details class="native-coordination__configuration native-responsibility__configuration" data-responsibility-configure="contribution" hidden>
@@ -674,20 +680,20 @@
                   <div class="native-responsibility__field">
                     <label for="contribution-receiverPersonId">Human receiver</label>
                     <select id="contribution-receiverPersonId" name="receiverPersonId" aria-describedby="contribution-receiverPersonId-error"></select>
-                    <button type="button" class="native-control--create" data-native-create="person" data-native-return="contribution" data-native-return-field="receiverPersonId" aria-label="Add a person for human review">Add a person</button>
+                    <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="contribution" data-native-return-field="receiverPersonId" aria-label="Add a person for human review">Add a person</button>
                     <p class="native-coordination__error" id="contribution-receiverPersonId-error" data-responsibility-error="receiverPersonId"></p>
                   </div>
                   <div class="native-responsibility__field">
                     <label for="contribution-decisionOwnerPersonId">Who decides</label>
                     <select id="contribution-decisionOwnerPersonId" name="decisionOwnerPersonId" aria-describedby="contribution-decisionOwnerPersonId-error"></select>
-                    <button type="button" class="native-control--create" data-native-create="person" data-native-return="contribution" data-native-return-field="decisionOwnerPersonId" aria-label="Add a person to decide">Add a person</button>
+                    <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="contribution" data-native-return-field="decisionOwnerPersonId" aria-label="Add a person to decide">Add a person</button>
                     <p class="native-coordination__error" id="contribution-decisionOwnerPersonId-error" data-responsibility-error="decisionOwnerPersonId"></p>
                   </div>
                     </div>
                     <div class="native-responsibility__sessions" role="group" aria-labelledby="contribution-work-label">
                       <p class="native-coordination__control-title" id="contribution-work-label">Supporting sessions</p>
                       <ul class="native-responsibility__work" data-responsibility-work aria-describedby="contribution-workIds-error"></ul>
-                      <button type="button" class="native-control--create" data-native-create="session" data-native-return="contribution">Add a session</button>
+                      <button type="button" class="native-control--navigate native-control--create" data-native-create="session" data-native-return="contribution">Add a session</button>
                       <p class="native-coordination__error" id="contribution-workIds-error" data-responsibility-error="workIds"></p>
                     </div>
                     <div class="native-responsibility__grid">
@@ -723,12 +729,12 @@
             <section aria-labelledby="native-ability-catalogue-title">
               <h4 id="native-ability-catalogue-title">What people can do</h4>
               <p>Help customers compare, recover, approve, trace, edit, coordinate, or inspect.</p>
-              <ul class="native-capabilities__catalogue" data-capability-catalogue="ability"></ul>
+              <div class="native-capabilities__sequence" data-capability-catalogue="ability" tabindex="0" role="region" aria-label="Customer ability support"></div>
             </section>
             <section aria-labelledby="native-practice-catalogue-title">
               <h4 id="native-practice-catalogue-title">How the team works</h4>
               <p>Agree expectations, focus decisions, experiment, price opportunities, carry handoffs, and check outcomes.</p>
-              <ul class="native-capabilities__catalogue" data-capability-catalogue="practice"></ul>
+              <div class="native-capabilities__sequence" data-capability-catalogue="practice" tabindex="0" role="region" aria-label="Team practice support"></div>
             </section>
           </div>
           <article class="native-capability-card" data-capability-selected hidden aria-labelledby="native-capability-title">
@@ -774,15 +780,17 @@
             <p data-change-current></p>
             <div class="native-coordination__actions"><button type="button" data-change-action="review">Review saved edits</button><button type="button" data-change-action="current">Use current values</button><button type="button" data-change-action="discard">Discard saved edits</button></div>
           </div>
+          <section class="native-change__lens-field" aria-label="Explore the plan through a viewpoint">
+            <div class="native-change__lens-wheel" data-change-lens-wheel role="group" aria-label="Choose an interpretive lens"></div>
+            <section class="native-change__interpretation" data-change-interpretation aria-label="Viewpoint on the plan"></section>
+            <div data-native-motion-controls></div>
+          </section>
           <form data-change-form novalidate>
             <fieldset data-change-fields disabled aria-label="Change framework, viewpoint and support">
               <div class="native-change__selectors">
                 <div data-change-frameworks></div><div data-change-lenses></div><div data-change-filters></div>
               </div>
-              <section class="native-change__lens-field" aria-label="Explore the plan through a viewpoint">
-                <div class="native-change__lens-wheel" data-change-lens-wheel role="group" aria-label="Choose an interpretive lens"></div>
-                <section class="native-change__interpretation" data-change-interpretation aria-label="Viewpoint on the plan"></section>
-              </section>
+
               <div class="native-change__matrix" data-change-matrix></div>
               <section class="native-change__four-actions" data-change-four-actions aria-label="Questions for the next discussion"></section>
               <section class="native-change__attention" aria-labelledby="native-change-attention-title">

@@ -2,6 +2,8 @@ import { describeAssuranceReference } from './assurance-models.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './command-draft.mjs';
 import { money, duration } from './display.mjs';
+import { preparePersonDraftValues } from './person-draft.mjs';
+import { mountRateControls } from './rate-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
@@ -38,9 +40,18 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function currentOperation(epoch) { return !disposed && epoch === generation; }
   function announce(message) { if (!disposed) elements.status.textContent = message; }
+  const rateControls = mountRateControls({ host: inputs.ratePerHour.closest('.native-coordination__control'), precision: inputs.ratePerHour, label: 'New person hourly rate',
+    read() {
+      const view = editor.read(), active = editing.read().active, descriptor = describeAssemblyTarget(view.draft?.assemblyId);
+      const person = descriptor?.form === 'person.create', parsed = person ? preparePersonDraftValues(view.draft.raw) : null;
+      return { token: view.draft?.token, raw: view.draft?.raw.ratePerHour, cents: parsed?.admitted.rateCentsPerHour ?? null,
+        enabled: person && !disposed && !composing && isActive() && elements.configure.open && view.status === 'editing'
+          && active?.kind === 'assembly' && active.token === view.draft?.token };
+    }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'ratePerHour', value), epoch); } });
   function button(label, action, id = null) {
     const control = document.createElement('button');
     control.type = 'button'; control.textContent = label; control.dataset.assemblyAction = action;
+    if (action === 'team-open') control.classList.add('native-control--navigate');
     if (id !== null) control.dataset.assemblyId = id;
     return control;
   }
@@ -137,11 +148,11 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       const score = describeScoreReference(projection.state.scoreSettings, reference);
       if (score) {
-        const link = document.createElement('a'); link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
         link.textContent = 'Review in the coordination horizon'; item.append(`${score.label}. `, link); return item;
       }
       if (assurance) {
-        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
         link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
         item.append(`${assurance}. `, link); return item;
       }
@@ -196,6 +207,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
       errors[field].textContent = error?.message ?? '';
     }
+    rateControls.refresh();
     const membersError = draft?.errors.find(item => item.path === 'draft.personIds');
     errors.personIds.textContent = membersError?.message ?? '';
     elements.members.setAttribute('aria-invalid', String(Boolean(membersError)));
@@ -231,6 +243,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     selectedTarget = result.view?.draft?.assemblyId ?? selectedTarget;
     render();
     if (editor.read().draft) { acknowledgedOpen = true; elements.configure.open = true; }
+    rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     onEditing();
     if (currentOperation(epoch) && focus) focusEditor();
@@ -238,6 +251,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function open(target, focus = true) {
     if (disposed) return;
+    rateControls.release();
     const epoch = ++generation;
     onBegin();
     if (!currentOperation(epoch)) return;
@@ -245,6 +259,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function create(form) {
     if (disposed || !['person.create', 'team.create'].includes(form) || !ASSEMBLY_FORMS[form]) return;
+    rateControls.release();
     const epoch = ++generation;
     onBegin();
     if (!currentOperation(epoch)) return;
@@ -252,6 +267,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function close({ park = true } = {}) {
     if (disposed) return;
+    rateControls.release();
     const epoch = ++generation;
     acknowledgedOpen = false;
     if (park && editing.read().active?.kind === 'assembly') editing.park();
@@ -267,6 +283,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function settle(action) {
     if (disposed) return;
+    rateControls.release();
     const view = editor.read();
     if (!view.draft) return;
     if (composing && action === 'apply') { announce('Finish entering the value, then apply.'); return; }
@@ -384,6 +401,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function dispose() {
     if (disposed) return;
+    rateControls.dispose();
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -407,7 +425,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     listen(root, 'click', click);
     listen(elements.form, 'input', input);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
-    listen(elements.form, 'compositionstart', () => { composing = true; });
+    listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; rateControls.refresh(); });
     listen(elements.form, 'compositionend', event => { composing = false; input(event); });
     listen(elements.members, 'change', event => {
       const id = event.target.dataset.assemblyMember;
@@ -423,6 +441,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     });
     listen(elements.configure, 'toggle', () => {
       if (disposed) return;
+      if (!elements.configure.open) rateControls.release();
+      rateControls.refresh();
       if (elements.configure.open) {
         if (isActive() && !acknowledgedOpen && selectedTarget) open(selectedTarget, false);
       } else if (acknowledgedOpen) { close(); onEditing(); }

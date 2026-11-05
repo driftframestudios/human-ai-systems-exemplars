@@ -7,7 +7,7 @@ const interval = row => `${scoreMinute(row.startMinute)}–${scoreMinute(row.end
 
 // The view projects admitted records. Position means elapsed minutes; the
 // pricing owner retains money and the score owner retains interval arithmetic.
-export function createScoreView(root, { onSelect, onNavigate }) {
+export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
   const document = root.ownerDocument;
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -18,6 +18,7 @@ export function createScoreView(root, { onSelect, onNavigate }) {
   function control(label, kind, id, action = 'select') {
     const button = node('button', label); button.type = 'button';
     Object.assign(button.dataset, { scoreViewAction: action, scoreKind: kind, scoreId: id });
+    if (action === 'navigate') button.className = 'native-score__navigate native-control--navigate';
     return button;
   }
   function metric(label, value, hint) {
@@ -56,6 +57,7 @@ export function createScoreView(root, { onSelect, onNavigate }) {
     const button = event.target.closest('[data-score-view-action]');
     if (!button || !root.contains(button) || disposed) return;
     const target = { kind: button.dataset.scoreKind, id: button.dataset.scoreId };
+    if (button.dataset.scoreViewAction === 'add-decision') { onAddDecision(target.id); return; }
     (button.dataset.scoreViewAction === 'navigate' ? onNavigate : onSelect)(target);
   }
   root.addEventListener('click', click);
@@ -102,6 +104,7 @@ export function createScoreView(root, { onSelect, onNavigate }) {
         socket.dataset.decision = gate.modeledDecision;
         socket.append(node('small', `Modeled decision · ${gate.modeledDecision}`)); item.append(socket);
       }
+      const add = control('Add a decision', 'stage', stage.id, 'add-decision'); add.className = 'native-control--create'; add.setAttribute('aria-label', `Add a decision after ${stage.label}`); item.append(add);
       stages.append(item);
     }
     stages.hidden = !score.stages.length;
@@ -164,7 +167,7 @@ export function createScoreView(root, { onSelect, onNavigate }) {
     capacityRows.replaceChildren();
     for (const person of score.capacity) {
       const card = node('article', undefined, 'native-score__person'); card.dataset.attention = String(person.overlapMinutes > 0 || person.outsideAvailabilityMinutes > 0);
-      const title = node('h5'); title.append(control(person.label, 'person', person.personId)); card.append(title);
+      card.dataset.scorePerson = person.personId; card.append(node('h5', person.label));
       const values = node('dl');
       values.append(metric('Scheduled effort', scoreMinute(person.scheduledEffortMinutes)), metric('Occupied time', scoreMinute(person.occupiedMinutes)),
         metric('Available time', person.availableMinutes === null ? 'To choose' : scoreMinute(person.availableMinutes)));
@@ -172,14 +175,23 @@ export function createScoreView(root, { onSelect, onNavigate }) {
       if (person.unscheduledEffortMinutes) card.append(node('p', `${scoreMinute(person.unscheduledEffortMinutes)} of effort still needs timing.`));
       if (person.overlapMinutes) card.append(node('p', `${scoreMinute(person.overlapMinutes)} of overlapping work · up to ${person.peakConcurrent} simultaneous sessions. Inspect availability to trace the selected interval.`, 'native-score__attention'));
       if (person.outsideAvailabilityMinutes) card.append(node('p', `${scoreMinute(person.outsideAvailabilityMinutes)} falls outside the entered availability.`, 'native-score__attention'));
-      card.append(control('Inspect availability', 'person', person.personId), control('Open person settings', 'person', person.personId, 'navigate'));
+      const actions = node('div', undefined, 'native-score__record-actions'), inspect = control('Inspect availability', 'person', person.personId), settings = control('Person settings', 'person', person.personId, 'navigate');
+      inspect.classList.add('native-control--navigate');
+      inspect.setAttribute('aria-label', `Inspect availability for ${person.label}`); settings.setAttribute('aria-label', `Go to person settings for ${person.label}`);
+      actions.append(inspect, settings); card.append(actions);
       capacityRows.append(card);
     }
     edges.replaceChildren(); dependencies.hidden = !score.dependencies.length;
     for (const edge of score.dependencies) {
-      const item = node('li'), button = control(`${work.get(edge.fromWorkId).label} → ${work.get(edge.toWorkId).label}`, 'dependency', edge.id);
-      item.append(button, node('span', `${STATUS[edge.status]} · ${scoreMinute(edge.lagMinutes)} between sessions${edge.slackMinutes === null ? '' : ` · ${scoreMinute(Math.abs(edge.slackMinutes))} ${edge.slackMinutes < 0 ? 'too early' : 'spare'}`}`));
-      if (edge.connectionId) item.append(control('Inspect connection', 'connection', edge.connectionId, 'navigate'));
+      const from = work.get(edge.fromWorkId).label, to = work.get(edge.toWorkId).label;
+      const item = node('li'), actions = node('div', undefined, 'native-score__record-actions'), inspect = control('Inspect handoff', 'dependency', edge.id);
+      inspect.classList.add('native-control--navigate');
+      inspect.setAttribute('aria-label', `Inspect handoff from ${from} to ${to}`); actions.append(inspect);
+      item.append(node('h5', `${from} → ${to}`), node('p', `${STATUS[edge.status]} · ${scoreMinute(edge.lagMinutes)} between sessions${edge.slackMinutes === null ? '' : ` · ${scoreMinute(Math.abs(edge.slackMinutes))} ${edge.slackMinutes < 0 ? 'too early' : 'spare'}`}`, 'native-score__dependency-reading'));
+      if (edge.connectionId) {
+        const settings = control('Connection settings', 'connection', edge.connectionId, 'navigate'); settings.setAttribute('aria-label', `Go to connection settings for ${from} to ${to}`); actions.append(settings);
+      }
+      item.append(actions);
       edges.append(item);
     }
     banks.replaceChildren();

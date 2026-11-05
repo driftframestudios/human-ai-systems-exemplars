@@ -159,7 +159,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       const creationHelp = element('p', 'Name the team and choose its people here. Preview the arrangement, then Apply arrangement to add the team and its connections together.', 'native-coordination__hint');
       group.prepend(creationHelp);
       const addPerson = element('button', 'Add a person'); addPerson.type = 'button';
-      addPerson.className = 'native-control--create'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
+      addPerson.className = 'native-control--create native-control--navigate'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
       group.append(addPerson);
       dynamic.push(() => {
         creationHelp.hidden = row.selection !== 'new';

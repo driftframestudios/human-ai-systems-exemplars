@@ -114,15 +114,24 @@ for (const engine of names) {
     const page = await open(t, engine);
     const original = await bytes(page);
     await ada(page);
-    await expect(people(page).locator('[data-assembly-total]')).toHaveText('$1,440.00');
+    const rate = people(page).locator('[data-assembly-person-fields] [data-rate-step="10"]');
+    await field(page, 'ratePerHour').fill(''); await expect(rate).toBeDisabled();
+    await field(page, 'ratePerHour').fill('120.25'); await rate.focus(); await page.keyboard.press('ArrowRight');
+    await expect(field(page, 'ratePerHour')).toHaveValue('130.25');
+    await expect(people(page).locator('[data-assembly-total]')).toHaveText('$1,460.50');
     await expect(total(page)).toHaveText('$1,200.00');
     await cancel(page).click();
     assert.equal(await bytes(page), original);
-    await ada(page); await apply(page).click();
-    await expect(total(page)).toHaveText('$1,440.00');
+    await ada(page); await field(page, 'ratePerHour').fill('115.25');
+    await rate.focus(); await page.keyboard.press('ArrowRight');
+    await expect(field(page, 'ratePerHour')).toHaveValue('125.25');
+    await apply(page).click();
+    await expect(total(page)).toHaveText('$1,450.50');
     await expect(people(page).locator('[data-person-configure]')).toHaveAttribute('open', '');
     const adaId = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.find(row => row.label === 'Ada').id);
+    assert.equal(await page.evaluate(id => window.assemblyFixture.studio.read().state.people.find(row => row.id === id).rateCentsPerHour, adaId), 12525);
     await action(page, 'team-create').click();
+    await expect(rate).toBeDisabled(); await expect(rate).toBeHidden();
     await field(page, 'label').fill('Design');
     await people(page).locator(`[data-assembly-member="${adaId}"]`).check();
     await people(page).locator('[data-assembly-member="product-one"]').check();
@@ -133,7 +142,7 @@ for (const engine of names) {
     await expect(people(page).locator(`[data-assembly-team="${design.id}"]`)).toBeFocused();
     await people(page).locator(`[data-assembly-team="${design.id}"]`).click();
     assert.deepEqual(design.personIds, ['product-one', adaId]);
-    await expect(total(page)).toHaveText('$1,440.00');
+    await expect(total(page)).toHaveText('$1,450.50');
     await expect(people(page).locator('[data-assembly-configure]')).toHaveAttribute('open', '');
     await people(page).locator(`[data-assembly-action="team-up"][data-assembly-id="${design.id}"]`).click();
     assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].id), design.id);
@@ -154,7 +163,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'investment').click();
     await root(page).locator('[data-investment-action="undo"]').click();
-    await expect(total(page)).toHaveText('$1,440.00');
+    await expect(total(page)).toHaveText('$1,450.50');
     assert.equal(await page.evaluate(id => window.assemblyFixture.studio.read().state.people.some(row => row.id === id), adaId), true);
   });
 

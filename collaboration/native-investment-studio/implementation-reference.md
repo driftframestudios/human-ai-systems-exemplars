@@ -53,6 +53,8 @@ then identifies each behavior's implementation owner.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
   shared by duration edits, people, purpose, assembly forms, full sessions, roles and contributions.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
+- `rate-controls.mjs` owns relative $10 and $5 dial gestures beside existing hourly-rate fields. People and Quality retain parsing, unknown values, exact cents, $1 steps and accepted-state ownership.
+- `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the lens-side controls. It leaves accepted state and editor history with their existing owners.
 - `time-controls.mjs` owns the shared Hours and Minutes dial gestures and the semantic
   Hours/Minutes/Working sessions cluster used by supporting-work proposals.
   Each receiving editor retains its raw draft, validation and acceptance.
@@ -1803,15 +1805,17 @@ and a visitor's comprehension remain separate observations.
 
 ## Native Studio chapters
 
-`shell.mjs` owns the amp head's manually activated Coordination, People and Investment
-tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
+`shell.mjs` owns the amp head’s manually activated chapter tabs. About authors each button, panel and stable ID; `controller.mjs` mounts
 the shell after mounting the receivers against the same Studio instance. The
 shell changes presentation and calls the parent receiver's selection callback.
 The parent parks the outgoing edit and resumes the incoming target through the
 shared coordinator. The amp head
 continues to display the shared accepted amount.
 
-`mountChapterShell(root, { onSelect })` returns `read()`, `select(chapterKey)` and `dispose()`.
+`mountChapterShell(root, { onSelect, motion })` returns `read()`,
+`select(chapterKey, options)` and `dispose()`. Native amp selection uses the
+chapter route; contextual links pass `kind: "context"`. The motion owner supplies
+a separate local inspection indication.
 Read reports the selected chapter and admitted chapter keys. Select reveals
 one chapter, focuses its tab and records its owned fragment. Disposal cancels
 motion, removes listeners and restores authored attributes without replacing
@@ -2099,3 +2103,33 @@ remain staffing references, separate from this relative timeline. The score
 browser route observes timing/capacity, explicit $100 follow-up funding, exact
 Undo, stale navigation, view-only zoom, agenda/table, narrow reading and keyboard
 focus. Source fixtures independently establish arithmetic and admission boundaries.
+
+
+## Create entry and confirmation controls
+
+The **create entry** starts a new item or nested addition. It receives
+`native-control--create`, a compact plus mark, and a concrete label such as
+**Add session**, **Add a person**, or **Add a decision**. The mark tells the
+visitor that a new editing task begins.
+
+The **confirmation** accepts the item already being prepared. It uses the
+ordinary commit treatment and the form's action label, such as **Add session**,
+**Create team**, or **Apply proposal**. Its appearance stays with Apply/Save;
+the plus mark remains on the entry control. Copy can share the same verb while
+position and treatment distinguish beginning the task from completing it.
+
+Class assignment follows the operation and editor mode, rather than matching
+an “Add” word. Nested Add actions inside a form still begin their own item and
+keep the plus. A final submit that accepts that form does not restart creation.
+Removal keeps its rose treatment, and Cancel retains its neutral recovery key.
+This applies across People, teams, sessions, connections, contributions,
+abilities, Change, Assurance and the horizon's authored records.
+
+### Navigation cues
+
+A small directional mark identifies a control that moves to another chapter or
+inspector, including support-sequencer cells, record inspection and saved-edit
+return routes. The source factory declares `native-control--navigate` from the
+action's behavior. CSS paints an empty geometric mark, keeping the accessible
+name equal to the action's words. In-place keys, switches, confirmations and
+disclosure summaries retain their own selected or expanded state.

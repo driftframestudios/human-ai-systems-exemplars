@@ -45,7 +45,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     ['durationHours', '[data-native-duration-hours]'], ['durationMinutes', '[data-native-duration-minutes]'],
     ['context', '[data-native-session-context]'], ['status', '[data-native-session-status]'],
   ].map(([key, selector]) => [key, requireElement(selector)]));
-  const inputs = Object.fromEntries(FIELDS.map(field => [field, elements.form.elements.namedItem(field)]));
+  const fieldControls = Object.fromEntries(FIELDS.map(field => [field, [...elements.form.querySelectorAll(`[name="${field}"]`)]]));
+  const inputs = Object.fromEntries(FIELDS.map(field => [field, fieldControls[field][0]]));
   const errors = Object.fromEntries(ERROR_FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
   const remoteTitle = elements.summary.querySelector('[data-native-remote-title]') ?? elements.summary;
   const dials = Object.fromEntries(['hours', 'minutes'].map(unit => {
@@ -83,6 +84,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     finally { releaseRetiredLease(); }
   }
   function announce(message) { if (!disposed) elements.status.textContent = message; }
+  function markInvalid(field, invalid) {
+    for (const input of fieldControls[field]) input.setAttribute('aria-invalid', String(invalid));
+  }
+  function focusField(field) {
+    (fieldControls[field].find(input => input.checked) ?? inputs[field]).focus();
+  }
   function dialState() {
     const view = editor.read(), active = editing.read().active;
     return { token: view.draft?.token, hours: view.draft?.raw.hoursPerSession ?? inputs.hoursPerSession.value, minutes: view.draft?.raw.minutesPerSession ?? inputs.minutesPerSession.value,
@@ -240,19 +247,19 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       const row = document.createElement('li');
       const score = describeScoreReference(projection.state.scoreSettings, reference);
       if (score) {
-        const link = document.createElement('a'); link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
         link.textContent = 'Review in the coordination horizon'; row.append(`${score.label}. `, link); return row;
       }
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       if (assurance) {
-        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
         link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
         row.append(`${assurance}. `, link); return row;
       }
       if (reference.collection === 'changeSettings') {
         const map = projection.state.changeSettings.frameworkMaps.find(item => item.frameworkId === reference.id);
         const name = getChangeFramework(map.frameworkId, map.version).name;
-        const link = document.createElement('a'); link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
         link.textContent = 'Review linked sessions in Change'; row.append(`${name}: `, link); return row;
       }
       const connection = reference.collection === 'connections' && projection.state.connections.find(row => row.id === reference.id);
@@ -297,9 +304,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     renderTeam(raw.teamId ?? '');
     for (const field of FIELDS) {
       const value = raw[field] ?? '';
-      if (inputs[field].value !== value) inputs[field].value = value;
+      for (const input of fieldControls[field]) {
+        if (input.type === 'radio') input.checked = input.value === value;
+        else if (input.value !== value) input.value = value;
+      }
       const error = draft?.errors.find(item => item.path === `draft.${field}`);
-      inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
+      markInvalid(field, Boolean(error));
       errors[field].textContent = error ? `${LABELS[field]}: ${error.message}` : '';
     }
     const membershipError = draft?.errors.find(item => item.path === 'draft.personIds');
@@ -321,7 +331,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const errorField = error && ERROR_FIELDS.find(field => error.path.endsWith(`.${field}`));
     if (errorField && !draft?.errors.length) {
       errors[errorField].textContent = `${LABELS[errorField]}: ${error.message}`;
-      (errorField === 'personIds' ? elements.members : inputs[errorField]).setAttribute('aria-invalid', 'true');
+      if (errorField === 'personIds') elements.members.setAttribute('aria-invalid', 'true');
+      else markInvalid(errorField, true);
     }
     elements.generalError.textContent = error && !draft?.errors.length && !errorField ? error.message : '';
     durationDials.refresh();
@@ -409,7 +420,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (!result.ok) {
       changed(result, epoch, () => {
         const field = FIELDS.find(name => result.error.path === `draft.${name}`);
-        if (field) inputs[field].focus();
+        if (field) focusField(field);
       }); return;
     }
     if (action === 'cancel') {
@@ -461,7 +472,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function edit(event) {
     const field = event.target.name;
-    if (disposed || inputs[field] !== event.target) return;
+    if (disposed || !fieldControls[field]?.includes(event.target) || event.target.type === 'radio' && !event.target.checked) return;
     durationDials?.release();
     const view = editor.read();
     if (!view.draft) return;

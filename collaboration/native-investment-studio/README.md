@@ -52,8 +52,8 @@ its broader planning capabilities while the native experience grows.
    history** to plan a customer ability. Reuse a working session, or propose
    additional work with named people and funding. Apply accepts the whole proposal;
    Undo restores the preceding plan.
-6. Open **Change**. Compare frameworks and viewpoints, retain each component's
-   mapping, and adjust the attention faders. Open Vision to compare PODA, Impact
+6. Open **Change**. Compare frameworks and viewpoints, select a component key,
+   and adjust the attention faders. Choose Vision to compare PODA, Impact
    Map and Strategy Canvas. Read a method's purpose, expand its example, then
    plan the work it should support. Hours, Minutes and Working sessions use the
    same controls as Session settings. Investment compares accepted choices with
@@ -70,7 +70,9 @@ chapters can retain unfinished work. A saved edit may need review after another
 change updates the accepted plan. The amp amount describes accepted investment;
 a form preview describes that form's proposal.
 
-Cards describe what people can do and how a team plans to work. Their reverse
+The support sequencer makes responsibility, preparation, review and recorded
+observation available as individual cells. Choose a gap to open its editor;
+Apply accepts the proposal. Cards describe what people can do and how a team plans to work. Their reverse
 shows responsibility, supporting sessions, current gaps, and recorded
 observations. **Open beside** keeps overview and support together at roomy
 widths. Shared sessions retain one cost account; retiring a card keeps its
@@ -97,7 +99,9 @@ scale or follow a session, person or chapter link; return to the horizon with
 your unfinished entries intact.
 
 Hover over or focus a clip to preview its participants, duration, funding and
-preceding work. The compact chronological table keeps sessions, waits and
+preceding work. The visible scale keys keep their selected state. **Go to chapter**
+opens a related part of the Studio. Each stage has **Add a decision**, and the
+decision inspector shows complete questions and evidence before editing. The compact chronological table keeps sessions, waits and
 decisions in time order; the session table compares effort and funding across
 their full series.
 
@@ -123,6 +127,24 @@ Hours and Minutes each have a dial beside their precision field. Hours uses the
 larger dial; both also accept keyboard arrows, taps, step buttons and direct
 entry. Turning Hours preserves Minutes. At 23:30, set Minutes to zero before
 choosing 24 hours.
+
+## Choose how the instrument responds
+
+**Studio motion**, beside the Change lens, begins with lower motion. Choose
+Full motion for short reel, screen and navigation responses; a system preference
+for reduced motion retains the lower setting. Amp chapter selection, contextual
+chapter jumps and inspection inside a chapter use distinct destination cues.
+These choices affect presentation while your plan and saved edits retain their
+own state.
+
+Hourly rates have a larger **$10 steps** dial and a smaller **$5 steps** dial
+beside the exact field and **$1** buttons. Turning a dial preserves cents; a blank
+rate stays unknown until you enter one.
+
+A small arrow marks a move to another view or inspector.
+A plus mark starts adding an item. The final Add or Apply button confirms the
+item already being prepared. Physical-looking switches keep native checkbox
+behavior, and small fixed choice sets show their available options directly.
 
 ## Run a local preview
 
@@ -167,7 +189,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653),
+source, the worktree, [#696](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/696),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.

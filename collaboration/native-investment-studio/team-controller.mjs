@@ -1,5 +1,7 @@
 import { createDraftCoordinator } from './editing.mjs';
 import { money, duration } from './display.mjs';
+import { preparePersonDraftValues } from './person-draft.mjs';
+import { mountRateControls } from './rate-controls.mjs';
 
 const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -66,6 +68,17 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     onEditing();
     if (focus && retains(epoch, mark)) focus();
   }
+  const rateControls = mountRateControls({ host: inputs.ratePerHour.closest('.native-coordination__control'), precision: inputs.ratePerHour,
+    read() {
+      const view = editor.read(), active = editing.read().active;
+      const parsed = view.draft ? preparePersonDraftValues(view.draft.raw) : null;
+      return { token: view.draft?.token, raw: view.draft?.raw.ratePerHour, cents: parsed?.admitted.rateCentsPerHour ?? null,
+        enabled: !disposed && !composing && isActive() && elements.configure.open && view.status === 'editing'
+          && active?.kind === 'person' && active.token === view.draft?.token };
+    }, write(token, value) {
+      const epoch = ++generation, result = operate('setText', token, 'ratePerHour', value);
+      if (!owns(epoch)) return; announce(result.ok ? '' : result.error.message); render();
+    } });
 
   function renderRoster(next) {
     if (next === projection) return;
@@ -80,6 +93,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const item = document.createElement('li');
       const button = document.createElement('button');
       button.type = 'button';
+      button.className = 'native-control--navigate';
       button.dataset.personId = person.id;
       button.textContent = person.label;
       const saved = document.createElement('span');
@@ -131,6 +145,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       inputs[field].setAttribute('aria-invalid', String(Boolean(error)));
       errors[field].textContent = error ? `${LABELS[field]}: ${error.message}` : '';
     }
+    rateControls.refresh();
     const proposed = view.status === 'editing' && view.draft && !composing ? operate('preview', view.draft.token) : null;
     if (!owns(epoch)) return editor.read();
     const current = editor.read();
@@ -147,6 +162,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
 
   function select(personId, focus = true) {
     if (disposed) return;
+    rateControls.release();
     const epoch = ++generation, before = boundary();
     onBegin();
     const active = editing.read().active;
@@ -158,6 +174,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     render();
     if (!owns(epoch)) return;
     if (selectedId !== null) elements.configure.open = true;
+    rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     notify(epoch, focus ? () => {
       if (editor.read().status === 'editing') inputs.ratePerHour.focus();
@@ -167,6 +184,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
 
   function settle(action) {
     if (disposed) return;
+    rateControls.release();
     const view = editor.read();
     if (!view.draft) return;
     if (composing && action === 'apply') { announce('Finish entering the number, then apply.'); return; }
@@ -252,6 +270,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const active = editing.read().active;
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
+    rateControls.dispose();
     summaryPreview.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -263,14 +282,14 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   }
 
   const receiver = Object.freeze({ read: () => editor.read(), refresh: render,
-    close: () => { if (!disposed) { generation += 1; composing = false; elements.configure.open = false; } },
+    close: () => { if (!disposed) { rateControls.release(); generation += 1; composing = false; elements.configure.open = false; } },
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const input of Object.values(inputs)) input.maxLength = 32;
     listen(root, 'click', click);
     listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
-    listen(elements.form, 'compositionstart', () => { generation += 1; composing = true; render(); });
+    listen(elements.form, 'compositionstart', () => { rateControls.release(); generation += 1; composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });
     listen(elements.configure.querySelector('summary'), 'click', event => {
       if (!disposed && !elements.configure.open && selectedId !== null && canOpen()) {
@@ -278,6 +297,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       }
     });
     listen(elements.configure, 'toggle', () => {
+      if (!elements.configure.open) rateControls.release();
+      rateControls.refresh();
       if (!disposed && isActive() && elements.configure.open && editor.read().draft === null && selectedId !== null) select(selectedId);
     });
     render();

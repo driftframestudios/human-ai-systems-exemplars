@@ -412,3 +412,50 @@ establish that the aesthetic improves learning or decision quality for this visi
 population. The next useful observation is whether visitors can identify the
 selected record, the parameter they can adjust, the connected work, and the accepted
 result without an explanation from the collaborator.
+
+### 11. Make navigation distance and control purpose visible
+
+**Decision.** Express three kinds of movement with different destination cues:
+amp chapter selection, a contextual jump to another chapter, and inspection
+within the current section. Start with lower motion across the Studio; let the
+visitor explicitly request fuller motion beside the lens.
+
+**Evidence and transfer.** The original
+[Codrops page-transition source](https://github.com/codrops/PageTransitions/blob/master/css/animations.css)
+demonstrates bounded combinations of fade, translation and reveal. It supplies
+creative techniques, rather than evidence that a particular animation improves
+this Studio's usability. The local interpretation uses a short chapter fade,
+a slightly longer contextual reveal and a local inspector emphasis. Destination
+labels, focus and static cues carry meaning in the lower-motion presentation.
+The W3C's [Animation from interactions guidance](https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html)
+supports visitor control over nonessential movement. Its
+[Pause, Stop, Hide guidance](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html)
+also applies to automatically scrolling information. A lower-motion preference
+and a pause control have distinct jobs.
+
+The [Ableton Push manual](https://www.ableton.com/en/push/manual/) places
+parameter displays beside encoders and uses pads with persistent selected
+states. This is official product behavior used as composition inspiration.
+Our local controls retain ordinary HTML semantics: checkboxes for independent
+membership, radios for small exclusive sets, pressed buttons for view choices,
+and labeled actions for creation or inspection. A recessed selected key and
+an adjacent reading make the parameter relationship visible. A plus mark
+belongs to the entry that starts adding an item. The final confirmation uses
+the ordinary commit treatment, so it reads as completing the current task.
+This distinction comes from the human’s observed ambiguity in the session form.
+
+**Implementation bridge.** The presentation owner cancels active effects when
+lower motion, an operating-system preference, a hidden page or disposal requires
+it. Motion changes stay outside accepted plan, draft, export and Undo state.
+The Abilities matrix exposes responsibility, preparation, review and recorded
+observation as separate support questions. CRT styling preserves the exact
+normal-reference curve and threshold geometry. Its finite glow acknowledges
+a sigma change; the mathematical illustration retains its own evidence scope.
+
+**Focused observation.** Exercise keyboard choice, rapid chapter jumps, local
+inspection and a mid-animation switch to lower motion. Inspect a support gap,
+retain its raw draft across another selection, and verify accepted bytes remain
+unchanged until Apply. At narrow and laptop widths, inspect role labels, matrix
+header contrast, selected-state shapes and the complete gate question/evidence.
+These observations establish the exercised behavior; visitor interpretation
+of the art direction remains a receiving human judgment.

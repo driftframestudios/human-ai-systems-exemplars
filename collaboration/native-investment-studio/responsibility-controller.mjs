@@ -85,6 +85,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function button(label, action, id) {
     const element = document.createElement('button'); element.type = 'button'; element.textContent = label;
     element.dataset.responsibilityAction = action;
+    if (action === 'open') element.classList.add('native-control--navigate');
     if (id !== undefined) element.dataset.responsibilityId = id;
     return element;
   }
@@ -134,7 +135,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     for (const row of next.state.contributions) {
       const item = document.createElement('li'), open = button(CATEGORY_LABELS.get(row.categoryId), 'open', row.id);
       open.dataset.contributionId = row.id;
-      open.className = 'native-responsibility__selector';
+      open.classList.add('native-responsibility__selector');
       open.setAttribute('aria-controls', contribution.configure.id);
       open.setAttribute('aria-expanded', 'false');
       const detail = document.createElement('p');
@@ -243,6 +244,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     }
     group.apply.disabled = Boolean(error?.references?.length);
     group.apply.setAttribute('aria-disabled', String(!draft?.changed));
+    group.apply.classList.toggle('native-control--remove', removing);
     group.apply.textContent = removing ? 'Remove contribution' : descriptor?.mode === 'create' && draft ? 'Add contribution' : 'Apply changes';
     return view;
   }

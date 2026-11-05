@@ -774,3 +774,75 @@ repair. The receiving implementation preserves a newer editor's focus and raw
 entries, releases a retired receiver's lease after an in-progress operation,
 and allocates proposed work against existing identities. Capacity summaries stay
 compact; the selected overlapping interval reveals its contributing sessions.
+
+
+## 5 November 2026 — Read, choose, begin and confirm
+
+The next instrument pass makes distinct operations recognizable. The Abilities
+support sequencer separates responsibility, preparation, review and recorded
+observation; cells route to the corresponding retained editor. Change's piano
+keys select one inspector while every component keeps its fields and unfinished
+entries. Quality receives a CRT-like mathematical reference screen and tactile
+concept pads. Explicit labels retain each quantity's meaning.
+
+Lower motion is the initial Studio state. Fuller motion is a presentation
+choice beside the lens, constrained by the operating system's reduced-motion
+preference. The navigation grammar distinguishes amp chapter selection,
+contextual chapter jumps and local inspection. Each has a static destination
+cue; fuller motion adds a short fade, a more pronounced reveal, or local emphasis.
+Effects cancel on a lower-motion choice, hidden document or disposal. This state
+stays outside accepted plans, draft history and export.
+
+The horizon exposes view scale directly, labels onward routes **Go to chapter**,
+and gives each stage a nearby **Add a decision**. That action seeds a decision
+proposal for the chosen stage; Apply accepts it. Complete questions and evidence
+remain readable with an explicit edit disclosure. Capacity names and dependency
+headings are plain readings, with separate inspection and navigation controls.
+
+The human observed an important distinction after the shared Add treatment:
+a plus on the final **Add session** button suggested starting another task.
+The durable rule now assigns the plus to a creation entry only. A confirmation
+uses the ordinary commit treatment, even when its label includes “Add.” Nested
+creation entries retain their own plus. The implementation reference carries
+this interaction rule across every chapter.
+
+The participant-card review also exposed oversized checkbox pressure. The
+shared native checkbox now has a compact fixed track and thumb, role/rate text
+owns the remaining width, and reorder keys align at each card row's bottom.
+Forced colors and print restore the ordinary native checkbox. This repairs
+reading and placement while preserving membership and accepted-state behavior.
+
+Issue #696 owns this instrument pass; #697 receives arrangement topology and
+AI-to-human handoffs, #698 receives quality's explicit work consequences, and
+#699 retains the future compact sticky amp. Dev integration follows independent
+engineering review. #686 holds the human-cued public release; #679 follows
+complete showcase construction.
+
+
+The human also requested engaging hourly-rate controls: a larger **$10 steps**
+dial, a smaller **$5 steps** dial, existing **$1** step buttons and exact entry.
+The dials adjust relative to the entered amount so cents remain intact. Unknown
+rates remain unknown until a visitor enters a value. This belongs to #696's
+shared parameter family and applies wherever the Studio edits an hourly rate.
+
+### Keep the amp head compact
+
+The human returned the amp head to its compact composition: the original ASCII
+rail, investment display, chapter controls, and Purpose / Saved edits / Operating
+manual row. The experimental readings panel has been removed. Any consequence
+channel will be reconsidered with the future compact sticky-header exploration
+in [#699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699).
+The current showcase continues with its existing header and presentation controls.
+
+The shared rate controls also serve the new-person form. A measured layout shift
+when unknown-rate guidance appeared was repaired by keeping that explanation
+visible; following inputs retain their positions as validity changes. Session
+Funding and Status now expose their two choices directly, with native keyboard
+selection and error recovery for each option.
+
+The final source route passes, alongside the suite-planner/About contracts and
+delivery-closure checks. Focused three-engine observations cover rate gestures
+and exact cents, draft recovery, session accounting, support navigation, motion,
+contrast and narrow composition. Independent engineering reviews accepted the
+separate authored slices. These observations establish the exercised behaviors;
+the feature continues through the ordinary dev pull-request review route.

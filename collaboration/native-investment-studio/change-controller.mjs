@@ -29,7 +29,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   const elements = Object.fromEntries(['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work', 'manual', 'interpretation',
     'lens-wheel', 'four-actions', 'preview', 'error', 'status', 'form', 'fields', 'recovery', 'current'].map(name => [name, find(name)]));
   const actions = new Map([...root.querySelectorAll('[data-change-action]')].map(element => [element.dataset.changeAction, element]));
-  const editor = editing.change, componentNodes = [], ranges = new Map();
+  const editor = editing.change, componentNodes = [], ranges = new Map(), selectedComponents = new Map();
   for (const name of ['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work', 'lens-wheel']) elements[name].replaceChildren();
   root.querySelector('[data-change-attention-note]')?.remove();
   let disposed = false, generation = 0, composing = false, sequence = 0, lastProjection = null;
@@ -41,7 +41,11 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     if (className) element.className = className;
     return element;
   }
-  function button(text, action) { const element = node('button', text); element.type = 'button'; element.dataset.changeAction = action; return element; }
+  function button(text, action) {
+    const element = node('button', text); element.type = 'button'; element.dataset.changeAction = action;
+    if (['work', 'suggest'].includes(action)) element.classList.add('native-control--navigate');
+    return element;
+  }
   function methodLink(method) {
     const route = method.readingRoute;
     if (!route) return null;
@@ -51,7 +55,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       : new URL(`../../${route.path}`, import.meta.url);
     if (route.fragment) url.hash = route.fragment;
     const link = node('a', `${route.label} (new tab)`);
-    link.href = url.href; link.target = '_blank'; link.rel = 'noopener';
+    link.href = url.href; link.target = '_blank'; link.rel = 'noopener'; link.classList.add('native-control--navigate');
     return link;
   }
   function announce(text) { if (!disposed) elements.status.textContent = text; }
@@ -64,14 +68,14 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     return rows;
   }
   function populate(control, raw) {
-    const { input, metadata, key } = control;
+    const { input, metadata, key, radio } = control;
     const selected = metadata.kind === 'ids' ? raw : [raw];
     const rows = metadata.source ? sourceOptions(metadata.source, selected) : choices[key] ?? choices.status;
     input.replaceChildren();
-    if (metadata.kind === 'ids') {
+    if (metadata.kind === 'ids' || radio) {
       for (const [id, text] of rows) {
         const item = node('li'), label = node('label'), checkbox = node('input');
-        checkbox.type = 'checkbox'; checkbox.name = key; checkbox.value = id; checkbox.dataset.changeField = key;
+        checkbox.type = radio ? 'radio' : 'checkbox'; checkbox.name = key; checkbox.value = id; checkbox.dataset.changeField = key;
         checkbox.setAttribute('aria-describedby', control.error.id);
         label.append(checkbox, node('span', text)); item.append(label); input.append(item);
       }
@@ -82,12 +86,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     for (const [id, label] of rows) { const option = node('option', label); option.value = id; input.append(option); }
   }
   function field(parent, key) {
-    const metadata = CHANGE_FIELDS[key], group = node(metadata.kind === 'ids' ? 'fieldset' : 'div', undefined, 'native-change__field');
-    const label = node(metadata.kind === 'ids' ? 'legend' : 'label', metadata.label);
-    const input = document.createElement(metadata.kind === 'ids' ? 'ul' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : 'input');
+    const metadata = CHANGE_FIELDS[key], radio = key.endsWith('.status') || key === 'proposal.funding', grouped = metadata.kind === 'ids' || radio;
+    const group = node(grouped ? 'fieldset' : 'div', undefined, 'native-change__field');
+    const label = node(grouped ? 'legend' : 'label', metadata.label);
+    const input = document.createElement(grouped ? 'ul' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : 'input');
     input.id = `${instance}-${++sequence}`; input.name = key; input.dataset.changeField = key; label.htmlFor = input.id;
     if (key.startsWith('attention.')) { label.textContent = 'Parts'; input.setAttribute('aria-label', `${metadata.label} attention parts`); }
-    if (metadata.kind === 'ids') input.className = 'native-change__choices';
+    if (grouped) input.className = radio ? 'native-change__exclusive' : 'native-change__choices';
     if (input.tagName === 'INPUT') {
       input.type = metadata.checkbox ? 'checkbox' : 'text'; input.maxLength = metadata.maxLength;
       if (metadata.numeric) { input.inputMode = 'numeric'; input.spellcheck = false; input.className = 'native-change__numeric'; }
@@ -104,10 +109,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
     if (metadata.source && targetName[metadata.source]) {
       const kind = targetName[metadata.source], create = node('button', `Add ${kind === 'person' ? 'a person' : kind === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
-      create.type = 'button'; Object.assign(create.dataset, { nativeCreate: kind, nativeReturn: 'change', nativeReturnField: key }); group.append(create);
+      create.type = 'button'; create.classList.add('native-control--navigate'); Object.assign(create.dataset, { nativeCreate: kind, nativeReturn: 'change', nativeReturnField: key }); group.append(create);
     }
     group.append(error); parent.append(group);
-    const control = { input, metadata, error, key, group }; controls.set(key, control); return control;
+    const control = { input, metadata, error, key, group, radio }; controls.set(key, control); return control;
   }
   field(elements.frameworks, 'framework'); field(elements.lenses, 'lens'); field(elements.filters, 'sourceFilter');
   const lensRotor = node('div', undefined, 'native-change__lens-rotor'); lensRotor.setAttribute('aria-hidden', 'true');
@@ -118,11 +123,21 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     control.className = 'native-change__lens-choice'; control.style.setProperty('--lens-position', index);
     elements['lens-wheel'].append(control); return control;
   });
-
+  elements.matrix.classList.add('native-change__workspace');
+  const componentKeys = node('div', undefined, 'native-change__keys'), inspectors = node('div', undefined, 'native-change__inspectors');
+  componentKeys.setAttribute('role', 'group'); componentKeys.setAttribute('aria-label', 'Choose a change component');
+  elements.matrix.append(componentKeys, inspectors);
   for (const framework of listChangeFrameworks()) for (const component of framework.components) {
-    const prefix = `map.${framework.id}.${component.id}.`, details = node('details', undefined, 'native-change__component');
-    Object.assign(details.dataset, { changeFramework: framework.id, changeComponent: component.id });
-    const summary = node('summary', component.label), body = node('div', undefined, 'native-change__component-body');
+    if (!selectedComponents.has(framework.id)) selectedComponents.set(framework.id, component.id);
+    const prefix = `map.${framework.id}.${component.id}.`, panel = node('section', undefined, 'native-change__component');
+    Object.assign(panel.dataset, { changeFramework: framework.id, changeComponent: component.id });
+    panel.id = `${instance}-component-${framework.id}-${component.id}`;
+    const key = button('', 'component'), keyStatus = node('small', '', 'native-change__key-status');
+    key.className = 'native-change__key'; key.dataset.changeFramework = framework.id; key.dataset.changeComponent = component.id;
+    key.setAttribute('aria-controls', panel.id); key.append(node('strong', component.label), keyStatus); componentKeys.append(key);
+    const heading = node('h4', component.label, 'native-change__component-title'); heading.id = `${panel.id}-title`;
+    panel.setAttribute('aria-labelledby', heading.id);
+    const preview = node('p', '', 'native-change__component-preview'), body = node('div', undefined, 'native-change__component-body');
     const introduction = node('div', undefined, 'native-change__component-introduction');
     introduction.append(node('p', component.explanation), node('p', `People to involve: ${component.receiverRole}.`));
     const settings = node('div', undefined, 'native-change__component-settings');
@@ -151,9 +166,19 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       const actions = node('div', undefined, 'native-change__suggestion-actions'); actions.append(propose);
       li.append(actions); suggestions.append(li);
     }
-    body.append(node('h5', 'Choose work to support this change'), suggestions); details.append(summary, body); elements.matrix.append(details);
-    componentNodes.push({ framework, component, prefix, details, summary, linkedWork, suggestions });
+    body.append(node('h5', 'Choose work to support this change'), suggestions); panel.append(heading, preview, body); inspectors.append(panel);
+    componentNodes.push({ framework, component, prefix, panel, key, keyStatus, preview, linkedWork, suggestions });
   }
+  listen(componentKeys, 'keydown', event => {
+    const key = event.target.closest('[data-change-action="component"]');
+    if (!key || !componentKeys.contains(key) || !['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+    const visible = componentNodes.filter(entry => !entry.key.hidden).map(entry => entry.key), index = visible.indexOf(key);
+    if (index < 0) return;
+    event.preventDefault();
+    const target = event.key === 'Home' ? 0 : event.key === 'End' ? visible.length - 1
+      : (index + (['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1) + visible.length) % visible.length;
+    visible[target].focus();
+  });
   const attentionNote = node('div', undefined, 'native-change__live-reading'); attentionNote.dataset.changeAttentionNote = ''; elements.mixer.before(attentionNote);
   for (const channel of listAttentionChannels()) {
     const group = node('section', undefined, 'native-change__channel'), key = `attention.${channel.id}`; group.dataset.changeChannel = channel.id;
@@ -184,7 +209,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         && active?.kind === 'change' && active.token === view.draft.token };
   }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   const manual = node('div');
-  manual.append(node('p', 'Choose a framework to examine its components. Keep the work already linked to each component as you compare frameworks. Apply accepts your selected framework, mappings, viewpoint, suggestions filter and attention together.'),
+  manual.append(node('p', 'Choose a framework, then a component key to inspect its support. Arrow keys move between keys; Enter or Space opens the focused component. Each component keeps its entries as you compare frameworks. Apply accepts your selected framework, mappings, viewpoint, suggestions filter and attention together.'),
     node('p', 'A mapped component records planning intent. Linked work names who will carry it. Review the resulting work and evidence before judging readiness.'),
     node('p', 'Attention parts express relative emphasis from 0 through 25. They help focus discussion. Staffing and session choices supply the investment calculation.'),
     node('p', 'The original 48 aggregate person-hours illustrate how a gap might receive support. Set participants, duration, occurrences and funding for your own proposed session.'));
@@ -230,7 +255,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         } else value = control.metadata.kind === 'ids' ? [] : '';
       }
       if (['SELECT', 'UL'].includes(control.input.tagName) && (lastProjection !== view.projection || !control.input.children.length)) populate(control, value);
-      if (control.metadata.kind === 'ids') for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = value.includes(checkbox.value);
+      if (control.metadata.kind === 'ids' || control.radio) for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = control.radio ? value === checkbox.value : value.includes(checkbox.value);
       else if (control.metadata.checkbox) control.input.checked = value === 'yes';
       else if (control.input.value !== value) control.input.value = value;
       const error = view.draft?.errors.find(error => error.path === `draft.${key}`);
@@ -245,11 +270,19 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     durationDials.refresh();
     lastProjection = view.projection;
     for (const entry of componentNodes) {
-      entry.details.hidden = entry.framework.id !== reading.framework.id;
+      const inFramework = entry.framework.id === reading.framework.id;
+      const selected = inFramework && selectedComponents.get(entry.framework.id) === entry.component.id;
+      entry.key.hidden = !inFramework; entry.key.setAttribute('aria-pressed', String(selected)); entry.panel.hidden = !selected;
       const state = settings.frameworkMaps.find(row => row.frameworkId === entry.framework.id).components.find(row => row.componentId === entry.component.id);
       const status = CHANGE_STATUSES.find(row => row.id === state.status)?.label ?? state.status;
       const workNames = state.workIds.map(id => view.projection.state.work.find(row => row.id === id)?.label ?? id);
-      entry.summary.textContent = `${entry.component.label} · ${status}${workNames.length ? ` · ${workNames.slice(0, 2).join(', ')}${workNames.length > 2 ? ' and further linked work' : ''}` : ''}`;
+      const capabilityNames = state.capabilityRefs.map(ref => {
+        const row = view.projection.state[ref.kind === 'ability' ? 'abilities' : 'practices'].find(row => row.id === ref.instanceId);
+        return row ? getCapabilityDefinition(ref.kind, row.definitionId, row.definitionVersion).action : ref.instanceId;
+      });
+      const supportNames = [...workNames, ...capabilityNames];
+      entry.keyStatus.textContent = `${state.mapped ? 'Included' : 'Mapping to plan'} · ${status} · ${supportNames.length ? 'Support linked' : 'Support to choose'}`;
+      entry.preview.textContent = `${status} · ${supportNames.length ? supportNames.join(', ') : 'Choose supporting work or an ability.'}`;
       for (const li of entry.suggestions.children) li.hidden = settings.sourceFilter !== 'all' && li.dataset.changeSource !== settings.sourceFilter;
       entry.linkedWork.replaceChildren(...state.workIds.map(id => { const inspect = button(`Inspect ${view.projection.state.work.find(row => row.id === id)?.label ?? id}`, 'work'); inspect.dataset.changeWork = id; return inspect; }));
     }
@@ -341,6 +374,9 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.changeAction;
     if (action === 'apply') return;
+    if (action === 'component') {
+      selectedComponents.set(control.dataset.changeFramework, control.dataset.changeComponent); render(); return;
+    }
     if (action === 'cancel' || action === 'discard') { settle('cancel'); return; }
     const view = editor.read(); if (!view.draft) return;
     if (action === 'review' || action === 'current') { const epoch = ++generation; opened(editor[action === 'review' ? 'review' : 'useCurrent'](view.draft.token, studio.read()), epoch, true); return; }
@@ -370,9 +406,9 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const key = event.target.dataset.changeField, control = controls.get(key), view = editor.read();
     if (disposed || !isActive() || !control || !view.draft || view.status !== 'editing') return;
     const fromRange = ranges.get(key) === event.target;
-    if (!fromRange && control.input !== event.target && !(control.metadata.kind === 'ids' && control.input.contains(event.target))) return;
-    if (event.type === 'input' && (control.input.tagName === 'SELECT' || control.metadata.checkbox || control.metadata.kind === 'ids') && !fromRange
-      || event.type === 'change' && control.input.tagName !== 'SELECT' && !control.metadata.checkbox && control.metadata.kind !== 'ids') return;
+    if (!fromRange && control.input !== event.target && !((control.metadata.kind === 'ids' || control.radio) && control.input.contains(event.target))) return;
+    if (event.type === 'input' && (control.input.tagName === 'SELECT' || control.metadata.checkbox || control.metadata.kind === 'ids' || control.radio) && !fromRange
+      || event.type === 'change' && control.input.tagName !== 'SELECT' && !control.metadata.checkbox && control.metadata.kind !== 'ids' && !control.radio) return;
     const epoch = ++generation;
     if (control.metadata.kind === 'ids') {
       const chosen = new Set([...control.input.querySelectorAll('input:checked')].map(checkbox => checkbox.value));
@@ -396,6 +432,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   function dispose() {
     if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true;
+    for (const button of lensButtons) button.disabled = true;
     durationDials.dispose(); controls.clear(); ranges.clear(); INSTANCES.delete(root);
   }
   render();

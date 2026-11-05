@@ -4,6 +4,7 @@ import { createDraftCoordinator } from './editing.mjs';
 import { INTEGER, money } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
 import { mountChapterShell } from './shell.mjs';
+import { mountStudioMotion } from './motion.mjs';
 import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
@@ -57,6 +58,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let workPanel = null;
   let teamPanel = null;
   let chapterShell = null;
+  let motion = null;
   let purposePanel = null;
   let investmentPanel = null;
   let assemblyPanel = null;
@@ -226,7 +228,7 @@ export function mountCoordinationPanel(root, options = {}) {
     returnRoutes.push({ kind, target, held, inspectedWorkId: id });
     render(); root.querySelector('[data-native-session-select]')?.focus();
   }
-  function navigateFromScore(target) {
+  function navigateFromScore(target, origin = {}) {
     if (disposed) return;
     const state = studio.read().state;
     if (target.kind === 'work' && !state.work.some(row => row.id === target.id)
@@ -238,7 +240,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (target.kind === 'person') { chapterShell?.select('people'); teamPanel?.select(target.id); }
     else if (target.kind === 'work') { chapterShell?.select('coordination'); workPanel?.select(target.id, false); }
     else if (target.kind === 'connection') { chapterShell?.select('coordination'); connectionPanel?.select(target.id); }
-    else if (target.kind === 'chapter' && ['change', 'assurance', 'investment'].includes(target.id)) chapterShell?.select(target.id);
+    else if (target.kind === 'chapter' && ['change', 'assurance', 'investment'].includes(target.id)) chapterShell?.select(target.id, { kind: origin.routeKind ?? 'context' });
     render();
     const destination = target.kind === 'person' ? root.querySelector('[data-native-team-editor]')
       : target.kind === 'work' ? root.querySelector('[data-native-session-editor]')
@@ -364,7 +366,7 @@ export function mountCoordinationPanel(root, options = {}) {
         item.append(removed);
       } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection', 'capability', 'change', 'assurance', 'score'].includes(record.kind)) {
         const open = document.createElement('button');
-        open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
+        open.type = 'button'; open.className = 'native-control--navigate'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
       }
       const discard = document.createElement('button');
@@ -576,6 +578,7 @@ export function mountCoordinationPanel(root, options = {}) {
     disposed = true;
     renderGeneration += 1;
     chapterShell?.dispose();
+    motion?.dispose();
     connectionView?.dispose();
     connectionPanel?.dispose();
     templatePanel?.dispose();
@@ -607,6 +610,7 @@ export function mountCoordinationPanel(root, options = {}) {
 
   const receiver = Object.freeze({ read: () => workPanel?.read() ?? editor.read(), refresh: render, dispose });
   try {
+    motion = mountStudioMotion(root);
     render();
     listen(root, 'click', click);
     if (ampTools) ampTools.hidden = false;
@@ -637,7 +641,8 @@ export function mountCoordinationPanel(root, options = {}) {
     if (scoreRoot) scorePanel = mountScorePanel(scoreRoot, { studio, editing,
       onBegin: () => beginCoordination('score'), canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
-      onNavigate: navigateFromScore, onAccepted: () => render(), onEditing: () => render() });
+      onNavigate: navigateFromScore, onInspect: element => motion?.indicate(element, { kind: 'inspection' }),
+      onAccepted: () => render(), onEditing: () => render() });
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
       onBegin: () => {
@@ -706,6 +711,8 @@ export function mountCoordinationPanel(root, options = {}) {
       onSourceWork: (id, origin) => inspectSupportingWork('assurance', id, origin), onAccepted: () => render(), onEditing: () => render(),
     });
     investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
+    // Resolve chapter fragments against the completed enhanced amp layout.
+    root.dataset.nativeReady = 'true';
     const chapterList = root.querySelector('[data-native-chapter-list]');
     if (chapterList) {
       for (const button of chapterList.querySelectorAll('[data-native-chapter]')) {
@@ -713,7 +720,7 @@ export function mountCoordinationPanel(root, options = {}) {
         button.prepend(icon);
         cleanup.push(() => icon.remove());
       }
-      chapterShell = mountChapterShell(root, { onSelect: chapter => {
+      chapterShell = mountChapterShell(root, { motion, onSelect: chapter => {
         purposePanel?.close({ resume: false });
         if (activeChapter !== chapter) editing.park();
         activeChapter = chapter;
@@ -726,7 +733,6 @@ export function mountCoordinationPanel(root, options = {}) {
       } });
     }
     elements.fallback.hidden = true;
-    root.dataset.nativeReady = 'true';
     INSTANCES.set(root, receiver);
     return receiver;
   } catch (error) {

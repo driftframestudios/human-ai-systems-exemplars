@@ -90,7 +90,8 @@ async function open(t, engine, fullAbout = false) {
     const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
     const root = document.querySelector('[data-native-coordination]');
     mountCoordinationPanel(root).dispose();
-    mountCoordinationPanel(root, { studio: createStudio() });
+    const studio = createStudio();
+    window.teamFixture = { studio, controller: mountCoordinationPanel(root, { studio }) };
   });
   await settle();
   return page;
@@ -117,11 +118,85 @@ async function assertContained(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: relative rate dials preserve cents and unknowns until Apply and Undo`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const initial = await page.evaluate(() => window.teamFixture.studio.exportText());
+    await choose(page);
+    const coarse = settings(page).locator('[data-rate-step="10"]'), fine = settings(page).locator('[data-rate-step="5"]');
+    await input(page, 'ratePerHour').fill('100.25');
+    await coarse.focus(); await page.keyboard.press('ArrowRight');
+    await expect(input(page, 'ratePerHour')).toHaveValue('110.25');
+    await page.keyboard.press('ArrowRight'); await expect(input(page, 'ratePerHour')).toHaveValue('120.25');
+    await fine.focus(); await page.keyboard.press('ArrowLeft'); await expect(input(page, 'ratePerHour')).toHaveValue('115.25');
+    await team(page).locator('[data-person-field="ratePerHour"][data-step="1"]').click();
+    await expect(input(page, 'ratePerHour')).toHaveValue('116.25');
+    await expect(preview(page)).toHaveText('$1,248.75');
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), initial);
+    for (const dial of [coarse, fine]) { await expect(dial).toHaveValue('0'); await expect(dial).toHaveAttribute('min', '-1'); await expect(dial).toHaveAttribute('max', '1'); }
+    await action(page, 'apply').click(); await expect(accepted(page)).toHaveText('$1,248.75');
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.read().state.people[0].rateCentsPerHour), 11625);
+    await panel(page).locator('[data-native-chapter="investment"]').click();
+    await panel(page).locator('[data-investment-action="undo"]').click();
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), initial);
+    await choose(page);
+    for (const raw of ['', '1.']) { await input(page, 'ratePerHour').fill(raw); await expect(coarse).toBeDisabled(); await expect(fine).toBeDisabled(); await expect(input(page, 'ratePerHour')).toHaveValue(raw); }
+    await input(page, 'ratePerHour').fill('0'); await expect(coarse).toBeEnabled(); await expect(coarse).toHaveAttribute('min', '0');
+    await coarse.focus(); await page.keyboard.press('ArrowRight'); await expect(input(page, 'ratePerHour')).toHaveValue('10.00');
+    for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(value => { document.documentElement.style.fontSize = value ? '200%' : ''; }, enlarged);
+      await coarse.scrollIntoViewIfNeeded(); await assertContained(page);
+      const [large, small] = await Promise.all([coarse.boundingBox(), fine.boundingBox()]);
+      assert.ok(large.width > small.width && small.width >= 44, `coarse/fine targets stay distinct at ${width}px`);
+    }
+    await settings(page).locator('.native-rate-controls').screenshot({ path: resolve(captures, `${engine}-rate-dials-enlarged.png`) });
+  });
+
+  test(`${engine}: rate rotary cancellation restores exact raw spelling and parking releases capture`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine); await choose(page);
+    const coarse = settings(page).locator('[data-rate-step="10"]');
+    const beginTurn = async () => {
+      await coarse.scrollIntoViewIfNeeded();
+      await coarse.evaluate(node => node.addEventListener('pointerdown', event => { window.teamFixture.pointerId = event.pointerId; }, { once: true }));
+      const box = await coarse.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height * .1); await page.mouse.down();
+      await page.mouse.move(box.x + box.width * .8, box.y + box.height * .2);
+      await expect(input(page, 'ratePerHour')).toHaveValue('110.25');
+    };
+    await input(page, 'ratePerHour').fill('100.25'); await coarse.scrollIntoViewIfNeeded();
+    const tapBox = await coarse.boundingBox();
+    await page.mouse.click(tapBox.x + tapBox.width * .9, tapBox.y + tapBox.height / 2);
+    await expect(input(page, 'ratePerHour')).toHaveValue('110.25');
+    await page.mouse.click(tapBox.x + tapBox.width * .1, tapBox.y + tapBox.height / 2);
+    await expect(input(page, 'ratePerHour')).toHaveValue('100.25');
+    await input(page, 'ratePerHour').fill('00100.25'); await beginTurn();
+    await page.keyboard.press('Escape'); await expect(input(page, 'ratePerHour')).toHaveValue('00100.25');
+    assert.equal(await coarse.evaluate(node => node.hasPointerCapture(window.teamFixture.pointerId)), false); await page.mouse.up();
+    await beginTurn();
+    await coarse.evaluate(node => node.dispatchEvent(new PointerEvent('pointercancel', { pointerId: window.teamFixture.pointerId, bubbles: true })));
+    await expect(input(page, 'ratePerHour')).toHaveValue('00100.25'); await page.mouse.up();
+    await beginTurn();
+    await team(page).locator('[data-person-id="product-two"]').focus(); await page.keyboard.press('Enter');
+    assert.equal(await coarse.evaluate(node => node.hasPointerCapture(window.teamFixture.pointerId)), false);
+    await page.mouse.up(); await expect(input(page, 'ratePerHour')).toHaveValue('100.00');
+    await choose(page); await expect(input(page, 'ratePerHour')).toHaveValue('110.25');
+    await page.emulateMedia({ forcedColors: 'active' });
+    await coarse.focus(); await page.keyboard.press('ArrowLeft'); await expect(input(page, 'ratePerHour')).toHaveValue('100.25');
+    assert.notEqual(await coarse.evaluate(node => getComputedStyle(node).appearance), 'none');
+    await page.emulateMedia({ forcedColors: 'none' });
+    await input(page, 'ratePerHour').fill('00100.25'); await beginTurn();
+    await page.evaluate(() => window.teamFixture.controller.dispose());
+    assert.equal(await coarse.count(), 0); await page.mouse.up();
+    assert.equal(await page.evaluate(() => window.teamFixture.studio.read().state.people[0].rateCentsPerHour), 10000);
+  });
+
   test(`${engine}: person funding edits price exact amounts while draft, cancel and unknown rates stay distinct`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await expect(accepted(page)).toHaveText('$1,200.00');
     await expect(team(page).locator('[data-person-id]')).toHaveCount(4);
+    await expect(team(page).locator('[data-person-id="product-one"]')).toHaveClass(/native-control--navigate/u);
     await choose(page);
+    await expect(team(page).locator('[data-person-id="product-one"]')).toHaveAccessibleName('product-one');
     await expect(input(page, 'ratePerHour')).toBeFocused();
     await expect(input(page, 'ratePerHour')).toBeInViewport();
     await expect(settings(page).locator('summary')).toContainText('$100.00/hour');

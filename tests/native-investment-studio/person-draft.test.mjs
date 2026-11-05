@@ -4,8 +4,21 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createPersonDraftAdapter } from '../../collaboration/native-investment-studio/person-draft.mjs';
 import { createExamplePlan } from '../../collaboration/native-investment-studio/contract.mjs';
+import { shiftRateCents } from '../../collaboration/native-investment-studio/rate-controls.mjs';
 
 const PERSON = 'product-one';
+test('relative rate detents retain exact cents, unknowns and complete steps at either price boundary', () => {
+  assert.equal(shiftRateCents(10025, 10, 1), 11025);
+  assert.equal(shiftRateCents(10025, 5, -1), 9525);
+  assert.equal(shiftRateCents(10025, 5, 3), 11525);
+  assert.equal(shiftRateCents(25, 10, -1), 25);
+  assert.equal(shiftRateCents(1025, 5, -3), 25);
+  assert.equal(shiftRateCents(99999425, 5, 3), 99999925);
+  assert.equal(shiftRateCents(100000000, 10, 1), 100000000);
+  assert.equal(shiftRateCents(null, 10, 1), null);
+  assert.throws(() => shiftRateCents(100.25, 10, 1), TypeError);
+  assert.throws(() => shiftRateCents(10025, 3, 1), TypeError);
+});
 function setup() {
   const studio = createStudio();
   const editor = createPersonDraftAdapter(studio);

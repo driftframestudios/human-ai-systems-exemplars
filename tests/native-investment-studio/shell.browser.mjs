@@ -180,6 +180,9 @@ for (const engine of names) {
       mountCoordinationPanel(node).dispose();
       const studio = createStudio();
       window.chapterFixture = { studio, controller: mountCoordinationPanel(node, { studio }) };
+      const { mountStudioMotion } = await import('/collaboration/native-investment-studio/motion.mjs');
+      if (mountStudioMotion(node).read().effective !== 'lower') throw Error('A fresh Studio starts with lower motion.');
+      mountStudioMotion(node).set('full');
     }, { controllerPath, statePath });
     await selected(page, 'people');
     assert.equal(new URL(page.url()).hash, '#native-team-title');

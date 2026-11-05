@@ -1,7 +1,10 @@
 const INSTANCES = new WeakMap();
 const CHAPTER_KEYS = new Set(['coordination', 'people', 'work', 'change', 'assurance', 'horizon', 'investment']);
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-const MOTION = Object.freeze({ duration: 160, easing: 'ease-out' });
+const MOTION = Object.freeze({
+  chapter: { frames: [{ opacity: .82 }, { opacity: 1 }], options: { duration: 160, easing: 'ease-out' } },
+  context: { frames: [{ opacity: .65, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], options: { duration: 280, easing: 'ease-out' } },
+});
 const HISTORY_KEY = '__contextCanvasNativeStudio';
 
 function snapshot(element, names) {
@@ -17,9 +20,10 @@ function restore({ element, attributes }) {
 
 // This owner changes presentation only. Mounted editors retain their own model,
 // raw drafts, listeners and disclosure state across chapter selection.
-export function mountChapterShell(root, { onSelect = () => {} } = {}) {
+export function mountChapterShell(root, { onSelect = () => {}, motion = null } = {}) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   if (typeof onSelect !== 'function') throw new TypeError('Supply a chapter selection callback.');
+  if (motion !== null && (typeof motion.read !== 'function' || typeof motion.subscribe !== 'function')) throw new TypeError('Supply the Studio motion owner.');
   const document = root?.ownerDocument;
   const window = document?.defaultView;
   if (!window) throw new TypeError('Supply a native Studio root with a document.');
@@ -62,10 +66,10 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
   // Admission finishes before the first attribute or listener changes. Disposal
   // restores these authored attributes without replacing any editor descendants.
   const originals = [
-    snapshot(root, ['data-native-chapters-ready']),
+    snapshot(root, ['data-native-chapters-ready', 'data-native-route-kind']),
     snapshot(list, ['role', 'hidden']),
     ...buttons.map(button => snapshot(button, ['type', 'role', 'aria-selected', 'tabindex'])),
-    ...panels.map(panel => snapshot(panel, ['role', 'aria-labelledby', 'tabindex', 'hidden'])),
+    ...panels.map(panel => snapshot(panel, ['role', 'aria-labelledby', 'tabindex', 'hidden', 'data-native-arrival'])),
   ];
   const order = Object.freeze([...chapters.keys()]);
   const fallbackPanel = panels.find(panel => !panel.hidden);
@@ -90,14 +94,11 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
     catch { /* Semantic state and listener cleanup retain their own completion. */ }
   }
 
-  function animatePanel(panel, generation) {
-    if (disposed || reducedMotion?.matches || document.visibilityState === 'hidden' || typeof panel.animate !== 'function') return;
+  function animatePanel(panel, generation, kind) {
+    if (disposed || motion?.read().effective !== 'full' || reducedMotion?.matches || document.visibilityState === 'hidden' || typeof panel.animate !== 'function') return;
     // An unavailable animation leaves the selected semantic state complete.
     try {
-      const current = panel.animate([
-        { opacity: 0, transform: 'translateY(4px)' },
-        { opacity: 1, transform: 'none' },
-      ], MOTION);
+      const current = panel.animate(MOTION[kind].frames, MOTION[kind].options);
       const release = () => { if (animation === current) animation = null; };
       current.finished.then(release, release);
       if (disposed || generation !== selectionGeneration) {
@@ -153,9 +154,9 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
     catch { /* Chapter selection also works when history writes are unavailable. */ }
   }
 
-  function choose(key, { history = false, focus = false, motion = false } = {}) {
+  function choose(key, { history = false, focus = false, motion = false, routeKind = 'context' } = {}) {
     const next = chapters.get(key);
-    if (disposed || !next) return false;
+    if (disposed || !next || !Object.hasOwn(MOTION, routeKind)) return false;
     const generation = ++selectionGeneration;
     if (history) writeFragment(next);
     if (disposed || generation !== selectionGeneration) return false;
@@ -171,15 +172,17 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
     if (disposed || generation !== selectionGeneration) return false;
     active.button.setAttribute('aria-selected', 'false');
     active.button.tabIndex = -1;
+    active.panel.removeAttribute('data-native-arrival');
     active.panel.hidden = true;
     next.button.setAttribute('aria-selected', 'true');
     next.button.tabIndex = 0;
     next.panel.hidden = false;
+    next.panel.setAttribute('data-native-arrival', routeKind); root.setAttribute('data-native-route-kind', routeKind);
     active = next;
     if (!moveFocus) focused = next;
     if (!initializing) onSelect(next.key);
     if (disposed || generation !== selectionGeneration) return false;
-    if (motion) animatePanel(next.panel, generation);
+    if (motion) animatePanel(next.panel, generation, routeKind);
     return !disposed && generation === selectionGeneration;
   }
 
@@ -229,7 +232,7 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
   function click(event) {
     if (event.defaultPrevented) return;
     const chapter = eventChapter(event);
-    if (chapter) choose(chapter.key, { history: true, focus: true, motion: true });
+    if (chapter) choose(chapter.key, { history: true, focus: true, motion: true, routeKind: 'chapter' });
   }
 
   function keydown(event) {
@@ -245,7 +248,7 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
       case 'Enter':
       case ' ':
         event.preventDefault();
-        choose(chapter.key, { history: true, focus: true, motion: true });
+        choose(chapter.key, { history: true, focus: true, motion: true, routeKind: 'chapter' });
         return;
       default: return;
     }
@@ -274,7 +277,7 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
 
   const receiver = Object.freeze({
     read: () => Object.freeze({ activeChapter: active.key, chapters: order, disposed }),
-    select: key => choose(key, { history: true, focus: true, motion: true }),
+    select: (key, { kind = 'context' } = {}) => choose(key, { history: true, focus: true, motion: true, routeKind: kind }),
     dispose,
   });
 
@@ -306,6 +309,7 @@ export function mountChapterShell(root, { onSelect = () => {} } = {}) {
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(document, 'visibilitychange', () => { if (document.visibilityState === 'hidden') cancelMotion(); });
     if (reducedMotion?.addEventListener) listen(reducedMotion, 'change', () => { if (reducedMotion.matches) cancelMotion(); });
+    if (motion) cleanup.push(motion.subscribe(value => { if (value.effective !== 'full') cancelMotion(); }));
     list.hidden = false;
     reconcileFragment({ restoreEntry: true });
     if (disposed) return receiver;
