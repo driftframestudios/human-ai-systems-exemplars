@@ -2133,3 +2133,42 @@ return routes. The source factory declares `native-control--navigate` from the
 action's behavior. CSS paints an empty geometric mark, keeping the accessible
 name equal to the action's words. In-place keys, switches, confirmations and
 disclosure summaries retain their own selected or expanded state.
+
+
+## Authored arrangement identity and readable topology
+
+Schema 0.8 adds `arrangements`: a stable ID, exact finite template identity/version,
+and complete team and connection slot bindings. `coordination-arrangements.mjs`
+owns the catalogue, detached topology projection, reference description and
+Investment comparison. `connection-templates.mjs` prepares the complete change;
+its acceptance adds grouping and generated rows atomically. Model 0.1 accounting
+retains its authority. Earlier schemas migrate to an empty arrangement collection;
+0.7's authored score, timed work and availability remain intact.
+
+Actual connection endpoints determine present cables. Authored template slots
+retain role and containment meaning; a changed endpoint yields an adapted
+reading. `arrangement.remove` removes grouping alone. Underlying record removal
+uses the existing reference-aware route. Replay, identity collisions, Undo and
+exchange comparison use the same canonical bindings.
+
+`connection-view.mjs` renders the immediate proposed sketch and accepted reading
+with a scroll-owned SVG plus native semantic navigation. About's route CSS owns
+its `native-arrangement` family. The root coordinator owns team, person, session
+and contribution detours and the return to Connections. Template detachment uses
+the existing preview/Apply owner. `contribution-view-model.mjs` joins contributions
+to connections by exact shared work IDs and exposes the human receiver, decision
+owner, instructions and explicit gaps. Its projection-keyed cache retains immutable
+readings; association leaves review completion and monetary accounting with their
+existing owners.
+
+### Decision creation within an arrangement
+
+The horizon identifies a new decision by draft ID absent from accepted decisions.
+The creation form names its stage, reveals its empty prose fields and states
+that confirmation accepts the retained arrangement. `decisionOrigins` retains
+the lane that began creation separately from its editable after-stage relation.
+Discard removes only that draft record and returns to its origin; a removed
+origin falls back to an available stage entry. Apply returns to the accepted
+marker. Full questions and evidence retain the existing display/edit pattern
+once accepted. This distinction makes beginning, inspecting and confirming an
+item observable while preserving one draft and acceptance owner.

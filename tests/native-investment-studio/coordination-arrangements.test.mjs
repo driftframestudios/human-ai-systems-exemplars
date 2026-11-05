@@ -1,0 +1,164 @@
+import '../../tools/node-runtime-admission.mjs';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { preparePlan, prepareImport, parsePlan } from '../../collaboration/native-investment-studio/contract.mjs';
+import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
+import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
+import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
+import { createPlanExchange } from '../../collaboration/native-investment-studio/exchange.mjs';
+import { prepareCoordinationTemplate, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
+import { getCoordinationTemplate, projectCoordinationArrangements, describeArrangementReference, describeArrangementChanges } from '../../collaboration/native-investment-studio/coordination-arrangements.mjs';
+import { LIMITS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+
+function podRequest(proposalId = 'working-pod') {
+  return { templateId: 'pod', version: '1.0.0', proposalId,
+    teams: [{ slotId: 'partner', kind: 'new', label: 'Receiving reviewers', personIds: ['product-one'] },
+      { slotId: 'pod', kind: 'existing', teamId: 'delivery', addPersonIds: [] }],
+    connections: ['feedback', 'handoff'].map(slotId => ({ slotId, receiverPersonId: 'product-one',
+      sharedObject: 'Pilot instructions', responseExpectation: 'Return the review before pilot approval.',
+      workIds: ['review'], status: 'active', recoveryWork: null })) };
+}
+function pod() {
+  const studio = createStudio(), proposal = prepareCoordinationTemplate(studio.read(), podRequest());
+  assert.equal(applyCoordinationTemplate(studio, proposal).ok, true);
+  return studio;
+}
+const expectedPod = Object.freeze({ id: 'working-pod', templateId: 'pod', templateVersion: '1.0.0',
+  teamBindings: [{ slotId: 'pod', teamId: 'delivery' }, { slotId: 'partner', teamId: 'working-pod-team-partner' }],
+  connectionBindings: [{ slotId: 'handoff', connectionId: 'working-pod-connection-handoff' },
+    { slotId: 'feedback', connectionId: 'working-pod-connection-feedback' }] });
+
+test('0.7 migration retains an authored horizon and actual topology while leaving template identity unspecified', () => {
+  const old = createShowcasePlan(); old.schemaVersion = '0.7.0'; delete old.arrangements;
+  old.teams[0].label = 'Pod';
+  const original = JSON.stringify(old), receipt = prepareImport(original), current = receipt.projection;
+  assert.equal(receipt.sourceSchemaVersion, '0.7.0'); assert.equal(current.state.schemaVersion, '0.8.0');
+  assert.deepEqual(current.state.scoreSettings, old.scoreSettings);
+  assert.ok(old.scoreSettings.gates.length && old.scoreSettings.proposals.length && old.scoreSettings.waits.length);
+  assert.deepEqual(current.state.people, old.people); assert.deepEqual(current.state.work, old.work);
+  assert.deepEqual(current.state.connections, old.connections); assert.deepEqual(current.state.teams, old.teams);
+  assert.deepEqual(current.state.arrangements, []);
+  assert.deepEqual(projectCoordinationArrangements(current.state), { arrangements: [], customConnectionIds: ['scope', 'readiness', 'decision'] });
+  assert.equal(current.result.plannedCommitmentCents, 398000);
+  assert.equal(JSON.stringify(old), original); assert.equal(parsePlan(current.serialized).serialized, current.serialized);
+  assert.ok(SCHEMA_BYTE_LIMITS['0.8.0'] > SCHEMA_BYTE_LIMITS['0.7.0']);
+  const spoofed = JSON.parse(original); spoofed.arrangements = [];
+  assert.throws(() => preparePlan(spoofed), { code: 'fields' });
+});
+
+test('mixed team binding acquires one canonical arrangement atomically and preserves it through exchange and history', () => {
+  const studio = createStudio(), before = studio.read(), request = podRequest();
+  const proposal = prepareCoordinationTemplate(before, request);
+  assert.deepEqual(proposal.projection.state.arrangements, [expectedPod]);
+  assert.deepEqual(proposal.summary.newArrangementIds, ['working-pod']);
+  assert.strictEqual(studio.read(), before); assert.deepEqual(proposal.projection.result, before.result);
+  assert.equal(applyCoordinationTemplate(studio, proposal).ok, true);
+  const accepted = studio.read();
+  assert.equal(parsePlan(studio.exportText()).serialized, accepted.serialized);
+  const repeated = prepareCoordinationTemplate(accepted, request);
+  assert.strictEqual(repeated.projection, accepted); assert.deepEqual(repeated.summary.newArrangementIds, []);
+  assert.equal(applyCoordinationTemplate(studio, repeated).ok, true); assert.equal(studio.readHistory().undoCount, 1);
+  assert.equal(studio.undo(accepted).ok, true); assert.deepEqual(studio.read().state, before.state);
+  assert.equal(studio.redo(studio.read()).ok, true); assert.deepEqual(studio.read().state.arrangements, [expectedPod]);
+  const restored = studio.read();
+  const collision = podRequest(); collision.templateId = 'guild';
+  collision.teams[0].slotId = 'delivery'; collision.teams[1].slotId = 'practice';
+  collision.connections[0].slotId = 'learning'; collision.connections[1].slotId = 'guidance';
+  assert.throws(() => prepareCoordinationTemplate(studio.read(), collision), { code: 'identity-collision' });
+  assert.strictEqual(studio.read(), restored);
+});
+
+test('actual edges, renamed teams and current membership govern the adapted view without modifying its source', () => {
+  const plan = structuredClone(pod().read().state);
+  plan.teams[0].label = 'Changed delivery name'; plan.teams[0].personIds.reverse();
+  plan.teams.push({ id: 'external-reviewers', label: 'External reviewers', personIds: ['product-one'], lifecycle: 'active' });
+  plan.connections.find(row => row.id === 'working-pod-connection-feedback').receiverTeamId = 'external-reviewers';
+  plan.connections.push({ ...plan.connections[0], id: 'custom-review', status: 'paused' });
+  const accepted = preparePlan(plan), view = projectCoordinationArrangements(accepted.state), row = view.arrangements[0];
+  assert.equal(row.label, 'Pod'); assert.equal(row.purpose, 'Connect a delivery group and a partner around a shared object and feedback.');
+  assert.equal(row.adapted, true); assert.deepEqual(row.connections.map(edge => edge.adapted), [false, true]);
+  assert.equal(row.teams[0].team.label, 'Changed delivery name');
+  assert.deepEqual(row.teams[0].team.personIds, ['engineering-two', 'engineering-one', 'product-two', 'product-one']);
+  assert.equal(row.connections[1].expectedReceiverTeamId, 'delivery');
+  assert.equal(row.connections[1].connection.receiverTeamId, 'external-reviewers');
+  assert.deepEqual(view.customConnectionIds, ['custom-review']);
+  assert.deepEqual(describeArrangementChanges(pod().read().state, accepted.state), [
+    'Pod arrangement changed: Delivery group: Changed delivery name; Partner group: Receiving reviewers. Share the work: Changed delivery name → Receiving reviewers; Return feedback: Receiving reviewers → External reviewers. Connections are adapted from this template.',
+  ]);
+  assert.deepEqual(accepted.state.arrangements, [expectedPod]);
+  assert.equal(accepted.result.plannedCommitmentCents, 120000);
+  assert.notStrictEqual(row.teams[0].team, accepted.state.teams[0]);
+  assert.notStrictEqual(row.connections[0].connection, accepted.state.connections[0]);
+  assert.ok(Object.isFrozen(row.connections[0].connection.workIds));
+  assert.throws(() => { row.teams[0].team.personIds.pop(); }, TypeError);
+});
+
+test('detaching a template preserves teams, connections, work and money and offers a route before bound removal', () => {
+  const studio = pod(), before = studio.read();
+  const blocked = studio.applyCommand({ type: 'connection.remove', connectionId: 'working-pod-connection-handoff' }, before);
+  assert.equal(blocked.ok, false); assert.equal(blocked.error.code, 'dependencies');
+  assert.deepEqual(blocked.error.references, [{ collection: 'arrangements', id: 'working-pod', field: 'connectionBindings[0].connectionId' }]);
+  assert.deepEqual(describeArrangementReference(before.state, blocked.error.references[0]), { id: 'working-pod', label: 'Pod arrangement' });
+  const command = { type: 'arrangement.remove', arrangementId: 'working-pod' }, preview = studio.previewCommand(command, before);
+  assert.equal(preview.ok, true); assert.strictEqual(studio.read(), before);
+  for (const field of ['people', 'teams', 'connections', 'work', 'scoreSettings']) assert.deepEqual(preview.projection.state[field], before.state[field]);
+  assert.deepEqual(preview.projection.result, before.result); assert.deepEqual(preview.projection.state.arrangements, []);
+  assert.deepEqual(describeArrangementChanges(before.state, preview.projection.state), [
+    'Pod template grouping removed: Delivery group: Product and Engineering; Partner group: Receiving reviewers.',
+  ]);
+  assert.equal(studio.applyCommand(command, before).ok, true);
+  const detached = studio.read();
+  assert.deepEqual(projectCoordinationArrangements(detached.state).customConnectionIds, ['working-pod-connection-handoff', 'working-pod-connection-feedback']);
+  assert.equal(studio.previewCommand({ type: 'connection.remove', connectionId: 'working-pod-connection-handoff' }, detached).ok, true);
+  assert.equal(studio.undo(detached).ok, true); assert.deepEqual(studio.read().state.arrangements, [expectedPod]);
+  const teamBlocked = studio.applyCommand({ type: 'team.remove', teamId: 'working-pod-team-partner' }, studio.read());
+  assert.ok(teamBlocked.error.references.some(row => row.collection === 'arrangements' && row.field === 'teamBindings[1].teamId'));
+});
+
+test('closed arrangement slots, versions and references reject ambiguous grouping before publication', () => {
+  const original = pod().read().state;
+  const cases = [
+    [row => { row.templateVersion = undefined; }, 'arrangement-template'],
+    [row => { row.templateId = 'unknown'; }, 'arrangement-template'],
+    [row => { row.teamBindings.pop(); }, 'arrangement-slots'],
+    [row => { row.teamBindings[0].slotId = 'other'; }, 'arrangement-slot'],
+    [row => { row.connectionBindings[1].slotId = 'handoff'; }, 'duplicate-slot'],
+    [row => { row.teamBindings[1].teamId = 'delivery'; }, 'duplicate-binding'],
+    [row => { row.connectionBindings[0].connectionId = 'removed'; }, 'reference'],
+    [row => { row.extra = 'unknown'; }, 'fields'],
+  ];
+  for (const [mutate, code] of cases) {
+    const plan = structuredClone(original); mutate(plan.arrangements[0]);
+    assert.throws(() => preparePlan(plan), { code });
+  }
+  const reversed = structuredClone(original); reversed.arrangements[0].teamBindings.reverse(); reversed.arrangements[0].connectionBindings.reverse();
+  assert.deepEqual(preparePlan(reversed).state.arrangements, [expectedPod]);
+  const maximum = structuredClone(original);
+  maximum.arrangements = Array.from({ length: LIMITS.arrangements }, (_, index) => ({ ...structuredClone(expectedPod), id: `group-${index}` }));
+  const accepted = preparePlan(maximum); assert.equal(parsePlan(accepted.serialized).serialized, accepted.serialized);
+  maximum.arrangements.push({ ...structuredClone(expectedPod), id: 'one-more' });
+  assert.throws(() => preparePlan(maximum), { code: 'collection' });
+  assert.equal(getCoordinationTemplate('pod', '2.0.0'), null);
+});
+
+test('exchange previews identity and binding changes even when accepted amounts remain equal', () => {
+  const studio = createStudio(), editing = createDraftCoordinator(studio), exchange = createPlanExchange(studio, editing);
+  const arranged = pod().read();
+  let result = exchange.previewText(arranged.serialized);
+  assert.equal(result.ok, true); assert.deepEqual(result.view.preview.changes.arrangements.added, ['working-pod']);
+  assert.deepEqual(describeArrangementChanges(studio.read().state, result.view.preview.projection.state), [
+    'Pod arrangement added: Delivery group: Product and Engineering; Partner group: Receiving reviewers. Share the work: Product and Engineering → Receiving reviewers; Return feedback: Receiving reviewers → Product and Engineering.',
+  ]);
+  assert.equal(exchange.apply(result.view.preview.token).ok, true);
+  const changed = structuredClone(studio.read().state);
+  changed.arrangements[0].connectionBindings.reverse();
+  [changed.arrangements[0].connectionBindings[0].connectionId, changed.arrangements[0].connectionBindings[1].connectionId]
+    = [changed.arrangements[0].connectionBindings[1].connectionId, changed.arrangements[0].connectionBindings[0].connectionId];
+  result = exchange.previewText(JSON.stringify(changed));
+  assert.equal(result.ok, true); assert.deepEqual(result.view.preview.changes.arrangements.changed,
+    [{ id: 'working-pod', fields: ['connectionBindings'] }]);
+  assert.equal(result.view.preview.projection.result.plannedCommitmentCents, 120000);
+  changed.arrangements = []; result = exchange.previewText(JSON.stringify(changed));
+  assert.deepEqual(result.view.preview.changes.arrangements.removed, ['working-pod']);
+  exchange.dispose(); editing.dispose();
+});

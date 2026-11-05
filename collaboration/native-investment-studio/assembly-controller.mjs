@@ -1,3 +1,4 @@
+import { describeArrangementReference } from './coordination-arrangements.mjs';
 import { describeAssuranceReference } from './assurance-models.mjs';
 import { describeScoreReference } from './score-reference.mjs';
 import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './command-draft.mjs';
@@ -145,6 +146,11 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.dependencies.hidden = dependencies.length === 0;
     elements.dependencies.replaceChildren(...dependencies.map(reference => {
       const item = document.createElement('li');
+      const arrangement = describeArrangementReference(projection.state, reference);
+      if (arrangement) {
+        const link = document.createElement('a'); link.className = 'native-control--navigate'; link.href = '#native-studio-coordination'; link.dataset.nativeOpenArrangement = arrangement.id;
+        link.textContent = 'Review the arrangement'; item.append(`${arrangement.label}. `, link); return item;
+      }
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       const score = describeScoreReference(projection.state.scoreSettings, reference);
       if (score) {

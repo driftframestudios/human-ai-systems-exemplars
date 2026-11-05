@@ -22,7 +22,7 @@ const records = Object.freeze({
   dependency: { fromWorkId: id('Earlier session', 'work'), toWorkId: id('Later session', 'work'), lagMinutes: number('Waiting minutes after earlier work'), connectionId: id('Related connection', 'connections', true) },
   stage: { label: label('Stage name'), workIds: ids('Sessions in this stage', 'work', LIMITS.work) },
   wait: { label: label('Wait name'), startMinute: number('Wait start minute'), endMinute: number('Wait end minute'), reason: text('Reason for the wait'), receiverPersonId: id('Person receiving the result', 'people', true) },
-  gate: { label: label('Gate name'), afterStageId: id('Stage before the gate', 'stages'), reviewerPersonId: id('Person reviewing the decision', 'people', true),
+  gate: { label: label('Decision name'), afterStageId: id('Stage before the decision', 'stages'), reviewerPersonId: id('Person reviewing the decision', 'people', true),
     question: text('Question to resolve'), evidence: text('Evidence for review'), modeledDecision: text('Modeled decision', { choices: ['open', 'proceed', 'revise', 'hold'] }) },
   proposal: { bank: text('Proposal bank', { choices: ['next', 'options'] }), gateId: id('Gate before commitment', 'gates', true),
     workId: id('Proposed session identifier'), label: label('Proposed session name'), teamId: id('Hosting team', 'teams'), personIds: ids('Participating people', 'people', LIMITS.people),

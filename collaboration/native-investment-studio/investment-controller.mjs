@@ -7,6 +7,7 @@ import { getCapabilityDefinition } from './capabilities.mjs';
 import { getQualityConcept, getSourcePreset, getRehearsalDefinition } from './assurance-models.mjs';
 import { getChangeFramework, getInterpretiveLens, listAttentionChannels } from './change-models.mjs';
 import { describeScoreChanges } from './score-reference.mjs';
+import { describeArrangementChanges } from './coordination-arrangements.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -23,7 +24,7 @@ const CHANGE_LABELS = Object.freeze({
 });
 const COLLECTION_LABELS = Object.freeze({ people: 'People', teams: 'Teams', work: 'Work' });
 const CONTRIBUTION_LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
-const MAPPING_LABELS = Object.freeze({ planned: 'Planned', partial: 'Partly planned', look: 'Look here', outside: 'Outside the scope' });
+const MAPPING_LABELS = Object.freeze({ planned: 'Planned', partial: 'Partly planned', look: 'Needs review', outside: 'Outside the scope' });
 
 function changeDescriptions(before, after) {
   const prior = before.changeSettings, next = after.changeSettings, descriptions = [];
@@ -140,6 +141,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     if (preview.changes.changeSettings.length) changeDescriptions(projection.state, preview.projection.state).forEach(add);
     if (preview.changes.assuranceSettings.length) assuranceDescriptions(projection.state, preview.projection.state).forEach(add);
     describeScoreChanges(projection.state, preview.projection.state).forEach(add);
+    describeArrangementChanges(projection.state, preview.projection.state).forEach(add);
     for (const [kind, label] of Object.entries(COLLECTION_LABELS)) {
       const change = preview.changes[kind];
       if (!change.added.length && !change.removed.length && !change.changed.length && !change.orderChanged) continue;
@@ -188,6 +190,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
         || 'Quality, recovery, learning and rehearsal records match the baseline.']);
       if (baseline) rows.push(['Score and availability', describeScoreChanges(baseline.projection.state, projection.state).join(' · ')
         || 'Timing, availability, dependencies, stages, waits and modeled decisions match the baseline.']);
+      if (baseline) rows.push(['Team arrangements', describeArrangementChanges(baseline.projection.state, projection.state).join(' · ')
+        || 'Template groupings and their connection directions match the baseline.']);
       comparison.replaceChildren(...rows.map(([label, value]) => {
         const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
         dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;

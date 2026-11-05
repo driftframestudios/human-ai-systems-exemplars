@@ -109,6 +109,41 @@ for (const engine of names) {
   });
   test(`${engine}: score keeps exact agenda, keyboard routes and narrow layout usable`, async t => {
     const page = await open(t, engine);
+    for (const [width, enlarged] of [[1273, false], [390, false], [320, true]]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(value => { document.documentElement.style.fontSize = value ? '200%' : ''; }, enlarged);
+      const toolbar = score(page).locator('.native-score__transport'); await toolbar.scrollIntoViewIfNeeded();
+      const reading = await toolbar.evaluate(element => {
+        const rect = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, top: box.top, height: box.height, center: box.top + box.height / 2 }; };
+        const navigation = [...element.querySelectorAll('.native-control--navigate')].map(button => {
+          const box = button.getBoundingClientRect(), range = document.createRange(); range.selectNodeContents(button);
+          const textRight = Math.max(...[...range.getClientRects()].map(part => part.right));
+          const cue = getComputedStyle(button, '::after'), style = getComputedStyle(button);
+          const size = Number.parseFloat(cue.width), end = Number.parseFloat(cue.right), border = Number.parseFloat(style.borderRightWidth);
+          return { name: button.textContent, ...rect(button), textRight,
+            cueLeft: box.right - border - end - size / 2 - Math.SQRT2 * size / 2,
+            cueTop: Number.parseFloat(style.borderTopWidth) + (cue.top.endsWith('%')
+              ? Number.parseFloat(cue.top) * (box.height - Number.parseFloat(style.borderTopWidth) - Number.parseFloat(style.borderBottomWidth)) / 100
+              : Number.parseFloat(cue.top)),
+            ownScroll: button.scrollWidth, ownWidth: button.clientWidth };
+        });
+        return { groups: [...element.children].filter(node => !node.hidden).map(rect), navigation, width: innerWidth,
+          pageWidth: document.documentElement.scrollWidth };
+      });
+      assert.ok(reading.pageWidth <= width + 1, `toolbar content stays within the page at ${width}px`);
+      if (width === 1273) {
+        const centers = reading.groups.map(group => group.center);
+        assert.ok(Math.max(...centers) - Math.min(...centers) <= 1, `toolbar groups share one vertical center: ${JSON.stringify(reading.groups)}`);
+      }
+      for (const control of reading.navigation) {
+        assert.ok(control.left >= -.5 && control.right <= width + .5 && control.ownScroll <= control.ownWidth + 1,
+          `navigation text remains contained at ${width}px: ${JSON.stringify(control)}`);
+        assert.ok(control.textRight + 1 <= control.cueLeft, `the complete ${control.name} label clears its directional cue: ${JSON.stringify(control)}`);
+        assert.ok(Math.abs(control.cueTop - control.height / 2) <= 2, `the ${control.name} cue stays vertically centred: ${JSON.stringify(control)}`);
+      }
+      await toolbar.screenshot({ path: resolve(captures, `${engine}-toolbar-${width}${enlarged ? '-enlarged' : ''}.png`) });
+    }
+    await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
     for (const width of [1000, 1322, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       await score(page).locator('.native-score__heading').scrollIntoViewIfNeeded();
@@ -174,7 +209,7 @@ for (const engine of names) {
       window.scoreFixture.controller.dispose();
       const element = document.querySelector('[data-native-score]'), observations = [];
       const external = document.createElement('input'); external.name = 'newer-purpose-focus'; document.body.append(external);
-      for (const callback of ['onBegin', 'onEditing', 'select']) {
+      for (const callback of ['onBegin', 'onEditing', 'select', 'decision-focus']) {
         const studio = createStudio(createShowcasePlan()), accepted = studio.read(), editing = createDraftCoordinator(studio);
         let armed = true, successorToken;
         function transfer() {
@@ -186,14 +221,19 @@ for (const engine of names) {
         }
         const receiver = mountScorePanel(element, { studio, editing,
           onBegin: callback === 'onBegin' ? transfer : () => {},
-          onEditing: callback === 'onBegin' ? () => {} : transfer });
-        if (callback === 'select') receiver.select({ kind: 'work', id: 'review' }, true);
+          onEditing: ['onEditing', 'select'].includes(callback) ? transfer : () => {} });
+        const decisionFocus = event => { if (event.target.dataset.scoreField === 'gate.gate-1.label') transfer(); };
+        if (callback === 'decision-focus') {
+          element.addEventListener('focusin', decisionFocus);
+          element.querySelector('[data-score-view-action="add-decision"]').click();
+        } else if (callback === 'select') receiver.select({ kind: 'work', id: 'review' }, true);
         else receiver.open();
         const retained = () => ({ active: editing.read().active?.kind ?? null,
           sameLease: editing.read().active?.token === successorToken,
           raw: editing.purpose.read().draft?.raw.changedAbility ?? null,
           focus: document.activeElement.name, acceptedUnchanged: studio.read() === accepted });
         const beforeDisposal = retained(); receiver.dispose();
+        element.removeEventListener('focusin', decisionFocus);
         observations.push({ callback, beforeDisposal, afterDisposal: retained() });
         editing.dispose();
       }
@@ -201,7 +241,7 @@ for (const engine of names) {
     });
     const expected = { active: 'purpose', sameLease: true,
       raw: 'The receiving team can recover an interrupted request.', focus: 'newer-purpose-focus', acceptedUnchanged: true };
-    assert.deepEqual(observations, ['onBegin', 'onEditing', 'select'].map(callback => ({ callback, beforeDisposal: expected, afterDisposal: expected })));
+    assert.deepEqual(observations, ['onBegin', 'onEditing', 'select', 'decision-focus'].map(callback => ({ callback, beforeDisposal: expected, afterDisposal: expected })));
   });
   test(`${engine}: score disposal during preview releases its lease and removes its owned controls`, async t => {
     const page = await open(t, engine);
@@ -436,15 +476,52 @@ for (const engine of names) {
   });
   test(`${engine}: a stage adds a decision to the retained arrangement and Apply accepts both edits together`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
+    const inspector = score(page).locator('.native-score__inspector');
+    for (const [stage, label, width, enlarged] of [['understand', 'Understand the request', 1273, false],
+      ['build', 'Build and rehearse', 390, false], ['understand', 'Understand the request', 320, true]]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(value => { document.documentElement.style.fontSize = value ? '200%' : ''; }, enlarged);
+      const entry = score(page).getByRole('button', { name: `Add a decision after ${label}`, exact: true });
+      await entry.click();
+      await expect(inspector).toHaveAttribute('data-creating-decision', 'true');
+      await expect(inspector.getByRole('heading', { name: 'New decision', exact: true })).toBeVisible();
+      await expect(input(page, 'gate.gate-1.label')).toBeFocused();
+      await expect(input(page, 'gate.gate-1.afterStageId')).toHaveValue(stage);
+      const visibility = await inspector.evaluate(element => {
+        const heading = element.querySelector('h4').getBoundingClientRect(), name = element.querySelector('[data-score-field$=".label"]').getBoundingClientRect();
+        const navigation = document.querySelector('nav[aria-label="Primary"]').getBoundingClientRect();
+        return { headingTop: heading.top, headingBottom: heading.bottom, nameTop: name.top, nameBottom: name.bottom, navigationBottom: navigation.bottom, viewport: innerHeight };
+      });
+      assert.ok(visibility.headingTop >= visibility.navigationBottom && visibility.nameTop >= visibility.navigationBottom
+        && visibility.nameBottom <= visibility.viewport, `new decision identity and focused name are visible below the fixed navigation: ${JSON.stringify(visibility)}`);
+      await expect(input(page, 'gate.gate-1.question')).toBeVisible(); await expect(input(page, 'gate.gate-1.evidence')).toBeVisible();
+      await expect(inspector.locator('.native-score__picker')).toBeHidden(); await expect(action(page, 'add')).toBeHidden();
+      await expect(action(page, 'apply')).toHaveText('Add decision to plan');
+      assert.equal(await bytes(page), accepted);
+      if (width !== 390) await page.screenshot({ path: resolve(captures, `${engine}-new-decision-${width}${enlarged ? '-enlarged' : ''}.png`) });
+      if (width === 390) await input(page, 'gate.gate-1.afterStageId').selectOption('');
+      await action(page, 'discard-decision').click();
+      await expect(entry).toBeFocused(); assert.equal(await bytes(page), accepted, 'discard returns to the creation origin even after its optional stage relationship changes');
+      if (width === 1273) await score(page).locator('.native-score__stages').screenshot({ path: resolve(captures, `${engine}-decision-stage-return.png`) });
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
     await inspect(page, 'work', 'review'); await input(page, 'work.review.startMinute').fill('00500');
     await score(page).getByRole('button', { name: 'Add a decision after Understand the request', exact: true }).click();
     await expect(input(page, 'gate.gate-1.label')).toBeFocused();
     await expect(input(page, 'gate.gate-1.label')).toHaveValue('Decision after Understand the request');
     await expect(input(page, 'gate.gate-1.afterStageId')).toHaveValue('understand');
     await input(page, 'gate.gate-1.label').fill('Research handoff decision');
+    await action(page, 'discard-decision').click();
     await inspect(page, 'work', 'review'); await expect(input(page, 'work.review.startMinute')).toHaveValue('00500');
+    await score(page).getByRole('button', { name: 'Add a decision after Understand the request', exact: true }).click();
+    await input(page, 'gate.gate-1.label').fill('Research handoff decision');
+    await action(page, 'keep-decision').click();
+    await inspect(page, 'work', 'review'); await expect(input(page, 'work.review.startMinute')).toHaveValue('00500');
+    await inspect(page, 'gate', 'gate-1'); await expect(input(page, 'gate.gate-1.label')).toHaveValue('Research handoff decision');
+    await expect(inspector).toHaveAttribute('data-creating-decision', 'true');
     assert.equal(await bytes(page), accepted, 'the stage action adds to the current raw proposal, not the accepted plan');
     await action(page, 'apply').click();
+    await expect(score(page).locator('.native-score__stages [data-score-kind="gate"][data-score-id="gate-1"]')).toBeFocused();
     const state = await page.evaluate(() => window.scoreFixture.studio.read().state);
     assert.equal(state.scoreSettings.gates.length, 2);
     assert.equal(state.scoreSettings.gates.find(row => row.id === 'gate-1').afterStageId, 'understand');

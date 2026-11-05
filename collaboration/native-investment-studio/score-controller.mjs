@@ -26,6 +26,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   let scale = 1, focusWorkId = null, fieldSignature = null, fieldSequence = 0, lastProjection = null;
   let overlapIndex = 0;
   let retiredToken = null;
+  const decisionOrigins = new Map();
   const owns = epoch => !disposed && generation === epoch;
   const boundary = () => { const current = editing.read(); return { projection: studio.read(), intent: current.intent, token: current.active?.token ?? null }; };
   const retains = (epoch, mark) => {
@@ -89,7 +90,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const preview = node('p', '', 'native-score__preview'); preview.dataset.scorePreview = '';
   const error = node('p', '', 'native-coordination__error'); error.dataset.scoreError = ''; error.setAttribute('role', 'alert');
   const actions = node('div', undefined, 'native-coordination__actions');
-  const apply = button('Apply arrangement', 'apply'); apply.type = 'submit'; const cancel = button('Cancel changes', 'cancel'); actions.append(apply, cancel);
+  const apply = button('Apply arrangement', 'apply'); apply.type = 'submit'; const cancel = button('Cancel changes', 'cancel');
+  const keepDecision = button('Keep draft and inspect arrangement', 'keep-decision'); keepDecision.className = 'native-control--navigate';
+  actions.append(apply, cancel, keepDecision);
   const status = node('p', '', 'native-coordination__status'); status.dataset.scoreStatus = ''; status.setAttribute('role', 'status');
   form.append(recovery, pickerRow, detail, navigation, overlapReading, editFields, preview, error, actions, status);
   inspector.append(title, rail, form);
@@ -117,6 +120,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (metadata.source === 'proposals') return labels('proposal', raw, state);
     return (state[metadata.source] ?? []).map(row => [row.id, row.label ?? row.sharedObject ?? row.id]);
   }
+  const isNewDecision = (raw, state) => selected.kind === 'gate' && raw.gateIds.includes(selected.id)
+    && !state.scoreSettings.gates.some(row => row.id === selected.id);
   function field(parent, key, raw, state) {
     const metadata = scoreField(key); if (!metadata) return;
     const radio = !metadata.checkbox && !metadata.source && metadata.choices?.length >= 2 && metadata.choices.length <= 4;
@@ -146,7 +151,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       if (metadata.numeric) { input.inputMode = 'numeric'; input.className = 'native-score__number'; }
     }
     let reading = null;
-    if (prose) {
+    if (prose && isNewDecision(raw, state)) {
+      input.rows = 3; group.append(caption, input);
+    } else if (prose) {
       reading = node('p', '', 'native-score__prose-reading'); reading.dataset.scoreProse = key;
       const edit = node('details', undefined, 'native-score__prose-editor'); edit.append(node('summary', `Edit ${metadata.label.toLowerCase()}`), caption, input);
       group.append(node('h5', metadata.label), reading, edit);
@@ -188,8 +195,14 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!rows.some(([id]) => id === selected.id)) selected = { kind: selected.kind, id: rows[0]?.[0] ?? '' };
     const selectionOptions = JSON.stringify(rows);
     if (picker.dataset.options !== selectionOptions) { picker.replaceChildren(...rows.map(([id, label]) => { const option = node('option', label); option.value = id; return option; })); picker.dataset.options = selectionOptions; }
-    picker.value = selected.id; pickerLabel.textContent = `Choose ${selected.kind === 'work' ? 'a session' : selected.kind === 'person' ? 'a person' : selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : `a ${selected.kind}`}`;
-    pickerRow.hidden = selected.kind === 'window';
+    picker.value = selected.id; pickerLabel.textContent = `Choose ${selected.kind === 'work' ? 'a session' : selected.kind === 'person' ? 'a person' : selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : selected.kind === 'gate' ? 'a decision' : `a ${selected.kind}`}`;
+    const creatingDecision = isNewDecision(raw, state);
+    inspector.dataset.creatingDecision = String(creatingDecision);
+    title.textContent = creatingDecision ? 'New decision' : 'Inspect the arrangement';
+    rail.hidden = creatingDecision; keepDecision.hidden = !creatingDecision;
+    if (creatingDecision) { if (detail.nextElementSibling !== preview) form.insertBefore(detail, preview); }
+    else if (detail.nextElementSibling !== navigation) form.insertBefore(detail, navigation);
+    pickerRow.hidden = selected.kind === 'window' || creatingDecision;
     for (const key of rail.children) key.setAttribute('aria-pressed', String(key.dataset.scoreKind === selected.kind));
     buildFields(raw, state, current.projection);
     for (const [key, { input, message, metadata, radio, reading }] of controls) {
@@ -203,15 +216,18 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     editFields.disabled = !editable; editFields.hidden = !current.draft; actions.hidden = !current.draft;
     recovery.hidden = !current.draft || !['stale', 'parked'].includes(current.status);
     apply.disabled = !editable || composing; cancel.disabled = !current.draft;
+    apply.textContent = creatingDecision ? 'Add decision to plan' : 'Apply arrangement';
+    cancel.textContent = creatingDecision ? 'Discard this decision' : 'Cancel changes';
+    cancel.dataset.scoreAction = creatingDecision ? 'discard-decision' : 'cancel';
     arrange.textContent = current.draft ? 'Inspect arrangement' : 'Arrange timing';
-    add.hidden = ['work', 'person', 'window'].includes(selected.kind); add.textContent = `Add ${selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : `a ${selected.kind}`}`;
-    remove.hidden = ['window'].includes(selected.kind) || !selected.id || ['work', 'person'].includes(selected.kind) && (selected.kind === 'work' ? state.work : state.people).some(row => row.id === selected.id);
-    remove.textContent = ['work', 'person'].includes(selected.kind) ? 'Remove this missing reference' : `Remove this ${selected.kind === 'dependency' ? 'handoff' : selected.kind}`;
+    add.hidden = creatingDecision || ['work', 'person', 'window'].includes(selected.kind); add.textContent = `Add ${selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : selected.kind === 'gate' ? 'a decision' : `a ${selected.kind}`}`;
+    remove.hidden = creatingDecision || ['window'].includes(selected.kind) || !selected.id || ['work', 'person'].includes(selected.kind) && (selected.kind === 'work' ? state.work : state.people).some(row => row.id === selected.id);
+    remove.textContent = ['work', 'person'].includes(selected.kind) ? 'Remove this missing reference' : `Remove this ${selected.kind === 'dependency' ? 'handoff' : selected.kind === 'gate' ? 'decision' : selected.kind}`;
     addInterval.hidden = selected.kind !== 'person' || !selected.id;
     source.hidden = !['work', 'person'].includes(selected.kind) || !selected.id; source.textContent = selected.kind === 'person' ? 'Open person settings' : 'Open session settings';
     focus.hidden = selected.kind !== 'work' || !selected.id;
     const selectedWork = state.work.find(row => row.id === selected.id);
-    detail.textContent = selected.kind === 'work' && selectedWork ? `${selectedWork.label}: ${selectedWork.occurrences} × ${scoreMinute(selectedWork.minutesPerOccurrence)} per person. Timing changes the arrangement; session settings own duration, people and funding.`
+    detail.textContent = creatingDecision ? 'Name this new decision and add the context you know. Add decision to plan accepts it together with your other arrangement changes. Discard this decision keeps those other entries.' : selected.kind === 'work' && selectedWork ? `${selectedWork.label}: ${selectedWork.occurrences} × ${scoreMinute(selectedWork.minutesPerOccurrence)} per person. Timing changes the arrangement; session settings own duration, people and funding.`
       : selected.kind === 'person' ? 'Describe when this person is available. Unknown availability and explicitly empty availability retain different meanings.'
         : selected.kind === 'gate' ? 'This is a modeled decision. Name the person and evidence that would support a real review.'
           : selected.kind === 'proposal' ? 'Explore possible work here. Select Add to planned work and Apply to accept its commitment.'
@@ -234,7 +250,8 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       const names = [...new Set(selectScoreIntervalWork(reading.score, person.personId, person.overlap[overlapIndex]).map(row => row.label))];
       overlapNames.textContent = `Work in this interval: ${names.join(', ')}.`;
     }
-    preview.textContent = proposed?.ok ? `Accepted investment ${money(current.projection.result.knownCommitmentCents)} · proposed investment ${money(proposed.projection.result.knownCommitmentCents)}. ${proposed.summary.fundedWorkIds.length ? 'Apply adds the selected proposals to planned work.' : 'Apply accepts this arrangement.'}`
+    const acceptanceAction = creatingDecision ? 'Add decision to plan' : 'Apply';
+    preview.textContent = proposed?.ok ? `Accepted investment ${money(current.projection.result.knownCommitmentCents)} · proposed investment ${money(proposed.projection.result.knownCommitmentCents)}. ${proposed.summary.fundedWorkIds.length ? `${acceptanceAction} adds the selected proposals to planned work.` : `${acceptanceAction} accepts this arrangement.`}`
       : current.draft ? 'The horizon retains the accepted arrangement while these entries need review.' : 'Select a session, person or decision to inspect its timing and relationships.';
     error.textContent = current.error?.message ?? (proposed && !proposed.ok ? proposed.error.message : '');
     root.dataset.scoreState = current.status;
@@ -278,12 +295,34 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function settle(method) {
     const current = editor.read(); if (disposed || !current.draft) return;
     if (composing && method === 'apply') { announce('Finish entering the text, then apply.'); return; }
+    const newDecision = isNewDecision(current.draft.raw, current.projection.state) ? { id: selected.id, stageId: current.draft.raw[`gate.${selected.id}.afterStageId`] } : null;
     const epoch = ++generation, result = operate(method, current.draft.token); if (!owns(epoch)) return;
     if (!result.ok) { changed(result, epoch); return; }
-    if (method === 'cancel') { if (opened(operate('begin', 'score', studio.read()), epoch)) announce('Arrangement changes cancelled.'); return; }
+    if (method === 'cancel') { decisionOrigins.clear(); if (opened(operate('begin', 'score', studio.read()), epoch)) announce('Arrangement changes cancelled.'); return; }
+    decisionOrigins.clear();
     const accepted = result.projection ?? studio.read(); onAccepted(accepted);
     if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return;
-    if (opened(operate('begin', 'score', accepted), epoch)) announce('Arrangement applied.');
+    if (opened(operate('begin', 'score', accepted), epoch)) {
+      announce(newDecision ? 'Decision added. Your arrangement changes are applied.' : 'Arrangement applied.');
+      if (newDecision && owns(epoch)) returnToStage(newDecision.stageId, newDecision.id);
+    }
+  }
+  function returnToStage(stageId, gateId = null) {
+    const target = projectionRoot.querySelector(gateId
+      ? `.native-score__stages [data-score-kind="gate"][data-score-id="${gateId}"]`
+      : `.native-score__stages [data-score-view-action="add-decision"][data-score-id="${stageId}"]`);
+    const destination = target ?? projectionRoot.querySelector('[data-score-view-action="add-decision"]') ?? arrange;
+    destination.scrollIntoView({ block: 'center' }); destination.focus({ preventScroll: true });
+  }
+  function discardDecision() {
+    const current = editor.read();
+    if (!current.draft || current.status !== 'editing' || !isNewDecision(current.draft.raw, current.projection.state)) return;
+    const { raw, token } = current.draft, id = selected.id, stageId = decisionOrigins.get(id) ?? raw[`gate.${id}.afterStageId`], epoch = ++generation;
+    const result = operate('setIds', token, 'gateIds', raw.gateIds.filter(value => value !== id));
+    if (!owns(epoch)) return;
+    if (result.ok) { decisionOrigins.delete(id); selected = { kind: 'stage', id: stageId }; fieldSignature = null; }
+    const mark = boundary(); changed(result, epoch);
+    if (result.ok && retains(epoch, mark)) { announce('Decision draft discarded. Your other arrangement entries are kept.'); returnToStage(stageId); }
   }
   function freshId(kind, existing) { const taken = new Set(existing); let ordinal = 1; while (taken.has(`${kind}-${ordinal}`)) ordinal++; return `${kind}-${ordinal}`; }
   function addDecision(stageId) {
@@ -301,10 +340,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (result.ok) result = operate('setText', token, `gate.${id}.afterStageId`, stageId);
     if (result.ok) result = operate('setText', token, `gate.${id}.label`, `Decision after ${raw[`stage.${stageId}.label`]}`.slice(0, scoreField(`gate.${id}.label`).maxLength));
     if (!owns(epoch)) return;
-    if (result.ok) { selected = { kind: 'gate', id }; fieldSignature = null; }
+    if (result.ok) { decisionOrigins.set(id, stageId); selected = { kind: 'gate', id }; fieldSignature = null; }
     const mark = boundary(); changed(result, epoch);
     if (result.ok && retains(epoch, mark)) {
-      inspector.scrollIntoView({ block: 'nearest' }); controls.get(`gate.${id}.label`)?.input.focus({ preventScroll: true });
+      inspector.scrollIntoView({ block: 'start' });
+      const name = controls.get(`gate.${id}.label`)?.input; name?.focus({ preventScroll: true });
+      if (retains(epoch, mark)) name?.select();
       if (retains(epoch, mark)) onInspect(inspector);
     }
   }
@@ -328,6 +369,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (action === 'focus') { focusWorkId = selected.id; render(); scrollIntoView(); return; }
     if (action === 'source') { navigate(selected); return; }
     if (action === 'cancel') { settle('cancel'); return; }
+    if (action === 'discard-decision') { discardDecision(); return; }
+    if (action === 'keep-decision') {
+      const raw = editor.read().draft?.raw;
+      if (raw) select({ kind: 'stage', id: raw[`gate.${selected.id}.afterStageId`] || raw.stageIds[0] || '' }, true);
+      return;
+    }
     const current = editor.read(); if (!current.draft) return;
     const token = current.draft.token, raw = current.draft.raw, epoch = ++generation;
     if (action === 'review' || action === 'current') { opened(operate(action === 'review' ? 'review' : 'useCurrent', token, studio.read()), epoch, true); return; }
@@ -373,7 +420,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function dispose() { if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
     close(); disposed = true; ++generation; releaseRetiredLease(); view.dispose(); cleanup.splice(0).forEach(release => release());
     for (const owned of [toolbar, projectionRoot, inspector, manual]) owned.remove(); if (fallback) fallback.hidden = false;
-    delete root.dataset.scoreState; controls.clear(); INSTANCES.delete(root); }
+    delete root.dataset.scoreState; controls.clear(); decisionOrigins.clear(); INSTANCES.delete(root); }
   render();
   const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select, dispose }); INSTANCES.set(root, controller); return controller;
 }

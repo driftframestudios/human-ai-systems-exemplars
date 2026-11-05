@@ -47,7 +47,7 @@ test('create person, team and work own their data and publish one priced change 
   // Four original people cost $1,200; one new person works 1.5 hours at $120.
   assert.equal(next.result.knownCommitmentCents, 138000);
   assert.equal(next.state.revision, 3);
-  assert.equal(next.state.schemaVersion, '0.7.0');
+  assert.equal(next.state.schemaVersion, '0.8.0');
   assert.equal(next.state.modelVersion, '0.1.0');
   assert.deepEqual(studio.readHistory(), { undoCount: 3, redoCount: 0, limit: 20 });
   suppliedPerson.rateCentsPerHour = 1;

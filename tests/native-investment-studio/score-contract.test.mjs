@@ -39,10 +39,10 @@ test('investment comparisons name actual score changes and separate modeled deci
   assert.deepEqual(describeScoreChanges(studio.read().state, preparePlan(unavailable).state), [`Availability — ${before.people[0].label}: minutes 10–90 → No available intervals.`]);
 });
 test('schema0.6 migration preserves amounts and unknown calendar inputs, including an omitted legacy timing member', () => {
-  const legacy = createExamplePlan(); legacy.schemaVersion = '0.6.0'; delete legacy.scoreSettings;
+  const legacy = createExamplePlan(); legacy.schemaVersion = '0.6.0'; delete legacy.scoreSettings; delete legacy.arrangements;
   legacy.people.forEach(row => { delete row.availability; }); delete legacy.work[0].timing;
   const result = prepareImport(JSON.stringify(legacy)).projection;
-  assert.equal(result.state.schemaVersion, '0.7.0'); assert.equal(result.result.knownCommitmentCents, 120000);
+  assert.equal(result.state.schemaVersion, '0.8.0'); assert.equal(result.result.knownCommitmentCents, 120000);
   assert.equal(result.state.work[0].timing, null); assert.ok(result.state.people.every(row => row.availability === null));
   assert.equal(result.state.scoreSettings.window, null); assert.deepEqual(result.state.scoreSettings.proposals, []);
   assert.equal(result.score.workRows[0].placement, 'unspecified');

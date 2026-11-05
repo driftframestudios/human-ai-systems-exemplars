@@ -68,6 +68,10 @@ test('each template starts from the one-team example, preserves people and work 
     assert.deepEqual(proposal.projection.result, before.result); assert.equal(proposal.projection.result.plannedCommitmentCents, 120000);
     assert.equal(proposal.summary.money.totalDeltaCents, 0); assert.equal(proposal.summary.newTeamIds.length, groups);
     const accepted = apply(studio, proposal);
+    assert.deepEqual(accepted.state.arrangements, [{ id: 'sample', templateId: id, templateVersion: '1.0.0',
+      teamBindings: listCoordinationTemplates().find(row => row.id === id).teams.map(slot => ({ slotId: slot.id, teamId: `sample-team-${slot.id}` })),
+      connectionBindings: listCoordinationTemplates().find(row => row.id === id).connections.map(slot => ({ slotId: slot.id, connectionId: `sample-connection-${slot.id}` })) }]);
+    assert.deepEqual(proposal.summary.newArrangementIds, ['sample']);
     assert.equal(accepted.state.revision, 1); assert.equal(studio.readHistory().undoCount, 1); assert.equal(studio.readAcceptance().sequence, 1);
     assert.deepEqual(accepted.state.connections.map(row => row.id), listCoordinationTemplates().find(row => row.id === id).connections.map(row => `sample-connection-${row.id}`));
   }
@@ -288,9 +292,9 @@ test('the full current candidate admits exactly 16384 references and rejects one
     const edge = id => ({ id, senderTeamId: 'delivery', receiverTeamId: 'receiving', receiverPersonId: null,
       sharedObject: 'Object', responseExpectation: null, workIds, status: 'active' });
     for (let index = 0; index < 246; index += 1) plan.connections.push(edge(`existing-${index}`));
-    plan.connections.push({ ...edge('partial'), workIds: workIds.slice(0, 6 + excess) });
-    // 132 membership/work/practice references + 246*66 + 8 = 16376.
-    // The template adds two edges, each with two groups, one receiver, one work.
+    plan.connections.push({ ...edge('partial'), workIds: workIds.slice(0, 2 + excess) });
+    // 132 membership/work/practice references + 246*66 + 4 = 16372.
+    // The template adds eight edge references and four arrangement bindings.
     const studio = createStudio(plan);
     if (excess) unchanged(studio, () => prepareCoordinationTemplate(studio.read(), existingRequest()), 'reference-budget');
     else assert.equal(prepareCoordinationTemplate(studio.read(), existingRequest()).projection.state.connections.length, 249);

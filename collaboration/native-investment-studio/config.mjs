@@ -5,7 +5,7 @@ import { createScoreSettings } from './score-models.mjs';
 export { PRACTICES } from './capabilities.mjs';
 // Immutable vocabulary shared by independent Studio instances.
 export const CONTRACT = Object.freeze({
-  kind: 'native-investment-plan', schemaVersion: '0.7.0', modelVersion: '0.1.0',
+  kind: 'native-investment-plan', schemaVersion: '0.8.0', modelVersion: '0.1.0',
   currency: 'USD', minutesPerHour: 60,
 });
 
@@ -59,6 +59,12 @@ const SCORE_JSON_BYTES = JSON.stringify({ scoreSettings: createScoreSettings() }
   + 32 * (192 + 3 * 64 + 120 * 6 + 2 * RELATIONSHIP_TEXT_LIMIT * 6)
   + 32 * (512 + 4 * 64 + 120 * 6 + 5 * 9)
   + 128 + 120 * 6 + 2 * 9 + CAPABILITY_REFERENCE_LIMIT * (64 + 3);
+// Each arrangement binds at most three authored team slots and three edges.
+// Identifiers use ASCII; the catalogue owns bounded template and slot names.
+const ARRANGEMENT_JSON_BYTES = JSON.stringify({ arrangements: [] }).length - 1
+  + 32 * (JSON.stringify({ id: '', templateId: '', templateVersion: '', teamBindings: [], connectionBindings: [] }).length
+    + 3 * 64 + 1 + 3 * (JSON.stringify({ slotId: '', teamId: '' }).length + 2 * 64 + 1)
+    + 3 * (JSON.stringify({ slotId: '', connectionId: '' }).length + 2 * 64 + 1));
 export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.1.0': 524288,
   '0.2.0': 524288 + PURPOSE_JSON_BYTES,
@@ -67,6 +73,7 @@ export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.5.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES,
   '0.6.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES,
   '0.7.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES,
+  '0.8.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES,
 });
 
 export const LIMITS = Object.freeze({
@@ -75,7 +82,7 @@ export const LIMITS = Object.freeze({
   recoveryEvents: 32, learningActions: 32, rehearsals: 64,
   availabilityIntervals: 16, scoreOccurrences: 4096, scoreAssignments: 16384, scoreDependencies: 512,
   scoreStages: 32, scoreWaits: 32, scoreGates: 32, scoreProposals: 32, scoreMinute: 100000000,
-  contributions: 128, connections: 256, relationshipText: RELATIONSHIP_TEXT_LIMIT, identifier: 64, label: 120, horizonWeeks: 260,
+  contributions: 128, connections: 256, arrangements: 32, relationshipText: RELATIONSHIP_TEXT_LIMIT, identifier: 64, label: 120, horizonWeeks: 260,
   fundedMinutes: 10000000, minutesPerOccurrence: 1440, occurrences: 10000,
   rateCentsPerHour: 100000000, revision: Number.MAX_SAFE_INTEGER - 1, purposeText: PURPOSE_TEXT_LIMIT,
 });
