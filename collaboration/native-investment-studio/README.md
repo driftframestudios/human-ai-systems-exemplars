@@ -9,11 +9,11 @@ through Undo, saved edits, or a baseline comparison.
 
 ## Current state
 
-**Paused for a collaboration-mode change on 5 November 2026.** The current
-feature is a work-in-progress checkpoint. Resume from the
-[pause entry](experience-journal.md#2026-11-05--pause-and-next-iteration-direction)
-before extending it; two verification findings and the latest visual refinements
-remain open. Source and release integration await their receiving reviews.
+**Implementation resumed on 5 November 2026.** The human approved the Issue
+sequence and design direction. The current repair has passing return-path,
+enlarged-text, and affected-browser checks. Source integration awaits independent
+engineering review; public delivery preparation retains its separate human
+publication review.
 
 Purpose, people, teams, working sessions, roles, human review, connections,
 arrangement previews, and plan exchange have native owners. The complete

@@ -1968,9 +1968,6 @@ p#on-dark-iron-ore {
     color: var(--native-text);
     color-scheme: light;
     font: 1rem/1.5 system-ui, sans-serif;
-    /* Keep WebKit's automatic inflation stable; rem sizing still follows text zoom. */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
     margin-block: 1.5rem;
     overflow-wrap: anywhere;
 }
@@ -2438,7 +2435,6 @@ p#on-dark-iron-ore {
     letter-spacing: .14em;
 }
 .native-zine__heading { border-block-end: .125rem solid var(--native-rule); padding-block-end: .65rem; }
-.native-zine__heading > span { font: 700 .8em/1 ui-monospace, monospace; color: var(--about-deep-teal); white-space: nowrap; }
 .native-zine__return {
     display: flex;
     flex-wrap: wrap;
@@ -2485,6 +2481,7 @@ p#on-dark-iron-ore {
 /* Membership toggles keep both geometry and the explicit ordering controls. */
 .native-coordination .native-coordination__member {
     align-content: start;
+    font-size: 1rem;
     transition: none;
 }
 .native-coordination .native-coordination__member[data-selected='false'] {

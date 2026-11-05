@@ -20,12 +20,14 @@
       "tokensPath": "visual-fidelity-contracts/ascii-zine-field.tokens.css",
       "specimenPath": "visual-fidelity-contracts/ascii-zine-field.specimen.html",
       "examples": [
+        "visual-fidelity-contracts/ascii-zine-field/index.html",
         "visual-fidelity-contracts/ascii-zine-field.specimen.html",
         "context-canvas-project-surface/context-canvas/index.html"
       ],
       "tests": [
         "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
-        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs"
+        "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
+        "tests/prod-deployment/primary-closure.test.mjs"
       ]
     },
     {

@@ -153,7 +153,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       item.dataset.selected = String(selected); checkbox.checked = selected;
       item.querySelector('strong').textContent = person?.label ?? `${id} · removed person`;
       item.querySelector('small').textContent = !person ? 'Remove this selection.' : `${person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`}${teamId && !teamMembers.has(id) ? ' · outside this team' : ''}`;
-      item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Left out';
+      item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button'), index = positions.get(id);
       up.disabled = index === undefined || index === 0; down.disabled = index === undefined || index === ids.length - 1;
       up.setAttribute('aria-label', `Move up: ${person?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${person?.label ?? id}`);

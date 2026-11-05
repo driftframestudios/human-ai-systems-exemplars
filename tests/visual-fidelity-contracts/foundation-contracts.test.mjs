@@ -290,6 +290,7 @@ test("cataloged labs declare their exact implementation versions and behavior ro
 test("standalone HTML artifacts carry the shared public attribution contract", async () => {
   const htmlPaths = [
     "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+    "visual-fidelity-contracts/ascii-zine-field/index.html",
     "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
     "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
     "visual-fidelity-contracts/examples/index.html",
@@ -315,6 +316,7 @@ test("standalone HTML artifacts carry the shared public attribution contract", a
 test("off-canvas skip links retain a viewport-bounded focus target at enlarged text", async () => {
   const styleOwners = [
     "visual-fidelity-contracts/ascii-zine-field.specimen.html",
+    "visual-fidelity-contracts/ascii-zine-field/index.html",
     "visual-fidelity-contracts/contracts/industrial-ink/specimen.html",
     "visual-fidelity-contracts/contracts/soft-color-blocking/specimen.html",
     "visual-fidelity-contracts/examples/styles.css",

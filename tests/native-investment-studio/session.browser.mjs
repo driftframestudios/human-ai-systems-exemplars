@@ -101,6 +101,7 @@ for (const engine of names) {
     for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(enlarged => { document.documentElement.style.fontSize = enlarged ? '200%' : ''; }, enlarged);
+      await member(page, 'product-one').scrollIntoViewIfNeeded();
       await member(page, 'product-one').focus(); await frames(page);
       const before = await geometry();
       if (enlarged) {
@@ -109,6 +110,7 @@ for (const engine of names) {
       }
       await page.keyboard.press('Space');
       await expect(member(page, 'product-one')).not.toBeChecked();
+      await expect(member(page, 'product-one').locator('xpath=ancestor::li').locator('.native-coordination__member-status')).toHaveText('Available');
       await expect(member(page, 'product-one')).toBeFocused();
       assert.deepEqual(await geometry(), before, 'deselection retains every row position and height');
       await page.keyboard.press('Space');
@@ -169,6 +171,51 @@ for (const engine of names) {
     assert.deepEqual(plan.work[0].personIds, [plan.people[0].id]);
     await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
   });
+  test(`${engine}: restarting a prerequisite retires its obsolete route and descendants while retaining their drafts`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await field(page, 'label').fill('Session to resume');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-native-assembly]');
+    const creation = assembly.locator('[data-assembly-form]');
+    await creation.locator('[name="label"]').fill('Earlier team draft');
+    await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await creation.locator('[name="label"]').fill('Earlier person draft');
+    const saved = root(page).locator('[data-native-saved]');
+    await saved.locator('summary').click();
+    await saved.locator('[data-saved-open^="session:"]').click();
+    await expect(field(page, 'label')).toHaveValue('Session to resume');
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await sessions(page).locator('[data-native-create="team"]').click();
+    await creation.locator('[name="label"]').fill('Receiving team');
+    await assembly.locator('[data-assembly-apply]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await expect(field(page, 'label')).toHaveValue('Session to resume');
+    await expect(saved).toContainText('Earlier team draft');
+    await expect(saved).toContainText('Earlier person draft');
+    await expect(legacy(page, 'review')).toBeFocused();
+  });
+
+  test(`${engine}: resuming a nested origin through Saved edits retains its earlier return destination`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await field(page, 'label').fill('Session waiting for a team');
+    await sessions(page).locator('[data-native-create="team"]').click();
+    const assembly = root(page).locator('[data-native-assembly]'), creation = assembly.locator('[data-assembly-form]');
+    await creation.locator('[name="label"]').fill('Team waiting for a person');
+    await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
+    await creation.locator('[name="label"]').fill('Person still being drafted');
+    const saved = root(page).locator('[data-native-saved]');
+    await saved.locator('summary').click();
+    await saved.locator('[data-native-saved-list] > li').filter({ hasText: 'Team waiting for a person' }).locator('[data-saved-open]').click();
+    await expect(creation.locator('[name="label"]')).toHaveValue('Team waiting for a person');
+    await expect(root(page).locator('[data-native-return-action]')).toHaveText('Return to session');
+    await assembly.locator('[data-assembly-apply]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(field(page, 'label')).toHaveValue('Session waiting for a team');
+    await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
+    await expect(saved).toContainText('Person still being drafted');
+  });
+
   test(`${engine}: discarding the saved origin releases its return route and keeps the current creation form`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await field(page, 'label').fill('Unfinished session');

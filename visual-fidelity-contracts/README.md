@@ -44,9 +44,12 @@ executable, versioned contract material listed here.
 
 ### Repository composition contracts
 
-- [ASCII Zine Field](./ascii-zine-field.md) — a review candidate for warm-paper
-  studios and workshop artifacts, with ASCII ornament, native controls, and an
-  [interactive specimen](./ascii-zine-field.specimen.html).
+- [ASCII Zine Field guide](./ascii-zine-field/index.html) — a review candidate
+  for warm-paper studios and workshop artifacts, with ASCII ornament, native
+  controls, an [interactive specimen](./ascii-zine-field.specimen.html), and the
+  [full contract](./ascii-zine-field.md). The
+  [ASCII zine composition skill](../.agents/skills/ascii-zine-composition/README.md)
+  carries the reusable authoring method.
 - [Cobalt Operating Field](./cobalt-operating-field.md) — light-field system
   cartography for workbenches, operating maps, architecture handoffs, and
   changed-work narratives.
@@ -72,6 +75,12 @@ executable, versioned contract material listed here.
 The versioned [catalog](./catalog.v1.json) gives each contract a stable ID and
 maps its source, standing, public route, examples, tokens, and tests. Established
 flat paths stay available while the typed hub develops around them.
+
+The ASCII family guide, specimen, stylesheet, full Markdown source, and catalog
+are selected in the primary production manifest for the next reviewed release.
+The portable skill is selected separately for the next tagged GitHub Pages
+projection. These registrations prepare both receivers; the release record
+establishes their accepted source coordinates and actual publication.
 
 ## Run a lab
 

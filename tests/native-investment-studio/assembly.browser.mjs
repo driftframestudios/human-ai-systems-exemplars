@@ -91,6 +91,7 @@ for (const engine of names) {
   test(`${engine}: team membership toggles retain row geometry and checkbox focus`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await people(page).locator('[data-assembly-team="delivery"]').click();
+    await expect(people(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
     const list = people(page).locator('[data-assembly-members]');
     const geometry = () => list.evaluate(element => {
       const origin = element.getBoundingClientRect().top;

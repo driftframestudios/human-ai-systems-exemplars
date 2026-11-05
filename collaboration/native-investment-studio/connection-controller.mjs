@@ -114,7 +114,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
       const position = positions.get(id);
       item.dataset.selected = String(positions.has(id)); checkbox.checked = positions.has(id);
       item.querySelector('[data-member-name]').textContent = row ? named(row) : `${id} · removed session`;
-      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Left out';
+      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button');
       up.disabled = position === undefined || position === 0; down.disabled = position === undefined || position === ids.length - 1;
       up.setAttribute('aria-label', `Move up: ${row?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${row?.label ?? id}`);

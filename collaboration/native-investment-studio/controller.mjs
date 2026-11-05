@@ -126,6 +126,21 @@ export function mountCoordinationPanel(root, options = {}) {
       returnTeamButton.hidden = false; returnTeamButton.textContent = `Add ${createdLabel} to ${team.label}`;
     }
   }
+  function retainReturnAncestors(kind, target) {
+    const repeated = returnRoutes.findIndex(route => route.kind === kind && route.target === target);
+    if (repeated >= 0) { returnRoutes.splice(repeated); return; }
+    const descriptor = TARGET_READERS[kind]?.(target);
+    const parent = returnRoutes.findLastIndex(route => {
+      const destinationKind = route.creating === 'session' ? 'session' : 'assembly';
+      return destinationKind === kind && (route.creationTarget === target
+        || route.createdId && descriptor?.id === route.createdId
+          && descriptor.collection === (route.creating === 'person' ? 'people' : route.creating === 'team' ? 'teams' : 'work'))
+        || kind === 'assembly' && route.continuationTarget === target;
+    });
+    // Return routes describe the current detour. Saved drafts keep their own
+    // recovery owner when a visitor starts a different task or resumes an ancestor.
+    returnRoutes.splice(parent + 1);
+  }
   function createPrerequisite(button) {
     const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
     if (!['session', 'connection', 'assembly', 'contribution', 'template'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
@@ -139,6 +154,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const result = creating === 'session' ? workPanel?.create() : assemblyPanel?.create(`${creating}.create`);
     if (!result?.ok) { announce(result?.error?.message ?? 'Open People to add this record.'); render(); return; }
     pendingReturnFocus = null;
+    retainReturnAncestors(kind, target);
     returnRoutes.push({ kind, target, creating, held, creationTarget: result.view.draft.assemblyId ?? result.view.draft.sessionId,
       field: button.dataset.nativeReturnField ?? (kind === 'session' && creating === 'team' ? 'teamId' : kind === 'connection' && creating === 'person' ? 'receiverPersonId' : null),
       requiredTeamId: kind === 'connection' && creating === 'person' ? view.draft.raw.receiverTeamId : null });
@@ -181,8 +197,10 @@ export function mountCoordinationPanel(root, options = {}) {
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     chapterShell?.select('people');
-    const result = assemblyPanel?.open(makeAssemblyTarget('team.update', team.id));
+    const target = makeAssemblyTarget('team.update', team.id);
+    const result = assemblyPanel?.open(target);
     if (!result?.ok || result.view.status !== 'editing') { announce(`Review the saved team entries, then select ${person.label}.`); return; }
+    route.continuationTarget = target;
     const ids = result.view.draft.raw.personIds;
     if (!ids.includes(route.createdId)) editing.assembly.setIds(result.view.draft.token, 'personIds', [...ids, route.createdId]);
     render();
@@ -365,15 +383,21 @@ export function mountCoordinationPanel(root, options = {}) {
     if (button.dataset.savedOpen) {
       const saved = savedByKey.get(button.dataset.savedOpen);
       if (!saved) return;
+      let opened;
       if (saved.kind === 'purpose') purposePanel?.open();
       else {
         purposePanel?.close({ resume: false });
         chapterShell?.select(['person', 'assembly', 'role', 'contribution'].includes(saved.kind) ? 'people' : 'coordination');
-        if (saved.kind === 'assembly') assemblyPanel?.open(saved.targetId);
+        if (saved.kind === 'assembly') opened = assemblyPanel?.open(saved.targetId);
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
-        else if (saved.kind === 'session') workPanel?.open(saved.targetId);
-        else if (saved.kind === 'role' || saved.kind === 'contribution') responsibilityPanel?.open(saved.targetId);
-        else if (saved.kind === 'connection') connectionPanel?.open(saved.targetId);
+        else if (saved.kind === 'session') opened = workPanel?.open(saved.targetId);
+        else if (saved.kind === 'role' || saved.kind === 'contribution') opened = responsibilityPanel?.open(saved.targetId);
+        else if (saved.kind === 'connection') opened = connectionPanel?.open(saved.targetId);
+      }
+      if (opened?.view?.draft?.[`${saved.kind}Id`] === saved.targetId) {
+        const returned = returnRoutes.findIndex(route => route.kind === saved.kind && route.target === saved.targetId);
+        if (returned >= 0) returnRoutes.splice(returned);
+        pendingReturnFocus = null;
       }
       render();
       return;

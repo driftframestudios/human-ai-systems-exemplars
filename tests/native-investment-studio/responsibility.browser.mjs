@@ -101,7 +101,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
     await role(page);
-    await expect(settings(page, 'role').locator('summary')).toContainText('Add role details');
+    await expect(settings(page, 'role').locator('summary')).toHaveText('Roles · product-one · Add role details');
     for (const [name, value] of Object.entries(expectedRole)) await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
     await apply(page, 'role').click();
     await expect(settings(page, 'role')).toHaveAttribute('open', '');

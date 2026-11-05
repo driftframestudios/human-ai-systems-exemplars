@@ -309,3 +309,63 @@ requested specimen and language refinements, update the public-projection and
 production-release routes, then complete the affected checks and independent
 review. Keep the full showcase route in #637 and final About reconciliation in
 #638. The local preview can remain available during this short pause.
+
+## 2026-11-05 — Resume the approved sequence
+
+**Human direction.** The Issue order and synthesized implementation plan are
+approved. The pause has ended. Complete the current usability repair and its
+independent engineering review, then continue the populated showcase through
+[#649](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/649)
+and the tactile controls in
+[#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
+The original checkout retains its own working branch; the feature uses
+`codex/studio-usability-zine`. The earlier feature-branch push rejection cleared
+on an ordinary retry. Repository protections retain their existing settings.
+
+**Visual and language decisions.** The specimen's native select now has a
+decorative caret inset 20 pixels, with reserved label space. Its native select
+still owns options, keyboard selection, and focus; forced colors restores the
+browser indicator. The heading reads “Texture with a simple job.” The Studio
+uses plain chapter headings and a short stitched amp rail. Selection lists
+read “Included” and “Available.” Settings and role summaries separate the fixed
+label from the literal entered name with a middle dot, preserving names such as
+“Research review” exactly as entered.
+
+The family now explains targeted amp-grille, scroll-note, and leaflet
+treatments. Its portable composition method owns ornament's job, placement,
+ordinary control semantics, and fitting verification; the family owns its
+palette, tokens, and specimen. The public skill projection and production
+family guide have separate receiving paths. Their source registration prepares
+the next release; human review retains publication authority.
+
+**Refined browser finding.** The earlier text-size-adjust account was a
+provisional explanation. The pinned WebKit reports those adjustment properties
+unsupported, and the offscreen test observation retained smaller descendant
+metrics after responsive enlargement. Bringing the actual card into view
+before measuring established the enlarged reading. The repaired observation
+therefore includes a visible-card precondition. Participant rows also own a
+`1rem` font size so the surrounding page's narrow `li` rule does not determine
+their typography. The ineffective scoped adjustment was removed. The browser
+check still requires enlarged readable text and stable row geometry through
+membership changes.
+
+**Next composed task.** Author one cross-functional scenario with recognizable
+roles, connected teams, shared work, and an accountable review route. Keep the
+small teaching fixtures available. Its replacement preview should disclose
+changed contributions and connections through the existing exchange owner.
+Operate one working-session quantity with a real knob above the precision
+field, and make that same editor the first contextual Remote. A short authored
+review request can invite a useful adjustment and baseline comparison. The
+broader ability, quality, recovery, and timing chapters retain their approved
+owners.
+
+**Motion decision.** Keep the current ornament stationary. Consider a brief
+texture variation during the first knob/Remote composition, where an actual
+accepted change or chapter transition gives it a clear event. Accepted money
+and units stay readable; reduced motion shows the settled state directly.
+This targeted extension remains in #647 with its other meaningful transitions.
+
+**Receiving evidence.** The final feature PR owns the normalized source,
+affected-browser, publication-closure, and independent-review return. This
+entry preserves the design corrections and next task; the PR records the exact
+source accepted for integration.

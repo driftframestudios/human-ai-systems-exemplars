@@ -82,6 +82,29 @@ for (const [engineName, engine] of Object.entries(engines)) {
     }
   });
 
+  test(`${engineName} keeps the ASCII guide readable and its full-source routes reachable`, async t => {
+    const browser = await engine.launch();
+    t.after(() => browser.close());
+    const page = await browser.newPage({ viewport: { width: 320, height: 900 }, javaScriptEnabled: false });
+    const telemetry = monitor(page);
+    await page.goto(`${server.origin}/visual-fidelity-contracts/ascii-zine-field/index.html`);
+    await page.addStyleTag({ content: ':root { font-size: 200% !important; }' });
+    assert.equal(await page.getByRole('heading', { level: 1 }).textContent(), 'ASCII Zine Field');
+    const overflow = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+    assert.ok(overflow.scroll <= overflow.client + 1, JSON.stringify(overflow));
+    await page.getByRole('link', { name: 'Try the working specimen', exact: true }).click();
+    assert.match(page.url(), /ascii-zine-field\.specimen\.html$/u);
+    await page.getByRole('link', { name: 'ASCII Zine Field guide', exact: true }).click();
+    assert.match(page.url(), /ascii-zine-field\/index\.html$/u);
+    for (const name of ['Full family contract (Markdown)', 'Versioned contract catalog (JSON)', 'Reference tokens and classes (CSS)']) {
+      const link = page.getByRole('link', { name, exact: true });
+      const href = await link.getAttribute('href');
+      const response = await page.request.get(new URL(href, page.url()).href);
+      assert.equal(response.ok(), true, `${name} has an available source response`);
+    }
+    assertTelemetry(telemetry);
+  });
+
   test(`${engineName} keeps zine editing and recovery reachable with stable narrow controls`, async t => {
     const browser = await engine.launch();
     t.after(() => browser.close());
@@ -100,7 +123,24 @@ for (const [engineName, engine] of Object.entries(engines)) {
       if (textScale > 1) await page.addStyleTag({ content: ':root { font-size: 200% !important; }' });
       const title = page.getByLabel('Note title', { exact: true });
       await title.fill('A question we can use');
-      await page.getByLabel('Draft artifact', { exact: true }).selectOption('Research question');
+      const artifact = page.getByRole('combobox', { name: 'Draft artifact', exact: true });
+      await artifact.focus();
+      await artifact.press('r');
+      await artifact.press('Tab');
+      assert.equal(await artifact.inputValue(), 'Research question', 'the inset caret preserves native keyboard selection');
+      const caret = await page.locator('.azf-select').evaluate(node => {
+        const ornament = getComputedStyle(node, '::after');
+        const field = getComputedStyle(node.querySelector('select'));
+        return {
+          inset: parseFloat(ornament.insetInlineEnd),
+          width: parseFloat(ornament.width),
+          padding: parseFloat(field.paddingInlineEnd),
+          pointerEvents: ornament.pointerEvents,
+        };
+      });
+      assert.ok(caret.inset >= 8 && caret.inset <= 24, 'the caret has a comfortable inner-edge inset');
+      assert.ok(caret.padding >= caret.inset + caret.width, 'selected text keeps a reserved area beside the caret');
+      assert.equal(caret.pointerEvents, 'none', 'the decorative caret leaves the select as the pointer target');
       const save = page.getByRole('button', { name: 'Save example', exact: true });
       await save.focus();
       await save.press('Enter');
@@ -173,6 +213,13 @@ test('zine forced colors, print, and scriptless reading preserve the working mea
   await page.goto(`${server.origin}/visual-fidelity-contracts/ascii-zine-field.specimen.html`);
   await page.emulateMedia({ forcedColors: 'active' });
   assert.equal(await page.locator('.azf-ornament').first().isVisible(), false, 'decoration yields to the user-selected palette');
+  const artifact = page.getByRole('combobox', { name: 'Draft artifact', exact: true });
+  assert.equal(await artifact.evaluate(node => getComputedStyle(node).appearance), 'auto', 'forced colors restores the native select appearance');
+  assert.equal(await page.locator('.azf-select').evaluate(node => getComputedStyle(node, '::after').display), 'none', 'forced colors uses one browser-drawn caret');
+  await artifact.focus();
+  await artifact.press('r');
+  await artifact.press('Tab');
+  assert.equal(await artifact.inputValue(), 'Research question', 'native keyboard choice remains available in forced colors');
   const remove = page.getByRole('button', { name: 'Remove sample prompt', exact: true });
   assert.equal(await remove.evaluate(node => getComputedStyle(node).borderTopStyle), 'dashed', 'removal retains a visible shape cue');
   await remove.click();

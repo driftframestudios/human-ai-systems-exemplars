@@ -16,6 +16,7 @@
   --azf-space: clamp(1rem, 2.6vw, 2rem);
   --azf-shadow: .3rem .3rem 0 var(--azf-ink);
   --azf-rule: 2px solid var(--azf-ink);
+  --azf-select-caret-inset: 20px;
 }
 
 .azf-field { color-scheme: light; background: var(--azf-paper); color: var(--azf-ink); font: 1rem/1.55 var(--azf-font-body); }
@@ -51,6 +52,9 @@
 .azf-field label { display: block; }
 .azf-field :where(input, select, textarea, button) { max-inline-size: 100%; font: inherit; }
 .azf-field :where(select, input[type="text"], textarea) { inline-size: 100%; min-block-size: 44px; margin-block: .4rem 1rem; padding: .55rem .65rem; border: 2px solid var(--azf-line); border-radius: .2rem; background: var(--azf-panel); color: var(--azf-ink); }
+.azf-select { position: relative; margin-block: .4rem 1rem; }
+.azf-select select { appearance: none; margin: 0; padding-inline-end: calc(var(--azf-select-caret-inset) + 1.5rem); }
+.azf-select::after { content: ""; position: absolute; inset-inline-end: var(--azf-select-caret-inset); inset-block-start: 50%; inline-size: .5rem; block-size: .5rem; border-inline-end: 2px solid var(--azf-ink); border-block-end: 2px solid var(--azf-ink); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
 .azf-field [aria-invalid="true"] { border-color: var(--azf-rose-ink); border-style: dashed; }
 .azf-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: .75rem; align-items: stretch; margin-block: 1rem; }
 .azf-button { min-block-size: 44px; padding: .6rem .85rem; border: var(--azf-rule); border-radius: .35rem; background: var(--azf-panel); color: var(--azf-ink); box-shadow: .15rem .15rem 0 var(--azf-ink); font-weight: 750 !important; text-align: center; overflow-wrap: anywhere; cursor: pointer; }
@@ -78,6 +82,8 @@
   .azf-button { color: ButtonText; background: ButtonFace; border-color: ButtonText; box-shadow: none; }
   .azf-button--primary { border-width: 3px; }
   .azf-button--remove { border-style: dashed; }
+  .azf-select select { appearance: auto; padding-inline-end: .65rem; }
+  .azf-select::after { display: none; }
   .azf-field a, .azf-amp a { color: LinkText; }
   .azf-field :focus-visible, .azf-amp :focus-visible { outline-color: Highlight; }
 }

@@ -118,7 +118,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const name = people.get(id)?.label ?? `${id} (removed)`, index = positions.get(id);
       item.dataset.selected = String(selected.has(id)); controls.checkbox.checked = selected.has(id);
       item.querySelector('[data-member-name]').textContent = name;
-      item.querySelector('.native-coordination__member-status').textContent = selected.has(id) ? `Included · ${index + 1}` : 'Left out';
+      item.querySelector('.native-coordination__member-status').textContent = selected.has(id) ? `Included · ${index + 1}` : 'Available';
       controls.up.disabled = index === undefined || index === 0; controls.down.disabled = index === undefined || index === ids.length - 1;
       controls.up.setAttribute('aria-label', `Move up: ${name} in the team`); controls.down.setAttribute('aria-label', `Move down: ${name} in the team`);
       memberControls.set(id, controls); rows.push(item);
@@ -157,7 +157,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const target = descriptor?.collection === 'people' ? people.get(descriptor.id) : teams.get(descriptor?.id);
     elements.summary.textContent = !descriptor ? 'Settings' : descriptor.mode === 'create'
       ? descriptor.collection === 'people' ? 'Add a person' : 'Add a team'
-      : `${removing ? 'Remove' : 'Settings for'} ${target?.label ?? descriptor.id}`;
+      : `${removing ? 'Remove' : 'Settings'} · ${target?.label ?? descriptor.id}`;
     elements['name-group'].hidden = !descriptor || removing;
     elements['name-label'].textContent = personForm ? 'Name' : 'Team name';
     elements['person-fields'].hidden = !personForm;

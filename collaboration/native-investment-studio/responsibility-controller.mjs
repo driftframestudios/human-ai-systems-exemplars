@@ -101,7 +101,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (kind === 'role') {
       const raw = roleRaw(row);
       const facts = ROLE_FIELDS.filter(field => raw[field]).slice(0, 2).map(field => responsibilityValue(field, raw[field]));
-      return `Roles for ${named(row)} · ${facts.join(' · ') || 'Add role details'}${draft?.changed ? ' · Unsaved edits' : ''}`;
+      return `Roles · ${named(row)} · ${facts.join(' · ') || 'Add role details'}${draft?.changed ? ' · Unsaved edits' : ''}`;
     }
     if (descriptor?.mode === 'remove' && draft) return `Remove ${CATEGORY_LABELS.get(row?.categoryId) ?? 'contribution'}`;
     if (descriptor?.mode === 'create' && draft) return 'New contribution';
@@ -170,7 +170,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       const position = positions.get(id);
       item.dataset.selected = String(positions.has(id)); input.checked = positions.has(id);
       item.querySelector('[data-member-name]').textContent = row ? named(row) : `${id} · removed session`;
-      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Left out';
+      item.querySelector('.native-coordination__member-status').textContent = positions.has(id) ? `Included · ${position + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button');
       up.disabled = position === undefined || position === 0; down.disabled = position === undefined || position === ids.length - 1;
       up.setAttribute('aria-label', `Move up: ${row?.label ?? id}`); down.setAttribute('aria-label', `Move down: ${row?.label ?? id}`);

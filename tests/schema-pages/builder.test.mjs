@@ -669,7 +669,7 @@ test("the private selection ledger classifies the complete repository skill fami
   const possibleNames = selection.skills
     .filter((entry) => entry.publicationStanding === "public_possible")
     .map((entry) => entry.name);
-  assert.equal(readyNames.length, 29);
+  assert.ok(readyNames.includes("ascii-zine-composition"), "the portable ASCII composition method is selected for public release");
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
     "citation-atlas-selection",

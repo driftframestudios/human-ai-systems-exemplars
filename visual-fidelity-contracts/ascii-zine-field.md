@@ -13,8 +13,9 @@ on the [About page](../context-canvas-project-surface/context-canvas/index.html)
 uses a small dose alongside its existing Tiffany and cobalt composition.
 
 **Standing:** review candidate, version `0.1.0`, composition ID
-`vfc:ascii-zine-field`. This repository contract has a local specimen. A future
-public collection route belongs to the publication receiver's review.
+`vfc:ascii-zine-field`. This repository contract has a [reading guide](./ascii-zine-field/index.html)
+and local specimen. Their production routes are selected for the next reviewed
+release; the receiving release records actual publication.
 
 ## Choose a useful dose
 
@@ -49,23 +50,49 @@ never invents progress, authority, capacity, confidence, or measured activity.
 An ornamental grille remains ornamental; a data encoding includes its values,
 units, scale, source, and a readable equivalent.
 
+### Place the texture with its object
+
+An amp grille belongs inside the ink panel that it textures. Its stable weave
+gives that panel material character while the heading supplies its identity.
+Keep the grille clear of labels, selector carets, and focus outlines. Changes to
+a real studio setting can change an associated texture when the setting and its
+value remain readable in ordinary text.
+
+A scrollnote uses a short perforation, stitched edge, or margin mark beside a
+note or recovery slip. The note's actual text and action keep the reading order.
+This treatment suits a small annotation that visitors may revisit; a whole page
+of repeated decorative frames adds work to finding the important note.
+
+A leaflet uses a small folded-paper silhouette, edge pattern, or stationary
+offset beside an explanatory card. The specimen's masthead introduces this
+shape in ASCII. A leaflet carrying instructions remains semantic HTML, and its
+fold is decoration. Text stays on a clear reading field even when a receiving
+surface adds a transparent paper texture around it.
+
 ## Character sets and authored patterns
 
 The portable core uses ASCII spaces and visible characters from U+0020 through
-U+007E. Its working palette is `+ - | / : . #`, with ordinary letters when a
+U+007E. Its working palette is `- | / : . # _`, with ordinary letters when a
 real label benefits from monospace. Text remains ordinary HTML outside the art.
 Use `data-ascii-art` on a decorative sample so the focused source check can
 distinguish its strict character contract from the surrounding document.
 
 ```text
-+--+--+--+--+--+--+       / / / / / / / /
-|  :  |  :  |  :  |      / / / / / / / /
-+--+--+--+--+--+--+       / / / / / / / /
+   __________________    / / / / / / / /
+  / / / / / / / / / /   / / / / / / / /
+ /_________________/    / / / / / / / /
 
 ##..##..##..##..##       : . : . : . : .
 ..##..##..##..##..       . : . : . : . :
 ##..##..##..##..##       : . : . : . : .
 ```
+
+Plus signs carry a familiar addition cue. Reserve `+` beside headings or actions
+for an actual add operation with a written label. Nearby ornament uses stitches,
+dots, slashes, or a plain rule. A bounded structural diagram may still use `+`
+for its intersections when its surrounding composition clearly reads as a
+diagram. The distinction depends on location and visitor expectation rather
+than a blanket character prohibition.
 
 Unicode box drawing (`┌─┐`), block elements (`░▒▓`), and other glyph systems are
 optional, separately named extensions. Their font metrics and character support
@@ -93,6 +120,14 @@ Buttons in the same action group share a practical width and height. Other
 groups can choose a width that fits their task. Longer labels wrap and targets
 remain at least 44 CSS pixels tall. Field selectors and disclosure rows retain
 their own geometry. ASCII brackets never impersonate an interactive control.
+
+Single-choice selectors retain a native `select` and its associated label.
+The reference `.azf-select` wrapper places a decorative caret 20 CSS pixels
+inside the field's logical end, within the family's 8–24px range. It reserves
+space for both the selected text and the caret. The caret accepts no pointer
+input, while the browser owns the option menu, keyboard selection, and focus.
+Forced colors restores the browser-drawn select and caret. This follows the
+native-control approach described in [MDN's select styling guidance](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling).
 
 For people, name the actual relationship being changed: “Leave this team” or
 “Take off this team” can fit membership; “Remove contribution” fits an artifact.
@@ -138,6 +173,33 @@ change paint without translating objects. Cards and controls keep their order
 and geometry as state changes. Inactive content remains readable, with ordinary
 contrast for text that visitors can still use.
 
+## Optional tactile variation follows real state
+
+A transparent texture can make a grille, scrollnote, or leaflet feel handled:
+small irregular marks, a slight change in weave, or a paper edge that settles
+after a visitor changes a setting. Use a bounded decorative layer with
+`pointer-events: none` and `aria-hidden="true"`. The paper behind essential text
+stays opaque enough for the declared text contrast; focus and control edges
+remain clear. A transparent asset retains its alpha channel and its intended
+size when the receiving surface places it.
+
+“Scramble” means an optional variation in this material treatment. Connect it to
+one actual state change, such as a changed draft setting or a restored note.
+The state owner supplies the value, and the written result appears immediately.
+The texture can then settle once into a repeatable composition. An ornamental
+shuffle represents no quantities, ranks, progress, or scientific measurement;
+any such encoding has its own stated values and mapping.
+
+The default is a still treatment. A receiving implementation that adds motion
+offers a still equivalent, honors `prefers-reduced-motion`, keeps labels and
+focus stationary, and lets a visitor disable the optional effect. A short
+localized effect ends on its own; continuous scrambling, flashing, and
+text-obscuring transitions fall outside this family. [W3C's guidance on
+animation from interactions](https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions)
+supports giving visitors control over non-essential motion. The specimen
+demonstrates the still composition; each animated receiving use needs its own
+behavior and motion observation.
+
 ## Native receiving pattern
 
 The route can map only the needed reference tokens and own its selector names:
@@ -159,7 +221,7 @@ The route can map only the needed reference tokens and own its selector names:
 ```html
 <section aria-labelledby="people-title">
   <header>
-    <span class="studio-rule-art" data-ascii-art aria-hidden="true">+--+--+--+</span>
+    <span class="studio-rule-art" data-ascii-art aria-hidden="true">. . / . . / . .</span>
     <h2 id="people-title">People</h2>
   </header>
   <details>
