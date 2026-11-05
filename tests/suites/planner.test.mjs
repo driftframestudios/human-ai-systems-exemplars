@@ -22,6 +22,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/capability.browser.mjs',
   'tests/native-investment-studio/change-contract.test.mjs',
   'tests/native-investment-studio/change-draft.test.mjs',
+  'tests/native-investment-studio/change-methods.test.mjs',
   'tests/native-investment-studio/change-models.test.mjs',
   'tests/native-investment-studio/change-proposals.test.mjs',
   'tests/native-investment-studio/change.browser.mjs',
@@ -319,7 +320,7 @@ test('native Studio routes retain source and separate browser owners with execut
   ]);
   const sourceMembers = [
     'assurance-contract.test.mjs', 'assurance-draft.test.mjs', 'assurance-models.test.mjs', 'assurance-proposals.test.mjs',
-    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
     'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].sort().map(file => `tests/native-investment-studio/${file}`);
@@ -360,8 +361,9 @@ test('native Studio routes retain source and separate browser owners with execut
     const plan = createPlan(catalog, {suites: [id]});
     assert.deepEqual(plan.suites[0].members, members, id);
     assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', ...members], id);
-    assert.equal(pkg.scripts[alias], admission + members.join(' '), alias);
-    assert.deepEqual(catalog.inventory.rootScriptSelection.directNodeTestSelectors[alias], members, alias);
+    const selectors = id === 'node.native-investment-studio' ? ['tests/native-investment-studio/*.test.mjs'] : members;
+    assert.equal(pkg.scripts[alias], admission + selectors.join(' '), alias);
+    assert.deepEqual(catalog.inventory.rootScriptSelection.directNodeTestSelectors[alias], selectors, alias);
     assert.deepEqual(catalog.suites.find(suite => suite.id === id).aliases, [alias], id);
     assert.ok(createPlan(catalog, {bundles: [bundle]}).suites.some(suite => suite.id === id), id);
     for (const member of members) await access(resolve(ROOT, member));

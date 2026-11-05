@@ -1,8 +1,10 @@
+import { createTimeControls, mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
 import { CHANGE_FIELDS, changeSettingsFromRaw } from './change-draft.mjs';
 import { listChangeFrameworks, listInterpretiveLenses, listAttentionChannels, getChangeSuggestion,
   CHANGE_STATUSES, CHANGE_SOURCE_FILTERS, FOUR_ACTIONS_METHOD, createChangeSettings, projectChange } from './change-models.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { money } from './display.mjs';
+import { getChangeMethod, listChangeMethods } from './change-methods.mjs';
 
 const INSTANCES = new WeakMap();
 let instanceSequence = 0;
@@ -40,6 +42,18 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     return element;
   }
   function button(text, action) { const element = node('button', text); element.type = 'button'; element.dataset.changeAction = action; return element; }
+  function methodLink(method) {
+    const route = method.readingRoute;
+    if (!route) return null;
+    const canvasRoot = 'context-canvas-project-surface/context-canvas/';
+    const url = route.path.startsWith(canvasRoot)
+      ? new URL(route.path.slice(canvasRoot.length), document.baseURI)
+      : new URL(`../../${route.path}`, import.meta.url);
+    if (route.fragment) url.hash = route.fragment;
+    const link = node('a', `${route.label} (new tab)`);
+    link.href = url.href; link.target = '_blank'; link.rel = 'noopener';
+    return link;
+  }
   function announce(text) { if (!disposed) elements.status.textContent = text; }
   function sourceOptions(source, selected) {
     const rows = source === 'capabilities' ? ['ability', 'practice'].flatMap(kind => studio.read().state[kind === 'ability' ? 'abilities' : 'practices'].map(row =>
@@ -108,19 +122,35 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const prefix = `map.${framework.id}.${component.id}.`, details = node('details', undefined, 'native-change__component');
     Object.assign(details.dataset, { changeFramework: framework.id, changeComponent: component.id });
     const summary = node('summary', component.label), body = node('div', undefined, 'native-change__component-body');
-    body.append(node('p', component.explanation), node('p', `People to involve: ${component.receiverRole}.`));
-    for (const key of ['mapped', 'status', 'workIds', 'capabilityRefs']) field(body, prefix + key);
+    const introduction = node('div', undefined, 'native-change__component-introduction');
+    introduction.append(node('p', component.explanation), node('p', `People to involve: ${component.receiverRole}.`));
+    const settings = node('div', undefined, 'native-change__component-settings');
+    for (const key of ['mapped', 'status', 'workIds', 'capabilityRefs']) field(settings, prefix + key);
+    body.append(introduction, settings);
     const linkedWork = node('div', undefined, 'native-coordination__actions'); body.append(linkedWork);
-    const suggestions = node('ul');
+    const suggestions = node('ul', undefined, 'native-change__suggestions');
     for (const source of ['core', 'enterprise']) for (const suggestion of component[source + 'Suggestions']) {
-      const li = node('li'); li.dataset.changeSource = source;
-      li.append(node('p', suggestion.label));
+      const method = getChangeMethod(suggestion.id);
+      const li = node('li', undefined, 'native-change__suggestion');
+      Object.assign(li.dataset, { changeSource: source, changeMethod: suggestion.id });
+      li.append(node('h5', method.displayLabel ?? method.label), node('p', method.purpose));
+      const example = node('details', undefined, 'native-change__method-example');
+      const summary = node('summary', 'See an example');
+      summary.setAttribute('aria-label', `See an example of ${method.displayLabel ?? method.label}`);
+      const reading = node('div');
+      reading.append(node('p', method.useWhen), node('strong', method.question), node('p', method.example));
+      const inputs = node('ul'); method.bring.forEach(item => inputs.append(node('li', item)));
+      reading.append(node('h6', 'Bring to the discussion'), inputs, node('h6', 'Leave with'), node('p', method.leaveWith),
+        node('small', 'This example offers a starting point. Choose the question and evidence for your own initiative.'));
+      const onward = methodLink(method); if (onward) reading.append(onward);
+      example.append(summary, reading); li.append(example);
       const propose = button('Plan supporting work', 'suggest');
-      propose.setAttribute('aria-label', `Plan supporting work for ${suggestion.label}`);
+      propose.setAttribute('aria-label', `Plan supporting work for ${method.displayLabel ?? method.label}`);
       Object.assign(propose.dataset, { changeFramework: ref(framework), changeComponent: component.id, changeSource: source, changeSuggestion: suggestion.id });
-      li.append(propose); suggestions.append(li);
+      const actions = node('div', undefined, 'native-change__suggestion-actions'); actions.append(propose);
+      li.append(actions); suggestions.append(li);
     }
-    body.append(suggestions); details.append(summary, body); elements.matrix.append(details);
+    body.append(node('h5', 'Choose work to support this change'), suggestions); details.append(summary, body); elements.matrix.append(details);
     componentNodes.push({ framework, component, prefix, details, summary, linkedWork, suggestions });
   }
   const attentionNote = node('div', undefined, 'native-change__live-reading'); attentionNote.dataset.changeAttentionNote = ''; elements.mixer.before(attentionNote);
@@ -132,11 +162,26 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const track = node('div', undefined, 'native-change__fader-track'); track.append(range); group.append(track);
     ranges.set(key, range); field(group, key); group.append(node('p', channel.description, 'native-change__channel-description')); elements.mixer.append(group);
   }
-  const workHeading = node('h4', 'Plan a supporting session'), workNote = node('p'), workFields = node('div', undefined, 'native-change__work-fields');
-  const newWorkFields = node('div', undefined, 'native-change__work-fields');
-  field(workFields, 'proposal.mode'); const existingWork = field(workFields, 'proposal.existingWorkId');
-  for (const key of ['label', 'teamId', 'personIds', 'hoursPerSession', 'minutesPerSession', 'occurrences', 'funding']) field(newWorkFields, `proposal.${key}`);
-  workFields.append(newWorkFields, button('Set this work proposal aside', 'clear-work')); elements.work.append(workHeading, workNote, workFields);
+  const workHeading = node('h4', 'Plan a supporting session'), workNote = node('p'), workFields = node('div', undefined, 'native-support-proposal');
+  const modeFields = node('div', undefined, 'native-support-proposal__metadata'), newWorkFields = node('div', undefined, 'native-support-proposal__details');
+  field(modeFields, 'proposal.mode'); const existingWork = field(modeFields, 'proposal.existingWorkId');
+  const identityFields = node('div', undefined, 'native-support-proposal__metadata');
+  for (const key of ['label', 'teamId']) field(identityFields, `proposal.${key}`);
+  newWorkFields.append(identityFields); field(newWorkFields, 'proposal.personIds');
+  const time = createTimeControls(document, { idPrefix: `${instance}-proposal`, fieldPrefix: 'proposal.',
+    decorateField(input, key) { input.dataset.changeField = key; },
+    decorateStep(button, key, direction) { Object.assign(button.dataset, { changeAction: 'step', changeField: key, changeStep: String(direction) }); } });
+  for (const [key, control] of time.controls) controls.set(key, { ...control, metadata: CHANGE_FIELDS[key] });
+  newWorkFields.append(time.element); field(newWorkFields, 'proposal.funding');
+  const workActions = node('div', undefined, 'native-coordination__actions'); workActions.append(button('Set this work proposal aside', 'clear-work'));
+  workFields.append(modeFields, newWorkFields, workActions); elements.work.append(workHeading, workNote, workFields);
+  const minutesDial = mountMinutesDial({ ...time, read() {
+    const view = editor.read(), active = editing.read().active;
+    return { token: view.draft?.token, raw: view.draft?.raw['proposal.minutesPerSession'], hours: view.draft?.raw['proposal.hoursPerSession'], composing,
+      error: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession'),
+      enabled: !disposed && !composing && isActive() && view.status === 'editing' && view.draft?.raw['proposal.mode'] === 'new'
+        && active?.kind === 'change' && active.token === view.draft.token };
+  }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.minutesPerSession', value), epoch); } });
   const manual = node('div');
   manual.append(node('p', 'Choose a framework to examine its components. Keep the work already linked to each component as you compare frameworks. Apply accepts your selected framework, mappings, viewpoint, suggestions filter and attention together.'),
     node('p', 'A mapped component records planning intent. Linked work names who will carry it. Review the resulting work and evidence before judging readiness.'),
@@ -147,6 +192,12 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     for (const component of framework.components) details.append(node('h5', component.label), node('p', component.explanation));
     details.append(node('p', `${framework.id} · version ${framework.version}`)); manual.append(details);
   }
+  const methodSources = node('details'); methodSources.append(node('summary', 'Where the suggested methods come from'));
+  for (const method of listChangeMethods()) {
+    methodSources.append(node('h5', method.displayLabel ?? method.label), node('p', method.sourceNote));
+    const onward = methodLink(method); if (onward) methodSources.append(onward);
+  }
+  manual.append(methodSources);
   const attribution = node('p', `${FOUR_ACTIONS_METHOD.name} by ${FOUR_ACTIONS_METHOD.authors.join(' and ')}. ${FOUR_ACTIONS_METHOD.purpose} ${FOUR_ACTIONS_METHOD.adaptation} `);
   const link = node('a', 'Read the original method'); link.href = FOUR_ACTIONS_METHOD.url; attribution.append(link); manual.append(attribution); elements.manual.replaceChildren(manual);
 
@@ -189,6 +240,8 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         range.setAttribute('aria-valuetext', error ? 'Enter whole parts from 0 through 25 in the precise field' : `${value} attention parts`);
       }
     }
+    renderTimeReadout(time, raw ?? {}, { errors: view.draft?.errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
+    minutesDial.refresh();
     lastProjection = view.projection;
     for (const entry of componentNodes) {
       entry.details.hidden = entry.framework.id !== reading.framework.id;
@@ -233,7 +286,11 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     if (hasWork) {
       const [frameworkId, version] = raw['proposal.framework'].split('@');
       const suggestion = getChangeSuggestion(frameworkId, version, raw['proposal.component'], raw['proposal.source'], raw['proposal.suggestion']);
-      workNote.textContent = suggestion?.label ?? 'Review the selected suggestion against its framework.';
+      const method = suggestion && getChangeMethod(suggestion.id);
+      const component = listChangeFrameworks().find(row => row.id === frameworkId)?.components.find(row => row.id === raw['proposal.component']);
+      workNote.textContent = method
+        ? `${method.displayLabel ?? method.label} supports ${component?.label ?? 'this change'}. Intended result: ${method.leaveWith}`
+        : 'Review the selected suggestion against its framework.';
     } else workNote.textContent = 'Choose an authored suggestion in a component to plan one supporting session with your settings.';
     const preview = editable && !composing ? editor.preview(view.draft.token) : null;
     if (disposed) return view;
@@ -301,7 +358,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       const suggestion = getChangeSuggestion(frameworkId, version, control.dataset.changeComponent, control.dataset.changeSource, control.dataset.changeSuggestion);
       editFields([['proposal.framework', control.dataset.changeFramework], ['proposal.component', control.dataset.changeComponent],
         ['proposal.source', control.dataset.changeSource], ['proposal.suggestion', control.dataset.changeSuggestion],
-        ['proposal.label', suggestion.label], ['proposal.mode', 'new']]);
+        ['proposal.label', getChangeMethod(suggestion.id).sessionLabel], ['proposal.mode', 'new']]);
       controls.get('proposal.label').input.focus();
     }
   });
@@ -329,13 +386,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     changed(editor.setText(view.draft.token, key, event.key === 'Home' ? '0' : '25'), epoch);
   });
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
-  listen(elements.form, 'compositionstart', () => { composing = true; });
+  listen(elements.form, 'compositionstart', () => { composing = true; render(); });
   listen(elements.form, 'compositionend', event => { composing = false; input(event); });
-  function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; if (park && editing.read().active?.kind === 'change') editing.park(); }
+  function close({ park = true } = {}) { if (disposed) return; minutesDial.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'change') editing.park(); }
   function dispose() {
     if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true;
-    controls.clear(); ranges.clear(); INSTANCES.delete(root);
+    minutesDial.dispose(); controls.clear(); ranges.clear(); INSTANCES.delete(root);
   }
   render();
   const controller = Object.freeze({ open, refresh: render, close, resume: () => open('change', false), dispose });

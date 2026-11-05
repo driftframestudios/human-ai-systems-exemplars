@@ -3,6 +3,16 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/native-investment-studio/change-methods.mjs",
+      "projected_path": "collaboration/native-investment-studio/change-methods.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/time-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/time-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/investment-analysis/core.js",
       "projected_path": "collaboration/investment-analysis/core.js",
       "media_type": "text/javascript"

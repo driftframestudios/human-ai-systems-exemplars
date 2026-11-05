@@ -9,27 +9,18 @@ through Undo, saved edits, or a baseline comparison.
 
 ## Current state
 
-**The native showcase is growing from accepted source.** The relationship
-foundation and usability repair are integrated through
-[#675](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/675)
-and [#687](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/687)
-after independent engineering review.
-[#688](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/688)
-adds the service-request pilot, working minutes dial, and contextual session
-editor. [#689](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/689)
-connects ability and practice cards to their shared supporting work and repairs
-form-action spacing. [#690](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/690)
-adds retained framework mappings, interpretation and relative attention. The
-current Quality & recovery chapter receives that plan through #652.
+**The native showcase is growing from accepted source.** People, teams,
+working sessions, connections, abilities and practices share one plan. Change
+adds framework mappings, viewpoints and relative attention. The
+[Quality & recovery feature, #692](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/692)
+adds reference estimates, learning prompts and a recoverable response rehearsal.
 
-Purpose, people, teams, working sessions, roles, human review, connections,
-arrangement previews, and plan exchange have native owners. The complete
-showcase is still developing. The accepted
-[usability repair, #685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685)
-brings clearer controls, stable choices, prerequisite creation, useful collapsed
-previews, and ASCII zine styling to those working chapters. Its receiving PR owns
-the verification return. The session continues through the complete showcase;
-performance refinement follows that experience.
+The current [method and controls work, #691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691)
+explains suggested work and gives supporting-session proposals the familiar
+Hours, Minutes and Working sessions controls. Stable choices, nearby creation,
+useful collapsed previews and ASCII zine styling support these visitor tasks.
+The complete showcase continues through explicit timing, visual analysis,
+scenarios and final composition. Performance refinement follows that experience.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
 tracks the ASCII composition method's public Pages projection and the visual
@@ -55,8 +46,10 @@ its broader planning capabilities while the native experience grows.
    additional work with named people and funding. Apply accepts the whole proposal;
    Undo restores the preceding plan.
 6. Open **Change**. Compare frameworks and viewpoints, retain each component's
-   mapping, and adjust the attention faders. A suggested session previews its
-   people, time and funding before Apply. Investment compares these choices with
+   mapping, and adjust the attention faders. Open Vision to compare PODA, Impact
+   Map and Strategy Canvas. Read a method's purpose, expand its example, then
+   plan the work it should support. Hours, Minutes and Working sessions use the
+   same controls as Session settings. Investment compares accepted choices with
    your baseline as well as their monetary result.
 
 The starter names participants by their work and uses illustrative rates. It begins at $3,980;
@@ -130,7 +123,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652),
+source, the worktree, [#691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.

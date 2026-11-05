@@ -185,6 +185,13 @@ for (const engine of names) {
     assert.equal(await captured(page), false, 'pointer cancellation releases capture and preserves the exact precision text');
     await page.mouse.up();
 
+    await field(page, 'hoursPerSession').fill('24'); await field(page, 'minutesPerSession').fill('0');
+    await expect(knob(page)).toHaveAttribute('max', '0'); await beginTurn(page, 0);
+    await expect(field(page, 'minutesPerSession')).toHaveValue('0'); await expect(knob(page)).toBeEnabled();
+    await page.keyboard.press('Escape'); assert.equal(await captured(page), false); await page.mouse.up();
+    await expect(field(page, 'minutesPerSession')).toHaveValue('0'); await expect(field(page, 'minutesPerSession')).toHaveAttribute('aria-invalid', 'false');
+    await field(page, 'hoursPerSession').fill('0'); await field(page, 'minutesPerSession').fill('0030'); await expect(knob(page)).toHaveAttribute('max', '59');
+
     await knob(page).scrollIntoViewIfNeeded(); await knob(page).focus();
     const center = await knob(page).boundingBox(), scrollBefore = await page.evaluate(() => scrollY);
     await page.mouse.move(center.x + center.width / 2, center.y + center.height / 2);

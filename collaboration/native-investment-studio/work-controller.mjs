@@ -1,3 +1,4 @@
+import { mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
 import { describeAssuranceReference } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
@@ -48,7 +49,6 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const knob = dial?.querySelector('[data-native-minutes-knob]');
   const knobNote = root.querySelector('[data-native-knob-note]');
   const knobHelp = root.querySelector('#native-minutes-knob-help');
-  const forcedColors = knob && document.defaultView.matchMedia('(forced-colors: active)');
   const cleanup = [];
   let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
@@ -56,7 +56,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   let renderedSelection = undefined, renderedDraftToken = null, renderedTeam = undefined;
   let composing = false, disposed = false, acknowledgedOpen = false, generation = 0;
   let retiredToken = null, membersTarget = null, memberOrder = [];
-  let knobGesture = null;
+  let minutesDial;
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -77,80 +77,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     finally { releaseRetiredLease(); }
   }
   function announce(message) { if (!disposed) elements.status.textContent = message; }
-  // The native range owns keyboard/AT semantics. This adapter supplies only
-  // circular pointer input; precision text and the shared draft own the value.
-  function knobView() {
+  function dialState() {
     const view = editor.read(), active = editing.read().active;
-    return !disposed && !composing && isActive() && elements.configure.open && !knob?.disabled
-      && view.status === 'editing' && active?.kind === 'session' && active.token === view.draft?.token ? view : null;
-  }
-  function setKnobValue(value, token = knobView()?.draft.token) {
-    const view = knobView();
-    if (!view || view.draft.token !== token || view.draft.raw.minutesPerSession === String(value)) return;
-    const epoch = ++generation;
-    changed(operate('setText', token, 'minutesPerSession', String(value)), epoch);
-  }
-  function finishKnobGesture(restore = false) {
-    const gesture = knobGesture;
-    if (!gesture) return;
-    knobGesture = null;
-    delete dial.dataset.dragging;
-    if (knob.hasPointerCapture(gesture.pointerId)) knob.releasePointerCapture(gesture.pointerId);
-    if (restore) setKnobValue(gesture.raw, gesture.token);
-  }
-  function renderKnob(view, raw) {
-    if (!knob) return;
-    const text = raw.minutesPerSession;
-    const valid = !composing && /^[0-9]+$/.test(text ?? '') && Number(text) <= 59
-      && !view.draft?.errors.some(error => error.path === 'draft.minutesPerSession');
-    const active = editing.read().active;
-    const ready = valid && view.status === 'editing' && active?.kind === 'session'
-      && active.token === view.draft?.token && isActive();
-    if (knobGesture && (!ready || knobGesture.token !== view.draft?.token)) finishKnobGesture();
-    knob.disabled = !ready;
-    dial.dataset.valueState = valid ? 'ready' : 'unavailable';
-    if (valid) {
-      knob.value = String(Number(text));
-      knob.setAttribute('aria-valuetext', `${Number(text)} minutes per session`);
-      dial.style.setProperty('--native-knob-angle', `${-135 + Number(text) * 270 / 59}deg`);
-    } else knob.setAttribute('aria-valuetext', 'Enter minutes in the precision field to use the dial');
-    if (knobNote) {
-      knobNote.hidden = valid;
-      knobNote.textContent = 'Enter 0–59 in Minutes to use the dial.';
-    }
-  }
-  function pointerAngle(event) {
-    const box = knob.getBoundingClientRect();
-    const x = event.clientX - box.left - box.width / 2, y = event.clientY - box.top - box.height / 2;
-    if (Math.hypot(x, y) < 4) return null;
-    const angle = Math.atan2(y, x) * 180 / Math.PI + 90;
-    return angle > 180 ? angle - 360 : angle;
-  }
-  function turnKnob(event) {
-    const gesture = knobGesture;
-    if (!gesture || event.pointerId !== gesture.pointerId) return;
-    if (knobView()?.draft.token !== gesture.token) { finishKnobGesture(); return; }
-    const angle = pointerAngle(event);
-    if (angle === null) return;
-    // Follow the shortest angular step and stop at each end of the 270° arc.
-    // Crossing the lower gap therefore keeps the endpoint instead of wrapping.
-    const delta = ((angle - gesture.lastAngle + 540) % 360) - 180;
-    gesture.angle = Math.min(135, Math.max(-135, gesture.angle + delta));
-    gesture.lastAngle = angle;
-    setKnobValue(Math.round((gesture.angle + 135) * 59 / 270), gesture.token);
-  }
-  function startKnob(event) {
-    if (forcedColors.matches) return;
-    const view = knobView();
-    if (!view || knobGesture || !event.isPrimary || event.button !== 0) return;
-    event.preventDefault();
-    knob.focus({ preventScroll: true });
-    const angle = pointerAngle(event) ?? -135 + Number(view.draft.raw.minutesPerSession) * 270 / 59;
-    knob.setPointerCapture(event.pointerId);
-    knobGesture = { pointerId: event.pointerId, token: view.draft.token, raw: view.draft.raw.minutesPerSession,
-      lastAngle: angle, angle: Math.min(135, Math.max(-135, angle)) };
-    dial.dataset.dragging = 'true';
-    setKnobValue(Math.round((knobGesture.angle + 135) * 59 / 270), view.draft.token);
+    return { token: view.draft?.token, raw: view.draft?.raw.minutesPerSession ?? inputs.minutesPerSession.value, hours: view.draft?.raw.hoursPerSession ?? inputs.hoursPerSession.value,
+      composing, error: view.draft?.errors.some(error => error.path === 'draft.minutesPerSession'),
+      enabled: !disposed && !composing && isActive() && elements.configure.open && view.status === 'editing'
+        && active?.kind === 'session' && active.token === view.draft?.token };
   }
   function fallback() { return works.has(lastAcceptedId) ? lastAcceptedId : projection.state.work[0]?.id ?? null; }
   function option(value, label, disabled = false) {
@@ -312,11 +244,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.members.setAttribute('aria-invalid', String(Boolean(membershipError)));
     if (!removing) renderMembers(raw.personIds ?? [], raw.teamId ?? '');
     elements.pauseNote.hidden = raw.status !== 'paused';
-    for (const [field, output] of [['hoursPerSession', elements.durationHours], ['minutesPerSession', elements.durationMinutes]]) {
-      const value = raw[field];
-      output.textContent = composing || !/^[0-9]+$/.test(value ?? '') || draft?.errors.some(error => error.path === `draft.${field}`)
-        ? '—' : String(Number(value)).padStart(2, '0');
-    }
+    renderTimeReadout({ outputs: { hours: elements.durationHours, minutes: elements.durationMinutes } }, raw, { errors: draft?.errors, composing });
     const preview = draft && !composing && view.status === 'editing' ? operate('preview', draft.token) : null;
     if (!owns(epoch)) return view;
     if (preview) {
@@ -333,7 +261,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       (errorField === 'personIds' ? elements.members : inputs[errorField]).setAttribute('aria-invalid', 'true');
     }
     elements.generalError.textContent = error && !draft?.errors.length && !errorField ? error.message : '';
-    renderKnob(view, raw);
+    minutesDial.refresh();
     renderDependencies(error);
     elements.preview.hidden = removing;
     const result = preview?.ok ? preview.projection.result : !draft ? projection.result : null;
@@ -371,7 +299,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function open(target, focus = true) {
     if (disposed) return;
-    finishKnobGesture();
+    minutesDial?.release();
     const epoch = ++generation;
     onBegin();
     if (!owns(epoch)) return;
@@ -383,7 +311,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function create() {
     if (disposed) return;
-    finishKnobGesture();
+    minutesDial?.release();
     const epoch = ++generation;
     onBegin();
     if (!owns(epoch)) return;
@@ -391,7 +319,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function close({ park = true } = {}) {
     if (disposed) return;
-    finishKnobGesture();
+    minutesDial?.release();
     const epoch = ++generation; acknowledgedOpen = false;
     if (park && editing.read().active?.kind === 'session') editing.park();
     if (owns(epoch)) elements.configure.open = false;
@@ -407,7 +335,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function settle(action) {
     if (disposed) return;
-    finishKnobGesture();
+    minutesDial?.release();
     const view = editor.read();
     if (!view.draft) return;
     if (composing && action === 'apply') { announce('Finish entering the value, then apply.'); return; }
@@ -471,7 +399,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function edit(event) {
     const field = event.target.name;
     if (disposed || inputs[field] !== event.target) return;
-    finishKnobGesture();
+    minutesDial?.release();
     const view = editor.read();
     if (!view.draft) return;
     const epoch = ++generation;
@@ -500,7 +428,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function dispose() {
     if (disposed) return;
-    finishKnobGesture();
+    minutesDial?.release();
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -510,9 +438,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.fieldset.disabled = true; elements.configure.open = false;
     elements.add.disabled = true; elements.remove.disabled = true; elements.select.disabled = true;
     elements.toolbar.hidden = true;
-    if (dial) dial.hidden = true;
-    if (knobHelp) knobHelp.hidden = true;
-    if (knobNote) knobNote.hidden = true;
+    minutesDial?.dispose();
     delete root.dataset.sessionReady; INSTANCES.delete(root);
   }
   const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close,
@@ -524,25 +450,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       else render();
     }, dispose });
   try {
-    if (knob) {
-      listen(knob, 'input', () => setKnobValue(knob.value));
-      listen(knob, 'pointerdown', startKnob);
-      listen(knob, 'pointermove', turnKnob);
-      listen(knob, 'pointerup', event => {
-        if (knobGesture?.pointerId !== event.pointerId) return;
-        turnKnob(event); finishKnobGesture();
-      });
-      listen(knob, 'pointercancel', event => { if (knobGesture?.pointerId === event.pointerId) finishKnobGesture(true); });
-      listen(knob, 'lostpointercapture', event => { if (knobGesture?.pointerId === event.pointerId) finishKnobGesture(true); });
-      listen(knob, 'keydown', event => {
-        if (event.key === 'Escape' && knobGesture) { event.preventDefault(); finishKnobGesture(true); }
-        else if (knobGesture) finishKnobGesture();
-      });
-      listen(document.defaultView, 'blur', () => finishKnobGesture(true));
-      listen(forcedColors, 'change', () => finishKnobGesture(true));
-      dial.hidden = false;
-      if (knobHelp) knobHelp.hidden = false;
-    }
+    minutesDial = mountMinutesDial({ dial, knob, note: knobNote, help: knobHelp, read: dialState,
+      write(token, value) { const epoch = ++generation; changed(operate('setText', token, 'minutesPerSession', value), epoch); } });
     for (const [field, metadata] of Object.entries(SESSION_FORMS['work.create'].fields)) {
       if (inputs[field]?.tagName === 'INPUT') inputs[field].maxLength = metadata.maxLength;
     }

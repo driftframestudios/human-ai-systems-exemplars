@@ -64,10 +64,10 @@ for (const engine of names) {
   test(`${engine}: framework drafts retain mappings and reset keeps support, viewpoint and accepted investment`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'change').click();
-    const urgency = component(page, 'kotter', 'urgency'); await urgency.locator('summary').click();
+    const urgency = component(page, 'kotter', 'urgency'); await urgency.locator(':scope > summary').click();
     await field(page, 'map.kotter.urgency.status').selectOption('look'); await check(page, 'map.kotter.urgency.workIds', 'review').check();
     await field(page, 'framework').selectOption('adkar@1.0.0');
-    await component(page, 'adkar', 'awareness').locator('summary').click(); await field(page, 'map.adkar.awareness.status').selectOption('partial');
+    await component(page, 'adkar', 'awareness').locator(':scope > summary').click(); await field(page, 'map.adkar.awareness.status').selectOption('partial');
     await field(page, 'lens').selectOption('people@1.0.0'); await field(page, 'sourceFilter').selectOption('enterprise');
     await expect(panel(page).locator('[data-change-interpretation]')).toContainText('Who gains ability');
     const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]');
@@ -123,7 +123,7 @@ for (const engine of names) {
 
   test(`${engine}: a configured supporting session applies with the settings, while stale raw attention remains recoverable`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
-    const urgency = component(page, 'kotter', 'urgency'); await urgency.locator('summary').click();
+    const urgency = component(page, 'kotter', 'urgency'); await urgency.locator(':scope > summary').click();
     await field(page, 'sourceFilter').selectOption('core');
     await urgency.locator('[data-change-action="suggest"][data-change-source="core"]').first().click();
     await field(page, 'proposal.label').fill('Pilot discussion');
@@ -137,11 +137,19 @@ for (const engine of names) {
     const beforeProposal = await bytes(page);
     await field(page, 'proposal.teamId').selectOption('delivery');
     await check(page, 'proposal.personIds', 'product-one').check();
+    const proposalDial = panel(page).locator('[data-native-minutes-knob]');
+    await expect(panel(page).getByLabel('Working sessions', { exact: true })).toHaveValue('1');
+    await proposalDial.focus(); await page.keyboard.press('Home'); await page.keyboard.press('ArrowUp');
+    await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('1'); await page.keyboard.press('End');
+    await panel(page).locator('[data-change-action="step"][data-change-field="proposal.minutesPerSession"][data-change-step="1"]').click();
+    await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('1'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('0');
+    await expect(proposalDial).toHaveValue('0');
     await field(page, 'proposal.hoursPerSession').fill('1'); await field(page, 'proposal.minutesPerSession').fill('30');
+    await expect(proposalDial).toHaveValue('30');
     await field(page, 'proposal.funding').selectOption('additional');
     await expect(panel(page).locator('[data-change-preview]')).toContainText('Proposed investment: $16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00');
-    await expect(urgency.locator('summary')).toContainText('Pilot discussion');
+    await expect(urgency.locator(':scope > summary')).toContainText('Pilot discussion');
     await urgency.locator('[data-change-action="work"][data-change-work="change-work-1"]').click();
     await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
     await root(page).locator('[data-native-return-action]').click(); await expect(panel(page)).toBeVisible();
@@ -166,9 +174,61 @@ for (const engine of names) {
     await page.emulateMedia({ forcedColors: 'active' });
     const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]'); await fader.focus(); await page.keyboard.press('ArrowDown');
     await expect(field(page, 'attention.urgency')).toHaveValue('24');
-    await panel(page).screenshot({ path: resolve(captures, `${engine}-narrow-forced.png`) });
+    await panel(page).locator('[data-change-mixer]').screenshot({ path: resolve(captures, `${engine}-narrow-forced.png`) });
     const accepted = await bytes(page); await page.evaluate(() => window.changeFixture.controller.dispose());
     await field(page, 'attention.urgency').evaluate(input => { input.value = '5'; input.dispatchEvent(new Event('input', { bubbles: true })); });
     assert.equal(await bytes(page), accepted); await expect(field(page, 'attention.urgency')).toBeDisabled();
   });
+  test(`${engine}: method examples explain a supporting session before its proposal changes investment`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const vision = component(page, 'kotter', 'vision'); await vision.locator(':scope > summary').click();
+    const method = id => vision.locator(`[data-change-method="${id}"]`);
+    await expect(method('poda')).toContainText('what the team needs to learn');
+    await expect(method('impact-map')).toContainText('people affected');
+    await expect(method('strategy-canvas')).toContainText('current support');
+    const disclosure = method('poda').locator('details > summary');
+    await disclosure.focus(); await page.keyboard.press('Space');
+    await expect(method('poda').locator('details')).toHaveAttribute('open', '');
+    await expect(method('poda')).toContainText('Discoverable');
+    await expect(method('poda').getByRole('link')).toHaveAttribute('href', /poda\.html#poda-prototype-title$/);
+    await expect(method('poda').getByRole('link')).toHaveAttribute('target', '_blank');
+    assert.equal(await bytes(page), initial, 'reading a method preserves the accepted plan');
+    await disclosure.click();
+    for (const width of [1280, 1920]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const boxes = await vision.locator('[data-change-method]:visible').evaluateAll(cards => cards.map(card => {
+        const rect = card.getBoundingClientRect(); return { x: rect.x, y: rect.y, right: rect.right, width: rect.width };
+      }));
+      assert.ok(boxes[1].x > boxes[0].x && Math.abs(boxes[1].y - boxes[0].y) < 1, 'methods share the available row');
+      assert.ok(boxes.every(box => box.x >= 0 && box.right <= width && box.width >= 280), JSON.stringify(boxes));
+      await vision.screenshot({ path: resolve(captures, `${engine}-methods-${width}.png`) });
+    }
+    await method('poda').getByRole('button', { name: 'Plan supporting work for PODA', exact: true }).click();
+    await expect(field(page, 'proposal.label')).toHaveValue('Clarify purpose and next learning');
+    await expect(panel(page).locator('[data-change-work]')).toContainText('PODA supports Vision');
+    await field(page, 'proposal.teamId').selectOption('delivery');
+    await check(page, 'proposal.personIds', 'product-one').check();
+    await field(page, 'proposal.minutesPerSession').fill('45');
+    await field(page, 'proposal.occurrences').fill('2');
+    await field(page, 'proposal.funding').selectOption('additional');
+    await expect(panel(page).locator('[data-change-preview]')).toContainText('$16,150.00');
+    await method('strategy-canvas').locator('details > summary').click();
+    await expect(method('strategy-canvas')).toContainText('good-enough');
+    await field(page, 'sourceFilter').selectOption('enterprise');
+    await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('45');
+    assert.equal(await bytes(page), initial, 'explanations and filters leave the proposed work unaccepted');
+    await field(page, 'sourceFilter').selectOption('core');
+    await page.setViewportSize({ width: 320, height: 1000 });
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await method('poda').scrollIntoViewIfNeeded();
+    const narrow = await vision.locator('[data-change-method]:visible').evaluateAll(cards => cards.map(card => {
+      const rect = card.getBoundingClientRect(); return { x: rect.x, right: rect.right, width: rect.width };
+    }));
+    assert.ok(narrow.every(box => box.x >= -.5 && box.right <= 320.5 && box.width > 0), JSON.stringify(narrow));
+    await method('poda').screenshot({ path: resolve(captures, `${engine}-method-narrow.png`) });
+    await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00');
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    assert.equal(await bytes(page), initial, 'one Undo restores the exact preceding accepted plan');
+  });
+
 }

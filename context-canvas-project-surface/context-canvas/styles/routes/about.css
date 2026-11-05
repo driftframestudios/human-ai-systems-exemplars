@@ -2522,6 +2522,23 @@ p#on-dark-iron-ore {
 .native-change__component > summary span { display: block; font-size: .875rem; font-weight: 400; margin-block-start: .25rem; }
 .native-change__component-body { display: grid; gap: 1rem; padding: clamp(.5rem, 2vw, 1rem); }
 .native-change__component-body p { margin: 0; }
+.native-change__component-introduction { display: grid; gap: .5rem; }
+.native-change__component-settings { display: grid; align-items: start; gap: 1rem; min-inline-size: 0; }
+.native-change__suggestions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(21rem, 100%), 1fr)); align-items: start; gap: 1rem; padding: 0; margin: 0; list-style: none; }
+.native-change__suggestion { display: grid; align-content: start; gap: .85rem; min-inline-size: 0; margin: 0; padding: 1rem; color: var(--native-text); background: var(--about-soft-apricot); border: .0625rem solid var(--native-rule); border-block-start: .25rem solid var(--about-deep-teal); }
+.about-page .native-change__suggestion h5 { margin: 0; font: 700 1.1rem/1.35 system-ui, sans-serif; color: var(--native-text); }
+.native-change__method-example { min-inline-size: 0; border-block: .0625rem dashed var(--native-rule); }
+.native-coordination .native-change__method-example > summary { padding: .65rem .25rem; cursor: pointer; font-weight: 650; border: 0; background: transparent; box-shadow: none; }
+.native-change__method-example > div { display: grid; gap: .75rem; padding: .5rem .25rem 1rem; }
+.native-change__method-example h6 { margin: .3rem 0 0; font: 700 .95rem/1.4 system-ui, sans-serif; }
+.native-change__method-example ul { padding-inline-start: 1.3rem; margin: 0; }
+.native-change__method-example li { margin-block: .2rem; }
+.native-change__method-example small { font-size: .85rem; line-height: 1.5; }
+.native-change__suggestion-actions { display: flex; flex-wrap: wrap; gap: .75rem; padding-block-end: .3rem; }
+.native-change__suggestion-actions button { inline-size: 100%; }
+@container native-change (min-width: 42rem) {
+    .native-change__component-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .native-change__choices { display: grid; gap: .6rem; padding: 0; list-style: none; }
 .native-change__choices label { display: flex; align-items: start; gap: .65rem; min-block-size: 2.75rem; padding: .55rem; border: .0625rem solid var(--native-rule); }
 .native-change input[type='checkbox'] { flex: 0 0 1.2rem; inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; padding: 0; margin-block-start: .2rem; accent-color: var(--about-deep-teal); }
@@ -2836,4 +2853,39 @@ p#on-dark-iron-ore {
     .native-change__selectors select option { padding: .65rem .85rem; white-space: normal; }
     .native-change__selectors select option:checked { background: var(--native-signal); font-weight: 700; }
     .native-change__selectors select option:hover { outline: .125rem solid var(--native-rule); outline-offset: -.125rem; }
+}
+
+/* Shared session-time controls: Session's static form and supporting proposals. */
+.native-time-controls { display: grid; gap: 1rem; min-inline-size: 0; }
+.native-time-controls .native-time__overview { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: .75rem; }
+.native-time-controls .native-time__overview > * { min-inline-size: 0; }
+.native-time-controls .native-minutes-control { inline-size: 100%; max-inline-size: 9rem; }
+.native-time-controls .native-knob { inline-size: min(100%, 7.5rem); }
+.native-time-controls .native-coordination__control { grid-template-columns: minmax(0, 1fr); }
+.native-time-controls .native-time__overview > .native-coordination__control-title { grid-column: 1 / -1; margin: 0; }
+.native-time-controls .native-time__overview > .native-minutes-control { grid-column: auto; grid-row: auto; justify-self: start; }
+.native-time-controls .native-time__overview > .native-knob__help { grid-column: auto; grid-row: auto; max-inline-size: 40ch; margin: 0 !important; }
+.native-time-controls .native-time__quantities { container-type: normal; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 1rem; margin: 0; }
+.native-time-controls .native-coordination__control--count { grid-column: auto; }
+.native-time-controls .native-time__feedback { grid-column: 1 / -1; }
+.native-time-controls .native-time__feedback:has(> :not([hidden]):not(:empty)) { padding-block-start: .2rem; }
+.native-time-controls .native-coordination__stepper { --native-input-measure: calc(5ch + 1.25rem); grid-template-columns: repeat(2, minmax(0, 1fr)); inline-size: min(100%, calc(5.5rem + .35rem)); }
+.native-time-controls .native-coordination__stepper input { inline-size: min(var(--native-input-measure), 100%); }
+.native-support-proposal { display: grid; gap: 1.25rem; min-inline-size: 0; }
+.native-support-proposal__metadata { display: grid; align-items: start; gap: 1.25rem; min-inline-size: 0; }
+.native-support-proposal__details { display: grid; gap: 1.25rem; min-inline-size: 0; }
+.native-support-proposal > *, .native-support-proposal__metadata > *, .native-support-proposal__details > * { min-inline-size: 0; }
+.native-support-proposal .native-time-controls { padding-block: 1rem; border-block: .0625rem dashed var(--native-rule); }
+@container (min-width: 32rem) {
+    .native-support-proposal__metadata { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .native-support-proposal .native-change__choices, .native-support-proposal .native-assurance__choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container (min-width: 26rem) {
+    .native-time-controls .native-time__overview { grid-template-columns: minmax(0, 1fr) 8.5rem; }
+    .native-time-controls .native-time__overview > .native-minutes-control { grid-column: 2; grid-row: 2 / span 2; justify-self: center; }
+    .native-time-controls .native-time__overview > .native-knob__help { grid-column: 1; grid-row: 3; }
+    .native-time-controls .native-time__quantities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@container (min-width: 48rem) {
+    .native-support-proposal .native-time-controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 1.5rem; }
 }
