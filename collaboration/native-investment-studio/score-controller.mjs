@@ -99,7 +99,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   inspector.append(inspectorSummary, rail, form);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   const manual = node('details', undefined, 'native-score__manual'); manual.append(node('summary', 'How time, effort and decisions relate'),
-    node('p', 'Place sessions in elapsed hours and minutes from the beginning of this plan. Time between session starts sets the repeat interval. Elapsed time continues through off-hours; availability describes when a person can join. Funded time describes how much effort is already paid for.'),
+    node('p', 'Schedule sessions in elapsed hours and minutes from the start of this plan. Choose when the first session starts and, for repeated sessions, the time from one start to the next. The session count sets how many run. Elapsed time includes off-hours; availability describes when a person can join. Funded time describes how much effort is already paid for.'),
     node('p', 'Waiting occupies elapsed time and carries no participant effort. Model response work as a session when people must spend time on it. A dependency connects the last finish of earlier work to the first start of later work.'),
     node('p', 'Next and Options retain proposed work separately. A modeled Proceed decision makes a linked proposal eligible; select Add to planned work and Apply to fund it. Real decisions remain with the named people and their evidence.'),
     node('p', 'The quality reference uses 80 hours per sprint and 520 hours per quarter. Those staffing reference conversions are separate from elapsed minutes in this horizon. Changing the view scale changes only what you see.'));
@@ -160,12 +160,16 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       group.append(node('h5', metadata.label), reading, edit);
     } else group.append(caption, input);
     if (metadata.numeric) {
-      const steps = node('div', undefined, 'native-score__steps');
+      const steps = node('div', undefined, 'native-coordination__stepper native-score__steps');
       for (const direction of [-1, 1]) { const step = button(direction < 0 ? '−' : '+', 'step'); Object.assign(step.dataset, { scoreField: key, scoreStep: String(direction) }); step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${metadata.label.toLowerCase()}`); steps.append(step); }
       steps.insertBefore(input, steps.lastElementChild); group.append(steps);
       if (metadata.time) {
         const hint = node('small', '', 'native-score__time-hint'); hint.id = `${input.id}-time-hint`;
-        hint.textContent = 'Enter 11h30m or 690 minutes.';
+        hint.textContent = /^(work|proposal)\.[^.]+\.startMinute$/u.test(key)
+          ? 'Time after the start of this plan. 0m starts immediately. Enter 11h30m or 690 minutes.'
+          : /^(work|proposal)\.[^.]+\.repeatEveryMinutes$/u.test(key)
+            ? 'Measure from one session start to the next. The session count sets how many run. Enter 1h or 60 minutes.'
+            : 'Enter 11h30m or 690 minutes.';
         input.setAttribute('aria-describedby', `${hint.id} ${message.id}`); group.append(hint);
       }
     }
@@ -241,7 +245,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
             : selected.kind === 'wait' ? 'Waiting extends elapsed time. Add a working session when people must spend time responding.'
               : selected.kind === 'dependency' ? 'The later session starts after every occurrence of the earlier work and any waiting minutes. A linked paused connection suspends this obligation.'
                 : 'Select a record to inspect it, or arrange timing to try a change.';
-    if (['work', 'person', 'wait', 'window', 'proposal'].includes(selected.kind) && !creatingDecision) detail.textContent += ' Elapsed from the beginning of this plan.';
+    if (['work', 'person', 'wait', 'window', 'proposal'].includes(selected.kind) && !creatingDecision) detail.textContent += ' The schedule uses elapsed time from the start of this plan, including off-hours.';
     let proposed = null;
     if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
