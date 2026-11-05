@@ -303,6 +303,9 @@
       "kind": "node-test",
       "members": [
         "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/capabilities.test.mjs",
+        "tests/native-investment-studio/capability-draft.test.mjs",
+        "tests/native-investment-studio/capability-proposals.test.mjs",
         "tests/native-investment-studio/command-draft.test.mjs",
         "tests/native-investment-studio/commands.test.mjs",
         "tests/native-investment-studio/connection-draft.test.mjs",
@@ -2988,6 +2991,28 @@
       "aliases": [
         "test:native-investment-studio:connection-template-browser"
       ]
+    },
+    {
+      "id": "browser.native-investment-studio.capabilities",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/capability.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Ability and practice cards, shared supporting work, atomic proposals, reverse and beside reading, saved drafts, observation records and cross-engine recovery.",
+      "aliases": [
+        "test:native-investment-studio:capability-browser"
+      ]
     }
   ],
   "bundles": [
@@ -3116,7 +3141,8 @@
         "browser.native-investment-studio.assembly",
         "browser.native-investment-studio.team-assembly",
         "browser.native-investment-studio.connections",
-        "browser.native-investment-studio.connection-templates"
+        "browser.native-investment-studio.connection-templates",
+        "browser.native-investment-studio.capabilities"
       ]
     },
     {
@@ -3492,6 +3518,9 @@
         ],
         "test:native-investment-studio:source": [
           "tests/native-investment-studio/assembly-editing.test.mjs",
+          "tests/native-investment-studio/capabilities.test.mjs",
+          "tests/native-investment-studio/capability-draft.test.mjs",
+          "tests/native-investment-studio/capability-proposals.test.mjs",
           "tests/native-investment-studio/command-draft.test.mjs",
           "tests/native-investment-studio/commands.test.mjs",
           "tests/native-investment-studio/connection-draft.test.mjs",
@@ -3606,6 +3635,9 @@
         ],
         "test:native-investment-studio:connection-template-browser": [
           "tests/native-investment-studio/connection-template.browser.mjs"
+        ],
+        "test:native-investment-studio:capability-browser": [
+          "tests/native-investment-studio/capability.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

@@ -196,8 +196,8 @@ for (const engine of names) {
     await investment(page).locator('[data-investment-preset]').selectOption('service-request-pilot');
     await action(page, 'preset').click();
     const changes = investment(page).locator('[data-investment-changes]');
-    await expect(changes).toContainText('Contribution added: Cross-source synthesis · Leo reviews · Maya decides.');
-    await expect(changes).toContainText('Connection added: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Noor receives.');
+    await expect(changes).toContainText('Contribution added: Cross-source synthesis · Researcher reviews · Product lead decides.');
+    await expect(changes).toContainText('Connection added: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Quality reviewer receives.');
     assert.equal(await bytes(page), before);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$3,980.00');
@@ -205,14 +205,14 @@ for (const engine of names) {
     revised.contributions[0].receiverPersonId = 'noor';
     revised.connections.find(row => row.id === 'readiness').status = 'paused';
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'review-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(revised)) });
-    await expect(changes).toContainText('Contribution changed: Cross-source synthesis · Leo reviews · Maya decides → Cross-source synthesis · Noor reviews · Maya decides (receiving person).');
-    await expect(changes).toContainText('Connection changed: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Noor receives (connection status).');
+    await expect(changes).toContainText('Contribution changed: Cross-source synthesis · Researcher reviews · Product lead decides → Cross-source synthesis · Quality reviewer reviews · Product lead decides (receiving person).');
+    await expect(changes).toContainText('Connection changed: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Quality reviewer receives (connection status).');
     assert.equal(await bytes(page), pilot);
     await action(page, 'clear').click();
     await investment(page).locator('[data-investment-preset]').selectOption('shared-working-sessions');
     await action(page, 'preset').click();
-    await expect(changes).toContainText('Contribution removed: Cross-source synthesis · Leo reviews · Maya decides.');
-    await expect(changes).toContainText('Connection removed: Readiness findings and rollout conditions · Quality and Operations → Product and Research · Maya receives.');
+    await expect(changes).toContainText('Contribution removed: Cross-source synthesis · Researcher reviews · Product lead decides.');
+    await expect(changes).toContainText('Connection removed: Readiness findings and rollout conditions · Quality and Operations → Product and Research · Product lead receives.');
     await expect(total(page)).toHaveText('$3,980.00');
     await action(page, 'clear').click();
     await action(page, 'undo').click();
@@ -306,18 +306,21 @@ for (const engine of names) {
     const initial = await bytes(page);
     const legacy = JSON.parse(initial);
     delete legacy.purpose; delete legacy.contributions; delete legacy.connections;
+    delete legacy.abilities; delete legacy.capabilityEvidence;
+    legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
+      teamId: row.teamId, workIds: [...new Set(row.supportBindings.flatMap(binding => binding.workIds))] }));
     for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
     for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
     legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.3.0.');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.4.0.');
     assert.equal(await bytes(page), initial);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
-    assert.equal(admitted.schemaVersion, '0.3.0');
+    assert.equal(admitted.schemaVersion, '0.4.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
     await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');

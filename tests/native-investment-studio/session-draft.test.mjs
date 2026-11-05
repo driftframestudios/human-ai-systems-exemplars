@@ -147,7 +147,7 @@ test('session removal preserves bounded practice references and releases only an
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   let token = open(editor, studio, 'work.remove');
   const result = rejected(editor.preview(token), 'dependencies');
-  assert.deepEqual(result.error.references, [{ collection: 'practices', id: 'shared-expectations', field: 'workIds' }]);
+  assert.deepEqual(result.error.references, [{ collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' }]);
   rejected(editor.apply(token), 'dependencies'); assert.strictEqual(studio.read(), before);
   assert.equal(editor.cancel(token).ok, true);
   token = open(editor, studio, 'work.create', 'extra'); fill(editor, token); editor.apply(token);

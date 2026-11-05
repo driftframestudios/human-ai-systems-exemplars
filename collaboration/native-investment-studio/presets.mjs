@@ -28,17 +28,17 @@ export function createShowcasePlan() {
     changedAbility: 'Operations staff can route a service request, see who owns it, and recover a missed handoff.',
     affectedPopulation: 'A synthetic Product, Engineering, and Quality / Operations pilot.',
     observationSignal: 'Walk through a routine request and a missed handoff with the people who will operate the pilot.',
-    accountableOwner: 'Maya decides pilot scope and readiness after the human reviews.',
-    reviewBoundary: 'Leo checks source evidence; Ari checks behavior; Noor reviews exception handling; Sam checks the operating instructions.',
+    accountableOwner: 'The product lead decides pilot scope and readiness after the human reviews.',
+    reviewBoundary: 'The researcher checks source evidence; the engineering lead checks behavior; the quality reviewer checks exception handling; the operations specialist checks the operating instructions.',
     openConditions: 'Rates and funded time are illustrative. Timing remains unscheduled. Readiness depends on the observed walkthrough.',
   };
   plan.people = [
-    ['maya', 'Maya', 'product-program', 12000, 240, 'decision-owner', 'approves'],
-    ['leo', 'Leo', 'design-research', 10000, 240, 'individual-contributor', 'recommends'],
-    ['ari', 'Ari', 'engineering', 14000, 360, 'player-coach', 'recommends'],
-    ['jules', 'Jules', 'engineering', 12000, 360, 'individual-contributor', 'operates'],
-    ['noor', 'Noor', 'quality-regulatory', 11000, 120, 'domain-reviewer', 'recommends'],
-    ['sam', 'Sam', 'ops-support', 9000, 120, 'domain-reviewer', 'operates'],
+    ['maya', 'Product lead', 'product-program', 12000, 240, 'decision-owner', 'approves'],
+    ['leo', 'Researcher', 'design-research', 10000, 240, 'individual-contributor', 'recommends'],
+    ['ari', 'Engineering lead', 'engineering', 14000, 360, 'player-coach', 'recommends'],
+    ['jules', 'Engineer', 'engineering', 12000, 360, 'individual-contributor', 'operates'],
+    ['noor', 'Quality reviewer', 'quality-regulatory', 11000, 120, 'domain-reviewer', 'recommends'],
+    ['sam', 'Operations specialist', 'ops-support', 9000, 120, 'domain-reviewer', 'operates'],
   ].map(([id, label, functionId, rateCentsPerHour, fundedMinutes, postureId, decisionId]) => ({
     id, label, rateCentsPerHour, fundedMinutes,
     role: { ...emptyRole(), functionId, postureId, decisionId }, lifecycle: 'active',
@@ -58,14 +58,20 @@ export function createShowcasePlan() {
     status: 'planned', timing: null, lifecycle: 'active',
   }));
   plan.practices = [
-    { id: 'shared-expectations', practiceId: 'expectation', teamId: 'engineering', workIds: ['review'] },
-    { id: 'readiness-evidence', practiceId: 'assurance', teamId: 'operations', workIds: ['review', 'rehearsal'] },
+    { id: 'shared-expectations', definitionId: 'expectation', definitionVersion: '1.0.0',
+      context: 'Agree the pilot scope and expected response at each decision review.', teamId: 'engineering',
+      responsiblePersonIds: ['maya', 'ari', 'noor'], decisionOwnerPersonId: 'maya', lifecycle: 'active', prerequisites: [],
+      supportBindings: [{ requirementId: 'coordination', workIds: ['review'] }, { requirementId: 'review', workIds: ['review'] }] },
+    { id: 'readiness-evidence', definitionId: 'assurance', definitionVersion: '1.0.0',
+      context: 'Walk through routine requests and recovery instructions before a pilot decision.', teamId: 'operations',
+      responsiblePersonIds: ['noor', 'sam'], decisionOwnerPersonId: 'maya', lifecycle: 'active', prerequisites: [],
+      supportBindings: [{ requirementId: 'preparation', workIds: ['rehearsal'] }, { requirementId: 'review', workIds: ['review'] }] },
   ];
   plan.contributions = [{
     id: 'evidence-draft', categoryId: 'cross-source-synthesis', receiverPersonId: 'leo', decisionOwnerPersonId: 'maya',
     workIds: ['research', 'review'],
-    reviewBoundary: 'Leo checks each draft claim against the interview notes. Noor checks exception-handling claims in the review.',
-    decisionBoundary: 'Maya chooses the pilot scope after the evidence and review conditions are recorded.',
+    reviewBoundary: 'The researcher checks each draft claim against the interview notes. The quality reviewer checks exception-handling claims in the review.',
+    decisionBoundary: 'The product lead chooses the pilot scope after the evidence and review conditions are recorded.',
   }];
   plan.connections = [
     ['scope', 'product', 'engineering', 'ari', 'Pilot scope and tested user journeys',

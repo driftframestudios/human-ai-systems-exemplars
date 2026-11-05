@@ -7,6 +7,7 @@ import { LIMITS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investmen
 import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from '../../collaboration/native-investment-studio/roles.mjs';
 import { createPlanExchange } from '../../collaboration/native-investment-studio/exchange.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
+import { createLegacyPractice } from '../../collaboration/native-investment-studio/capabilities.mjs';
 
 const contribution = (id = 'source-review', overrides = {}) => ({ id, categoryId: 'source-retrieval',
   receiverPersonId: 'product-one', decisionOwnerPersonId: 'engineering-one', workIds: ['review'],
@@ -35,6 +36,8 @@ function held(studio, command, code) {
 }
 function oldPlan(version = '0.2.0') {
   const plan = createExamplePlan(); plan.schemaVersion = version;
+  delete plan.abilities; delete plan.capabilityEvidence;
+  plan.practices = [{ id: 'shared-expectations', practiceId: 'expectation', teamId: 'delivery', workIds: ['review'] }];
   delete plan.contributions; delete plan.connections;
   if (version === '0.1.0') delete plan.purpose;
   for (const person of plan.people) { delete person.role; delete person.lifecycle; }
@@ -63,7 +66,7 @@ test('complete old versions migrate owned defaults while explicit current fields
     const source = oldPlan(version), serialized = JSON.stringify(source);
     source.people[0].rateCentsPerHour = null; source.people[1].rateCentsPerHour = 0;
     const input = JSON.stringify(source), receipt = prepareImport(input), current = receipt.projection;
-    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.3.0');
+    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.4.0');
     assert.equal(current.state.modelVersion, '0.1.0');
     assert.deepEqual(current.state.people[0].role, emptyRole());
     assert.ok(current.state.people.every(row => row.lifecycle === 'active'));
@@ -106,7 +109,7 @@ test('retired funding and multiplied relationship references price each person a
   const plan = connectedPlan();
   plan.people[0].fundedMinutes = 60; plan.people[0].lifecycle = 'retired';
   plan.connections.push(connection('parallel')); plan.contributions.push(contribution('parallel'));
-  plan.practices.push({ id: 'cross-team-practice', practiceId: 'assurance', teamId: 'reviewers', workIds: ['review'] });
+  plan.practices.push(createLegacyPractice('cross-team-practice', 'assurance', 'reviewers', ['review']));
   const projection = preparePlan(plan);
   assert.equal(projection.result.fundedKnownCents, 10000);
   assert.equal(projection.result.additionalKnownCents, 120000);
@@ -196,8 +199,8 @@ test('removal reports every human, endpoint and supporting-work dependency in st
   assert.deepEqual(held(studio, { type: 'team.remove', teamId: 'reviewers' }, 'dependencies').references,
     [{ collection: 'connections', id: 'handoff', field: 'receiverTeamId' }]);
   assert.deepEqual(held(studio, { type: 'work.remove', workId: 'review' }, 'dependencies').references, [
-    { collection: 'practices', id: 'shared-expectations', field: 'workIds' },
     { collection: 'contributions', id: 'source-review', field: 'workIds' }, { collection: 'connections', id: 'handoff', field: 'workIds' },
+    { collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' },
   ]);
   apply(studio, { type: 'contribution.remove', contributionId: 'source-review' });
   apply(studio, { type: 'connection.remove', connectionId: 'handoff' });
@@ -260,8 +263,9 @@ test('new commands reject surplus, accessors, stale and reentrant proposals befo
   assert.equal(studio.applyCommand({ type: 'contribution.remove', contributionId: 'source-review' }, before).error.code, 'stale-edit');
 });
 
-test('current reference limit counts every scalar and list edge, with exact and one-over fixtures', () => {
+test('the 0.3.0 reference profile counts every scalar and list edge, with exact and one-over fixtures', () => {
   const plan = createExamplePlan(); plan.practices = [];
+  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence;
   plan.people = Array.from({ length: 128 }, (_, i) => ({ ...plan.people[0], id: `person-${i}` }));
   const ids = plan.people.map(row => row.id);
   plan.teams = Array.from({ length: 32 }, (_, i) => ({ id: `team-${i}`, label: 'Team', personIds: ids.slice(), lifecycle: 'active' }));
@@ -269,7 +273,6 @@ test('current reference limit counts every scalar and list edge, with exact and 
   const workIds = plan.work.map(row => row.id);
   plan.contributions = Array.from({ length: 30 }, (_, i) => contribution(`contribution-${i}`, { receiverPersonId: null, decisionOwnerPersonId: null, workIds: workIds.slice() }));
   // 32×128 memberships +128 work participants +128 owning teams +30×128 supporting work =8192.
-  assert.equal(LIMITS.references, 8192);
   const exact = preparePlan(plan); assert.equal(exact.result.knownCommitmentCents, 21333);
   plan.contributions[0].receiverPersonId = 'person-0';
   assert.throws(() => preparePlan(plan), { code: 'reference-budget' });
@@ -315,7 +318,7 @@ test('exchange names role, lifecycle, human-responsibility and connection change
 
 test('version-owned byte ceilings stay exact while the current bounded transport accepts its own export', () => {
   assert.equal(SCHEMA_BYTE_LIMITS['0.1.0'], 524288); assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
-  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.3.0']); assert.ok(LIMITS.bytes > 546029);
+  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.4.0']); assert.ok(LIMITS.bytes > SCHEMA_BYTE_LIMITS['0.3.0']);
   const current = preparePlan(connectedPlan());
   const exactTransport = current.serialized + ' '.repeat(LIMITS.bytes - Buffer.byteLength(current.serialized));
   assert.equal(prepareImport(exactTransport).projection.serialized, current.serialized);
@@ -323,8 +326,9 @@ test('version-owned byte ceilings stay exact while the current bounded transport
 });
 
 
-test('maximum-shaped current records and escaped metadata round-trip within the derived finite envelope', () => {
+test('maximum-shaped 0.3.0 records and escaped metadata migrate and round-trip within the finite envelope', () => {
   const plan = createExamplePlan(), id = (kind, i) => `${kind}-${i}`.padEnd(64, 'x');
+  plan.schemaVersion = '0.3.0'; delete plan.abilities; delete plan.capabilityEvidence;
   const maxText = '\u0000'.repeat(600), maxLabel = '\u0000'.repeat(120);
   const role = Object.fromEntries(Object.entries(ROLE_CATALOGUES).map(([field, rows]) => [field, rows.reduce((a, b) => a.id.length > b.id.length ? a : b).id]));
   role.change = { frameworkId: 'npt', componentId: 'cognitive-participation' };

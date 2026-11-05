@@ -7,6 +7,7 @@ const WORK_CHANGE_FIELDS = new Map([
 const REMOVAL_TARGETS = new Map([
   ['person.remove', ['people', 'personId']], ['team.remove', ['teams', 'teamId']], ['work.remove', ['work', 'workId']],
   ['contribution.remove', ['contributions', 'contributionId']], ['connection.remove', ['connections', 'connectionId']],
+  ['capability.evidence.remove', ['capabilityEvidence', 'evidenceId']],
 ]);
 
 function sameIds(left, right) {
@@ -56,9 +57,6 @@ function dependencies(state, collection, id) {
     include(state.work, 'work', 'personIds', row => row.personIds.includes(id));
   } else if (collection === 'teams') {
     include(state.work, 'work', 'teamId', row => row.teamId === id);
-    include(state.practices, 'practices', 'teamId', row => row.teamId === id);
-  } else if (collection === 'work') {
-    include(state.practices, 'practices', 'workIds', row => row.workIds.includes(id));
   }
   if (collection === 'people') {
     include(state.contributions, 'contributions', 'receiverPersonId', row => row.receiverPersonId === id);
@@ -70,6 +68,27 @@ function dependencies(state, collection, id) {
   } else if (collection === 'work') {
     include(state.contributions, 'contributions', 'workIds', row => row.workIds.includes(id));
     include(state.connections, 'connections', 'workIds', row => row.workIds.includes(id));
+  }
+  for (const name of ['abilities', 'practices']) {
+    if (collection === 'people') {
+      include(state[name], name, 'responsiblePersonIds', row => row.responsiblePersonIds.includes(id));
+      include(state[name], name, 'decisionOwnerPersonId', row => row.decisionOwnerPersonId === id);
+    } else if (collection === 'teams') {
+      include(state[name], name, 'teamId', row => row.teamId === id);
+    } else if (collection === 'work') {
+      for (const row of state[name]) row.supportBindings.forEach((binding, index) => {
+        if (binding.workIds.includes(id)) references.push(Object.freeze({ collection: name, id: row.id, field: `supportBindings[${index}].workIds` }));
+      });
+    } else if (collection === 'abilities' || collection === 'practices') {
+      const kind = collection === 'abilities' ? 'ability' : 'practice';
+      include(state[name], name, 'prerequisites', row => row.prerequisites.some(reference => reference.kind === kind && reference.instanceId === id));
+    }
+  }
+  if (collection === 'people') {
+    include(state.capabilityEvidence, 'capabilityEvidence', 'recorderPersonId', row => row.recorderPersonId === id);
+  } else if (collection === 'abilities' || collection === 'practices') {
+    const kind = collection === 'abilities' ? 'ability' : 'practice';
+    include(state.capabilityEvidence, 'capabilityEvidence', 'subject', row => row.subject.kind === kind && row.subject.instanceId === id);
   }
   return Object.freeze(references);
 }
@@ -162,6 +181,38 @@ export function prepareAssembly(base, candidate) {
       if (current.status === command.status) return { projection: base };
       collection = 'connections'; rows = update(state.connections, index, { ...current, status: command.status }); break;
     }
+    case 'capability.update': {
+      collection = command.kind === 'ability' ? 'abilities' : 'practices';
+      const index = position(state[collection], command.instanceId, 'command.instanceId');
+      if (command.instance.id !== command.instanceId) throw new PlanError('target', 'command.instanceId', 'Keep the replacement bound to its original ability or practice.');
+      const current = state[collection][index];
+      if (command.instance.definitionId !== current.definitionId || command.instance.definitionVersion !== current.definitionVersion) {
+        throw new PlanError('capability-definition-change', 'command.instance.definitionId', 'Install the other definition as a new instance so recorded observations keep their original subject.');
+      }
+      if (JSON.stringify(command.instance) === JSON.stringify(state[collection][index])) return { projection: base };
+      rows = update(state[collection], index, command.instance); break;
+    }
+    case 'capability.lifecycle.set': {
+      collection = command.kind === 'ability' ? 'abilities' : 'practices';
+      const index = position(state[collection], command.instanceId, 'command.instanceId');
+      const current = state[collection][index];
+      if (current.lifecycle === command.lifecycle) return { projection: base };
+      rows = update(state[collection], index, { ...current, lifecycle: command.lifecycle }); break;
+    }
+    case 'capability.evidence.record': {
+      collection = 'capabilityEvidence';
+      const existing = state[collection].find(row => row.id === command.evidence.id);
+      if (existing) {
+        if (JSON.stringify(existing) === JSON.stringify(command.evidence)) return { projection: base };
+        throw new PlanError('identity-collision', 'command.evidence.id', 'Use a new observation identifier or retain the recorded observation.');
+      }
+      rows = append(state[collection], command.evidence, 'command.evidence.id'); break;
+    }
+    case 'capability.remove': {
+      const next = removal(base, command.kind === 'ability' ? 'abilities' : 'practices', command.instanceId, 'instanceId');
+      if (next.error) return next;
+      ({ collection, rows } = next); break;
+    }
     case 'collection.reorder':
       collection = command.collection;
       rows = reordered(state[collection], command.ids);
@@ -171,7 +222,8 @@ export function prepareAssembly(base, candidate) {
     case 'team.remove':
     case 'work.remove':
     case 'contribution.remove':
-    case 'connection.remove': {
+    case 'connection.remove':
+    case 'capability.evidence.remove': {
       const [targetCollection, targetField] = REMOVAL_TARGETS.get(command.type);
       const next = removal(base, targetCollection, command[targetField], targetField);
       if (next.error) return next;

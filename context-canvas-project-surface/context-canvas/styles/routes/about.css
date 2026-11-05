@@ -2182,6 +2182,12 @@ p#on-dark-iron-ore {
 .native-coordination__error { color: var(--native-error); font-size: .875rem; }
 .native-coordination__error:empty { display: none; }
 .native-coordination__actions { display: flex; flex-wrap: wrap; gap: .85rem; }
+/* Empty feedback can disappear; form actions still reserve space for key shadows. */
+.native-coordination fieldset > .native-coordination__actions {
+    margin-block-start: 1rem;
+    padding-block-end: .35rem;
+    padding-inline-end: .35rem;
+}
 .native-coordination__actions [data-action='apply'] { background: var(--native-signal); }
 .native-coordination__trace { grid-column: 1 / -1; }
 .native-coordination__trace-body { padding: 1rem; }
@@ -2435,6 +2441,70 @@ p#on-dark-iron-ore {
     letter-spacing: .14em;
 }
 .native-zine__heading { border-block-end: .125rem solid var(--native-rule); padding-block-end: .65rem; }
+
+/* Ability cards receive ASCII Zine Field's folded-leaflet composition.
+   capability-controller.mjs owns one selected record and its visible faces;
+   this adapter owns their paper, hierarchy, and responsive reading order. */
+.native-capabilities { container: native-capabilities / inline-size; display: grid; gap: 1.5rem; padding: clamp(.5rem, 3vw, 2.5rem); }
+.native-capabilities > *, .native-capabilities section, .native-capabilities article { min-inline-size: 0; }
+.native-capabilities__heading { display: grid; gap: .8rem; }
+.native-capabilities p { font-size: 1rem; }
+.about-page .native-capabilities :is(h3, h4, h5) { color: var(--native-text); font-family: system-ui, sans-serif; line-height: 1.3; }
+.about-page .native-capabilities h4 { font-size: 1.2rem; }
+.native-capabilities__catalogues { display: grid; gap: 1.25rem; }
+.native-capabilities__catalogues > section { display: grid; align-content: start; gap: .7rem; }
+.native-capabilities__catalogue { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .65rem; list-style: none; padding: 0; }
+.native-capabilities__catalogue > li { margin: 0; min-inline-size: 0; }
+.native-capabilities .native-capabilities__choice { display: grid; align-content: start; gap: .35rem; inline-size: 100%; block-size: 100%; min-inline-size: 0; text-align: start; font-weight: 650; background: var(--about-cool-blue); }
+.native-capabilities__choice :is(small, span) { font-size: .8rem; font-weight: 450; }
+.native-capabilities__choice[aria-pressed='true'] { background: var(--native-signal); border-style: double; }
+.native-capabilities__catalogues > section:nth-child(2) .native-capabilities__choice { background: var(--about-soft-apricot); }
+.native-capabilities__catalogues > section:nth-child(2) .native-capabilities__choice[aria-pressed='true'] { background: var(--native-zine-rose); }
+.native-capability-card { container: native-capability-card / inline-size; display: grid; align-content: start; gap: 1rem; padding: clamp(.5rem, 2vw, 1.5rem); background: var(--native-zine-field); border: .125rem solid var(--native-ink); border-block-start: .5rem solid var(--about-deep-teal); box-shadow: .35rem .4rem 0 var(--native-key-shadow); }
+.native-capability-card > header { display: grid; gap: .6rem; }
+.native-capability-card__actions { padding-block-end: .85rem; border-block-end: .0625rem dashed var(--native-rule); }
+.native-capability-card__faces { display: grid; gap: 1.2rem; align-items: start; }
+.native-capability-card__faces > section { display: grid; align-content: start; gap: 1rem; }
+.native-capability-card__reverse { padding: clamp(.6rem, 2vw, 1.1rem); background: var(--about-cool-blue); border-inline-start: .2rem solid var(--about-cobalt); }
+.native-capability__section { display: grid; gap: .65rem; padding-block-end: .8rem; border-block-end: .0625rem dashed var(--native-rule); }
+.native-capability__support { padding-inline-start: 1.25rem; }
+.native-capability__support li { margin-block-end: .8rem; }
+.native-capabilities :is(dl, [data-capability-manual-body]) { display: grid; gap: .65rem; }
+.native-capabilities dt { font-size: .875rem; font-weight: 700; }
+.native-capabilities dd { margin-block-end: .6rem; }
+.native-capability-settings form { display: grid; gap: 1rem; padding: clamp(.5rem, 2vw, 1.25rem); background: var(--about-soft-apricot); }
+.native-capability-settings fieldset { display: grid; gap: 1rem; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.native-capability-settings fieldset fieldset { padding: .8rem; border: .0625rem solid var(--native-rule); background: var(--native-paper); }
+.native-capability-settings legend { font-weight: 650; padding-inline: .35rem; }
+.native-capability__field { display: grid; gap: .4rem; min-inline-size: 0; }
+.native-capability__field > label { font-weight: 650; }
+.native-capability-settings :is(input, select, textarea) { max-inline-size: 100%; min-inline-size: 0; inline-size: 100%; min-block-size: 2.75rem; padding: .6rem; border: .125rem solid var(--native-rule); background-color: var(--native-paper); color: var(--native-text); font: inherit; }
+.native-capability-settings textarea { resize: vertical; }
+.native-capability__field--numeric { justify-items: start; }
+.native-capability__field--numeric input { inline-size: calc(5ch + 1.6rem); text-align: end; font-variant-numeric: tabular-nums; }
+.native-capability__steps { flex-wrap: nowrap; gap: .5rem; }
+.native-capability__steps button { min-inline-size: 2.75rem; }
+.native-capability__choices { display: grid; gap: .6rem; padding: 0; list-style: none; }
+.native-capability__choices label { display: flex; align-items: start; gap: .65rem; min-block-size: 2.75rem; padding: .55rem; border: .0625rem solid var(--native-rule); background: var(--native-paper); cursor: pointer; }
+.native-capability-settings input[type='checkbox'] { flex: 0 0 1.2rem; inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; padding: 0; margin-block-start: .2rem; accent-color: var(--about-deep-teal); }
+.native-capability-settings [data-capability-action='apply'] { background: var(--native-signal); }
+.native-capability-manual > summary > span { display: block; font-size: .875rem; font-weight: 400; margin-block-start: .3rem; }
+.native-capability-manual > div { padding: clamp(.6rem, 2vw, 1.3rem); }
+.native-capability-manual article { padding-block: 1rem; border-block-end: .0625rem dashed var(--native-rule); }
+@container native-capabilities (min-width: 48rem) {
+    .native-capabilities__catalogues { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container native-capability-card (min-width: 44rem) {
+    [data-capability-layout='beside'] .native-capability-card__faces { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+    .native-capability-card { box-shadow: none; }
+    .native-capabilities__choice[aria-pressed='true'] { border-color: Highlight; outline: .125rem solid Highlight; }
+}
+@media print {
+    .native-capabilities__catalogues, .native-capability-card__actions, .native-capability-settings { display: none; }
+    .native-capability-card { box-shadow: none; break-inside: avoid; }
+}
 
 /* The first populated scenario and Remote share the existing accepted plan.
    Keep this adapter beside native controls; the ASCII family supplies ornament. */

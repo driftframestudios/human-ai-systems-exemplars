@@ -142,19 +142,19 @@ test('each preparation owns its edge budget and exact-budget recovery retains th
   candidate.teams = Array.from({ length: 32 }, (_, index) => ({
     id: `team-${index}`, label: `Team ${index}`, personIds: candidate.people.map(person => person.id), lifecycle: 'active',
   }));
-  candidate.work = Array.from({ length: 32 }, (_, index) => ({ id: `work-${index}`, label: 'Work', teamId: 'team-0',
-    personIds: candidate.people.slice(0, index === 31 ? 96 : 128).map(row => row.id), minutesPerOccurrence: 0, occurrences: 0,
+  candidate.work = Array.from({ length: 96 }, (_, index) => ({ id: `work-${index}`, label: 'Work', teamId: 'team-0',
+    personIds: candidate.people.slice(0, index === 95 ? 32 : 128).map(row => row.id), minutesPerOccurrence: 0, occurrences: 0,
     funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }));
   candidate.practices = [];
   const studio = createStudio(candidate);
   const before = studio.capture();
-  // 4,096 memberships, 4,064 participants and 32 work-owner IDs fill 8,192 references.
+  // 4,096 memberships, 12,192 participants and 96 work-owner IDs fill 16,384 references.
   assert.equal(before.state.teams.flatMap(team => team.personIds).length, 4096);
   assert.equal(before.state.people.length, 128);
-  assert.equal(before.state.work.flatMap(row => row.personIds).length, 4064);
+  assert.equal(before.state.work.flatMap(row => row.personIds).length, 12192);
 
   const overBudget = structuredClone(candidate);
-  overBudget.work[31].personIds.push('person-96');
+  overBudget.work[95].personIds.push('person-32');
   expectHeld(studio.replace(overBudget, before), before, 'reference-budget');
   const duplicate = structuredClone(candidate);
   duplicate.teams[31].personIds[127] = 'person-0';
@@ -220,10 +220,10 @@ test('separate instances and caller-owned initial records keep independent state
   const secondProjection = second.read();
   candidate.people[0].rateCentsPerHour = 1;
   candidate.work[0].personIds.splice(0, 1);
-  candidate.practices[0].workIds.length = 0;
+  candidate.practices[0].supportBindings[0].workIds.length = 0;
   assert.equal(first.read().result.plannedCommitmentCents, 120000);
   assert.equal(first.read().state.work[0].personIds.length, 4);
-  assert.deepEqual(first.read().state.practices[0].workIds, ['review']);
+  assert.deepEqual(first.read().state.practices[0].supportBindings[0].workIds, ['review']);
   const updated = first.updateWork('review', changedReview(first.read(), { occurrences: 12 }), first.read());
   assert.equal(updated.ok, true);
   assert.equal(first.read().result.plannedCommitmentCents, 240000);
@@ -760,28 +760,52 @@ test('legacy admissions, current captures, history and baselines retain their ac
   const externalCapture = Object.freeze({ state: Object.freeze(oldState), serialized: legacyPurposeFixture });
   const studio = createStudio(externalCapture.state);
   const initial = studio.read();
-  assert.equal(initial.state.schemaVersion, '0.3.0');
+  assert.equal(initial.state.schemaVersion, '0.4.0');
   studio.setBaseline(initial);
   studio.updatePurpose({ ...initial.state.purpose, changedAbility: 'Improve the reading.' }, initial);
-  assert.equal(studio.read().state.schemaVersion, '0.3.0');
-  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.3.0');
+  assert.equal(studio.read().state.schemaVersion, '0.4.0');
+  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.4.0');
   assert.equal(studio.importText(legacyPurposeFixture, studio.read()).ok, true);
   assert.equal(studio.read().state.purpose.changedAbility, null);
   assert.equal(studio.replace(externalCapture.state, studio.read()).ok, true);
   studio.restoreBaseline(studio.read());
   while (studio.readHistory().undoCount) {
     assert.equal(studio.undo(studio.read()).ok, true);
-    assert.equal(studio.capture().state.schemaVersion, '0.3.0');
-    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.3.0');
+    assert.equal(studio.capture().state.schemaVersion, '0.4.0');
+    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.4.0');
   }
   while (studio.readHistory().redoCount) {
     assert.equal(studio.redo(studio.read()).ok, true);
-    assert.equal(studio.read().state.schemaVersion, '0.3.0');
+    assert.equal(studio.read().state.schemaVersion, '0.4.0');
   }
   assert.equal(externalCapture.state.schemaVersion, '0.1.0');
   assert.equal(Object.hasOwn(externalCapture.state, 'purpose'), false);
   assert.equal(externalCapture.serialized, legacyPurposeFixture);
   assert.deepEqual(externalCapture.state, JSON.parse(legacyPurposeFixture));
+});
+
+test('a genuine 0.3 relationship plan retains its meaning through 0.4 acceptance and history', () => {
+  const source = createExamplePlan(); source.schemaVersion = '0.3.0';
+  delete source.abilities; delete source.capabilityEvidence;
+  source.practices = [{ id: 'shared-expectations', practiceId: 'expectation', teamId: 'delivery', workIds: ['review'] }];
+  source.people[0].role.decisionId = 'approves'; source.work[0].lifecycle = 'retired';
+  source.teams.push({ id: 'receiving', label: 'Receiving team', personIds: ['product-one'], lifecycle: 'active' });
+  source.contributions = [{ id: 'draft', categoryId: 'draft-artifacts', receiverPersonId: 'product-one', decisionOwnerPersonId: 'product-one',
+    workIds: ['review'], reviewBoundary: 'Inspect the draft before use.', decisionBoundary: 'The named person decides.' }];
+  source.connections = [{ id: 'review-return', senderTeamId: 'delivery', receiverTeamId: 'receiving', receiverPersonId: 'product-one',
+    sharedObject: 'A reviewed draft', responseExpectation: 'Return an acceptance observation.', workIds: ['review'], status: 'paused' }];
+  const bytes = JSON.stringify(source), studio = createStudio(source), accepted = studio.read();
+  assert.equal(accepted.state.schemaVersion, '0.4.0');
+  for (const field of ['purpose', 'people', 'teams', 'work', 'contributions', 'connections']) assert.deepEqual(accepted.state[field], source[field]);
+  assert.deepEqual(accepted.state.practices[0].supportBindings, [{ requirementId: 'general-support', workIds: ['review'] }]);
+  assert.equal(accepted.state.practices[0].definitionVersion, '0.0.0');
+  studio.setBaseline(accepted);
+  assert.equal(studio.updatePurpose({ ...accepted.state.purpose, changedAbility: 'Continue the reviewed work.' }, accepted).ok, true);
+  assert.equal(studio.undo(studio.read()).ok, true); assert.deepEqual(studio.read().state, accepted.state);
+  assert.deepEqual(studio.read().capabilities, accepted.capabilities);
+  assert.equal(studio.restoreBaseline(studio.read()).ok, true);
+  assert.equal(studio.importText(bytes, studio.read()).ok, true); assert.deepEqual(studio.read().state, accepted.state);
+  assert.equal(source.schemaVersion, '0.3.0'); assert.equal(JSON.stringify(source), bytes);
 });
 
 test('invalid purpose and legacy imports retain accepted bytes, baseline and history', () => {

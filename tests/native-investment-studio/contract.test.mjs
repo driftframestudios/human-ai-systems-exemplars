@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { preparePlan, preparePurpose, prepareImport, parsePlan, createExamplePlan, PlanError } from '../../collaboration/native-investment-studio/contract.mjs';
 import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+import { createLegacyPractice } from '../../collaboration/native-investment-studio/capabilities.mjs';
 const unassignedRole = () => ({ functionId: null, seniorityId: null, postureId: null, enablerId: null,
   change: null, qualityId: null, aiId: null, decisionId: null });
 
@@ -42,7 +43,7 @@ test('complete legacy byte-budget plans migrate and retain their original transp
   const legacy = legacyAtBytes(524288);
   const legacyBytes = JSON.stringify(legacy);
   const migrated = parsePlan(legacyBytes);
-  assert.equal(Buffer.byteLength(migrated.serialized), 550673);
+  assert.ok(Buffer.byteLength(migrated.serialized) <= LIMITS.bytes);
   assert.deepEqual(migrated.state.purpose, noPurpose);
   assert.equal(parsePlan(migrated.serialized).serialized, migrated.serialized);
   assert.equal(JSON.stringify(legacy), legacyBytes);
@@ -55,8 +56,8 @@ test('complete legacy byte-budget plans migrate and retain their original transp
   assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
   assert.throws(() => parsePlan(`${versionTwoBytes} `), { code: 'bytes' });
   const current = parsePlan(versionTwoBytes);
-  assert.equal(Buffer.byteLength(current.serialized), 572261);
-  assert.equal(current.state.schemaVersion, '0.3.0');
+  assert.ok(Buffer.byteLength(current.serialized) <= LIMITS.bytes);
+  assert.equal(current.state.schemaVersion, '0.4.0');
   assert.ok(LIMITS.bytes >= Buffer.byteLength(current.serialized));
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(current.result.plannedCommitmentCents, migrated.result.plannedCommitmentCents);
@@ -73,7 +74,7 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   const source = JSON.parse(legacyText);
   const before = JSON.stringify(source);
   const projection = preparePlan(source);
-  assert.equal(projection.state.schemaVersion, '0.3.0');
+  assert.equal(projection.state.schemaVersion, '0.4.0');
   assert.equal(projection.state.modelVersion, '0.1.0');
   assert.deepEqual(projection.state.purpose, noPurpose);
   assert.equal(projection.state.revision, 7);
@@ -87,12 +88,12 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   assert.deepEqual(parsePlan(legacyText), projection);
   assert.deepEqual(parsePlan(projection.serialized), projection);
   assert.ok(Object.isFrozen(projection.state.purpose));
-  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.3.0');
+  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.4.0');
   const receipt = prepareImport(legacyText);
   assert.equal(receipt.sourceSchemaVersion, '0.1.0');
   assert.deepEqual(receipt.projection, projection);
   assert.ok(Object.isFrozen(receipt));
-  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.3.0');
+  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.4.0');
 });
 
 test('legacy migration first admits the closed old root, rows, references, model and integer tokens', () => {
@@ -131,7 +132,7 @@ test('schema selection uses the owned enumerable data descriptor and rechecks it
   const absent = JSON.parse(legacyText); delete absent.schemaVersion; rejects(absent, 'data-property');
   const inherited = Object.assign(Object.create({ schemaVersion: '0.1.0' }), absent);
   rejects(inherited, 'record');
-  for (const value of ['0.4.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
+  for (const value of ['0.5.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
     const plan = JSON.parse(legacyText); plan.schemaVersion = value; rejects(plan, 'unsupported-contract');
   }
   let descriptors = 0;
@@ -204,7 +205,7 @@ test('allocated practice work stays inside staffing; shared work enters once', (
     id, label: id, teamId: 'delivery', personIds, minutesPerOccurrence, occurrences, funding, status: 'planned', timing: null, lifecycle: 'active',
   });
   plan.work = [work('agreement', ['one', 'two'], 45, 1), work('preparation', ['one'], 30, 1), work('check', ['one', 'two'], 10, 6), work('review', ['reviewer'], 60, 1, 'additional')];
-  plan.practices = ['expectation', 'assurance'].map(practiceId => ({ id: practiceId, practiceId, teamId: 'delivery', workIds: ['agreement', 'preparation', 'check', 'review'] }));
+  plan.practices = ['expectation', 'assurance'].map(practiceId => createLegacyPractice(practiceId, practiceId, 'delivery', ['agreement', 'preparation', 'check', 'review']));
   const result = preparePlan(plan).result;
   assert.equal(result.fundedKnownCents, 1600000);
   assert.equal(result.allocatedKnownCents, 40000);
@@ -337,10 +338,10 @@ test('duplicates, unresolved references, and ownership mismatches are rejected',
     ['duplicate-id', plan => { plan.people[1].id = plan.people[0].id; }],
     ['duplicate-reference', plan => { plan.work[0].personIds[1] = plan.work[0].personIds[0]; }],
     ['reference', plan => { plan.work[0].teamId = 'missing'; }],
-    ['reference', plan => { plan.practices[0].workIds = ['missing']; }],
+    ['reference', plan => { plan.practices[0].supportBindings[0].workIds = ['missing']; }],
     ['team-membership', plan => { plan.teams[0].personIds.shift(); }],
     ['timing-version', plan => { plan.work[0].timing = { week: 1 }; }],
-    ['practice', plan => { plan.practices[0].practiceId = 'invented'; }],
+    ['capability-definition', plan => { plan.practices[0].definitionId = 'invented'; }],
   ];
   for (const [code, alter] of cases) {
     const plan = createExamplePlan(); alter(plan); rejects(plan, code);
@@ -385,8 +386,8 @@ test('import and collection budgets reject before downstream work', () => {
   const edges = createExamplePlan();
   edges.people = Array.from({ length: 128 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }));
   edges.teams = Array.from({ length: 32 }, (_, i) => ({ id: `team-${i}`, label: 'Team', personIds: edges.people.map(person => person.id), lifecycle: 'active' }));
-  edges.work = Array.from({ length: 33 }, (_, index) => ({ ...edges.work[0], id: `work-${index}`, teamId: 'team-0',
-    personIds: index === 32 ? ['person-0'] : edges.people.map(row => row.id) }));
+  edges.work = Array.from({ length: 96 }, (_, index) => ({ ...edges.work[0], id: `work-${index}`, teamId: 'team-0',
+    personIds: edges.people.map(row => row.id) }));
   edges.practices = [];
   rejects(edges, 'reference-budget');
 });

@@ -96,7 +96,7 @@ test('a transient removal confirmation parks no empty draft and preserves depend
   const { studio, editing } = setup();
   const draft = editing.session.begin('work.remove:review', studio.read()).view.draft;
   assert.deepEqual(rejected(editing.session.preview(draft.token), 'dependencies').error.references,
-    [{ collection: 'practices', id: 'shared-expectations', field: 'workIds' }]);
+    [{ collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' }]);
   assert.equal(editing.park().ok, true); assert.equal(editing.read().slots, 0);
   assert.equal(editing.session.read().draft, null);
 });

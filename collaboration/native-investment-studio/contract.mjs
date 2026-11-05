@@ -1,5 +1,6 @@
 import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
 import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from './roles.mjs';
+import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityWorkIds, createLegacyPractice } from './capabilities.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -8,8 +9,6 @@ const PRACTICE_IDS = new Set(PRACTICES.map(record => record.id));
 const encoder = new TextEncoder();
 const FUNDING = Object.freeze(['allocated', 'additional']);
 const WORK_STATUS = Object.freeze(['planned', 'paused']);
-const LEGACY_SCHEMA = '0.1.0';
-const PURPOSE_SCHEMA = '0.2.0';
 const LIFECYCLE = Object.freeze(['active', 'retired']);
 const CONNECTION_STATUS = Object.freeze(['active', 'paused']);
 const ROLE_IDS = new Map(Object.entries(ROLE_CATALOGUES).map(([field, rows]) => [field, new Set(rows.map(row => row.id))]));
@@ -17,7 +16,8 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
+  relationshipPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
   purposePlan: [...PLAN_FIELDS, 'purpose'],
   legacyPlan: PLAN_FIELDS,
   purpose: PURPOSE_FIELDS,
@@ -32,9 +32,18 @@ const FIELDS = Object.freeze({
   contribution: ['id', 'categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary'],
   connection: ['id', 'senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status'],
   practice: ['id', 'practiceId', 'teamId', 'workIds'],
+  capability: ['id', 'definitionId', 'definitionVersion', 'context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle', 'prerequisites', 'supportBindings'],
+  capabilityReference: ['kind', 'instanceId'],
+  supportBinding: ['requirementId', 'workIds'],
+  capabilityEvidence: ['id', 'subject', 'stage', 'context', 'observation', 'recorderPersonId', 'reviewBoundary', 'observedPlanRevision'],
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
-const VERSION_FIELDS = new Map([[LEGACY_SCHEMA, 'legacyPlan'], [PURPOSE_SCHEMA, 'purposePlan'], [CONTRACT.schemaVersion, 'plan']]);
+const PROFILES = new Map([
+  ['0.1.0', { fields: 'legacyPlan', purpose: false, relationships: false, capabilities: false, references: 4096 }],
+  ['0.2.0', { fields: 'purposePlan', purpose: true, relationships: false, capabilities: false, references: 4096 }],
+  ['0.3.0', { fields: 'relationshipPlan', purpose: true, relationships: true, capabilities: false, references: 8192 }],
+  ['0.4.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, references: LIMITS.references }],
+]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
   'team.create': ['type', 'team'],
@@ -59,9 +68,14 @@ const COMMAND_FIELDS = Object.freeze({
   'person.remove': ['type', 'personId'],
   'team.remove': ['type', 'teamId'],
   'work.remove': ['type', 'workId'],
+  'capability.update': ['type', 'kind', 'instanceId', 'instance'],
+  'capability.lifecycle.set': ['type', 'kind', 'instanceId', 'lifecycle'],
+  'capability.remove': ['type', 'kind', 'instanceId'],
+  'capability.evidence.record': ['type', 'evidence'],
+  'capability.evidence.remove': ['type', 'evidenceId'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
-const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections']);
+const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence']);
 
 export class PlanError extends Error {
   constructor(code, path, message) {
@@ -108,7 +122,7 @@ function schemaVersion(candidate) {
   if (!descriptor?.enumerable || !Object.hasOwn(descriptor, 'value')) {
     reject('data-property', 'plan.schemaVersion', 'Supply an enumerable schema-version data value.');
   }
-  if (typeof descriptor.value !== 'string' || !VERSION_FIELDS.has(descriptor.value)) {
+  if (typeof descriptor.value !== 'string' || !PROFILES.has(descriptor.value)) {
     reject('unsupported-contract', 'plan.schemaVersion', 'Use a supported native plan schema.');
   }
   return descriptor.value;
@@ -370,6 +384,14 @@ export function prepareAssemblyCommand(candidate) {
     case 'person.remove': return { type, personId: text(raw.personId, `${path}.personId`, true) };
     case 'team.remove': return { type, teamId: text(raw.teamId, `${path}.teamId`, true) };
     case 'work.remove': return { type, workId: text(raw.workId, `${path}.workId`, true) };
+    case 'capability.update': {
+      const kind = choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`);
+      return { type, kind, instanceId: text(raw.instanceId, `${path}.instanceId`, true), instance: prepareCapability(raw.instance, kind, `${path}.instance`) };
+    }
+    case 'capability.lifecycle.set': return { type, kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true), lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`) };
+    case 'capability.remove': return { type, kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true) };
+    case 'capability.evidence.record': return { type, evidence: prepareCapabilityEvidence(raw.evidence, `${path}.evidence`) };
+    case 'capability.evidence.remove': return { type, evidenceId: text(raw.evidenceId, `${path}.evidenceId`, true) };
   }
 }
 
@@ -422,6 +444,166 @@ export function prepareContribution(candidate, path = 'contribution') {
     workIds: identifiers(raw.workIds, LIMITS.work, `${path}.workIds`),
     reviewBoundary: relationshipText(raw.reviewBoundary, `${path}.reviewBoundary`), decisionBoundary: relationshipText(raw.decisionBoundary, `${path}.decisionBoundary`) };
 }
+
+function capabilityReference(candidate, path) {
+  const raw = record(candidate, 'capabilityReference', path);
+  return { kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true) };
+}
+const capabilityKey = (kind, id) => `${kind}:${id}`;
+
+export function prepareCapability(candidate, kind, path = 'capability') {
+  choice(kind, CAPABILITY_KINDS, `${path}.kind`);
+  const raw = record(candidate, 'capability', path);
+  const definition = getCapabilityDefinition(kind, raw.definitionId, raw.definitionVersion);
+  if (!definition) reject('capability-definition', `${path}.definitionId`, 'Choose an exact listed definition and version.');
+  const requirements = new Set(definition.supportRequirements.map(row => row.id)), seenBindings = new Set(), seenPrerequisites = new Set();
+  return {
+    id: text(raw.id, `${path}.id`, true), definitionId: definition.id, definitionVersion: definition.version,
+    context: relationshipText(raw.context, `${path}.context`), teamId: nullableId(raw.teamId, `${path}.teamId`),
+    responsiblePersonIds: identifiers(raw.responsiblePersonIds, LIMITS.people, `${path}.responsiblePersonIds`),
+    decisionOwnerPersonId: nullableId(raw.decisionOwnerPersonId, `${path}.decisionOwnerPersonId`),
+    lifecycle: choice(raw.lifecycle, LIFECYCLE, `${path}.lifecycle`),
+    prerequisites: list(raw.prerequisites, LIMITS.prerequisiteEdges, `${path}.prerequisites`).map((value, index) => {
+      const row = capabilityReference(value, `${path}.prerequisites[${index}]`), key = capabilityKey(row.kind, row.instanceId);
+      if (seenPrerequisites.has(key)) reject('duplicate-reference', `${path}.prerequisites`, 'Choose each prerequisite instance once.');
+      seenPrerequisites.add(key); return row;
+    }),
+    supportBindings: list(raw.supportBindings, LIMITS.supportRequirements, `${path}.supportBindings`).map((value, index) => {
+      const bindingPath = `${path}.supportBindings[${index}]`, binding = record(value, 'supportBinding', bindingPath);
+      if (!requirements.has(binding.requirementId)) reject('support-requirement', `${bindingPath}.requirementId`, 'Choose a requirement from this exact definition.');
+      if (seenBindings.has(binding.requirementId)) reject('duplicate-reference', `${path}.supportBindings`, 'Bind each support requirement once.');
+      seenBindings.add(binding.requirementId);
+      return { requirementId: binding.requirementId, workIds: identifiers(binding.workIds, LIMITS.work, `${bindingPath}.workIds`) };
+    }),
+  };
+}
+
+export function prepareCapabilityEvidence(candidate, path = 'capabilityEvidence') {
+  const raw = record(candidate, 'capabilityEvidence', path);
+  return { id: text(raw.id, `${path}.id`, true), subject: capabilityReference(raw.subject, `${path}.subject`),
+    stage: choice(raw.stage, EVIDENCE_STAGES, `${path}.stage`),
+    context: relationshipText(raw.context, `${path}.context`, false),
+    observation: relationshipText(raw.observation, `${path}.observation`, false),
+    recorderPersonId: text(raw.recorderPersonId, `${path}.recorderPersonId`, true),
+    reviewBoundary: relationshipText(raw.reviewBoundary, `${path}.reviewBoundary`, false),
+    observedPlanRevision: integer(raw.observedPlanRevision, LIMITS.revision, `${path}.observedPlanRevision`) };
+}
+
+function prepareCapabilities(raw, state, people, teams, work, budget) {
+  const nodes = new Map(), adjacency = new Map(), indegrees = new Map();
+  let edges = 0;
+  for (const [kind, collection] of [['ability', 'abilities'], ['practice', 'practices']]) {
+    state[collection] = list(raw[collection], LIMITS[collection], `plan.${collection}`).map((value, index) => {
+      const path = `plan.${collection}[${index}]`, row = prepareCapability(value, kind, path);
+      reference(row.teamId, teams, `${path}.teamId`, budget);
+      reference(row.decisionOwnerPersonId, people, `${path}.decisionOwnerPersonId`, budget);
+      row.responsiblePersonIds = references(row.responsiblePersonIds, people, `${path}.responsiblePersonIds`, budget);
+      for (const [index, binding] of row.supportBindings.entries()) binding.workIds = references(binding.workIds, work, `${path}.supportBindings[${index}].workIds`, budget);
+      edges += row.prerequisites.length;
+      if (edges > LIMITS.prerequisiteEdges) reject('prerequisite-budget', `${path}.prerequisites`, 'Keep the plan within 512 prerequisite references.');
+      const key = capabilityKey(kind, row.id);
+      nodes.set(key, { kind, row, path }); adjacency.set(key, []); indegrees.set(key, row.prerequisites.length);
+      return row;
+    });
+    indexRecords(state[collection], `plan.${collection}`);
+  }
+  for (const [key, node] of nodes) for (const [index, edge] of node.row.prerequisites.entries()) {
+    const target = capabilityKey(edge.kind, edge.instanceId);
+    reference(target, nodes, `${node.path}.prerequisites[${index}]`, budget);
+    adjacency.get(target).push(key);
+  }
+  // A dependency-first topological pass visits every node and edge once. The
+  // same ordering lets current support propagate without repeated graph walks.
+  const queue = [...nodes.keys()].filter(key => indegrees.get(key) === 0), ordered = [];
+  for (let cursor = 0; cursor < queue.length; cursor += 1) {
+    const key = queue[cursor]; ordered.push(nodes.get(key));
+    for (const dependant of adjacency.get(key)) {
+      const degree = indegrees.get(dependant) - 1; indegrees.set(dependant, degree);
+      if (degree === 0) queue.push(dependant);
+    }
+  }
+  if (ordered.length !== nodes.size) {
+    const node = nodes.get([...nodes.keys()].find(key => indegrees.get(key) > 0));
+    reject('capability-cycle', `${node.path}.prerequisites`, 'Choose prerequisites that leave a clear starting point; this selection forms a cycle.');
+  }
+  state.capabilityEvidence = list(raw.capabilityEvidence, LIMITS.capabilityEvidence, 'plan.capabilityEvidence').map((value, index) => {
+    const path = `plan.capabilityEvidence[${index}]`, row = prepareCapabilityEvidence(value, path);
+    reference(capabilityKey(row.subject.kind, row.subject.instanceId), nodes, `${path}.subject`, budget);
+    reference(row.recorderPersonId, people, `${path}.recorderPersonId`, budget);
+    if (row.observedPlanRevision > state.revision) reject('evidence-revision', `${path}.observedPlanRevision`, 'Record an observation against this revision or an earlier revision.');
+    return row;
+  });
+  indexRecords(state.capabilityEvidence, 'plan.capabilityEvidence');
+  return { nodes, ordered };
+}
+
+function capabilitySummaries(state, graph, people, teams, work, result) {
+  const capacity = new Map(result.capacity.map(row => [row.personId, row]));
+  const summaries = new Map(), users = new Map(), evidence = new Map();
+  for (const { row, kind } of graph.ordered) for (const id of capabilityWorkIds(row)) {
+    if (!users.has(id)) users.set(id, new Set()); users.get(id).add(capabilityKey(kind, row.id));
+  }
+  for (const row of state.capabilityEvidence) {
+    const key = capabilityKey(row.subject.kind, row.subject.instanceId);
+    if (!evidence.has(key)) evidence.set(key, []); evidence.get(key).push(row);
+  }
+  for (const { kind, row } of graph.ordered) {
+    const definition = getCapabilityDefinition(kind, row.definitionId, row.definitionVersion), gaps = [];
+    const gap = (code, field, message, detail = {}) => gaps.push({ code, field, message, ...detail });
+    if (row.context === null) gap('context-needed', 'context', 'Describe where people will use this ability or practice.');
+    if (row.teamId === null) gap('team-needed', 'teamId', 'Choose the team responsible for this work.');
+    else if (teams.get(row.teamId).lifecycle === 'retired') gap('retired-team', 'teamId', 'Choose an active responsible team.', { teamId: row.teamId });
+    if (!row.responsiblePersonIds.length) gap('responsible-person-needed', 'responsiblePersonIds', 'Choose the people responsible for the work.');
+    if (row.decisionOwnerPersonId === null) gap('decision-owner-needed', 'decisionOwnerPersonId', 'Choose the person who decides whether the result is ready.');
+    for (const id of new Set([...row.responsiblePersonIds, row.decisionOwnerPersonId].filter(Boolean))) if (people.get(id).lifecycle === 'retired') gap('retired-person', 'responsiblePersonIds', 'Review the responsibility assigned to a retired person.', { personId: id });
+    const bindings = new Map(row.supportBindings.map(binding => [binding.requirementId, binding.workIds]));
+    const requirements = definition.supportRequirements.map(requirement => {
+      const ids = bindings.get(requirement.id) ?? [];
+      let complete = ids.length > 0;
+      if (!ids.length) gap('support-needed', 'supportBindings', `Choose work for “${requirement.label}”.`, { requirementId: requirement.id });
+      for (const id of ids) {
+        const session = work.get(id);
+        if (session.lifecycle === 'retired' || session.status === 'paused' || session.minutesPerOccurrence * session.occurrences === 0) {
+          complete = false; gap('support-unavailable', 'supportBindings', `Review the time and availability of ${session.label}.`, { requirementId: requirement.id, workId: id });
+        }
+        if (teams.get(session.teamId).lifecycle === 'retired') {
+          complete = false; gap('support-team-retired', 'supportBindings', `Review the team carrying ${session.label}.`, { requirementId: requirement.id, workId: id, teamId: session.teamId });
+        }
+      }
+      return { requirementId: requirement.id, workIds: ids, complete };
+    });
+    const selected = row.prerequisites.map(edge => graph.nodes.get(capabilityKey(edge.kind, edge.instanceId)));
+    for (const required of definition.prerequisiteDefinitions) if (!selected.some(node => node.kind === required.kind && node.row.definitionId === required.definitionId && node.row.definitionVersion === required.definitionVersion)) {
+      gap('prerequisite-needed', 'prerequisites', `Choose a prerequisite for “${getCapabilityDefinition(required.kind, required.definitionId, required.definitionVersion).action}”.`, required);
+    }
+    for (const edge of row.prerequisites) {
+      const key = capabilityKey(edge.kind, edge.instanceId), prerequisite = graph.nodes.get(key).row;
+      if (prerequisite.lifecycle === 'retired' || summaries.get(key).support !== 'supported') gap('prerequisite-gap', 'prerequisites', 'Review the current support of this prerequisite.', edge);
+    }
+    const workIds = capabilityWorkIds(row), minutes = new Map();
+    for (const id of workIds) {
+      const session = work.get(id);
+      for (const personId of session.personIds) {
+        if (!minutes.has(personId)) minutes.set(personId, { allocated: 0, additional: 0 });
+        minutes.get(personId)[session.funding] += session.minutesPerOccurrence * session.occurrences;
+      }
+    }
+    let allocatedKnownCents = 0, additionalKnownCents = 0, completeMoney = true;
+    for (const [personId, usage] of minutes) {
+      const person = people.get(personId), allocated = price(usage.allocated, person.rateCentsPerHour), additional = price(usage.additional, person.rateCentsPerHour);
+      if (person.lifecycle === 'retired' && usage.allocated + usage.additional > 0) gap('support-person-retired', 'supportBindings', `Review the supporting work assigned to ${person.label}.`, { personId });
+      if (allocated === null || additional === null) { completeMoney = false; gap('rate-needed', 'supportBindings', `Set a rate for ${person.label} to complete this amount.`, { personId }); }
+      if (allocated !== null) allocatedKnownCents = sum(allocatedKnownCents, allocated);
+      if (additional !== null) additionalKnownCents = sum(additionalKnownCents, additional);
+      if (capacity.get(personId).remainingMinutes < 0) gap('capacity-exceeded', 'supportBindings', `Review the funded time available to ${person.label}.`, { personId });
+    }
+    const records = evidence.get(capabilityKey(kind, row.id)) ?? [];
+    summaries.set(capabilityKey(kind, row.id), { kind, instanceId: row.id, workIds, sharedWorkIds: workIds.filter(id => users.get(id).size > 1),
+      support: gaps.length ? 'proposed' : 'supported', gaps, requirements, evidenceIds: records.map(item => item.id), recordedStage: records.at(-1)?.stage ?? null,
+      amounts: { allocatedKnownCents, additionalKnownCents, knownCents: sum(allocatedKnownCents, additionalKnownCents), standing: completeMoney ? 'priced' : 'incomplete' } });
+  }
+  return Object.fromEntries([['ability', 'abilities'], ['practice', 'practices']].map(([kind, collection]) => [collection, state[collection].map(row => summaries.get(capabilityKey(kind, row.id)))]));
+}
 export function prepareConnection(candidate, path = 'connection') {
   const raw = record(candidate, 'connection', path);
   const senderTeamId = text(raw.senderTeamId, `${path}.senderTeamId`, true);
@@ -471,8 +653,7 @@ function relationshipObservations(state, peopleById, teamsById, workById, result
 }
 
 function prepareVersion(candidate, version) {
-  const raw = record(candidate, VERSION_FIELDS.get(version), 'plan');
-  const current = version === CONTRACT.schemaVersion;
+  const profile = PROFILES.get(version), raw = record(candidate, profile.fields, 'plan');
   for (const key of ['kind', 'schemaVersion', 'modelVersion', 'currency']) {
     const expected = key === 'schemaVersion' ? version : CONTRACT[key];
     if (raw[key] !== expected) reject('unsupported-contract', `plan.${key}`, 'Use this native plan contract; retain other Studio records in their original instrument.');
@@ -481,23 +662,23 @@ function prepareVersion(candidate, version) {
     kind: CONTRACT.kind, schemaVersion: version, modelVersion: CONTRACT.modelVersion,
     planId: text(raw.planId, 'plan.planId', true), revision: integer(raw.revision, LIMITS.revision, 'plan.revision'),
     currency: CONTRACT.currency, horizonWeeks: integer(raw.horizonWeeks, LIMITS.horizonWeeks, 'plan.horizonWeeks', 1),
-    ...(version !== LEGACY_SCHEMA ? { purpose: preparePurpose(raw.purpose, 'plan.purpose') } : {}),
+    ...(profile.purpose ? { purpose: preparePurpose(raw.purpose, 'plan.purpose') } : {}),
     people: [], teams: [], work: [], practices: [],
   };
-  const budget = { remaining: current ? LIMITS.references : 4096 };
+  const budget = { remaining: profile.references };
   state.people = list(raw.people, LIMITS.people, 'plan.people')
-    .map((value, i) => { const path = `plan.people[${i}]`; return personFields(record(value, current ? 'person' : 'legacyPerson', path), path); });
+    .map((value, i) => { const path = `plan.people[${i}]`; return personFields(record(value, profile.relationships ? 'person' : 'legacyPerson', path), path); });
   const peopleById = indexRecords(state.people, 'plan.people');
   state.teams = list(raw.teams, LIMITS.teams, 'plan.teams').map((value, i) => {
     const path = `plan.teams[${i}]`;
-    const team = record(value, current ? 'team' : 'legacyTeam', path);
+    const team = record(value, profile.relationships ? 'team' : 'legacyTeam', path);
     return teamFields(team, references(team.personIds, peopleById, `${path}.personIds`, budget), path);
   });
   const teamsById = indexRecords(state.teams, 'plan.teams');
   const teamMembers = new Map(state.teams.map(team => [team.id, new Set(team.personIds)]));
   state.work = list(raw.work, LIMITS.work, 'plan.work').map((value, i) => {
     const path = `plan.work[${i}]`;
-    const work = record(value, current ? 'work' : 'legacyWork', path);
+    const work = record(value, profile.relationships ? 'work' : 'legacyWork', path);
     const teamId = text(work.teamId, `${path}.teamId`, true);
     if (!teamsById.has(teamId)) reject('reference', `${path}.teamId`, 'Choose an existing team.');
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
@@ -506,7 +687,7 @@ function prepareVersion(candidate, version) {
     return workFields(work, personIds, path);
   });
   const workById = indexRecords(state.work, 'plan.work');
-  state.practices = list(raw.practices, LIMITS.practices, 'plan.practices').map((value, i) => {
+  if (!profile.capabilities) state.practices = list(raw.practices, LIMITS.practices, 'plan.practices').map((value, i) => {
     const path = `plan.practices[${i}]`;
     const practice = record(value, 'practice', path);
     if (!PRACTICE_IDS.has(practice.practiceId)) reject('practice', `${path}.practiceId`, 'Choose a defined practice.');
@@ -516,9 +697,9 @@ function prepareVersion(candidate, version) {
       workIds: references(practice.workIds, workById, `${path}.workIds`, budget) };
   });
   indexRecords(state.practices, 'plan.practices');
-  if (current) {
+  if (profile.relationships) {
     // Scalar references join the same current-version budget as ordered lists.
-    budget.remaining -= state.work.length + state.practices.length;
+    budget.remaining -= state.work.length + (profile.capabilities ? 0 : state.practices.length);
     if (budget.remaining < 0) reject('reference-budget', 'plan', 'Use at most the declared total reference budget.');
     state.contributions = list(raw.contributions, LIMITS.contributions, 'plan.contributions').map((value, i) => {
       const path = `plan.contributions[${i}]`;
@@ -541,12 +722,14 @@ function prepareVersion(candidate, version) {
     });
     indexRecords(state.connections, 'plan.connections');
   }
+  const graph = profile.capabilities ? prepareCapabilities(raw, state, peopleById, teamsById, workById, budget) : null;
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
   const result = calculate(state, peopleById);
   return freeze({ state, result, serialized,
-    ...(current ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}) });
+    ...(profile.relationships ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}),
+    ...(graph ? { capabilities: capabilitySummaries(state, graph, peopleById, teamsById, workById, result) } : {}) });
 }
 
 function prepareSelectedVersion(candidate, version) {
@@ -556,10 +739,12 @@ function prepareSelectedVersion(candidate, version) {
   // bytes are fully admitted before migration. Only this owned state is copied.
   return prepareVersion({ ...admitted.state, schemaVersion: CONTRACT.schemaVersion,
     purpose: admitted.state.purpose ?? emptyPurpose(),
-    people: admitted.state.people.map(row => ({ ...row, role: emptyRole(), lifecycle: 'active' })),
-    teams: admitted.state.teams.map(row => ({ ...row, lifecycle: 'active' })),
-    work: admitted.state.work.map(row => ({ ...row, lifecycle: 'active' })),
-    contributions: [], connections: [] }, CONTRACT.schemaVersion);
+    people: admitted.state.people.map(row => ({ role: emptyRole(), lifecycle: 'active', ...row })),
+    teams: admitted.state.teams.map(row => ({ lifecycle: 'active', ...row })),
+    work: admitted.state.work.map(row => ({ lifecycle: 'active', ...row })),
+    contributions: admitted.state.contributions ?? [], connections: admitted.state.connections ?? [],
+    practices: admitted.state.practices.map(row => createLegacyPractice(row.id, row.practiceId, row.teamId, row.workIds)),
+    abilities: [], capabilityEvidence: [] }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -612,7 +797,7 @@ export function createExamplePlan() {
     people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active' })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],
-    contributions: [], connections: [],
-    practices: [{ id: 'shared-expectations', practiceId: 'expectation', teamId: 'delivery', workIds: ['review'] }],
+    contributions: [], connections: [], abilities: [], capabilityEvidence: [],
+    practices: [createLegacyPractice('shared-expectations', 'expectation', 'delivery', ['review'])],
   };
 }
