@@ -165,6 +165,7 @@
             <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
             <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
             <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
+            <button type="button" id="native-studio-tab-assurance" data-native-chapter="assurance" aria-controls="native-studio-assurance"><span>Quality &amp; recovery</span></button>
             <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
           </div>
           <details class="native-purpose" data-native-purpose>
@@ -203,6 +204,7 @@
               </ol>
               <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
               <p><a href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
+              <p><a href="#native-studio-assurance" data-native-open-assurance>Prepare a review or recovery rehearsal</a> and compare the work before you accept it.</p>
               <p><a href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention and explicit supporting sessions.</p>
             </div>
           </details>
@@ -340,16 +342,19 @@
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
                     <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
                   </output>
+                  <div class="native-minutes-control">
+                    <label for="native-minutes-knob">Minutes dial</label>
                   <div class="native-knob" data-native-minutes-dial hidden>
                     <div class="native-knob__ticks" aria-hidden="true"></div>
                     <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
-                    <input type="range" min="0" max="59" step="1" value="30" data-native-minutes-knob aria-label="Minutes rotary control" aria-describedby="native-minutes-knob-help native-minutes-error">
+                    <input type="range" min="0" max="59" step="1" value="30" id="native-minutes-knob" data-native-minutes-knob aria-describedby="native-minutes-knob-help native-minutes-error">
+                  </div>
                   </div>
                   <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap the dial, use arrow keys, or enter minutes below. Escape restores the value where a turn began.</p>
                   <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
                 <div class="native-coordination__controls">
-                  <div class="native-coordination__control">
+                  <div class="native-coordination__control native-coordination__control--hours">
                     <label for="native-hours">Hours</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
@@ -358,7 +363,7 @@
                     </div>
                     <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession" hidden>0–24 hours</p>
                   </div>
-                  <div class="native-coordination__control">
+                  <div class="native-coordination__control native-coordination__control--minutes">
                     <label for="native-minutes">Minutes</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
@@ -748,7 +753,10 @@
               <div class="native-change__selectors">
                 <div data-change-frameworks></div><div data-change-lenses></div><div data-change-filters></div>
               </div>
-              <section class="native-change__interpretation" data-change-interpretation aria-label="Viewpoint on the plan"></section>
+              <section class="native-change__lens-field" aria-label="Explore the plan through a viewpoint">
+                <div class="native-change__lens-wheel" data-change-lens-wheel role="group" aria-label="Choose an interpretive lens"></div>
+                <section class="native-change__interpretation" data-change-interpretation aria-label="Viewpoint on the plan"></section>
+              </section>
               <div class="native-change__matrix" data-change-matrix></div>
               <section class="native-change__four-actions" data-change-four-actions aria-label="Questions for the next discussion"></section>
               <section class="native-change__attention" aria-labelledby="native-change-attention-title">
@@ -770,6 +778,36 @@
             <div data-change-manual></div>
           </details>
           <noscript><p>Frameworks offer different questions about how work becomes routine. Relative attention describes emphasis. Actual sessions carry their people, time and funding; the complete original Studio remains available below.</p></noscript>
+        </section>
+        <section class="native-assurance" id="native-studio-assurance" data-native-chapter-panel="assurance" data-native-assurance aria-labelledby="native-assurance-title">
+          <header class="native-assurance__heading">
+            <h3 id="native-assurance-title" class="native-zine__heading">Prepare for review, recovery and learning</h3>
+            <p>Choose the checks your initiative needs, rehearse a complication, and plan the work that helps people respond. Compare the proposed effort and price before applying a change.</p>
+          </header>
+          <div class="native-coordination__recovery" data-assurance-recovery hidden>
+            <p data-assurance-current></p>
+            <div class="native-coordination__actions"><button type="button" data-assurance-action="review">Review saved edits</button><button type="button" data-assurance-action="current">Use current values</button><button type="button" data-assurance-action="discard">Discard saved edits</button></div>
+          </div>
+          <form data-assurance-form novalidate>
+            <fieldset data-assurance-fields disabled aria-label="Quality, recovery, learning and rehearsal">
+              <section class="native-assurance__quality" data-assurance-quality aria-label="Quality planning assumptions"></section>
+              <section class="native-assurance__concepts" data-assurance-concepts aria-label="Quality checks and supporting work"></section>
+              <section class="native-assurance__statistics" data-assurance-statistics aria-label="Illustrative quality attention"></section>
+              <section class="native-assurance__events" data-assurance-events aria-label="Recovery assumptions and support"></section>
+              <section class="native-assurance__learning" data-assurance-learning aria-label="Choose the next learning observation"></section>
+              <section class="native-assurance__rehearsal" data-assurance-rehearsal aria-label="Rehearse a complication"></section>
+              <section class="native-assurance__work" data-assurance-work aria-label="Proposed supporting work"></section>
+              <div class="native-coordination__preview" data-assurance-preview aria-live="polite" aria-atomic="true">Choose a quality or recovery assumption to inspect its effect.</div>
+              <p class="native-coordination__error" data-assurance-error></p>
+              <div class="native-coordination__actions"><button type="submit" data-assurance-action="apply" disabled>Apply changes</button><button type="button" data-assurance-action="cancel" disabled>Cancel changes</button></div>
+            </fieldset>
+          </form>
+          <p class="native-coordination__status" data-assurance-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <details class="native-assurance__manual">
+            <summary>Quality and recovery manual <span>Read the estimate, prepare a response, and record what you observe.</span></summary>
+            <div data-assurance-manual></div>
+          </details>
+          <noscript><p>Quality and recovery planning connects explicit assumptions to named working sessions and reviewers. The complete original Studio remains available below; the accepted ledger above shows how declared work receives its price.</p></noscript>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title" class="native-zine__heading">Keep and compare your plan.</h3>

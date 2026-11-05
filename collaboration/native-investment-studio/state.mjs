@@ -29,7 +29,8 @@ function restoredEnvelope(projection) {
   // Nested state/result and serialized bytes are already owned and immutable.
   // Only the accepted envelope needs fresh identity to retire earlier edits.
   return Object.freeze({ state: projection.state, result: projection.result, serialized: projection.serialized,
-    observations: projection.observations, capabilities: projection.capabilities, change: projection.change });
+    observations: projection.observations, capabilities: projection.capabilities, change: projection.change,
+    assurance: projection.assurance });
 }
 
 // One accepted owner per instance. Captures remain immutable after later commits.

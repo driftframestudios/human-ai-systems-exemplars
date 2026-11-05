@@ -61,6 +61,7 @@ then identifies each behavior's implementation owner.
 - `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
 - `change-models.mjs` transfers the original framework, lens, attention and Four Actions definitions into a finite immutable catalogue; its pure projection reads admitted Change settings.
 - `change-proposals.mjs` prepares settings and explicitly configured support work together. `change-draft.mjs` retains raw entries, and `change-controller.mjs` receives the framework matrix, viewpoints, mixer and support proposal.
+- `assurance-models.mjs` preserves quality concepts, original scenario assumptions, learning prompts and authored rehearsals. `investment-analysis/staffing-adapter.mjs` receives the original staffing formula for separate quality/recovery illustrations. `assurance-proposals.mjs`, `assurance-draft.mjs` and `assurance-controller.mjs` connect those readings to explicit, recoverable work proposals.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -113,11 +114,11 @@ inspect today.
 | Coordination | Full Studio coordination horizon, human-received AI contributions, and collaboration routes | Named work, teams, and participants establish effort and ownership. Directed connections have a canonical source contract; patch-bay controls, decision gates, and schedule behavior follow their named receivers. |
 | Teams and capacity | Role quantities, rates, allocation, function, posture, ability enablers, and decision boundaries | Stable person and team identities, funded minutes, rates, membership, and explicit capacity consequences. Canonical role, lifecycle and human-responsibility records now support their next focused editors. |
 | Abilities and work | Activities, framework-related suggestions, and stated desired abilities | Stable work records and practice assignments reference one work owner. Customer abilities and decision authority remain distinct from team practices. |
-| Change and interpretation | Six change frameworks, eight interpretive lenses, and eight relative attention weights | The capability inventory preserves their separate jobs. Framework mappings and interpretation enter a later native module; attention weights retain their meaning as emphasis. |
+| Change and interpretation | Six change frameworks, eight interpretive lenses, and eight relative attention weights | The capability inventory preserves their separate jobs. Native Change retains each framework map and its explicit support; attention weights retain their meaning as emphasis. |
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
 | Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.5.0 round-trip, admitted 0.1.0 through 0.4.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.6.0 round-trip, admitted 0.1.0 through 0.5.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
 recovery rows. Its geometry supplies a visual precedent; actual native timing,
@@ -125,7 +126,7 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.5.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.6.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
 `horizonWeeks`, closed `purpose` and `changeSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
@@ -145,6 +146,51 @@ are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
 
+### Quality, recovery and learning
+
+Schema 0.6 adds the closed `assuranceSettings` record. A reference horizon is
+explicit hours, sprints or quarters; an unset horizon remains open. It stays
+separate from the native plan's weeks. Quality settings retain inclusion,
+horizon allocation, independent review rate, half-step sigma, additional share,
+and all ten named concepts with their ordered supporting-work links. Recovery
+retains bounded events, aggregate minutes, occurrence counts, inclusion,
+lifecycle, receiver, review boundary and support. Learning records name their
+source prompt, context, decision owner, review boundary and supporting work.
+
+A rehearsal names an exact scenario definition/version, context, assumptions,
+response, related records and plan revision. Recording an observation requires
+context, a response and a named reviewer. Editing a retained rehearsal keeps
+its scenario identity; another scenario receives another record. Import admits
+an independently complete snapshot through the ordinary exchange boundary.
+
+`prepareAssuranceProposal` accepts complete settings and explicit new work,
+work updates and connection updates together. Preview names per-person time,
+occurrences, participants, aggregate person-minutes and the money change.
+Apply publishes one accepted event; Cancel, saved drafts, stale review, Undo
+and baseline preserve their existing ownership. Imported array order survives
+untouched and real edits. Shared work retains one account. Removing an
+illustrative assumption leaves separately accepted work under its own control.
+
+The analytical adapter calls the existing `InvestmentCore.staffing` owner.
+One sprint, 18% allocation, sigma 3 and $195/hour yields 15.84 illustrative
+quality hours and $3,088.80. Two three-hour recovery events at a $150 equally
+weighted selected-person rate with 50% additional share yield $450. Quality and
+recovery sub-results remain independently available when the other lacks an
+input. Explicit zero rates retain zero; missing rates retain an open estimate.
+Native investment continues to price accepted people and working sessions.
+
+The sigma diagram shows a centered normal reference, symmetric marked tails,
+its literal probability and the original seven attention areas. The source
+multiplier describes planning attention; a human observation establishes actual
+use or readiness. Learning suggestions derive from scenario, current emphasis,
+unknowns and selected quality checks. Opening a prompt changes disclosure;
+planning its work uses the same proposal boundary.
+
+Initial bounds allow 32 recovery events, 32 learning actions and 64 rehearsal
+records under the existing shared reference budget. Exact prior schema byte
+and reference ceilings remain intact. Source-derived catalogue work is fixed;
+projection and proposal work follow bounded records and their explicit links.
+
 ### Purpose and schema migration
 
 Purpose has exactly six nullable fields: `changedAbility`, `affectedPopulation`,
@@ -155,7 +201,7 @@ whitespace. Canonical output retains the trimmed, nonblank value; explicit
 or explicit null. The purpose draft adapter converts blank input into null at
 Apply. Purpose text describes the initiative independently of monetary inputs.
 
-`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, `0.4.0`, or `0.5.0` from the root's own
+`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, `0.4.0`, `0.5.0`, or `0.6.0` from the root's own
 enumerable schema-version data descriptor. It fully admits each source version's
 closed root, rows, references, numeric meaning and byte budget before constructing
 a current record. Version 0.1 receives six null purpose fields; versions 0.1 and 0.2
@@ -165,8 +211,10 @@ Version 0.3 retains its roles, lifecycle, purpose, contributions and connections
 Practices in versions 0.1–0.3 become the immutable legacy definition version with an
 ordered `general-support` binding; earlier work references retain their order.
 Versions 0.1–0.3 receive empty abilities and capability-evidence collections.
-Version 0.4 retains its exact capability instances and observations. All older
-versions receive the initial Change settings with empty support links.
+Version 0.4 retains its exact capability instances and observations. Versions
+through 0.4 receive initial Change settings with empty support links. Version
+0.5 retains its complete Change settings. Earlier versions receive initial
+quality and recovery settings with empty work links and rehearsal records.
 The owned migrated record then passes current admission. Current envelopes
 supply every declared current field; finite row-command compatibility has its
 own explicit construction boundary.
@@ -685,7 +733,7 @@ still carries the existing accepted projection, giving a future UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.5.0 export/import retains
+edit. Rejection preserves the prior snapshot. Native 0.6.0 export/import retains
 the supported state, and genuine native 0.1.0/0.2.0 plans migrate through their complete
 original admission. Full-Studio exports and unknown schema versions receive an
 explicit compatibility result; their original instruments retain those records

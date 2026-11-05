@@ -1,3 +1,4 @@
+import { describeAssuranceReference } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
@@ -253,6 +254,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.dependencies.hidden = references.length === 0;
     elements.dependencies.replaceChildren(...references.map(reference => {
       const row = document.createElement('li');
+      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
+      if (assurance) {
+        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
+        row.append(`${assurance}. `, link); return row;
+      }
       if (reference.collection === 'changeSettings') {
         const map = projection.state.changeSettings.frameworkMaps.find(item => item.frameworkId === reference.id);
         const name = getChangeFramework(map.frameworkId, map.version).name;

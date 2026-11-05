@@ -100,6 +100,24 @@ function dependencies(state, collection, id) {
         field: `frameworkMaps[${mapIndex}].components[${componentIndex}].${field}` }));
     }));
   }
+  const assurance = state.assuranceSettings;
+  const assuranceReference = (recordId, field) => references.push(Object.freeze({ collection: 'assuranceSettings', id: recordId, field }));
+  if (collection === 'people' && assurance.context.recoveryRatePersonIds.includes(id)) {
+    assuranceReference('recovery-rate-population', 'context.recoveryRatePersonIds');
+  }
+  if (collection === 'work') assurance.quality.concepts.forEach((row, index) => {
+    if (row.workIds.includes(id)) assuranceReference(row.conceptId, `quality.concepts[${index}].workIds`);
+  });
+  for (const [name, human] of [['recoveryEvents', 'receiverPersonId'], ['learningActions', 'decisionOwnerPersonId'], ['rehearsals', 'reviewerPersonId']]) {
+    assurance[name].forEach((row, index) => {
+      if (collection === 'people' && row[human] === id) assuranceReference(row.id, `${name}[${index}].${human}`);
+      if (collection === 'work' && row.workIds.includes(id)) assuranceReference(row.id, `${name}[${index}].workIds`);
+      if (name === 'rehearsals') {
+        if (collection === 'people' && row.personIds.includes(id)) assuranceReference(row.id, `${name}[${index}].personIds`);
+        if (collection === 'connections' && row.connectionIds.includes(id)) assuranceReference(row.id, `${name}[${index}].connectionIds`);
+      }
+    });
+  }
   return Object.freeze(references);
 }
 
@@ -127,6 +145,17 @@ export function prepareAssembly(base, candidate) {
     case 'change.settings.replace':
       if (JSON.stringify(command.changeSettings) === JSON.stringify(state.changeSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, changeSettings: command.changeSettings }) };
+    case 'assurance.settings.replace': {
+      const previous = new Map(state.assuranceSettings.rehearsals.map(row => [row.id, row]));
+      for (const row of command.assuranceSettings.rehearsals) {
+        const existing = previous.get(row.id);
+        if (existing && (existing.definitionId !== row.definitionId || existing.definitionVersion !== row.definitionVersion)) {
+          throw new PlanError('rehearsal-definition-change', 'command.assuranceSettings.rehearsals', 'Use a new rehearsal identifier for another scenario so observations retain their original subject.');
+        }
+      }
+      if (JSON.stringify(command.assuranceSettings) === JSON.stringify(state.assuranceSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, assuranceSettings: command.assuranceSettings }) };
+    }
     case 'person.create':
       collection = 'people'; rows = append(state.people, { role: emptyRole(), lifecycle: 'active', ...command.person }, 'command.person.id'); break;
     case 'team.create':

@@ -1,3 +1,4 @@
+import { describeAssuranceReference } from './assurance-models.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
 
@@ -176,7 +177,14 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     const references = error?.references ?? [];
     elements.dependencies.hidden = references.length === 0;
     elements.dependencies.replaceChildren(...references.map(reference => {
-      const item = document.createElement('li'); item.textContent = `${referenceLabels.get(reference.collection)?.get(reference.id) ?? reference.id}: ${reference.field}`; return item;
+      const item = document.createElement('li');
+      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
+      if (assurance) {
+        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
+        item.append(`${assurance}. `, link); return item;
+      }
+      item.textContent = `${referenceLabels.get(reference.collection)?.get(reference.id) ?? reference.id}: ${reference.field}`; return item;
     }));
     elements.apply.disabled = references.length > 0;
     elements.apply.setAttribute('aria-disabled', String(!draft?.changed));

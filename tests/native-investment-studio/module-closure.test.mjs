@@ -35,6 +35,21 @@ test('strings, comments, regular expressions and import.meta remain ordinary Jav
   `), [entry]);
 });
 
+test('the exact staffing adapter and formula owner join the static graph with independent delivery ownership', async () => {
+  const adapter = 'collaboration/investment-analysis/staffing-adapter.mjs';
+  const core = 'collaboration/investment-analysis/core.js';
+  const sources = new Map([
+    [entry, "import { estimate } from '../investment-analysis/staffing-adapter.mjs'; export const result = estimate();"],
+    [adapter, "import * as imported from './core.js'; export const estimate = () => imported.default ?? globalThis.InvestmentCore;"],
+    [core, "(function (root) { root.InvestmentCore = Object.freeze({ staffing: () => 0 }); })(globalThis);"],
+  ]);
+  const paths = [entry, adapter, core].sort();
+  assert.deepEqual(await parseNativeModuleGraph(name => sources.get(name)), paths);
+  assert.doesNotThrow(() => verifyNativeModuleOwnership(paths, manifest(paths), paths));
+  assert.throws(() => verifyNativeModuleOwnership(paths, manifest([entry, adapter]), paths), error('manifest-missing'));
+  assert.throws(() => verifyNativeModuleOwnership(paths, manifest(paths), [entry, adapter]), error('inventory-missing'));
+});
+
 for (const [name, source, code] of [
   ['literal dynamic', "import('./dependency.mjs')", 'dynamic-import'],
   ['computed dynamic', 'const destination = globalThis.destination; import(destination)', 'dynamic-import'],
@@ -51,6 +66,8 @@ for (const [name, source, code] of [
   ['fragment', "import './dependency.mjs#part'", 'import-path'],
   ['encoded path', "import './%64ependency.mjs'", 'import-path'],
   ['outside root', "import '../outside.mjs'", 'module-path'],
+  ['other shared sibling', "import '../investment-analysis/other.mjs'", 'module-path'],
+  ['unlisted JavaScript', "import './dependency.js'", 'module-path'],
   ['JSON attributes', "import value from './dependency.mjs' with { type: 'json' }", 'import-attributes'],
   ['syntax', 'export const value = ;', 'module-syntax'],
 ]) test(`syntax admission diagnoses ${name} before delivery`, async () => {

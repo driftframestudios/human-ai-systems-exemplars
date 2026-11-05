@@ -135,12 +135,34 @@ test('Change settings survive preview, baseline and export while their money sta
   assert.deepEqual(studio.read().state.changeSettings, initial.state.changeSettings);
 });
 
+test('Assurance file preview retains its illustration and linked work independently of accepted investment', () => {
+  const studio = createStudio(createShowcasePlan()), exchange = createPlanExchange(studio, editingFixture());
+  const initial = studio.read(), bytes = studio.exportText(); studio.setBaseline(initial);
+  const candidate = JSON.parse(bytes);
+  candidate.assuranceSettings.context.referenceHorizon = { quantity: 1, unit: 'sprints' };
+  candidate.assuranceSettings.context.recoveryRatePersonIds = ['noor', 'sam'];
+  candidate.assuranceSettings.recoveryAdditionalShareBasisPoints = 5000;
+  candidate.assuranceSettings.recoveryEvents.push({ id: 'recovery-review', label: 'Review the recovery response', included: true, lifecycle: 'active',
+    eventCount: 2, aggregateMinutesPerEvent: 180, receiverPersonId: 'noor', reviewBoundary: 'The service-request pilot', workIds: ['review'] });
+  const proposal = exchange.previewText(JSON.stringify(candidate)); assert.equal(proposal.ok, true);
+  assert.deepEqual(proposal.view.preview.changes.assuranceSettings, ['context', 'recoveryAdditionalShareBasisPoints', 'recoveryEvents']);
+  assert.equal(proposal.view.preview.projection.assurance.quality.estimate.amountCents, 308880);
+  assert.equal(proposal.view.preview.projection.assurance.recovery.estimate.amountCents, 30000);
+  assert.equal(proposal.view.preview.projection.result.plannedCommitmentCents, 398000);
+  assert.equal(studio.exportText(), bytes);
+  assert.equal(exchange.apply(proposal.view.preview.token).ok, true);
+  assert.deepEqual(JSON.parse(studio.exportText()).assuranceSettings, candidate.assuranceSettings);
+  assert.deepEqual(exchange.previewText(studio.exportText()).view.preview.changes.assuranceSettings, []);
+  assert.strictEqual(studio.readBaseline().projection, initial);
+  assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.exportText(), bytes);
+});
+
 test('legacy preview carries truthful source version while accepted export remains current', () => {
   const { studio, exchange } = fixture();
   const legacy = createExamplePlan();
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
-  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings;
+  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings;
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId, teamId: row.teamId, workIds: row.supportBindings[0].workIds }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
@@ -148,9 +170,9 @@ test('legacy preview carries truthful source version while accepted export remai
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.5.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.6.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.5.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.6.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

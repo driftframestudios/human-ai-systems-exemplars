@@ -82,7 +82,32 @@ for (const engine of names) {
     for (const id of ['urgency', 'coalition', 'vision', 'broad-participation', 'remove-barriers', 'short-term-wins', 'sustain-acceleration', 'anchor-in-culture']) {
       await field(page, `attention.${id}`).fill(id === 'urgency' ? '25' : '0');
     }
-    await expect(panel(page).locator('[data-change-attention-note]')).toHaveText('Give Urgency the most attention (25 parts). Consider whether the planned work reflects that choice.');
+    await expect(panel(page).locator('[data-change-attention-note]')).toContainText('Give the most attention to Urgency (25 parts). Consider whether the planned work reflects that choice.');
+    await expect(panel(page).locator('.native-change__emphasis-tag')).toHaveText('Urgency');
+    await expect(panel(page).locator('[data-change-channel="urgency"]')).toHaveAttribute('data-emphasis', 'highest');
+    const geometry = await panel(page).locator('.native-change__channel').evaluateAll(channels => channels.map(channel => {
+      const box = channel.getBoundingClientRect(), heading = channel.querySelector('h5'), range = channel.querySelector('input[type="range"]'), note = channel.querySelector('.native-change__channel-description');
+      const fader = range.getBoundingClientRect();
+      return { height: box.height, faderStart: fader.top - box.top, faderHeight: fader.height, headingColor: getComputedStyle(heading).color, descriptionAfter: note.getBoundingClientRect().top > fader.bottom };
+    }));
+    assert.ok(geometry.every(row => Math.abs(row.height - geometry[0].height) < 1 && Math.abs(row.faderStart - geometry[0].faderStart) < 1 && Math.abs(row.faderHeight - geometry[0].faderHeight) < 1 && row.descriptionAfter), JSON.stringify(geometry));
+    assert.ok(geometry.every(row => row.headingColor === 'rgb(248, 241, 217)'), 'light headings remain readable on the dark housing');
+    for (const key of ['framework', 'lens', 'sourceFilter']) {
+      const size = await field(page, key).boundingBox(); assert.ok(size.height >= 44, `${key} has a complete field target`);
+      if (await field(page, key).evaluate(el => getComputedStyle(el).appearance === 'base-select')) {
+        assert.equal(await field(page, key).evaluate(el => getComputedStyle(el).backgroundImage), 'none', 'the native picker retains one arrow');
+        await field(page, key).click(); await expect.poll(() => field(page, key).evaluate(el => el.matches(':open'))).toBe(true);
+        await field(page, key).click(); await expect.poll(() => field(page, key).evaluate(el => el.matches(':open'))).toBe(false);
+      }
+      await field(page, key).click(); await page.keyboard.press('Escape');
+      await expect(field(page, key)).toBeFocused();
+    }
+    const lensChoice = panel(page).locator('[data-change-lens="operating@1.0.0"]');
+    await lensChoice.click(); await expect(lensChoice).toHaveAttribute('aria-pressed', 'true');
+    await expect(field(page, 'lens')).toHaveValue('operating@1.0.0');
+    await field(page, 'lens').selectOption('people@1.0.0');
+    await expect(panel(page).locator('[data-change-lens="people@1.0.0"]')).toHaveAttribute('aria-pressed', 'true');
+
     await field(page, 'framework').selectOption('kotter@1.0.0');
     await expect(field(page, 'map.kotter.urgency.status')).toHaveValue('look'); await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
     await expect(panel(page).locator('[data-change-preview]')).toContainText('Proposed investment: $16,000.00. Accepted investment: $16,000.00.');

@@ -3,6 +3,36 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/investment-analysis/core.js",
+      "projected_path": "collaboration/investment-analysis/core.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/investment-analysis/staffing-adapter.mjs",
+      "projected_path": "collaboration/investment-analysis/staffing-adapter.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/assurance-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/assurance-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/assurance-models.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-models.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/assurance-proposals.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-proposals.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/404.html",
       "projected_path": "404.html",
       "media_type": "text/html"

@@ -543,3 +543,72 @@ their current definitions already travel with the plan. #654 receives separate
 analytical assumptions and traces. #649/#638 complete scenarios, reports and
 the final About composition. The full original Studio and human-cued release
 boundary remain intact. Pause at performance refinement after the showcase.
+
+## 2026-11-05 — Rehearse a response and inspect its consequences
+
+**Accepted ground.** PR #690 integrated the Change chapter at `dev@57f7b3d`,
+with a merge tree equal to its independently reviewed source. Quality,
+recovery and learning now receive the same accepted plan through #652.
+
+**What a visitor can do.** The Quality & recovery chapter retains the original
+quality concepts, reference horizon, independent rate, sigma illustration,
+recovery assumptions and contextual learning prompts. Its authored complication
+cards let a visitor prepare a response, name affected work and people, inspect
+changes, Apply, compare, and keep or Undo the result. A 30-minute additional
+session for the pilot's Quality reviewer and Operations specialist adds $100.
+A reviewer records an observation, its context and the decision it informs.
+Participation leaves competence and readiness for their fitting observation.
+
+**Meaning to preserve.** Reference estimates and accepted work remain distinct.
+The original staffing calculation owns quality and recovery illustrations;
+explicit native people, time and funding own investment. The reference horizon
+uses hours, 80-hour sprints or 520-hour quarters. Native plan weeks retain their
+own meaning. Aggregate effort and per-person duration appear together in the
+proposal. Reusing a session retains its one account. Removing an estimate leaves
+accepted work available for an explicit decision. Settings, proposed work and
+connection changes share one acceptance and one Undo event.
+
+**Interaction continuity.** Quality concepts, events, learning actions and
+rehearsals expose their supporting work and a route to inspect or create it.
+Collapsed records preview that support. Raw entries survive chapter changes,
+missing-record creation and stale review. A reused local rehearsal ID after
+Cancel or Undo receives its current scenario's visible parent; the scenario
+identity of an accepted observation stays stable. Independent review identified
+that parent repair and a mistaken quarter label; the receiving feature includes
+their focused checks.
+
+**Control refinements from human use.** The Change selectors were visibly
+compressed to 17 pixels in the earlier browser stylesheet. Shared native field
+sizing gives them room for their text and a comfortable target. The browser’s
+native base picker supplies repeat-click dismissal where supported, with the
+standard native picker as its fallback. Actual in-app observation confirmed
+open and repeated-click close for framework, viewpoint and suggestion source;
+keyboard dismissal and selection retain their native owner. The [HTML select
+contract](https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element)
+supplies that semantic boundary. Attention
+panels keep aligned titles, tracks, numeric controls and equal outer heights;
+descriptions sit beneath the controls. Light labels and separate warm filled
+tracks make the slider knob and current amount legible. Focus changes the
+channel's texture. Current-emphasis tags and a short update cue explain that
+this reading responds to the visitor's selections; the same warm cue marks
+matching channels. Zero and tied emphasis retain their literal meanings.
+
+The native lens selector reuses the original Studio's wheel composition: fixed
+labeled choices surround a brief reel turn. Reduced motion settles the same
+selection directly. A visible Minutes dial label ties the session knob to its
+exact controls. Future tactile controls follow their data: bounded numbers,
+exclusive choices and actual toggles each receive the matching native input.
+The original Coordination Horizon supplies useful arrangement and navigation
+patterns for #653; its approximate spans remain distinguishable from the native
+score's explicit timing.
+
+**Continuation.** The feature PR owns the final source, browser, visual and
+independent-review return. #691 next explains the offered planning methods,
+uses laptop and wide space for meaningful comparisons, and shares the session
+time controls with supporting-work proposals. Its source audit preserves PODA
+learning questions, Impact Map discoverables, and Strategy Canvas anchored
+readings. #653 receives the authored score, agenda, capacity and decision gates; #654 receives contribution traces and analytical
+reconciliation. #649/#638/#656 complete scenarios, reports and final placement.
+The full original Studio remains discoverable. The tagged public release
+follows the human cue through #686. Pause at performance refinement after the
+holistic showcase.

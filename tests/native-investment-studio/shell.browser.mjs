@@ -98,7 +98,7 @@ async function open(t, engine, { fragment = '', complete = false, ...options } =
 async function selected(page, name) {
   await expect(tab(page, name)).toHaveAttribute('aria-selected', 'true');
   await expect(chapter(page, name)).toBeVisible();
-  for (const other of ['coordination', 'people', 'work', 'change', 'investment'].filter(key => key !== name)) {
+  for (const other of ['coordination', 'people', 'work', 'change', 'assurance', 'investment'].filter(key => key !== name)) {
     await expect(tab(page, other)).toHaveAttribute('aria-selected', 'false');
     await expect(chapter(page, other)).toBeHidden();
   }

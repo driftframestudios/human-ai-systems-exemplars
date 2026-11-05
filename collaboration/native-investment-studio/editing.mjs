@@ -9,6 +9,7 @@ import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describ
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
 import { createCapabilityDraftAdapter, CAPABILITY_FORMS, makeCapabilityTarget, describeCapabilityTarget,
   copyCapabilityRaw, sameCapabilityRaw } from './capability-draft.mjs';
+import { createAssuranceDraftAdapter, assuranceField, copyAssuranceRaw, sameAssuranceRaw } from './assurance-draft.mjs';
 import { createChangeDraftAdapter, CHANGE_FIELDS, copyChangeRaw, sameChangeRaw } from './change-draft.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
@@ -22,6 +23,8 @@ const TYPES = Object.freeze({
     create: createPersonDraftAdapter }),
   purpose: Object.freeze({ id: 'purposeId', index: state => new Map([['purpose', state.purpose]]),
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
+  assurance: Object.freeze({ id: 'assuranceId', index: state => new Map([['assurance', state.assuranceSettings]]), ids: true, step: true,
+    rawFields: true, metadata: assuranceField, create: createAssuranceDraftAdapter, copy: copyAssuranceRaw, same: sameAssuranceRaw }),
   change: Object.freeze({ id: 'changeId', index: state => new Map([['change', state.changeSettings]]), ids: true, step: true,
     fields: Object.freeze(Object.keys(CHANGE_FIELDS)), fieldMetadata: CHANGE_FIELDS,
     create: createChangeDraftAdapter, copy: copyChangeRaw, same: sameChangeRaw }),
@@ -56,7 +59,7 @@ const INSTANCES = new WeakMap();
 const diagnostic = (code, message) => Object.freeze({ code, path: 'draft', message });
 const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.token;
 const keyFor = (kind, targetId) => `${kind}:${targetId}`;
-const fieldsFor = (kind, targetId) => TYPES[kind].describe ? Object.keys(TYPES[kind].describe(targetId).fields) : TYPES[kind].fields;
+const fieldsFor = (kind, targetId, raw) => TYPES[kind].rawFields ? Object.keys(raw) : TYPES[kind].describe ? Object.keys(TYPES[kind].describe(targetId).fields) : TYPES[kind].fields;
 const sameRaw = (kind, targetId, left, right) => TYPES[kind].same ? TYPES[kind].same(targetId, left, right)
   : fieldsFor(kind, targetId).every(field => left[field] === right[field]);
 const copyRaw = (kind, targetId, raw) => TYPES[kind].copy ? TYPES[kind].copy(targetId, raw) : Object.freeze({ ...raw });
@@ -251,8 +254,8 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
         const initialRaw = opened.view.draft.raw;
         const raw = mode === 'current' ? null : previousRaw ?? record?.raw;
         const formFields = TYPES[kind].describe?.(targetId).fields ?? TYPES[kind].fieldMetadata;
-        if (raw) for (const field of fieldsFor(kind, targetId)) {
-          const method = formFields?.[field].kind === 'ids' ? 'setIds' : 'setText';
+        if (raw) for (const field of fieldsFor(kind, targetId, raw)) {
+          const method = (TYPES[kind].metadata?.(field) ?? formFields?.[field])?.kind === 'ids' ? 'setIds' : 'setText';
           const result = adapter[method](opened.view.draft.token, field, raw[field]);
           if (!result.ok) { adapter.dispose(); return fail(kind, result.error); }
         }

@@ -1,3 +1,4 @@
+import { describeAssuranceReference } from './assurance-models.mjs';
 import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './command-draft.mjs';
 import { money, duration } from './display.mjs';
 
@@ -132,6 +133,12 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.dependencies.hidden = dependencies.length === 0;
     elements.dependencies.replaceChildren(...dependencies.map(reference => {
       const item = document.createElement('li');
+      const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
+      if (assurance) {
+        const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
+        link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);
+        item.append(`${assurance}. `, link); return item;
+      }
       const name = references.get(reference.collection)?.get(reference.id) ?? reference.id;
       item.textContent = `${REFERENCE_LABELS[reference.collection]}: ${name}`;
       return item;

@@ -19,6 +19,8 @@ import { describeCapabilityTarget } from './capability-draft.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { mountChangePanel } from './change-controller.mjs';
 import { summarizeChangeDraft } from './change-draft.mjs';
+import { mountAssurancePanel } from './assurance-controller.mjs';
+import { summarizeAssuranceDraft } from './assurance-draft.mjs';
 
 const INSTANCES = new WeakMap();
 const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
@@ -62,6 +64,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let templatePanel = null;
   let capabilityPanel = null;
   let changePanel = null;
+  let assurancePanel = null;
   let coordinationEditor = 'session';
   let peopleEditor = 'person';
   let activeChapter = 'coordination';
@@ -122,7 +125,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const createdLabel = created?.label;
     const team = state.teams.find(row => row.id === route.requiredTeamId);
     const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
-    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan' }[route.kind];
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan' }[route.kind];
     returnButton.textContent = `Return to ${destination}`;
     returnNote.textContent = createdLabel
       ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
@@ -152,9 +155,9 @@ export function mountCoordinationPanel(root, options = {}) {
   }
   function createPrerequisite(button) {
     const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
-    if (!['session', 'connection', 'assembly', 'contribution', 'template', 'capability', 'change'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
+    if (!['session', 'connection', 'assembly', 'contribution', 'template', 'capability', 'change', 'assurance'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
     const view = kind === 'template' ? null : editing[kind].read();
-    const target = view?.draft?.[{ session: 'sessionId', connection: 'connectionId', assembly: 'assemblyId', contribution: 'contributionId', capability: 'capabilityId', change: 'changeId' }[kind]];
+    const target = view?.draft?.[{ session: 'sessionId', connection: 'connectionId', assembly: 'assemblyId', contribution: 'contributionId', capability: 'capabilityId', change: 'changeId', assurance: 'assuranceId' }[kind]];
     if (kind !== 'template' && !target) { announce('Open the settings you want to continue, then add what they need.'); return; }
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
@@ -175,7 +178,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!route) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    chapterShell?.select(route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution'].includes(route.kind) ? 'people' : 'coordination');
+    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution'].includes(route.kind) ? 'people' : 'coordination');
     if (route.kind === 'template') {
       if (!templatePanel?.open()) return;
       returnRoutes.pop(); render(); renderReturnRoute();
@@ -183,7 +186,7 @@ export function mountCoordinationPanel(root, options = {}) {
       announce('Your arrangement entries are ready. Choose the added person and preview the arrangement.');
       return;
     }
-    const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel }[route.kind];
+    const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel }[route.kind];
     const result = panel.open(route.target);
     if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
     pendingReturnFocus = route.field ? { kind: route.kind, target: route.target, field: route.field } : null;
@@ -193,7 +196,7 @@ export function mountCoordinationPanel(root, options = {}) {
   }
   function inspectSupportingWork(kind, id, origin) {
     const target = origin?.targetId;
-    if (!target || (kind === 'capability' ? !describeCapabilityTarget(target) : target !== 'change') || !studio.read().state.work.some(row => row.id === id)) return;
+    if (!target || (kind === 'capability' ? !describeCapabilityTarget(target) : !['change', 'assurance'].includes(kind) || target !== kind) || !studio.read().state.work.some(row => row.id === id)) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     const held = editing.read().parked.some(record => record.kind === kind && record.targetId === target);
@@ -233,12 +236,12 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!pendingReturnFocus) return;
     const request = pendingReturnFocus;
     const { kind, target, field } = request, view = editing[kind].read();
-    const key = { session: 'sessionId', connection: 'connectionId', contribution: 'contributionId', assembly: 'assemblyId', capability: 'capabilityId', change: 'changeId' }[kind];
+    const key = { session: 'sessionId', connection: 'connectionId', contribution: 'contributionId', assembly: 'assemblyId', capability: 'capabilityId', change: 'changeId', assurance: 'assuranceId' }[kind];
     if (view.status !== 'editing' || view.draft?.[key] !== target) return;
-    const scope = { session: '[data-native-session-editor]', connection: '[data-native-connection-editor]', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]', capability: '[data-capability-form]', change: '[data-change-form]' }[kind];
+    const scope = { session: '[data-native-session-editor]', connection: '[data-native-connection-editor]', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]', capability: '[data-capability-form]', change: '[data-change-form]', assurance: '[data-assurance-form]' }[kind];
     const form = root.querySelector(scope), input = form?.querySelector(`[name="${field}"]`);
     if (!input) return;
-    if (kind === 'capability' || kind === 'change') {
+    if (['capability', 'change', 'assurance'].includes(kind)) {
       for (let ancestor = input.parentElement; ancestor && ancestor !== form; ancestor = ancestor.parentElement) {
         if (ancestor.tagName === 'DETAILS') ancestor.open = true;
       }
@@ -279,6 +282,7 @@ export function mountCoordinationPanel(root, options = {}) {
       }
       if (record.kind === 'purpose') return 'Plan purpose';
       if (record.kind === 'change') return 'Change planning';
+      if (record.kind === 'assurance') return 'Quality, recovery and learning';
       const names = record.kind === 'person' ? people : works;
       return names.get(record.targetId) ?? record.targetId;
     }
@@ -307,14 +311,15 @@ export function mountCoordinationPanel(root, options = {}) {
       const entries = Object.entries(record.raw).filter(([field, raw]) => record.kind !== 'capability'
         || (raw !== '' && raw !== 'no' && (!Array.isArray(raw) || raw.length)
           && (!field.startsWith('new.') || record.raw[`new.${field.split('.')[1]}.enabled`] === 'yes')));
-      values.textContent = record.kind === 'change' ? summarizeChangeDraft(record.raw)
+      values.textContent = record.kind === 'assurance' ? summarizeAssuranceDraft(record.raw)
+        : record.kind === 'change' ? summarizeChangeDraft(record.raw)
         : entries.map(([field, raw]) => `${target?.fields?.[field]?.label ?? labels[field] ?? field}: ${savedValue(field, raw)}`).join(' · ');
       item.append(title, values);
       if (!record.targetExists && !target) {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection', 'capability', 'change'].includes(record.kind)) {
+      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection', 'capability', 'change', 'assurance'].includes(record.kind)) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -413,10 +418,16 @@ export function mountCoordinationPanel(root, options = {}) {
     investmentPanel?.refresh();
     capabilityPanel?.refresh();
     changePanel?.refresh();
+    assurancePanel?.refresh();
     return view;
   }
 
   function click(event) {
+    const assuranceLink = event.target.closest('[data-native-open-assurance]');
+    if (assuranceLink && root.contains(assuranceLink)) {
+      event.preventDefault(); chapterShell?.select('assurance');
+      root.querySelector('[data-assurance-quality] input, [data-assurance-quality] select')?.focus(); return;
+    }
     const changeLink = event.target.closest('[data-native-open-change]');
     if (changeLink && root.contains(changeLink)) {
       event.preventDefault(); chapterShell?.select('change');
@@ -454,7 +465,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (button.hasAttribute('data-native-create')) { createPrerequisite(button); return; }
     if (button.hasAttribute('data-native-return-action')) { returnToDraft(); return; }
     if (button.hasAttribute('data-native-return-team')) { addCreatedPersonToTeam(); return; }
-    if (['review', 'use-current', 'useCurrent', 'current'].includes(button.dataset.action ?? button.dataset.sessionAction ?? button.dataset.connectionAction ?? button.dataset.responsibilityAction ?? button.dataset.assemblyAction ?? button.dataset.capabilityAction ?? button.dataset.changeAction)) focusReturnedField();
+    if (['review', 'use-current', 'useCurrent', 'current'].includes(button.dataset.action ?? button.dataset.sessionAction ?? button.dataset.connectionAction ?? button.dataset.responsibilityAction ?? button.dataset.assemblyAction ?? button.dataset.capabilityAction ?? button.dataset.changeAction ?? button.dataset.assuranceAction)) focusReturnedField();
     if (button.dataset.savedDiscard) {
       const saved = savedByKey.get(button.dataset.savedDiscard);
       if (!saved) return;
@@ -477,7 +488,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (saved.kind === 'purpose') purposePanel?.open();
       else {
         purposePanel?.close({ resume: false });
-        chapterShell?.select(saved.kind === 'change' ? 'change' : saved.kind === 'capability' ? 'work' : ['person', 'assembly', 'role', 'contribution'].includes(saved.kind) ? 'people' : 'coordination');
+        chapterShell?.select(saved.kind === 'assurance' ? 'assurance' : saved.kind === 'change' ? 'change' : saved.kind === 'capability' ? 'work' : ['person', 'assembly', 'role', 'contribution'].includes(saved.kind) ? 'people' : 'coordination');
         if (saved.kind === 'assembly') opened = assemblyPanel?.open(saved.targetId);
         else if (saved.kind === 'person') teamPanel?.select(saved.targetId);
         else if (saved.kind === 'session') opened = workPanel?.open(saved.targetId);
@@ -485,6 +496,7 @@ export function mountCoordinationPanel(root, options = {}) {
         else if (saved.kind === 'connection') opened = connectionPanel?.open(saved.targetId);
         else if (saved.kind === 'capability') opened = capabilityPanel?.open(saved.targetId);
         else if (saved.kind === 'change') opened = changePanel?.open(saved.targetId);
+        else if (saved.kind === 'assurance') opened = assurancePanel?.open(saved.targetId);
       }
       if (opened?.view?.draft?.[`${saved.kind}Id`] === saved.targetId) {
         const returned = returnRoutes.findIndex(route => route.kind === saved.kind && route.target === saved.targetId);
@@ -506,6 +518,7 @@ export function mountCoordinationPanel(root, options = {}) {
     templatePanel?.dispose();
     capabilityPanel?.dispose();
     changePanel?.dispose();
+    assurancePanel?.dispose();
     workPanel?.dispose();
     investmentPanel?.dispose();
     purposePanel?.dispose();
@@ -595,6 +608,7 @@ export function mountCoordinationPanel(root, options = {}) {
         else if (activeChapter === 'people') resumePeople();
         else if (activeChapter === 'work') capabilityPanel?.resume();
         else if (activeChapter === 'change') changePanel?.resume();
+        else if (activeChapter === 'assurance') assurancePanel?.resume();
       }, onChange: () => render() });
     const capabilityRoot = root.querySelector('[data-native-capabilities]');
     if (capabilityRoot) capabilityPanel = mountCapabilityPanel(capabilityRoot, { studio, editing,
@@ -609,6 +623,13 @@ export function mountCoordinationPanel(root, options = {}) {
       canOpen: () => activeChapter === 'change' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'change' && !purposePanel?.isOpen(),
       onSourceWork: (id, origin) => inspectSupportingWork('change', id, origin), onAccepted: () => render(), onEditing: () => render(),
+    });
+    const assuranceRoot = root.querySelector('[data-native-assurance]');
+    if (assuranceRoot) assurancePanel = mountAssurancePanel(assuranceRoot, { studio, editing,
+      onBegin: () => { purposePanel?.close({ resume: false }); },
+      canOpen: () => activeChapter === 'assurance' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'assurance' && !purposePanel?.isOpen(),
+      onSourceWork: (id, origin) => inspectSupportingWork('assurance', id, origin), onAccepted: () => render(), onEditing: () => render(),
     });
     investmentPanel = mountInvestmentPanel(requireElement('.native-investment'), { studio, editing, onChange: () => render() });
     const chapterList = root.querySelector('[data-native-chapter-list]');
@@ -626,6 +647,7 @@ export function mountCoordinationPanel(root, options = {}) {
         else if (chapter === 'people') resumePeople();
         else if (chapter === 'work') capabilityPanel?.resume();
         else if (chapter === 'change') changePanel?.resume();
+        else if (chapter === 'assurance') assurancePanel?.resume();
         render();
       } });
     }
