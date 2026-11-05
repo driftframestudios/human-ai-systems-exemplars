@@ -298,6 +298,73 @@
       "aliases": []
     },
     {
+      "id": "node.native-investment-studio",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/assurance-consequences.test.mjs",
+        "tests/native-investment-studio/assurance-contract.test.mjs",
+        "tests/native-investment-studio/assurance-draft.test.mjs",
+        "tests/native-investment-studio/assurance-models.test.mjs",
+        "tests/native-investment-studio/assurance-proposals.test.mjs",
+        "tests/native-investment-studio/capabilities.test.mjs",
+        "tests/native-investment-studio/capability-draft.test.mjs",
+        "tests/native-investment-studio/capability-proposals.test.mjs",
+        "tests/native-investment-studio/change-contract.test.mjs",
+        "tests/native-investment-studio/change-draft.test.mjs",
+        "tests/native-investment-studio/change-methods.test.mjs",
+        "tests/native-investment-studio/change-models.test.mjs",
+        "tests/native-investment-studio/change-proposals.test.mjs",
+        "tests/native-investment-studio/command-draft.test.mjs",
+        "tests/native-investment-studio/commands.test.mjs",
+        "tests/native-investment-studio/connection-draft.test.mjs",
+        "tests/native-investment-studio/connection-editing.test.mjs",
+        "tests/native-investment-studio/connection-templates.test.mjs",
+        "tests/native-investment-studio/connection-view.test.mjs",
+        "tests/native-investment-studio/contract.test.mjs",
+        "tests/native-investment-studio/contribution-view-model.test.mjs",
+        "tests/native-investment-studio/controller.test.mjs",
+        "tests/native-investment-studio/coordination-arrangements.test.mjs",
+        "tests/native-investment-studio/draft.test.mjs",
+        "tests/native-investment-studio/editing.test.mjs",
+        "tests/native-investment-studio/exchange.test.mjs",
+        "tests/native-investment-studio/investment-trace.test.mjs",
+        "tests/native-investment-studio/module-closure.test.mjs",
+        "tests/native-investment-studio/person-draft.test.mjs",
+        "tests/native-investment-studio/person-state.test.mjs",
+        "tests/native-investment-studio/presets.test.mjs",
+        "tests/native-investment-studio/purpose-draft.test.mjs",
+        "tests/native-investment-studio/relationships.test.mjs",
+        "tests/native-investment-studio/reports.test.mjs",
+        "tests/native-investment-studio/responsibility-draft.test.mjs",
+        "tests/native-investment-studio/responsibility-editing.test.mjs",
+        "tests/native-investment-studio/score-contract.test.mjs",
+        "tests/native-investment-studio/score-draft.test.mjs",
+        "tests/native-investment-studio/score-models.test.mjs",
+        "tests/native-investment-studio/score-time.test.mjs",
+        "tests/native-investment-studio/session-draft.test.mjs",
+        "tests/native-investment-studio/session-editing.test.mjs",
+        "tests/native-investment-studio/shell.test.mjs",
+        "tests/native-investment-studio/state.test.mjs",
+        "tests/native-investment-studio/team-controller.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native plan admission, monetary and capacity semantics, immutable accepted state, person and work edits, bounded drafts, scheduled work-commit recovery, chapter navigation and icon ownership, exchange, and the native About receiver's static and local module-delivery contracts.",
+      "aliases": [
+        "test:native-investment-studio:source"
+      ]
+    },
+    {
       "id": "node.narrative-architectures",
       "family": "narrative-architectures",
       "kind": "node-test",
@@ -2724,6 +2791,160 @@
       ]
     },
     {
+      "id": "browser.native-investment-studio.coordination",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/controller.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About coordination controls: independent money/effort, hours/minutes entry, pure live draft previews and accepted identity, explicit Apply/Cancel, stale recovery and teardown, focus/disclosure continuity, responsive and enlarged-text containment, forced colors, reduced motion, and ordinary page scrolling across Chromium, Firefox and Playwright WebKit. Native touch, assistive technology and comprehension retain separate observations.",
+      "aliases": [
+        "test:native-investment-studio:coordination-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.chapters",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/shell.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About chapter navigation: manual keyboard focus and explicit selection, retained person and work drafts, stale cross-chapter edits, original descendant fragments and browser history, visible focus, reduced-motion behavior, parent scrolling and scriptless fallback across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:chapters-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.investment",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/investment.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native Purpose and Investment: purpose draft ownership, baseline and history, versioned preview and explicit replacement, FileReader races, byte and format recovery, captured downloads, responsive focus and page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:investment-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.sessions",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/session.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Complete working sessions: participant and funding arithmetic, creation and removal, selected and parked edits, stale recovery, empty-plan entry, compact controls and ordinary About scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:session-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.responsibility",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/responsibility.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "People role details and human review assignments: complete field meaning, stable references, saved/stale recovery, unchanged accounting, ordered sessions, focus, narrow reading and disposal across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:responsibility-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.assembly",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assembly.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native People and Teams: finite creation, ordered membership, referenced-removal recovery, saved and stale drafts, imported identity collisions, callback ownership, exact amounts, compact inputs and ordinary page scrolling across Chromium, Firefox and Playwright WebKit.",
+      "aliases": [
+        "test:native-investment-studio:assembly-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.team-assembly",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/team-controller.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Native About Team Assembly: person rates and funded time, independently calculated investment and capacity, draft and accepted-state isolation, stale recovery, focus and keyboard editing, responsive containment, ordinary page scrolling, and the preserved full-Studio route across Chromium, Firefox and Playwright WebKit. Native application and reader observations retain their own receivers.",
+      "aliases": [
+        "test:native-investment-studio:team-browser"
+      ]
+    },
+    {
       "id": "browser.context-canvas.about-studio-chapters",
       "family": "context-canvas",
       "kind": "node-test",
@@ -2744,6 +2965,138 @@
       "aliases": [
         "test:about-studio-chapters-browser"
       ]
+    },
+    {
+      "id": "browser.native-investment-studio.connections",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Connection form and diagram/list agreement, stable references, pause accounting, saved-edit recovery, focus, local horizontal inspection and ordinary vertical reading across three engines.",
+      "aliases": [
+        "test:native-investment-studio:connection-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.connection-templates",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/connection-template.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Bounded coordination template configuration, atomic preview and Apply, stale intent, cancellation, exact recovery-work accounting and cross-engine reading.",
+      "aliases": [
+        "test:native-investment-studio:connection-template-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.capabilities",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/capability.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Ability and practice cards, shared supporting work, atomic proposals, reverse and beside reading, saved drafts, observation records and cross-engine recovery.",
+      "aliases": [
+        "test:native-investment-studio:capability-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.change",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/change.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Retained change-framework maps, interpretive lenses, relative attention, explicit supporting-work proposals, Apply and Undo, saved drafts and accessible cross-engine chapter operation.",
+      "aliases": [
+        "test:native-investment-studio:change-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.assurance",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Quality and recovery illustrations, explicit supporting-work proposals, learning routes, professional rehearsal records, Apply and Undo, saved drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:assurance-browser"
+      ]
+    },
+    {
+      "id": "browser.native-investment-studio.score",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/score.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Authored timing and availability, score inspection, modeled decision gates, explicit proposal funding, Apply and Undo, retained drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:score-browser"
+      ]
     }
   ],
   "bundles": [
@@ -2757,6 +3110,7 @@
         "node.documentation",
         "node.iframe-routes",
         "node.investment-analysis",
+        "node.native-investment-studio",
         "node.media-publication",
         "node.narrative-architectures",
         "node.prod-deployment",
@@ -2862,7 +3216,20 @@
         "browser.context-canvas.debrief-callout-integrity",
         "browser.context-canvas.about-scroll",
         "browser.context-canvas.about-disclosures",
-        "browser.context-canvas.about-studio-chapters"
+        "browser.context-canvas.about-studio-chapters",
+        "browser.native-investment-studio.coordination",
+        "browser.native-investment-studio.chapters",
+        "browser.native-investment-studio.investment",
+        "browser.native-investment-studio.responsibility",
+        "browser.native-investment-studio.sessions",
+        "browser.native-investment-studio.assembly",
+        "browser.native-investment-studio.team-assembly",
+        "browser.native-investment-studio.connections",
+        "browser.native-investment-studio.connection-templates",
+        "browser.native-investment-studio.capabilities",
+        "browser.native-investment-studio.change",
+        "browser.native-investment-studio.assurance",
+        "browser.native-investment-studio.score"
       ]
     },
     {
@@ -3236,6 +3603,30 @@
         "test:context-canvas": [
           "tests/context-canvas/*.test.mjs"
         ],
+        "test:native-investment-studio:source": [
+          "tests/native-investment-studio/*.test.mjs"
+        ],
+        "test:native-investment-studio:coordination-browser": [
+          "tests/native-investment-studio/controller.browser.mjs"
+        ],
+        "test:native-investment-studio:team-browser": [
+          "tests/native-investment-studio/team-controller.browser.mjs"
+        ],
+        "test:native-investment-studio:session-browser": [
+          "tests/native-investment-studio/session.browser.mjs"
+        ],
+        "test:native-investment-studio:responsibility-browser": [
+          "tests/native-investment-studio/responsibility.browser.mjs"
+        ],
+        "test:native-investment-studio:assembly-browser": [
+          "tests/native-investment-studio/assembly.browser.mjs"
+        ],
+        "test:native-investment-studio:investment-browser": [
+          "tests/native-investment-studio/investment.browser.mjs"
+        ],
+        "test:native-investment-studio:chapters-browser": [
+          "tests/native-investment-studio/shell.browser.mjs"
+        ],
         "test:prototype-control-labels": [
           "tests/context-canvas/prototype-control-labels.test.mjs"
         ],
@@ -3298,6 +3689,24 @@
         ],
         "test:about-studio-chapters-browser": [
           "tests/context-canvas/about-studio-chapters.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-browser": [
+          "tests/native-investment-studio/connection.browser.mjs"
+        ],
+        "test:native-investment-studio:connection-template-browser": [
+          "tests/native-investment-studio/connection-template.browser.mjs"
+        ],
+        "test:native-investment-studio:capability-browser": [
+          "tests/native-investment-studio/capability.browser.mjs"
+        ],
+        "test:native-investment-studio:change-browser": [
+          "tests/native-investment-studio/change.browser.mjs"
+        ],
+        "test:native-investment-studio:assurance-browser": [
+          "tests/native-investment-studio/assurance.browser.mjs"
+        ],
+        "test:native-investment-studio:score-browser": [
+          "tests/native-investment-studio/score.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

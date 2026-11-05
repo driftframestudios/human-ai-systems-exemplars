@@ -24,6 +24,13 @@
       "publicationNote": "The initial repository exercise is complete. Public projection remains held until a source-package review and another natural use test the skill outside this Debrief language pass."
     },
     {
+      "name": "ascii-zine-composition",
+      "sourcePath": ".agents/skills/ascii-zine-composition/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
       "name": "audit-anthropomorphic-cues",
       "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
       "publicationStanding": "public_ready",

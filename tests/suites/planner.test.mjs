@@ -9,6 +9,65 @@ import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
+  'tests/native-investment-studio/assembly-editing.test.mjs',
+  'tests/native-investment-studio/assembly.browser.mjs',
+  'tests/native-investment-studio/assurance-consequences.test.mjs',
+  'tests/native-investment-studio/assurance-contract.test.mjs',
+  'tests/native-investment-studio/assurance-draft.test.mjs',
+  'tests/native-investment-studio/assurance-models.test.mjs',
+  'tests/native-investment-studio/assurance-proposals.test.mjs',
+  'tests/native-investment-studio/assurance.browser.mjs',
+  'tests/native-investment-studio/score-contract.test.mjs',
+  'tests/native-investment-studio/score-draft.test.mjs',
+  'tests/native-investment-studio/score-models.test.mjs',
+  'tests/native-investment-studio/score-time.test.mjs',
+  'tests/native-investment-studio/score.browser.mjs',
+  'tests/native-investment-studio/capabilities.test.mjs',
+  'tests/native-investment-studio/capability-draft.test.mjs',
+  'tests/native-investment-studio/capability-proposals.test.mjs',
+  'tests/native-investment-studio/capability.browser.mjs',
+  'tests/native-investment-studio/change-contract.test.mjs',
+  'tests/native-investment-studio/change-draft.test.mjs',
+  'tests/native-investment-studio/change-methods.test.mjs',
+  'tests/native-investment-studio/change-models.test.mjs',
+  'tests/native-investment-studio/change-proposals.test.mjs',
+  'tests/native-investment-studio/change.browser.mjs',
+  'tests/native-investment-studio/command-draft.test.mjs',
+  'tests/native-investment-studio/commands.test.mjs',
+  'tests/native-investment-studio/connection-draft.test.mjs',
+  'tests/native-investment-studio/connection-editing.test.mjs',
+  'tests/native-investment-studio/connection-template.browser.mjs',
+  'tests/native-investment-studio/connection-templates.test.mjs',
+  'tests/native-investment-studio/coordination-arrangements.test.mjs',
+  'tests/native-investment-studio/contribution-view-model.test.mjs',
+  'tests/native-investment-studio/connection-view.test.mjs',
+  'tests/native-investment-studio/connection.browser.mjs',
+  'tests/native-investment-studio/contract.test.mjs',
+  'tests/native-investment-studio/controller.test.mjs',
+  'tests/native-investment-studio/controller.browser.mjs',
+  'tests/native-investment-studio/draft.test.mjs',
+  'tests/native-investment-studio/editing.test.mjs',
+  'tests/native-investment-studio/exchange.test.mjs',
+  'tests/native-investment-studio/investment.browser.mjs',
+  'tests/native-investment-studio/investment-trace.test.mjs',
+  'tests/native-investment-studio/module-closure.test.mjs',
+  'tests/native-investment-studio/person-draft.test.mjs',
+  'tests/native-investment-studio/person-state.test.mjs',
+  'tests/native-investment-studio/presets.test.mjs',
+  'tests/native-investment-studio/purpose-draft.test.mjs',
+  'tests/native-investment-studio/relationships.test.mjs',
+  'tests/native-investment-studio/reports.test.mjs',
+  'tests/native-investment-studio/responsibility-draft.test.mjs',
+  'tests/native-investment-studio/responsibility-editing.test.mjs',
+  'tests/native-investment-studio/responsibility.browser.mjs',
+  'tests/native-investment-studio/session-draft.test.mjs',
+  'tests/native-investment-studio/session-editing.test.mjs',
+  'tests/native-investment-studio/session.browser.mjs',
+  'tests/native-investment-studio/shell.test.mjs',
+  'tests/native-investment-studio/shell.browser.mjs',
+  'tests/native-investment-studio/state.test.mjs',
+  'tests/native-investment-studio/team-controller.test.mjs',
+  'tests/native-investment-studio/team-controller.browser.mjs',
   'tests/context-canvas/about-studio-chapters.test.mjs',
   'tests/context-canvas/about-studio-chapters.browser.mjs',
   'tests/context-canvas/about-disclosure-readings.browser.mjs',
@@ -261,6 +320,74 @@ test('Visual Fidelity source ownership stays identical in package and suite rout
     aliasMembers,
   );
   for (const member of suite.members) await access(resolve(ROOT, member));
+});
+
+test('native Studio routes retain source and separate browser owners with executable alias parity', async () => {
+  const [catalog, pkg, files] = await Promise.all([
+    catalogPromise,
+    readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse),
+    readdir(resolve(ROOT, 'tests/native-investment-studio')),
+  ]);
+  const sourceMembers = [
+    'assurance-consequences.test.mjs', 'assurance-contract.test.mjs', 'assurance-draft.test.mjs', 'assurance-models.test.mjs', 'assurance-proposals.test.mjs',
+    'score-contract.test.mjs', 'score-draft.test.mjs', 'score-models.test.mjs', 'score-time.test.mjs',
+    'coordination-arrangements.test.mjs', 'contribution-view-model.test.mjs',
+    'investment-trace.test.mjs', 'reports.test.mjs',
+    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
+    'team-controller.test.mjs',
+  ].sort().map(file => `tests/native-investment-studio/${file}`);
+  assert.deepEqual(
+    files.filter(file => file.endsWith('.test.mjs')).sort(),
+    sourceMembers.map(member => member.split('/').at(-1)).sort(),
+    'every native source module has an explicit execution route',
+  );
+  const routes = [
+    ['node.native-investment-studio', 'test:native-investment-studio:source', sourceMembers, 'source-unit'],
+    ['browser.native-investment-studio.coordination', 'test:native-investment-studio:coordination-browser',
+      ['tests/native-investment-studio/controller.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.team-assembly', 'test:native-investment-studio:team-browser',
+      ['tests/native-investment-studio/team-controller.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.sessions', 'test:native-investment-studio:session-browser',
+      ['tests/native-investment-studio/session.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.assembly', 'test:native-investment-studio:assembly-browser',
+      ['tests/native-investment-studio/assembly.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connections', 'test:native-investment-studio:connection-browser',
+      ['tests/native-investment-studio/connection.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.connection-templates', 'test:native-investment-studio:connection-template-browser',
+      ['tests/native-investment-studio/connection-template.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.capabilities', 'test:native-investment-studio:capability-browser',
+      ['tests/native-investment-studio/capability.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.change', 'test:native-investment-studio:change-browser',
+      ['tests/native-investment-studio/change.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.assurance', 'test:native-investment-studio:assurance-browser',
+      ['tests/native-investment-studio/assurance.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.score', 'test:native-investment-studio:score-browser',
+      ['tests/native-investment-studio/score.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.responsibility', 'test:native-investment-studio:responsibility-browser',
+      ['tests/native-investment-studio/responsibility.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.investment', 'test:native-investment-studio:investment-browser',
+      ['tests/native-investment-studio/investment.browser.mjs'], 'focused-browser'],
+    ['browser.native-investment-studio.chapters', 'test:native-investment-studio:chapters-browser',
+      ['tests/native-investment-studio/shell.browser.mjs'], 'focused-browser'],
+  ];
+  const admission = 'node tools/check-node-runtime.mjs --quiet && node --test ';
+  for (const [id, alias, members, bundle] of routes) {
+    const plan = createPlan(catalog, {suites: [id]});
+    assert.deepEqual(plan.suites[0].members, members, id);
+    assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', ...members], id);
+    const selectors = id === 'node.native-investment-studio' ? ['tests/native-investment-studio/*.test.mjs'] : members;
+    assert.equal(pkg.scripts[alias], admission + selectors.join(' '), alias);
+    assert.deepEqual(catalog.inventory.rootScriptSelection.directNodeTestSelectors[alias], selectors, alias);
+    assert.deepEqual(catalog.suites.find(suite => suite.id === id).aliases, [alias], id);
+    assert.ok(createPlan(catalog, {bundles: [bundle]}).suites.some(suite => suite.id === id), id);
+    for (const member of members) await access(resolve(ROOT, member));
+  }
+  const sourcePlan = createPlan(catalog, {bundles: ['source-unit']});
+  for (const [id] of routes.slice(1)) {
+    assert.equal(sourcePlan.suites.some(suite => suite.id === id), false,
+      `${id} retains its explicit browser selection`);
+  }
 });
 
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {

@@ -752,22 +752,6 @@
       "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
     },
     {
-      "token": "PUBLIC_URL_IFRAME_INVESTMENT_STUDIO_CHAPTERS",
-      "authority_class": "iframe",
-      "role": "hosted_instrument",
-      "owner": {
-        "type": "iframe_route_manifest",
-        "family": "canvas",
-        "route_id": "investment-studio-chapters"
-      },
-      "fragment": null,
-      "expected_url": "https://iframes.vik.guru/v1/canvas/investment-studio-chapters/",
-      "allowed_carriers": [
-        "jsonld"
-      ],
-      "selection_basis": "The accepted iframe route manifest owns this stable hosted-instrument destination."
-    },
-    {
       "token": "PUBLIC_URL_IFRAME_PROMPT_CONDITIONS_EXPLORER",
       "authority_class": "iframe",
       "role": "hosted_instrument",
@@ -847,6 +831,21 @@
         "jsonld"
       ],
       "selection_basis": "The primary page route and authored structured-data fragment establish this complete public identifier."
+    },
+    {
+      "token": "PUBLIC_URL_PAGE_ABOUT_STUDIO",
+      "authority_class": "page",
+      "role": "primary_retrieval",
+      "owner": {
+        "type": "primary_route_manifest",
+        "source_path": "context-canvas-project-surface/context-canvas/index.html"
+      },
+      "fragment": "studio-title",
+      "expected_url": "https://vik.guru/#studio-title",
+      "allowed_carriers": [
+        "jsonld"
+      ],
+      "selection_basis": "The primary page route and authored Studio heading identify the native investment instrument in About."
     },
     {
       "token": "PUBLIC_URL_PAGE_ABOUT_WEBSITE",
@@ -2228,6 +2227,21 @@
         "jsonld"
       ],
       "selection_basis": "The schemas Worker publication manifest exposes this Context Canvas resource through its stable companion route."
+    },
+    {
+      "token": "PUBLIC_URL_SKILL_ASCII_ZINE_COMPOSITION",
+      "authority_class": "skill",
+      "role": "skill_retrieval",
+      "owner": {
+        "type": "skill_publication_selection",
+        "skill_name": "ascii-zine-composition"
+      },
+      "fragment": null,
+      "expected_url": "https://schemas.vik.guru/skills/ascii-zine-composition/",
+      "allowed_carriers": [
+        "anchor"
+      ],
+      "selection_basis": "The repository skill publication selection includes this public-ready source package."
     },
     {
       "token": "PUBLIC_URL_SKILL_AUDIT_ANTHROPOMORPHIC_CUES",

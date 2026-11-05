@@ -56,15 +56,15 @@ query strings, fragments, and malformed or incomplete token coverage.
 ## Repository route authority
 
 [`context-canvas-route-bindings.v1.json`](context-canvas-route-bindings.v1.json)
-binds 166 semantic keys to repository-owned publication routes:
+binds 167 semantic keys to repository-owned publication routes:
 
 | Authority class | Keys | Source authority |
 | --- | ---: | --- |
-| Page and fragment | 85 | cPanel primary route manifest and production origin configuration |
+| Page and fragment | 86 | cPanel primary route manifest and production origin configuration |
 | Asset | 39 | cPanel primary route manifest |
-| Hosted instrument | 6 | Canvas and Core iframe route manifests |
+| Hosted instrument | 5 | Canvas and Core iframe route manifests |
 | Schema | 2 | schema Worker publication manifest |
-| Skill | 34 | skill publication selection and schema companion selection |
+| Skill | 35 | skill publication selection and schema companion selection |
 
 The adjacent
 [`context-canvas-route-bindings.schema.json`](context-canvas-route-bindings.schema.json)

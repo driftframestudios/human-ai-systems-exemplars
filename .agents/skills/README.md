@@ -40,6 +40,7 @@ completes the job.
 | Skill | Use it when | Result |
 | --- | --- | --- |
 | [`context-canvas-surface-reading`](context-canvas-surface-reading/README.md) · [contract](context-canvas-surface-reading/SKILL.md) | A Context Canvas page, iframe, or family enters assessment or change | A visitor-page reading grounded in its material owners |
+| [`ascii-zine-composition`](ascii-zine-composition/README.md) · [contract](ascii-zine-composition/SKILL.md) | An interface or publication calls for ASCII and print-shop character | An expressive composition with a complete semantic reading and fitting interaction evidence |
 | [`context-canvas-css-ownership`](context-canvas-css-ownership/README.md) · [contract](context-canvas-css-ownership/SKILL.md) | Cascade, selector migration, route bundles, or style ownership changes | Legible CSS ownership and a focused comparison |
 | [`context-canvas-visual-verification`](context-canvas-visual-verification/README.md) · [contract](context-canvas-visual-verification/SKILL.md) | Layout, interaction, alternate media, or a visible regression needs evidence | Proportionate visual evidence with limits and a next receiver |
 | [`audit-anthropomorphic-cues`](audit-anthropomorphic-cues/README.md) · [contract](audit-anthropomorphic-cues/SKILL.md) | Bundled person-like cues may affect reliance, authority, or recovery | A cue-bundle ledger and proportionate disposition |

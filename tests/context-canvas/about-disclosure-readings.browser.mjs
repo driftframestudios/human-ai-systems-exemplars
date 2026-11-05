@@ -9,22 +9,22 @@ import { assertTelemetry, monitor, startStaticServer } from '../../tools/core-ar
 const route = '/context-canvas-project-surface/context-canvas/index.html';
 const captureRoot = resolve(import.meta.dirname, '../../.visual-runs/about-disclosure-readings');
 const folios = [
-  { key: 'career', closed: 'Show 4 more career records', opened: 'Hide 4 additional career records', records: [
-    ['career-case-2', 'Modernization while work continued', 'LIMS, ELN, ITSM, genome visualization'],
-    ['career-case-3', 'Multiple-account abuse login pathways', 'Multiple-account abuse crossed interface'],
-    ['career-case-1', 'Silent bulk-export boundary', 'A build-versus-buy evaluation exposed records'],
-    ['career-case-4', 'Token life versus key propagation', 'EHR JSON Web Tokens expired five minutes'],
-    ['career-case-5', 'A shared language without flattened expertise', 'Business units, scientists, designers'],
-    ['career-case-6', 'Applied systems work through a studio', 'Healthcare and research teams need practical ways'],
+  { key: 'career', closed: 'Show 4 more examples', opened: 'Hide 4 additional examples', fields: ['Situation', 'What Changed', 'Boundary'], records: [
+    ['career-case-2', 'Modernizing systems while keeping work moving', 'Scientists and laboratory teams needed better tools'],
+    ['career-case-3', 'Tracing multi-account abuse', 'Sunk cost of gamed profiles was'],
+    ['career-case-5', 'Rapid prototyping with details that matter', 'My polished screens still left a robotics client'],
+    ['career-case-6', 'Building at Driftframe Studios, LLC', 'Teams want shorter development cycles'],
+    ['career-case-4', 'When tokens expired before keys arrived', 'In an EHR integration, JWT tokens expired'],
+    ['career-case-1', 'Catching missing records in bulk exports', 'During a build-versus-buy evaluation'],
   ] },
-  { key: 'quality', closed: 'Show 5 more quality records', opened: 'Hide 5 additional quality records', records: [
-    ['quality-case-2', 'Validation-ready implementation path', 'SaMD, internal systems, clinical-trial software'],
-    ['quality-case-3', 'Adverse-event signal attention', 'Post-market and pharmacovigilance teams'],
-    ['quality-case-1', 'Inspectable behavior before implementation hardens', 'Teams needed to connect intended use'],
-    ['quality-case-4', 'Deletion includes the forgotten stores', 'Deletion requests could leave discoverable traces'],
-    ['quality-case-5', 'Seasonality and service anomalies', 'Batch data and service-level metrics'],
-    ['quality-case-6', 'Evidence that travels into review', 'Clinical, product, engineering, quality'],
-    ['quality-case-7', 'Lifecycle quality for public-benefit work', 'Research, education, and public-benefit technology'],
+  { key: 'quality', closed: 'Show 5 more examples', opened: 'Hide 5 additional examples', fields: ['Situation', 'Mechanism', 'Changed work', 'Boundary'], records: [
+    ['quality-case-2', 'Keeping validation connected to implementation', 'Engineers and executives needed a clear account', ['Situation', 'What Changed', 'Changed work', 'Boundary']],
+    ['quality-case-3', 'Flagging adverse events for review', 'Post-market and pharmacovigilance teams'],
+    ['quality-case-1', 'Making system behavior testable early', 'Teams needed to connect intended use'],
+    ['quality-case-4', 'Tracing deletion through logs & retention', 'Deletion requests could leave discoverable traces'],
+    ['quality-case-5', 'Finding anomalies in seasonal data', 'Batch data and service-level metrics'],
+    ['quality-case-6', 'Preparing evidence for submissions', 'Clinical, product, engineering, quality'],
+    ['quality-case-7', 'Quality engineering for public research & toole', 'Research, education, and public-benefit technology'],
   ] },
 ];
 const promptRows = ['Source diet', 'Desired state', 'Role boundary', 'Input sanitation', 'Working set'];
@@ -109,12 +109,12 @@ async function assertVisibleText(locator, label) {
 }
 
 async function assertRecords(page, definition) {
-  for (const [id, title, situation] of definition.records) {
+  for (const [id, title, situation, fields = definition.fields] of definition.records) {
     const record = page.locator(`[data-source-id="${id}"]`);
     assert.equal(await record.locator('h4').textContent(), title);
-    assert.deepEqual(await record.locator('dt').allTextContents(), ['Situation', 'Mechanism', 'Changed work', 'Boundary']);
+    assert.deepEqual(await record.locator('dt').allTextContents(), fields);
     assert.ok((await record.locator('dd').first().textContent()).startsWith(situation), `${id}: the named situation survives`);
-    assert.equal(await record.locator('dd').count(), 4);
+    assert.equal(await record.locator('dd').count(), fields.length);
     assert.ok((await record.locator('dd').allTextContents()).every(text => text.trim().length > 35), `${id}: each named field carries substantive content`);
     await assertVisibleText(record.locator('h4, dt, dd'), id);
   }

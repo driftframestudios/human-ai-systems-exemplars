@@ -22,7 +22,7 @@ The files in this directory keep their existing paths. Collaboration notes, sour
 
 ## Current ledgers
 
-- [fast-uri dependency security floor](dependency-security-fast-uri.md): the root npm override, CVE scope, Ajv compatibility checks, and retirement condition.
+- [Dependency security floors for fast-uri and Worker tooling](dependency-security-fast-uri.md): the root parser override, shared Wrangler/Miniflare/Undici/Sharp path, consumer checks, and retirement conditions.
 - [Strategy Canvas collaboration system](strategy-canvas-collaboration-system.md) — the shared schema v2 spine, canonical and Context expression boundary, human-first elicitation, three contribution channels, room-scale direct manipulation, Narrative adapter, embed capability contract, and review gates.
 - [Context Canvas — referent conditioning and open lesson field](context-canvas-referent-conditioning-iteration.md) — recoverable human references, register and social-proxy boundaries, bounded benchmark interpretation, test-drive-first visitor flow, class-size/grouping coordination tableau, full-distribution generated-candidate sampling kept distinct from optional authored-route event estimates, and the educator field’s synchronized prompt-capsule and reviewed-handoff contract.
 - [Context Canvas — instrument systems iteration](context-canvas-instrument-systems-iteration.md) — AI Systems, Shared Machinery, About integrations, prototype routing, rail navigation, and publication receipts.
