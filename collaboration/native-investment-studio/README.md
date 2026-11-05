@@ -9,23 +9,27 @@ through Undo, saved edits, or a baseline comparison.
 
 ## Current state
 
-**Implementation resumed on 5 November 2026.** The human approved the Issue
-sequence and design direction. The current repair has passing return-path,
-enlarged-text, and affected-browser checks. Source integration awaits independent
-engineering review; public delivery preparation retains its separate human
-publication review.
+**The native showcase is growing from accepted source.** The relationship
+foundation and usability repair are integrated through
+[#675](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/675)
+and [#687](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/687)
+after independent engineering review. The current implementation adds an
+authored service-request pilot, a working minutes knob, and a contextual session
+editor through #649 and #647.
 
 Purpose, people, teams, working sessions, roles, human review, connections,
 arrangement previews, and plan exchange have native owners. The complete
-showcase is still developing. The current
+showcase is still developing. The accepted
 [usability repair, #685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685)
 brings clearer controls, stable choices, prerequisite creation, useful collapsed
 previews, and ASCII zine styling to those working chapters. Its receiving PR owns
-verification and integration status; publication retains its separate review.
+the verification return. The session continues through the complete showcase;
+performance refinement follows that experience.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
 tracks the ASCII composition method's public Pages projection and the visual
-family's production guide, full source, and working specimen.
+family's production guide, full source, and working specimen. A full tagged
+Pages release is a future step triggered by the human.
 
 The [experience journal](experience-journal.md) preserves design intent and
 implementation continuity. The [task audit](usability-research.md#task-focused-audit-and-receiving-work)
@@ -35,12 +39,18 @@ its broader planning capabilities while the native experience grows.
 
 ## Try a useful sequence
 
-1. Open Purpose and describe the change you want to make.
-2. In People, add people, set rates and funded time, and create a team.
-3. In Coordination, plan a session or a team connection. A nearby creation
-   action can help supply a missing prerequisite and return to the task.
-4. Inspect the proposed investment, Apply the change, then use Investment to
-   compare a baseline, Undo, or download the accepted plan.
+1. Read the service-request pilot brief and save a baseline.
+2. Choose **Adjust review time**, then try 45 minutes with the dial, arrow keys,
+   step buttons, or precision field. Inspect the draft before Apply.
+3. Try the review request. Inspect the readiness connection, pause it while the
+   instructions are clarified, and name the response the team needs.
+4. Use Investment to compare the baseline, Undo, or download the accepted plan.
+
+The starter uses fictional people and illustrative rates. It begins at $3,980;
+four 45-minute decision reviews instead of 30-minute reviews add $370. Pausing
+a connection keeps its supporting work and cost. In People, change the roles,
+rates, and funded time to explore another plan. Nearby creation actions can
+supply a missing person or team and return to your unfinished task.
 
 A field edit stays in its editor until Apply. Collapsing a section and switching
 chapters can retain unfinished work. A saved edit may need review after another
@@ -86,11 +96,12 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, and [#685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685).
+source, the worktree, [#649](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/649),
+and [#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.
 
-The current repair sits within
+The current showcase work sits within
 [#647's amp composition](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647)
 and [#637's showcase route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Quality, recovery, learning, and professional play continue through

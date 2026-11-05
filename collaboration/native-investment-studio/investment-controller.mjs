@@ -2,6 +2,7 @@ import { createPlanExchange } from './exchange.mjs';
 import { listPresets } from './presets.mjs';
 import { money } from './display.mjs';
 import { PURPOSE_LABELS } from './purpose-controller.mjs';
+import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -9,8 +10,24 @@ const CHANGE_LABELS = Object.freeze({
   rateCentsPerHour: 'hourly rates', personIds: 'participants', teamId: 'team',
   minutesPerOccurrence: 'session duration', occurrences: 'session count',
   funding: 'funding', status: 'work status', timing: 'timing', practiceId: 'practice', workIds: 'supporting work',
+  role: 'roles', lifecycle: 'availability', categoryId: 'contribution kind', receiverPersonId: 'receiving person',
+  decisionOwnerPersonId: 'decision owner', reviewBoundary: 'human review', decisionBoundary: 'human decision',
+  senderTeamId: 'sending team', receiverTeamId: 'receiving team', sharedObject: 'what is shared', responseExpectation: 'expected response',
 });
 const COLLECTION_LABELS = Object.freeze({ people: 'People', teams: 'Teams', work: 'Work', practices: 'Practices' });
+const CONTRIBUTION_LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
+
+function relationshipDescriptions(state) {
+  const people = new Map(state.people.map(row => [row.id, row.label]));
+  const teams = new Map(state.teams.map(row => [row.id, row.label]));
+  const human = (id, action, unassigned) => id === null ? unassigned : `${people.get(id)} ${action}`;
+  return {
+    contributions: new Map(state.contributions.map(row => [row.id,
+      `${CONTRIBUTION_LABELS.get(row.categoryId)} · ${human(row.receiverPersonId, 'reviews', 'Reviewer to choose')} · ${human(row.decisionOwnerPersonId, 'decides', 'Decision owner to choose')}`])),
+    connections: new Map(state.connections.map(row => [row.id,
+      `${row.sharedObject ?? 'Shared work to describe'} · ${teams.get(row.senderTeamId)} → ${teams.get(row.receiverTeamId)} · ${human(row.receiverPersonId, 'receives', 'Receiving person to choose')}`])),
+  };
+}
 
 export function mountInvestmentPanel(root, { studio, editing, onChange }) {
   const document = root.ownerDocument, window = document.defaultView;
@@ -48,6 +65,18 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
       if (!change.added.length && !change.removed.length && !change.changed.length && !change.orderChanged) continue;
       const fields = new Set(change.changed.flatMap(row => row.fields));
       add(`${label}: ${change.added.length} added, ${change.removed.length} removed, ${change.changed.length} changed${fields.size ? ` (${[...fields].map(name => CHANGE_LABELS[name] ?? name).join(', ')})` : ''}${change.orderChanged ? '; updated order' : ''}.`);
+    }
+    const before = relationshipDescriptions(projection.state);
+    const after = relationshipDescriptions(preview.projection.state);
+    for (const [kind, label] of [['contributions', 'Contribution'], ['connections', 'Connection']]) {
+      const change = preview.changes[kind];
+      for (const id of change.added) add(`${label} added: ${after[kind].get(id)}.`);
+      for (const id of change.removed) add(`${label} removed: ${before[kind].get(id)}.`);
+      for (const row of change.changed) {
+        const current = before[kind].get(row.id), proposed = after[kind].get(row.id);
+        add(`${label} changed: ${current}${current === proposed ? '' : ` → ${proposed}`} (${row.fields.map(name => kind === 'connections' && name === 'status' ? 'connection status' : CHANGE_LABELS[name] ?? name).join(', ')}).`);
+      }
+      if (change.orderChanged) add(`${kind === 'contributions' ? 'Contributions' : 'Connections'}: updated order.`);
     }
     if (!fragment.childNodes.length) add('The plan values match the current plan.');
     changes.replaceChildren(fragment);

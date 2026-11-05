@@ -286,3 +286,47 @@ next action. A generic navigation link alone establishes only the navigation.
 Research stops here because additional examples would repeat the chosen
 patterns. The next evidence comes from the implemented visitor tasks and the
 smallest browser observation capable of challenging each decision.
+
+## Working rotary control and contextual editor
+
+**Question.** How can the first amp knob make a real session adjustment while
+keeping precise entry, ordinary scrolling, and recoverable draft ownership?
+
+**Evidence.** The [WAI slider pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)
+describes named values and keyboard operation, and calls for device-specific
+attention to touch assistive technology. [WAI technique G216](https://www.w3.org/WAI/WCAG22/Techniques/general/G216)
+describes single-point alternatives for slider operation. The
+[Pointer Events specification](https://www.w3.org/TR/pointerevents3/)
+defines capture, cancellation, and the `touch-action` boundary for direct
+manipulation. These sources guide the adapter; they leave its particular rotary
+geometry and receiving-device behavior to implementation evidence.
+
+**Decision.** Use a native range for Minutes, bounded to the existing 0–59
+field. A pointer adapter maps a 270-degree arc to the same raw session draft.
+Keyboard operation stays native; the visible precision field and step buttons
+remain ordinary alternatives. The dial owns capture only during its gesture.
+Escape or pointer cancellation restores the exact starting raw value; a change
+of editor retires the gesture while retaining the draft under its existing
+owner. Apply owns acceptance and Undo owns accepted history.
+
+The housing and light remain fixed while the pointer turns. Forced colors
+shows an ordinary native range, with the rotary pointer adapter yielding to its
+native gesture. Invalid typed values remain visible in the precision field and
+temporarily rest the dial. The explanation sits after the quantity inputs so
+it preserves their position. The dial leaves wheel behavior with the page.
+
+**Composition.** The shared duration readout, dial, and short help form one
+control group above the aligned precision fields. The selected-session editor
+uses the same DOM beside the session at wide widths and inline at narrow widths.
+Its heading preserves the session's literal name. An Operating manual disclosure
+explains the first useful actions and existing funding meanings without opening
+a second editor or adding a modal task.
+
+**Fitting observation.** Exercise native keyboard input, precision agreement,
+rotary pointer movement and cancellation, invalid-value recovery, editor changes,
+Apply/Undo, forced colors, and disposal. Observe reflow and retained focus after
+resizing the same editor. The authored pilot supplies an independent $370
+consequence for four additional quarter-hours across its three reviewers.
+These observations establish those local operations. Touch assistive-technology
+acceptance retains a fitting device observation before a public conformance
+claim; visible precision and step controls remain part of the shipped task.

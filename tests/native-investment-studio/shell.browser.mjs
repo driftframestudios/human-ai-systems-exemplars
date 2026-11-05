@@ -81,6 +81,13 @@ async function open(t, engine, { fragment = '', complete = false, ...options } =
     await page.locator('img').evaluateAll(images => Promise.all(images.map(image => { image.loading = 'eager'; return image.decode(); })));
     await page.evaluate(() => document.fonts.ready);
     await expect(root(page)).toHaveAttribute('data-native-ready', 'true');
+    await page.evaluate(async ({ controllerPath, statePath }) => {
+      const { mountCoordinationPanel } = await import(controllerPath);
+      const { createStudio } = await import(statePath);
+      const root = document.querySelector('[data-native-coordination]');
+      mountCoordinationPanel(root).dispose();
+      mountCoordinationPanel(root, { studio: createStudio() });
+    }, { controllerPath, statePath });
     await expect(root(page)).toHaveAttribute('data-native-chapters-ready', 'true');
   }
   await settle();
@@ -316,7 +323,7 @@ for (const engine of names) {
     await expect(root(fallback).locator('[data-native-chapter-list]')).toBeHidden();
     await expect(chapter(fallback, 'coordination')).toBeVisible();
     await expect(chapter(fallback, 'people')).toBeVisible();
-    await expect(total(fallback)).toHaveText('$1,200.00');
+    await expect(total(fallback)).toHaveText('$3,980.00');
     await expect(fallback.locator('a[href="../../collaboration/initiative-costing-calculator/index.html"]')).toBeVisible();
   });
 }

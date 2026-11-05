@@ -20,7 +20,7 @@ test('native About coordination has one module receiver and retains both legacy 
   const peopleStart = about.indexOf('<section class="native-team"', panelStart);
   assert.ok(panelStart >= 0 && peopleStart > panelStart, 'Coordination precedes the People chapter');
   const nativePanel = about.slice(panelStart, peopleStart);
-  assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary>Session settings<\/summary>/u,
+  assert.match(nativePanel, /<details\b[^>]*data-native-configure>\s*<summary><span data-native-remote-title>Session settings · Pilot decision review<\/span><\/summary>/u,
     'the native session disclosure remains the entry and return control');
   assert.doesNotMatch(nativePanel, /data-action="edit"/u, 'the live editor opens directly through its receiver');
   assert.equal((nativePanel.slice(0, nativePanel.indexOf('<section class="native-team"')).match(/<input\b[^>]*\binputmode="numeric"/gu) ?? []).length, fields.length, 'the receiver exposes three independent quantities');
