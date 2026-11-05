@@ -1013,3 +1013,21 @@ lifecycle. A generic error factory would add a second vocabulary without a new
 recovery decision. Focused cases exercise allocation, attachment and dispatch
 failure, replacement and disposal. The existing download journey receives
 content and retained-draft evidence. #709 owns this change.
+
+
+## 2026-11-05 — Return navigation policy
+
+Return paths distinguish a held editor's identity from an accepted record's
+identity. A held creation can survive before its record exists; a discarded
+held editor releases its return. Unheld paths follow the record that is still
+available. The existing ordered array and route objects keep their ownership:
+revisiting an origin retires it and its descendants, while nested creation
+retains its nearest parent. Small pure predicates express those separate jobs.
+
+Score admits a known chapter or an existing work, person or connection before
+parking an editor or changing return routes, chapter or focus. Its producer and
+receiver share that finite destination vocabulary. Priority-sensitive guidance,
+such as adding a person to the receiving team, remains explicit in the controller.
+Focused policy cases and the existing nested-return journeys receive the proof.
+Issue #710 owns this change; the accepted state and draft lease machinery remain
+the transaction authority.

@@ -50,6 +50,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/exchange.test.mjs',
   'tests/native-investment-studio/investment.browser.mjs',
   'tests/native-investment-studio/investment-trace.test.mjs',
+  'tests/native-investment-studio/navigation-policy.test.mjs',
   'tests/native-investment-studio/module-closure.test.mjs',
   'tests/native-investment-studio/person-draft.test.mjs',
   'tests/native-investment-studio/person-state.test.mjs',
@@ -335,7 +336,7 @@ test('native Studio routes retain source and separate browser owners with execut
     'coordination-arrangements.test.mjs', 'contribution-view-model.test.mjs',
     'investment-trace.test.mjs', 'browser-download.test.mjs', 'reports.test.mjs',
     'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
-    'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
+    'navigation-policy.test.mjs', 'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].sort().map(file => `tests/native-investment-studio/${file}`);
   assert.deepEqual(

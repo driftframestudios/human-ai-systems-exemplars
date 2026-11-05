@@ -332,6 +332,7 @@
         "tests/native-investment-studio/exchange.test.mjs",
         "tests/native-investment-studio/investment-trace.test.mjs",
         "tests/native-investment-studio/module-closure.test.mjs",
+        "tests/native-investment-studio/navigation-policy.test.mjs",
         "tests/native-investment-studio/person-draft.test.mjs",
         "tests/native-investment-studio/person-state.test.mjs",
         "tests/native-investment-studio/presets.test.mjs",
