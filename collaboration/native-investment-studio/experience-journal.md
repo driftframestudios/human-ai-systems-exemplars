@@ -492,3 +492,54 @@ accepted plan. Quality, recovery, score, traces, scenarios and final About
 composition follow the approved route in #637. The complete original Studio
 remains available. #686 holds the later human-cued tagged release; performance
 refinement begins after the complete showcase and the requested pause.
+
+## 2026-11-05 — Retain the plan while changing the questions
+
+**Accepted ground.** PR #689 is integrated on `dev@4fd8fba` after independent
+review of head `a799697`; their trees match. #650, #677 and #678 are complete.
+The current `codex/studio-change-chapter` branch receives #651. The source
+catalogue transfers the original framework explanations, suggestions, receiver
+roles, lenses and attention descriptions directly. Stable native component IDs
+retain existing role assignments.
+
+**Visitor task.** Choose a framework, inspect a component, compare viewpoints,
+adjust attention, and propose the support that the plan needs. Every framework
+keeps its mapping and planning status when another is selected. Source filters
+retain the original Core/Enterprise suggestion behavior. The Four Actions
+reading forms discussion questions; changing those questions leaves records
+with their existing owners.
+
+**Controls and appearance.** Collapsed component summaries preview the planning
+state. The same Included/Available checkbox grammar selects supporting work,
+people and cards. A dark mixer holds the relative attention controls; stationary
+housing and highlights surround native vertical range inputs. Each fader also
+has an exact Parts field and step buttons. The first visual reading exposed
+low-contrast headings and staggered tracks caused by unequal text lengths.
+The shared mixer rows now align those tracks and their values, and headings
+use the light control text. The earlier action-spacing repair carries into
+the form footer and new proposal controls.
+
+**Meaning of an adjustment.** Parts range independently from 0 to 25. The
+values express relative emphasis, and an all-zero mix invites a choice. The
+greatest-emphasis explanation refers to the actual maximum and its ties.
+Frameworks, lenses, mappings and attention preserve money. A source suggestion
+can reuse a session or propose explicitly configured new work; Apply accepts
+settings and the support link together. The original 48 aggregate person-hours
+remains explanatory context. Visitors choose the native per-person duration,
+occurrences, participants and funding before a new session enters their plan.
+
+**Recovery and disclosure.** One Change draft retains all maps and unfinished
+work. Reset changes draft framework, mapping/status and attention defaults,
+while keeping support references, lens/filter and actual sessions. Creating a
+missing person, team or session returns to the requesting control. Removing
+linked work or a card points back to Change for an explicit support decision.
+Baseline and exchange readings name changed components and attention values;
+the accepted plan file carries the complete settings.
+
+**Continuation.** The receiving PR owns exact source and browser evidence.
+#652 next receives quality, recovery and learning. #653 receives the retained
+lens visual-kind cue and attention emphasis in the authored coordination score;
+their current definitions already travel with the plan. #654 receives separate
+analytical assumptions and traces. #649/#638 complete scenarios, reports and
+the final About composition. The full original Studio and human-cued release
+boundary remain intact. Pause at performance refinement after the showcase.

@@ -9,6 +9,7 @@ import { createAssemblyDraftAdapter, ASSEMBLY_FORMS, makeAssemblyTarget, describ
 import { PURPOSE_FIELDS, LIMITS } from './config.mjs';
 import { createCapabilityDraftAdapter, CAPABILITY_FORMS, makeCapabilityTarget, describeCapabilityTarget,
   copyCapabilityRaw, sameCapabilityRaw } from './capability-draft.mjs';
+import { createChangeDraftAdapter, CHANGE_FIELDS, copyChangeRaw, sameChangeRaw } from './change-draft.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
 const indexRows = rows => new Map(rows.map(row => [row.id, row]));
@@ -21,6 +22,9 @@ const TYPES = Object.freeze({
     create: createPersonDraftAdapter }),
   purpose: Object.freeze({ id: 'purposeId', index: state => new Map([['purpose', state.purpose]]),
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
+  change: Object.freeze({ id: 'changeId', index: state => new Map([['change', state.changeSettings]]), ids: true, step: true,
+    fields: Object.freeze(Object.keys(CHANGE_FIELDS)), fieldMetadata: CHANGE_FIELDS,
+    create: createChangeDraftAdapter, copy: copyChangeRaw, same: sameChangeRaw }),
   assembly: Object.freeze({ id: 'assemblyId', step: true, ids: true,
     index: state => new Map(['people', 'teams'].flatMap(collection => state[collection].map(row => [`${collection}:${row.id}`, row]))),
     create: createAssemblyDraftAdapter, forms: ASSEMBLY_FORMS, make: makeAssemblyTarget,
@@ -246,7 +250,7 @@ export function createDraftCoordinator(studio, { limit = EDITING_LIMITS.drafts }
         if (!opened.ok) { adapter.dispose(); return fail(kind, opened.error); }
         const initialRaw = opened.view.draft.raw;
         const raw = mode === 'current' ? null : previousRaw ?? record?.raw;
-        const formFields = TYPES[kind].describe?.(targetId).fields;
+        const formFields = TYPES[kind].describe?.(targetId).fields ?? TYPES[kind].fieldMetadata;
         if (raw) for (const field of fieldsFor(kind, targetId)) {
           const method = formFields?.[field].kind === 'ids' ? 'setIds' : 'setText';
           const result = adapter[method](opened.view.draft.token, field, raw[field]);

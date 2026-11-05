@@ -90,6 +90,16 @@ function dependencies(state, collection, id) {
     const kind = collection === 'abilities' ? 'ability' : 'practice';
     include(state.capabilityEvidence, 'capabilityEvidence', 'subject', row => row.subject.kind === kind && row.subject.instanceId === id);
   }
+  if (collection === 'work' || collection === 'abilities' || collection === 'practices') {
+    const kind = collection === 'abilities' ? 'ability' : 'practice';
+    state.changeSettings.frameworkMaps.forEach((mapping, mapIndex) => mapping.components.forEach((component, componentIndex) => {
+      const field = collection === 'work' ? 'workIds' : 'capabilityRefs';
+      const matches = collection === 'work' ? component.workIds.includes(id)
+        : component.capabilityRefs.some(edge => edge.kind === kind && edge.instanceId === id);
+      if (matches) references.push(Object.freeze({ collection: 'changeSettings', id: mapping.frameworkId,
+        field: `frameworkMaps[${mapIndex}].components[${componentIndex}].${field}` }));
+    }));
+  }
   return Object.freeze(references);
 }
 
@@ -114,6 +124,9 @@ export function prepareAssembly(base, candidate) {
   let collection;
   let rows;
   switch (command.type) {
+    case 'change.settings.replace':
+      if (JSON.stringify(command.changeSettings) === JSON.stringify(state.changeSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, changeSettings: command.changeSettings }) };
     case 'person.create':
       collection = 'people'; rows = append(state.people, { role: emptyRole(), lifecycle: 'active', ...command.person }, 'command.person.id'); break;
     case 'team.create':

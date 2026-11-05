@@ -306,6 +306,10 @@
         "tests/native-investment-studio/capabilities.test.mjs",
         "tests/native-investment-studio/capability-draft.test.mjs",
         "tests/native-investment-studio/capability-proposals.test.mjs",
+        "tests/native-investment-studio/change-contract.test.mjs",
+        "tests/native-investment-studio/change-draft.test.mjs",
+        "tests/native-investment-studio/change-models.test.mjs",
+        "tests/native-investment-studio/change-proposals.test.mjs",
         "tests/native-investment-studio/command-draft.test.mjs",
         "tests/native-investment-studio/commands.test.mjs",
         "tests/native-investment-studio/connection-draft.test.mjs",
@@ -3013,6 +3017,28 @@
       "aliases": [
         "test:native-investment-studio:capability-browser"
       ]
+    },
+    {
+      "id": "browser.native-investment-studio.change",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/change.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Retained change-framework maps, interpretive lenses, relative attention, explicit supporting-work proposals, Apply and Undo, saved drafts and accessible cross-engine chapter operation.",
+      "aliases": [
+        "test:native-investment-studio:change-browser"
+      ]
     }
   ],
   "bundles": [
@@ -3142,7 +3168,8 @@
         "browser.native-investment-studio.team-assembly",
         "browser.native-investment-studio.connections",
         "browser.native-investment-studio.connection-templates",
-        "browser.native-investment-studio.capabilities"
+        "browser.native-investment-studio.capabilities",
+        "browser.native-investment-studio.change"
       ]
     },
     {
@@ -3521,6 +3548,10 @@
           "tests/native-investment-studio/capabilities.test.mjs",
           "tests/native-investment-studio/capability-draft.test.mjs",
           "tests/native-investment-studio/capability-proposals.test.mjs",
+          "tests/native-investment-studio/change-contract.test.mjs",
+          "tests/native-investment-studio/change-draft.test.mjs",
+          "tests/native-investment-studio/change-models.test.mjs",
+          "tests/native-investment-studio/change-proposals.test.mjs",
           "tests/native-investment-studio/command-draft.test.mjs",
           "tests/native-investment-studio/commands.test.mjs",
           "tests/native-investment-studio/connection-draft.test.mjs",
@@ -3638,6 +3669,9 @@
         ],
         "test:native-investment-studio:capability-browser": [
           "tests/native-investment-studio/capability.browser.mjs"
+        ],
+        "test:native-investment-studio:change-browser": [
+          "tests/native-investment-studio/change.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

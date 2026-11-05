@@ -1,6 +1,7 @@
 import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from './config.mjs';
 import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from './roles.mjs';
 import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityWorkIds, createLegacyPractice } from './capabilities.mjs';
+import { CHANGE_CATALOGUE_VERSION, listChangeFrameworks, getChangeFramework, getInterpretiveLens, listAttentionChannels, createChangeSettings, projectChange } from './change-models.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -16,7 +17,8 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings'],
+  capabilityPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
   relationshipPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
   purposePlan: [...PLAN_FIELDS, 'purpose'],
   legacyPlan: PLAN_FIELDS,
@@ -36,13 +38,21 @@ const FIELDS = Object.freeze({
   capabilityReference: ['kind', 'instanceId'],
   supportBinding: ['requirementId', 'workIds'],
   capabilityEvidence: ['id', 'subject', 'stage', 'context', 'observation', 'recorderPersonId', 'reviewBoundary', 'observedPlanRevision'],
+  changeSettings: ['activeFramework', 'lens', 'sourceFilter', 'frameworkMaps', 'attention'],
+  changeFramework: ['frameworkId', 'version'],
+  changeLens: ['lensId', 'version'],
+  changeFrameworkMap: ['frameworkId', 'version', 'components'],
+  changeComponent: ['componentId', 'mapped', 'status', 'workIds', 'capabilityRefs'],
+  changeAttention: ['version', 'channels'],
+  changeChannel: ['channelId', 'parts'],
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const PROFILES = new Map([
   ['0.1.0', { fields: 'legacyPlan', purpose: false, relationships: false, capabilities: false, references: 4096 }],
   ['0.2.0', { fields: 'purposePlan', purpose: true, relationships: false, capabilities: false, references: 4096 }],
   ['0.3.0', { fields: 'relationshipPlan', purpose: true, relationships: true, capabilities: false, references: 8192 }],
-  ['0.4.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, references: LIMITS.references }],
+  ['0.4.0', { fields: 'capabilityPlan', purpose: true, relationships: true, capabilities: true, references: 16384 }],
+  ['0.5.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
@@ -73,6 +83,7 @@ const COMMAND_FIELDS = Object.freeze({
   'capability.remove': ['type', 'kind', 'instanceId'],
   'capability.evidence.record': ['type', 'evidence'],
   'capability.evidence.remove': ['type', 'evidenceId'],
+  'change.settings.replace': ['type', 'changeSettings'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence']);
@@ -392,6 +403,7 @@ export function prepareAssemblyCommand(candidate) {
     case 'capability.remove': return { type, kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true) };
     case 'capability.evidence.record': return { type, evidence: prepareCapabilityEvidence(raw.evidence, `${path}.evidence`) };
     case 'capability.evidence.remove': return { type, evidenceId: text(raw.evidenceId, `${path}.evidenceId`, true) };
+    case 'change.settings.replace': return { type, changeSettings: prepareChangeSettings(raw.changeSettings, `${path}.changeSettings`) };
   }
 }
 
@@ -450,6 +462,64 @@ function capabilityReference(candidate, path) {
   return { kind: choice(raw.kind, CAPABILITY_KINDS, `${path}.kind`), instanceId: text(raw.instanceId, `${path}.instanceId`, true) };
 }
 const capabilityKey = (kind, id) => `${kind}:${id}`;
+
+// Settings own planning posture and references. Whole-plan admission resolves
+// the references; mapped status itself makes no claim about supporting work.
+export function prepareChangeSettings(candidate, path = 'plan.changeSettings') {
+  const raw = record(candidate, 'changeSettings', path);
+  const active = record(raw.activeFramework, 'changeFramework', `${path}.activeFramework`);
+  const activeDefinition = getChangeFramework(active.frameworkId, active.version);
+  if (!activeDefinition) reject('change-framework', `${path}.activeFramework`, 'Choose an exact listed framework and version.');
+  const lens = record(raw.lens, 'changeLens', `${path}.lens`);
+  const lensDefinition = getInterpretiveLens(lens.lensId, lens.version);
+  if (!lensDefinition) reject('change-lens', `${path}.lens`, 'Choose an exact listed lens and version.');
+  const definitions = listChangeFrameworks(), seenFrameworks = new Set();
+  const frameworkMaps = list(raw.frameworkMaps, definitions.length, `${path}.frameworkMaps`).map((value, index) => {
+    const mapPath = `${path}.frameworkMaps[${index}]`, mapping = record(value, 'changeFrameworkMap', mapPath);
+    const definition = getChangeFramework(mapping.frameworkId, mapping.version);
+    if (!definition) reject('change-framework', mapPath, 'Retain a mapping for an exact listed framework and version.');
+    const key = `${definition.id}:${definition.version}`;
+    if (seenFrameworks.has(key)) reject('duplicate-reference', mapPath, 'Retain each framework version once.');
+    seenFrameworks.add(key);
+    const allowed = new Set(definition.components.map(row => row.id)), seenComponents = new Set();
+    const components = list(mapping.components, allowed.size, `${mapPath}.components`).map((value, position) => {
+      const componentPath = `${mapPath}.components[${position}]`, row = record(value, 'changeComponent', componentPath);
+      if (!allowed.has(row.componentId)) reject('change-component', `${componentPath}.componentId`, 'Choose a component within this exact framework version.');
+      if (seenComponents.has(row.componentId)) reject('duplicate-reference', `${componentPath}.componentId`, 'Retain each component once.');
+      seenComponents.add(row.componentId);
+      if (typeof row.mapped !== 'boolean') reject('boolean', `${componentPath}.mapped`, 'State whether this component is mapped.');
+      const seenReferences = new Set();
+      const capabilityRefs = list(row.capabilityRefs, LIMITS.abilities + LIMITS.practices, `${componentPath}.capabilityRefs`).map((value, referenceIndex) => {
+        const edgePath = `${componentPath}.capabilityRefs[${referenceIndex}]`, edge = capabilityReference(value, edgePath);
+        const edgeKey = capabilityKey(edge.kind, edge.instanceId);
+        if (seenReferences.has(edgeKey)) reject('duplicate-reference', edgePath, 'Reference each ability or practice once in this component.');
+        seenReferences.add(edgeKey); return edge;
+      });
+      return { componentId: row.componentId, mapped: row.mapped,
+        status: choice(row.status, ['planned', 'partial', 'look', 'outside'], `${componentPath}.status`),
+        workIds: identifiers(row.workIds, LIMITS.work, `${componentPath}.workIds`), capabilityRefs };
+    });
+    if (components.length !== allowed.size) reject('change-components', `${mapPath}.components`, 'Retain every component of this framework version.');
+    return { frameworkId: definition.id, version: definition.version, components };
+  });
+  if (frameworkMaps.length !== definitions.length) reject('change-frameworks', `${path}.frameworkMaps`, 'Retain a map for every available framework.');
+  const attention = record(raw.attention, 'changeAttention', `${path}.attention`);
+  if (attention.version !== CHANGE_CATALOGUE_VERSION) reject('change-attention', `${path}.attention.version`, 'Use the supported attention-channel version.');
+  const channelsById = new Map(listAttentionChannels().map(row => [row.id, row])), seenChannels = new Set();
+  const channels = list(attention.channels, channelsById.size, `${path}.attention.channels`).map((value, index) => {
+    const channelPath = `${path}.attention.channels[${index}]`, channel = record(value, 'changeChannel', channelPath);
+    const definition = channelsById.get(channel.channelId);
+    if (!definition) reject('change-channel', `${channelPath}.channelId`, 'Choose a defined attention channel.');
+    if (seenChannels.has(definition.id)) reject('duplicate-reference', `${channelPath}.channelId`, 'Retain each attention channel once.');
+    seenChannels.add(definition.id);
+    return { channelId: definition.id, parts: integer(channel.parts, definition.maxParts, `${channelPath}.parts`, definition.minParts) };
+  });
+  if (channels.length !== channelsById.size) reject('change-channels', `${path}.attention.channels`, 'Retain all eight attention channels.');
+  return { activeFramework: { frameworkId: activeDefinition.id, version: activeDefinition.version },
+    lens: { lensId: lensDefinition.id, version: lensDefinition.version },
+    sourceFilter: choice(raw.sourceFilter, ['all', 'core', 'enterprise'], `${path}.sourceFilter`),
+    frameworkMaps, attention: { version: CHANGE_CATALOGUE_VERSION, channels } };
+}
 
 export function prepareCapability(candidate, kind, path = 'capability') {
   choice(kind, CAPABILITY_KINDS, `${path}.kind`);
@@ -723,13 +793,24 @@ function prepareVersion(candidate, version) {
     indexRecords(state.connections, 'plan.connections');
   }
   const graph = profile.capabilities ? prepareCapabilities(raw, state, peopleById, teamsById, workById, budget) : null;
+  if (profile.change) {
+    state.changeSettings = prepareChangeSettings(raw.changeSettings);
+    for (const [mapIndex, mapping] of state.changeSettings.frameworkMaps.entries()) {
+      for (const [componentIndex, component] of mapping.components.entries()) {
+        const path = `plan.changeSettings.frameworkMaps[${mapIndex}].components[${componentIndex}]`;
+        component.workIds = references(component.workIds, workById, `${path}.workIds`, budget);
+        for (const [index, edge] of component.capabilityRefs.entries()) reference(capabilityKey(edge.kind, edge.instanceId), graph.nodes, `${path}.capabilityRefs[${index}]`, budget);
+      }
+    }
+  }
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
   const result = calculate(state, peopleById);
   return freeze({ state, result, serialized,
     ...(profile.relationships ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}),
-    ...(graph ? { capabilities: capabilitySummaries(state, graph, peopleById, teamsById, workById, result) } : {}) });
+    ...(graph ? { capabilities: capabilitySummaries(state, graph, peopleById, teamsById, workById, result) } : {}),
+    ...(profile.change ? { change: projectChange(state.changeSettings) } : {}) });
 }
 
 function prepareSelectedVersion(candidate, version) {
@@ -743,8 +824,10 @@ function prepareSelectedVersion(candidate, version) {
     teams: admitted.state.teams.map(row => ({ lifecycle: 'active', ...row })),
     work: admitted.state.work.map(row => ({ lifecycle: 'active', ...row })),
     contributions: admitted.state.contributions ?? [], connections: admitted.state.connections ?? [],
-    practices: admitted.state.practices.map(row => createLegacyPractice(row.id, row.practiceId, row.teamId, row.workIds)),
-    abilities: [], capabilityEvidence: [] }, CONTRACT.schemaVersion);
+    practices: PROFILES.get(version).capabilities ? admitted.state.practices
+      : admitted.state.practices.map(row => createLegacyPractice(row.id, row.practiceId, row.teamId, row.workIds)),
+    abilities: admitted.state.abilities ?? [], capabilityEvidence: admitted.state.capabilityEvidence ?? [],
+    changeSettings: admitted.state.changeSettings ?? createChangeSettings() }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -794,6 +877,7 @@ export function createExamplePlan() {
     kind: CONTRACT.kind, schemaVersion: CONTRACT.schemaVersion, modelVersion: CONTRACT.modelVersion,
     currency: CONTRACT.currency, planId: 'coordination-example', revision: 0, horizonWeeks: 6,
     purpose: emptyPurpose(),
+    changeSettings: createChangeSettings(),
     people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active' })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],

@@ -110,6 +110,8 @@ function changesBetween(before, after) {
   const changes = {
     plan: Object.freeze(ROOT_FIELDS.filter(field => before[field] !== after[field])),
     purpose: Object.freeze(PURPOSE_FIELDS.filter(field => before.purpose[field] !== after.purpose[field])),
+    changeSettings: Object.freeze(['activeFramework', 'lens', 'sourceFilter', 'frameworkMaps', 'attention']
+      .filter(field => !equalField(before.changeSettings[field], after.changeSettings[field]))),
   };
   for (const [kind, fields] of Object.entries(ROW_FIELDS)) {
     const prior = new Map(before[kind].map(row => [row.id, row]));

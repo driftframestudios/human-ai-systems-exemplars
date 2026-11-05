@@ -136,7 +136,7 @@ test('the capability, evidence and edge bounds distinguish the exact accepted li
 });
 
 test('genuine old envelopes preserve exact profile meaning before migrating ordered support', () => {
-  const base = createExamplePlan(); delete base.abilities; delete base.capabilityEvidence;
+  const base = createExamplePlan(); delete base.abilities; delete base.capabilityEvidence; delete base.changeSettings;
   base.practices = [{ id: 'legacy', practiceId: 'continuity', teamId: 'delivery', workIds: ['review'] }];
   base.people[0].role.decisionId = 'approves'; base.people[0].lifecycle = 'retired';
   base.people[1].rateCentsPerHour = null; base.people[2].rateCentsPerHour = 0;
@@ -150,7 +150,7 @@ test('genuine old envelopes preserve exact profile meaning before migrating orde
     }
     if (version === '0.1.0') delete old.purpose;
     const bytes = JSON.stringify(old), receipt = prepareImport(bytes), migrated = receipt.projection;
-    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(migrated.state.schemaVersion, '0.4.0');
+    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(migrated.state.schemaVersion, '0.5.0');
     assert.deepEqual(migrated.state.practices[0], createLegacyPractice('legacy', 'continuity', 'delivery', ['review']));
     assert.deepEqual(migrated.state.people.map(row => row.rateCentsPerHour), [10000, null, 0, 10000]);
     if (version === '0.3.0') { assert.equal(migrated.state.people[0].lifecycle, 'retired'); assert.equal(migrated.state.people[0].role.decisionId, 'approves'); assert.deepEqual(migrated.state.contributions, old.contributions); }
@@ -186,6 +186,6 @@ test('maximum new escaped context and evidence fields remain self-importable wit
   const current = preparePlan(candidate);
   assert.equal(current.state.abilities[127].context, full);
   assert.equal(current.state.capabilityEvidence[255].observation, full);
-  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.4.0']);
+  assert.ok(Buffer.byteLength(current.serialized) <= SCHEMA_BYTE_LIMITS['0.5.0']);
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
 });

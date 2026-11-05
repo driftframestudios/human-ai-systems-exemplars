@@ -2506,6 +2506,58 @@ p#on-dark-iron-ore {
     .native-capability-card { box-shadow: none; break-inside: avoid; }
 }
 
+/* Change keeps framework interpretation on paper and relative attention on a
+   fixed mixer housing. The native range owns pointer and keyboard operation. */
+.native-change { container: native-change / inline-size; display: grid; gap: 1.25rem; padding: clamp(.5rem, 2.5vw, 2rem); color: var(--native-text); }
+.native-change__heading { max-inline-size: 78ch; }
+.native-change form, .native-change [data-change-fields] { display: grid; gap: 1.25rem; min-inline-size: 0; }
+.native-change__selectors, .native-change__matrix, .native-change__four-actions, .native-change__work-fields { display: grid; gap: 1rem; min-inline-size: 0; }
+.native-change__selectors > *, .native-change__field { display: grid; align-content: start; gap: .5rem; min-inline-size: 0; }
+.native-change__field input:not([type='checkbox']), .native-change__field select, .native-change__field textarea { max-inline-size: 100%; }
+.native-change__field textarea { inline-size: 100%; min-inline-size: 0; padding: .6rem; font: inherit; color: var(--native-text); background: var(--native-paper); border: .125rem solid var(--native-rule); }
+.native-change__interpretation { padding: 1rem; background: var(--about-cool-blue); border-inline-start: .3rem solid var(--about-cobalt); }
+.native-change__interpretation:empty, .native-change__work:empty { display: none; }
+.native-change__component { min-inline-size: 0; background: var(--native-paper); border: .125rem solid var(--native-rule); }
+.native-change__component > summary { padding: .75rem; cursor: pointer; }
+.native-change__component > summary span { display: block; font-size: .875rem; font-weight: 400; margin-block-start: .25rem; }
+.native-change__component-body { display: grid; gap: 1rem; padding: clamp(.5rem, 2vw, 1rem); }
+.native-change__component-body p { margin: 0; }
+.native-change__choices { display: grid; gap: .6rem; padding: 0; list-style: none; }
+.native-change__choices label { display: flex; align-items: start; gap: .65rem; min-block-size: 2.75rem; padding: .55rem; border: .0625rem solid var(--native-rule); }
+.native-change input[type='checkbox'] { flex: 0 0 1.2rem; inline-size: 1.2rem; block-size: 1.2rem; min-block-size: 1.2rem; padding: 0; margin-block-start: .2rem; accent-color: var(--about-deep-teal); }
+.native-change__discussion { padding: 1rem; background: var(--native-paper); border-block-start: .25rem solid var(--about-deep-teal); border-block-end: .0625rem dashed var(--native-rule); }
+.native-change__attention { padding: clamp(.5rem, 2vw, 1.3rem); color: var(--native-paper); background: #263a3b; border: .125rem solid var(--native-ink); box-shadow: .3rem .3rem 0 var(--native-key-shadow); }
+.about-page .native-change__attention h4 { color: inherit; }
+.native-change__attention > button + p { margin-block-start: .75rem; }
+.native-change__mixer { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(6.5rem, 100%), 1fr)); gap: .85rem; margin-block: 1.25rem; }
+.native-change__channel { display: grid; grid-row: span 4; grid-template-rows: subgrid; justify-items: center; align-content: start; gap: .65rem; min-inline-size: 0; padding: .75rem .35rem; border: .0625rem solid #81918d; background: linear-gradient(135deg, #415456, #213233); }
+.about-page .native-change__channel h5 { color: var(--native-paper); font: 650 1rem/1.35 system-ui, sans-serif; margin: 0; overflow-wrap: anywhere; }
+.native-change__channel > p { margin: 0; font-size: .875rem; line-height: 1.5; }
+.native-change__channel > .native-change__field { justify-items: center; }
+.native-change__channel > label { min-block-size: 3.5em; text-align: center; font-weight: 650; overflow-wrap: anywhere; }
+.native-change input.native-change__fader { appearance: auto; writing-mode: vertical-lr; direction: rtl; inline-size: 10rem; block-size: 2.75rem; min-block-size: 2.75rem; padding: .25rem; margin: 0; border: 0; border-radius: .2rem; background: #152828; box-shadow: inset .12rem .12rem 0 #071517, inset -.08rem -.08rem 0 #87958e; accent-color: var(--native-signal); }
+.native-change input.native-change__numeric { inline-size: min(calc(5ch + 1.8rem), 100%); padding-inline: .55rem; }
+.native-change__steps { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.native-change__steps button { min-inline-size: 2.75rem; }
+.native-change__work { display: grid; gap: 1rem; padding: 1rem; background: var(--about-soft-apricot); border: .125rem solid var(--native-rule); }
+.native-change [data-change-action='apply'] { background: var(--native-signal); }
+.native-change__manual > summary { padding: .8rem; cursor: pointer; }
+.native-change__manual > summary span { display: block; margin-block-start: .25rem; font-size: .875rem; font-weight: 400; }
+.native-change__manual > div { padding: 1rem; max-inline-size: 82ch; background: var(--native-paper); border-inline: .0625rem dashed var(--native-rule); }
+@container native-change (min-width: 42rem) {
+    .native-change__selectors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .native-change__four-actions, .native-change__work-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+    .native-change__attention, .native-change__channel { color: CanvasText; background: Canvas; border-color: CanvasText; box-shadow: none; }
+    .about-page .native-change__channel h5 { color: CanvasText; }
+    .native-change input.native-change__fader { background: Canvas; box-shadow: none; }
+}
+@media print {
+    .native-change__attention, .native-change__channel { color: black; background: white; box-shadow: none; }
+    .native-change__component { break-inside: avoid; }
+}
+
 /* The first populated scenario and Remote share the existing accepted plan.
    Keep this adapter beside native controls; the ASCII family supplies ornament. */
 .native-manual { grid-column: 1 / -1; color: var(--native-text); background: var(--native-paper); }
