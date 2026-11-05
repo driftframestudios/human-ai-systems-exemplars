@@ -15,16 +15,11 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
   const outputs = {};
   for (const name of ['hours', 'minutes']) { const part = node('span'), value = node('strong', '00'); part.append(value, node('span', name)); display.append(part); outputs[name] = value; }
   display.setAttribute('for', `${idPrefix}-hoursPerSession ${idPrefix}-minutesPerSession`);
-  const minutesControl = node('div', undefined, 'native-minutes-control'), dialLabel = node('label', 'Minutes dial'); dialLabel.htmlFor = `${idPrefix}-dial`;
-  const dial = node('div', undefined, 'native-knob'); dial.dataset.nativeMinutesDial = ''; dial.hidden = true;
-  const ticks = node('div', undefined, 'native-knob__ticks'), face = node('div', undefined, 'native-knob__face'); ticks.setAttribute('aria-hidden', 'true'); face.setAttribute('aria-hidden', 'true'); face.append(node('span', undefined, 'native-knob__pointer'));
-  const knob = node('input'); Object.assign(knob, { type: 'range', min: '0', max: '59', step: '1', value: '0', id: `${idPrefix}-dial` }); knob.dataset.nativeMinutesKnob = '';
-  const help = node('p', 'Turn or tap the dial, use arrow keys, or enter minutes below. Escape restores the value where a turn began.', 'native-coordination__hint native-knob__help'); help.id = `${idPrefix}-dial-help`; help.hidden = true;
+  const help = node('p', 'Turn or tap a dial, use arrow keys, or enter a value beside it. Escape restores the value where a turn began.', 'native-coordination__hint native-knob__help'); help.id = `${idPrefix}-dial-help`; help.hidden = true;
   const limit = node('p', 'Hours and minutes combine into one duration, up to 24 hours per person.', 'native-coordination__hint'); limit.id = `${idPrefix}-duration-limit`;
-  knob.setAttribute('aria-describedby', `${help.id} ${idPrefix}-minutesPerSession-error`); dial.append(ticks, face, knob); minutesControl.append(dialLabel, dial); overview.append(title, display, minutesControl, help, limit);
+  overview.append(title, display, help, limit);
   const quantities = node('div', undefined, 'native-coordination__controls native-time__quantities'), feedback = node('div', undefined, 'native-coordination__feedback native-time__feedback'); feedback.setAttribute('role', 'group'); feedback.setAttribute('aria-label', 'Quantity feedback');
-  const note = node('p', '', 'native-coordination__hint'); note.hidden = true; note.dataset.nativeKnobNote = ''; feedback.append(note);
-  const controls = new Map();
+  const controls = new Map(), dials = {};
   for (const name of TIME_FIELDS) {
     const key = fieldPrefix + name, group = node('div', undefined, `native-coordination__control native-coordination__control--${name === 'hoursPerSession' ? 'hours' : name === 'minutesPerSession' ? 'minutes' : 'count'}`);
     const label = node('label', labels[name]), input = node('input'), stepper = node('div', undefined, 'native-coordination__stepper');
@@ -37,12 +32,26 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
       step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${name === 'occurrences' ? 'working sessions by one' : `session duration by one ${name === 'hoursPerSession' ? 'hour' : 'minute'}`}`);
       stepper.append(step); if (direction === -1) stepper.append(input);
     }
-    group.append(label, stepper, range); quantities.append(group); controls.set(key, { input, error, group, key });
+    group.append(label);
+    if (name !== 'occurrences') {
+      const unit = name === 'hoursPerSession' ? 'hours' : 'minutes'; group.classList.add('native-time__part');
+      const adjustment = node('div', undefined, 'native-time__adjustment');
+      const dial = node('div', undefined, `native-knob native-knob--${unit}`); dial.dataset[unit === 'hours' ? 'nativeHoursDial' : 'nativeMinutesDial'] = ''; dial.hidden = true;
+      const ticks = node('div', undefined, 'native-knob__ticks'), face = node('div', undefined, 'native-knob__face'); ticks.setAttribute('aria-hidden', 'true'); face.setAttribute('aria-hidden', 'true'); face.append(node('span', undefined, 'native-knob__pointer'));
+      const knob = node('input'); Object.assign(knob, { type: 'range', min: '0', max: unit === 'hours' ? '24' : '59', step: '1', value: '0', id: `${idPrefix}-${unit === 'hours' ? 'hours-' : ''}dial` });
+      knob.dataset[unit === 'hours' ? 'nativeHoursKnob' : 'nativeMinutesKnob'] = '';
+      knob.setAttribute('aria-label', `${labels[name]} dial`); knob.setAttribute('aria-describedby', `${help.id} ${limit.id} ${error.id}`);
+      const note = node('p', '', 'native-coordination__hint'); note.hidden = true;
+      note.dataset[unit === 'hours' ? 'nativeHoursKnobNote' : 'nativeKnobNote'] = ''; feedback.append(note);
+      dial.append(ticks, face, knob); adjustment.append(dial, stepper); group.append(adjustment);
+      dials[unit] = { dial, knob, note, help: unit === 'minutes' ? help : null };
+    } else group.append(stepper);
+    group.append(range); quantities.append(group); controls.set(key, { input, error, group, key });
   }
   const context = node('p', '', 'native-coordination__hint'); context.id = `${idPrefix}-context`; quantities.lastElementChild.append(context);
   controls.get(fieldPrefix + 'occurrences').input.setAttribute('aria-describedby', `${context.id} ${idPrefix}-occurrences-range ${idPrefix}-occurrences-error`);
   element.append(overview, quantities, feedback);
-  return Object.freeze({ element, controls, dial, knob, note, help, outputs, context });
+  return Object.freeze({ element, controls, dials, ...dials.minutes, outputs, context });
 }
 
 export function renderTimeReadout({ outputs, context }, raw, { errors = [], composing = false, fieldPrefix = '', horizonWeeks } = {}) {
@@ -55,14 +64,18 @@ export function renderTimeReadout({ outputs, context }, raw, { errors = [], comp
 
 // The native range owns keyboard and assistive-technology semantics. This owner
 // adds rotary pointer input while every publication checks the host's current lease.
-export function mountMinutesDial({ dial, knob, note, help, read, write }) {
+function mountTimeDial({ unit, dial, knob, note, help, read, write }) {
   if (!dial || !knob) return Object.freeze({ refresh() {}, release() {}, dispose() {} });
+  const scale = unit === 'hours' ? LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour : CONTRACT.minutesPerHour - 1;
   const window = knob.ownerDocument.defaultView, forcedColors = window.matchMedia('(forced-colors: active)'), cleanup = [];
   let gesture = null, disposed = false;
   const listen = (element, name, handler) => { element.addEventListener(name, handler); cleanup.push(() => element.removeEventListener(name, handler)); };
   function maximum(view) {
-    return /^[0-9]+$/.test(view?.hours ?? '') && Number(view.hours) <= LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour
-      ? Math.min(59, LIMITS.minutesPerOccurrence - Number(view.hours) * CONTRACT.minutesPerHour) : null;
+    const other = unit === 'hours' ? view?.minutes : view?.hours;
+    const otherLimit = unit === 'hours' ? CONTRACT.minutesPerHour - 1 : LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour;
+    if (!/^[0-9]+$/.test(other ?? '') || Number(other) > otherLimit) return null;
+    return unit === 'hours' ? Math.floor((LIMITS.minutesPerOccurrence - Number(other)) / CONTRACT.minutesPerHour)
+      : Math.min(scale, LIMITS.minutesPerOccurrence - Number(other) * CONTRACT.minutesPerHour);
   }
   function current() { const view = read(); return !disposed && view?.enabled && !knob.disabled ? view : null; }
   function set(value, token = current()?.token) {
@@ -82,10 +95,16 @@ export function mountMinutesDial({ dial, knob, note, help, read, write }) {
     const max = maximum(view), valid = max !== null && !view?.composing && /^[0-9]+$/.test(view?.raw ?? '') && Number(view.raw) <= max && !view.error;
     const enabled = valid && Boolean(view.enabled);
     if (gesture && (!enabled || gesture.token !== view.token)) release();
-    knob.max = String(max ?? 59); knob.disabled = !enabled; dial.dataset.valueState = valid ? 'ready' : 'unavailable';
-    if (valid) { knob.value = String(Number(view.raw)); knob.setAttribute('aria-valuetext', `${Number(view.raw)} minutes per session`); dial.style.setProperty('--native-knob-angle', `${-135 + Number(view.raw) * 270 / 59}deg`); }
-    else knob.setAttribute('aria-valuetext', 'Enter minutes in the precision field to use the dial');
-    if (note) { note.hidden = valid; note.textContent = max === 0 ? 'At 24 hours, set Minutes to 0 to use the dial.' : max === null ? 'Enter valid hours and minutes to use the dial.' : 'Enter 0–59 in Minutes to use the dial.'; }
+    knob.max = String(max ?? scale); knob.disabled = !enabled; dial.dataset.valueState = valid ? 'ready' : 'unavailable';
+    if (valid) { knob.value = String(Number(view.raw)); knob.setAttribute('aria-valuetext', `${Number(view.raw)} ${unit} per session${unit === 'hours' && max < scale ? '; up to 23 hours while Minutes is above 0' : ''}`); dial.style.setProperty('--native-knob-angle', `${-135 + Number(view.raw) * 270 / scale}deg`); }
+    else knob.setAttribute('aria-valuetext', `Enter valid hours and minutes in the precision fields to use the ${unit} dial`);
+    if (note) {
+      const limitedHours = unit === 'hours' && max !== null && max < scale;
+      note.hidden = valid && !limitedHours;
+      note.textContent = limitedHours ? 'Hours reaches 23 while Minutes is above 0. Set Minutes to 0 to choose 24 hours.'
+        : unit === 'minutes' && max === 0 ? 'At 24 hours, set Minutes to 0 to use the dial.'
+          : max === null ? 'Enter valid hours and minutes to use the dial.' : `Enter 0–${scale} in ${unit === 'hours' ? 'Hours' : 'Minutes'} to use the dial.`;
+    }
   }
   function pointerAngle(event) {
     const box = knob.getBoundingClientRect(), x = event.clientX - box.left - box.width / 2, y = event.clientY - box.top - box.height / 2;
@@ -98,7 +117,7 @@ export function mountMinutesDial({ dial, knob, note, help, read, write }) {
     const angle = pointerAngle(event); if (angle === null) return;
     const delta = ((angle - gesture.lastAngle + 540) % 360) - 180;
     gesture.angle = Math.min(135, Math.max(-135, gesture.angle + delta)); gesture.lastAngle = angle;
-    set(Math.round((gesture.angle + 135) * 59 / 270), gesture.token);
+    set(Math.round((gesture.angle + 135) * scale / 270), gesture.token);
   }
   listen(knob, 'input', () => set(knob.value));
   listen(knob, 'pointerdown', event => {
@@ -106,9 +125,9 @@ export function mountMinutesDial({ dial, knob, note, help, read, write }) {
     const view = current(); if (!view || gesture || !event.isPrimary || event.button !== 0) return;
     event.preventDefault(); knob.focus({ preventScroll: true });
     if (current()?.token !== view.token) return;
-    const angle = pointerAngle(event) ?? -135 + Number(view.raw) * 270 / 59;
+    const angle = pointerAngle(event) ?? -135 + Number(view.raw) * 270 / scale;
     knob.setPointerCapture(event.pointerId); gesture = { pointerId: event.pointerId, token: view.token, raw: view.raw, lastAngle: angle, angle: Math.min(135, Math.max(-135, angle)) };
-    dial.dataset.dragging = 'true'; set(Math.round((gesture.angle + 135) * 59 / 270), view.token);
+    dial.dataset.dragging = 'true'; set(Math.round((gesture.angle + 135) * scale / 270), view.token);
   });
   listen(knob, 'pointermove', turn);
   listen(knob, 'pointerup', event => { if (gesture?.pointerId === event.pointerId) { turn(event); release(); } });
@@ -117,4 +136,16 @@ export function mountMinutesDial({ dial, knob, note, help, read, write }) {
   listen(window, 'blur', () => release(true)); listen(forcedColors, 'change', () => release(true));
   dial.hidden = false; if (help) help.hidden = false; refresh();
   return Object.freeze({ refresh, release, dispose() { if (disposed) return; release(); disposed = true; cleanup.splice(0).forEach(release => release()); knob.disabled = true; dial.hidden = true; if (help) help.hidden = true; if (note) note.hidden = true; } });
+}
+
+
+// Both unit controls share one host lease. A dial writes only its own duration
+// part; the complementary part determines its maximum and keeps its exact text.
+export function mountDurationDials({ dials, read, write }) {
+  const mounted = ['hours', 'minutes'].map(unit => mountTimeDial({ unit, ...dials[unit], read() {
+    const view = read();
+    return { ...view, raw: view?.[unit], error: view?.errors?.[unit] };
+  }, write(token, value) { write(token, unit === 'hours' ? 'hoursPerSession' : 'minutesPerSession', value); } }));
+  return Object.freeze({ refresh() { mounted.forEach(dial => dial.refresh()); }, release(restore = false) { mounted.forEach(dial => dial.release(restore)); },
+    dispose() { mounted.forEach(dial => dial.dispose()); } });
 }

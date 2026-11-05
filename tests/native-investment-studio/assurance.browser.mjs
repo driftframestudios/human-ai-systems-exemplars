@@ -82,6 +82,10 @@ for (const engine of names) {
     await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('1'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('0'); await expect(minutesDial).toHaveValue('0');
     await field(page, 'proposal.minutesPerSession').fill(' later '); await expect(minutesDial).toBeDisabled();
     await field(page, 'proposal.hoursPerSession').fill('0'); await field(page, 'proposal.minutesPerSession').fill('30');
+    const hoursDial = panel(page).locator('[data-native-hours-knob]');
+    await hoursDial.focus(); await page.keyboard.press('ArrowUp');
+    await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('1'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('30');
+    await page.keyboard.press('Home'); await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('0');
     await minutesDial.scrollIntoViewIfNeeded(); await minutesDial.evaluate(node => node.addEventListener('pointerdown', event => { window.assuranceFixture.pointerId = event.pointerId; }, { once: true }));
     const dialBox = await minutesDial.boundingBox(); await page.mouse.move(dialBox.x + dialBox.width * .9, dialBox.y + dialBox.height / 2); await page.mouse.down();
     await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
@@ -93,10 +97,19 @@ for (const engine of names) {
     const time = panel(page).locator('.native-time-controls');
     for (const width of [1280, 1920]) {
       await page.setViewportSize({ width, height: 1100 });
-      const boxes = await time.evaluate(node => { const box = element => { const r=element.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, width:r.width }; }; return { all:box(node), overview:box(node.querySelector('.native-time__overview')), quantities:box(node.querySelector('.native-time__quantities')) }; });
-      assert.ok(boxes.quantities.x > boxes.overview.x && Math.abs(boxes.quantities.y - boxes.overview.y) < 1, 'time entry uses the available row beside the display and dial');
-      assert.ok(boxes.quantities.right <= boxes.all.right + 1 && boxes.all.right <= width, JSON.stringify(boxes));
+      const boxes = await time.evaluate(node => {
+        const box = element => { const r = element.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, width:r.width, middle:r.y+r.height/2 }; };
+        const part = unit => { const group = node.querySelector(`.native-coordination__control--${unit}`); return { ...box(group), dial:box(group.querySelector('.native-knob')), stepper:box(group.querySelector('.native-coordination__stepper')) }; };
+        return { all:box(node), overview:box(node.querySelector('.native-time__overview')), quantities:box(node.querySelector('.native-time__quantities')),
+          hours:part('hours'), minutes:part('minutes'), count:box(node.querySelector('.native-coordination__control--count')) };
+      });
+      assert.ok(boxes.quantities.y > boxes.overview.y && Math.abs(boxes.hours.y-boxes.minutes.y) < 1 && Math.abs(boxes.hours.y-boxes.count.y) < 1,
+        'Hours, Minutes and Working sessions align beneath their shared readout');
+      assert.ok(boxes.hours.dial.width > boxes.minutes.dial.width, 'Hours carries the larger dial');
       await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-${width}.png`) });
+      for (const unit of ['hours', 'minutes']) assert.ok(boxes[unit].dial.right <= boxes[unit].stepper.x + 1
+        && Math.abs(boxes[unit].dial.middle-boxes[unit].stepper.middle) < 1, `${unit} dial stays beside its precision input: ${JSON.stringify(boxes[unit])}`);
+      assert.ok(boxes.quantities.right <= boxes.all.right + 1 && boxes.all.right <= width, JSON.stringify(boxes));
       await panel(page).locator('[data-assurance-work]').screenshot({ path: resolve(captures, `${engine}-supporting-session-${width}.png`) });
     }
     await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });

@@ -71,7 +71,7 @@ export function createShowcasePlan() {
     observationSignal: 'Walk through a routine request and a missed handoff with the people who will operate the pilot.',
     accountableOwner: 'The product lead decides pilot scope and readiness after the human reviews.',
     reviewBoundary: 'The researcher checks source evidence; the engineering lead checks behavior; the quality reviewer checks exception handling; the operations specialist checks the operating instructions.',
-    openConditions: 'Rates and funded time are illustrative. Timing remains unscheduled. Readiness depends on the observed walkthrough.',
+    openConditions: 'Rates, funded time and the rehearsal sequence are illustrative. Readiness depends on the observed walkthrough and human review.',
   };
   plan.people = [
     ['maya', 'Product lead', 'product-program', 12000, 240, 'decision-owner', 'approves'],
@@ -81,7 +81,7 @@ export function createShowcasePlan() {
     ['noor', 'Quality reviewer', 'quality-regulatory', 11000, 120, 'domain-reviewer', 'recommends'],
     ['sam', 'Operations specialist', 'ops-support', 9000, 120, 'domain-reviewer', 'operates'],
   ].map(([id, label, functionId, rateCentsPerHour, fundedMinutes, postureId, decisionId]) => ({
-    id, label, rateCentsPerHour, fundedMinutes,
+    id, label, rateCentsPerHour, fundedMinutes, availability: [{ startMinute: 0, endMinute: 900 }],
     role: { ...emptyRole(), functionId, postureId, decisionId }, lifecycle: 'active',
   }));
   plan.teams = [
@@ -124,6 +124,31 @@ export function createShowcasePlan() {
   ].map(([id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds]) => ({
     id, senderTeamId, receiverTeamId, receiverPersonId, sharedObject, responseExpectation, workIds, status: 'active',
   }));
+  const placement = { research: [0, 90], pairing: [150, 90], rehearsal: [480, 90], review: [660, 45] };
+  for (const row of plan.work) row.timing = { startMinute: placement[row.id][0], repeatEveryMinutes: placement[row.id][1] };
+  plan.scoreSettings = {
+    version: '1.0.0', window: { label: 'Pilot rehearsal · elapsed minutes from the first session', startMinute: 0, endMinute: 900 },
+    dependencies: [
+      { id: 'research-before-pairing', fromWorkId: 'research', toWorkId: 'pairing', lagMinutes: 0, connectionId: 'scope' },
+      { id: 'pairing-before-rehearsal', fromWorkId: 'pairing', toWorkId: 'rehearsal', lagMinutes: 0, connectionId: 'readiness' },
+      { id: 'rehearsal-before-review', fromWorkId: 'rehearsal', toWorkId: 'review', lagMinutes: 30, connectionId: 'decision' },
+    ],
+    stages: [
+      { id: 'understand', label: 'Understand the request', workIds: ['research'] },
+      { id: 'build', label: 'Build and rehearse', workIds: ['pairing', 'rehearsal'] },
+      { id: 'review', label: 'Review the evidence', workIds: ['review'] },
+    ],
+    waits: [{ id: 'review-preparation', label: 'Receiving response', startMinute: 630, endMinute: 660,
+      reason: 'Illustrative wait for the receiving team to make its evidence available.', receiverPersonId: 'noor' }],
+    gates: [{ id: 'pilot-decision', label: 'Pilot decision', afterStageId: 'review', reviewerPersonId: 'maya',
+      question: 'Does the walkthrough support proceeding with the pilot?', evidence: 'Review the routine request, recovery instructions and remaining conditions.', modeledDecision: 'open' }],
+    proposals: [
+      { id: 'confirm-recovery', bank: 'next', gateId: 'pilot-decision', work: { id: 'confirm-recovery-session', label: 'Confirm the recovery instructions',
+        teamId: 'operations', personIds: ['noor', 'sam'], minutesPerOccurrence: 30, occurrences: 1, funding: 'additional', status: 'planned', lifecycle: 'active', timing: { startMinute: 840, repeatEveryMinutes: null } } },
+      { id: 'compare-routing', bank: 'options', gateId: null, work: { id: 'compare-routing-session', label: 'Compare another routing option',
+        teamId: 'product', personIds: ['maya', 'leo'], minutesPerOccurrence: 30, occurrences: 1, funding: 'additional', status: 'planned', lifecycle: 'active', timing: null } },
+    ],
+  };
   return plan;
 }
 

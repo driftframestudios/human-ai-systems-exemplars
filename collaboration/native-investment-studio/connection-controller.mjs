@@ -1,4 +1,5 @@
 import { describeAssuranceReference } from './assurance-models.mjs';
+import { describeScoreReference } from './score-reference.mjs';
 import { CONNECTION_FORMS, makeConnectionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { money } from './display.mjs';
 
@@ -179,6 +180,11 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     elements.dependencies.replaceChildren(...references.map(reference => {
       const item = document.createElement('li');
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
+      const score = describeScoreReference(projection.state.scoreSettings, reference);
+      if (score) {
+        const link = document.createElement('a'); link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
+        link.textContent = 'Review in the coordination horizon'; item.append(`${score.label}. `, link); return item;
+      }
       if (assurance) {
         const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
         link.textContent = 'Review in Quality & recovery'; link.setAttribute('aria-label', `Review ${assurance} in Quality & recovery`);

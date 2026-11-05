@@ -711,3 +711,66 @@ callback and includes those explicit mappings in the diagram. Literal browser
 fixtures exercise receiver replacement and every support family. The shared
 time controls also align their precision fields when a label wraps. Enlarged
 amp counts and the diagram's center panel retain readable words.
+
+## 5 November 2026 — the Studio as a digital instrument
+
+The human confirmed the coordination horizon as both a visual arrangement and
+cross-experience navigation. The complete showcase now leans into music-production
+controllers, euro-rack modules, amplifier faces and restrained 16-bit/32-bit
+character. The accepted Purpose / Saved edits / Operating manual sub-row stays.
+
+[Issue #696](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/696)
+receives the shared composition: tactile component keys with one stable inspector,
+illuminated quality pads, a readable CRT reference screen, and parameter dials
+beside exact inputs. Hours gets a larger dial than Minutes. Boolean and small
+categorical choices keep their fitting direct controls. Texture and brief responses
+support the reading; reduced motion retains a quiet, complete surface.
+
+[Issue #697](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/697)
+receives visibly different Pod, Guild, Project team and Shared service topologies,
+with accepted structure named outside the collapsed editor. AI assistance uses
+actual contribution categories and explicit human receiving, review and decision
+responsibilities. [Issue #698](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/698)
+receives quality's authored preparation and recovery consequences. Support badges
+refer to named work, rehearsal or observation; costs and timing follow those
+records and their explicit assumptions.
+
+The current source work remains the authored horizon in #653. Its time basis uses
+relative minutes, separates elapsed span from participant effort, retains unknown
+availability, and keeps waiting apart from paid work. Optional work becomes a
+commitment through explicit funding and Apply. The instrument appearance preserves
+that distinction between an exploratory draft and accepted investment.
+
+Feature integration continues to dev after independent engineering review. The
+complete experience precedes performance refinement; public release waits for the
+human cue tracked by #686.
+
+The next annotations clarify the shared control families in #696. Contained
+boolean choices can look like physical switches while retaining their native
+checkbox behavior. Add and Create actions receive an obvious common treatment;
+the plus mark means an actual addition. Lower motion is the initial experience,
+with an explicit fuller-motion choice beside the lens and a consistent preference
+across the instrument. The amp's reading channel should explain useful consequences
+from the current chapter and recent changes, with varied ASCII interstitials and
+a complete static reading.
+
+Abilities receives a sequencer-like support matrix: responsibility, preparation,
+review and observation each have a meaningful cell and a route to the receiving
+inspector. Missing support remains visible and actionable. The separate future
+[compact amp exploration, #699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699)
+records a sticky Studio header, compact page navigation and release at the Studio's
+scroll boundaries. It follows the current showcase work.
+
+The authored horizon leads Coordination. Its clip preview is equally available
+on hover and keyboard focus and names participants, duration, funding and the
+preceding work. The chronological agenda and session-series reading use compact
+semantic tables with local scrolling. Interval removal uses the same bounded
+action-button alignment as other controls. The final axis label stays on one
+line. Hours and Minutes have separate adjacent dials, with Hours visibly larger.
+
+Independent review distinguished inactive effort in the table and identified
+draft-ownership, input-composition and repeated-proposal creation paths needing
+repair. The receiving implementation preserves a newer editor's focus and raw
+entries, releases a retired receiver's lease after an in-progress operation,
+and allocates proposed work against existing identities. Capacity summaries stay
+compact; the selected overlapping interval reveals its contributing sessions.

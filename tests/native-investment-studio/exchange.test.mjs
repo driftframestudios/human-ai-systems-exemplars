@@ -100,7 +100,7 @@ test('comparison names row additions, removals and changed relationship fields',
   const { exchange } = fixture();
   const result = exchange.previewText(planText(plan => {
     plan.people.shift();
-    plan.people.push({ id: 'new-person', label: 'New person', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
+    plan.people.push({ id: 'new-person', label: 'New person', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active', availability: null });
     plan.teams[0].personIds = plan.people.map(row => row.id);
     plan.work[0].personIds = plan.teams[0].personIds.slice();
   }));
@@ -162,7 +162,7 @@ test('legacy preview carries truthful source version while accepted export remai
   const legacy = createExamplePlan();
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
-  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings;
+  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings; delete legacy.scoreSettings; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId, teamId: row.teamId, workIds: row.supportBindings[0].workIds }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
@@ -170,9 +170,9 @@ test('legacy preview carries truthful source version while accepted export remai
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.6.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.7.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.6.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.7.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

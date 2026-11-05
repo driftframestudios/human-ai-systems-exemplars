@@ -47,7 +47,7 @@ test('create person, team and work own their data and publish one priced change 
   // Four original people cost $1,200; one new person works 1.5 hours at $120.
   assert.equal(next.result.knownCommitmentCents, 138000);
   assert.equal(next.state.revision, 3);
-  assert.equal(next.state.schemaVersion, '0.6.0');
+  assert.equal(next.state.schemaVersion, '0.7.0');
   assert.equal(next.state.modelVersion, '0.1.0');
   assert.deepEqual(studio.readHistory(), { undoCount: 3, redoCount: 0, limit: 20 });
   suppliedPerson.rateCentsPerHour = 1;
@@ -378,7 +378,7 @@ test('team replacement checks canonical identity and nested reference admission 
 
 test('collection and reference budgets remain whole-plan boundaries for command creation', () => {
   const plan = createExamplePlan();
-  plan.people = Array.from({ length: 128 }, (_, index) => person(`person-${index}`, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }));
+  plan.people = Array.from({ length: 128 }, (_, index) => person(`person-${index}`, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null }));
   plan.teams = Array.from({ length: 32 }, (_, index) => ({ id: `team-${index}`, label: 'Team', personIds: plan.people.map(row => row.id), lifecycle: 'active' }));
   // 4,096 team members + 95 × 129 work references + 33 final work references
   // fill the 0.4 envelope's 16,384-reference boundary exactly.

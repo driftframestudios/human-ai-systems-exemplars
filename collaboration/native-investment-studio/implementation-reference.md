@@ -53,7 +53,7 @@ then identifies each behavior's implementation owner.
 - `editing.mjs` owns one active typed editor and eight bounded draft slots
   shared by duration edits, people, purpose, assembly forms, full sessions, roles and contributions.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
-- `time-controls.mjs` owns the shared Minutes dial gesture and the semantic
+- `time-controls.mjs` owns the shared Hours and Minutes dial gestures and the semantic
   Hours/Minutes/Working sessions cluster used by supporting-work proposals.
   Each receiving editor retains its raw draft, validation and acceptance.
 - `responsibility-controller.mjs` owns selected-person role details and human
@@ -69,6 +69,12 @@ then identifies each behavior's implementation owner.
   versions; source metadata stays in the catalogue and deeper manual.
 - `change-proposals.mjs` prepares settings and explicitly configured support work together. `change-draft.mjs` retains raw entries, and `change-controller.mjs` receives the framework matrix, viewpoints, mixer and support proposal.
 - `assurance-models.mjs` preserves quality concepts, original scenario assumptions, learning prompts and authored rehearsals. `investment-analysis/staffing-adapter.mjs` receives the original staffing formula for separate quality/recovery illustrations. `assurance-proposals.mjs`, `assurance-draft.mjs` and `assurance-controller.mjs` connect those readings to explicit, recoverable work proposals.
+- `score-models.mjs` derives the authored horizon, agenda and temporal capacity.
+  `score-draft.mjs` retains raw timing, availability, arrangement and funding
+  choices; `score-controller.mjs` and `score-view.mjs` receive the inspector and
+  its linked views. `score-reference.mjs` names removal dependencies and
+  comparison changes. Their [shared contract](#authored-coordination-horizon)
+  keeps authored placement separate from monetary accounting.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -86,6 +92,10 @@ then identifies each behavior's implementation owner.
 - `tests/native-investment-studio/controller.test.mjs` owns the local module
   delivery and semantic receiving checks; `controller.browser.mjs` owns the
   actual control, reading, and lifecycle observations across three engines.
+- `tests/native-investment-studio/score-contract.test.mjs`, `score-draft.test.mjs`
+  and `score-models.test.mjs` own timing admission, atomic funding, draft recovery
+  and literal interval observations. `score.browser.mjs` owns the linked horizon,
+  inspector, Apply/Undo and accessible browser journey.
 
 ## Existing owners and the receiving boundary
 
@@ -113,36 +123,38 @@ meaning it transforms.
 ## Capability transfer map
 
 The original instruments retain each capability while the native receiver
-grows. This map connects the planned modules to source that a collaborator can
-inspect today.
+grows. This map connects their capabilities to the current native contract and
+its remaining extensions.
 
-| Module | Current source capability | First-tranche contract and next receiver |
+| Module | Original instrument capability | Current native contract and next receiver |
 | --- | --- | --- |
-| Coordination | Full Studio coordination horizon, human-received AI contributions, and collaboration routes | Named work, teams, and participants establish effort and ownership. Directed connections have a canonical source contract; patch-bay controls, decision gates, and schedule behavior follow their named receivers. |
+| Coordination | Full Studio coordination horizon, human-received AI contributions, and collaboration routes | Named work, teams, and participants establish effort and ownership. The connection diagram and authored horizon expose directed handoffs, dependencies, waits, stages and modeled decision gates. |
 | Teams and capacity | Role quantities, rates, allocation, function, posture, ability enablers, and decision boundaries | Stable person and team identities, funded minutes, rates, membership, and explicit capacity consequences. Canonical role, lifecycle and human-responsibility records now support their next focused editors. |
 | Abilities and work | Activities, framework-related suggestions, and stated desired abilities | Stable work records and practice assignments reference one work owner. Customer abilities and decision authority remain distinct from team practices. |
 | Change and interpretation | Six change frameworks, eight interpretive lenses, and eight relative attention weights | The capability inventory preserves their separate jobs. Native Change retains each framework map and its explicit support; attention weights retain their meaning as emphasis. |
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
-| Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
+| Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. Nullable timing and availability retain unknown input; schema 0.7 adds an authored relative-minute score, waits, dependencies and modeled gates. Automatic scheduling has a separate future receiver. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.6.0 round-trip, admitted 0.1.0 through 0.5.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.7.0 round-trip, admitted 0.1.0 through 0.6.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
-recovery rows. Its geometry supplies a visual precedent; actual native timing,
-capacity scheduling, and priority policy require their own declared inputs.
+recovery rows. Its geometry supplies a visual precedent. The native horizon
+reads explicit starts, recurrence intervals and person availability from schema
+0.7. Automatic placement and priority policy remain future extensions with
+their own declared inputs and human acceptance boundary.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.6.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.7.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, closed `purpose` and `changeSettings` records, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings` and `scoreSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
 | --- | --- | --- |
-| `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. |
+| `people` | `id`, `label`, `fundedMinutes`, `rateCentsPerHour`, `role`, `lifecycle`, `availability` | One participant's funded effort and loaded hourly rate. A null rate preserves an explicit pricing gap. Nullable availability supplies separate half-open elapsed-minute intervals. |
 | `teams` | `id`, `label`, `personIds`, `lifecycle` | Named grouping with explicit participant membership. Shared participants retain one funded-capacity account. |
-| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; this version's `timing` is null. |
+| `work` | `id`, `label`, `teamId`, `personIds`, `minutesPerOccurrence`, `occurrences`, `funding`, `status`, `timing`, `lifecycle` | The named participants each contribute the stated minutes for each occurrence. `funding` is `allocated` or `additional`; `status` is `planned` or `paused`; `timing` is null or an authored start and recurrence interval in elapsed minutes. |
 | `abilities`, `practices` | `id`, `definitionId`, `definitionVersion`, `context`, `teamId`, `responsiblePersonIds`, `decisionOwnerPersonId`, `lifecycle`, `prerequisites`, `supportBindings` | Separate customer abilities and team arrangements bind exact definitions to shared work. Ordered requirement bindings are authoritative; their unique work union is derived. |
 | `capabilityEvidence` | `id`, `subject`, `stage`, `context`, `observation`, `recorderPersonId`, `reviewBoundary`, `observedPlanRevision` | An explicit observation of a typed ability/practice subject, retained independently of current support checks. |
 | `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
@@ -208,7 +220,7 @@ whitespace. Canonical output retains the trimmed, nonblank value; explicit
 or explicit null. The purpose draft adapter converts blank input into null at
 Apply. Purpose text describes the initiative independently of monetary inputs.
 
-`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, `0.4.0`, `0.5.0`, or `0.6.0` from the root's own
+`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, `0.4.0`, `0.5.0`, `0.6.0`, or `0.7.0` from the root's own
 enumerable schema-version data descriptor. It fully admits each source version's
 closed root, rows, references, numeric meaning and byte budget before constructing
 a current record. Version 0.1 receives six null purpose fields; versions 0.1 and 0.2
@@ -222,6 +234,10 @@ Version 0.4 retains its exact capability instances and observations. Versions
 through 0.4 receive initial Change settings with empty support links. Version
 0.5 retains its complete Change settings. Earlier versions receive initial
 quality and recovery settings with empty work links and rehearsal records.
+Versions through 0.6 receive unknown timing and availability and empty Score
+settings; their effort, monetary amounts and authored array order survive
+migration. Schema 0.6 also admits the historical work shape with its timing
+member omitted, preserving that unknown placement as explicit null.
 The owned migrated record then passes current admission. Current envelopes
 supply every declared current field; finite row-command compatibility has its
 own explicit construction boundary.
@@ -732,15 +748,15 @@ if (changed.ok) {
 console.log(before.result.knownCommitmentCents); // Captured prior value: 120000 cents
 ```
 
-`preparePlan` returns a deeply frozen projection with `state`, `result`, `observations`, and
-`serialized`, or throws `PlanError` carrying a diagnostic code, path, and
-message. Facade mutations return either `{ ok: true, projection }` or
+`preparePlan` returns a deeply frozen projection with `state`, `result`, `observations`,
+`capabilities`, `change`, `assurance`, `score`, and `serialized`, or throws `PlanError`
+carrying a diagnostic code, path, and message. Facade mutations return either `{ ok: true, projection }` or
 `{ ok: false, error: { code, path, message }, projection }`. The rejected result
-still carries the existing accepted projection, giving a future UI a stable
+still carries the existing accepted projection, giving the native UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.6.0 export/import retains
+edit. Rejection preserves the prior snapshot. Native 0.7.0 export/import retains
 the supported state, and genuine native 0.1.0/0.2.0 plans migrate through their complete
 original admission. Full-Studio exports and unknown schema versions receive an
 explicit compatibility result; their original instruments retain those records
@@ -872,9 +888,9 @@ when migrated with empty new collections.
 
 Admission constructs identity maps and membership sets once per preparation.
 Reference checks, retirement companions and monetary calculation traverse
-bounded records and total edges. With expected constant-time Map/Set lookup,
-full preparation takes O(N + R + B + Q) time: admitted records, references,
-encoded text and the additional per-card support traversal described above.
+bounded records and total edges. Full preparation follows the
+[shared cost contract](#cost-and-input-frequency-contract), including per-card
+support traversal and the authored Score projection.
 Retained state and projections hold the admitted records and derived readings.
 A changed command adds one collection scan
 or copy before that same complete preparation. A same-record comparison costs
@@ -1027,7 +1043,9 @@ so a request's slot order has the same meaning when reordered.
 `timing`, and `lifecycle`. The factory derives its ID as
 `${proposalId}-recovery-${connectionSlotId}` and appends that reference to the
 connection. The normal work constructor and whole-plan admission validate its
-units, funding, people, membership, and current `timing: null` rule. A recovery
+units, funding, people, membership and nullable authored timing. The native
+factory form starts new recovery work with unknown timing; the horizon can
+place that accepted work. A recovery
 record may use a group proposed in the same preview. Its funding and effort
 remain explicit choices.
 
@@ -1076,8 +1094,8 @@ connections; set membership preserves ordered uniqueness. It creates at most
 three groups, three connections, and three recovery records. Whole-plan
 admission checks the final record, reference, and encoded-byte budgets.
 
-With N accepted records, R references and B bounded text/serialized bytes,
-preparation is O(N + R + B) time and space under expected Map/Set lookup.
+Preparation follows the [shared cost contract](#cost-and-input-frequency-contract),
+including accepted records, references, serialized bytes and derived projections.
 Its row comparisons cover at most three finite records per collection. A
 changed Apply invokes the accepted owner's full admission once more; exact
 no-op Apply is O(1). Caller-retained proposals retain their immutable base and
@@ -1225,9 +1243,9 @@ this adapter supplies lifecycle guards rather than an execution sandbox.
 
 Begin locates one work row in O(W). Read, text edits, field validation, and steps
 operate on two or three bounded strings, according to the duration format.
-Scheduling retains one ticket. Successful Apply
-retains the complete O(P + T + W + A + R + B) preparation and serialization path;
-it introduces no incremental calculator. One active draft retains one base
+Scheduling retains one ticket. Successful Apply uses the
+[complete preparation and serialization path](#cost-and-input-frequency-contract).
+One active draft retains one base
 projection, which may differ from the Studio's current projection after an
 external change. Caller-retained views and scheduler-retained callbacks have
 their own lifetimes; the future receiver bounds any history it keeps.
@@ -1272,8 +1290,10 @@ rate supplies the recovery route from unknown.
 Funded hours and remaining minutes combine into canonical minutes. Remaining
 minutes run from zero through 59, and total funded time stays within the
 contract's 10,000,000-minute bound: 166,666 hours and 40 minutes. Funded time
-is total available effort in this plan. A calendar or sprint allocation keeps
-its separate future timing contract.
+is the participant's funded effort in this plan. The Score editor separately
+records when that person is available in elapsed minutes; changing availability
+preserves funded time and its monetary amount. Calendar dates and per-sprint
+allocation remain separate future extensions.
 
 The adapter retains one proposal keyed by canonical cents/minutes under its
 active token and base projection. Equivalent spellings such as `101` and
@@ -1286,8 +1306,9 @@ The editor creates no scheduler, timer, listener, or asynchronous resource.
 
 Begin locates its person in O(P). Read, validation, direct text edits, and steps
 operate on three bounded strings. A cache hit returns its prepared proposal in
-O(1); a changed valid preview or material Apply performs complete
-O(P + T + W + A + R + B) preparation, including serialization. The facade's
+O(1); a changed valid preview or material Apply performs
+[complete preparation](#cost-and-input-frequency-contract), including Score
+projection and serialization. The facade's
 person-position map adds O(P) retained entries and expected O(1) target lookup.
 A valid unchanged row performs bounded person admission before returning the
 accepted projection. Surplus direct-object keys retain their O(K) enumeration
@@ -1450,9 +1471,10 @@ a 30-minute duration, one session, additional funding, and planned status.
 The visitor supplies a team and at least one participant before preview or
 Apply. Current admission requires every participant to belong to the selected
 team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Timing remains `null` under schema 0.5;
-updates carry the accepted row's timing value through the existing work owner.
-The later scheduling contract owns any new timing representation.
+reference or membership adjustment. Historical schema 0.5 required null timing.
+Current creation starts with unknown timing, and updates carry the accepted
+row's timing value through the existing work owner. The Score contract owns
+authored timing; session edits retain that accepted placement.
 
 The full form edits name, team, participants, hours, minutes, session count,
 funding, and planned/paused status together. `prepareWorkDraftValues` and
@@ -1627,11 +1649,12 @@ The adapter's deferred mode remains available to separately measured receivers.
 The accepted amount, effort equation, person traces, and funding distinction all
 read one immutable projection. Funded staffing plus additional purchases forms
 the commitment; attributed allocation remains inside staffing. Incomplete
-pricing carries its standing beside the known subtotal. The horizon is context:
-the working-session count carries repeated participant effort while sprint
-length, calendar placement, and per-sprint allocation need a later timing
-contract. Integer-cent formatting retains exact cents through the admitted
-monetary range.
+pricing carries its standing beside the known subtotal. `horizonWeeks` remains
+scenario context. The working-session count carries repeated participant effort;
+the authored Score separately places those occurrences and compares them with
+availability and dependencies. Calendar dates and per-sprint allocation remain
+future extensions. Integer-cent formatting retains exact cents through the
+admitted monetary range.
 
 One new accepted projection costs O(W + T + P + A) for receiver lookups and person
 trace construction, where A is attached practices, in addition to the model's complete preparation. Raw text edits update a fixed set of fields; comparing
@@ -1760,9 +1783,9 @@ its static counterpart retain their current carriers until Issue #638 places
 the native Studio and collapsed table together. Issue #656 owns a later table
 content refresh.
 
-File preflight takes O(1); decoding, admission and canonical preparation take
-O(B + N + R + Q), where B is bounded bytes, N records, R references and Q the
-capability-to-work-to-participant traversal described above. Preview
+File preflight takes O(1); decoding and canonical preparation follow the
+[shared cost contract](#cost-and-input-frequency-contract), including capability
+support and Score projection. With N records and R references, preview
 summaries use stable-ID maps and sets in O(N + R) time and transient space.
 They run once per prepared preview. Comparison DOM updates follow accepted
 projection or baseline changes; raw keystrokes retain those nodes. Exchange
@@ -1884,10 +1907,13 @@ Let N be admitted records, R their references, and B the bounded text and
 serialized payload. Admission, indexes, graph validation and the global money
 calculation take O(N + R + B) time under ordinary expected Map/Set lookup.
 Capability support additionally visits each instance's bound sessions and those
-sessions' participants; call those visits Q. Full preparation therefore takes
-O(N + R + B + Q). Shared sessions retain one global money account while each
-card receives its own direct-support reading. Prepared state, indexes, results,
-and serialization retain proportional memory. Every accepted edit currently
+sessions' participants; call those visits Q. Score projection adds the bounded
+expansion and interval sorting described under
+[Authored coordination horizon](#authored-coordination-horizon); call that work S.
+Full preparation therefore takes O(N + R + B + Q + S). Shared sessions retain
+one global money account while each card receives its own direct-support reading.
+Prepared state, indexes, results and serialization retain proportional memory.
+Every accepted edit currently
 prepares the complete admitted revision.
 
 Every accepted revision currently carries its complete serialized state.
@@ -1963,6 +1989,7 @@ npm run test:native-investment-studio:investment-browser
 npm run test:native-investment-studio:assembly-browser
 npm run test:native-investment-studio:session-browser
 npm run test:native-investment-studio:responsibility-browser
+npm run test:native-investment-studio:score-browser
 node --test tests/context-canvas/about-studio-chapters.test.mjs
 node --test tests/prod-deployment/primary-closure.test.mjs
 ```
@@ -2011,3 +2038,64 @@ from the capability/state tranche and from publication.
 
 Re-entry begins at Issue #643's receiving observations, Issue #641's measurement
 plan, and this package's focused tests. Issue #637 retains the wider sequence.
+
+
+## Authored coordination horizon
+
+Schema 0.7 adds nullable `people[].availability`, nullable
+`work[].timing = {startMinute, repeatEveryMinutes}`, and `scoreSettings` version
+1.0.0. Historical schemas migrate with unknown timing and availability and empty
+score settings. A supplied empty availability array means explicitly no available
+time; null means unknown. All intervals use half-open elapsed-minute boundaries.
+Zero-duration milestones consume zero capacity. When timing is supplied, work
+with more than one occurrence requires a positive interval between starts.
+Repeated work can retain unknown timing while its declared effort remains priced.
+
+`scoreSettings` owns a labeled optional window, dependencies, stages, waits,
+modeled decision gates and proposed sessions in Next/Options. A dependency's
+earliest later start is the earlier work's last finish plus the declared lag;
+the later work's actual first start determines its slack or readiness gap.
+Cycle admission examines every authored edge. A paused connection suspends its
+associated obligation while preserving the connection and independently priced
+work. Paused or retired work retains its placement and money account while its
+active temporal occupancy is excluded. A partially positioned stage retains an
+unknown gate position.
+
+`score.arrangement.replace` atomically receives settings, unique work-timing and
+person-availability patches, and explicit proposal IDs to fund. An associated gate
+must carry modeled Proceed before funding. Funding moves the ordinary work record
+into accepted work and removes its proposal. Changing a gate by itself preserves
+money. Undo, export/import and baseline comparison use the same state owner.
+Real approval remains with the named person and evidence outside this simulation.
+
+`score-models.mjs` derives frozen, detached work rows, occurrences, interval
+capacity, dependencies, stages, waits, gates, agenda and proposal banks. It owns no
+pricing. Event sorting distinguishes scheduled effort from occupied interval union,
+shared-person overlap and work outside known availability. The accepted monetary
+calculation remains the source for staffing and additional investment.
+
+Let E be expanded occurrences, A participant assignments, V supplied availability
+intervals, D dependencies and T the remaining score records/references. Expansion
+and storage are linear in their admitted output. Event, availability and agenda
+sorting contribute O(A log A + V log V + E log E); remaining traversal is
+O(E + A + D + T). Admission bounds E at 4,096, A at 16,384, dependencies at 512,
+availability intervals at 16 per person and other authored record groups at 32.
+The UI uses compact overlap totals. Only one selected overlapping interval earns
+an affected-work scan; its inspector retains the exact participating session names.
+General scheduling and performance refinement follow a concrete receiving need.
+
+`score-draft.mjs` keeps raw text, collection IDs, stale repair and explicit funding
+intent under the existing coordinator. `score-controller.mjs` owns the stable
+inspector, preview, Apply/Cancel, selected record and view scale. `score-view.mjs`
+projects the same reading into the track field, agenda, exact table and people
+cards. `score-reference.mjs` supplies truthful removal routes and readable
+comparison descriptions. The root controller retains chapter, saved-edit and
+return-navigation ownership; `about.css` owns the scoped instrument composition.
+
+The showcase's rehearsal sequence is an explicit authored example: minute 0
+through 825, with a 900-minute planning window. It costs the same $3,980 as its
+untimed predecessor. Quality's 80-hour sprint and 520-hour quarter conversions
+remain staffing references, separate from this relative timeline. The score
+browser route observes timing/capacity, explicit $100 follow-up funding, exact
+Undo, stale navigation, view-only zoom, agenda/table, narrow reading and keyboard
+focus. Source fixtures independently establish arithmetic and admission boundaries.

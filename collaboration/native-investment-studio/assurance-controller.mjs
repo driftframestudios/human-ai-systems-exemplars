@@ -1,4 +1,4 @@
-import { createTimeControls, mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
+import { createTimeControls, mountDurationDials, renderTimeReadout } from './time-controls.mjs';
 import { ASSURANCE_FIELDS, assuranceField, assuranceSettingsFromRaw, startingAssuranceRaw } from './assurance-draft.mjs';
 import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalDefinitions, getLearningPromptDefinition, projectAssurance, sourcePresetEstimate } from './assurance-models.mjs';
 import { money } from './display.mjs';
@@ -98,7 +98,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     node('p', 'The illustration estimates effort from a reference horizon. Linked working sessions supply the accepted investment. Choose people, duration and funding when planning those sessions.'), qualityGrid);
   field(qualityGrid, 'sourcePresetId');
   const horizon = node('div', undefined, 'native-assurance__horizon'); qualityGrid.append(horizon);
-  field(horizon, 'horizonQuantity'); field(horizon, 'horizonUnit');
+  field(horizon, 'horizonUnit'); field(horizon, 'horizonQuantity');
   const quantities = node('div', undefined, 'native-assurance__quantities'); qualityGrid.append(quantities);
   for (const key of ['namedUnknowns', 'allocationPercent', 'independentRate', 'qualityAdditionalPercent', 'recoveryAdditionalPercent']) field(quantities, key);
   field(qualityGrid, 'qualityIncluded'); field(qualityGrid, 'recoveryRatePersonIds');
@@ -153,13 +153,13 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   for (const [key, control] of time.controls) controls.set(key, { ...control, metadata: assuranceField(key) });
   workFields.append(time.element); field(workFields, 'proposal.funding');
   const workPreview = node('p'); workPreview.dataset.assuranceWorkPreview = ''; workFields.append(workPreview, actionRow(button('Set this session proposal aside', 'clear-work')));
-  const minutesDial = mountMinutesDial({ ...time, read() {
+  const durationDials = mountDurationDials({ ...time, read() {
     const view = editor.read(), active = editing.read().active;
-    return { token: view.draft?.token, raw: view.draft?.raw['proposal.minutesPerSession'], hours: view.draft?.raw['proposal.hoursPerSession'], composing,
-      error: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession'),
+    return { token: view.draft?.token, hours: view.draft?.raw['proposal.hoursPerSession'], minutes: view.draft?.raw['proposal.minutesPerSession'], composing,
+      errors: { hours: view.draft?.errors.some(error => error.path === 'draft.proposal.hoursPerSession'), minutes: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession') },
       enabled: !disposed && !composing && isActive() && view.status === 'editing' && view.draft?.raw['proposal.mode'] !== 'none'
         && active?.kind === 'assurance' && active.token === view.draft.token };
-  }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.minutesPerSession', value), epoch); } });
+  }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   const manual = node('div'); manual.append(
     node('p', 'Plan quality, recovery and learning against the current purpose. Link existing sessions when they already carry the work. A new session asks for its participants, duration, occurrences and funding before Apply accepts it.'),
     node('p', 'The quality illustration uses reference hours × allocation × (0.65 + 0.15 × sigma attention), then applies the independent hourly rate and additional share. The recovery illustration uses aggregate person-time and the selected people’s mean rate. These illustrations remain separate from the native session ledger.'),
@@ -232,7 +232,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       const error = errors.find(error => error.path === `draft.${key}`); control.error.textContent = error?.message ?? ''; control.input.setAttribute('aria-invalid', String(Boolean(error)));
     }
     renderTimeReadout(time, raw, { errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
-    minutesDial.refresh();
+    durationDials.refresh();
     lastProjection = view.projection;
     sigmaInput.value = String(reading.sigma.sigma); sigmaInput.setAttribute('aria-valuetext', `${reading.sigma.sigma} sigma attention`); sigmaValue.textContent = `${reading.sigma.sigma}σ`;
     renderSigma(reading.sigma);
@@ -364,7 +364,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   listen(elements.form, 'input', input); listen(elements.form, 'change', input);
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(elements.form, 'compositionstart', () => { composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
-  function close({ park = true } = {}) { if (disposed) return; minutesDial.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
-  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; minutesDial.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
+  function close({ park = true } = {}) { if (disposed) return; durationDials.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
+  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
   render(); const controller = Object.freeze({ open, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
 }

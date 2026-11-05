@@ -41,8 +41,8 @@ const legacy = (page, name) => sessions(page).locator(`[data-action="${name}"]`)
 const select = page => sessions(page).locator('[data-native-session-select]');
 const member = (page, id) => sessions(page).locator(`[data-session-person="${id}"]`);
 const total = page => root(page).locator('[data-native-total]');
-const knob = page => sessions(page).locator('[data-native-minutes-knob]');
-const dial = page => sessions(page).locator('[data-native-minutes-dial]');
+const knob = (page, unit = 'minutes') => sessions(page).locator(`[data-native-${unit}-knob]`);
+const dial = (page, unit = 'minutes') => sessions(page).locator(`[data-native-${unit}-dial]`);
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.sessionFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -90,22 +90,22 @@ async function prepareSession(page) {
   await field(page, 'occurrences').fill('2');
 }
 
-async function dialPoint(page, degrees) {
-  const box = await knob(page).boundingBox();
+async function dialPoint(page, degrees, unit = 'minutes') {
+  const box = await knob(page, unit).boundingBox();
   assert.ok(box, 'the mounted dial has a visible pointer target');
   const radians = degrees * Math.PI / 180, radius = Math.min(box.width, box.height) * .38;
   return { x: box.x + box.width / 2 + Math.sin(radians) * radius,
     y: box.y + box.height / 2 - Math.cos(radians) * radius };
 }
-async function beginTurn(page, degrees) {
-  await knob(page).scrollIntoViewIfNeeded();
-  await knob(page).evaluate(node => node.addEventListener('pointerdown', event => {
+async function beginTurn(page, degrees, unit = 'minutes') {
+  await knob(page, unit).scrollIntoViewIfNeeded();
+  await knob(page, unit).evaluate(node => node.addEventListener('pointerdown', event => {
     window.sessionFixture.knobPointerId = event.pointerId;
   }, { once: true }));
-  const point = await dialPoint(page, degrees);
+  const point = await dialPoint(page, degrees, unit);
   await page.mouse.move(point.x, point.y); await page.mouse.down();
 }
-const captured = page => knob(page).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
+const captured = (page, unit = 'minutes') => knob(page, unit).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
 
 for (const engine of names) {
   test(`${engine}: session diagram names Change, quality, recovery, learning and rehearsal support`, { timeout: 45000 }, async t => {
@@ -184,6 +184,35 @@ for (const engine of names) {
     const reading = await map.evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth, nodes: [...el.querySelectorAll('li, h3, h4')].map(n => ({ client: n.clientWidth, scroll: n.scrollWidth })) }));
     assert.ok(reading.scroll <= reading.client + 1); assert.ok(reading.nodes.every(n => n.scroll <= n.client + 1));
     await map.screenshot({ path: resolve(captures, `${engine}-session-map-narrow.png`) });
+  });
+
+  test(`${engine}: the Hours dial changes its own duration part and preserves Minutes through precision, cancellation and the combined cap`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), accepted = await bytes(page), hours = knob(page, 'hours');
+    await expect(dial(page, 'hours')).toBeVisible(); await expect(hours).toHaveAttribute('max', '23');
+    await hours.scrollIntoViewIfNeeded();
+    const point = await dialPoint(page, -135 + 2 * 270 / 24, 'hours'); await page.mouse.click(point.x, point.y);
+    await expect(field(page, 'hoursPerSession')).toHaveValue('2'); await expect(field(page, 'minutesPerSession')).toHaveValue('30');
+    await expect(sessions(page).locator('[data-native-duration-hours]')).toHaveText('02');
+    await expect(sessions(page).locator('[data-native-duration-minutes]')).toHaveText('30');
+    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$6,000.00');
+    await hours.focus(); await page.keyboard.press('ArrowUp'); await expect(field(page, 'hoursPerSession')).toHaveValue('3');
+    await sessions(page).locator('[data-field="hoursPerSession"][data-step="-1"]').click(); await expect(hours).toHaveValue('2');
+    await field(page, 'hoursPerSession').fill('002'); await expect(hours).toHaveValue('2');
+    await beginTurn(page, 0, 'hours'); await expect(field(page, 'hoursPerSession')).toHaveValue('12');
+    await page.keyboard.press('Escape'); await page.mouse.up(); await expect(field(page, 'hoursPerSession')).toHaveValue('002');
+    await expect(field(page, 'minutesPerSession')).toHaveValue('30');
+    await field(page, 'hoursPerSession').fill('later'); await expect(hours).toBeDisabled(); await expect(knob(page)).toBeDisabled();
+    await expect(field(page, 'hoursPerSession')).toHaveValue('later');
+    await field(page, 'hoursPerSession').fill('23'); await hours.focus(); await page.keyboard.press('End');
+    await expect(field(page, 'hoursPerSession')).toHaveValue('23'); await expect(field(page, 'minutesPerSession')).toHaveValue('30');
+    await expect(hours).toHaveAttribute('aria-valuetext', '23 hours per session; up to 23 hours while Minutes is above 0');
+    await field(page, 'minutesPerSession').fill('0'); await expect(hours).toHaveAttribute('max', '24');
+    await hours.focus(); await page.keyboard.press('End'); await expect(field(page, 'hoursPerSession')).toHaveValue('24');
+    await expect(knob(page)).toHaveAttribute('max', '0'); await expect(field(page, 'minutesPerSession')).toHaveValue('0');
+    assert.equal(await bytes(page), accepted);
+    await field(page, 'hoursPerSession').fill('2'); await field(page, 'minutesPerSession').fill('30'); await legacy(page, 'apply').click();
+    assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work[0].minutesPerOccurrence), 150);
+    await expect(total(page)).toHaveText('$6,000.00');
   });
 
   test(`${engine}: the native minutes knob shares precision text, preview, Apply and recovery`, { timeout: 60000 }, async t => {
@@ -289,27 +318,30 @@ for (const engine of names) {
   });
 
   test(`${engine}: parking and disposal release rotary capture before later pointer events`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine), accepted = await bytes(page);
-    await beginTurn(page, 90);
-    await expect(field(page, 'minutesPerSession')).toHaveValue('49');
-    await tab(page, 'people').focus(); await page.keyboard.press('Enter');
-    assert.equal(await captured(page), false, 'chapter departure releases the turn before parking');
-    await knob(page).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
-      pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
-    })));
-    await page.mouse.up();
-    await tab(page, 'coordination').click();
-    await expect(field(page, 'minutesPerSession')).toHaveValue('49');
-    await beginTurn(page, 0);
-    await page.evaluate(() => window.sessionFixture.controller.dispose());
-    assert.equal(await captured(page), false, 'receiver retirement releases its pointer');
-    await expect(dial(page)).toBeHidden();
-    await expect(sessions(page).locator('#native-minutes-knob-help')).toBeHidden();
-    await knob(page).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
-      pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
-    })));
-    await page.mouse.up();
-    assert.equal(await bytes(page), accepted, 'retired events cannot accept or alter the plan');
+    for (const unit of ['hours', 'minutes']) {
+      const page = await open(t, engine), accepted = await bytes(page);
+      const value = unit === 'hours' ? '20' : '49', fieldName = unit === 'hours' ? 'hoursPerSession' : 'minutesPerSession';
+      await beginTurn(page, 90, unit);
+      await expect(field(page, fieldName)).toHaveValue(value);
+      await tab(page, 'people').focus(); await page.keyboard.press('Enter');
+      assert.equal(await captured(page, unit), false, 'chapter departure releases the turn before parking');
+      await knob(page, unit).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
+        pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
+      })));
+      await page.mouse.up();
+      await tab(page, 'coordination').click();
+      await expect(field(page, fieldName)).toHaveValue(value);
+      await beginTurn(page, 0, unit);
+      await page.evaluate(() => window.sessionFixture.controller.dispose());
+      assert.equal(await captured(page, unit), false, 'receiver retirement releases its pointer');
+      await expect(dial(page, unit)).toBeHidden();
+      await expect(sessions(page).locator('#native-minutes-knob-help')).toBeHidden();
+      await knob(page, unit).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
+        pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
+      })));
+      await page.mouse.up();
+      assert.equal(await bytes(page), accepted, 'retired events cannot accept or alter the plan');
+    }
   });
 
   test(`${engine}: participant toggles keep cards in place and explicit moves own the order`, { timeout: 60000 }, async t => {

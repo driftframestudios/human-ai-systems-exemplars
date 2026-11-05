@@ -224,7 +224,11 @@
           <button type="button" data-native-return-team hidden>Add to receiving team</button>
           <button type="button" data-native-return-action>Return to session</button>
         </aside>
-        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-patch-bay-title">
+        <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-score-title">
+          <section class="native-score" data-native-score aria-labelledby="native-score-title">
+            <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>See when people work together, what must be ready, and which decision makes the next commitment possible.</p></header>
+            <p data-score-fallback>The pilot moves through research, prototype work, an operations rehearsal and review. The interactive horizon lets you inspect that illustrative sequence and try another arrangement.</p>
+          </section>
           <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
             <h3 id="native-patch-bay-title" class="native-zine__heading">Coordination connections</h3>
             <p class="native-coordination__hint">Connect teams through the work they share.</p>
@@ -356,33 +360,39 @@
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
                     <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
                   </output>
-                  <div class="native-minutes-control">
-                    <label for="native-minutes-knob">Minutes dial</label>
-                  <div class="native-knob" data-native-minutes-dial hidden>
-                    <div class="native-knob__ticks" aria-hidden="true"></div>
-                    <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
-                    <input type="range" min="0" max="59" step="1" value="30" id="native-minutes-knob" data-native-minutes-knob aria-describedby="native-minutes-knob-help native-minutes-error">
-                  </div>
-                  </div>
-                  <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap the dial, use arrow keys, or enter minutes below. Escape restores the value where a turn began.</p>
+                  <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap a dial, use arrow keys, or enter a value beside it. Escape restores the value where a turn began.</p>
                   <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
                 <div class="native-coordination__controls native-time__quantities">
-                  <div class="native-coordination__control native-coordination__control--hours">
+                  <div class="native-coordination__control native-coordination__control--hours native-time__part">
                     <label for="native-hours">Hours</label>
-                    <div class="native-coordination__stepper">
-                      <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
-                      <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-duration-limit native-hours-error">
-                      <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
+                    <div class="native-time__adjustment">
+                      <div class="native-knob native-knob--hours" data-native-hours-dial hidden>
+                        <div class="native-knob__ticks" aria-hidden="true"></div>
+                        <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
+                        <input type="range" min="0" max="24" step="1" value="0" id="native-hours-knob" data-native-hours-knob aria-label="Hours dial" aria-describedby="native-minutes-knob-help native-duration-limit native-hours-error">
+                      </div>
+                      <div class="native-coordination__stepper">
+                        <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
+                        <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-duration-limit native-hours-error">
+                        <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
+                      </div>
                     </div>
                     <p class="native-coordination__hint" id="native-hours-range" data-native-range="hoursPerSession" hidden>0–24 hours</p>
                   </div>
-                  <div class="native-coordination__control native-coordination__control--minutes">
+                  <div class="native-coordination__control native-coordination__control--minutes native-time__part">
                     <label for="native-minutes">Minutes</label>
-                    <div class="native-coordination__stepper">
-                      <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
-                      <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-duration-limit native-minutes-error">
-                      <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
+                    <div class="native-time__adjustment">
+                      <div class="native-knob native-knob--minutes" data-native-minutes-dial hidden>
+                        <div class="native-knob__ticks" aria-hidden="true"></div>
+                        <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
+                        <input type="range" min="0" max="59" step="1" value="30" id="native-minutes-knob" data-native-minutes-knob aria-label="Minutes dial" aria-describedby="native-minutes-knob-help native-duration-limit native-minutes-error">
+                      </div>
+                      <div class="native-coordination__stepper">
+                        <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
+                        <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-duration-limit native-minutes-error">
+                        <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
+                      </div>
                     </div>
                     <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession" hidden>0–59 minutes</p>
                   </div>
@@ -398,6 +408,7 @@
                   </div>
                 </div>
                 <div class="native-coordination__feedback native-session__quantity-feedback native-time__feedback" role="group" aria-label="Quantity feedback">
+                  <p class="native-coordination__hint" data-native-hours-knob-note hidden>Enter hours above to use the dial.</p>
                   <p class="native-coordination__hint" data-native-knob-note hidden>Enter minutes above to use the dial.</p>
                   <p class="native-coordination__error" id="native-hours-error" data-native-error="hoursPerSession"></p>
                   <p class="native-coordination__error" id="native-minutes-error" data-native-error="minutesPerSession"></p>

@@ -7,7 +7,7 @@ const encoder = new TextEncoder();
 const ROOT_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks']);
 // These fields own preview comparisons, while contract.mjs owns admission.
 const ROW_FIELDS = Object.freeze({
-  people: Object.freeze(['label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle']),
+  people: Object.freeze(['label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle', 'availability']),
   teams: Object.freeze(['label', 'personIds', 'lifecycle']),
   work: Object.freeze(['label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle']),
   abilities: Object.freeze(['definitionId', 'definitionVersion', 'context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle', 'prerequisites', 'supportBindings']),
@@ -114,6 +114,8 @@ function changesBetween(before, after) {
       .filter(field => !equalField(before.changeSettings[field], after.changeSettings[field]))),
     assuranceSettings: Object.freeze(['context', 'quality', 'recoveryAdditionalShareBasisPoints', 'recoveryEvents', 'learningActions', 'rehearsals']
       .filter(field => !equalField(before.assuranceSettings[field], after.assuranceSettings[field]))),
+    scoreSettings: Object.freeze(['window', 'dependencies', 'stages', 'waits', 'gates', 'proposals']
+      .filter(field => !equalField(before.scoreSettings[field], after.scoreSettings[field]))),
   };
   for (const [kind, fields] of Object.entries(ROW_FIELDS)) {
     const prior = new Map(before[kind].map(row => [row.id, row]));

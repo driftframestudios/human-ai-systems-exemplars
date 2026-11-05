@@ -21,6 +21,8 @@ import { mountChangePanel } from './change-controller.mjs';
 import { summarizeChangeDraft } from './change-draft.mjs';
 import { mountAssurancePanel } from './assurance-controller.mjs';
 import { summarizeAssuranceDraft } from './assurance-draft.mjs';
+import { mountScorePanel } from './score-controller.mjs';
+import { summarizeScoreDraft } from './score-draft.mjs';
 
 const INSTANCES = new WeakMap();
 const TARGET_READERS = Object.freeze({ assembly: describeAssemblyTarget, session: describeSessionTarget,
@@ -65,6 +67,7 @@ export function mountCoordinationPanel(root, options = {}) {
   let capabilityPanel = null;
   let changePanel = null;
   let assurancePanel = null;
+  let scorePanel = null;
   const ampTools = root.querySelector('[data-native-amp-tools]');
   const ampPanels = new Map([...root.querySelectorAll('[data-amp-panel]')].map(button =>
     [button.dataset.ampPanel, { button, panel: root.querySelector(`#${button.getAttribute('aria-controls')}`) }]));
@@ -104,7 +107,8 @@ export function mountCoordinationPanel(root, options = {}) {
     else teamPanel?.resume();
   }
   function resumeCoordination() {
-    if (coordinationEditor === 'connection') connectionPanel?.resume();
+    if (coordinationEditor === 'score') scorePanel?.resume();
+    else if (coordinationEditor === 'connection') connectionPanel?.resume();
     else if (coordinationEditor === 'template') templatePanel?.resume();
     else workPanel?.resume();
   }
@@ -115,6 +119,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (kind !== 'session') workPanel?.close({ park: false });
     if (kind !== 'connection') connectionPanel?.close({ park: false });
     if (kind !== 'template') templatePanel?.close();
+    if (kind !== 'score') scorePanel?.close({ park: false });
   }
 
   function renderReturnRoute() {
@@ -138,12 +143,13 @@ export function mountCoordinationPanel(root, options = {}) {
     const createdLabel = created?.label;
     const team = state.teams.find(row => row.id === route.requiredTeamId);
     const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
-    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan' }[route.kind];
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon' }[route.kind];
     returnButton.textContent = `Return to ${destination}`;
     returnNote.textContent = createdLabel
       ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
       : `Your ${destination} entries are saved while you ${route.creating === 'team' ? 'create a team' : route.creating === 'session' ? 'add a session' : 'add a person'}.`;
     if (route.inspectedWorkId) returnNote.textContent = `Review the supporting session, then return to your ${destination} and its saved entries.`;
+    if (route.kind === 'score') returnNote.textContent = 'Inspect the related work, then return to the coordination horizon and your saved arrangement.';
     if (route.createdId && !created) returnNote.textContent = `The added ${route.createdKind} is outside the current plan. Your ${destination} entries remain saved. Return to choose an available ${route.createdKind} or create another.`;
     if (createdLabel && route.field && route.createdKind === 'team') returnNote.textContent = `${createdLabel} is ready. Return to review your saved entries and select it as the ${route.field === 'senderTeamId' ? 'sending team' : route.field === 'receiverTeamId' ? 'receiving team' : 'session team'}.`;
     if (needsMembership && returnTeamButton) {
@@ -199,7 +205,7 @@ export function mountCoordinationPanel(root, options = {}) {
       announce('Your arrangement entries are ready. Choose the added person and preview the arrangement.');
       return;
     }
-    const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel }[route.kind];
+    const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel, score: scorePanel }[route.kind];
     const result = panel.open(route.target);
     if (!result?.view?.draft) { announce(result?.error?.message ?? 'Choose an existing record to continue.'); return; }
     pendingReturnFocus = route.field ? { kind: route.kind, target: route.target, field: route.field } : null;
@@ -219,6 +225,26 @@ export function mountCoordinationPanel(root, options = {}) {
     retainReturnAncestors(kind, target);
     returnRoutes.push({ kind, target, held, inspectedWorkId: id });
     render(); root.querySelector('[data-native-session-select]')?.focus();
+  }
+  function navigateFromScore(target) {
+    if (disposed) return;
+    const state = studio.read().state;
+    if (target.kind === 'work' && !state.work.some(row => row.id === target.id)
+      || target.kind === 'person' && !state.people.some(row => row.id === target.id)
+      || target.kind === 'connection' && !state.connections.some(row => row.id === target.id)) return;
+    const held = editing.read().parked.some(row => row.kind === 'score');
+    retainReturnAncestors('score', 'score');
+    returnRoutes.push({ kind: 'score', target: 'score', held, inspectedWorkId: target.kind === 'work' ? target.id : null });
+    if (target.kind === 'person') { chapterShell?.select('people'); teamPanel?.select(target.id); }
+    else if (target.kind === 'work') { chapterShell?.select('coordination'); workPanel?.select(target.id, false); }
+    else if (target.kind === 'connection') { chapterShell?.select('coordination'); connectionPanel?.select(target.id); }
+    else if (target.kind === 'chapter' && ['change', 'assurance', 'investment'].includes(target.id)) chapterShell?.select(target.id);
+    render();
+    const destination = target.kind === 'person' ? root.querySelector('[data-native-team-editor]')
+      : target.kind === 'work' ? root.querySelector('[data-native-session-editor]')
+        : target.kind === 'connection' ? root.querySelector('[data-native-connection-editor]') : root.querySelector(`[data-native-chapter-panel="${target.id}"]`);
+    destination?.scrollIntoView({ block: 'start' });
+    destination?.querySelector('select, button, summary, input')?.focus({ preventScroll: true });
   }
   function prerequisiteCreated(descriptor) {
     const route = returnRoutes.at(-1);
@@ -299,6 +325,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (record.kind === 'purpose') return 'Plan purpose';
       if (record.kind === 'change') return 'Change planning';
       if (record.kind === 'assurance') return 'Quality, recovery and learning';
+      if (record.kind === 'score') return 'Coordination horizon';
       const names = record.kind === 'person' ? people : works;
       return names.get(record.targetId) ?? record.targetId;
     }
@@ -327,7 +354,7 @@ export function mountCoordinationPanel(root, options = {}) {
       const entries = Object.entries(record.raw).filter(([field, raw]) => record.kind !== 'capability'
         || (raw !== '' && raw !== 'no' && (!Array.isArray(raw) || raw.length)
           && (!field.startsWith('new.') || record.raw[`new.${field.split('.')[1]}.enabled`] === 'yes')));
-      values.textContent = record.kind === 'assurance' ? summarizeAssuranceDraft(record.raw)
+      values.textContent = record.kind === 'score' ? summarizeScoreDraft(record.raw) : record.kind === 'assurance' ? summarizeAssuranceDraft(record.raw)
         : record.kind === 'change' ? summarizeChangeDraft(record.raw)
         : entries.map(([field, raw]) => `${target?.fields?.[field]?.label ?? labels[field] ?? field}: ${savedValue(field, raw)}`).join(' · ');
       item.append(title, values);
@@ -335,7 +362,7 @@ export function mountCoordinationPanel(root, options = {}) {
         const removed = document.createElement('p');
         removed.textContent = 'Record removed. The saved values remain here.';
         item.append(removed);
-      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection', 'capability', 'change', 'assurance'].includes(record.kind)) {
+      } else if (['assembly', 'session', 'purpose', 'person', 'role', 'contribution', 'connection', 'capability', 'change', 'assurance', 'score'].includes(record.kind)) {
         const open = document.createElement('button');
         open.type = 'button'; open.dataset.savedOpen = key; open.textContent = 'Open edit';
         item.append(open);
@@ -435,10 +462,16 @@ export function mountCoordinationPanel(root, options = {}) {
     capabilityPanel?.refresh();
     changePanel?.refresh();
     assurancePanel?.refresh();
+    scorePanel?.refresh();
     return view;
   }
 
   function click(event) {
+    const scoreLink = event.target.closest('[data-native-open-score]');
+    if (scoreLink && root.contains(scoreLink)) {
+      event.preventDefault(); chapterShell?.select('coordination');
+      scorePanel?.select({ kind: scoreLink.dataset.nativeOpenScore, id: scoreLink.dataset.nativeScoreId }, true); return;
+    }
     const assuranceLink = event.target.closest('[data-native-open-assurance]');
     if (assuranceLink && root.contains(assuranceLink)) {
       event.preventDefault(); chapterShell?.select('assurance');
@@ -526,6 +559,7 @@ export function mountCoordinationPanel(root, options = {}) {
         else if (saved.kind === 'capability') opened = capabilityPanel?.open(saved.targetId);
         else if (saved.kind === 'change') opened = changePanel?.open(saved.targetId);
         else if (saved.kind === 'assurance') opened = assurancePanel?.open(saved.targetId);
+        else if (saved.kind === 'score') opened = scorePanel?.open(saved.targetId);
       }
       if (opened?.view?.draft?.[`${saved.kind}Id`] === saved.targetId) {
         const returned = returnRoutes.findIndex(route => route.kind === saved.kind && route.target === saved.targetId);
@@ -548,6 +582,7 @@ export function mountCoordinationPanel(root, options = {}) {
     capabilityPanel?.dispose();
     changePanel?.dispose();
     assurancePanel?.dispose();
+    scorePanel?.dispose();
     workPanel?.dispose();
     investmentPanel?.dispose();
     purposePanel?.dispose();
@@ -598,6 +633,11 @@ export function mountCoordinationPanel(root, options = {}) {
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'template' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
+    const scoreRoot = root.querySelector('[data-native-score]');
+    if (scoreRoot) scorePanel = mountScorePanel(scoreRoot, { studio, editing,
+      onBegin: () => beginCoordination('score'), canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
+      isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
+      onNavigate: navigateFromScore, onAccepted: () => render(), onEditing: () => render() });
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
       onBegin: () => {

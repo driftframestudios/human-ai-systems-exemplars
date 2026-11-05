@@ -377,3 +377,38 @@ operations. Cross-engine screenshots establish the exercised composition;
 the human's next walkthrough supplies the receiving usability observation.
 Further research did not change this bounded repair. The authored score and
 broader visual analysis retain #653 and #654 as their receivers.
+
+## Digital instrument composition — 5 November 2026
+
+**Decision:** carry a shared musical-instrument vocabulary across the native
+Studio while keeping selected record, editable parameter, proposed consequence
+and accepted investment easy to distinguish. #696 receives composition, #653
+receives the horizon, #697 receives arrangement topology, and #698 receives
+quality preparation/recovery consequences.
+
+Official manuals describe established interface mechanisms. Their transfer to
+enterprise planning is a local design inference; the CRT and restrained retro-game
+character are the human's art direction. The following mechanisms change this
+implementation, rather than serving as a style inventory.
+
+| Evidence and source class | Receiving design decision | Observable consequence and limit |
+| --- | --- | --- |
+| [Ableton Push manual: working with racks](https://www.ableton.com/en/push/manual/) distinguishes selecting a pad/device and adjusting its displayed parameters. Official product documentation. | Change component keys and quality pads select one stable inspector. Selected-for-inspection and included-in-plan remain separate states. | Inspect A, edit it, inspect B, return to A: raw entries remain. Plain buttons fit record selection; a tab implementation would carry the complete [WAI tab pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). |
+| [VCV parameter commands](https://vcvrack.com/manual/KeyCommands) combine knob adjustment and numerical entry. Official product documentation. | Pair dials with exact inputs and step buttons. Give Hours the larger dial and Minutes the smaller adjacent dial; this size hierarchy is a local choice. | Pointer, keyboard, step and exact entry agree. Invalid text remains available for repair; 23:30 retains its minutes when the Hours control reaches its available maximum. Native ranges and click alternatives retain the [slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) and [dragging alternative](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements) boundaries. |
+| [Live Arrangement View](https://www.ableton.com/en/manual/arrangement-view/) uses a whole-arrangement overview, visible-region focus and locators. Official product documentation. | Make the coordination horizon an overview navigator, with view scale, named decisions and direct routes to sessions, people and chapters. | View changes preserve accepted serialization and money. A narrow agenda and exact table retain the same authored relative-minute records. |
+| [VCV Getting Started](https://vcvrack.com/manual/GettingStarted) exposes connected modules and endpoints. Official product documentation. | Draw named relationships, grouped arrangements and selected paths. | Participates, supports, hands off and depends on remain distinct relations. Signal-flow styling supplies legibility; source-owned planning edges supply their actual meaning. |
+| [WAI complex-image guidance](https://www.w3.org/WAI/tutorials/images/complex/) calls for recoverable values, relationships and interpretation. Standards guidance. | Frame the quality reference in a dark CRT-like bezel with crisp trace, thresholds and adjacent exact reading. | Sigma changes update the trace and its reference values. Glow and scanlines remain decorative and restrained; the display continues to name a mathematical reference. |
+| [Non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), [reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html), and [reduced-motion technique C39](https://www.w3.org/WAI/WCAG22/Techniques/css/C39.html) define relevant access conditions. Standards guidance. | Use inset faces, borders, text and persistent selection marks; brief feedback preserves the hitbox. Keep a quiet resting display and a complete reduced-motion reading. | Focus, selected, disabled and pressed states remain distinguishable in forced colors. Controls and text fit 320 CSS pixels and enlarged text. |
+| [VCV Menu Bar](https://vcvrack.com/manual/MenuBar) documents Undo/Redo and saved patches; the Push manual documents Undo after macro randomization. Official product documentation. | Keep the Studio's explicit preview, Apply, Cancel, saved edits and Undo through the instrument treatment. | A 30→45-minute review proposal shows $4,350 while accepted investment stays $3,980. Apply accepts once; Undo restores the preceding plan. |
+
+The main transfer risk is that immediate visual feedback can look like an accepted
+commitment. The horizon therefore labels proposed versus accepted readings, and
+optional work keeps an explicit funding action. Another risk is that a badge looks
+like proof of competence: each support badge must point to planned work, rehearsal
+or a scoped observation and retain that evidence standing.
+
+These sources support a bounded implementation and human walkthrough. They do not
+establish that the aesthetic improves learning or decision quality for this visitor
+population. The next useful observation is whether visitors can identify the
+selected record, the parameter they can adjust, the connected work, and the accepted
+result without an explanation from the collaborator.

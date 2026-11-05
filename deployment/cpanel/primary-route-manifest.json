@@ -2406,6 +2406,31 @@
       "source_path": "visual-fidelity-contracts/catalog.v1.json",
       "projected_path": "visual-fidelity-contracts/catalog.v1.json",
       "media_type": "application/json"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-controller.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-controller.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-draft.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-draft.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-models.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-models.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-reference.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-reference.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/score-view.mjs",
+      "projected_path": "collaboration/native-investment-studio/score-view.mjs",
+      "media_type": "text/javascript"
     }
   ]
 }

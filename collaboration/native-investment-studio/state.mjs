@@ -30,7 +30,7 @@ function restoredEnvelope(projection) {
   // Only the accepted envelope needs fresh identity to retire earlier edits.
   return Object.freeze({ state: projection.state, result: projection.result, serialized: projection.serialized,
     observations: projection.observations, capabilities: projection.capabilities, change: projection.change,
-    assurance: projection.assurance });
+    assurance: projection.assurance, score: projection.score });
 }
 
 // One accepted owner per instance. Captures remain immutable after later commits.
@@ -109,6 +109,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     const current = base.state.people[position];
     if (person.id === current.id && person.label === current.label
         && person.lifecycle === current.lifecycle && JSON.stringify(person.role) === JSON.stringify(current.role)
+        && JSON.stringify(person.availability) === JSON.stringify(current.availability)
         && person.fundedMinutes === current.fundedMinutes && person.rateCentsPerHour === current.rateCentsPerHour) {
       return { projection: base };
     }
@@ -130,7 +131,7 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     const current = base.state.work[position];
     if (row.id === current.id && row.label === current.label && row.teamId === current.teamId
         && row.minutesPerOccurrence === current.minutesPerOccurrence && row.occurrences === current.occurrences
-        && row.lifecycle === current.lifecycle && row.funding === current.funding && row.status === current.status && row.timing === current.timing
+        && row.lifecycle === current.lifecycle && row.funding === current.funding && row.status === current.status && JSON.stringify(row.timing) === JSON.stringify(current.timing)
         && row.personIds.length === current.personIds.length && row.personIds.every((id, index) => id === current.personIds[index])) {
       return { projection: base };
     }
