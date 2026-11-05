@@ -1063,3 +1063,44 @@ control families keep their existing treatment. The affected browser journeys
 check normal mobile, desktop and enlarged-text layouts, field descriptions,
 Apply and Undo. Issue #712 owns this consolidation. README routes now lead to
 main's working showcase and #708's focused quality changes.
+
+## 2026-11-05 — Proposed sprint and quarter showcase
+
+The human's next direction changes the planning model after the timing-copy
+repair. [#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718)
+holds four alternatives and the recommended synthesis: a populated period
+board, sequencer drill-down, stage bands and one optional change demonstration.
+The proposal awaits human review. Runtime behavior remains the elapsed-time
+arrangement accepted on main.
+
+The proposed entry shows four labeled two-week sprints. A separate two-quarter
+example follows pilot preparation and validation into rollout and operating
+adoption. Its representative sessions sit within broader activity spans, and
+its amount prices the included work. Trying that example previews a replacement;
+regrouping the visitor's current plan retains its sessions, effort and cost.
+Zoom changes the information shown: plan, selected period, then session or
+decision. A visible return restores the originating view.
+
+Two persistent editing groups, Sessions and Stages & handoffs, provide a compact
+alternate route to direct visual selection. People and duration belong beside
+each session. Stages group work; decisions attach to stages or handoffs; delays
+describe affected work and its proposed later placement. Availability opens
+beside a person and keeps its separate authored meaning. Funded time remains
+distinct from availability, and broad period membership establishes no exact
+simultaneous-session collision.
+
+The original calculator supplies horizon choices, broad bands and navigable
+markers. Its authored fractional positions need a native record-driven
+replacement for drill-down. Its staffing-hour conventions retain their economic
+meaning. Proposed period identities and occurrence placements have one owner;
+regrouping preserves work identity and occurrence count. Earlier saved work can
+receive an explicit placement proposal while preserving its effort.
+
+The About-page review favors a concise populated exhibit inside the existing
+compact amp head. Deeper accounting stays available through disclosure. A few
+placement, reference and recovery cases plus sprint/quarter browser journeys
+will support implementation; existing arithmetic coverage remains sufficient
+unless a changed behavior supplies a new question. Independent source and
+experience reviews informed the proposal. Re-entry begins with human review of
+#718, then the visible examples and period contract. Performance #679 and the
+human-cued public release #686 retain their separate boundaries.

@@ -17,6 +17,11 @@ delivered the working showcase to main. The focused
 [core-quality pass, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708),
 clarifies navigation policy, download ownership, input limits and scheduling controls.
 
+The next Coordination proposal, [#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718),
+reframes the horizon around sprints and business quarters with period-to-session
+drill-down. It awaits human review; the runnable showcase still uses the
+elapsed-time arrangement described below.
+
 The [experience journal](experience-journal.md) preserves the interaction intent
 and review findings. The [capability transfer map](implementation-reference.md#capability-transfer-map)
 shows what the native experience supports and where the full Studio remains the
