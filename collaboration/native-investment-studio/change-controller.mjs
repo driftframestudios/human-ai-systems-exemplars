@@ -25,10 +25,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     return element;
   };
   const elements = Object.fromEntries(['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work', 'manual', 'interpretation',
-    'four-actions', 'preview', 'error', 'status', 'form', 'fields', 'recovery', 'current'].map(name => [name, find(name)]));
+    'lens-wheel', 'four-actions', 'preview', 'error', 'status', 'form', 'fields', 'recovery', 'current'].map(name => [name, find(name)]));
   const actions = new Map([...root.querySelectorAll('[data-change-action]')].map(element => [element.dataset.changeAction, element]));
   const editor = editing.change, componentNodes = [], ranges = new Map();
-  for (const name of ['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work']) elements[name].replaceChildren();
+  for (const name of ['frameworks', 'lenses', 'filters', 'matrix', 'mixer', 'work', 'lens-wheel']) elements[name].replaceChildren();
   root.querySelector('[data-change-attention-note]')?.remove();
   let disposed = false, generation = 0, composing = false, sequence = 0, lastProjection = null;
   const owns = epoch => !disposed && generation === epoch;
@@ -96,6 +96,14 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const control = { input, metadata, error, key, group }; controls.set(key, control); return control;
   }
   field(elements.frameworks, 'framework'); field(elements.lenses, 'lens'); field(elements.filters, 'sourceFilter');
+  const lensRotor = node('div', undefined, 'native-change__lens-rotor'); lensRotor.setAttribute('aria-hidden', 'true');
+  elements['lens-wheel'].append(lensRotor);
+  const lensButtons = listInterpretiveLenses().map((lens, index) => {
+    const control = button(lens.name, 'lens'); control.dataset.changeLens = ref(lens);
+    control.className = 'native-change__lens-choice'; control.style.setProperty('--lens-position', index);
+    elements['lens-wheel'].append(control); return control;
+  });
+
   for (const framework of listChangeFrameworks()) for (const component of framework.components) {
     const prefix = `map.${framework.id}.${component.id}.`, details = node('details', undefined, 'native-change__component');
     Object.assign(details.dataset, { changeFramework: framework.id, changeComponent: component.id });
@@ -115,13 +123,14 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     body.append(suggestions); details.append(summary, body); elements.matrix.append(details);
     componentNodes.push({ framework, component, prefix, details, summary, linkedWork, suggestions });
   }
-  const attentionNote = node('p'); attentionNote.dataset.changeAttentionNote = ''; elements.mixer.before(attentionNote);
+  const attentionNote = node('div', undefined, 'native-change__live-reading'); attentionNote.dataset.changeAttentionNote = ''; elements.mixer.before(attentionNote);
   for (const channel of listAttentionChannels()) {
-    const group = node('section', undefined, 'native-change__channel'), key = `attention.${channel.id}`;
-    group.append(node('h5', channel.label), node('p', channel.description));
+    const group = node('section', undefined, 'native-change__channel'), key = `attention.${channel.id}`; group.dataset.changeChannel = channel.id;
+    group.append(node('h5', channel.label));
     const range = node('input', undefined, 'native-change__fader'); range.type = 'range'; range.min = '0'; range.max = '25'; range.step = '1';
     range.dataset.changeField = key; range.setAttribute('aria-label', `${channel.label} attention parts`); range.setAttribute('aria-orientation', 'vertical');
-    group.append(range); ranges.set(key, range); field(group, key); elements.mixer.append(group);
+    const track = node('div', undefined, 'native-change__fader-track'); track.append(range); group.append(track);
+    ranges.set(key, range); field(group, key); group.append(node('p', channel.description, 'native-change__channel-description')); elements.mixer.append(group);
   }
   const workHeading = node('h4', 'Plan a supporting session'), workNote = node('p'), workFields = node('div', undefined, 'native-change__work-fields');
   const newWorkFields = node('div', undefined, 'native-change__work-fields');
@@ -176,6 +185,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       control.error.textContent = error?.message ?? ''; control.input.setAttribute('aria-invalid', String(Boolean(error)));
       if (ranges.has(key)) {
         const range = ranges.get(key); range.value = /^\d+$/.test(value) && Number(value) <= 25 ? value : '0';
+        range.parentElement.style.setProperty('--native-fader-fill', `${Number(range.value) * 4}%`);
         range.setAttribute('aria-valuetext', error ? 'Enter whole parts from 0 through 25 in the precise field' : `${value} attention parts`);
       }
     }
@@ -190,6 +200,9 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       entry.linkedWork.replaceChildren(...state.workIds.map(id => { const inspect = button(`Inspect ${view.projection.state.work.find(row => row.id === id)?.label ?? id}`, 'work'); inspect.dataset.changeWork = id; return inspect; }));
     }
     const lens = reading.lens, interpretation = node('dl');
+    const selectedLens = ref(lens), lensIndex = listInterpretiveLenses().findIndex(row => ref(row) === selectedLens);
+    elements['lens-wheel'].style.setProperty('--lens-angle', `${lensIndex * 45}deg`);
+    lensButtons.forEach(control => { control.setAttribute('aria-pressed', String(control.dataset.changeLens === selectedLens)); control.disabled = !editable; });
     for (const [label, value] of [['In view', lens.surface], ['Attention', lens.load], ['Held aside', lens.aside], ['Revisit when', lens.reentry], ['Next question', lens.trigger]]) {
       const row = node('div'); row.append(node('dt', label), node('dd', value)); interpretation.append(row);
     }
@@ -201,9 +214,20 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const attentionError = view.draft?.errors.some(error => error.path.startsWith('draft.attention.'));
     const greatestParts = Math.max(...reading.attention.channels.map(channel => channel.parts));
     const greatestChannels = reading.attention.channels.filter(channel => channel.parts === greatestParts);
-    attentionNote.textContent = attentionError ? 'Enter whole attention parts from 0 through 25 to compare the emphasis.'
-      : reading.attention.totalParts === 0 ? 'All attention parts are zero. Choose an emphasis to guide the next discussion.'
-        : `Give ${greatestChannels.map(channel => channel.label).join(', ')} the most attention (${greatestParts} parts). Consider whether the planned work reflects that choice.`;
+    const emphasis = node('p');
+    if (attentionError) emphasis.textContent = 'Enter whole attention parts from 0 through 25 to compare the emphasis.';
+    else if (reading.attention.totalParts === 0) emphasis.textContent = 'All attention parts are zero. Choose an emphasis to guide the next discussion.';
+    else {
+      emphasis.append(node('strong', 'Give the most attention to '));
+      greatestChannels.forEach((channel, index) => {
+        if (index) emphasis.append(document.createTextNode(', '));
+        emphasis.append(node('span', channel.label, 'native-change__emphasis-tag'));
+      });
+      emphasis.append(document.createTextNode(` (${greatestParts} parts). Consider whether the planned work reflects that choice.`));
+    }
+    attentionNote.replaceChildren(emphasis, node('small', 'This reading updates as you adjust the attention sliders.'));
+    const greatestIds = new Set(greatestChannels.map(channel => channel.id));
+    for (const channel of elements.mixer.children) channel.dataset.emphasis = !attentionError && greatestParts > 0 && greatestIds.has(channel.dataset.changeChannel) ? 'highest' : 'ordinary';
     const hasWork = raw && raw['proposal.mode'] !== 'none'; workFields.hidden = !hasWork;
     existingWork.group.hidden = raw?.['proposal.mode'] !== 'existing'; newWorkFields.hidden = raw?.['proposal.mode'] !== 'new';
     if (hasWork) {
@@ -268,6 +292,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       for (const channel of defaults.attention.channels) entries.push([`attention.${channel.channelId}`, String(channel.parts)]);
       editFields(entries); announce('Starting framework, mapping and attention restored in this proposal. Linked support and the selected viewpoint remain available.'); return;
     }
+    if (action === 'lens') { editFields([['lens', control.dataset.changeLens]]); return; }
     if (action === 'clear-work') { editFields([['proposal.mode', 'none']]); return; }
     if (action === 'work') { onSourceWork(control.dataset.changeWork, { targetId: 'change' }); return; }
     if (action === 'suggest') {

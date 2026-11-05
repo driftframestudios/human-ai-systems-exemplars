@@ -306,7 +306,7 @@ for (const engine of names) {
     const initial = await bytes(page);
     const legacy = JSON.parse(initial);
     delete legacy.purpose; delete legacy.contributions; delete legacy.connections;
-    delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings;
+    delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings; delete legacy.assuranceSettings;
     legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
       teamId: row.teamId, workIds: [...new Set(row.supportBindings.flatMap(binding => binding.workIds))] }));
     for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
@@ -314,13 +314,13 @@ for (const engine of names) {
     legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.5.0.');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.6.0.');
     assert.equal(await bytes(page), initial);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
-    assert.equal(admitted.schemaVersion, '0.5.0');
+    assert.equal(admitted.schemaVersion, '0.6.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
     await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');

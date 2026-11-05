@@ -1,9 +1,10 @@
 import { ROLE_FIELDS } from './roles.mjs';
 import { createChangeSettings } from './change-models.mjs';
+import { createAssuranceSettings } from './assurance-models.mjs';
 export { PRACTICES } from './capabilities.mjs';
 // Immutable vocabulary shared by independent Studio instances.
 export const CONTRACT = Object.freeze({
-  kind: 'native-investment-plan', schemaVersion: '0.5.0', modelVersion: '0.1.0',
+  kind: 'native-investment-plan', schemaVersion: '0.6.0', modelVersion: '0.1.0',
   currency: 'USD', minutesPerHour: 60,
 });
 
@@ -42,17 +43,24 @@ const CAPABILITY_JSON_BYTES = JSON.stringify({ abilities: [], capabilityEvidence
 // reference is the largest added edge; all edges share the existing plan budget.
 const CHANGE_JSON_BYTES = JSON.stringify({ changeSettings: createChangeSettings() }).length - 1
   + CAPABILITY_REFERENCE_LIMIT * (JSON.stringify({ kind: 'practice', instanceId: '' }).length + 64 + 1);
+const ASSURANCE_JSON_BYTES = JSON.stringify({ assuranceSettings: createAssuranceSettings() }).length - 1
+  + 32 * (512 + 120 * 6 + RELATIONSHIP_TEXT_LIMIT * 6 + 2 * 64)
+  + 32 * (512 + 2 * RELATIONSHIP_TEXT_LIMIT * 6 + 3 * 64)
+  + 64 * (768 + 4 * RELATIONSHIP_TEXT_LIMIT * 6 + 4 * 64)
+  + CAPABILITY_REFERENCE_LIMIT * (64 + 3);
 export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.1.0': 524288,
   '0.2.0': 524288 + PURPOSE_JSON_BYTES,
   '0.3.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES,
   '0.4.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES,
   '0.5.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES,
+  '0.6.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES,
 });
 
 export const LIMITS = Object.freeze({
   bytes: SCHEMA_BYTE_LIMITS[CONTRACT.schemaVersion], people: 128, teams: 32, work: 256, practices: 128,
   references: CAPABILITY_REFERENCE_LIMIT, abilities: 128, supportRequirements: 8, prerequisiteEdges: 512, capabilityEvidence: 256,
+  recoveryEvents: 32, learningActions: 32, rehearsals: 64,
   contributions: 128, connections: 256, relationshipText: RELATIONSHIP_TEXT_LIMIT, identifier: 64, label: 120, horizonWeeks: 260,
   fundedMinutes: 10000000, minutesPerOccurrence: 1440, occurrences: 10000,
   rateCentsPerHour: 100000000, revision: Number.MAX_SAFE_INTEGER - 1, purposeText: PURPOSE_TEXT_LIMIT,

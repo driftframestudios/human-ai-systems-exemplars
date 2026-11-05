@@ -303,6 +303,10 @@
       "kind": "node-test",
       "members": [
         "tests/native-investment-studio/assembly-editing.test.mjs",
+        "tests/native-investment-studio/assurance-contract.test.mjs",
+        "tests/native-investment-studio/assurance-draft.test.mjs",
+        "tests/native-investment-studio/assurance-models.test.mjs",
+        "tests/native-investment-studio/assurance-proposals.test.mjs",
         "tests/native-investment-studio/capabilities.test.mjs",
         "tests/native-investment-studio/capability-draft.test.mjs",
         "tests/native-investment-studio/capability-proposals.test.mjs",
@@ -3039,6 +3043,28 @@
       "aliases": [
         "test:native-investment-studio:change-browser"
       ]
+    },
+    {
+      "id": "browser.native-investment-studio.assurance",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Quality and recovery illustrations, explicit supporting-work proposals, learning routes, professional rehearsal records, Apply and Undo, saved drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:assurance-browser"
+      ]
     }
   ],
   "bundles": [
@@ -3169,7 +3195,8 @@
         "browser.native-investment-studio.connections",
         "browser.native-investment-studio.connection-templates",
         "browser.native-investment-studio.capabilities",
-        "browser.native-investment-studio.change"
+        "browser.native-investment-studio.change",
+        "browser.native-investment-studio.assurance"
       ]
     },
     {
@@ -3545,6 +3572,10 @@
         ],
         "test:native-investment-studio:source": [
           "tests/native-investment-studio/assembly-editing.test.mjs",
+          "tests/native-investment-studio/assurance-contract.test.mjs",
+          "tests/native-investment-studio/assurance-draft.test.mjs",
+          "tests/native-investment-studio/assurance-models.test.mjs",
+          "tests/native-investment-studio/assurance-proposals.test.mjs",
           "tests/native-investment-studio/capabilities.test.mjs",
           "tests/native-investment-studio/capability-draft.test.mjs",
           "tests/native-investment-studio/capability-proposals.test.mjs",
@@ -3672,6 +3703,9 @@
         ],
         "test:native-investment-studio:change-browser": [
           "tests/native-investment-studio/change.browser.mjs"
+        ],
+        "test:native-investment-studio:assurance-browser": [
+          "tests/native-investment-studio/assurance.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

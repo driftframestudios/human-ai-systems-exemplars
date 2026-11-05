@@ -8,6 +8,11 @@ import { browserSharedJavaScriptPaths } from './node-route-inventory.mjs';
 export const NATIVE_STUDIO_ROOT = 'collaboration/native-investment-studio';
 export const NATIVE_STUDIO_ENTRY = `${NATIVE_STUDIO_ROOT}/controller.mjs`;
 const MANIFEST = 'deployment/cpanel/primary-route-manifest.json';
+// These exact shared owners preserve the existing staffing formula authority.
+const SHARED_DEPENDENCIES = new Set([
+  'collaboration/investment-analysis/staffing-adapter.mjs',
+  'collaboration/investment-analysis/core.js',
+]);
 
 export class NativeModuleClosureError extends Error {
   constructor(code, module, detail = '') {
@@ -20,14 +25,15 @@ export class NativeModuleClosureError extends Error {
 
 const fail = (code, module, detail) => { throw new NativeModuleClosureError(code, module, detail); };
 const isNative = value => typeof value === 'string' && value.startsWith(`${NATIVE_STUDIO_ROOT}/`);
+const isOwned = value => isNative(value) || SHARED_DEPENDENCIES.has(value);
 function canonicalModule(value) {
-  if (!isNative(value) || path.posix.normalize(value) !== value ||
-      !/^[a-zA-Z0-9_./-]+\.mjs$/u.test(value)) fail('module-path', String(value));
+  if (!isOwned(value) || path.posix.normalize(value) !== value ||
+      (!SHARED_DEPENDENCIES.has(value) && !/^[a-zA-Z0-9_./-]+\.mjs$/u.test(value))) fail('module-path', String(value));
   return value;
 }
 
 function importedModule(owner, specifier) {
-  if (typeof specifier !== 'string' || !/^\.\.?\/[a-zA-Z0-9_./-]+\.mjs$/u.test(specifier)) {
+  if (typeof specifier !== 'string' || !/^\.\.?\/[a-zA-Z0-9_./-]+\.m?js$/u.test(specifier)) {
     fail('import-path', owner, String(specifier));
   }
   return canonicalModule(path.posix.normalize(path.posix.join(path.posix.dirname(owner), specifier)));
@@ -102,7 +108,7 @@ export function verifyNativeModuleOwnership(paths, manifestFiles, browserPaths) 
   const graph = new Set(paths);
   const manifested = new Set();
   for (const file of manifestFiles) {
-    if (!isNative(file.source_path) && !isNative(file.projected_path)) continue;
+    if (!isOwned(file.source_path) && !isOwned(file.projected_path)) continue;
     const source = canonicalModule(file.source_path);
     if (manifested.has(source)) fail('manifest-duplicate', source);
     manifested.add(source);
@@ -111,7 +117,7 @@ export function verifyNativeModuleOwnership(paths, manifestFiles, browserPaths) 
     if (!graph.has(source)) fail('manifest-orphan', source);
   }
   const classified = new Set();
-  for (const source of browserPaths.filter(isNative)) {
+  for (const source of browserPaths.filter(isOwned)) {
     canonicalModule(source);
     if (classified.has(source)) fail('inventory-duplicate', source);
     classified.add(source);

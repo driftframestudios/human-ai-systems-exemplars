@@ -2,6 +2,7 @@ import { CONTRACT, LIMITS, PRACTICES, PURPOSE_FIELDS, SCHEMA_BYTE_LIMITS } from 
 import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIES, emptyRole } from './roles.mjs';
 import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityWorkIds, createLegacyPractice } from './capabilities.mjs';
 import { CHANGE_CATALOGUE_VERSION, listChangeFrameworks, getChangeFramework, getInterpretiveLens, listAttentionChannels, createChangeSettings, projectChange } from './change-models.mjs';
+import { createAssuranceSettings, listQualityConcepts, getSourcePreset, getRehearsalDefinition, getLearningPromptDefinition, projectAssurance } from './assurance-models.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -17,7 +18,8 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings'],
+  changePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings'],
   capabilityPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
   relationshipPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
   purposePlan: [...PLAN_FIELDS, 'purpose'],
@@ -45,6 +47,14 @@ const FIELDS = Object.freeze({
   changeComponent: ['componentId', 'mapped', 'status', 'workIds', 'capabilityRefs'],
   changeAttention: ['version', 'channels'],
   changeChannel: ['channelId', 'parts'],
+  assuranceSettings: ['version', 'context', 'quality', 'recoveryAdditionalShareBasisPoints', 'recoveryEvents', 'learningActions', 'rehearsals'],
+  assuranceContext: ['sourcePresetId', 'referenceHorizon', 'namedUnknowns', 'recoveryRatePersonIds'],
+  referenceHorizon: ['quantity', 'unit'],
+  quality: ['included', 'allocationPercent', 'independentRateCentsPerHour', 'sigmaHalfSteps', 'additionalShareBasisPoints', 'concepts'],
+  qualityConcept: ['conceptId', 'included', 'workIds'],
+  recoveryEvent: ['id', 'label', 'included', 'lifecycle', 'eventCount', 'aggregateMinutesPerEvent', 'receiverPersonId', 'reviewBoundary', 'workIds'],
+  learningAction: ['id', 'promptId', 'context', 'decisionOwnerPersonId', 'reviewBoundary', 'workIds'],
+  rehearsal: ['id', 'definitionId', 'definitionVersion', 'context', 'assumptions', 'response', 'reviewerPersonId', 'observedPlanRevision', 'observation', 'workIds', 'connectionIds', 'personIds'],
 });
 const FIELD_SETS = new Map(Object.entries(FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const PROFILES = new Map([
@@ -52,7 +62,8 @@ const PROFILES = new Map([
   ['0.2.0', { fields: 'purposePlan', purpose: true, relationships: false, capabilities: false, references: 4096 }],
   ['0.3.0', { fields: 'relationshipPlan', purpose: true, relationships: true, capabilities: false, references: 8192 }],
   ['0.4.0', { fields: 'capabilityPlan', purpose: true, relationships: true, capabilities: true, references: 16384 }],
-  ['0.5.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, references: LIMITS.references }],
+  ['0.5.0', { fields: 'changePlan', purpose: true, relationships: true, capabilities: true, change: true, references: 16384 }],
+  ['0.6.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
@@ -84,6 +95,7 @@ const COMMAND_FIELDS = Object.freeze({
   'capability.evidence.record': ['type', 'evidence'],
   'capability.evidence.remove': ['type', 'evidenceId'],
   'change.settings.replace': ['type', 'changeSettings'],
+  'assurance.settings.replace': ['type', 'assuranceSettings'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence']);
@@ -404,6 +416,7 @@ export function prepareAssemblyCommand(candidate) {
     case 'capability.evidence.record': return { type, evidence: prepareCapabilityEvidence(raw.evidence, `${path}.evidence`) };
     case 'capability.evidence.remove': return { type, evidenceId: text(raw.evidenceId, `${path}.evidenceId`, true) };
     case 'change.settings.replace': return { type, changeSettings: prepareChangeSettings(raw.changeSettings, `${path}.changeSettings`) };
+    case 'assurance.settings.replace': return { type, assuranceSettings: prepareAssuranceSettings(raw.assuranceSettings, `${path}.assuranceSettings`) };
   }
 }
 
@@ -519,6 +532,108 @@ export function prepareChangeSettings(candidate, path = 'plan.changeSettings') {
     lens: { lensId: lensDefinition.id, version: lensDefinition.version },
     sourceFilter: choice(raw.sourceFilter, ['all', 'core', 'enterprise'], `${path}.sourceFilter`),
     frameworkMaps, attention: { version: CHANGE_CATALOGUE_VERSION, channels } };
+}
+
+function boolean(value, path) {
+  if (typeof value !== 'boolean') reject('boolean', path, 'Supply true or false for this choice.');
+  return value;
+}
+
+// Estimate assumptions and recorded rehearsal context retain their own units.
+// Supporting sessions keep the plan's existing person-minute and funding owners.
+export function prepareAssuranceSettings(candidate, path = 'plan.assuranceSettings') {
+  const raw = record(candidate, 'assuranceSettings', path);
+  if (raw.version !== '1.0.0') reject('assurance-version', `${path}.version`, 'Use the supported assurance-settings version.');
+  const context = record(raw.context, 'assuranceContext', `${path}.context`);
+  if (context.sourcePresetId !== null && !getSourcePreset(context.sourcePresetId, '1.0.0')) {
+    reject('assurance-preset', `${path}.context.sourcePresetId`, 'Choose an authored source preset or leave the reference unset.');
+  }
+  let referenceHorizon = null;
+  if (context.referenceHorizon !== null) {
+    const horizonPath = `${path}.context.referenceHorizon`, horizon = record(context.referenceHorizon, 'referenceHorizon', horizonPath);
+    referenceHorizon = { quantity: integer(horizon.quantity, 1000, `${horizonPath}.quantity`, 1),
+      unit: choice(horizon.unit, ['hours', 'sprints', 'quarters'], `${horizonPath}.unit`) };
+  }
+  const qualityPath = `${path}.quality`, quality = record(raw.quality, 'quality', qualityPath);
+  const conceptIds = new Set(listQualityConcepts().map(row => row.id)), seen = new Set();
+  const concepts = list(quality.concepts, conceptIds.size, `${qualityPath}.concepts`).map((value, index) => {
+    const rowPath = `${qualityPath}.concepts[${index}]`, row = record(value, 'qualityConcept', rowPath);
+    if (!conceptIds.has(row.conceptId)) reject('quality-concept', `${rowPath}.conceptId`, 'Choose an authored quality concept.');
+    if (seen.has(row.conceptId)) reject('duplicate-reference', `${rowPath}.conceptId`, 'Retain each quality concept once.');
+    seen.add(row.conceptId);
+    return { conceptId: row.conceptId, included: boolean(row.included, `${rowPath}.included`),
+      workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`) };
+  });
+  if (concepts.length !== conceptIds.size) reject('quality-concepts', `${qualityPath}.concepts`, 'Retain all ten quality concepts.');
+  const recoveryEvents = list(raw.recoveryEvents, LIMITS.recoveryEvents, `${path}.recoveryEvents`).map((value, index) => {
+    const rowPath = `${path}.recoveryEvents[${index}]`, row = record(value, 'recoveryEvent', rowPath);
+    return { id: text(row.id, `${rowPath}.id`, true), label: text(row.label, `${rowPath}.label`),
+      included: boolean(row.included, `${rowPath}.included`), lifecycle: choice(row.lifecycle, LIFECYCLE, `${rowPath}.lifecycle`),
+      eventCount: integer(row.eventCount, 1000, `${rowPath}.eventCount`),
+      aggregateMinutesPerEvent: integer(row.aggregateMinutesPerEvent, 60000, `${rowPath}.aggregateMinutesPerEvent`),
+      receiverPersonId: nullableId(row.receiverPersonId, `${rowPath}.receiverPersonId`),
+      reviewBoundary: relationshipText(row.reviewBoundary, `${rowPath}.reviewBoundary`),
+      workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`) };
+  });
+  const learningActions = list(raw.learningActions, LIMITS.learningActions, `${path}.learningActions`).map((value, index) => {
+    const rowPath = `${path}.learningActions[${index}]`, row = record(value, 'learningAction', rowPath);
+    if (!getLearningPromptDefinition(row.promptId)) reject('learning-prompt', `${rowPath}.promptId`, 'Choose an authored learning prompt.');
+    return { id: text(row.id, `${rowPath}.id`, true), promptId: row.promptId,
+      context: relationshipText(row.context, `${rowPath}.context`),
+      decisionOwnerPersonId: nullableId(row.decisionOwnerPersonId, `${rowPath}.decisionOwnerPersonId`),
+      reviewBoundary: relationshipText(row.reviewBoundary, `${rowPath}.reviewBoundary`),
+      workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`) };
+  });
+  const rehearsals = list(raw.rehearsals, LIMITS.rehearsals, `${path}.rehearsals`).map((value, index) => {
+    const rowPath = `${path}.rehearsals[${index}]`, row = record(value, 'rehearsal', rowPath);
+    const definition = getRehearsalDefinition(row.definitionId, row.definitionVersion);
+    if (!definition) reject('rehearsal-definition', `${rowPath}.definitionId`, 'Choose an exact authored rehearsal and version.');
+    const observation = relationshipText(row.observation, `${rowPath}.observation`);
+    const context = relationshipText(row.context, `${rowPath}.context`);
+    const response = relationshipText(row.response, `${rowPath}.response`);
+    const reviewerPersonId = nullableId(row.reviewerPersonId, `${rowPath}.reviewerPersonId`);
+    if (observation !== null && (context === null || response === null || reviewerPersonId === null)) {
+      reject('rehearsal-observation', rowPath, 'Name the context, response and human reviewer for a recorded observation.');
+    }
+    return { id: text(row.id, `${rowPath}.id`, true), definitionId: definition.id, definitionVersion: definition.version,
+      context, assumptions: relationshipText(row.assumptions, `${rowPath}.assumptions`), response, reviewerPersonId,
+      observedPlanRevision: integer(row.observedPlanRevision, LIMITS.revision, `${rowPath}.observedPlanRevision`), observation,
+      workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`),
+      connectionIds: identifiers(row.connectionIds, LIMITS.connections, `${rowPath}.connectionIds`),
+      personIds: identifiers(row.personIds, LIMITS.people, `${rowPath}.personIds`) };
+  });
+  for (const [name, rows] of [['recoveryEvents', recoveryEvents], ['learningActions', learningActions], ['rehearsals', rehearsals]]) indexRecords(rows, `${path}.${name}`);
+  return { version: '1.0.0', context: { sourcePresetId: context.sourcePresetId, referenceHorizon,
+    namedUnknowns: integer(context.namedUnknowns, 20, `${path}.context.namedUnknowns`),
+    recoveryRatePersonIds: identifiers(context.recoveryRatePersonIds, LIMITS.people, `${path}.context.recoveryRatePersonIds`) },
+  quality: { included: boolean(quality.included, `${qualityPath}.included`),
+    allocationPercent: integer(quality.allocationPercent, 100, `${qualityPath}.allocationPercent`),
+    independentRateCentsPerHour: quality.independentRateCentsPerHour === null ? null : integer(quality.independentRateCentsPerHour, LIMITS.rateCentsPerHour, `${qualityPath}.independentRateCentsPerHour`),
+    sigmaHalfSteps: integer(quality.sigmaHalfSteps, 12, `${qualityPath}.sigmaHalfSteps`, 2),
+    additionalShareBasisPoints: integer(quality.additionalShareBasisPoints, 10000, `${qualityPath}.additionalShareBasisPoints`), concepts },
+  recoveryAdditionalShareBasisPoints: integer(raw.recoveryAdditionalShareBasisPoints, 10000, `${path}.recoveryAdditionalShareBasisPoints`),
+  recoveryEvents, learningActions, rehearsals };
+}
+
+function prepareAssuranceReferences(state, people, work, budget) {
+  const settings = state.assuranceSettings, path = 'plan.assuranceSettings';
+  const connections = new Map(state.connections.map(row => [row.id, row]));
+  settings.context.recoveryRatePersonIds = references(settings.context.recoveryRatePersonIds, people, `${path}.context.recoveryRatePersonIds`, budget);
+  settings.quality.concepts.forEach((row, index) => {
+    row.workIds = references(row.workIds, work, `${path}.quality.concepts[${index}].workIds`, budget);
+  });
+  for (const [collection, human] of [['recoveryEvents', 'receiverPersonId'], ['learningActions', 'decisionOwnerPersonId'], ['rehearsals', 'reviewerPersonId']]) {
+    settings[collection].forEach((row, index) => {
+      const rowPath = `${path}.${collection}[${index}]`;
+      reference(row[human], people, `${rowPath}.${human}`, budget);
+      row.workIds = references(row.workIds, work, `${rowPath}.workIds`, budget);
+      if (collection === 'rehearsals') {
+        if (row.observedPlanRevision > state.revision) reject('observation-revision', `${rowPath}.observedPlanRevision`, 'Refer to this plan revision or an earlier observed revision.');
+        row.personIds = references(row.personIds, people, `${rowPath}.personIds`, budget);
+        row.connectionIds = references(row.connectionIds, connections, `${rowPath}.connectionIds`, budget);
+      }
+    });
+  }
 }
 
 export function prepareCapability(candidate, kind, path = 'capability') {
@@ -803,6 +918,10 @@ function prepareVersion(candidate, version) {
       }
     }
   }
+  if (profile.assurance) {
+    state.assuranceSettings = prepareAssuranceSettings(raw.assuranceSettings);
+    prepareAssuranceReferences(state, peopleById, workById, budget);
+  }
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
@@ -810,7 +929,8 @@ function prepareVersion(candidate, version) {
   return freeze({ state, result, serialized,
     ...(profile.relationships ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}),
     ...(graph ? { capabilities: capabilitySummaries(state, graph, peopleById, teamsById, workById, result) } : {}),
-    ...(profile.change ? { change: projectChange(state.changeSettings) } : {}) });
+    ...(profile.change ? { change: projectChange(state.changeSettings) } : {}),
+    ...(profile.assurance ? { assurance: projectAssurance(state.assuranceSettings, state) } : {}) });
 }
 
 function prepareSelectedVersion(candidate, version) {
@@ -827,7 +947,8 @@ function prepareSelectedVersion(candidate, version) {
     practices: PROFILES.get(version).capabilities ? admitted.state.practices
       : admitted.state.practices.map(row => createLegacyPractice(row.id, row.practiceId, row.teamId, row.workIds)),
     abilities: admitted.state.abilities ?? [], capabilityEvidence: admitted.state.capabilityEvidence ?? [],
-    changeSettings: admitted.state.changeSettings ?? createChangeSettings() }, CONTRACT.schemaVersion);
+    changeSettings: admitted.state.changeSettings ?? createChangeSettings(),
+    assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings() }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -878,6 +999,7 @@ export function createExamplePlan() {
     currency: CONTRACT.currency, planId: 'coordination-example', revision: 0, horizonWeeks: 6,
     purpose: emptyPurpose(),
     changeSettings: createChangeSettings(),
+    assuranceSettings: createAssuranceSettings(),
     people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active' })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],

@@ -4,6 +4,7 @@ import { money } from './display.mjs';
 import { PURPOSE_LABELS } from './purpose-controller.mjs';
 import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
+import { getQualityConcept, getSourcePreset, getRehearsalDefinition } from './assurance-models.mjs';
 import { getChangeFramework, getInterpretiveLens, listAttentionChannels } from './change-models.mjs';
 
 const CHANGE_LABELS = Object.freeze({
@@ -50,6 +51,42 @@ function changeDescriptions(before, after) {
   const labels = new Map(listAttentionChannels().map(row => [row.id, row.label]));
   for (const row of next.attention.channels) if (priorParts.get(row.channelId) !== row.parts)
     descriptions.push(`${labels.get(row.channelId)} attention: ${priorParts.get(row.channelId)} → ${row.parts} parts`);
+  return descriptions;
+}
+
+function assuranceDescriptions(before, after) {
+  const prior = before.assuranceSettings, next = after.assuranceSettings, descriptions = [];
+  const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+  const people = new Map([...before.people, ...after.people].map(row => [row.id, row.label]));
+  const works = new Map([...before.work, ...after.work].map(row => [row.id, row.label]));
+  const support = ids => ids.map(id => works.get(id)).join(', ') || 'Supporting session to choose';
+  if (!same(prior.context, next.context)) {
+    const horizon = next.context.referenceHorizon;
+    descriptions.push(`Quality and recovery context: ${next.context.sourcePresetId ? getSourcePreset(next.context.sourcePresetId).name + "; " : ""}${horizon ? `${horizon.quantity} ${horizon.unit}` : 'reference horizon to choose'}; ${next.context.namedUnknowns} named unknowns; recovery rate from ${next.context.recoveryRatePersonIds.map(id => people.get(id)).join(', ') || 'people to choose'}.`);
+  }
+  for (const [field, label, format] of [
+    ['included', 'Quality planning', value => value ? 'Included' : 'Available'],
+    ['allocationPercent', 'Quality allocation', value => `${value}%`],
+    ['independentRateCentsPerHour', 'Independent-review rate', value => value === null ? 'Rate to choose' : `${money(value)}/hour`],
+    ['sigmaHalfSteps', 'Illustrative sigma', value => String(value / 2)],
+    ['additionalShareBasisPoints', 'Additional quality share', value => `${value / 100}%`],
+  ]) if (prior.quality[field] !== next.quality[field])
+    descriptions.push(`${label}: ${format(prior.quality[field])} → ${format(next.quality[field])}.`);
+  const concepts = new Map(prior.quality.concepts.map(row => [row.conceptId, row]));
+  for (const row of next.quality.concepts) if (!same(concepts.get(row.conceptId), row))
+    descriptions.push(`Quality check ${getQualityConcept(row.conceptId).label}: ${row.included ? 'Included' : 'Available'}; ${support(row.workIds)}.`);
+  if (prior.recoveryAdditionalShareBasisPoints !== next.recoveryAdditionalShareBasisPoints)
+    descriptions.push(`Additional recovery share: ${prior.recoveryAdditionalShareBasisPoints / 100}% → ${next.recoveryAdditionalShareBasisPoints / 100}%.`);
+  for (const [field, label] of [['recoveryEvents', 'Recovery assumption'], ['learningActions', 'Learning action'], ['rehearsals', 'Rehearsal']]) {
+    const old = new Map(prior[field].map(row => [row.id, row])), retained = new Set(next[field].map(row => row.id));
+    const describe = row => field === 'recoveryEvents'
+      ? `${row.label}: ${row.eventCount} events × ${row.aggregateMinutesPerEvent} aggregate minutes; ${row.included ? 'Included' : 'Available'}; ${row.lifecycle}; ${support(row.workIds)}`
+      : field === 'learningActions'
+        ? `${row.context || row.promptId}; decision owner ${people.get(row.decisionOwnerPersonId) || 'to choose'}; ${support(row.workIds)}`
+        : `${row.context || getRehearsalDefinition(row.definitionId, row.definitionVersion).name}; ${row.response || 'response to describe'}; ${row.observation ? `observation: ${row.observation}` : 'observation to record'}; reviewer ${people.get(row.reviewerPersonId) || 'to choose'}; ${support(row.workIds)}`;
+    for (const row of next[field]) if (!same(old.get(row.id), row)) descriptions.push(`${label} ${old.has(row.id) ? 'changed' : 'added'}: ${describe(row)}.`);
+    for (const row of prior[field]) if (!retained.has(row.id)) descriptions.push(`${label} removed: ${describe(row)}.`);
+  }
   return descriptions;
 }
 
@@ -100,6 +137,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     if (preview.changes.plan.length) add(`Plan: ${preview.changes.plan.map(name => CHANGE_LABELS[name] ?? name).join(', ')}.`);
     if (preview.changes.purpose.length) add(`Purpose: ${preview.changes.purpose.map(name => PURPOSE_LABELS[name]).join(' · ')}`);
     if (preview.changes.changeSettings.length) changeDescriptions(projection.state, preview.projection.state).forEach(add);
+    if (preview.changes.assuranceSettings.length) assuranceDescriptions(projection.state, preview.projection.state).forEach(add);
     for (const [kind, label] of Object.entries(COLLECTION_LABELS)) {
       const change = preview.changes[kind];
       if (!change.added.length && !change.removed.length && !change.changed.length && !change.orderChanged) continue;
@@ -144,6 +182,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
       ]);
       if (baseline) rows.push(['Change planning', changeDescriptions(baseline.projection.state, projection.state).join(' · ')
         || 'Framework, viewpoint, mapping and attention match the baseline.']);
+      if (baseline) rows.push(['Quality and recovery', assuranceDescriptions(baseline.projection.state, projection.state).join(' · ')
+        || 'Quality, recovery, learning and rehearsal records match the baseline.']);
       comparison.replaceChildren(...rows.map(([label, value]) => {
         const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
         dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;

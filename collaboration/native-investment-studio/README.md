@@ -18,8 +18,9 @@ after independent engineering review.
 adds the service-request pilot, working minutes dial, and contextual session
 editor. [#689](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/689)
 connects ability and practice cards to their shared supporting work and repairs
-form-action spacing. The current Change chapter receives that accepted plan
-through #651.
+form-action spacing. [#690](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/690)
+adds retained framework mappings, interpretation and relative attention. The
+current Quality & recovery chapter receives that plan through #652.
 
 Purpose, people, teams, working sessions, roles, human review, connections,
 arrangement previews, and plan exchange have native owners. The complete
@@ -77,6 +78,16 @@ separately owned work. The card manual explains each action and its acceptance
 question. Recording an observation preserves who saw what, where, and against
 which plan revision.
 
+7. Open **Quality & recovery**. Save a baseline in Investment, prepare the
+   recovery-instruction rehearsal, and add a 30-minute session with the Quality
+   reviewer and Operations specialist as extra work. Inspect the $100 increase,
+   Apply, compare, and keep or Undo it. A recorded observation names the human
+   reviewer and the decision it informs.
+
+Quality and recovery illustrations retain their own horizon, rates and effort.
+The accepted total changes when a visitor explicitly accepts people or work.
+The short manuals explain those quantities beside their controls.
+
 ## Run a local preview
 
 Use the Node version declared in [`.node-version`](../../.node-version), and
@@ -106,6 +117,7 @@ npm run test:native-investment-studio:session-browser
 npm run test:native-investment-studio:assembly-browser
 npm run test:native-investment-studio:capability-browser
 npm run test:native-investment-studio:change-browser
+npm run test:native-investment-studio:assurance-browser
 ```
 
 Browser routes require the repository's locked Playwright browsers. The
@@ -118,7 +130,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#651](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/651),
+source, the worktree, [#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.
@@ -128,6 +140,8 @@ The current showcase work sits within
 and [#637's showcase route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Quality, recovery, learning, and professional play continue through
 [#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652);
+method explanations, shared session controls and roomy Change layouts through
+[#691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691);
 coordination score, capacity, and decision gates through
 [#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653).
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)

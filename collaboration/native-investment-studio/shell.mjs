@@ -1,5 +1,5 @@
 const INSTANCES = new WeakMap();
-const CHAPTER_KEYS = new Set(['coordination', 'people', 'work', 'change', 'horizon', 'investment']);
+const CHAPTER_KEYS = new Set(['coordination', 'people', 'work', 'change', 'assurance', 'horizon', 'investment']);
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const MOTION = Object.freeze({ duration: 160, easing: 'ease-out' });
 const HISTORY_KEY = '__contextCanvasNativeStudio';

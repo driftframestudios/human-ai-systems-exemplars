@@ -134,9 +134,9 @@ test('About authors its working chapter panels and retains the existing deep-lin
   const about = await readFile(new URL('../../context-canvas-project-surface/context-canvas/index.html', import.meta.url), 'utf8');
   const controls = [...about.matchAll(/<button\b[^>]*\bdata-native-chapter="([^"]+)"[^>]*>/gu)];
   const panels = [...about.matchAll(/<section\b[^>]*\bdata-native-chapter-panel="([^"]+)"[^>]*>/gu)];
-  assert.deepEqual(controls.map(match => match[1]), ['coordination', 'people', 'work', 'change', 'investment']);
-  assert.deepEqual(panels.map(match => match[1]), ['coordination', 'people', 'work', 'change', 'investment']);
-  for (const key of ['coordination', 'people', 'work', 'change', 'investment']) {
+  assert.deepEqual(controls.map(match => match[1]), ['coordination', 'people', 'work', 'change', 'assurance', 'investment']);
+  assert.deepEqual(panels.map(match => match[1]), ['coordination', 'people', 'work', 'change', 'assurance', 'investment']);
+  for (const key of ['coordination', 'people', 'work', 'change', 'assurance', 'investment']) {
     assert.ok(controls.find(match => match[1] === key)[0].includes(`aria-controls="native-studio-${key}"`));
     const panel = panels.find(match => match[1] === key)[0];
     assert.ok(panel.includes(`id="native-studio-${key}"`));
@@ -380,7 +380,7 @@ test('partial listener installation restores authored state and leaves the root 
 
 test('finite icon construction owns each SVG and retains exact local geometry and accessible control naming', async () => {
   const f = fixture();
-  assert.deepEqual(STUDIO_ICON_NAMES, ['coordination', 'people', 'work', 'change', 'investment']);
+  assert.deepEqual(STUDIO_ICON_NAMES, ['coordination', 'people', 'work', 'change', 'assurance', 'investment']);
   assert.ok(Object.isFrozen(STUDIO_ICON_NAMES));
   const first = createStudioIcon(f.document, 'people');
   const second = createStudioIcon(f.document, 'people');

@@ -9,7 +9,7 @@
     "indexed_page_count": 40
   },
   "authority_receipts": {
-    "public_route_binding_sha256": "d7419e3b1a4efd8c5d245ecfaec53d389c6ccab0d54c73ea0a7a37e16e9e4834",
+    "public_route_binding_sha256": "10694d3156fe6657d5866a107501c4c5c7793b022954d507499a21991cd36b1e",
     "registry_binding_sha256": "9a28f3fe1db2aad1d5455361b40d4827538869768cd2ee89b03e4f1ebc1d41c3",
     "occurrence_sha256": "080cb8b579a587df65cc132326664c284d8c18aa2f986f79bd257454ab5b8c50"
   },

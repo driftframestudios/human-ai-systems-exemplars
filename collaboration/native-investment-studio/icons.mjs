@@ -35,7 +35,7 @@ const GEOMETRY = new Map([
     ['path', { d: 'M22 21v-2a4 4 0 0 0-3-3.87' }],
     ['circle', { cx: '9', cy: '7', r: '4' }],
   ]],
-  // The folded card and mixer marks are source-authored; the remaining marks
+  // The folded card, mixer and rehearsal marks are source-authored; the remaining marks
   // retain the selected Lucide geometry and notices identified above.
   ['work', [
     ['rect', { x: '3', y: '6', width: '14', height: '15', rx: '1' }],
@@ -46,6 +46,9 @@ const GEOMETRY = new Map([
     ['rect', { x: '3', y: '7', width: '4', height: '4', rx: '1' }],
     ['rect', { x: '10', y: '14', width: '4', height: '4', rx: '1' }],
     ['rect', { x: '17', y: '5', width: '4', height: '4', rx: '1' }],
+  ]],
+  ['assurance', [
+    ['path', { d: 'M4 18V6h16v12H4M7 12h3l2-4 3 8 2-4h3' }],
   ]],
   ['investment', [
     ['path', { d: 'M12 16v5' }],
