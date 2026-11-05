@@ -2,6 +2,8 @@ import { createDraftCoordinator } from './editing.mjs';
 import { money, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
+import { projectAssuranceConsequences } from './assurance-consequences.mjs';
+import { appendAssuranceBadges } from './assurance-badges.mjs';
 
 const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -88,6 +90,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       for (const id of team.personIds) memberships.get(id).push(team.label);
     }
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
+    const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
     const fragment = document.createDocumentFragment();
     for (const person of next.state.people) {
       const item = document.createElement('li');
@@ -109,6 +112,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const space = document.createElement('p');
       space.textContent = remaining < 0 ? `${duration(-remaining)} above funded time` : `${duration(remaining)} of funded time available`;
       item.append(button, saved, team, detail, space);
+      appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });
       fragment.append(item);
     }
     elements.roster.replaceChildren(fragment);

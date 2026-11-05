@@ -11,6 +11,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/assembly-editing.test.mjs',
   'tests/native-investment-studio/assembly.browser.mjs',
+  'tests/native-investment-studio/assurance-consequences.test.mjs',
   'tests/native-investment-studio/assurance-contract.test.mjs',
   'tests/native-investment-studio/assurance-draft.test.mjs',
   'tests/native-investment-studio/assurance-models.test.mjs',
@@ -325,7 +326,7 @@ test('native Studio routes retain source and separate browser owners with execut
     readdir(resolve(ROOT, 'tests/native-investment-studio')),
   ]);
   const sourceMembers = [
-    'assurance-contract.test.mjs', 'assurance-draft.test.mjs', 'assurance-models.test.mjs', 'assurance-proposals.test.mjs',
+    'assurance-consequences.test.mjs', 'assurance-contract.test.mjs', 'assurance-draft.test.mjs', 'assurance-models.test.mjs', 'assurance-proposals.test.mjs',
     'score-contract.test.mjs', 'score-draft.test.mjs', 'score-models.test.mjs',
     'coordination-arrangements.test.mjs', 'contribution-view-model.test.mjs',
     'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',

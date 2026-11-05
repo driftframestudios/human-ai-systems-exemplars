@@ -884,3 +884,49 @@ Issue #697 owns this slice. The receiving sequence continues to #698's explicit
 quality preparation and recovery consequences, followed by the remaining visual
 analysis, scenarios and final About composition. Performance refinement and the
 human-cued public release retain their separate receiving issues.
+
+### Quality choices explain the work they carry
+
+The next instrument pass connects each quality pad to explicit preparation,
+people, time and investment. A concept's Available/Included state and its linked
+work remain separately visible. A visitor can inspect retained supporting work
+and deliberately adjust it. The accepted amount continues to come from the plan.
+
+The recovery-failure rehearsal uses authored conditions and response assumptions.
+Preparation, response and rehearsal may share one working session, retaining
+one work identity and cost. Timeline readings use supplied placements; event
+person-effort stays an aggregate workload. Independent review supplied a useful
+rounding fixture: two half-hour session lines at one cent per hour can display
+two cents of line attribution while the native settled commitment is one cent.
+The consequence reading keeps those quantities and their adjustment legible.
+
+People and team badges open the specific support or observation that explains
+them. Planned work, rehearsal planning and a recorded human observation retain
+their distinct meanings. The return route preserves the original dirty editor,
+including raw numeric spelling, through a nested supporting-session inspection.
+Issue #698 owns this work; #654, #649 and #638 receive the remaining analytical,
+scenario and final-composition work before #679's performance refinement.
+
+## 2026-11-05 — Checked checkpoint and human-requested pause
+
+The human requested a pause after the current checks and before the next
+refinements. The #698 feature is retained locally on
+`codex/studio-quality-consequences`; its pull-request delivery remains pending.
+The accepted dev source remains the arrangement feature delivered through #702.
+
+The native source route passes all 556 cases. The planner/About contracts and
+delivery closure pass. Assurance cases pass across Chromium, Firefox and WebKit:
+the final enlarged-text replay confirms whole session and investment amounts,
+readable session routes, exact observation-badge returns, retained raw drafts,
+and Apply/Undo accounting. Independent actual-page review also confirms that a
+badge removed by a session change returns focus to the visible People roster.
+These observations cover the exercised proposal and return paths and the
+320-pixel doubled-text composition.
+
+The next Coordination refinements remain queued: shadow-free ghost Cancel
+controls; a concise visual initial view with secondary capacity details behind
+progressive disclosure; shorter activity previews; removal of the repeated
+visible timing explanation; and consistent compact steppers. Enterprise timing
+needs an explicit business-time interpretation that preserves existing plan
+units. Revisit that design with the human's next direction before implementation.
+Public release and performance refinement retain their separate receiving work.

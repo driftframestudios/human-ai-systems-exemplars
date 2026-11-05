@@ -2236,7 +2236,7 @@ p#on-dark-iron-ore {
 .native-team { padding: clamp(1rem, 3vw, 2.5rem); border-block-start: .125rem solid var(--native-ink); display: grid; gap: 1rem; }
 .about-page .native-team h3 { color: var(--native-text); font: 650 1.5rem/1.25 system-ui, sans-serif; }
 .native-team__roster { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
-.native-team__roster li { margin: 0; border: .125rem solid var(--native-ink); border-inline-start: .3rem solid var(--about-deep-teal); background: var(--about-mint-green); padding: .8rem; display: grid; gap: .5rem; align-content: start; min-inline-size: 0; }
+.native-team__roster > li { margin: 0; border: .125rem solid var(--native-ink); border-inline-start: .3rem solid var(--about-deep-teal); background: var(--about-mint-green); padding: .8rem; display: grid; gap: .5rem; align-content: start; min-inline-size: 0; }
 .native-team__roster button { text-align: start; overflow-wrap: anywhere; }
 .native-team__roster button[aria-pressed='true'] { background: var(--native-signal); border-style: double; }
 .native-team__roster p { font-size: .875rem; }
@@ -3356,4 +3356,52 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
   .native-arrangement__viewport, .native-arrangement__boundary rect, .native-arrangement__team rect { background: Canvas; fill: Canvas; stroke: CanvasText; }
   .native-arrangement__diagram text { fill: CanvasText; }
   .native-arrangement__edge { color: LinkText; }
+}
+
+/* Support badges route a person's or team's accepted work to its evidence owner. */
+.native-support-badges { display: grid; gap: .4rem; min-inline-size: 0; padding: 0; margin: .6rem 0; list-style: none; }
+.native-support-badges > li { min-inline-size: 0; margin: 0; padding: 0; }
+.native-coordination .native-support-badge { display: grid; gap: .2rem; inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding-block: .45rem; padding-inline-start: .55rem; border: 1px solid #557c6c; border-inline-start: .25rem solid #007f70; border-radius: .3rem; background: #dcebe1; color: #153e33; box-shadow: inset 0 -.12rem 0 #a0b9a9; text-align: start; }
+.native-support-badge strong { font: 700 .8rem/1.4 system-ui, sans-serif; }
+.native-support-badge small { font: 400 .75rem/1.4 system-ui, sans-serif; }
+.native-support-badge[data-support-standing='observation'] { border-inline-start-color: #6e518a; background: #eee6f4; }
+@media (forced-colors: active) {
+  .native-coordination .native-support-badge { border-color: ButtonText; background: ButtonFace; color: ButtonText; box-shadow: none; }
+}
+
+/* Quality pads select a stable work reading; the meters retain their named units. */
+.native-assurance__consequence { min-inline-size: 0; padding: clamp(.35rem, 1.5vw, 1rem); margin-block: .8rem; border: .18rem solid #607b6e; border-radius: .4rem; background: #dde8df; box-shadow: inset 0 .2rem 0 #c4d5c9; }
+.native-assurance__consequence > h5 { margin: 0 0 .5rem; font: 750 1.1rem/1.4 system-ui, sans-serif; color: #173c32; }
+.native-assurance__consequence[data-assurance-effect='proposed'] { border-inline-start: .35rem solid #96602a; }
+.native-assurance__effect-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: .75rem; min-inline-size: 0; }
+.native-assurance__effect { container: quality-effect / inline-size; min-inline-size: 0; padding: clamp(.25rem, 1vw, .75rem); border: 1px solid #7d9b8c; background: #f6f1df; }
+.native-assurance__effect h6 { margin: 0 0 .6rem; font: 750 .95rem/1.4 system-ui, sans-serif; color: #163d32; }
+.native-assurance__metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: .55rem; padding: .65rem; margin: .5rem 0; border: .15rem solid #526b5f; border-radius: .3rem; background: #19342d; color: #f6f1df; }
+.native-assurance__metrics > div { min-inline-size: 0; padding-inline-start: .5rem; border-inline-start: .12rem solid #69d9c2; }
+.native-assurance__metrics dt { color: #f6f1df; font: 600 .75rem/1.4 system-ui, sans-serif; }
+.native-assurance__metrics dd { margin: .3rem 0; color: #70e8cd; font: 650 1.05rem/1.5 ui-monospace, monospace; }
+.native-assurance__effect .native-assurance__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@container quality-effect (max-width: 24rem) {
+  .native-assurance__effect .native-assurance__metrics { grid-template-columns: minmax(0, 1fr); }
+}
+.native-assurance__work-reading { display: grid; gap: .6rem; padding: 0; margin: .65rem 0 0; list-style: none; }
+.native-assurance__work-reading > li { min-inline-size: 0; padding-block-start: .55rem; margin: 0; border-block-start: 1px dashed #7d9b8c; }
+.native-assurance__work-reading p { font-size: .8rem; line-height: 1.5; }
+.native-coordination .native-assurance__work-reading button { max-inline-size: 100%; font-size: .8rem; text-align: start; }
+.native-assurance__assumptions-reading { padding: .6rem; border-inline-start: .2rem solid #96602a; background: #f8eac7; }
+.native-assurance__rail [data-assurance-pad][data-support='linked'] { border-inline-start: .3rem solid #007f70; }
+.native-assurance__rail [data-assurance-pad][data-support='open'] { border-inline-start-style: dashed; }
+@container native-assurance (max-width: 32rem) {
+  /* Nested scenario records share the available reading width at enlarged text. */
+  .native-assurance__rehearsal .native-assurance__card { padding-inline: 0; border-inline-width: 0; }
+  .native-assurance__consequence, .native-assurance__effect { padding-inline: .2rem; }
+  .native-assurance__metrics { padding-inline: .2rem; }
+  .native-assurance__metrics > div { padding-inline-start: .1rem; }
+  .native-coordination .native-assurance__work-reading button { padding-inline-start: .3rem; }
+  .native-coordination .native-assurance__work-reading .native-control--navigate { padding-inline-end: 1.2rem; }
+  .native-assurance__work-reading .native-control--navigate::after { inset-inline-end: .3rem; }
+}
+@media (forced-colors: active) {
+  .native-assurance__consequence, .native-assurance__effect, .native-assurance__metrics, .native-assurance__assumptions-reading { border-color: CanvasText; background: Canvas; color: CanvasText; box-shadow: none; }
+  .native-assurance__metrics :is(dt, dd), .native-assurance__consequence > h5, .native-assurance__effect h6 { color: CanvasText; }
 }

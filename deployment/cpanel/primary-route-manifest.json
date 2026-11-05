@@ -33,6 +33,16 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/assurance-badges.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-badges.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "collaboration/native-investment-studio/assurance-consequences.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-consequences.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/assurance-controller.mjs",
       "projected_path": "collaboration/native-investment-studio/assurance-controller.mjs",
       "media_type": "text/javascript"

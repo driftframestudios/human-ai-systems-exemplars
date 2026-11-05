@@ -5,6 +5,8 @@ import { ASSEMBLY_FORMS, describeAssemblyTarget, makeAssemblyTarget } from './co
 import { money, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
+import { projectAssuranceConsequences } from './assurance-consequences.mjs';
+import { appendAssuranceBadges } from './assurance-badges.mjs';
 
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
@@ -83,6 +85,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     elements.person.value = selectedPerson ?? '';
     selectPersonControls();
     teamControls = new Map();
+    const support = new Map(projectAssuranceConsequences(next).accepted.badges.teams.map(row => [row.teamId, row.badges]));
     const fragment = document.createDocumentFragment();
     next.state.teams.forEach((team, index) => {
       const item = document.createElement('li');
@@ -97,7 +100,9 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const remove = button('Remove team', 'team-remove', team.id);
       remove.className = 'native-control--remove';
       remove.setAttribute('aria-label', `Remove team: ${team.label}`);
-      actions.append(up, down, remove); item.append(choose, members, actions); fragment.append(item);
+      actions.append(up, down, remove); item.append(choose, members);
+      appendAssuranceBadges(document, item, support.get(team.id) ?? [], { kind: 'team', id: team.id, label: team.label });
+      item.append(actions); fragment.append(item);
       teamControls.set(team.id, choose);
     });
     elements.teams.replaceChildren(fragment);

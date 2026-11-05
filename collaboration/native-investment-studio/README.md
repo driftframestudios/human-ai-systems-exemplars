@@ -23,8 +23,15 @@ leads with diagrams, readable examples and compact inspection controls. Stable c
 useful collapsed previews and ASCII zine styling support these visitor tasks.
 The coordination horizon now joins authored timing, availability, waits and
 modeled decisions to the accepted plan. Arrangement templates now keep their accepted identity and show their actual
-work directions. The complete showcase continues through quality consequences,
+work directions through [#702](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/702).
+The current [quality consequences feature, #698](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/698)
+connects preparation and recovery to explicit work. The complete showcase continues through
 visual analysis, scenarios and final composition. Performance refinement follows that experience.
+
+**Human-requested pause:** #698 has completed its current local checks on
+`codex/studio-quality-consequences`. Its feature delivery remains pending. The
+[journal checkpoint](experience-journal.md#2026-11-05--checked-checkpoint-and-human-requested-pause)
+records the verified behavior and the queued Coordination refinements.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
 tracks the ASCII composition method's public Pages projection and the visual
@@ -90,6 +97,21 @@ which plan revision.
 Quality and recovery illustrations retain their own horizon, rates and effort.
 The accepted total changes when a visitor explicitly accepts people or work.
 The short manuals explain those quantities beside their controls.
+
+Choose a quality pad to inspect its supporting sessions, people, funding and
+authored timing. The reading distinguishes the accepted plan from the proposal
+you are editing. Making a concept Available keeps its separately planned work;
+inspect or adjust that work to change its investment.
+
+The recovery-failure rehearsal compares preparation with an explicitly assumed
+response. Named people, session duration, occurrences and funding make that
+response concrete. Named sessions supply the accepted time and cost. Shared sessions retain one identity
+when they support preparation, response and rehearsal together.
+
+People and team cards show badges for planned quality work, planned rehearsals
+and recorded observations. Select a badge to inspect its source, then return to
+the same card with unfinished edits retained. An observation identifies its
+reviewer and observed plan revision; its text explains what was actually found.
 
 ## Compare team arrangements
 
