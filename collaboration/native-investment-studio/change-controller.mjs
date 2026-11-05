@@ -111,6 +111,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   }
   field(elements.frameworks, 'framework'); field(elements.lenses, 'lens'); field(elements.filters, 'sourceFilter');
   const lensRotor = node('div', undefined, 'native-change__lens-rotor'); lensRotor.setAttribute('aria-hidden', 'true');
+  let lastLens = null, lensAngle = 0;
   elements['lens-wheel'].append(lensRotor);
   const lensButtons = listInterpretiveLenses().map((lens, index) => {
     const control = button(lens.name, 'lens'); control.dataset.changeLens = ref(lens);
@@ -254,7 +255,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     }
     const lens = reading.lens, interpretation = node('dl');
     const selectedLens = ref(lens), lensIndex = listInterpretiveLenses().findIndex(row => ref(row) === selectedLens);
-    elements['lens-wheel'].style.setProperty('--lens-angle', `${lensIndex * 45}deg`);
+    if (lastLens === null) lensAngle = lensIndex * 45;
+    else if (lastLens !== selectedLens) lensAngle += 360 + ((lensIndex * 45 - lensAngle % 360 + 360) % 360);
+    lastLens = selectedLens;
+    elements['lens-wheel'].style.setProperty('--lens-angle', `${lensAngle}deg`);
     lensButtons.forEach(control => { control.setAttribute('aria-pressed', String(control.dataset.changeLens === selectedLens)); control.disabled = !editable; });
     for (const [label, value] of [['In view', lens.surface], ['Attention', lens.load], ['Held aside', lens.aside], ['Revisit when', lens.reentry], ['Next question', lens.trigger]]) {
       const row = node('div'); row.append(node('dt', label), node('dd', value)); interpretation.append(row);

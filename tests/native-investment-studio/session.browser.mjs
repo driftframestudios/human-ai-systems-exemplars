@@ -108,6 +108,84 @@ async function beginTurn(page, degrees) {
 const captured = page => knob(page).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
 
 for (const engine of names) {
+  test(`${engine}: session diagram names Change, quality, recovery, learning and rehearsal support`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.sessionFixture, plan = JSON.parse(studio.exportText());
+      plan.practices = []; plan.abilities = []; plan.connections = []; plan.contributions = [];
+      const mapping = plan.changeSettings.frameworkMaps.find(row => row.frameworkId === 'kotter');
+      mapping.components.find(row => row.componentId === 'vision').workIds = ['review'];
+      plan.assuranceSettings.quality.concepts.find(row => row.conceptId === 'acceptance-criteria').workIds = ['review'];
+      plan.assuranceSettings.recoveryEvents = [{ id: 'acceptance-criteria', label: 'Replay the interrupted request', included: true, lifecycle: 'active',
+        eventCount: 1, aggregateMinutesPerEvent: 30, receiverPersonId: null, reviewBoundary: null, workIds: ['review'] }];
+      plan.assuranceSettings.learningActions = [{ id: 'learn', promptId: 'source-framing', context: null, decisionOwnerPersonId: null, reviewBoundary: null, workIds: ['review'] }];
+      plan.assuranceSettings.rehearsals = [{ id: 'practice', definitionId: 'review-change', definitionVersion: '1.0.0', context: null, assumptions: null,
+        response: null, reviewerPersonId: null, observedPlanRevision: 0, observation: null, workIds: ['review'], connectionIds: [], personIds: [] }];
+      const result = studio.importText(JSON.stringify(plan), studio.read());
+      if (!result.ok) throw Error(JSON.stringify(result.error)); controller.refresh();
+    });
+    const before = await bytes(page), support = sessions(page).locator('[data-native-session-map-support]');
+    await expect(support).toContainText('Vision');
+    await expect(support).toContainText('Acceptance criteria / specification by example');
+    await expect(support).toContainText('Replay the interrupted request');
+    await expect(support).toContainText('Source framing and facilitation');
+    await expect(support).toContainText('A reviewer changes the acceptance conditions');
+    await expect(support).not.toContainText('Supporting links can be added');
+    assert.equal(await bytes(page), before);
+    await action(page, 'remove').click();
+    const references = sessions(page).locator('[data-native-session-dependencies]');
+    await expect(references).toContainText('Quality concept: Acceptance criteria / specification by example');
+    await expect(references).toContainText('Recovery event: Replay the interrupted request');
+    await expect(legacy(page, 'apply')).toBeDisabled();
+    assert.equal(await bytes(page), before);
+  });
+
+  test(`${engine}: accepted session diagram stays above expanding settings and whole-plan costs`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.sessionFixture;
+      const result = studio.importText(JSON.stringify(createShowcasePlan()), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const map = sessions(page).locator('.native-session-map');
+    await expect(map.locator('[data-native-session-map-people] li')).toHaveText(['Product lead', 'Engineering lead', 'Quality reviewer']);
+    await expect(map.locator('[data-native-team]')).toHaveText('Engineering');
+    await expect(map).toContainText('Readiness findings and rollout conditions');
+    await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
+    await expect(total(page)).toHaveText('$3,980.00');
+    const before = await bytes(page);
+    const settings = sessions(page).locator('[data-native-configure]'), trace = sessions(page).locator('[data-native-trace]');
+    const geometry = () => map.evaluate(el => { const box = el.getBoundingClientRect(); return { x: box.x, y: box.y + scrollY, width: box.width, height: box.height }; });
+    for (const width of [1152, 1322, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      if (await settings.getAttribute('open') !== null) await settings.locator('summary').click();
+      if (await trace.getAttribute('open') !== null) await trace.locator('summary').click();
+      const accepted = await geometry();
+      await settings.locator('summary').click(); await frames(page);
+      assert.ok(Object.entries(await geometry()).every(([key, value]) => Math.abs(value - accepted[key]) < .1), 'opening settings preserves accepted diagram placement within subpixel rounding');
+      await trace.locator('summary').click(); await frames(page);
+      assert.ok(Object.entries(await geometry()).every(([key, value]) => Math.abs(value - accepted[key]) < .1), 'opening whole-plan costs preserves accepted diagram placement within subpixel rounding');
+      const diagramBox = await map.boundingBox(), ledger = await trace.boundingBox();
+      assert.ok(ledger.width >= diagramBox.width - 1, 'whole-plan costs retain the available chapter width');
+    }
+    await field(page, 'minutesPerSession').fill('45');
+    await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
+    assert.equal(await bytes(page), before);
+    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
+    await legacy(page, 'cancel').click();
+    assert.equal(await bytes(page), before);
+    for (const width of [900, 1000, 1322]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await map.screenshot({ path: resolve(captures, `${engine}-session-map-${width}.png`) });
+    }
+    await page.setViewportSize({ width: 320, height: 1000 });
+    await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+    const reading = await map.evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth, nodes: [...el.querySelectorAll('li, h3, h4')].map(n => ({ client: n.clientWidth, scroll: n.scrollWidth })) }));
+    assert.ok(reading.scroll <= reading.client + 1); assert.ok(reading.nodes.every(n => n.scroll <= n.client + 1));
+    await map.screenshot({ path: resolve(captures, `${engine}-session-map-narrow.png`) });
+  });
+
   test(`${engine}: the native minutes knob shares precision text, preview, Apply and recovery`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
     await expect(dial(page)).toBeVisible();
@@ -326,7 +404,7 @@ for (const engine of names) {
     await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
     await creation.locator('[name="label"]').fill('Earlier person draft');
     const saved = root(page).locator('[data-native-saved]');
-    await saved.locator('summary').click();
+    await root(page).locator('[data-amp-panel="saved"]').click();
     await saved.locator('[data-saved-open^="session:"]').click();
     await expect(field(page, 'label')).toHaveValue('Session to resume');
     await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
@@ -350,7 +428,7 @@ for (const engine of names) {
     await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
     await creation.locator('[name="label"]').fill('Person still being drafted');
     const saved = root(page).locator('[data-native-saved]');
-    await saved.locator('summary').click();
+    await root(page).locator('[data-amp-panel="saved"]').click();
     await saved.locator('[data-native-saved-list] > li').filter({ hasText: 'Team waiting for a person' }).locator('[data-saved-open]').click();
     await expect(creation.locator('[name="label"]')).toHaveValue('Team waiting for a person');
     await expect(root(page).locator('[data-native-return-action]')).toHaveText('Return to session');
@@ -368,7 +446,7 @@ for (const engine of names) {
     const assembly = root(page).locator('[data-assembly-form]');
     await assembly.locator('[name="label"]').fill('Current team draft');
     const saved = root(page).locator('[data-native-saved]');
-    await saved.locator('summary').click();
+    await root(page).locator('[data-amp-panel="saved"]').click();
     await saved.locator('[data-saved-discard^="session:"]').click();
     await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
     await expect(assembly.locator('[name="label"]')).toHaveValue('Current team draft');

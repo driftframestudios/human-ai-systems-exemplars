@@ -159,7 +159,8 @@ async function assertMaximumDigitsFit(page) {
 
 async function assertFormContainerSeams(page) {
   const rem = await page.evaluate(() => Number.parseFloat(getComputedStyle(document.documentElement).fontSize));
-  const samples = [20 * rem - 1, 20 * rem + 1, 31 * rem - 1, 31 * rem + 1];
+  // Session and supporting-work controls share the current 26rem composition.
+  const samples = [26 * rem - 1, 26 * rem + 1];
   for (const target of samples) {
     let width = Math.ceil(target + 100);
     let observed;
@@ -181,10 +182,8 @@ async function assertFormContainerSeams(page) {
         inputTop: node.querySelector('input[inputmode]').getBoundingClientRect().top,
         buttonTop: node.querySelector('button').getBoundingClientRect().top })));
     assert.equal(controls.length, 3);
-    if (target > 31 * rem) assert.ok(Math.max(...controls.map(item => item.inputTop)) - Math.min(...controls.map(item => item.inputTop)) < .1,
+    if (target > 26 * rem) assert.ok(Math.max(...controls.map(item => item.inputTop)) - Math.min(...controls.map(item => item.inputTop)) < .1,
       `all three inputs share the row beyond the wide seam: ${JSON.stringify(controls)}`);
-    else if (target > 20 * rem) assert.ok(Math.abs(controls[0].inputTop - controls[1].inputTop) < .1 && controls[2].top > controls[1].top,
-      `two duration controls share a row before the session count: ${JSON.stringify(controls)}`);
     else assert.ok(controls[0].top < controls[1].top && controls[1].top < controls[2].top,
       `the smallest form preserves the ordered three-control flow: ${JSON.stringify(controls)}`);
     for (const control of controls) {
@@ -415,7 +414,7 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
 
     const trace = panel(page).locator('[data-native-trace]');
-    await expect(trace.locator('summary')).toHaveText('Cost breakdown');
+    await expect(trace.locator('summary')).toHaveText('Whole-plan cost breakdown');
     await trace.locator('summary').click();
     const people = trace.locator('[data-native-trace-list] > li');
     assert.equal(await people.count(), 4, 'the trace retains all four independently priced participants');

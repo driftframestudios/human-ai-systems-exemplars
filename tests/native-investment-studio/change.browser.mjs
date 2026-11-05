@@ -103,13 +103,27 @@ for (const engine of names) {
       await expect(field(page, key)).toBeFocused();
     }
     const lensChoice = panel(page).locator('[data-change-lens="operating@1.0.0"]');
-    await lensChoice.click(); await expect(lensChoice).toHaveAttribute('aria-pressed', 'true');
+    await lensChoice.scrollIntoViewIfNeeded();
+    const lensBox = await lensChoice.boundingBox();
+    await page.mouse.move(lensBox.x + lensBox.width / 2, lensBox.y + lensBox.height / 2);
+    await page.mouse.down();
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const pressedBox = await lensChoice.boundingBox();
+    assert.ok(Math.abs(pressedBox.x - lensBox.x) < 1 && Math.abs(pressedBox.y - lensBox.y) < 1,
+      'pressing a reel choice preserves its pointer target');
+    await page.mouse.up(); await expect(lensChoice).toHaveAttribute('aria-pressed', 'true');
     await expect(field(page, 'lens')).toHaveValue('operating@1.0.0');
+    const rotor = panel(page).locator('.native-change__lens-rotor');
+    assert.equal(await rotor.evaluate(el => getComputedStyle(el).pointerEvents), 'none');
+    const angle = await panel(page).locator('[data-change-lens-wheel]').evaluate(el => parseFloat(el.style.getPropertyValue('--lens-angle')));
     await field(page, 'lens').selectOption('people@1.0.0');
     await expect(panel(page).locator('[data-change-lens="people@1.0.0"]')).toHaveAttribute('aria-pressed', 'true');
+    assert.ok(await panel(page).locator('[data-change-lens-wheel]').evaluate(el => parseFloat(el.style.getPropertyValue('--lens-angle'))) >= angle + 360,
+      'a changed viewpoint makes the reel turn without moving its controls');
 
     await field(page, 'framework').selectOption('kotter@1.0.0');
     await expect(field(page, 'map.kotter.urgency.status')).toHaveValue('look'); await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
+    await expect(field(page, 'map.kotter.urgency.status').locator('option:checked')).toHaveText('Needs review');
     await expect(panel(page).locator('[data-change-preview]')).toContainText('Proposed investment: $16,000.00. Accepted investment: $16,000.00.');
     assert.equal(await bytes(page), initial);
     await action(page, 'reset').click();

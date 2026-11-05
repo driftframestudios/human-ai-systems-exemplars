@@ -27,7 +27,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   const editor = editing.capability;
   let disposed = false, generation = 0, composing = false, acknowledged = false, projection = null;
   let selection = null, target = null, reversed = false, beside = false, builtTarget = null, builtProjection = null;
-  let controls = new Map(), workGroups = new Map(), sequence = 0, observationGroup = null;
+  let controls = new Map(), workGroups = new Map(), sequence = 0, observationGroup = null, peopleGroup = null, prerequisiteGroup = null;
   const owns = epoch => !disposed && generation === epoch;
   function listen(node, event, handler) { node.addEventListener(event, handler); cleanup.push(() => node.removeEventListener(event, handler)); }
   function node(tag, content, className) {
@@ -74,14 +74,19 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       }));
     }
   }
-  function section(title, content) {
-    const region = node('section', undefined, 'native-capability__section'); region.append(node('h5', title));
+  function section(title, content, preview = null) {
+    const region = node(preview === null ? 'section' : 'details', undefined, 'native-capability__section');
+    region.dataset.capabilitySection = title;
+    region.append(node(preview === null ? 'h5' : 'summary', preview === null ? title : `${title} · ${preview}`));
     if (typeof content === 'string') region.append(node('p', content));
     else if (content) region.append(content);
     return region;
   }
   function renderCard() {
+    const expanded = new Set([...elements.reverse.querySelectorAll('details[open]')].map(item => item.dataset.capabilitySection));
     const def = definition(), row = record(), summary = row ? summaryFor(selection.kind, row.id) : null;
+    const openDraft = editor.read().draft;
+    const proposal = !row && openDraft?.capabilityId === target ? openDraft : null;
     elements.selected.hidden = !def;
     for (const key of ['reverse', 'beside', 'configure']) actions.get(key).disabled = !def;
     actions.get('remove').disabled = !row;
@@ -98,11 +103,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       control.dataset.capabilityKind === selection.kind && control.dataset.capabilityDefinition === def.id
       && control.dataset.capabilityVersion === def.version && control.dataset.capabilityId === (row?.id ?? '')));
     const overview = [node('h5', 'What becomes possible'), node('p', def.explanation), node('p', def.actor),
-      node('p', row?.context ?? 'Name where people will use this action.'), node('p', supportLabel(summary))];
+      node('p', row?.context ?? (proposal?.raw.context.trim() || 'Name where people will use this action.')),
+      node('p', proposal ? 'Proposed for this plan. Apply accepts its people and supporting work.' : supportLabel(summary))];
     if (row) overview.push(node('p', row.lifecycle === 'retired' ? 'Retired from the plan. Its separately owned work remains available.' : 'Included in this plan.'));
     elements.front.replaceChildren(...overview);
     const acceptance = section('How to check the result', def.acceptanceJob);
-    acceptance.append(node('p', `${def.id} · version ${def.version}${row ? ` · instance ${row.id}` : ' · new proposal'}`));
     const detail = [acceptance,
       section('People and responsibility', row ? `${row.teamId ? projection.state.teams.find(team => team.id === row.teamId)?.label : 'Choose a team'}. ${row.responsiblePersonIds.map(id => projection.state.people.find(person => person.id === id)?.label ?? id).join(', ') || 'Choose the people carrying the work'}. Decision: ${projection.state.people.find(person => person.id === row.decisionOwnerPersonId)?.label ?? 'Choose who decides'}.` : 'Plan the team, the people carrying the work, and the person who decides.')];
     const workList = node('ul', undefined, 'native-capability__support');
@@ -135,12 +140,15 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       Object.assign(plan.dataset, { capabilityKind: required.kind, capabilityDefinition: required.definitionId, capabilityVersion: required.definitionVersion });
       li.append(plan); prerequisites.append(li);
     }
-    detail.push(section('Prerequisites', prerequisites.children.length ? prerequisites : 'This definition has no required prerequisite definition.'));
+    detail.push(section('Prerequisites', prerequisites.children.length ? prerequisites : 'This definition has no required prerequisite definition.',
+      def.prerequisiteDefinitions.length ? def.prerequisiteDefinitions.map(item => getCapabilityDefinition(item.kind, item.definitionId, item.definitionVersion).action).join(', ') : 'Ready to plan directly'));
     const observations = projection.state.capabilityEvidence.filter(item => item.subject.kind === selection.kind && item.subject.instanceId === row?.id);
     const history = node('ul');
     for (const item of observations) history.append(node('li', `${STAGES[item.stage]} · ${item.observation} Context: ${item.context}. Recorded by ${projection.state.people.find(person => person.id === item.recorderPersonId)?.label ?? item.recorderPersonId} at plan revision ${item.observedPlanRevision}. Applies to: ${item.reviewBoundary}.`));
-    detail.push(section('Recorded observations', history.children.length ? history : 'Add an observation in settings when people have evidence to record. Current support checks remain separate from these records.'));
+    detail.push(section('Recorded observations', history.children.length ? history : 'Add an observation in settings when people have evidence to record. Current support checks remain separate from these records.',
+      observations.at(-1)?.observation ?? 'Add evidence when available'));
     elements.reverse.replaceChildren(...detail);
+    for (const details of elements.reverse.querySelectorAll('details')) details.open = expanded.has(details.dataset.capabilitySection);
   }
   function options(source, selected = []) {
     const rows = source === 'capabilities' ? ['ability', 'practice'].flatMap(kind => projection.state[COLLECTION[kind]].map(row =>
@@ -151,17 +159,28 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     return rows;
   }
   function field(parent, key, metadata, raw) {
-    const group = node('div', undefined, `native-capability__field${metadata.numeric ? ' native-capability__field--numeric' : ''}`), label = node('label', metadata.label);
-    const input = document.createElement(metadata.source && metadata.kind !== 'ids' || metadata.choices ? 'select'
+    const checkboxes = key.startsWith('support.');
+    const group = node(checkboxes ? 'fieldset' : 'div', undefined, `native-capability__field${metadata.numeric ? ' native-capability__field--numeric' : ''}`), label = node(checkboxes ? 'legend' : 'label', metadata.label);
+    const input = document.createElement(checkboxes ? 'ul' : metadata.source && metadata.kind !== 'ids' || metadata.choices ? 'select'
       : metadata.kind === 'ids' ? 'select' : metadata.maxLength > 120 ? 'textarea' : 'input');
     input.id = `${instance}-field-${++sequence}`; input.name = key; label.htmlFor = input.id; input.dataset.capabilityField = key;
-    if (metadata.kind === 'ids') { input.multiple = true; input.size = Math.min(4, Math.max(2, options(metadata.source, raw).length)); input.className = 'native-capability__choices'; }
-    if (input.tagName === 'SELECT') {
+    if (metadata.kind === 'ids') { input.className = 'native-capability__choices'; if (!checkboxes) { input.multiple = true; input.size = Math.min(4, Math.max(2, options(metadata.source, raw).length)); } }
+    if (checkboxes) {
+      input.tabIndex = -1;
+      for (const [value, text] of options(metadata.source, raw)) {
+        const item = node('li'), choice = node('label'), check = document.createElement('input');
+        check.type = 'checkbox'; check.value = value; check.dataset.capabilityField = key;
+        check.dataset.capabilityChoice = value; check.setAttribute('aria-describedby', input.id + '-error');
+        choice.append(check, node('span', text)); item.append(choice); input.append(item);
+      }
+      if (!input.children.length) input.append(node('li', 'Add a working session to choose support.'));
+    } else if (input.tagName === 'SELECT') {
       const choices = metadata.choices ? metadata.choices.map(value => [value, CHOICES[value] ?? value])
         : [...(metadata.kind === 'ids' ? [] : [['', 'Choose when known']]), ...options(metadata.source, metadata.kind === 'ids' ? raw : [raw])];
       for (const [value, text] of choices) { const option = node('option', text); option.value = value; input.append(option); }
     } else {
       input.maxLength = metadata.maxLength; input.autocomplete = 'off';
+      if (input.tagName === 'TEXTAREA') input.rows = 3;
       if (input.tagName === 'INPUT') input.type = 'text';
       if (metadata.numeric) { input.inputMode = 'numeric'; input.spellcheck = false; }
     }
@@ -180,18 +199,22 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       const create = node('button', `Add ${type === 'person' ? 'a person' : type === 'team' ? 'a team' : 'a working session'}`, 'native-control--create');
       create.type = 'button'; create.dataset.nativeCreate = type; create.dataset.nativeReturn = 'capability'; create.dataset.nativeReturnField = key; group.append(create);
     }
-    group.append(error); parent.append(group); controls.set(key, { input, error, metadata });
+    group.append(error); parent.append(group); controls.set(key, { input, error, metadata, checkboxes });
   }
   function buildFields(descriptor, raw) {
-    controls = new Map(); workGroups = new Map(); observationGroup = null; elements.fields.replaceChildren();
+    controls = new Map(); workGroups = new Map(); observationGroup = null; peopleGroup = null; prerequisiteGroup = null; elements.fields.replaceChildren();
     if (!descriptor || descriptor.mode === 'remove') {
       if (descriptor) elements.fields.append(node('p', 'Remove this instance? Its separately owned working sessions and funding remain in the plan.'));
       return;
     }
-    const basics = section('People and context'); elements.fields.append(basics);
-    for (const key of ['context', 'teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle']) field(basics, key, descriptor.fields[key], raw[key]);
+    const basics = section('Use in this plan'); elements.fields.append(basics);
+    field(basics, 'context', descriptor.fields.context, raw.context);
+    if (descriptor.mode === 'create' && projection.state.planId === 'service-request-pilot') basics.append(node('p', 'This example starts with an editable pilot proposal. Apply adds it to your plan.'));
+    peopleGroup = node('details', undefined, 'native-capability__section'); peopleGroup.dataset.capabilityPeople = '';
+    peopleGroup.append(node('summary')); elements.fields.append(peopleGroup);
+    for (const key of ['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle']) field(peopleGroup, key, descriptor.fields[key], raw[key]);
     const prerequisites = node('details'); prerequisites.append(node('summary', 'Prerequisites · choose the supporting abilities and practices'));
-    field(prerequisites, 'prerequisites', descriptor.fields.prerequisites, raw.prerequisites); elements.fields.append(prerequisites);
+    field(prerequisites, 'prerequisites', descriptor.fields.prerequisites, raw.prerequisites); elements.fields.append(prerequisites); prerequisiteGroup = prerequisites;
     for (const requirement of descriptor.definition.supportRequirements) {
       const group = node('details', undefined, 'native-capability__section'); group.dataset.capabilityRequirement = requirement.id;
       group.append(node('summary', requirement.label), node('p', requirement.description));
@@ -229,10 +252,20 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       elements.summary.textContent = `${descriptor.mode === 'remove' ? 'Remove' : 'Settings'} · ${descriptor.definition.action}`;
       for (const [key, control] of controls) {
         const raw = draft.raw[key];
-        if (control.metadata.kind === 'ids') for (const option of control.input.options) option.selected = raw.includes(option.value);
+        if (control.checkboxes) for (const check of control.input.querySelectorAll('input')) check.checked = raw.includes(check.value);
+        else if (control.metadata.kind === 'ids') for (const option of control.input.options) option.selected = raw.includes(option.value);
         else if (control.input.value !== raw) control.input.value = raw;
         const error = draft.errors.find(item => item.path === `draft.${key}`);
         control.input.setAttribute('aria-invalid', String(Boolean(error))); control.error.textContent = error?.message ?? '';
+      }
+      if (peopleGroup) {
+        const team = projection.state.teams.find(row => row.id === draft.raw.teamId)?.label;
+        const owner = projection.state.people.find(row => row.id === draft.raw.decisionOwnerPersonId)?.label;
+        peopleGroup.querySelector('summary').textContent = `People and responsibility · ${[team, owner ? `${owner} decides` : 'Choose who decides'].filter(Boolean).join(' · ')}`;
+      }
+      if (prerequisiteGroup) {
+        const selected = new Map(options('capabilities', draft.raw.prerequisites));
+        prerequisiteGroup.querySelector('summary').textContent = `Prerequisites · ${draft.raw.prerequisites.map(id => selected.get(id)).join(', ') || (descriptor.definition.prerequisiteDefinitions.length ? 'Choose the supporting abilities and practices' : 'Ready to plan directly')}`;
       }
       for (const [id, { group, newWork }] of workGroups) {
         newWork.hidden = draft.raw[`new.${id}.enabled`] !== 'yes';
@@ -364,11 +397,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
   });
   function input(event) {
     const key = event.target.dataset.capabilityField, control = controls.get(key), view = editor.read();
-    if (disposed || !isActive() || !control || control.input !== event.target || !view.draft || view.status !== 'editing') return;
-    if (event.type === 'input' && event.target.tagName === 'SELECT' || event.type === 'change' && event.target.tagName !== 'SELECT') return;
+    if (disposed || !isActive() || !control || (control.checkboxes ? !control.input.contains(event.target) : control.input !== event.target) || !view.draft || view.status !== 'editing') return;
+    if (control.checkboxes ? event.type !== 'change' : event.type === 'input' && event.target.tagName === 'SELECT' || event.type === 'change' && event.target.tagName !== 'SELECT') return;
     const epoch = ++generation;
     if (control.metadata.kind === 'ids') {
-      const chosen = new Set([...control.input.selectedOptions].map(option => option.value));
+      const chosen = new Set([...(control.checkboxes ? control.input.querySelectorAll('input:checked') : control.input.selectedOptions)].map(option => option.value));
       const ordered = [...view.draft.raw[key].filter(id => chosen.has(id)), ...chosen].filter((id, index, ids) => ids.indexOf(id) === index);
       changed(editor.setIds(view.draft.token, key, ordered), epoch);
     } else changed(editor.setText(view.draft.token, key, control.input.value), epoch);

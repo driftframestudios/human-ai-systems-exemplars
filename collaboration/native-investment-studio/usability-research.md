@@ -330,3 +330,50 @@ consequence for four additional quarter-hours across its three reviewers.
 These observations establish those local operations. Touch assistive-technology
 acceptance retains a fitting device observation before a public conformance
 claim; visible precision and step controls remain part of the shipped task.
+
+## 2026-11-05 — Read the showcase before editing it
+
+**Receiving decision.** #694 receives the annotated laptop review after #693.
+Visitors should first understand the people and shared work, then inspect a
+compact set of controls. The observed session layout changed its column model
+when Settings opened; the whole-plan ledger then occupied a narrow column.
+The lens's pressed transform also replaced its centering transform, moving the
+target between pointer-down and pointer-up. These are source observations with
+specific receiving repairs.
+
+**Evidence and design bridge.**
+
+| Source and standing | Consequence for this surface |
+| --- | --- |
+| [Shneiderman's original visual-information taxonomy](https://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf) treats overview, relationships and details as distinct useful operations. | Show the accepted session's people and actual support relations before editing. Keep the exact accounting available below. This is a local adaptation of the taxonomy. |
+| [Hornbæk, Bederson and Plaisant's controlled overview study](https://courses.ischool.berkeley.edu/i247/s04/resources/p362-hornbaek.pdf) reports mixed task effects and overhead from switching views in map navigation. | A permanent side-by-side overview is an option, with task-dependent value. The human's observed layout favors a full-width diagram followed by optional details. Map-study results do not establish Studio comprehension. |
+| [Nielsen's progressive-disclosure guidance](https://www.nngroup.com/articles/progressive-disclosure/) is practiced design guidance for keeping common work available while deferring secondary features. | Keep accepted investment, named participants and the selected session visible. Put manuals and complete accounting behind clear controls. Readable purpose text precedes its explicit Edit action. |
+| [Bringhurst's primary-text excerpt](https://teachinginter.net/reader/typographic-style.html), particularly section 1.2.2, gives textual levels distinct but harmonious forms. | Headings, relation labels, quantities, descriptions and actions receive consistent weight, scale and spacing. Reduce oversized framing and repetition before reducing readable text. |
+| [WAI disclosure semantics](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) and [reflow guidance](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html) establish operation and reading boundaries. | The amp's buttons synchronize their expanded state with their existing native receivers. Enhanced controls replace the fallback summary's focus stop. Expanded text uses ordinary page scrolling and remains readable with enlarged type. |
+
+**Chosen composition.** Coordination starts with its connection diagram. A
+full-width session diagram names the selected participants separately from its
+owning team and shows the work records that explicitly reference the session.
+The connector words describe participation and planned support. Accepted values
+remain visible while a separate editor previews a proposal. Settings and
+whole-plan costs expand below without changing the diagram's column model.
+Normal vertical expansion remains intentional; pixel-stable page height would
+require clipping or another scrolling region.
+
+The amp has a compact Purpose, Saved edits and Operating manual row. Purpose
+opens as complete text; Edit begins a draft. Saved edits retain their current
+recovery owner. Small exclusive choices use direct native radios. Repeated
+quality concepts and rehearsals use a selection rail with one inspected record,
+while stable record identity preserves each unfinished entry. The proposed
+relationship diagram and rails remain HTML readings when decoration is absent.
+
+**Observation and limit.** The initial pilot's Engineering session includes the
+Product lead, Engineering lead and Quality reviewer. Engineer belongs to the
+team but is outside that session. Four 30-minute sessions imply six
+participant-hours; the whole-plan commitment remains $3,980. A duration draft
+keeps that accepted diagram intact until Apply. Browser checks distinguish
+that state contract and confirm unchanged diagram geometry across disclosure
+operations. Cross-engine screenshots establish the exercised composition;
+the human's next walkthrough supplies the receiving usability observation.
+Further research did not change this bounded repair. The authored score and
+broader visual analysis retain #653 and #654 as their receivers.

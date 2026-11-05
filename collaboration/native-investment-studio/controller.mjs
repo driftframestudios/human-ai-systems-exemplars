@@ -65,6 +65,19 @@ export function mountCoordinationPanel(root, options = {}) {
   let capabilityPanel = null;
   let changePanel = null;
   let assurancePanel = null;
+  const ampTools = root.querySelector('[data-native-amp-tools]');
+  const ampPanels = new Map([...root.querySelectorAll('[data-amp-panel]')].map(button =>
+    [button.dataset.ampPanel, { button, panel: root.querySelector(`#${button.getAttribute('aria-controls')}`) }]));
+  function syncAmpTools() {
+    for (const [name, { button, panel }] of ampPanels) {
+      button.setAttribute('aria-expanded', String(panel.open && !panel.hidden));
+      if (name === 'saved') {
+        const count = editing.read().parked.length;
+        button.disabled = count === 0;
+        button.querySelector('[data-amp-saved-count]').textContent = `(${count})`;
+      }
+    }
+  }
   let coordinationEditor = 'session';
   let peopleEditor = 'person';
   let activeChapter = 'coordination';
@@ -239,7 +252,8 @@ export function mountCoordinationPanel(root, options = {}) {
     const key = { session: 'sessionId', connection: 'connectionId', contribution: 'contributionId', assembly: 'assemblyId', capability: 'capabilityId', change: 'changeId', assurance: 'assuranceId' }[kind];
     if (view.status !== 'editing' || view.draft?.[key] !== target) return;
     const scope = { session: '[data-native-session-editor]', connection: '[data-native-connection-editor]', contribution: '[data-responsibility-configure="contribution"]', assembly: '[data-assembly-form]', capability: '[data-capability-form]', change: '[data-change-form]', assurance: '[data-assurance-form]' }[kind];
-    const form = root.querySelector(scope), input = form?.querySelector(`[name="${field}"]`);
+    const form = root.querySelector(scope), input = form?.querySelector(`[name="${field}"]`)
+      ?? form?.querySelector(`[data-${kind}-field="${field}"]`);
     if (!input) return;
     if (['capability', 'change', 'assurance'].includes(kind)) {
       for (let ancestor = input.parentElement; ancestor && ancestor !== form; ancestor = ancestor.parentElement) {
@@ -258,6 +272,8 @@ export function mountCoordinationPanel(root, options = {}) {
     savedProjection = projection;
     savedByKey.clear();
     elements.saved.hidden = records.length === 0;
+    if (!records.length) elements.saved.open = false;
+    syncAmpTools();
     text('savedCount', String(records.length));
     const fragment = document.createDocumentFragment();
     const labels = { hoursPerSession: 'Hours per session', minutesPerSession: 'Minutes per session', occurrences: 'Working sessions',
@@ -440,6 +456,19 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
+    if (button.dataset.ampPanel) {
+      const selected = ampPanels.get(button.dataset.ampPanel);
+      const next = !selected.panel.open;
+      for (const { panel } of ampPanels.values()) {
+        if (panel !== selected.panel && panel.open) {
+          if (panel.hasAttribute('data-native-purpose')) purposePanel.close();
+          else panel.open = false;
+        }
+      }
+      if (!next && selected.panel.hasAttribute('data-native-purpose')) purposePanel.close();
+      else selected.panel.open = next;
+      syncAmpTools(); return;
+    }
     if (button.dataset.nativeShowcaseAction && studio.read().state.planId === 'service-request-pilot') {
       const action = button.dataset.nativeShowcaseAction;
       if (action === 'baseline') {
@@ -533,6 +562,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const view = editor.read();
     elements.fallback.hidden = false;
     elements.fallback.textContent = 'Editing closed.';
+    if (ampTools) ampTools.hidden = true;
     delete root.dataset.nativeReady;
     root.dataset.nativeState = 'disposed';
     announce('Editing closed.');
@@ -544,6 +574,9 @@ export function mountCoordinationPanel(root, options = {}) {
   try {
     render();
     listen(root, 'click', click);
+    if (ampTools) ampTools.hidden = false;
+    for (const { panel } of ampPanels.values()) listen(panel, 'toggle', syncAmpTools);
+    syncAmpTools();
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(window, 'pageshow', () => render());
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
@@ -602,6 +635,7 @@ export function mountCoordinationPanel(root, options = {}) {
       onAccepted: () => render(), onEditing: () => render(),
     });
     purposePanel = mountPurposePanel(requireElement('[data-native-purpose]'), { studio, editing,
+      trigger: ampPanels.get('purpose')?.button,
       onOpen: () => { editing.park(); },
       onClose: () => {
         if (activeChapter === 'coordination') resumeCoordination();

@@ -173,8 +173,10 @@ for (const engine of names) {
     await expect(people(page).locator('[data-person-configure] fieldset')).toBeEnabled();
     await people(page).locator('[data-assembly-configure] > summary').click();
     await expect(form(page).locator('fieldset')).toBeEnabled();
-    await root(page).locator('[data-native-purpose] > summary').click();
-    await root(page).locator('[data-native-purpose] > summary').click();
+    await root(page).locator('[data-amp-panel="purpose"]').click();
+    await expect(root(page).locator('[data-native-purpose] [data-purpose-reading]')).toBeVisible();
+    await expect(root(page).locator('[data-native-purpose] form')).toBeHidden();
+    await root(page).locator('[data-amp-panel="purpose"]').click();
     await expect(field(page, 'label')).toHaveValue('Operations');
     await tab(page, 'coordination').click();
     await root(page).locator('[data-native-configure] input[name="hoursPerSession"]').fill('2');

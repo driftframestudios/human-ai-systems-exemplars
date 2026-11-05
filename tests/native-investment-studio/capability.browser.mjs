@@ -33,7 +33,7 @@ const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`
 const bytes = page => page.evaluate(() => window.capabilityFixture.studio.exportText());
 const choice = (page, id) => panel(page).locator(`[data-capability-action="select"][data-capability-definition="${id}"]`).first();
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-async function open(t, engine) {
+async function open(t, engine, showcase = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request)); page.on('requestfinished', request => pending.delete(request)); page.on('requestfailed', request => pending.delete(request));
@@ -45,31 +45,76 @@ async function open(t, engine) {
   });
   await page.goto(server.origin + route, { waitUntil: 'load' }); await page.evaluate(() => document.fonts.ready);
   await expect(root(page)).toHaveAttribute('data-native-ready', 'true');
-  await page.evaluate(async () => {
+  await page.evaluate(async showcase => {
     const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
     const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
     const { createExamplePlan } = await import('/collaboration/native-investment-studio/contract.mjs');
+    const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
     const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
     const element = document.querySelector('[data-native-coordination]'); mountCoordinationPanel(element).dispose();
-    const plan = createExamplePlan(); plan.people = plan.people.slice(0, 2).map(person => ({ ...person, fundedMinutes: 4800 }));
-    plan.teams[0].personIds = plan.people.map(person => person.id);
-    plan.work = [{ ...plan.work[0], personIds: [...plan.teams[0].personIds], minutesPerOccurrence: 120, occurrences: 1, funding: 'allocated' }];
+    const plan = showcase ? createShowcasePlan() : createExamplePlan();
+    if (!showcase) {
+      plan.people = plan.people.slice(0, 2).map(person => ({ ...person, fundedMinutes: 4800 }));
+      plan.teams[0].personIds = plan.people.map(person => person.id);
+      plan.work = [{ ...plan.work[0], personIds: [...plan.teams[0].personIds], minutesPerOccurrence: 120, occurrences: 1, funding: 'allocated' }];
+    }
     const studio = createStudio(plan); window.capabilityFixture = { studio, editing: createDraftCoordinator(studio), controller: mountCoordinationPanel(element, { studio }) };
-  });
+  }, showcase);
   await tab(page, 'work').click(); return page;
 }
 async function support(page) {
   await field(page, 'context').fill('Recover an accepted change in the pilot');
+  await panel(page).locator('[data-capability-people] > summary').click();
   await field(page, 'teamId').selectOption('delivery');
   await field(page, 'responsiblePersonIds').selectOption(['product-one', 'product-two']);
   await field(page, 'decisionOwnerPersonId').selectOption('product-one');
   for (const id of ['preparation', 'review']) {
     await panel(page).locator(`[data-capability-requirement="${id}"] > summary`).click();
-    await field(page, `support.${id}`).selectOption('review');
+    await panel(page).locator(`input[data-capability-field="support.${id}"][value="review"]`).check();
   }
 }
 
 for (const engine of names) {
+  test(`${engine}: the pilot proposal previews its people and keeps support choices stable across compact columns`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true), initial = await bytes(page);
+    await choice(page, 'inspect-history').click();
+    await expect(field(page, 'context')).toHaveValue('Help pilot reviewers find an earlier service-request decision and recover why it changed.');
+    const people = panel(page).locator('[data-capability-people]');
+    await expect(people).not.toHaveAttribute('open', '');
+    await expect(people.locator('summary')).toHaveText('People and responsibility · Engineering · Product lead decides');
+    const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
+    await expect(prepare.locator('summary')).toContainText('Prototype pairing');
+    await prepare.locator('summary').click();
+    const support = prepare.locator('ul.native-capability__choices');
+    const selected = support.locator('input[value="pairing"]'); await expect(selected).toBeChecked();
+    const positions = await support.locator('li').evaluateAll(items => items.map(item => ({ x: item.offsetLeft, y: item.offsetTop })));
+    assert.equal(positions[0].y, positions[1].y); assert.ok(positions[1].x > positions[0].x);
+    await selected.uncheck(); await support.locator('input[value="research"]').check();
+    assert.deepEqual(await support.locator('li').evaluateAll(items => items.map(item => ({ x: item.offsetLeft, y: item.offsetTop }))), positions,
+      'changing membership leaves each choice in place');
+    await page.setViewportSize({ width: 390, height: 1000 });
+    const narrow = await support.locator('li').evaluateAll(items => items.map(item => ({ x: item.offsetLeft, y: item.offsetTop })));
+    assert.equal(narrow[0].x, narrow[1].x); assert.ok(narrow[1].y > narrow[0].y);
+    await expect(support.locator('input[value="research"]')).toBeChecked();
+    assert.equal(await bytes(page), initial); await expect(total(page)).toHaveText('$3,980.00');
+    await panel(page).screenshot({ path: resolve(captures, `${engine}-compact-proposal.png`) });
+    await prepare.locator('[data-native-create="session"]').click();
+    const session = root(page).locator('[data-native-session-editor]');
+    await session.locator('[name="label"]').fill('History walkthrough');
+    await session.locator('[name="teamId"]').selectOption('engineering');
+    await session.locator('[data-session-person="ari"]').check();
+    await session.locator('[name="funding"]').selectOption('allocated');
+    await session.locator('[data-action="apply"]').click();
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(panel(page)).toHaveAttribute('data-capability-state', 'stale');
+    await action(page, 'review').click();
+    await expect(prepare).toHaveAttribute('open', ''); await expect(support).toBeFocused();
+    await expect(support.locator('input[value="research"]')).toBeChecked();
+    await expect(prepare.getByRole('checkbox', { name: 'History walkthrough' })).not.toBeChecked();
+    await prepare.getByRole('checkbox', { name: 'History walkthrough' }).check();
+    assert.equal((await page.evaluate(() => window.capabilityFixture.studio.read().state.abilities.length)), 0,
+      'returning supplies the new session while keeping the capability proposal unaccepted');
+  });
   test(`${engine}: a card reverses, installs shared support and explicit review, then returns through Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await expect(panel(page).locator('[data-capability-title]')).toHaveText('Actively negotiate expectations');

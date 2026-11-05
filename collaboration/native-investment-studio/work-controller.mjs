@@ -1,9 +1,11 @@
 import { mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
-import { describeAssuranceReference } from './assurance-models.mjs';
+import { describeAssuranceReference, getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
-import { getChangeFramework } from './change-models.mjs';
+import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
+import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 
 const INSTANCES = new WeakMap();
 const NUMBER_FIELDS = Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']);
@@ -53,6 +55,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
   let membersProjection = null, membersIds = null, membersTeam = null, memberControls = new Map();
+  let diagramProjection = null, diagramId = null;
   let renderedSelection = undefined, renderedDraftToken = null, renderedTeam = undefined;
   let composing = false, disposed = false, acknowledgedOpen = false, generation = 0;
   let retiredToken = null, membersTarget = null, memberOrder = [];
@@ -121,6 +124,51 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       : view.draft ? 'Set the people, time and funding below.' : 'Add a working session to plan its people, time and funding.';
     elements.acceptedStatus.textContent = row ? `${row.status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[row.funding]}` : '';
     elements.context.textContent = `Across this ${projection.state.horizonWeeks}-week plan.`;
+    renderSessionMap(row);
+  }
+  function renderSessionMap(row) {
+    const participantList = root.querySelector('[data-native-session-map-people]');
+    if (!participantList || (diagramProjection === projection && diagramId === row?.id)) return;
+    diagramProjection = projection; diagramId = row?.id;
+    const item = (label, note) => {
+      const li = document.createElement('li'), name = document.createElement('strong');
+      name.textContent = label; li.append(name);
+      if (note) { const small = document.createElement('small'); small.textContent = note; li.append(small); }
+      return li;
+    };
+    participantList.replaceChildren(...(row?.personIds.length ? row.personIds.map(id => item(people.get(id).label))
+      : [item(row ? 'Participants to be chosen' : 'Choose the people for this session')]));
+    root.querySelector('[data-native-session-map-time]').textContent = row
+      ? `${duration(row.minutesPerOccurrence)} per person · ${row.occurrences} working sessions` : 'Time to be planned';
+    const supported = [];
+    if (row) {
+      for (const connection of projection.state.connections) if (connection.workIds.includes(row.id))
+        supported.push(item(connection.sharedObject, `${teams.get(connection.senderTeamId).label} → ${teams.get(connection.receiverTeamId).label}`));
+      for (const contribution of projection.state.contributions) if (contribution.workIds.includes(row.id))
+        supported.push(item(CONTRIBUTION_CATEGORIES.find(category => category.id === contribution.categoryId).label, contribution.receiverPersonId ? `Received by ${people.get(contribution.receiverPersonId).label}` : 'Receiver to be chosen'));
+      for (const mapping of projection.state.changeSettings.frameworkMaps) {
+        for (const component of mapping.components) if (component.workIds.includes(row.id))
+          supported.push(item(getChangeComponent(mapping.frameworkId, mapping.version, component.componentId).label,
+            getChangeFramework(mapping.frameworkId, mapping.version).name));
+      }
+      const assurance = projection.state.assuranceSettings;
+      for (const concept of assurance.quality.concepts) if (concept.workIds.includes(row.id))
+        supported.push(item(getQualityConcept(concept.conceptId).label, concept.included ? 'Quality work · Included' : 'Quality work · Available'));
+      for (const event of assurance.recoveryEvents) if (event.workIds.includes(row.id))
+        supported.push(item(event.label, 'Recovery work'));
+      for (const learning of assurance.learningActions) if (learning.workIds.includes(row.id))
+        supported.push(item(getLearningPromptDefinition(learning.promptId).label, 'Learning work'));
+      for (const rehearsal of assurance.rehearsals) if (rehearsal.workIds.includes(row.id))
+        supported.push(item(getRehearsalDefinition(rehearsal.definitionId, rehearsal.definitionVersion).name, 'Rehearsal response'));
+      for (const [collection, kind] of [['abilities', 'ability'], ['practices', 'practice']]) {
+        for (const instance of projection.state[collection]) if (capabilityWorkIds(instance).includes(row.id)) {
+          const definition = getCapabilityDefinition(kind, instance.definitionId, instance.definitionVersion);
+          supported.push(item(definition.action, instance.teamId ? teams.get(instance.teamId).label : 'Team to be chosen'));
+        }
+      }
+    }
+    root.querySelector('[data-native-session-map-support]').replaceChildren(...(supported.length ? supported
+      : [item('Supporting links can be added', 'Link this session from Coordination, Abilities, Change or Quality & recovery.')]));
   }
   function renderTeam(raw) {
     if (renderedTeam !== raw) {
@@ -184,7 +232,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function renderDependencies(error) {
     const references = error?.references ?? [];
     elements.dependencies.hidden = references.length === 0;
-    elements.dependencies.replaceChildren(...references.map(reference => {
+    const records = new Map(references.map(reference => [`${reference.collection}:${reference.collection === 'assuranceSettings' ? reference.field.split('[')[0] : ''}:${reference.id}`, reference]));
+    elements.dependencies.replaceChildren(...[...records.values()].map(reference => {
       const row = document.createElement('li');
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       if (assurance) {
@@ -198,6 +247,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
         const link = document.createElement('a'); link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
         link.textContent = 'Review linked sessions in Change'; row.append(`${name}: `, link); return row;
       }
+      const connection = reference.collection === 'connections' && projection.state.connections.find(row => row.id === reference.id);
+      if (connection) { row.textContent = `Connection: ${connection.sharedObject}`; return row; }
+      const ability = reference.collection === 'abilities' && projection.state.abilities.find(row => row.id === reference.id);
+      if (ability) { row.textContent = `Ability: ${getCapabilityDefinition('ability', ability.definitionId, ability.definitionVersion).action}`; return row; }
+      const contribution = reference.collection === 'contributions' && projection.state.contributions.find(row => row.id === reference.id);
+      if (contribution) { row.textContent = `Contribution: ${CONTRIBUTION_CATEGORIES.find(category => category.id === contribution.categoryId).label}`; return row; }
       const practice = practices.get(reference.id);
       const name = PRACTICE_LABELS.get(practice?.definitionId) ?? reference.id;
       row.textContent = `Practice: ${name}${practice ? ` · ${teams.get(practice.teamId).label}` : ''}`;

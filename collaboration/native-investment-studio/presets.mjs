@@ -3,6 +3,47 @@ import { createExamplePlan, preparePlan, PlanError } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
 
 const PRESET_VERSION = '1.0.0';
+
+// These editable proposals belong to the service-request example. They reuse
+// its accepted work; the ordinary capability editor still owns Apply and Undo.
+const SHOWCASE_CAPABILITY_CONTEXT = Object.freeze({
+  'compare-alternatives': 'Compare ways to route a service request against response time, clear ownership, and recovery after a missed handoff.',
+  'recover-interrupted-work': 'Resume a service request after an interruption with the saved details and next responsible person visible.',
+  'approve-change': 'Review the pilot scope, operating instructions, and recovery evidence before deciding whether to proceed.',
+  'trace-evidence': 'Trace a pilot-readiness claim to the research notes or walkthrough observation that supports it.',
+  'edit-records-in-bulk': 'Preview a routing change across selected service requests and restore their earlier assignments if needed.',
+  'coordinate-handoff': 'Agree who receives each service request, what response they owe, and how to recover a missed handoff.',
+  'inspect-history': 'Help pilot reviewers find an earlier service-request decision and recover why it changed.',
+  expectation: 'Agree the pilot scope and expected response at each decision review.',
+  focalization: 'Identify the question the product lead must resolve before choosing the pilot scope.',
+  experimentation: 'Rehearse a routine request and a missed handoff before committing to a wider rollout.',
+  opportunity: 'Compare extra pilot review time with the engineering and operations work it would displace.',
+  continuity: 'Prepare the operating instructions and receiving responsibilities so a service request can continue after a handoff.',
+  assurance: 'Walk through routine requests and recovery instructions before a pilot decision.',
+});
+export function showcaseCapabilityDefaults(plan, definition) {
+  if (plan.planId !== 'service-request-pilot' || definition.version !== '1.0.0') return null;
+  const context = SHOWCASE_CAPABILITY_CONTEXT[definition.id];
+  if (!context) return null;
+  const operational = ['recover-interrupted-work', 'coordinate-handoff', 'continuity', 'assurance'].includes(definition.id);
+  const investigative = ['compare-alternatives', 'trace-evidence', 'focalization', 'opportunity'].includes(definition.id);
+  const teamId = operational ? 'operations' : investigative ? 'product' : 'engineering';
+  const team = plan.teams.find(row => row.id === teamId && row.lifecycle === 'active');
+  const activePeople = new Set(plan.people.filter(row => row.lifecycle === 'active').map(row => row.id));
+  const activeWork = new Set(plan.work.filter(row => row.lifecycle === 'active' && row.status !== 'paused').map(row => row.id));
+  const preparation = operational ? 'rehearsal' : investigative ? 'research' : 'pairing';
+  const supportByPhase = { preparation, coordination: 'review', review: 'review' };
+  return { context, teamId: team?.id ?? null, responsiblePersonIds: (team?.personIds ?? []).filter(id => activePeople.has(id)),
+    decisionOwnerPersonId: activePeople.has('maya') ? 'maya' : null,
+    prerequisites: definition.prerequisiteDefinitions.flatMap(required => {
+      const row = plan[required.kind === 'ability' ? 'abilities' : 'practices'].find(item => item.lifecycle === 'active'
+        && item.definitionId === required.definitionId && item.definitionVersion === required.definitionVersion);
+      return row ? [{ kind: required.kind, instanceId: row.id }] : [];
+    }),
+    supportBindings: definition.supportRequirements.map(requirement => ({ requirementId: requirement.id,
+      workIds: activeWork.has(supportByPhase[requirement.phase]) ? [supportByPhase[requirement.phase]] : [] })),
+  };
+}
 function workingSessions() {
   const plan = createExamplePlan();
   plan.planId = 'shared-working-sessions';
