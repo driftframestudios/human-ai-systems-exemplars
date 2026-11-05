@@ -12,9 +12,10 @@ through Undo, saved edits, or a baseline comparison.
 The native showcase joins Coordination, People, Abilities, Change, Quality &
 recovery, and Investment through one accepted plan. It includes the authored
 horizon, team arrangements, source-linked comparisons, six scenario families,
-and portable reports. [#706](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/706)
-delivered the final construction features; [#638](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/638)
-places the instrument in About's existing Studio reading and carries it to main.
+and portable reports. [#707](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707)
+delivered the working showcase to main. The focused
+[core-quality pass, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708),
+clarifies navigation policy, download ownership, input limits and scheduling controls.
 
 The [experience journal](experience-journal.md) preserves the interaction intent
 and review findings. The [capability transfer map](implementation-reference.md#capability-transfer-map)
@@ -162,7 +163,7 @@ decisions in time order; the session table compares effort and funding across
 their full series.
 
 Try moving the first Pilot decision review from **11h** to **8h20m** in
-**Session starts after**.
+**First session starts**.
 The proposed horizon shows the review starting before its supporting work is
 ready and overlapping the Quality reviewer's rehearsal. The $3,980 accepted
 investment stays visible. Apply accepts the arrangement; Cancel restores the
@@ -176,8 +177,9 @@ choice and funded session together; Undo restores the earlier plan.
 
 Enter elapsed hours and minutes, such as **11h30m** or **690 minutes**. The
 stored arrangement retains exact integer minutes from the beginning of the
-plan; elapsed time continues through off-hours. **Time between session starts**
-sets the repeat interval. Compact step buttons change a value by one minute,
+plan; elapsed time continues through off-hours. **Schedule within this plan**
+enables start and repeat timing for the session. **Start a session every** sets the time from
+one start to the next; the session count sets how many run. Compact step buttons change a value by one minute,
 and saved edits retain the entered text. Participant effort,
 funded time and temporal availability retain separate meanings. A wait adds
 elapsed time and has zero participant effort. Older imported plans keep timing
@@ -253,24 +255,15 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#697](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/697),
-and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
-Use the journal alongside Issues: it preserves why an interaction feels and
-behaves as it does; Issues own current outcomes and acceptance.
+source, the worktree and the [core-quality route, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708).
+The journal preserves interaction intent and settled rationale; Issues and PRs
+hold current acceptance and delivery. The working showcase is on main.
 
-The current showcase work sits within
-[#647's amp composition](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647)
-and [#637's showcase route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
-Quality, recovery, learning, and professional play continue through
-[#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652);
-method explanations, shared session controls and roomy Change layouts through
-[#691](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/691);
-compact showcase composition through
-[#694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694);
-coordination score, capacity, and decision gates through
-[#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653).
-[#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
-receives later relationship-rendering refinements after showcase completion.
+The [economic transfer, #705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705),
+[performance refinement, #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679),
+and [tagged release, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
+retain separate outcomes and receiving events. Performance and publication begin
+with the human's next direction.
 
 ## Source owners and deeper reading
 

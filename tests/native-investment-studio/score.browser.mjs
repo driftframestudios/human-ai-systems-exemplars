@@ -166,7 +166,7 @@ for (const engine of names) {
     await score(page).locator('.native-score__agenda summary').click();
     const agenda = score(page).getByRole('region', { name: 'Chronological agenda', exact: true });
     const agendaTable = agenda.getByRole('table', { name: 'Working sessions, waits and decisions in time order' });
-    assert.deepEqual(await agendaTable.getByRole('columnheader').allTextContents(), ['Elapsed time', 'Session or event', 'People and context']);
+    assert.deepEqual(await agendaTable.getByRole('columnheader').allTextContents(), ['Time after plan start', 'Session or event', 'People and context']);
     assert.ok(await agendaTable.getByRole('columnheader').evaluateAll(cells => cells.every(cell => cell.scope === 'col')));
     assert.ok(await agendaTable.getByRole('rowheader').evaluateAll(cells => cells.length > 0 && cells.every(cell => cell.scope === 'row')));
     assert.deepEqual(await agendaTable.locator('tbody tr > td:first-child').allTextContents(), [
@@ -407,18 +407,12 @@ for (const engine of names) {
     }
     await inspect(page, 'work', 'review');
     const starts = input(page, 'work.review.startMinute'); await starts.fill('11h30m');
-    await score(page).getByRole('button', { name: 'Increase session starts after', exact: true }).click();
+    await score(page).getByRole('button', { name: 'Increase first session starts', exact: true }).click();
     await expect(starts).toHaveValue('11h 31m');
-    const stepper = starts.locator('..');
-    const geometry = await stepper.evaluate(element => {
-      const box = element.getBoundingClientRect(), controls = [...element.children].map(child => { const rect = child.getBoundingClientRect(); return { tag: child.tagName, top: rect.top, bottom: rect.bottom, center: rect.left + rect.width / 2, left: rect.left, right: rect.right, width: rect.width, height: rect.height, radius: getComputedStyle(child).borderRadius }; });
-      return { left: box.left, right: box.right, controls, width: innerWidth };
-    });
-    assert.equal(geometry.controls.length, 3);
-    const exactEntry = geometry.controls.find(row => row.tag === 'INPUT'), actions = geometry.controls.filter(row => row.tag === 'BUTTON');
-    assert.ok(actions.every(row => row.top > exactEntry.bottom && row.width === row.height && row.radius === '50%'), 'circular actions sit below the exact entry');
-    assert.ok(Math.abs(actions[0].top - actions[1].top) <= 1 && Math.abs((actions[0].center + actions[1].center) / 2 - exactEntry.center) <= 1, 'the increment pair stays centered beneath its input');
-    assert.ok(geometry.left >= 0 && geometry.right <= geometry.width && geometry.controls.every(row => row.height >= 40), JSON.stringify(geometry));
+    await expect(score(page).getByLabel('Schedule within this plan', { exact: true })).toBeChecked();
+    await expect(score(page).getByLabel('First session starts', { exact: true })).toHaveValue('11h 31m');
+    await expect(starts).toHaveAccessibleDescription(/Time after the start of this plan\. 0m starts immediately\./u);
+    await expect(score(page).getByLabel('Start a session every', { exact: true })).toHaveAccessibleDescription(/from one session start to the next/u);
     await score(page).locator('.native-score__inspector > summary').click();
     assert.equal(await score(page).locator('.native-score__inspector').evaluate(element => element.open), false);
     await score(page).locator('.native-score__inspector > summary').click();
@@ -426,6 +420,54 @@ for (const engine of names) {
     await score(page).locator('.native-score__inspector').screenshot({ path: resolve(captures, `${engine}-elapsed-entry-390.png`) });
     await action(page, 'cancel').last().click(); await expect(starts).toHaveValue('11h');
     assert.equal(await bytes(page), accepted, 'availability inspection preserves accepted state');
+
+    await starts.fill('1h'); await input(page, 'work.review.repeatEveryMinutes').fill('1h');
+    const clips = score(page).locator('.native-score__clip[data-score-kind="work"][data-score-id="review"]');
+    assert.deepEqual(await clips.evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label'))), [
+      'Pilot decision review: 1h–1h 30m, occurrence 1', 'Pilot decision review: 2h–2h 30m, occurrence 2',
+      'Pilot decision review: 3h–3h 30m, occurrence 3', 'Pilot decision review: 4h–4h 30m, occurrence 4',
+    ], 'the interval runs from start to start, preserving each 30-minute duration');
+    assert.equal(await bytes(page), accepted);
+    await action(page, 'apply').click();
+    assert.deepEqual(await page.evaluate(() => window.scoreFixture.studio.read().state.work.find(row => row.id === 'review').timing), { startMinute: 60, repeatEveryMinutes: 60 });
+    await expect(root(page).locator('[data-native-total]')).toHaveText('$3,980.00');
+    await page.evaluate(() => { window.scoreFixture.studio.undo(window.scoreFixture.studio.read()); window.scoreFixture.controller.refresh(); });
+    assert.equal(await bytes(page), accepted, 'Undo restores timing without changing its investment');
+    await inspect(page, 'proposal', 'confirm-recovery');
+    await expect(score(page).getByLabel('First session starts', { exact: true })).toHaveAccessibleDescription(/Time after the start of this plan/u);
+    await expect(score(page).getByLabel('Start a session every', { exact: true })).toHaveAccessibleDescription(/The session count sets how many run/u);
+
+    const measureStepper = async (control, label) => {
+      await control.scrollIntoViewIfNeeded();
+      const geometry = await control.locator('..').evaluate(element => {
+        const box = node => { const rect = node.getBoundingClientRect(); return { top: rect.top, bottom: rect.bottom, center: rect.left + rect.width / 2, left: rect.left, right: rect.right, width: rect.width, height: rect.height, radius: getComputedStyle(node).borderRadius }; };
+        return { input: box(element.querySelector('input')), buttons: [...element.querySelectorAll('button')].map(box), gap: parseFloat(getComputedStyle(element).columnGap), viewport: innerWidth };
+      });
+      const [minus, plus] = geometry.buttons;
+      assert.ok(geometry.buttons.every(row => row.top > geometry.input.bottom && Math.abs(row.width - row.height) <= 1 && row.radius === '50%' && row.width >= 44), `${label}: circular controls remain beneath the input`);
+      assert.ok(Math.abs(minus.top - plus.top) <= 1 && Math.abs((minus.center + plus.center) / 2 - geometry.input.center) <= 1, `${label}: both controls center beneath their input`);
+      assert.ok(Math.abs(plus.left - minus.right - geometry.gap) <= 1, `${label}: the shared gap stays compact when the input is wider`);
+      assert.ok(geometry.buttons.every(row => row.left >= 0 && row.right <= geometry.viewport), `${label}: both controls remain reachable`);
+      return geometry;
+    };
+    for (const [width, font] of [[390, ''], [1440, ''], [1440, '200%']]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(value => { document.documentElement.style.fontSize = value; }, font);
+      const session = root(page).locator('[data-native-configure]');
+      if (!await session.evaluate(element => element.open)) await session.locator(':scope > summary').click();
+      const reference = await measureStepper(session.locator('input[name="minutesPerSession"]'), 'Session minutes');
+      await inspect(page, 'work', 'review');
+      const timing = await measureStepper(input(page, 'work.review.startMinute'), 'First session');
+      assert.ok(Math.abs(timing.buttons[0].width - reference.buttons[0].width) <= 1 && Math.abs(timing.gap - reference.gap) <= 1, 'Score uses the Session control dimensions and spacing');
+      await score(page).locator('.native-score__inspector').screenshot({ path: resolve(captures, `${engine}-timing-controls-${width}${font ? '-enlarged' : ''}.png`) });
+      await root(page).locator('[data-native-chapter="assurance"]').click();
+      const rate = page.locator('[data-native-assurance] input[data-assurance-field="independentRate"]');
+      const quantity = await measureStepper(rate, 'Independent quality rate');
+      assert.ok(Math.abs(quantity.buttons[0].width - reference.buttons[0].width) <= 1 && Math.abs(quantity.gap - reference.gap) <= 1, 'the wider rate input retains the same centered control pair');
+      if (width === 390) await rate.locator('..').screenshot({ path: resolve(captures, `${engine}-shared-rate-controls-390.png`) });
+      await root(page).locator('[data-native-chapter="coordination"]').click();
+    }
+    assert.equal(await bytes(page), accepted, 'control inspection leaves accepted work unchanged');
   });
   test(`${engine}: direct horizon controls retain draft text and distinguish inspection from navigation`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);

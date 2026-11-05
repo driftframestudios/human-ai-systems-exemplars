@@ -2182,7 +2182,8 @@ p#on-dark-iron-ore {
 .native-coordination label { font-weight: 650; }
 .native-coordination__stepper { font: 600 1.2rem/1.4 ui-monospace, monospace; --native-input-measure: calc(5ch + 1.25rem); display: inline-grid; grid-template-columns: repeat(2, minmax(0, 2.75rem)); inline-size: max-content; max-inline-size: 100%; justify-self: start; align-items: center; gap: .35rem; }
 .native-coordination__stepper button { border-radius: 50%; grid-row: 2; inline-size: min(2.75rem, 100%); min-inline-size: 44px; block-size: 2.75rem; padding: 0; font-size: 1.3rem; }
-.native-coordination__stepper button:last-child { justify-self: end; }
+.native-coordination__stepper > button:first-of-type { justify-self: end; }
+.native-coordination__stepper > button:last-of-type { justify-self: start; }
 .native-coordination input {
     background: var(--native-paper);
     border: .125rem solid var(--native-ink);
@@ -3132,11 +3133,7 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-score select, .native-score input[type='text'] { max-inline-size: 100%; min-inline-size: 0; padding: .55rem; min-block-size: 2.75rem; font: inherit; color: var(--native-text); background-color: #fffdf4; border: .125rem solid var(--native-rule); border-radius: .15rem; }
 .native-score input[type='text']:not(.native-score__number) { text-align: start; }
 .native-score .native-score__number { inline-size: 100%; font-family: ui-monospace, monospace; font-weight: 700; text-align: center; }
-.native-score__steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: .35rem; inline-size: 13ch; max-inline-size: 100%; }
-.native-score__steps > input { grid-column: 1 / -1; grid-row: 1; }
-.native-coordination .native-score__steps button { grid-row: 2; display: grid; place-items: center; min-inline-size: 2.5rem; inline-size: 2.5rem; min-block-size: 2.5rem; block-size: 2.5rem; border-radius: 50%; padding: 0; line-height: 1; font: 700 1.15rem/1 ui-monospace, monospace; }
-.native-score__steps button:first-child { justify-self: end; }
-.native-score__steps button:last-child { justify-self: start; }
+.native-score__steps { --native-input-measure: 13ch; grid-template-columns: repeat(2, minmax(0, 1fr)); inline-size: min(var(--native-input-measure), 100%); }
 .native-score__time-hint { font-size: .75rem; line-height: 1.4; }
 .native-score__interval { padding: .75rem; border: 1px solid var(--native-rule); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 .native-score__interval h5 { grid-column: 1 / -1; }

@@ -18,8 +18,8 @@ export const SCORE_FIELDS = Object.freeze({
   waitIds: ids('Waits', null, LIMITS.scoreWaits), gateIds: ids('Decision gates', null, LIMITS.scoreGates),
   proposalIds: ids('Proposed sessions', null, LIMITS.scoreProposals), fundProposalIds: ids('Proposals to add to planned work', 'proposals', LIMITS.scoreProposals),
 });
-const timingFields = Object.freeze({ timed: yesno('Place this work in time'), startMinute: time('Session starts after'),
-  repeatEveryMinutes: time('Time between session starts', LIMITS.scoreMinute, { optional: true, min: 1 }) });
+const timingFields = Object.freeze({ timed: yesno('Schedule within this plan'), startMinute: time('First session starts'),
+  repeatEveryMinutes: time('Start a session every', LIMITS.scoreMinute, { optional: true, min: 1 }) });
 const records = Object.freeze({
   work: timingFields,
   dependency: { fromWorkId: id('Earlier session', 'work'), toWorkId: id('Later session', 'work'), lagMinutes: time('Wait after earlier work'), connectionId: id('Related connection', 'connections', true) },

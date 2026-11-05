@@ -42,7 +42,7 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
   agendaRegion.setAttribute('role', 'region'); agendaRegion.setAttribute('aria-label', 'Chronological agenda');
   const agendaTable = node('table'); agendaTable.append(node('caption', 'Working sessions, waits and decisions in time order'));
   const agendaHead = node('thead'), agendaHeading = node('tr');
-  for (const label of ['Elapsed time', 'Session or event', 'People and context']) { const cell = node('th', label); cell.scope = 'col'; agendaHeading.append(cell); }
+  for (const label of ['Time after plan start', 'Session or event', 'People and context']) { const cell = node('th', label); cell.scope = 'col'; agendaHeading.append(cell); }
   agendaHead.append(agendaHeading); const agendaRows = node('tbody'); agendaTable.append(agendaHead, agendaRows); agendaRegion.append(agendaTable); agenda.append(agendaRegion);
   const exact = node('details', undefined, 'native-score__exact'); exact.append(node('summary', 'Read exact timing and effort'));
   const tableRegion = node('div', undefined, 'native-score__table-scroll'); tableRegion.tabIndex = 0;
@@ -113,7 +113,7 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
     stages.hidden = !score.stages.length;
     timeline.replaceChildren(); timeline.style.setProperty('--score-scale', String(scale));
     const axis = node('div', undefined, 'native-score__row native-score__axis');
-    axis.append(node('strong', 'Elapsed time'));
+    axis.append(node('strong', 'Time after plan start'));
     const ticks = node('div', undefined, 'native-score__track');
     for (let step = 0; step <= 4; step++) { const tick = node('span', scoreMinute(Math.round(from + length * step / 4))); tick.style.left = `${step * 25}%`; ticks.append(tick); }
     axis.append(ticks); timeline.append(axis);
@@ -159,7 +159,7 @@ export function createScoreView(root, { onSelect, onNavigate, onAddDecision }) {
     if (!agendaRows.children.length) { const row = node('tr'), cell = node('td', 'Choose timing for a working session to build the agenda.'); cell.colSpan = 3; row.append(cell); agendaRows.append(row); }
     table.replaceChildren(node('caption', 'Working-session timing, effort and funding'));
     const head = node('thead'), heading = node('tr');
-    for (const label of ['Working session', 'Activity', 'First start', 'Last finish', 'Each session', 'Repeat interval', 'Participant effort', 'Funding']) { const cell = node('th', label); cell.scope = 'col'; heading.append(cell); }
+    for (const label of ['Working session', 'Activity', 'First start after plan start', 'Last finish after plan start', 'Each session', 'Session starts every', 'Participant effort', 'Funding']) { const cell = node('th', label); cell.scope = 'col'; heading.append(cell); }
     head.append(heading); table.append(head); const body = node('tbody');
     for (const row of score.workRows) {
       const tr = node('tr'), title = node('th'); title.scope = 'row'; title.append(control(row.label, 'work', row.workId)); tr.append(title);

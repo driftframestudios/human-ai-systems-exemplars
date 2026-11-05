@@ -30,8 +30,9 @@ then identifies each behavior's implementation owner.
 
 ## Source map
 
-- `config.mjs` owns the immutable units, input limits, contract vocabulary,
-  six practice definitions, and bounded history defaults.
+- `config.mjs` owns immutable units, shared collection/value bounds, versioned
+  transport envelopes, contract vocabulary and bounded history defaults.
+  Practice definitions are re-exported from their capability owner.
 - `contract.mjs` owns `preparePlan`, `preparePerson`, `prepareTeam`, `prepareWork`,
   `preparePurpose`, `prepareAssemblyCommand`, `prepareImport`, `parsePlan`, `createExamplePlan`, and
   `PlanError`. Its synthetic scenario factory is the example's single source.
@@ -77,6 +78,12 @@ then identifies each behavior's implementation owner.
   its linked views. `score-reference.mjs` names removal dependencies and
   comparison changes. Their [shared contract](#authored-coordination-horizon)
   keeps authored placement separate from monetary accounting.
+- `navigation-policy.mjs` owns pure return-route validity, ordered ancestry
+  and finite Score destination admission. Controllers retain draft parking,
+  route mutation, chapter changes and focus effects.
+- `browser-download.mjs` owns temporary links and retained object URLs through
+  dispatch, failure, replacement and disposal. Report and JSON controllers keep
+  their format, accepted snapshot and visitor-feedback ownership.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;

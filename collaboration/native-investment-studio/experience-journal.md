@@ -1046,3 +1046,20 @@ contract and migration observations exercise admission and compatibility; a
 direct before/after comparison establishes this refactor's value preservation.
 Additional arithmetic fixtures would repeat the implementation. Issue #711
 owns this change.
+
+
+## 2026-11-05 — Planning-time language and shared circular controls
+
+Timing controls now name scheduling within the plan, the first session start,
+and the time between session starts. Adjacent help explains the offset from
+plan start, start-to-start repetition and the finite session count. Integer
+elapsed minutes, session duration and accepted investment retain their existing
+owners. A business calendar or sprint cadence needs authored working-time
+assumptions before it can represent these values faithfully.
+
+Score uses the existing circular stepper family. Wider rate and quantity inputs
+keep the same compact, centered button pair as Session planning. Rectangular
+control families keep their existing treatment. The affected browser journeys
+check normal mobile, desktop and enlarged-text layouts, field descriptions,
+Apply and Undo. Issue #712 owns this consolidation. README routes now lead to
+main's working showcase and #708's focused quality changes.
