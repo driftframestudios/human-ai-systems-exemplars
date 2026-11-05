@@ -82,13 +82,13 @@ test('legacy import preserves parked purpose text for review or deliberate curre
   delete legacy.contributions; delete legacy.connections;
   delete legacy.abilities; delete legacy.capabilityEvidence;
   delete legacy.changeSettings;
-  delete legacy.assuranceSettings;
+  delete legacy.assuranceSettings; delete legacy.scoreSettings; legacy.people = legacy.people.map(({ availability, ...row }) => row); legacy.work = legacy.work.map(row => ({ ...row, timing: null }));
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
     teamId: row.teamId, workIds: row.supportBindings.flatMap(binding => binding.workIds) }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
-  assert.equal(studio.read().state.schemaVersion, '0.6.0');
+  assert.equal(studio.read().state.schemaVersion, '0.7.0');
   assert.equal(editing.purpose.read().status, 'stale');
   rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
   const reviewed = editing.purpose.review(saved, studio.read());
@@ -124,7 +124,7 @@ test('purpose reserves a bounded slot, accepts only its fixed target, and releas
   const next = opened(editing, studio, 'purpose', 'purpose');
   editing.purpose.setText(next, 'changedAbility', 'Still a draft');
   const disposed = editing.dispose();
-  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null, session: null, role: null, contribution: null, connection: null, capability: null, change: null, assurance: null });
+  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null, session: null, role: null, contribution: null, connection: null, capability: null, change: null, assurance: null, score: null });
   assert.equal(disposed.slots, 0);
   assert.equal(disposed.active, null);
   assert.equal(editing.purpose.read().status, 'disposed');
@@ -270,7 +270,7 @@ test('stale review binds the displayed current projection and current-values cho
 
 test('removed targets keep readable saved text until explicit discard', () => {
   const source = createExamplePlan();
-  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
+  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active', availability: null });
   const { studio, editing } = setup({}, source);
   const token = opened(editing, studio, 'person', 'reserve');
   editing.person.setText(token, 'ratePerHour', '120');
@@ -304,7 +304,7 @@ test('accepted A to B to A restoration keeps older parked text stale', () => {
 
 test('discarding an unselected removed target releases capacity and preserves the active lease', () => {
   const source = createExamplePlan();
-  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' });
+  source.people.push({ id: 'reserve', label: 'Reserve', fundedMinutes: 0, rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active', availability: null });
   const { studio, editing } = setup({ limit: 2 }, source);
   const reserve = opened(editing, studio, 'person', 'reserve');
   editing.person.setText(reserve, 'ratePerHour', '120');

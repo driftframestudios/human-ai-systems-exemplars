@@ -1,4 +1,4 @@
-import { createTimeControls, mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
+import { createTimeControls, mountDurationDials, renderTimeReadout } from './time-controls.mjs';
 import { CHANGE_FIELDS, changeSettingsFromRaw } from './change-draft.mjs';
 import { listChangeFrameworks, listInterpretiveLenses, listAttentionChannels, getChangeSuggestion,
   CHANGE_STATUSES, CHANGE_SOURCE_FILTERS, FOUR_ACTIONS_METHOD, createChangeSettings, projectChange } from './change-models.mjs';
@@ -176,13 +176,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   newWorkFields.append(time.element); field(newWorkFields, 'proposal.funding');
   const workActions = node('div', undefined, 'native-coordination__actions'); workActions.append(button('Set this work proposal aside', 'clear-work'));
   workFields.append(modeFields, newWorkFields, workActions); elements.work.append(workHeading, workNote, workFields);
-  const minutesDial = mountMinutesDial({ ...time, read() {
+  const durationDials = mountDurationDials({ ...time, read() {
     const view = editor.read(), active = editing.read().active;
-    return { token: view.draft?.token, raw: view.draft?.raw['proposal.minutesPerSession'], hours: view.draft?.raw['proposal.hoursPerSession'], composing,
-      error: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession'),
+    return { token: view.draft?.token, hours: view.draft?.raw['proposal.hoursPerSession'], minutes: view.draft?.raw['proposal.minutesPerSession'], composing,
+      errors: { hours: view.draft?.errors.some(error => error.path === 'draft.proposal.hoursPerSession'), minutes: view.draft?.errors.some(error => error.path === 'draft.proposal.minutesPerSession') },
       enabled: !disposed && !composing && isActive() && view.status === 'editing' && view.draft?.raw['proposal.mode'] === 'new'
         && active?.kind === 'change' && active.token === view.draft.token };
-  }, write(token, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.minutesPerSession', value), epoch); } });
+  }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   const manual = node('div');
   manual.append(node('p', 'Choose a framework to examine its components. Keep the work already linked to each component as you compare frameworks. Apply accepts your selected framework, mappings, viewpoint, suggestions filter and attention together.'),
     node('p', 'A mapped component records planning intent. Linked work names who will carry it. Review the resulting work and evidence before judging readiness.'),
@@ -242,7 +242,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       }
     }
     renderTimeReadout(time, raw ?? {}, { errors: view.draft?.errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
-    minutesDial.refresh();
+    durationDials.refresh();
     lastProjection = view.projection;
     for (const entry of componentNodes) {
       entry.details.hidden = entry.framework.id !== reading.framework.id;
@@ -392,11 +392,11 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(elements.form, 'compositionstart', () => { composing = true; render(); });
   listen(elements.form, 'compositionend', event => { composing = false; input(event); });
-  function close({ park = true } = {}) { if (disposed) return; minutesDial.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'change') editing.park(); }
+  function close({ park = true } = {}) { if (disposed) return; durationDials.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'change') editing.park(); }
   function dispose() {
     if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true;
-    minutesDial.dispose(); controls.clear(); ranges.clear(); INSTANCES.delete(root);
+    durationDials.dispose(); controls.clear(); ranges.clear(); INSTANCES.delete(root);
   }
   render();
   const controller = Object.freeze({ open, refresh: render, close, resume: () => open('change', false), dispose });

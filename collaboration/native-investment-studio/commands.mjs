@@ -118,6 +118,21 @@ function dependencies(state, collection, id) {
       }
     });
   }
+  const score = state.scoreSettings;
+  const scoreReference = (recordId, field) => references.push(Object.freeze({ collection: 'scoreSettings', id: recordId, field }));
+  score.dependencies.forEach((row, index) => {
+    for (const field of collection === 'work' ? ['fromWorkId', 'toWorkId'] : collection === 'connections' ? ['connectionId'] : [])
+      if (row[field] === id) scoreReference(row.id, `dependencies[${index}].${field}`);
+  });
+  if (collection === 'work') score.stages.forEach((row, index) => { if (row.workIds.includes(id)) scoreReference(row.id, `stages[${index}].workIds`); });
+  if (collection === 'people') {
+    score.waits.forEach((row, index) => { if (row.receiverPersonId === id) scoreReference(row.id, `waits[${index}].receiverPersonId`); });
+    score.gates.forEach((row, index) => { if (row.reviewerPersonId === id) scoreReference(row.id, `gates[${index}].reviewerPersonId`); });
+  }
+  score.proposals.forEach((row, index) => {
+    if (collection === 'people' && row.work.personIds.includes(id)) scoreReference(row.id, `proposals[${index}].work.personIds`);
+    if (collection === 'teams' && row.work.teamId === id) scoreReference(row.id, `proposals[${index}].work.teamId`);
+  });
   return Object.freeze(references);
 }
 
@@ -142,6 +157,30 @@ export function prepareAssembly(base, candidate) {
   let collection;
   let rows;
   switch (command.type) {
+    case 'score.arrangement.replace': {
+      const settings = command.scoreSettings, proposals = new Map(settings.proposals.map(row => [row.id, row]));
+      const gates = new Map(settings.gates.map(row => [row.id, row]));
+      const fund = new Set(command.fundProposalIds), promoted = [];
+      for (const id of fund) {
+        const proposal = proposals.get(id);
+        if (!proposal) throw new PlanError('reference', 'command.fundProposalIds', 'Choose a proposal in this arrangement.');
+        if (proposal.gateId !== null && gates.get(proposal.gateId)?.modeledDecision !== 'proceed')
+          throw new PlanError('score-gate', 'command.fundProposalIds', 'Model the attached gate as proceed before adding this proposal to planned work.');
+        if (state.work.some(row => row.id === proposal.work.id)) throw new PlanError('duplicate-id', 'command.fundProposalIds', 'Give proposed work an identity distinct from accepted sessions.');
+        promoted.push(proposal.work);
+      }
+      const work = [...state.work, ...promoted], people = [...state.people];
+      for (const patch of command.workTiming) {
+        const index = position(work, patch.workId, 'command.workTiming'); work[index] = { ...work[index], timing: patch.timing };
+      }
+      for (const patch of command.availability) {
+        const index = position(people, patch.personId, 'command.availability'); people[index] = { ...people[index], availability: patch.intervals };
+      }
+      const scoreSettings = { ...settings, proposals: settings.proposals.filter(row => !fund.has(row.id)) };
+      if (JSON.stringify(work) === JSON.stringify(state.work) && JSON.stringify(people) === JSON.stringify(state.people)
+        && JSON.stringify(scoreSettings) === JSON.stringify(state.scoreSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, work, people, scoreSettings }) };
+    }
     case 'change.settings.replace':
       if (JSON.stringify(command.changeSettings) === JSON.stringify(state.changeSettings)) return { projection: base };
       return { projection: preparePlan({ ...state, revision: state.revision + 1, changeSettings: command.changeSettings }) };
@@ -157,7 +196,7 @@ export function prepareAssembly(base, candidate) {
       return { projection: preparePlan({ ...state, revision: state.revision + 1, assuranceSettings: command.assuranceSettings }) };
     }
     case 'person.create':
-      collection = 'people'; rows = append(state.people, { role: emptyRole(), lifecycle: 'active', ...command.person }, 'command.person.id'); break;
+      collection = 'people'; rows = append(state.people, { role: emptyRole(), lifecycle: 'active', availability: null, ...command.person }, 'command.person.id'); break;
     case 'team.create':
       collection = 'teams'; rows = append(state.teams, { lifecycle: 'active', ...command.team }, 'command.team.id'); break;
     case 'work.create':

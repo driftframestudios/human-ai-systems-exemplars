@@ -11,6 +11,7 @@ import { createCapabilityDraftAdapter, CAPABILITY_FORMS, makeCapabilityTarget, d
   copyCapabilityRaw, sameCapabilityRaw } from './capability-draft.mjs';
 import { createAssuranceDraftAdapter, assuranceField, copyAssuranceRaw, sameAssuranceRaw } from './assurance-draft.mjs';
 import { createChangeDraftAdapter, CHANGE_FIELDS, copyChangeRaw, sameChangeRaw } from './change-draft.mjs';
+import { createScoreDraftAdapter, scoreField, copyScoreRaw, sameScoreRaw } from './score-draft.mjs';
 
 export const EDITING_LIMITS = Object.freeze({ drafts: 8 });
 const indexRows = rows => new Map(rows.map(row => [row.id, row]));
@@ -25,6 +26,8 @@ const TYPES = Object.freeze({
     fields: PURPOSE_FIELDS, create: createPurposeDraftAdapter }),
   assurance: Object.freeze({ id: 'assuranceId', index: state => new Map([['assurance', state.assuranceSettings]]), ids: true, step: true,
     rawFields: true, metadata: assuranceField, create: createAssuranceDraftAdapter, copy: copyAssuranceRaw, same: sameAssuranceRaw }),
+  score: Object.freeze({ id: 'scoreId', index: state => new Map([['score', state.scoreSettings]]), ids: true, step: true,
+    rawFields: true, metadata: scoreField, create: createScoreDraftAdapter, copy: copyScoreRaw, same: sameScoreRaw }),
   change: Object.freeze({ id: 'changeId', index: state => new Map([['change', state.changeSettings]]), ids: true, step: true,
     fields: Object.freeze(Object.keys(CHANGE_FIELDS)), fieldMetadata: CHANGE_FIELDS,
     create: createChangeDraftAdapter, copy: copyChangeRaw, same: sameChangeRaw }),

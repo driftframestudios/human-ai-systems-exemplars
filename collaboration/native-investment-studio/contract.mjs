@@ -3,6 +3,7 @@ import { ROLE_CATALOGUES, ROLE_FIELDS, CHANGE_FRAMEWORKS, CONTRIBUTION_CATEGORIE
 import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityWorkIds, createLegacyPractice } from './capabilities.mjs';
 import { CHANGE_CATALOGUE_VERSION, listChangeFrameworks, getChangeFramework, getInterpretiveLens, listAttentionChannels, createChangeSettings, projectChange } from './change-models.mjs';
 import { createAssuranceSettings, listQualityConcepts, getSourcePreset, getRehearsalDefinition, getLearningPromptDefinition, projectAssurance } from './assurance-models.mjs';
+import { createScoreSettings, projectScore } from './score-models.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
 const INTEGER_TOKEN = /^-?(0|[1-9][0-9]*)$/;
@@ -18,7 +19,8 @@ const FRAMEWORK_COMPONENTS = new Map(CHANGE_FRAMEWORKS.map(row => [row.id, new S
 const CATEGORY_IDS = new Set(CONTRIBUTION_CATEGORIES.map(row => row.id));
 const PLAN_FIELDS = Object.freeze(['kind', 'schemaVersion', 'modelVersion', 'planId', 'revision', 'currency', 'horizonWeeks', 'people', 'teams', 'work', 'practices']);
 const FIELDS = Object.freeze({
-  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings'],
+  plan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings', 'scoreSettings'],
+  assurancePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings', 'assuranceSettings'],
   changePlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence', 'changeSettings'],
   capabilityPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections', 'abilities', 'capabilityEvidence'],
   relationshipPlan: [...PLAN_FIELDS, 'purpose', 'contributions', 'connections'],
@@ -26,6 +28,7 @@ const FIELDS = Object.freeze({
   legacyPlan: PLAN_FIELDS,
   purpose: PURPOSE_FIELDS,
   person: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle'],
+  scorePerson: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour', 'role', 'lifecycle', 'availability'],
   legacyPerson: ['id', 'label', 'fundedMinutes', 'rateCentsPerHour'],
   role: ROLE_FIELDS,
   change: ['frameworkId', 'componentId'],
@@ -33,6 +36,16 @@ const FIELDS = Object.freeze({
   legacyTeam: ['id', 'label', 'personIds'],
   work: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing', 'lifecycle'],
   legacyWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timing'],
+  untimedWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'lifecycle'],
+  workTiming: ['startMinute', 'repeatEveryMinutes'], interval: ['startMinute', 'endMinute'],
+  scoreSettings: ['version', 'window', 'dependencies', 'stages', 'waits', 'gates', 'proposals'],
+  scoreWindow: ['label', 'startMinute', 'endMinute'],
+  scoreDependency: ['id', 'fromWorkId', 'toWorkId', 'lagMinutes', 'connectionId'],
+  scoreStage: ['id', 'label', 'workIds'],
+  scoreWait: ['id', 'label', 'startMinute', 'endMinute', 'reason', 'receiverPersonId'],
+  scoreGate: ['id', 'label', 'afterStageId', 'reviewerPersonId', 'question', 'evidence', 'modeledDecision'],
+  scoreProposal: ['id', 'bank', 'gateId', 'work'],
+  workTimingPatch: ['workId', 'timing'], availabilityPatch: ['personId', 'intervals'],
   contribution: ['id', 'categoryId', 'receiverPersonId', 'decisionOwnerPersonId', 'workIds', 'reviewBoundary', 'decisionBoundary'],
   connection: ['id', 'senderTeamId', 'receiverTeamId', 'receiverPersonId', 'sharedObject', 'responseExpectation', 'workIds', 'status'],
   practice: ['id', 'practiceId', 'teamId', 'workIds'],
@@ -63,7 +76,8 @@ const PROFILES = new Map([
   ['0.3.0', { fields: 'relationshipPlan', purpose: true, relationships: true, capabilities: false, references: 8192 }],
   ['0.4.0', { fields: 'capabilityPlan', purpose: true, relationships: true, capabilities: true, references: 16384 }],
   ['0.5.0', { fields: 'changePlan', purpose: true, relationships: true, capabilities: true, change: true, references: 16384 }],
-  ['0.6.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, references: LIMITS.references }],
+  ['0.6.0', { fields: 'assurancePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, references: 16384 }],
+  ['0.7.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
@@ -96,6 +110,7 @@ const COMMAND_FIELDS = Object.freeze({
   'capability.evidence.remove': ['type', 'evidenceId'],
   'change.settings.replace': ['type', 'changeSettings'],
   'assurance.settings.replace': ['type', 'assuranceSettings'],
+  'score.arrangement.replace': ['type', 'scoreSettings', 'workTiming', 'availability', 'fundProposalIds'],
 });
 const COMMAND_FIELD_SETS = new Map(Object.entries(COMMAND_FIELDS).map(([kind, keys]) => [kind, new Set(keys)]));
 const ORDERED_COLLECTIONS = Object.freeze(['people', 'teams', 'work', 'practices', 'contributions', 'connections', 'abilities', 'capabilityEvidence']);
@@ -301,7 +316,7 @@ function calculate(state, peopleById) {
     knownCommitmentCents, fundedKnownCents, additionalKnownCents, allocatedKnownCents,
     lineRoundingAdjustments: { allocatedCents: reconcile(allocatedKnownCents, allocatedLineCents), additionalCents: reconcile(additionalKnownCents, additionalLineCents) },
     staffing, ledger, capacity: capacityRows, obligations,
-    timing: 'unscheduled',
+    timing: state.work.some(row => row.timing !== null) ? 'authored' : 'unscheduled',
   };
 }
 
@@ -310,7 +325,7 @@ function calculate(state, peopleById) {
 function editableRecord(candidate, kind, path) {
   const legacy = `legacy${kind[0].toUpperCase()}${kind.slice(1)}`;
   const keys = candidate && typeof candidate === 'object' ? Reflect.ownKeys(candidate) : [];
-  return record(candidate, keys.length === FIELDS[legacy].length ? legacy : kind, path);
+  return record(candidate, kind === 'person' && keys.length === FIELDS.scorePerson.length ? 'scorePerson' : keys.length === FIELDS[legacy].length ? legacy : kind, path);
 }
 
 export function prepareRole(candidate, path = 'role') {
@@ -340,7 +355,8 @@ function personFields(person, path) {
   return { id: text(person.id, `${path}.id`, true), label: text(person.label, `${path}.label`),
     fundedMinutes: integer(person.fundedMinutes, LIMITS.fundedMinutes, `${path}.fundedMinutes`),
     rateCentsPerHour: person.rateCentsPerHour === null ? null : integer(person.rateCentsPerHour, LIMITS.rateCentsPerHour, `${path}.rateCentsPerHour`),
-    ...(Object.hasOwn(person, 'role') ? { role: prepareRole(person.role, `${path}.role`) } : {}), ...lifecycleFields(person, path) };
+    ...(Object.hasOwn(person, 'role') ? { role: prepareRole(person.role, `${path}.role`) } : {}),
+    ...(Object.hasOwn(person, 'availability') ? { availability: prepareAvailability(person.availability, `${path}.availability`) } : {}), ...lifecycleFields(person, path) };
 }
 export function preparePerson(candidate, path = 'person') { return personFields(editableRecord(candidate, 'person', path), path); }
 
@@ -417,6 +433,20 @@ export function prepareAssemblyCommand(candidate) {
     case 'capability.evidence.remove': return { type, evidenceId: text(raw.evidenceId, `${path}.evidenceId`, true) };
     case 'change.settings.replace': return { type, changeSettings: prepareChangeSettings(raw.changeSettings, `${path}.changeSettings`) };
     case 'assurance.settings.replace': return { type, assuranceSettings: prepareAssuranceSettings(raw.assuranceSettings, `${path}.assuranceSettings`) };
+    case 'score.arrangement.replace': {
+      const workTiming = list(raw.workTiming, LIMITS.work, `${path}.workTiming`).map((value, index) => {
+        const rowPath = `${path}.workTiming[${index}]`, row = record(value, 'workTimingPatch', rowPath);
+        return { workId: text(row.workId, `${rowPath}.workId`, true), timing: prepareWorkTiming(row.timing, `${rowPath}.timing`) };
+      });
+      const availability = list(raw.availability, LIMITS.people, `${path}.availability`).map((value, index) => {
+        const rowPath = `${path}.availability[${index}]`, row = record(value, 'availabilityPatch', rowPath);
+        return { personId: text(row.personId, `${rowPath}.personId`, true), intervals: prepareAvailability(row.intervals, `${rowPath}.intervals`) };
+      });
+      identifiers(workTiming.map(row => row.workId), LIMITS.work, `${path}.workTiming`);
+      identifiers(availability.map(row => row.personId), LIMITS.people, `${path}.availability`);
+      return { type, scoreSettings: prepareScoreSettings(raw.scoreSettings, `${path}.scoreSettings`), workTiming, availability,
+        fundProposalIds: identifiers(raw.fundProposalIds, LIMITS.scoreProposals, `${path}.fundProposalIds`) };
+    }
   }
 }
 
@@ -435,13 +465,19 @@ export function preparePurpose(candidate, path = 'purpose') {
 function emptyPurpose() { return Object.fromEntries(PURPOSE_FIELDS.map(field => [field, null])); }
 
 function workFields(work, personIds, path) {
-  if (work.timing !== null) reject('timing-version', `${path}.timing`, 'Keep timing explicitly unavailable until a scheduling contract is selected.');
-  return { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`),
+  const timing = prepareWorkTiming(work.timing, `${path}.timing`);
+  const row = { id: text(work.id, `${path}.id`, true), label: text(work.label, `${path}.label`),
     teamId: text(work.teamId, `${path}.teamId`, true), personIds,
     minutesPerOccurrence: integer(work.minutesPerOccurrence, LIMITS.minutesPerOccurrence, `${path}.minutesPerOccurrence`),
     occurrences: integer(work.occurrences, LIMITS.occurrences, `${path}.occurrences`),
     funding: choice(work.funding, FUNDING, `${path}.funding`),
-    status: choice(work.status, WORK_STATUS, `${path}.status`), timing: null, ...lifecycleFields(work, path) };
+    status: choice(work.status, WORK_STATUS, `${path}.status`), timing, ...lifecycleFields(work, path) };
+  if (timing !== null) {
+    if (row.occurrences > 1 && timing.repeatEveryMinutes === null) reject('score-cadence', `${path}.timing.repeatEveryMinutes`, 'Supply the minutes between starts for repeated work, or leave its timing unknown.');
+    const lastEnd = timing.startMinute + Math.max(0, row.occurrences - 1) * (timing.repeatEveryMinutes ?? 0) + row.minutesPerOccurrence;
+    if (row.occurrences && lastEnd > LIMITS.scoreMinute) reject('score-minute-budget', `${path}.timing`, 'Keep every occurrence within the relative-minute boundary.');
+  }
+  return row;
 }
 
 // Admit one closed row before comparing it with an already accepted work row.
@@ -450,6 +486,90 @@ export function prepareWork(candidate, path = 'work') {
   const work = editableRecord(candidate, 'work', path);
   const personIds = identifiers(work.personIds, LIMITS.people, `${path}.personIds`, 1);
   return workFields(work, personIds, path);
+}
+
+export function prepareWorkTiming(candidate, path = 'timing') {
+  if (candidate === null) return null;
+  const row = record(candidate, 'workTiming', path);
+  return { startMinute: integer(row.startMinute, LIMITS.scoreMinute, `${path}.startMinute`),
+    repeatEveryMinutes: row.repeatEveryMinutes === null ? null : integer(row.repeatEveryMinutes, LIMITS.scoreMinute, `${path}.repeatEveryMinutes`, 1) };
+}
+function scoreInterval(row, path) {
+  const startMinute = integer(row.startMinute, LIMITS.scoreMinute, `${path}.startMinute`);
+  return { startMinute, endMinute: integer(row.endMinute, LIMITS.scoreMinute, `${path}.endMinute`, startMinute) };
+}
+export function prepareAvailability(candidate, path = 'availability') {
+  if (candidate === null) return null;
+  return list(candidate, LIMITS.availabilityIntervals, path).map((value, index) => {
+    const rowPath = `${path}[${index}]`; return scoreInterval(record(value, 'interval', rowPath), rowPath);
+  });
+}
+
+export function prepareScoreSettings(candidate, path = 'plan.scoreSettings') {
+  const raw = record(candidate, 'scoreSettings', path);
+  if (raw.version !== '1.0.0') reject('score-version', `${path}.version`, 'Use the supported score-settings version.');
+  let window = null;
+  if (raw.window !== null) { const row = record(raw.window, 'scoreWindow', `${path}.window`); window = { label: text(row.label, `${path}.window.label`), ...scoreInterval(row, `${path}.window`) }; }
+  const rows = (name, kind, maximum, prepare) => {
+    const prepared = list(raw[name], maximum, `${path}.${name}`).map((value, index) => {
+      const rowPath = `${path}.${name}[${index}]`, row = record(value, kind, rowPath);
+      return { id: text(row.id, `${rowPath}.id`, true), ...prepare(row, rowPath) };
+    });
+    indexRecords(prepared, `${path}.${name}`); return prepared;
+  };
+  const dependencies = rows('dependencies', 'scoreDependency', LIMITS.scoreDependencies, (row, rowPath) => ({
+    fromWorkId: text(row.fromWorkId, `${rowPath}.fromWorkId`, true), toWorkId: text(row.toWorkId, `${rowPath}.toWorkId`, true),
+    lagMinutes: integer(row.lagMinutes, LIMITS.scoreMinute, `${rowPath}.lagMinutes`), connectionId: nullableId(row.connectionId, `${rowPath}.connectionId`) }));
+  const stages = rows('stages', 'scoreStage', LIMITS.scoreStages, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`) }));
+  const waits = rows('waits', 'scoreWait', LIMITS.scoreWaits, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), ...scoreInterval(row, rowPath),
+    reason: relationshipText(row.reason, `${rowPath}.reason`), receiverPersonId: nullableId(row.receiverPersonId, `${rowPath}.receiverPersonId`) }));
+  const gates = rows('gates', 'scoreGate', LIMITS.scoreGates, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), afterStageId: text(row.afterStageId, `${rowPath}.afterStageId`, true),
+    reviewerPersonId: nullableId(row.reviewerPersonId, `${rowPath}.reviewerPersonId`), question: relationshipText(row.question, `${rowPath}.question`),
+    evidence: relationshipText(row.evidence, `${rowPath}.evidence`), modeledDecision: choice(row.modeledDecision, ['open', 'proceed', 'revise', 'hold'], `${rowPath}.modeledDecision`) }));
+  const proposals = rows('proposals', 'scoreProposal', LIMITS.scoreProposals, (row, rowPath) => {
+    const proposed = record(row.work, 'work', `${rowPath}.work`);
+    return { bank: choice(row.bank, ['next', 'options'], `${rowPath}.bank`), gateId: nullableId(row.gateId, `${rowPath}.gateId`),
+      work: workFields(proposed, identifiers(proposed.personIds, LIMITS.people, `${rowPath}.work.personIds`, 1), `${rowPath}.work`) };
+  });
+  indexRecords(proposals.map(row => row.work), `${path}.proposals.work`);
+  return { version: '1.0.0', window, dependencies, stages, waits, gates, proposals };
+}
+
+function prepareScoreReferences(state, people, teams, work, budget) {
+  const settings = state.scoreSettings, path = 'plan.scoreSettings', connections = new Map(state.connections.map(row => [row.id, row]));
+  let occurrences = 0, assignments = 0;
+  for (const row of state.work) if (row.timing !== null) {
+    occurrences += row.occurrences; assignments += row.occurrences * row.personIds.length;
+  }
+  if (occurrences > LIMITS.scoreOccurrences) reject('score-occurrence-budget', 'plan.work', 'Keep explicitly timed work within 4096 occurrences; leave other timing unknown.');
+  if (assignments > LIMITS.scoreAssignments) reject('score-assignment-budget', 'plan.work', 'Keep explicitly timed work within 16384 person assignments.');
+  const outgoing = new Map([...work.keys()].map(id => [id, []])), incoming = new Map([...work.keys()].map(id => [id, 0]));
+  settings.dependencies.forEach((row, index) => {
+    const rowPath = `${path}.dependencies[${index}]`;
+    reference(row.fromWorkId, work, `${rowPath}.fromWorkId`, budget); reference(row.toWorkId, work, `${rowPath}.toWorkId`, budget);
+    reference(row.connectionId, connections, `${rowPath}.connectionId`, budget);
+    outgoing.get(row.fromWorkId).push(row.toWorkId); incoming.set(row.toWorkId, incoming.get(row.toWorkId) + 1);
+  });
+  // Kahn's finite queue visits each authored vertex and edge once. Paused
+  // connections preserve their authored edges for cycle admission.
+  const ready = [...incoming.keys()].filter(id => incoming.get(id) === 0); let visited = 0;
+  for (let cursor = 0; cursor < ready.length; cursor += 1) {
+    visited += 1;
+    for (const id of outgoing.get(ready[cursor])) { incoming.set(id, incoming.get(id) - 1); if (incoming.get(id) === 0) ready.push(id); }
+  }
+  if (visited !== work.size) reject('score-cycle', `${path}.dependencies`, 'Choose dependencies that move toward later work without returning to an earlier session.');
+  settings.stages.forEach((row, index) => { row.workIds = references(row.workIds, work, `${path}.stages[${index}].workIds`, budget); });
+  const stages = new Map(settings.stages.map(row => [row.id, row])), gates = new Map(settings.gates.map(row => [row.id, row]));
+  settings.waits.forEach((row, index) => reference(row.receiverPersonId, people, `${path}.waits[${index}].receiverPersonId`, budget));
+  settings.gates.forEach((row, index) => { reference(row.afterStageId, stages, `${path}.gates[${index}].afterStageId`, budget); reference(row.reviewerPersonId, people, `${path}.gates[${index}].reviewerPersonId`, budget); });
+  settings.proposals.forEach((row, index) => {
+    const rowPath = `${path}.proposals[${index}]`, proposed = row.work;
+    if (work.has(proposed.id)) reject('duplicate-id', `${rowPath}.work.id`, 'Give proposed work an identity distinct from accepted sessions.');
+    reference(row.gateId, gates, `${rowPath}.gateId`, budget); reference(proposed.teamId, teams, `${rowPath}.work.teamId`, budget);
+    proposed.personIds = references(proposed.personIds, people, `${rowPath}.work.personIds`, budget, 1);
+    const members = new Set(teams.get(proposed.teamId).personIds);
+    if (proposed.personIds.some(id => !members.has(id))) reject('team-membership', `${rowPath}.work.personIds`, 'Assign proposed participants to the work-owning team.');
+  });
 }
 
 function nullableId(value, path) { return value === null ? null : text(value, path, true); }
@@ -852,7 +972,7 @@ function prepareVersion(candidate, version) {
   };
   const budget = { remaining: profile.references };
   state.people = list(raw.people, LIMITS.people, 'plan.people')
-    .map((value, i) => { const path = `plan.people[${i}]`; return personFields(record(value, profile.relationships ? 'person' : 'legacyPerson', path), path); });
+    .map((value, i) => { const path = `plan.people[${i}]`; return personFields(record(value, profile.score ? 'scorePerson' : profile.relationships ? 'person' : 'legacyPerson', path), path); });
   const peopleById = indexRecords(state.people, 'plan.people');
   state.teams = list(raw.teams, LIMITS.teams, 'plan.teams').map((value, i) => {
     const path = `plan.teams[${i}]`;
@@ -863,7 +983,10 @@ function prepareVersion(candidate, version) {
   const teamMembers = new Map(state.teams.map(team => [team.id, new Set(team.personIds)]));
   state.work = list(raw.work, LIMITS.work, 'plan.work').map((value, i) => {
     const path = `plan.work[${i}]`;
-    const work = record(value, profile.relationships ? 'work' : 'legacyWork', path);
+    const hasTiming = value && typeof value === 'object' && Object.hasOwn(value, 'timing');
+    const work = version === '0.6.0' && !hasTiming ? { ...record(value, 'untimedWork', path), timing: null }
+      : record(value, profile.relationships ? 'work' : 'legacyWork', path);
+    if (!profile.score && work.timing !== null) reject('timing-version', `${path}.timing`, 'Use the score schema for authored timing; retain null in this earlier contract.');
     const teamId = text(work.teamId, `${path}.teamId`, true);
     if (!teamsById.has(teamId)) reject('reference', `${path}.teamId`, 'Choose an existing team.');
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
@@ -922,6 +1045,10 @@ function prepareVersion(candidate, version) {
     state.assuranceSettings = prepareAssuranceSettings(raw.assuranceSettings);
     prepareAssuranceReferences(state, peopleById, workById, budget);
   }
+  if (profile.score) {
+    state.scoreSettings = prepareScoreSettings(raw.scoreSettings);
+    prepareScoreReferences(state, peopleById, teamsById, workById, budget);
+  }
   const serialized = JSON.stringify(state);
   const byteLimit = SCHEMA_BYTE_LIMITS[version];
   if (serialized.length > byteLimit || encoder.encode(serialized).byteLength > byteLimit) reject('bytes', 'plan', 'Use a plan within its schema UTF-8 budget.');
@@ -930,7 +1057,8 @@ function prepareVersion(candidate, version) {
     ...(profile.relationships ? { observations: relationshipObservations(state, peopleById, teamsById, workById, result) } : {}),
     ...(graph ? { capabilities: capabilitySummaries(state, graph, peopleById, teamsById, workById, result) } : {}),
     ...(profile.change ? { change: projectChange(state.changeSettings) } : {}),
-    ...(profile.assurance ? { assurance: projectAssurance(state.assuranceSettings, state) } : {}) });
+    ...(profile.assurance ? { assurance: projectAssurance(state.assuranceSettings, state) } : {}),
+    ...(profile.score ? { score: projectScore(state) } : {}) });
 }
 
 function prepareSelectedVersion(candidate, version) {
@@ -940,7 +1068,7 @@ function prepareSelectedVersion(candidate, version) {
   // bytes are fully admitted before migration. Only this owned state is copied.
   return prepareVersion({ ...admitted.state, schemaVersion: CONTRACT.schemaVersion,
     purpose: admitted.state.purpose ?? emptyPurpose(),
-    people: admitted.state.people.map(row => ({ role: emptyRole(), lifecycle: 'active', ...row })),
+    people: admitted.state.people.map(row => ({ role: emptyRole(), lifecycle: 'active', availability: null, ...row })),
     teams: admitted.state.teams.map(row => ({ lifecycle: 'active', ...row })),
     work: admitted.state.work.map(row => ({ lifecycle: 'active', ...row })),
     contributions: admitted.state.contributions ?? [], connections: admitted.state.connections ?? [],
@@ -948,7 +1076,8 @@ function prepareSelectedVersion(candidate, version) {
       : admitted.state.practices.map(row => createLegacyPractice(row.id, row.practiceId, row.teamId, row.workIds)),
     abilities: admitted.state.abilities ?? [], capabilityEvidence: admitted.state.capabilityEvidence ?? [],
     changeSettings: admitted.state.changeSettings ?? createChangeSettings(),
-    assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings() }, CONTRACT.schemaVersion);
+    assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings(),
+    scoreSettings: createScoreSettings() }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }
@@ -1000,7 +1129,8 @@ export function createExamplePlan() {
     purpose: emptyPurpose(),
     changeSettings: createChangeSettings(),
     assuranceSettings: createAssuranceSettings(),
-    people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active' })),
+    scoreSettings: createScoreSettings(),
+    people: ['product-one', 'product-two', 'engineering-one', 'engineering-two'].map(id => ({ id, label: id, fundedMinutes: 0, rateCentsPerHour: 10000, role: emptyRole(), lifecycle: 'active', availability: null })),
     teams: [{ id: 'delivery', label: 'Product and Engineering', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], lifecycle: 'active' }],
     work: [{ id: 'review', label: 'Weekly working session', teamId: 'delivery', personIds: ['product-one', 'product-two', 'engineering-one', 'engineering-two'], minutesPerOccurrence: 30, occurrences: 6, funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' }],
     contributions: [], connections: [], abilities: [], capabilityEvidence: [],

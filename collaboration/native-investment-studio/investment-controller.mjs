@@ -6,6 +6,7 @@ import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { getQualityConcept, getSourcePreset, getRehearsalDefinition } from './assurance-models.mjs';
 import { getChangeFramework, getInterpretiveLens, listAttentionChannels } from './change-models.mjs';
+import { describeScoreChanges } from './score-reference.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -13,7 +14,7 @@ const CHANGE_LABELS = Object.freeze({
   rateCentsPerHour: 'hourly rates', personIds: 'participants', teamId: 'team',
   minutesPerOccurrence: 'session duration', occurrences: 'session count',
   funding: 'funding', status: 'work status', timing: 'timing', practiceId: 'practice', workIds: 'supporting work',
-  role: 'roles', lifecycle: 'availability', categoryId: 'contribution kind', receiverPersonId: 'receiving person',
+  role: 'roles', lifecycle: 'record state', availability: 'authored availability', categoryId: 'contribution kind', receiverPersonId: 'receiving person',
   decisionOwnerPersonId: 'decision owner', reviewBoundary: 'human review', decisionBoundary: 'human decision',
   senderTeamId: 'sending team', receiverTeamId: 'receiving team', sharedObject: 'what is shared', responseExpectation: 'expected response',
   definitionId: 'chosen action', definitionVersion: 'definition version', context: 'use context', responsiblePersonIds: 'responsible people',
@@ -138,6 +139,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     if (preview.changes.purpose.length) add(`Purpose: ${preview.changes.purpose.map(name => PURPOSE_LABELS[name]).join(' · ')}`);
     if (preview.changes.changeSettings.length) changeDescriptions(projection.state, preview.projection.state).forEach(add);
     if (preview.changes.assuranceSettings.length) assuranceDescriptions(projection.state, preview.projection.state).forEach(add);
+    describeScoreChanges(projection.state, preview.projection.state).forEach(add);
     for (const [kind, label] of Object.entries(COLLECTION_LABELS)) {
       const change = preview.changes[kind];
       if (!change.added.length && !change.removed.length && !change.changed.length && !change.orderChanged) continue;
@@ -184,6 +186,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
         || 'Framework, viewpoint, mapping and attention match the baseline.']);
       if (baseline) rows.push(['Quality and recovery', assuranceDescriptions(baseline.projection.state, projection.state).join(' · ')
         || 'Quality, recovery, learning and rehearsal records match the baseline.']);
+      if (baseline) rows.push(['Score and availability', describeScoreChanges(baseline.projection.state, projection.state).join(' · ')
+        || 'Timing, availability, dependencies, stages, waits and modeled decisions match the baseline.']);
       comparison.replaceChildren(...rows.map(([label, value]) => {
         const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
         dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;

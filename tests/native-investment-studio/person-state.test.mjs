@@ -46,8 +46,8 @@ for (const [workCount, expectedDelta] of [[1, 300], [8, 2400], [25, 7500]]) {
 test('a person shared by teams contributes one funded account and both funding pools once', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 120, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'two', label: 'Two', fundedMinutes: 60, rateCentsPerHour: 5000, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'one', label: 'One', fundedMinutes: 120, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'two', label: 'Two', fundedMinutes: 60, rateCentsPerHour: 5000, role: unassignedRole(), lifecycle: 'active', availability: null },
   ];
   plan.teams = ['first', 'second'].map(id => ({ id, label: id, personIds: ['one', 'two'], lifecycle: 'active' }));
   const work = (id, teamId, personId, minutes, funding) => ({ ...plan.work[0], id, teamId, personIds: [personId], minutesPerOccurrence: minutes, occurrences: 1, funding });
@@ -69,7 +69,7 @@ test('a person shared by teams contributes one funded account and both funding p
 
 test('person previews preserve pool rounding when displayed work lines round independently', () => {
   const plan = createExamplePlan();
-  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active' }];
+  plan.people = [{ id: 'one', label: 'One', fundedMinutes: 60, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active', availability: null }];
   plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one'], lifecycle: 'active' }];
   plan.work = ['allocated', 'additional'].flatMap(funding => [0, 1].map(index => ({ ...plan.work[0], id: `${funding}-${index}`,
     personIds: ['one'], minutesPerOccurrence: 15, occurrences: 1, funding })));
@@ -88,11 +88,11 @@ test('person previews preserve pool rounding when displayed work lines round ind
 test('unknown rate, explicit zero, and zero funded time retain different pricing meanings', () => {
   const studio = createStudio();
   const initial = studio.read();
-  const missing = studio.updatePerson(PERSON, person(initial, { rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active' }), initial);
+  const missing = studio.updatePerson(PERSON, person(initial, { rateCentsPerHour: null, role: unassignedRole(), lifecycle: 'active', availability: null }), initial);
   assert.equal(missing.ok, true);
   assert.equal(missing.projection.result.plannedCommitmentCents, null);
   assert.equal(missing.projection.result.knownCommitmentCents, 90000);
-  const zero = studio.updatePerson(PERSON, person(missing.projection, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }), missing.projection);
+  const zero = studio.updatePerson(PERSON, person(missing.projection, { rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null }), missing.projection);
   assert.equal(zero.ok, true);
   assert.equal(zero.projection.result.plannedCommitmentCents, 90000);
   assert.equal(zero.projection.result.standing, 'priced');
@@ -159,8 +159,8 @@ test('person commands validate every field before treating a candidate as unchan
 test('an individually valid rate whose aggregate exceeds safe money retains the last priced plan', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null },
   ];
   plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two'], lifecycle: 'active' }];
   plan.work = Array.from({ length: LIMITS.work }, (_, index) => ({ ...plan.work[0], id: `work-${index}`,
@@ -169,7 +169,7 @@ test('an individually valid rate whose aggregate exceeds safe money retains the 
   const studio = createStudio(plan);
   const before = studio.read();
   assert.equal(before.result.plannedCommitmentCents, 6144000000000000);
-  const candidate = person(before, { rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active' }, 'two');
+  const candidate = person(before, { rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active', availability: null }, 'two');
   held(studio.previewPerson('two', candidate, before), before, 'money-overflow');
   held(studio.updatePerson('two', candidate, before), before, 'money-overflow');
   assert.strictEqual(studio.capture(), before);

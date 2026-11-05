@@ -21,8 +21,9 @@ Hours, Minutes and Working sessions controls. The current
 [showcase refinement, #694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694)
 leads with diagrams, readable examples and compact inspection controls. Stable choices, nearby creation,
 useful collapsed previews and ASCII zine styling support these visitor tasks.
-The complete showcase continues through explicit timing, visual analysis,
-scenarios and final composition. Performance refinement follows that experience.
+The coordination horizon now joins authored timing, availability, waits and
+modeled decisions to the accepted plan. The complete showcase continues through
+visual analysis, scenarios and final composition. Performance refinement follows that experience.
 
 The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
 tracks the ASCII composition method's public Pages projection and the visual
@@ -37,8 +38,9 @@ its broader planning capabilities while the native experience grows.
 
 ## Try a useful sequence
 
-1. Inspect the team connections, then open **Purpose** to read what the pilot
-   should change. Investment lets you save a baseline before experimenting.
+1. Begin with the **Coordination horizon**, then inspect the team connections.
+   Open **Purpose** to read what the pilot should change. Investment lets you
+   save a baseline before experimenting.
 2. In Coordination, choose **Pilot decision review** under Working session.
    Its diagram names who joins and what their work supports. Open **Session
    settings**, then try 45 minutes with the dial, arrow keys, step buttons, or
@@ -86,6 +88,42 @@ Quality and recovery illustrations retain their own horizon, rates and effort.
 The accepted total changes when a visitor explicitly accepts people or work.
 The short manuals explain those quantities beside their controls.
 
+## Arrange the work in time
+
+The **Coordination horizon** shows the pilot's authored rehearsal sequence.
+Select a session clip or a stage to inspect it. The same records supply the
+chronological agenda, exact table and available-time reading. Change the view
+scale or follow a session, person or chapter link; return to the horizon with
+your unfinished entries intact.
+
+Hover over or focus a clip to preview its participants, duration, funding and
+preceding work. The compact chronological table keeps sessions, waits and
+decisions in time order; the session table compares effort and funding across
+their full series.
+
+Try moving the first Pilot decision review from minute 660 to minute 500.
+The proposed horizon shows the review starting before its supporting work is
+ready and overlapping the Quality reviewer's rehearsal. The $3,980 accepted
+investment stays visible. Apply accepts the arrangement; Cancel restores the
+current entries; Investment offers Undo and baseline comparison.
+
+Next work and Options hold possible sessions. Set the Pilot decision's modeled
+choice to Proceed, inspect **Confirm the recovery instructions**, and select
+**Add this proposal to planned work when I Apply**. The 30-minute session with
+the Quality reviewer and Operations specialist adds $100. Apply accepts the gate
+choice and funded session together; Undo restores the earlier plan.
+
+Timing uses elapsed minutes from a named starting point. Participant effort,
+funded time and temporal availability retain separate meanings. A wait adds
+elapsed time and has zero participant effort. Older imported plans keep timing
+and availability unspecified until a visitor supplies them. The example's times,
+rates and modeled decisions remain editable assumptions.
+
+Hours and Minutes each have a dial beside their precision field. Hours uses the
+larger dial; both also accept keyboard arrows, taps, step buttons and direct
+entry. Turning Hours preserves Minutes. At 23:30, set Minutes to zero before
+choosing 24 hours.
+
 ## Run a local preview
 
 Use the Node version declared in [`.node-version`](../../.node-version), and
@@ -111,6 +149,7 @@ Run source checks and the browser route for the affected task. For example:
 
 ```sh
 npm run test:native-investment-studio:source
+npm run test:native-investment-studio:score-browser
 npm run test:native-investment-studio:session-browser
 npm run test:native-investment-studio:assembly-browser
 npm run test:native-investment-studio:capability-browser
@@ -128,7 +167,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#694](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/694),
+source, the worktree, [#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.

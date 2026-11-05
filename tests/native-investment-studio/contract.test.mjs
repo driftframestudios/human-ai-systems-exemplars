@@ -57,7 +57,7 @@ test('complete legacy byte-budget plans migrate and retain their original transp
   assert.throws(() => parsePlan(`${versionTwoBytes} `), { code: 'bytes' });
   const current = parsePlan(versionTwoBytes);
   assert.ok(Buffer.byteLength(current.serialized) <= LIMITS.bytes);
-  assert.equal(current.state.schemaVersion, '0.6.0');
+  assert.equal(current.state.schemaVersion, '0.7.0');
   assert.ok(LIMITS.bytes >= Buffer.byteLength(current.serialized));
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(current.result.plannedCommitmentCents, migrated.result.plannedCommitmentCents);
@@ -74,7 +74,7 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   const source = JSON.parse(legacyText);
   const before = JSON.stringify(source);
   const projection = preparePlan(source);
-  assert.equal(projection.state.schemaVersion, '0.6.0');
+  assert.equal(projection.state.schemaVersion, '0.7.0');
   assert.equal(projection.state.modelVersion, '0.1.0');
   assert.deepEqual(projection.state.purpose, noPurpose);
   assert.equal(projection.state.revision, 7);
@@ -88,12 +88,12 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   assert.deepEqual(parsePlan(legacyText), projection);
   assert.deepEqual(parsePlan(projection.serialized), projection);
   assert.ok(Object.isFrozen(projection.state.purpose));
-  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.6.0');
+  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.7.0');
   const receipt = prepareImport(legacyText);
   assert.equal(receipt.sourceSchemaVersion, '0.1.0');
   assert.deepEqual(receipt.projection, projection);
   assert.ok(Object.isFrozen(receipt));
-  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.6.0');
+  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.7.0');
 });
 
 test('legacy migration first admits the closed old root, rows, references, model and integer tokens', () => {
@@ -132,7 +132,7 @@ test('schema selection uses the owned enumerable data descriptor and rechecks it
   const absent = JSON.parse(legacyText); delete absent.schemaVersion; rejects(absent, 'data-property');
   const inherited = Object.assign(Object.create({ schemaVersion: '0.1.0' }), absent);
   rejects(inherited, 'record');
-  for (const value of ['0.7.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
+  for (const value of ['0.8.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
     const plan = JSON.parse(legacyText); plan.schemaVersion = value; rejects(plan, 'unsupported-contract');
   }
   let descriptors = 0;
@@ -196,9 +196,9 @@ test('coordination has an independent person-minute and cent oracle', () => {
 test('allocated practice work stays inside staffing; shared work enters once', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 4800, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'two', label: 'Two', fundedMinutes: 4800, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'reviewer', label: 'Reviewer', fundedMinutes: 0, rateCentsPerHour: 15000, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'one', label: 'One', fundedMinutes: 4800, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'two', label: 'Two', fundedMinutes: 4800, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'reviewer', label: 'Reviewer', fundedMinutes: 0, rateCentsPerHour: 15000, role: unassignedRole(), lifecycle: 'active', availability: null },
   ];
   plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two', 'reviewer'], lifecycle: 'active' }];
   const work = (id, personIds, minutesPerOccurrence, occurrences, funding = 'allocated') => ({
@@ -258,7 +258,7 @@ test('cent rounding is exact per person/funding pool, including half cents', () 
 test('splitting work preserves spending and attribution with an explicit display reconciliation', () => {
   for (const funding of ['allocated', 'additional']) {
     const plan = createExamplePlan();
-    plan.people = [{ id: 'one', label: 'One', fundedMinutes: funding === 'allocated' ? 60 : 0, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active' }];
+    plan.people = [{ id: 'one', label: 'One', fundedMinutes: funding === 'allocated' ? 60 : 0, rateCentsPerHour: 10000, role: unassignedRole(), lifecycle: 'active', availability: null }];
     plan.teams[0].personIds = ['one'];
     plan.work[0] = { ...plan.work[0], personIds: ['one'], minutesPerOccurrence: 60, occurrences: 1, funding };
     const combined = preparePlan(plan).result;
@@ -286,7 +286,7 @@ test('splitting work preserves spending and attribution with an explicit display
 test('positive display reconciliation restores a pooled cent in either funding treatment', () => {
   for (const funding of ['allocated', 'additional']) {
     const plan = createExamplePlan();
-    plan.people = [{ id: 'one', label: 'One', fundedMinutes: funding === 'allocated' ? 58 : 0, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active' }];
+    plan.people = [{ id: 'one', label: 'One', fundedMinutes: funding === 'allocated' ? 58 : 0, rateCentsPerHour: 1, role: unassignedRole(), lifecycle: 'active', availability: null }];
     plan.teams[0].personIds = ['one'];
     plan.work = ['first', 'second'].map(id => ({ ...plan.work[0], id,
       personIds: ['one'], minutesPerOccurrence: 29, occurrences: 1, funding }));
@@ -340,7 +340,7 @@ test('duplicates, unresolved references, and ownership mismatches are rejected',
     ['reference', plan => { plan.work[0].teamId = 'missing'; }],
     ['reference', plan => { plan.practices[0].supportBindings[0].workIds = ['missing']; }],
     ['team-membership', plan => { plan.teams[0].personIds.shift(); }],
-    ['timing-version', plan => { plan.work[0].timing = { week: 1 }; }],
+    ['fields', plan => { plan.work[0].timing = { week: 1 }; }],
     ['capability-definition', plan => { plan.practices[0].definitionId = 'invented'; }],
   ];
   for (const [code, alter] of cases) {
@@ -384,7 +384,7 @@ test('import and collection budgets reject before downstream work', () => {
   assert.throws(() => parsePlan('{'), { code: 'json' });
   const large = createExamplePlan(); large.people = new Array(LIMITS.people + 1); rejects(large, 'collection');
   const edges = createExamplePlan();
-  edges.people = Array.from({ length: 128 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' }));
+  edges.people = Array.from({ length: 128 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null }));
   edges.teams = Array.from({ length: 32 }, (_, i) => ({ id: `team-${i}`, label: 'Team', personIds: edges.people.map(person => person.id), lifecycle: 'active' }));
   edges.work = Array.from({ length: 96 }, (_, index) => ({ ...edges.work[0], id: `work-${index}`, teamId: 'team-0',
     personIds: edges.people.map(row => row.id) }));
@@ -408,7 +408,7 @@ test('array admission snapshots its own length and bounds traversal despite a ch
       if (/^\d+$/.test(key)) {
         personDescriptors += 1;
         return { enumerable: true, configurable: true, writable: true,
-          value: { id: `person-${key}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' } };
+          value: { id: `person-${key}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null } };
       }
       return Reflect.getOwnPropertyDescriptor(target, key);
     },
@@ -424,7 +424,7 @@ test('array admission snapshots its own length and bounds traversal despite a ch
 
 test('large individually valid line amounts cannot overflow the aggregate', () => {
   const plan = createExamplePlan();
-  plan.people = Array.from({ length: 16 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active' }));
+  plan.people = Array.from({ length: 16 }, (_, i) => ({ id: `person-${i}`, label: 'Person', fundedMinutes: 0, rateCentsPerHour: LIMITS.rateCentsPerHour, role: unassignedRole(), lifecycle: 'active', availability: null }));
   const personIds = plan.people.map(person => person.id);
   plan.teams = [{ id: 'delivery', label: 'Delivery', personIds, lifecycle: 'active' }];
   plan.work = Array.from({ length: 200 }, (_, i) => ({ ...plan.work[0], id: `work-${i}`, personIds, minutesPerOccurrence: LIMITS.minutesPerOccurrence, occurrences: LIMITS.occurrences }));
@@ -435,9 +435,9 @@ test('large individually valid line amounts cannot overflow the aggregate', () =
 test('safe settled ceiling survives larger display-line totals and reordered work', () => {
   const plan = createExamplePlan();
   plan.people = [
-    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: 100000000, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 56514959, role: unassignedRole(), lifecycle: 'active' },
-    { id: 'filler', label: 'Filler', fundedMinutes: 0, rateCentsPerHour: 60, role: unassignedRole(), lifecycle: 'active' },
+    { id: 'one', label: 'One', fundedMinutes: 0, rateCentsPerHour: 100000000, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'two', label: 'Two', fundedMinutes: 0, rateCentsPerHour: 56514959, role: unassignedRole(), lifecycle: 'active', availability: null },
+    { id: 'filler', label: 'Filler', fundedMinutes: 0, rateCentsPerHour: 60, role: unassignedRole(), lifecycle: 'active', availability: null },
   ];
   plan.teams = [{ id: 'delivery', label: 'Delivery', personIds: ['one', 'two', 'filler'], lifecycle: 'active' }];
   const work = (id, personIds, minutesPerOccurrence, occurrences) => ({

@@ -176,7 +176,8 @@
     "test:native-investment-studio:connection-template-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/connection-template.browser.mjs",
     "test:native-investment-studio:capability-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/capability.browser.mjs",
     "test:native-investment-studio:change-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/change.browser.mjs",
-    "test:native-investment-studio:assurance-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/assurance.browser.mjs"
+    "test:native-investment-studio:assurance-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/assurance.browser.mjs",
+    "test:native-investment-studio:score-browser": "node tools/check-node-runtime.mjs --quiet && node --test tests/native-investment-studio/score.browser.mjs"
   },
   "overrides": {
     "fast-uri": "4.2.3"

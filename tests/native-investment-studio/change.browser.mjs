@@ -160,6 +160,10 @@ for (const engine of names) {
     await expect(proposalDial).toHaveValue('0');
     await field(page, 'proposal.hoursPerSession').fill('1'); await field(page, 'proposal.minutesPerSession').fill('30');
     await expect(proposalDial).toHaveValue('30');
+    const proposalHours = panel(page).locator('[data-native-hours-knob]');
+    await proposalHours.focus(); await page.keyboard.press('ArrowUp');
+    await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('2'); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('30');
+    await page.keyboard.press('ArrowDown'); await expect(field(page, 'proposal.hoursPerSession')).toHaveValue('1');
     await field(page, 'proposal.funding').selectOption('additional');
     await expect(panel(page).locator('[data-change-preview]')).toContainText('Proposed investment: $16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00');

@@ -77,7 +77,7 @@ test('imported creation collision retains all raw data until explicit fresh-ID r
   const before = editing.assembly.read().draft;
   const id = describeAssemblyTarget(draft.assemblyId).id;
   const replacement = structuredClone(studio.read().state);
-  replacement.people.push({ id, label: 'Imported person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active' });
+  replacement.people.push({ id, label: 'Imported person', fundedMinutes: 0, rateCentsPerHour: 0, role: unassignedRole(), lifecycle: 'active', availability: null });
   studio.replace(replacement, studio.read());
   assert.equal(editing.assembly.read().status, 'stale');
   assert.equal(editing.assembly.read().creationConflict, true);

@@ -334,6 +334,9 @@
         "tests/native-investment-studio/relationships.test.mjs",
         "tests/native-investment-studio/responsibility-draft.test.mjs",
         "tests/native-investment-studio/responsibility-editing.test.mjs",
+        "tests/native-investment-studio/score-contract.test.mjs",
+        "tests/native-investment-studio/score-draft.test.mjs",
+        "tests/native-investment-studio/score-models.test.mjs",
         "tests/native-investment-studio/session-draft.test.mjs",
         "tests/native-investment-studio/session-editing.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
@@ -3066,6 +3069,28 @@
       "aliases": [
         "test:native-investment-studio:assurance-browser"
       ]
+    },
+    {
+      "id": "browser.native-investment-studio.score",
+      "family": "native-investment-studio",
+      "kind": "node-test",
+      "members": [
+        "tests/native-investment-studio/score.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "collaboration/native-investment-studio/README.md",
+      "scope": "Authored timing and availability, score inspection, modeled decision gates, explicit proposal funding, Apply and Undo, retained drafts and accessible cross-engine operation.",
+      "aliases": [
+        "test:native-investment-studio:score-browser"
+      ]
     }
   ],
   "bundles": [
@@ -3197,7 +3222,8 @@
         "browser.native-investment-studio.connection-templates",
         "browser.native-investment-studio.capabilities",
         "browser.native-investment-studio.change",
-        "browser.native-investment-studio.assurance"
+        "browser.native-investment-studio.assurance",
+        "browser.native-investment-studio.score"
       ]
     },
     {
@@ -3672,6 +3698,9 @@
         ],
         "test:native-investment-studio:assurance-browser": [
           "tests/native-investment-studio/assurance.browser.mjs"
+        ],
+        "test:native-investment-studio:score-browser": [
+          "tests/native-investment-studio/score.browser.mjs"
         ]
       },
       "directBrowserToolSelections": {

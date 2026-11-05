@@ -1,4 +1,5 @@
-import { mountMinutesDial, renderTimeReadout } from './time-controls.mjs';
+import { mountDurationDials, renderTimeReadout } from './time-controls.mjs';
+import { describeScoreReference } from './score-reference.mjs';
 import { describeAssuranceReference, getQualityConcept, getLearningPromptDefinition, getRehearsalDefinition } from './assurance-models.mjs';
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
@@ -47,10 +48,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const inputs = Object.fromEntries(FIELDS.map(field => [field, elements.form.elements.namedItem(field)]));
   const errors = Object.fromEntries(ERROR_FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
   const remoteTitle = elements.summary.querySelector('[data-native-remote-title]') ?? elements.summary;
-  const dial = root.querySelector('[data-native-minutes-dial]');
-  const knob = dial?.querySelector('[data-native-minutes-knob]');
-  const knobNote = root.querySelector('[data-native-knob-note]');
-  const knobHelp = root.querySelector('#native-minutes-knob-help');
+  const dials = Object.fromEntries(['hours', 'minutes'].map(unit => {
+    const dial = root.querySelector(`[data-native-${unit}-dial]`);
+    return [unit, { dial, knob: dial?.querySelector(`[data-native-${unit}-knob]`),
+      note: root.querySelector(unit === 'hours' ? '[data-native-hours-knob-note]' : '[data-native-knob-note]'),
+      help: unit === 'minutes' ? root.querySelector('#native-minutes-knob-help') : null }];
+  }));
   const cleanup = [];
   let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
@@ -59,7 +62,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   let renderedSelection = undefined, renderedDraftToken = null, renderedTeam = undefined;
   let composing = false, disposed = false, acknowledgedOpen = false, generation = 0;
   let retiredToken = null, membersTarget = null, memberOrder = [];
-  let minutesDial;
+  let durationDials;
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -82,8 +85,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function announce(message) { if (!disposed) elements.status.textContent = message; }
   function dialState() {
     const view = editor.read(), active = editing.read().active;
-    return { token: view.draft?.token, raw: view.draft?.raw.minutesPerSession ?? inputs.minutesPerSession.value, hours: view.draft?.raw.hoursPerSession ?? inputs.hoursPerSession.value,
-      composing, error: view.draft?.errors.some(error => error.path === 'draft.minutesPerSession'),
+    return { token: view.draft?.token, hours: view.draft?.raw.hoursPerSession ?? inputs.hoursPerSession.value, minutes: view.draft?.raw.minutesPerSession ?? inputs.minutesPerSession.value,
+      composing, errors: { hours: view.draft?.errors.some(error => error.path === 'draft.hoursPerSession'), minutes: view.draft?.errors.some(error => error.path === 'draft.minutesPerSession') },
       enabled: !disposed && !composing && isActive() && elements.configure.open && view.status === 'editing'
         && active?.kind === 'session' && active.token === view.draft?.token };
   }
@@ -232,9 +235,14 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function renderDependencies(error) {
     const references = error?.references ?? [];
     elements.dependencies.hidden = references.length === 0;
-    const records = new Map(references.map(reference => [`${reference.collection}:${reference.collection === 'assuranceSettings' ? reference.field.split('[')[0] : ''}:${reference.id}`, reference]));
+    const records = new Map(references.map(reference => [`${reference.collection}:${['assuranceSettings', 'scoreSettings'].includes(reference.collection) ? reference.field.split('[')[0] : ''}:${reference.id}`, reference]));
     elements.dependencies.replaceChildren(...[...records.values()].map(reference => {
       const row = document.createElement('li');
+      const score = describeScoreReference(projection.state.scoreSettings, reference);
+      if (score) {
+        const link = document.createElement('a'); link.href = '#native-studio-coordination'; Object.assign(link.dataset, { nativeOpenScore: score.kind, nativeScoreId: score.id });
+        link.textContent = 'Review in the coordination horizon'; row.append(`${score.label}. `, link); return row;
+      }
       const assurance = describeAssuranceReference(projection.state.assuranceSettings, reference);
       if (assurance) {
         const link = document.createElement('a'); link.href = '#native-studio-assurance'; link.dataset.nativeOpenAssurance = '';
@@ -316,7 +324,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       (errorField === 'personIds' ? elements.members : inputs[errorField]).setAttribute('aria-invalid', 'true');
     }
     elements.generalError.textContent = error && !draft?.errors.length && !errorField ? error.message : '';
-    minutesDial.refresh();
+    durationDials.refresh();
     renderDependencies(error);
     elements.preview.hidden = removing;
     const result = preview?.ok ? preview.projection.result : !draft ? projection.result : null;
@@ -354,7 +362,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function open(target, focus = true) {
     if (disposed) return;
-    minutesDial?.release();
+    durationDials?.release();
     const epoch = ++generation;
     onBegin();
     if (!owns(epoch)) return;
@@ -366,7 +374,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function create() {
     if (disposed) return;
-    minutesDial?.release();
+    durationDials?.release();
     const epoch = ++generation;
     onBegin();
     if (!owns(epoch)) return;
@@ -374,7 +382,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function close({ park = true } = {}) {
     if (disposed) return;
-    minutesDial?.release();
+    durationDials?.release();
     const epoch = ++generation; acknowledgedOpen = false;
     if (park && editing.read().active?.kind === 'session') editing.park();
     if (owns(epoch)) elements.configure.open = false;
@@ -390,7 +398,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function settle(action) {
     if (disposed) return;
-    minutesDial?.release();
+    durationDials?.release();
     const view = editor.read();
     if (!view.draft) return;
     if (composing && action === 'apply') { announce('Finish entering the value, then apply.'); return; }
@@ -454,7 +462,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function edit(event) {
     const field = event.target.name;
     if (disposed || inputs[field] !== event.target) return;
-    minutesDial?.release();
+    durationDials?.release();
     const view = editor.read();
     if (!view.draft) return;
     const epoch = ++generation;
@@ -483,7 +491,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function dispose() {
     if (disposed) return;
-    minutesDial?.release();
+    durationDials?.release();
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
@@ -493,7 +501,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.fieldset.disabled = true; elements.configure.open = false;
     elements.add.disabled = true; elements.remove.disabled = true; elements.select.disabled = true;
     elements.toolbar.hidden = true;
-    minutesDial?.dispose();
+    durationDials?.dispose();
     delete root.dataset.sessionReady; INSTANCES.delete(root);
   }
   const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close,
@@ -505,8 +513,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       else render();
     }, dispose });
   try {
-    minutesDial = mountMinutesDial({ dial, knob, note: knobNote, help: knobHelp, read: dialState,
-      write(token, value) { const epoch = ++generation; changed(operate('setText', token, 'minutesPerSession', value), epoch); } });
+    durationDials = mountDurationDials({ dials, read: dialState,
+      write(token, field, value) { const epoch = ++generation; changed(operate('setText', token, field, value), epoch); } });
     for (const [field, metadata] of Object.entries(SESSION_FORMS['work.create'].fields)) {
       if (inputs[field]?.tagName === 'INPUT') inputs[field].maxLength = metadata.maxLength;
     }

@@ -120,13 +120,17 @@ test('assurance reference guards name dependent records and settings commands pr
   assert.equal(removedWork.error.code, 'dependencies');
   assert.deepEqual(removedWork.error.references.map(row => row.field), ['quality.concepts[7].workIds', 'recoveryEvents[0].workIds', 'rehearsals[0].workIds']);
   const removedConnection = studio.applyCommand({ type: 'connection.remove', connectionId: 'readiness' }, before);
-  assert.deepEqual(removedConnection.error.references, [{ collection: 'assuranceSettings', id: 'pilot-recovery', field: 'rehearsals[0].connectionIds' }]);
+  assert.deepEqual(removedConnection.error.references, [{ collection: 'assuranceSettings', id: 'pilot-recovery', field: 'rehearsals[0].connectionIds' },
+    { collection: 'scoreSettings', id: 'pairing-before-rehearsal', field: 'dependencies[1].connectionId' }]);
   const removedPerson = studio.applyCommand({ type: 'person.remove', personId: 'noor' }, before);
   assert.ok(removedPerson.error.references.some(row => row.collection === 'assuranceSettings' && row.field === 'context.recoveryRatePersonIds'));
   assert.ok(removedPerson.error.references.some(row => row.collection === 'assuranceSettings' && row.field === 'rehearsals[0].reviewerPersonId'));
   assert.ok(removedPerson.error.references.some(row => row.collection === 'assuranceSettings' && row.field === 'rehearsals[0].personIds'));
   const settings = structuredClone(before.state.assuranceSettings); settings.rehearsals[0].connectionIds = [];
   assert.equal(studio.applyCommand({ type: 'assurance.settings.replace', assuranceSettings: settings }, before).ok, true);
+  const scoreSettings = structuredClone(studio.read().state.scoreSettings);
+  scoreSettings.dependencies.find(row => row.connectionId === 'readiness').connectionId = null;
+  assert.equal(studio.applyCommand({ type: 'score.arrangement.replace', scoreSettings, workTiming: [], availability: [], fundProposalIds: [] }, studio.read()).ok, true);
   assert.equal(studio.applyCommand({ type: 'connection.remove', connectionId: 'readiness' }, studio.read()).ok, true);
   assert.equal(studio.read().state.work.at(-1).id, 'recovery-check');
   assert.equal(studio.read().result.knownCommitmentCents, 408000);
