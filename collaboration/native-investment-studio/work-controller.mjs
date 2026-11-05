@@ -1,6 +1,7 @@
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
+import { getChangeFramework } from './change-models.mjs';
 
 const INSTANCES = new WeakMap();
 const NUMBER_FIELDS = Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']);
@@ -252,6 +253,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.dependencies.hidden = references.length === 0;
     elements.dependencies.replaceChildren(...references.map(reference => {
       const row = document.createElement('li');
+      if (reference.collection === 'changeSettings') {
+        const map = projection.state.changeSettings.frameworkMaps.find(item => item.frameworkId === reference.id);
+        const name = getChangeFramework(map.frameworkId, map.version).name;
+        const link = document.createElement('a'); link.href = '#native-studio-change'; link.dataset.nativeOpenChange = '';
+        link.textContent = 'Review linked sessions in Change'; row.append(`${name}: `, link); return row;
+      }
       const practice = practices.get(reference.id);
       const name = PRACTICE_LABELS.get(practice?.definitionId) ?? reference.id;
       row.textContent = `Practice: ${name}${practice ? ` · ${teams.get(practice.teamId).label}` : ''}`;

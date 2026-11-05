@@ -59,6 +59,8 @@ then identifies each behavior's implementation owner.
 - `capabilities.mjs` owns the versioned ability/practice definitions and legacy interpretation.
 - `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
 - `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
+- `change-models.mjs` transfers the original framework, lens, attention and Four Actions definitions into a finite immutable catalogue; its pure projection reads admitted Change settings.
+- `change-proposals.mjs` prepares settings and explicitly configured support work together. `change-draft.mjs` retains raw entries, and `change-controller.mjs` receives the framework matrix, viewpoints, mixer and support proposal.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -115,7 +117,7 @@ inspect today.
 | Quality, recovery, and learning | Quality concepts and effort, disruption/recovery rows, learning disclosures, and scenario-specific questions | Work can carry its declared effort and funding basis. Richer quality, recovery, and observed-practice records follow through named extensions to the model. |
 | Horizon and commitments | Editable duration and units with an illustrative coordination drawing | `horizonWeeks` names the scenario context. `timing: null` explicitly carries unscheduled work; recurrence counts determine effort. A scheduler requires an additional timing contract. |
 | Investment and comparison | Staffing breakdown, heuristic planning range, commercial/service/capital analysis, and comparison capsules | Known monetary subtotal, completeness, funding distinction, capacity diagnostics, and immutable captures. Analytical domains continue with their existing owner until a compatible adapter is accepted. |
-| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.4.0 round-trip, admitted 0.1.0, 0.2.0 and 0.3.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
+| Keep and carry | Accepted analytical import/export, captured reports, and leave-behind snapshots | Native 0.5.0 round-trip, admitted 0.1.0 through 0.4.0 migration, revision-bound edits, and exact captures. Existing full-Studio exports remain usable in their original instrument. |
 
 The original horizon draws approximate spans from selected role, activity, and
 recovery rows. Its geometry supplies a visual precedent; actual native timing,
@@ -123,9 +125,9 @@ capacity scheduling, and priority policy require their own declared inputs.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.4.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.5.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, one closed `purpose` record, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, closed `purpose` and `changeSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
@@ -153,16 +155,18 @@ whitespace. Canonical output retains the trimmed, nonblank value; explicit
 or explicit null. The purpose draft adapter converts blank input into null at
 Apply. Purpose text describes the initiative independently of monetary inputs.
 
-`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, or `0.4.0` from the root's own
+`preparePlan` selects schema `0.1.0`, `0.2.0`, `0.3.0`, `0.4.0`, or `0.5.0` from the root's own
 enumerable schema-version data descriptor. It fully admits each source version's
 closed root, rows, references, numeric meaning and byte budget before constructing
 a current record. Version 0.1 receives six null purpose fields; versions 0.1 and 0.2
 receive unassigned role fields, active lifecycle values, and empty
 contribution/connection collections. A 0.2 purpose retains its admitted values.
 Version 0.3 retains its roles, lifecycle, purpose, contributions and connections.
-Every older practice becomes the immutable legacy definition version with an
+Practices in versions 0.1–0.3 become the immutable legacy definition version with an
 ordered `general-support` binding; earlier work references retain their order.
-Older plans receive empty abilities and capability-evidence collections.
+Versions 0.1–0.3 receive empty abilities and capability-evidence collections.
+Version 0.4 retains its exact capability instances and observations. All older
+versions receive the initial Change settings with empty support links.
 The owned migrated record then passes current admission. Current envelopes
 supply every declared current field; finite row-command compatibility has its
 own explicit construction boundary.
@@ -187,7 +191,7 @@ reference budget. Each old version still rejects its extra transport byte.
 `prepareImport(text)` performs the existing bounded JSON and integer-token
 checks once and returns frozen `{ projection, sourceSchemaVersion }`.
 `parsePlan(text)` returns that same path's projection. Import previews can use
-the source version while exports always describe the actual current 0.4 state.
+the source version while exports always describe the actual current 0.5 state.
 Caller-owned legacy records and external captures retain their original version
 and contents. Construction, replacement, import, history and baseline retention
 inside a current Studio receive current-schema projections.
@@ -261,6 +265,55 @@ browser route owns the actual install, reverse, support inspection, saved edit,
 enlarged layout and lifecycle journeys. The literal accounting example is
 $16,000 staffing, $400 attributed inside that funding, and a $150 additional
 review yielding $16,150 total.
+
+### Frameworks, viewpoints and relative attention
+
+The Change chapter helps a visitor choose questions about how new work becomes
+routine, map support and compare emphasis. Its closed `changeSettings` record
+holds the selected versioned framework, versioned lens, source filter, all six
+framework maps and eight relative attention channels. Component identity is
+the framework/version/component tuple. Reordering input arrays preserves that
+identity; the catalogue supplies display order. A framework switch retains
+the other maps and existing people-role assignments.
+
+Component mapping and planning status stay separate from linked work and
+capability observations. The original gap condition is an unmapped component
+or status `look`. A mapped `partial` or `outside` component keeps its original
+meaning. Core/Enterprise suggestions retain their source order and fallback.
+Four Actions retains the original status preference and authored-order tie
+handling, including deliberate reuse in short frameworks. Its Eliminate
+reading asks about scope; record removal keeps its own explicit command.
+
+The eight lenses retain their complete authored reading fields. Attention
+uses integer parts from 0 through 25 per channel. Zero and non-100 totals are
+valid. The mixer keeps the same channels through framework changes; an all-zero
+mix invites a choice rather than declaring a highest emphasis. Framework,
+viewpoint, mapping and attention changes preserve money. Explicit accepted
+sessions change the work account through its existing pricing rules.
+
+One shared editor retains every framework's raw mapping, status, support and
+attention values. Apply accepts the complete proposal; saved edits, Cancel,
+Undo and baseline comparison retain their ordinary ownership. Reset restores
+the original active framework, mapping/status values and attention while
+preserving linked support, the selected lens/filter and actual work.
+
+`prepareChangeProposal(base, {changeSettings, workProposal})` prepares settings
+alone or settings plus one named source suggestion. The work choice either
+reuses a session or supplies a complete new session with explicit people,
+duration, occurrences and funding. It links that work and sets the targeted
+component mapped/planned in one history event. The original suggestion's
+48 aggregate person-hours remain explanatory metadata. Native work declares
+time per participant; copying the aggregate estimate into every participant's
+quantity would change its meaning. Apply uses the existing exact-base owner,
+and identical proposals preserve acceptance and history.
+
+Schema 0.5 keeps 0.4's exact 9,095,416-byte and 16,384-reference admission.
+The new encoded-byte ceiling is 10,737,393; current aggregate references stay
+at 16,384. Work/capability links count in that budget and in removal diagnostics.
+Change projections survive Undo and baseline restoration. Exchange and baseline
+readings name changed frameworks, viewpoints, components and attention values.
+The catalogue, contract, proposal, draft and browser routes own their respective
+source fidelity, admission, accounting, recovery and visible-control observations.
 
 `previewPurpose(candidate, expectedProjection)` validates and prepares a proposed
 purpose while preserving accepted state. `updatePurpose` publishes a material
@@ -484,7 +537,7 @@ The discriminant is checked again after reflection. The complete person, team
 and work validators remain shared with their plan contract. Changed plans
 receive the complete reference, membership, cardinality, byte-budget and exact
 accounting preparation used by other native edits. Command construction leaves
-the current schema at 0.4 and the pricing model at 0.1.
+the current schema at 0.5 and the pricing model at 0.1.
 
 A referenced removal returns `ok: false` with `error.code: 'dependencies'` and
 an immutable `error.references` array. Each entry has `{collection, id, field}`;
@@ -632,7 +685,7 @@ still carries the existing accepted projection, giving a future UI a stable
 amount and a precise recovery message together.
 
 `replace` and `importText` pass through the same admission boundary as a work
-edit. Rejection preserves the prior snapshot. Native 0.4.0 export/import retains
+edit. Rejection preserves the prior snapshot. Native 0.5.0 export/import retains
 the supported state, and genuine native 0.1.0/0.2.0 plans migrate through their complete
 original admission. Full-Studio exports and unknown schema versions receive an
 explicit compatibility result; their original instruments retain those records
@@ -1342,7 +1395,7 @@ a 30-minute duration, one session, additional funding, and planned status.
 The visitor supplies a team and at least one participant before preview or
 Apply. Current admission requires every participant to belong to the selected
 team. The editor retains the selected people while the owner reports a missing
-reference or membership adjustment. Timing remains `null` under schema 0.4;
+reference or membership adjustment. Timing remains `null` under schema 0.5;
 updates carry the accepted row's timing value through the existing work owner.
 The later scheduling contract owns any new timing representation.
 

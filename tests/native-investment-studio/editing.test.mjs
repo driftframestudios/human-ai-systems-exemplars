@@ -81,12 +81,13 @@ test('legacy import preserves parked purpose text for review or deliberate curre
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
   delete legacy.abilities; delete legacy.capabilityEvidence;
+  delete legacy.changeSettings;
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId,
     teamId: row.teamId, workIds: row.supportBindings.flatMap(binding => binding.workIds) }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
-  assert.equal(studio.read().state.schemaVersion, '0.4.0');
+  assert.equal(studio.read().state.schemaVersion, '0.5.0');
   assert.equal(editing.purpose.read().status, 'stale');
   rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
   const reviewed = editing.purpose.review(saved, studio.read());
@@ -122,7 +123,7 @@ test('purpose reserves a bounded slot, accepts only its fixed target, and releas
   const next = opened(editing, studio, 'purpose', 'purpose');
   editing.purpose.setText(next, 'changedAbility', 'Still a draft');
   const disposed = editing.dispose();
-  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null, session: null, role: null, contribution: null, connection: null, capability: null });
+  assert.deepEqual(disposed.selected, { work: null, person: null, purpose: null, assembly: null, session: null, role: null, contribution: null, connection: null, capability: null, change: null });
   assert.equal(disposed.slots, 0);
   assert.equal(disposed.active, null);
   assert.equal(editing.purpose.read().status, 'disposed');

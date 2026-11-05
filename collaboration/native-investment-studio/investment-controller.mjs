@@ -4,6 +4,7 @@ import { money } from './display.mjs';
 import { PURPOSE_LABELS } from './purpose-controller.mjs';
 import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { getCapabilityDefinition } from './capabilities.mjs';
+import { getChangeFramework, getInterpretiveLens, listAttentionChannels } from './change-models.mjs';
 
 const CHANGE_LABELS = Object.freeze({
   planId: 'plan name', revision: 'saved revision', schemaVersion: 'file format',
@@ -20,6 +21,37 @@ const CHANGE_LABELS = Object.freeze({
 });
 const COLLECTION_LABELS = Object.freeze({ people: 'People', teams: 'Teams', work: 'Work' });
 const CONTRIBUTION_LABELS = new Map(CONTRIBUTION_CATEGORIES.map(row => [row.id, row.label]));
+const MAPPING_LABELS = Object.freeze({ planned: 'Planned', partial: 'Partly planned', look: 'Look here', outside: 'Outside the scope' });
+
+function changeDescriptions(before, after) {
+  const prior = before.changeSettings, next = after.changeSettings, descriptions = [];
+  const frameworkName = row => getChangeFramework(row.frameworkId, row.version).name;
+  const lensName = row => getInterpretiveLens(row.lensId, row.version).name;
+  if (JSON.stringify(prior.activeFramework) !== JSON.stringify(next.activeFramework))
+    descriptions.push(`Framework: ${frameworkName(prior.activeFramework)} → ${frameworkName(next.activeFramework)}`);
+  if (JSON.stringify(prior.lens) !== JSON.stringify(next.lens)) descriptions.push(`Viewpoint: ${lensName(prior.lens)} → ${lensName(next.lens)}`);
+  if (prior.sourceFilter !== next.sourceFilter) descriptions.push(`Suggestions: ${prior.sourceFilter} → ${next.sourceFilter}`);
+  const priorMaps = new Map(prior.frameworkMaps.map(row => [row.frameworkId + ':' + row.version, row]));
+  const work = new Map(after.work.map(row => [row.id, row.label]));
+  for (const map of next.frameworkMaps) {
+    const old = new Map(priorMaps.get(map.frameworkId + ':' + map.version)?.components.map(row => [row.componentId, row]) ?? []);
+    const definition = getChangeFramework(map.frameworkId, map.version);
+    for (const row of map.components) {
+      if (JSON.stringify(old.get(row.componentId)) === JSON.stringify(row)) continue;
+      const name = definition.components.find(component => component.id === row.componentId).label;
+      const supports = [...row.workIds.map(id => work.get(id)), ...row.capabilityRefs.map(ref => {
+        const instance = after[ref.kind === 'ability' ? 'abilities' : 'practices'].find(item => item.id === ref.instanceId);
+        return getCapabilityDefinition(ref.kind, instance.definitionId, instance.definitionVersion).action;
+      })];
+      descriptions.push(`${definition.name} · ${name}: ${row.mapped ? 'Mapped' : 'Mapping to plan'}; ${MAPPING_LABELS[row.status]}${supports.length ? `; linked to ${supports.join(', ')}` : '; support to choose'}`);
+    }
+  }
+  const priorParts = new Map(prior.attention.channels.map(row => [row.channelId, row.parts]));
+  const labels = new Map(listAttentionChannels().map(row => [row.id, row.label]));
+  for (const row of next.attention.channels) if (priorParts.get(row.channelId) !== row.parts)
+    descriptions.push(`${labels.get(row.channelId)} attention: ${priorParts.get(row.channelId)} → ${row.parts} parts`);
+  return descriptions;
+}
 
 function relationshipDescriptions(state) {
   const people = new Map(state.people.map(row => [row.id, row.label]));
@@ -67,6 +99,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     }
     if (preview.changes.plan.length) add(`Plan: ${preview.changes.plan.map(name => CHANGE_LABELS[name] ?? name).join(', ')}.`);
     if (preview.changes.purpose.length) add(`Purpose: ${preview.changes.purpose.map(name => PURPOSE_LABELS[name]).join(' · ')}`);
+    if (preview.changes.changeSettings.length) changeDescriptions(projection.state, preview.projection.state).forEach(add);
     for (const [kind, label] of Object.entries(COLLECTION_LABELS)) {
       const change = preview.changes[kind];
       if (!change.added.length && !change.removed.length && !change.changed.length && !change.orderChanged) continue;
@@ -109,6 +142,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
         projection.result.standing === 'priced' && baseline.projection.result.standing === 'priced' ? 'Change' : 'Change in known amount',
         money(projection.result.knownCommitmentCents - baseline.projection.result.knownCommitmentCents),
       ]);
+      if (baseline) rows.push(['Change planning', changeDescriptions(baseline.projection.state, projection.state).join(' · ')
+        || 'Framework, viewpoint, mapping and attention match the baseline.']);
       comparison.replaceChildren(...rows.map(([label, value]) => {
         const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
         dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;

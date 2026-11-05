@@ -1,8 +1,9 @@
 import { ROLE_FIELDS } from './roles.mjs';
+import { createChangeSettings } from './change-models.mjs';
 export { PRACTICES } from './capabilities.mjs';
 // Immutable vocabulary shared by independent Studio instances.
 export const CONTRACT = Object.freeze({
-  kind: 'native-investment-plan', schemaVersion: '0.4.0', modelVersion: '0.1.0',
+  kind: 'native-investment-plan', schemaVersion: '0.5.0', modelVersion: '0.1.0',
   currency: 'USD', minutesPerHour: 60,
 });
 
@@ -37,11 +38,16 @@ const CAPABILITY_JSON_BYTES = JSON.stringify({ abilities: [], capabilityEvidence
   + 512 * 48
   + 256 * (384 + 4 * 64 + 3 * RELATIONSHIP_TEXT_LIMIT * 6)
   + (CAPABILITY_REFERENCE_LIMIT - RELATIONSHIP_REFERENCE_LIMIT) * (64 + 3);
+// Catalogue identities bound the fixed settings metadata. A typed capability
+// reference is the largest added edge; all edges share the existing plan budget.
+const CHANGE_JSON_BYTES = JSON.stringify({ changeSettings: createChangeSettings() }).length - 1
+  + CAPABILITY_REFERENCE_LIMIT * (JSON.stringify({ kind: 'practice', instanceId: '' }).length + 64 + 1);
 export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.1.0': 524288,
   '0.2.0': 524288 + PURPOSE_JSON_BYTES,
   '0.3.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES,
   '0.4.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES,
+  '0.5.0': 524288 + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES,
 });
 
 export const LIMITS = Object.freeze({

@@ -16,8 +16,10 @@ and [#687](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/
 after independent engineering review.
 [#688](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/688)
 adds the service-request pilot, working minutes dial, and contextual session
-editor. The current implementation connects ability and practice cards to their
-shared supporting work through #650, #677, and #678.
+editor. [#689](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/689)
+connects ability and practice cards to their shared supporting work and repairs
+form-action spacing. The current Change chapter receives that accepted plan
+through #651.
 
 Purpose, people, teams, working sessions, roles, human review, connections,
 arrangement previews, and plan exchange have native owners. The complete
@@ -51,6 +53,10 @@ its broader planning capabilities while the native experience grows.
    history** to plan a customer ability. Reuse a working session, or propose
    additional work with named people and funding. Apply accepts the whole proposal;
    Undo restores the preceding plan.
+6. Open **Change**. Compare frameworks and viewpoints, retain each component's
+   mapping, and adjust the attention faders. A suggested session previews its
+   people, time and funding before Apply. Investment compares these choices with
+   your baseline as well as their monetary result.
 
 The starter names participants by their work and uses illustrative rates. It begins at $3,980;
 four 45-minute decision reviews instead of 30-minute reviews add $370. Pausing
@@ -78,7 +84,7 @@ install the locked dependencies with `npm ci` from the repository root. Start
 the existing local server there:
 
 ```sh
-node --input-type=module <<'JS'
+node --import ./tools/node-runtime-admission.mjs --input-type=module <<'JS'
 import { startStaticServer } from './tools/core-architecture-browser-helper.mjs';
 const server = await startStaticServer();
 console.log(`${server.origin}/context-canvas-project-surface/context-canvas/index.html#native-studio-coordination`);
@@ -99,6 +105,7 @@ npm run test:native-investment-studio:source
 npm run test:native-investment-studio:session-browser
 npm run test:native-investment-studio:assembly-browser
 npm run test:native-investment-studio:capability-browser
+npm run test:native-investment-studio:change-browser
 ```
 
 Browser routes require the repository's locked Playwright browsers. The
@@ -111,7 +118,7 @@ states. Screenshots remain in ignored `.visual-runs/` for local comparison.
 ## Resume the work
 
 Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree, [#650](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/650),
+source, the worktree, [#651](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/651),
 and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
 Use the journal alongside Issues: it preserves why an interaction feels and
 behaves as it does; Issues own current outcomes and acceptance.

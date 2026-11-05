@@ -164,6 +164,7 @@
             <button type="button" id="native-studio-tab-coordination" data-native-chapter="coordination" aria-controls="native-studio-coordination"><span>Coordination</span></button>
             <button type="button" id="native-studio-tab-people" data-native-chapter="people" aria-controls="native-studio-people"><span>People</span></button>
             <button type="button" id="native-studio-tab-work" data-native-chapter="work" aria-controls="native-studio-work"><span>Abilities</span></button>
+            <button type="button" id="native-studio-tab-change" data-native-chapter="change" aria-controls="native-studio-change"><span>Change</span></button>
             <button type="button" id="native-studio-tab-investment" data-native-chapter="investment" aria-controls="native-studio-investment"><span>Investment</span></button>
           </div>
           <details class="native-purpose" data-native-purpose>
@@ -202,6 +203,7 @@
               </ol>
               <p>Staffing is funded time at each person's rate. Work included in staffing uses that time; extra work adds investment. Shared people and session references keep one account. Pausing a connection retains its supporting work and cost.</p>
               <p><a href="#native-studio-work" data-native-open-capabilities>Explore abilities and practices</a> to choose an outcome, inspect its supporting work, and plan the people who will carry it.</p>
+              <p><a href="#native-studio-change" data-native-open-change>Plan how the change takes hold</a> through frameworks, viewpoints, relative attention and explicit supporting sessions.</p>
             </div>
           </details>
         </header>
@@ -731,6 +733,43 @@
             <div data-capability-manual-body></div>
           </details>
           <noscript><p>Interactive cards become available with scripting. Each card connects a customer action or team practice to named people and working sessions. The accepted ledger above remains a readable example; the full Studio link below offers the complete planning instrument.</p></noscript>
+        </section>
+        <section class="native-change" id="native-studio-change" data-native-chapter-panel="change" data-native-change aria-labelledby="native-change-title">
+          <header class="native-change__heading">
+            <h3 id="native-change-title" class="native-zine__heading">Help the new way of working take hold</h3>
+            <p>Choose a framework to examine the plan, change the viewpoint, and decide which work needs attention. Link a component to the people and sessions that support it.</p>
+          </header>
+          <div class="native-coordination__recovery" data-change-recovery hidden>
+            <p data-change-current></p>
+            <div class="native-coordination__actions"><button type="button" data-change-action="review">Review saved edits</button><button type="button" data-change-action="current">Use current values</button><button type="button" data-change-action="discard">Discard saved edits</button></div>
+          </div>
+          <form data-change-form novalidate>
+            <fieldset data-change-fields disabled aria-label="Change framework, viewpoint and support">
+              <div class="native-change__selectors">
+                <div data-change-frameworks></div><div data-change-lenses></div><div data-change-filters></div>
+              </div>
+              <section class="native-change__interpretation" data-change-interpretation aria-label="Viewpoint on the plan"></section>
+              <div class="native-change__matrix" data-change-matrix></div>
+              <section class="native-change__four-actions" data-change-four-actions aria-label="Questions for the next discussion"></section>
+              <section class="native-change__attention" aria-labelledby="native-change-attention-title">
+                <h4 id="native-change-attention-title">Choose what needs attention</h4>
+                <p>Use relative parts from 0 to 25. A higher value asks for more attention within this mix. People, funded time and investment keep their declared values.</p>
+                <div class="native-change__mixer" data-change-mixer></div>
+                <button type="button" data-change-action="reset">Restore starting framework, mapping and attention</button>
+                <p class="native-coordination__hint">Keeps linked work, abilities and the selected viewpoint.</p>
+              </section>
+              <section class="native-change__work" data-change-work aria-label="Proposed supporting session"></section>
+              <div class="native-coordination__preview" data-change-preview aria-live="polite" aria-atomic="true">Choose a framework or attention value to inspect a change.</div>
+              <p class="native-coordination__error" data-change-error></p>
+              <div class="native-coordination__actions"><button type="submit" data-change-action="apply" disabled>Apply changes</button><button type="button" data-change-action="cancel" disabled>Cancel changes</button></div>
+            </fieldset>
+          </form>
+          <p class="native-coordination__status" data-change-status role="status" aria-live="polite" aria-atomic="true"></p>
+          <details class="native-change__manual">
+            <summary>Change planning manual <span>Choose a viewpoint, interpret a gap, and prepare useful support.</span></summary>
+            <div data-change-manual></div>
+          </details>
+          <noscript><p>Frameworks offer different questions about how work becomes routine. Relative attention describes emphasis. Actual sessions carry their people, time and funding; the complete original Studio remains available below.</p></noscript>
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title" class="native-zine__heading">Keep and compare your plan.</h3>

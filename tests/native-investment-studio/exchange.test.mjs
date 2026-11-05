@@ -113,12 +113,34 @@ test('comparison names row additions, removals and changed relationship fields',
   assert.equal(result.view.preview.projection.result.plannedCommitmentCents, null);
 });
 
+test('Change settings survive preview, baseline and export while their money stays unchanged', () => {
+  const { studio, exchange } = fixture();
+  const initial = studio.read();
+  studio.setBaseline(initial);
+  const candidate = JSON.parse(studio.exportText());
+  candidate.changeSettings.activeFramework.frameworkId = 'weick';
+  candidate.changeSettings.lens.lensId = 'learning';
+  candidate.changeSettings.attention.channels[0].parts = 0;
+  candidate.changeSettings.frameworkMaps[0].components[0].workIds = ['review'];
+  const prepared = exchange.previewText(JSON.stringify(candidate));
+  assert.equal(prepared.ok, true);
+  assert.deepEqual(prepared.view.preview.changes.changeSettings, ['activeFramework', 'lens', 'frameworkMaps', 'attention']);
+  assert.equal(prepared.view.preview.projection.result.knownCommitmentCents, initial.result.knownCommitmentCents);
+  assert.equal(exchange.apply(prepared.view.preview.token).ok, true);
+  assert.deepEqual(JSON.parse(studio.exportText()).changeSettings, candidate.changeSettings);
+  assert.deepEqual(studio.readBaseline().projection.state.changeSettings, initial.state.changeSettings);
+  const again = exchange.previewText(studio.exportText());
+  assert.deepEqual(again.view.preview.changes.changeSettings, []);
+  assert.equal(studio.undo(studio.read()).ok, true);
+  assert.deepEqual(studio.read().state.changeSettings, initial.state.changeSettings);
+});
+
 test('legacy preview carries truthful source version while accepted export remains current', () => {
   const { studio, exchange } = fixture();
   const legacy = createExamplePlan();
   delete legacy.purpose;
   delete legacy.contributions; delete legacy.connections;
-  delete legacy.abilities; delete legacy.capabilityEvidence;
+  delete legacy.abilities; delete legacy.capabilityEvidence; delete legacy.changeSettings;
   legacy.practices = legacy.practices.map(row => ({ id: row.id, practiceId: row.definitionId, teamId: row.teamId, workIds: row.supportBindings[0].workIds }));
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
@@ -126,9 +148,9 @@ test('legacy preview carries truthful source version while accepted export remai
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.4.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.5.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.4.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.5.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {
