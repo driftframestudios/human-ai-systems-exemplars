@@ -71,7 +71,7 @@ async function support(page) {
 }
 
 for (const engine of names) {
-  test(`${engine}: selected support pads distinguish recorded observations, linked work and current gaps`, async t => {
+  test(`${engine}: support cells distinguish recorded observations, linked work and current gaps`, async t => {
     const page = await open(t, engine, true);
     await page.evaluate(() => {
       const { studio, controller } = window.capabilityFixture, candidate = JSON.parse(studio.exportText());
@@ -84,25 +84,32 @@ for (const engine of names) {
       controller.refresh();
     });
     const accepted = await bytes(page);
-    await expect(panel(page).locator('[data-capability-catalogue] table')).toHaveCount(0);
-    await choice(page, 'expectation').click();
-    await expect(panel(page).getByRole('group', { name: 'Support for this action' }).locator('.native-capability__cell')).toHaveCount(4);
+    for (const [kind, caption, firstColumn] of [
+      ['ability', 'Customer abilities', 'What people can do'],
+      ['practice', 'Team practices', 'How the team works'],
+    ]) {
+      const table = panel(page).locator(`[data-capability-catalogue="${kind}"] table`);
+      await expect(table).toHaveAccessibleName(`${caption} · support in the accepted plan`);
+      assert.deepEqual(await table.getByRole('columnheader').allTextContents(), [firstColumn, 'Responsibility', 'Preparation', 'Review', 'Observation']);
+      assert.ok(await table.getByRole('columnheader').evaluateAll(cells => cells.every(cell => cell.scope === 'col')));
+      assert.ok(await table.getByRole('rowheader').evaluateAll(cells => cells.length > 0 && cells.every(cell => cell.scope === 'row')));
+      assert.equal(await table.locator('button:not(.native-control--navigate)').count(), 0, 'each support or card receiver carries the onward cue');
+    }
     await expect(supportCell(page, 'expectation', 'preparation')).toHaveAttribute('data-support-state', 'unspecified');
     await expect(supportCell(page, 'expectation', 'preparation')).toContainText('Not specified');
     await expect(supportCell(page, 'expectation', 'preparation')).not.toHaveClass(/native-control--navigate/u);
     assert.equal(await supportCell(page, 'expectation', 'preparation').evaluate(element => element.tagName), 'SPAN');
-    await choice(page, 'assurance').click();
     await expect(supportCell(page, 'assurance', 'responsibility')).toHaveAttribute('data-support-state', 'gap');
-    await expect(supportCell(page, 'assurance', 'responsibility')).toHaveAccessibleName(/Choose the people responsible for the work/u);
+    await expect(supportCell(page, 'assurance', 'responsibility')).toContainText('Choose the people responsible for the work.');
     await expect(supportCell(page, 'assurance', 'preparation')).toHaveAttribute('data-support-state', 'linked');
-    await expect(supportCell(page, 'assurance', 'preparation')).toHaveAccessibleName(/Operations rehearsal/u);
+    await expect(supportCell(page, 'assurance', 'preparation')).toContainText('Operations rehearsal');
     await expect(supportCell(page, 'assurance', 'review')).toHaveAttribute('data-support-state', 'attention');
-    await expect(supportCell(page, 'assurance', 'review')).toHaveAccessibleName(/Review the time and availability of Pilot decision review/u);
+    await expect(supportCell(page, 'assurance', 'review')).toContainText('Review the time and availability of Pilot decision review.');
     await expect(supportCell(page, 'assurance', 'observation')).toHaveAttribute('data-support-state', 'recorded');
     await expect(supportCell(page, 'assurance', 'observation')).toContainText('Rehearsed recorded');
+    await expect(supportCell(page, 'assurance', 'observation')).toContainText('The receiving operator recovered the saved request.');
     await expect(supportCell(page, 'assurance', 'observation')).toHaveClass(/native-control--navigate/u);
     await expect(supportCell(page, 'assurance', 'observation')).toHaveAccessibleName('Establish a fitting acceptance observation · Observation: Rehearsed recorded. The receiving operator recovered the saved request.');
-    assert.equal(await panel(page).locator('.native-capability__support-pads button:not(.native-control--navigate)').count(), 0, 'each support receiver carries the onward cue');
     await supportCell(page, 'assurance', 'observation').focus(); await page.keyboard.press('Enter');
     await expect(field(page, 'evidenceStage')).toBeFocused();
     await expect(field(page, 'evidenceStage').locator('..').locator('..')).toContainText('Routine requests in the walkthrough');
@@ -111,51 +118,56 @@ for (const engine of names) {
   });
   test(`${engine}: support cells resume the same accepted and new-card drafts at the requested section`, async t => {
     const page = await open(t, engine, true), accepted = await bytes(page);
-    await choice(page, 'assurance').click(); await supportCell(page, 'assurance', 'preparation').click();
+    await supportCell(page, 'assurance', 'preparation').click();
     const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
     await expect(prepare).toHaveAttribute('open', '');
     await expect(prepare.locator('ul.native-capability__choices')).toBeFocused();
     await field(page, 'context').fill('  Keep the recovery rehearsal context  ');
     await field(page, 'new.preparation.enabled').selectOption('yes');
     await field(page, 'new.preparation.minutesPerSession').fill('later');
-    await choice(page, 'assurance').click(); await supportCell(page, 'assurance', 'review').click();
+    await supportCell(page, 'assurance', 'review').click();
     await expect(panel(page).locator('[data-capability-requirement="review"]')).toHaveAttribute('open', '');
     await expect(field(page, 'context')).toHaveValue('  Keep the recovery rehearsal context  ');
-    await choice(page, 'expectation').click(); await supportCell(page, 'expectation', 'responsibility').click();
+    await supportCell(page, 'expectation', 'responsibility').click();
     await expect(field(page, 'teamId')).toBeFocused();
     await expect(action(page, 'configure')).not.toHaveClass(/native-control--create/u);
-    await choice(page, 'assurance').click(); await supportCell(page, 'assurance', 'preparation').click();
+    await supportCell(page, 'assurance', 'preparation').click();
     await expect(field(page, 'context')).toHaveValue('  Keep the recovery rehearsal context  ');
     await expect(field(page, 'new.preparation.minutesPerSession')).toHaveValue('later');
-    await choice(page, 'inspect-history').click(); await supportCell(page, 'inspect-history', 'preparation').click();
+    await supportCell(page, 'inspect-history', 'preparation').click();
     await expect(action(page, 'configure')).toHaveClass(/native-control--create/u);
     await field(page, 'context').fill('  Keep this history proposal  ');
-    await choice(page, 'inspect-history').click(); await supportCell(page, 'inspect-history', 'review').click();
+    await supportCell(page, 'inspect-history', 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
     await action(page, 'configure').click();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
-    await choice(page, 'expectation').click(); await supportCell(page, 'expectation', 'responsibility').click();
-    await choice(page, 'inspect-history').click(); await supportCell(page, 'inspect-history', 'observation').click();
+    await supportCell(page, 'expectation', 'responsibility').click();
+    await supportCell(page, 'inspect-history', 'observation').click();
     await expect(field(page, 'evidenceStage')).toBeFocused();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
     await expect(supportCell(page, 'inspect-history', 'preparation')).toHaveAttribute('data-support-state', 'available');
     assert.equal(await bytes(page), accepted, 'moving between support cells retains unfinished raw text and accepts no records');
     assert.equal(await page.evaluate(() => window.capabilityFixture.studio.read().state.abilities.length), 0);
   });
-  test(`${engine}: compact action pads retain support navigation at laptop and mobile widths`, async t => {
+  test(`${engine}: support tables keep words and controls available at laptop and enlarged narrow widths`, async t => {
     const page = await open(t, engine, true), accepted = await bytes(page);
     const region = panel(page).locator('[data-capability-catalogue="practice"]');
-    for (const width of [1440, 390]) {
+    for (const [width, textSize] of [[1440, '100%'], [390, '200%']]) {
       await page.setViewportSize({ width, height: 1000 });
+      await page.evaluate(size => { document.documentElement.style.fontSize = size; }, textSize);
       await region.scrollIntoViewIfNeeded();
       const box = await region.evaluate(element => ({ left: element.getBoundingClientRect().left, right: element.getBoundingClientRect().right,
-        pageWidth: document.documentElement.scrollWidth }));
+        viewport: innerWidth, pageWidth: document.documentElement.scrollWidth, ownWidth: element.clientWidth, contentWidth: element.scrollWidth }));
       assert.ok(box.left >= -.5 && box.right <= width + .5 && box.pageWidth <= width + .5, JSON.stringify(box));
-      await expect(region.locator('table')).toHaveCount(0);
-      await region.screenshot({ path: resolve(captures, `${engine}-action-pads-${width}.png`) });
+      if (width === 390) {
+        assert.ok(box.contentWidth > box.ownWidth, 'the narrow table retains its comparable columns in local scrolling');
+        await region.focus(); await expect(region).toBeFocused();
+        await region.evaluate(element => { element.scrollLeft = element.scrollWidth; });
+        assert.ok(await region.evaluate(element => element.scrollLeft) > 0);
+      }
+      await region.screenshot({ path: resolve(captures, `${engine}-support-sequencer-${width}.png`) });
     }
     await page.emulateMedia({ forcedColors: 'active' });
-    await choice(page, 'assurance').click();
     await supportCell(page, 'assurance', 'review').focus(); await page.keyboard.press('Enter');
     await expect(panel(page).locator('[data-capability-requirement="review"] ul.native-capability__choices')).toBeFocused();
     assert.equal(await bytes(page), accepted);

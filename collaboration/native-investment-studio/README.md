@@ -77,8 +77,9 @@ chapters can retain unfinished work. A saved edit may need review after another
 change updates the accepted plan. The amp amount describes accepted investment;
 a form preview describes that form's proposal.
 
-Action pads open a selected card. Its responsibility, preparation, review and
-observation controls lead directly to their editors;
+The **What people can do** and **How the team works** tables compare each
+action’s responsibility, preparation, review and observation. Select a row’s
+action to open its card, or a support cell to open the matching editor.
 Apply accepts the proposal. Cards describe what people can do and how a team plans to work. Their reverse
 shows responsibility, supporting sessions, current gaps, and recorded
 observations. **Open beside** keeps overview and support together at roomy
