@@ -1,238 +1,142 @@
 # Native Investment Studio
 
-Plan who will work together, what they will do, who reviews the result, and
-what the work costs. The native Studio lives in the
-[About experience](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination).
-Its amp-style controls, people and team editors, and connection diagram share
-one accepted plan. Visitors can try a change, Apply or Cancel it, and return
-through Undo, saved edits, or a baseline comparison.
+Explore how people, shared work, review and investment fit together in the
+[About showcase](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination).
+The visitor-facing **Project Resourcing & Spend Studio** combines a populated
+plan with tactile reels, faders, dials and MIDI-style tracks. It gives a busy
+visitor something useful to inspect and change immediately.
+
+Semantic HTML, CSS and vanilla JavaScript carry the experience. One accepted
+plan connects Coordination, People, Abilities, Change, Quality & recovery and
+Investment. Editors retain their proposals until Apply; Cancel, saved edits,
+Undo and baseline comparison make exploration recoverable.
 
 ## Current state
 
-The native showcase joins Coordination, People, Abilities, Change, Quality &
-recovery, and Investment through one accepted plan. It includes the authored
-horizon, team arrangements, source-linked comparisons, six scenario families,
-and portable reports. [#707](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/707)
-delivered the working showcase to main. The focused
-[core-quality pass, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708),
-clarifies navigation policy, download ownership, input limits and scheduling controls.
+The working showcase is on main. The cohesion route in
+[#735](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/735)
+was delivered through independently reviewed PRs #741–#745: shared controls,
+Coordination and People, Abilities, Change, and Quality & recovery. The linked
+issues retain their acceptance criteria and evidence under
+[milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
+The [journal](experience-journal.md#current-working-contract) records the current
+contract and the decisions that replaced earlier interfaces.
 
-Coordination opens a four-sprint pilot with named sessions, handoffs and a
-review decision. Open a sprint to see its weeks, then a session to inspect its
-people, duration and placement. A separate two-quarter rollout example shows
-preparation, validation and operating adoption. Example buttons update the view
-in place; Undo restores the preceding plan. The implementation route is
-[#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718),
-through #720–#722.
+The showcase supports ordinary phone and laptop widths. Performance refinement
+remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
+The separately human-cued tagged public release remains with
+[#686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686),
+including the ASCII composition skill's public projection and the visual
+family's production guide and specimen.
 
-Coordination keeps the period overview and MIDI session tracks together. Team
-connections and working-session details open on demand. Select participants
-directly; a session can bring people from different teams together. Full motion
-is the default. The amp head offers half-speed Lower motion and Off; system
-reduced-motion preferences suppress animation.
+## Try the experience
 
-People uses team lanes and session tracks. Change pairs viewpoint and framework
-reels with faders, work lanes and supporting-session pads. Quality & recovery
-pairs pre-release and post-release reels with a six-channel fader bank, CRT
-reference chart, rehearsal lanes and support tracks. Presets populate the view;
-select a pad to inspect its existing editor, then Apply or Cancel. The Abilities
-support tables remain the comparable view of responsibility, preparation,
-review and observation. [#727](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/727)
-records this visual interaction route.
+1. Open a sprint in the **Coordination horizon**, then a session. Its people,
+   duration and placement explain the work behind the visual. **Whole plan**
+   returns to the overview.
+2. Change the **Pilot decision review** from 30 to 45 minutes. Read the proposed
+   amount, then Apply or Cancel. The illustrative pilot starts at $3,980;
+   extending its four reviews adds $370.
+3. Explore a team arrangement, an Abilities support cell, or a Change reel.
+   The selected work opens beside its visual context. People retain their own
+   records when they participate across teams.
+4. In **Quality & recovery**, vary the pre-release and post-release reels or
+   faders. Inspect the changed pads and their supporting sessions. The scope's
+   color and motion illustrate the selected assumptions; accepted sessions
+   continue to own effort and price.
+5. Use **Investment** to save a baseline, compare a change, Undo, or download a
+   plan, readable report or collaboration brief.
 
-The [experience journal](experience-journal.md) preserves the interaction intent
-and review findings. The [capability transfer map](implementation-reference.md#capability-transfer-map)
-shows what the native experience supports and where the full Studio remains the
-working receiver. Its broader economic translation continues in
-[#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
+The examples identify people by their work, such as Researcher and Quality
+reviewer. Their rates, sessions and review situations are authored illustrations.
+The showcase makes their relationships visible; real commitments and findings
+remain decisions for the people doing and reviewing the work.
 
-Ordinary mobile layouts belong to this showcase. Performance refinement rests
-with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
-The [next-release handoff, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
-retains the ASCII method's public Pages projection and the visual family's
-production guide and specimen. A tagged public release remains a separate,
-human-cued step.
+## Follow the work through the chapters
 
-## Try a useful sequence
+| Chapter | Useful operation |
+| --- | --- |
+| Coordination | Open periods and sessions in the horizon; arrange teams; inspect stages, handoffs, decisions and delays when needed. |
+| People | Select a person from team lanes or shared-session tracks; adjust rates, funded time, roles and memberships in the existing editor. |
+| Abilities | Compare responsibility, preparation, review and observation in the support tables. Select a cell to open its adjacent editing rack. |
+| Change | Choose a viewpoint and framework, adjust the framework's faders, then link or plan the sessions that support adoption. Method examples open locally. |
+| Quality & recovery | Explore preparation and recovery through reels, faders, work lanes and session pads. Open a check, rehearsal, recovery action or illustration when it needs detail. |
+| Investment | Compare a baseline, inspect the whole-plan cost breakdown, recover accepted changes, and save or open plans. |
 
-1. Begin with the **Coordination horizon**, then inspect the team connections.
-   Open **Purpose** to read what the pilot should change. Investment lets you
-   save a baseline before experimenting.
-2. In Coordination, open **Working sessions** and choose **Pilot decision review**.
-   Its diagram names who joins and what their work supports. Open **Session
-   settings**, then try 45 minutes with the dial, arrow keys, step buttons, or
-   precision field. Inspect the draft before Apply.
-3. Try the review request. Inspect the readiness connection, pause it while the
-   instructions are clarified, and name the response the team needs.
-4. Use Investment to compare the baseline, Undo, or download the accepted plan.
-5. Open **Abilities**. Inspect a team practice's reverse, or choose **Inspect
-   history** to plan a customer ability. Reuse a working session, or propose
-   additional work with named people and funding. Apply accepts the whole proposal;
-   Undo restores the preceding plan.
-6. Open **Change**. Compare frameworks and viewpoints, select a component key,
-   and adjust the attention faders. Choose Vision to compare PODA, Impact
-   Map and Strategy Canvas. Read a method's purpose, expand its example, then
-   plan the work it should support. Hours, Minutes and Working sessions use the
-   same controls as Session settings. Investment compares accepted choices with
-   your baseline as well as their monetary result.
+The pale **Editorial Rack** carries work, relationships and reading. The dark
+**Instrument Rack** carries reels, faders and live visual feedback. Shared
+colors and control behavior connect these compositions across chapters.
 
-The starter names participants by their work and uses illustrative rates. It begins at $3,980;
-four 45-minute decision reviews instead of 30-minute reviews add $370. Pausing
-a connection keeps its supporting work and cost. In People, change the roles,
-rates, and funded time to explore another plan. Nearby creation actions can
-supply a missing person or team and return to your unfinished task.
+### Arrange sessions across sprints or quarters
 
-A field edit stays in its editor until Apply. Collapsing a section and switching
-chapters can retain unfinished work. A saved edit may need review after another
-change updates the accepted plan. The amp amount describes accepted investment;
-a form preview describes that form's proposal.
+The pilot begins with four two-week sprints. The two-quarter rollout is a
+separately authored example of preparation, rollout and operating adoption.
+Example buttons replace the plan in place with Undo available. Choosing
+**Sprints** or **Business quarters** regroups existing work immediately and also
+supports Undo. Changing the period count previews a horizon for Apply or Cancel;
+a shorter horizon retains affected sessions under **Choose a period**.
 
-The **What people can do** and **How the team works** tables compare each
-action’s responsibility, preparation, review and observation. Select a row’s
-action to open its card, or a support cell to open the matching editor.
-Apply accepts the proposal. Cards describe what people can do and how a team plans to work. Their reverse
-shows responsibility, supporting sessions, current gaps, and recorded
-observations. **Open beside** keeps overview and support together at roomy
-widths. Shared sessions retain one cost account; retiring a card keeps its
-separately owned work. The card manual explains each action and its acceptance
-question. Recording an observation preserves who saw what, where, and against
-which plan revision.
+Open a period to see its weeks or months. Select a session to inspect its people,
+duration and individual occurrence placements. **Add session** begins a draft
+in the selected period; its final confirmation accepts that draft. Increasing
+**Working sessions** adds occurrences awaiting placement. Increasing Hours or
+Minutes makes each occurrence longer.
 
-7. Open **Quality & recovery**. Save a baseline in Investment, prepare the
-   recovery-instruction rehearsal, and add a 30-minute session with the Quality
-   reviewer and Operations specialist as extra work. Inspect the $100 increase,
-   Apply, compare, and keep or Undo it. A recorded observation names the human
-   reviewer and the decision it informs.
+**Stages & handoffs** reveals the work's relationships and their editors.
+Decisions attach to a stage or handoff. Delays name affected work and can propose
+its later placement. Availability opens beside the person and period it concerns;
+funded time keeps its separate accounting meaning. Older saved plans retain
+their recorded timing and offer an explicit sprint-arrangement proposal.
 
-Quality and recovery illustrations retain their own horizon, rates and effort.
-The accepted total changes when a visitor explicitly accepts people or work.
-The short manuals explain those quantities beside their controls.
+### Inspect support and keep the result
 
-Choose a quality pad to inspect its supporting sessions, people, funding and
-authored timing. The reading distinguishes the accepted plan from the proposal
-you are editing. Making a concept Available keeps its separately planned work;
-inspect or adjust that work to change its investment.
+Abilities and practices share existing sessions through their support cells.
+Changing one cell opens the relevant part of the selected card's editing rack.
+Illustrative observation choices show possible findings; imported observations
+retain their reviewer, context and revision. Shared sessions keep one cost
+account even when several cards or checks refer to them.
 
-The recovery-failure rehearsal compares preparation with an explicitly assumed
-response. Named people, session duration, occurrences and funding make that
-response concrete. Named sessions supply the accepted time and cost. Shared sessions retain one identity
-when they support preparation, response and rehearsal together.
+Change's framework faders adjust distinct component groups. The starting pilot
+already links components to supporting work. PODA, Impact Map and Strategy Canvas
+examples explain the method beside the selected component before offering a
+session proposal.
 
-People and team cards show badges for planned quality work, planned rehearsals
-and recorded observations. Select a badge to inspect its source, then return to
-the same card with unfinished edits retained. An observation identifies its
-reviewer and observed plan revision; its text explains what was actually found.
+Quality begins at **4σ** with balanced preparation controls. Authored pressure
+rules can move pads or hold a required check on, with a short cue explaining how
+to release it. Color, ions and extreme-setting reel stutter are presentation
+responses, not measured risk forecasts or automatic changes to the accepted plan.
+Pre-release, post-release and recovery work use the same people, session and
+Apply owners as the other chapters. Imported observations remain readable;
+the showcase uses authored examples in place of observation-entry forms.
 
-## Compare investment and keep a result
+The amp amount describes accepted investment; an editor's amount describes its
+proposal. Switching chapters can preserve unfinished work in **Saved edits**.
+When the accepted plan changes, a saved edit may need review before acceptance.
+Cancel keeps the accepted plan; Undo and Redo traverse accepted changes.
 
-In **Investment**, save a baseline, change people or work, and compare the
-current amount with that baseline. Undo restores the previous accepted plan.
-The optional cost breakdown remains here alongside save and open controls.
+### Recognize the controls
 
-Choose a starting plan to explore discovery, migration, regulated workflows,
-AI-assisted products, integration or operational recovery. Preview the replacement
-before **Use this plan** in Investment. Each is an authored native rehearsal with explicit
-people, sessions and review conditions. Undo restores the previous accepted plan.
+A plus begins creation; the final Add or Apply confirms the item already being
+prepared. An arrow identifies a destination or inspector. A caret reveals nearby
+content. Small fixed choice sets remain visible, and selected choices stay
+visually pressed. Cancel uses a shadow-free ghost treatment.
 
-**Download report** produces a self-contained HTML reading with exact values,
-purpose, work, review observations and the accepted JSON. **Download collaboration
-brief** carries the same snapshot as plain text for a later conversation. Unfinished
-editor entries remain available in the Studio. Save the ordinary plan JSON to
-continue editing through the importer.
+Hours and Minutes have separately sized dials beside exact fields. Rates have
+$10 and $5 dials, $1 step buttons and direct entry. An explicit rate gesture can
+start a blank amount; an untouched blank remains unknown. Native controls keep
+keyboard operation and exact values available.
 
-The [full Studio](../initiative-costing-calculator/index.html) retains broader
-role-pool, service, capital, reserve and commercial models. Their explicit native
-translation continues in [#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
-
-## Compare team arrangements
-
-Open **Team connections**, then **Try a team arrangement** in Coordination. Pod, Guild, Project team and
-Shared service each show their roles and directed work immediately. Choose
-people and receiving responsibilities, Preview the complete proposal, then
-Apply. The accepted arrangement name and diagram remain visible when the form
-is collapsed. Select a team, connection or supporting session to inspect it;
-the return control brings you back to Connections.
-
-Editing a connection's endpoints produces an **Adapted arrangement** reading.
-**Use these connections without the template** removes the grouping after an
-explicit preview and Apply; the teams, sessions, connections and cost stay in
-the plan. Older plans keep a Custom connections reading until an arrangement
-is explicitly authored. Export, import and Undo preserve these distinctions.
-
-Where an AI contribution shares a working session with a connection, the
-reading names its function, human reviewer and decision owner. The associated
-sessions explain planned support. Review instructions and decision boundaries
-remain inspectable alongside any missing context.
-
-## Arrange work across sprints or quarters
-
-The **Coordination horizon** begins with a four-sprint service-request pilot.
-Each sprint represents two weeks in this example. Open a sprint to see its
-working sessions, then choose a session to inspect its people and duration.
-**Whole plan** returns to the overview. Zoom leaves the plan and investment intact.
-
-**Try a later review** proposes another sprint for the review and its decision.
-Read the consequence, then Apply or Cancel. Investment's Undo restores the
-previous arrangement. The same sessions keep their effort and price; additional
-work or a longer session changes the planned investment.
-
-**Sprints / Business quarters** regroups the current work. Changing the period
-count previews the new horizon; shortening it retains affected sessions under
-**Choose a period**. **Two-quarter rollout** replaces the example in place with
-its own preparation, rollout and adoption work. Undo restores the preceding
-plan. Investment retains the preview route for its broader starting-plan choices.
-
-Each period has **Add session**. It opens a new draft with that period selected,
-example wording, people and duration together. Confirming **Add session** accepts
-it; Cancel keeps the accepted plan. Existing session settings place each
-occurrence separately. Increasing **Working sessions** adds occurrences awaiting
-placement; increasing Hours or Minutes makes each session longer.
-
-**Stages & handoffs** groups sessions and connects the work that prepares a
-result to the work receiving it. A stage or handoff can carry a decision or delay.
-The contextual decision form names the question, evidence and reviewer. Delays
-can propose moving the affected sessions to a later period. Their extra work, if
-needed, receives its own session and funding choice.
-
-The MIDI tracks and downloadable reading use the same periods, people and
-duration. The detailed agenda remains in the downloaded report.
-Availability belongs to a person and period; an unknown amount stays
-**Availability to choose**. Funded time retains its separate accounting meaning.
-Older saved plans preserve their recorded work and timing. **Arrange this plan
-in sprints** offers an explicit placement proposal for those plans.
-
-In Session settings and supporting-session proposals, Hours and Minutes each
-have a dial beside their precision field. Hours uses the
-larger dial; both also accept keyboard arrows, taps, step buttons and direct
-entry. Turning Hours preserves Minutes. At 23:30, set Minutes to zero before
-choosing 24 hours.
-
-## Choose how the instrument responds
-
-**Studio motion**, beside the Change lens, begins with Full motion for short
-reel, screen and navigation responses. Choose Lower for quieter responses;
-a system preference for reduced motion keeps the effective setting lower.
-Amp chapter selection, contextual
-chapter jumps and inspection inside a chapter use distinct destination cues.
-These choices affect presentation while your plan and saved edits retain their
-own state.
-
-Hourly rates have a larger **$10 steps** dial and a smaller **$5 steps** dial
-beside the exact field and **$1** buttons. Turning a dial preserves cents; a blank
-rate stays unknown until you enter one.
-
-A small arrow marks a move to another view or inspector.
-A plus mark starts adding an item. The final Add or Apply button confirms the
-item already being prepared. Physical-looking switches keep native checkbox
-behavior, and small fixed choice sets show their available options directly.
-Cancel uses an underlined, shadow-free text action with a visible keyboard focus
-outline; Apply keeps the confirmation treatment.
+The amp offers **Off**, **Half-speed** and **Full-speed** animation. Full-speed is
+the default; system reduced-motion preferences suppress animation. Chapter
+changes, contextual navigation, local inspection and pad movement have distinct
+responses. Nearby controls stay in place; longer reveals yield to visitor input.
+Presentation choices stay separate from the plan and its history.
 
 ## Run a local preview
 
-Use the Node version declared in [`.node-version`](../../.node-version), and
-install the locked dependencies with `npm ci` from the repository root. Start
-the existing local server there:
+Use the Node version in [`.node-version`](../../.node-version) and install the
+locked dependencies with `npm ci` from the repository root. Start the existing
+server there:
 
 ```sh
 node --import ./tools/node-runtime-admission.mjs --input-type=module <<'JS'
@@ -242,55 +146,41 @@ console.log(`${server.origin}/context-canvas-project-surface/context-canvas/inde
 JS
 ```
 
-Open the printed address and stop the server with Ctrl-C when finished. The
-page owns its ordinary vertical scrolling; connection diagrams can scroll
-locally. Separately hosted media and embedded experiences retain their own
-availability and owners.
+Open the printed address; Ctrl-C stops the server. About owns vertical reading,
+while wide tables and tracks scroll locally. The closed static counterpart and
+[full original Studio](../initiative-costing-calculator/index.html) retain their
+own routes. Broader economic translation remains in
+[#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
 
-## Check the behavior being changed
+## Verify the changed behavior
 
-Run source checks and the browser route for the affected task. For example:
-
-```sh
-npm run test:native-investment-studio:source
-npm run test:native-investment-studio:score-browser
-npm run test:native-investment-studio:session-browser
-npm run test:native-investment-studio:assembly-browser
-npm run test:native-investment-studio:capability-browser
-npm run test:native-investment-studio:change-browser
-npm run test:native-investment-studio:assurance-browser
-```
-
-Browser routes require the repository's locked Playwright browsers. The
+Start with `npm run test:native-investment-studio:source`, then select the
+existing browser route for the changed chapter, such as
+`npm run test:native-investment-studio:assurance-browser`. Browser routes use
+the locked Playwright browsers. The
 [focused regression reference](implementation-reference.md#focused-regression-route)
-and [owned suite catalog](../../tests/suites/README.md) give the other routes
-and prerequisites. Source checks establish model and ownership behavior;
-focused browser observations establish the exercised control, focus, and layout
-states. Screenshots remain in ignored `.visual-runs/` for local comparison.
+and [suite catalog](../../tests/suites/README.md) identify other routes and
+prerequisites.
 
-## Resume the work
+Prefer observations of a meaningful action: a control changes the right draft,
+Apply accepts it, Cancel or Undo restores the expected state, and a return finds
+the visitor's work. Layout changes earn ordinary mobile and desktop observations;
+engine-sensitive controls earn the relevant alternate-engine check. Keep local
+comparison images in ignored `.visual-runs/`. The receiving PR records the exact
+checked source and remaining review boundary.
 
-Read the latest [journal entry](experience-journal.md), then reconcile it with
-source, the worktree and the [core-quality route, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708).
-The journal preserves interaction intent and settled rationale; Issues and PRs
-hold current acceptance and delivery. The working showcase is on main.
-
-The [economic transfer, #705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705),
-[performance refinement, #679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679),
-and [tagged release, #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
-retain separate outcomes and receiving events. Performance and publication begin
-with the human's next direction.
-
-## Source owners and deeper reading
+## Find the source owner
 
 | To change or understand | Begin here |
 | --- | --- |
-| Visitor composition and styling | [About HTML](../../context-canvas-project-surface/context-canvas/index.html), [route CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), and [ASCII Zine Field](../../visual-fidelity-contracts/ascii-zine-field.md) |
-| Accepted state, pricing, history, and exchange | [Implementation reference](implementation-reference.md#portable-state) |
-| Editor drafts, saved work, and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and [shared editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
-| A particular chapter or control | [Source map](implementation-reference.md#source-map) and [task audit](usability-research.md#task-focused-audit-and-receiving-work) |
-| Design decisions and receiving evidence | [Experience journal](experience-journal.md) and [bounded research](usability-research.md) |
+| About composition, shared controls and chapter styling | [About HTML](../../context-canvas-project-surface/context-canvas/index.html), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css), then the corresponding `studio-*.css` route owner |
+| Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
+| Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
+| Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
+| Visual and interaction rationale | [Experience journal](experience-journal.md), [usability research](usability-research.md), and [ASCII Zine Field](../../visual-fidelity-contracts/ascii-zine-field.md) |
 
-Return to the [Context Canvas README](../../context-canvas-project-surface/context-canvas/README.md)
-for the surrounding visitor pages, or the [collaboration directory](../) for
-adjacent exemplars.
+For re-entry, reconcile the journal's current contract with runnable source,
+the worktree and #735's live Issue/PR route. Return to the
+[Context Canvas README](../../context-canvas-project-surface/context-canvas/README.md)
+for the surrounding pages or the [collaboration directory](../) for adjacent
+exemplars.

@@ -1,1256 +1,356 @@
 # Native Studio experience journal
 
-This journal preserves the decisions that make the Studio coherent when work
-resumes: what a visitor is trying to do, which state a control describes, how
-roles relate to real responsibility, and why the experience looks and responds
-as it does. Use it beside the [README](README.md), runnable source, and GitHub
-Issues. Issues own current outcomes and acceptance; this file keeps material
-design context close to the experience.
+This journal preserves the decisions that let a collaborator continue the
+Studio coherently: what visitors should understand, which state a control owns,
+and why the experience looks and responds as it does. The [README](README.md)
+is the practical entry point; runnable source owns behavior; GitHub Issues and
+PRs own current acceptance and delivery. The
+[implementation reference](implementation-reference.md) carries deeper contracts,
+and [usability research](usability-research.md) records the bounded research.
 
-Entries are chronological. Each distinguishes source observations, human
-direction, implementation decisions, and evidence still to collect. The
-[implementation reference](implementation-reference.md) retains detailed state
-and ownership contracts; the [usability research](usability-research.md)
-connects this repair to public evidence and focused observations.
+The 6 November 2026 reconciliation replaces the accumulating chronological
+continuation notes with a current contract and material decision history.
+The supersession table identifies deliberate reversals. Earlier prose and exact
+interim check counts remain recoverable in Git history.
 
-## 2026-11-05 — Re-entry at the native patch-bay checkpoint
+## Current working contract
 
-**Source observation.** Commit `cf16539` is the comparison checkpoint for this
-usability pass. It contains the native patch bay and the existing Purpose,
-People, Coordination, and Investment behavior. It supplies source evidence for
-this entry; the runnable working branch supplies behavior during the repair.
-This checkpoint is distinct from a claim about publication or final showcase
-completion.
+The Studio is a populated, visual About-page showcase for a visitor who may
+only scan and try a few controls. Its purpose is to make cross-functional work,
+responsibility and investment understandable through direct exploration.
+Useful examples, visible choices and recoverable interactions lead; precise
+editors remain available when a visitor chooses to inspect them.
 
-The native Studio already has one immutable accepted-plan owner, complete
-working-session and person editors, people/team creation, role and contribution
-records, directed team connections, atomic arrangement proposals, saved edits,
-Undo/Redo, one baseline, and admitted file exchange. The original full Studio
-continues to carry capabilities whose native chapters are still developing.
+The working showcase is on main. The cohesion route
+[#735](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/735)
+was delivered under
+[milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23)
+through focused, independently reviewed PRs. Each PR owns its checked source,
+result and recovery path:
 
-The initial usability concern has a concrete mechanism: team and session
-membership renderers put selected people before available people, and add
-movement controls only to selected rows. Toggling a checkbox can therefore
-move the row and alter its height. The arrangement editor already supports
-creating teams, but choosing “Create a team” only exposes proposed fields;
-Preview and Apply perform the later acceptance. Existing team and human
-selectors otherwise depend on records already present in the plan.
+| Design outcome | Issue | Delivered change |
+| --- | --- | --- |
+| Shared composition and controls | #736 | [#741](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/741) |
+| Coordination and People | #737 | [#742](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/742) |
+| Adjacent Abilities inspector | #738 | [#743](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/743) |
+| Framework-specific Change controls | #739 | [#744](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/744) |
+| Quality pads and calm starting preset | #740 | [#745](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/745) |
 
-**State meanings to preserve.**
+### State, people and evidence
 
-| State or relationship | Meaning and visitor consequence |
+| Owned meaning | Consequence for the experience |
 | --- | --- |
-| Accepted plan | `state.mjs` publishes immutable projections. The amp amount, accepted diagram, comparison, and download describe that accepted state. |
-| Raw editor draft | Text and selections belong to the active editor. Its preview can show a proposed amount; Apply accepts the complete change and Cancel restores the accepted reading. |
-| Saved edits | `editing.mjs` retains target-bound unfinished work when another editor takes the active lease. Reopening may require explicit review if accepted state changed in the meantime. |
-| Accepted identity | A newer accepted event can make an earlier draft stale even when an imported payload has equal values. Numeric revision or visual equality alone does not grant that draft a current lease. |
-| Purpose | The stated change, affected people, observable signal, accountable owner, review boundary, and open conditions explain the undertaking. Their text adds no implicit price adjustment. |
-| Person and membership | A person retains one identity, rate, and funded-capacity account. Team membership and session participation are separate relationships. A checkbox changes the named relationship. |
-| Funding and effort | Allocated session effort uses funded staffing; additional effort contributes extra commitment. A missing rate remains an explicit completeness gap. Zero is an actual value. |
-| Paused and retired records | Paused work retains declared effort and cost. Lifecycle and relationship labels preserve reference meaning; they do not silently erase obligations or history. |
-| Session timing | Count and duration establish effort. The current timing field is null; calendar placement and scheduling policy belong to their later contract. |
-| Undo and baseline | Undo/Redo concern accepted events. A saved baseline is an independent comparison and restore point. Saved draft recovery retains its own target and review route. |
+| Accepted plan | One immutable projection supplies the accepted amount, work relationships, comparisons and downloads. |
+| Editor proposal | Raw text and selections remain with their editor until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
+| Saved edit | The shared coordinator retains target-bound unfinished work. A changed accepted identity can require explicit review even when values happen to match. |
+| History and baseline | Undo/Redo traverse accepted changes. A baseline is an independent comparison and restore point. Saved drafts retain their separate recovery route. |
+| Person | One identity, hourly rate and funded-time account can participate in several teams and sessions. Role labels identify the illustrative people. |
+| Membership and participation | Team membership and session participation are distinct. Known people can join a session directly across team boundaries; this preserves independently edited team rosters. |
+| Purpose and roles | Purpose, function, seniority, posture, human review and decision boundaries describe responsibility. They introduce no implicit price adjustment. |
+| AI contribution | A functional contribution retains its human receiver, reviewer, decision owner, supporting work and review-before-use instructions. Those responsibilities may belong to different people. |
+| Effort and funding | Duration, occurrences and participants establish session effort. Work within funded staffing and extra investment retain separate accounts. Shared work is priced once. |
+| Unknown and zero | An untouched blank rate or availability stays unknown. Zero is an entered value. An explicit rate-dial gesture can begin an amount. |
+| Status and removal | Pausing a connection or changing a check's inclusion preserves separately owned work. Removal reviews references before accepting the requested change. |
+| Evidence | Planned support, rehearsal and recorded observations retain different meanings. Imported findings preserve the reviewer, context and observed revision. Authored examples illustrate possible responses. |
 
-**Role meanings to preserve.** Function, seniority, working posture, ability
-enabler, change-model component, quality role, AI role, and decision boundary
-describe the selected person's contribution. They remain distinct fields.
-The human receiver of an AI contribution and the person who decides may differ.
-Review-before-use and decision-boundary text describe what those people own.
-Labels such as Draft artifacts name an output category; they do not represent
-an action that removes, generates, or accepts an artifact. Role and human-review
-metadata preserve the model's separate accounting inputs.
+The amp displays accepted investment. Reels and faders can change a draft and
+its illustration; a presentation effect never accepts work or awards readiness.
+A missing rate retains a known-amount reading and a route to its person editor.
+Line attribution and independently rounded subtotals keep their explanatory
+meaning; the plan's complete funding pools own the settled amount.
 
-**Re-entry consequence.** Continue from the source mechanism and visitor task,
-using [#685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685)
-as the current usability receiver within
-[#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647)
-and [#637](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/637).
+### A plan that reads as enterprise work
 
-## 2026-11-05 — Human direction and the current repair
+Coordination leads with a four-sprint pilot and an aligned session sequencer.
+Each illustrative sprint contains two weeks. A separately authored two-quarter
+example carries preparation into rollout and operating adoption. Its sessions
+represent work within that wider initiative; the amount prices the included work.
 
-**Human direction.** Complete the polished, visual, interactive showcase with
-its amp-head character, knobs, and light professional play. The current
-aesthetic is worth developing. Add a cooler zine and ASCII vocabulary while
-keeping semantic HTML, CSS, and vanilla JavaScript as the visitor foundation.
-The complete working experience comes before general performance refinement.
+The view has three useful depths: whole plan, selected sprint or quarter, then
+its session or decision. Period membership and order are authored. Zoom changes
+what the visitor sees while preserving plan bytes, effort and investment.
+The session editor owns people, duration, occurrence count, funding and placement.
 
-The concrete interaction intent is:
+Example buttons replace the plan in place with Undo available. The Sprints /
+Business quarters choice immediately regroups the existing work and supports
+Undo. Period-count changes use a visible horizon proposal with Apply and Cancel.
+Shortening the horizon retains affected sessions for placement. Older plans keep
+their recorded timing until an explicit period-arrangement proposal is accepted.
 
-- People stay in place when selected or deselected. Written state and subdued
-  treatment can communicate participation; explicit reorder controls own
-  intentional movement.
-- Selectors choose values, disclosures reveal detail, and buttons take actions.
-  Distinct shapes and consistent sizing within an action group help explain
-  those jobs. Removal controls use rose treatment plus accurate text.
-- Wording names the modeled relationship with humane, ordinary language.
-  “Remove from plan” can explain a person's plan removal. “Remove contribution”
-  names an artifact. “Dequeue” is suitable when the experience actually has a
-  queue; the current plan uses people, memberships, sessions, and connections.
-- A missing team or person has a creation route beside the dependent control.
-  The unfinished task stays recoverable and has a visible return. Coordination
-  can remain the visual entrance when those prerequisite routes work.
-- Collapsed sections preview useful accepted facts. Empty sections invite a
-  specific entry. A visitor can understand why opening the section matters.
-- Panels use their area thoughtfully and keep controls steady through ordinary
-  input. Responsive reflow and explicit changes retain their legitimate jobs.
+A period's Add session action opens a new draft in that period with useful
+example context. Confirming Add session accepts the prepared item. More
+occurrences create additional placements to choose; more Hours or Minutes makes
+each occurrence longer. These separate operations remain visible beside the work.
 
-**Implementation direction.** The repair adds stable participant rows, clearer
-control styling, person/role summaries, and creation detours through existing
-editors. Its expanded receiving scope includes people and supporting sessions
-for contributions, receiving people and sessions for connections, and people
-for arrangement templates. These routes preserve source drafts and explain
-return; their final behavior and any narrower completion boundary belong to the
-receiving verification and review.
+Stages group sessions. Handoffs connect the work that prepares a result to its
+receiver. Decisions attach to a stage or handoff and retain their question,
+evidence and reviewer. Delays name affected work and can propose a later period.
+Availability opens beside a person and period; funded time retains its economic
+meaning. Broad period membership establishes sequence, not exact collisions.
 
-The return contract has four visible parts: what is being created, the task
-being preserved, how to return, and what needs review after creation changes
-the accepted plan. A newly created connection receiver also needs the right
-team membership. Template work retains its own raw configuration and requires
-a fresh preview after an accepted-plan change. These are model relationships,
-so the interface should keep their consequences apparent.
+The default view keeps the overview and MIDI tracks together. Stages & handoffs
+reveals related work and its contextual settings. People and available time use
+progressive disclosure. Detailed chronological readings stay in downloadable
+reports. The earlier eight-category elapsed-time inspector is retired.
 
-**Style and experiential details.**
+### A coherent visual instrument
 
-| Cue | Intended job and source boundary |
+The amp is a compact frame for the Studio identity, accepted amount, chapters,
+Purpose and Saved edits. Its animation choices are Off, Half-speed and Full-speed.
+Full-speed is the requested default. System reduced-motion preferences suppress
+animation; the selected content and all operations remain available.
+
+The **Editorial Rack** uses pale, readable work areas for relationships, prose,
+kanban lanes and support tables. The **Instrument Rack** uses a dark face for
+reels, aligned faders, exact readouts and responsive visualizations. About's
+existing color tokens own the palette. Chapter styles extend the shared owner
+instead of creating separate button or control systems.
+
+Music-production controllers, euro-rack modules and restrained 16-bit/32-bit
+character guide the tactile treatment. Stationary housings and upper-left light
+keep controls readable while pointers, selected keys and pads respond. ASCII
+rules, grille details and small interstitials have a specific visual job.
+Decorative texture stays outside the accessible reading. Plus signs identify
+creation entries; ordinary headings carry their own hierarchy.
+
+Motion communicates the operation: chapter arrival, a contextual move, local
+inspection, a reel reveal, or a pad changing lanes. Selection and data remain
+stable while the effect settles. Nearby editors stay in view. Longer reveals
+move only as needed and yield to wheel, touch, pointer or keyboard input. Off
+and system reduction settle the same destination directly. General performance
+refinement remains separate from correcting an observed interaction defect.
+
+### Controls and recovery
+
+- A plus starts a creation flow. The final Add or Apply confirms the item already
+  being prepared. A nested creation action retains its own entry treatment.
+- An arrow announces another view or inspector; a caret opens nearby content.
+  Persistent choices remain visibly pressed. A descriptive title stays distinct
+  from the button that edits or navigates from it.
+- Cancel is a shadow-free ghost action. Removal uses rose treatment with exact
+  relationship wording. Shared action groups retain spacing when feedback clears
+  or labels wrap.
+- Participant cards stay in place when toggled. Included and Available describe
+  the relationship. Explicit reorder controls own intentional movement.
+- Hours has a larger dial than Minutes, beside their exact fields. Rates have
+  $10 and $5 dials, centered $1 step buttons and direct entry. Native keyboard
+  behavior and units remain visible; long repeated operating paragraphs are
+  replaced by useful labels and local validation.
+- Small fixed choice sets expose their options directly. Boolean switches keep
+  native checkbox ownership. Long questions and evidence are readable before
+  editing instead of being clipped inside a small text field.
+- Creation detours retain the originating draft and a visible return. A returned
+  record is checked against current accepted state; Undo can change its meaning.
+  Nested return routes preserve the nearest useful origin and retire discarded
+  or superseded routes.
+
+Known records and references remain admission boundaries. Artificial team
+membership prerequisites have been removed from session participation so a
+visitor can explore cross-functional work directly.
+
+### Chapter-specific decisions
+
+**People and team planning.** Team lanes and person/session tracks lead. Selecting
+a person opens their existing settings; rates and ordering remain in a compact
+secondary route. Team arrangement reels show populated structures and actual
+work directions. The selected arrangement proposes teams, connections and
+supporting sessions together; Apply accepts it and Undo restores the prior plan.
+A changed endpoint can show an adapted arrangement. Removing template grouping
+preserves the teams, work and connections. Earlier files retain a custom reading
+until a template is explicitly authored.
+
+**Abilities.** The human preferred full support comparison over an action-pad-only
+catalogue. What people can do and How the team works retain semantic tables for
+responsibility, preparation, review and observation. One editing rack opens
+adjacent to the selected table. Native checkbox pads connect people, prerequisites
+and supporting sessions. Card front, reverse and side-by-side readings retain
+meaningful detail. Authored observation choices replace typing a result in the
+showcase; imported history stays readable. The separate manual UI is retired.
+
+**Change.** Viewpoint and framework reels populate component emphasis, work lanes
+and linked-session tracks. Each framework partitions the stored attention
+channels so changing one visible fader preserves the other components' emphasis.
+The starter has real support links to its existing sessions. Selecting a method
+opens a local explanation and example, then its work proposal. PODA connects
+purpose, objectives, discoverables and activities; Impact Map connects a goal to
+affected people and an investigation; Strategy Canvas compares anchored support.
+Their examples suggest planning work, while the plan retains its actual people,
+sessions and evidence. Manual and repetitive framing blocks are retired.
+
+**Quality & recovery.** Pre-release and post-release reels select authored check
+and rehearsal configurations. Sigma, Quality, Urgency, Compliance, Training and
+Fidelity form the fader bank. Prepare, Rehearse and Operate & learn lanes sit
+beside session tracks; selecting a pad opens its matching settings, rehearsal,
+recovery or illustration pane. Rich rehearsal context stays in the selected
+reading. Recovery and learning entries begin with useful example content.
+
+New showcase plans begin at 4σ with balanced preparation settings. Imported
+settings retain their own values. Authored pressure rules move pads and can keep
+a needed check included; a nearby cue names the control change that releases it.
+The scope changes from calm through warning to salmon intensity with decorative
+ions. Extreme settings add decorative reel stutter. These are deterministic
+illustrations of chosen assumptions, not empirical forecasts. They never advance
+an accepted plan or assign an automatic cost. Only accepted people and sessions
+change their owned investment. Imported observations remain readable; the
+observed-result form and chapter manual are retired.
+
+**Investment.** Baseline comparison, history, save/open controls, the whole-plan
+cost breakdown and downloads remain. The original contribution-trace comparison
+panel is retired. Investment's broader starting-plan selection retains its
+replacement preview; Coordination's two example buttons act in place with Undo.
+Reports, collaboration briefs and JSON describe the same accepted snapshot.
+Unfinished editor entries remain in the Studio. The full original calculator
+retains broader role-pool, service, capital, reserve and commercial models.
+
+## Superseded directions
+
+These changes are intentional. Use the current contract above when an older
+entry, screenshot or technical description presents the earlier behavior.
+
+| Earlier direction | Current replacement and reason |
 | --- | --- |
-| Amp head and knobs | Keep the Studio inviting and tactile, with the accepted amount visible and exact input controls available. A knob's ornamental character must retain an understandable value and operation. |
-| Tiffany and cobalt | Continue About's existing composition. Route CSS maps those colors to local meaning rather than replacing the surrounding page's visual ownership. |
-| Warm paper and ink | Give reading and editable cards a zine-like material character with strong text contrast and useful space around controls. |
-| Rose quartz range | Distinguish removals, changed work, and recovery; text names the action or condition so color is supplementary. |
-| Fixed light | Light comes from the upper left; small hard shadows fall down and right. Focus and pressed treatments remain recognizable without moving neighboring controls. |
-| ASCII masthead, rules, and weave | Short authored patterns create publication texture. Decorative punctuation stays outside the accessible reading; meaningful art keeps an equivalent text reading. |
-| Patch annotation and recovery slip | Explain a relationship or a next step beside the affected work. They should help a visitor continue rather than merely decorate a status message. |
-| Typography | Ordinary system text carries sustained reading; monospace provides short labels and texture. Long names, enlarged text, and narrow widths retain complete usable words. |
-| Professional play | Future progress and playful feedback describe actual visitor actions and outcomes. Ornamental stamps alone establish no achievement or authority. |
-
-The [ASCII Zine Field](../../visual-fidelity-contracts/ascii-zine-field.md)
-holds the family, token roles, specimen, and extension boundaries. Its palette
-is a reference mapping; About's route stylesheet owns the actual Studio
-composition. The research record distinguishes accessibility guidance from
-local aesthetic choices and from visitor preference still to observe.
-
-**Evidence pending at this entry.** Source changes are in progress. The fitting
-browser return must exercise stable row rectangles and focus, creation and
-cancellation from dependent editors, preserved draft values, accepted versus
-draft summaries, and the new composition at narrow and desktop sizes. Check
-forced colors, reduced motion, enlarged text, and keyboard operation where the
-changed controls depend on them. An independent engineering review then reads
-the actual proposed change. This entry records intended behavior, not a claim
-that those observations already passed.
-
-## 2026-11-05 — Keep delivery cost observable as the showcase grows
-
-**Source observation and decision.** The first-paint stylesheet test had a
-mandatory ceiling of 122,737 raw bytes from the earlier CSS extraction
-comparison at `2d8e708`, before the native Studio. This repair's measured owner
-set contains 124,236 bytes, an increase of 1,499 bytes against that comparison.
-The test now reports the measurement as a diagnostic. Required stylesheet load
-order and exclusion of the broad legacy sheet remain executable checks.
-Historical planning and threadkeeping retain the earlier comparison as history.
-
-This is a deliberate evidence boundary: a historical extraction size describes
-that source set. It does not establish the right feature budget for the new
-showcase. The human's direction favors completing useful behavior and retaining
-an observable cost, with targeted refinement when actual visitor pressure
-justifies it.
-
-**Recorded check return.** On the repository-admitted Node 22.23.4 runtime:
-
-```sh
-node --test tests/context-canvas/about-first-paint-css.test.mjs tests/context-canvas/code-and-about-treatment.test.mjs
-```
-
-The implementing pass reported 10 of 10 tests passing. This establishes the
-exercised About source and stylesheet-owner contracts at that point in the
-repair. It leaves browser timing, interaction responsiveness, and subsequent
-edits to their fitting observations. A reproducible slow interaction, loading
-problem, or measured delivery regression can reopen the performance decision;
-a larger source file by itself is an observation to interpret.
-
-## 2026-11-05 — Put a clear entry point beside durable experience context
-
-**Human direction and documentation change.** Keep material state, role,
-styling, and experiential details beside the experience and use them with the
-GitHub work route. The package now has a short practical [README](README.md),
-this journal, the bounded [research and task audit](usability-research.md), and
-the [implementation reference](implementation-reference.md). The former README's
-detailed contracts moved to that reference; its technical headings and local
-anchor relationships remain available. Existing unfragmented inbound README
-links continue to open the practical entry point.
-
-**Next re-entry.** Reconcile the current source and verification return with
-[#685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685),
-finish the affected visitor tasks, and record the actual remaining boundary.
-The fuller showcase continues through
-[#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647)
-for amp composition,
-[#652](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/652)
-for quality/recovery/learning and professional play, and
-[#653](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/653)
-for coordination score/capacity/decision gates.
-[#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679)
-receives later relationship-rendering refinements after the showcase exists.
-The [task audit](usability-research.md#task-focused-audit-and-receiving-work)
-keeps specific prerequisite and correction paths visible while that work grows.
-
-## 2026-11-05 — Browser findings refine stable rows and return pathways
-
-**Implementation observation.** The current repair reuses mounted rows in all
-four selection lists: session participants, team members, contribution
-supporting sessions, and connection supporting sessions. Membership toggles
-update the checkbox, written Included/Left out state, and styling. Explicit
-Move up/down owns display-order changes. This preserves the control a visitor
-is using and gives geometry checks a stable element to observe.
-
-Prerequisite returns now record the originating chooser, including the two
-different contribution human-assignment fields. After any required review of
-a stale draft, the intended return focuses that exact chooser. A newly created
-connection receiver can be added to its receiving team through the existing
-team editor and ordinary Apply before selection. Return routes also reconcile
-discarded or lost source drafts; created-record messages read the current
-accepted label and existence so Undo can change their meaning accurately.
-These are current source mechanisms whose complete behavior remains subject
-to the receiving browser sweep and independent review.
-
-Template proposals already include optional review-session creation with
-people, team, duration, count, funding, and status. That capability belongs in
-the same Preview/Apply sequence as its teams and connections. The current
-repair adds clearer creation instructions, collapsed team/member previews,
-and the person-creation detour. Direct correction links from static
-removal-dependency labels remain a further interaction task in
-[#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
-
-**Browser observation and design response.** A WebKit comparison exposed label
-inflation from 16 to 19.2 CSS pixels and a corresponding 4.8-pixel row-height
-change. Mounted-row reuse addresses unnecessary control replacement. The
-Studio also scopes `text-size-adjust: 100%` and its WebKit-prefixed counterpart
-to keep mobile text inflation from changing the authored control geometry.
-The [CSSWG size-adjustment editor's draft](https://drafts.csswg.org/css-size-adjust-1/#adjustment-control)
-describes this percentage mechanism; it is work in progress rather than a
-finished interoperability guarantee. Authored `rem` sizes and user-selected
-text enlargement remain part of the layout. Browser checks establish the
-observed behavior at their actual engine, viewport, and text setting.
-
-Narrow reading also exposed action-button overflow within cards. The revised
-groups allow labels to wrap within their available width. At a 320-pixel
-viewport with 200% text, smaller outer gutters leave more usable space for
-nested editors, and connection group text receives its own line. These changes
-preserve enlarged reading while addressing the observed layout pressure.
-
-**Evidence boundary.** The final affected-browser sweep and independent review
-are still receiving work at this entry. The PR will consolidate actual commands,
-normalized outcomes, and remaining limitations. This journal records the
-decision-changing findings and source response without promoting interim
-observations to a completed showcase or release claim.
-
-## 2026-11-05 — Pause and next iteration direction
-
-**Human direction.** Pause cleanly so the human can change collaboration mode
-before continuing. This checkpoint preserves useful work and open findings;
-it does not mark the feature accepted or accelerate its remaining review.
-The working branch is `codex/studio-usability-zine`, based on `cf16539` from
-pending #675. The shared original checkout retains its separate branch.
-[#685](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/685)
-is the current work receiver. Feature integration and publication remain open.
-
-**What landed well.** The human found the ASCII Zine Field specimen highly
-valuable and wants to carry it forward. Preserve its existing composition and
-make these targeted refinements:
-
-- Move the native select's caret inward from the right edge by 8–24 pixels.
-  Keep the native select behavior, visible value, and a fitting forced-colors
-  treatment. The Studio already has its own 20-pixel indicator inset.
-- Replace “Texture with a quiet job” with “Texture with a simple job” or another
-  direct formulation that accurately describes the visual treatment.
-- Use plus signs deliberately. A plus near a heading can imply Add. Prefer
-  undecorated headings where they read clearly; explore character-art texture
-  in the amp head, scroll-like notes, and magazine-leaflet compositions.
-- Consider a brief tactile scramble around an accepted amount change, chapter
-  transition, removal, or Undo. Its operation stays transparent: accepted values
-  remain readable, motion follows actual state, and reduced motion has a stable
-  equivalent. This is a design candidate, not implemented behavior.
-- Prefer participation pairs such as “Included” and “Available” over “Left out.”
-  Match the actual relationship being selected and retain the native checkbox.
-- Review sentence and title case across summaries. Distinguish a fixed interface
-  label from a user-authored name instead of silently recasing that name. The
-  reported “Settings for Research review” case needs an intentional presentation.
-
-**Next release requirements.** The ASCII zine reusable guidance is slated for
-the next public GitHub Pages projection, and the Visual Fidelity Contract is
-slated for the next production release. The current implementation is a
-composition contract, tokens, and specimen; the human also called it a skill.
-The receiving release pass should confirm whether a portable skill is warranted
-in addition to the family, then use the existing skill/catalog/publication
-owners. Preserve these two receiving routes explicitly in release planning.
-Slating establishes planned inclusion; human-held publication still requires
-its ordinary review and exact artifact verification.
-
-**Open engineering findings.** Independent review remains provisional:
-
-1. Repeated prerequisite detours from the same saved origin can leave an
-   obsolete return route. Reproduce: edit a session, Create team, resume that
-   session through Saved edits, Create team again, Apply, Return to session.
-   Retire the superseded origin route while preserving useful nested detours.
-2. The latest WebKit enlarged-text assertion observes about 19.2 pixels where
-   the test expects about 32 pixels. Diagnose the actual typography and timing
-   after the scoped text-size adjustment. Preserve user enlargement and stable
-   rows; choose the repair from that observation. The failing assertion remains
-   available. The temporary console diagnostic was removed for this checkpoint.
-
-The last broad affected-browser run passed 92 of 93 cases. A later targeted
-run passed 11 of 12. Earlier native source checks passed 420 cases before the
-last return-controller refinements. The ASCII family passed its 15 source and
-8 browser checks. Those are observations of their respective source points;
-the checkpoint still needs final source and affected-browser verification plus
-independent acceptance. The final receiving PR should own that bounded return.
-
-**Resume here.** Read this entry with #685, resolve the two findings, make the
-requested specimen and language refinements, update the public-projection and
-production-release routes, then complete the affected checks and independent
-review. Keep the full showcase route in #637 and final About reconciliation in
-#638. The local preview can remain available during this short pause.
-
-## 2026-11-05 — Resume the approved sequence
-
-**Human direction.** The Issue order and synthesized implementation plan are
-approved. The pause has ended. Complete the current usability repair and its
-independent engineering review, then continue the populated showcase through
-[#649](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/649)
-and the tactile controls in
-[#647](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/647).
-The original checkout retains its own working branch; the feature uses
-`codex/studio-usability-zine`. The earlier feature-branch push rejection cleared
-on an ordinary retry. Repository protections retain their existing settings.
-
-**Visual and language decisions.** The specimen's native select now has a
-decorative caret inset 20 pixels, with reserved label space. Its native select
-still owns options, keyboard selection, and focus; forced colors restores the
-browser indicator. The heading reads “Texture with a simple job.” The Studio
-uses plain chapter headings and a short stitched amp rail. Selection lists
-read “Included” and “Available.” Settings and role summaries separate the fixed
-label from the literal entered name with a middle dot, preserving names such as
-“Research review” exactly as entered.
-
-The family now explains targeted amp-grille, scroll-note, and leaflet
-treatments. Its portable composition method owns ornament's job, placement,
-ordinary control semantics, and fitting verification; the family owns its
-palette, tokens, and specimen. The public skill projection and production
-family guide have separate receiving paths. Their source registration prepares
-the next release; human review retains publication authority.
-[Issue #686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686)
-owns both release handoffs, including exact source and generated-artifact review
-and the later delivered-route observation.
-
-**Refined browser finding.** The earlier text-size-adjust account was a
-provisional explanation. The pinned WebKit reports those adjustment properties
-unsupported, and the offscreen test observation retained smaller descendant
-metrics after responsive enlargement. Bringing the actual card into view
-before measuring established the enlarged reading. The repaired observation
-therefore includes a visible-card precondition. Participant rows also own a
-`1rem` font size so the surrounding page's narrow `li` rule does not determine
-their typography. The ineffective scoped adjustment was removed. The browser
-check still requires enlarged readable text and stable row geometry through
-membership changes.
-
-**Next composed task.** Author one cross-functional scenario with recognizable
-roles, connected teams, shared work, and an accountable review route. Keep the
-small teaching fixtures available. Its replacement preview should disclose
-changed contributions and connections through the existing exchange owner.
-Operate one working-session quantity with a real knob above the precision
-field, and make that same editor the first contextual Remote. A short authored
-review request can invite a useful adjustment and baseline comparison. The
-broader ability, quality, recovery, and timing chapters retain their approved
-owners.
-
-**Motion decision.** Keep the current ornament stationary. Consider a brief
-texture variation during the first knob/Remote composition, where an actual
-accepted change or chapter transition gives it a clear event. Accepted money
-and units stay readable; reduced motion shows the settled state directly.
-This targeted extension remains in #647 with its other meaningful transitions.
-
-**Receiving evidence.** The final feature PR owns the normalized source,
-affected-browser, publication-closure, and independent-review return. This
-entry preserves the design corrections and next task; the PR records the exact
-source accepted for integration.
-
-## 2026-11-05 — Build the populated pilot and first working dial
-
-**Accepted ground.** #675 and #687 are integrated on `dev@8451f656`. Their
-merge trees equal their independently reviewed heads. #668 and #685 are
-complete. The current source branch is `codex/studio-showcase-controls`;
-#649 and #647 own its outcome. #686 preserves next-release inclusion. The
-human explicitly places the full tagged Pages release in a future human-cued
-step. This session continues through the holistic showcase, then pauses at
-performance-refinement Issues.
-
-**Scenario.** The service-request pilot uses fictional people and illustrative
-rates across Product and Research, Engineering, and Quality and Operations.
-Shared people retain one account. Its brief asks the visitor to try four
-45-minute decision reviews instead of four 30-minute reviews. The starting
-$3,980 consists of $2,840 staffing and $1,140 extra work; $1,480 of work is
-already included in staffing. The proposed extra hour across reviewers at
-$120, $140, and $110 per hour adds $370. The ordinary small examples remain
-teaching fixtures; the native page supplies this larger plan explicitly.
-
-**Interaction and meaning.** Save a baseline, open the review, adjust the
-minutes dial or precise value, inspect the draft, and Apply or Cancel. The
-review request asks the visitor to pause the readiness connection while Noor's
-recovery-instruction concern is clarified. Existing work keeps its time and
-price. The response is an authored rehearsal with ordinary controls and
-recoverable consequences; it awards no automatic score or readiness claim.
-The brief disappears when another plan is loaded. Its record-specific actions
-remain available only while the named records exist.
-
-**Composition.** The dark amp keeps accepted money legible. The duration
-readout, actual minutes knob, and short help share a row above exact fields at
-wide widths, then reflow naturally. A trial with the sole knob inside one of
-three aligned field columns left large empty regions; moving it to the shared
-readout group made the same operating relationship more compact. The housing
-and highlight remain stationary while the pointer turns. The existing session
-disclosure becomes the first Remote, with the literal selected session name,
-one draft, and wide-side/narrow-inline placement. Its state owner stays intact
-through resizing. The amp's manual disclosure offers a short operating route.
-Independent review exposed clipping at enlarged desktop text. The Remote now
-uses its chapter's available inline space to choose side-by-side placement;
-the same controls return to ordinary flow when enlarged text needs the width.
-The browser journey checks actual editor and control containment at that size.
-
-**Source and verification boundary.** The preset factory and accepted source
-own the starting values; the authored HTML supplies the matching scriptless
-reading. The Investment preview now includes named contribution and connection
-changes through its existing exchange difference. The knob stays in the working
-session controller and adds no module or runtime dependency. The receiving PR
-will own the final source, browser, visual, and independent-review return.
-
-## 2026-11-05 — Connect abilities to the work that supports them
-
-**Accepted ground and current task.** PR #688 is integrated on `dev@7035bc2`;
-its merge tree matches the independently reviewed source. The current branch,
-`codex/studio-capability-cards`, receives #650, #677 and #678 together. A visitor
-can choose a customer action or team practice, inspect its support, configure
-responsibility and work, preview the whole proposal, and Apply or Undo it.
-
-**Human language direction.** The starter now identifies people by their work:
-Product lead, Researcher, Engineering lead, Engineer, Quality reviewer and
-Operations specialist. These labels keep the people recognizable without
-assigning fictional personal identities. Stable record IDs preserve existing
-relationships. The preceding entry records the earlier naming; current source
-owns the revised display labels.
-
-The human also asked for descriptions that explain useful outcomes. The
-selected-card kicker was redundant beside its action, so it was removed.
-The chapter introduction says “Plan what your users can do.” Collapsed support
-sections name their selected or proposed sessions; empty sections invite the
-visitor to choose support. Reverse readings and the manual explain the action
-and its acceptance question before definition metadata. Counts remain useful
-where they communicate an actual quantity or limit.
-
-**Composition and continuity.** The Abilities chapter keeps catalogue choices,
-the selected card, its reverse, settings and manual in normal page flow.
-“Open beside” exposes both readings when available width supports them. The
-same editor owns the draft through reverse reading, chapter changes, saved
-edits and prerequisite creation. Inspecting a supporting session offers a
-return to the selected card. Narrow and enlarged layouts retain the same
-controls and readable precision fields. The amp manual opens the catalogue's
-shared operating explanations.
-
-**Meaning and accounting.** Schema 0.4 records ability/practice instances,
-versioned definitions, human responsibilities, shared support and observations.
-Older plans pass their original admission profile before migration; their
-practice work retains its original general-support meaning. Proposed,
-Supported, Rehearsed and Observed in context describe explicit observations.
-Current support gaps can change while earlier records remain recoverable.
-
-Installing or editing a card publishes its configured work and evidence in one
-history step. Shared sessions retain one global price and capacity account.
-Card amounts describe their selected work and round independently; the plan
-prices complete funding pools. Two separate one-minute sessions at $1 per hour
-can therefore show two cents each on their cards while the plan settles three
-cents. The reverse explains that distinction. A missing hourly rate produces
-known-amount wording and a route to People to complete the estimate.
-
-**Repairs discovered through use.** Independent review found that successive
-new-session proposals could reuse an ID; allocation now checks existing work
-and all work in the same proposal. A three-engine interaction exposed Firefox's
-composition-end ordering; the editor captures that final field before drawing
-its preview. The real page bootstrap also exposed an unregistered chapter icon;
-the source-owned folded-card icon now completes the shell. Each repair has an
-observation at its affected boundary.
-
-The human's connection-editor screenshot also exposed removal and commit
-buttons touching when empty feedback disappeared. The shared form-action rule
-now reserves a gap above Apply/Cancel and space for their fixed shadows. Its
-browser observation covers wide, narrow and enlarged-text rows, including
-wrapped actions. This repair belongs with the working interaction. Returning
-from adding a person also opens the original nested support section before
-focusing its chooser, preserving both the draft and the visitor's place.
-
-**Next receiver.** The receiving feature PR owns final verification and exact
-independent acceptance. After integration, #651 carries the original change
-frameworks, interpretive lenses and relative attention controls into this
-accepted plan. Quality, recovery, score, traces, scenarios and final About
-composition follow the approved route in #637. The complete original Studio
-remains available. #686 holds the later human-cued tagged release; performance
-refinement begins after the complete showcase and the requested pause.
-
-## 2026-11-05 — Retain the plan while changing the questions
-
-**Accepted ground.** PR #689 is integrated on `dev@4fd8fba` after independent
-review of head `a799697`; their trees match. #650, #677 and #678 are complete.
-The current `codex/studio-change-chapter` branch receives #651. The source
-catalogue transfers the original framework explanations, suggestions, receiver
-roles, lenses and attention descriptions directly. Stable native component IDs
-retain existing role assignments.
-
-**Visitor task.** Choose a framework, inspect a component, compare viewpoints,
-adjust attention, and propose the support that the plan needs. Every framework
-keeps its mapping and planning status when another is selected. Source filters
-retain the original Core/Enterprise suggestion behavior. The Four Actions
-reading forms discussion questions; changing those questions leaves records
-with their existing owners.
-
-**Controls and appearance.** Collapsed component summaries preview the planning
-state. The same Included/Available checkbox grammar selects supporting work,
-people and cards. A dark mixer holds the relative attention controls; stationary
-housing and highlights surround native vertical range inputs. Each fader also
-has an exact Parts field and step buttons. The first visual reading exposed
-low-contrast headings and staggered tracks caused by unequal text lengths.
-The shared mixer rows now align those tracks and their values, and headings
-use the light control text. The earlier action-spacing repair carries into
-the form footer and new proposal controls.
-
-**Meaning of an adjustment.** Parts range independently from 0 to 25. The
-values express relative emphasis, and an all-zero mix invites a choice. The
-greatest-emphasis explanation refers to the actual maximum and its ties.
-Frameworks, lenses, mappings and attention preserve money. A source suggestion
-can reuse a session or propose explicitly configured new work; Apply accepts
-settings and the support link together. The original 48 aggregate person-hours
-remains explanatory context. Visitors choose the native per-person duration,
-occurrences, participants and funding before a new session enters their plan.
-
-**Recovery and disclosure.** One Change draft retains all maps and unfinished
-work. Reset changes draft framework, mapping/status and attention defaults,
-while keeping support references, lens/filter and actual sessions. Creating a
-missing person, team or session returns to the requesting control. Removing
-linked work or a card points back to Change for an explicit support decision.
-Baseline and exchange readings name changed components and attention values;
-the accepted plan file carries the complete settings.
-
-**Continuation.** The receiving PR owns exact source and browser evidence.
-#652 next receives quality, recovery and learning. #653 receives the retained
-lens visual-kind cue and attention emphasis in the authored coordination score;
-their current definitions already travel with the plan. #654 receives separate
-analytical assumptions and traces. #649/#638 complete scenarios, reports and
-the final About composition. The full original Studio and human-cued release
-boundary remain intact. Pause at performance refinement after the showcase.
-
-## 2026-11-05 — Rehearse a response and inspect its consequences
-
-**Accepted ground.** PR #690 integrated the Change chapter at `dev@57f7b3d`,
-with a merge tree equal to its independently reviewed source. Quality,
-recovery and learning now receive the same accepted plan through #652.
-
-**What a visitor can do.** The Quality & recovery chapter retains the original
-quality concepts, reference horizon, independent rate, sigma illustration,
-recovery assumptions and contextual learning prompts. Its authored complication
-cards let a visitor prepare a response, name affected work and people, inspect
-changes, Apply, compare, and keep or Undo the result. A 30-minute additional
-session for the pilot's Quality reviewer and Operations specialist adds $100.
-A reviewer records an observation, its context and the decision it informs.
-Participation leaves competence and readiness for their fitting observation.
-
-**Meaning to preserve.** Reference estimates and accepted work remain distinct.
-The original staffing calculation owns quality and recovery illustrations;
-explicit native people, time and funding own investment. The reference horizon
-uses hours, 80-hour sprints or 520-hour quarters. Native plan weeks retain their
-own meaning. Aggregate effort and per-person duration appear together in the
-proposal. Reusing a session retains its one account. Removing an estimate leaves
-accepted work available for an explicit decision. Settings, proposed work and
-connection changes share one acceptance and one Undo event.
-
-**Interaction continuity.** Quality concepts, events, learning actions and
-rehearsals expose their supporting work and a route to inspect or create it.
-Collapsed records preview that support. Raw entries survive chapter changes,
-missing-record creation and stale review. A reused local rehearsal ID after
-Cancel or Undo receives its current scenario's visible parent; the scenario
-identity of an accepted observation stays stable. Independent review identified
-that parent repair and a mistaken quarter label; the receiving feature includes
-their focused checks.
-
-**Control refinements from human use.** The Change selectors were visibly
-compressed to 17 pixels in the earlier browser stylesheet. Shared native field
-sizing gives them room for their text and a comfortable target. The browser’s
-native base picker supplies repeat-click dismissal where supported, with the
-standard native picker as its fallback. Actual in-app observation confirmed
-open and repeated-click close for framework, viewpoint and suggestion source;
-keyboard dismissal and selection retain their native owner. The [HTML select
-contract](https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element)
-supplies that semantic boundary. Attention
-panels keep aligned titles, tracks, numeric controls and equal outer heights;
-descriptions sit beneath the controls. Light labels and separate warm filled
-tracks make the slider knob and current amount legible. Focus changes the
-channel's texture. Current-emphasis tags and a short update cue explain that
-this reading responds to the visitor's selections; the same warm cue marks
-matching channels. Zero and tied emphasis retain their literal meanings.
-
-The native lens selector reuses the original Studio's wheel composition: fixed
-labeled choices surround a brief reel turn. Reduced motion settles the same
-selection directly. A visible Minutes dial label ties the session knob to its
-exact controls. Future tactile controls follow their data: bounded numbers,
-exclusive choices and actual toggles each receive the matching native input.
-The original Coordination Horizon supplies useful arrangement and navigation
-patterns for #653; its approximate spans remain distinguishable from the native
-score's explicit timing.
-
-**Continuation.** The feature PR owns the final source, browser, visual and
-independent-review return. #691 next explains the offered planning methods,
-uses laptop and wide space for meaningful comparisons, and shares the session
-time controls with supporting-work proposals. Its source audit preserves PODA
-learning questions, Impact Map discoverables, and Strategy Canvas anchored
-readings. #653 receives the authored score, agenda, capacity and decision gates; #654 receives contribution traces and analytical
-reconciliation. #649/#638/#656 complete scenarios, reports and final placement.
-The full original Studio remains discoverable. The tagged public release
-follows the human cue through #686. Pause at performance refinement after the
-holistic showcase.
-
-## 2026-11-05 — Understand the method before planning its work
-
-**Accepted ground.** PR #692 completed Quality & recovery on `dev@35223fe`,
-with a tree equal to independently reviewed head `009e909`. #691 now receives
-the human's request for understandable suggestions, shared time controls and
-more useful laptop and wide composition.
-
-**The decision to support.** A method card explains what its work can accomplish
-before offering a session. PODA connects purpose, objectives, discoverables and
-activities. Impact Map connects a goal to affected people, intended change and
-an investigation. Strategy Canvas compares anchored current, good-enough and
-desired support; consequence weighting stays distinct. Small examples and
-useful discussion inputs sit inside native disclosures. Existing companions
-open in a separate tab so the Studio's unfinished work remains available.
-
-**Source and authorship.** The method catalogue preserves the original
-suggestion IDs and labels while supplying readable display labels and
-outcome-led session names. Canonical prototypes and their separately adapted
-Context Canvas versions retain their own manifest owners. Expectation
-Architecture and other suggestions with limited local definitions receive
-explicit Studio-authored planning guidance. The deeper manual carries that
-standing. Examples describe possible planning work; the visitor supplies the
-initiative's evidence and decisions.
-
-**Composition and controls.** Component settings share available width, and
-method cards form readable columns at laptop and wide sizes. Their flat
-caret disclosures reveal guidance; shadowed buttons begin a work proposal.
-The supporting-session form groups identity, people, time and funding into
-complete regions. Session settings, Change and Quality & recovery share the
-Minutes dial behavior and the same Hours, Minutes and Working sessions
-semantics. Each editor retains its own draft and Apply boundary. Direct entry,
-step buttons and native keyboard operation remain available beside the dial.
-
-Fresh browser observation exposed a proposal collapse after its preview became
-valid. Removing both new nested containment boundaries restored the controls;
-changing only their display type left the fault in place. Responsive composition
-therefore uses the existing chapter and Session boundaries. The planning journey
-checks visible controls after participant selection as well as exact amounts.
-
-**Continuation.** The receiving feature PR owns verification and independent
-review. #653 next supplies the explicit coordination score, agenda, capacity
-and decision gates. #654, #649, #638 and #656 complete the remaining visual
-analysis, scenarios, carry-away results and final placement. #686 retains the
-future human-cued tagged release. The requested pause begins at performance
-refinement after the complete showcase.
-
-## 2026-11-05 — Inspect a compact, stable showcase
-
-**Accepted ground.** #693 is integrated at `dev@8bdbacc`, with a tree equal to
-independently reviewed head `4d0f490`. The human's annotated browser review
-changed the immediate receiver to #694 before #653. Its purpose is to let a
-visitor understand and try the example without first filling out a form.
-
-**Stable composition.** Opening Session settings had changed the layout from
-one to two columns and moved the whole-plan ledger into a narrow left column.
-The diagram now retains its full-width position. Settings and whole-plan costs
-expand underneath. The diagram names actual session participants, the hosting
-team and explicit support references. Connector words carry the relationships;
-color and arrows reinforce them. The accepted diagram and the editable proposal
-retain their distinct values. The pilot starts at $3,980, and changing its four
-reviews from 30 to 45 minutes proposes $4,350.
-
-**Read before editing.** The amp's Purpose, Saved edits and Operating manual
-controls share a compact secondary row. Purpose presents complete text before
-Edit; the shared editor still owns Apply, Cancel, parked entries and stale
-review. The purpose preview remains visible when the panel is closed. Saved
-edits keep their recovery value and their position even when there are none.
-The connection diagram leads Coordination; the optional pilot brief follows it.
-Session controls are beside their receiving work, and Investment owns baseline
-comparison. The quality visualization leads its chapter's deeper settings.
-
-**Control meaning.** The lens keeps its position during a press and turns its
-reel when selection changes. The decorative rotor passes pointer input to the
-real choices. Contribution inspectors use expanded-state carets. Supporting
-sessions become compact checkbox choices. Showcase ability proposals receive
-editable, explicitly illustrative context and existing support; ordinary new
-plans retain their authorship. The stored review-status identity stays stable
-while its label becomes Needs review.
-
-Quality assumptions use compact precision controls. Horizon units, quality
-concepts and rehearsal scenarios use direct exclusive choices. One inspected
-concept or rehearsal has room to read while its siblings keep their saved
-entries. Sigma occupies its full range with visible values. Headings and
-attention terms gain consistent typographic emphasis. The bounded research
-record explains these choices and their evidence limits.
-
-**Continuation.** The receiving PR owns verification and exact independent
-review. Continue the authored score through #653, then #654, #649, #638 and
-#656 for the holistic showcase. #686 retains the future human-cued tagged
-public release. Pause at performance refinement after the complete experience.
-
-Independent review found a callback after the read-first Purpose receiver had
-retired and a diagram that initially omitted Change and Quality & recovery
-support. The receiving repair checks the current operation after the opening
-callback and includes those explicit mappings in the diagram. Literal browser
-fixtures exercise receiver replacement and every support family. The shared
-time controls also align their precision fields when a label wraps. Enlarged
-amp counts and the diagram's center panel retain readable words.
-
-## 5 November 2026 — the Studio as a digital instrument
-
-The human confirmed the coordination horizon as both a visual arrangement and
-cross-experience navigation. The complete showcase now leans into music-production
-controllers, euro-rack modules, amplifier faces and restrained 16-bit/32-bit
-character. The accepted Purpose / Saved edits / Operating manual sub-row stays.
-
-[Issue #696](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/696)
-receives the shared composition: tactile component keys with one stable inspector,
-illuminated quality pads, a readable CRT reference screen, and parameter dials
-beside exact inputs. Hours gets a larger dial than Minutes. Boolean and small
-categorical choices keep their fitting direct controls. Texture and brief responses
-support the reading; reduced motion retains a quiet, complete surface.
-
-[Issue #697](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/697)
-receives visibly different Pod, Guild, Project team and Shared service topologies,
-with accepted structure named outside the collapsed editor. AI assistance uses
-actual contribution categories and explicit human receiving, review and decision
-responsibilities. [Issue #698](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/698)
-receives quality's authored preparation and recovery consequences. Support badges
-refer to named work, rehearsal or observation; costs and timing follow those
-records and their explicit assumptions.
-
-The current source work remains the authored horizon in #653. Its time basis uses
-relative minutes, separates elapsed span from participant effort, retains unknown
-availability, and keeps waiting apart from paid work. Optional work becomes a
-commitment through explicit funding and Apply. The instrument appearance preserves
-that distinction between an exploratory draft and accepted investment.
-
-Feature integration continues to dev after independent engineering review. The
-complete experience precedes performance refinement; public release waits for the
-human cue tracked by #686.
-
-The next annotations clarify the shared control families in #696. Contained
-boolean choices can look like physical switches while retaining their native
-checkbox behavior. Add and Create actions receive an obvious common treatment;
-the plus mark means an actual addition. Lower motion is the initial experience,
-with an explicit fuller-motion choice beside the lens and a consistent preference
-across the instrument. The amp's reading channel should explain useful consequences
-from the current chapter and recent changes, with varied ASCII interstitials and
-a complete static reading.
-
-Abilities receives a sequencer-like support matrix: responsibility, preparation,
-review and observation each have a meaningful cell and a route to the receiving
-inspector. Missing support remains visible and actionable. The separate future
-[compact amp exploration, #699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699)
-records a sticky Studio header, compact page navigation and release at the Studio's
-scroll boundaries. It follows the current showcase work.
-
-The authored horizon leads Coordination. Its clip preview is equally available
-on hover and keyboard focus and names participants, duration, funding and the
-preceding work. The chronological agenda and session-series reading use compact
-semantic tables with local scrolling. Interval removal uses the same bounded
-action-button alignment as other controls. The final axis label stays on one
-line. Hours and Minutes have separate adjacent dials, with Hours visibly larger.
-
-Independent review distinguished inactive effort in the table and identified
-draft-ownership, input-composition and repeated-proposal creation paths needing
-repair. The receiving implementation preserves a newer editor's focus and raw
-entries, releases a retired receiver's lease after an in-progress operation,
-and allocates proposed work against existing identities. Capacity summaries stay
-compact; the selected overlapping interval reveals its contributing sessions.
-
-
-## 5 November 2026 — Read, choose, begin and confirm
-
-The next instrument pass makes distinct operations recognizable. The Abilities
-support sequencer separates responsibility, preparation, review and recorded
-observation; cells route to the corresponding retained editor. Change's piano
-keys select one inspector while every component keeps its fields and unfinished
-entries. Quality receives a CRT-like mathematical reference screen and tactile
-concept pads. Explicit labels retain each quantity's meaning.
-
-Lower motion is the initial Studio state. Fuller motion is a presentation
-choice beside the lens, constrained by the operating system's reduced-motion
-preference. The navigation grammar distinguishes amp chapter selection,
-contextual chapter jumps and local inspection. Each has a static destination
-cue; fuller motion adds a short fade, a more pronounced reveal, or local emphasis.
-Effects cancel on a lower-motion choice, hidden document or disposal. This state
-stays outside accepted plans, draft history and export.
-
-The horizon exposes view scale directly, labels onward routes **Go to chapter**,
-and gives each stage a nearby **Add a decision**. That action seeds a decision
-proposal for the chosen stage; Apply accepts it. Complete questions and evidence
-remain readable with an explicit edit disclosure. Capacity names and dependency
-headings are plain readings, with separate inspection and navigation controls.
-
-The human observed an important distinction after the shared Add treatment:
-a plus on the final **Add session** button suggested starting another task.
-The durable rule now assigns the plus to a creation entry only. A confirmation
-uses the ordinary commit treatment, even when its label includes “Add.” Nested
-creation entries retain their own plus. The implementation reference carries
-this interaction rule across every chapter.
-
-The participant-card review also exposed oversized checkbox pressure. The
-shared native checkbox now has a compact fixed track and thumb, role/rate text
-owns the remaining width, and reorder keys align at each card row's bottom.
-Forced colors and print restore the ordinary native checkbox. This repairs
-reading and placement while preserving membership and accepted-state behavior.
-
-Issue #696 owns this instrument pass; #697 receives arrangement topology and
-AI-to-human handoffs, #698 receives quality's explicit work consequences, and
-#699 retains the future compact sticky amp. Dev integration follows independent
-engineering review. #686 holds the human-cued public release; #679 follows
-complete showcase construction.
-
-
-The human also requested engaging hourly-rate controls: a larger **$10 steps**
-dial, a smaller **$5 steps** dial, existing **$1** step buttons and exact entry.
-The dials adjust relative to the entered amount so cents remain intact. Unknown
-rates remain unknown until a visitor enters a value. This belongs to #696's
-shared parameter family and applies wherever the Studio edits an hourly rate.
-
-### Keep the amp head compact
-
-The human returned the amp head to its compact composition: the original ASCII
-rail, investment display, chapter controls, and Purpose / Saved edits / Operating
-manual row. The experimental readings panel has been removed. Any consequence
-channel will be reconsidered with the future compact sticky-header exploration
-in [#699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699).
-The current showcase continues with its existing header and presentation controls.
-
-The shared rate controls also serve the new-person form. A measured layout shift
-when unknown-rate guidance appeared was repaired by keeping that explanation
-visible; following inputs retain their positions as validity changes. Session
-Funding and Status now expose their two choices directly, with native keyboard
-selection and error recovery for each option.
-
-The final source route passes, alongside the suite-planner/About contracts and
-delivery-closure checks. Focused three-engine observations cover rate gestures
-and exact cents, draft recovery, session accounting, support navigation, motion,
-contrast and narrow composition. Independent engineering reviews accepted the
-separate authored slices. These observations establish the exercised behaviors;
-the feature continues through the ordinary dev pull-request review route.
-
-
-### New decisions need a visible beginning and return
-
-A stage creation entry produced a new decision but landed in a generic editor
-that looked like an existing record. The repaired flow names **New decision**, reveals empty context fields, and places its heading below the
-fixed page navigation. **Add decision to plan** confirms the retained arrangement;
-its explanatory text names that scope. **Discard this decision** preserves other
-arrangement entries. Acceptance returns to the new lane marker; discarding returns
-to that lane's Add entry. The research bridge is in the usability record.
-
-The same receiving walkthrough found misaligned horizon controls and overlapping
-navigation carets. The transport now centers its controls vertically, keeps
-**Go to chapter** beside its links, and reserves separate space for centered
-carets. The affected layout has been checked at laptop, narrow and enlarged-text
-widths in Chromium, Firefox and WebKit.
-
-
-### Arrangements carry roles and actual work directions
-
-Pod now depicts shared work between its delivery and partner groups; Guild
-separates practice guidance from delivery and learning. Project team shows the
-sponsoring, project and receiving groups with the actual feedback direction.
-Shared service places the service responsibility beside its real requester.
-The diagrams use the accepted or proposed endpoints, and the HTML companion
-keeps names, directions and onward routes available at narrow widths.
-
-Schema 0.8 records authored template identity and slot bindings. Existing plans
-keep their actual connections without an inferred template. A changed endpoint
-shows an adapted reading; removing only the template grouping keeps the work
-and cost. The contribution reading associates actual shared sessions with a
-functional AI contribution, its human reviewer and decision owner. These cues
-show planned responsibility and retain explicit review boundaries.
-
-Issue #697 owns this slice. The receiving sequence continues to #698's explicit
-quality preparation and recovery consequences, followed by the remaining visual
-analysis, scenarios and final About composition. Performance refinement and the
-human-cued public release retain their separate receiving issues.
-
-### Quality choices explain the work they carry
-
-The next instrument pass connects each quality pad to explicit preparation,
-people, time and investment. A concept's Available/Included state and its linked
-work remain separately visible. A visitor can inspect retained supporting work
-and deliberately adjust it. The accepted amount continues to come from the plan.
-
-The recovery-failure rehearsal uses authored conditions and response assumptions.
-Preparation, response and rehearsal may share one working session, retaining
-one work identity and cost. Timeline readings use supplied placements; event
-person-effort stays an aggregate workload. Independent review supplied a useful
-rounding fixture: two half-hour session lines at one cent per hour can display
-two cents of line attribution while the native settled commitment is one cent.
-The consequence reading keeps those quantities and their adjustment legible.
-
-People and team badges open the specific support or observation that explains
-them. Planned work, rehearsal planning and a recorded human observation retain
-their distinct meanings. The return route preserves the original dirty editor,
-including raw numeric spelling, through a nested supporting-session inspection.
-Issue #698 owns this work; #654, #649 and #638 receive the remaining analytical,
-scenario and final-composition work before #679's performance refinement.
-
-## 2026-11-05 — Checked checkpoint and human-requested pause
-
-The human requested a pause after the current checks and before the next
-refinements. The #698 feature is retained locally on
-`codex/studio-quality-consequences`; its pull-request delivery remains pending.
-The accepted dev source remains the arrangement feature delivered through #702.
-
-The native source route passes all 556 cases. The planner/About contracts and
-delivery closure pass. Assurance cases pass across Chromium, Firefox and WebKit:
-the final enlarged-text replay confirms whole session and investment amounts,
-readable session routes, exact observation-badge returns, retained raw drafts,
-and Apply/Undo accounting. Independent actual-page review also confirms that a
-badge removed by a session change returns focus to the visible People roster.
-These observations cover the exercised proposal and return paths and the
-320-pixel doubled-text composition.
-
-The next Coordination refinements remain queued: shadow-free ghost Cancel
-controls; a concise visual initial view with secondary capacity details behind
-progressive disclosure; shorter activity previews; removal of the repeated
-visible timing explanation; and consistent compact steppers. Enterprise timing
-needs an explicit business-time interpretation that preserves existing plan
-units. Revisit that design with the human's next direction before implementation.
-Public release and performance refinement retain their separate receiving work.
-
-
-## 2026-11-05 — Resumed showcase construction and main delivery
-
-The human resumed construction and authorized a working version on main after
-independent review. Ordinary mobile widths belong to this delivery. Performance
-refinement and the tagged public release keep their separate receiving events.
-The prior pause is historical; #703 delivered the accepted quality consequences
-to dev before this construction slice.
-
-Coordination now leads with the horizon while capacity, prerequisites and the
-arrangement editor use native disclosure. Clip previews state effort and the
-preceding activity. Cancel controls use shadow-free ghost styling. Exact timing
-entries accept hours and minutes while the plan retains integer elapsed minutes.
-A calendar or sprint conversion needs authored working-time assumptions; the
-current control describes elapsed sequence timing, while session duration and
-funded time retain their existing owners.
-
-Investment now has held A, accepted B and Difference channels. The plot and exact
-table attribute staffing and extra work to people; allocated work remains part
-of staffing. Source inspection returns to the same comparison and retains raw
-editor drafts. Plan identity qualifies people when comparing different scenarios.
-
-Six authored native scenarios join purpose, prerequisites, sessions, change
-support and quality work. They preserve their explicit native assumptions.
-Readable HTML reports and collaboration briefs capture the same accepted
-snapshot and include exact JSON. Human observations retain their reviewer and
-observed revision; planned rehearsals remain distinguishable from observations.
-The broader original-model translation continues in #705 with the full Studio
-as its current working receiver.
-
-Independent review identified and resolved a deferred disclosure event that
-could reclaim focus from a newer editor, mobile trace radio sizing, and report
-scroll-region accessibility. Focused source and three-engine browser checks
-cover accepted values, retained drafts, source returns, mobile controls and
-report downloads. The feature PR receives the final exact-head evidence. #638
-then receives main's newer About prose and closed static counterpart together
-with the native instrument. #679 receives later performance work; #686 receives
-the separately human-cued tagged release.
-
-
-## 2026-11-05 — One native About showcase
-
-The final receiver uses main's existing Studio section and preserves its kicker,
-heading and introductory paragraph. The native instrument replaces the chapter
-iframe; the temporary second Studio section is removed. The static counterpart
-remains directly below, closed by default with its existing Show/Hide behavior.
-The complete original Studio and its derived chapter artifact keep their source
-and independent routes. AI Systems now offers a concise onward route to the full
-Studio and back to the native example.
-
-This integration reconciles main's current human-authored About and AI Systems
-reading with the independently reviewed features accepted on dev. Main's
-Coordination-first original chapter presentation and deliberate copy removals
-remain authoritative. The capability transfer map explains the native and
-preserved receivers, including #705's later economic translation.
-
-The final main pull request receives the combined source, browser, route and
-independent-review evidence. Main integration completes the working showcase
-construction. The next task boundary is the human-requested pause before
-performance refinement. Tagged Pages and production delivery remain #686's
-separately human-cued events.
-
-
-## 2026-11-05 — Download selection and resource ownership
-
-The core-quality pass in #708 follows the working showcase accepted through
-#707. Each change has a narrow Issue and reviewed PR; #679 retains performance
-refinement and #686 retains the separately human-cued tagged release.
-
-Report actions select one declared format before capturing the accepted plan.
-Reports and plan JSON share a browser resource owner that retains the preceding
-successful URL while another attempt runs, releases an unsuccessful attempt and
-its temporary link, and closes once on disposal. Status copy describes preparing
-a download. The browser supplies the completion observation. Snapshot generation,
-import, accounting and unfinished editor state keep their existing owners.
-
-This choice follows the operation's recovery behavior: one local recovery
-message serves the caller, while one reusable adapter owns the repeated resource
-lifecycle. A generic error factory would add a second vocabulary without a new
-recovery decision. Focused cases exercise allocation, attachment and dispatch
-failure, replacement and disposal. The existing download journey receives
-content and retained-draft evidence. #709 owns this change.
-
-
-## 2026-11-05 — Return navigation policy
-
-Return paths distinguish a held editor's identity from an accepted record's
-identity. A held creation can survive before its record exists; a discarded
-held editor releases its return. Unheld paths follow the record that is still
-available. The existing ordered array and route objects keep their ownership:
-revisiting an origin retires it and its descendants, while nested creation
-retains its nearest parent. Small pure predicates express those separate jobs.
-
-Score admits a known chapter or an existing work, person or connection before
-parking an editor or changing return routes, chapter or focus. Its producer and
-receiver share that finite destination vocabulary. Priority-sensitive guidance,
-such as adding a person to the receiving team, remains explicit in the controller.
-Focused policy cases and the existing nested-return journeys receive the proof.
-Issue #710 owns this change; the accepted state and draft lease machinery remain
-the transaction authority.
-
-
-## 2026-11-05 — Shared admission limits
-
-Collection capacities and value bounds now have one named source in config.
-Encoded schema envelopes and exported admission limits use those same semantic
-values. Structural row allowances stay beside the schema that introduced them;
-the base envelope and earlier relationship-reference allowance remain explicit.
-The change preserves every exported value and all versioned byte budgets.
-
-This is a maintenance repair for changing one bound consistently. Existing
-contract and migration observations exercise admission and compatibility; a
-direct before/after comparison establishes this refactor's value preservation.
-Additional arithmetic fixtures would repeat the implementation. Issue #711
-owns this change.
-
-
-## 2026-11-05 — Planning-time language and shared circular controls
-
-Timing controls now name scheduling within the plan, the first session start,
-and the time between session starts. Adjacent help explains the offset from
-plan start, start-to-start repetition and the finite session count. Integer
-elapsed minutes, session duration and accepted investment retain their existing
-owners. A business calendar or sprint cadence needs authored working-time
-assumptions before it can represent these values faithfully.
-
-Score uses the existing circular stepper family. Wider rate and quantity inputs
-keep the same compact, centered button pair as Session planning. Rectangular
-control families keep their existing treatment. The affected browser journeys
-check normal mobile, desktop and enlarged-text layouts, field descriptions,
-Apply and Undo. Issue #712 owns this consolidation. README routes now lead to
-main's working showcase and #708's focused quality changes.
-
-## 2026-11-05 — Proposed sprint and quarter showcase
-
-The human's next direction changes the planning model after the timing-copy
-repair. [#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718)
-holds four alternatives and the recommended synthesis: a populated period
-board, sequencer drill-down, stage bands and one optional change demonstration.
-The proposal awaits human review. Runtime behavior remains the elapsed-time
-arrangement accepted on main.
-
-The proposed entry shows four labeled two-week sprints. A separate two-quarter
-example follows pilot preparation and validation into rollout and operating
-adoption. Its representative sessions sit within broader activity spans, and
-its amount prices the included work. Trying that example previews a replacement;
-regrouping the visitor's current plan retains its sessions, effort and cost.
-Zoom changes the information shown: plan, selected period, then session or
-decision. A visible return restores the originating view.
-
-Two persistent editing groups, Sessions and Stages & handoffs, provide a compact
-alternate route to direct visual selection. People and duration belong beside
-each session. Stages group work; decisions attach to stages or handoffs; delays
-describe affected work and its proposed later placement. Availability opens
-beside a person and keeps its separate authored meaning. Funded time remains
-distinct from availability, and broad period membership establishes no exact
-simultaneous-session collision.
-
-The original calculator supplies horizon choices, broad bands and navigable
-markers. Its authored fractional positions need a native record-driven
-replacement for drill-down. Its staffing-hour conventions retain their economic
-meaning. Proposed period identities and occurrence placements have one owner;
-regrouping preserves work identity and occurrence count. Earlier saved work can
-receive an explicit placement proposal while preserving its effort.
-
-The About-page review favors a concise populated exhibit inside the existing
-compact amp head. Deeper accounting stays available through disclosure. A few
-placement, reference and recovery cases plus sprint/quarter browser journeys
-will support implementation; existing arithmetic coverage remains sufficient
-unless a changed behavior supplies a new question. Independent source and
-experience reviews informed the proposal. Re-entry begins with human review of
-#718, then the visible examples and period contract. Performance #679 and the
-human-cued public release #686 retain their separate boundaries.
-
-## 2026-11-05 — Sprint and quarter implementation
-
-The human approved #718. Coordination now opens the service-request pilot
-across four labeled two-week sprints. The separately authored two-quarter
-example carries preparation into rollout and operating adoption. Choosing an
-example updates Coordination directly with Undo available; regrouping the current plan preserves its
-sessions, people, effort and price. The compact amp head remains the frame.
-
-Ordered period identities and session-occurrence placements own the visual
-arrangement. A period opens weeks or months; a session opens its existing
-people, duration and funding editor. This semantic zoom changes the view.
-Adding a period or moving work changes a proposal that the visitor can Apply,
-Cancel or later Undo. Shortening the horizon retains affected sessions in
-Choose a period. Earlier files retain their original arrangement and receive
-an explicit proposal for period placement.
-
-Sessions and Stages & handoffs are the two persistent editing groups.
-Decisions attach to stages or handoffs, delays identify affected work and its
-later period, and availability opens beside a person. Representative sessions
-illustrate coordination within a larger initiative; the amount prices included
-work. Period membership establishes broad ordering. Availability remains an
-authored assumption separate from funded time.
-
-The initial visual keeps the period overview and aligned MIDI tracks together.
-Team connections, session details and contextual editors open on demand.
-The detailed agenda remains in downloadable reports using the same named
-periods, weeks or months and session facts. Ordinary
-mobile cards, laptop overview, keyboard focus and reduced motion carry the
-same operations. The optional later-review example exposes its consequence
-before acceptance; Undo restores the earlier arrangement.
-
-Independent review identified two ownership repairs: unchanged occurrence
-placements retain their authored interleaving, and reviewing a parked
-arrangement preserves sessions accepted through another editor. Keyed
-three-way reconciliation retains independent edits and names a conflict when
-both editors change the same placement. Use current values provides explicit
-recovery. Focused regression cases distinguish these faults; the existing
-arithmetic suite remains the economic observation.
-
-Issues #720–#722 receive the core contract, contextual interface and composed
-About verification respectively. Performance #679 and public release #686
-remain separate, human-cued work. Re-entry begins with the working period view
-and the current status of #718.
-
-
-### Confirmed compact landing view
-
-The human accepted the rendered landing composition as practically perfect.
-Preserve that composition while completing verification and integration. The
-original calculator supplied a comparison; the showcase retains its existing
-editing, saved work and recovery abilities. The visible entry stays compact.
-
-Long visitor agendas, repeated support matrices and replacement ledgers have
-left the default view. Abilities uses action pads and selected support controls;
-Quality keeps its visual controls and opens assumptions on request. Investment
-returns to baseline, history and save/open controls; the contribution-trace panel
-is retired. Lengthy dial instructions and duplicate Coordination chapter links
-are removed. Full motion is the requested default; Lower and system preferences
-remain available.
-
-Session participants may come from different teams. A visitor chooses known
-people directly; this leaves independently edited team rosters intact. Example
-buttons replace the arrangement in Coordination immediately and preserve Undo.
-These decisions supersede earlier visible-ledger and replacement-navigation
-proposals. Performance and public tagged release remain separate human-cued work.
-
-
-## 2026-11-05 — Restore the Abilities support tables
-
-The human values comparing support across the full Abilities chapter. Issue
-#725 restores that chapter from `codex/studio-period-model` at `d55a925`:
-What people can do and How the team works each show Responsibility,
-Preparation, Review and Observation. Selecting a support cell opens its
-existing editor; the card front, reverse and retained drafts follow the same
-chapter behavior. The current sprint/quarter model and accepted Coordination
-landing composition remain the receiving context. This choice supersedes the
-action-pad simplification for Abilities. Ordinary mobile widths retain the
-comparable columns through local horizontal scrolling.
-
-
-## 2026-11-06 — Reels and shared motion
-
-The approved route in #727 carries populated boards and MIDI tracks through
-People, Coordination details, Change, and Quality & recovery. The existing
-Coordination horizon and restored Abilities tables remain useful anchors.
-Reels choose authored configurations; faders refine them; details retain the
-existing people, sessions, observations, saved edits, and Apply/Cancel owners.
-
-Issue #729 establishes one native-button reel with direct choices, arrow-key
-selection, a next-choice hub, and a separate decorative rotor. The amp head
-owns Off, Lower and Full motion. Full is the default, Lower takes twice as
-long, and Off or the system reduced-motion preference suppresses animation.
-Chapter fades, contextual arrivals, local focus cues, and reel-driven reveals
-retain distinct effects. Motion changes leave selected content and plan state
-complete. Chapter CSS follows the shared control stylesheet, with each new
-rack retaining a named source owner.
-
-This supersedes the earlier lens-local lower/full control. Performance work
-and public tagged publication retain their human-cued receiving events.
-
-### Change rack
-
-Issue #730 maps each interpretive lens to an authored framework configuration.
-The left reel selects the lens; the cobalt reel selects the framework and
-locks in after a short delay. Faders vary the selected framework's emphasis
-and decorative rotor, with focus, supporting, and available lanes reflecting
-the changed emphasis. The MIDI table links actual working sessions to
-components. Existing status and support choices survive switching frameworks;
-Apply accepts the draft, and Undo retains its established behavior.
-
-Exact selectors, component settings, methods, and richer interpretation remain
-in disclosed racks. Ordinary phone widths stack the full reels and keep local
-track scrolling. This preserves visible choices while concentrating the
-initial view on the instruments and the work they affect.
-
-### People and Coordination details
-
-Issue #728 places team lanes and person/session tracks above the existing
-settings. Rates and ordering use a compact disclosure; person settings open
-below the visual reading. Session pads open the same working-session editor,
-and their return keeps the originating chapter. A team's Choose people action
-opens its membership editor; global Add person begins the existing creation
-flow. The button wording identifies whether the visitor selects membership
-or creates a new record.
-
-Team arrangements use seven authored presets, including Stream-aligned, Matrix
-and Tiger Team. Turning the reel previews populated teams, connections and
-supporting sessions locally; Apply accepts the arrangement and Undo restores
-it. The connection diagram remains a component in the rack. The initial
-Coordination horizon keeps its accepted compact composition.
-
-### Quality and recovery rack
-
-Issue #731 splits quality exploration between pre-release and post-release
-reels. Quality, urgency, compliance, training and fidelity faders select
-authored concept and rehearsal configurations; the highlighted sigma fader
-also drives the mathematical reference display. Prepare, Rehearse and
-Operate & learn lanes expose those choices as pads beside actual support
-tracks. Rehearsals begin with context, assumptions, a response and responsible
-people so the visitor can inspect a useful proposal immediately. Observed
-evidence remains a separately entered result. Supporting sessions continue to
-own accepted effort and cost.
-
-Independent review caught a static-owner selector that could match a populated
-track pad after remount. Exact empty data hooks now identify the authored
-receivers. The focused remount journey proves a populated track can be mounted
-again, retain its accepted plan, and open a new proposal. Desktop and ordinary
-mobile observations cover visible reels, aligned faders, local track scrolling
-and editor recovery.
+| Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
+| Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
+| Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
+| Scrolling amp readings panel and consequence marquee | Compact amp composition. The sticky-header/consequence-channel exploration stays deferred in #699. |
+| Change and Quality manuals, long dial help and default reference-value disclosure | Short labels, populated controls, local examples and contextual detail. Technical explanations stay in source/reference documentation. |
+| Observation-entry forms as the showcase's normal path | Authored illustrative choices with imported observation history preserved. Visitors can explore without composing evidence text. |
+| Team membership required before a person can join a session | Direct cross-team participation using known identities, with team rosters retained independently. |
+| Investment contribution-trace plot and default detailed agendas | Baseline/history/file controls, optional whole-plan breakdown and portable reports. |
+| Dark treatment across every work region | Pale Editorial Rack for reading and work; dark Instrument Rack for controls and visual response. |
+| Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
+| Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
+| Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
+
+## Material decision history
+
+### 5 November — Stable interaction before further visual expansion
+
+The early native patch-bay checkpoint already supplied accepted state, editors,
+roles, connections, proposals, saved work and Undo. The human's annotated review
+identified concrete instability: selecting participants changed their order,
+controls moved when feedback disappeared, and missing people or teams created
+unclear detours. The #685 usability work retained mounted rows, separated entry
+from confirmation, and added return routes beside dependent controls.
+
+Browser observation corrected an early text-inflation hypothesis. The useful
+repair was to measure an actually visible enlarged card and give participant
+rows their own typography. Scoped text-size adjustment was removed when the
+pinned engine did not support the assumed mechanism. This matters on re-entry:
+retain the visible-control precondition rather than reviving the discarded CSS.
+
+The human endorsed the ASCII specimen and requested targeted ornament, an inset
+select caret, Included/Available language and literal entered names in summaries.
+The resulting composition guidance and public release preparation remain routed
+through #686. The working repair's exact evidence belongs to its receiving PR,
+not to the provisional counts from earlier pauses.
+
+### 5 November — A populated pilot, useful support and explicit cost
+
+The #649/#647 work introduced a connected service-request pilot, a real duration
+dial and a review response. Role labels replaced fictional human names. Its
+$3,980 starting investment and the $370 effect of extending four reviews provide
+a concrete, small demonstration. Pausing a connection preserves its supporting
+work and cost. This remains a useful distinction between a relationship's status
+and a session's commitment.
+
+Abilities (#650/#677/#678), Change (#651), Quality (#652) and method explanations
+(#691) joined the same accepted plan. Shared work retained one account; card
+support, explicit rehearsal and observations kept separate meanings. Independent
+reviews found consequential faults in repeated proposal IDs, composition-end
+capture, retired receivers reclaiming focus and source returns. Focused repairs
+kept those boundaries in their existing owners.
+
+The #694/#696 interaction work established a stable session diagram and
+full-width editor flow, read-before-edit Purpose, direct small choices,
+recognizable creation/confirmation controls, Hours/Minutes dials and $10/$5 rate
+dials. The human's repeated annotations made progressive disclosure, complete
+labels, legible contrast and ordinary mobile operation part of construction.
+
+Arrangement topology (#697) and quality consequences (#698) connected diagrams
+and badges to actual records. Pod, Guild, Project team and Shared service kept
+their own work directions. AI-related support named human receiving and decision
+responsibilities. Badges linked to a specific planned session, rehearsal or
+observation; they did not confer competence or readiness.
+
+### 5 November — One native About experience and reliable owners
+
+PR #707 integrated the working native showcase into About's existing Studio
+section. The surrounding human-authored page, closed static counterpart and full
+original Studio route remained. The main showcase then received #708's focused
+core-quality work: download resource ownership (#709), return policy (#710),
+shared admission limits (#711), and consistent timing controls (#712).
+
+The download adapter retains a successful resource while another attempt runs,
+releases failed attempts and disposes once. Return policy distinguishes a saved
+creation from an accepted record. Shared limits preserve one semantic source.
+These were bounded ownership improvements; broader factories or numeric tests
+would not have answered an additional receiving question.
+
+### 5 November — Enterprise periods replace elapsed-time planning
+
+The human rejected elapsed-time offsets as the primary planning concept.
+The #718 alternatives and synthesis led to #720–#722: explicit period identities,
+occurrence placements, two authored examples, semantic zoom and contextual
+creation. Business periods represent authored sequence; they are not inferred
+calendar conversions from staffing hours.
+
+Independent review preserved interleaved occurrences during replacement and
+reconciled parked arrangement drafts against newly accepted sessions. Keyed
+three-way comparison retains independent changes and names a conflicting edit
+for explicit recovery. Old references remain until deliberate cleanup. Those
+behavioral cases protect data meaning without expanding arithmetic testing.
+
+The compact Coordination landing view was accepted. Later human review restored
+Abilities' comparative support tables through #725, superseding their temporary
+action-pad simplification. Cross-team session participation was relaxed while
+known-reference admission remained. Full motion replaced the earlier lower
+motion default. The detailed contribution trace left Investment; ordinary
+comparison and the optional whole-plan breakdown stayed.
+
+### 6 November — Populated reels become a shared interaction family
+
+The #727 route introduced the shared reel (#729), People and arrangement
+surfaces (#728), Change (#730), and Quality (#731). Native buttons own reel
+choices and keyboard operation; the rotor is decorative. Existing controllers
+continue to own settings, proposals, saved work and acceptance.
+
+Independent review found a remount hazard: a broad data-hook selector matched a
+populated track pad before the intended static receiver. Exact empty data hooks
+now identify the authored owner. The focused remount journey exercises populated
+tracks and a fresh proposal after mounting again. This is a standing ownership
+lesson for new dynamic pads.
+
+The #735 cohesion pass builds on that family. It consolidates pale work
+racks and dark instruments, exposes team planning, keeps local Abilities and
+Change editors beside their visual context, and makes Quality pressure legible
+through authored locks, recoverable cues and decorative response. The README
+and this journal were rewritten as a whole so the current experience can be
+understood without reconstructing every intermediate iteration.
+
+## Verification and next receiving decision
+
+Use the smallest observation that distinguishes a consequential fault. Source
+checks establish admission, state ownership, reference handling and recovery.
+Focused browser journeys establish the exercised action, focus and layout.
+Ordinary mobile and desktop views belong to this showcase; engine-sensitive
+range, fieldset, pointer or composition behavior receives the relevant alternate
+engine. Screenshots stay in ignored `.visual-runs/` for local comparison.
+
+The integrated Studio source suite and focused chapter journeys passed.
+Quality's new reel/pressure paths also passed in Firefox and WebKit. Independent
+source and visual reviews accepted the feature slices after the identified
+focus-return and styling repairs. The broader About suite reproduced the same
+twelve failures on the unchanged baseline; its failures belong to that existing
+boundary. The linked PRs retain the exact observations and reviewed commits.
+
+For a new iteration, reconcile #735's completed route with runnable source and
+the visitor's next concrete need. Pause before general performance refinement in
+[#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
+The future compact sticky amp remains
+[#699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699),
+and broader economic translation remains
+[#705](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/705).
+Tagged Pages publication and the production release remain the separately
+human-cued route in
+[#686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686).
