@@ -340,9 +340,14 @@ engine. Screenshots stay in ignored `.visual-runs/` for local comparison.
 The integrated Studio source suite and focused chapter journeys passed.
 Quality's new reel/pressure paths also passed in Firefox and WebKit. Independent
 source and visual reviews accepted the feature slices after the identified
-focus-return and styling repairs. The broader About suite reproduced the same
-twelve failures on the unchanged baseline; its failures belong to that existing
-boundary. The linked PRs retain the exact observations and reviewed commits.
+focus-return and styling repairs. Follow-up repairs in
+[#747](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/747),
+[#748](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/748)
+and [#749](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/749)
+reconciled the broader suite with accepted editorial changes and source-owned
+projections. The complete Context Canvas source suite now passes. This supersedes
+the earlier standing of twelve reproduced baseline failures; the receiving PRs
+retain the exact observations and reviewed commits.
 
 For a new iteration, reconcile #735's completed route with runnable source and
 the visitor's next concrete need. Pause before general performance refinement in
