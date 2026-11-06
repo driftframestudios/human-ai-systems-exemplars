@@ -1204,3 +1204,18 @@ rack retaining a named source owner.
 
 This supersedes the earlier lens-local lower/full control. Performance work
 and public tagged publication retain their human-cued receiving events.
+
+### Change rack
+
+Issue #730 maps each interpretive lens to an authored framework configuration.
+The left reel selects the lens; the cobalt reel selects the framework and
+locks in after a short delay. Faders vary the selected framework's emphasis
+and decorative rotor, with focus, supporting, and available lanes reflecting
+the changed emphasis. The MIDI table links actual working sessions to
+components. Existing status and support choices survive switching frameworks;
+Apply accepts the draft, and Undo retains its established behavior.
+
+Exact selectors, component settings, methods, and richer interpretation remain
+in disclosed racks. Ordinary phone widths stack the full reels and keep local
+track scrolling. This preserves visible choices while concentrating the
+initial view on the instruments and the work they affect.

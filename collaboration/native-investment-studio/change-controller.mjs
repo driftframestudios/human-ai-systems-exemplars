@@ -5,6 +5,8 @@ import { listChangeFrameworks, listInterpretiveLenses, listAttentionChannels, ge
 import { getCapabilityDefinition } from './capabilities.mjs';
 import { money } from './display.mjs';
 import { getChangeMethod, listChangeMethods } from './change-methods.mjs';
+import { createReel, revealReelResult } from './reel-control.mjs';
+import { changeShowcaseEntries, projectChangeEmphasis } from './change-showcase.mjs';
 
 const INSTANCES = new WeakMap();
 let instanceSequence = 0;
@@ -22,7 +24,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, instance = `change-${++instanceSequence}`, cleanup = [], controls = new Map();
   const find = name => {
-    const element = root.querySelector(`[data-change-${name}]`);
+    const element = root.querySelector(`[data-change-${name}=""]`);
     if (!element) throw new TypeError(`Supply the Change ${name} element.`);
     return element;
   };
@@ -91,7 +93,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const label = node(grouped ? 'legend' : 'label', metadata.label);
     const input = document.createElement(grouped ? 'ul' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : 'input');
     input.id = `${instance}-${++sequence}`; input.name = key; input.dataset.changeField = key; label.htmlFor = input.id;
-    if (key.startsWith('attention.')) { label.textContent = 'Parts'; input.setAttribute('aria-label', `${metadata.label} attention parts`); }
+    if (key.startsWith('attention.')) { label.textContent = 'Level'; input.setAttribute('aria-label', `${metadata.label} attention parts`); }
     if (grouped) input.className = radio ? 'native-change__exclusive' : 'native-change__choices';
     if (input.tagName === 'INPUT') {
       input.type = metadata.checkbox ? 'checkbox' : 'text'; input.maxLength = metadata.maxLength;
@@ -115,18 +117,49 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const control = { input, metadata, error, key, group, radio }; controls.set(key, control); return control;
   }
   field(elements.frameworks, 'framework'); field(elements.lenses, 'lens'); field(elements.filters, 'sourceFilter');
-  const lensRotor = node('div', undefined, 'native-change__lens-rotor'); lensRotor.setAttribute('aria-hidden', 'true');
-  let lastLens = null, lensAngle = 0;
-  elements['lens-wheel'].append(lensRotor);
-  const lensButtons = listInterpretiveLenses().map((lens, index) => {
-    const control = button(lens.name, 'lens'); control.dataset.changeLens = ref(lens);
-    control.className = 'native-change__lens-choice'; control.style.setProperty('--lens-position', index);
-    elements['lens-wheel'].append(control); return control;
-  });
+  const reelDeck = elements['lens-wheel'].parentElement;
+  reelDeck.classList.add('native-change__reels');
+  elements['lens-wheel'].className = 'native-change__reel-holder';
+  const frameworkHolder = root.querySelector('[data-change-framework-wheel]') ?? node('div', undefined, 'native-change__reel-holder');
+  frameworkHolder.replaceChildren();
+  frameworkHolder.dataset.changeFrameworkWheel = '';
+  elements['lens-wheel'].after(frameworkHolder);
+  const selectConfiguration = (kind, value) => {
+    const view = editor.read();
+    if (disposed || !isActive() || view.status !== 'editing') return;
+    const lensId = kind === 'lens' ? value.split('@')[0] : view.draft.raw.lens.split('@')[0];
+    const frameworkId = kind === 'framework' ? value.split('@')[0] : undefined;
+    const result = editFields(changeShowcaseEntries(view.projection.state, view.draft.raw, lensId, frameworkId));
+    if (result?.ok) revealReelResult(elements.matrix);
+  };
+  const lensReel = createReel(document, { label: 'Interpretive lens', choices: choices.lens.map(([id, label]) => ({ id, label })),
+    value: choices.lens[0][0], onSelect: value => selectConfiguration('lens', value), variant: 'teal' });
+  const frameworkReel = createReel(document, { label: 'Change framework', choices: choices.framework.map(([id, label]) => ({ id, label })),
+    value: choices.framework[0][0], onSelect: value => selectConfiguration('framework', value), variant: 'cobalt', secondary: true });
+  elements['lens-wheel'].append(lensReel.element); frameworkHolder.append(frameworkReel.element);
+  const selectorDetails = root.querySelector('.native-change__setup') ?? node('details', undefined, 'native-change__setup'), selectorSummary = node('summary', 'Choose exact settings');
+  const selectors = elements.frameworks.parentElement;
+  if (!selectorDetails.contains(selectors)) selectors.before(selectorDetails);
+  selectorDetails.replaceChildren(selectorSummary, selectors);
+  const attentionPanel = elements.mixer.closest('.native-change__attention');
+  for (const paragraph of [...attentionPanel.children].filter(child => child.tagName === 'P')) paragraph.remove();
+  elements.fields.prepend(attentionPanel);
   elements.matrix.classList.add('native-change__workspace');
-  const componentKeys = node('div', undefined, 'native-change__keys'), inspectors = node('div', undefined, 'native-change__inspectors');
+  const componentKeys = node('div', undefined, 'native-change__keys'), inspectors = node('details', undefined, 'native-change__inspectors');
+  const inspectorSummary = node('summary', 'Inspect a change component'); inspectors.append(inspectorSummary);
   componentKeys.setAttribute('role', 'group'); componentKeys.setAttribute('aria-label', 'Choose a change component');
-  elements.matrix.append(componentKeys, inspectors);
+  const lanes = new Map([['focus', 'Focus now'], ['support', 'Keep in view'], ['available', 'Also consider']].map(([id, label]) => {
+    const lane = node('section', undefined, 'native-change__lane'); lane.dataset.changeLane = id;
+    lane.append(node('h4', label)); componentKeys.append(lane); return [id, lane];
+  }));
+  const tracks = node('div', undefined, 'native-change__tracks'); tracks.dataset.changeTracks = '';
+  const supportDetails = node('details', undefined, 'native-change__support-detail');
+  supportDetails.append(node('summary', 'Read the supporting work'));
+  const supportTable = node('table'); supportDetails.append(supportTable);
+  elements.matrix.append(componentKeys, tracks, supportDetails, inspectors);
+  const discussionDetails = root.querySelector('.native-change__discussion-detail') ?? node('details', undefined, 'native-change__discussion-detail');
+  if (!discussionDetails.contains(elements['four-actions'])) elements['four-actions'].before(discussionDetails);
+  discussionDetails.replaceChildren(node('summary', 'Explore another planning question'), elements['four-actions']);
   for (const framework of listChangeFrameworks()) for (const component of framework.components) {
     if (!selectedComponents.has(framework.id)) selectedComponents.set(framework.id, component.id);
     const prefix = `map.${framework.id}.${component.id}.`, panel = node('section', undefined, 'native-change__component');
@@ -134,7 +167,8 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     panel.id = `${instance}-component-${framework.id}-${component.id}`;
     const key = button('', 'component'), keyStatus = node('small', '', 'native-change__key-status');
     key.className = 'native-change__key'; key.dataset.changeFramework = framework.id; key.dataset.changeComponent = component.id;
-    key.setAttribute('aria-controls', panel.id); key.append(node('strong', component.label), keyStatus); componentKeys.append(key);
+    key.setAttribute('aria-controls', panel.id); const meter = node('span', undefined, 'native-change__pad-meter'); meter.setAttribute('aria-hidden', 'true');
+    key.append(node('strong', component.label), keyStatus, meter); lanes.get('support').append(key);
     const heading = node('h4', component.label, 'native-change__component-title'); heading.id = `${panel.id}-title`;
     panel.setAttribute('aria-labelledby', heading.id);
     const preview = node('p', '', 'native-change__component-preview'), body = node('div', undefined, 'native-change__component-body');
@@ -142,7 +176,8 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     introduction.append(node('p', component.explanation), node('p', `People to involve: ${component.receiverRole}.`));
     const settings = node('div', undefined, 'native-change__component-settings');
     for (const key of ['mapped', 'status', 'workIds', 'capabilityRefs']) field(settings, prefix + key);
-    body.append(introduction, settings);
+    const supportEditor = node('details', undefined, 'native-change__support-editor');
+    supportEditor.append(node('summary', 'Edit status and supporting work'), settings); body.append(introduction, supportEditor);
     const linkedWork = node('div', undefined, 'native-coordination__actions'); body.append(linkedWork);
     const suggestions = node('ul', undefined, 'native-change__suggestions');
     for (const source of ['core', 'enterprise']) for (const suggestion of component[source + 'Suggestions']) {
@@ -167,7 +202,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       li.append(actions); suggestions.append(li);
     }
     body.append(node('h5', 'Choose work to support this change'), suggestions); panel.append(heading, preview, body); inspectors.append(panel);
-    componentNodes.push({ framework, component, prefix, panel, key, keyStatus, preview, linkedWork, suggestions });
+    componentNodes.push({ framework, component, prefix, panel, key, keyStatus, meter, preview, linkedWork, suggestions });
   }
   listen(componentKeys, 'keydown', event => {
     const key = event.target.closest('[data-change-action="component"]');
@@ -226,6 +261,44 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   manual.append(methodSources);
   const attribution = node('p', `${FOUR_ACTIONS_METHOD.name} by ${FOUR_ACTIONS_METHOD.authors.join(' and ')}. ${FOUR_ACTIONS_METHOD.purpose} ${FOUR_ACTIONS_METHOD.adaptation} `);
   const link = node('a', 'Read the original method'); link.href = FOUR_ACTIONS_METHOD.url; attribution.append(link); manual.append(attribution); elements.manual.replaceChildren(manual);
+
+  let trackSignature = '';
+  function renderTracks(reading, view, editable) {
+    const works = view.projection.state.work.filter(work => work.lifecycle === 'active');
+    const signature = JSON.stringify([reading.framework.id, reading.components, works.map(work => [work.id, work.label]), editable]);
+    if (signature === trackSignature) return;
+    trackSignature = signature;
+    const focusedPad = tracks.contains(document.activeElement) ? { map: document.activeElement.dataset.changeMap, work: document.activeElement.dataset.changeWork } : null;
+    const table = node('table'), caption = node('caption', `${reading.framework.name} · sessions supporting the change`);
+    const head = node('thead'), headings = node('tr'); headings.append(node('th', 'Change component'));
+    for (const work of works) headings.append(node('th', work.label));
+    for (const heading of headings.children) heading.scope = 'col'; head.append(headings);
+    const body = node('tbody'), supportBody = node('tbody'), supportHead = node('thead'), supportHeadings = node('tr');
+    for (const label of ['Component', 'Planning status', 'Supporting work', 'Suggested method']) { const th = node('th', label); th.scope = 'col'; supportHeadings.append(th); }
+    supportHead.append(supportHeadings);
+    for (const component of reading.components) {
+      const row = node('tr'), title = node('th', component.label); title.scope = 'row'; row.append(title);
+      for (const work of works) {
+        const cell = node('td'), pad = button('', 'support-pad'), linked = component.workIds.includes(work.id);
+        pad.className = 'native-change__support-pad'; pad.disabled = !editable;
+        pad.dataset.changeWork = work.id; pad.dataset.changeMap = `map.${reading.framework.id}.${component.componentId}.workIds`;
+        pad.setAttribute('aria-pressed', String(linked));
+        pad.setAttribute('aria-label', `${linked ? 'Unlink' : 'Link'} ${work.label} ${linked ? 'from' : 'to'} ${component.label}`);
+        pad.title = `${work.label} · ${work.minutesPerOccurrence} min per person · ${linked ? 'Linked' : 'Available'}`;
+        pad.append(node('span', linked ? 'Linked' : 'Link')); cell.append(pad); row.append(cell);
+      }
+      body.append(row);
+      const detail = node('tr'), name = node('th', component.label); name.scope = 'row';
+      detail.append(name, node('td', CHANGE_STATUSES.find(status => status.id === component.status)?.label ?? component.status),
+        node('td', component.workIds.map(id => works.find(work => work.id === id)?.label ?? id).join(', ') || 'Choose a supporting session'),
+        node('td', component.preferredSuggestion?.label ?? 'Choose a method'));
+      supportBody.append(detail);
+    }
+    table.append(caption, head, body); tracks.replaceChildren(table);
+    if (!works.length) tracks.replaceChildren(node('p', 'Add a working session to connect it to this change.'));
+    supportTable.replaceChildren(node('caption', 'Change support in this proposal'), supportHead, supportBody);
+    if (focusedPad) [...tracks.querySelectorAll('button')].find(pad => pad.dataset.changeMap === focusedPad.map && pad.dataset.changeWork === focusedPad.work)?.focus({ preventScroll: true });
+  }
 
   function render() {
     const view = editor.read(); if (disposed) return view;
@@ -286,17 +359,27 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       for (const li of entry.suggestions.children) li.hidden = settings.sourceFilter !== 'all' && li.dataset.changeSource !== settings.sourceFilter;
       entry.linkedWork.replaceChildren(...state.workIds.map(id => { const inspect = button(`Inspect ${view.projection.state.work.find(row => row.id === id)?.label ?? id}`, 'work'); inspect.dataset.changeWork = id; return inspect; }));
     }
-    const lens = reading.lens, interpretation = node('dl');
-    const selectedLens = ref(lens), lensIndex = listInterpretiveLenses().findIndex(row => ref(row) === selectedLens);
-    if (lastLens === null) lensAngle = lensIndex * 45;
-    else if (lastLens !== selectedLens) lensAngle += 360 + ((lensIndex * 45 - lensAngle % 360 + 360) % 360);
-    lastLens = selectedLens;
-    elements['lens-wheel'].style.setProperty('--lens-angle', `${lensAngle}deg`);
-    lensButtons.forEach(control => { control.setAttribute('aria-pressed', String(control.dataset.changeLens === selectedLens)); control.disabled = !editable; });
-    for (const [label, value] of [['In view', lens.surface], ['Attention', lens.load], ['Held aside', lens.aside], ['Revisit when', lens.reentry], ['Next question', lens.trigger]]) {
+    lensReel.select(ref(reading.lens)); frameworkReel.select(ref(reading.framework));
+    frameworkReel.vary(reading.attention.channels.reduce((sum, channel) => sum + (Number.isFinite(channel.parts) ? channel.parts : 0), 0) / 200);
+    lensReel.element.disabled = !editable; frameworkReel.element.disabled = !editable;
+    const viewpointDetails = node('details'); viewpointDetails.open = Boolean(elements.interpretation.querySelector('details')?.open); viewpointDetails.append(node('summary', 'Read this viewpoint'));
+    const interpretation = node('dl');
+    for (const [label, value] of [['In view', reading.lens.surface], ['Attention', reading.lens.load], ['Revisit when', reading.lens.reentry], ['Next question', reading.lens.trigger]]) {
       const row = node('div'); row.append(node('dt', label), node('dd', value)); interpretation.append(row);
     }
-    elements.interpretation.replaceChildren(node('h4', lens.name), interpretation);
+    viewpointDetails.append(interpretation);
+    elements.interpretation.replaceChildren(node('p', reading.lens.load, 'native-change__viewpoint-line'), viewpointDetails);
+    const emphasized = projectChangeEmphasis(reading), emphasisById = new Map(emphasized.map(row => [row.componentId, row]));
+    for (const entry of componentNodes.filter(entry => entry.framework.id === reading.framework.id)) {
+      const row = emphasisById.get(entry.component.id), lane = lanes.get(row.lane);
+      if (entry.key.parentElement !== lane) lane.append(entry.key);
+      entry.meter.style.setProperty('--change-emphasis', `${row.emphasis * 4}%`);
+      entry.key.dataset.changeEmphasis = String(row.emphasis);
+      entry.key.title = `${entry.component.explanation}. ${entry.preview.textContent}`;
+      if (entry.key.getAttribute('aria-pressed') === 'true') inspectorSummary.textContent = `Inspect ${entry.component.label.toLowerCase()}`;
+    }
+    for (const lane of lanes.values()) lane.hidden = ![...lane.querySelectorAll('button')].some(key => !key.hidden);
+    renderTracks(reading, view, editable);
     elements['four-actions'].replaceChildren(...reading.fourActions.map(action => {
       const article = node('article', undefined, 'native-change__discussion');
       article.append(node('h5', `${action.label} · ${action.time}`), node('p', action.component.label), node('p', action.component.explanation)); return article;
@@ -313,9 +396,9 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         if (index) emphasis.append(document.createTextNode(', '));
         emphasis.append(node('span', channel.label, 'native-change__emphasis-tag'));
       });
-      emphasis.append(document.createTextNode(` (${greatestParts} parts). Consider whether the planned work reflects that choice.`));
+
     }
-    attentionNote.replaceChildren(emphasis, node('small', 'This reading updates as you adjust the attention sliders.'));
+    attentionNote.replaceChildren(emphasis);
     const greatestIds = new Set(greatestChannels.map(channel => channel.id));
     for (const channel of elements.mixer.children) channel.dataset.emphasis = !attentionError && greatestParts > 0 && greatestIds.has(channel.dataset.changeChannel) ? 'highest' : 'ordinary';
     const hasWork = raw && raw['proposal.mode'] !== 'none'; workFields.hidden = !hasWork;
@@ -328,7 +411,8 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       workNote.textContent = method
         ? `${method.displayLabel ?? method.label} supports ${component?.label ?? 'this change'}. Intended result: ${method.leaveWith}`
         : 'Review the selected suggestion against its framework.';
-    } else workNote.textContent = 'Choose an authored suggestion in a component to plan one supporting session with your settings.';
+    } else workNote.textContent = '';
+    elements.work.hidden = !hasWork;
     const preview = editable && !composing ? editor.preview(view.draft.token) : null;
     if (disposed) return view;
     elements.error.textContent = view.error?.message ?? (preview && !preview.ok ? preview.error.message : '');
@@ -338,7 +422,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     } else elements.preview.textContent = composing ? 'Finish entering the value.' : !view.draft ? 'Open Change to compare a framework or adjust the emphasis.' : 'Review the entries before applying this proposal.';
     return view;
   }
-  function focusFirst() { const view = editor.read(); (view.status === 'stale' ? actions.get('review') : controls.get('framework').input).focus(); }
+  function focusFirst() { const view = editor.read(); (view.status === 'stale' ? actions.get('review') : lensReel.element.querySelector('[aria-pressed="true"]')).focus(); }
   function opened(result, epoch, focus) {
     if (!owns(epoch)) return result;
     composing = false; render(); if (!owns(epoch)) return result;
@@ -366,8 +450,9 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const view = editor.read(); if (!view.draft || view.status !== 'editing') return;
     const epoch = ++generation;
     let result;
-    for (const [key, value] of entries) { result = editor.setText(view.draft.token, key, value); if (!result.ok || !owns(epoch)) break; }
+    for (const [key, value] of entries) { result = CHANGE_FIELDS[key].kind === 'ids' ? editor.setIds(view.draft.token, key, value) : editor.setText(view.draft.token, key, value); if (!result.ok || !owns(epoch)) break; }
     if (result) changed(result, epoch);
+    return result;
   }
   listen(root, 'click', event => {
     const control = event.target.closest('[data-change-action]');
@@ -375,7 +460,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     const action = control.dataset.changeAction;
     if (action === 'apply') return;
     if (action === 'component') {
-      selectedComponents.set(control.dataset.changeFramework, control.dataset.changeComponent); render(); return;
+      selectedComponents.set(control.dataset.changeFramework, control.dataset.changeComponent); inspectors.open = true; render(); return;
     }
     if (action === 'cancel' || action === 'discard') { settle('cancel'); return; }
     const view = editor.read(); if (!view.draft) return;
@@ -389,7 +474,10 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       for (const channel of defaults.attention.channels) entries.push([`attention.${channel.channelId}`, String(channel.parts)]);
       editFields(entries); announce('Starting framework, mapping and attention restored in this proposal. Linked support and the selected viewpoint remain available.'); return;
     }
-    if (action === 'lens') { editFields([['lens', control.dataset.changeLens]]); return; }
+    if (action === 'support-pad') {
+      const key = control.dataset.changeMap, ids = view.draft.raw[key], id = control.dataset.changeWork;
+      editFields([[key, ids.includes(id) ? ids.filter(value => value !== id) : [...ids, id]]]); return;
+    }
     if (action === 'clear-work') { editFields([['proposal.mode', 'none']]); return; }
     if (action === 'work') { onSourceWork(control.dataset.changeWork, { targetId: 'change' }); return; }
     if (action === 'suggest') {
@@ -409,6 +497,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
     if (!fromRange && control.input !== event.target && !((control.metadata.kind === 'ids' || control.radio) && control.input.contains(event.target))) return;
     if (event.type === 'input' && (control.input.tagName === 'SELECT' || control.metadata.checkbox || control.metadata.kind === 'ids' || control.radio) && !fromRange
       || event.type === 'change' && control.input.tagName !== 'SELECT' && !control.metadata.checkbox && control.metadata.kind !== 'ids' && !control.radio) return;
+    if (key === 'framework' || key === 'lens') { selectConfiguration(key, event.target.value); return; }
     const epoch = ++generation;
     if (control.metadata.kind === 'ids') {
       const chosen = new Set([...control.input.querySelectorAll('input:checked')].map(checkbox => checkbox.value));
@@ -432,7 +521,7 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
   function dispose() {
     if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true;
-    for (const button of lensButtons) button.disabled = true;
+    lensReel.dispose(); frameworkReel.dispose(); frameworkHolder.remove();
     durationDials.dispose(); controls.clear(); ranges.clear(); INSTANCES.delete(root);
   }
   render();

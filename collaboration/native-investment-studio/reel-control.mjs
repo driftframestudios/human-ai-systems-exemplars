@@ -58,3 +58,8 @@ export function createReel(document, { label, choices, value, onSelect, variant 
     wheel.removeEventListener('click', click); wheel.removeEventListener('keydown', keydown); element.remove();
   } });
 }
+
+// Alternating names restart the CSS arrival without timers or layout reads.
+export function revealReelResult(element) {
+  element.dataset.reelArrival = element.dataset.reelArrival === 'odd' ? 'even' : 'odd';
+}

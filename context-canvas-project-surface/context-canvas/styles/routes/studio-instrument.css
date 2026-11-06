@@ -22,8 +22,10 @@
 .native-reel[data-reel-variant='cobalt'] .native-reel__rotor { background: radial-gradient(circle, #f1e6d0 0 8%, #24315d 8% 16%, transparent 16% 60%, #eee9ff 60% 65%, transparent 65%), repeating-conic-gradient(#eee9ff 0 13deg, #3a4c92 13deg 45deg); }
 .native-coordination .native-reel[data-reel-variant='cobalt'] .native-reel__choice[aria-pressed='true'] { background: #304bc2; color: #fff9ec; }
 @keyframes studio-reel-arrival { from { opacity: .65; transform: translateY(12px); clip-path: inset(6% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+@keyframes studio-reel-arrival-even { from { opacity: .65; transform: translateY(12px); clip-path: inset(6% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
 @keyframes studio-scope-glow { 0%,100% { filter: drop-shadow(0 0 2px #76dfca55); } 50% { filter: drop-shadow(0 0 6px #82f4dcaa); } }
 .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) [data-reel-arrival] { animation: studio-reel-arrival calc(360ms * var(--studio-speed)) ease-out; }
+.native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) [data-reel-arrival='even'] { animation-name: studio-reel-arrival-even; }
 .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .native-assurance__sigma-curve { animation: studio-scope-glow calc(3s * var(--studio-speed)) ease-in-out infinite; }
 .native-coordination[data-native-motion='off'] *, .native-coordination[data-native-motion='off'] *::before, .native-coordination[data-native-motion='off'] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { .native-coordination *, .native-coordination *::before, .native-coordination *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
