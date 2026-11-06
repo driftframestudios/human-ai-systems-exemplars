@@ -56,7 +56,9 @@ then identifies each behavior's implementation owner.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `rate-controls.mjs` owns relative $10 and $5 dial gestures beside existing hourly-rate fields. People and Quality retain parsing, unknown values, exact cents, $1 steps and accepted-state ownership.
 - `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the amp-head Off / Lower / Full controls. It leaves accepted state and editor history with their existing owners.
-- `reel-control.mjs` owns reusable native-button reels. `select()` synchronizes a choice without dispatch, `vary()` changes decorative rotation, and the caller owns preset changes. `studio-instrument.css` supplies the shared visual control family after `about.css`; chapter rack styles extend it.
+- `arrangement-surfaces.mjs` composes team lanes and person/session tracks from accepted or explicitly proposed records; existing controllers own editing and acceptance.
+- `change-showcase.mjs` and `assurance-showcase.mjs` hold authored exploration configurations; their controllers apply those entries through existing draft adapters.
+- `reel-control.mjs` owns reusable native-button reels. `select()` synchronizes a choice without dispatch, `vary()` changes decorative rotation, `revealReelResult()` cues a refreshed board, and the caller owns preset changes. `studio-instrument.css` supplies the shared visual control family after `about.css`; chapter rack styles extend it.
 
 - `time-controls.mjs` owns the shared Hours and Minutes dial gestures and the semantic
   Hours/Minutes/Working sessions cluster used by supporting-work proposals.

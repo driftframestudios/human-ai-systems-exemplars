@@ -13,6 +13,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/assurance-showcase.mjs",
+      "projected_path": "collaboration/native-investment-studio/assurance-showcase.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
       "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
       "media_type": "text/css"
@@ -20,6 +25,11 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-change.css",
       "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-change.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css",
       "media_type": "text/css"
     },
     {

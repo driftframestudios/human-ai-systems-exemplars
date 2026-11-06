@@ -4,6 +4,8 @@ import { listQualityConcepts, listSourcePresets, getSourcePreset, listRehearsalD
 import { money } from './display.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences, summarizeAssuranceWork } from './assurance-consequences.mjs';
+import { createReel, revealReelResult } from './reel-control.mjs';
+import { QUALITY_REELS, QUALITY_FADERS, QUALITY_PHASES, createQualityExploration, qualityArrangement, qualityRehearsalExample } from './assurance-showcase.mjs';
 
 const INSTANCES = new WeakMap();
 let instanceSequence = 0;
@@ -23,13 +25,17 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, instance = `assurance-${++instanceSequence}`, cleanup = [], controls = new Map(), cards = new Map();
   const node = (tag, text, className) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; };
-  const find = name => { const element = root.querySelector(`[data-assurance-${name}]`); if (!element) throw new TypeError(`Supply the assurance ${name} element.`); return element; };
+  const find = name => { const element = root.querySelector(`[data-assurance-${name}=""]`); if (!element) throw new TypeError(`Supply the assurance ${name} element.`); return element; };
   const elements = Object.fromEntries(['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'preview', 'error', 'status', 'manual', 'form', 'fields', 'recovery', 'current'].map(name => [name, find(name)]));
   const actions = new Map([...root.querySelectorAll('[data-assurance-action]')].map(element => [element.dataset.assuranceAction, element]));
   const editor = editing.assurance;
   const concepts = listQualityConcepts(), definitions = listRehearsalDefinitions();
   let selectedConcept = concepts[0].id, selectedScenario = definitions[0].id;
   let renderedSigma = null, selectedPrompt = null;
+  let exploration = createQualityExploration();
+  const explorationBySettings = new Map();
+  const explorationKey = projection => JSON.stringify(projection.state.assuranceSettings);
+  const restoreExploration = projection => ({ ...(explorationBySettings.get(explorationKey(projection)) ?? createQualityExploration()) });
   for (const name of ['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'manual']) elements[name].replaceChildren();
   let disposed = false, generation = 0, sequence = 0, composing = false, lastProjection = null, promptSignature = '';
   const owns = epoch => !disposed && generation === epoch;
@@ -115,10 +121,30 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   field(qualityGrid, 'qualityIncluded'); field(qualityGrid, 'recoveryRatePersonIds');
   const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the illustrative source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); qualityAssumptions.append(sourceReading);
   const estimates = node('div', undefined, 'native-assurance__estimates'); estimates.dataset.assuranceEstimates = ''; elements.quality.append(estimates);
-  elements.concepts.append(node('h4', 'Connect quality intentions to work'));
-  const conceptChoices = selectionRail(elements.concepts, 'Inspect a quality concept', concepts, 'concept');
-  const conceptInspector = node('div'); conceptInspector.dataset.assuranceConceptInspector = ''; elements.concepts.append(conceptInspector);
+  const instrument = node('section', undefined, 'native-quality-rack'); instrument.setAttribute('aria-label', 'Arrange quality and recovery');
+  const reels = node('div', undefined, 'native-quality-rack__reels');
+  const beforeReel = createReel(document, { label: 'Before release', choices: QUALITY_REELS.before, value: exploration.before,
+    variant: 'teal', onSelect: id => configure({ before: id }) });
+  const afterReel = createReel(document, { label: 'After release', choices: QUALITY_REELS.after, value: exploration.after,
+    variant: 'cobalt', secondary: true, onSelect: id => configure({ after: id }) });
+  reels.append(beforeReel.element, afterReel.element); instrument.append(reels);
+  const faders = node('div', undefined, 'native-quality-rack__faders'), faderControls = new Map();
+  instrument.append(faders); elements.fields.prepend(instrument);
+  const board = node('div', undefined, 'native-quality-board'), lanes = new Map();
+  for (const phase of QUALITY_PHASES) {
+    const lane = node('section', undefined, 'native-quality-board__lane'); lane.dataset.qualityPhase = phase.id;
+    lane.append(node('h4', phase.label), node('p', phase.description)); lanes.set(phase.id, lane); board.append(lane);
+  }
+  elements.concepts.append(board);
+  const conceptChoices = new Map([
+    ...selectionRail(lanes.get('prepare'), 'Preparation checks', concepts.filter(row => QUALITY_REELS.before.some(choice => choice.id === row.id)), 'concept'),
+    ...selectionRail(lanes.get('operate'), 'Operating checks', concepts.filter(row => QUALITY_REELS.after.some(choice => choice.id === row.id)), 'concept'),
+  ]);
+  const conceptDisclosure = node('details', undefined, 'native-quality-drilldown');
+  conceptDisclosure.append(node('summary', 'Quality check settings'));
+  const conceptInspector = node('div'); conceptInspector.dataset.assuranceConceptInspector = ''; conceptDisclosure.append(conceptInspector); elements.concepts.append(conceptDisclosure);
   const consequence = node('section', undefined, 'native-assurance__consequence'); consequence.dataset.assuranceConsequence = ''; elements.concepts.append(consequence);
+  conceptDisclosure.append(consequence);
   for (const concept of concepts) {
     const details = node('section', undefined, 'native-assurance__card'); details.dataset.assuranceConcept = concept.id;
     const summary = node('h5', concept.label), body = node('div');
@@ -126,23 +152,29 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const links = actionRow(); body.append(links, actionRow(button('Plan supporting work', 'propose', { assuranceTarget: `concept/${concept.id}`, assuranceLabel: concept.label })));
     details.append(summary, body); conceptInspector.append(details); cards.set(`concept/${concept.id}`, { details, summary, links, label: concept.label });
   }
-  elements.statistics.append(node('h4', 'Explore quality attention'));
-  const sigmaControl = node('div', undefined, 'native-assurance__sigma-control'), sigmaLabel = node('label', 'Sigma attention');
+  const sigmaControl = node('div', undefined, 'native-quality-rack__channel native-quality-rack__channel--sigma'), sigmaLabel = node('label', 'Sigma attention');
   const sigmaInput = node('input'); sigmaInput.type = 'range'; sigmaInput.min = '1'; sigmaInput.max = '6'; sigmaInput.step = '0.5'; sigmaInput.id = `${instance}-sigma`; sigmaInput.dataset.assuranceField = 'sigmaHalfSteps'; sigmaLabel.htmlFor = sigmaInput.id;
   const sigmaValue = node('output'); sigmaValue.setAttribute('for', sigmaInput.id);
   const sigmaScale = node('div', undefined, 'native-assurance__sigma-scale'); sigmaScale.setAttribute('aria-hidden', 'true');
   for (let value = 1; value <= 6; value += 1) sigmaScale.append(node('span', `${value}σ`));
-  sigmaControl.append(sigmaLabel, sigmaValue, sigmaInput, sigmaScale); elements.statistics.append(sigmaControl);
-  const sigmaSelect = field(elements.statistics, 'sigmaHalfSteps', 'Choose sigma attention');
+  sigmaControl.append(sigmaLabel, sigmaValue, sigmaInput, sigmaScale); faders.append(sigmaControl);
+  const sigmaSelect = field(qualityGrid, 'sigmaHalfSteps', 'Choose sigma attention');
   sigmaSelect.input.setAttribute('aria-label', 'Choose sigma attention');
-  const sigmaValues = node('details'); sigmaValues.append(node('summary', 'Read the reference values')); const sigmaValuesBody = node('dl'); sigmaValues.append(sigmaValuesBody);
+  const sigmaValues = node('details'); sigmaValues.append(node('summary', 'Quality reference details')); const sigmaValuesBody = node('dl'); sigmaValues.append(sigmaValuesBody); elements.manual.append(sigmaValues);
   const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), sigmaBasis = node('p');
   sigmaValues.append(sigmaBasis);
   const scope = node('section', undefined, 'native-assurance__scope'), scopeHead = node('div', undefined, 'native-assurance__scope-head');
   scopeHead.append(node('span', 'NORMAL REFERENCE / TWO-SIDED TAILS'));
   const scopeValue = node('strong'); scopeHead.append(scopeValue);
-  const scopeControls = node('div', undefined, 'native-assurance__scope-controls'); scopeControls.append(sigmaControl, sigmaSelect.group);
-  scope.append(scopeHead, sigmaPlot); elements.statistics.append(scope, scopeControls, sigmaReading, sigmaValues);
+  scope.append(scopeHead, sigmaPlot); elements.statistics.append(scope, sigmaReading); instrument.append(elements.statistics);
+  for (const definition of QUALITY_FADERS) {
+    const channel = node('div', undefined, 'native-quality-rack__channel'), label = node('label', definition.label), value = node('output');
+    const slider = node('input'); slider.type = 'range'; slider.min = '0'; slider.max = '4'; slider.step = '1'; slider.value = String(definition.value);
+    slider.id = `${instance}-quality-${definition.id}`; slider.dataset.qualityFader = definition.id; label.htmlFor = slider.id; value.setAttribute('for', slider.id);
+    const ends = node('div', undefined, 'native-quality-rack__ends'); ends.append(node('span', definition.low), node('span', definition.high));
+    channel.append(label, value, slider, ends); faders.append(channel); faderControls.set(definition.id, { slider, value, channel, definition });
+    listen(slider, 'input', () => configure({ [definition.id]: Number(slider.value) }, definition.id));
+  }
   elements.events.append(node('h4', 'Prepare for recovery'), actionRow(button('Add a recovery event', 'add-event')));
   const eventList = node('div'); elements.events.append(eventList);
   elements.learning.append(node('h4', 'Turn a learning question into planned work'));
@@ -153,7 +185,13 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const learningList = node('div'); elements.learning.append(prompts, learningList);
   listen(promptChoice, 'change', () => { if (!disposed && isActive()) { selectedPrompt = promptChoice.value; render(); } });
   elements.rehearsal.append(node('h4', 'Rehearse a professional complication'), node('p', 'Try a complication, then plan the response.'));
-  const scenarioChoices = selectionRail(elements.rehearsal, 'Choose a complication', definitions, 'scenario');
+  const scenarioChoices = selectionRail(lanes.get('rehearse'), 'Try a complication', definitions, 'scenario');
+  const rehearsalDisclosure = node('details', undefined, 'native-quality-drilldown'); rehearsalDisclosure.append(node('summary', 'Rehearsal settings'));
+  elements.rehearsal.before(rehearsalDisclosure); rehearsalDisclosure.append(elements.rehearsal);
+  const followThrough = node('details', undefined, 'native-quality-drilldown'); followThrough.append(node('summary', 'Recovery events and learning work'));
+  elements.events.before(followThrough); followThrough.append(elements.events, elements.learning);
+  const tracks = node('div', undefined, 'native-quality-tracks'); tracks.setAttribute('role', 'region'); tracks.setAttribute('aria-label', 'Quality work tracks'); tracks.tabIndex = 0;
+  elements.concepts.insertBefore(tracks, conceptDisclosure);
   const rehearsalGroups = new Map(), scenarioCards = new Map();
   for (const definition of definitions) {
     const card = node('section', undefined, 'native-assurance__card'); card.dataset.assuranceComplication = definition.id;
@@ -199,6 +237,58 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     node('p', 'Quality and rehearsal catalogue · version 1.0.0. Illustrative methods are adapted from the full Investment and Change Studio.'));
   elements.manual.append(manual);
 
+  function configure(patch, channel = null, sigma = null) {
+    const view = editor.read(); if (disposed || !isActive() || view.status !== 'editing' || !view.draft) return;
+    exploration = { ...exploration, ...patch };
+    if (channel === 'compliance') exploration.before = exploration.compliance >= 3 ? 'security-privacy' : 'independent-review';
+    if (channel === 'fidelity') exploration.before = exploration.fidelity >= 3 ? 'data-model-quality' : 'acceptance-criteria';
+    if (channel === 'training') exploration.after = exploration.training >= 3 ? 'post-release-learning' : 'reconciliation-replay';
+    if (channel === 'urgency') exploration.before = exploration.urgency >= 3 ? 'risk-based-testing' : 'release-readiness';
+    if (channel === 'quality') exploration.before = exploration.quality >= 3 ? 'independent-review' : 'acceptance-criteria';
+    const halfSteps = sigma ?? Number(view.draft.raw.sigmaHalfSteps);
+    if (sigma !== null) {
+      exploration.before = halfSteps >= 9 ? 'independent-review' : halfSteps >= 6 ? 'risk-based-testing' : 'acceptance-criteria';
+      exploration.after = halfSteps >= 8 ? 'reconciliation-replay' : 'observability';
+    }
+    const arrangement = qualityArrangement(exploration, halfSteps), included = new Set(arrangement.included), raw = view.draft.raw;
+    selectedConcept = patch.after ? arrangement.after : arrangement.before; selectedScenario = arrangement.definitionId;
+    const definition = definitions.find(row => row.id === arrangement.definitionId);
+    const prefix = 'explore-' + definition.id;
+    let recordId = prefix, suffix = 1;
+    while (raw.rehearsalIds.includes(recordId) && raw[`rehearsal.${recordId}.observation`]?.trim()) recordId = `${prefix}-${suffix++}`;
+    const example = qualityRehearsalExample(definition, arrangement, view.projection.state);
+    const entries = concepts.map(row => [`concept.${row.id}.included`, included.has(row.id) ? 'yes' : 'no']);
+    entries.push(['allocationPercent', String(arrangement.allocationPercent)],
+      ['rehearsalIds', raw.rehearsalIds.includes(recordId) ? raw.rehearsalIds : [...raw.rehearsalIds, recordId]],
+      ...Object.entries(example).map(([key, value]) => [`rehearsal.${recordId}.${key}`, value]));
+    if (sigma !== null) entries.push(['sigmaHalfSteps', String(sigma)]);
+    instrument.dataset.qualityArrival = channel ?? (patch.before ? 'before' : 'after');
+    edit(entries);
+    if (channel === null) revealReelResult(board);
+  }
+  function renderTracks(raw, state) {
+    const focused = tracks.contains(document.activeElement) ? { ...document.activeElement.dataset } : null;
+    const table = node('table'), caption = node('caption', 'Quality work · preparation through operation');
+    const head = node('thead'), headings = node('tr');
+    for (const label of ['Quality check', 'Included', 'Supporting work']) { const th = node('th', label); th.scope = 'col'; headings.append(th); }
+    head.append(headings); const body = node('tbody');
+    for (const concept of concepts) {
+      const row = node('tr'), title = node('th'); title.scope = 'row';
+      const inspect = button(concept.label, 'inspect-concept', { assuranceConceptId: concept.id }); inspect.classList.add('native-control--navigate'); title.append(inspect);
+      const included = raw[`concept.${concept.id}.included`] === 'yes', stateCell = node('td'), workCell = node('td');
+      const pad = button(included ? 'Included' : 'Available', 'toggle-concept', { assuranceConceptId: concept.id });
+      pad.className = 'native-quality-tracks__pad'; pad.setAttribute('aria-pressed', String(included)); pad.setAttribute('aria-label', `${concept.label}: ${included ? 'included' : 'available'}`);
+      stateCell.append(pad);
+      const workIds = raw[`concept.${concept.id}.workIds`] ?? [];
+      if (workIds.length) for (const id of workIds) workCell.append(button(state.work.find(row => row.id === id)?.label ?? id, 'work', { assuranceWork: id }));
+      else workCell.append(button('Plan supporting work', 'propose', { assuranceTarget: `concept/${concept.id}`, assuranceLabel: concept.label }));
+      row.append(title, stateCell, workCell); body.append(row);
+    }
+    table.append(caption, head, body); tracks.replaceChildren(table);
+    if (focused) [...tracks.querySelectorAll('button')].find(control => control.dataset.assuranceAction === focused.assuranceAction
+      && control.dataset.assuranceConceptId === focused.assuranceConceptId && control.dataset.assuranceTarget === focused.assuranceTarget
+      && control.dataset.assuranceWork === focused.assuranceWork)?.focus({ preventScroll: true });
+  }
   function addRecordCard(kind, id, raw) {
     const key = `${kind}/${id}`;
     if (cards.has(key)) {
@@ -331,6 +421,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   }
   function render() {
     const view = editor.read(); if (disposed) return view;
+    if (lastProjection !== view.projection && !view.draft?.changed) exploration = restoreExploration(view.projection);
     const raw = view.draft?.raw ?? startingAssuranceRaw(view.projection.state.assuranceSettings), editable = view.status === 'editing';
     elements.fields.disabled = !editable; actions.get('apply').disabled = !editable || composing; actions.get('cancel').disabled = !view.draft;
     elements.recovery.hidden = !view.draft || !['stale', 'parked'].includes(view.status);
@@ -356,6 +447,13 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     rateControls.refresh();
     lastProjection = view.projection;
     sigmaInput.value = String(reading.sigma.sigma); sigmaInput.setAttribute('aria-valuetext', `${reading.sigma.sigma} sigma attention`); sigmaValue.textContent = `${reading.sigma.sigma}σ`;
+    sigmaControl.style.setProperty('--quality-level', `${(reading.sigma.sigma - 1) / 5 * 100}%`);
+    beforeReel.select(exploration.before); afterReel.select(exploration.after);
+    for (const [id, { slider, value, channel, definition }] of faderControls) {
+      slider.value = String(exploration[id]); value.textContent = ['Low', 'Light', 'Balanced', 'High', 'Full'][exploration[id]];
+      slider.setAttribute('aria-valuetext', `${value.textContent}: ${definition.low} to ${definition.high}`);
+      channel.style.setProperty('--quality-level', `${exploration[id] / 4 * 100}%`);
+    }
     renderSigma(reading.sigma);
     sigmaValuesBody.replaceChildren(...[['Sigma threshold', reading.sigma.sigma], ['Two-sided tail probability', reading.sigma.tailProbability], ['Reference values per million beyond the thresholds', reading.sigma.tailPerMillion], ['Quality illustration hours', reading.quality.estimate.hours ?? 'Choose a reference horizon'], ['Recovery illustration hours', reading.recovery.estimate.hours ?? 'Choose the recovery assumptions']].map(([label, value]) => { const group = node('div'); group.append(node('dt', label), node('dd', String(value))); return group; }));
     for (const [key, card] of cards) {
@@ -370,12 +468,13 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       choice.radio.checked = id === selectedConcept;
       const included = raw[`concept.${id}.included`] === 'yes', linked = raw[`concept.${id}.workIds`].length > 0;
       choice.radio.parentElement.dataset.included = String(included); choice.radio.parentElement.dataset.support = linked ? 'linked' : 'open';
-      choice.status.textContent = `${included ? 'Included' : 'Available'} · ${linked ? 'Supporting work linked' : 'Choose supporting work'}`;
+      choice.status.textContent = included ? linked ? 'Work linked' : 'Included' : 'Available';
     }
     for (const [id, choice] of scenarioChoices) {
       choice.radio.checked = id === selectedScenario; scenarioCards.get(id).hidden = id !== selectedScenario;
       choice.status.textContent = raw.rehearsalIds.some(recordId => raw[`rehearsal.${recordId}.definitionId`] === id) ? 'Continue this rehearsal' : 'Explore this situation';
     }
+    renderTracks(raw, view.projection.state);
     const nextPromptSignature = JSON.stringify(reading.learning);
     if (promptSignature !== nextPromptSignature) {
       promptChoice.replaceChildren(...reading.learning.map(prompt => { const option = node('option', prompt.label); option.value = prompt.promptId; return option; }));
@@ -418,10 +517,10 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       const current = editing.read(); return owns(epoch) && current.intent === ownership.intent
         && (active ? current.active?.kind === active.kind && current.active?.token === active.token && current.active?.targetId === active.targetId : current.active === null);
     };
-    if (target.kind === 'concept') selectedConcept = target.id;
+    if (target.kind === 'concept') { selectedConcept = target.id; conceptDisclosure.open = true; }
     else {
       const definitionId = raw?.[`rehearsal.${target.id}.definitionId`] ?? view.projection.state.assuranceSettings.rehearsals.find(row => row.id === target.id)?.definitionId;
-      if (!scenarioCards.has(definitionId)) return false; selectedScenario = definitionId;
+      if (!scenarioCards.has(definitionId)) return false; selectedScenario = definitionId; rehearsalDisclosure.open = true;
     }
     render(); if (!retains()) return false;
     if (view.status !== 'editing') { actions.get('review').focus(); return true; }
@@ -441,6 +540,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     if (result) changed(result, epoch);
   }
   function addRecord(kind, values) {
+    if (kind === 'rehearsal') rehearsalDisclosure.open = true; else followThrough.open = true;
     const raw = editor.read().draft.raw, list = collectionKeys[kind]; let sequence = 1; while (raw[list].includes(`${kind}-${sequence}`)) sequence += 1; const id = `${kind}-${sequence}`;
     edit([[list, [...raw[list], id]], ...Object.entries(values).map(([key, value]) => [`${kind}.${id}.${key}`, value])]);
     const card = cards.get(`${kind}/${id}`); if (!card) return null; card.details.open = true; card.details.querySelector('input,textarea,select')?.focus(); return id;
@@ -449,8 +549,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     rateControls.release();
     const view = editor.read(); if (disposed || !view.draft) return; if (composing && method === 'apply') { announce('Finish entering the text, then apply.'); return; }
     const epoch = ++generation, result = editor[method](view.draft.token); if (!owns(epoch)) return; if (!result.ok) { changed(result, epoch); return; }
-    if (method === 'cancel') { opened(editor.begin('assurance', studio.read()), epoch, false); announce('Changes cancelled.'); return; }
-    const accepted = result.projection ?? studio.read(); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return;
+    if (method === 'cancel') { exploration = restoreExploration(studio.read()); opened(editor.begin('assurance', studio.read()), epoch, false); announce('Changes cancelled.'); return; }
+    const accepted = result.projection ?? studio.read(); explorationBySettings.set(explorationKey(accepted), { ...exploration }); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return;
     opened(editor.begin('assurance', accepted), epoch, false); if (owns(epoch)) { announce('Quality, recovery and proposed work applied.'); actions.get('apply').focus(); }
   }
   function loadWork(id) {
@@ -459,15 +559,18 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       ['proposal.hoursPerSession', String(Math.floor(work.minutesPerOccurrence / 60))], ['proposal.minutesPerSession', String(work.minutesPerOccurrence % 60)], ['proposal.occurrences', String(work.occurrences)], ['proposal.funding', work.funding]]);
   }
   listen(root, 'click', event => {
+    if (event.target.dataset.assuranceSelection) input({ type: 'change', target: event.target });
     const control = event.target.closest('[data-assurance-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.assuranceAction; if (action === 'apply') return;
     if (action === 'cancel' || action === 'discard') { settle('cancel'); return; }
     const view = editor.read(); if (!view.draft) return;
     if (action === 'review' || action === 'current') { const epoch = ++generation; opened(editor[action === 'review' ? 'review' : 'useCurrent'](view.draft.token, studio.read()), epoch, true); return; }
     if (view.status !== 'editing') return;
+    if (action === 'inspect-concept') { selectSupport({ kind: 'concept', id: control.dataset.assuranceConceptId }); return; }
+    if (action === 'toggle-concept') { const key = `concept.${control.dataset.assuranceConceptId}.included`; edit([[key, view.draft.raw[key] === 'yes' ? 'no' : 'yes']]); return; }
     if (action === 'preparation') { selectSupport({ kind: 'concept', id: 'reconciliation-replay' }); return; }
     if (action === 'scenario') {
-      selectedScenario = control.dataset.assuranceDefinition; render(); const card = scenarioCards.get(selectedScenario);
+      selectedScenario = control.dataset.assuranceDefinition; rehearsalDisclosure.open = true; render(); const card = scenarioCards.get(selectedScenario);
       if (card && !disposed) { const heading = card.querySelector('h5'); heading.tabIndex = -1; heading.focus(); } return;
     }
     if (action === 'proposal-settings') { controls.get('proposal.label').input.focus(); return; }
@@ -477,7 +580,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     if (action === 'learning') { addRecord('learning', { promptId: control.dataset.assurancePrompt, context: '', decisionOwnerPersonId: '', reviewBoundary: '', workIds: [] }); return; }
     if (action === 'rehearse') {
       const definition = listRehearsalDefinitions().find(row => row.id === control.dataset.assuranceDefinition);
-      addRecord('rehearsal', { definitionId: definition.id, definitionVersion: definition.version, context: '', assumptions: definition.assumptions.join(' '), response: '', reviewerPersonId: '', observedPlanRevision: String(studio.read().state.revision), observation: '', workIds: [], connectionIds: [], personIds: [] }); return;
+      addRecord('rehearsal', qualityRehearsalExample(definition, qualityArrangement(exploration), studio.read().state)); return;
     }
     if (action === 'keep-connections') {
       const ids = view.draft.raw[`rehearsal.${control.dataset.assuranceRecord}.connectionIds`]; edit([['connectionUpdateIds', view.draft.raw.connectionUpdateIds.filter(id => !ids.includes(id))]]); return;
@@ -499,8 +602,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     const selection = event.target.dataset.assuranceSelection;
     if (selection) {
       if (event.type !== 'change' || disposed || !isActive() || editor.read().status !== 'editing' || !event.target.checked) return;
-      if (selection === 'concept' && conceptChoices.has(event.target.value)) selectedConcept = event.target.value;
-      if (selection === 'scenario' && scenarioChoices.has(event.target.value)) selectedScenario = event.target.value;
+      if (selection === 'concept' && conceptChoices.has(event.target.value)) { selectedConcept = event.target.value; conceptDisclosure.open = true; }
+      if (selection === 'scenario' && scenarioChoices.has(event.target.value)) { selectedScenario = event.target.value; rehearsalDisclosure.open = true; }
       render(); return;
     }
     const key = event.target.dataset.assuranceField, control = controls.get(key), view = editor.read();
@@ -516,6 +619,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       const value = range ? String(Number(event.target.value) * 2) : control.metadata.checkbox ? control.input.checked ? 'yes' : 'no' : event.target.value;
       if (key === 'sourcePresetId') { const preset = getSourcePreset(value); edit([[key, value], ...(preset ? [['horizonQuantity', String(preset.horizon.quantity)], ['horizonUnit', preset.horizon.unit], ['namedUnknowns', String(preset.namedUnknowns)]] : [])]); }
       else if (key === 'proposal.existingWorkId') loadWork(value);
+      else if (key === 'sigmaHalfSteps') configure({}, 'sigma', Number(value));
       else edit([[key, value]]);
     }
   }
@@ -523,6 +627,6 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   listen(elements.form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
   listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; render(); }); listen(elements.form, 'compositionend', event => { composing = false; input(event); });
   function close({ park = true } = {}) { if (disposed) return; durationDials.release(); rateControls.release(); ++generation; composing = false; if (park && editing.read().active?.kind === 'assurance') editing.park(); }
-  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
+  function dispose() { if (disposed) return; close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release()); elements.fields.disabled = true; for (const button of actions.values()) button.disabled = true; durationDials.dispose(); rateControls.dispose(); beforeReel.dispose(); afterReel.dispose(); instrument.before(elements.statistics); instrument.remove(); rehearsalDisclosure.before(elements.rehearsal); rehearsalDisclosure.remove(); followThrough.before(elements.events, elements.learning); followThrough.remove(); controls.clear(); cards.clear(); INSTANCES.delete(root); }
   render(); const controller = Object.freeze({ open, selectSupport, refresh: render, close, resume: () => open('assurance', false), dispose }); INSTANCES.set(root, controller); return controller;
 }

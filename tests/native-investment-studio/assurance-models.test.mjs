@@ -13,6 +13,25 @@ import {
   projectAssurance, projectLearning, projectSigmaReference,
 } from '../../collaboration/native-investment-studio/assurance-models.mjs';
 import { estimateQualityReference, estimateRecoveryReference } from '../../collaboration/investment-analysis/staffing-adapter.mjs';
+import { createQualityExploration, qualityArrangement, qualityRehearsalExample } from '../../collaboration/native-investment-studio/assurance-showcase.mjs';
+import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
+
+test('quality exploration produces distinct preparation and recovery proposals with useful, unobserved rehearsal context', () => {
+  const baseline = qualityArrangement(createQualityExploration());
+  const formal = qualityArrangement({ ...createQualityExploration(), before: 'security-privacy', after: 'post-release-learning', compliance: 4, training: 4, urgency: 4 });
+  assert.equal(baseline.definitionId, 'recovery-failure');
+  assert.equal(formal.definitionId, 'specialist-unavailable');
+  assert.ok(formal.included.includes('security-privacy') && formal.included.includes('post-release-learning'));
+  assert.notDeepEqual(formal.included, baseline.included);
+  const plan = createShowcasePlan(), before = JSON.stringify(plan);
+  const example = qualityRehearsalExample(getRehearsalDefinition(formal.definitionId, '1.0.0'), formal, plan);
+  assert.match(example.context, /specialist.*unavailable/i);
+  assert.match(example.response, /alternate reviewer/);
+  assert.ok(example.workIds.length && example.workIds.every(id => plan.work.some(row => row.id === id)));
+  assert.ok(example.personIds.length && example.personIds.every(id => plan.people.some(row => row.id === id)));
+  assert.equal(example.observation, '');
+  assert.equal(JSON.stringify(plan), before);
+});
 
 const core = createRequire(import.meta.url)('../../collaboration/investment-analysis/core.js');
 const original = await readFile(new URL('../../collaboration/initiative-costing-calculator/index.html', import.meta.url), 'utf8');

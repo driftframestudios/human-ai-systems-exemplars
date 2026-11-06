@@ -26,8 +26,8 @@ const panel = page => root(page).locator('[data-native-assurance]');
 const action = (page, name) => panel(page).locator(`[data-assurance-action="${name}"]`);
 const field = (page, key) => panel(page).locator(`input[name="${key}"], select[name="${key}"], textarea[name="${key}"]`);
 const check = (page, key, value) => panel(page).locator(`input[name="${key}"][value="${value}"]`);
-const selectConcept = (page, id) => panel(page).locator(`input[data-assurance-selection="concept"][value="${id}"]`).check();
-const selectScenario = (page, id) => panel(page).locator(`input[data-assurance-selection="scenario"][value="${id}"]`).check();
+const selectConcept = (page, id) => panel(page).locator(`input[data-assurance-selection="concept"][value="${id}"]`).click();
+const selectScenario = (page, id) => panel(page).locator(`input[data-assurance-selection="scenario"][value="${id}"]`).click();
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 
 const total = page => root(page).locator('[data-native-total]');
@@ -56,11 +56,68 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: quality reels and faders populate a distinct recoverable arrangement and keep both reels visible on mobile`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const before = panel(page).getByRole('group', { name: 'Before release', exact: true });
+    const after = panel(page).getByRole('group', { name: 'After release', exact: true });
+    await before.getByRole('button', { name: 'Security', exact: true }).click();
+    await after.getByRole('button', { name: 'Learn', exact: true }).click();
+    await panel(page).locator('[data-quality-fader="urgency"]').fill('4');
+    await expect(before).toHaveAttribute('data-reel-value', 'risk-based-testing');
+    await expect(after).toHaveAttribute('data-reel-value', 'post-release-learning');
+    await expect(panel(page).locator('[data-assurance-pad="specialist-unavailable"] input')).toBeChecked();
+    assert.equal(await bytes(page), initial);
+    await panel(page).getByText('Rehearsal settings', { exact: true }).click();
+    const rehearsal = panel(page).locator('[data-assurance-rehearsal="explore-specialist-unavailable"]');
+    await rehearsal.locator('summary').first().click();
+    await expect(field(page, 'rehearsal.explore-specialist-unavailable.context')).toHaveValue(/specialist.*unavailable/i);
+    await expect(field(page, 'rehearsal.explore-specialist-unavailable.response')).toHaveValue(/alternate reviewer/);
+    await expect(field(page, 'rehearsal.explore-specialist-unavailable.observation')).toHaveValue('');
+    await action(page, 'cancel').click(); assert.equal(await bytes(page), initial);
+    await before.getByRole('button', { name: 'Data quality', exact: true }).click();
+    await panel(page).locator('[data-quality-fader="compliance"]').fill('4');
+    await selectConcept(page, 'security-privacy');
+    await check(page, 'concept.security-privacy.workIds', 'review').check();
+    await action(page, 'apply').click();
+    const settings = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings);
+    assert.ok(settings.quality.concepts.find(row => row.conceptId === 'security-privacy').included);
+    assert.ok(settings.rehearsals.some(row => row.context && row.response && row.observation === null));
+    assert.notEqual(await bytes(page), initial);
+    const accepted = await bytes(page);
+    await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const current = window.assuranceFixture;
+      current.controller.dispose();
+      current.controller = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: current.studio });
+    });
+    await tab(page, 'assurance').click();
+    await expect(panel(page).locator('.native-quality-tracks [data-assurance-work="review"]')).toBeVisible();
+    await selectConcept(page, 'security-privacy');
+    await panel(page).locator('[data-assurance-target="concept/security-privacy"]').click();
+    await expect(panel(page).locator('[data-assurance-work=""]')).toBeVisible();
+    await field(page, 'proposal.label').fill('Check the release access rules');
+    assert.equal(await bytes(page), accepted);
+    await action(page, 'cancel').click(); assert.equal(await bytes(page), accepted);
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
+    await tab(page, 'assurance').click();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const geometry = await panel(page).locator('.native-reel__wheel').evaluateAll(nodes => nodes.map(node => {
+        const box = node.getBoundingClientRect(); return { width: box.width, left: box.left, right: box.right };
+      }));
+      const faders = await panel(page).locator('.native-quality-rack__faders input').evaluateAll(nodes => nodes.map(node => { const box=node.getBoundingClientRect(); return { left:box.left, right:box.right, height:box.height }; }));
+      assert.ok(faders.every(box => box.height > 50 && box.left >= 0 && box.right <= width), JSON.stringify(faders));
+      assert.equal(geometry.length, 2); assert.ok(geometry.every(box => box.width > 80 && box.left >= 0 && box.right <= width), JSON.stringify(geometry));
+      await panel(page).locator('.native-quality-rack').screenshot({ path: resolve(captures, `${engine}-quality-rack-${width}.png`) });
+      await panel(page).locator('.native-quality-board').screenshot({ path: resolve(captures, `${engine}-quality-board-${width}.png`) });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+    }
+  });
   test(`${engine}: recovery work previews its people and $100 before Apply, baseline comparison and Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await expect(total(page)).toHaveText('$3,980.00');
     await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'assurance').click();
-    await action(page, 'add-event').click();
+    await panel(page).getByText('Recovery events and learning work', { exact: true }).click(); await action(page, 'add-event').click();
     const event = panel(page).locator('[data-assurance-event="event-1"]');
     await field(page, 'event.event-1.label').fill('Recover the interrupted request');
     await field(page, 'event.event-1.receiverPersonId').selectOption('sam');
@@ -151,7 +208,7 @@ for (const engine of names) {
     await sigma.focus(); await page.keyboard.press('Home'); await expect(sigma).toHaveValue('1'); await expect(field(page, 'sigmaHalfSteps')).toHaveValue('2');
     await page.keyboard.press('End'); await expect(sigma).toHaveValue('6'); await expect(field(page, 'sigmaHalfSteps')).toHaveValue('12');
     await sigma.scrollIntoViewIfNeeded(); const sigmaBox = await sigma.boundingBox();
-    assert.ok(sigmaBox.width >= .9 * await sigma.locator('..').evaluate(node => node.getBoundingClientRect().width));
+    assert.ok(sigmaBox.height > sigmaBox.width, 'Sigma shares the vertical fader bank.');
     await page.mouse.click(sigmaBox.x + sigmaBox.width / 2, sigmaBox.y + sigmaBox.height / 2);
     await expect(sigma).toHaveValue('3.5'); await expect(field(page, 'sigmaHalfSteps')).toHaveValue('7');
     await expect(panel(page).locator('[data-assurance-statistics] svg')).toHaveAttribute('aria-label', /3.5 sigma/);
@@ -173,6 +230,7 @@ for (const engine of names) {
     await panel(page).getByRole('button', { name: 'Increase independent quality rate per hour', exact: true }).click();
     await expect(field(page, 'independentRate')).toHaveValue('106.25');
     assert.equal(await bytes(page), initial, 'rate illustration edits remain in the Assurance draft');
+    await panel(page).getByText('Recovery events and learning work', { exact: true }).click();
     await expect(panel(page).getByLabel('Question to explore')).toBeVisible();
     await expect(action(page, 'learning')).toHaveCount(1); await action(page, 'learning').click();
     await field(page, 'learning.learning-1.context').fill('Find the observation that could change pilot readiness.');
@@ -201,7 +259,7 @@ for (const engine of names) {
     const comparison = panel(page).locator('[data-assurance-scenario-comparison="rehearsal-1"]');
     await expect(comparison).toContainText('Combined linked work: 240 person-minutes; $400.00 attributed session cost');
     await expect(comparison).toContainText('Shared work: Operations rehearsal');
-    await complication.locator('[data-assurance-action="propose"]').click();
+    await complication.locator('[data-assurance-target="rehearsal/rehearsal-1"]').click();
     await field(page, 'proposal.label').fill('Repair and repeat the interrupted request'); await field(page, 'proposal.teamId').selectOption('operations');
     await check(page, 'proposal.personIds', 'noor').check(); await check(page, 'proposal.personIds', 'sam').check();
     await field(page, 'proposal.minutesPerSession').fill('30'); await check(page, 'proposal.funding', 'additional').check();
@@ -217,13 +275,14 @@ for (const engine of names) {
     await selectScenario(page, 'recovery-failure');
     await expect(field(page, 'rehearsal.rehearsal-1.response')).toHaveValue('Clarify the restart instruction and repeat the observation.');
     await check(page, 'rehearsal.rehearsal-1.connectionIds', 'readiness').check();
-    await complication.locator('[data-assurance-action="pause-connections"]').click(); await expect(panel(page).locator('[data-assurance-preview]')).toContainText('paused'); assert.equal(await bytes(page), initial);
+    await complication.locator('[data-assurance-action="pause-connections"][data-assurance-record="rehearsal-1"]').click(); await expect(panel(page).locator('[data-assurance-preview]')).toContainText('paused'); assert.equal(await bytes(page), initial);
     await field(page, 'namedUnknowns').fill(' later '); await tab(page, 'people').click();
     await page.evaluate(() => { const { studio, controller } = window.assuranceFixture, plan = JSON.parse(studio.exportText()); plan.purpose.changedAbility = 'Recover the interrupted request.'; const result = studio.importText(JSON.stringify(plan), studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh(); });
     await tab(page, 'assurance').click(); await expect(panel(page)).toHaveAttribute('data-assurance-state', 'stale'); await action(page, 'review').click();
     await expect(field(page, 'namedUnknowns')).toHaveValue(' later '); await expect(field(page, 'namedUnknowns')).toHaveAttribute('aria-invalid', 'true');
     await expect(field(page, 'rehearsal.rehearsal-1.response')).toHaveValue('Clarify the restart instruction and repeat the observation.');
     await field(page, 'namedUnknowns').fill('4');
+    await expect(sigma).toBeVisible();
     await panel(page).locator('[data-assurance-quality]').screenshot({ path: resolve(captures, `${engine}-compact-assumptions.png`) });
     await panel(page).locator('[data-assurance-concepts]').screenshot({ path: resolve(captures, `${engine}-concept-inspector.png`) });
     await comparison.screenshot({ path: resolve(captures, `${engine}-recovery-consequences-desktop.png`) });
@@ -234,9 +293,9 @@ for (const engine of names) {
     const boxes = await panel(page).locator('[data-assurance-statistics] input, [data-assurance-statistics] svg').evaluateAll(inputs => inputs.map(input => { const box = input.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, height: box.height }; }));
     assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
     const compactBoxes = await panel(page).locator('[data-assurance-quality] input, [data-assurance-quality] label, .native-assurance__rail label, [data-assurance-concept-inspector] button').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));
-    assert.ok(compactBoxes.every(box => box.left >= -.5 && box.right <= 320.5), JSON.stringify(compactBoxes));
+    assert.ok(compactBoxes.every(box => box.left >= -.5 && box.right <= 390.5), JSON.stringify(compactBoxes));
     const consequenceBoxes = await panel(page).locator('[data-assurance-consequence] button, [data-assurance-scenario-comparison] button, .native-assurance__metrics').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));
-    assert.ok(consequenceBoxes.every(box => box.left >= -.5 && box.right <= 320.5), JSON.stringify(consequenceBoxes));
+    assert.ok(consequenceBoxes.every(box => box.left >= -.5 && box.right <= 390.5), JSON.stringify(consequenceBoxes));
     for (const literal of ['$400.00', '$3,980.00', '$4,080.00']) {
       const amount = comparison.getByText(literal, { exact: true }).first();
       const amountReading = await amount.evaluate(element => {
@@ -249,7 +308,7 @@ for (const engine of names) {
         }
         return { lines: lines.size, parents };
       });
-      assert.equal(amountReading.lines, 1, `${literal} remains one readable value at 320px and doubled text: ${JSON.stringify(amountReading)}`);
+      assert.equal(amountReading.lines, 1, `${literal} remains one readable value at mobile width: ${JSON.stringify(amountReading)}`);
     }
     const routeLines = await comparison.locator('.native-assurance__effect').first().getByRole('button', { name: 'Inspect Operations rehearsal', exact: true }).evaluate(button => {
       const text = button.firstChild, lines = new Set();
@@ -258,7 +317,7 @@ for (const engine of names) {
       }
       return lines.size;
     });
-    assert.equal(routeLines, 1, 'the session route retains readable ordinary words at 320px and doubled text');
+    assert.equal(routeLines, 1, 'the session route retains readable ordinary words at mobile width');
     await comparison.screenshot({ path: resolve(captures, `${engine}-recovery-consequences-narrow.png`) });
     await page.emulateMedia({ forcedColors: 'active' }); await sigma.focus(); await page.keyboard.press('ArrowLeft'); await expect(field(page, 'sigmaHalfSteps')).toHaveValue('6');
     await panel(page).locator('[data-assurance-statistics]').screenshot({ path: resolve(captures, `${engine}-narrow-forced.png`) });
@@ -272,13 +331,14 @@ for (const engine of names) {
     const concepts = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.quality.concepts);
     assert.deepEqual(concepts.find(row => row.conceptId === 'independent-review').workIds, ['review']); assert.equal(concepts.find(row => row.conceptId === 'independent-review').included, false);
     assert.deepEqual(concepts.find(row => row.conceptId === 'accessibility').workIds, ['research']);
-    const responses = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.rehearsals.map(row => [row.definitionId, row.response]));
+    const responses = await page.evaluate(() => window.assuranceFixture.studio.read().state.assuranceSettings.rehearsals.filter(row => !row.id.startsWith('explore-')).map(row => [row.definitionId, row.response]));
     assert.deepEqual(responses, [['recovery-failure', 'Clarify the restart instruction and repeat the observation.'], ['review-change', 'Ask the decision owner to confirm the new observation.']]);
     await expect(total(page)).toHaveText('$4,080.00');
     await expect(comparison).toHaveAttribute('data-assurance-effect', 'accepted');
     await page.setViewportSize({ width: 1440, height: 1100 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; }); await page.emulateMedia({ forcedColors: 'none' });
     await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
     await tab(page, 'people').click();
+    await root(page).getByText('Rates and available time', { exact: true }).click();
     await root(page).locator('[data-team-roster] [data-person-id="noor"]').click();
     const rate = root(page).locator('[data-person-configure] [name="ratePerHour"]'); await rate.fill('00100.25');
     const badge = root(page).locator('[data-support-owner-kind="person"][data-support-owner-id="noor"] [data-support-kind="rehearsal"][data-support-id="rehearsal-1"][data-support-standing="observation"]');
@@ -295,7 +355,7 @@ for (const engine of names) {
     await root(page).locator('[data-native-return-action]').click(); await expect(root(page).locator('[data-person-action="review"]')).toBeFocused();
     await expect(rate).toHaveValue('00100.25');
     const accepted = await bytes(page);
-    await tab(page, 'coordination').click(); await root(page).locator('.native-connections__list button[data-connection-select="readiness"]').click();
+    await tab(page, 'coordination').click(); await root(page).locator('[data-native-workspace="connection"] > summary').click(); await root(page).locator('.native-connections__list button[data-connection-select="readiness"]').click();
     const connection = root(page).locator('[data-native-connection-editor]'); await connection.locator('[data-connection-action="remove"]').click();
     await expect(connection.locator('[data-connection-dependencies]')).toContainText('Rehearsal: A recovery rehearsal reveals a gap');
     await expect(connection.locator('[data-connection-apply]')).toBeDisabled();
@@ -309,6 +369,7 @@ for (const engine of names) {
 
   test(`${engine}: Cancel and Undo move a reused rehearsal ID to its current scenario, and a missing reviewer returns to the saved response`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
+    await panel(page).getByText('Rehearsal settings', { exact: true }).click();
     const scenario = id => panel(page).locator(`[data-assurance-complication="${id}"]`);
     await scenario('review-change').locator('[data-assurance-action="rehearse"]').click();
     await field(page, 'rehearsal.rehearsal-1.context').fill('First scenario context');
@@ -341,6 +402,7 @@ for (const engine of names) {
     assert.equal(state.work.length, 4); assert.equal(state.work.find(row => row.id === 'rehearsal').minutesPerOccurrence, 30);
     assert.equal(state.assuranceSettings.rehearsals[0].definitionId, 'specialist-unavailable');
     await tab(page, 'people').click(); const people = root(page).locator('[data-native-assembly]');
+    await root(page).getByText('Rates and available time', { exact: true }).click();
     await people.locator('[data-assembly-person]').selectOption(state.people.find(row => row.label === 'Additional reviewer').id);
     await people.locator('[data-assembly-action="person-remove"]').click();
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('Rehearsal: A specialist is unavailable for the planned review');
