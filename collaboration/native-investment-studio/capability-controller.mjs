@@ -1,6 +1,7 @@
 import { listCapabilities, getCapabilityDefinition } from './capabilities.mjs';
 import { capabilityForm, makeCapabilityTarget, describeCapabilityTarget } from './capability-draft.mjs';
 import { money, duration } from './display.mjs';
+import { revealStudioDestination } from './motion.mjs';
 
 const INSTANCES = new WeakMap();
 const COLLECTION = Object.freeze({ ability: 'abilities', practice: 'practices' });
@@ -22,13 +23,16 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     return node;
   };
   const elements = Object.fromEntries(['selected', 'title', 'front', 'reverse', 'configure', 'summary', 'form', 'fields',
-    'preview', 'dependencies', 'error', 'recovery', 'current', 'status', 'manual-body'].map(name => [name, find(name)]));
+    'preview', 'dependencies', 'error', 'recovery', 'current', 'status'].map(name => [name, find(name)]));
   const actions = new Map([...root.querySelectorAll('[data-capability-action]')].map(node => [node.dataset.capabilityAction, node]));
   const catalogues = new Map(['ability', 'practice'].map(kind => [kind, root.querySelector(`[data-capability-catalogue="${kind}"]`)]));
+  const rack = document.createElement('section'); rack.className = 'native-capability-rack'; rack.id = `${instance}-rack`; rack.setAttribute('aria-label', 'Selected ability or practice');
+  elements.selected.before(rack); rack.append(elements.selected, elements.configure);
   const editor = editing.capability;
   let disposed = false, generation = 0, composing = false, acknowledged = false, projection = null;
   let selection = null, target = null, reversed = false, beside = false, builtTarget = null, builtProjection = null;
   let controls = new Map(), workGroups = new Map(), sequence = 0, observationGroup = null, peopleGroup = null, prerequisiteGroup = null;
+  let sections = new Map(), sectionKeys = new Map(), selectedSection = 'context';
   const owns = epoch => !disposed && generation === epoch;
   function listen(node, event, handler) { node.addEventListener(event, handler); cleanup.push(() => node.removeEventListener(event, handler)); }
   function node(tag, content, className) {
@@ -66,7 +70,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (phase === 'observation') {
       const latest = projection.state.capabilityEvidence.find(item => item.id === summary?.evidenceIds.at(-1));
       return latest ? { state: 'recorded', label: `${STAGES[latest.stage]} recorded`, detail: latest.observation }
-        : { state: row ? 'gap' : 'available', label: 'Add when available', detail: 'Record what people observed and where it applies.' };
+        : { state: row ? 'gap' : 'available', label: 'Explore an example', detail: 'Preview a walkthrough, recovery or decision result.' };
     }
     const requirements = definition.supportRequirements.filter(requirement => requirement.phase === phase);
     if (!requirements.length) return { state: 'unspecified', label: 'Not specified', detail: `This definition describes its other supporting work in the card.`, requirement: null };
@@ -141,6 +145,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     for (const key of ['reverse', 'beside', 'configure']) actions.get(key).disabled = !def;
     actions.get('remove').disabled = !row;
     if (!def) return;
+    if (catalogues.get(selection.kind).nextElementSibling !== rack) catalogues.get(selection.kind).after(rack);
     elements.title.textContent = def.action;
     elements.selected.dataset.capabilityLayout = beside ? 'beside' : 'single';
     elements.front.hidden = reversed && !beside; elements.reverse.hidden = !reversed && !beside;
@@ -150,9 +155,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     actions.get('beside').textContent = beside ? 'Use one reading' : 'Open beside';
     actions.get('configure').textContent = row ? 'Edit support' : `Plan this ${selection.kind}`;
     actions.get('configure').classList.toggle('native-control--create', !row);
-    for (const control of root.querySelectorAll('[data-capability-action="select"]')) control.setAttribute('aria-pressed', String(
-      control.dataset.capabilityKind === selection.kind && control.dataset.capabilityDefinition === def.id
-      && control.dataset.capabilityVersion === def.version && control.dataset.capabilityId === (row?.id ?? '')));
+    for (const control of root.querySelectorAll('[data-capability-action="select"]')) {
+      const active = control.dataset.capabilityKind === selection.kind && control.dataset.capabilityDefinition === def.id
+        && control.dataset.capabilityVersion === def.version && control.dataset.capabilityId === (row?.id ?? '');
+      control.setAttribute('aria-pressed', String(active)); control.setAttribute('aria-expanded', String(active)); control.setAttribute('aria-controls', rack.id);
+    }
     for (const item of root.querySelectorAll('[data-capability-row]')) item.dataset.selected = String(
       item.dataset.capabilityKind === selection.kind && item.dataset.capabilityDefinition === def.id
       && item.dataset.capabilityVersion === def.version && item.dataset.capabilityId === (row?.id ?? ''));
@@ -202,7 +209,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     const observations = projection.state.capabilityEvidence.filter(item => item.subject.kind === selection.kind && item.subject.instanceId === row?.id);
     const history = node('ul');
     for (const item of observations) history.append(node('li', `${STAGES[item.stage]} · ${item.observation} Context: ${item.context}. Recorded by ${projection.state.people.find(person => person.id === item.recorderPersonId)?.label ?? item.recorderPersonId} at plan revision ${item.observedPlanRevision}. Applies to: ${item.reviewBoundary}.`));
-    detail.push(section('Recorded observations', history.children.length ? history : 'Add an observation in settings when people have evidence to record. Current support checks remain separate from these records.',
+    detail.push(section('Recorded observations', history.children.length ? history : 'Explore illustrative results in the example pads.',
       observations.at(-1)?.observation ?? 'Add evidence when available'));
     elements.reverse.replaceChildren(...detail);
     for (const details of elements.reverse.querySelectorAll('details')) details.open = expanded.has(details.dataset.capabilitySection);
@@ -216,7 +223,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     return rows;
   }
   function field(parent, key, metadata, raw) {
-    const checkboxes = key.startsWith('support.');
+    const checkboxes = metadata.kind === 'ids';
     const group = node(checkboxes ? 'fieldset' : 'div', undefined, `native-capability__field${metadata.numeric ? ' native-capability__field--numeric' : ''}`), label = node(checkboxes ? 'legend' : 'label', metadata.label);
     const input = document.createElement(checkboxes ? 'ul' : metadata.source && metadata.kind !== 'ids' || metadata.choices ? 'select'
       : metadata.kind === 'ids' ? 'select' : metadata.maxLength > 120 ? 'textarea' : 'input');
@@ -259,19 +266,25 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     group.append(error); parent.append(group); controls.set(key, { input, error, metadata, checkboxes });
   }
   function buildFields(descriptor, raw) {
-    controls = new Map(); workGroups = new Map(); observationGroup = null; peopleGroup = null; prerequisiteGroup = null; elements.fields.replaceChildren();
+    controls = new Map(); workGroups = new Map(); sections = new Map(); sectionKeys = new Map(); observationGroup = null; peopleGroup = null; prerequisiteGroup = null; elements.fields.replaceChildren();
     if (!descriptor || descriptor.mode === 'remove') {
       if (descriptor) elements.fields.append(node('p', 'Remove this instance? Its separately owned working sessions and funding remain in the plan.'));
       return;
     }
-    const basics = section('Use in this plan'); elements.fields.append(basics);
+    const rail = node('div', undefined, 'native-capability-pad-rail'); rail.setAttribute('role', 'group'); rail.setAttribute('aria-label', 'Inspect support'); elements.fields.append(rail);
+    function register(key, label, region) {
+      const pad = button(label, 'inspect-section'); pad.dataset.capabilitySectionKey = key; pad.setAttribute('aria-controls', `${instance}-section-${key}`);
+      region.id = `${instance}-section-${key}`; sections.set(key, region); sectionKeys.set(key, pad); rail.append(pad);
+    }
+    const basics = section('Use in this plan'); elements.fields.append(basics); register('context', 'Outcome', basics);
     field(basics, 'context', descriptor.fields.context, raw.context);
     if (descriptor.mode === 'create' && projection.state.planId === 'service-request-pilot') basics.append(node('p', 'This example starts with an editable pilot proposal. Apply adds it to your plan.'));
     peopleGroup = node('details', undefined, 'native-capability__section'); peopleGroup.dataset.capabilityPeople = '';
     peopleGroup.append(node('summary')); elements.fields.append(peopleGroup);
+    register('responsibility', 'People', peopleGroup);
     for (const key of ['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId', 'lifecycle']) field(peopleGroup, key, descriptor.fields[key], raw[key]);
     const prerequisites = node('details'); prerequisites.append(node('summary', 'Prerequisites · choose the supporting abilities and practices'));
-    field(prerequisites, 'prerequisites', descriptor.fields.prerequisites, raw.prerequisites); elements.fields.append(prerequisites); prerequisiteGroup = prerequisites;
+    field(prerequisites, 'prerequisites', descriptor.fields.prerequisites, raw.prerequisites); elements.fields.append(prerequisites); prerequisiteGroup = prerequisites; register('prerequisites', 'Before this', prerequisites);
     for (const requirement of descriptor.definition.supportRequirements) {
       const group = node('details', undefined, 'native-capability__section'); group.dataset.capabilityRequirement = requirement.id;
       group.append(node('summary', requirement.label), node('p', requirement.description));
@@ -281,15 +294,42 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       const newWork = node('div', undefined, 'native-capability__new-work');
       for (const [key, metadata] of Object.entries(descriptor.fields)) if (key.startsWith(prefix) && !key.endsWith('.enabled')) field(newWork, key, metadata, raw[key]);
       group.append(newWork); elements.fields.append(group); workGroups.set(requirement.id, { group, newWork });
+      const phaseLabel = { preparation: 'Prepare', coordination: 'Handoff', review: 'Review', maintenance: 'Maintain' }[requirement.phase] ?? requirement.label;
+      register(requirement.id, phaseLabel, group);
     }
-    const evidence = node('details', undefined, 'native-capability__section'); evidence.append(node('summary', 'Record an observation · add evidence when available'));
-    const latest = projection.state.capabilityEvidence.filter(item => item.subject.kind === descriptor.kind && item.subject.instanceId === descriptor.id).at(-1);
-    if (latest) evidence.append(node('p', `${STAGES[latest.stage]} recorded: ${latest.observation} Context: ${latest.context}. Applies to: ${latest.reviewBoundary}.`));
-    field(evidence, 'evidenceStage', descriptor.fields.evidenceStage, raw.evidenceStage);
-    observationGroup = node('div');
-    for (const key of ['evidenceContext', 'evidenceObservation', 'evidenceRecorder', 'evidenceReviewBoundary']) field(observationGroup, key, descriptor.fields[key], raw[key]);
-    evidence.append(observationGroup); elements.fields.append(evidence);
+    const examples = section('Example results'); examples.dataset.capabilityExamples = '';
+    examples.append(node('p', 'Illustrative walkthroughs · choose a result to explore.'));
+    const pads = node('div', undefined, 'native-capability-example-pads');
+    for (const [key, label] of [['walkthrough', 'Routine walkthrough'], ['recovery', 'Recover a handoff'], ['decision', 'Ready for review']]) {
+      const pad = button(label, 'example'); pad.dataset.capabilityExample = key; pad.setAttribute('aria-pressed', 'false'); pads.append(pad);
+    }
+    observationGroup = node('div', undefined, 'native-capability-example-reading'); observationGroup.setAttribute('aria-live', 'polite');
+    examples.append(pads, observationGroup); elements.fields.append(examples); register('observation', 'Example result', examples);
+    showExample('walkthrough'); showSection(sections.has(selectedSection) ? selectedSection : 'context');
   }
+  function showExample(key) {
+    const def = definition(); if (!def || !observationGroup) return;
+    const readings = {
+      walkthrough: ['Routine walkthrough', `The team explores how to ${def.action.toLowerCase()} using the service-request pilot.`, def.acceptanceJob],
+      recovery: ['Recover a handoff', 'A receiving team finds a missing detail. The team rehearses a correction and makes the next action clear.', 'Compare the recovered route with the original handoff.'],
+      decision: ['Ready for review', 'The decision owner reviews the prepared work and names the next useful step.', def.acceptanceJob],
+    };
+    observationGroup.replaceChildren(node('strong', readings[key][0]), node('p', readings[key][1]), node('p', readings[key][2]));
+    elements.fields.querySelectorAll('[data-capability-example]').forEach(pad => pad.setAttribute('aria-pressed', String(pad.dataset.capabilityExample === key)));
+  }
+  function showSection(key) {
+    if (!sections.has(key)) return;
+    selectedSection = key;
+    for (const [id, region] of sections) { region.hidden = id !== key && id !== 'context'; if (region.tagName === 'DETAILS') region.open = id === key; }
+    for (const [id, pad] of sectionKeys) { pad.setAttribute('aria-pressed', String(id === key)); pad.setAttribute('aria-expanded', String(id === key)); }
+  }
+  function revealField(key) {
+    const input = controls.get(key)?.input;
+    if (!input) return;
+    const section = [...sections].find(([, region]) => region.contains(input));
+    if (section) showSection(section[0]);
+  }
+
   function render() {
     const view = editor.read(); if (disposed) return view;
     renderCatalogues(view.projection);
@@ -334,7 +374,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
         if (!newWork.hidden) selectedNames.push(`Add ${draft.raw[`new.${id}.label`].trim() || 'a named session'}`);
         group.querySelector('summary').textContent = `${descriptor.definition.supportRequirements.find(item => item.id === id).label} · ${selectedNames.join(', ') || 'Choose supporting work'}`;
       }
-      if (observationGroup) observationGroup.hidden = !draft.raw.evidenceStage;
+
     }
     const preview = draft && view.status === 'editing' && !composing ? editor.preview(draft.token) : null;
     if (disposed) return view;
@@ -354,7 +394,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     }
     return view;
   }
-  function focusEditor() { const view = editor.read(); (view.status === 'stale' ? actions.get('review') : controls.values().next().value?.input ?? actions.get('cancel')).focus(); }
+  function focusEditor() { const view = editor.read(); (view.status === 'stale' ? actions.get('review') : controls.values().next().value?.input ?? actions.get('cancel')).focus({ preventScroll: true }); revealStudioDestination(elements.configure); }
   function opened(result, epoch, focus) {
     if (!owns(epoch)) return result;
     if (result.view.draft) selectDescriptor(describeCapabilityTarget(result.view.draft.capabilityId));
@@ -426,33 +466,18 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       || editing.read().active && editing.read().active.kind !== 'capability') return;
     if (current.status !== 'editing') { focusEditor(); return; }
     const phase = control.dataset.capabilityPhase;
-    const region = phase === 'responsibility' ? peopleGroup : phase === 'observation' ? observationGroup?.closest('details')
-      : workGroups.get(control.dataset.capabilityRequirementTarget)?.group;
-    if (!region) return;
-    region.open = true;
-    const key = phase === 'responsibility' ? 'teamId' : phase === 'observation' ? 'evidenceStage' : `support.${control.dataset.capabilityRequirementTarget}`;
-    controls.get(key)?.input.focus();
-  }
-  function renderManual() {
-    const groups = [];
-    for (const kind of ['ability', 'practice']) {
-      const group = section(kind === 'ability' ? 'Customer abilities' : 'Team practices');
-      for (const definition of listCapabilities(kind)) {
-        const details = node('details'); details.append(node('summary', definition.action), node('p', definition.explanation),
-          node('p', `How to check the result. ${definition.acceptanceJob}`), node('p', definition.estimateUnits));
-        const requirements = node('ul');
-        for (const requirement of definition.supportRequirements) requirements.append(node('li', `${requirement.label}: ${requirement.description} Starting estimate: ${duration(requirement.estimate.minutesPerOccurrence)} × ${requirement.estimate.occurrences}.`));
-        details.append(requirements, node('p', definition.assumptions.join(' ')), node('p', `${definition.id} · version ${definition.version}`)); group.append(details);
-      }
-      groups.push(group);
-    }
-    elements['manual-body'].replaceChildren(...groups);
+    const key = phase === 'responsibility' ? 'responsibility' : phase === 'observation' ? 'observation' : control.dataset.capabilityRequirementTarget;
+    showSection(key);
+    const focus = phase === 'observation' ? elements.fields.querySelector('[data-capability-example]') : controls.get(phase === 'responsibility' ? 'teamId' : `support.${key}`)?.input;
+    focus?.focus({ preventScroll: true }); revealStudioDestination(elements.configure);
   }
   listen(root, 'click', event => {
     const control = event.target.closest('[data-capability-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.capabilityAction;
     if (action === 'apply') return;
-    if (action === 'select') { selectCard(control); return; }
+    if (action === 'select') { selectedSection = 'context'; selectCard(control); showSection('context'); elements.title.tabIndex = -1; elements.title.focus({ preventScroll: true }); revealStudioDestination(rack); return; }
+    if (action === 'inspect-section') { showSection(control.dataset.capabilitySectionKey); return; }
+    if (action === 'example') { showExample(control.dataset.capabilityExample); return; }
     if (action === 'support-cell') { inspectSupport(control); return; }
     if (action === 'reverse') { reversed = !reversed && !beside; beside = false; renderCard(); return; }
     if (action === 'beside') { beside = !beside; reversed = false; renderCard(); return; }
@@ -504,10 +529,11 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     if (disposed) return;
     close(); disposed = true; ++generation; cleanup.splice(0).forEach(release => release());
     elements.fields.disabled = true; for (const control of actions.values()) control.disabled = true;
+    root.append(elements.selected, elements.configure); rack.remove();
     INSTANCES.delete(root); projection = null; controls.clear(); workGroups.clear();
   }
-  renderManual(); render();
-  const controller = Object.freeze({ refresh: render, open, create, showSupport, selectedTarget: () => target,
+  render();
+  const controller = Object.freeze({ refresh: render, open, create, showSupport, revealField, selectedTarget: () => target,
     close, resume: () => target ? open(target, false) : render(), dispose });
   INSTANCES.set(root, controller); return controller;
 }
