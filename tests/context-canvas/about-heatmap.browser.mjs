@@ -1,8 +1,11 @@
 import '../../tools/node-runtime-admission.mjs';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { after, before, test } from 'node:test';
 import { chromium, firefox, webkit } from '@playwright/test';
 import { startStaticServer } from '../../tools/core-architecture-browser-helper.mjs';
+import { aboutPath, heatmapSourcePath, createAboutHeatmapProjection } from '../../tools/materialize-about-heatmap.mjs';
 
 const engines = { chromium, firefox, webkit };
 const names = process.env.HEATMAP_BROWSER ? [process.env.HEATMAP_BROWSER] : Object.keys(engines);
@@ -14,8 +17,13 @@ const imageNames = {
   before: 'bgr_3b_before_safeway_purple.svg',
   after: 'bgr_3b_after_safeway_cool_tri.svg',
 };
-let server;
+let server, fixture;
 before(async () => {
+  const root = resolve(import.meta.dirname, '../..');
+  const [about, source] = await Promise.all([aboutPath, heatmapSourcePath].map(path => readFile(resolve(root, path), 'utf8')));
+  // About retired this exhibit. This explicit host exercises the retained adapter
+  // and its CSS/runtime without restoring it to the visitor's landing page.
+  fixture = about.replace('<main id="main">', `<main id="main"><section class="about-field about-field--tiffany" aria-labelledby="deliver-title"><div class="about-reading about-reading--wide"><h2 id="deliver-title">Retained comparison fixture</h2>${createAboutHeatmapProjection(source)}<p><a href="../../collaboration/about-heatmap-comparison/index.html">Open the comparison</a></p></div></section>`);
   server = await startStaticServer();
   for (const name of names) browsers.set(name, await engines[name].launch());
 });
@@ -31,10 +39,11 @@ async function open(t, engine, options = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   t.after(() => assert.deepEqual(errors, [], 'native About reading executes without page errors'));
-  // This receiver observes native About content; hosted instruments and remote media
+  // This explicit receiver observes the retained comparison; hosted instruments and remote media
   // retain their own contracts. Fixed placeholders keep their delivery out of this proof.
   await page.route('**/*', request => new URL(request.request().url()).origin === server.origin
     ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate instrument owner</title>' }));
+  await page.route(server.origin + route, request => request.fulfill({ status: 200, contentType: 'text/html', body: fixture }));
   await page.goto(server.origin + route + '#deliver-title', { waitUntil: 'load' });
   if (options.javaScriptEnabled !== false) await page.evaluate(() => document.fonts.ready);
   assert.equal(await page.locator(`${selector} img`).evaluateAll(images =>
@@ -89,7 +98,7 @@ async function assertContained(page) {
 }
 
 for (const engine of names) {
-  test(`${engine}: native comparison preserves state, focus, fragment, and vertical reading`, { timeout: 30_000 }, async t => {
+  test(`${engine}: retained comparison fixture preserves state, focus, fragment, and vertical reading`, { timeout: 30_000 }, async t => {
     const page = await open(t, engine), root = page.locator(selector);
     await assertView(page, 'side');
     for (const mode of ['before', 'after', 'side']) {

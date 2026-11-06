@@ -29,14 +29,6 @@ const repeatedImageAlternatives = new Map([
     "../img/plot/ai_legible_viewlet_svg_companion.svg",
     "Five stages carry an event from observation through context and review to an accountable human–AI handoff and a recoverable audit trail.",
   ],
-  [
-    "forms_upfront.png",
-    "Step three of a payment form shows card number, security code, expiration date, and a Create your portfolio button.",
-  ],
-  [
-    "langwhich_upfront.png",
-    "Two LangWhich prototype screens showing learner-selected English and Spanish clinical vocabulary views.",
-  ],
 ]);
 
 const socialImageAlternatives = new Map([
@@ -109,7 +101,7 @@ async function parentRoutes() {
 
 test("parent visitor images carry a legible text relationship", async () => {
   const emptyAlternatives = [];
-  let imageCount = 0;
+  const observedExamples = new Set();
 
   for (const route of await parentRoutes()) {
     const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
@@ -117,19 +109,24 @@ test("parent visitor images carry a legible text relationship", async () => {
       const tag = match[0];
       const alt = attribute(tag, "alt");
       const src = attribute(tag, "src");
-      imageCount += 1;
-
       assert.notEqual(alt, undefined, `${route}: ${src} needs an alt attribute`);
       if (alt === "") emptyAlternatives.push(`${route}:${src}`);
 
       const expected = repeatedImageAlternatives.get(src);
-      if (expected) assert.equal(alt, expected, `${route}: ${src}`);
+      if (expected) {
+        observedExamples.add(src);
+        assert.equal(alt, expected, `${route}: ${src}`);
+      }
     }
   }
 
-  // About adds two native heatmap figures; their exact source pairing and
-  // directional-evidence wording have a focused About heatmap contract.
-  assert.equal(imageCount, 167);
+  // Named semantic figures establish a substantive population while the audit
+  // above follows every current image through editorial additions and removals.
+  assert.deepEqual(
+    [...observedExamples].sort(),
+    [...repeatedImageAlternatives.keys()].sort(),
+    "The exemplar reading retains its event, comparison and handoff figures",
+  );
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],

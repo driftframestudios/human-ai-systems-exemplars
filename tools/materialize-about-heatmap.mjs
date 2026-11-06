@@ -42,19 +42,33 @@ export function createAboutHeatmapProjection(source) {
   return `${start}\n${content}\n${end}`;
 }
 
-export function replaceAboutHeatmapProjection(about, projection) {
+export function aboutHeatmapReceiverState(about) {
   const starts = [...about.matchAll(/<!-- about-heatmap-projection:start -->/gu)];
   const ends = [...about.matchAll(/<!-- about-heatmap-projection:end -->/gu)];
+  if (starts.length === 0 && ends.length === 0 && !/\bdata-about-heatmap\b/u.test(about)) return 'absent';
   if (starts.length !== 1 || ends.length !== 1 || starts[0].index >= ends[0].index) {
     throw new Error('About requires one ordered heatmap projection boundary.');
   }
-  return about.slice(0, starts[0].index) + projection + about.slice(ends[0].index + end.length);
+  return 'present';
+}
+
+export function replaceAboutHeatmapProjection(about, projection) {
+  if (aboutHeatmapReceiverState(about) !== 'present') {
+    throw new Error('About requires one ordered heatmap projection boundary.');
+  }
+  const startIndex = about.indexOf(start), endIndex = about.indexOf(end);
+  return about.slice(0, startIndex) + projection + about.slice(endIndex + end.length);
 }
 
 export async function main(args = process.argv.slice(2)) {
   if (args.length > 1 || (args.length === 1 && args[0] !== '--check')) throw new Error('Usage: node tools/materialize-about-heatmap.mjs [--check]');
   const [source, about] = await Promise.all([heatmapSourcePath, aboutPath].map(path => readFile(resolve(root, path), 'utf8')));
-  const expected = replaceAboutHeatmapProjection(about, createAboutHeatmapProjection(source));
+  const projection = createAboutHeatmapProjection(source);
+  if (aboutHeatmapReceiverState(about) === 'absent') {
+    console.log('About has no heatmap receiver. The standalone comparison remains valid; no page projection was checked or written.');
+    return;
+  }
+  const expected = replaceAboutHeatmapProjection(about, projection);
   if (args[0] === '--check') {
     if (expected !== about) throw new Error('About heatmap projection is stale; run node tools/materialize-about-heatmap.mjs.');
     console.log('About heatmap projection matches its standalone content owner.');

@@ -31,8 +31,8 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 
 ## About comparison and fitted instruments
 
-About owns vertical reading through its native heatmap comparison, AI Method
-Gallery, Prompt Conditions Explorer, and native Investment Studio. The Studio sits
+About owns vertical reading through its AI Method Gallery, Prompt Conditions
+Explorer, and native Investment Studio. The Studio sits
 inside the cross-functional investment section beside a closed static counterpart
 table. AI Systems links to the complete original Studio and back to this native
 example; both Studio sources retain their independent routes.
@@ -74,12 +74,18 @@ The patch bay lives above the complete working-session form; `styles/routes/abou
 owns its scoped palette, focus and reading geometry. The retained Studio chapter
 package keeps its source and independent iframe route.
 
-`collaboration/about-heatmap-comparison/index.html` owns the heatmap content.
-`tools/materialize-about-heatmap.mjs` projects its two figures, captions, and
-interpretation into a marked native block in `index.html`; `about-heatmap.js`
-adds root-scoped Before, After, and Side-by-side controls. Static and print
-readings retain both figures. `styles/routes/about.css` owns the receiving
-composition and uses the existing About palette.
+`collaboration/about-heatmap-comparison/index.html` retains the standalone
+heatmap comparison. The concise About revision retired its embedded exhibit;
+this supersedes the earlier native-projection route. The retained adapter,
+`tools/materialize-about-heatmap.mjs`, still validates the standalone vocabulary
+and can replace an explicitly marked receiver. With the receiver absent, both
+build and check report that standing and leave About untouched. A partial,
+duplicated or reversed marker pair remains an error.
+
+`about-heatmap.js` and the existing About CSS retain the root-scoped Before,
+After and Side-by-side treatment. The browser route mounts the adapter in an
+explicit local fixture to exercise that retained behavior; it establishes fixture
+behavior, while the current About page keeps its shorter composition.
 
 `about-content-fit.js` admits layout reports for About's two explicit
 `iframe[data-about-content-fit]` consumers: Gallery and Prompt Conditions Explorer. Each document receives its own
@@ -144,7 +150,8 @@ instrument cases explicitly substitute freshly packaged children on a second
 local origin while preserving the production sandbox. This establishes local
 source and package behavior. Standalone print checks exercise each instrument's
 existing visible comparison; About keeps its established print policy for
-embedded instruments, with the native heatmap participating directly in print.
+embedded instruments. The retained heatmap fixture separately exercises its
+complete native print reading.
 Native-device input, physical pagination, and the exact hosted release retain
 separate observations.
 
