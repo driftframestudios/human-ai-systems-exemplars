@@ -55,7 +55,9 @@ then identifies each behavior's implementation owner.
   shared by duration edits, people, purpose, assembly forms, full sessions, roles and contributions.
 - `work-controller.mjs` owns the selected complete working-session form and its browser interactions.
 - `rate-controls.mjs` owns relative $10 and $5 dial gestures beside existing hourly-rate fields. People and Quality retain parsing, unknown values, exact cents, $1 steps and accepted-state ownership.
-- `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the lens-side controls. It leaves accepted state and editor history with their existing owners.
+- `motion.mjs` owns the Studio presentation preference, system reduction, cancelable local indication and the amp-head Off / Lower / Full controls. It leaves accepted state and editor history with their existing owners.
+- `reel-control.mjs` owns reusable native-button reels. `select()` synchronizes a choice without dispatch, `vary()` changes decorative rotation, and the caller owns preset changes. `studio-instrument.css` supplies the shared visual control family after `about.css`; chapter rack styles extend it.
+
 - `time-controls.mjs` owns the shared Hours and Minutes dial gestures and the semantic
   Hours/Minutes/Working sessions cluster used by supporting-work proposals.
   Each receiving editor retains its raw draft, validation and acceptance.
@@ -150,7 +152,7 @@ original-model economic equivalence remains the receiving task in #705.
 | Explain investment and a changed commitment | Accepted investment, a saved baseline and their difference share the native staffing and extra-work ledger. The optional cost breakdown remains in Investment. Comparison checks distinguish unknown amounts, pooled rounding, allocated work and replaced plan identities. | Reserve, complexity, planning bands, cumulative/cash-flow, service and commercial models remain with the full Studio; #705 receives native analytical translation. |
 | Try another initiative | Six authored rehearsal families populate purpose, people, work, prerequisites, change support and quality. Preset/report checks independently price the examples and verify round-trip ownership. | The six original factories retain their original economic meanings; the native families disclose their explicit assumptions. |
 | Keep, compare and carry a plan | Versioned native 0.9.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange and report checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
-| Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; the Lower choice and system reduced-motion setting quiet the responses. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
+| Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; Lower plays effects at half speed, while Off and the system reduced-motion setting suppress animation. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
 
 The comparison reads the accepted plan and saved baseline. Allocated work stays
 inside staffing. Reference estimates and authored rehearsal outcomes remain

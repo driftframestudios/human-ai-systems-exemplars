@@ -32,6 +32,7 @@ const POST_BASELINE_NODE_MEMBERS = [
   'tests/native-investment-studio/change-methods.test.mjs',
   'tests/native-investment-studio/change-models.test.mjs',
   'tests/native-investment-studio/change-proposals.test.mjs',
+  'tests/native-investment-studio/change-showcase.test.mjs',
   'tests/native-investment-studio/change.browser.mjs',
   'tests/native-investment-studio/command-draft.test.mjs',
   'tests/native-investment-studio/commands.test.mjs',
@@ -335,7 +336,7 @@ test('native Studio routes retain source and separate browser owners with execut
     'cadence.test.mjs', 'score-contract.test.mjs', 'score-draft.test.mjs', 'score-models.test.mjs', 'score-time.test.mjs',
     'coordination-arrangements.test.mjs', 'contribution-view-model.test.mjs',
     'browser-download.test.mjs', 'reports.test.mjs',
-    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
+    'assembly-editing.test.mjs', 'capabilities.test.mjs', 'capability-draft.test.mjs', 'capability-proposals.test.mjs', 'change-contract.test.mjs', 'change-draft.test.mjs', 'change-methods.test.mjs', 'change-models.test.mjs', 'change-proposals.test.mjs', 'change-showcase.test.mjs', 'command-draft.test.mjs', 'commands.test.mjs', 'connection-draft.test.mjs', 'connection-editing.test.mjs', 'connection-templates.test.mjs', 'connection-view.test.mjs', 'contract.test.mjs', 'controller.test.mjs', 'draft.test.mjs', 'editing.test.mjs', 'exchange.test.mjs',
     'navigation-policy.test.mjs', 'module-closure.test.mjs', 'person-draft.test.mjs', 'person-state.test.mjs', 'presets.test.mjs', 'purpose-draft.test.mjs', 'relationships.test.mjs', 'responsibility-draft.test.mjs', 'responsibility-editing.test.mjs', 'session-draft.test.mjs', 'session-editing.test.mjs', 'shell.test.mjs', 'state.test.mjs',
     'team-controller.test.mjs',
   ].sort().map(file => `tests/native-investment-studio/${file}`);

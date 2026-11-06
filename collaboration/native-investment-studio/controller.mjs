@@ -572,7 +572,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const changeLink = event.target.closest('[data-native-open-change]');
     if (changeLink && root.contains(changeLink)) {
       event.preventDefault(); chapterShell?.select('change');
-      root.querySelector('[data-change-frameworks] select')?.focus(); return;
+      (root.querySelector('[data-change-lens-wheel] [aria-pressed="true"]') ?? root.querySelector('[data-change-frameworks] select'))?.focus(); return;
     }
     const capabilityLink = event.target.closest('[data-native-open-capabilities]');
     if (capabilityLink && root.contains(capabilityLink)) {

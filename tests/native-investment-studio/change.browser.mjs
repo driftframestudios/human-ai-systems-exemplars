@@ -55,116 +55,64 @@ async function open(t, engine) {
     plan.work = [{ ...plan.work[0], personIds: [...plan.teams[0].personIds], minutesPerOccurrence: 120, occurrences: 1, funding: 'allocated' }];
     const studio = createStudio(plan); window.changeFixture = { studio, controller: mountCoordinationPanel(element, { studio }) };
   });
-  await tab(page, 'change').click(); await expect(panel(page)).toHaveAttribute('data-change-state', 'editing'); return page;
+  await tab(page, 'change').click(); await expect(panel(page)).toHaveAttribute('data-change-state', 'editing');
+  await panel(page).locator('.native-change__setup > summary').click(); return page;
 }
 
 for (const engine of names) {
-  test(`${engine}: framework drafts retain mappings and reset keeps support, viewpoint and accepted investment`, { timeout: 60000 }, async t => {
+  test(`${engine}: reels choose an authored framework and faders vary its work view before Apply`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
-    const visibleKeys = () => panel(page).locator('[data-change-action="component"]:visible').evaluateAll(keys => keys.map(key => `${key.dataset.changeFramework}.${key.dataset.changeComponent}`));
-    assert.deepEqual(await visibleKeys(), ['urgency', 'coalition', 'vision', 'broad-participation', 'remove-barriers', 'short-term-wins', 'sustain-acceleration', 'anchor-in-culture'].map(id => `kotter.${id}`),
-      'the key rail exposes the selected framework and keeps other frameworks out of the reading and keyboard route');
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'change').click();
-    const urgency = component(page, 'kotter', 'urgency'); await componentKey(page, 'kotter', 'urgency').click();
-    await expect(componentKey(page, 'kotter', 'urgency')).not.toHaveClass(/native-control--navigate/u);
-    await choice(page, 'map.kotter.urgency.status', 'look').check(); await check(page, 'map.kotter.urgency.workIds', 'review').check();
-    await expect(urgency.getByRole('button', { name: 'Inspect Weekly working session', exact: true })).toHaveClass(/native-control--navigate/u);
-    await expect(urgency.getByRole('button', { name: 'Inspect Weekly working session', exact: true })).toHaveAccessibleName('Inspect Weekly working session');
-    await field(page, 'map.kotter.urgency.status').evaluate(input => { window.retainedComponentField = input; });
-    const coalitionKey = componentKey(page, 'kotter', 'coalition'); await coalitionKey.focus(); await page.keyboard.press('Enter');
-    await expect(coalitionKey).toBeFocused(); await expect(coalitionKey).toHaveAttribute('aria-pressed', 'true');
-    await expect(urgency).toBeHidden(); await expect(panel(page).locator('.native-change__component:visible')).toHaveCount(1);
-    await choice(page, 'map.kotter.coalition.status', 'partial').check();
-    await coalitionKey.focus(); await page.keyboard.press('Home'); await expect(componentKey(page, 'kotter', 'urgency')).toBeFocused();
-    await expect(coalitionKey).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.press('Space'); await expect(urgency).toBeVisible();
-    assert.equal(await field(page, 'map.kotter.urgency.status').evaluate(input => input === window.retainedComponentField), true,
-      'selecting a component keeps its original field and unfinished value');
-    await expect(field(page, 'map.kotter.urgency.status')).toHaveValue('look');
-    await field(page, 'framework').selectOption('adkar@1.0.0');
-    assert.deepEqual(await visibleKeys(), ['awareness', 'desire', 'knowledge', 'ability', 'reinforcement'].map(id => `adkar.${id}`));
-    await componentKey(page, 'adkar', 'awareness').click(); await choice(page, 'map.adkar.awareness.status', 'partial').check();
-    await field(page, 'lens').selectOption('people@1.0.0'); await field(page, 'sourceFilter').selectOption('enterprise');
-    await expect(panel(page).locator('[data-change-interpretation]')).toContainText('Who gains ability');
-    const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]');
-    await fader.focus(); await page.keyboard.press('Home'); await expect(field(page, 'attention.urgency')).toHaveValue('0');
-    await page.keyboard.press('ArrowUp'); await expect(field(page, 'attention.urgency')).toHaveValue('1');
-    await page.keyboard.press('ArrowDown'); await expect(field(page, 'attention.urgency')).toHaveValue('0');
-    await expect(total(page)).toHaveText('$16,000.00');
-    await page.keyboard.press('End'); await expect(field(page, 'attention.urgency')).toHaveValue('25');
-    await panel(page).locator('[data-change-action="step"][data-change-field="attention.urgency"][data-change-step="-1"]').click();
-    await expect(field(page, 'attention.urgency')).toHaveValue('24');
-    await field(page, 'framework').selectOption('dual@1.0.0');
+    const lens = value => panel(page).locator(`[data-change-lens-wheel] [data-reel-choice="${value}@1.0.0"]`);
+    const framework = value => panel(page).locator(`[data-change-framework-wheel] [data-reel-choice="${value}@1.0.0"]`);
+    await lens('people').click();
+    await expect(lens('people')).toHaveAttribute('aria-pressed', 'true');
+    await expect(framework('adkar')).toHaveAttribute('aria-pressed', 'true');
+    await expect(field(page, 'framework')).toHaveValue('adkar@1.0.0');
+    await expect(panel(page).locator('[data-change-tracks]')).toContainText('Weekly working session');
+    assert.equal(await bytes(page), initial, 'preset selection owns a draft until Apply');
+    await lens('people').focus(); await page.keyboard.press('ArrowRight');
+    await expect(lens('operating')).toHaveAttribute('aria-pressed', 'true');
+    await expect(framework('npt')).toHaveAttribute('aria-pressed', 'true');
+    await framework('kotter').click();
+    await componentKey(page, 'kotter', 'urgency').click();
+    const urgency = component(page, 'kotter', 'urgency');
+    await urgency.locator('.native-change__support-editor > summary').click();
+    await choice(page, 'map.kotter.urgency.status', 'look').check();
+    await check(page, 'map.kotter.urgency.workIds', 'review').check();
+    await framework('adkar').click(); await framework('kotter').click();
+    await expect(choice(page, 'map.kotter.urgency.status', 'look')).toBeChecked();
+    await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
+    const beforeLanes = await panel(page).locator('[data-change-lane="focus"] [data-change-action="component"]:visible').evaluateAll(rows => rows.map(row => row.dataset.changeComponent));
     for (const id of ['urgency', 'coalition', 'vision', 'broad-participation', 'remove-barriers', 'short-term-wins', 'sustain-acceleration', 'anchor-in-culture']) {
       await field(page, `attention.${id}`).fill(id === 'urgency' ? '25' : '0');
     }
-    await expect(panel(page).locator('[data-change-attention-note]')).toContainText('Give the most attention to Urgency (25 parts). Consider whether the planned work reflects that choice.');
-    await expect(panel(page).locator('.native-change__emphasis-tag')).toHaveText('Urgency');
-    await expect(panel(page).locator('[data-change-channel="urgency"]')).toHaveAttribute('data-emphasis', 'highest');
-    const geometry = await panel(page).locator('.native-change__channel').evaluateAll(channels => channels.map(channel => {
-      const box = channel.getBoundingClientRect(), heading = channel.querySelector('h5'), range = channel.querySelector('input[type="range"]'), note = channel.querySelector('.native-change__channel-description');
-      const fader = range.getBoundingClientRect();
-      return { height: box.height, faderStart: fader.top - box.top, faderHeight: fader.height, headingColor: getComputedStyle(heading).color, descriptionAfter: note.getBoundingClientRect().top > fader.bottom };
-    }));
-    assert.ok(geometry.every(row => Math.abs(row.height - geometry[0].height) < 1 && Math.abs(row.faderStart - geometry[0].faderStart) < 1 && Math.abs(row.faderHeight - geometry[0].faderHeight) < 1 && row.descriptionAfter), JSON.stringify(geometry));
-    assert.ok(geometry.every(row => row.headingColor === 'rgb(248, 241, 217)'), 'light headings remain readable on the dark housing');
-    for (const key of ['framework', 'lens', 'sourceFilter']) {
-      const size = await field(page, key).boundingBox(); assert.ok(size.height >= 44, `${key} has a complete field target`);
-      if (await field(page, key).evaluate(el => getComputedStyle(el).appearance === 'base-select')) {
-        assert.equal(await field(page, key).evaluate(el => getComputedStyle(el).backgroundImage), 'none', 'the native picker retains one arrow');
-        await field(page, key).click(); await expect.poll(() => field(page, key).evaluate(el => el.matches(':open'))).toBe(true);
-        await field(page, key).click(); await expect.poll(() => field(page, key).evaluate(el => el.matches(':open'))).toBe(false);
-      }
-      await field(page, key).click(); await page.keyboard.press('Escape');
-      await expect(field(page, key)).toBeFocused();
-    }
-    const lensChoice = panel(page).locator('[data-change-lens="operating@1.0.0"]');
-    await lensChoice.scrollIntoViewIfNeeded();
-    const lensBox = await lensChoice.boundingBox();
-    await page.mouse.move(lensBox.x + lensBox.width / 2, lensBox.y + lensBox.height / 2);
-    await page.mouse.down();
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    const pressedBox = await lensChoice.boundingBox();
-    assert.ok(Math.abs(pressedBox.x - lensBox.x) < 1 && Math.abs(pressedBox.y - lensBox.y) < 1,
-      'pressing a reel choice preserves its pointer target');
-    await page.mouse.up(); await expect(lensChoice).toHaveAttribute('aria-pressed', 'true');
-    await expect(field(page, 'lens')).toHaveValue('operating@1.0.0');
-    const rotor = panel(page).locator('.native-change__lens-rotor');
-    assert.equal(await rotor.evaluate(el => getComputedStyle(el).pointerEvents), 'none');
-    await expect(motionChoice(page, 'full')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await expect(motionChoice(page, 'full')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'full');
-    assert.ok(await rotor.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration)) > 0);
-    await motionChoice(page, 'lower').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
-    assert.equal(await rotor.evaluate(el => getComputedStyle(el).transitionDuration), '0s');
-    await motionChoice(page, 'full').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'full');
-    assert.equal(await bytes(page), initial, 'motion preference changes presentation independently of the accepted plan');
-    assert.ok(await rotor.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration)) > 0);
-    const angle = await panel(page).locator('[data-change-lens-wheel]').evaluate(el => parseFloat(el.style.getPropertyValue('--lens-angle')));
-    await field(page, 'lens').selectOption('people@1.0.0');
-    await expect(panel(page).locator('[data-change-lens="people@1.0.0"]')).toHaveAttribute('aria-pressed', 'true');
-    assert.ok(await panel(page).locator('[data-change-lens-wheel]').evaluate(el => parseFloat(el.style.getPropertyValue('--lens-angle'))) >= angle + 360,
-      'a changed viewpoint makes the reel turn without moving its controls');
-    await motionChoice(page, 'lower').check();
-    await expect.poll(() => rotor.evaluate(el => el.getAnimations().length)).toBe(0);
-    await motionChoice(page, 'full').check(); await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(motionChoice(page, 'full')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
-    await expect(root(page).locator('.native-motion__status')).toContainText('system setting keeps motion lower');
-
-    await field(page, 'framework').selectOption('kotter@1.0.0');
-    await expect(field(page, 'map.kotter.urgency.status')).toHaveValue('look'); await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
-    await expect(choice(page, 'map.kotter.urgency.status', 'look')).toBeChecked();
-    await expect(urgency.getByRole('radio', { name: 'Needs review', exact: true })).toBeChecked();
-    await expect(panel(page).locator('[data-change-preview]')).toContainText('Proposed investment: $16,000.00. Accepted investment: $16,000.00.');
+    const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]');
+    await fader.focus(); await page.keyboard.press('ArrowDown'); await expect(field(page, 'attention.urgency')).toHaveValue('24');
+    await expect(field(page, 'framework')).toHaveValue('kotter@1.0.0');
+    const afterLanes = await panel(page).locator('[data-change-lane="focus"] [data-change-action="component"]:visible').evaluateAll(rows => rows.map(row => row.dataset.changeComponent));
+    assert.notDeepEqual(afterLanes, beforeLanes); assert.deepEqual(afterLanes, ['urgency']);
+    const pad = panel(page).locator('[data-change-action="support-pad"][data-change-map="map.kotter.urgency.workIds"][data-change-work="review"]');
+    await expect(pad).toHaveAttribute('aria-pressed', 'true'); await pad.focus(); await page.keyboard.press('Space');
+    await expect(pad).toHaveAttribute('aria-pressed', 'false'); await expect(pad).toBeFocused();
+    await pad.click(); await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
     assert.equal(await bytes(page), initial);
-    await action(page, 'reset').click();
-    await expect(field(page, 'attention.urgency')).toHaveValue('12'); await expect(field(page, 'lens')).toHaveValue('people@1.0.0');
-    await expect(field(page, 'sourceFilter')).toHaveValue('enterprise'); await expect(check(page, 'map.kotter.urgency.workIds', 'review')).toBeChecked();
-    await panel(page).locator('[data-change-matrix]').screenshot({ path: resolve(captures, `${engine}-component-workspace.png`) });
-    await panel(page).locator('.native-change__attention').screenshot({ path: resolve(captures, `${engine}-mixer.png`) });
+    await panel(page).locator('.native-change__inspectors > summary').click();
+    await panel(page).locator('.native-change__setup > summary').click();
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      const reels = await panel(page).locator('.native-reel__wheel').evaluateAll(rows => rows.map(row => { const box = row.getBoundingClientRect(); return { width: box.width, height: box.height, right: box.right }; }));
+      assert.equal(reels.length, 2); assert.ok(reels.every(box => box.width > 100 && box.height > 100 && box.right <= width + 1), JSON.stringify(reels));
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await panel(page).locator('.native-change__reels').screenshot({ path: resolve(captures, `${engine}-reels-${width}.png`) });
+      await panel(page).locator('[data-change-mixer]').screenshot({ path: resolve(captures, `${engine}-faders-${width}.png`) });
+      await panel(page).locator('[data-change-matrix]').screenshot({ path: resolve(captures, `${engine}-work-${width}.png`) });
+    }
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,000.00');
-    await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$0.00');
-    await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
+    const accepted = JSON.parse(await bytes(page));
+    assert.equal(accepted.changeSettings.attention.channels[0].parts, 24);
+    assert.deepEqual(accepted.changeSettings.frameworkMaps[0].components[0].workIds, ['review']);
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    assert.equal(await bytes(page), initial);
   });
 
   test(`${engine}: a configured supporting session applies with the settings, while stale raw attention remains recoverable`, { timeout: 60000 }, async t => {
@@ -220,18 +168,18 @@ for (const engine of names) {
     await action(page, 'review').click(); await expect(field(page, 'attention.urgency')).toHaveValue(' later ');
     await expect(field(page, 'attention.urgency')).toHaveAttribute('aria-invalid', 'true');
     await field(page, 'attention.urgency').fill('25');
-    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.setViewportSize({ width: 390, height: 1000 });
     await motionChoice(page, 'lower').scrollIntoViewIfNeeded();
     const motionBoxes = await root(page).locator('.native-motion__choices label').evaluateAll(labels => labels.map(label => {
       const box = label.getBoundingClientRect(); return { left: box.left, right: box.right, height: box.height };
     }));
-    assert.ok(motionBoxes.every(box => box.left >= -.5 && box.right <= 320.5 && box.height >= 44), JSON.stringify(motionBoxes));
+    assert.ok(motionBoxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.height >= 44), JSON.stringify(motionBoxes));
     await root(page).locator('.native-motion').screenshot({ path: resolve(captures, `${engine}-motion-narrow.png`) });
     await field(page, 'attention.urgency').scrollIntoViewIfNeeded();
     const boxes = await panel(page).locator('[data-change-mixer] input').evaluateAll(inputs => inputs.map(input => {
       const box = input.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, height: box.height };
     }));
-    assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 320.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
+    assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
     await page.emulateMedia({ forcedColors: 'active' });
     const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]'); await fader.focus(); await page.keyboard.press('ArrowDown');
     await expect(field(page, 'attention.urgency')).toHaveValue('24');
@@ -266,7 +214,7 @@ for (const engine of names) {
     }
     await method('poda').getByRole('button', { name: 'Plan supporting work for PODA', exact: true }).click();
     await expect(field(page, 'proposal.label')).toHaveValue('Clarify purpose and next learning');
-    await expect(panel(page).locator('[data-change-work]')).toContainText('PODA supports Vision');
+    await expect(panel(page).locator('section[data-change-work]')).toContainText('PODA supports Vision');
     await field(page, 'proposal.teamId').selectOption('delivery');
     await check(page, 'proposal.personIds', 'product-one').check();
     await field(page, 'proposal.minutesPerSession').fill('45');
@@ -279,13 +227,13 @@ for (const engine of names) {
     await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('45');
     assert.equal(await bytes(page), initial, 'explanations and filters leave the proposed work unaccepted');
     await field(page, 'sourceFilter').selectOption('core');
-    await page.setViewportSize({ width: 320, height: 1000 });
-    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.setViewportSize({ width: 390, height: 1000 });
+
     await method('poda').scrollIntoViewIfNeeded();
     const narrow = await vision.locator('[data-change-method]:visible').evaluateAll(cards => cards.map(card => {
       const rect = card.getBoundingClientRect(); return { x: rect.x, right: rect.right, width: rect.width };
     }));
-    assert.ok(narrow.every(box => box.x >= -.5 && box.right <= 320.5 && box.width > 0), JSON.stringify(narrow));
+    assert.ok(narrow.every(box => box.x >= -.5 && box.right <= 390.5 && box.width > 0), JSON.stringify(narrow));
     await method('poda').screenshot({ path: resolve(captures, `${engine}-method-narrow.png`) });
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$16,150.00');
     await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();

@@ -96,6 +96,37 @@ async function selected(page, name) {
 }
 
 for (const engine of names) {
+  test(`${engine}: amp motion controls and shared reels preserve semantic selection across presentation modes`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine, { reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
+    const motion = mode => root(page).locator(`[data-native-motion-choice="${mode}"]`);
+    await expect(root(page).locator('.native-coordination__amp [data-native-motion-controls]')).toBeVisible();
+    await expect(motion('full')).toBeChecked();
+    await motion('lower').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
+    await page.evaluate(async () => {
+      const { createReel } = await import('/collaboration/native-investment-studio/reel-control.mjs');
+      window.reelSelections = [];
+      window.reelFixture = createReel(document, { label: 'Explore arrangement',
+        choices: [{ id: 'pod', label: 'Pod' }, { id: 'project', label: 'Project team' }, { id: 'service', label: 'Shared service' }], value: 'pod',
+        onSelect: id => window.reelSelections.push(id) });
+      document.querySelector('[data-native-chapter-panel="coordination"]').prepend(window.reelFixture.element);
+    });
+    const reel = root(page).getByRole('group', { name: 'Explore arrangement', exact: true });
+    await reel.locator('[data-reel-choice="project"]').click();
+    await expect(reel.locator('[data-reel-choice="project"]')).toHaveAttribute('aria-pressed', 'true');
+    await reel.locator('[data-reel-choice="project"]').focus(); await page.keyboard.press('ArrowRight');
+    await expect(reel.locator('[data-reel-choice="service"]')).toBeFocused();
+    assert.deepEqual(await page.evaluate(() => window.reelSelections), ['project', 'service']);
+    assert.equal(await reel.locator('.native-reel__rotor').evaluate(el => getComputedStyle(el).transitionDuration), '0.96s');
+    await motion('off').check();
+    assert.equal(await reel.locator('.native-reel__rotor').evaluate(el => getComputedStyle(el).transitionDuration), '0s');
+    await page.evaluate(() => { window.reelFixture.select('pod'); window.reelFixture.vary(.5); });
+    await expect(reel.locator('[data-reel-choice="pod"]')).toHaveAttribute('aria-pressed', 'true');
+    assert.deepEqual(await page.evaluate(() => window.reelSelections), ['project', 'service'], 'presentation synchronization does not dispatch a plan selection');
+    await motion('full').check(); await page.emulateMedia({ reducedMotion: 'reduce' });
+    assert.equal(await reel.locator('.native-reel__rotor').evaluate(el => getComputedStyle(el).transitionDuration), '0s');
+    await page.evaluate(() => window.reelFixture.dispose()); await expect(reel).toHaveCount(0);
+  });
+
   test(`${engine}: manual chapter activation parks edits and requires review before a stale working session can apply`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await selected(page, 'coordination');

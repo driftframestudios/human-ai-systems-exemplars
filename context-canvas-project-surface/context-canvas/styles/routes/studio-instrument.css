@@ -1,0 +1,41 @@
+/* Native Studio presentation controls. Loaded after About; chapter rack styles
+   follow this owner. ASCII Zine Field and Cobalt Evidence Field guide its palette. */
+.native-coordination { --studio-speed: 1; }
+.native-coordination[data-native-motion='lower'] { --studio-speed: 2; }
+.native-coordination__amp > [data-native-motion-controls] { grid-column: 1 / -1; }
+.native-coordination__amp .native-motion { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; padding: .4rem .6rem; background: transparent; color: var(--native-paper); border-color: #60756b; }
+.native-coordination__amp .native-motion legend { float: left; font: 600 .75rem/1.5 ui-monospace, monospace; }
+.native-coordination__amp .native-motion__choices { gap: .3rem; }
+.native-coordination__amp .native-motion__choices label { color: #20382f; padding: .3rem .65rem; min-block-size: 2.75rem; }
+.native-coordination__amp .native-motion__status { margin: 0 !important; color: #d9e6da; font-size: .75rem; }
+.native-coordination .native-reel { min-inline-size: 0; margin: 0; padding: .5rem; border: 1px solid #607970; border-radius: .4rem; background: #dbe7df; color: #193a32; }
+.native-reel legend { font: 700 .85rem/1.4 ui-monospace, monospace; padding: .1rem .4rem; background: inherit; border-radius: .2rem; }
+.native-reel__wheel { position: relative; inline-size: min(100%, 24rem); aspect-ratio: 1; margin-inline: auto; border: .15rem solid #486a61; border-radius: 50%; background: radial-gradient(circle, #243e36 0 25%, #eae4cd 25% 28%, #90b7ac 28% 65%, #d7dfcf 65%); box-shadow: inset .2rem .2rem 0 #fff5da, inset -.2rem -.2rem 0 #526d62; }
+.native-reel__rotor { position: absolute; inset: 26%; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, #eadfbe 0 8%, #1e3932 8% 16%, transparent 16% 60%, #f7edce 60% 65%, transparent 65%), repeating-conic-gradient(#f7edce 0 13deg, #365b50 13deg 45deg); transform: rotate(var(--reel-angle, 0deg)); transition: transform calc(480ms * var(--studio-speed)) cubic-bezier(.22,.7,.25,1); }
+.native-reel[data-reel-secondary='true'] .native-reel__rotor { transition-duration: calc(720ms * var(--studio-speed)); transition-delay: calc(90ms * var(--studio-speed)); }
+.native-coordination .native-reel__choice { position: absolute; z-index: 1; left: var(--reel-x); top: var(--reel-y); translate: -50% -50%; inline-size: 30%; min-inline-size: 0; min-block-size: 2.75rem; margin: 0; padding: .35rem .25rem; font: 650 clamp(.65rem, 1vw, .8rem)/1.25 system-ui, sans-serif; overflow-wrap: normal; color: #152d39; background: #f7efdb; border: .1rem solid #263c35; box-shadow: .13rem .16rem 0 #536357; }
+.native-coordination .native-reel__choice[aria-pressed='true'] { background: #58d2bd; border-style: double; box-shadow: inset .1rem .15rem .15rem #225c4a88; }
+.native-coordination .native-reel__hub { position: absolute; z-index: 2; inset: 41%; min-inline-size: 0; min-block-size: 0; inline-size: 18%; block-size: 18%; padding: 0; border-radius: 50%; font: 1.5rem/1 system-ui; color: #f7efdb; background: #213e35; border: .15rem solid #f7efdb; box-shadow: none; }
+.native-reel__reading { display: block; min-block-size: 2.2em; margin-block-start: .4rem; text-align: center; font: 650 .8rem/1.4 ui-monospace, monospace; }
+.native-reel[data-reel-variant='cobalt'] { background: #dfe5f8; color: #172d69; border-color: #5b6caa; }
+.native-reel[data-reel-variant='cobalt'] .native-reel__wheel { background: radial-gradient(circle, #223069 0 25%, #e6e5fa 25% 28%, #7d90c6 28% 65%, #c7cee7 65%); }
+.native-reel[data-reel-variant='cobalt'] .native-reel__rotor { background: radial-gradient(circle, #f1e6d0 0 8%, #24315d 8% 16%, transparent 16% 60%, #eee9ff 60% 65%, transparent 65%), repeating-conic-gradient(#eee9ff 0 13deg, #3a4c92 13deg 45deg); }
+.native-coordination .native-reel[data-reel-variant='cobalt'] .native-reel__choice[aria-pressed='true'] { background: #304bc2; color: #fff9ec; }
+@keyframes studio-reel-arrival { from { opacity: .65; transform: translateY(12px); clip-path: inset(6% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+@keyframes studio-reel-arrival-even { from { opacity: .65; transform: translateY(12px); clip-path: inset(6% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+@keyframes studio-scope-glow { 0%,100% { filter: drop-shadow(0 0 2px #76dfca55); } 50% { filter: drop-shadow(0 0 6px #82f4dcaa); } }
+.native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) [data-reel-arrival] { animation: studio-reel-arrival calc(360ms * var(--studio-speed)) ease-out; }
+.native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) [data-reel-arrival='even'] { animation-name: studio-reel-arrival-even; }
+.native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .native-assurance__sigma-curve { animation: studio-scope-glow calc(3s * var(--studio-speed)) ease-in-out infinite; }
+.native-coordination[data-native-motion='off'] *, .native-coordination[data-native-motion='off'] *::before, .native-coordination[data-native-motion='off'] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media (prefers-reduced-motion: reduce) { .native-coordination *, .native-coordination *::before, .native-coordination *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+@media (forced-colors: active) {
+ .native-coordination .native-reel, .native-reel__wheel { background: Canvas; color: CanvasText; box-shadow: none; }
+ .native-reel__rotor { background: Canvas !important; border: .5rem double CanvasText; }
+ .native-coordination .native-reel :is(button,button[aria-pressed='true']) { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
+ .native-coordination .native-reel button[aria-pressed='true'] { outline: .2rem solid Highlight; }
+}
+
+.native-coordination[data-native-motion='lower'] .native-change__key { transition: background-color 280ms ease-out, box-shadow 280ms ease-out, transform 280ms ease-out; }
+.native-coordination[data-native-motion='lower'] .native-cadence__board[data-cadence-arrival='period'] { animation: native-cadence-open 480ms ease-out both; }
+.native-coordination[data-native-motion='lower'] .native-cadence__board[data-cadence-arrival='plan'] { animation: native-cadence-return 360ms ease-out both; }

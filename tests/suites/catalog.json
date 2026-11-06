@@ -318,6 +318,7 @@
         "tests/native-investment-studio/change-methods.test.mjs",
         "tests/native-investment-studio/change-models.test.mjs",
         "tests/native-investment-studio/change-proposals.test.mjs",
+        "tests/native-investment-studio/change-showcase.test.mjs",
         "tests/native-investment-studio/command-draft.test.mjs",
         "tests/native-investment-studio/commands.test.mjs",
         "tests/native-investment-studio/connection-draft.test.mjs",

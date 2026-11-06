@@ -1,0 +1,68 @@
+/* Change's paired reels, attention faders and linked-work pads receive the
+   shared instrument controls from studio-instrument.css. change-controller.mjs
+   owns the draft; change-showcase.mjs owns authored viewpoint configurations. */
+.native-change__reels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.35rem, 2vw, 1.25rem); padding: clamp(.4rem, 2vw, 1rem); background: linear-gradient(110deg, #233f3e, #1c2e50); border: .15rem solid #526a69; border-radius: .6rem; box-shadow: inset 0 .2rem 0 #b7c9bf; }
+.native-change__reel-holder { min-inline-size: 0; }
+.native-change__reels .native-change__interpretation { grid-column: 1 / -1; padding: .6rem .85rem; border: 0; background: #e6edee; color: #142e43; }
+.native-change__interpretation .native-change__viewpoint-line { margin: 0; font-size: .875rem; font-weight: 600; }
+.native-change__interpretation > details { margin-block-start: .35rem; }
+.native-coordination .native-change__interpretation > details > summary { padding: .35rem 0; border: 0; background: transparent; font-size: .8rem; }
+.native-change__interpretation dl { margin-block: .65rem; grid-template-columns: repeat(2, minmax(0, 1fr)); font-size: .85rem; }
+.native-change .native-change__workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: .85rem; padding: clamp(.45rem, 1.5vw, 1rem); background: #dce6e4; border-color: #3d5c5c; }
+.native-change__keys { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: .75rem; }
+.native-change__lane { display: grid; align-content: start; gap: .5rem; min-inline-size: 0; padding: .55rem; border: 1px solid #8a9f98; background: #c7d4cc; }
+.about-page .native-change__lane > h4 { margin: 0 0 .25rem; color: #193f3d; font: 700 .875rem/1.4 system-ui, sans-serif; }
+.native-change__lane[data-change-lane='focus'] { background: #d8e7ed; border-block-start: .25rem solid #3652ca; }
+.native-change__lane[data-change-lane='available'] { border-style: dashed; background: #e8e8df; }
+.native-coordination .native-change .native-change__key { display: grid; gap: .35rem; padding: .7rem; min-block-size: 5.7rem; inline-size: 100%; min-inline-size: 0; text-align: start; background: #f8f1d9; }
+.native-coordination .native-change .native-change__key[aria-pressed='true'] { background: #94ded0; border-color: #1e5952; }
+.native-change__key-status { font: 500 .75rem/1.4 system-ui, sans-serif; }
+.native-change__pad-meter { display: block; block-size: .4rem; margin-block-start: .25rem; border: 1px solid #537575; background: repeating-linear-gradient(to right, transparent 0 calc(12.5% - 2px), #f1f0de calc(12.5% - 2px) 12.5%), linear-gradient(to right, #277f76 0 var(--change-emphasis, 0%), #c8d6cd var(--change-emphasis, 0%) 100%); }
+.native-change__tracks { overflow-x: auto; min-inline-size: 0; padding: .6rem; background: #173133; border: .125rem solid #637e77; border-radius: .35rem; box-shadow: inset 0 .3rem .5rem #061b1f; }
+.native-change__tracks table { inline-size: 100%; border-collapse: separate; border-spacing: .35rem; color: #e6f2e7; background: transparent; }
+.native-change__tracks caption { text-align: start; color: #e1f2df; padding: .25rem .3rem .65rem; font: 500 .8rem/1.4 ui-monospace, monospace; }
+.native-change .native-change__tracks :is(th, td) { padding: .15rem; border: 0; color: #e1f2df; background: transparent; vertical-align: middle; }
+.native-change__tracks th { font: 650 .8rem/1.4 system-ui, sans-serif; text-align: start; min-inline-size: 7rem; }
+.native-change__tracks th[scope='row'] { max-inline-size: 10rem; padding-inline-end: .6rem; }
+.native-coordination .native-change button.native-change__support-pad { display: grid; place-items: center; inline-size: 100%; min-inline-size: 3.5rem; min-block-size: 2.75rem; padding: .35rem; border: 1px solid #849b92; background: #294441; color: #d6e6df; box-shadow: inset 0 -.22rem #102c2a; font-size: .75rem; }
+.native-coordination .native-change button.native-change__support-pad[aria-pressed='true'] { color: #123635; background: #68d5bf; border-color: #bcebd6; box-shadow: inset 0 -.22rem #3e9d88; }
+.native-change__support-detail { overflow-x: auto; }
+.native-change__support-detail table { inline-size: 100%; border-collapse: collapse; background: #fffaf0; }
+.native-change__support-detail :is(th, td) { padding: .6rem; text-align: start; vertical-align: top; color: #193348; border-block-end: 1px solid #a2b2a6; font-size: .85rem; }
+.native-change__support-detail th { font-weight: 700; }
+.native-change__support-detail caption { padding: .6rem; text-align: start; font-weight: 650; }
+.native-change__inspectors > section { margin-block-start: .65rem; }
+.native-change .native-change__attention { margin: 0; border-radius: .35rem; }
+.native-change .native-change__mixer { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: .45rem; margin-block: .75rem; }
+.native-change .native-change__channel { grid-template-rows: 3.6em 8rem minmax(7rem, auto) 4.5em; gap: .5rem; padding: .65rem .3rem; }
+.native-change .native-change__channel[data-emphasis='highest'] { border-block-start-width: .0625rem; box-shadow: inset 0 .2rem #edc37b; }
+.native-change .native-change__channel h5 { font-size: .8rem; text-align: center; }
+.native-change .native-change__channel > p { font-size: .7rem; line-height: 1.3; }
+.native-change .native-change__channel .native-change__field { gap: .3rem; }
+.native-change .native-change__channel .native-change__field > label { font-size: .75rem; }
+.native-change .native-change__fader-track { block-size: 8rem; }
+.native-change .native-change__live-reading { padding: .5rem .7rem; }
+.native-change__live-reading p { margin: 0; font-size: .8rem; }
+.native-change .native-change__numeric { padding: .35rem; min-block-size: 2.25rem; }
+.native-change .native-change__steps { gap: .35rem; }
+.native-coordination .native-change .native-change__steps button { min-inline-size: 2.75rem; min-block-size: 2.75rem; inline-size: 2.75rem; block-size: 2.75rem; padding: 0; border-radius: 50%; }
+.native-change__attention [data-change-action='reset'] { font-size: .8rem; }
+.native-change__support-editor > div { margin-block-start: .75rem; }
+@container native-change (max-width: 48rem) {
+  .native-change .native-change__mixer { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .native-change__keys { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .native-change__interpretation dl { grid-template-columns: minmax(0, 1fr); }
+}
+@container native-change (max-width: 34rem) {
+  .native-change__reels { grid-template-columns: minmax(0, 1fr); }
+}
+@container native-change (max-width: 28rem) {
+  .native-change__keys { grid-template-columns: minmax(0, 1fr); }
+  .native-change .native-change__mixer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+  .native-change__reels, .native-change__lane, .native-change__tracks { background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none; }
+  .native-change .native-change__tracks :is(th, td, caption), .about-page .native-change__lane > h4 { color: CanvasText; }
+  .native-coordination .native-change button.native-change__support-pad { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
+  .native-coordination .native-change button.native-change__support-pad[aria-pressed='true'] { border: .2rem solid Highlight; }
+}

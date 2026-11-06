@@ -1183,3 +1183,39 @@ chapter behavior. The current sprint/quarter model and accepted Coordination
 landing composition remain the receiving context. This choice supersedes the
 action-pad simplification for Abilities. Ordinary mobile widths retain the
 comparable columns through local horizontal scrolling.
+
+
+## 2026-11-06 — Reels and shared motion
+
+The approved route in #727 carries populated boards and MIDI tracks through
+People, Coordination details, Change, and Quality & recovery. The existing
+Coordination horizon and restored Abilities tables remain useful anchors.
+Reels choose authored configurations; faders refine them; details retain the
+existing people, sessions, observations, saved edits, and Apply/Cancel owners.
+
+Issue #729 establishes one native-button reel with direct choices, arrow-key
+selection, a next-choice hub, and a separate decorative rotor. The amp head
+owns Off, Lower and Full motion. Full is the default, Lower takes twice as
+long, and Off or the system reduced-motion preference suppresses animation.
+Chapter fades, contextual arrivals, local focus cues, and reel-driven reveals
+retain distinct effects. Motion changes leave selected content and plan state
+complete. Chapter CSS follows the shared control stylesheet, with each new
+rack retaining a named source owner.
+
+This supersedes the earlier lens-local lower/full control. Performance work
+and public tagged publication retain their human-cued receiving events.
+
+### Change rack
+
+Issue #730 maps each interpretive lens to an authored framework configuration.
+The left reel selects the lens; the cobalt reel selects the framework and
+locks in after a short delay. Faders vary the selected framework's emphasis
+and decorative rotor, with focus, supporting, and available lanes reflecting
+the changed emphasis. The MIDI table links actual working sessions to
+components. Existing status and support choices survive switching frameworks;
+Apply accepts the draft, and Undo retains its established behavior.
+
+Exact selectors, component settings, methods, and richer interpretation remain
+in disclosed racks. Ordinary phone widths stack the full reels and keep local
+track scrolling. This preserves visible choices while concentrating the
+initial view on the instruments and the work they affect.
