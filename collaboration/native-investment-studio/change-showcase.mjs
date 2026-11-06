@@ -16,16 +16,34 @@ const LENSES = Object.freeze({
 });
 const ASSOCIATIONS = Object.freeze({
   kotter: [['urgency'], ['coalition'], ['vision'], ['broad-participation'], ['remove-barriers'], ['short-term-wins'], ['sustain-acceleration'], ['anchor-in-culture']],
-  npt: [['vision', 'urgency'], ['coalition', 'broad-participation'], ['remove-barriers', 'sustain-acceleration'], ['short-term-wins', 'anchor-in-culture'], ['anchor-in-culture', 'remove-barriers']],
+  npt: [['vision', 'urgency'], ['coalition', 'broad-participation'], ['remove-barriers'], ['short-term-wins', 'sustain-acceleration'], ['anchor-in-culture']],
   rogers: [['vision', 'urgency'], ['anchor-in-culture', 'broad-participation'], ['remove-barriers'], ['short-term-wins'], ['sustain-acceleration', 'coalition']],
-  weick: [['broad-participation', 'short-term-wins'], ['vision', 'remove-barriers'], ['anchor-in-culture', 'sustain-acceleration']],
-  adkar: [['urgency', 'vision'], ['coalition', 'broad-participation'], ['vision', 'short-term-wins'], ['remove-barriers', 'sustain-acceleration'], ['anchor-in-culture', 'short-term-wins']],
+  weick: [['broad-participation', 'coalition', 'short-term-wins'], ['urgency', 'vision', 'remove-barriers'], ['anchor-in-culture', 'sustain-acceleration']],
+  adkar: [['urgency', 'vision'], ['coalition', 'broad-participation'], ['short-term-wins'], ['remove-barriers', 'sustain-acceleration'], ['anchor-in-culture']],
   dual: [['urgency', 'vision', 'anchor-in-culture', 'remove-barriers'], ['coalition', 'broad-participation', 'short-term-wins', 'sustain-acceleration']],
 });
 const SUPPORT = Object.freeze({
   urgency: 'research', coalition: 'review', vision: 'pairing', 'broad-participation': 'review',
   'remove-barriers': 'rehearsal', 'short-term-wins': 'pairing', 'sustain-acceleration': 'rehearsal', 'anchor-in-culture': 'review',
 });
+
+// Each framework partitions the stored channels. A visible fader therefore
+// changes one component while preserving every other component's emphasis.
+export function frameworkEmphasisEntries(frameworkId, componentId, value) {
+  const framework = getChangeFramework(frameworkId, CHANGE_CATALOGUE_VERSION);
+  const index = framework?.components.findIndex(component => component.id === componentId) ?? -1;
+  return index < 0 ? [] : ASSOCIATIONS[frameworkId][index].map(id => [`attention.${id}`, String(value)]);
+}
+
+export function seedShowcaseChangeSupport(plan) {
+  const active = new Set(plan.work.filter(work => work.lifecycle === 'active').map(work => work.id));
+  for (const map of plan.changeSettings.frameworkMaps) map.components.forEach((component, index) => {
+    if (component.workIds.length || component.status === 'outside') return;
+    component.workIds = [...new Set(ASSOCIATIONS[map.frameworkId][index].map(id => SUPPORT[id]))].filter(id => active.has(id));
+    if (component.workIds.length) component.mapped = true;
+  });
+  return plan;
+}
 
 export function changeShowcaseConfiguration(lensId, frameworkId) {
   const lens = LENSES[lensId] ?? LENSES.executive;

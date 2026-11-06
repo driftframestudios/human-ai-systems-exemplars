@@ -29,7 +29,7 @@ const choice = (page, key, value) => panel(page).locator(`input[type="radio"][na
 const check = (page, key, value) => panel(page).locator(`input[name="${key}"][value="${value}"]`);
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const component = (page, framework, id) => panel(page).locator(`section[data-change-framework="${framework}"][data-change-component="${id}"]`);
-const componentKey = (page, framework, id) => panel(page).locator(`[data-change-action="component"][data-change-framework="${framework}"][data-change-component="${id}"]`);
+const componentKey = (page, framework, id) => panel(page).locator(`.native-change__key[data-change-framework="${framework}"][data-change-component="${id}"]`);
 const motionChoice = (page, mode) => root(page).locator(`[data-native-motion-choice="${mode}"]`);
 const total = page => root(page).locator('[data-native-total]');
 const bytes = page => page.evaluate(() => window.changeFixture.studio.exportText());
@@ -68,6 +68,12 @@ for (const engine of names) {
     await expect(lens('people')).toHaveAttribute('aria-pressed', 'true');
     await expect(framework('adkar')).toHaveAttribute('aria-pressed', 'true');
     await expect(field(page, 'framework')).toHaveValue('adkar@1.0.0');
+    await expect(panel(page).locator('[data-change-fader]:visible')).toHaveCount(5);
+    const knowledge = panel(page).getByRole('slider', { name: 'Knowledge emphasis', exact: true });
+    const ability = panel(page).getByRole('slider', { name: 'Ability emphasis', exact: true });
+    const abilityBefore = await ability.inputValue();
+    await knowledge.focus(); await page.keyboard.press('End');
+    await expect(knowledge).toHaveValue('25'); await expect(ability).toHaveValue(abilityBefore);
     await expect(panel(page).locator('[data-change-tracks]')).toContainText('Weekly working session');
     assert.equal(await bytes(page), initial, 'preset selection owns a draft until Apply');
     await lens('people').focus(); await page.keyboard.press('ArrowRight');
@@ -86,7 +92,7 @@ for (const engine of names) {
     for (const id of ['urgency', 'coalition', 'vision', 'broad-participation', 'remove-barriers', 'short-term-wins', 'sustain-acceleration', 'anchor-in-culture']) {
       await field(page, `attention.${id}`).fill(id === 'urgency' ? '25' : '0');
     }
-    const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]');
+    const fader = panel(page).locator('[data-change-fader="kotter/urgency"]');
     await fader.focus(); await page.keyboard.press('ArrowDown'); await expect(field(page, 'attention.urgency')).toHaveValue('24');
     await expect(field(page, 'framework')).toHaveValue('kotter@1.0.0');
     const afterLanes = await panel(page).locator('[data-change-lane="focus"] [data-change-action="component"]:visible').evaluateAll(rows => rows.map(row => row.dataset.changeComponent));
@@ -103,6 +109,10 @@ for (const engine of names) {
       const reels = await panel(page).locator('.native-reel__wheel').evaluateAll(rows => rows.map(row => { const box = row.getBoundingClientRect(); return { width: box.width, height: box.height, right: box.right }; }));
       assert.equal(reels.length, 2); assert.ok(reels.every(box => box.width > 100 && box.height > 100 && box.right <= width + 1), JSON.stringify(reels));
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      if (width === 390) {
+        const orientation = await panel(page).locator('[data-change-fader]:visible').evaluateAll(inputs => inputs.map(input => getComputedStyle(input).writingMode));
+        assert.ok(orientation.every(value => value === 'horizontal-tb'));
+      }
       await panel(page).locator('.native-change__reels').screenshot({ path: resolve(captures, `${engine}-reels-${width}.png`) });
       await panel(page).locator('[data-change-mixer]').screenshot({ path: resolve(captures, `${engine}-faders-${width}.png`) });
       await panel(page).locator('[data-change-matrix]').screenshot({ path: resolve(captures, `${engine}-work-${width}.png`) });
@@ -113,6 +123,21 @@ for (const engine of names) {
     assert.deepEqual(accepted.changeSettings.frameworkMaps[0].components[0].workIds, ['review']);
     await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await bytes(page), initial);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.changeFixture;
+      const result = studio.importText(JSON.stringify(createShowcasePlan()), studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    await tab(page, 'change').click();
+    if (await action(page, 'current').isVisible()) await action(page, 'current').click();
+    await expect(panel(page).locator('[data-change-map="map.kotter.urgency.workIds"][data-change-work="research"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(panel(page).locator('.native-change__manual')).toHaveCount(0);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await panel(page).screenshot({ path: resolve(captures, `${engine}-populated-${width}.png`) });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    }
   });
 
   test(`${engine}: a configured supporting session applies with the settings, while stale raw attention remains recoverable`, { timeout: 60000 }, async t => {
@@ -176,12 +201,12 @@ for (const engine of names) {
     assert.ok(motionBoxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.height >= 44), JSON.stringify(motionBoxes));
     await root(page).locator('.native-motion').screenshot({ path: resolve(captures, `${engine}-motion-narrow.png`) });
     await field(page, 'attention.urgency').scrollIntoViewIfNeeded();
-    const boxes = await panel(page).locator('[data-change-mixer] input').evaluateAll(inputs => inputs.map(input => {
+    const boxes = await panel(page).locator('[data-change-mixer] input:visible').evaluateAll(inputs => inputs.map(input => {
       const box = input.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, height: box.height };
     }));
     assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
     await page.emulateMedia({ forcedColors: 'active' });
-    const fader = panel(page).locator('input[type="range"][data-change-field="attention.urgency"]'); await fader.focus(); await page.keyboard.press('ArrowDown');
+    const fader = panel(page).locator('[data-change-fader="kotter/urgency"]'); await fader.focus(); await page.keyboard.press('ArrowDown');
     await expect(field(page, 'attention.urgency')).toHaveValue('24');
     await panel(page).locator('[data-change-mixer]').screenshot({ path: resolve(captures, `${engine}-narrow-forced.png`) });
     const accepted = await bytes(page); await page.evaluate(() => window.changeFixture.controller.dispose());
@@ -192,9 +217,14 @@ for (const engine of names) {
     const page = await open(t, engine), initial = await bytes(page);
     const vision = component(page, 'kotter', 'vision'); await componentKey(page, 'kotter', 'vision').click();
     const method = id => vision.locator(`[data-change-method="${id}"]`);
+    const chooseMethod = id => vision.locator(`[data-change-method-choice="${id}"]`).click();
+    await chooseMethod('poda');
     await expect(method('poda')).toContainText('what the team needs to learn');
+    await chooseMethod('impact-map');
     await expect(method('impact-map')).toContainText('people affected');
+    await chooseMethod('strategy-canvas');
     await expect(method('strategy-canvas')).toContainText('current support');
+    await chooseMethod('poda');
     const disclosure = method('poda').locator('details > summary');
     await disclosure.focus(); await page.keyboard.press('Space');
     await expect(method('poda').locator('details')).toHaveAttribute('open', '');
@@ -208,7 +238,7 @@ for (const engine of names) {
       const boxes = await vision.locator('[data-change-method]:visible').evaluateAll(cards => cards.map(card => {
         const rect = card.getBoundingClientRect(); return { x: rect.x, y: rect.y, right: rect.right, width: rect.width };
       }));
-      assert.ok(boxes[1].x > boxes[0].x && Math.abs(boxes[1].y - boxes[0].y) < 1, 'methods share the available row');
+      assert.equal(boxes.length, 1, 'method pads share one local inspector');
       assert.ok(boxes.every(box => box.x >= 0 && box.right <= width && box.width >= 280), JSON.stringify(boxes));
       await vision.screenshot({ path: resolve(captures, `${engine}-methods-${width}.png`) });
     }
@@ -221,13 +251,14 @@ for (const engine of names) {
     await field(page, 'proposal.occurrences').fill('2');
     await choice(page, 'proposal.funding', 'additional').check();
     await expect(panel(page).locator('[data-change-preview]')).toContainText('$16,150.00');
-    await method('strategy-canvas').locator('details > summary').click();
+    await chooseMethod('strategy-canvas'); await method('strategy-canvas').locator('details > summary').click();
     await expect(method('strategy-canvas')).toContainText('good-enough');
     await field(page, 'sourceFilter').selectOption('enterprise');
     await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('45');
     assert.equal(await bytes(page), initial, 'explanations and filters leave the proposed work unaccepted');
     await field(page, 'sourceFilter').selectOption('core');
     await page.setViewportSize({ width: 390, height: 1000 });
+    await chooseMethod('poda');
 
     await method('poda').scrollIntoViewIfNeeded();
     const narrow = await vision.locator('[data-change-method]:visible').evaluateAll(cards => cards.map(card => {
