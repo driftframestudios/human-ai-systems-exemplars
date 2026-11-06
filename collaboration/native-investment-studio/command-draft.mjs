@@ -20,6 +20,7 @@ export const ASSEMBLY_FORMS = Object.freeze({
 });
 
 const sessionFields = Object.freeze({ label: textField('Session name'), teamId: textField('Team', LIMITS.identifier),
+  cadencePlacements: textField('Periods for these sessions', LIMITS.cadencePlacementTextBytes),
   personIds: Object.freeze({ ...membership, label: 'People in this session' }),
   hoursPerSession: textField('Hours per session', WORK_DRAFT_TEXT_LIMIT),
   minutesPerSession: textField('Minutes per session', WORK_DRAFT_TEXT_LIMIT),
@@ -152,7 +153,7 @@ function admittedIds(candidate, maximum, field) {
   return { ids };
 }
 
-function initialRaw(descriptor, row) {
+function initialRaw(descriptor, row, plan) {
   if (descriptor.form === 'person.create') return { label: '', ratePerHour: '', fundedHours: '0', fundedMinutes: '0' };
   if (descriptor.mode === 'remove') return {};
   if (descriptor.form === 'role.update') return Object.fromEntries(Object.keys(roleFields).map(field => [field,
@@ -168,6 +169,7 @@ function initialRaw(descriptor, row) {
     responseExpectation: row?.responseExpectation ?? '', workIds: row ? [...row.workIds] : [], status: row?.status ?? 'active',
   };
   if (descriptor.collection === 'work') return { label: row?.label ?? '', teamId: row?.teamId ?? '',
+    cadencePlacements: JSON.stringify((plan?.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === descriptor.id).map(({ workId, ...item }) => item)),
     personIds: row ? [...row.personIds] : [],
     hoursPerSession: String(Math.floor((row?.minutesPerOccurrence ?? 30) / CONTRACT.minutesPerHour)),
     minutesPerSession: String((row?.minutesPerOccurrence ?? 30) % CONTRACT.minutesPerHour),
@@ -250,6 +252,14 @@ function values(session) {
     const work = { id: descriptor.id, label, teamId: raw.teamId, personIds: [...raw.personIds], ...parsed.admitted,
       funding: raw.funding, status: raw.status, timing: session.row?.timing ?? null };
     command = { type: descriptor.form, work };
+    if (session.baseProjection.state.scoreSettings.cadence) {
+      try {
+        const placements = JSON.parse(raw.cadencePlacements || '[]');
+        command.placements = Array.isArray(placements) ? placements.filter(item =>
+          !Number.isSafeInteger(item?.occurrenceIndex) || item.occurrenceIndex < work.occurrences) : placements;
+      }
+      catch { errors.push(diagnostic('cadence', 'draft.cadencePlacements', 'Choose periods for these sessions.')); }
+    }
   } else {
     const team = { id: descriptor.id, label, personIds: [...raw.personIds] };
     command = descriptor.mode === 'create' ? { type: descriptor.form, team }
@@ -271,9 +281,11 @@ function changedRow(session, command) {
     ? !sameIds(command.connection.workIds, row.workIds) : command.connection[field] !== row[field]);
   if (session.descriptor.collection !== 'work') return command.team.label !== row.label || !sameIds(command.team.personIds, row.personIds);
   const work = command.work;
+  const placements = (session.baseProjection.state.scoreSettings.cadence?.placements ?? []).filter(item => item.workId === row.id).map(({ workId, ...item }) => item);
   return work.label !== row.label || work.teamId !== row.teamId || !sameIds(work.personIds, row.personIds)
     || work.minutesPerOccurrence !== row.minutesPerOccurrence || work.occurrences !== row.occurrences
-    || work.funding !== row.funding || work.status !== row.status;
+    || work.funding !== row.funding || work.status !== row.status
+    || (command.placements !== undefined && JSON.stringify(command.placements) !== JSON.stringify(placements));
 }
 
 // A finite form owns one explicit draft. The Studio owns command admission,
@@ -300,7 +312,7 @@ function createFormDraftAdapter(studio, family) {
   let active = null, disposed = false, lastError = null;
 
   function publish(session, command, preview) {
-    if (session.descriptor.form === 'work.update') {
+    if (session.descriptor.form === 'work.update' && command.placements === undefined) {
       return studio[preview ? 'previewWork' : 'updateWork'](session.descriptor.id, command.work, session.baseProjection);
     }
     return studio[preview ? 'previewCommand' : 'applyCommand'](command, session.baseProjection);
@@ -341,7 +353,7 @@ function createFormDraftAdapter(studio, family) {
     if (descriptor.mode === 'create' && row) return fail(diagnostic('creation-conflict', 'draft', 'This record is already in the plan. Use these entries to create another.'));
     if (descriptor.mode !== 'create' && !row) return fail(diagnostic('reference', 'draft', 'Choose a record in the current plan.'));
     active = { target, descriptor, row, baseProjection: projection, token: Object.freeze({}),
-      raw: initialRaw(descriptor, row), rawRevision: 0, preview: null };
+      raw: initialRaw(descriptor, row, projection.state), rawRevision: 0, preview: null };
     return succeed();
   }
 

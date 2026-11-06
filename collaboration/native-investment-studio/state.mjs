@@ -1,6 +1,7 @@
 import { preparePlan, preparePerson as preparePersonRecord, prepareWork as prepareWorkRecord, preparePurpose as preparePurposeRecord, parsePlan, createExamplePlan, PlanError } from './contract.mjs';
 import { HISTORY, PURPOSE_FIELDS } from './config.mjs';
 import { prepareAssembly } from './commands.mjs';
+import { replaceWorkPlacements } from './cadence.mjs';
 
 function historyLimit(options) {
   const prototype = options && typeof options === 'object' ? Object.getPrototypeOf(options) : undefined;
@@ -137,7 +138,9 @@ export function createStudio(initial = createExamplePlan(), options = {}) {
     }
     const work = base.state.work.slice();
     work[position] = row;
-    return { projection: preparePlan({ ...base.state, revision: base.state.revision + 1, work }) };
+    const scoreSettings = { ...base.state.scoreSettings,
+      cadence: replaceWorkPlacements(base.state.scoreSettings.cadence, row) };
+    return { projection: preparePlan({ ...base.state, revision: base.state.revision + 1, work, scoreSettings }) };
   }
 
   function traversal(stack, direction) {

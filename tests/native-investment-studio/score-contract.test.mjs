@@ -42,7 +42,7 @@ test('schema0.6 migration preserves amounts and unknown calendar inputs, includi
   const legacy = createExamplePlan(); legacy.schemaVersion = '0.6.0'; delete legacy.scoreSettings; delete legacy.arrangements;
   legacy.people.forEach(row => { delete row.availability; }); delete legacy.work[0].timing;
   const result = prepareImport(JSON.stringify(legacy)).projection;
-  assert.equal(result.state.schemaVersion, '0.8.0'); assert.equal(result.result.knownCommitmentCents, 120000);
+  assert.equal(result.state.schemaVersion, '0.9.0'); assert.equal(result.result.knownCommitmentCents, 120000);
   assert.equal(result.state.work[0].timing, null); assert.ok(result.state.people.every(row => row.availability === null));
   assert.equal(result.state.scoreSettings.window, null); assert.deepEqual(result.state.scoreSettings.proposals, []);
   assert.equal(result.score.workRows[0].placement, 'unspecified');

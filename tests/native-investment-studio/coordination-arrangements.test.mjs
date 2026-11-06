@@ -30,10 +30,11 @@ const expectedPod = Object.freeze({ id: 'working-pod', templateId: 'pod', templa
 
 test('0.7 migration retains an authored horizon and actual topology while leaving template identity unspecified', () => {
   const old = createShowcasePlan(); old.schemaVersion = '0.7.0'; delete old.arrangements;
+  old.scoreSettings.version = '1.0.0'; delete old.scoreSettings.cadence;
   old.teams[0].label = 'Pod';
   const original = JSON.stringify(old), receipt = prepareImport(original), current = receipt.projection;
-  assert.equal(receipt.sourceSchemaVersion, '0.7.0'); assert.equal(current.state.schemaVersion, '0.8.0');
-  assert.deepEqual(current.state.scoreSettings, old.scoreSettings);
+  assert.equal(receipt.sourceSchemaVersion, '0.7.0'); assert.equal(current.state.schemaVersion, '0.9.0');
+  assert.deepEqual(current.state.scoreSettings, { ...old.scoreSettings, version: '1.1.0', cadence: null });
   assert.ok(old.scoreSettings.gates.length && old.scoreSettings.proposals.length && old.scoreSettings.waits.length);
   assert.deepEqual(current.state.people, old.people); assert.deepEqual(current.state.work, old.work);
   assert.deepEqual(current.state.connections, old.connections); assert.deepEqual(current.state.teams, old.teams);

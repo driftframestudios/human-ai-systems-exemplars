@@ -1,6 +1,7 @@
 import { LIMITS } from './config.mjs';
 import { createScoreSettings } from './score-models.mjs';
 import { parseScoreTime, formatScoreTime } from './score-time.mjs';
+import { PlanError, prepareCadence } from './contract.mjs';
 
 const text = (label, extra = {}) => Object.freeze({ kind: 'text', label, maxLength: LIMITS.relationshipText, ...extra });
 const id = (label, source, optional = false) => text(label, { source, optional, maxLength: LIMITS.identifier });
@@ -11,6 +12,8 @@ const numberFromRaw = (value, metadata) => metadata.time ? parseScoreTime(value)
 const yesno = label => text(label, { checkbox: true, choices: ['yes', 'no'] });
 const label = name => text(name, { maxLength: LIMITS.label });
 export const SCORE_FIELDS = Object.freeze({
+  cadence: text('Sprint and quarter arrangement', { maxLength: LIMITS.cadenceTextBytes }),
+  cadenceBase: text('Arrangement at the start of this edit', { maxLength: LIMITS.cadenceTextBytes }),
   windowEnabled: yesno('Describe a coordination window'), windowLabel: label('Window label'),
   windowStartMinute: time('Window starts after'), windowEndMinute: time('Window ends after'),
   timedWorkIds: ids('Work timing records', 'work', LIMITS.work), availabilityPersonIds: ids('Availability records', 'people', LIMITS.people),
@@ -25,7 +28,7 @@ const records = Object.freeze({
   dependency: { fromWorkId: id('Earlier session', 'work'), toWorkId: id('Later session', 'work'), lagMinutes: time('Wait after earlier work'), connectionId: id('Related connection', 'connections', true) },
   stage: { label: label('Stage name'), workIds: ids('Sessions in this stage', 'work', LIMITS.work) },
   wait: { label: label('Wait name'), startMinute: time('Wait starts after'), endMinute: time('Wait ends after'), reason: text('Reason for the wait'), receiverPersonId: id('Person receiving the result', 'people', true) },
-  gate: { label: label('Decision name'), afterStageId: id('Stage before the decision', 'stages'), reviewerPersonId: id('Person reviewing the decision', 'people', true),
+  gate: { label: label('Decision name'), afterStageId: id('Stage before the decision', 'stages', true), reviewerPersonId: id('Person reviewing the decision', 'people', true),
     question: text('Question to resolve'), evidence: text('Evidence for review'), modeledDecision: text('Modeled decision', { choices: ['open', 'proceed', 'revise', 'hold'] }) },
   proposal: { bank: text('Proposal bank', { choices: ['next', 'options'] }), gateId: id('Gate before commitment', 'gates', true),
     workId: id('Proposed session identifier'), label: label('Proposed session name'), teamId: id('Hosting team', 'teams'), personIds: ids('Participating people', 'people', LIMITS.people),
@@ -61,7 +64,7 @@ const timingRaw = timing => ({ timed: timing === null ? 'no' : 'yes', startMinut
 const put = (raw, prefix, values) => { for (const [key, value] of Object.entries(values)) raw[prefix + key] = Array.isArray(value) ? [...value] : value == null ? '' : typeof value === 'number' && scoreField(prefix + key)?.time ? formatScoreTime(value) : String(value); };
 export function startingScoreRaw(plan) {
   const settings = plan.scoreSettings;
-  const raw = { windowEnabled: settings.window === null ? 'no' : 'yes', windowLabel: settings.window?.label ?? '',
+  const raw = { cadence: JSON.stringify(settings.cadence ?? null), cadenceBase: JSON.stringify(settings.cadence ?? null), windowEnabled: settings.window === null ? 'no' : 'yes', windowLabel: settings.window?.label ?? '',
     windowStartMinute: formatScoreTime(settings.window?.startMinute ?? 0), windowEndMinute: formatScoreTime(settings.window?.endMinute ?? 0),
     timedWorkIds: plan.work.map(row => row.id), availabilityPersonIds: plan.people.map(row => row.id),
     dependencyIds: settings.dependencies.map(row => row.id), stageIds: settings.stages.map(row => row.id), waitIds: settings.waits.map(row => row.id),
@@ -84,8 +87,58 @@ export function copyScoreRaw(_target, raw) { return Object.freeze(Object.fromEnt
 export function sameScoreRaw(_target, a, b) { return Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(key => Object.hasOwn(b, key) && (Array.isArray(a[key]) ? equalIds(a[key], b[key]) : a[key] === b[key])); }
 const nullable = value => value?.trim() || null;
 const timingFromRaw = (raw, prefix) => raw[prefix + 'timed'] !== 'yes' ? null : { startMinute: parseScoreTime(raw[prefix + 'startMinute']), repeatEveryMinutes: nullable(raw[prefix + 'repeatEveryMinutes']) === null ? null : parseScoreTime(raw[prefix + 'repeatEveryMinutes']) };
+const sameValue = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const cadenceConflict = field => { throw new PlanError('cadence-conflict', `draft.cadence.${field}`,
+  'This arrangement and the accepted plan changed the same detail. Use current values, then make this change again.'); };
+function mergedValue(base, draft, current, field) {
+  if (sameValue(base, draft)) return current;
+  if (sameValue(base, current) || sameValue(draft, current)) return draft;
+  return cadenceConflict(field);
+}
+function mergedRows(base, draft, current, key, field) {
+  const index = rows => new Map(rows.map(row => [key(row), row]));
+  const before = index(base), proposed = index(draft), accepted = index(current), merged = new Map();
+  for (const id of new Set([...before.keys(), ...proposed.keys(), ...accepted.keys()])) {
+    const row = mergedValue(before.get(id), proposed.get(id), accepted.get(id), field);
+    if (row !== undefined) merged.set(id, row);
+  }
+  // Existing relative order is meaningful. New rows keep their source's
+  // neighboring positions; simultaneous additions retain accepted rows first.
+  const shared = new Set([...before.keys()].filter(id => proposed.has(id) && accepted.has(id) && merged.has(id)));
+  const orderOf = rows => rows.map(key).filter(id => shared.has(id));
+  const order = mergedValue(orderOf(base), orderOf(draft), orderOf(current), field);
+  const links = new Map(order.map((id, index) => [id, { previous: order[index - 1] ?? null, next: order[index + 1] ?? null }]));
+  let first = order[0] ?? null, last = order.at(-1) ?? null;
+  for (const rows of [current, draft]) {
+    const source = rows.map(key).filter(id => merged.has(id));
+    for (let index = source.length - 1; index >= 0; index--) {
+      const id = source[index]; if (links.has(id)) continue;
+      const next = source[index + 1] ?? null, previous = next === null ? last : links.get(next).previous;
+      links.set(id, { previous, next });
+      if (previous === null) first = id; else links.get(previous).next = id;
+      if (next === null) last = id; else links.get(next).previous = id;
+    }
+  }
+  const result = [];
+  for (let id = first; id !== null; id = links.get(id).next) result.push(merged.get(id));
+  return result;
+}
+function reviewedCadence(raw, plan) {
+  const draft = prepareCadence(JSON.parse(raw.cadence ?? 'null'), 'draft.cadence');
+  const base = prepareCadence(JSON.parse(raw.cadenceBase ?? raw.cadence ?? 'null'), 'draft.cadenceBase');
+  const current = plan.scoreSettings.cadence;
+  if (sameValue(base, draft)) return current;
+  if (sameValue(base, current) || sameValue(draft, current)) return draft;
+  if (!base || !draft || !current || draft.basis !== base.basis || current.basis !== base.basis) return cadenceConflict('basis');
+  const result = { version: mergedValue(base.version, draft.version, current.version, 'version'), basis: base.basis,
+    periods: mergedValue(base.periods, draft.periods, current.periods, 'periods') };
+  const keys = { placements: row => `${row.workId}:${row.occurrenceIndex}`, availability: row => `${row.personId}:${row.periodId}`,
+    handoffs: row => row.id, decisionAnchors: row => row.gateId, delays: row => row.id };
+  for (const [field, key] of Object.entries(keys)) result[field] = mergedRows(base[field], draft[field], current[field], key, field);
+  return result;
+}
 export function scoreArrangementFromRaw(raw, plan) {
-  const settings = { ...createScoreSettings(), window: raw.windowEnabled === 'yes' ? { label: raw.windowLabel.trim(), startMinute: parseScoreTime(raw.windowStartMinute), endMinute: parseScoreTime(raw.windowEndMinute) } : null };
+  const settings = { ...createScoreSettings(), cadence: reviewedCadence(raw, plan), window: raw.windowEnabled === 'yes' ? { label: raw.windowLabel.trim(), startMinute: parseScoreTime(raw.windowStartMinute), endMinute: parseScoreTime(raw.windowEndMinute) } : null };
   for (const [kind, collection] of [['dependency', 'dependencies'], ['stage', 'stages'], ['wait', 'waits'], ['gate', 'gates']]) {
     settings[collection] = raw[collectionKeys[kind]].map(id => ({ id, ...Object.fromEntries(Object.entries(records[kind]).map(([key, metadata]) => {
       const value = raw[`${kind}.${id}.${key}`];
@@ -105,10 +158,12 @@ export function scoreArrangementFromRaw(raw, plan) {
       ? raw[`availability.${personId}.intervalIds`].map(id => ({ startMinute: parseScoreTime(raw[`availability.${personId}.${id}.startMinute`]), endMinute: parseScoreTime(raw[`availability.${personId}.${id}.endMinute`]) })) : null })),
     fundProposalIds: [...raw.fundProposalIds] };
 }
-export function summarizeScoreDraft(raw) { return `${raw.windowEnabled === 'yes' && raw.windowLabel.trim() ? raw.windowLabel.trim() : 'Authored arrangement'}. Review session timing, availability and modeled decisions${raw.fundProposalIds.length ? ' before adding the selected proposals to planned work' : ''}.`; }
+export function summarizeScoreDraft(raw) { return `Review the plan's periods, stages, handoffs and decisions${raw.fundProposalIds.length ? ' before adding the selected proposals to planned work' : ''}.`; }
 
 function errorsFor(raw) {
   const errors = [];
+  try { JSON.parse(raw.cadence ?? 'null'); JSON.parse(raw.cadenceBase ?? 'null'); }
+  catch { errors.push(diagnostic('cadence', 'draft.cadence', 'Review the period arrangement before applying.')); }
   for (const [key, value] of Object.entries(raw)) {
     const metadata = scoreField(key); if (!metadata || metadata.kind === 'ids') continue;
     if (key.startsWith('window') && key !== 'windowEnabled' && raw.windowEnabled !== 'yes') continue;
@@ -206,7 +261,10 @@ export function createScoreDraftAdapter(studio) {
     if (session.baseProjection !== studio.read()) return { error: stale() };
     const errors = errorsFor(session.raw); if (errors.length) return { error: errors[0] };
     if (!session.preview || session.preview.revision !== revision) {
-      const command = scoreArrangementFromRaw(session.raw, session.baseProjection.state), result = studio.previewCommand(command, session.baseProjection);
+      let command;
+      try { command = scoreArrangementFromRaw(session.raw, session.baseProjection.state); }
+      catch (error) { if (error instanceof PlanError) return { error: diagnostic(error.code, error.path, error.message) }; throw error; }
+      const result = studio.previewCommand(command, session.baseProjection);
       if (!result.ok) return { error: result.error };
       const before = session.baseProjection.result, after = result.projection.result;
       const fundedWorkIds = session.raw.fundProposalIds.map(id => session.raw[`proposal.${id}.workId`].trim());

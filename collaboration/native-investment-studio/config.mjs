@@ -2,10 +2,11 @@ import { ROLE_FIELDS } from './roles.mjs';
 import { createChangeSettings } from './change-models.mjs';
 import { createAssuranceSettings } from './assurance-models.mjs';
 import { createScoreSettings } from './score-models.mjs';
+import { CADENCE_PERIOD_LIMIT } from './cadence.mjs';
 export { PRACTICES } from './capabilities.mjs';
 // Immutable vocabulary shared by independent Studio instances.
 export const CONTRACT = Object.freeze({
-  kind: 'native-investment-plan', schemaVersion: '0.8.0', modelVersion: '0.1.0',
+  kind: 'native-investment-plan', schemaVersion: '0.9.0', modelVersion: '0.1.0',
   currency: 'USD', minutesPerHour: 60,
 });
 
@@ -23,7 +24,8 @@ const COLLECTION_LIMITS = Object.freeze({
   recoveryEvents: 32, learningActions: 32, rehearsals: 64,
   availabilityIntervals: 16, scoreOccurrences: 4096, scoreAssignments: 16384,
   scoreDependencies: 512, scoreStages: 32, scoreWaits: 32, scoreGates: 32,
-  scoreProposals: 32,
+  scoreProposals: 32, cadencePeriods: CADENCE_PERIOD_LIMIT,
+  cadenceAvailability: 128 * CADENCE_PERIOD_LIMIT,
 });
 const VALUE_LIMITS = Object.freeze({
   purposeText: 600, relationshipText: 600, identifier: 64, label: 120,
@@ -72,7 +74,7 @@ const ASSURANCE_JSON_BYTES = JSON.stringify({ assuranceSettings: createAssurance
   + COLLECTION_LIMITS.references * (VALUE_LIMITS.identifier + 3);
 // Minute digits follow the admitted maximum. Row envelopes include punctuation;
 // labels and text retain their worst-case JSON encoding.
-const SCORE_JSON_BYTES = JSON.stringify({ scoreSettings: createScoreSettings() }).length - 1
+const SCORE_JSON_BYTES = JSON.stringify({ scoreSettings: createScoreSettings('1.0.0') }).length - 1
   + COLLECTION_LIMITS.people * (32 + COLLECTION_LIMITS.availabilityIntervals * (48 + 2 * SCORE_MINUTE_DIGITS))
   + COLLECTION_LIMITS.work * (64 + 2 * SCORE_MINUTE_DIGITS)
   + COLLECTION_LIMITS.scoreDependencies * (128 + 4 * VALUE_LIMITS.identifier + SCORE_MINUTE_DIGITS)
@@ -87,6 +89,13 @@ const ARRANGEMENT_JSON_BYTES = JSON.stringify({ arrangements: [] }).length - 1
   + COLLECTION_LIMITS.arrangements * (JSON.stringify({ id: '', templateId: '', templateVersion: '', teamBindings: [], connectionBindings: [] }).length
     + 3 * VALUE_LIMITS.identifier + 1 + 3 * (JSON.stringify({ slotId: '', teamId: '' }).length + 2 * VALUE_LIMITS.identifier + 1)
     + 3 * (JSON.stringify({ slotId: '', connectionId: '' }).length + 2 * VALUE_LIMITS.identifier + 1));
+export const CADENCE_PLACEMENT_BYTES = COLLECTION_LIMITS.scoreOccurrences * (128 + 2 * VALUE_LIMITS.identifier);
+export const CADENCE_JSON_BYTES = 1024 + CADENCE_PLACEMENT_BYTES
+  + COLLECTION_LIMITS.cadencePeriods * (128 + VALUE_LIMITS.identifier + LABEL_JSON_BYTES)
+  + COLLECTION_LIMITS.cadenceAvailability * (128 + 2 * VALUE_LIMITS.identifier)
+  + COLLECTION_LIMITS.scoreDependencies * (256 + 3 * VALUE_LIMITS.identifier)
+  + COLLECTION_LIMITS.scoreGates * (128 + 2 * VALUE_LIMITS.identifier)
+  + COLLECTION_LIMITS.scoreWaits * (256 + 5 * VALUE_LIMITS.identifier + LABEL_JSON_BYTES + RELATIONSHIP_TEXT_JSON_BYTES);
 export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.1.0': BASE_SCHEMA_JSON_BYTES,
   '0.2.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES,
@@ -96,10 +105,11 @@ export const SCHEMA_BYTE_LIMITS = Object.freeze({
   '0.6.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES,
   '0.7.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES,
   '0.8.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES,
+  '0.9.0': BASE_SCHEMA_JSON_BYTES + PURPOSE_JSON_BYTES + RELATIONSHIP_JSON_BYTES + CAPABILITY_JSON_BYTES + CHANGE_JSON_BYTES + ASSURANCE_JSON_BYTES + SCORE_JSON_BYTES + ARRANGEMENT_JSON_BYTES + CADENCE_JSON_BYTES,
 });
 
 export const LIMITS = Object.freeze({
-  bytes: SCHEMA_BYTE_LIMITS[CONTRACT.schemaVersion], ...COLLECTION_LIMITS, ...VALUE_LIMITS,
+  bytes: SCHEMA_BYTE_LIMITS[CONTRACT.schemaVersion], cadenceTextBytes: CADENCE_JSON_BYTES, cadencePlacementTextBytes: CADENCE_PLACEMENT_BYTES, ...COLLECTION_LIMITS, ...VALUE_LIMITS,
 });
 
 export const HISTORY = Object.freeze({ defaultEntries: 20, maxEntries: 100 });

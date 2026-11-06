@@ -17,7 +17,7 @@ function exactCapacity(row) {
 test('empty score settings leave accepted effort unscheduled and availability unknown', () => {
   const first = createScoreSettings(), second = createScoreSettings();
   first.stages.push({ id: 'local', label: 'Local proposal', workIds: [] });
-  assert.deepEqual(second, { version: '1.0.0', window: null, dependencies: [], stages: [], waits: [], gates: [], proposals: [] });
+  assert.deepEqual(second, { version: '1.1.0', window: null, dependencies: [], stages: [], waits: [], gates: [], proposals: [], cadence: null });
   const plan = createExamplePlan(); plan.scoreSettings = second;
   const { score } = reading(plan);
   assert.equal(score.window, null); assert.equal(score.workRows[0].placement, 'unspecified');

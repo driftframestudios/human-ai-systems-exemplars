@@ -57,7 +57,7 @@ test('complete legacy byte-budget plans migrate and retain their original transp
   assert.throws(() => parsePlan(`${versionTwoBytes} `), { code: 'bytes' });
   const current = parsePlan(versionTwoBytes);
   assert.ok(Buffer.byteLength(current.serialized) <= LIMITS.bytes);
-  assert.equal(current.state.schemaVersion, '0.8.0');
+  assert.equal(current.state.schemaVersion, '0.9.0');
   assert.ok(LIMITS.bytes >= Buffer.byteLength(current.serialized));
   assert.equal(parsePlan(current.serialized).serialized, current.serialized);
   assert.equal(current.result.plannedCommitmentCents, migrated.result.plannedCommitmentCents);
@@ -74,7 +74,7 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   const source = JSON.parse(legacyText);
   const before = JSON.stringify(source);
   const projection = preparePlan(source);
-  assert.equal(projection.state.schemaVersion, '0.8.0');
+  assert.equal(projection.state.schemaVersion, '0.9.0');
   assert.equal(projection.state.modelVersion, '0.1.0');
   assert.deepEqual(projection.state.purpose, noPurpose);
   assert.equal(projection.state.revision, 7);
@@ -88,12 +88,12 @@ test('genuine 0.1 input migrates deterministically while null, zero, rates and s
   assert.deepEqual(parsePlan(legacyText), projection);
   assert.deepEqual(parsePlan(projection.serialized), projection);
   assert.ok(Object.isFrozen(projection.state.purpose));
-  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.8.0');
+  assert.equal(JSON.parse(projection.serialized).schemaVersion, '0.9.0');
   const receipt = prepareImport(legacyText);
   assert.equal(receipt.sourceSchemaVersion, '0.1.0');
   assert.deepEqual(receipt.projection, projection);
   assert.ok(Object.isFrozen(receipt));
-  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.8.0');
+  assert.equal(prepareImport(projection.serialized).sourceSchemaVersion, '0.9.0');
 });
 
 test('legacy migration first admits the closed old root, rows, references, model and integer tokens', () => {
@@ -132,7 +132,7 @@ test('schema selection uses the owned enumerable data descriptor and rechecks it
   const absent = JSON.parse(legacyText); delete absent.schemaVersion; rejects(absent, 'data-property');
   const inherited = Object.assign(Object.create({ schemaVersion: '0.1.0' }), absent);
   rejects(inherited, 'record');
-  for (const value of ['0.9.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
+  for (const value of ['9.0.0', '', null, undefined, 1, { toString() { throw new Error('unused'); } }]) {
     const plan = JSON.parse(legacyText); plan.schemaVersion = value; rejects(plan, 'unsupported-contract');
   }
   let descriptors = 0;

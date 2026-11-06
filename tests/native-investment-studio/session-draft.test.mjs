@@ -25,7 +25,7 @@ test('session forms have closed target and field metadata, separate from assembl
   const descriptor = describeSessionTarget('work.update:review');
   assert.equal(descriptor.id, 'review'); assert.equal(descriptor.collection, 'work');
   assert.equal(descriptor.mode, 'update');
-  assert.deepEqual(Object.keys(descriptor.fields), ['label', 'teamId', 'personIds', 'hoursPerSession', 'minutesPerSession', 'occurrences', 'funding', 'status']);
+  assert.deepEqual(Object.keys(descriptor.fields), ['label', 'teamId', 'cadencePlacements', 'personIds', 'hoursPerSession', 'minutesPerSession', 'occurrences', 'funding', 'status']);
   assert.deepEqual(descriptor.fields.status.choices, ['planned', 'paused']);
   assert.equal(descriptor.fields.teamId.maxLength, 64);
   assert.ok(Object.isFrozen(descriptor.fields.funding.choices));
@@ -37,7 +37,7 @@ test('session forms have closed target and field metadata, separate from assembl
 test('session creation starts incomplete, previews $1250 and accepts one additional $50 session', () => {
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   const token = open(editor, studio, 'work.create', 'extra');
-  assert.deepEqual(editor.read().draft.raw, { label: '', teamId: '', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
+  assert.deepEqual(editor.read().draft.raw, { label: '', teamId: '', cadencePlacements: '[]', personIds: [], hoursPerSession: '0', minutesPerSession: '30', occurrences: '1', funding: 'additional', status: 'planned' });
   rejected(editor.preview(token), 'label');
   fill(editor, token, { label: '  One session  ' });
   const preview = editor.preview(token); assert.equal(preview.ok, true);

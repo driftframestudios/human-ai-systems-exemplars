@@ -7,6 +7,18 @@ const roles = Object.freeze({ fromWorkId: 'earlier session', toWorkId: 'later se
 // families distinguish equal record IDs in separate score collections.
 export function describeScoreReference(settings, reference) {
   if (reference?.collection !== 'scoreSettings' || typeof reference.field !== 'string') return null;
+  const cadence = /^cadence\.(placements|availability|handoffs|delays)\[(\d+)\]\.(.+)$/.exec(reference.field);
+  if (cadence) {
+    const row = settings.cadence?.[cadence[1]][Number(cadence[2])];
+    if (!row) return null;
+    const period = id => settings.cadence.periods.find(item => item.id === id)?.label ?? 'Period to choose';
+    const categories = { placements: ['session', row.workId, `Session placement: ${period(row.periodId)}`],
+      availability: ['availability', row.personId, `Availability: ${period(row.periodId)}`],
+      handoffs: ['handoff', row.id, `Handoff: ${row.from?.id} → ${row.to?.id}`],
+      delays: ['delay', row.id, `Delay: ${row.label}`] };
+    const [kind, id, label] = categories[cadence[1]];
+    return Object.freeze({ kind, id, field: cadence[3], key: `${kind}/${id}/${reference.field}`, label });
+  }
   const match = /^(dependencies|stages|waits|gates|proposals)\[\d+\]\.(.+)$/.exec(reference.field);
   if (!match) return null;
   const [kind, category] = families[match[1]], row = settings[match[1]].find(row => row.id === reference.id);
@@ -48,7 +60,7 @@ export function describeScoreChanges(before, after) {
     dependencies: row => `${works.get(row.fromWorkId)} → ${works.get(row.toWorkId)}; ${row.lagMinutes} minutes between sessions${row.connectionId ? `; connection: ${connections.get(row.connectionId)}` : ''}`,
     stages: row => `${row.label}; ${row.workIds.map(id => works.get(id)).join(', ') || 'Supporting sessions to choose'}`,
     waits: row => `${row.label}; ${span(row)}; ${row.reason || 'Reason to describe'}; receiver ${people.get(row.receiverPersonId) || 'to choose'}`,
-    gates: row => `${row.label}; after ${stages.get(row.afterStageId)}; modeled decision: ${row.modeledDecision}; reviewer ${people.get(row.reviewerPersonId) || 'to choose'}; question: ${row.question || 'to describe'}; evidence: ${row.evidence || 'to describe'}`,
+    gates: row => `${row.label}; after ${stages.get(row.afterStageId) ?? 'the selected handoff'}; modeled decision: ${row.modeledDecision}; reviewer ${people.get(row.reviewerPersonId) || 'to choose'}; question: ${row.question || 'to describe'}; evidence: ${row.evidence || 'to describe'}`,
     proposals: row => `${row.work.label}; ${row.bank === 'next' ? 'Next' : 'Options'}; ${row.work.minutesPerOccurrence} minutes × ${row.work.occurrences} sessions; ${row.work.personIds.map(id => people.get(id)).join(', ')}; ${row.work.teamId ? `hosted by ${teams.get(row.work.teamId)}; ` : ''}${row.work.funding} funding; ${row.work.status}; ${row.work.lifecycle}; ${timing(row.work.timing)}${row.gateId ? `; gate: ${gates.get(row.gateId)}` : ''}`,
   };
   for (const [field, [, label]] of Object.entries(families)) {
@@ -60,6 +72,33 @@ export function describeScoreChanges(before, after) {
     }
     if (prior[field].length === next[field].length && prior[field].every(row => retained.has(row.id))
       && !same(prior[field].map(row => row.id), next[field].map(row => row.id))) descriptions.push(`${label} order changed: ${next[field].map(row => field === 'dependencies' ? describe[field](row) : field === 'proposals' ? row.work.label : row.label).join(' → ')}.`);
+  }
+  if (!same(prior.cadence, next.cadence)) {
+    const old = prior.cadence, cadence = next.cadence;
+    if (!cadence) descriptions.push('Planning periods removed; retained session timing remains available.');
+    else {
+      if (!old || old.basis !== cadence.basis || !same(old.periods, cadence.periods))
+        descriptions.push(`Planning horizon: ${cadence.periods.map(row => row.label).join(' → ')} (${cadence.basis === 'sprint' ? 'two weeks per sprint' : 'three months per quarter'}).`);
+      const periodName = id => cadence.periods.find(row => row.id === id)?.label ?? 'Period to choose';
+      const previous = new Map(old?.placements.map(row => [`${row.workId}:${row.occurrenceIndex}`, row]) ?? []);
+      for (const row of cadence.placements) if (!same(previous.get(`${row.workId}:${row.occurrenceIndex}`), row))
+        descriptions.push(`Session placement — ${works.get(row.workId)} ${row.occurrenceIndex + 1}: ${periodName(row.periodId)}${row.subdivision === null ? '' : ` · ${cadence.basis === 'sprint' ? 'week' : 'month'} ${row.subdivision}`}.`);
+      const retained = new Set(cadence.placements.map(row => `${row.workId}:${row.occurrenceIndex}`));
+      for (const row of old?.placements ?? []) if (!retained.has(`${row.workId}:${row.occurrenceIndex}`))
+        descriptions.push(`Session placement cleared — ${works.get(row.workId) ?? row.workId} ${row.occurrenceIndex + 1}.`);
+      const endpointName = row => row.kind === 'work' ? works.get(row.id) : stages.get(row.id);
+      const families = {
+        availability: { key: row => `${row.personId}:${row.periodId}`, label: 'Period availability', describe: row => `${people.get(row.personId)} · ${periodName(row.periodId)}: ${row.availableMinutes === null ? 'availability to choose' : `${row.availableMinutes} minutes available`}` },
+        handoffs: { key: row => row.id, label: 'Handoff', describe: row => `${endpointName(row.from)} → ${endpointName(row.to)}` },
+        decisionAnchors: { key: row => row.gateId, label: 'Decision anchor', describe: row => `${gates.get(row.gateId)} · ${row.kind === 'stage' ? stages.get(row.id) : 'selected handoff'}` },
+        delays: { key: row => row.id, label: 'Delay', describe: row => `${row.label}: ${periodName(row.fromPeriodId)} → ${periodName(row.toPeriodId)}; ${row.reason || 'reason to describe'}; receiver ${people.get(row.receiverPersonId) || 'to choose'}` },
+      };
+      for (const [field, shape] of Object.entries(families)) {
+        const beforeRows = new Map((old?.[field] ?? []).map(row => [shape.key(row), row])), retained = new Set(cadence[field].map(shape.key));
+        for (const row of cadence[field]) if (!same(beforeRows.get(shape.key(row)), row)) descriptions.push(`${shape.label} ${beforeRows.has(shape.key(row)) ? 'changed' : 'added'}: ${shape.describe(row)}.`);
+        for (const row of old?.[field] ?? []) if (!retained.has(shape.key(row))) descriptions.push(`${shape.label} removed: ${shape.describe(row)}.`);
+      }
+    }
   }
   return descriptions;
 }

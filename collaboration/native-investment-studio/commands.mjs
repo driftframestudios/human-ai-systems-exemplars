@@ -1,5 +1,6 @@
 import { PlanError, prepareAssemblyCommand, preparePlan } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
+import { replaceWorkPlacements } from './cadence.mjs';
 
 const WORK_CHANGE_FIELDS = new Map([
   ['work.participants.replace', 'personIds'], ['work.funding.set', 'funding'], ['work.status.set', 'status'],
@@ -142,6 +143,22 @@ function dependencies(state, collection, id) {
     if (collection === 'people' && row.work.personIds.includes(id)) scoreReference(row.id, `proposals[${index}].work.personIds`);
     if (collection === 'teams' && row.work.teamId === id) scoreReference(row.id, `proposals[${index}].work.teamId`);
   });
+  const cadence = score.cadence;
+  if (cadence) {
+    if (collection === 'people') {
+      cadence.availability.forEach((row, index) => { if (row.personId === id) scoreReference(id, `cadence.availability[${index}].personId`); });
+      cadence.delays.forEach((row, index) => { if (row.receiverPersonId === id) scoreReference(row.id, `cadence.delays[${index}].receiverPersonId`); });
+    }
+    cadence.handoffs.forEach((row, index) => {
+      if (collection === 'work') for (const field of ['from', 'to']) {
+        if (row[field].kind === 'work' && row[field].id === id) scoreReference(row.id, `cadence.handoffs[${index}].${field}`);
+      }
+      if (collection === 'connections' && row.connectionId === id) scoreReference(row.id, `cadence.handoffs[${index}].connectionId`);
+    });
+    if (collection === 'work') cadence.delays.forEach((row, index) => {
+      if (row.anchor.kind === 'work' && row.anchor.id === id) scoreReference(row.id, `cadence.delays[${index}].anchor`);
+    });
+  }
   return Object.freeze(references);
 }
 
@@ -209,7 +226,16 @@ export function prepareAssembly(base, candidate) {
     case 'team.create':
       collection = 'teams'; rows = append(state.teams, { lifecycle: 'active', ...command.team }, 'command.team.id'); break;
     case 'work.create':
-      collection = 'work'; rows = append(state.work, { lifecycle: 'active', ...command.work }, 'command.work.id'); break;
+    case 'work.update': {
+      const index = command.type === 'work.update' ? position(state.work, command.work.id, 'command.work.id') : -1;
+      const row = { ...(index < 0 ? { lifecycle: 'active' } : state.work[index]), ...command.work };
+      const work = index < 0 ? append(state.work, row, 'command.work.id') : update(state.work, index, row);
+      if (state.scoreSettings.cadence === null && command.placements?.length)
+        throw new PlanError('reference', 'command.placements', 'Choose a planning horizon before placing sessions.');
+      const scoreSettings = { ...state.scoreSettings, cadence: replaceWorkPlacements(state.scoreSettings.cadence, row, command.placements) };
+      if (JSON.stringify(work) === JSON.stringify(state.work) && JSON.stringify(scoreSettings) === JSON.stringify(state.scoreSettings)) return { projection: base };
+      return { projection: preparePlan({ ...state, revision: state.revision + 1, work, scoreSettings }) };
+    }
     case 'team.update': {
       const index = position(state.teams, command.teamId, 'command.teamId');
       const current = state.teams[index];
@@ -319,6 +345,11 @@ export function prepareAssembly(base, candidate) {
       const next = removal(base, targetCollection, command[targetField], targetField);
       if (next.error) return next;
       ({ collection, rows } = next);
+      if (command.type === 'work.remove' && state.scoreSettings.cadence) {
+        const scoreSettings = { ...state.scoreSettings, cadence: { ...state.scoreSettings.cadence,
+          placements: state.scoreSettings.cadence.placements.filter(row => row.workId !== command.workId) } };
+        return { projection: preparePlan({ ...state, revision: state.revision + 1, work: rows, scoreSettings }) };
+      }
       break;
     }
   }
