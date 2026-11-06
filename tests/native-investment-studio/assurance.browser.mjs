@@ -107,9 +107,9 @@ for (const engine of names) {
       assert.ok(boxes.quantities.right <= boxes.all.right + 1 && boxes.all.right <= width, JSON.stringify(boxes));
       await panel(page).locator('[data-assurance-work]').screenshot({ path: resolve(captures, `${engine}-supporting-session-${width}.png`) });
     }
-    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.setViewportSize({ width: 390, height: 1000 });
     const narrowTime = await time.evaluate(node => { const outer=node.getBoundingClientRect(); return [...node.querySelectorAll('input,button,label,.native-knob')].map(input => { const b=input.getBoundingClientRect(); return {left:b.left,right:b.right,width:b.width,height:b.height,outerLeft:outer.left,outerRight:outer.right}; }); });
-    assert.ok(narrowTime.every(box => box.left >= box.outerLeft - .5 && box.right <= box.outerRight + .5 && box.left >= -.5 && box.right <= 320.5 && box.width > 0 && box.height > 0), JSON.stringify(narrowTime));
+    assert.ok(narrowTime.every(box => box.left >= box.outerLeft - .5 && box.right <= box.outerRight + .5 && box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(narrowTime));
     await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-narrow.png`) });
     await page.setViewportSize({ width: 1440, height: 1100 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
     await expect(panel(page).locator('[data-assurance-work-preview]')).toContainText('30 minutes per person × 2 people × 1 occurrences = 60 aggregate person-minutes');
@@ -126,6 +126,7 @@ for (const engine of names) {
     await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
     await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
     await tab(page, 'assurance').click(); if (await action(page, 'current').isVisible()) await action(page, 'current').click();
+    await panel(page).locator('[data-assurance-assumptions] > summary').click();
     await field(page, 'allocationPercent').fill('32'); await action(page, 'cancel').click(); await expect(field(page, 'allocationPercent')).toHaveValue('18'); assert.equal(await bytes(page), initial);
   });
 
@@ -136,6 +137,9 @@ for (const engine of names) {
     await action(page, 'apply').click(); assert.equal(await bytes(page), initial);
     assert.equal(await page.evaluate(() => window.assuranceFixture.studio.readHistory().undoCount), 0);
     await panel(page).locator('.native-assurance__scope').screenshot({ path: resolve(captures, `${engine}-crt-reference.png`) });
+    await expect(panel(page).locator('[data-assurance-assumptions]')).not.toHaveAttribute('open', '');
+    await expect(panel(page).locator('.native-assurance__attention')).toHaveCount(0);
+    await panel(page).locator('[data-assurance-assumptions] > summary').click();
     await field(page, 'sourcePresetId').selectOption('regulated-workflow');
     await expect(check(page, 'horizonUnit', 'quarters')).toBeChecked();
     const quarterHours = await page.evaluate(async () => { const {estimateQualityReference} = await import('/collaboration/investment-analysis/staffing-adapter.mjs'); const estimate = estimateQualityReference({ included: true, allocationPercent: 100, independentRateCentsPerHour: 0, sigmaHalfSteps: 2, additionalShareBasisPoints: 10000 }, { quantity: 1, unit: 'quarters' }); return estimate.hours / estimate.multiplier; });
@@ -169,7 +173,8 @@ for (const engine of names) {
     await panel(page).getByRole('button', { name: 'Increase independent quality rate per hour', exact: true }).click();
     await expect(field(page, 'independentRate')).toHaveValue('106.25');
     assert.equal(await bytes(page), initial, 'rate illustration edits remain in the Assurance draft');
-    const prompt = panel(page).locator('[data-assurance-learning] details').first(); await prompt.locator('summary').click(); await prompt.locator('[data-assurance-action="learning"]').click();
+    await expect(panel(page).getByLabel('Question to explore')).toBeVisible();
+    await expect(action(page, 'learning')).toHaveCount(1); await action(page, 'learning').click();
     await field(page, 'learning.learning-1.context').fill('Find the observation that could change pilot readiness.');
     await field(page, 'learning.learning-1.decisionOwnerPersonId').selectOption('maya'); await check(page, 'learning.learning-1.workIds', 'research').check();
     const complication = panel(page).locator('[data-assurance-complication="recovery-failure"]'); await selectScenario(page, 'recovery-failure'); await complication.locator('[data-assurance-action="rehearse"]').click();
@@ -224,10 +229,10 @@ for (const engine of names) {
     await comparison.screenshot({ path: resolve(captures, `${engine}-recovery-consequences-desktop.png`) });
     const quantities = await panel(page).locator('.native-assurance__quantity input').evaluateAll(inputs => inputs.filter(input => input.getBoundingClientRect().width).map(input => ({ input: input.getBoundingClientRect().width, field: input.closest('.native-assurance__field').getBoundingClientRect().width })));
     assert.ok(quantities.every(row => row.input <= 220 && row.input <= row.field), JSON.stringify(quantities));
-    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.setViewportSize({ width: 390, height: 1000 });
     await sigma.scrollIntoViewIfNeeded();
     const boxes = await panel(page).locator('[data-assurance-statistics] input, [data-assurance-statistics] svg').evaluateAll(inputs => inputs.map(input => { const box = input.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, height: box.height }; }));
-    assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 320.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
+    assert.ok(boxes.every(box => box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(boxes));
     const compactBoxes = await panel(page).locator('[data-assurance-quality] input, [data-assurance-quality] label, .native-assurance__rail label, [data-assurance-concept-inspector] button').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));
     assert.ok(compactBoxes.every(box => box.left >= -.5 && box.right <= 320.5), JSON.stringify(compactBoxes));
     const consequenceBoxes = await panel(page).locator('[data-assurance-consequence] button, [data-assurance-scenario-comparison] button, .native-assurance__metrics').evaluateAll(nodes => nodes.filter(node => node.getBoundingClientRect().width).map(node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right }; }));

@@ -2,7 +2,7 @@ import '../../tools/node-runtime-admission.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { captureStudioReport } from '../../collaboration/native-investment-studio/reports.mjs';
-import { createShowcasePlan, preparePreset } from '../../collaboration/native-investment-studio/presets.mjs';
+import { createShowcasePlan, createQuarterShowcasePlan, preparePreset } from '../../collaboration/native-investment-studio/presets.mjs';
 import { preparePlan, parsePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 
@@ -32,6 +32,28 @@ test('report renders authored markup as text and preserves it exactly in the por
   assert.match(report.html, /&lt;script&gt;alert\(&quot;example&quot;\)&lt;\/script&gt; &amp; review/);
   assert.match(report.html, /known; rates remain to be supplied/);
   assert.equal(parsePlan(report.json).state.purpose.changedAbility, plan.purpose.changedAbility);
+});
+
+test('period reports preserve named placement and authored session order in both readable companions', () => {
+  for (const [plan, placement] of [[createShowcasePlan(), 'Sprint 1 · Week 1'], [createQuarterShowcasePlan(), 'Quarter 1 · Month 1']]) {
+    const projection = preparePlan(plan), report = captureStudioReport(projection);
+    const agenda = report.html.match(/<caption>Sessions within the plan<\/caption>[\s\S]*?<\/table>/)?.[0];
+    const brief = report.capsule.split('ACCEPTED PLAN JSON')[0];
+    assert.ok(agenda, 'The printable report exposes an individual-session agenda.');
+    assert.ok(agenda.includes(placement));
+    assert.ok(brief.includes(placement));
+    assert.match(brief, /Availability remains unknown where a value has yet to be supplied\./);
+    assert.doesNotMatch(agenda, /after plan start/);
+    assert.equal(report.json, projection.serialized);
+    if (plan.scoreSettings.cadence.basis === 'sprint') {
+      // Rehearsal session 2 precedes review session 1 within the same week.
+      const rehearsal = '<th scope="row">Operations rehearsal</th><td>2</td><td>Sprint 4 · Week 1</td>';
+      const review = '<th scope="row">Pilot decision review</th><td>1</td><td>Sprint 4 · Week 1</td>';
+      assert.ok(agenda.indexOf(rehearsal) >= 0 && agenda.indexOf(rehearsal) < agenda.indexOf(review));
+      const rehearsalLine = brief.indexOf('- Operations rehearsal, session 2');
+      assert.ok(rehearsalLine >= 0 && rehearsalLine < brief.indexOf('- Pilot decision review, session 1'));
+    }
+  }
 });
 
 test('readable recovery observations preserve the reviewer, observed revision and event standing', () => {

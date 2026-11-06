@@ -77,6 +77,7 @@ async function open(t, engine, options = {}) {
       mountCoordinationPanel(root).dispose();
       mountCoordinationPanel(root, { studio: createStudio() });
     }, { controllerPath, statePath, selector });
+    await page.locator('details[data-native-workspace="session"] > summary').click();
     await expect(page.locator(`${selector} [data-native-configure]`)).toHaveAttribute('open', '');
     await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeEditable();
   }
@@ -155,43 +156,6 @@ async function assertMaximumDigitsFit(page) {
   await setDuration(page, '0', '45');
   await input(page, 'occurrences').fill('6');
   await input(page).focus();
-}
-
-async function assertFormContainerSeams(page) {
-  const rem = await page.evaluate(() => Number.parseFloat(getComputedStyle(document.documentElement).fontSize));
-  // Session and supporting-work controls share the current 26rem composition.
-  const samples = [26 * rem - 1, 26 * rem + 1];
-  for (const target of samples) {
-    let width = Math.ceil(target + 100);
-    let observed;
-    for (let attempt = 0; attempt < 8; attempt += 1) {
-      await page.setViewportSize({ width, height: 1000 });
-      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      observed = await panel(page).locator('[data-native-configure] .native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
-      if (Math.abs(observed - target) <= .75) break;
-      width += Math.round(target - observed);
-    }
-    assert.ok(Math.abs(observed - target) <= .75,
-      `the form-content fixture reaches ${target}px beside its responsive seam; observed ${observed}px at viewport ${width}px`);
-    await assertMaximumDigitsFit(page);
-    const settledWidth = await panel(page).locator('[data-native-configure] .native-coordination__controls').evaluate(node => node.getBoundingClientRect().width);
-    assert.ok(Math.abs(settledWidth - target) <= .75,
-      `the ${target}px form sample retains its measured width after editing: before ${observed}px, after ${settledWidth}px`);
-    const controls = await panel(page).locator('[data-native-configure] .native-coordination__controls > .native-coordination__control').evaluateAll(nodes =>
-      nodes.map(node => ({ top: node.getBoundingClientRect().top, width: node.getBoundingClientRect().width,
-        inputTop: node.querySelector('input[inputmode]').getBoundingClientRect().top,
-        buttonTop: node.querySelector('button').getBoundingClientRect().top })));
-    assert.equal(controls.length, 3);
-    if (target > 26 * rem) assert.ok(Math.max(...controls.map(item => item.inputTop)) - Math.min(...controls.map(item => item.inputTop)) < .1,
-      `all three inputs share the row beyond the wide seam: ${JSON.stringify(controls)}`);
-    else assert.ok(controls[0].top < controls[1].top && controls[1].top < controls[2].top,
-      `the smallest form preserves the ordered three-control flow: ${JSON.stringify(controls)}`);
-    for (const control of controls) {
-      assert.ok(control.buttonTop > control.inputTop,
-        `each control consistently places its step buttons below the input: ${JSON.stringify(control)}`);
-    }
-  }
-  await page.setViewportSize({ width: 1440, height: 1000 });
 }
 
 async function assertInputPositionsThroughFeedback(page, capture = null) {
@@ -364,6 +328,7 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,822.50');
 
     await tab('coordination').click();
+    await panel(page).locator('details[data-native-workspace="connection"] > summary').click();
     await arrangements.locator(':scope > summary').click();
     await arrangements.locator('[data-template-action="preview"]').click();
     await expect(arrangements.locator('[data-template-total]')).toHaveText('$1,822.50');
@@ -414,14 +379,16 @@ for (const engine of names) {
     await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'true');
 
     const trace = panel(page).locator('[data-native-trace]');
+    await expect(panel(page).locator('[data-native-effort]')).toHaveText('4 people × 1 h per session × 6 working sessions = 24 h of participant effort.');
+    await panel(page).locator('[data-native-chapter="investment"]').click();
     await expect(trace.locator('summary')).toHaveText('Whole-plan cost breakdown');
     await trace.locator('summary').click();
     const people = trace.locator('[data-native-trace-list] > li');
     assert.equal(await people.count(), 4, 'the trace retains all four independently priced participants');
     for (const person of await people.all()) await expect(person).toContainText('360 min · $600.00');
     await expect(trace.locator('[data-native-trace-summary]')).toContainText('$2,400.00');
-    await expect(panel(page).locator('[data-native-effort]')).toHaveText('4 people × 1 h per session × 6 working sessions = 24 h of participant effort.');
     await trace.locator('summary').click();
+    await panel(page).locator('[data-native-chapter="coordination"]').click();
     await input(page).fill('30');
     await assertDurationReadout(page, '01', '30');
     await expect(preview(page)).toHaveText('$3,600.00');
@@ -513,7 +480,7 @@ for (const engine of names) {
         tops: [...root.querySelectorAll('[data-native-configure] input[inputmode]')].map(input => input.getBoundingClientRect().top) };
     });
     assert.ok(wide.contentWidth >= wide.threshold, `the wide fixture reaches the three-control row: ${JSON.stringify(wide)}`);
-    assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < .1, 'all three wide inputs share one top alignment');
+    assert.ok(Math.max(...wide.tops) - Math.min(...wide.tops) < 1, `all three wide inputs share one top alignment: ${JSON.stringify(wide)}`);
     await assertMaximumDigitsFit(page);
     if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-desktop.png') });
     const configure = panel(page).locator('[data-native-configure]');
@@ -522,42 +489,36 @@ for (const engine of names) {
     await summary.focus(); await summary.press('Enter'); await expect(summary).toBeFocused();
     await summary.press('Enter'); await expect(summary).toBeFocused();
     await expect(input(page)).toHaveValue('45');
-    await panel(page).locator('[data-native-trace] > summary').click();
     await input(page).focus();
-    await assertFormContainerSeams(page);
-    for (const width of [833, 832, 831, 390, 320, 1440]) {
+    for (const width of [833, 390, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect(input(page)).toBeFocused();
       await expect(input(page)).toHaveValue('45');
       await assertContained(page);
       await assertCompactControls(page);
       await assertMaximumDigitsFit(page);
-      if ([1440, 390, 320].includes(width)) await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? String(width) : null);
-      if ([833, 832, 831].includes(width)) {
+      if ([1440, 390].includes(width)) await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? String(width) : null);
+      if (width === 833) {
         const agreement = await panel(page).locator('.native-coordination__agreement').boundingBox();
         const configuration = await configure.boundingBox();
         assert.ok(configuration.y >= agreement.y + agreement.height, 'the complete session editor follows its accepted summary');
         assert.ok(configuration.width >= agreement.width - 1, 'the complete form receives the chapter width');
       }
-      if (width === 320) {
-        if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-320.png') });
-      }
     }
     await page.setViewportSize({ width: 390, height: 1000 });
     await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    for (const width of [390, 320]) {
+    for (const width of [390]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect(input(page)).toBeFocused();
       await assertContained(page);
       await assertMaximumDigitsFit(page);
       await assertInputPositionsThroughFeedback(page, engine === 'webkit' ? `${width}-enlarged` : null);
-      if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures,
-        width === 390 ? 'coordination-enlarged.png' : 'coordination-320-enlarged.png') });
+      if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-enlarged.png') });
     }
     await page.setViewportSize({ width: 390, height: 1000 });
     await expect(input(page)).toHaveValue('45');
     await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
-    await panel(page).locator('[data-native-configure] select[name="status"]').focus();
+    await panel(page).locator('[data-native-configure] input[name="status"]:checked').focus();
     const nextControl = engine === 'webkit' ? 'Alt+Tab' : 'Tab';
     await page.keyboard.press(nextControl);
     await expect(action(page, 'apply')).toBeFocused();

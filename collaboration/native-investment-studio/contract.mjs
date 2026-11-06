@@ -503,7 +503,7 @@ function workFields(work, personIds, path) {
 }
 
 // Admit one closed row before comparing it with an already accepted work row.
-// A changed row receives whole-plan reference, membership and budget checks.
+// A changed row receives whole-plan reference and budget checks.
 export function prepareWork(candidate, path = 'work') {
   const work = editableRecord(candidate, 'work', path);
   const personIds = identifiers(work.personIds, LIMITS.people, `${path}.personIds`, 1);
@@ -702,8 +702,6 @@ function prepareScoreReferences(state, people, teams, work, budget) {
     if (work.has(proposed.id)) reject('duplicate-id', `${rowPath}.work.id`, 'Give proposed work an identity distinct from accepted sessions.');
     reference(row.gateId, gates, `${rowPath}.gateId`, budget); reference(proposed.teamId, teams, `${rowPath}.work.teamId`, budget);
     proposed.personIds = references(proposed.personIds, people, `${rowPath}.work.personIds`, budget, 1);
-    const members = new Set(teams.get(proposed.teamId).personIds);
-    if (proposed.personIds.some(id => !members.has(id))) reject('team-membership', `${rowPath}.work.personIds`, 'Assign proposed participants to the work-owning team.');
   });
 }
 
@@ -1153,8 +1151,6 @@ function prepareVersion(candidate, version) {
     const teamId = text(work.teamId, `${path}.teamId`, true);
     if (!teamsById.has(teamId)) reject('reference', `${path}.teamId`, 'Choose an existing team.');
     const personIds = references(work.personIds, peopleById, `${path}.personIds`, budget, 1);
-    const members = teamMembers.get(teamId);
-    if (personIds.some(id => !members.has(id))) reject('team-membership', `${path}.personIds`, 'Assign participating people to the work-owning team.');
     return workFields(work, personIds, path);
   });
   const workById = indexRecords(state.work, 'plan.work');

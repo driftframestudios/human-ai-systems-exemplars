@@ -590,7 +590,7 @@ test('a work no-op admits the entire closed row before preserving identity at th
   assert.equal(studio.readHistory().undoCount, 0);
 });
 
-test('changed work preserves reference, membership and authored participation order', () => {
+test('changed work preserves valid references and authored participation independently of team rosters', () => {
   const studio = createStudio(); const before = studio.read();
   for (const [row, code] of [[changedReview(before, { teamId: 'missing' }), 'reference'],
     [changedReview(before, { personIds: ['missing'] }), 'reference']]) {
@@ -599,7 +599,9 @@ test('changed work preserves reference, membership and authored participation or
   const plan = createExamplePlan();
   plan.teams.push({ id: 'other', label: 'Other', personIds: [], lifecycle: 'active' });
   const owned = createStudio(plan); const base = owned.read();
-  expectHeld(owned.updateWork('review', changedReview(base, { teamId: 'other' }), base), base, 'team-membership');
+  const crossTeam = owned.updateWork('review', changedReview(base, { teamId: 'other' }), base);
+  assert.equal(crossTeam.ok, true);
+  assert.deepEqual(crossTeam.projection.state.teams, base.state.teams);
   const reordered = studio.updateWork('review', changedReview(before, { personIds: [...before.state.work[0].personIds].reverse() }), before);
   assert.equal(reordered.ok, true);
   assert.notStrictEqual(reordered.projection, before, 'authored participant order is a material presentation change');

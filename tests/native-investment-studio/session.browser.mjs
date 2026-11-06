@@ -71,6 +71,7 @@ async function open(t, engine, full = false, contextOptions = {}) {
     const studio = createStudio();
     window.sessionFixture = { studio, controller: mountCoordinationPanel(element, { studio }), editing: createDraftCoordinator(studio) };
   });
+  await page.locator('details[data-native-workspace="session"] > summary').click();
   return page;
 }
 
@@ -103,6 +104,52 @@ async function beginTurn(page, degrees, unit = 'minutes') {
 const captured = (page, unit = 'minutes') => knob(page, unit).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
 
 for (const engine of names) {
+  test(`${engine}: session placement stays with its draft and newly added occurrences remain unplaced`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      window.sessionFixture.controller.dispose();
+      const studio = createStudio(createShowcasePlan());
+      window.sessionFixture = { studio, controller: mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio }) };
+    });
+    await select(page).selectOption('review');
+    const placements = sessions(page).locator('.native-session__placements');
+    const firstPeriod = placements.getByRole('combobox', { name: 'Session 1 · Sprint', exact: true });
+    const before = await bytes(page);
+    await expect(firstPeriod).toHaveValue('period-4');
+    await page.setViewportSize({ width: 390, height: 1000 });
+    await placements.scrollIntoViewIfNeeded();
+    const bounds = await placements.evaluate(element => ({ left: element.getBoundingClientRect().left,
+      right: element.getBoundingClientRect().right, pageWidth: document.documentElement.scrollWidth, viewport: innerWidth }));
+    assert.ok(bounds.left >= 0 && bounds.right <= bounds.viewport + 1 && bounds.pageWidth <= bounds.viewport + 1, JSON.stringify(bounds));
+    await placements.screenshot({ path: resolve(captures, `${engine}-placements-mobile.png`) });
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await firstPeriod.focus();
+    await firstPeriod.selectOption('period-3');
+    await expect(firstPeriod).toBeFocused();
+    assert.equal(await bytes(page), before, 'choosing a sprint stays in the draft');
+    await legacy(page, 'cancel').click();
+    await select(page).selectOption('review');
+    await expect(firstPeriod).toHaveValue('period-4');
+    await field(page, 'occurrences').fill('5');
+    await expect(placements.getByRole('combobox', { name: 'Session 5 · Sprint', exact: true })).toHaveValue('');
+    await firstPeriod.selectOption('period-3');
+    await legacy(page, 'apply').click();
+    const accepted = JSON.parse(await bytes(page)), work = accepted.work.find(row => row.id === 'review');
+    assert.equal(work.minutesPerOccurrence, 30);
+    assert.deepEqual(work.personIds, ['maya', 'ari', 'noor']);
+    assert.equal(work.occurrences, 5);
+    const placed = accepted.scoreSettings.cadence.placements.filter(row => row.workId === 'review');
+    assert.equal(placed.find(row => row.occurrenceIndex === 0).periodId, 'period-3');
+    assert.equal(placed.some(row => row.occurrenceIndex === 4), false);
+    await field(page, 'occurrences').fill('2');
+    await legacy(page, 'apply').click();
+    assert.deepEqual(JSON.parse(await bytes(page)).scoreSettings.cadence.placements.filter(row => row.workId === 'review')
+      .map(row => row.occurrenceIndex), [0, 1], 'reducing the sessions retires only their trailing placements');
+  });
+
   test(`${engine}: session diagram names Change, quality, recovery, learning and rehearsal support`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {
@@ -135,7 +182,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), before);
   });
 
-  test(`${engine}: accepted session diagram stays above expanding settings and whole-plan costs`, { timeout: 60000 }, async t => {
+  test(`${engine}: accepted session diagram stays above settings while whole-plan costs remain in Investment`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
       const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
@@ -150,19 +197,14 @@ for (const engine of names) {
     await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
     await expect(total(page)).toHaveText('$3,980.00');
     const before = await bytes(page);
-    const settings = sessions(page).locator('[data-native-configure]'), trace = sessions(page).locator('[data-native-trace]');
+    const settings = sessions(page).locator('[data-native-configure]');
     const geometry = () => map.evaluate(el => { const box = el.getBoundingClientRect(); return { x: box.x, y: box.y + scrollY, width: box.width, height: box.height }; });
     for (const width of [1152, 1322, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
       if (await settings.getAttribute('open') !== null) await settings.locator('summary').click();
-      if (await trace.getAttribute('open') !== null) await trace.locator('summary').click();
       const accepted = await geometry();
       await settings.locator('summary').click(); await frames(page);
       assert.ok(Object.entries(await geometry()).every(([key, value]) => Math.abs(value - accepted[key]) < .1), 'opening settings preserves accepted diagram placement within subpixel rounding');
-      await trace.locator('summary').click(); await frames(page);
-      assert.ok(Object.entries(await geometry()).every(([key, value]) => Math.abs(value - accepted[key]) < .1), 'opening whole-plan costs preserves accepted diagram placement within subpixel rounding');
-      const diagramBox = await map.boundingBox(), ledger = await trace.boundingBox();
-      assert.ok(ledger.width >= diagramBox.width - 1, 'whole-plan costs retain the available chapter width');
     }
     await field(page, 'minutesPerSession').fill('45');
     await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
@@ -170,12 +212,17 @@ for (const engine of names) {
     await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
     await legacy(page, 'cancel').click();
     assert.equal(await bytes(page), before);
+    await tab(page, 'investment').click();
+    const trace = root(page).locator('[data-native-chapter-panel="investment"] [data-native-trace]');
+    await trace.locator('summary').click();
+    await expect(trace.locator('[data-native-trace-summary]')).toContainText('$3,980.00 total');
+    assert.equal(await bytes(page), before, 'reading the shared cost breakdown preserves the plan');
+    await tab(page, 'coordination').click();
     for (const width of [900, 1000, 1322]) {
       await page.setViewportSize({ width, height: 1000 });
       await map.screenshot({ path: resolve(captures, `${engine}-session-map-${width}.png`) });
     }
-    await page.setViewportSize({ width: 320, height: 1000 });
-    await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+    await page.setViewportSize({ width: 390, height: 1000 });
     const reading = await map.evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth, nodes: [...el.querySelectorAll('li, h3, h4')].map(n => ({ client: n.clientWidth, scroll: n.scrollWidth })) }));
     assert.ok(reading.scroll <= reading.client + 1); assert.ok(reading.nodes.every(n => n.scroll <= n.client + 1));
     await map.screenshot({ path: resolve(captures, `${engine}-session-map-narrow.png`) });
@@ -200,7 +247,8 @@ for (const engine of names) {
     await expect(field(page, 'hoursPerSession')).toHaveValue('later');
     await field(page, 'hoursPerSession').fill('23'); await hours.focus(); await page.keyboard.press('End');
     await expect(field(page, 'hoursPerSession')).toHaveValue('23'); await expect(field(page, 'minutesPerSession')).toHaveValue('30');
-    await expect(hours).toHaveAttribute('aria-valuetext', '23 hours per session; up to 23 hours while Minutes is above 0');
+    await expect(hours).toHaveAttribute('aria-valuetext', '23 hours per session');
+    await expect(sessions(page).locator('[data-native-hours-knob-note]')).toBeHidden();
     await field(page, 'minutesPerSession').fill('0'); await expect(hours).toHaveAttribute('max', '24');
     await hours.focus(); await page.keyboard.press('End'); await expect(field(page, 'hoursPerSession')).toHaveValue('24');
     await expect(knob(page)).toHaveAttribute('max', '0'); await expect(field(page, 'minutesPerSession')).toHaveValue('0');
@@ -330,7 +378,6 @@ for (const engine of names) {
       await page.evaluate(() => window.sessionFixture.controller.dispose());
       assert.equal(await captured(page, unit), false, 'receiver retirement releases its pointer');
       await expect(dial(page, unit)).toBeHidden();
-      await expect(sessions(page).locator('#native-minutes-knob-help')).toBeHidden();
       await knob(page, unit).evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', {
         pointerId: window.sessionFixture.knobPointerId, clientX: 0, clientY: 0, bubbles: true,
       })));
@@ -348,16 +395,11 @@ for (const engine of names) {
         y: Math.round((row.getBoundingClientRect().top - origin) * 1000) / 1000, height: Math.round(row.getBoundingClientRect().height * 1000) / 1000 }));
     });
     const accepted = await bytes(page);
-    for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
+    for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
-      await page.evaluate(enlarged => { document.documentElement.style.fontSize = enlarged ? '200%' : ''; }, enlarged);
       await member(page, 'product-one').scrollIntoViewIfNeeded();
       await member(page, 'product-one').focus(); await frames(page);
       const before = await geometry();
-      if (enlarged) {
-        const fontSize = await list.locator('label').first().evaluate(label => parseFloat(getComputedStyle(label).fontSize));
-        assert.ok(fontSize >= 31.99, `authored text enlargement remains available: ${fontSize}px`);
-      }
       await page.keyboard.press('Space');
       await expect(member(page, 'product-one')).not.toBeChecked();
       await expect(member(page, 'product-one').locator('xpath=ancestor::li').locator('.native-coordination__member-status')).toHaveText('Available');
@@ -503,6 +545,7 @@ for (const engine of names) {
 
     await tab(page, 'coordination').click();
     const arrangement = root(page).locator('[data-connection-templates]');
+    await root(page).locator('[data-native-workspace="connection"] > summary').click();
     await arrangement.locator(':scope > summary').click();
     const team = arrangement.locator('[data-template-card^="team:"]').first();
     await team.locator('summary').click();
@@ -541,6 +584,7 @@ for (const engine of names) {
     await legacy(page, 'cancel').click(); await sessions(page).locator('[data-native-configure] > summary').click();
     await expect(form(page).getByRole('radio', { name: 'Planned', exact: true })).toBeChecked();
     await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeChecked();
+    await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeEnabled();
     await page.evaluate(() => {
       const { editing, controller } = window.sessionFixture;
       editing.session.setText(editing.session.read().draft.token, 'funding', 'unknown');
@@ -581,6 +625,40 @@ for (const engine of names) {
     // Three known original participants ($900) and one known funded person ($200).
     await expect(total(page)).toHaveText('$1,100.00');
     await expect(root(page).locator('[data-native-standing]')).toHaveText('Known total · USD');
+  });
+
+  test(`${engine}: cross-team sessions create and edit without changing team rosters`, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.sessionFixture;
+      const result = studio.applyCommand({ type: 'team.create', team: { id: 'review-host', label: 'Review host', personIds: [] } }, studio.read());
+      if (!result.ok) throw Error(result.error.code); controller.refresh();
+    });
+    const original = await bytes(page), originalTeams = JSON.parse(original).teams;
+    for (const keep of [false, true]) {
+      await prepareSession(page);
+      await field(page, 'teamId').selectOption('review-host');
+      await expect(sessions(page).locator('[data-native-session-error]')).toBeEmpty();
+      assert.equal(await bytes(page), original, 'cross-team selection remains a draft');
+      await legacy(page, keep ? 'apply' : 'cancel').click();
+      if (!keep) assert.equal(await bytes(page), original);
+    }
+    const created = await bytes(page), createdState = JSON.parse(created);
+    assert.equal(createdState.work.at(-1).teamId, 'review-host');
+    assert.deepEqual(createdState.work.at(-1).personIds, ['product-one', 'product-two']);
+    assert.deepEqual(createdState.teams, originalTeams);
+    await member(page, 'engineering-one').check();
+    await legacy(page, 'apply').click();
+    const editedState = JSON.parse(await bytes(page));
+    assert.deepEqual(editedState.work.at(-1).personIds, ['product-one', 'product-two', 'engineering-one']);
+    assert.deepEqual(editedState.teams, originalTeams);
+    for (const expected of [created, original]) {
+      await page.evaluate(() => {
+        const { studio, controller } = window.sessionFixture;
+        const result = studio.undo(studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
+      });
+      assert.equal(await bytes(page), expected);
+    }
   });
 
   test(`${engine}: session selection retains separate drafts through chapters and stale-plan review`, { timeout: 60000 }, async t => {

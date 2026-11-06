@@ -333,13 +333,13 @@ test('identity references survive reorder and renaming; Map keys remain ordinary
   assert.equal(preparePlan(plan).result.ledger[0].lines[0].personId, 'constructor');
 });
 
-test('duplicates, unresolved references, and ownership mismatches are rejected', () => {
+test('duplicates, unresolved references, and invalid record shapes are rejected', () => {
   const cases = [
     ['duplicate-id', plan => { plan.people[1].id = plan.people[0].id; }],
     ['duplicate-reference', plan => { plan.work[0].personIds[1] = plan.work[0].personIds[0]; }],
     ['reference', plan => { plan.work[0].teamId = 'missing'; }],
     ['reference', plan => { plan.practices[0].supportBindings[0].workIds = ['missing']; }],
-    ['team-membership', plan => { plan.teams[0].personIds.shift(); }],
+    ['reference', plan => { plan.work[0].personIds = ['missing']; }],
     ['fields', plan => { plan.work[0].timing = { week: 1 }; }],
     ['capability-definition', plan => { plan.practices[0].definitionId = 'invented'; }],
   ];

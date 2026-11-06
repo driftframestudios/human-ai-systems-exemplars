@@ -343,16 +343,6 @@
       "media_type": "text/javascript"
     },
     {
-      "source_path": "collaboration/native-investment-studio/investment-trace-view.mjs",
-      "projected_path": "collaboration/native-investment-studio/investment-trace-view.mjs",
-      "media_type": "text/javascript"
-    },
-    {
-      "source_path": "collaboration/native-investment-studio/investment-trace.mjs",
-      "projected_path": "collaboration/native-investment-studio/investment-trace.mjs",
-      "media_type": "text/javascript"
-    },
-    {
       "source_path": "collaboration/native-investment-studio/person-draft.mjs",
       "projected_path": "collaboration/native-investment-studio/person-draft.mjs",
       "media_type": "text/javascript"
@@ -2488,6 +2478,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/cadence-view.mjs",
+      "projected_path": "collaboration/native-investment-studio/cadence-view.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/score-models.mjs",
       "projected_path": "collaboration/native-investment-studio/score-models.mjs",
       "media_type": "text/javascript"
@@ -2500,11 +2495,6 @@
     {
       "source_path": "collaboration/native-investment-studio/score-time.mjs",
       "projected_path": "collaboration/native-investment-studio/score-time.mjs",
-      "media_type": "text/javascript"
-    },
-    {
-      "source_path": "collaboration/native-investment-studio/score-view.mjs",
-      "projected_path": "collaboration/native-investment-studio/score-view.mjs",
       "media_type": "text/javascript"
     }
   ]

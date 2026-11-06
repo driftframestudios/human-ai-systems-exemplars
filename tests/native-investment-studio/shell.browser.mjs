@@ -110,6 +110,7 @@ for (const engine of names) {
     await page.goForward();
     await selected(page, 'people');
     await tab(page, 'coordination').click();
+    await root(page).locator('[data-native-workspace="session"] > summary').click();
     await work(page, 'minutesPerSession').fill('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
     await tab(page, 'coordination').focus();
@@ -172,8 +173,7 @@ for (const engine of names) {
       const studio = createStudio();
       window.chapterFixture = { studio, controller: mountCoordinationPanel(node, { studio }) };
       const { mountStudioMotion } = await import('/collaboration/native-investment-studio/motion.mjs');
-      if (mountStudioMotion(node).read().effective !== 'lower') throw Error('A fresh Studio starts with lower motion.');
-      mountStudioMotion(node).set('full');
+      if (mountStudioMotion(node).read().effective !== 'full') throw Error('A fresh Studio starts with full motion when the system permits it.');
     }, { controllerPath, statePath });
     await selected(page, 'people');
     assert.equal(new URL(page.url()).hash, '#native-team-title');
@@ -190,6 +190,7 @@ for (const engine of names) {
       history.replaceState({ chapterFixture: 'retained' }, '', location.href);
     });
     await tab(page, 'coordination').click();
+    await root(page).locator('[data-native-workspace="session"] > summary').click();
     await work(page, 'minutesPerSession').fill('40');
     await tab(page, 'people').click();
     await person(page, 'ratePerHour').focus();

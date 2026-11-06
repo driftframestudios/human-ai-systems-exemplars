@@ -88,13 +88,15 @@ test('unknown and zero rates retain distinct meanings when new people join work'
   assert.equal(next.result.plannedCommitmentCents, 120000);
 });
 
-test('team updates and ordered memberships retain all participating work relationships', () => {
+test('team rosters change independently while session participants retain their identities', () => {
   const studio = createStudio();
   const ids = ['engineering-two', 'engineering-one', 'product-two', 'product-one'];
   apply(studio, { type: 'team.update', teamId: 'delivery', team: { id: 'delivery', label: 'Delivery group', personIds: ids } });
   assert.equal(studio.read().state.teams[0].label, 'Delivery group');
   assert.deepEqual(studio.read().state.teams[0].personIds, ids);
-  held(studio, { type: 'team.members.replace', teamId: 'delivery', personIds: ['product-one'] }, 'team-membership');
+  const participants = studio.read().state.work[0].personIds;
+  apply(studio, { type: 'team.members.replace', teamId: 'delivery', personIds: ['product-one'] });
+  assert.deepEqual(studio.read().state.work[0].personIds, participants);
   held(studio, { type: 'team.members.replace', teamId: 'delivery', personIds: ['missing'] }, 'reference');
   held(studio, { type: 'team.update', teamId: 'delivery', team: { id: 'other', label: 'Other', personIds: ids } }, 'target');
   apply(studio, { type: 'work.participants.replace', workId: 'review', personIds: ['product-one'] });

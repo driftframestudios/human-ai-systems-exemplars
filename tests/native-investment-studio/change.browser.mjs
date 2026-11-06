@@ -131,8 +131,11 @@ for (const engine of names) {
     await expect(field(page, 'lens')).toHaveValue('operating@1.0.0');
     const rotor = panel(page).locator('.native-change__lens-rotor');
     assert.equal(await rotor.evaluate(el => getComputedStyle(el).pointerEvents), 'none');
+    await expect(motionChoice(page, 'full')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
     await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await expect(motionChoice(page, 'lower')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
+    await expect(motionChoice(page, 'full')).toBeChecked(); await expect(root(page)).toHaveAttribute('data-native-motion', 'full');
+    assert.ok(await rotor.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration)) > 0);
+    await motionChoice(page, 'lower').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
     assert.equal(await rotor.evaluate(el => getComputedStyle(el).transitionDuration), '0s');
     await motionChoice(page, 'full').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'full');
     assert.equal(await bytes(page), initial, 'motion preference changes presentation independently of the accepted plan');

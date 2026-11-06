@@ -22,11 +22,7 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
   const document = host.ownerDocument, window = document.defaultView, instance = `native-rate-${++sequence}`;
   const element = document.createElement('div'); element.className = 'native-rate-controls';
   const dials = document.createElement('div'); dials.className = 'native-rate__dials';
-  const help = document.createElement('p'); help.id = `${instance}-help`; help.className = 'native-coordination__hint native-rate__help';
-  help.textContent = 'Turn clockwise to add, anticlockwise to subtract. Tap the right or left half, or use arrow keys. Escape restores the rate where a turn began. The exact field and $1 buttons remain available.';
-  const note = document.createElement('p'); note.className = 'native-coordination__hint native-rate__note'; note.id = `${instance}-note`;
-  note.textContent = 'A blank rate stays unknown. Enter a known valid rate in the exact field to use the dials.';
-  element.append(dials, help, note); host.append(element);
+  element.append(dials); host.append(element);
   let disposed = false;
   const mounted = [10, 5].map(dollars => {
     const size = dollars === 10 ? 'coarse' : 'fine', part = document.createElement('div'); part.className = 'native-rate__part';
@@ -39,7 +35,7 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
     Object.assign(knob, { type: 'range', min: '-1', max: '1', step: '1', value: '0', id: `${instance}-${size}` });
     knob.dataset.rateStep = String(dollars); knob.setAttribute('aria-label', `${label}, ${dollars}-dollar steps`);
     knob.setAttribute('aria-controls', precision.id);
-    knob.setAttribute('aria-describedby', `${help.id} ${note.id}`); caption.htmlFor = knob.id;
+    caption.htmlFor = knob.id;
     dial.append(ticks, face, knob); part.append(caption, dial); dials.append(part);
     const forcedColors = window.matchMedia('(forced-colors: active)'), cleanup = [];
     let gesture = null, angle = 0;
@@ -67,7 +63,7 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
       knob.disabled = !view; dial.dataset.valueState = view ? 'available' : 'unavailable';
       knob.min = view && shiftRateCents(view.cents, dollars, -1) !== view.cents ? '-1' : '0';
       knob.max = view && shiftRateCents(view.cents, dollars, 1) !== view.cents ? '1' : '0'; knob.value = '0';
-      knob.setAttribute('aria-valuetext', view ? `${money(view.cents)} per hour. Adjust down or up by ${dollars} dollars.` : `Enter a known valid rate in the exact field to use ${dollars}-dollar steps.`);
+      knob.setAttribute('aria-valuetext', view ? `${money(view.cents)} per hour` : 'Enter a valid hourly rate.');
       paintAngle();
     }
     function shift(steps, token = current()?.token) {

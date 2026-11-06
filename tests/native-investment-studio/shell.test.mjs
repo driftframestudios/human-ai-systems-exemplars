@@ -348,14 +348,14 @@ test('rapid transitions cancel the previous animation and reduced motion release
   shell.dispose(); motion.dispose();
 });
 
-test('Studio motion starts lower, preserves explicit preference under system reduction, and retires live effects', async () => {
+test('Studio motion starts full, preserves explicit preference under system reduction, and retires live effects', async () => {
   const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
   assert.strictEqual(mountStudioMotion(f.root), motion);
-  assert.deepEqual(motion.read(), { requested: 'lower', effective: 'lower', systemReduced: false, disposed: false });
-  shell.select('people'); assert.equal(f.animations.length, 0);
-  assert.equal(f.root.getAttribute('data-native-motion'), 'lower');
-  motion.set('full'); shell.select('coordination'); assert.equal(f.animations.length, 1);
+  assert.deepEqual(motion.read(), { requested: 'full', effective: 'full', systemReduced: false, disposed: false });
+  shell.select('people'); assert.equal(f.animations.length, 1);
+  assert.equal(f.root.getAttribute('data-native-motion'), 'full');
   motion.set('lower'); assert.equal(f.animations[0].cancelled, true);
+  shell.select('coordination'); assert.equal(f.animations.length, 1);
   motion.set('full'); shell.select('people');
   f.media.matches = true; f.media.send('change');
   assert.equal(f.animations[1].cancelled, true);
@@ -367,12 +367,15 @@ test('Studio motion starts lower, preserves explicit preference under system red
   assert.equal(motion.read().effective, 'lower'); assert.equal(f.root.getAttribute('data-native-motion'), null);
   assert.equal(motion.set('full'), false); shell.dispose();
   assert.equal(f.media.listenerCount(), 0);
-  const fresh = mountStudioMotion(f.root); assert.equal(fresh.read().requested, 'lower'); fresh.dispose();
+  f.media.matches = true;
+  const fresh = mountStudioMotion(f.root);
+  assert.deepEqual(fresh.read(), { requested: 'full', effective: 'lower', systemReduced: true, disposed: false }); fresh.dispose();
   await Promise.resolve();
 });
 
 test('chapter selection, contextual arrival and local inspection retain distinct bounded motion and static cues', async () => {
   const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
+  motion.set('lower');
   shell.select('people', { kind: 'context' });
   assert.equal(f.records.get('people').panel.getAttribute('data-native-arrival'), 'context');
   assert.equal(f.animations.length, 0);

@@ -15,9 +15,7 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
   const outputs = {};
   for (const name of ['hours', 'minutes']) { const part = node('span'), value = node('strong', '00'); part.append(value, node('span', name)); display.append(part); outputs[name] = value; }
   display.setAttribute('for', `${idPrefix}-hoursPerSession ${idPrefix}-minutesPerSession`);
-  const help = node('p', 'Turn or tap a dial, use arrow keys, or enter a value beside it. Escape restores the value where a turn began.', 'native-coordination__hint native-knob__help'); help.id = `${idPrefix}-dial-help`; help.hidden = true;
-  const limit = node('p', 'Hours and minutes combine into one duration, up to 24 hours per person.', 'native-coordination__hint'); limit.id = `${idPrefix}-duration-limit`;
-  overview.append(title, display, help, limit);
+  overview.append(title, display);
   const quantities = node('div', undefined, 'native-coordination__controls native-time__quantities'), feedback = node('div', undefined, 'native-coordination__feedback native-time__feedback'); feedback.setAttribute('role', 'group'); feedback.setAttribute('aria-label', 'Quantity feedback');
   const controls = new Map(), dials = {};
   for (const name of TIME_FIELDS) {
@@ -26,7 +24,7 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
     Object.assign(input, { id: `${idPrefix}-${name}`, name: key, type: 'text', inputMode: 'numeric', autocomplete: 'off', spellcheck: false, maxLength: WORK_DRAFT_TEXT_LIMIT }); label.htmlFor = input.id; decorateField(input, key);
     const error = node('p', '', 'native-coordination__error'); error.id = input.id + '-error'; feedback.append(error);
     const range = node('p', `0–${(name === 'hoursPerSession' ? LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour : name === 'minutesPerSession' ? 59 : LIMITS.occurrences).toLocaleString('en-US')} ${name === 'hoursPerSession' ? 'hours' : name === 'minutesPerSession' ? 'minutes' : 'sessions'}`, 'native-coordination__hint'); range.id = input.id + '-range';
-    input.setAttribute('aria-describedby', `${title.id} ${range.id} ${limit.id} ${error.id}`);
+    input.setAttribute('aria-describedby', `${title.id} ${range.id} ${error.id}`);
     for (const direction of [-1, 1]) {
       const step = node('button', direction < 0 ? '−' : '+'); step.type = 'button'; decorateStep(step, key, direction);
       step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${name === 'occurrences' ? 'working sessions by one' : `session duration by one ${name === 'hoursPerSession' ? 'hour' : 'minute'}`}`);
@@ -40,11 +38,11 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
       const ticks = node('div', undefined, 'native-knob__ticks'), face = node('div', undefined, 'native-knob__face'); ticks.setAttribute('aria-hidden', 'true'); face.setAttribute('aria-hidden', 'true'); face.append(node('span', undefined, 'native-knob__pointer'));
       const knob = node('input'); Object.assign(knob, { type: 'range', min: '0', max: unit === 'hours' ? '24' : '59', step: '1', value: '0', id: `${idPrefix}-${unit === 'hours' ? 'hours-' : ''}dial` });
       knob.dataset[unit === 'hours' ? 'nativeHoursKnob' : 'nativeMinutesKnob'] = '';
-      knob.setAttribute('aria-label', `${labels[name]} dial`); knob.setAttribute('aria-describedby', `${help.id} ${limit.id} ${error.id}`);
+      knob.setAttribute('aria-label', `${labels[name]} dial`); knob.setAttribute('aria-describedby', error.id);
       const note = node('p', '', 'native-coordination__hint'); note.hidden = true;
       note.dataset[unit === 'hours' ? 'nativeHoursKnobNote' : 'nativeKnobNote'] = ''; feedback.append(note);
       dial.append(ticks, face, knob); adjustment.append(dial, stepper); group.append(adjustment);
-      dials[unit] = { dial, knob, note, help: unit === 'minutes' ? help : null };
+      dials[unit] = { dial, knob, note };
     } else group.append(stepper);
     group.append(range); quantities.append(group); controls.set(key, { input, error, group, key });
   }
@@ -64,7 +62,7 @@ export function renderTimeReadout({ outputs, context }, raw, { errors = [], comp
 
 // The native range owns keyboard and assistive-technology semantics. This owner
 // adds rotary pointer input while every publication checks the host's current lease.
-function mountTimeDial({ unit, dial, knob, note, help, read, write }) {
+function mountTimeDial({ unit, dial, knob, note, read, write }) {
   if (!dial || !knob) return Object.freeze({ refresh() {}, release() {}, dispose() {} });
   const scale = unit === 'hours' ? LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour : CONTRACT.minutesPerHour - 1;
   const window = knob.ownerDocument.defaultView, forcedColors = window.matchMedia('(forced-colors: active)'), cleanup = [];
@@ -96,14 +94,12 @@ function mountTimeDial({ unit, dial, knob, note, help, read, write }) {
     const enabled = valid && Boolean(view.enabled);
     if (gesture && (!enabled || gesture.token !== view.token)) release();
     knob.max = String(max ?? scale); knob.disabled = !enabled; dial.dataset.valueState = valid ? 'ready' : 'unavailable';
-    if (valid) { knob.value = String(Number(view.raw)); knob.setAttribute('aria-valuetext', `${Number(view.raw)} ${unit} per session${unit === 'hours' && max < scale ? '; up to 23 hours while Minutes is above 0' : ''}`); dial.style.setProperty('--native-knob-angle', `${-135 + Number(view.raw) * 270 / scale}deg`); }
-    else knob.setAttribute('aria-valuetext', `Enter valid hours and minutes in the precision fields to use the ${unit} dial`);
+    if (valid) { knob.value = String(Number(view.raw)); knob.setAttribute('aria-valuetext', `${Number(view.raw)} ${unit} per session`); dial.style.setProperty('--native-knob-angle', `${-135 + Number(view.raw) * 270 / scale}deg`); }
+    else knob.setAttribute('aria-valuetext', 'Enter valid hours and minutes.');
     if (note) {
-      const limitedHours = unit === 'hours' && max !== null && max < scale;
-      note.hidden = valid && !limitedHours;
-      note.textContent = limitedHours ? 'Hours reaches 23 while Minutes is above 0. Set Minutes to 0 to choose 24 hours.'
-        : unit === 'minutes' && max === 0 ? 'At 24 hours, set Minutes to 0 to use the dial.'
-          : max === null ? 'Enter valid hours and minutes to use the dial.' : `Enter 0–${scale} in ${unit === 'hours' ? 'Hours' : 'Minutes'} to use the dial.`;
+      note.hidden = valid || Boolean(view?.composing);
+      note.textContent = max === null ? 'Enter valid hours and minutes.'
+        : unit === 'minutes' && max === 0 ? 'Use 0 minutes with 24 hours.' : `Enter 0–${max} ${unit}.`;
     }
   }
   function pointerAngle(event) {
@@ -134,8 +130,8 @@ function mountTimeDial({ unit, dial, knob, note, help, read, write }) {
   for (const type of ['pointercancel', 'lostpointercapture']) listen(knob, type, event => { if (gesture?.pointerId === event.pointerId) release(true); });
   listen(knob, 'keydown', event => { if (event.key === 'Escape' && gesture) { event.preventDefault(); release(true); } else if (gesture) release(); });
   listen(window, 'blur', () => release(true)); listen(forcedColors, 'change', () => release(true));
-  dial.hidden = false; if (help) help.hidden = false; refresh();
-  return Object.freeze({ refresh, release, dispose() { if (disposed) return; release(); disposed = true; cleanup.splice(0).forEach(release => release()); knob.disabled = true; dial.hidden = true; if (help) help.hidden = true; if (note) note.hidden = true; } });
+  dial.hidden = false; refresh();
+  return Object.freeze({ refresh, release, dispose() { if (disposed) return; release(); disposed = true; cleanup.splice(0).forEach(release => release()); knob.disabled = true; dial.hidden = true; if (note) note.hidden = true; } });
 }
 
 

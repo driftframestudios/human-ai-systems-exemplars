@@ -145,7 +145,7 @@
       <h2 id="studio-title">Cross-Functional Investment Studio</h2>
 
       <div class="about-reading--prototype">
-        <p>Complex, important initiatives are often cross-functional resource requests. This prototype lets a visitor model plans, change frameworks, staffing, quality, human–AI handoffs, disruption, and investment.</p>
+        <p>Explore a service-request pilot across four sprints. See who prepares the work, who receives it, and when the team can decide. Try a change and compare the work it needs.</p>
       </div>
 
       <div class="native-coordination" data-native-coordination>
@@ -231,9 +231,10 @@
         </aside>
         <section class="native-coordination__body" id="native-studio-coordination" data-native-chapter-panel="coordination" aria-labelledby="native-score-title">
           <section class="native-score" data-native-score aria-labelledby="native-score-title">
-            <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>See when people work together, what must be ready, and which decision makes the next commitment possible.</p></header>
+            <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>Open a sprint to see the sessions, people and decisions that carry the work forward.</p></header>
             <p data-score-fallback>The pilot moves through research, prototype work, an operations rehearsal and review. The interactive horizon lets you inspect that illustrative sequence and try another arrangement.</p>
           </section>
+          <details class="native-coordination__workspace" data-native-workspace="connection"><summary>Team connections</summary>
           <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
             <h3 id="native-patch-bay-title" class="native-zine__heading">Coordination connections</h3>
             <p class="native-coordination__hint">Connect teams through the work they share.</p>
@@ -308,9 +309,10 @@
               <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
             </section>
           </section>
+          </details>
           <details class="native-showcase" data-native-showcase><summary>Try the service-request pilot <span>Clarify a review and compare the work it needs.</span></summary><div class="native-showcase__content">
             <div class="native-showcase__brief">
-              <p class="native-coordination__plate">A plan to try · illustrative four-week pilot</p>
+              <p class="native-coordination__plate">Illustrative four-sprint pilot</p>
               <h3 id="native-showcase-title">Make a service request easier to complete.</h3>
               <p>Product and Research, Engineering, and Quality and Operations are preparing a small pilot. Their shared work connects evidence, a prototype, and a decision about readiness.</p>
               <p>Choose Pilot decision review in Working sessions below, then open its settings to try 45 minutes. Compare the proposal before Apply. Investment holds baseline comparison and Undo.</p>
@@ -324,6 +326,7 @@
               </div>
             </details>
           </div></details>
+          <details class="native-coordination__workspace" data-native-workspace="session"><summary>Working sessions</summary>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>
             <div><label for="native-session-select">Working session</label><select id="native-session-select" data-native-session-select disabled><option value="review">Pilot decision review</option></select></div>
@@ -365,8 +368,6 @@
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
                     <span><strong data-native-duration-minutes>30</strong><span>minutes</span></span>
                   </output>
-                  <p class="native-coordination__hint native-knob__help" id="native-minutes-knob-help" hidden>Turn or tap a dial, use arrow keys, or enter a value beside it. Escape restores the value where a turn began.</p>
-                  <p class="native-coordination__hint" id="native-duration-limit" hidden>Hours and minutes combine into one duration, up to 24 hours per person.</p>
                 </div>
                 <div class="native-coordination__controls native-time__quantities">
                   <div class="native-coordination__control native-coordination__control--hours native-time__part">
@@ -375,11 +376,11 @@
                       <div class="native-knob native-knob--hours" data-native-hours-dial hidden>
                         <div class="native-knob__ticks" aria-hidden="true"></div>
                         <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
-                        <input type="range" min="0" max="24" step="1" value="0" id="native-hours-knob" data-native-hours-knob aria-label="Hours dial" aria-describedby="native-minutes-knob-help native-duration-limit native-hours-error">
+                        <input type="range" min="0" max="24" step="1" value="0" id="native-hours-knob" data-native-hours-knob aria-label="Hours dial" aria-describedby="native-hours-error">
                       </div>
                       <div class="native-coordination__stepper">
                         <button type="button" data-field="hoursPerSession" data-step="-1" aria-label="Decrease session duration by one hour">−</button>
-                        <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-duration-limit native-hours-error">
+                        <input id="native-hours" name="hoursPerSession" type="text" inputmode="numeric" value="0" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-hours-range native-hours-error">
                         <button type="button" data-field="hoursPerSession" data-step="1" aria-label="Increase session duration by one hour">+</button>
                       </div>
                     </div>
@@ -391,11 +392,11 @@
                       <div class="native-knob native-knob--minutes" data-native-minutes-dial hidden>
                         <div class="native-knob__ticks" aria-hidden="true"></div>
                         <div class="native-knob__face" aria-hidden="true"><span class="native-knob__pointer"></span></div>
-                        <input type="range" min="0" max="59" step="1" value="30" id="native-minutes-knob" data-native-minutes-knob aria-label="Minutes dial" aria-describedby="native-minutes-knob-help native-duration-limit native-minutes-error">
+                        <input type="range" min="0" max="59" step="1" value="30" id="native-minutes-knob" data-native-minutes-knob aria-label="Minutes dial" aria-describedby="native-minutes-error">
                       </div>
                       <div class="native-coordination__stepper">
                         <button type="button" data-field="minutesPerSession" data-step="-1" aria-label="Decrease session duration by one minute">−</button>
-                        <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-duration-limit native-minutes-error">
+                        <input id="native-minutes" name="minutesPerSession" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false" aria-describedby="native-duration-label native-minutes-range native-minutes-error">
                         <button type="button" data-field="minutesPerSession" data-step="1" aria-label="Increase session duration by one minute">+</button>
                       </div>
                     </div>
@@ -422,7 +423,7 @@
                 </div>
                 <div class="native-session__participant-group" role="group" aria-labelledby="native-session-people-label">
                   <p id="native-session-people-label" class="native-coordination__control-title">Participants</p>
-                  <p class="native-coordination__hint">Choose people from this team.</p>
+                  <p class="native-coordination__hint">Choose the people joining this session.</p>
                   <ul class="native-session__members" data-native-session-members aria-describedby="native-session-people-error"></ul>
                   <p class="native-coordination__hint" data-native-session-people-empty hidden>This team needs participants. <button type="button" class="native-control--navigate native-control--create" data-native-create="person" data-native-return="session">Add a person</button></p>
                   <p class="native-coordination__error" id="native-session-people-error" data-native-error="personIds"></p>
@@ -453,21 +454,8 @@
             </form>
           </details>
           <p class="native-coordination__status" data-native-status data-native-session-status role="status" aria-live="polite" aria-atomic="true"></p>
-          <details class="native-coordination__trace" data-native-trace>
-            <summary>Whole-plan cost breakdown</summary>
-            <div class="native-coordination__trace-body">
-              <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
-              <ul class="native-coordination__ledger" data-native-trace-list>
-                <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
-                <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
-                <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
-                <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
-                <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
-                <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
-              </ul>
-            </div>
-          </details>
           </section>
+          </details>
         </section>
         <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
           <h3 id="native-team-title" class="native-zine__heading">People and teams</h3>
@@ -868,10 +856,24 @@
               <button type="button" data-investment-action="download">Download current plan</button>
             </section>
           </div>
+          <details class="native-coordination__trace" data-native-trace>
+            <summary>Whole-plan cost breakdown</summary>
+            <div class="native-coordination__trace-body">
+              <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
+              <ul class="native-coordination__ledger" data-native-trace-list>
+                <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
+                <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
+                <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
+                <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
+                <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
+                <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
+              </ul>
+            </div>
+          </details>
           <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
-            <h4 id="native-plan-preview-title" tabindex="-1">Plan preview</h4>
+            <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
             <p data-investment-preview-total></p>
-            <ul data-investment-changes></ul>
+            <div data-investment-changes></div>
             <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
           </section>
           <p class="native-coordination__status" data-investment-status role="status" aria-live="polite" aria-atomic="true"></p>
@@ -944,6 +946,8 @@
       <div class="about-embed-caption"><a href="../../collaboration/initiative-costing-calculator/index.html">Open the full studio</a></div>
 
       <nav class="about-continue" aria-label="Continue the Studio question">
+        <a href="#how-title">See the work behind this approach</a>
+        <a href="debriefs.html">Read the project Debriefs</a>
         <strong>Continue the question:</strong>
         <a href="hiring-surfaces-talent-agent-intake.html#amplified-hiring-reach">How are teams using AI agents for hiring?</a>
         <a href="initiative-costing.html">How AI agents should or shouldn't be used for planning costs?</a>

@@ -72,11 +72,12 @@ then identifies each behavior's implementation owner.
   versions; source metadata stays in the catalogue and deeper manual.
 - `change-proposals.mjs` prepares settings and explicitly configured support work together. `change-draft.mjs` retains raw entries, and `change-controller.mjs` receives the framework matrix, viewpoints, mixer and support proposal.
 - `assurance-models.mjs` preserves quality concepts, original scenario assumptions, learning prompts and authored rehearsals. `investment-analysis/staffing-adapter.mjs` receives the original staffing formula for separate quality/recovery illustrations. `assurance-proposals.mjs`, `assurance-draft.mjs` and `assurance-controller.mjs` connect those readings to explicit, recoverable work proposals.
-- `score-models.mjs` derives the authored horizon, agenda and temporal capacity.
-  `score-draft.mjs` retains raw timing, availability, arrangement and funding
-  choices; `score-controller.mjs` and `score-view.mjs` receive the inspector and
-  its linked views. `score-reference.mjs` names removal dependencies and
-  comparison changes. Their [shared contract](#authored-coordination-horizon)
+- `cadence.mjs` derives sprint and quarter placements, handoffs and decision locations.
+  `score-models.mjs` retains the legacy elapsed-time projection and agenda.
+  `score-draft.mjs` carries cadence edits alongside retained timing and funding;
+  `score-controller.mjs` and `cadence-view.mjs` receive contextual editors and
+  the period overview with MIDI tracks. `score-reference.mjs` names removal dependencies and
+  comparison changes. Their [shared contract](#sprint-and-quarter-coordination)
   keeps authored placement separate from monetary accounting.
 - `navigation-policy.mjs` owns pure return-route validity, ordered ancestry
   and finite Score destination admission. Controllers retain draft parking,
@@ -103,8 +104,9 @@ then identifies each behavior's implementation owner.
   actual control, reading, and lifecycle observations across three engines.
 - `tests/native-investment-studio/score-contract.test.mjs`, `score-draft.test.mjs`
   and `score-models.test.mjs` own timing admission, atomic funding, draft recovery
-  and literal interval observations. `score.browser.mjs` owns the linked horizon,
-  inspector, Apply/Undo and accessible browser journey.
+  and literal interval observations. `cadence.test.mjs` covers period placement
+  and reference integrity. `score.browser.mjs` owns the linked horizon,
+  contextual inspector, Apply/Undo and accessible browser journey.
 
 ## Existing owners and the receiving boundary
 
@@ -141,24 +143,23 @@ original-model economic equivalence remains the receiving task in #705.
 | --- | --- | --- |
 | Arrange people and shared work | Person/team identities, roles, exact rates, funded time, membership, stable participant cards, hours/minutes dials and explicit AI contribution → human review → decision links through shared work. Person, assembly, responsibility and session checks exercise Apply, Cancel and recovery. | Full Studio keeps aggregate role quantities and its allocation model; #705 owns translation. |
 | See how teams coordinate | Pod, Guild, Project team and Shared service templates preserve arrangement identity and actual directed handoffs. Connection and template checks follow teams, people and supporting sessions. | Original routes remain usable independently. |
-| Explain desired abilities and supporting practices | The support sequencer opens responsibility, preparation, review and observation. Card reverses share existing work and preserve named decision owners. Capability checks exercise retained drafts and shared support. | Original activity catalogue remains available in the full Studio. |
+| Explain desired abilities and supporting practices | Selected action pads open responsibility, preparation, review and observation. Card reverses share existing work and preserve named decision owners. Capability checks exercise retained drafts and shared support. | Original activity catalogue remains available in the full Studio. |
 | Interpret change | Six frameworks, eight lenses, attention faders and method explanations retain distinct meanings. Supporting sessions carry actual investment. Change checks cover framework retention, lens interaction and proposal funding. | Broader source-derived heuristic effects keep their original analytical owner. |
 | Prepare quality, recovery and learning | Quality pads, planned response work, human-reviewed observations and People/team support badges have exact accepted/proposed consequences. Assurance checks distinguish reference estimates, planned work and observed outcomes. | Original quality shares, blended rates and disruption equations remain in the full Studio and its analysis owners. |
-| Arrange timing and decision gates | The horizon, compact agenda, availability, dependencies, waits, stages and next-work bank use one authored elapsed sequence. Score checks cover creation, Apply/Undo and raw hours/minutes recovery. | Working calendars and automatic scheduling require explicit assumptions in later work. Staffing weeks retain their own meaning. |
-| Explain investment and a changed commitment | Held A, accepted B and Difference channels reconcile native staffing and extra work through a per-person plot and exact ledger. Source inspection preserves the return route. Trace checks distinguish unknown/zero, pooled rounding, allocated work and replaced plan identities. | Reserve, complexity, planning bands, cumulative/cash-flow, service and commercial models remain with the full Studio; #705 receives native analytical translation. |
+| Arrange sessions and decisions | Sprint and quarter overviews open into weeks or months. Contextual editors retain sessions, availability, stages, handoffs, decisions and delays; reports carry the detailed agenda. Score checks cover view-only zoom, creation, Apply/Cancel/Undo and retained placement. | Earlier saved plans retain exact elapsed timing. Working calendars and automatic scheduling require explicit assumptions in later work. |
+| Explain investment and a changed commitment | Accepted investment, a saved baseline and their difference share the native staffing and extra-work ledger. The optional cost breakdown remains in Investment. Comparison checks distinguish unknown amounts, pooled rounding, allocated work and replaced plan identities. | Reserve, complexity, planning bands, cumulative/cash-flow, service and commercial models remain with the full Studio; #705 receives native analytical translation. |
 | Try another initiative | Six authored rehearsal families populate purpose, people, work, prerequisites, change support and quality. Preset/report checks independently price the examples and verify round-trip ownership. | The six original factories retain their original economic meanings; the native families disclose their explicit assumptions. |
-| Keep, compare and carry a plan | Versioned native 0.8.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange and report checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
-| Move through the showcase | Amp keys, contextual arrows, local inspector cues and lower-motion default distinguish navigation. About provides ordinary vertical flow and a closed static counterpart. Focused three-engine journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
+| Keep, compare and carry a plan | Versioned native 0.9.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange and report checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
+| Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; the Lower choice and system reduced-motion setting quiet the responses. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
 
-The comparison attributes changes to accepted source records, rather than
-claiming that one input independently caused a difference. Allocated work stays
+The comparison reads the accepted plan and saved baseline. Allocated work stays
 inside staffing. Reference estimates and authored rehearsal outcomes remain
 visibly distinct from funded work and human observations. A main source merge
 preserves the separately human-cued tagged-release boundary in #686.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.7.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.9.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
 `horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings` and `scoreSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
@@ -1644,8 +1645,10 @@ listeners, ends the draft, and exposes the accepted static reading. A repaired
 root can mount again. A persisted page transition retains the owner for browser
 history restoration; an actual departure disposes it.
 
-Mounting opens Session settings with a fresh draft. Its native summary handles
-later opening and closing; Cancel returns focus to that summary.
+Mounting prepares Session settings with a fresh draft inside the collapsed
+Working sessions workspace. Explicit session navigation opens that workspace;
+its native summaries handle later opening and closing. Cancel returns focus to
+the Session settings summary.
 `work-controller.mjs` owns one complete session form: name, team, ordered
 participants, duration, count, funding and status. Raw text and circular step
 buttons share the `editing.session` lease with every other chapter. The in-card
@@ -1664,9 +1667,9 @@ read one immutable projection. Funded staffing plus additional purchases forms
 the commitment; attributed allocation remains inside staffing. Incomplete
 pricing carries its standing beside the known subtotal. `horizonWeeks` remains
 scenario context. The working-session count carries repeated participant effort;
-the authored Score separately places those occurrences and compares them with
-availability and dependencies. Calendar dates and per-sprint allocation remain
-future extensions. Integer-cent formatting retains exact cents through the
+the cadence separately places those occurrences within sprints or quarters and
+records period availability and handoffs. Calendar dates and automatic scheduling
+remain future extensions. Integer-cent formatting retains exact cents through the
 admitted monetary range.
 
 One new accepted projection costs O(W + T + P + A) for receiver lookups and person
@@ -1784,8 +1787,9 @@ raw survives replacement under its original target and requires review.
 `presets.mjs` supplies the populated service-request pilot, six authored native
 scenario families and two compact teaching factories. Shared working sessions
 price twelve person-hours as $1,200 of extra work; the funded example allocates
-the same effort inside $1,200 of staffing. The replacement preview names affected
-records and any admitted legacy format conversion. `showcase-scenarios.mjs`
+the same effort inside $1,200 of staffing. The replacement confirmation names the plan, its amount, horizon and any
+admitted legacy format conversion. Coordination examples update in place through
+the accepted state owner and remain recoverable through Undo. `showcase-scenarios.mjs`
 provides the six family factories; #705 owns original-model economic conversion.
 
 Download captures one accepted serialized string. The controller retains one
@@ -1797,8 +1801,8 @@ later static-table content refresh.
 
 File preflight takes O(1); decoding and canonical preparation follow the
 [shared cost contract](#cost-and-input-frequency-contract), including capability
-support and Score projection. With N records and R references, preview
-summaries use stable-ID maps and sets in O(N + R) time and transient space.
+support and Score projection. With N records and R references, exchange
+comparisons use stable-ID maps and sets in O(N + R) time and transient space.
 They run once per prepared preview. Comparison DOM updates follow accepted
 projection or baseline changes; raw keystrokes retain those nodes. Exchange
 retains one pending controller, one preview or bounded rejected text, and tiny
@@ -1923,7 +1927,7 @@ calculation take O(N + R + B) time under ordinary expected Map/Set lookup.
 Capability support additionally visits each instance's bound sessions and those
 sessions' participants; call those visits Q. Score projection adds the bounded
 expansion and interval sorting described under
-[Authored coordination horizon](#authored-coordination-horizon); call that work S.
+[Legacy authored coordination horizon](#legacy-authored-coordination-horizon); call that work S.
 Full preparation therefore takes O(N + R + B + Q + S). Shared sessions retain
 one global money account while each card receives its own direct-support reading.
 Prepared state, indexes, results and serialization retain proportional memory.
@@ -2054,7 +2058,45 @@ and this package's focused tests. Issue #679 receives performance refinement
 after the human resumes that work; #705 owns broader economic translation.
 
 
-## Authored coordination horizon
+## Sprint and quarter coordination
+
+Schema 0.9 and score settings 1.1 add nullable `scoreSettings.cadence`.
+`cadence.mjs` owns ordered period IDs, explicit work/occurrence placements,
+period availability, typed work/stage handoffs, stage/handoff decision anchors
+and contextual delays. A placement pairs a work ID with its zero-based occurrence
+index; each occurrence has at most one period and week/month subdivision.
+Unplaced work remains included in effort and cost.
+
+`resizeCadence` keeps affected occurrences unplaced when periods are removed.
+`regroupCadence` relabels and groups the same work by ordinal placement; it
+establishes no calendar conversion. The authored pilot uses two-week sprints.
+The separate quarter example contains representative preparation, validation,
+rollout and adoption sessions. Their shown investment prices that included work.
+
+The work command atomically accepts a session and its placements. Omitted
+placement input preserves current placement; a reduced occurrence count trims
+its trailing placements. Reference guards retain explicit ownership for stages,
+handoffs, decisions and delays. Earlier schema admission keeps the original
+byte and field contracts before migrating; existing team arrangements and legacy
+timing remain intact, with cadence initially unknown.
+
+`score-controller.mjs` owns horizon drafts and contextual stage, handoff,
+decision, delay and availability editing. The existing work controller owns
+session people, duration, count, funding and placement. The root controller owns
+chapter and return routes. `cadence-view.mjs` projects the overview, weeks/months,
+MIDI tracks and relationships; `about.css` owns the native-cadence composition.
+The detailed agenda remains in downloadable reports.
+Periods are view selections until the visitor changes their count or basis.
+
+The raw score adapter carries bounded cadence JSON through the established
+saved-edit coordinator. Admission validates the complete candidate before
+publication. Zoom and focus are local view state. Reports use the same cadence
+projection; legacy plans keep the elapsed-time report described below.
+
+## Legacy authored coordination horizon
+
+The following contract remains available to read earlier saved plans and their
+exact timing. The visitor editor now uses the sprint and quarter route above.
 
 Schema 0.7 adds nullable `people[].availability`, nullable
 `work[].timing = {startMinute, repeatEveryMinutes}`, and `scoreSettings` version
@@ -2098,36 +2140,13 @@ The UI uses compact overlap totals. Only one selected overlapping interval earns
 an affected-work scan; its inspector retains the exact participating session names.
 General scheduling and performance refinement follow a concrete receiving need.
 
-`score-draft.mjs` keeps raw text, collection IDs, stale repair and explicit funding
-intent under the existing coordinator. `score-controller.mjs` owns the stable
-inspector, preview, Apply/Cancel, selected record and view scale. `score-view.mjs`
-projects the same reading into the track field, agenda, exact table and people
-cards. `score-reference.mjs` supplies truthful removal routes and readable
-comparison descriptions. The root controller retains chapter, saved-edit and
-return-navigation ownership; `about.css` owns the scoped instrument composition.
-
-Capacity, dependency details and the inspector begin as closed native
-disclosures. Their DOM owners retain open state through preview and refresh;
-clip selection and return navigation reveal the same inspector before focus.
-The clip preview leads with minutes per person and the preceding activity.
-The horizon names its starting context once; the manual retains the fuller
-explanation of time, effort and funding.
-
-`score-time.mjs` supplies exact elapsed-unit parsing and display. Entries such
-as `11h30m`, `690 minutes` and `690` produce the same canonical 690 minutes.
-Hours may extend past 24; draft text remains literal through invalid input,
-parking and stale review. Step controls move by one minute. The schema and
-arrangement arithmetic retain integer elapsed minutes. Working-calendar
-interpretation requires authored working days, hours and exceptions, as in
-[Microsoft's calendar guidance](https://support.microsoft.com/en-au/project/set-the-general-working-days-and-times-for-a-project).
-
-The showcase's rehearsal sequence is an explicit authored example: minute 0
-through 825, with a 900-minute planning window. It costs the same $3,980 as its
-untimed predecessor. Quality's 80-hour sprint and 520-hour quarter conversions
-remain staffing references, separate from this relative timeline. The score
-browser route observes timing/capacity, explicit $100 follow-up funding, exact
-Undo, stale navigation, view-only zoom, agenda/table, narrow reading and keyboard
-focus. Source fixtures independently establish arithmetic and admission boundaries.
+`score-draft.mjs` preserves legacy timing and availability in a period edit.
+`score-reference.mjs` supplies removal routes and readable comparisons.
+`score-time.mjs` retains exact elapsed-unit parsing for older input and tests.
+The original 0–825 minute rehearsal and its 900-minute window remain preserved
+source data. The current showcase describes their sessions through authored
+period placements. Quality's 80-hour sprint and 520-hour quarter assumptions
+remain separate staffing references.
 
 
 ## Create entry and confirmation controls
@@ -2227,12 +2246,11 @@ The root coordinator retains the originating editor and nested inspection route;
 return restores its raw entries, with stale recovery retaining focus when needed.
 
 
-### Investment trace and portable results
+### Investment comparison and portable results
 
-`investment-trace.mjs` derives held and accepted per-person funding pools;
-`investment-trace-view.mjs` renders the channels, plot and exact table.
-`investment-controller.mjs` owns selection and baseline actions. The root
-controller parks drafts when following sources and restores the comparison.
+`investment-controller.mjs` owns baseline comparison, history and plan exchange.
+The contribution-trace panel and its runtime modules were retired following
+human review. The original compact controls remain the visitor path.
 
 `showcase-scenarios.mjs` authors six native rehearsal families through the
 existing admitted plan. `reports.mjs` synchronously derives HTML and text from

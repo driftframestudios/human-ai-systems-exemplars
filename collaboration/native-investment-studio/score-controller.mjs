@@ -1,448 +1,482 @@
-import { createScoreView, scoreMinute } from './score-view.mjs';
+import { createCadenceView } from './cadence-view.mjs';
+import { createCadence, resizeCadence, regroupCadence, CADENCE_PERIOD_LIMIT } from './cadence.mjs';
+import { createShowcaseCadence } from './showcase-scenarios.mjs';
 import { scoreField, startingScoreRaw } from './score-draft.mjs';
-import { selectScoreIntervalWork } from './score-models.mjs';
 import { money } from './display.mjs';
 import { resolveScoreDestination } from './navigation-policy.mjs';
 
 const INSTANCES = new WeakMap();
+const LABELS = Object.freeze({ stage: 'stage', handoff: 'handoff', gate: 'decision', delay: 'delay', person: 'person',
+  dependency: 'retained handoff', wait: 'retained wait', proposal: 'retained proposal', 'legacy-availability': 'retained availability' });
+const RETAINED_LISTS = Object.freeze({ dependency: 'dependencyIds', wait: 'waitIds', proposal: 'proposalIds' });
+const CHOICES = Object.freeze({ open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 let sequence = 0;
-const KINDS = Object.freeze({ work: 'Sessions', person: 'Availability', dependency: 'Handoffs', stage: 'Stages', wait: 'Waits', gate: 'Decisions', proposal: 'Next & options', window: 'Time basis' });
-const LISTS = Object.freeze({ work: 'timedWorkIds', person: 'availabilityPersonIds', dependency: 'dependencyIds', stage: 'stageIds', wait: 'waitIds', gate: 'gateIds', proposal: 'proposalIds' });
-const FIELDS = Object.freeze({
-  window: ['windowEnabled', 'windowLabel', 'windowStartMinute', 'windowEndMinute'],
-  work: ['timed', 'startMinute', 'repeatEveryMinutes'],
-  dependency: ['fromWorkId', 'toWorkId', 'lagMinutes', 'connectionId'], stage: ['label', 'workIds'],
-  wait: ['label', 'startMinute', 'endMinute', 'reason', 'receiverPersonId'],
-  gate: ['label', 'afterStageId', 'reviewerPersonId', 'question', 'evidence', 'modeledDecision'],
-  proposal: ['label', 'bank', 'gateId', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'timed', 'startMinute', 'repeatEveryMinutes'],
-});
-const CHOICE_LABELS = Object.freeze({ next: 'Next', options: 'Option', allocated: 'Within funded time', additional: 'Extra investment', planned: 'Planned', paused: 'Paused',
-  open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
+const freshId = (kind, rows) => { const used = new Set(rows.map(row => typeof row === 'string' ? row : row.id)); let n = 1; while (used.has(kind + '-' + n)) n++; return kind + '-' + n; };
+const cadenceFrom = raw => { try { return JSON.parse(raw.cadence ?? 'null'); } catch { return null; } };
 
-export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {}, onNavigate = () => {}, onInspect = () => {},
-  canOpen = () => true, isActive = canOpen }) {
+// The score draft retains the transaction. This controller owns the visitor's
+// selected period and contextual inspector; zoom never enters accepted state.
+export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {},
+  onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
-  const document = root.ownerDocument, instance = `score-${++sequence}`, cleanup = [], controls = new Map(), editor = editing.score;
-  let disposed = false, generation = 0, composing = false, selected = { kind: 'work', id: studio.read().state.work[0]?.id ?? '' };
-  let scale = 1, focusWorkId = null, fieldSignature = null, fieldSequence = 0, lastProjection = null;
-  let overlapIndex = 0;
-  let retiredToken = null;
-  const decisionOrigins = new Map();
-  const owns = epoch => !disposed && generation === epoch;
-  const boundary = () => { const current = editing.read(); return { projection: studio.read(), intent: current.intent, token: current.active?.token ?? null }; };
-  const retains = (epoch, mark) => {
-    const current = editing.read();
-    return owns(epoch) && studio.read() === mark.projection && current.intent === mark.intent && (current.active?.token ?? null) === mark.token;
-  };
-  function releaseRetiredLease() {
-    if (retiredToken === null) return;
-    const active = editing.read().active;
-    if (active?.kind !== 'score' || active.token !== retiredToken) { retiredToken = null; return; }
-    const result = editing.park();
-    if (result.ok || result.error.code !== 'settling') retiredToken = null;
-  }
-  function operate(method, ...args) {
-    try { return editor[method](...args); }
-    finally { releaseRetiredLease(); }
-  }
+  const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
+  let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
+  let selected = { kind: 'horizon', id: '' }, fieldSignature = '', lastProjection = null;
+  let arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
+  const created = new Map();
   const node = (tag, text, className) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; };
   const listen = (el, type, fn) => { el.addEventListener(type, fn); cleanup.push(() => el.removeEventListener(type, fn)); };
-  function button(text, action) {
-    const el = node('button', text); el.type = 'button'; el.dataset.scoreAction = action;
-    if (['chapter', 'source', 'open'].includes(action)) el.classList.add('native-control--navigate');
-    return el;
+  function button(text, action, className = '') { const el = node('button', text, className); el.type = 'button'; el.dataset.scoreAction = action; return el; }
+  const owns = epoch => !disposed && generation === epoch;
+  const boundary = () => ({ projection: studio.read(), intent: editing.read().intent, token: editing.read().active?.token ?? null });
+  const retains = (epoch, mark) => owns(epoch) && studio.read() === mark.projection && editing.read().intent === mark.intent && (editing.read().active?.token ?? null) === mark.token;
+  function operate(method, ...args) {
+    try { return editor[method](...args); }
+    finally {
+      if (retiredToken !== null) {
+        const active = editing.read().active;
+        if (active?.kind !== 'score' || active.token !== retiredToken) retiredToken = null;
+        else { const result = editing.park(); if (result.ok || result.error.code !== 'settling') retiredToken = null; }
+      }
+    }
   }
   function announce(text) { if (!disposed) status.textContent = text; }
-  const toolbar = node('div', undefined, 'native-score__transport'); toolbar.setAttribute('aria-label', 'Horizon view');
-  const viewChoices = node('div', undefined, 'native-score__view-choices'); viewChoices.setAttribute('role', 'group'); viewChoices.setAttribute('aria-label', 'View scale');
-  const scaleButtons = new Map();
-  for (const [value, label] of [[1, 'Whole plan'], [2, '2×'], [4, '4×']]) {
-    const choice = button(label, 'scale'); choice.dataset.scoreScale = String(value); viewChoices.append(choice); scaleButtons.set(value, choice);
+  const toolbar = node('div', undefined, 'native-score__transport');
+  const horizon = node('fieldset', undefined, 'native-score__horizon-controls'); horizon.append(node('legend', 'Plan horizon'));
+  const basisChoices = node('div', undefined, 'native-score__segments');
+  for (const [value, label] of [['sprint', 'Sprints'], ['quarter', 'Business quarters']]) {
+    const labelEl = node('label'), input = node('input'); input.type = 'radio'; input.name = instance + '-basis'; input.value = value; input.dataset.cadenceBasis = '';
+    labelEl.append(input, node('span', label)); basisChoices.append(labelEl);
   }
-  const resetFocus = button('Show all sessions', 'reset-focus'), arrange = button('Arrange timing', 'open'); resetFocus.hidden = true;
-  const links = node('div', undefined, 'native-score__chapter-links'); links.setAttribute('role', 'group'); links.setAttribute('aria-label', 'Go to chapter');
-  links.append(node('span', 'Go to chapter', 'native-score__group-label'));
-  for (const [kind, label] of [['change', 'Change'], ['assurance', 'Quality & recovery'], ['investment', 'Investment']]) {
-    const link = button(label, 'chapter');
-    link.classList.add('native-score__navigate'); link.setAttribute('aria-label', `Go to ${label}`); link.dataset.scoreChapter = kind; links.append(link);
+  const countLabel = node('label', 'Periods'), count = node('input'); count.type = 'number'; count.min = '1'; count.max = String(CADENCE_PERIOD_LIMIT); count.id = instance + '-count'; countLabel.htmlFor = count.id; count.dataset.cadenceCount = '';
+  const addPeriod = button('Add sprint', 'add-period', 'native-control--create');
+  horizon.append(basisChoices, countLabel, count, addPeriod);
+  const examples = node('div', undefined, 'native-score__example-links'); examples.append(node('span', 'Try a different example'));
+  for (const [id, label] of [['service-request-pilot', 'Four-sprint pilot'], ['service-request-rollout', 'Two-quarter rollout']]) {
+    const el = button(label, 'example'); el.dataset.presetId = id; examples.append(el);
   }
-  toolbar.append(viewChoices, resetFocus, arrange, links);
+  toolbar.append(horizon, examples);
+  const pending = node('div', undefined, 'native-score__pending'); pending.hidden = true;
+  const pendingText = node('p'), pendingActions = node('div', undefined, 'native-coordination__actions');
+  pendingActions.append(button('Apply horizon', 'apply'), button('Cancel changes', 'cancel')); pending.append(pendingText, pendingActions);
   const projectionRoot = node('div', undefined, 'native-score__projection'); projectionRoot.dataset.scoreProjection = '';
-  const inspector = node('details', undefined, 'native-score__inspector');
-  const inspectorSummary = node('summary'), title = node('h4', 'Inspect the arrangement'); title.id = `${instance}-inspect-title`; inspectorSummary.append(title);
-  const rail = node('div', undefined, 'native-score__keys'); rail.setAttribute('aria-label', 'Inspect the arrangement');
-  for (const [kind, label] of Object.entries(KINDS)) { const key = button(label, 'kind'); key.dataset.scoreKind = kind; rail.append(key); }
+  const inspector = node('details', undefined, 'native-score__inspector'), summary = node('summary', 'Stages & handoffs');
+  const rail = node('div', undefined, 'native-score__keys'); rail.setAttribute('aria-label', 'Plan editors');
+  rail.append(button('Sessions', 'sessions'), button('Stages & handoffs', 'flow'));
+  const flowActions = node('div', undefined, 'native-coordination__actions');
+  flowActions.append(button('Add stage', 'add-stage', 'native-control--create'), button('Connect work', 'add-handoff', 'native-control--create'));
   const form = node('form'); form.noValidate = true; form.dataset.scoreForm = '';
+  const title = node('h4', 'Inspect the arrangement'), detail = node('p', '', 'native-score__record-note');
+  title.tabIndex = -1;
   const recovery = node('div', undefined, 'native-coordination__recovery'); recovery.hidden = true;
-  recovery.append(node('p', 'Your arrangement entries are saved. Review them against the current plan to continue.'), button('Review saved edits', 'review'), button('Use current values', 'current'), button('Discard saved edits', 'cancel'));
-  const pickerLabel = node('label', 'Choose a session'), picker = node('select'); picker.id = `${instance}-record`; pickerLabel.htmlFor = picker.id;
-  const pickerRow = node('div', undefined, 'native-score__picker'); pickerRow.append(pickerLabel, picker);
-  const editFields = node('fieldset'); editFields.dataset.scoreFields = ''; editFields.setAttribute('aria-label', 'Arrangement settings');
-  const fields = node('div', undefined, 'native-score__fields'), recordActions = node('div', undefined, 'native-coordination__actions');
-  const add = button('Add record', 'add'), remove = button('Remove record', 'remove'), addInterval = button('Add available interval', 'add-interval');
-  remove.className = 'native-control--remove'; add.className = addInterval.className = 'native-control--create'; recordActions.append(add, remove, addInterval);
-  const detail = node('p', '', 'native-score__record-note'); detail.dataset.scoreRecordNote = '';
-  const navigation = node('div', undefined, 'native-coordination__actions');
-  const overlapReading = node('div', undefined, 'native-score__overlap');
-  const overlapLabel = node('label', 'Inspect an overlapping interval'), overlapChoice = node('select'), overlapNames = node('p');
-  overlapChoice.id = `${instance}-overlap`; overlapLabel.htmlFor = overlapChoice.id; overlapReading.append(overlapLabel, overlapChoice, overlapNames);
-  const source = button('Open session settings', 'source'), focus = button('Focus this session', 'focus'); navigation.append(source, focus);
-  editFields.append(fields, recordActions);
+  recovery.append(node('p', 'Your entries are saved. Review them against the current plan.'), button('Review saved edits', 'review'), button('Use current values', 'current'));
+  const fields = node('fieldset', undefined, 'native-score__fields'); fields.dataset.scoreFields = ''; fields.setAttribute('aria-label', 'Arrangement settings');
+  const contextActions = node('div', undefined, 'native-coordination__actions');
   const preview = node('p', '', 'native-score__preview'); preview.dataset.scorePreview = '';
-  const error = node('p', '', 'native-coordination__error'); error.dataset.scoreError = ''; error.setAttribute('role', 'alert');
-  const actions = node('div', undefined, 'native-coordination__actions');
-  const apply = button('Apply arrangement', 'apply'); apply.type = 'submit'; const cancel = button('Cancel changes', 'cancel');
-  const keepDecision = button('Keep draft and inspect arrangement', 'keep-decision'); keepDecision.className = 'native-control--navigate';
-  actions.append(apply, cancel, keepDecision);
-  const status = node('p', '', 'native-coordination__status'); status.dataset.scoreStatus = ''; status.setAttribute('role', 'status');
-  form.append(recovery, pickerRow, detail, navigation, overlapReading, editFields, preview, error, actions, status);
-  inspector.append(inspectorSummary, rail, form);
+  const error = node('p', '', 'native-coordination__error'); error.setAttribute('role', 'alert'); error.dataset.scoreError = '';
+  const actions = node('div', undefined, 'native-coordination__actions'), apply = button('Apply changes', 'apply'), cancel = button('Cancel changes', 'cancel');
+  apply.type = 'submit'; actions.append(apply, cancel);
+  const status = node('p', '', 'native-coordination__status'); status.setAttribute('role', 'status'); status.dataset.scoreStatus = '';
+  form.append(title, detail, recovery, fields, contextActions, preview, error, actions);
+  inspector.append(summary, rail, flowActions, form);
+  const manual = node('details', undefined, 'native-score__manual'); manual.append(node('summary', 'How periods and session effort relate'),
+    node('p', 'Sprints and quarters group the work. Open a period to see its weeks or months, then choose a session to inspect its people and duration. Each sprint in this example spans two weeks.'),
+    node('p', 'A stage groups related sessions. A handoff connects the work that produces a result to the work that receives it. Decisions and delays belong beside those relationships.'),
+    node('p', 'Moving sessions between periods keeps their effort and price. Increasing duration or adding working sessions changes the planned effort. Available time and funded time remain separate assumptions.'));
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
-  const manual = node('details', undefined, 'native-score__manual'); manual.append(node('summary', 'How time, effort and decisions relate'),
-    node('p', 'Schedule sessions in elapsed hours and minutes from the start of this plan. Choose when the first session starts and, for repeated sessions, the time from one start to the next. The session count sets how many run. Elapsed time includes off-hours; availability describes when a person can join. Funded time describes how much effort is already paid for.'),
-    node('p', 'Waiting occupies elapsed time and carries no participant effort. Model response work as a session when people must spend time on it. A dependency connects the last finish of earlier work to the first start of later work.'),
-    node('p', 'Next and Options retain proposed work separately. A modeled Proceed decision makes a linked proposal eligible; select Add to planned work and Apply to fund it. Real decisions remain with the named people and their evidence.'),
-    node('p', 'The quality reference uses 80 hours per sprint and 520 hours per quarter. Those staffing reference conversions are separate from elapsed minutes in this horizon. Changing the view scale changes only what you see.'));
-  root.append(toolbar, projectionRoot, inspector, manual);
-  const view = createScoreView(projectionRoot, { onSelect(target) { select(target, true); }, onNavigate(target) { navigate(target); }, onAddDecision: addDecision });
+  root.append(toolbar, pending, projectionRoot, inspector, manual, status);
+  const view = createCadenceView(projectionRoot, {
+    onSelect: target => select(target, true), onNavigate: target => navigate(target),
+    onPeriod: id => { periodId = id; render(); }, onAddSession: context => createSession(context),
+    onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
+    onAddStage: () => addStage(), onCreateHorizon: () => proposeHorizon(),
+    onTryReview: () => tryLaterReview(),
+  });
 
-  function labels(kind, raw, state) {
-    if (kind === 'window') return [['window', 'Time basis']];
-    const rows = raw[LISTS[kind]] ?? [];
-    const current = new Map((kind === 'work' ? state.work : kind === 'person' ? state.people : []).map(row => [row.id, row.label]));
-    return rows.map(id => [id, kind === 'work' || kind === 'person' ? current.get(id) ?? `${id} · removed; repair this reference`
-      : kind === 'dependency' ? `${state.work.find(row => row.id === raw[`dependency.${id}.fromWorkId`])?.label ?? 'Earlier work'} → ${state.work.find(row => row.id === raw[`dependency.${id}.toWorkId`])?.label ?? 'Later work'}`
-        : raw[`${kind}.${id}.label`] || `New ${kind}`]);
+  function ensure() {
+    if (disposed || !canOpen()) return null;
+    if (editor.read().draft && editing.read().active?.kind === 'score') return { ok: true, view: editor.read() };
+    const epoch = ++generation, before = boundary(); onBegin();
+    const active = editing.read().active;
+    if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent || (active && active.token !== before.token)) return null;
+    const result = operate('begin', 'score', studio.read()); if (!owns(epoch)) return null;
+    return result;
   }
-  function options(metadata, raw, state) {
-    if (metadata.choices) return metadata.choices.map(id => [id, CHOICE_LABELS[id] ?? id]);
-    if (metadata.source === 'stages') return labels('stage', raw, state);
-    if (metadata.source === 'gates') return labels('gate', raw, state);
-    if (metadata.source === 'proposals') return labels('proposal', raw, state);
-    return (state[metadata.source] ?? []).map(row => [row.id, row.label ?? row.sharedObject ?? row.id]);
+  function changeCadence(update) {
+    const opened = ensure(); if (!opened?.ok) { announce(opened?.error?.message ?? 'Open the current arrangement.'); return; }
+    const current = editor.read(); if (current.status !== 'editing') { render(); inspector.open = true; return; }
+    const cadence = cadenceFrom(current.draft.raw);
+    const result = operate('setText', current.draft.token, 'cadence', JSON.stringify(update(cadence, current)));
+    render(); announce(result.ok ? 'Preview the arrangement, then Apply to keep it.' : result.error.message); onEditing();
   }
-  const isNewDecision = (raw, state) => selected.kind === 'gate' && raw.gateIds.includes(selected.id)
-    && !state.scoreSettings.gates.some(row => row.id === selected.id);
-  function field(parent, key, raw, state) {
-    const metadata = scoreField(key); if (!metadata) return;
-    const radio = !metadata.checkbox && !metadata.source && metadata.choices?.length >= 2 && metadata.choices.length <= 4;
-    const grouped = metadata.kind === 'ids' || radio, prose = ['question', 'evidence', 'reason'].includes(key.split('.').at(-1));
-    const group = node(grouped ? 'fieldset' : 'div', undefined, `native-score__field${prose ? ' native-score__field--prose' : ''}`);
-    const caption = node(grouped ? 'legend' : 'label', metadata.label), input = node(grouped ? 'div' : metadata.source || metadata.choices && !metadata.checkbox ? 'select' : prose ? 'textarea' : 'input');
-    input.id = `${instance}-field-${++fieldSequence}`; input.dataset.scoreField = key; input.name = key;
-    if (!grouped) caption.htmlFor = input.id;
-    const message = node('p', '', 'native-coordination__error'); message.id = `${input.id}-error`;
-    input.setAttribute('aria-describedby', message.id);
-    if (grouped) {
-      input.className = radio ? 'native-score__segments' : 'native-score__choices';
-      const rows = options(metadata, raw, state), present = new Set(rows.map(([id]) => id));
-      if (!radio) for (const id of raw[key] ?? []) if (!present.has(id)) rows.push([id, `${id} · removed; choose a current record`]);
-      for (const [id, name] of rows) {
-        const label = node('label'), check = node('input'); check.type = radio ? 'radio' : 'checkbox'; check.value = id; check.dataset.scoreField = key; check.name = `${instance}-${key}`;
-        check.setAttribute('aria-describedby', message.id); label.append(check, node('span', name)); input.append(label);
-      }
-    } else if (input.tagName === 'SELECT') {
-      const rows = options(metadata, raw, state); if (metadata.source) rows.unshift(['', metadata.optional ? 'Choose when useful' : 'Choose a record']);
-      if (raw[key] && !rows.some(([id]) => id === raw[key])) rows.push([raw[key], `${raw[key]} · removed; choose a current record`]);
-      for (const [id, name] of rows) { const option = node('option', name); option.value = id; input.append(option); }
-    } else {
-      if (input.tagName === 'INPUT') input.type = metadata.checkbox ? 'checkbox' : 'text';
-      input.maxLength = metadata.maxLength;
-      if (prose) input.rows = 4;
-      if (metadata.numeric) { input.inputMode = metadata.time ? 'text' : 'numeric'; input.className = 'native-score__number'; }
-    }
-    let reading = null;
-    if (prose && isNewDecision(raw, state)) {
-      input.rows = 3; group.append(caption, input);
-    } else if (prose) {
-      reading = node('p', '', 'native-score__prose-reading'); reading.dataset.scoreProse = key;
-      const edit = node('details', undefined, 'native-score__prose-editor'); edit.append(node('summary', `Edit ${metadata.label.toLowerCase()}`), caption, input);
-      group.append(node('h5', metadata.label), reading, edit);
-    } else group.append(caption, input);
-    if (metadata.numeric) {
-      const steps = node('div', undefined, 'native-coordination__stepper native-score__steps');
-      for (const direction of [-1, 1]) { const step = button(direction < 0 ? '−' : '+', 'step'); Object.assign(step.dataset, { scoreField: key, scoreStep: String(direction) }); step.setAttribute('aria-label', `${direction < 0 ? 'Decrease' : 'Increase'} ${metadata.label.toLowerCase()}`); steps.append(step); }
-      steps.insertBefore(input, steps.lastElementChild); group.append(steps);
-      if (metadata.time) {
-        const hint = node('small', '', 'native-score__time-hint'); hint.id = `${input.id}-time-hint`;
-        hint.textContent = /^(work|proposal)\.[^.]+\.startMinute$/u.test(key)
-          ? 'Time after the start of this plan. 0m starts immediately. Enter 11h30m or 690 minutes.'
-          : /^(work|proposal)\.[^.]+\.repeatEveryMinutes$/u.test(key)
-            ? 'Measure from one session start to the next. The session count sets how many run. Enter 1h or 60 minutes.'
-            : 'Enter 11h30m or 690 minutes.';
-        input.setAttribute('aria-describedby', `${hint.id} ${message.id}`); group.append(hint);
-      }
-    }
-    group.append(message); parent.append(group); controls.set(key, { input, message, metadata, radio, reading });
+  function proposeHorizon() {
+    selected = { kind: 'horizon', id: '' };
+    changeCadence((cadence, current) => cadence ?? createShowcaseCadence(current.projection.state, 4));
   }
-  function buildFields(raw, state, projection) {
-    const intervals = selected.kind === 'person' ? raw[`availability.${selected.id}.intervalIds`] ?? [] : [];
-    const signature = `${selected.kind}:${selected.id}:${intervals.join(',')}:${raw.stageIds.join(',')}:${raw.gateIds.join(',')}:${raw.proposalIds.join(',')}`;
-    if (signature === fieldSignature && lastProjection === projection) return;
-    fieldSignature = signature; lastProjection = projection; controls.clear(); fields.replaceChildren();
-    if (selected.kind === 'person' && selected.id) {
-      field(fields, `availability.${selected.id}.known`, raw, state);
-      for (const id of intervals) {
-        const group = node('section', undefined, 'native-score__interval'); group.append(node('h5', 'Available interval'));
-        field(group, `availability.${selected.id}.${id}.startMinute`, raw, state); field(group, `availability.${selected.id}.${id}.endMinute`, raw, state);
-        const remove = button('Remove this interval', 'remove-interval'); remove.dataset.scoreInterval = id; remove.className = 'native-control--remove'; group.append(remove); fields.append(group);
-      }
-    } else if (selected.kind === 'window' || selected.id) {
-      for (const key of FIELDS[selected.kind]) field(fields, selected.kind === 'window' ? key : `${selected.kind}.${selected.id}.${key}`, raw, state);
-      if (selected.kind === 'proposal') {
-        const label = node('label', undefined, 'native-score__fund'), check = node('input'); check.type = 'checkbox'; check.dataset.scoreFund = selected.id;
-        label.append(check, node('span', 'Add this proposal to planned work when I Apply')); fields.append(label);
-      }
+  function tryLaterReview() {
+    selected = { kind: 'horizon', id: '' };
+    changeCadence(cadence => {
+      if (!cadence || cadence.basis !== 'sprint' || cadence.periods.length >= CADENCE_PERIOD_LIMIT) return cadence;
+      const placements = cadence.placements.filter(row => row.workId === 'review');
+      if (!placements.length) return cadence;
+      const next = resizeCadence(cadence, cadence.periods.length + 1), later = next.periods.at(-1);
+      arrangementNote = 'The review and its decision move to ' + later.label + '. The receiving team waits longer; the same sessions keep their effort and cost.';
+      return { ...next, placements: next.placements.map(row => row.workId === 'review' ? { ...row, periodId: later.id } : row),
+        delays: [...next.delays, { id: freshId('delay', next.delays), label: 'Allow another sprint before review',
+          anchor: { kind: 'work', id: 'review' }, fromPeriodId: placements.at(-1).periodId, toPeriodId: later.id,
+          reason: 'The receiving team needs more time to prepare its review.', receiverPersonId: null }] };
+    });
+  }
+  function open(_target = 'score', focus = true) {
+    const result = ensure(); render(); if (!result || disposed) return result;
+    inspector.open = true; const epoch = generation, mark = boundary(); onEditing();
+    if (!retains(epoch, mark)) return result;
+    if (focus) (fields.querySelector('input, select, textarea') ?? rail.firstElementChild).focus();
+    return result;
+  }
+  function select(target, reveal = false) {
+    if (disposed || !isActive()) return;
+    if (target.kind === 'availability') target = { ...target, kind: studio.read().state.scoreSettings.cadence?.availability.some(row => row.personId === target.id) ? 'person' : 'legacy-availability' };
+    if (target.kind === 'work') { navigate(target); return; }
+    if (target.kind === 'dependency') {
+      const old = studio.read().state.scoreSettings.dependencies.find(row => row.id === target.id);
+      const match = studio.read().state.scoreSettings.cadence?.handoffs.find(row => row.id === target.id || row.from.kind === 'work' && row.from.id === old?.fromWorkId && row.to.kind === 'work' && row.to.id === old?.toWorkId);
+      if (match) target = { kind: 'handoff', id: match.id };
     }
+    if (!['stage', 'handoff', 'gate', 'delay', 'person', 'horizon', 'legacy-availability', ...Object.keys(RETAINED_LISTS)].includes(target.kind)) return;
+    selected = target; fieldSignature = ''; const result = ensure(); render();
+    if (!result || disposed) return;
+    inspector.open = true; const epoch = generation, mark = boundary(); onEditing();
+    if (!retains(epoch, mark)) return;
+    if (reveal) { inspector.scrollIntoView({ block: 'start' }); (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); onInspect(inspector); }
+  }
+  function navigate(target) {
+    if (disposed || !resolveScoreDestination(target, studio.read().state)) return;
+    const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
+    onNavigate(target, { kind: 'score', targetId: 'score', routeKind: 'context' });
+  }
+  function createSession(context) {
+    if (disposed || !isActive()) return;
+    const accepted = studio.read().state.scoreSettings.cadence;
+    const draft = editor.read().draft, proposed = draft && cadenceFrom(draft.raw);
+    if (context?.periodId && (!accepted?.periods.some(period => period.id === context.periodId)
+      || proposed && (proposed.basis !== accepted.basis || JSON.stringify(proposed.periods) !== JSON.stringify(accepted.periods)))) {
+      announce('Apply this horizon before adding a session to its new periods.'); return;
+    }
+    const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
+    onCreateSession(context);
+  }
+  function writeRaw(key, value) {
+    const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
+    const result = operate(Array.isArray(value) ? 'setIds' : 'setText', current.draft.token, key, value);
+    render(); announce(result.ok ? '' : result.error.message); onEditing();
+  }
+  function field(key, label, value, write, { choices, multiple = false, prose = false, numeric = false, placeholder = '' } = {}) {
+    const group = node(multiple ? 'fieldset' : 'div', undefined, 'native-score__field' + (prose ? ' native-score__field--prose' : ''));
+    const caption = node(multiple ? 'legend' : 'label', label);
+    const input = node(multiple ? 'div' : choices ? 'select' : prose ? 'textarea' : 'input');
+    input.id = instance + '-field-' + controls.size; input.dataset.cadenceField = key;
+    if (!multiple) caption.htmlFor = input.id;
+    if (choices) for (const [id, text] of choices) {
+      if (multiple) { const option = node('label'), check = node('input'); check.type = 'checkbox'; check.value = id; check.dataset.cadenceField = key; option.append(check, node('span', text)); input.append(option); }
+      else { const option = node('option', text); option.value = id; input.append(option); }
+    }
+    if (input.tagName === 'INPUT') { input.type = numeric ? 'number' : 'text'; input.placeholder = placeholder; if (numeric) input.min = '0'; else input.maxLength = 200; }
+    if (prose) { input.rows = 3; input.maxLength = scoreField('gate.gate-1.question').maxLength; }
+    group.append(caption, input); fields.append(group); controls.set(key, { input, value, write, multiple });
+  }
+  function rawField(key, raw, choices, multiple = false) {
+    const metadata = scoreField(key); field(key, metadata.label, () => editor.read().draft?.raw[key] ?? raw[key], value => writeRaw(key, value),
+      { choices, multiple, prose: ['question', 'evidence'].includes(key.split('.').at(-1)) });
+  }
+  function retainedFields(raw, state) {
+    const { kind, id } = selected, prefix = kind + '.' + id + '.';
+    if (kind === 'legacy-availability' ? !raw.availabilityPersonIds.includes(id) : !raw[RETAINED_LISTS[kind]]?.includes(id)) return;
+    const name = (collection, key) => state[collection].find(row => row.id === key)?.label ?? key ?? 'Unspecified';
+    const values = kind === 'dependency' ? [
+      ['Work preparing the handoff', name('work', raw[prefix + 'fromWorkId'])],
+      ['Work receiving the handoff', name('work', raw[prefix + 'toWorkId'])],
+    ] : kind === 'wait' ? [
+      ['Wait', raw[prefix + 'label']], ['Reason', raw[prefix + 'reason'] || 'Unspecified'],
+      ['Person receiving the result', name('people', raw[prefix + 'receiverPersonId'])],
+    ] : kind === 'proposal' ? [
+      ['Proposed session', raw[prefix + 'label']], ['Team', name('teams', raw[prefix + 'teamId'])],
+      ['People', raw[prefix + 'personIds'].map(personId => name('people', personId)).join(', ') || 'Unspecified'],
+      ['Time per person', raw[prefix + 'minutesPerOccurrence'] + ' × ' + raw[prefix + 'occurrences'] + ' working sessions'],
+    ] : [['Person', name('people', id)], ['Saved availability', raw['availability.' + id + '.known'] === 'yes' ? 'Entered in an earlier arrangement' : 'Unknown']];
+    const reading = node('dl', undefined, 'native-score__field native-score__field--prose');
+    for (const [label, value] of values) reading.append(node('dt', label), node('dd', value));
+    fields.append(reading);
+    contextActions.append(button('Remove this ' + LABELS[kind], 'remove', 'native-control--remove'));
+  }
+  function buildFields(raw, state, cadence) {
+    const signature = JSON.stringify([selected, periodId, raw.stageIds, raw.gateIds, cadence?.periods, cadence?.handoffs.map(row => row.id), cadence?.delays.map(row => row.id)]);
+    if (signature === fieldSignature && lastProjection === state) return;
+    fieldSignature = signature; lastProjection = state; controls.clear(); fields.replaceChildren(); contextActions.replaceChildren();
+    const people = [['', 'Choose when known'], ...state.people.map(row => [row.id, row.label])];
+    const periods = [['', 'Choose a period'], ...(cadence?.periods ?? []).map(row => [row.id, row.label])];
+    const endpoints = [...state.work.map(row => ['work:' + row.id, row.label]), ...raw.stageIds.map(id => ['stage:' + id, raw['stage.' + id + '.label'] || 'New stage'])];
+    const patch = (collection, id, property, value) => changeCadence(next => ({ ...next, [collection]: next[collection].map(row => row.id === id ? { ...row, [property]: value } : row) }));
+    const ownedField = (collection, property, label, options = {}) => {
+      const row = cadence?.[collection].find(row => row.id === selected.id); if (!row) return;
+      const read = () => cadenceFrom(editor.read().draft?.raw ?? raw)?.[collection].find(row => row.id === selected.id)?.[property];
+      field(collection + '.' + selected.id + '.' + property, label, () => { const value = read(); return value && typeof value === 'object' ? value.kind + ':' + value.id : value ?? ''; },
+        value => patch(collection, selected.id, property, options.endpoint ? { kind: value.split(':')[0], id: value.split(':')[1] } : options.nullable ? value || null : value), options);
+    };
+    if (Object.hasOwn(RETAINED_LISTS, selected.kind) || selected.kind === 'legacy-availability') {
+      retainedFields(raw, state);
+    } else if (selected.kind === 'stage' && raw.stageIds.includes(selected.id)) {
+      rawField('stage.' + selected.id + '.label', raw);
+      rawField('stage.' + selected.id + '.workIds', raw, state.work.map(row => [row.id, row.label]), true);
+    } else if (selected.kind === 'gate' && raw.gateIds.includes(selected.id)) {
+      for (const name of ['label', 'question', 'evidence']) rawField('gate.' + selected.id + '.' + name, raw);
+      field('decision-anchor', 'Decision follows', () => {
+        const anchor = cadenceFrom(editor.read().draft?.raw ?? raw)?.decisionAnchors.find(row => row.gateId === selected.id);
+        return anchor ? anchor.kind + ':' + anchor.id : '';
+      }, value => {
+        const [kind, id] = value.split(':');
+        writeRaw('gate.' + selected.id + '.afterStageId', kind === 'stage' ? id : '');
+        changeCadence(next => ({ ...next, decisionAnchors: [...next.decisionAnchors.filter(row => row.gateId !== selected.id), { gateId: selected.id, kind, id }] }));
+      }, { choices: [...raw.stageIds.map(id => ['stage:' + id, raw['stage.' + id + '.label'] || 'New stage']),
+        ...(cadence?.handoffs ?? []).map(row => ['handoff:' + row.id, 'Handoff · ' + row.id])] });
+      rawField('gate.' + selected.id + '.reviewerPersonId', raw, people);
+      rawField('gate.' + selected.id + '.modeledDecision', raw, Object.entries(CHOICES));
+    } else if (selected.kind === 'handoff') {
+      ownedField('handoffs', 'from', 'Work preparing the handoff', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'to', 'Work receiving the handoff', { choices: endpoints, endpoint: true });
+      ownedField('handoffs', 'connectionId', 'Team connection', { choices: [['', 'Choose when useful'], ...state.connections.map(row => [row.id, row.sharedObject])], nullable: true });
+    } else if (selected.kind === 'delay') {
+      ownedField('delays', 'label', 'Delay name');
+      ownedField('delays', 'anchor', 'Affected work or handoff', { choices: [...endpoints, ...(cadence?.handoffs ?? []).map(row => ['handoff:' + row.id, 'Handoff · ' + row.id])], endpoint: true });
+      ownedField('delays', 'fromPeriodId', 'Originally planned in', { choices: periods, nullable: true });
+      ownedField('delays', 'toPeriodId', 'Proposed later period', { choices: periods, nullable: true });
+      ownedField('delays', 'reason', 'What needs time', { prose: true, nullable: true });
+      ownedField('delays', 'receiverPersonId', 'Person receiving the result', { choices: people, nullable: true });
+      contextActions.append(button('Preview affected sessions in the later period', 'move-delayed'));
+    } else if (selected.kind === 'person' && cadence) {
+      field('availability-period', 'Period', () => periodId ?? cadence.periods[0]?.id ?? '', value => { periodId = value; fieldSignature = ''; render(); }, { choices: periods.slice(1) });
+      const selectedPeriod = periodId ?? cadence.periods[0]?.id;
+      field('availability-minutes', 'Available minutes in this period', () => cadenceFrom(editor.read().draft?.raw ?? raw)?.availability.find(row => row.personId === selected.id && row.periodId === selectedPeriod)?.availableMinutes ?? '',
+        value => {
+          if (value !== '' && (!Number.isSafeInteger(Number(value)) || Number(value) < 0)) { announce('Enter whole minutes, or leave the available time blank.'); return; }
+          changeCadence(next => ({ ...next, availability: [...next.availability.filter(row => row.personId !== selected.id || row.periodId !== selectedPeriod),
+            ...(value === '' ? [] : [{ personId: selected.id, periodId: selectedPeriod, availableMinutes: Number(value) }])] }));
+        }, { numeric: true, placeholder: 'Unknown' });
+      const personLink = button('Open person settings', 'person-settings', 'native-control--navigate'); contextActions.append(personLink);
+    }
+    if (['stage', 'handoff'].includes(selected.kind) && selected.id) {
+      contextActions.append(button('Add decision here', 'add-decision', 'native-control--create'), button('Add delay here', 'add-delay', 'native-control--create'));
+    }
+    if (['stage', 'handoff', 'gate', 'delay'].includes(selected.kind) && selected.id) contextActions.append(button('Remove this ' + LABELS[selected.kind], 'remove', 'native-control--remove'));
   }
   function render() {
     const current = editor.read(); if (disposed) return current;
-    const raw = current.draft?.raw ?? startingScoreRaw(current.projection.state), state = current.projection.state;
-    const editable = current.status === 'editing', rows = labels(selected.kind, raw, state);
-    if (focusWorkId && !state.work.some(row => row.id === focusWorkId)) focusWorkId = null;
-    for (const [value, choice] of scaleButtons) choice.setAttribute('aria-pressed', String(scale === value));
-    resetFocus.hidden = !focusWorkId;
-    if (!rows.some(([id]) => id === selected.id)) selected = { kind: selected.kind, id: rows[0]?.[0] ?? '' };
-    const selectionOptions = JSON.stringify(rows);
-    if (picker.dataset.options !== selectionOptions) { picker.replaceChildren(...rows.map(([id, label]) => { const option = node('option', label); option.value = id; return option; })); picker.dataset.options = selectionOptions; }
-    picker.value = selected.id; pickerLabel.textContent = `Choose ${selected.kind === 'work' ? 'a session' : selected.kind === 'person' ? 'a person' : selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : selected.kind === 'gate' ? 'a decision' : `a ${selected.kind}`}`;
-    const creatingDecision = isNewDecision(raw, state);
-    inspector.dataset.creatingDecision = String(creatingDecision);
-    title.textContent = creatingDecision ? 'New decision' : 'Inspect the arrangement';
-    rail.hidden = creatingDecision; keepDecision.hidden = !creatingDecision;
-    if (creatingDecision) { if (detail.nextElementSibling !== preview) form.insertBefore(detail, preview); }
-    else if (detail.nextElementSibling !== navigation) form.insertBefore(detail, navigation);
-    pickerRow.hidden = selected.kind === 'window' || creatingDecision;
-    for (const key of rail.children) key.setAttribute('aria-pressed', String(key.dataset.scoreKind === selected.kind));
-    buildFields(raw, state, current.projection);
-    for (const [key, { input, message, metadata, radio, reading }] of controls) {
-      const value = raw[key];
-      if (metadata.kind === 'ids' || radio) for (const check of input.querySelectorAll('input')) check.checked = radio ? value === check.value : (value ?? []).includes(check.value);
-      else if (metadata.checkbox) input.checked = value === 'yes'; else if (input.value !== value) input.value = value ?? '';
-      if (reading) reading.textContent = value?.trim() ? value : 'Add this context when it is known.';
-      const error = current.draft?.errors.find(row => row.path === `draft.${key}`); message.textContent = error?.message ?? ''; input.setAttribute('aria-invalid', String(Boolean(error)));
-    }
-    const fund = fields.querySelector('[data-score-fund]'); if (fund) fund.checked = raw.fundProposalIds.includes(selected.id);
-    editFields.disabled = !editable; editFields.hidden = !current.draft; actions.hidden = !current.draft;
-    recovery.hidden = !current.draft || !['stale', 'parked'].includes(current.status);
-    apply.disabled = !editable || composing; cancel.disabled = !current.draft;
-    apply.textContent = creatingDecision ? 'Add decision to plan' : 'Apply arrangement';
-    cancel.textContent = creatingDecision ? 'Discard this decision' : 'Cancel changes';
-    cancel.dataset.scoreAction = creatingDecision ? 'discard-decision' : 'cancel';
-    arrange.textContent = current.draft ? 'Inspect arrangement' : 'Arrange timing';
-    add.hidden = creatingDecision || ['work', 'person', 'window'].includes(selected.kind); add.textContent = `Add ${selected.kind === 'dependency' ? 'a handoff' : selected.kind === 'proposal' ? 'proposed work' : selected.kind === 'gate' ? 'a decision' : `a ${selected.kind}`}`;
-    remove.hidden = creatingDecision || ['window'].includes(selected.kind) || !selected.id || ['work', 'person'].includes(selected.kind) && (selected.kind === 'work' ? state.work : state.people).some(row => row.id === selected.id);
-    remove.textContent = ['work', 'person'].includes(selected.kind) ? 'Remove this missing reference' : `Remove this ${selected.kind === 'dependency' ? 'handoff' : selected.kind === 'gate' ? 'decision' : selected.kind}`;
-    addInterval.hidden = selected.kind !== 'person' || !selected.id;
-    recordActions.hidden = add.hidden && remove.hidden && addInterval.hidden;
-    source.hidden = !['work', 'person'].includes(selected.kind) || !selected.id; source.textContent = selected.kind === 'person' ? 'Open person settings' : 'Open session settings';
-    focus.hidden = selected.kind !== 'work' || !selected.id;
-    const selectedWork = state.work.find(row => row.id === selected.id);
-    detail.textContent = creatingDecision ? 'Name this new decision and add the context you know. Add decision to plan accepts it together with your other arrangement changes. Discard this decision keeps those other entries.' : selected.kind === 'work' && selectedWork ? `${selectedWork.label}: ${selectedWork.occurrences} × ${scoreMinute(selectedWork.minutesPerOccurrence)} per person. Timing changes the arrangement; session settings own duration, people and funding.`
-      : selected.kind === 'person' ? 'Describe when this person is available. Unknown availability and explicitly empty availability retain different meanings.'
-        : selected.kind === 'gate' ? 'This is a modeled decision. Name the person and evidence that would support a real review.'
-          : selected.kind === 'proposal' ? 'Explore possible work here. Select Add to planned work and Apply to accept its commitment.'
-            : selected.kind === 'wait' ? 'Waiting extends elapsed time. Add a working session when people must spend time responding.'
-              : selected.kind === 'dependency' ? 'The later session starts after every occurrence of the earlier work and any waiting minutes. A linked paused connection suspends this obligation.'
-                : 'Select a record to inspect it, or arrange timing to try a change.';
-    if (['work', 'person', 'wait', 'window', 'proposal'].includes(selected.kind) && !creatingDecision) detail.textContent += ' The schedule uses elapsed time from the start of this plan, including off-hours.';
-    let proposed = null;
-    if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
+    const raw = current.draft?.raw ?? startingScoreRaw(current.projection.state), cadence = cadenceFrom(raw), state = current.projection.state;
+    const editable = current.status === 'editing';
+    const displayedCadence = editable ? cadence : state.scoreSettings.cadence;
+    if (periodId && !displayedCadence?.periods.some(row => row.id === periodId)) periodId = null;
+    for (const input of basisChoices.querySelectorAll('input')) input.checked = input.value === displayedCadence?.basis;
+    count.value = String(displayedCadence?.periods.length ?? 4); addPeriod.textContent = displayedCadence?.basis === 'quarter' ? 'Add quarter' : 'Add sprint';
+    addPeriod.disabled = (displayedCadence?.periods.length ?? 0) >= CADENCE_PERIOD_LIMIT;
+    let proposed = null; if (editable && current.draft && !composing) proposed = operate('preview', current.draft.token);
     if (disposed) return current;
     const reading = proposed?.ok ? proposed.projection : current.projection;
-    view.refresh(reading, { selected, scale, focusWorkId, preview: proposed?.ok && current.draft.changed });
-    const person = selected.kind === 'person' ? reading.score.capacity.find(row => row.personId === selected.id) : null;
-    overlapReading.hidden = !person?.overlap.length;
-    if (person?.overlap.length) {
-      overlapIndex = Math.min(overlapIndex, person.overlap.length - 1);
-      const rows = person.overlap.map((row, index) => [String(index), `${scoreMinute(row.startMinute)}–${scoreMinute(row.endMinute)} · ${row.concurrent} simultaneous sessions`]);
-      const signature = JSON.stringify(rows);
-      if (overlapChoice.dataset.options !== signature) { overlapChoice.replaceChildren(...rows.map(([value, label]) => { const option = node('option', label); option.value = value; return option; })); overlapChoice.dataset.options = signature; }
-      overlapChoice.value = String(overlapIndex);
-      const names = [...new Set(selectScoreIntervalWork(reading.score, person.personId, person.overlap[overlapIndex]).map(row => row.label))];
-      overlapNames.textContent = `Work in this interval: ${names.join(', ')}.`;
+    view.refresh(reading, { periodId, selected, preview: Boolean(proposed?.ok && current.draft.changed) });
+    const isNew = created.has(selected.kind + ':' + selected.id);
+    title.textContent = isNew ? 'New ' + LABELS[selected.kind] : selected.kind === 'horizon' ? 'Arrange the work' : 'Inspect ' + (LABELS[selected.kind] ?? 'the work');
+    if (isNew && selected.kind === 'gate') {
+      const anchor = cadence?.decisionAnchors.find(row => row.gateId === selected.id);
+      const name = endpoint => endpoint.kind === 'stage' ? raw['stage.' + endpoint.id + '.label']
+        : state.work.find(row => row.id === endpoint.id)?.label;
+      const handoff = anchor?.kind === 'handoff' && cadence.handoffs.find(row => row.id === anchor.id);
+      const context = anchor?.kind === 'stage' ? name(anchor) : handoff ? name(handoff.from) + ' → ' + name(handoff.to) : null;
+      if (context) title.textContent = 'New decision for ' + context;
     }
-    const acceptanceAction = creatingDecision ? 'Add decision to plan' : 'Apply';
-    preview.textContent = proposed?.ok ? `Accepted investment ${money(current.projection.result.knownCommitmentCents)} · proposed investment ${money(proposed.projection.result.knownCommitmentCents)}. ${proposed.summary.fundedWorkIds.length ? `${acceptanceAction} adds the selected proposals to planned work.` : `${acceptanceAction} accepts this arrangement.`}`
-      : current.draft ? 'The horizon retains the accepted arrangement while these entries need review.' : 'Select a session, person or decision to inspect its timing and relationships.';
+    detail.textContent = Object.hasOwn(RETAINED_LISTS, selected.kind) || selected.kind === 'legacy-availability'
+      ? 'This reference was saved in an earlier arrangement. Inspect it here, then remove it if it no longer belongs in this plan. Apply keeps the removal; Cancel restores it.'
+      : selected.kind === 'stage' ? 'Group the sessions that support this stage. Their people and duration stay with each session.'
+      : selected.kind === 'handoff' ? 'Connect the work preparing a result to the work that receives it.'
+        : selected.kind === 'gate' ? 'Name the question and the person who will review the evidence.'
+          : selected.kind === 'delay' ? 'Describe what needs more time. Move the affected sessions when you are ready to revise their placement.'
+            : selected.kind === 'person' ? 'Available time describes this period. Leave it blank when unknown; funded time has its own meaning.'
+              : 'Choose a session in the visual to set its people and duration. Stages and handoffs explain how the work fits together.';
+    buildFields(raw, state, cadence);
+    for (const { input, value, multiple } of controls.values()) {
+      const next = value(); if (multiple) for (const check of input.querySelectorAll('input')) check.checked = (next ?? []).includes(check.value);
+      else if (input.value !== String(next ?? '')) input.value = next ?? '';
+    }
+    fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft;
+    recovery.hidden = !current.draft || (!['stale', 'parked'].includes(current.status)
+      && current.error?.code !== 'cadence-conflict' && proposed?.error?.code !== 'cadence-conflict');
+    const changed = Boolean(current.draft?.changed);
+    preview.textContent = proposed?.ok ? 'Accepted investment ' + money(current.projection.result.knownCommitmentCents) + ' · proposed investment ' + money(proposed.projection.result.knownCommitmentCents) + '.'
+      : current.draft ? 'Review the entries before applying this arrangement.' : '';
+    pendingText.textContent = arrangementNote + ' ' + preview.textContent;
+    pending.hidden = selected.kind !== 'horizon' || !changed;
+    actions.hidden = !current.draft || selected.kind === 'horizon'; preview.hidden = selected.kind === 'horizon';
+    apply.textContent = isNew ? 'Add ' + LABELS[selected.kind] + ' to plan' : 'Apply changes'; apply.disabled = !editable || composing || !changed;
+    cancel.disabled = !current.draft;
+    for (const el of pendingActions.children) el.disabled = !editable || composing;
     error.textContent = current.error?.message ?? (proposed && !proposed.ok ? proposed.error.message : '');
     root.dataset.scoreState = current.status;
     return current;
   }
-  function opened(result, epoch, focusField = false) {
-    if (!owns(epoch)) return; composing = false; render(); if (!owns(epoch)) return;
-    announce(result?.ok ? '' : result?.error?.message ?? '');
-    const mark = boundary(); onEditing();
-    if (!retains(epoch, mark)) return;
-    inspector.open = true;
-    if (focusField) (recovery.hidden ? fields.querySelector('input, select') ?? add : recovery.querySelector('button'))?.focus();
-    return { result, epoch, mark };
+  function addStage() {
+    const result = ensure(); if (!result?.ok) return;
+    const current = editor.read(); if (current.status !== 'editing') { render(); return; }
+    const id = freshId('stage', current.draft.raw.stageIds), token = current.draft.token;
+    operate('setIds', token, 'stageIds', [...current.draft.raw.stageIds, id]); operate('setText', token, 'stage.' + id + '.label', 'Prepare the next step');
+    created.set('stage:' + id, true); select({ kind: 'stage', id }, true);
   }
-  function beginOpen(_target = 'score', focusField = true) {
-    if (disposed || !canOpen()) return;
-    const epoch = ++generation, before = boundary(); onBegin();
-    const active = editing.read().active;
-    if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
-      || (active && active.token !== before.token)) return;
-    return opened(operate('begin', 'score', studio.read()), epoch, focusField);
+  function addHandoff() {
+    const result = ensure(); if (!result?.ok) return;
+    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence) { proposeHorizon(); return; }
+    if (current.projection.state.work.length < 2) { announce('Add two working sessions before connecting them.'); return; }
+    const id = freshId('handoff', cadence.handoffs), [first, second] = current.projection.state.work;
+    const from = cadence.handoffs[0]?.from ?? { kind: 'work', id: first.id };
+    const to = cadence.handoffs[0]?.to ?? { kind: 'work', id: second.id };
+    changeCadence(next => ({ ...next, handoffs: [...next.handoffs, { id, from, to, connectionId: null }] }));
+    created.set('handoff:' + id, true); select({ kind: 'handoff', id }, true);
   }
-  function open(target = 'score', focusField = true) { return beginOpen(target, focusField)?.result; }
-  function select(target, reveal = false) {
-    if (!Object.hasOwn(KINDS, target.kind)) return;
-    selected = target; overlapIndex = 0; fieldSignature = null;
-    let completion;
-    if (!editor.read().draft || editing.read().active?.kind !== 'score') completion = beginOpen('score', false);
-    else { const epoch = generation, mark = boundary(); render(); if (retains(epoch, mark)) completion = { epoch, mark }; }
-    if (completion && retains(completion.epoch, completion.mark) && reveal) {
-      inspector.open = true;
-      inspector.scrollIntoView({ block: 'nearest' });
-      (fields.querySelector('input, select') ?? picker).focus({ preventScroll: true });
-      if (retains(completion.epoch, completion.mark)) onInspect(inspector);
+  function addDecision(anchor = selected) {
+    const result = ensure(); if (!result?.ok) return;
+    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
+    const id = freshId('gate', current.draft.raw.gateIds), token = current.draft.token;
+    operate('setIds', token, 'gateIds', [...current.draft.raw.gateIds, id]);
+    operate('setText', token, 'gate.' + id + '.label', 'Review the next commitment');
+    operate('setText', token, 'gate.' + id + '.question', 'What evidence would let the receiving team proceed?');
+    if (anchor.kind === 'stage') operate('setText', token, 'gate.' + id + '.afterStageId', anchor.id);
+    changeCadence(next => ({ ...next, decisionAnchors: [...next.decisionAnchors, { gateId: id, kind: anchor.kind, id: anchor.id }] }));
+    created.set('gate:' + id, true); select({ kind: 'gate', id }, true);
+  }
+  function addDelay(anchor = selected) {
+    const result = ensure(); if (!result?.ok) return;
+    const current = editor.read(), cadence = cadenceFrom(current.draft.raw); if (!cadence || current.status !== 'editing') return;
+    const id = freshId('delay', cadence.delays), affected = new Set(affectedWorkIds(anchor, cadence, current.draft.raw));
+    const placed = new Set(cadence.placements.filter(row => affected.has(row.workId)).map(row => row.periodId));
+    const from = periodId && placed.has(periodId) ? periodId : cadence.periods.find(row => placed.has(row.id))?.id ?? null;
+    const index = cadence.periods.findIndex(row => row.id === from);
+    changeCadence(next => {
+      if (index === next.periods.length - 1 && next.periods.length < CADENCE_PERIOD_LIMIT) next = resizeCadence(next, next.periods.length + 1);
+      const to = index >= 0 ? next.periods[index + 1]?.id ?? null : null;
+      return { ...next, delays: [...next.delays, { id, label: 'Allow time for review', anchor: { kind: anchor.kind, id: anchor.id }, fromPeriodId: from, toPeriodId: to, reason: 'Clarify the receiving team’s questions before proceeding.', receiverPersonId: null }] };
+    });
+    created.set('delay:' + id, true); select({ kind: 'delay', id }, true);
+  }
+  function removeSelected() {
+    const current = editor.read(); if (!current.draft || current.status !== 'editing') return;
+    const cadence = cadenceFrom(current.draft.raw);
+    const retainedList = RETAINED_LISTS[selected.kind];
+    if (retainedList || selected.kind === 'legacy-availability') {
+      const { token, raw } = current.draft;
+      if (selected.kind === 'legacy-availability') {
+        operate('setText', token, 'availability.' + selected.id + '.known', 'no');
+        operate('setIds', token, 'availability.' + selected.id + '.intervalIds', []);
+      } else {
+        if (selected.kind === 'proposal') operate('setIds', token, 'fundProposalIds', raw.fundProposalIds.filter(id => id !== selected.id));
+        operate('setIds', token, retainedList, raw[retainedList].filter(id => id !== selected.id));
+      }
+      arrangementNote = 'The retained reference will be removed when you Apply. Cancel keeps the saved arrangement.';
+      selected = { kind: 'horizon', id: '' }; fieldSignature = ''; render(); onEditing(); return;
     }
+    const referred = cadence && (cadence.handoffs.some(row => [row.from, row.to].some(end => end.kind === selected.kind && end.id === selected.id))
+      || cadence.decisionAnchors.some(row => row.kind === selected.kind && row.id === selected.id)
+      || cadence.delays.some(row => row.anchor.kind === selected.kind && row.anchor.id === selected.id));
+    if (referred) { announce('Move or remove the related handoffs, decisions and delays before removing this ' + LABELS[selected.kind] + '.'); return; }
+    if (selected.kind === 'handoff') {
+      const handoff = cadence?.handoffs.find(row => row.id === selected.id), raw = current.draft.raw;
+      const matches = id => id === selected.id || handoff?.from.kind === 'work' && handoff?.to.kind === 'work'
+        && raw['dependency.' + id + '.fromWorkId'] === handoff.from.id && raw['dependency.' + id + '.toWorkId'] === handoff.to.id;
+      operate('setIds', current.draft.token, 'dependencyIds', raw.dependencyIds.filter(id => !matches(id)));
+    }
+    if (['stage', 'gate'].includes(selected.kind)) writeRaw(selected.kind === 'stage' ? 'stageIds' : 'gateIds', current.draft.raw[selected.kind === 'stage' ? 'stageIds' : 'gateIds'].filter(id => id !== selected.id));
+    const removed = selected;
+    changeCadence(next => next === null ? null : ({ ...next,
+      handoffs: removed.kind === 'handoff' ? next.handoffs.filter(row => row.id !== removed.id) : next.handoffs,
+      delays: removed.kind === 'delay' ? next.delays.filter(row => row.id !== removed.id) : next.delays,
+      decisionAnchors: removed.kind === 'gate' ? next.decisionAnchors.filter(row => row.gateId !== removed.id) : next.decisionAnchors }));
+    arrangementNote = 'The ' + LABELS[removed.kind] + ' will be removed when you Apply. Cancel keeps the saved arrangement.';
+    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; render();
   }
-  function changed(result, epoch) { if (!owns(epoch)) return; render(); if (!owns(epoch)) return; announce(result.ok ? '' : result.error.message); onEditing(); }
-  function navigate(target, routeKind) {
-    if (disposed) return;
-    if (!resolveScoreDestination(target, studio.read().state)) return;
-    const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
-    onNavigate(target, { kind: 'score', targetId: 'score', ...(routeKind ? { routeKind } : {}) });
+  function affectedWorkIds(endpoint, cadence, raw) {
+    if (endpoint.kind === 'work') return [endpoint.id];
+    if (endpoint.kind === 'stage') return raw['stage.' + endpoint.id + '.workIds'] ?? [];
+    const handoff = cadence.handoffs.find(row => row.id === endpoint.id);
+    return handoff ? affectedWorkIds(handoff.to, cadence, raw) : [];
+  }
+  function moveDelayedSessions() {
+    const current = editor.read(), cadence = current.draft && cadenceFrom(current.draft.raw);
+    const delay = cadence?.delays.find(row => row.id === selected.id);
+    if (!delay?.toPeriodId) { announce('Choose the later period first.'); return; }
+    const affected = new Set(affectedWorkIds(delay.anchor, cadence, current.draft.raw));
+    const matches = row => affected.has(row.workId) && (!delay.fromPeriodId || row.periodId === delay.fromPeriodId) && row.periodId !== delay.toPeriodId;
+    if (!cadence.placements.some(matches)) { announce('Choose a period containing the affected sessions before previewing their move.'); return; }
+    changeCadence(next => ({ ...next, placements: next.placements.map(row => matches(row) ? { ...row, periodId: delay.toPeriodId } : row) }));
+    announce('Preview the moved sessions in ' + cadence.periods.find(row => row.id === delay.toPeriodId).label + '. Their people, duration and price are retained.');
   }
   function settle(method) {
-    const current = editor.read(); if (disposed || !current.draft) return;
-    if (composing && method === 'apply') { announce('Finish entering the text, then apply.'); return; }
-    const newDecision = isNewDecision(current.draft.raw, current.projection.state) ? { id: selected.id, stageId: current.draft.raw[`gate.${selected.id}.afterStageId`] } : null;
+    const current = editor.read(); if (disposed || !current.draft || composing && method === 'apply') return;
+    const origin = selected;
     const epoch = ++generation, result = operate(method, current.draft.token); if (!owns(epoch)) return;
-    if (!result.ok) { changed(result, epoch); return; }
-    if (method === 'cancel') { decisionOrigins.clear(); if (opened(operate('begin', 'score', studio.read()), epoch)) announce('Arrangement changes cancelled.'); return; }
-    decisionOrigins.clear();
-    const accepted = result.projection ?? studio.read(); onAccepted(accepted);
-    if (!owns(epoch) || studio.read() !== accepted || editing.read().active !== null) return;
-    if (opened(operate('begin', 'score', accepted), epoch)) {
-      announce(newDecision ? 'Decision added. Your arrangement changes are applied.' : 'Arrangement applied.');
-      if (newDecision && owns(epoch)) returnToStage(newDecision.stageId, newDecision.id);
-    }
-  }
-  function returnToStage(stageId, gateId = null) {
-    const target = projectionRoot.querySelector(gateId
-      ? `.native-score__stages [data-score-kind="gate"][data-score-id="${gateId}"]`
-      : `.native-score__stages [data-score-view-action="add-decision"][data-score-id="${stageId}"]`);
-    const destination = target ?? projectionRoot.querySelector('[data-score-view-action="add-decision"]') ?? arrange;
-    destination.scrollIntoView({ block: 'center' }); destination.focus({ preventScroll: true });
-  }
-  function discardDecision() {
-    const current = editor.read();
-    if (!current.draft || current.status !== 'editing' || !isNewDecision(current.draft.raw, current.projection.state)) return;
-    const { raw, token } = current.draft, id = selected.id, stageId = decisionOrigins.get(id) ?? raw[`gate.${id}.afterStageId`], epoch = ++generation;
-    const result = operate('setIds', token, 'gateIds', raw.gateIds.filter(value => value !== id));
-    if (!owns(epoch)) return;
-    if (result.ok) { decisionOrigins.delete(id); selected = { kind: 'stage', id: stageId }; fieldSignature = null; }
-    const mark = boundary(); changed(result, epoch);
-    if (result.ok && retains(epoch, mark)) { announce('Decision draft discarded. Your other arrangement entries are kept.'); returnToStage(stageId); }
-  }
-  function freshId(kind, existing) { const taken = new Set(existing); let ordinal = 1; while (taken.has(`${kind}-${ordinal}`)) ordinal++; return `${kind}-${ordinal}`; }
-  function addDecision(stageId) {
-    if (disposed || !isActive()) return;
-    if (!editor.read().draft || editing.read().active?.kind !== 'score') {
-      const completion = beginOpen('score', false);
-      if (!completion || !retains(completion.epoch, completion.mark)) return;
-    }
-    const current = editor.read();
-    if (current.status !== 'editing') { announce('Review the saved arrangement before adding a decision.'); recovery.querySelector('button')?.focus(); return; }
-    const { raw, token } = current.draft;
-    if (!raw.stageIds.includes(stageId)) { announce('Choose a stage in the current arrangement before adding a decision.'); return; }
-    const epoch = ++generation, id = freshId('gate', raw.gateIds);
-    let result = operate('setIds', token, 'gateIds', [...raw.gateIds, id]);
-    if (result.ok) result = operate('setText', token, `gate.${id}.afterStageId`, stageId);
-    if (result.ok) result = operate('setText', token, `gate.${id}.label`, `Decision after ${raw[`stage.${stageId}.label`]}`.slice(0, scoreField(`gate.${id}.label`).maxLength));
-    if (!owns(epoch)) return;
-    if (result.ok) { decisionOrigins.set(id, stageId); selected = { kind: 'gate', id }; fieldSignature = null; }
-    const mark = boundary(); changed(result, epoch);
-    if (result.ok && retains(epoch, mark)) {
-      inspector.open = true;
-      inspector.scrollIntoView({ block: 'start' });
-      const name = controls.get(`gate.${id}.label`)?.input; name?.focus({ preventScroll: true });
-      if (retains(epoch, mark)) name?.select();
-      if (retains(epoch, mark)) onInspect(inspector);
-    }
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    created.clear();
+    arrangementNote = 'Previewing the new horizon. Sessions and their effort are retained.';
+    if (method === 'apply') { const accepted = result.projection ?? studio.read(); onAccepted(accepted); if (!owns(epoch) || studio.read() !== accepted) return; }
+    selected = { kind: 'horizon', id: '' }; fieldSignature = ''; inspector.open = false; render(); onEditing();
+    announce(method === 'apply' ? 'Arrangement applied. Undo restores the previous plan.' : 'Changes cancelled.');
+    if (!owns(epoch) || editing.read().active) return;
+    const prefix = (origin.kind === 'gate' ? 'decision' : origin.kind) + ':' + origin.id;
+    const marker = [...projectionRoot.querySelectorAll('[data-cadence-key]')].find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
+    if (marker) { const disclosure = marker.closest('details'); if (disclosure) disclosure.open = true; }
+    const destination = marker ?? summary; destination.scrollIntoView({ block: 'nearest' }); destination.focus({ preventScroll: true });
   }
   function click(event) {
-    const control = event.target.closest('[data-score-action]');
-    if (!control || !root.contains(control) || disposed || !isActive()) return;
+    const control = event.target.closest('[data-score-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
     const action = control.dataset.scoreAction;
-    if (action === 'apply') return;
-    if (action === 'open') { open(); return; }
-    if (action === 'scale') {
-      const next = Number(control.dataset.scoreScale); if (!scaleButtons.has(next)) return;
-      scale = next; if (scale === 1) focusWorkId = null; render(); return;
-    }
-    if (action === 'reset-focus') {
-      const epoch = generation, mark = boundary(); focusWorkId = null; render();
-      if (retains(epoch, mark)) scaleButtons.get(scale).focus();
-      return;
-    }
-    if (action === 'chapter') { navigate({ kind: 'chapter', id: control.dataset.scoreChapter }, 'context'); return; }
-    if (action === 'kind') { select({ kind: control.dataset.scoreKind, id: '' }); return; }
-    if (action === 'focus') { focusWorkId = selected.id; render(); scrollIntoView(); return; }
-    if (action === 'source') { navigate(selected); return; }
-    if (action === 'cancel') { settle('cancel'); return; }
-    if (action === 'discard-decision') { discardDecision(); return; }
-    if (action === 'keep-decision') {
-      const raw = editor.read().draft?.raw;
-      if (raw) select({ kind: 'stage', id: raw[`gate.${selected.id}.afterStageId`] || raw.stageIds[0] || '' }, true);
-      return;
-    }
-    const current = editor.read(); if (!current.draft) return;
-    const token = current.draft.token, raw = current.draft.raw, epoch = ++generation;
-    if (action === 'review' || action === 'current') { opened(operate(action === 'review' ? 'review' : 'useCurrent', token, studio.read()), epoch, true); return; }
-    if (current.status !== 'editing') return;
-    if (action === 'step') { changed(operate('step', token, control.dataset.scoreField, Number(control.dataset.scoreStep)), epoch); return; }
-    if (action === 'add' || action === 'remove') {
-      const list = LISTS[selected.kind];
-      const taken = selected.kind === 'proposal' ? [...raw[list], ...current.projection.state.work.map(row => row.id), ...raw.proposalIds.map(id => raw[`proposal.${id}.workId`].trim())] : raw[list];
-      const id = action === 'add' ? freshId(selected.kind, taken) : selected.id;
-      const ids = action === 'add' ? [...raw[list], id] : raw[list].filter(value => value !== id);
-      const result = operate('setIds', token, list, ids);
-      if (result.ok) { selected = { kind: selected.kind, id: action === 'add' ? id : ids[0] ?? '' }; fieldSignature = null; }
-      changed(result, epoch); return;
-    }
-    if (action === 'add-interval' || action === 'remove-interval') {
-      const key = `availability.${selected.id}.intervalIds`, id = action === 'add-interval' ? freshId('interval', raw[key]) : control.dataset.scoreInterval;
-      changed(operate('setIds', token, key, action === 'add-interval' ? [...raw[key], id] : raw[key].filter(value => value !== id)), epoch);
-    }
+    if (action === 'apply') { event.preventDefault(); settle('apply'); }
+    else if (action === 'cancel') settle('cancel');
+    else if (action === 'add-period') { selected = { kind: 'horizon', id: '' }; changeCadence(next => next ? resizeCadence(next, next.periods.length + 1) : createCadence()); }
+    else if (action === 'sessions') { inspector.open = false; projectionRoot.scrollIntoView({ block: 'start' }); projectionRoot.querySelector('button')?.focus(); }
+    else if (action === 'flow') { selected = { kind: 'horizon', id: '' }; open(); }
+    else if (action === 'add-stage') addStage();
+    else if (action === 'add-handoff') addHandoff();
+    else if (action === 'add-decision') addDecision();
+    else if (action === 'add-delay') addDelay();
+    else if (action === 'move-delayed') moveDelayedSessions();
+    else if (action === 'remove') removeSelected();
+    else if (action === 'person-settings') navigate({ kind: 'person', id: selected.id });
+    else if (action === 'chapter') navigate({ kind: 'chapter', id: control.dataset.scoreChapter });
+    else if (action === 'example') {
+      const parked = editing.park(); if (!parked.ok) announce(parked.error.message); else onExample(control.dataset.presetId);
+    } else if (action === 'review' || action === 'current') { const current = editor.read(); if (current.draft) { operate(action === 'review' ? 'review' : 'useCurrent', current.draft.token, studio.read()); render(); onEditing(); } }
   }
-  function scrollIntoView() { projectionRoot.scrollIntoView({ block: 'nearest' }); }
-  function input(event) {
-    const key = event.target.dataset.scoreField, current = editor.read(), control = controls.get(key);
-    if (disposed || !isActive() || !current.draft || current.status !== 'editing') return;
-    if (event.target.dataset.scoreFund && event.type === 'change') {
-      const ids = current.draft.raw.fundProposalIds.filter(id => id !== event.target.dataset.scoreFund);
-      if (event.target.checked) ids.push(event.target.dataset.scoreFund);
-      const epoch = ++generation; changed(operate('setIds', current.draft.token, 'fundProposalIds', ids), epoch); return;
-    }
-    if (!control || control.input !== event.target && !((control.metadata.kind === 'ids' || control.radio) && control.input.contains(event.target))) return;
-    const discrete = control.metadata.checkbox || control.metadata.kind === 'ids' || control.radio || control.input.tagName === 'SELECT';
-    if (discrete ? event.type !== 'change' : !['input', 'compositionend'].includes(event.type)) return;
-    const epoch = ++generation;
-    const result = control.metadata.kind === 'ids' ? operate('setIds', current.draft.token, key, [...control.input.querySelectorAll('input:checked')].map(check => check.value))
-      : operate('setText', current.draft.token, key, control.metadata.checkbox ? control.input.checked ? 'yes' : 'no' : event.target.value);
-    changed(result, epoch);
-  }
-  listen(root, 'click', click); listen(form, 'input', input); listen(form, 'change', input);
-  listen(inspectorSummary, 'click', event => {
-    if (disposed || inspector.open || !isActive()) return;
-    if (!editor.read().draft || editing.read().active?.kind !== 'score') {
-      event.preventDefault(); beginOpen('score', false);
-    }
+  listen(root, 'click', click);
+  listen(basisChoices, 'change', event => {
+    if (!Object.hasOwn(event.target.dataset, 'cadenceBasis') || !isActive()) return;
+    selected = { kind: 'horizon', id: '' };
+    changeCadence(next => next ? regroupCadence(next, event.target.value) : createCadence(event.target.value, event.target.value === 'quarter' ? 2 : 4));
   });
-  listen(form, 'submit', event => { event.preventDefault(); if (!disposed && isActive()) settle('apply'); });
-  listen(form, 'compositionstart', () => { composing = true; render(); }); listen(form, 'compositionend', event => { composing = false; input(event); });
-  listen(picker, 'change', () => { if (!disposed) select({ kind: selected.kind, id: picker.value }); });
-  listen(overlapChoice, 'change', () => { overlapIndex = Number(overlapChoice.value); render(); });
+  listen(count, 'change', () => {
+    const value = Number(count.value);
+    if (!Number.isSafeInteger(value) || value < 1 || value > CADENCE_PERIOD_LIMIT) { announce('Choose 1 to ' + CADENCE_PERIOD_LIMIT + ' periods.'); return; }
+    selected = { kind: 'horizon', id: '' }; changeCadence(next => next ? resizeCadence(next, value) : createCadence('sprint', value));
+  });
+  function input(event) {
+    const item = controls.get(event.target.dataset.cadenceField); if (!item || !editor.read().draft || editor.read().status !== 'editing') return;
+    const discrete = item.multiple || item.input.tagName === 'SELECT';
+    if (discrete ? event.type !== 'change' : event.type !== 'input' && event.type !== 'compositionend') return;
+    item.write(item.multiple ? [...item.input.querySelectorAll('input:checked')].map(el => el.value) : event.target.value);
+  }
+  listen(form, 'input', input); listen(form, 'change', input);
+  listen(form, 'compositionstart', () => { composing = true; }); listen(form, 'compositionend', event => { composing = false; input(event); });
+  listen(form, 'submit', event => { event.preventDefault(); settle('apply'); });
+  listen(summary, 'click', event => { if (!inspector.open && !editor.read().draft) { event.preventDefault(); open('score', false); } });
   function close({ park = true } = {}) { if (disposed) return; ++generation; composing = false; if (park && editing.read().active?.kind === 'score') editing.park(); }
-  function dispose() { if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
-    close(); disposed = true; ++generation; releaseRetiredLease(); view.dispose(); cleanup.splice(0).forEach(release => release());
-    for (const owned of [toolbar, projectionRoot, inspector, manual]) owned.remove(); if (fallback) fallback.hidden = false;
-    delete root.dataset.scoreState; controls.clear(); decisionOrigins.clear(); INSTANCES.delete(root); }
+  function dispose() {
+    if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
+    close(); disposed = true; operate('read'); view.dispose(); cleanup.splice(0).forEach(release => release());
+    for (const el of [toolbar, pending, projectionRoot, inspector, manual, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
+  }
   render();
   const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select, dispose }); INSTANCES.set(root, controller); return controller;
 }
