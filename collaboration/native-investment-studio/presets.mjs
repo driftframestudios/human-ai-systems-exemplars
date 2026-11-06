@@ -3,6 +3,7 @@ import { createExamplePlan, preparePlan, PlanError } from './contract.mjs';
 import { emptyRole } from './roles.mjs';
 import { SCORE_VERSION } from './score-models.mjs';
 import { SHOWCASE_SCENARIOS, createScenarioPlan, createShowcaseCadence } from './showcase-scenarios.mjs';
+import { seedShowcaseChangeSupport } from './change-showcase.mjs';
 
 const PRESET_VERSION = '1.0.0';
 
@@ -152,7 +153,7 @@ export function createShowcasePlan() {
     ],
   };
   plan.scoreSettings.cadence = createShowcaseCadence(plan, 4);
-  return plan;
+  return seedShowcaseChangeSupport(plan);
 }
 
 // This is a separately authored rollout example. Choosing it previews a plan
