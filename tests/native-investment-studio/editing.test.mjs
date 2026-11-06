@@ -88,7 +88,7 @@ test('legacy import preserves parked purpose text for review or deliberate curre
   for (const person of legacy.people) { delete person.role; delete person.lifecycle; }
   for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
   assert.equal(studio.importText(JSON.stringify(legacy), studio.read()).ok, true);
-  assert.equal(studio.read().state.schemaVersion, '0.8.0');
+  assert.equal(studio.read().state.schemaVersion, '0.9.0');
   assert.equal(editing.purpose.read().status, 'stale');
   rejected(editing.purpose.begin('purpose', studio.read()), 'review-required');
   const reviewed = editing.purpose.review(saved, studio.read());

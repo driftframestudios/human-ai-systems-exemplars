@@ -1,4 +1,36 @@
 import { getCapabilityDefinition } from './capabilities.mjs';
+import { createCadence } from './cadence.mjs';
+
+// These placements describe the named examples' work, independently of legacy
+// minute offsets. Array order keeps sessions in sequence within each part.
+export function createShowcaseCadence(plan, periodCount, basis = 'sprint') {
+  const cadence = createCadence(basis, periodCount);
+  const last = periodCount - 1;
+  const slots = basis === 'quarter' ? {
+    research: [[0, 1]], pairing: [[0, 2]], rehearsal: [[0, 3]], review: [[0, 3]],
+    'rollout-planning': [[1, 1]], 'receiving-walkthrough': [[1, 2]],
+    'adoption-review': [[1, 3]], 'operating-handoff': [[1, 3]],
+  } : {
+    research: periodCount >= 3 ? [[0, 1], [0, 2]] : [[0, 1]],
+    pairing: periodCount >= 4 ? [[1, 1], [1, 2], [2, 1], [2, 2]]
+      : periodCount === 3 ? [[1, 1], [1, 2]] : [[0, periodCount === 2 ? 2 : 1]],
+    rehearsal: periodCount >= 4 ? [[last - 1, 2], [last, 1]] : [[last, periodCount === 1 ? 2 : 1]],
+    review: periodCount >= 4 ? [[last, 1], [last, 2]] : [[last, 2]],
+  };
+  const workById = new Map(plan.work.map(work => [work.id, work]));
+  for (const [workId, positions] of Object.entries(slots)) {
+    const work = workById.get(workId);
+    if (!work) continue;
+    for (let occurrenceIndex = 0; occurrenceIndex < work.occurrences; occurrenceIndex++) {
+      const [periodIndex, subdivision] = positions[Math.floor(occurrenceIndex * positions.length / work.occurrences)];
+      cadence.placements.push({ workId, occurrenceIndex, periodId: cadence.periods[periodIndex].id, subdivision });
+    }
+  }
+  cadence.handoffs = plan.scoreSettings.dependencies.map(edge => ({ id: edge.id,
+    from: { kind: 'work', id: edge.fromWorkId }, to: { kind: 'work', id: edge.toWorkId }, connectionId: edge.connectionId }));
+  cadence.decisionAnchors = plan.scoreSettings.gates.map(gate => ({ gateId: gate.id, kind: 'stage', id: gate.afterStageId }));
+  return cadence;
+}
 
 // Native rehearsal slices have explicit people and sessions. The broader source
 // scenarios retain their own role pools, economic assumptions and full Studio.
@@ -80,7 +112,7 @@ export function createScenarioPlan(base, scenario) {
   for (const person of plan.people) {
     person.fundedMinutes = plan.work.filter(work => work.funding === 'allocated' && work.personIds.includes(person.id))
       .reduce((total, work) => total + work.minutesPerOccurrence * work.occurrences, 0) + 60;
-    person.availability = [{ startMinute: 0, endMinute: cursor }];
+    person.availability = null;
   }
   const review = plan.work.find(row => row.id === 'review');
   plan.scoreSettings.window = { label: `${scenario.label} · rehearsal sequence`, startMinute: 0, endMinute: cursor };
@@ -135,5 +167,6 @@ export function createScenarioPlan(base, scenario) {
   for (const concept of plan.assuranceSettings.quality.concepts) {
     concept.workIds = concept.conceptId === scenario.quality ? ['rehearsal', 'review'] : [];
   }
+  plan.scoreSettings.cadence = createShowcaseCadence(plan, Math.ceil(scenario.weeks / 2));
   return plan;
 }

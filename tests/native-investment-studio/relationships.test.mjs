@@ -66,7 +66,7 @@ test('complete old versions migrate owned defaults while explicit current fields
     const source = oldPlan(version), serialized = JSON.stringify(source);
     source.people[0].rateCentsPerHour = null; source.people[1].rateCentsPerHour = 0;
     const input = JSON.stringify(source), receipt = prepareImport(input), current = receipt.projection;
-    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.8.0');
+    assert.equal(receipt.sourceSchemaVersion, version); assert.equal(current.state.schemaVersion, '0.9.0');
     assert.equal(current.state.modelVersion, '0.1.0');
     assert.deepEqual(current.state.people[0].role, emptyRole());
     assert.ok(current.state.people.every(row => row.lifecycle === 'active'));
@@ -318,7 +318,7 @@ test('exchange names role, lifecycle, human-responsibility and connection change
 
 test('version-owned byte ceilings stay exact while the current bounded transport accepts its own export', () => {
   assert.equal(SCHEMA_BYTE_LIMITS['0.1.0'], 524288); assert.equal(SCHEMA_BYTE_LIMITS['0.2.0'], 546029);
-  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.8.0']); assert.ok(LIMITS.bytes > SCHEMA_BYTE_LIMITS['0.3.0']);
+  assert.equal(LIMITS.bytes, SCHEMA_BYTE_LIMITS['0.9.0']); assert.ok(LIMITS.bytes > SCHEMA_BYTE_LIMITS['0.3.0']);
   const current = preparePlan(connectedPlan());
   const exactTransport = current.serialized + ' '.repeat(LIMITS.bytes - Buffer.byteLength(current.serialized));
   assert.equal(prepareImport(exactTransport).projection.serialized, current.serialized);

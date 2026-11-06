@@ -115,7 +115,7 @@ function changesBetween(before, after) {
       .filter(field => !equalField(before.changeSettings[field], after.changeSettings[field]))),
     assuranceSettings: Object.freeze(['context', 'quality', 'recoveryAdditionalShareBasisPoints', 'recoveryEvents', 'learningActions', 'rehearsals']
       .filter(field => !equalField(before.assuranceSettings[field], after.assuranceSettings[field]))),
-    scoreSettings: Object.freeze(['window', 'dependencies', 'stages', 'waits', 'gates', 'proposals']
+    scoreSettings: Object.freeze(['window', 'dependencies', 'stages', 'waits', 'gates', 'proposals', 'cadence']
       .filter(field => !equalField(before.scoreSettings[field], after.scoreSettings[field]))),
   };
   for (const [kind, fields] of Object.entries(ROW_FIELDS)) {

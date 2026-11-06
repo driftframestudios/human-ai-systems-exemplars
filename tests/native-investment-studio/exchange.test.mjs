@@ -170,9 +170,9 @@ test('legacy preview carries truthful source version while accepted export remai
   const result = exchange.previewText(JSON.stringify(legacy));
   assert.equal(result.ok, true);
   assert.equal(result.view.preview.sourceSchemaVersion, '0.1.0');
-  assert.equal(result.view.preview.projection.state.schemaVersion, '0.8.0');
+  assert.equal(result.view.preview.projection.state.schemaVersion, '0.9.0');
   assert.equal(exchange.apply(result.view.preview.token).ok, true);
-  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.8.0');
+  assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.9.0');
 });
 
 test('preset preview uses the same explicit acceptance boundary', () => {

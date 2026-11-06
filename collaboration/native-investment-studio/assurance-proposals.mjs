@@ -1,5 +1,6 @@
 import { LIMITS } from './config.mjs';
 import { PlanError, preparePlan, prepareWork, prepareConnection, prepareAssuranceSettings } from './contract.mjs';
+import { replaceWorkPlacements } from './cadence.mjs';
 
 const PROPOSALS = new WeakMap();
 const FIELDS = Object.freeze(['assuranceSettings', 'newWork', 'workUpdates', 'connectionUpdates']);
@@ -106,8 +107,10 @@ export function prepareAssuranceProposal(base, candidate) {
     work.rows.push(row); newWorkIds.push(row.id);
   }
   const changed = newWorkIds.length || work.changed.length || connections.changed.length || !same(assuranceSettings, state.assuranceSettings);
+  const scoreSettings = { ...state.scoreSettings, cadence: workUpdates.reduce(
+    (cadence, row) => replaceWorkPlacements(cadence, row), state.scoreSettings.cadence) };
   const projection = changed ? preparePlan({ ...state, revision: state.revision + 1,
-    assuranceSettings, work: work.rows, connections: connections.rows }) : base;
+    assuranceSettings, work: work.rows, connections: connections.rows, scoreSettings }) : base;
   const nextById = new Map(projection.state.work.map(row => [row.id, row]));
   const inspectedIds = [...suppliedWork.map(row => row.id), ...workUpdates.map(row => row.id)];
   const proposal = freeze({ projection, summary: { newWorkIds, reusedWorkIds,

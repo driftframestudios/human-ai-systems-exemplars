@@ -7,7 +7,68 @@ import { createDraftCoordinator } from '../../collaboration/native-investment-st
 import { createScoreDraftAdapter } from '../../collaboration/native-investment-studio/score-draft.mjs';
 import { describeScoreReference } from '../../collaboration/native-investment-studio/score-reference.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
+import { createCadence } from '../../collaboration/native-investment-studio/cadence.mjs';
 const set = (editor, token, key, value) => { const result = editor[Array.isArray(value) ? 'setIds' : 'setText'](token, key, value); assert.equal(result.ok, true, result.error?.message); };
+test('period draft owns raw recovery, preserves accepted state on rejection and restores its complete arrangement through history', () => {
+  const plan = createExamplePlan(); plan.scoreSettings.cadence = createCadence('quarter', 2);
+  const studio = createStudio(plan), editing = createDraftCoordinator(studio), editor = editing.score, before = studio.read();
+  let token = editor.begin('score', before).view.draft.token;
+  const cadence = JSON.parse(editor.read().draft.raw.cadence);
+  cadence.placements.push({ workId: 'review', occurrenceIndex: 0, periodId: 'period-2', subdivision: 3 });
+  const proposedText = JSON.stringify(cadence);
+  set(editor, token, 'cadence', ' { unfinished');
+  assert.equal(editor.preview(token).error.code, 'cadence'); assert.strictEqual(studio.read(), before);
+  assert.equal(editing.park().ok, true);
+  const changed = structuredClone(before.state); changed.purpose.accountableOwner = 'Review owner';
+  assert.equal(studio.replace(changed, before).ok, true);
+  assert.equal(editor.begin('score', studio.read()).error.code, 'review-required');
+  const review = editor.review(editor.read().draft.token, studio.read()); assert.equal(review.ok, true); token = review.view.draft.token;
+  assert.equal(editor.read().draft.raw.cadence, ' { unfinished');
+  set(editor, token, 'cadence', proposedText);
+  const acceptedBefore = studio.read(), preview = editor.preview(token);
+  assert.equal(preview.ok, true, preview.error?.message); assert.strictEqual(studio.read(), acceptedBefore);
+  assert.equal(preview.summary.money.knownDeltaCents, 0);
+  assert.equal(editor.apply(token).ok, true);
+  assert.equal(studio.read().score.cadence.periods[1].occurrences[0].workId, 'review');
+  assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.exportText(), acceptedBefore.serialized);
+  editing.dispose();
+});
+test('reviewed period edits preserve a session placement accepted while the arrangement was parked', () => {
+  const plan = createExamplePlan(); plan.scoreSettings.cadence = createCadence('sprint', 4);
+  const studio = createStudio(plan), editing = createDraftCoordinator(studio), editor = editing.score;
+  let token = editor.begin('score', studio.read()).view.draft.token;
+  const cadence = JSON.parse(editor.read().draft.raw.cadence);
+  cadence.availability.push({ personId: 'product-one', periodId: 'period-1', availableMinutes: 60 });
+  set(editor, token, 'cadence', JSON.stringify(cadence)); assert.equal(editing.park().ok, true);
+  const work = { ...studio.read().state.work[0], id: 'new-session', occurrences: 1, timing: null };
+  assert.equal(studio.applyCommand({ type: 'work.create', work,
+    placements: [{ occurrenceIndex: 0, periodId: 'period-2', subdivision: 2 }] }, studio.read()).ok, true);
+  const accepted = studio.read();
+  assert.equal(editor.begin('score', accepted).error.code, 'review-required');
+  const reviewed = editor.review(editor.read().draft.token, accepted); assert.equal(reviewed.ok, true); token = reviewed.view.draft.token;
+  assert.equal(editor.apply(token).ok, true);
+  assert.deepEqual(studio.read().state.scoreSettings.cadence.placements,
+    [{ workId: 'new-session', occurrenceIndex: 0, periodId: 'period-2', subdivision: 2 }]);
+  assert.deepEqual(studio.read().state.scoreSettings.cadence.availability, cadence.availability);
+  assert.equal(studio.undo(studio.read()).ok, true); assert.equal(studio.exportText(), accepted.serialized);
+  editing.dispose();
+});
+test('competing placement edits require explicit current-value recovery and preserve the accepted plan', () => {
+  const plan = createExamplePlan(); plan.scoreSettings.cadence = createCadence('sprint', 4);
+  plan.scoreSettings.cadence.placements = [{ workId: 'review', occurrenceIndex: 0, periodId: 'period-1', subdivision: 1 }];
+  const studio = createStudio(plan), editing = createDraftCoordinator(studio), editor = editing.score;
+  let token = editor.begin('score', studio.read()).view.draft.token;
+  const cadence = JSON.parse(editor.read().draft.raw.cadence); cadence.placements[0].periodId = 'period-2';
+  set(editor, token, 'cadence', JSON.stringify(cadence)); editing.park();
+  const updated = structuredClone(studio.read().state); updated.scoreSettings.cadence.placements[0].periodId = 'period-3';
+  assert.equal(studio.replace(updated, studio.read()).ok, true); const accepted = studio.read();
+  editor.begin('score', accepted); token = editor.review(editor.read().draft.token, accepted).view.draft.token;
+  assert.equal(editor.preview(token).error.code, 'cadence-conflict');
+  assert.equal(editor.apply(token).error.code, 'cadence-conflict'); assert.strictEqual(studio.read(), accepted);
+  token = editor.useCurrent(token, accepted).view.draft.token;
+  assert.equal(editor.preview(token).ok, true); assert.equal(editor.apply(token).ok, true); assert.strictEqual(studio.read(), accepted);
+  editing.dispose();
+});
 function proposed(editor, token) {
   set(editor, token, 'stageIds', ['pilot']); set(editor, token, 'stage.pilot.label', 'Review the pilot'); set(editor, token, 'stage.pilot.workIds', ['review']);
   set(editor, token, 'gateIds', ['review-gate']);

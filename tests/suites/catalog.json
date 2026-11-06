@@ -342,6 +342,7 @@
         "tests/native-investment-studio/responsibility-draft.test.mjs",
         "tests/native-investment-studio/responsibility-editing.test.mjs",
         "tests/native-investment-studio/score-contract.test.mjs",
+        "tests/native-investment-studio/cadence.test.mjs",
         "tests/native-investment-studio/score-draft.test.mjs",
         "tests/native-investment-studio/score-models.test.mjs",
         "tests/native-investment-studio/score-time.test.mjs",

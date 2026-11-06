@@ -4,6 +4,7 @@ import { CAPABILITY_KINDS, EVIDENCE_STAGES, getCapabilityDefinition, capabilityW
 import { CHANGE_CATALOGUE_VERSION, listChangeFrameworks, getChangeFramework, getInterpretiveLens, listAttentionChannels, createChangeSettings, projectChange } from './change-models.mjs';
 import { createAssuranceSettings, listQualityConcepts, getSourcePreset, getRehearsalDefinition, getLearningPromptDefinition, projectAssurance } from './assurance-models.mjs';
 import { createScoreSettings, projectScore } from './score-models.mjs';
+import { CADENCE_VERSION, CADENCE_SUBDIVISIONS } from './cadence.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
 
 const IDENTIFIER = /^[a-z][a-z0-9-]*$/;
@@ -41,6 +42,14 @@ const FIELDS = Object.freeze({
   untimedWork: ['id', 'label', 'teamId', 'personIds', 'minutesPerOccurrence', 'occurrences', 'funding', 'status', 'lifecycle'],
   workTiming: ['startMinute', 'repeatEveryMinutes'], interval: ['startMinute', 'endMinute'],
   scoreSettings: ['version', 'window', 'dependencies', 'stages', 'waits', 'gates', 'proposals'],
+  cadenceScoreSettings: ['version', 'window', 'dependencies', 'stages', 'waits', 'gates', 'proposals', 'cadence'],
+  cadence: ['version', 'basis', 'periods', 'placements', 'availability', 'handoffs', 'decisionAnchors', 'delays'],
+  cadencePeriod: ['id', 'label'], cadencePlacement: ['workId', 'occurrenceIndex', 'periodId', 'subdivision'],
+  workPlacement: ['occurrenceIndex', 'periodId', 'subdivision'],
+  cadenceAvailability: ['personId', 'periodId', 'availableMinutes'],
+  cadenceEndpoint: ['kind', 'id'], cadenceHandoff: ['id', 'from', 'to', 'connectionId'],
+  cadenceDecisionAnchor: ['gateId', 'kind', 'id'],
+  cadenceDelay: ['id', 'label', 'anchor', 'fromPeriodId', 'toPeriodId', 'reason', 'receiverPersonId'],
   scoreWindow: ['label', 'startMinute', 'endMinute'],
   scoreDependency: ['id', 'fromWorkId', 'toWorkId', 'lagMinutes', 'connectionId'],
   scoreStage: ['id', 'label', 'workIds'],
@@ -84,11 +93,13 @@ const PROFILES = new Map([
   ['0.6.0', { fields: 'assurancePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, references: 16384 }],
   ['0.7.0', { fields: 'scorePlan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, references: 16384 }],
   ['0.8.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, arrangements: true, references: LIMITS.references }],
+  ['0.9.0', { fields: 'plan', purpose: true, relationships: true, capabilities: true, change: true, assurance: true, score: true, cadence: true, arrangements: true, references: LIMITS.references }],
 ]);
 const COMMAND_FIELDS = Object.freeze({
   'person.create': ['type', 'person'],
   'team.create': ['type', 'team'],
   'work.create': ['type', 'work'],
+  'work.update': ['type', 'work'],
   'team.update': ['type', 'teamId', 'team'],
   'team.members.replace': ['type', 'teamId', 'personIds'],
   'work.participants.replace': ['type', 'workId', 'personIds'],
@@ -401,12 +412,15 @@ export function prepareAssemblyCommand(candidate) {
   if (typeof type !== 'string' || !COMMAND_FIELD_SETS.has(type)) {
     reject('command', `${path}.type`, 'Choose a supported assembly command.');
   }
-  const raw = dataRecord(candidate, COMMAND_FIELDS[type], COMMAND_FIELD_SETS.get(type), path);
+  const withPlacements = ['work.create', 'work.update'].includes(type) && Object.hasOwn(candidate, 'placements');
+  const fields = withPlacements ? [...COMMAND_FIELDS[type], 'placements'] : COMMAND_FIELDS[type];
+  const raw = dataRecord(candidate, fields, withPlacements ? new Set(fields) : COMMAND_FIELD_SETS.get(type), path);
   if (raw.type !== type) reject('command', `${path}.type`, 'Keep the admitted command type consistent.');
   switch (type) {
     case 'person.create': return { type, person: preparePerson(raw.person, `${path}.person`) };
     case 'team.create': return { type, team: prepareTeam(raw.team, `${path}.team`) };
-    case 'work.create': return { type, work: prepareWork(raw.work, `${path}.work`) };
+    case 'work.create': case 'work.update': return { type, work: prepareWork(raw.work, `${path}.work`),
+      ...(withPlacements ? { placements: prepareWorkPlacements(raw.placements, `${path}.placements`) } : {}) };
     case 'team.update': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), team: prepareTeam(raw.team, `${path}.team`) };
     case 'team.members.replace': return { type, teamId: text(raw.teamId, `${path}.teamId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`) };
     case 'work.participants.replace': return { type, workId: text(raw.workId, `${path}.workId`, true), personIds: identifiers(raw.personIds, LIMITS.people, `${path}.personIds`, 1) };
@@ -513,9 +527,115 @@ export function prepareAvailability(candidate, path = 'availability') {
   });
 }
 
-export function prepareScoreSettings(candidate, path = 'plan.scoreSettings') {
-  const raw = record(candidate, 'scoreSettings', path);
-  if (raw.version !== '1.0.0') reject('score-version', `${path}.version`, 'Use the supported score-settings version.');
+function placementFields(row, path) {
+  const periodId = nullableId(row.periodId, `${path}.periodId`);
+  if ((periodId === null) !== (row.subdivision === null)) reject('placement', path, 'Choose a period and its subdivision together, or leave both to choose.');
+  return { occurrenceIndex: integer(row.occurrenceIndex, LIMITS.occurrences - 1, `${path}.occurrenceIndex`), periodId,
+    subdivision: row.subdivision === null ? null : integer(row.subdivision, 3, `${path}.subdivision`, 1) };
+}
+export function prepareWorkPlacements(candidate, path = 'placements') {
+  const seen = new Set();
+  return list(candidate, LIMITS.scoreOccurrences, path).map((value, index) => {
+    const rowPath = `${path}[${index}]`, row = placementFields(record(value, 'workPlacement', rowPath), rowPath);
+    if (seen.has(row.occurrenceIndex)) reject('duplicate-reference', rowPath, 'Place each session occurrence once.');
+    seen.add(row.occurrenceIndex); return row;
+  });
+}
+export function prepareCadence(candidate, path = 'plan.scoreSettings.cadence') {
+  if (candidate === null) return null;
+  const raw = record(candidate, 'cadence', path);
+  if (raw.version !== CADENCE_VERSION) reject('cadence-version', `${path}.version`, 'Use the supported planning-period version.');
+  const basis = choice(raw.basis, ['sprint', 'quarter'], `${path}.basis`);
+  const rows = (field, kind, limit, prepare) => list(raw[field], limit, `${path}.${field}`).map((value, index) => {
+    const rowPath = `${path}.${field}[${index}]`; return prepare(record(value, kind, rowPath), rowPath);
+  });
+  const periods = rows('periods', 'cadencePeriod', LIMITS.cadencePeriods, (row, p) => ({ id: text(row.id, `${p}.id`, true), label: text(row.label, `${p}.label`) }));
+  if (!periods.length) reject('reference-count', `${path}.periods`, 'Retain at least one planning period.');
+  indexRecords(periods, `${path}.periods`);
+  const keys = new Set();
+  const placements = rows('placements', 'cadencePlacement', LIMITS.scoreOccurrences, (row, p) => {
+    const result = { workId: text(row.workId, `${p}.workId`, true), ...placementFields(row, p) };
+    const key = `${result.workId}:${result.occurrenceIndex}`;
+    if (keys.has(key)) reject('duplicate-reference', p, 'Place each session occurrence once.');
+    if (result.subdivision > CADENCE_SUBDIVISIONS[basis]) reject('placement', p, 'Choose a subdivision within this planning period.');
+    keys.add(key); return result;
+  });
+  const availabilityKeys = new Set();
+  const availability = rows('availability', 'cadenceAvailability', LIMITS.cadenceAvailability, (row, p) => {
+    const personId = text(row.personId, `${p}.personId`, true), periodId = text(row.periodId, `${p}.periodId`, true), key = `${personId}:${periodId}`;
+    if (availabilityKeys.has(key)) reject('duplicate-reference', p, 'Describe each person’s availability once per period.');
+    availabilityKeys.add(key);
+    return { personId, periodId, availableMinutes: row.availableMinutes === null ? null : integer(row.availableMinutes, LIMITS.fundedMinutes, `${p}.availableMinutes`) };
+  });
+  const endpoint = (value, p, kinds = ['work', 'stage']) => { const row = record(value, 'cadenceEndpoint', p); return { kind: choice(row.kind, kinds, `${p}.kind`), id: text(row.id, `${p}.id`, true) }; };
+  const handoffs = rows('handoffs', 'cadenceHandoff', LIMITS.scoreDependencies, (row, p) => ({ id: text(row.id, `${p}.id`, true),
+    from: endpoint(row.from, `${p}.from`), to: endpoint(row.to, `${p}.to`), connectionId: nullableId(row.connectionId, `${p}.connectionId`) }));
+  indexRecords(handoffs, `${path}.handoffs`);
+  const anchorIds = new Set();
+  const decisionAnchors = rows('decisionAnchors', 'cadenceDecisionAnchor', LIMITS.scoreGates, (row, p) => {
+    const gateId = text(row.gateId, `${p}.gateId`, true);
+    if (anchorIds.has(gateId)) reject('duplicate-reference', p, 'Give each decision one planning anchor.');
+    anchorIds.add(gateId);
+    return { gateId, kind: choice(row.kind, ['stage', 'handoff'], `${p}.kind`), id: text(row.id, `${p}.id`, true) };
+  });
+  const delays = rows('delays', 'cadenceDelay', LIMITS.scoreWaits, (row, p) => ({ id: text(row.id, `${p}.id`, true), label: text(row.label, `${p}.label`),
+    anchor: endpoint(row.anchor, `${p}.anchor`, ['work', 'stage', 'handoff']), fromPeriodId: nullableId(row.fromPeriodId, `${p}.fromPeriodId`),
+    toPeriodId: nullableId(row.toPeriodId, `${p}.toPeriodId`), reason: relationshipText(row.reason, `${p}.reason`), receiverPersonId: nullableId(row.receiverPersonId, `${p}.receiverPersonId`) }));
+  indexRecords(delays, `${path}.delays`);
+  return { version: CADENCE_VERSION, basis, periods, placements, availability, handoffs, decisionAnchors, delays };
+}
+
+function prepareCadenceReferences(state, people, work, stages, gates, connections, budget) {
+  const cadence = state.scoreSettings.cadence, path = 'plan.scoreSettings.cadence';
+  const periods = new Map(cadence.periods.map(row => [row.id, row])), periodIndex = new Map(cadence.periods.map((row, index) => [row.id, index]));
+  const handoffs = new Map(cadence.handoffs.map(row => [row.id, row]));
+  const endpoint = (row, p) => reference(row.id, row.kind === 'work' ? work : row.kind === 'stage' ? stages : handoffs, `${p}.id`, budget);
+  const workIds = row => row.kind === 'work' ? [row.id] : stages.get(row.id).workIds;
+  let occurrences = 0, assignments = 0;
+  for (const row of work.values()) { occurrences += row.occurrences; assignments += row.occurrences * row.personIds.length; }
+  if (occurrences > LIMITS.scoreOccurrences) reject('score-occurrence-budget', 'plan.work', 'Keep this planning horizon within the declared session-occurrence budget.');
+  if (assignments > LIMITS.scoreAssignments) reject('score-assignment-budget', 'plan.work', 'Keep this planning horizon within the declared participant-assignment budget.');
+  cadence.placements.forEach((row, index) => {
+    const p = `${path}.placements[${index}]`; reference(row.workId, work, `${p}.workId`, budget); reference(row.periodId, periods, `${p}.periodId`, budget);
+    if (row.occurrenceIndex >= work.get(row.workId).occurrences) reject('placement', p, 'Choose an existing occurrence of this session.');
+  });
+  cadence.availability.forEach((row, index) => { const p = `${path}.availability[${index}]`; reference(row.personId, people, `${p}.personId`, budget); reference(row.periodId, periods, `${p}.periodId`, budget); });
+  const adjacency = new Map([...work.keys()].map(id => [id, new Set()]));
+  let expandedEdges = 0;
+  cadence.handoffs.forEach((row, index) => {
+    const p = `${path}.handoffs[${index}]`; endpoint(row.from, `${p}.from`); endpoint(row.to, `${p}.to`); reference(row.connectionId, connections, `${p}.connectionId`, budget);
+    // Stage endpoints resolve through their existing work membership. Equal
+    // or overlapping membership is an ambiguous self-handoff.
+    for (const from of workIds(row.from)) for (const to of workIds(row.to)) {
+      if (++expandedEdges > LIMITS.references) reject('reference-budget', `${path}.handoffs`, 'Keep handoff relationships within the declared reference budget.');
+      if (from === to) reject('cadence-cycle', p, 'Connect distinct producing and receiving work.');
+      adjacency.get(from).add(to);
+    }
+  });
+  const visiting = new Set(), visited = new Set();
+  const visit = id => {
+    if (visiting.has(id)) reject('cadence-cycle', `${path}.handoffs`, 'Arrange handoffs toward later work.');
+    if (visited.has(id)) return;
+    visiting.add(id); for (const next of adjacency.get(id)) visit(next); visiting.delete(id); visited.add(id);
+  };
+  for (const id of adjacency.keys()) visit(id);
+  cadence.decisionAnchors.forEach((row, index) => {
+    const p = `${path}.decisionAnchors[${index}]`; reference(row.gateId, gates, `${p}.gateId`, budget); endpoint(row, p);
+  });
+  cadence.delays.forEach((row, index) => {
+    const p = `${path}.delays[${index}]`; endpoint(row.anchor, `${p}.anchor`); reference(row.fromPeriodId, periods, `${p}.fromPeriodId`, budget);
+    reference(row.toPeriodId, periods, `${p}.toPeriodId`, budget); reference(row.receiverPersonId, people, `${p}.receiverPersonId`, budget);
+    if (row.fromPeriodId !== null && row.toPeriodId !== null && periodIndex.get(row.toPeriodId) < periodIndex.get(row.fromPeriodId)) reject('delay-order', p, 'Choose the same or a later receiving period.');
+  });
+}
+
+export function prepareScoreSettings(candidate, path = 'plan.scoreSettings', legacy = false) {
+  const descriptor = candidate && typeof candidate === 'object' ? Object.getOwnPropertyDescriptor(candidate, 'version') : null;
+  if (!descriptor?.enumerable || !Object.hasOwn(descriptor, 'value')) reject('data-property', `${path}.version`, 'Supply an enumerable score version.');
+  const version = descriptor.value;
+  if (!(version === '1.0.0' || !legacy && version === '1.1.0')) reject('score-version', `${path}.version`, 'Use the supported score-settings version.');
+  const raw = record(candidate, version === '1.1.0' ? 'cadenceScoreSettings' : 'scoreSettings', path);
+  if (raw.version !== version) reject('score-version', `${path}.version`, 'Keep the admitted version consistent.');
   let window = null;
   if (raw.window !== null) { const row = record(raw.window, 'scoreWindow', `${path}.window`); window = { label: text(row.label, `${path}.window.label`), ...scoreInterval(row, `${path}.window`) }; }
   const rows = (name, kind, maximum, prepare) => {
@@ -531,7 +651,7 @@ export function prepareScoreSettings(candidate, path = 'plan.scoreSettings') {
   const stages = rows('stages', 'scoreStage', LIMITS.scoreStages, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), workIds: identifiers(row.workIds, LIMITS.work, `${rowPath}.workIds`) }));
   const waits = rows('waits', 'scoreWait', LIMITS.scoreWaits, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), ...scoreInterval(row, rowPath),
     reason: relationshipText(row.reason, `${rowPath}.reason`), receiverPersonId: nullableId(row.receiverPersonId, `${rowPath}.receiverPersonId`) }));
-  const gates = rows('gates', 'scoreGate', LIMITS.scoreGates, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), afterStageId: text(row.afterStageId, `${rowPath}.afterStageId`, true),
+  const gates = rows('gates', 'scoreGate', LIMITS.scoreGates, (row, rowPath) => ({ label: text(row.label, `${rowPath}.label`), afterStageId: version === '1.1.0' ? nullableId(row.afterStageId, `${rowPath}.afterStageId`) : text(row.afterStageId, `${rowPath}.afterStageId`, true),
     reviewerPersonId: nullableId(row.reviewerPersonId, `${rowPath}.reviewerPersonId`), question: relationshipText(row.question, `${rowPath}.question`),
     evidence: relationshipText(row.evidence, `${rowPath}.evidence`), modeledDecision: choice(row.modeledDecision, ['open', 'proceed', 'revise', 'hold'], `${rowPath}.modeledDecision`) }));
   const proposals = rows('proposals', 'scoreProposal', LIMITS.scoreProposals, (row, rowPath) => {
@@ -540,7 +660,8 @@ export function prepareScoreSettings(candidate, path = 'plan.scoreSettings') {
       work: workFields(proposed, identifiers(proposed.personIds, LIMITS.people, `${rowPath}.work.personIds`, 1), `${rowPath}.work`) };
   });
   indexRecords(proposals.map(row => row.work), `${path}.proposals.work`);
-  return { version: '1.0.0', window, dependencies, stages, waits, gates, proposals };
+  return { version: legacy ? '1.0.0' : '1.1.0', window, dependencies, stages, waits, gates, proposals,
+    ...(legacy ? {} : { cadence: version === '1.1.0' ? prepareCadence(raw.cadence, `${path}.cadence`) : null }) };
 }
 
 function prepareScoreReferences(state, people, teams, work, budget) {
@@ -569,7 +690,13 @@ function prepareScoreReferences(state, people, teams, work, budget) {
   settings.stages.forEach((row, index) => { row.workIds = references(row.workIds, work, `${path}.stages[${index}].workIds`, budget); });
   const stages = new Map(settings.stages.map(row => [row.id, row])), gates = new Map(settings.gates.map(row => [row.id, row]));
   settings.waits.forEach((row, index) => reference(row.receiverPersonId, people, `${path}.waits[${index}].receiverPersonId`, budget));
-  settings.gates.forEach((row, index) => { reference(row.afterStageId, stages, `${path}.gates[${index}].afterStageId`, budget); reference(row.reviewerPersonId, people, `${path}.gates[${index}].reviewerPersonId`, budget); });
+  settings.gates.forEach((row, index) => {
+    reference(row.afterStageId, stages, `${path}.gates[${index}].afterStageId`, budget);
+    if (row.afterStageId === null && !settings.cadence?.decisionAnchors.some(anchor => anchor.gateId === row.id))
+      reject('reference', `${path}.gates[${index}]`, 'Attach this decision to a stage or handoff.');
+    reference(row.reviewerPersonId, people, `${path}.gates[${index}].reviewerPersonId`, budget);
+  });
+  if (settings.cadence) prepareCadenceReferences(state, people, work, stages, gates, connections, budget);
   settings.proposals.forEach((row, index) => {
     const rowPath = `${path}.proposals[${index}]`, proposed = row.work;
     if (work.has(proposed.id)) reject('duplicate-id', `${rowPath}.work.id`, 'Give proposed work an identity distinct from accepted sessions.');
@@ -1084,7 +1211,7 @@ function prepareVersion(candidate, version) {
     prepareAssuranceReferences(state, peopleById, workById, budget);
   }
   if (profile.score) {
-    state.scoreSettings = prepareScoreSettings(raw.scoreSettings);
+    state.scoreSettings = prepareScoreSettings(raw.scoreSettings, 'plan.scoreSettings', !profile.cadence);
     prepareScoreReferences(state, peopleById, teamsById, workById, budget);
   }
   const serialized = JSON.stringify(state);
@@ -1115,8 +1242,8 @@ function prepareSelectedVersion(candidate, version) {
     abilities: admitted.state.abilities ?? [], capabilityEvidence: admitted.state.capabilityEvidence ?? [],
     changeSettings: admitted.state.changeSettings ?? createChangeSettings(),
     assuranceSettings: admitted.state.assuranceSettings ?? createAssuranceSettings(),
-    scoreSettings: admitted.state.scoreSettings ?? createScoreSettings(),
-    arrangements: [] }, CONTRACT.schemaVersion);
+    scoreSettings: prepareScoreSettings(admitted.state.scoreSettings ?? createScoreSettings()),
+    arrangements: admitted.state.arrangements ?? [] }, CONTRACT.schemaVersion);
 }
 
 export function preparePlan(candidate) { return prepareSelectedVersion(candidate, schemaVersion(candidate)); }

@@ -1,8 +1,9 @@
-export const SCORE_VERSION = '1.0.0';
+import { projectCadence } from './cadence.mjs';
+export const SCORE_VERSION = '1.1.0';
 
 // Each plan receives its own empty settings; old plans acquire no implied timing.
-export function createScoreSettings() {
-  return { version: SCORE_VERSION, window: null, dependencies: [], stages: [], waits: [], gates: [], proposals: [] };
+export function createScoreSettings(version = SCORE_VERSION) {
+  return { version, window: null, dependencies: [], stages: [], waits: [], gates: [], proposals: [], ...(version === '1.1.0' ? { cadence: null } : {}) };
 }
 
 function freeze(value) {
@@ -152,7 +153,7 @@ export function projectScore(plan) {
     const stage = stageById.get(gate.afterStageId);
     return { id: gate.id, label: gate.label, afterStageId: gate.afterStageId, reviewerPersonId: gate.reviewerPersonId,
       question: gate.question, evidence: gate.evidence, modeledDecision: gate.modeledDecision,
-      minute: stage.status === 'placed' ? stage.endMinute : null,
+      minute: stage?.status === 'placed' ? stage.endMinute : null,
       standing: 'modeled-decision', navigation: navigation('gate', gate.id) };
   });
   const waits = settings.waits.map(wait => ({ kind: 'wait', ...wait,
@@ -170,7 +171,7 @@ export function projectScore(plan) {
   const positionedEnd = agenda.length ? Math.max(...agenda.map(row => row.endMinute)) : null;
   const proposals = settings.proposals.map(proposal => ({ ...structuredClone(proposal),
     navigation: navigation('proposal', proposal.id) }));
-  return freeze({ window, workRows, occurrences, capacity: capacityRows, dependencies, stages, gates, waits, agenda, diagnostics,
+  return freeze({ cadence: projectCadence(plan), window, workRows, occurrences, capacity: capacityRows, dependencies, stages, gates, waits, agenda, diagnostics,
     span: { startMinute: positionedStart, endMinute: positionedEnd, elapsedMinutes: positionedEnd === null ? null : positionedEnd - positionedStart },
     banks: { committedWorkIds: workRows.map(row => row.workId),
       next: proposals.filter(proposal => proposal.bank === 'next'),

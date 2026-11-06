@@ -760,23 +760,23 @@ test('legacy admissions, current captures, history and baselines retain their ac
   const externalCapture = Object.freeze({ state: Object.freeze(oldState), serialized: legacyPurposeFixture });
   const studio = createStudio(externalCapture.state);
   const initial = studio.read();
-  assert.equal(initial.state.schemaVersion, '0.8.0');
+  assert.equal(initial.state.schemaVersion, '0.9.0');
   studio.setBaseline(initial);
   studio.updatePurpose({ ...initial.state.purpose, changedAbility: 'Improve the reading.' }, initial);
-  assert.equal(studio.read().state.schemaVersion, '0.8.0');
-  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.8.0');
+  assert.equal(studio.read().state.schemaVersion, '0.9.0');
+  assert.equal(studio.readBaseline().projection.state.schemaVersion, '0.9.0');
   assert.equal(studio.importText(legacyPurposeFixture, studio.read()).ok, true);
   assert.equal(studio.read().state.purpose.changedAbility, null);
   assert.equal(studio.replace(externalCapture.state, studio.read()).ok, true);
   studio.restoreBaseline(studio.read());
   while (studio.readHistory().undoCount) {
     assert.equal(studio.undo(studio.read()).ok, true);
-    assert.equal(studio.capture().state.schemaVersion, '0.8.0');
-    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.8.0');
+    assert.equal(studio.capture().state.schemaVersion, '0.9.0');
+    assert.equal(JSON.parse(studio.exportText()).schemaVersion, '0.9.0');
   }
   while (studio.readHistory().redoCount) {
     assert.equal(studio.redo(studio.read()).ok, true);
-    assert.equal(studio.read().state.schemaVersion, '0.8.0');
+    assert.equal(studio.read().state.schemaVersion, '0.9.0');
   }
   assert.equal(externalCapture.state.schemaVersion, '0.1.0');
   assert.equal(Object.hasOwn(externalCapture.state, 'purpose'), false);
@@ -795,7 +795,7 @@ test('a genuine 0.3 relationship plan retains its meaning through current accept
   source.connections = [{ id: 'review-return', senderTeamId: 'delivery', receiverTeamId: 'receiving', receiverPersonId: 'product-one',
     sharedObject: 'A reviewed draft', responseExpectation: 'Return an acceptance observation.', workIds: ['review'], status: 'paused' }];
   const bytes = JSON.stringify(source), studio = createStudio(source), accepted = studio.read();
-  assert.equal(accepted.state.schemaVersion, '0.8.0');
+  assert.equal(accepted.state.schemaVersion, '0.9.0');
   for (const field of ['purpose', 'teams', 'work', 'contributions', 'connections']) assert.deepEqual(accepted.state[field], source[field]);
   assert.deepEqual(accepted.state.people, source.people.map(row => ({ ...row, availability: null })));
   assert.deepEqual(accepted.state.practices[0].supportBindings, [{ requirementId: 'general-support', workIds: ['review'] }]);

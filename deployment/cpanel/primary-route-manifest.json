@@ -2483,6 +2483,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/cadence.mjs",
+      "projected_path": "collaboration/native-investment-studio/cadence.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/score-models.mjs",
       "projected_path": "collaboration/native-investment-studio/score-models.mjs",
       "media_type": "text/javascript"
