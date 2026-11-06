@@ -2473,8 +2473,6 @@ p#on-dark-iron-ore {
 .native-capabilities .native-capabilities__choice { display: grid; align-content: start; gap: .35rem; inline-size: 100%; block-size: 100%; min-inline-size: 0; text-align: start; font-weight: 650; background: var(--about-cool-blue); }
 .native-capabilities__choice :is(small, span) { font-size: .8rem; font-weight: 450; }
 .native-capabilities__choice[aria-pressed='true'] { background: var(--native-signal); border-style: double; }
-.native-capabilities__catalogues > section:nth-child(2) .native-capabilities__choice { background: var(--about-soft-apricot); }
-.native-capabilities__catalogues > section:nth-child(2) .native-capabilities__choice[aria-pressed='true'] { background: var(--native-zine-rose); }
 .native-capability-card { container: native-capability-card / inline-size; display: grid; align-content: start; gap: 1rem; padding: clamp(.5rem, 2vw, 1.5rem); background: var(--native-zine-field); border: .125rem solid var(--native-ink); border-block-start: .5rem solid var(--about-deep-teal); box-shadow: .35rem .4rem 0 var(--native-key-shadow); }
 .native-capability-card > header { display: grid; gap: .6rem; }
 .native-capability-card__actions { padding-block-end: .85rem; border-block-end: .0625rem dashed var(--native-rule); }

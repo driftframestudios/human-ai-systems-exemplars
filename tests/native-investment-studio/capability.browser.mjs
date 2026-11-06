@@ -23,6 +23,8 @@ const root = page => page.locator('[data-native-coordination]');
 const panel = page => root(page).locator('[data-native-capabilities]');
 const action = (page, name) => panel(page).locator(`[data-capability-action="${name}"]`);
 const field = (page, name) => panel(page).locator(`input[data-capability-field="${name}"], select[data-capability-field="${name}"], textarea[data-capability-field="${name}"]`);
+const ids = (page, name) => panel(page).locator(`ul[data-capability-field="${name}"]`);
+const section = (page, name) => panel(page).locator(`[data-capability-section-key="${name}"]`);
 const total = page => root(page).locator('[data-native-total]');
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.capabilityFixture.studio.exportText());
@@ -60,12 +62,12 @@ async function open(t, engine, showcase = false) {
 }
 async function support(page) {
   await field(page, 'context').fill('Recover an accepted change in the pilot');
-  await panel(page).locator('[data-capability-people] > summary').click();
+  await section(page, 'responsibility').click();
   await field(page, 'teamId').selectOption('delivery');
-  await field(page, 'responsiblePersonIds').selectOption(['product-one', 'product-two']);
+  for (const id of ['product-one', 'product-two']) await ids(page, 'responsiblePersonIds').locator(`input[value="${id}"]`).check();
   await field(page, 'decisionOwnerPersonId').selectOption('product-one');
   for (const id of ['preparation', 'review']) {
-    await panel(page).locator(`[data-capability-requirement="${id}"] > summary`).click();
+    await section(page, id).click();
     await panel(page).locator(`input[data-capability-field="support.${id}"][value="review"]`).check();
   }
 }
@@ -111,8 +113,10 @@ for (const engine of names) {
     await expect(supportCell(page, 'assurance', 'observation')).toHaveClass(/native-control--navigate/u);
     await expect(supportCell(page, 'assurance', 'observation')).toHaveAccessibleName('Establish a fitting acceptance observation · Observation: Rehearsed recorded. The receiving operator recovered the saved request.');
     await supportCell(page, 'assurance', 'observation').focus(); await page.keyboard.press('Enter');
-    await expect(field(page, 'evidenceStage')).toBeFocused();
-    await expect(field(page, 'evidenceStage').locator('..').locator('..')).toContainText('Routine requests in the walkthrough');
+    await expect(panel(page).locator('[data-capability-example]').first()).toBeFocused();
+    await expect(panel(page).locator('[data-capability-examples]')).toContainText('Illustrative walkthroughs');
+    await panel(page).locator('[data-capability-example="recovery"]').click();
+    await expect(panel(page).locator('.native-capability-example-reading')).toContainText('A receiving team finds a missing detail.');
     await expect(total(page)).toHaveText('$3,980.00');
     assert.equal(await bytes(page), accepted, 'inspection keeps historical observations and current support separate');
   });
@@ -121,7 +125,7 @@ for (const engine of names) {
     await supportCell(page, 'assurance', 'preparation').click();
     const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
     await expect(prepare).toHaveAttribute('open', '');
-    await expect(prepare.locator('ul.native-capability__choices')).toBeFocused();
+    await expect(ids(page, 'support.preparation')).toBeFocused();
     await field(page, 'context').fill('  Keep the recovery rehearsal context  ');
     await field(page, 'new.preparation.enabled').selectOption('yes');
     await field(page, 'new.preparation.minutesPerSession').fill('later');
@@ -143,7 +147,7 @@ for (const engine of names) {
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
     await supportCell(page, 'expectation', 'responsibility').click();
     await supportCell(page, 'inspect-history', 'observation').click();
-    await expect(field(page, 'evidenceStage')).toBeFocused();
+    await expect(panel(page).locator('[data-capability-example]').first()).toBeFocused();
     await expect(field(page, 'context')).toHaveValue('  Keep this history proposal  ');
     await expect(supportCell(page, 'inspect-history', 'preparation')).toHaveAttribute('data-support-state', 'available');
     assert.equal(await bytes(page), accepted, 'moving between support cells retains unfinished raw text and accepts no records');
@@ -167,9 +171,15 @@ for (const engine of names) {
       }
       await region.screenshot({ path: resolve(captures, `${engine}-support-sequencer-${width}.png`) });
     }
+    const keyPaint = async id => choice(page, id).evaluate(element => {
+      const css = getComputedStyle(element); return [css.backgroundColor, css.color, css.boxShadow];
+    });
+    assert.deepEqual(await keyPaint('compare-alternatives'), await keyPaint('focalization'), 'both catalogues share an available-key treatment');
+    await choice(page, 'compare-alternatives').click(); const selectedPaint = await keyPaint('compare-alternatives');
+    await choice(page, 'focalization').click(); assert.deepEqual(await keyPaint('focalization'), selectedPaint, 'both catalogues share the selected-key treatment');
     await page.emulateMedia({ forcedColors: 'active' });
     await supportCell(page, 'assurance', 'review').focus(); await page.keyboard.press('Enter');
-    await expect(panel(page).locator('[data-capability-requirement="review"] ul.native-capability__choices')).toBeFocused();
+    await expect(ids(page, 'support.review')).toBeFocused();
     assert.equal(await bytes(page), accepted);
   });
   test(`${engine}: the pilot proposal previews its people and keeps support choices stable across compact columns`, { timeout: 60000 }, async t => {
@@ -181,8 +191,8 @@ for (const engine of names) {
     await expect(people.locator('summary')).toHaveText('People and responsibility · Engineering · Product lead decides');
     const prepare = panel(page).locator('[data-capability-requirement="preparation"]');
     await expect(prepare.locator('summary')).toContainText('Prototype pairing');
-    await prepare.locator('summary').click();
-    const support = prepare.locator('ul.native-capability__choices');
+    await section(page, 'preparation').click();
+    const support = ids(page, 'support.preparation');
     const selected = support.locator('input[value="pairing"]'); await expect(selected).toBeChecked();
     const positions = await support.locator('li').evaluateAll(items => items.map(item => ({ x: item.offsetLeft, y: item.offsetTop })));
     assert.equal(positions[0].y, positions[1].y); assert.ok(positions[1].x > positions[0].x);
@@ -234,7 +244,7 @@ for (const engine of names) {
     await expect(reviewGroup).not.toHaveAttribute('open', '');
     await expect(reviewGroup.locator('summary')).toHaveText('Review with the responsible people · Weekly working session, Add History review');
     await reviewGroup.locator('summary').click();
-    await field(page, 'new.review.personIds').selectOption('product-one'); await field(page, 'new.review.hoursPerSession').fill('1');
+    await ids(page, 'new.review.personIds').locator('input[value="product-one"]').check(); await field(page, 'new.review.hoursPerSession').fill('1');
     await expect(field(page, 'new.review.hoursPerSession')).toHaveValue('1');
     await field(page, 'new.review.minutesPerSession').fill('30'); await field(page, 'new.review.funding').selectOption('additional');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('$16,150.00'); await expect(total(page)).toHaveText('$16,000.00');
@@ -260,7 +270,7 @@ for (const engine of names) {
     await choice(page, 'inspect-history').click(); await field(page, 'context').fill('  Return to this card  ');
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     const reviewGroup = panel(page).locator('[data-capability-requirement="review"]');
-    await reviewGroup.locator('summary').click();
+    await section(page, 'review').click();
     await field(page, 'new.review.enabled').selectOption('yes');
     await panel(page).locator('[data-native-create="person"][data-native-return-field="new.review.personIds"]').click();
     const assembly = root(page).locator('[data-native-assembly]');
@@ -279,15 +289,15 @@ for (const engine of names) {
     await expect(field(page, 'context')).toHaveValue('  Return to this card  '); await action(page, 'review').click();
     await expect(field(page, 'context')).toHaveValue('  Return to this card  ');
     await expect(reviewGroup).toHaveAttribute('open', '');
-    await expect(field(page, 'new.review.personIds')).toBeFocused();
-    await field(page, 'new.review.personIds').selectOption({ label: 'Quality reviewer' });
+    await expect(ids(page, 'new.review.personIds')).toBeFocused();
+    await ids(page, 'new.review.personIds').getByRole('checkbox', { name: 'Quality reviewer' }).check();
     await field(page, 'new.review.enabled').selectOption('no');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Known proposed investment: $8,000.00. Known accepted investment: $8,000.00.');
     await expect(panel(page).locator('[data-capability-preview]')).toContainText('Add missing hourly rates in People to complete the amounts.');
     await field(page, 'new.review.enabled').selectOption('yes');
     await field(page, 'new.review.minutesPerSession').fill('later');
     await expect(field(page, 'new.review.minutesPerSession')).toHaveAttribute('aria-invalid', 'true');
-    for (const width of [1440, 320]) {
+    for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
       await field(page, 'new.review.minutesPerSession').scrollIntoViewIfNeeded(); await frames(page);
       const boxes = await panel(page).locator('input[inputmode]').evaluateAll(inputs => inputs.filter(input => input.getClientRects().length).map(input => {

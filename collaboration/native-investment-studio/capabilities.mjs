@@ -25,7 +25,7 @@ const requirement = (id, label, phase, description, minutes = 30) => ({
 const prepare = requirement('preparation', 'Prepare the work', 'preparation', 'Prepare the material and access the people need.');
 const review = requirement('review', 'Review with the responsible people', 'review', 'Check the result against the agreed outcome and conditions.');
 const maintain = requirement('maintenance', 'Keep the work usable', 'maintenance', 'Assign time to update instructions and revisit changes.');
-const coordinate = requirement('coordination', 'Agree the next action', 'coordination', 'Bring the responsible people together to agree the work and its receiver.');
+const coordinate = requirement('coordination', 'Plan the handoff', 'coordination', 'Bring the responsible people together to agree the work and its receiver.');
 const reference = (kind, definitionId) => ({ kind, definitionId, definitionVersion: CAPABILITY_VERSION });
 
 const abilityRows = [
