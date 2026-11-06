@@ -5,6 +5,7 @@ import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } fr
 import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
+import { createReel, revealReelResult } from './reel-control.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
@@ -40,14 +41,22 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const choiceLabel = document.createElement('label'); choiceLabel.textContent = 'Arrangement'; choiceLabel.append(choice);
   const description = document.createElement('p'); description.className = 'native-coordination__hint';
   const structure = document.createElement('div'); structure.dataset.templateStructure = '';
+  const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
+    onSelect(id) { choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview(); revealReelResult(structure); } });
+  const arrangementDeck = document.createElement('div'); arrangementDeck.className = 'studio-arrangement-deck';
+  arrangementDeck.append(reel.element, structure);
+  choiceLabel.className = 'studio-arrangement-native-choice';
   const groups = document.createElement('div'); groups.className = 'native-connection-template__groups';
+  const customization = document.createElement('details'); customization.className = 'studio-arrangement-settings';
+  const customizationTitle = document.createElement('summary'); customizationTitle.textContent = 'Customize teams and handoffs';
+  customization.append(customizationTitle, groups);
   const previewRegion = document.createElement('section'); previewRegion.className = 'native-coordination__preview native-connection-template__preview';
   previewRegion.dataset.templatePreview = ''; previewRegion.hidden = true; previewRegion.setAttribute('aria-label', 'Arrangement preview');
   const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
   const previewButton = button('Preview arrangement', 'preview'), applyButton = button('Apply arrangement', 'apply');
   const cancelButton = button('Cancel preview', 'cancel'), anotherButton = button('Start another arrangement', 'another');
   actions.append(previewButton, applyButton, cancelButton, anotherButton);
-  form.append(choiceLabel, description, structure, groups, previewRegion, actions); body.replaceChildren(form);
+  form.append(choiceLabel, description, arrangementDeck, actions, previewRegion, customization); body.replaceChildren(form);
   function option(value, label) { const node = document.createElement('option'); node.value = value; node.textContent = label; return node; }
   function element(tag, text, className) {
     const node = document.createElement(tag); if (text !== undefined) node.textContent = text;
@@ -61,7 +70,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function retirePreview() {
     proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren(); applyButton.setAttribute('aria-disabled', 'true');
     applyButton.textContent = 'Apply arrangement';
-    for (const element of [choiceLabel, description, structure, groups]) element.hidden = false;
+    for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = false;
     previewButton.hidden = false; anotherButton.hidden = false;
   }
   function touch() { rawRevision += 1; generation += 1; retirePreview(); announce(''); }
@@ -85,12 +94,17 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function startingConfiguration(template) {
     const people = projection.state.people;
+    const teams = template.teams.map((slot, index) => {
+      const assigned = people.filter((row, position) => position % template.teams.length === index).map(row => row.id);
+      return { slotId: slot.id, selection: 'new', label: slot.label, personIds: assigned.length ? assigned : people.slice(0, 1).map(row => row.id) };
+    });
     return { templateId: template.id, proposalId: nextPrefix(template, projection.state),
-      teams: template.teams.map((slot, index) => ({ slotId: slot.id, selection: 'new', label: slot.label,
-        personIds: people.filter((row, position) => position % template.teams.length === index).map(row => row.id) })),
-      connections: template.connections.map(slot => ({ slotId: slot.id, receiverPersonId: '', sharedObject: 'Working plan', responseExpectation: '',
-        workIds: projection.state.work.length ? [projection.state.work[0].id] : [], status: 'active', recoveryEnabled: false,
-        recovery: { label: 'Review the handoff', team: `slot:${slot.receiverSlotId}`, personIds: [], hoursPerSession: '1', minutesPerSession: '0',
+      teams,
+      connections: template.connections.map(slot => ({ slotId: slot.id, receiverPersonId: teams.find(team => team.slotId === slot.receiverSlotId).personIds[0] ?? '',
+        sharedObject: slot.sharedObject ?? 'Working plan', responseExpectation: slot.responseExpectation ?? '',
+        workIds: projection.state.work.length ? [projection.state.work[0].id] : [], status: 'active', recoveryEnabled: Boolean(slot.sessionLabel && people.length),
+        recovery: { label: slot.sessionLabel ?? 'Review the handoff', team: `slot:${slot.receiverSlotId}`,
+          personIds: teams.find(team => team.slotId === slot.receiverSlotId).personIds.slice(), hoursPerSession: '0', minutesPerSession: '30',
           occurrences: '1', funding: 'additional', status: 'planned' } })),
     };
   }
@@ -152,7 +166,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function renderStructure() {
     const template = BY_ID.get(configuration.templateId);
     const teams = configuration.teams.map(row => ({ slotId: row.slotId, slotLabel: template.teams.find(slot => slot.id === row.slotId).label,
-      team: { id: `proposal-slot-${row.slotId}`, label: teamLabel(row).trim() || 'Team name to choose' } }));
+      team: { id: `proposal-slot-${row.slotId}`, label: teamLabel(row).trim() || 'Team name to choose', personIds: row.personIds } }));
     const connections = template.connections.map(slot => {
       const row = configuration.connections.find(row => row.slotId === slot.id);
       return { slotId: slot.id, slotLabel: slot.label, adapted: false,
@@ -160,11 +174,18 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
           sharedObject: row.sharedObject, status: row.status, workIds: row.workIds } };
     });
     const arrangement = { id: configuration.proposalId, templateId: template.id, templateVersion: template.version, label: template.label, purpose: template.description, adapted: false, teams, connections };
-    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: projection.state, reading: 'proposed', onNavigate(target) {
+    const proposedWork = configuration.connections.filter(row => row.recoveryEnabled).flatMap(row => {
+      const parsed = prepareWorkDraftValues(row.recovery); if (parsed.errors.length) return [];
+      return [{ id: `proposal-session-${row.slotId}`, label: row.recovery.label,
+        teamId: row.recovery.team.startsWith('slot:') ? `proposal-slot-${row.recovery.team.slice(5)}` : row.recovery.team.slice(5),
+        personIds: row.recovery.personIds, ...parsed.admitted, funding: row.recovery.funding, status: row.recovery.status }];
+    });
+    const previewPlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
+    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate(target) {
       if (!active()) return;
       const kind = target.kind === 'template-team' ? 'team' : 'connection';
       const section = [...groups.querySelectorAll('[data-template-card]')].find(section => section.dataset.templateCard === `${kind}:${target.id}`);
-      if (!section) return; section.open = true;
+      if (!section) return; customization.open = true; section.open = true;
       section.querySelector('input,select,button')?.focus();
     } }));
   }
@@ -179,7 +200,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function build() {
     bindings = new WeakMap(); controls = new Map(); optionSources = []; dynamic = []; invalid.clear(); groups.replaceChildren();
-    const template = BY_ID.get(configuration.templateId); choice.value = template.id; description.textContent = template.description;
+    const template = BY_ID.get(configuration.templateId); choice.value = template.id; reel.select(template.id); description.textContent = template.description;
     for (const row of configuration.teams) {
       const definition = template.teams.find(slot => slot.id === row.slotId), group = card(definition.label, `team:${row.slotId}`);
       field(group, `teams.${row.slotId}.selection`, 'Team', row, 'selection', { max: LIMITS.identifier + 5,
@@ -279,7 +300,8 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const total = element('output', money(summary.money.afterTotalCents)); total.dataset.templateTotal = '';
     const change = summary.money.totalDeltaCents === null ? `Known amount: ${money(summary.money.afterKnownCents)}. Add the missing rates to complete the total.`
       : `Current ${money(summary.money.beforeTotalCents)} · Change ${money(summary.money.totalDeltaCents)}`;
-    previewRegion.replaceChildren(element('h4', 'Arrangement preview'), list, element('p', 'Total investment'), total, element('p', change));
+    const receipt = element('details', undefined, 'studio-arrangement-receipt'); receipt.append(element('summary', 'Review the proposed records'), list);
+    previewRegion.replaceChildren(element('h4', 'Ready to apply'), element('p', 'Teams and their handoffs will be added together.'), total, element('p', change), receipt);
     previewRegion.hidden = false; applyButton.setAttribute('aria-disabled', 'false');
   }
   function parkAndNotify(epoch) {
@@ -329,7 +351,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const candidate = { command, base, acceptance: studio.readAcceptance(), intent: editing.read().intent, revision: rawRevision };
     if (!fresh(candidate)) return false;
     proposal = candidate;
-    for (const element of [choiceLabel, description, structure, groups]) element.hidden = true;
+    for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = true;
     previewButton.hidden = true; anotherButton.hidden = true;
     applyButton.textContent = 'Use connections without template';
     const template = getCoordinationTemplate(row.templateId, row.templateVersion);
@@ -351,7 +373,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1; proposal = null; configuration = null;
-    cleanup.forEach(remove => remove()); bindings = new WeakMap(); controls.clear(); optionSources = []; dynamic = [];
+    cleanup.forEach(remove => remove()); reel.dispose(); bindings = new WeakMap(); controls.clear(); optionSources = []; dynamic = [];
     body.replaceChildren(); status.textContent = ''; details.open = false; details.hidden = true; INSTANCES.delete(details);
   }
   listen(details, 'toggle', () => {

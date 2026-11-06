@@ -154,13 +154,14 @@ export function mountCoordinationPanel(root, options = {}) {
     const createdLabel = created?.label;
     const team = state.teams.find(row => row.id === route.requiredTeamId);
     const needsMembership = route.createdKind === 'person' && created && team && !team.personIds.includes(route.createdId);
-    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon', connectionsView: 'connections', peopleSupportView: 'people and teams' }[route.kind];
+    const destination = { session: 'session', connection: 'connection', assembly: 'team', contribution: 'contribution', template: 'arrangement', capability: 'card', change: 'change plan', assurance: 'quality and recovery plan', score: 'coordination horizon', connectionsView: 'connections', peopleView: 'people and teams', peopleSupportView: 'people and teams' }[route.kind];
     returnButton.textContent = `Return to ${destination}`;
     returnNote.textContent = createdLabel
       ? `${createdLabel} is ready. Return to review your saved entries and choose ${route.createdKind === 'person' ? 'this person' : route.createdKind === 'session' ? 'this session' : 'this team'}.`
       : `Your ${destination} entries are saved while you ${route.creating === 'team' ? 'create a team' : route.creating === 'session' ? 'add a session' : 'add a person'}.`;
     if (route.inspectedWorkId) returnNote.textContent = `Review the supporting session, then return to your ${destination} and its saved entries.`;
     if (route.kind === 'connectionsView') returnNote.textContent = 'Inspect the related team, person or work, then return to the connections and their arrangement.';
+    if (route.kind === 'peopleView') returnNote.textContent = 'Inspect the session, then return to people and teams.';
     if (route.kind === 'peopleSupportView') returnNote.textContent = 'Inspect the supporting work or recorded observation, then return to the person or team. Your unfinished entries stay saved.';
     if (route.kind === 'score') returnNote.textContent = 'Inspect the related work, then return to the coordination horizon and your saved arrangement.';
     if (route.createdId && !created) returnNote.textContent = `The added ${route.createdKind} is outside the current plan. Your ${destination} entries remain saved. Return to choose an available ${route.createdKind} or create another.`;
@@ -201,7 +202,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (!route) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination');
+    chapterShell?.select(route.kind === 'assurance' ? 'assurance' : route.kind === 'change' ? 'change' : route.kind === 'capability' ? 'work' : ['assembly', 'contribution', 'peopleView', 'peopleSupportView'].includes(route.kind) ? 'people' : 'coordination');
     if (route.kind === 'peopleSupportView') {
       if (route.origin?.kind === 'person') teamPanel?.select(route.origin.targetId);
       else if (route.origin?.kind === 'assembly') assemblyPanel?.open(route.origin.targetId);
@@ -218,9 +219,9 @@ export function mountCoordinationPanel(root, options = {}) {
       destination?.scrollIntoView({ block: 'center' }); destination?.focus({ preventScroll: true });
       return;
     }
-    if (route.kind === 'connectionsView') {
+    if (route.kind === 'connectionsView' || route.kind === 'peopleView') {
       returnRoutes.pop(); render(); renderReturnRoute();
-      const destination = root.querySelector('[data-native-connection-view]');
+      const destination = root.querySelector(route.kind === 'peopleView' ? '.studio-people-reading' : '[data-native-connection-view]');
       destination?.scrollIntoView({ block: 'start' });
       destination?.querySelector('button, select')?.focus({ preventScroll: true });
       return;
@@ -253,14 +254,22 @@ export function mountCoordinationPanel(root, options = {}) {
     returnRoutes.push({ kind, target, held, inspectedWorkId: id });
     render(); root.querySelector('[data-native-session-select]')?.focus();
   }
-  function navigateFromConnections(target) {
+  function navigateFromConnections(target, origin = 'connectionsView') {
     if (disposed) return;
+    if (target.kind === 'create-team' || target.kind === 'create-person') {
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      chapterShell?.select('people', { kind: 'context' });
+      assemblyPanel?.create(target.kind === 'create-team' ? 'team.create' : 'person.create');
+      render(); return;
+    }
     const collection = { team: 'teams', work: 'work', person: 'people', contribution: 'contributions' }[target.kind];
     if (!collection || !studio.read().state[collection].some(row => row.id === target.id)) return;
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
-    retainReturnAncestors('connectionsView', 'connections');
-    returnRoutes.push({ kind: 'connectionsView', target: 'connections', held: false });
+    const returnTarget = origin === 'peopleView' ? 'people' : 'connections';
+    retainReturnAncestors(origin, returnTarget);
+    returnRoutes.push({ kind: origin, target: returnTarget, held: false });
     chapterShell?.select(target.kind === 'work' ? 'coordination' : 'people', { kind: 'context' });
     if (target.kind === 'team') assemblyPanel?.open(makeAssemblyTarget('team.update', target.id));
     else if (target.kind === 'person') teamPanel?.select(target.id);
@@ -616,6 +625,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (result?.view?.status === 'stale') announce('Your saved entries are here. Review them against the current plan, then continue.');
       return;
     }
+    if (button.hasAttribute('data-native-work-open')) { navigateFromConnections({ kind: 'work', id: button.dataset.nativeWorkOpen }, 'peopleView'); return; }
     if (button.hasAttribute('data-native-create')) { createPrerequisite(button); return; }
     if (button.hasAttribute('data-native-return-action')) { returnToDraft(); return; }
     if (button.hasAttribute('data-native-return-team')) { addCreatedPersonToTeam(); return; }

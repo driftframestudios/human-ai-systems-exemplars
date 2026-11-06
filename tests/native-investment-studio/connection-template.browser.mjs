@@ -29,6 +29,8 @@ const status = page => panel(page).locator('[data-connection-template-status]');
 const bytes = page => page.evaluate(() => window.templateFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 async function card(page, id) {
+  const rack = panel(page).locator('.studio-arrangement-settings');
+  if (!(await rack.evaluate(node => node.open))) await rack.locator(':scope > summary').click();
   const target = panel(page).locator(`[data-template-card="${id}"]`);
   if (!(await target.evaluate(node => node.open))) await target.locator('summary').click();
 }
@@ -69,6 +71,28 @@ async function existingGroups(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: arrangement reel previews populated new structures before Apply and Undo restores the plan`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const before = await bytes(page);
+    for (const id of ['stream-aligned', 'matrix', 'tiger-team']) {
+      await panel(page).locator(`[data-reel-choice="${id}"]`).click();
+      await expect(panel(page).locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
+      await expect(panel(page).locator('.studio-team-lane')).toHaveCount(3);
+      await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'false');
+      assert.equal(await bytes(page), before, 'a reel choice prepares a proposal while accepted state stays intact');
+    }
+    await action(page, 'apply').click();
+    const accepted = await page.evaluate(() => {
+      const fixture = window.templateFixture, state = fixture.studio.read().state;
+      return { template: state.arrangements.at(-1).templateId, session: state.work.at(-1).label,
+        members: state.teams.slice(-3).map(team => team.personIds), accepted: fixture.accepted };
+    });
+    assert.equal(accepted.template, 'tiger-team'); assert.equal(accepted.session, 'Diagnose and agree a response');
+    assert.ok(accepted.members.every(members => members.length)); assert.equal(accepted.accepted, 1);
+    await page.evaluate(() => { const { studio, controller } = window.templateFixture; studio.undo(studio.read()); controller.render(); });
+    assert.equal(await bytes(page), before);
+  });
+
   test(`${engine}: authored arrangements retain distinct topology, actual endpoints and human handoffs through Apply, return and detach`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
@@ -92,7 +116,7 @@ for (const engine of names) {
     };
     const signatures = [];
     for (const [id, edges] of Object.entries(expected)) {
-      await panel(page).locator('[data-template-choice]').selectOption(id);
+      await panel(page).locator(`[data-reel-choice="${id}"]`).click();
       await expect(sketch.locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
       await expect(sketch).toContainText('Proposed structure');
       assert.deepEqual(await sketch.locator('[data-arrangement-connection]').evaluateAll(rows => rows.map(row => `${row.dataset.senderTeam.replace('proposal-slot-', '')}>${row.dataset.receiverTeam.replace('proposal-slot-', '')}`)), edges);
@@ -101,12 +125,12 @@ for (const engine of names) {
       await sketch.locator('.native-arrangement__viewport').screenshot({ path: resolve(captures, `${engine}-${id}-structure.png`) });
     }
     assert.equal(new Set(signatures).size, 4, 'each arrangement explains a different source-owned grouping before acceptance');
-    await panel(page).locator('[data-template-choice]').selectOption('pod');
+    await panel(page).locator('[data-reel-choice="pod"]').click();
     await sketch.locator('[data-arrangement-team="proposal-slot-pod"]').click();
     await expect(field(page, 'teams.pod.selection')).toBeFocused();
     await field(page, 'teams.pod.label').fill('Shared delivery');
-    await panel(page).locator('[data-template-choice]').selectOption('guild');
-    await panel(page).locator('[data-template-choice]').selectOption('pod'); await card(page, 'team:pod');
+    await panel(page).locator('[data-reel-choice="guild"]').click();
+    await panel(page).locator('[data-reel-choice="pod"]').click(); await card(page, 'team:pod');
     await expect(field(page, 'teams.pod.label')).toHaveValue('Shared delivery');
     await action(page, 'preview').click(); await action(page, 'apply').click();
     await panel(page).locator(':scope > summary').click();
@@ -119,12 +143,12 @@ for (const engine of names) {
     await page.evaluate(() => { const f = window.templateFixture, result = f.studio.importText(f.studio.exportText(), f.studio.read()); if (!result.ok) throw Error(result.error.code); f.nativeController.refresh(); });
     await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId);
     const beforeInspection = await bytes(page);
-    await reading.locator('button[data-arrangement-target-kind="team"]').first().click();
+    await reading.locator('.studio-team-lane__title').first().click();
     await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
     await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toBeFocused();
     await root.locator('[data-native-assembly] [data-assembly-form] [name="label"]').fill('Shared delivery · unfinished name');
     await root.locator('[data-native-return-action]').click(); await expect(reading).toBeVisible();
-    await reading.locator('button[data-arrangement-target-kind="team"]').first().click();
+    await reading.locator('.studio-team-lane__title').first().click();
     await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toHaveValue('Shared delivery · unfinished name');
     await root.locator('[data-native-return-action]').click(); assert.equal(await bytes(page), beforeInspection);
     const cable = reading.locator('.native-arrangement__cable').first(); await cable.scrollIntoViewIfNeeded();

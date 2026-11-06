@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 
 const about = await readFile(new URL('../../context-canvas-project-surface/context-canvas/index.html', import.meta.url), 'utf8');
-const teamSection = about.match(/<section\b[^>]*\bdata-native-team-editor\b[\s\S]*?<\/section>/u)?.[0];
+const teamSection = about.slice(about.indexOf('<section class="native-team"'), about.indexOf('<section class="native-capabilities"'));
 const team = teamSection?.match(/<details\b[^>]*\bdata-person-configure\b[\s\S]*?<\/details>/u)?.[0];
 
 test('About gives person settings a separate form with connected labels and field feedback', () => {

@@ -1219,3 +1219,19 @@ Exact selectors, component settings, methods, and richer interpretation remain
 in disclosed racks. Ordinary phone widths stack the full reels and keep local
 track scrolling. This preserves visible choices while concentrating the
 initial view on the instruments and the work they affect.
+
+### People and Coordination details
+
+Issue #728 places team lanes and person/session tracks above the existing
+settings. Rates and ordering use a compact disclosure; person settings open
+below the visual reading. Session pads open the same working-session editor,
+and their return keeps the originating chapter. A team's Choose people action
+opens its membership editor; global Add person begins the existing creation
+flow. The button wording identifies whether the visitor selects membership
+or creates a new record.
+
+Team arrangements use seven authored presets, including Stream-aligned, Matrix
+and Tiger Team. Turning the reel previews populated teams, connections and
+supporting sessions locally; Apply accepts the arrangement and Undo restores
+it. The connection diagram remains a component in the rack. The initial
+Coordination horizon keeps its accepted compact composition.

@@ -72,6 +72,7 @@ async function open(t, engine, full = false) {
   });
   await tab(page, 'people').click();
   await expect(people(page)).toHaveAttribute('data-assembly-ready', 'true');
+  await people(page).locator('.studio-people-rates > summary').click();
   return page;
 }
 
@@ -83,6 +84,27 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: People session tracks return to people and team lanes open the matching membership editor`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    const accepted = await bytes(page);
+    const track = people(page).locator('.studio-people-reading .studio-session-tracks__pad').first();
+    await expect(track).toHaveClass(/native-control--navigate/);
+    await track.click();
+    await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(root(page).locator('[data-native-session-editor] [data-native-configure]')).toHaveAttribute('open', '');
+    await root(page).getByRole('button', { name: 'Return to people and teams', exact: true }).click();
+    await expect(tab(page, 'people')).toHaveAttribute('aria-selected', 'true');
+    await expect(people(page).locator('.studio-people-reading button').first()).toBeFocused();
+    await expect(action(page, 'person-create')).toBeVisible();
+    await tab(page, 'coordination').click();
+    await root(page).locator('[data-native-workspace="connection"] > summary').click();
+    const lane = root(page).locator('[data-team-lane="delivery"]');
+    await lane.getByRole('button', { name: 'Choose people', exact: true }).click();
+    await expect(tab(page, 'people')).toHaveAttribute('aria-selected', 'true');
+    await expect(people(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
+    await expect(people(page).locator('[data-assembly-members]')).toBeVisible();
+    assert.equal(await bytes(page), accepted);
+  });
   test(`${engine}: team membership toggles retain row geometry and checkbox focus`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await people(page).locator('[data-assembly-team="delivery"]').click();
@@ -139,6 +161,7 @@ for (const engine of names) {
     assert.deepEqual(design.personIds, ['product-one', adaId]);
     await expect(total(page)).toHaveText('$1,450.50');
     await expect(people(page).locator('[data-assembly-configure]')).toHaveAttribute('open', '');
+    await people(page).locator(`[data-assembly-team="${design.id}"]`).locator('..').locator('details > summary').click();
     await people(page).locator(`[data-assembly-action="team-up"][data-assembly-id="${design.id}"]`).click();
     assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].id), design.id);
     await expect(people(page).locator(`[data-assembly-team="${design.id}"]`)).toBeFocused();

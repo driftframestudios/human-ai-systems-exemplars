@@ -3,9 +3,19 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/native-investment-studio/arrangement-surfaces.mjs",
+      "projected_path": "collaboration/native-investment-studio/arrangement-surfaces.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/change-showcase.mjs",
       "projected_path": "collaboration/native-investment-studio/change-showcase.mjs",
       "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css",
+      "media_type": "text/css"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-change.css",
