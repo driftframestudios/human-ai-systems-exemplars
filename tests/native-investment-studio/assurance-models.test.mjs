@@ -13,7 +13,7 @@ import {
   projectAssurance, projectLearning, projectSigmaReference,
 } from '../../collaboration/native-investment-studio/assurance-models.mjs';
 import { estimateQualityReference, estimateRecoveryReference } from '../../collaboration/investment-analysis/staffing-adapter.mjs';
-import { createQualityExploration, qualityArrangement, qualityRehearsalExample } from '../../collaboration/native-investment-studio/assurance-showcase.mjs';
+import { createQualityExploration, qualityArrangement, qualityRehearsalExample, qualityConstraints } from '../../collaboration/native-investment-studio/assurance-showcase.mjs';
 import { createShowcasePlan } from '../../collaboration/native-investment-studio/presets.mjs';
 
 test('quality exploration produces distinct preparation and recovery proposals with useful, unobserved rehearsal context', () => {
@@ -24,6 +24,7 @@ test('quality exploration produces distinct preparation and recovery proposals w
   assert.ok(formal.included.includes('security-privacy') && formal.included.includes('post-release-learning'));
   assert.notDeepEqual(formal.included, baseline.included);
   const plan = createShowcasePlan(), before = JSON.stringify(plan);
+  assert.equal(plan.assuranceSettings.quality.sigmaHalfSteps, 8, 'the showcase starts with a calm 4σ reference');
   const example = qualityRehearsalExample(getRehearsalDefinition(formal.definitionId, '1.0.0'), formal, plan);
   assert.match(example.context, /specialist.*unavailable/i);
   assert.match(example.response, /alternate reviewer/);
@@ -31,6 +32,20 @@ test('quality exploration produces distinct preparation and recovery proposals w
   assert.ok(example.personIds.length && example.personIds.every(id => plan.people.some(row => row.id === id)));
   assert.equal(example.observation, '');
   assert.equal(JSON.stringify(plan), before);
+});
+
+test('authored pressure conditions keep relevant checks included and release them when their controls recover', () => {
+  const base = createQualityExploration(), input = { ...base, quality: 0, urgency: 4, training: 0, compliance: 4 };
+  const snapshot = JSON.stringify(input), constrained = qualityConstraints(input, 2);
+  assert.equal(constrained.pressure, 'high'); assert.equal(constrained.extreme, true);
+  for (const id of ['risk-based-testing', 'reconciliation-replay', 'independent-review', 'accessibility', 'security-privacy']) {
+    assert.ok(constrained.required[id]); assert.ok(qualityArrangement(input, 2).included.includes(id));
+  }
+  assert.equal(constrained.phases['risk-based-testing'], 'rehearse');
+  const recovered = qualityConstraints(base, 10);
+  assert.equal(recovered.pressure, 'calm'); assert.equal(recovered.extreme, false);
+  assert.deepEqual(recovered.required, {}); assert.equal(recovered.phases['risk-based-testing'], 'prepare');
+  assert.equal(JSON.stringify(input), snapshot);
 });
 
 const core = createRequire(import.meta.url)('../../collaboration/investment-analysis/core.js');
