@@ -6,6 +6,8 @@ import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
 import { createReel, revealReelResult } from './reel-control.mjs';
+import { createLifecycleLanes, createSessionTracks } from './arrangement-surfaces.mjs';
+import { revealStudioDestination } from './motion.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
@@ -17,7 +19,7 @@ let nextInstance = 0;
 // One bounded configuration and one prepared proposal belong to this receiver.
 // Row drafts continue to use the shared coordinator and accepted state owner.
 export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, isActive = () => true, canOpen = isActive }) {
+  onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
   const details = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
   if (!details) throw new TypeError('Supply the coordination template disclosure.');
   if (INSTANCES.has(details)) return INSTANCES.get(details);
@@ -27,6 +29,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     throw new TypeError('Supply the Studio, its draft coordinator and receiver callbacks.');
   }
   const document = details.ownerDocument, body = details.querySelector('[data-connection-template-body]');
+  const exposed = details.hasAttribute('data-template-exposed');
   const status = details.querySelector('[data-connection-template-status]'), summary = details.querySelector('summary');
   if (!body || !status || !summary) throw new TypeError('Supply the complete coordination template disclosure.');
   const instance = `connection-template-${++nextInstance}`, cleanup = [];
@@ -41,8 +44,12 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const choiceLabel = document.createElement('label'); choiceLabel.textContent = 'Arrangement'; choiceLabel.append(choice);
   const description = document.createElement('p'); description.className = 'native-coordination__hint';
   const structure = document.createElement('div'); structure.dataset.templateStructure = '';
+  const delivery = document.createElement('div'); delivery.className = 'studio-arrangement-delivery';
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
-    onSelect(id) { choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview(); revealReelResult(structure); } });
+    onSelect(id) {
+      if (!active(canOpen) || (!active() && !open())) return;
+      choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview(); revealReelResult(structure);
+    } });
   const arrangementDeck = document.createElement('div'); arrangementDeck.className = 'studio-arrangement-deck';
   arrangementDeck.append(reel.element, structure);
   choiceLabel.className = 'studio-arrangement-native-choice';
@@ -53,10 +60,10 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const previewRegion = document.createElement('section'); previewRegion.className = 'native-coordination__preview native-connection-template__preview';
   previewRegion.dataset.templatePreview = ''; previewRegion.hidden = true; previewRegion.setAttribute('aria-label', 'Arrangement preview');
   const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
-  const previewButton = button('Preview arrangement', 'preview'), applyButton = button('Apply arrangement', 'apply');
+  const applyButton = button('Apply arrangement', 'apply'); applyButton.className = 'native-control--confirm';
   const cancelButton = button('Cancel preview', 'cancel'), anotherButton = button('Start another arrangement', 'another');
-  actions.append(previewButton, applyButton, cancelButton, anotherButton);
-  form.append(choiceLabel, description, arrangementDeck, actions, previewRegion, customization); body.replaceChildren(form);
+  actions.append(applyButton, cancelButton, anotherButton);
+  form.append(choiceLabel, description, arrangementDeck, actions, previewRegion, delivery, customization); body.replaceChildren(form);
   function option(value, label) { const node = document.createElement('option'); node.value = value; node.textContent = label; return node; }
   function element(tag, text, className) {
     const node = document.createElement(tag); if (text !== undefined) node.textContent = text;
@@ -68,10 +75,10 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function active(gate = isActive) { return !disposed && gate() && !disposed; }
   function announce(text) { if (!disposed) status.textContent = text; }
   function retirePreview() {
-    proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren(); applyButton.setAttribute('aria-disabled', 'true');
+    proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren(); applyButton.setAttribute('aria-disabled', 'false');
     applyButton.textContent = 'Apply arrangement';
     for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = false;
-    previewButton.hidden = false; anotherButton.hidden = false;
+    anotherButton.hidden = false;
   }
   function touch() { rawRevision += 1; generation += 1; retirePreview(); announce(''); }
   function fresh(preview) {
@@ -181,22 +188,31 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         personIds: row.recovery.personIds, ...parsed.admitted, funding: row.recovery.funding, status: row.recovery.status }];
     });
     const previewPlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
-    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate(target) {
+    function inspectTemplate(target) {
       if (!active()) return;
       const kind = target.kind === 'template-team' ? 'team' : 'connection';
       const section = [...groups.querySelectorAll('[data-template-card]')].find(section => section.dataset.templateCard === `${kind}:${target.id}`);
       if (!section) return; customization.open = true; section.open = true;
-      section.querySelector('input,select,button')?.focus();
-    } }));
+      section.querySelector('input,select,button')?.focus({ preventScroll: true }); revealStudioDestination(section);
+    }
+    const inspectSession = id => {
+      const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
+      if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
+      else onNavigate({ kind: 'work', id });
+    };
+    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate }));
+    delivery.replaceChildren(createLifecycleLanes(document, { plan: previewPlan, onSession: inspectSession }),
+      createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
+        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
   }
-  function refresh() {
+  function refresh(rebuild = false) {
     if (disposed) return;
     const next = studio.read(), changed = next !== projection;
     projection = next;
     if (changed) for (const source of optionSources) source.update();
     for (const update of dynamic) update();
-    renderStructure();
-    if (proposal && !fresh(proposal)) { applyButton.setAttribute('aria-disabled', 'true'); announce('The plan or edits changed. Preview this arrangement again.'); }
+    if (changed || rebuild) renderStructure();
+    if (proposal && !fresh(proposal)) { applyButton.setAttribute('aria-disabled', 'true'); announce('The plan or edits changed. Choose the arrangement again to refresh its proposal.'); }
   }
   function build() {
     bindings = new WeakMap(); controls = new Map(); optionSources = []; dynamic = []; invalid.clear(); groups.replaceChildren();
@@ -207,7 +223,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         options: () => [['new', 'Create a team'], ...projection.state.teams.map(team => [`team:${team.id}`, named(team)])] });
       const labelInput = field(group, `teams.${row.slotId}.label`, 'Team name', row, 'label', { max: LIMITS.label });
       const members = field(group, `teams.${row.slotId}.personIds`, 'People', row, 'personIds', { options: peopleOptions, multiple: true });
-      const creationHelp = element('p', 'Name the team and choose its people here. Preview the arrangement, then Apply arrangement to add the team and its connections together.', 'native-coordination__hint');
+      const creationHelp = element('p', 'Choose the people, then Apply arrangement to add these teams and handoffs together.', 'native-coordination__hint');
       group.prepend(creationHelp);
       const addPerson = element('button', 'Add a person'); addPerson.type = 'button';
       addPerson.className = 'native-control--create native-control--navigate'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
@@ -248,7 +264,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       field(recovery, `recovery.${row.slotId}.status`, 'Session', row.recovery, 'status', { max: 16,
         options: () => [['planned', 'Planned'], ['paused', 'Paused']] });
     }
-    refresh();
+    refresh(true);
   }
   function request() {
     const relevant = path => {
@@ -285,23 +301,12 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     control.error.textContent = message; control.input.setAttribute('aria-invalid', 'true');
   }
   function renderPreview(prepared) {
-    const state = prepared.projection.state, summary = prepared.summary;
-    const teamNames = new Map(state.teams.map(row => [row.id, row.label])), workNames = new Map(state.work.map(row => [row.id, row.label]));
-    const people = new Map(state.people.map(row => [row.id, row.label])), list = element('ul');
-    for (const id of summary.newTeamIds) {
-      const row = state.teams.find(team => team.id === id);
-      list.append(element('li', `New team: ${row.label}. People: ${row.personIds.map(personId => people.get(personId)).join(', ') || 'Unassigned'}.`));
-    }
-    for (const row of summary.memberships) list.append(element('li', `Add to ${teamNames.get(row.teamId)}: ${row.addedPersonIds.map(id => people.get(id)).join(', ')}.`));
-    const newConnections = new Set(summary.newConnectionIds);
-    for (const row of state.connections) if (newConnections.has(row.id)) list.append(element('li', `${teamNames.get(row.senderTeamId)} → ${teamNames.get(row.receiverTeamId)}: ${row.sharedObject}. ${row.status === 'paused' ? 'Paused' : 'Active'}.`));
-    for (const id of summary.newRecoveryWorkIds) list.append(element('li', `New review session: ${workNames.get(id)}.`));
-    if (!list.children.length) list.append(element('li', 'This arrangement already matches the plan.'));
+    const summary = prepared.summary;
     const total = element('output', money(summary.money.afterTotalCents)); total.dataset.templateTotal = '';
-    const change = summary.money.totalDeltaCents === null ? `Known amount: ${money(summary.money.afterKnownCents)}. Add the missing rates to complete the total.`
+    const change = summary.money.totalDeltaCents === null ? `Known investment ${money(summary.money.afterKnownCents)} · choose missing rates.`
       : `Current ${money(summary.money.beforeTotalCents)} · Change ${money(summary.money.totalDeltaCents)}`;
-    const receipt = element('details', undefined, 'studio-arrangement-receipt'); receipt.append(element('summary', 'Review the proposed records'), list);
-    previewRegion.replaceChildren(element('h4', 'Ready to apply'), element('p', 'Teams and their handoffs will be added together.'), total, element('p', change), receipt);
+    const amount = element('p', 'Proposed investment '); amount.append(total);
+    previewRegion.replaceChildren(amount, element('p', change));
     previewRegion.hidden = false; applyButton.setAttribute('aria-disabled', 'false');
   }
   function parkAndNotify(epoch) {
@@ -320,7 +325,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       const prepared = prepareCoordinationTemplate(base, request());
       if (!owns(epoch)) return false;
       const candidate = { prepared, base, acceptance, intent: draft.intent, revision };
-      if (!fresh(candidate)) { announce('The plan or edits changed. Preview this arrangement again.'); return false; }
+      if (!fresh(candidate)) { announce('The plan or edits changed. Choose the arrangement again to refresh its proposal.'); return false; }
       proposal = candidate; renderPreview(prepared); announce('Preview ready. Apply to update the plan.'); return true;
     } catch (error) {
       if (!owns(epoch)) return false;
@@ -330,8 +335,9 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function apply() {
     if (!active()) return false;
+    if (!proposal && !preview()) return false;
     const epoch = ++generation, held = proposal;
-    if (!fresh(held)) { applyButton.setAttribute('aria-disabled', 'true'); announce('Preview this arrangement against the current plan.'); return false; }
+    if (!fresh(held)) { announce('The plan changed. Choose the arrangement again to refresh its proposal.'); return false; }
     const result = held.command ? studio.applyCommand(held.command, held.base) : applyCoordinationTemplate(studio, held.prepared);
     if (!owns(epoch)) return false;
     if (!result.ok) { announce(result.error.message); return false; }
@@ -352,7 +358,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!fresh(candidate)) return false;
     proposal = candidate;
     for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = true;
-    previewButton.hidden = true; anotherButton.hidden = true;
+    anotherButton.hidden = true;
     applyButton.textContent = 'Use connections without template';
     const template = getCoordinationTemplate(row.templateId, row.templateVersion);
     previewRegion.replaceChildren(element('h4', `Use ${template.label} connections without the template?`),
@@ -368,7 +374,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function close() {
     if (disposed) return;
-    generation += 1; acknowledged = false; details.open = false;
+    generation += 1; acknowledged = false; if (!exposed) details.open = false;
   }
   function dispose() {
     if (disposed) return;
@@ -377,10 +383,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     body.replaceChildren(); status.textContent = ''; details.open = false; details.hidden = true; INSTANCES.delete(details);
   }
   listen(details, 'toggle', () => {
-    if (disposed) return;
+    if (disposed || exposed) return;
     if (details.open && !acknowledged) { if (!open() && !disposed) details.open = false; }
     else if (!details.open) acknowledged = false;
   });
+  listen(form, 'focusin', () => { if (exposed && !active() && active(canOpen)) open(); });
   for (const type of ['input', 'change']) listen(form, type, event => {
     if (!active()) return;
     if (event.target === choice && type === 'change') {
@@ -412,7 +419,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       }
       case 'another':
         touch(); projection = studio.read(); configuration.proposalId = nextPrefix(BY_ID.get(configuration.templateId), projection.state);
-        refresh(); announce('Ready to preview another arrangement.'); break;
+        refresh(true); announce('Ready to preview another arrangement.'); break;
       case 'step': {
         const path = target.dataset.templatePath, control = controls.get(path);
         const stepped = stepWorkDraftValues(control.record, control.key, Number(target.dataset.templateStep));
@@ -428,6 +435,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     }
   });
   configuration = startingConfiguration(TEMPLATES[0]); configurations.set(configuration.templateId, configuration); build(); retirePreview(); details.hidden = false;
+  if (exposed) details.open = true;
   const controller = Object.freeze({ open, resume: open, close, detach, isOpen: () => !disposed && details.open, render: refresh, dispose });
   INSTANCES.set(details, controller);
   return controller;

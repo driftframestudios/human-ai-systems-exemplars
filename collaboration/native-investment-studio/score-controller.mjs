@@ -4,6 +4,7 @@ import { createShowcaseCadence } from './showcase-scenarios.mjs';
 import { scoreField, startingScoreRaw } from './score-draft.mjs';
 import { money } from './display.mjs';
 import { resolveScoreDestination } from './navigation-policy.mjs';
+import { revealStudioDestination } from './motion.mjs';
 
 const INSTANCES = new WeakMap();
 const LABELS = Object.freeze({ stage: 'stage', handoff: 'handoff', gate: 'decision', delay: 'delay', person: 'person',
@@ -60,11 +61,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const pendingText = node('p'), pendingActions = node('div', undefined, 'native-coordination__actions');
   pendingActions.append(button('Apply horizon', 'apply'), button('Cancel changes', 'cancel')); pending.append(pendingText, pendingActions);
   const projectionRoot = node('div', undefined, 'native-score__projection'); projectionRoot.dataset.scoreProjection = '';
-  const inspector = node('details', undefined, 'native-score__inspector'), summary = node('summary', 'Stages & handoffs');
-  const rail = node('div', undefined, 'native-score__keys'); rail.setAttribute('aria-label', 'Plan editors');
-  rail.append(button('Sessions', 'sessions'), button('Stages & handoffs', 'flow'));
-  const flowActions = node('div', undefined, 'native-coordination__actions');
-  flowActions.append(button('Add stage', 'add-stage', 'native-control--create'), button('Connect work', 'add-handoff', 'native-control--create'));
+  const flowPanel = node('details', undefined, 'native-cadence native-cadence__details native-cadence__flow');
+  flowPanel.dataset.cadenceDisclosure = 'flow';
+  const flowSummary = node('summary', 'Stages & handoffs'), flowRoot = node('div');
+  const inspector = node('details', undefined, 'native-score__inspector'), summary = node('summary', 'Relationship settings');
   const form = node('form'); form.noValidate = true; form.dataset.scoreForm = '';
   const title = node('h4', 'Inspect the arrangement'), detail = node('p', '', 'native-score__record-note');
   title.tabIndex = -1;
@@ -78,18 +78,14 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   apply.type = 'submit'; actions.append(apply, cancel);
   const status = node('p', '', 'native-coordination__status'); status.setAttribute('role', 'status'); status.dataset.scoreStatus = '';
   form.append(title, detail, recovery, fields, contextActions, preview, error, actions);
-  inspector.append(summary, rail, flowActions, form);
-  const manual = node('details', undefined, 'native-score__manual'); manual.append(node('summary', 'How periods and session effort relate'),
-    node('p', 'Sprints and quarters group the work. Open a period to see its weeks or months, then choose a session to inspect its people and duration. Each sprint in this example spans two weeks.'),
-    node('p', 'A stage groups related sessions. A handoff connects the work that produces a result to the work that receives it. Decisions and delays belong beside those relationships.'),
-    node('p', 'Moving sessions between periods keeps their effort and price. Increasing duration or adding working sessions changes the planned effort. Available time and funded time remain separate assumptions.'));
+  inspector.append(summary, form); flowPanel.append(flowSummary, flowRoot, inspector);
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
-  root.append(toolbar, pending, projectionRoot, inspector, manual, status);
+  root.append(toolbar, pending, projectionRoot, flowPanel, status);
   const view = createCadenceView(projectionRoot, {
     onSelect: target => select(target, true), onNavigate: target => navigate(target),
     onPeriod: id => { periodId = id; render(); }, onAddSession: context => createSession(context),
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
-    onAddStage: () => addStage(), onCreateHorizon: () => proposeHorizon(),
+    onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot,
     onTryReview: () => tryLaterReview(),
   });
 
@@ -129,9 +125,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   }
   function open(_target = 'score', focus = true) {
     const result = ensure(); render(); if (!result || disposed) return result;
-    inspector.open = true; const epoch = generation, mark = boundary(); onEditing();
+    inspector.open = true; flowPanel.open = true; const epoch = generation, mark = boundary(); onEditing();
     if (!retains(epoch, mark)) return result;
-    if (focus) (fields.querySelector('input, select, textarea') ?? rail.firstElementChild).focus();
+    if (focus) (fields.querySelector('input, select, textarea') ?? title).focus();
     return result;
   }
   function select(target, reveal = false) {
@@ -146,9 +142,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!['stage', 'handoff', 'gate', 'delay', 'person', 'horizon', 'legacy-availability', ...Object.keys(RETAINED_LISTS)].includes(target.kind)) return;
     selected = target; fieldSignature = ''; const result = ensure(); render();
     if (!result || disposed) return;
-    inspector.open = true; const epoch = generation, mark = boundary(); onEditing();
+    inspector.open = true; flowPanel.open = true; const epoch = generation, mark = boundary(); onEditing();
     if (!retains(epoch, mark)) return;
-    if (reveal) { inspector.scrollIntoView({ block: 'start' }); (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); onInspect(inspector); }
+    if (reveal) { (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); revealStudioDestination(inspector); onInspect(inspector); }
   }
   function navigate(target) {
     if (disposed || !resolveScoreDestination(target, studio.read().state)) return;
@@ -306,6 +302,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
       else if (input.value !== String(next ?? '')) input.value = next ?? '';
     }
     fields.disabled = !editable; fields.hidden = !fields.children.length; contextActions.hidden = !current.draft;
+    inspector.hidden = !current.draft || selected.kind === 'horizon';
     recovery.hidden = !current.draft || (!['stale', 'parked'].includes(current.status)
       && current.error?.code !== 'cadence-conflict' && proposed?.error?.code !== 'cadence-conflict');
     const changed = Boolean(current.draft?.changed);
@@ -426,9 +423,9 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     announce(method === 'apply' ? 'Arrangement applied. Undo restores the previous plan.' : 'Changes cancelled.');
     if (!owns(epoch) || editing.read().active) return;
     const prefix = (origin.kind === 'gate' ? 'decision' : origin.kind) + ':' + origin.id;
-    const marker = [...projectionRoot.querySelectorAll('[data-cadence-key]')].find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
+    const marker = [...projectionRoot.querySelectorAll('[data-cadence-key]'), ...flowRoot.querySelectorAll('[data-cadence-key]')].find(el => el.dataset.cadenceKey === prefix || el.dataset.cadenceKey.startsWith(prefix + ':'));
     if (marker) { const disclosure = marker.closest('details'); if (disclosure) disclosure.open = true; }
-    const destination = marker ?? summary; destination.scrollIntoView({ block: 'nearest' }); destination.focus({ preventScroll: true });
+    const destination = marker ?? flowSummary; destination.focus({ preventScroll: true }); revealStudioDestination(destination);
   }
   function click(event) {
     const control = event.target.closest('[data-score-action]'); if (!control || !root.contains(control) || disposed || !isActive()) return;
@@ -436,8 +433,6 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (action === 'apply') { event.preventDefault(); settle('apply'); }
     else if (action === 'cancel') settle('cancel');
     else if (action === 'add-period') { selected = { kind: 'horizon', id: '' }; changeCadence(next => next ? resizeCadence(next, next.periods.length + 1) : createCadence()); }
-    else if (action === 'sessions') { inspector.open = false; projectionRoot.scrollIntoView({ block: 'start' }); projectionRoot.querySelector('button')?.focus(); }
-    else if (action === 'flow') { selected = { kind: 'horizon', id: '' }; open(); }
     else if (action === 'add-stage') addStage();
     else if (action === 'add-handoff') addHandoff();
     else if (action === 'add-decision') addDecision();
@@ -453,8 +448,15 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   listen(root, 'click', click);
   listen(basisChoices, 'change', event => {
     if (!Object.hasOwn(event.target.dataset, 'cadenceBasis') || !isActive()) return;
-    selected = { kind: 'horizon', id: '' };
-    changeCadence(next => next ? regroupCadence(next, event.target.value) : createCadence(event.target.value, event.target.value === 'quarter' ? 2 : 4));
+    const parked = editing.park(); if (!parked.ok) { render(); announce(parked.error.message); return; }
+    const base = studio.read(), basis = event.target.value, current = base.state.scoreSettings.cadence;
+    const next = current ? regroupCadence(current, basis) : createCadence(basis, basis === 'quarter' ? 2 : 4);
+    const result = studio.replace({ ...base.state, revision: base.state.revision + 1,
+      scoreSettings: { ...base.state.scoreSettings, cadence: next } }, base);
+    if (!result.ok) { render(); announce(result.error.message); return; }
+    selected = { kind: 'horizon', id: '' }; periodId = null; fieldSignature = '';
+    onAccepted(result.projection); if (disposed) return; render(); onEditing();
+    announce('The plan now uses ' + (basis === 'quarter' ? 'business quarters' : 'sprints') + '. Undo restores the previous horizon.');
   });
   listen(count, 'change', () => {
     const value = Number(count.value);
@@ -475,7 +477,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   function dispose() {
     if (disposed) return; const active = editing.read().active; retiredToken = active?.kind === 'score' ? active.token : null;
     close(); disposed = true; operate('read'); view.dispose(); cleanup.splice(0).forEach(release => release());
-    for (const el of [toolbar, pending, projectionRoot, inspector, manual, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
+    for (const el of [toolbar, pending, projectionRoot, flowPanel, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
   }
   render();
   const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select, dispose }); INSTANCES.set(root, controller); return controller;

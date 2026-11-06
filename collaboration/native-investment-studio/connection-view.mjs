@@ -1,6 +1,6 @@
 import { projectCoordinationArrangements } from './coordination-arrangements.mjs';
 import { createContributionViewModel } from './contribution-view-model.mjs';
-import { createTeamLanes, createSessionTracks } from './arrangement-surfaces.mjs';
+import { createTeamLanes } from './arrangement-surfaces.mjs';
 
 // About owns the .native-connections route styles. This receiver reads an
 // accepted projection; the parent owns edits, publication and monetary values.
@@ -220,7 +220,7 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   const section = node('section', undefined, 'native-arrangement');
   Object.assign(section.dataset, { arrangementId: arrangement.id, arrangementTemplate: arrangement.templateId, arrangementReading: reading, arrangementAdapted: String(arrangement.adapted) });
   const heading = node('h4', `${reading === 'accepted' ? 'Accepted arrangement' : 'Proposed structure'} · ${arrangement.label}`, 'native-arrangement__identity');
-  const status = node('p', reading === 'proposed' ? 'This sketch follows your selected roles and connections. Preview checks the complete entries before Apply accepts them.'
+  const status = node('p', reading === 'proposed' ? 'Proposed teams and handoffs · Apply to keep.'
     : arrangement.adapted ? 'Adapted arrangement. The cables show the current connection endpoints; the original slot roles remain labeled.' : 'The current connections follow this arrangement’s roles.', 'native-arrangement__status');
   const viewport = node('div', undefined, 'native-arrangement__viewport'); viewport.tabIndex = 0; viewport.setAttribute('role', 'region'); viewport.setAttribute('aria-label', `${arrangement.label} topology; scroll to inspect the complete structure`);
   const geometry = arrangementGeometry(arrangement, plan), svg = svgNode('svg', { class: 'native-arrangement__diagram', viewBox: `0 0 ${geometry.width} ${geometry.height}`, width: geometry.width, height: geometry.height, role: 'group', 'aria-label': `${reading === 'accepted' ? 'Accepted' : 'Proposed'} ${arrangement.label} structure` });
@@ -254,26 +254,21 @@ export function createArrangementReading(document, { arrangement, plan, reading 
     labelLines(team.label).forEach((line, index) => text.append(svgNode('tspan', { x: team.x, dy: index ? 17 : 0 }, line))); group.append(text); svg.append(group);
   }
   viewport.append(svg);
-  const companion = node('details', undefined, 'native-arrangement__companion');
-  companion.append(node('summary', 'Inspect teams, work and feedback'));
-  const teams = node('ul'), connections = node('ol');
+  const connections = node('div', undefined, 'studio-arrangement-connections');
   const route = (label, kind, id) => { const control = node('button', label, 'native-control--navigate'); control.type = 'button'; Object.assign(control.dataset, { arrangementTargetKind: kind, arrangementTargetId: id }); return control; };
-  for (const team of geometry.nodes) { const item = node('li'); item.append(route(`${team.role}: ${team.label}`, reading === 'proposed' ? 'template-team' : 'team', reading === 'proposed' ? team.slotId : team.id)); teams.append(item); }
   for (const row of arrangement.connections) {
-    const edge = row.connection, item = node('li'), from = geometry.nodes.find(team => team.id === edge.senderTeamId), to = geometry.nodes.find(team => team.id === edge.receiverTeamId);
-    item.append(route(`${row.slotLabel} · ${from.label} → ${to.label}`, reading === 'proposed' ? 'template-connection' : 'connection', reading === 'proposed' ? row.slotId : edge.id),
-      node('p', `${edge.sharedObject || 'Shared object to choose'} · ${edge.status === 'paused' ? 'Paused' : 'Active'}${row.adapted ? ' · Adapted endpoints' : ''}`));
-    if (reading === 'accepted') for (const id of edge.workIds) item.append(route(`Inspect ${plan.work.find(work => work.id === id)?.label ?? id}`, 'work', id));
-    connections.append(item);
+    const edge = row.connection, from = geometry.nodes.find(team => team.id === edge.senderTeamId), to = geometry.nodes.find(team => team.id === edge.receiverTeamId);
+    const control = route(row.slotLabel, reading === 'proposed' ? 'template-connection' : 'connection', reading === 'proposed' ? row.slotId : edge.id);
+    control.title = `${from.label} → ${to.label}: ${edge.sharedObject || 'Shared work'}${edge.status === 'paused' ? ' · Paused' : ''}`;
+    connections.append(control);
   }
-  companion.append(node('h5', 'Teams and responsibilities'), teams, node('h5', 'Directed work and feedback'), connections);
   const lanes = createTeamLanes(document, { plan, teams: arrangement.teams.map(row => row.team), proposed: reading === 'proposed',
     onAdd: reading === 'accepted' ? target => onNavigate({ kind: `create-${target.kind}` }) : null,
     onNavigate(target) {
       const binding = arrangement.teams.find(row => row.team.id === target.id);
       onNavigate(reading === 'proposed' ? { kind: 'template-team', id: binding.slotId } : target);
     } });
-  section.append(heading, status, lanes, viewport, companion);
+  section.append(heading, status, lanes, viewport, connections);
   section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); });
   svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); } });
   return section;
@@ -333,8 +328,9 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
   const contributions = element('section', 'native-connections__contributions'); contributions.dataset.connectionContributions = '';
   const returnSelected = button('Return to selected connection', 'return');
   detail.append(detailTitle, detailObject, detailStanding, detailReceiver, detailWork, noWork, detailResponse, contributions, returnSelected);
-  const tracks = element('div', 'studio-connections-tracks');
-  host.append(arrangementHost, heading, viewport, tracks, empty, list, navigation, detail);
+  const accepted = element('details', 'studio-accepted-connections');
+  accepted.append(element('summary', '', 'Current connections and owners'), arrangementHost, heading, viewport, empty, list, navigation, detail);
+  host.append(accepted);
 
   function renderArrangements(view) {
     const reading = projectCoordinationArrangements(acceptedProjection.state), ids = new Set(reading.arrangements.map(row => row.id));
@@ -413,8 +409,6 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     navigation.hidden = view.pageCount === 1;
     previous.disabled = view.page === 0; next.disabled = view.page + 1 === view.pageCount;
     pageLabel.textContent = `Page ${view.page + 1} of ${view.pageCount}`;
-    tracks.replaceChildren(createSessionTracks(document, { plan: acceptedProjection.state,
-      onSession: id => onNavigate({ kind: 'work', id }), label: 'Shared sessions · people who take part' }));
   }
   function selection(view) {
     if (rendered?.selectedId !== view.selectedId) mark(rendered?.selectedId, false);
@@ -466,7 +460,7 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (!disposed) renderArrangements(state.read());
     // The external editor may dispose, replace or reselect this receiver.
     // Completion deliberately performs no DOM work after handing it control.
-    if (notify) { detail.open = true; onSelect(id); }
+    if (notify) { accepted.open = true; detail.open = true; onSelect(id); }
     return true;
   }
   function showPage(page) {
@@ -508,7 +502,7 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     host.remove(); controls.clear(); cableControls.clear(); INSTANCES.delete(root);
   }
   function chooseArrangement() { if (disposed) return; selectedArrangement = arrangementChoice.value; renderArrangements(state.read()); }
-  function selectArrangement(id) { if (disposed || !projectCoordinationArrangements(acceptedProjection.state).arrangements.some(row => row.id === id)) return false; selectedArrangement = id; renderArrangements(state.read()); arrangementChoice.focus(); return true; }
+  function selectArrangement(id) { if (disposed || !projectCoordinationArrangements(acceptedProjection.state).arrangements.some(row => row.id === id)) return false; selectedArrangement = id; accepted.open = true; renderArrangements(state.read()); arrangementChoice.focus(); return true; }
   const receiver = Object.freeze({ read: state.read, refresh, select, selectArrangement, showPage, dispose });
   try {
     paint(); host.addEventListener('click', click); diagram.addEventListener('keydown', keydown); arrangementChoice.addEventListener('change', chooseArrangement);

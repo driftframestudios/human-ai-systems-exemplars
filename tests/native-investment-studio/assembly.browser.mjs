@@ -97,7 +97,9 @@ for (const engine of names) {
     await expect(people(page).locator('.studio-people-reading button').first()).toBeFocused();
     await expect(action(page, 'person-create')).toBeVisible();
     await tab(page, 'coordination').click();
-    await root(page).locator('[data-native-workspace="connection"] > summary').click();
+    const workspace = root(page).locator('[data-native-workspace="connection"]');
+    if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
+    await workspace.locator('.studio-accepted-connections > summary').click();
     const lane = root(page).locator('[data-team-lane="delivery"]');
     await lane.getByRole('button', { name: 'Choose people', exact: true }).click();
     await expect(tab(page, 'people')).toHaveAttribute('aria-selected', 'true');

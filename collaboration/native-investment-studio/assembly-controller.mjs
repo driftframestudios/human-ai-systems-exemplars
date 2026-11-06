@@ -1,3 +1,4 @@
+import { revealStudioDestination } from './motion.mjs';
 import { describeArrangementReference } from './coordination-arrangements.mjs';
 import { describeAssuranceReference } from './assurance-models.mjs';
 import { describeScoreReference } from './score-reference.mjs';
@@ -248,11 +249,12 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function focusEditor() {
     const view = editor.read();
-    if (view.status === 'stale') (elements['fresh-id'].hidden ? elements.recovery.querySelector('button') : elements['fresh-id']).focus();
+    if (view.status === 'stale') (elements['fresh-id'].hidden ? elements.recovery.querySelector('button') : elements['fresh-id']).focus({ preventScroll: true });
     else if (view.status === 'editing') {
       const descriptor = describeAssemblyTarget(view.draft.assemblyId);
-      (descriptor.mode === 'remove' ? elements.cancel : inputs.label).focus();
+      (descriptor.mode === 'remove' ? elements.cancel : inputs.label).focus({ preventScroll: true });
     }
+    revealStudioDestination(elements.configure);
   }
   function opened(result, epoch, focus) {
     if (!currentOperation(epoch)) return result;

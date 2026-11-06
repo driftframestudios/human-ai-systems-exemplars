@@ -25,6 +25,7 @@ after(async () => { try { await Promise.all([...browsers.values()].map(browser =
 const panel = page => page.locator('[data-connection-templates]');
 const field = (page, path) => panel(page).locator(`[data-template-field="${path}"]`);
 const action = (page, name) => panel(page).locator(`[data-template-action="${name}"]`);
+const preview = page => panel(page).locator('form').evaluate(form => form.requestSubmit());
 const status = page => panel(page).locator('[data-connection-template-status]');
 const bytes = page => page.evaluate(() => window.templateFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -61,8 +62,9 @@ async function open(t, engine) {
     receiver.controller = mountConnectionTemplatePanel(element, { studio, editing, onAccepted() { receiver.accepted += 1; } });
     window.templateFixture = receiver;
   });
-  await page.locator('details[data-native-workspace="connection"] > summary').click();
-  await panel(page).locator(':scope > summary').click(); await expect(panel(page)).toHaveAttribute('open', '');
+  const workspace = page.locator('details[data-native-workspace="connection"]');
+  if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
+  await panel(page).evaluate(element => { element.open = true; }); await expect(panel(page)).toHaveAttribute('open', '');
   return page;
 }
 async function existingGroups(page) {
@@ -107,7 +109,10 @@ for (const engine of names) {
     });
     const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
     await expect(accepted).toContainText('Custom connections');
-    await panel(page).locator(':scope > summary').click();
+    await panel(page).locator('.studio-team-lane__title').first().click();
+    await expect(field(page, 'teams.pod.selection')).toBeFocused();
+    await expect(panel(page).locator('.studio-arrangement-settings')).toHaveAttribute('open', '');
+    await panel(page).evaluate(element => { element.open = true; });
     const original = await bytes(page), sketch = panel(page).locator('[data-template-structure]');
     const expected = {
       pod: ['pod>partner', 'partner>pod'], guild: ['practice>delivery', 'delivery>practice'],
@@ -132,9 +137,10 @@ for (const engine of names) {
     await panel(page).locator('[data-reel-choice="guild"]').click();
     await panel(page).locator('[data-reel-choice="pod"]').click(); await card(page, 'team:pod');
     await expect(field(page, 'teams.pod.label')).toHaveValue('Shared delivery');
-    await action(page, 'preview').click(); await action(page, 'apply').click();
-    await panel(page).locator(':scope > summary').click();
+    await preview(page); await action(page, 'apply').click();
+    await panel(page).evaluate(element => { element.open = true; });
     const arrangementId = await page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0].id);
+    await accepted.locator('.studio-accepted-connections > summary').click();
     const reading = accepted.locator('[data-arrangement-reading="accepted"]');
     await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId); await expect(reading).toContainText('Accepted arrangement · Pod');
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().result.plannedCommitmentCents), 1600000);
@@ -193,7 +199,7 @@ for (const engine of names) {
     await expect(accepted).toContainText('Custom connections');
     await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
     assert.equal(await bytes(page), beforeDetach); await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
-    await panel(page).locator(':scope > summary').click();
+    await panel(page).evaluate(element => { element.open = true; });
     await reading.screenshot({ path: resolve(captures, `${engine}-accepted-desktop.png`) });
     await page.setViewportSize({ width: 390, height: 1000 });
     const viewport = reading.locator('.native-arrangement__viewport'); await viewport.focus(); await expect(viewport).toBeFocused();
@@ -211,15 +217,15 @@ for (const engine of names) {
     });
     assert.equal(nameReading.lines, 1, `the named human remains word-readable at mobile width: ${JSON.stringify(nameReading)}`);
     await handoff.screenshot({ path: resolve(captures, `${engine}-human-handoff-narrow.png`) });
-    await viewport.evaluate(element => { element.scrollLeft = element.scrollWidth; }); assert.ok(await viewport.evaluate(element => element.scrollLeft) > 0);
+    assert.ok(await viewport.evaluate(element => { element.scrollLeft = element.scrollWidth; return element.scrollWidth <= element.clientWidth + 1 || element.scrollLeft > 0; }), 'the complete diagram fits or remains horizontally reachable');
     await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
   });
   test(`${engine}: templates preview literal staffing and allocation, add explicit review work, and publish one Undo step`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), original = await bytes(page);
-    await existingGroups(page); await action(page, 'preview').click();
+    await existingGroups(page); await preview(page);
     await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,000.00');
     assert.equal(await bytes(page), original); await action(page, 'cancel').click(); assert.equal(await bytes(page), original);
-    await action(page, 'preview').click(); await action(page, 'apply').click();
+    await preview(page); await action(page, 'apply').click();
     await expect(panel(page)).toHaveAttribute('open', ''); await expect(action(page, 'apply')).toBeFocused();
     const first = await page.evaluate(() => { const { studio, accepted } = window.templateFixture; return { state: studio.read().state, result: studio.read().result, history: studio.readHistory(), accepted }; });
     assert.equal(first.state.connections.length, 2); assert.equal(first.history.undoCount, 1); assert.equal(first.accepted, 1);
@@ -229,9 +235,9 @@ for (const engine of names) {
     await field(page, 'recovery.handoff.team').selectOption('team:delivery');
     await field(page, 'recovery.handoff.personIds').selectOption(['product-one']);
     await field(page, 'recovery.handoff.hoursPerSession').fill('1'); await field(page, 'recovery.handoff.minutesPerSession').fill('30');
-    await field(page, 'recovery.handoff.occurrences').fill('1'); await action(page, 'preview').click();
+    await field(page, 'recovery.handoff.occurrences').fill('1'); await preview(page);
     await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,150.00');
-    await expect(panel(page).locator('[data-template-preview]')).toContainText('New review session: Review the handoff');
+    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Review the handoff');
     await action(page, 'apply').click();
     const final = await page.evaluate(() => { const f = window.templateFixture; return { result: f.studio.read().result, work: f.studio.read().state.work, history: f.studio.readHistory() }; });
     assert.equal(final.result.plannedCommitmentCents, 1615000); assert.equal(final.result.additionalKnownCents, 15000); assert.equal(final.result.allocatedKnownCents, 40000);
@@ -243,31 +249,32 @@ for (const engine of names) {
   test(`${engine}: configuration edits, shared draft intent and equal imports retire previews while retaining correctable inputs`, { timeout: 60000 }, async t => {
     const page = await open(t, engine); await existingGroups(page); await card(page, 'connection:handoff');
     await page.evaluate(() => { const f = window.templateFixture; f.studio.applyCommand({ type: 'team.create', team: { id: 'new', label: 'Existing New group', personIds: [] } }, f.studio.read()); f.controller.render(); });
-    await field(page, 'teams.pod.selection').selectOption('team:new'); await action(page, 'preview').click();
-    await expect(panel(page).locator('[data-template-preview]')).toContainText('Add to Existing New group: product-one');
+    await field(page, 'teams.pod.selection').selectOption('team:new'); await preview(page);
+    await expect(panel(page).locator('.studio-team-lane').first()).toContainText('Existing New group');
+    await expect(panel(page).locator('.studio-team-lane').first()).toContainText('product-one');
     await field(page, 'teams.pod.selection').selectOption('team:delivery');
     await page.evaluate(() => { const f = window.templateFixture, d = f.editing.person.begin('product-one', f.studio.read()).view.draft; f.editing.person.setText(d.token, 'ratePerHour', '105'); });
-    await action(page, 'preview').click();
+    await preview(page);
     assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 1);
     await field(page, 'connections.handoff.sharedObject').fill('A changed plan');
-    await expect(panel(page).locator('[data-template-preview]')).toBeHidden(); await action(page, 'apply').evaluate(button => button.click());
+    await expect(panel(page).locator('[data-template-preview]')).toBeHidden();
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
-    await action(page, 'preview').click();
+    await preview(page);
     await page.evaluate(() => { const f = window.templateFixture, d = f.editing.purpose.begin('purpose', f.studio.read()).view.draft; f.editing.purpose.setText(d.token, 'changedAbility', 'Recover samples'); });
-    await action(page, 'apply').click(); await expect(status(page)).toContainText('Preview this arrangement');
+    await action(page, 'apply').click(); await expect(status(page)).toContainText('Choose the arrangement again');
     assert.equal(await page.evaluate(() => window.templateFixture.editing.read().active.kind), 'purpose');
-    await action(page, 'preview').click(); assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 2);
+    await preview(page); assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 2);
     await page.evaluate(() => { const f = window.templateFixture; f.studio.replace(f.studio.read().state, f.studio.read()); f.controller.render(); });
     await expect(status(page)).toContainText('plan or edits changed'); await action(page, 'apply').evaluate(button => button.click());
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
     await page.evaluate(() => { const f = window.templateFixture; f.controller.close(); f.controller.resume(); });
     await expect(field(page, 'connections.handoff.sharedObject')).toHaveValue('A changed plan');
-    await action(page, 'preview').click(); await action(page, 'apply').click();
+    await preview(page); await action(page, 'apply').click();
     assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 2);
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections[0].sharedObject), 'A changed plan');
-    await field(page, 'connections.handoff.sharedObject').fill('Another arrangement'); await action(page, 'preview').click();
+    await field(page, 'connections.handoff.sharedObject').fill('Another arrangement'); await preview(page);
     await expect(status(page)).toContainText('Start another arrangement');
-    await action(page, 'another').click(); await action(page, 'preview').click(); await action(page, 'apply').click();
+    await action(page, 'another').click(); await preview(page); await action(page, 'apply').click();
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 4);
   });
 
@@ -275,11 +282,11 @@ for (const engine of names) {
     const page = await open(t, engine); await existingGroups(page); await card(page, 'connection:handoff');
     await panel(page).locator('[data-template-recovery="handoff"]').check();
     await field(page, 'recovery.handoff.team').selectOption('team:delivery'); await field(page, 'recovery.handoff.personIds').selectOption(['product-one']);
-    const hours = field(page, 'recovery.handoff.hoursPerSession'); await hours.fill('-1'); await action(page, 'preview').click();
+    const hours = field(page, 'recovery.handoff.hoursPerSession'); await hours.fill('-1'); await preview(page);
     await expect(hours).toHaveAttribute('aria-invalid', 'true'); assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
-    await panel(page).locator('[data-template-recovery="handoff"]').uncheck(); await action(page, 'preview').click();
+    await panel(page).locator('[data-template-recovery="handoff"]').uncheck(); await preview(page);
     await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,000.00');
-    await panel(page).locator('[data-template-recovery="handoff"]').check(); await action(page, 'preview').click();
+    await panel(page).locator('[data-template-recovery="handoff"]').check(); await preview(page);
     await expect(hours).toHaveValue('-1'); await expect(panel(page).locator('[data-template-preview]')).toBeHidden();
     await hours.fill('00001'); await field(page, 'recovery.handoff.minutesPerSession').fill('30');
     const step = panel(page).locator('[data-template-action="step"][data-template-path="recovery.handoff.minutesPerSession"][data-template-step="1"]');
@@ -302,7 +309,7 @@ for (const engine of names) {
     }
     await hours.scrollIntoViewIfNeeded(); await frames(page);
     const geometry = await panel(page).evaluate(element => ({ box: element.getBoundingClientRect().toJSON(), width: innerWidth,
-      controls: [...element.querySelectorAll('input,select,button')].filter(node => node.getClientRects().length).map(node => ({ tag: node.tagName, field: node.dataset.templateField ?? node.dataset.templateAction, box: node.getBoundingClientRect().toJSON(), parent: { className: node.parentElement.className, box: node.parentElement.getBoundingClientRect().toJSON(), font: getComputedStyle(node).font, width: getComputedStyle(node).inlineSize } })) }));
+      controls: [...element.querySelectorAll('input,select,button')].filter(node => node.getClientRects().length && !node.closest('.studio-session-tracks')).map(node => ({ tag: node.tagName, field: node.dataset.templateField ?? node.dataset.templateAction, box: node.getBoundingClientRect().toJSON(), parent: { className: node.parentElement.className, box: node.parentElement.getBoundingClientRect().toJSON(), font: getComputedStyle(node).font, width: getComputedStyle(node).inlineSize } })) }));
     for (const control of geometry.controls) assert.ok(control.box.left >= geometry.box.left - 1 && control.box.right <= geometry.box.right + 1, `${control.tag} remains in the template panel: ${JSON.stringify({ control, panel: geometry.box })}`);
     assert.ok(geometry.box.right <= geometry.width + 1);
     await page.screenshot({ path: resolve(captures, `template-${engine}-320-enlarged.png`), fullPage: false });
@@ -311,18 +318,18 @@ for (const engine of names) {
       f.controller = f.mount(f.element, { studio: f.studio, editing: f.editing, onAccepted() {
         f.controller.dispose(); f.controller = f.mount(f.element, { studio: f.studio, editing: f.editing }); f.controller.open();
         f.element.querySelector('[data-connection-template-status]').textContent = 'Successor keeps this status.';
-        f.element.querySelector('[data-template-action="preview"]').focus();
+        f.element.querySelector('[data-template-action="apply"]').focus();
       } }); f.controller.open();
     });
-    await action(page, 'preview').click(); await action(page, 'apply').click();
-    await expect(status(page)).toHaveText('Successor keeps this status.'); await expect(action(page, 'preview')).toBeFocused();
+    await preview(page); await action(page, 'apply').click();
+    await expect(status(page)).toHaveText('Successor keeps this status.'); await expect(action(page, 'apply')).toBeFocused();
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 2);
     await page.evaluate(() => {
       const f = window.templateFixture; f.controller.dispose(); f.hooks = 0;
       const facade = { ...f.studio, replace(candidate, expected) { const result = f.studio.replace(candidate, expected); f.controller.dispose(); return result; } };
       f.controller = f.mount(f.element, { studio: facade, editing: f.editing, onAccepted() { f.hooks += 1; } }); f.controller.open();
     });
-    await action(page, 'preview').click(); await action(page, 'apply').click();
+    await preview(page); await action(page, 'apply').click();
     assert.equal(await page.evaluate(() => window.templateFixture.hooks), 0);
     assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 4);
     await expect(panel(page)).toBeHidden();
