@@ -52,6 +52,7 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     selection = { kind: descriptor.kind, definitionId: descriptor.definition.id, version: descriptor.definition.version, id: descriptor.id };
     target = makeCapabilityTarget(descriptor.form, descriptor.id);
   }
+  function supportLabel(summary) { return summary ? summary.gaps.length ? 'Review the remaining support questions' : 'Supporting work is planned' : 'Plan its people and supporting work'; }
   function supportCell(definition, row, summary, phase) {
     if (phase === 'responsibility') {
       const gaps = summary?.gaps.filter(gap => ['teamId', 'responsiblePersonIds', 'decisionOwnerPersonId'].includes(gap.field)) ?? [];
@@ -94,17 +95,33 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
       for (const row of rows) if (!choices.some(choice => choice.row?.id === row.id)) {
         choices.push({ definition: getCapabilityDefinition(kind, row.definitionId, row.definitionVersion), row });
       }
-      const pads = node('div', undefined, 'native-capabilities__pads');
-      for (const { definition, row } of choices) {
-        const control = button('', 'select'); control.classList.add('native-capabilities__choice');
-        Object.assign(control.dataset, { capabilityKind: kind, capabilityDefinition: definition.id,
-          capabilityVersion: definition.version, capabilityId: row?.id ?? '' });
-        control.append(node('strong', definition.action), node('span', row ? row.lifecycle === 'retired' ? 'Retired from the plan' : 'Included in this plan' : 'Available to plan'));
-        pads.append(control);
+      const table = node('table'), head = node('thead'), heading = node('tr'), body = node('tbody');
+      table.append(node('caption', `${kind === 'ability' ? 'Customer abilities' : 'Team practices'} · support in the accepted plan`));
+      for (const label of [kind === 'ability' ? 'What people can do' : 'How the team works', ...SUPPORT_COLUMNS.map(([, label]) => label)]) {
+        const cell = node('th', label); cell.scope = 'col'; heading.append(cell);
       }
-      list.classList.remove('native-capabilities__sequence');
-      list.removeAttribute('tabindex'); list.removeAttribute('role'); list.removeAttribute('aria-label');
-      list.replaceChildren(pads);
+      head.append(heading); table.append(head, body);
+      for (const { definition, row } of choices) {
+        const tr = node('tr'), title = node('th'), control = button('', 'select');
+        title.scope = 'row'; control.classList.add('native-capabilities__choice');
+        const identity = { capabilityKind: kind, capabilityDefinition: definition.id,
+          capabilityVersion: definition.version, capabilityId: row?.id ?? '' };
+        Object.assign(control.dataset, identity); Object.assign(tr.dataset, identity); tr.dataset.capabilityRow = '';
+        control.append(node('strong', definition.action), node('span', row ? row.lifecycle === 'retired' ? 'Retired from the plan' : 'Included in this plan' : 'Available to plan'));
+        title.append(control); tr.append(title);
+        for (const [phase, label] of SUPPORT_COLUMNS) {
+          const reading = supportCell(definition, row, row ? summaryFor(kind, row.id) : null, phase), cell = node('td');
+          const item = reading.state === 'unspecified' ? node('span') : button('', 'support-cell');
+          item.classList.add('native-capability__cell'); item.dataset.supportState = reading.state;
+          Object.assign(item.dataset, identity, { capabilityPhase: phase });
+          if (reading.requirement) item.dataset.capabilityRequirementTarget = reading.requirement;
+          if (item.tagName === 'BUTTON') item.setAttribute('aria-label', `${definition.action} · ${label}: ${reading.label}. ${reading.detail}`);
+          item.append(node('strong', reading.label, 'native-capability__cell-status'), node('span', reading.detail, 'native-capability__cell-detail'));
+          cell.append(item); tr.append(cell);
+        }
+        body.append(tr);
+      }
+      list.replaceChildren(table);
     }
   }
   function section(title, content, preview = null) {
@@ -136,23 +153,14 @@ export function mountCapabilityPanel(root, { studio, editing, onBegin = () => {}
     for (const control of root.querySelectorAll('[data-capability-action="select"]')) control.setAttribute('aria-pressed', String(
       control.dataset.capabilityKind === selection.kind && control.dataset.capabilityDefinition === def.id
       && control.dataset.capabilityVersion === def.version && control.dataset.capabilityId === (row?.id ?? '')));
-    const overview = [node('p', def.explanation)];
-    const context = row?.context ?? proposal?.raw.context.trim();
-    if (context) overview.push(node('p', context));
-    const support = node('div', undefined, 'native-capability__support-pads');
-    support.setAttribute('role', 'group'); support.setAttribute('aria-label', 'Support for this action');
-    for (const [phase, label] of SUPPORT_COLUMNS) {
-      const reading = supportCell(def, row, summary, phase);
-      const item = reading.state === 'unspecified' ? node('span') : button('', 'support-cell');
-      item.classList.add('native-capability__cell'); item.dataset.supportState = reading.state;
-      Object.assign(item.dataset, { capabilityKind: selection.kind, capabilityDefinition: def.id,
-        capabilityVersion: def.version, capabilityId: row?.id ?? '', capabilityPhase: phase });
-      if (reading.requirement) item.dataset.capabilityRequirementTarget = reading.requirement;
-      item.setAttribute('aria-label', `${def.action} · ${label}: ${reading.label}. ${reading.detail}`);
-      item.append(node('strong', label, 'native-capability__cell-status'), node('span', reading.label, 'native-capability__cell-detail'));
-      support.append(item);
-    }
-    overview.push(support); elements.front.replaceChildren(...overview);
+    for (const item of root.querySelectorAll('[data-capability-row]')) item.dataset.selected = String(
+      item.dataset.capabilityKind === selection.kind && item.dataset.capabilityDefinition === def.id
+      && item.dataset.capabilityVersion === def.version && item.dataset.capabilityId === (row?.id ?? ''));
+    const overview = [node('h5', 'What becomes possible'), node('p', def.explanation), node('p', def.actor),
+      node('p', row?.context ?? (proposal?.raw.context.trim() || 'Name where people will use this action.')),
+      node('p', proposal ? 'Proposed for this plan. Apply accepts its people and supporting work.' : supportLabel(summary))];
+    if (row) overview.push(node('p', row.lifecycle === 'retired' ? 'Retired from the plan. Its separately owned work remains available.' : 'Included in this plan.'));
+    elements.front.replaceChildren(...overview);
     const acceptance = section('How to check the result', def.acceptanceJob);
     const detail = [acceptance,
       section('People and responsibility', row ? `${row.teamId ? projection.state.teams.find(team => team.id === row.teamId)?.label : 'Choose a team'}. ${row.responsiblePersonIds.map(id => projection.state.people.find(person => person.id === id)?.label ?? id).join(', ') || 'Choose the people carrying the work'}. Decision: ${projection.state.people.find(person => person.id === row.decisionOwnerPersonId)?.label ?? 'Choose who decides'}.` : 'Plan the team, the people carrying the work, and the person who decides.')];

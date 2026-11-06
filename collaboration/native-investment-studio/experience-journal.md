@@ -1170,3 +1170,16 @@ people directly; this leaves independently edited team rosters intact. Example
 buttons replace the arrangement in Coordination immediately and preserve Undo.
 These decisions supersede earlier visible-ledger and replacement-navigation
 proposals. Performance and public tagged release remain separate human-cued work.
+
+
+## 2026-11-05 — Restore the Abilities support tables
+
+The human values comparing support across the full Abilities chapter. Issue
+#725 restores that chapter from `codex/studio-period-model` at `d55a925`:
+What people can do and How the team works each show Responsibility,
+Preparation, Review and Observation. Selecting a support cell opens its
+existing editor; the card front, reverse and retained drafts follow the same
+chapter behavior. The current sprint/quarter model and accepted Coordination
+landing composition remain the receiving context. This choice supersedes the
+action-pad simplification for Abilities. Ordinary mobile widths retain the
+comparable columns through local horizontal scrolling.

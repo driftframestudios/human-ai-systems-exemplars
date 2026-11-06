@@ -2468,19 +2468,6 @@ p#on-dark-iron-ore {
 .about-page .native-capabilities h4 { font-size: 1.2rem; }
 .native-capabilities__catalogues { display: grid; gap: 1.25rem; }
 .native-capabilities__catalogues > section { display: grid; align-content: start; gap: .7rem; }
-.native-capabilities__pads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; min-inline-size: 0; }
-.native-capabilities .native-capabilities__pads .native-capabilities__choice { min-block-size: 4.5rem; padding: .65rem 1.8rem .65rem .7rem; font-size: .9rem; }
-.native-capability__support-pads { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; margin-block: .75rem; }
-.native-coordination .native-capability__support-pads .native-capability__cell { min-inline-size: 0; min-block-size: 4rem; padding: .55rem 1.8rem .55rem .6rem; }
-@container native-capabilities (max-width: 48rem) {
-  .native-capabilities__pads { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@container native-capabilities (max-width: 28rem) {
-  .native-capabilities__pads { grid-template-columns: 1fr; }
-}
-@container native-capability-card (max-width: 42rem) {
-  .native-capability__support-pads { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 .native-capabilities__catalogue { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .65rem; list-style: none; padding: 0; }
 .native-capabilities__catalogue > li { margin: 0; min-inline-size: 0; }
 .native-capabilities .native-capabilities__choice { display: grid; align-content: start; gap: .35rem; inline-size: 100%; block-size: 100%; min-inline-size: 0; text-align: start; font-weight: 650; background: var(--about-cool-blue); }
