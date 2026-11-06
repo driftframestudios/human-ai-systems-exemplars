@@ -103,6 +103,20 @@ test('gate decisions preserve investment until explicit atomic funding; failed a
   const invalid = command(studio.read().state); invalid.scoreSettings.proposals.push(structuredClone(invalid.scoreSettings.proposals[0]));
   assert.equal(studio.applyCommand(invalid, studio.read()).error.code, 'duplicate-id'); assert.equal(studio.read().serialized, gateAccepted.serialized);
 });
+test('proposed sessions accept cross-team participants without changing the hosting roster', () => {
+  const plan = proposalPlan();
+  plan.teams.push({ id: 'review-host', label: 'Review host', personIds: [], lifecycle: 'active' });
+  plan.scoreSettings.proposals[0].work.teamId = 'review-host';
+  plan.scoreSettings.gates[0].modeledDecision = 'proceed';
+  const studio = createStudio(plan), before = studio.read();
+  const result = studio.applyCommand(command(before.state, { fundProposalIds: ['followup'] }), before);
+  assert.equal(result.ok, true, result.error?.message);
+  assert.deepEqual(result.projection.state.work.at(-1).personIds, ['product-one']);
+  assert.equal(result.projection.state.work.at(-1).teamId, 'review-host');
+  assert.deepEqual(result.projection.state.teams, before.state.teams);
+  assert.equal(studio.undo(studio.read()).ok, true);
+  assert.equal(studio.exportText(), before.serialized);
+});
 test('score-aware removal guards identify the exact records and comparison separates timing, availability and gate changes', () => {
   const plan = proposalPlan(); plan.scoreSettings.waits = [{ id: 'response-wait', label: 'Wait for review', startMinute: 0, endMinute: 60, reason: null, receiverPersonId: 'product-one' }];
   const studio = createStudio(plan), before = studio.read();

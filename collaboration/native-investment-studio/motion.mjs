@@ -11,7 +11,7 @@ export function mountStudioMotion(root) {
   const original = root.getAttribute('data-native-motion');
   const listeners = new Set(), cleanup = [], controls = [];
   const slot = root.querySelectorAll('[data-native-motion-controls]')[0];
-  let requested = 'lower', disposed = false, generation = 0, group = null, status = null;
+  let requested = 'full', disposed = false, generation = 0, group = null, status = null;
   let indication = null, cue = null, indicationGeneration = 0;
   let snapshot;
 
@@ -53,9 +53,9 @@ export function mountStudioMotion(root) {
     if (snapshot.effective !== 'full') cancelIndication();
     for (const input of controls) input.checked = input.value === requested;
     if (status) status.textContent = snapshot.systemReduced
-      ? 'Applies throughout this Studio. Your system setting keeps motion lower.'
-      : requested === 'lower' ? 'Applies throughout this Studio. Readings settle directly.'
-        : 'Applies throughout this Studio. Short visual responses are enabled.';
+      ? 'Your system setting keeps motion lower.'
+      : requested === 'lower' ? 'Lower motion throughout the Studio.'
+        : 'Full motion throughout the Studio.';
     for (const listener of [...listeners]) {
       if (epoch !== generation) break;
       if (listeners.has(listener)) listener(snapshot);

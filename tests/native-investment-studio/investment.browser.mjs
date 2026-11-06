@@ -83,6 +83,13 @@ async function open(t, engine, complete = false, showcase = false) {
   return page;
 }
 
+async function openSession(page) {
+  const workspace = root(page).locator('[data-native-workspace="session"]');
+  if (!await workspace.evaluate(node => node.open)) await workspace.locator(':scope > summary').click();
+  const settings = root(page).locator('[data-native-configure]');
+  if (!await settings.evaluate(node => node.open)) await settings.locator(':scope > summary').click();
+}
+
 async function downloadText(page) {
   const pending = page.waitForEvent('download');
   await action(page, 'download').click();
@@ -216,66 +223,11 @@ for (const engine of names) {
     assert.deepEqual([...released.revoked].sort(), released.created.map(row => row.url).sort(),
       'idempotent root disposal releases each owned report URL and removes its action listener');
   });
-  test(`${engine}: contribution channels follow exact sources, retain the held baseline and explain an accepted change on mobile`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine), initial = await bytes(page);
-    await chapter(page, 'investment').click();
-    const trace = investment(page).locator('[data-investment-trace]'), selection = trace.locator('[data-trace-selection]');
-    const channel = value => trace.locator(`input[data-trace-channel="${value}"]`);
-    await expect(channel('baseline')).toBeDisabled(); await expect(trace.locator('[data-trace-total]')).toContainText('$1,200.00');
-    await trace.locator('[data-trace-hold]').click(); await expect(channel('baseline')).toBeEnabled();
-    const selected = await selection.inputValue();
-    await channel('baseline').check(); await trace.locator('[data-trace-scale]').selectOption('plan');
-    await channel('difference').check(); await expect(trace.locator('[data-trace-total]')).toContainText('$0.00');
-    assert.equal(await bytes(page), initial, 'holding, changing channel and scaling preserve the accepted plan');
-    await channel('accepted').check();
-    await trace.locator('[data-trace-source-kind="person"]').click();
-    const rate = root(page).locator('[data-person-configure] [name="ratePerHour"]');
-    await expect(rate).toBeFocused(); await rate.fill('101.25');
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(selection).toBeFocused(); await expect(selection).toHaveValue(selected); assert.equal(await bytes(page), initial);
-    await trace.locator('[data-trace-source-kind="work"]').first().click();
-    await expect(work(page, 'hoursPerSession')).toBeFocused(); await work(page, 'minutesPerSession').fill('45');
-    await root(page).locator('[data-action="apply"]').click(); await expect(total(page)).toHaveText('$1,800.00');
-    await root(page).locator('[data-native-return-action]').click(); await expect(selection).toBeFocused();
-    await channel('difference').check(); await expect(trace.locator('[data-trace-total]')).toContainText('$600.00');
-    await trace.locator('.native-investment-trace__ledger > summary').click();
-    const ledger = trace.locator('[data-trace-ledger]');
-    assert.deepEqual(await ledger.locator('thead th').allTextContents(), ['Person', 'A · Baseline', 'B · Accepted', 'Difference · B − A']);
-    assert.deepEqual(await ledger.locator('tbody tr').first().locator('td').allTextContents(), ['$300.00', '$450.00', '$150.00']);
-    assert.deepEqual(await ledger.locator('tfoot td').allTextContents(), ['$1,200.00', '$1,800.00', '$600.00']);
-    const download = JSON.parse(await downloadText(page)); assert.equal(download.work[0].minutesPerOccurrence, 45);
-    await trace.locator('[data-trace-source-kind="person"]').click();
-    await expect(rate).toHaveValue('101.25'); await expect(root(page).locator('[data-person-action="review"]')).toBeFocused();
-    await root(page).locator('[data-native-return-action]').click(); await expect(selection).toHaveValue(selected);
-    const accepted = await bytes(page);
-    await page.setViewportSize({ width: 390, height: 844 });
-    await expect(trace.locator('[data-trace-total]')).toContainText('$600.00');
-    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'ordinary mobile keeps page scrolling vertical');
-    const channelGeometry = await trace.locator('fieldset label').evaluateAll(labels => labels.map(label => ({
-      control: label.querySelector('input').getBoundingClientRect().height,
-      text: label.querySelector('span').getBoundingClientRect().height,
-      line: parseFloat(getComputedStyle(label.querySelector('span')).lineHeight)
-    })));
-    assert.ok(channelGeometry.every(row => row.control <= 24 && row.text <= row.line * 2 + 1),
-      'native radio indicators leave enough mobile width for readable channel labels');
-    const screen = trace.locator('.native-investment-trace__screen'); await screen.focus(); await expect(screen).toBeFocused();
-    assert.ok(await screen.evaluate(element => element.scrollWidth > element.clientWidth));
-    await screen.evaluate(element => { element.scrollLeft = element.scrollWidth; });
-    assert.ok(await screen.evaluate(element => element.scrollLeft > 0));
-    await selection.selectOption({ index: 1 });
-    await ledger.locator('tbody button').first().focus(); await page.keyboard.press('Enter');
-    await expect(ledger.locator('tbody button').first()).toBeFocused();
-    await trace.screenshot({ path: resolve(captures, `${engine}-contribution-trace-mobile.png`) });
-    assert.equal(await bytes(page), accepted);
-    await page.setViewportSize({ width: 1280, height: 900 }); await channel('baseline').check();
-    await expect(trace.locator('[data-trace-total]')).toContainText('$1,200.00');
-    await trace.screenshot({ path: resolve(captures, `${engine}-contribution-trace-wide.png`) });
-  });
-
   test(`${engine}: authored showcase enters through the shared plan, previews four longer reviews, compares and recovers`, { timeout: 45000 }, async t => {
     const page = await open(t, engine, false, true);
     const brief = root(page).locator('[data-native-showcase]');
     const reviewSession = async () => {
+      await openSession(page);
       await root(page).locator('[data-native-session-select]').selectOption('review');
       const settings = root(page).locator('[data-native-configure]');
       if (!await settings.evaluate(node => node.open)) await settings.locator(':scope > summary').click();
@@ -288,6 +240,8 @@ for (const engine of names) {
       await request.locator('[data-native-showcase-action="readiness"]').click();
     };
     await expect(brief).toBeVisible();
+    await expect(root(page).locator('[data-native-workspace="session"]')).not.toHaveAttribute('open', '');
+    await expect(root(page).locator('[data-native-workspace="connection"]')).not.toHaveAttribute('open', '');
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');
@@ -331,15 +285,17 @@ for (const engine of names) {
     assert.deepEqual(reviewed.connections.find(row => row.id === 'readiness').workIds, ['review', 'rehearsal']);
   });
 
-  test(`${engine}: replacement preview names the contribution and connections before acceptance and on removal`, { timeout: 45000 }, async t => {
+  test(`${engine}: concise replacement confirmation preserves accepted records until Apply or Cancel`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     const before = await bytes(page);
     await chapter(page, 'investment').click();
     await investment(page).locator('[data-investment-preset]').selectOption('service-request-pilot');
     await action(page, 'preset').click();
     const changes = investment(page).locator('[data-investment-changes]');
-    await expect(changes).toContainText('Contribution added: Cross-source synthesis · Researcher reviews · Product lead decides.');
-    await expect(changes).toContainText('Connection added: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Quality reviewer receives.');
+    await expect(changes).toContainText('Service request pilot');
+    await expect(changes).toContainText('4 sprints.');
+    await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
+    await expect(changes.locator('li')).toHaveCount(0);
     assert.equal(await bytes(page), before);
     await action(page, 'apply').click();
     await expect(total(page)).toHaveText('$3,980.00');
@@ -347,21 +303,21 @@ for (const engine of names) {
     revised.contributions[0].receiverPersonId = 'noor';
     revised.connections.find(row => row.id === 'readiness').status = 'paused';
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'review-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(revised)) });
-    await expect(changes).toContainText('Contribution changed: Cross-source synthesis · Researcher reviews · Product lead decides → Cross-source synthesis · Quality reviewer reviews · Product lead decides (receiving person).');
-    await expect(changes).toContainText('Connection changed: Prototype, acceptance evidence and exception log · Engineering → Quality and Operations · Quality reviewer receives (connection status).');
+    await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
+    await expect(action(page, 'apply')).toBeEnabled();
     assert.equal(await bytes(page), pilot);
     await action(page, 'clear').click();
     await investment(page).locator('[data-investment-preset]').selectOption('shared-working-sessions');
     await action(page, 'preset').click();
-    await expect(changes).toContainText('Contribution removed: Cross-source synthesis · Researcher reviews · Product lead decides.');
-    await expect(changes).toContainText('Connection removed: Readiness findings and rollout conditions · Quality and Operations → Product and Research · Product lead receives.');
+    await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
+    assert.equal(await bytes(page), pilot);
     await expect(total(page)).toHaveText('$3,980.00');
     await action(page, 'clear').click();
     await action(page, 'undo').click();
     assert.equal(await bytes(page), before);
   });
 
-  test(`${engine}: arrangement import and baseline describe grouping while detachment preserves the same investment`, { timeout: 45000 }, async t => {
+  test(`${engine}: arrangement import and detachment retain structure and recover through baseline and Undo`, { timeout: 45000 }, async t => {
     const page = await open(t, engine), before = await bytes(page);
     await chapter(page, 'investment').click(); await action(page, 'baseline').click();
     const proposed = await page.evaluate(async () => {
@@ -375,19 +331,19 @@ for (const engine of names) {
     const upload = text => investment(page).locator('[data-investment-file]').setInputFiles({ name: 'arranged-plan.json', mimeType: 'application/json', buffer: Buffer.from(text) });
     const changes = investment(page).locator('[data-investment-changes]'), comparison = investment(page).locator('[data-investment-comparison]');
     await upload(proposed);
-    await expect(changes).toContainText('Pod arrangement added: Delivery group: Product and Engineering; Partner group: Reviewing team.');
-    await expect(changes).toContainText('Return feedback: Reviewing team → Product and Engineering.');
+    await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     assert.equal(await bytes(page), before); await expect(total(page)).toHaveText('$1,200.00');
     await action(page, 'apply').click();
     const accepted = await bytes(page);
-    await expect(comparison).toContainText('Team arrangementsPod arrangement added:');
+    assert.deepEqual(JSON.parse(accepted).arrangements, JSON.parse(proposed).arrangements);
     await expect(comparison).toContainText('Change$0.00');
     const detached = JSON.parse(accepted); detached.arrangements = [];
     await upload(JSON.stringify(detached));
-    await expect(changes).toContainText('Pod template grouping removed: Delivery group: Product and Engineering; Partner group: Reviewing team.');
+    await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     assert.equal(await bytes(page), accepted);
     await action(page, 'apply').click();
     const after = JSON.parse(await bytes(page)), prior = JSON.parse(accepted);
+    assert.deepEqual(after.arrangements, []);
     for (const key of ['people', 'teams', 'work', 'connections']) assert.deepEqual(after[key], prior[key]);
     await expect(total(page)).toHaveText('$1,200.00');
     await action(page, 'undo').click(); assert.equal(await bytes(page), accepted);
@@ -455,9 +411,10 @@ for (const engine of names) {
     const page = await open(t, engine);
     await chapter(page, 'investment').click();
     await expect(action(page, 'undo')).toBeDisabled();
+    await expect(investment(page).locator('[data-investment-trace]')).toHaveCount(0);
     await action(page, 'baseline').click();
     await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Baseline total$1,200.00');
-    await chapter(page, 'coordination').click();
+    await chapter(page, 'coordination').click(); await openSession(page);
     await work(page, 'minutesPerSession').fill('45');
     await root(page).locator('[data-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,800.00');
@@ -476,7 +433,7 @@ for (const engine of names) {
     await action(page, 'preset').click();
     await expect(investment(page).locator('#native-plan-preview-title')).toBeFocused();
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,200.00');
-    await expect(investment(page).locator('[data-investment-changes]')).toContainText('funded time');
+    await expect(investment(page).locator('[data-investment-changes]')).toContainText('funded hours per person.');
     assert.equal(await bytes(page), retained);
     await action(page, 'clear').click();
     await expect(investment(page).locator('[data-investment-preview]')).toBeHidden();
@@ -624,7 +581,7 @@ for (const engine of names) {
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $2,400.00');
     assert.equal(await bytes(page), original);
     await upload.setInputFiles(makeFile(45));
-    await chapter(page, 'coordination').click();
+    await chapter(page, 'coordination').click(); await openSession(page);
     await work(page, 'minutesPerSession').fill('40');
     await page.evaluate(() => window.pendingPlanReads[2].finish());
     await chapter(page, 'investment').click();

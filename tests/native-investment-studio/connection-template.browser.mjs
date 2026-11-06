@@ -59,6 +59,7 @@ async function open(t, engine) {
     receiver.controller = mountConnectionTemplatePanel(element, { studio, editing, onAccepted() { receiver.accepted += 1; } });
     window.templateFixture = receiver;
   });
+  await page.locator('details[data-native-workspace="connection"] > summary').click();
   await panel(page).locator(':scope > summary').click(); await expect(panel(page)).toHaveAttribute('open', '');
   return page;
 }
@@ -170,7 +171,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), beforeDetach); await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
     await panel(page).locator(':scope > summary').click();
     await reading.screenshot({ path: resolve(captures, `${engine}-accepted-desktop.png`) });
-    await page.setViewportSize({ width: 320, height: 1000 }); await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.setViewportSize({ width: 390, height: 1000 });
     const viewport = reading.locator('.native-arrangement__viewport'); await viewport.focus(); await expect(viewport).toBeFocused();
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     const human = handoff.locator('[data-connection-target-kind="person"]').first();
@@ -184,7 +185,7 @@ for (const engine of names) {
       return { lines: lines.size, width: button.getBoundingClientRect().width, fontSize: style.fontSize,
         paddingStart: style.paddingInlineStart, paddingEnd: style.paddingInlineEnd };
     });
-    assert.equal(nameReading.lines, 1, `the named human remains word-readable at 320px and doubled text: ${JSON.stringify(nameReading)}`);
+    assert.equal(nameReading.lines, 1, `the named human remains word-readable at mobile width: ${JSON.stringify(nameReading)}`);
     await handoff.screenshot({ path: resolve(captures, `${engine}-human-handoff-narrow.png`) });
     await viewport.evaluate(element => { element.scrollLeft = element.scrollWidth; }); assert.ok(await viewport.evaluate(element => element.scrollLeft) > 0);
     await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });

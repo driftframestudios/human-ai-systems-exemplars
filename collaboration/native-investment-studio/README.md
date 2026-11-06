@@ -17,10 +17,18 @@ delivered the working showcase to main. The focused
 [core-quality pass, #708](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/708),
 clarifies navigation policy, download ownership, input limits and scheduling controls.
 
-The next Coordination proposal, [#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718),
-reframes the horizon around sprints and business quarters with period-to-session
-drill-down. It awaits human review; the runnable showcase still uses the
-elapsed-time arrangement described below.
+Coordination opens a four-sprint pilot with named sessions, handoffs and a
+review decision. Open a sprint to see its weeks, then a session to inspect its
+people, duration and placement. A separate two-quarter rollout example shows
+preparation, validation and operating adoption. Example buttons update the view
+in place; Undo restores the preceding plan. The implementation route is
+[#718](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/718),
+through #720–#722.
+
+Coordination keeps the period overview and MIDI session tracks together. Team
+connections and working-session details open on demand. Select participants
+directly; a session can bring people from different teams together. Full motion
+is the default, with a Lower choice and support for system motion preferences.
 
 The [experience journal](experience-journal.md) preserves the interaction intent
 and review findings. The [capability transfer map](implementation-reference.md#capability-transfer-map)
@@ -40,7 +48,7 @@ human-cued step.
 1. Begin with the **Coordination horizon**, then inspect the team connections.
    Open **Purpose** to read what the pilot should change. Investment lets you
    save a baseline before experimenting.
-2. In Coordination, choose **Pilot decision review** under Working session.
+2. In Coordination, open **Working sessions** and choose **Pilot decision review**.
    Its diagram names who joins and what their work supports. Open **Session
    settings**, then try 45 minutes with the dial, arrow keys, step buttons, or
    precision field. Inspect the draft before Apply.
@@ -69,8 +77,8 @@ chapters can retain unfinished work. A saved edit may need review after another
 change updates the accepted plan. The amp amount describes accepted investment;
 a form preview describes that form's proposal.
 
-The support sequencer makes responsibility, preparation, review and recorded
-observation available as individual cells. Choose a gap to open its editor;
+Action pads open a selected card. Its responsibility, preparation, review and
+observation controls lead directly to their editors;
 Apply accepts the proposal. Cards describe what people can do and how a team plans to work. Their reverse
 shows responsibility, supporting sessions, current gaps, and recorded
 observations. **Open beside** keeps overview and support together at roomy
@@ -106,15 +114,13 @@ reviewer and observed plan revision; its text explains what was actually found.
 
 ## Compare investment and keep a result
 
-In **Investment**, hold the accepted plan as **Channel A**, then change people
-or work. **Channel B** shows the current accepted plan; **Difference** shows
-each person's contribution to the change. Select a contribution to inspect its
-funded time and extra work, then follow the source and return to the same
-comparison. The exact table accompanies the visual display.
+In **Investment**, save a baseline, change people or work, and compare the
+current amount with that baseline. Undo restores the previous accepted plan.
+The optional cost breakdown remains here alongside save and open controls.
 
 Choose a starting plan to explore discovery, migration, regulated workflows,
 AI-assisted products, integration or operational recovery. Preview the replacement
-before **Use this plan**. Each is an authored native rehearsal with explicit
+before **Use this plan** in Investment. Each is an authored native rehearsal with explicit
 people, sessions and review conditions. Undo restores the previous accepted plan.
 
 **Download report** produces a self-contained HTML reading with exact values,
@@ -129,7 +135,7 @@ translation continues in [#705](https://github.com/driftframestudios/human-ai-sy
 
 ## Compare team arrangements
 
-Open **Try a team arrangement** in Coordination. Pod, Guild, Project team and
+Open **Team connections**, then **Try a team arrangement** in Coordination. Pod, Guild, Project team and
 Shared service each show their roles and directed work immediately. Choose
 people and receiving responsibilities, Preview the complete proposal, then
 Apply. The accepted arrangement name and diagram remain visible when the form
@@ -147,49 +153,42 @@ reading names its function, human reviewer and decision owner. The associated
 sessions explain planned support. Review instructions and decision boundaries
 remain inspectable alongside any missing context.
 
-## Arrange the work in time
+## Arrange work across sprints or quarters
 
-The **Coordination horizon** shows the pilot's authored rehearsal sequence.
-Select a session clip or a stage to inspect it. The same records supply the
-chronological agenda, exact table and available-time reading. Change the view
-scale or follow a session, person or chapter link; return to the horizon with
-your unfinished entries intact.
+The **Coordination horizon** begins with a four-sprint service-request pilot.
+Each sprint represents two weeks in this example. Open a sprint to see its
+working sessions, then choose a session to inspect its people and duration.
+**Whole plan** returns to the overview. Zoom leaves the plan and investment intact.
 
-Hover over or focus a clip to preview its minutes per person and preceding
-activity. People and available time, handoff details and the arrangement editor
-begin collapsed; opening them keeps the same records and controls. The visible
-scale keys keep their selected state. **Go to chapter**
-opens a related part of the Studio. Each stage has **Add a decision**. It opens
-**New decision** with the stage chosen and empty context ready to
-edit. **Add decision to plan** accepts the arrangement; **Discard this decision**
-keeps other unfinished entries. Both return to the stage. Existing decisions
-show complete questions and evidence before editing. The compact chronological table keeps sessions, waits and
-decisions in time order; the session table compares effort and funding across
-their full series.
+**Try a later review** proposes another sprint for the review and its decision.
+Read the consequence, then Apply or Cancel. Investment's Undo restores the
+previous arrangement. The same sessions keep their effort and price; additional
+work or a longer session changes the planned investment.
 
-Try moving the first Pilot decision review from **11h** to **8h20m** in
-**First session starts**.
-The proposed horizon shows the review starting before its supporting work is
-ready and overlapping the Quality reviewer's rehearsal. The $3,980 accepted
-investment stays visible. Apply accepts the arrangement; Cancel restores the
-current entries; Investment offers Undo and baseline comparison.
+**Sprints / Business quarters** regroups the current work. Changing the period
+count previews the new horizon; shortening it retains affected sessions under
+**Choose a period**. **Two-quarter rollout** replaces the example in place with
+its own preparation, rollout and adoption work. Undo restores the preceding
+plan. Investment retains the preview route for its broader starting-plan choices.
 
-Next work and Options hold possible sessions. Set the Pilot decision's modeled
-choice to Proceed, inspect **Confirm the recovery instructions**, and select
-**Add this proposal to planned work when I Apply**. The 30-minute session with
-the Quality reviewer and Operations specialist adds $100. Apply accepts the gate
-choice and funded session together; Undo restores the earlier plan.
+Each period has **Add session**. It opens a new draft with that period selected,
+example wording, people and duration together. Confirming **Add session** accepts
+it; Cancel keeps the accepted plan. Existing session settings place each
+occurrence separately. Increasing **Working sessions** adds occurrences awaiting
+placement; increasing Hours or Minutes makes each session longer.
 
-Enter elapsed hours and minutes, such as **11h30m** or **690 minutes**. The
-stored arrangement retains exact integer minutes from the beginning of the
-plan; elapsed time continues through off-hours. **Schedule within this plan**
-enables start and repeat timing for the session. **Start a session every** sets the time from
-one start to the next; the session count sets how many run. Compact step buttons change a value by one minute,
-and saved edits retain the entered text. Participant effort,
-funded time and temporal availability retain separate meanings. A wait adds
-elapsed time and has zero participant effort. Older imported plans keep timing
-and availability unspecified until a visitor supplies them. The example's times,
-rates and modeled decisions remain editable assumptions.
+**Stages & handoffs** groups sessions and connects the work that prepares a
+result to the work receiving it. A stage or handoff can carry a decision or delay.
+The contextual decision form names the question, evidence and reviewer. Delays
+can propose moving the affected sessions to a later period. Their extra work, if
+needed, receives its own session and funding choice.
+
+The MIDI tracks and downloadable reading use the same periods, people and
+duration. The detailed agenda remains in the downloaded report.
+Availability belongs to a person and period; an unknown amount stays
+**Availability to choose**. Funded time retains its separate accounting meaning.
+Older saved plans preserve their recorded work and timing. **Arrange this plan
+in sprints** offers an explicit placement proposal for those plans.
 
 In Session settings and supporting-session proposals, Hours and Minutes each
 have a dial beside their precision field. Hours uses the
@@ -199,9 +198,10 @@ choosing 24 hours.
 
 ## Choose how the instrument responds
 
-**Studio motion**, beside the Change lens, begins with lower motion. Choose
-Full motion for short reel, screen and navigation responses; a system preference
-for reduced motion retains the lower setting. Amp chapter selection, contextual
+**Studio motion**, beside the Change lens, begins with Full motion for short
+reel, screen and navigation responses. Choose Lower for quieter responses;
+a system preference for reduced motion keeps the effective setting lower.
+Amp chapter selection, contextual
 chapter jumps and inspection inside a chapter use distinct destination cues.
 These choices affect presentation while your plan and saved edits retain their
 own state.

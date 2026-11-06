@@ -110,12 +110,15 @@ test('the shared duration codec keeps carry, lexical bounds and zero explicit', 
   rejected(editor.setText(token, 'timing', 'null'), 'field');
 });
 
-test('session admission preserves selections and reports team, membership and choice errors', () => {
+test('session admission preserves cross-team selections and reports unknown references and choice errors', () => {
   const studio = createStudio(), editor = createSessionDraftAdapter(studio), before = studio.read();
   studio.applyCommand({ type: 'team.create', team: { id: 'empty', label: 'Empty', personIds: [] } }, before);
   const token = open(editor, studio);
   editor.setText(token, 'teamId', 'empty');
-  rejected(editor.preview(token), 'team-membership');
+  const preview = editor.preview(token);
+  assert.equal(preview.ok, true, preview.error?.message);
+  assert.deepEqual(preview.projection.state.teams.at(-1).personIds, []);
+  assert.equal(preview.projection.state.work[0].teamId, 'empty');
   assert.deepEqual(editor.read().draft.raw.personIds, ['product-one', 'product-two', 'engineering-one', 'engineering-two']);
   editor.setText(token, 'teamId', 'missing'); rejected(editor.preview(token), 'reference');
   editor.setText(token, 'teamId', 'delivery'); editor.setText(token, 'funding', 'maybe'); rejected(editor.preview(token), 'choice');

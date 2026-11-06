@@ -29,7 +29,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const editor = editing.assurance;
   const concepts = listQualityConcepts(), definitions = listRehearsalDefinitions();
   let selectedConcept = concepts[0].id, selectedScenario = definitions[0].id;
-  let renderedSigma = null;
+  let renderedSigma = null, selectedPrompt = null;
   for (const name of ['quality', 'concepts', 'statistics', 'events', 'learning', 'rehearsal', 'work', 'manual']) elements[name].replaceChildren();
   let disposed = false, generation = 0, sequence = 0, composing = false, lastProjection = null, promptSignature = '';
   const owns = epoch => !disposed && generation === epoch;
@@ -104,15 +104,16 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     return items;
   }
   const qualityGrid = node('div', undefined, 'native-assurance__assumptions');
-  elements.quality.append(node('h4', 'Plan quality work and examine its assumptions'),
-    node('p', 'The illustration estimates effort from a reference horizon. Linked working sessions supply the accepted investment. Choose people, duration and funding when planning those sessions.'), qualityGrid);
+  const qualityAssumptions = node('details'); qualityAssumptions.dataset.assuranceAssumptions = '';
+  qualityAssumptions.append(node('summary', 'Adjust the quality illustration'), qualityGrid);
+  elements.quality.append(qualityAssumptions);
   field(qualityGrid, 'sourcePresetId');
   const horizon = node('div', undefined, 'native-assurance__horizon'); qualityGrid.append(horizon);
   field(horizon, 'horizonUnit'); field(horizon, 'horizonQuantity');
   const quantities = node('div', undefined, 'native-assurance__quantities'); qualityGrid.append(quantities);
   for (const key of ['namedUnknowns', 'allocationPercent', 'independentRate', 'qualityAdditionalPercent', 'recoveryAdditionalPercent']) field(quantities, key);
   field(qualityGrid, 'qualityIncluded'); field(qualityGrid, 'recoveryRatePersonIds');
-  const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the illustrative source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); elements.quality.append(sourceReading);
+  const sourceReading = node('details'); sourceReading.append(node('summary', 'Read the illustrative source scenario')); const sourceBody = node('div'); sourceReading.append(sourceBody); qualityAssumptions.append(sourceReading);
   const estimates = node('div', undefined, 'native-assurance__estimates'); estimates.dataset.assuranceEstimates = ''; elements.quality.append(estimates);
   elements.concepts.append(node('h4', 'Connect quality intentions to work'));
   const conceptChoices = selectionRail(elements.concepts, 'Inspect a quality concept', concepts, 'concept');
@@ -135,17 +136,23 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
   const sigmaSelect = field(elements.statistics, 'sigmaHalfSteps', 'Choose sigma attention');
   sigmaSelect.input.setAttribute('aria-label', 'Choose sigma attention');
   const sigmaValues = node('details'); sigmaValues.append(node('summary', 'Read the reference values')); const sigmaValuesBody = node('dl'); sigmaValues.append(sigmaValuesBody);
-  const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), attentionList = node('dl', undefined, 'native-assurance__attention');
+  const sigmaPlot = node('div', undefined, 'native-assurance__chart'), sigmaReading = node('p'), sigmaBasis = node('p');
+  sigmaValues.append(sigmaBasis);
   const scope = node('section', undefined, 'native-assurance__scope'), scopeHead = node('div', undefined, 'native-assurance__scope-head');
   scopeHead.append(node('span', 'NORMAL REFERENCE / TWO-SIDED TAILS'));
   const scopeValue = node('strong'); scopeHead.append(scopeValue);
   const scopeControls = node('div', undefined, 'native-assurance__scope-controls'); scopeControls.append(sigmaControl, sigmaSelect.group);
-  scope.append(scopeHead, sigmaPlot); elements.statistics.append(scope, scopeControls, sigmaReading, sigmaValues, attentionList);
-  elements.events.append(node('h4', 'Prepare for recovery'), node('p', 'Describe an event, name who receives the recovery, and link the sessions that carry it. Aggregate person-minutes express everyone’s effort together.'), actionRow(button('Add a recovery event', 'add-event')));
+  scope.append(scopeHead, sigmaPlot); elements.statistics.append(scope, scopeControls, sigmaReading, sigmaValues);
+  elements.events.append(node('h4', 'Prepare for recovery'), actionRow(button('Add a recovery event', 'add-event')));
   const eventList = node('div'); elements.events.append(eventList);
   elements.learning.append(node('h4', 'Turn a learning question into planned work'));
-  const prompts = node('div', undefined, 'native-assurance__grid'), learningList = node('div'); elements.learning.append(prompts, learningList);
-  elements.rehearsal.append(node('h4', 'Rehearse a professional complication'), node('p', 'Use a scenario to examine a response before accepting changes. Record an observation after a person has performed and reviewed the rehearsal.'));
+  const prompts = node('div'), promptLabel = node('label', 'Question to explore'), promptChoice = node('select'), promptReading = node('p');
+  promptChoice.id = `${instance}-learning-question`; promptLabel.htmlFor = promptChoice.id;
+  const planLearning = button('Plan this learning', 'learning');
+  prompts.append(promptLabel, promptChoice, promptReading, actionRow(planLearning));
+  const learningList = node('div'); elements.learning.append(prompts, learningList);
+  listen(promptChoice, 'change', () => { if (!disposed && isActive()) { selectedPrompt = promptChoice.value; render(); } });
+  elements.rehearsal.append(node('h4', 'Rehearse a professional complication'), node('p', 'Try a complication, then plan the response.'));
   const scenarioChoices = selectionRail(elements.rehearsal, 'Choose a complication', definitions, 'scenario');
   const rehearsalGroups = new Map(), scenarioCards = new Map();
   for (const definition of definitions) {
@@ -319,8 +326,8 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       sigmaPlot.replaceChildren(svg);
       renderedSigma = reading.sigma;
     }
-    sigmaReading.textContent = `${reading.basis} About ${Number(reading.tailPerMillion.toFixed(2)).toLocaleString('en-US')} reference values per million lie beyond the selected thresholds. Quality effort multiplier: ${reading.multiplier === null ? 'set the reference horizon' : Number(reading.multiplier.toFixed(3))}.`;
-    attentionList.replaceChildren(...reading.attention.map(row => { const group = node('div'); group.append(node('dt', row.label), node('dd', `${row.description} ${row.hours === null ? 'Set a reference horizon to illustrate effort.' : `${hourText(row.hours)} of the quality illustration.`}`)); return group; }));
+    sigmaReading.textContent = 'Explore a mathematical quality reference. Supporting sessions determine the planned investment.';
+    sigmaBasis.textContent = reading.basis;
   }
   function render() {
     const view = editor.read(); if (disposed) return view;
@@ -342,6 +349,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
       if (control.metadata.kind === 'ids' || control.radio) for (const checkbox of control.input.querySelectorAll('input')) checkbox.checked = control.radio ? checkbox.value === value : value.includes(checkbox.value);
       else if (control.metadata.checkbox) control.input.checked = value === 'yes'; else if (control.input.value !== value) control.input.value = value;
       const error = errors.find(error => error.path === `draft.${key}`); control.error.textContent = error?.message ?? ''; control.input.setAttribute('aria-invalid', String(Boolean(error)));
+      if (error && qualityGrid.contains(control.input)) qualityAssumptions.open = true;
     }
     renderTimeReadout(time, raw, { errors, composing, fieldPrefix: 'proposal.', horizonWeeks: view.projection.state.horizonWeeks });
     durationDials.refresh();
@@ -370,18 +378,17 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     }
     const nextPromptSignature = JSON.stringify(reading.learning);
     if (promptSignature !== nextPromptSignature) {
-      prompts.replaceChildren(...reading.learning.map(prompt => { const card = node('details', undefined, 'native-assurance__card'); card.append(node('summary', prompt.label), node('p', prompt.prompt), actionRow(button('Plan this learning', 'learning', { assurancePrompt: prompt.promptId }))); return card; })); promptSignature = nextPromptSignature;
+      promptChoice.replaceChildren(...reading.learning.map(prompt => { const option = node('option', prompt.label); option.value = prompt.promptId; return option; }));
+      promptSignature = nextPromptSignature;
     }
-    const estimateText = (name, estimate) => `${name}: ${estimate.status === 'known' ? `${hourText(estimate.hours)} · ${money(estimate.amountCents)}` : estimate.problems.join(' ')}. ${estimate.basis}`;
+    const prompt = reading.learning.find(row => row.promptId === selectedPrompt) ?? reading.learning[0];
+    selectedPrompt = prompt?.promptId ?? null; prompts.hidden = !prompt;
+    if (prompt) { promptChoice.value = prompt.promptId; promptReading.textContent = prompt.prompt; planLearning.dataset.assurancePrompt = prompt.promptId; }
+    const estimateText = (name, estimate) => `${name}: ${estimate.status === 'known' ? `${hourText(estimate.hours)} · ${money(estimate.amountCents)}` : estimate.problems.join(' ')}`;
     estimates.replaceChildren(node('p', estimateText('Quality illustration', reading.quality.estimate)), node('p', estimateText('Recovery illustration', reading.recovery.estimate)));
     const preset = reading.sourcePreset; sourceReading.hidden = !preset;
     if (preset) {
       const total = sourcePresetEstimate(preset.id); sourceBody.replaceChildren(node('p', `${preset.name}. ${preset.horizon.quantity} ${preset.horizon.unit}; ${preset.complexity} complexity. Source scenario investment: ${total.status === 'known' ? money(Math.round(total.central * 100)) : total.problems.join(' ')}.`));
-      for (const [title, rows] of [['People and rates', preset.roles.map(row => `${row.label}: ${row.people} people at ${money(row.rateCentsPerHour)} per hour, ${row.allocationPercent}% allocation.`)],
-        ['Activities', preset.activities.map(row => `${row.label}: ${row.count} items, ${row.aggregateMinutesPerItem} aggregate person-minutes each.`)],
-        ['Recovery', preset.disruptions.map(row => `${row.label}: ${row.eventCount} events, ${row.aggregateMinutesPerEvent} aggregate person-minutes each.`)]]) {
-        const list = node('ul'); for (const row of rows) list.append(node('li', row)); sourceBody.append(node('h5', title), list);
-      }
       sourceBody.append(node('p', 'This source comparison retains its own staffing assumptions. The current plan keeps its people and working sessions.'));
     }
     const hasWork = raw['proposal.mode'] !== 'none'; workFields.hidden = !hasWork; existingWork.group.hidden = raw['proposal.mode'] !== 'update';
@@ -397,7 +404,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     renderConsequences(view, preview);
     return view;
   }
-  function opened(result, epoch, focus) { if (!owns(epoch)) return result; composing = false; render(); if (!owns(epoch)) return result; announce(result.ok ? '' : result.error.message); onEditing(); if (owns(epoch) && focus) (editor.read().status === 'stale' ? actions.get('review') : controls.get('sourcePresetId').input).focus(); return result; }
+  function opened(result, epoch, focus) { if (!owns(epoch)) return result; composing = false; render(); if (!owns(epoch)) return result; announce(result.ok ? '' : result.error.message); onEditing(); if (owns(epoch) && focus) (editor.read().status === 'stale' ? actions.get('review') : sigmaInput).focus(); return result; }
   function open(target = 'assurance', focus = true) { if (disposed || !canOpen()) return; const epoch = ++generation; onBegin(); if (!owns(epoch)) return; return opened(editor.begin(target, studio.read()), epoch, focus); }
   function selectSupport(target) {
     if (disposed || !target || !['concept', 'rehearsal'].includes(target.kind)) return false;

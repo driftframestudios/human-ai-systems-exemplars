@@ -7,6 +7,7 @@ import { INTEGER, money, duration } from './display.mjs';
 import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
 import { getChangeFramework, getChangeComponent } from './change-models.mjs';
+import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 
 const INSTANCES = new WeakMap();
 const NUMBER_FIELDS = Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']);
@@ -15,6 +16,7 @@ const ERROR_FIELDS = Object.freeze([...FIELDS, 'personIds']);
 const LABELS = Object.freeze({ label: 'Session name', teamId: 'Team', hoursPerSession: 'Hours', minutesPerSession: 'Minutes',
   occurrences: 'Working sessions', personIds: 'Participants', funding: 'Funding', status: 'Status' });
 const FUNDING = Object.freeze({ additional: 'Extra investment', allocated: 'Included in funded time' });
+const PLACEMENT_PAGE_SIZE = 12;
 const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice.action]));
 
 // One complete session form borrows the host's shared draft coordinator. The
@@ -48,21 +50,40 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   const fieldControls = Object.fromEntries(FIELDS.map(field => [field, [...elements.form.querySelectorAll(`[name="${field}"]`)]]));
   const inputs = Object.fromEntries(FIELDS.map(field => [field, fieldControls[field][0]]));
   const errors = Object.fromEntries(ERROR_FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
+  const placementElements = {};
+  for (const [key, tag, className] of [
+    ['fieldset', 'fieldset', 'native-session__placements'], ['legend', 'legend', ''],
+    ['rows', 'div', 'native-session__placement-rows'],
+    ['error', 'p', 'native-coordination__error'], ['pager', 'div', 'native-session__placement-pager'],
+    ['previous', 'button', ''], ['page', 'span', ''], ['next', 'button', ''],
+  ]) {
+    const node = document.createElement(tag); node.className = className; placementElements[key] = node;
+  }
+  placementElements.legend.textContent = 'Place each working session';
+  for (const [key, label, action] of [['previous', 'Previous sessions', 'placement-previous'], ['next', 'Next sessions', 'placement-next']]) {
+    placementElements[key].type = 'button'; placementElements[key].textContent = label;
+    placementElements[key].dataset.sessionAction = action;
+  }
+  placementElements.error.dataset.nativeError = 'cadencePlacements';
+  placementElements.pager.append(placementElements.previous, placementElements.page, placementElements.next);
+  placementElements.fieldset.append(placementElements.legend, placementElements.rows,
+    placementElements.error, placementElements.pager);
+  elements.fields.querySelector('.native-time-controls').after(placementElements.fieldset);
   const remoteTitle = elements.summary.querySelector('[data-native-remote-title]') ?? elements.summary;
   const dials = Object.fromEntries(['hours', 'minutes'].map(unit => {
     const dial = root.querySelector(`[data-native-${unit}-dial]`);
     return [unit, { dial, knob: dial?.querySelector(`[data-native-${unit}-knob]`),
-      note: root.querySelector(unit === 'hours' ? '[data-native-hours-knob-note]' : '[data-native-knob-note]'),
-      help: unit === 'minutes' ? root.querySelector('#native-minutes-knob-help') : null }];
+      note: root.querySelector(unit === 'hours' ? '[data-native-hours-knob-note]' : '[data-native-knob-note]') }];
   }));
   const cleanup = [];
   let projection = null, works = new Map(), people = new Map(), teams = new Map(), practices = new Map();
   let selectedId = workId, lastAcceptedId = workId, selectedTarget = null;
-  let membersProjection = null, membersIds = null, membersTeam = null, memberControls = new Map();
+  let membersProjection = null, membersIds = null, memberControls = new Map();
   let diagramProjection = null, diagramId = null;
   let renderedSelection = undefined, renderedDraftToken = null, renderedTeam = undefined;
   let composing = false, disposed = false, acknowledgedOpen = false, generation = 0;
   let retiredToken = null, membersTarget = null, memberOrder = [];
+  let placementPage = 0, placementSignature = null, placementToken = null, placementControls = new Map();
   let durationDials;
 
   function listen(element, name, callback) {
@@ -133,8 +154,61 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       ? `${row.personIds.length} people × ${duration(row.minutesPerOccurrence)} per session × ${row.occurrences} working sessions = ${duration(row.personIds.length * row.minutesPerOccurrence * row.occurrences)} of participant effort.`
       : view.draft ? 'Set the people, time and funding below.' : 'Add a working session to plan its people, time and funding.';
     elements.acceptedStatus.textContent = row ? `${row.status === 'paused' ? 'Paused' : 'Planned'} · ${FUNDING[row.funding]}` : '';
-    elements.context.textContent = `Across this ${projection.state.horizonWeeks}-week plan.`;
+    const cadence = projection.state.scoreSettings.cadence;
+    elements.context.textContent = cadence ? `Across ${cadence.periods.length} ${cadence.basis === 'sprint' ? 'sprints' : 'quarters'}.`
+      : 'Choose a planning horizon to arrange these sessions.';
     renderSessionMap(row);
+  }
+  function placementValues(raw) {
+    try {
+      const values = JSON.parse(raw.cadencePlacements || '[]');
+      return Array.isArray(values) ? values.filter(item => item && typeof item === 'object') : [];
+    } catch { return []; }
+  }
+  function renderPlacements(raw, view) {
+    const cadence = (view.draft?.baseProjection ?? projection).state.scoreSettings.cadence;
+    placementElements.fieldset.hidden = !cadence;
+    if (!cadence) return;
+    if (placementToken !== view.draft?.token) { placementToken = view.draft?.token; placementPage = 0; placementSignature = null; }
+    const entered = Number(raw.occurrences);
+    const count = Number.isSafeInteger(entered) && entered >= 0 && entered <= LIMITS.occurrences ? entered : 0;
+    const pages = Math.max(1, Math.ceil(count / PLACEMENT_PAGE_SIZE));
+    placementPage = Math.min(placementPage, pages - 1);
+    const first = placementPage * PLACEMENT_PAGE_SIZE, last = Math.min(count, first + PLACEMENT_PAGE_SIZE);
+    const signature = JSON.stringify([cadence.basis, cadence.periods, count, placementPage]);
+    if (placementSignature !== signature) {
+      placementSignature = signature; placementControls = new Map();
+      const rows = [];
+      for (let index = first; index < last; index++) {
+        const row = document.createElement('div'), title = document.createElement('strong');
+        row.className = 'native-session__placement-row'; title.textContent = `Session ${index + 1}`; row.append(title);
+        const controls = {};
+        for (const [field, label] of [['periodId', cadence.basis === 'sprint' ? 'Sprint' : 'Quarter'],
+          ['subdivision', cadence.basis === 'sprint' ? 'Week' : 'Month']]) {
+          const wrapper = document.createElement('label'), text = document.createElement('span'), select = document.createElement('select');
+          text.textContent = label; select.setAttribute('aria-label', `Session ${index + 1} · ${label}`);
+          select.dataset.placementIndex = String(index); select.dataset.placementField = field;
+          select.append(option('', field === 'periodId' ? 'Choose a period' : 'Choose a period first'));
+          if (field === 'periodId') select.append(...cadence.periods.map(period => option(period.id, period.label)));
+          else for (let part = 1; part <= CADENCE_SUBDIVISIONS[cadence.basis]; part++) select.append(option(String(part), `${label} ${part}`));
+          wrapper.append(text, select); row.append(wrapper); controls[field] = select;
+        }
+        rows.push(row); placementControls.set(index, controls);
+      }
+      placementElements.rows.replaceChildren(...rows);
+    }
+    const placements = new Map(placementValues(raw).map(item => [item.occurrenceIndex, item]));
+    for (const [index, controls] of placementControls) {
+      const selected = placements.get(index);
+      controls.periodId.value = selected?.periodId ?? '';
+      controls.subdivision.value = selected?.subdivision == null ? '' : String(selected.subdivision);
+      controls.subdivision.disabled = !selected?.periodId;
+    }
+    placementElements.error.textContent = view.draft?.errors.find(error => error.path === 'draft.cadencePlacements')?.message ?? '';
+    placementElements.pager.hidden = pages === 1;
+    placementElements.previous.disabled = placementPage === 0;
+    placementElements.next.disabled = placementPage === pages - 1;
+    placementElements.page.textContent = `Sessions ${first + 1}–${last} of ${count}`;
   }
   function renderSessionMap(row) {
     const participantList = root.querySelector('[data-native-session-map-people]');
@@ -193,15 +267,14 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     element.dataset.sessionAction = action; element.dataset.personId = id; element.disabled = disabled;
     element.setAttribute('aria-label', `${label}: ${people.get(id)?.label ?? id}`); return element;
   }
-  function renderMembers(ids, teamId) {
+  function renderMembers(ids) {
     if (membersTarget !== selectedTarget) {
       membersTarget = selectedTarget; memberOrder = []; membersIds = null;
     }
-    if (membersProjection === projection && membersTeam === teamId && membersIds?.length === ids.length
+    if (membersProjection === projection && membersIds?.length === ids.length
       && ids.every((id, index) => id === membersIds[index])) return;
-    membersProjection = projection; membersTeam = teamId; membersIds = [...ids];
+    membersProjection = projection; membersIds = [...ids];
     const positions = new Map(ids.map((id, index) => [id, index]));
-    const teamMembers = new Set(teams.get(teamId)?.personIds ?? []);
     const available = new Set([...people.keys(), ...ids]);
     memberOrder = memberOrder.filter(id => available.has(id));
     const shown = new Set(memberOrder);
@@ -226,7 +299,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       }
       item.dataset.selected = String(selected); checkbox.checked = selected;
       item.querySelector('strong').textContent = person?.label ?? `${id} · removed person`;
-      item.querySelector('small').textContent = !person ? 'Remove this selection.' : `${person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`}${teamId && !teamMembers.has(id) ? ' · outside this team' : ''}`;
+      item.querySelector('small').textContent = !person ? 'Remove this selection.' : person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`;
       item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button'), index = positions.get(id);
       up.disabled = index === undefined || index === 0; down.disabled = index === undefined || index === ids.length - 1;
@@ -297,10 +370,13 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     elements.confirm.hidden = !removing;
     elements.confirm.textContent = removing ? `Remove ${row?.label ?? descriptor.id} from this plan?` : '';
     const accepted = row ? { label: row.label, teamId: row.teamId, personIds: row.personIds,
+      cadencePlacements: JSON.stringify((projection.state.scoreSettings.cadence?.placements ?? [])
+        .filter(item => item.workId === row.id).map(({ workId, ...item }) => item)),
       hoursPerSession: String(Math.floor(row.minutesPerOccurrence / CONTRACT.minutesPerHour)),
       minutesPerSession: String(row.minutesPerOccurrence % CONTRACT.minutesPerHour), occurrences: String(row.occurrences),
       funding: row.funding, status: row.status } : {};
     const raw = draft?.raw ?? accepted;
+    renderPlacements(raw, view);
     renderTeam(raw.teamId ?? '');
     for (const field of FIELDS) {
       const value = raw[field] ?? '';
@@ -315,7 +391,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const membershipError = draft?.errors.find(item => item.path === 'draft.personIds');
     errors.personIds.textContent = membershipError?.message ?? '';
     elements.members.setAttribute('aria-invalid', String(Boolean(membershipError)));
-    if (!removing) renderMembers(raw.personIds ?? [], raw.teamId ?? '');
+    if (!removing) renderMembers(raw.personIds ?? []);
     elements.pauseNote.hidden = raw.status !== 'paused';
     renderTimeReadout({ outputs: { hours: elements.durationHours, minutes: elements.durationMinutes } }, raw, { errors: draft?.errors, composing });
     const preview = draft && !composing && view.status === 'editing' ? operate('preview', draft.token) : null;
@@ -383,13 +459,29 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (disposed || !works.has(id)) return;
     return open(makeSessionTarget('work.update', id), focus);
   }
-  function create() {
+  function create({ periodId, subdivision = 1 } = {}) {
     if (disposed) return;
     durationDials?.release();
     const epoch = ++generation;
     onBegin();
     if (!owns(epoch)) return;
-    return opened(operate('create', 'work.create', projection), epoch, true);
+    let result = operate('create', 'work.create', projection);
+    if (!owns(epoch) || !result.ok) return opened(result, epoch, true);
+    const cadence = projection.state.scoreSettings.cadence;
+    if (!cadence?.periods.some(period => period.id === periodId)) return opened(result, epoch, true);
+    const token = result.view.draft.token;
+    const team = projection.state.teams.find(row => row.personIds.some(id => people.has(id)));
+    const values = [['label', 'Review the next step']];
+    if (team) values.push(['teamId', team.id]);
+    values.push(['cadencePlacements', JSON.stringify([
+      { occurrenceIndex: 0, periodId, subdivision },
+    ])]);
+    for (const [field, value] of values) {
+      result = operate('setText', token, field, value);
+      if (!owns(epoch) || !result.ok) return opened(result, epoch, true);
+    }
+    if (team) result = operate('setIds', token, 'personIds', team.personIds.filter(id => people.has(id)));
+    return opened(result, epoch, true);
   }
   function close({ park = true } = {}) {
     if (disposed) return;
@@ -479,10 +571,28 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const epoch = ++generation;
     changed(operate('setText', view.draft.token, field, event.target.value), epoch);
   }
+  function editPlacement(event) {
+    const control = event.target, index = Number(control.dataset.placementIndex), field = control.dataset.placementField;
+    if (disposed || placementControls.get(index)?.[field] !== control) return;
+    const view = editor.read();
+    if (view.status !== 'editing' || !view.draft) return;
+    const placements = placementValues(view.draft.raw), current = placements.find(item => item.occurrenceIndex === index);
+    const remaining = placements.filter(item => item.occurrenceIndex !== index);
+    const next = field === 'periodId' ? (control.value ? { occurrenceIndex: index, periodId: control.value, subdivision: current?.subdivision ?? 1 } : null)
+      : { ...current, subdivision: Number(control.value) };
+    if (next) remaining.push(next);
+    remaining.sort((left, right) => left.occurrenceIndex - right.occurrenceIndex);
+    const epoch = ++generation;
+    changed(operate('setText', view.draft.token, 'cadencePlacements', JSON.stringify(remaining)), epoch);
+  }
   function click(event) {
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled || disposed) return;
     const action = button.dataset.action ?? button.dataset.sessionAction;
+    if (action === 'placement-previous' || action === 'placement-next') {
+      placementPage += action === 'placement-previous' ? -1 : 1;
+      render(); placementControls.values().next().value?.periodId.focus(); return;
+    }
     if (action === 'create') { create(); return; }
     if (action === 'remove' && works.has(selectedId)) { open(makeSessionTarget('work.remove', selectedId)); return; }
     if (action === 'person-up' || action === 'person-down') { membership(button.dataset.personId, action === 'person-up' ? -1 : 1); return; }
@@ -506,6 +616,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     disposed = true; generation += 1;
     for (const release of cleanup) release();
     cleanup.length = 0;
+    placementElements.fieldset.remove();
     const active = editing.read().active;
     if (active?.kind === 'session') retiredToken = active.token;
     releaseRetiredLease();
@@ -536,6 +647,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     listen(root, 'click', click);
     listen(elements.select, 'change', () => select(elements.select.value));
     listen(elements.form, 'input', edit);
+    listen(placementElements.rows, 'change', editPlacement);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { composing = true; render(); });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });

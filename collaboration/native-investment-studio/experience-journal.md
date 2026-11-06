@@ -1104,3 +1104,69 @@ unless a changed behavior supplies a new question. Independent source and
 experience reviews informed the proposal. Re-entry begins with human review of
 #718, then the visible examples and period contract. Performance #679 and the
 human-cued public release #686 retain their separate boundaries.
+
+## 2026-11-05 — Sprint and quarter implementation
+
+The human approved #718. Coordination now opens the service-request pilot
+across four labeled two-week sprints. The separately authored two-quarter
+example carries preparation into rollout and operating adoption. Choosing an
+example updates Coordination directly with Undo available; regrouping the current plan preserves its
+sessions, people, effort and price. The compact amp head remains the frame.
+
+Ordered period identities and session-occurrence placements own the visual
+arrangement. A period opens weeks or months; a session opens its existing
+people, duration and funding editor. This semantic zoom changes the view.
+Adding a period or moving work changes a proposal that the visitor can Apply,
+Cancel or later Undo. Shortening the horizon retains affected sessions in
+Choose a period. Earlier files retain their original arrangement and receive
+an explicit proposal for period placement.
+
+Sessions and Stages & handoffs are the two persistent editing groups.
+Decisions attach to stages or handoffs, delays identify affected work and its
+later period, and availability opens beside a person. Representative sessions
+illustrate coordination within a larger initiative; the amount prices included
+work. Period membership establishes broad ordering. Availability remains an
+authored assumption separate from funded time.
+
+The initial visual keeps the period overview and aligned MIDI tracks together.
+Team connections, session details and contextual editors open on demand.
+The detailed agenda remains in downloadable reports using the same named
+periods, weeks or months and session facts. Ordinary
+mobile cards, laptop overview, keyboard focus and reduced motion carry the
+same operations. The optional later-review example exposes its consequence
+before acceptance; Undo restores the earlier arrangement.
+
+Independent review identified two ownership repairs: unchanged occurrence
+placements retain their authored interleaving, and reviewing a parked
+arrangement preserves sessions accepted through another editor. Keyed
+three-way reconciliation retains independent edits and names a conflict when
+both editors change the same placement. Use current values provides explicit
+recovery. Focused regression cases distinguish these faults; the existing
+arithmetic suite remains the economic observation.
+
+Issues #720–#722 receive the core contract, contextual interface and composed
+About verification respectively. Performance #679 and public release #686
+remain separate, human-cued work. Re-entry begins with the working period view
+and the current status of #718.
+
+
+### Confirmed compact landing view
+
+The human accepted the rendered landing composition as practically perfect.
+Preserve that composition while completing verification and integration. The
+original calculator supplied a comparison; the showcase retains its existing
+editing, saved work and recovery abilities. The visible entry stays compact.
+
+Long visitor agendas, repeated support matrices and replacement ledgers have
+left the default view. Abilities uses action pads and selected support controls;
+Quality keeps its visual controls and opens assumptions on request. Investment
+returns to baseline, history and save/open controls; the contribution-trace panel
+is retired. Lengthy dial instructions and duplicate Coordination chapter links
+are removed. Full motion is the requested default; Lower and system preferences
+remain available.
+
+Session participants may come from different teams. A visitor chooses known
+people directly; this leaves independently edited team rosters intact. Example
+buttons replace the arrangement in Coordination immediately and preserve Undo.
+These decisions supersede earlier visible-ledger and replacement-navigation
+proposals. Performance and public tagged release remain separate human-cued work.

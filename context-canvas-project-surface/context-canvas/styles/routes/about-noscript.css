@@ -5,5 +5,5 @@
 
 /* The static Studio retains its example and full-view route. */
 .native-coordination :is(button, input, select, textarea) {
-  display: none;
+  display: none !important;
 }
