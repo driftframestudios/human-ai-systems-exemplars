@@ -43,6 +43,8 @@ const preview = page => team(page).locator('[data-person-total]');
 const settings = page => team(page).locator('[data-person-configure]');
 const choose = async (page, id = 'product-one') => {
   if (!(await team(page).isVisible())) await panel(page).locator('[data-native-chapter="people"]').click();
+  const rates = team(page).locator('.studio-people-rates');
+  if (await rates.count() && !(await rates.evaluate(node => node.open))) await rates.locator(':scope > summary').click();
   await team(page).locator(`[data-person-id="${id}"]`).click();
 };
 

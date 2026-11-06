@@ -1,5 +1,6 @@
 import { projectCoordinationArrangements } from './coordination-arrangements.mjs';
 import { createContributionViewModel } from './contribution-view-model.mjs';
+import { createTeamLanes, createSessionTracks } from './arrangement-surfaces.mjs';
 
 // About owns the .native-connections route styles. This receiver reads an
 // accepted projection; the parent owns edits, publication and monetary values.
@@ -161,6 +162,9 @@ const ARRANGEMENT_POSITIONS = Object.freeze({
   guild: { practice: [480, 110], delivery: [480, 340] },
   'project-team': { sponsor: [150, 100], project: [480, 240], operations: [810, 380] },
   'shared-service': { requester: [190, 225], service: [690, 225] },
+  'stream-aligned': { stream: [480, 235], enablement: [170, 105], operations: [790, 365] },
+  matrix: { delivery: [480, 330], practice: [200, 110], sponsor: [760, 110] },
+  'tiger-team': { response: [480, 210], specialists: [160, 210], owner: [800, 360] },
 });
 
 // Template slots explain placement. Every cable still reads the current
@@ -228,7 +232,10 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   if (arrangement.templateId === 'pod') boundary(55, 70, 850, 280, 'Shared work and feedback');
   else if (arrangement.templateId === 'guild') { boundary(270, 35, 420, 135, 'Practice guidance'); boundary(190, 260, 580, 150, 'Delivery and learning'); }
   else if (arrangement.templateId === 'project-team') { boundary(20, 30, 260, 145, 'Direction'); boundary(350, 170, 260, 145, 'Project delivery'); boundary(680, 310, 260, 145, 'Receiving the work'); }
-  else boundary(525, 65, 370, 330, 'Service responsibility');
+  else if (arrangement.templateId === 'shared-service') boundary(525, 65, 370, 330, 'Service responsibility');
+  else if (arrangement.templateId === 'stream-aligned') boundary(330, 135, 300, 190, 'Customer outcome');
+  else if (arrangement.templateId === 'matrix') boundary(45, 45, 865, 390, 'Shared assignment');
+  else boundary(330, 110, 300, 190, 'Focused response');
   for (const edge of geometry.edges) {
     const row = edge.connection, group = svgNode('g', { class: 'native-arrangement__edge', 'data-arrangement-connection': row.id, 'data-sender-team': row.senderTeamId, 'data-receiver-team': row.receiverTeamId, 'data-status': row.status, 'data-adapted': String(edge.adapted) });
     group.setAttribute('role', 'button'); group.setAttribute('tabindex', '-1'); group.setAttribute('aria-label', `${edge.slotLabel}: ${row.sharedObject || 'Shared object to choose'}`);
@@ -247,7 +254,8 @@ export function createArrangementReading(document, { arrangement, plan, reading 
     labelLines(team.label).forEach((line, index) => text.append(svgNode('tspan', { x: team.x, dy: index ? 17 : 0 }, line))); group.append(text); svg.append(group);
   }
   viewport.append(svg);
-  const companion = node('div', undefined, 'native-arrangement__companion');
+  const companion = node('details', undefined, 'native-arrangement__companion');
+  companion.append(node('summary', 'Inspect teams, work and feedback'));
   const teams = node('ul'), connections = node('ol');
   const route = (label, kind, id) => { const control = node('button', label, 'native-control--navigate'); control.type = 'button'; Object.assign(control.dataset, { arrangementTargetKind: kind, arrangementTargetId: id }); return control; };
   for (const team of geometry.nodes) { const item = node('li'); item.append(route(`${team.role}: ${team.label}`, reading === 'proposed' ? 'template-team' : 'team', reading === 'proposed' ? team.slotId : team.id)); teams.append(item); }
@@ -259,7 +267,13 @@ export function createArrangementReading(document, { arrangement, plan, reading 
     connections.append(item);
   }
   companion.append(node('h5', 'Teams and responsibilities'), teams, node('h5', 'Directed work and feedback'), connections);
-  section.append(heading, node('p', arrangement.purpose), status, viewport, companion);
+  const lanes = createTeamLanes(document, { plan, teams: arrangement.teams.map(row => row.team), proposed: reading === 'proposed',
+    onAdd: reading === 'accepted' ? target => onNavigate({ kind: `create-${target.kind}` }) : null,
+    onNavigate(target) {
+      const binding = arrangement.teams.find(row => row.team.id === target.id);
+      onNavigate(reading === 'proposed' ? { kind: 'template-team', id: binding.slotId } : target);
+    } });
+  section.append(heading, status, lanes, viewport, companion);
   section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); });
   svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); } });
   return section;
@@ -305,7 +319,8 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
   const previous = button('Previous connections', 'previous'), next = button('Next connections', 'next');
   const pageLabel = element('span', 'native-connections__page-label'); pageLabel.setAttribute('aria-live', 'polite');
   navigation.append(previous, pageLabel, next);
-  const detail = element('div', 'native-connections__detail');
+  const detail = element('details', 'native-connections__detail');
+  detail.append(element('summary', '', 'Selected connection and supporting work'));
   const detailTitle = element('p', 'native-connections__detail-title');
   const detailObject = element('p', 'native-connections__object');
   const detailStanding = element('p', 'native-connections__standing');
@@ -318,7 +333,8 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
   const contributions = element('section', 'native-connections__contributions'); contributions.dataset.connectionContributions = '';
   const returnSelected = button('Return to selected connection', 'return');
   detail.append(detailTitle, detailObject, detailStanding, detailReceiver, detailWork, noWork, detailResponse, contributions, returnSelected);
-  host.append(arrangementHost, heading, viewport, empty, list, navigation, detail);
+  const tracks = element('div', 'studio-connections-tracks');
+  host.append(arrangementHost, heading, viewport, tracks, empty, list, navigation, detail);
 
   function renderArrangements(view) {
     const reading = projectCoordinationArrangements(acceptedProjection.state), ids = new Set(reading.arrangements.map(row => row.id));
@@ -335,8 +351,8 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (selected) arrangementBody.replaceChildren(createArrangementReading(document, { arrangement: selected, plan: acceptedProjection.state,
       onNavigate(target) { if (disposed) return; if (target.kind === 'connection') select(target.id, { notify: true }); else onNavigate(target); } }));
     else arrangementBody.replaceChildren(element('h4', 'native-arrangement__identity', reading.arrangements.length ? 'All current connections' : 'Custom connections'),
-      element('p', 'native-arrangement__status', reading.arrangements.length ? 'The directed connections below include the accepted arrangements and any separately authored connections.'
-        : 'These connections have no template grouping recorded. Their teams, shared work and direction remain directly editable.'));
+      createTeamLanes(document, { plan: acceptedProjection.state, onNavigate,
+        onAdd: target => onNavigate({ kind: `create-${target.kind}` }) }));
     viewport.hidden = Boolean(selected) || view.model.connections.length === 0;
   }
 
@@ -397,6 +413,8 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     navigation.hidden = view.pageCount === 1;
     previous.disabled = view.page === 0; next.disabled = view.page + 1 === view.pageCount;
     pageLabel.textContent = `Page ${view.page + 1} of ${view.pageCount}`;
+    tracks.replaceChildren(createSessionTracks(document, { plan: acceptedProjection.state,
+      onSession: id => onNavigate({ kind: 'work', id }), label: 'Shared sessions · people who take part' }));
   }
   function selection(view) {
     if (rendered?.selectedId !== view.selectedId) mark(rendered?.selectedId, false);
@@ -448,7 +466,7 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (!disposed) renderArrangements(state.read());
     // The external editor may dispose, replace or reselect this receiver.
     // Completion deliberately performs no DOM work after handing it control.
-    if (notify) onSelect(id);
+    if (notify) { detail.open = true; onSelect(id); }
     return true;
   }
   function showPage(page) {

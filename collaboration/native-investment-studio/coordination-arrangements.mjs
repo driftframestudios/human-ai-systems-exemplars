@@ -5,9 +5,9 @@ const freeze = value => {
   }
   return value;
 };
-const catalogue = (id, label, description, teams, connections) => freeze({ id, version: VERSION, label, description,
+const catalogue = (id, label, description, teams, connections, examples = {}) => freeze({ id, version: VERSION, label, description,
   teams: teams.map(([id, label]) => ({ id, label })),
-  connections: connections.map(([id, label, senderSlotId, receiverSlotId]) => ({ id, label, senderSlotId, receiverSlotId })),
+  connections: connections.map(([id, label, senderSlotId, receiverSlotId]) => ({ id, label, senderSlotId, receiverSlotId, ...examples[id] })),
 });
 const CATALOGUE = new Map([
   catalogue('pod', 'Pod', 'Connect a delivery group and a partner around a shared object and feedback.',
@@ -22,6 +22,24 @@ const CATALOGUE = new Map([
   catalogue('shared-service', 'Shared service', 'Connect a requesting group and a service through requests and responses.',
     [['requester', 'Requesting group'], ['service', 'Service group']],
     [['request', 'Send a request', 'requester', 'service'], ['response', 'Return a response', 'service', 'requester']]),
+  catalogue('stream-aligned', 'Stream-aligned', 'Keep a team responsible for a customer outcome, with specialist support and operational feedback.',
+    [['stream', 'Customer outcome team'], ['enablement', 'Enabling team'], ['operations', 'Operations partner']],
+    [['enable', 'Resolve a delivery obstacle', 'enablement', 'stream'], ['deliver', 'Release a usable change', 'stream', 'operations'], ['learn', 'Return customer feedback', 'operations', 'stream']],
+    { enable: { sharedObject: 'A tested way through the delivery obstacle', responseExpectation: 'The outcome team can continue independently.', sessionLabel: 'Resolve the delivery obstacle' },
+      deliver: { sharedObject: 'A usable change and recovery instructions', responseExpectation: 'Operations confirms readiness to receive the change.' },
+      learn: { sharedObject: 'Observed customer outcomes', responseExpectation: 'Choose the next improvement together.' } }),
+  catalogue('matrix', 'Matrix', 'Bring delivery priorities and specialist practice together around a shared assignment.',
+    [['delivery', 'Delivery team'], ['practice', 'Specialist practice'], ['sponsor', 'Priority owners']],
+    [['expertise', 'Agree specialist support', 'practice', 'delivery'], ['priority', 'Agree the priority', 'sponsor', 'delivery'], ['review', 'Review the result', 'delivery', 'sponsor']],
+    { expertise: { sharedObject: 'Named specialist support and available time', responseExpectation: 'Agree who contributes and which work takes priority.', sessionLabel: 'Agree shared assignments' },
+      priority: { sharedObject: 'The next delivery commitment', responseExpectation: 'Resolve competing priorities before work begins.' },
+      review: { sharedObject: 'A result ready for a decision', responseExpectation: 'Confirm whether to continue or change direction.' } }),
+  catalogue('tiger-team', 'Tiger Team', 'Assemble a temporary response team, resolve a focused problem and hand ownership back.',
+    [['response', 'Focused response team'], ['specialists', 'Specialist support'], ['owner', 'Receiving owner']],
+    [['diagnose', 'Bring the evidence', 'specialists', 'response'], ['resolve', 'Test the response', 'response', 'specialists'], ['return', 'Return ownership', 'response', 'owner']],
+    { diagnose: { sharedObject: 'Evidence of the problem and affected work', responseExpectation: 'Agree a focused response and a stopping condition.', sessionLabel: 'Diagnose and agree a response' },
+      resolve: { sharedObject: 'A tested response and remaining limitations', responseExpectation: 'Check the response with the relevant specialists.' },
+      return: { sharedObject: 'Recovery instructions and an accountable owner', responseExpectation: 'The receiving owner accepts ongoing responsibility.' } }),
 ].map(row => [row.id, row]));
 const LIST = Object.freeze([...CATALOGUE.values()]);
 

@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="styles/components/route-card-grid.css" media="all">
   <link rel="stylesheet" href="styles/routes/about.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-instrument.css" media="all">
+  <link rel="stylesheet" href="styles/routes/studio-arrangements.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-change.css" media="all">
   <noscript><link rel="stylesheet" href="styles/routes/about-noscript.css" media="all"></noscript>
   <link rel="author" type="text/plain" href="humans.txt">
@@ -463,8 +464,15 @@
         <section class="native-team" id="native-studio-people" data-native-chapter-panel="people" data-native-team-editor data-native-assembly aria-labelledby="native-team-title">
           <h3 id="native-team-title" class="native-zine__heading">People and teams</h3>
           <p class="native-coordination__hint">Choose a person to set their rate and available time.</p>
-          <div class="native-assembly__toolbar">
+          <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
+            <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" class="native-control--create" data-assembly-action="team-create" disabled>Add team</button></div>
+            <ul class="native-assembly__team-list" data-assembly-teams></ul>
+            <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
+          </section>
             <button type="button" class="native-control--create" data-assembly-action="person-create" disabled>Add person</button>
+          <details class="studio-people-rates">
+            <summary>Rates and available time</summary>
+          <div class="native-assembly__toolbar">
             <div class="native-assembly__arrange" data-assembly-people-tools>
               <label for="assembly-person-order">Person to arrange</label>
               <select id="assembly-person-order" data-assembly-person disabled></select>
@@ -473,6 +481,7 @@
           </div>
           <ul class="native-team__roster" data-team-roster></ul>
           <p data-team-empty hidden>This plan has no people.</p>
+          </details>
           <details class="native-coordination__configuration" data-person-configure hidden>
             <summary>Settings · <span data-person-name></span></summary>
             <div class="native-coordination__recovery" data-person-recovery hidden>
@@ -582,11 +591,7 @@
               </fieldset>
             </form>
           </details>
-          <section class="native-assembly__teams" aria-labelledby="native-assembly-teams-title">
-            <div class="native-assembly__heading"><h4 id="native-assembly-teams-title">Teams</h4><button type="button" class="native-control--create" data-assembly-action="team-create" disabled>Add team</button></div>
-            <ul class="native-assembly__team-list" data-assembly-teams></ul>
-            <p class="native-coordination__hint" data-assembly-empty hidden>Add a team to bring people together.</p>
-          </section>
+
           <details class="native-coordination__configuration native-assembly__configuration" data-assembly-configure hidden>
             <summary data-assembly-summary>People and team settings</summary>
             <div class="native-coordination__recovery" data-assembly-recovery hidden>

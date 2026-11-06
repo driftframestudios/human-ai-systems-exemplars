@@ -8,6 +8,7 @@ import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
 import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
 import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
+import { createSessionTracks } from './arrangement-surfaces.mjs';
 
 const INSTANCES = new WeakMap();
 const NUMBER_FIELDS = Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']);
@@ -47,6 +48,12 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     ['durationHours', '[data-native-duration-hours]'], ['durationMinutes', '[data-native-duration-minutes]'],
     ['context', '[data-native-session-context]'], ['status', '[data-native-session-status]'],
   ].map(([key, selector]) => [key, requireElement(selector)]));
+  const overview = document.createElement('section'); overview.className = 'studio-session-overview';
+  overview.setAttribute('aria-label', 'Working sessions and participants'); elements.toolbar.before(overview);
+  const agreement = elements.name.closest('.native-coordination__agreement');
+  const agreementRack = document.createElement('details'); agreementRack.className = 'studio-session-details';
+  const agreementCaption = document.createElement('summary'); agreementCaption.textContent = 'People and supported work';
+  agreement.before(agreementRack); agreementRack.append(agreementCaption, agreement);
   const fieldControls = Object.fromEntries(FIELDS.map(field => [field, [...elements.form.querySelectorAll(`[name="${field}"]`)]]));
   const inputs = Object.fromEntries(FIELDS.map(field => [field, fieldControls[field][0]]));
   const errors = Object.fromEntries(ERROR_FIELDS.map(field => [field, requireElement(`[data-native-error="${field}"]`)]));
@@ -214,6 +221,19 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const participantList = root.querySelector('[data-native-session-map-people]');
     if (!participantList || (diagramProjection === projection && diagramId === row?.id)) return;
     diagramProjection = projection; diagramId = row?.id;
+    const cards = document.createElement('div'); cards.className = 'studio-session-overview__cards';
+    for (const session of projection.state.work) {
+      const control = document.createElement('button'); control.type = 'button';
+      control.className = 'studio-session-overview__card native-control--navigate';
+      control.setAttribute('aria-label', `Inspect session: ${session.label}`);
+      control.setAttribute('aria-pressed', String(row?.id === session.id));
+      const title = document.createElement('strong'), team = document.createElement('small'), time = document.createElement('small');
+      title.textContent = session.label; team.textContent = teams.get(session.teamId).label;
+      time.textContent = `${duration(session.minutesPerOccurrence)} per person · ${session.occurrences} sessions`;
+      control.append(title, team, time); control.addEventListener('click', () => select(session.id)); cards.append(control);
+    }
+    overview.replaceChildren(cards, createSessionTracks(document, { plan: projection.state, selectedId: row?.id,
+      onSession: id => select(id), label: 'Session participation · select a pad to inspect' }));
     const item = (label, note) => {
       const li = document.createElement('li'), name = document.createElement('strong');
       name.textContent = label; li.append(name);
@@ -617,6 +637,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     for (const release of cleanup) release();
     cleanup.length = 0;
     placementElements.fieldset.remove();
+    overview.remove(); agreementRack.before(agreement); agreementRack.remove();
     const active = editing.read().active;
     if (active?.kind === 'session') retiredToken = active.token;
     releaseRetiredLease();

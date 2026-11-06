@@ -1,0 +1,89 @@
+/* People, team-arrangement and working-session readings. Controllers own the
+   accepted/proposed records; this extension gives their controls a shared rack. */
+.studio-team-lanes,
+.native-coordination .native-assembly__team-list {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem;
+  margin-block: .65rem; padding: 0; list-style: none;
+}
+.studio-team-lane,
+.native-coordination .native-assembly__team-list > li {
+  min-inline-size: 0; margin: 0; padding: .55rem; border: 1px solid var(--native-rule);
+  border-block-start: .25rem solid var(--about-deep-teal); background: #dbe5d9;
+  box-shadow: none; display: flex; flex-direction: column; gap: .45rem;
+}
+.native-coordination .studio-team-lane__title { inline-size: 100%; text-align: start; font-weight: 750; }
+.studio-team-lane__people { display: grid; gap: .3rem; list-style: none; margin: 0; padding: 0; }
+.studio-team-lane__people li { margin: 0; padding: 0; }
+.native-coordination .studio-team-lane__person {
+  display: flex; justify-content: space-between; text-align: start; inline-size: 100%;
+  min-block-size: 2.75rem; padding: .35rem .6rem; background: var(--native-paper);
+  border: 1px solid #6c867c; border-radius: .15rem; box-shadow: inset 0 -.15rem #bdcfc4;
+  font-size: .8rem;
+}
+.studio-team-lane__note, .studio-team-lane__empty { font-size: .75rem; margin: 0; }
+.studio-team-lane__add { align-self: start; margin-block-start: auto; }
+.studio-team-lanes__actions { grid-column: 1 / -1; }
+.studio-session-tracks {
+  background: #142e2b; color: #eef4dc; border: .25rem solid #52675f; border-radius: .25rem;
+  overflow-x: auto; margin-block: .8rem; padding: .45rem; max-inline-size: 100%;
+}
+.native-coordination .studio-session-tracks table { inline-size: 100%; min-inline-size: 36rem; border-collapse: separate; border-spacing: .25rem; background: transparent; margin: 0; }
+.native-coordination .studio-session-tracks caption { text-align: start; font: 600 .75rem/1.4 ui-monospace, monospace; padding: .35rem; color: #eef4dc; }
+.native-coordination .studio-session-tracks :is(th, td) { background: transparent; color: #eef4dc; padding: .15rem; border: 0; text-align: center; vertical-align: middle; }
+.native-coordination .studio-session-tracks thead th { font: 600 .7rem/1.3 system-ui, sans-serif; inline-size: 6rem; min-inline-size: 5.5rem; overflow-wrap: normal; }
+.native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { inline-size: 13rem; min-inline-size: 11rem; text-align: start; }
+.native-coordination .studio-session-tracks tbody td { border-block-end: 1px solid #3b5e54; }
+.native-coordination .studio-session-tracks__name { inline-size: 100%; display: grid; justify-items: start; text-align: start; gap: .15rem; padding: .4rem .6rem; background: #28463e; color: #eef4dc; border: 1px solid #648d7d; box-shadow: inset 0 -.15rem #102c26; }
+.studio-session-tracks__name strong { font-size: .8rem; }
+.studio-session-tracks__name small { font-size: .7rem; font-weight: 400; }
+.native-coordination .studio-session-tracks__pad { min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: #55cdbb; color: #123e34; border: 1px solid #b9efde; border-radius: .2rem; box-shadow: inset 0 -.22rem #30766b; }
+.native-coordination .studio-session-tracks__pad.native-control--navigate { padding-inline: .3rem 1rem; }
+.native-coordination .studio-session-tracks__pad.native-control--navigate::after { inset-inline-end: .3rem; inline-size: .35rem; block-size: .35rem; }
+.native-coordination .studio-session-tracks__pad[data-funding='additional'] { background: #e8d59b; border-color: #fff0c4; box-shadow: inset 0 -.22rem #907a45; }
+.native-coordination .studio-session-tracks__pad[data-status='paused'] { background: #58776b; border-style: dashed; color: white; }
+.studio-session-tracks__empty { color: #97baa8; }
+.native-coordination .studio-session-tracks__legend { font: .7rem/1.4 ui-monospace, monospace; margin: .35rem; color: #dce8d8; }
+.studio-session-tracks tr[data-selected='true'] .studio-session-tracks__name { border-color: #7cebd8; background: #356b60; }
+.studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: start; min-inline-size: 0; }
+.native-coordination :is(.native-connections, .native-connection-template__form, .studio-connections-tracks) { min-inline-size: 0; max-inline-size: 100%; }
+.native-coordination .native-connection-template__form, .native-coordination .native-patch-bay { grid-template-columns: minmax(0, 1fr); }
+.studio-arrangement-native-choice { display: none; }
+.native-coordination .native-arrangement__status { font-size: .8rem; margin-block: .3rem .6rem; }
+.native-coordination .native-arrangement__viewport { margin-block: .5rem; background: #17342f; color: #e8f1dd; }
+.native-coordination .native-arrangement__diagram { min-inline-size: 32rem; inline-size: 100%; max-block-size: 21rem; }
+.native-coordination .native-arrangement__companion { display: block; padding: 0; margin-block: .45rem; }
+.native-coordination .native-arrangement__companion > summary { min-block-size: 2.75rem; padding: .5rem; }
+.native-coordination .native-connection-template__groups { margin-block-start: .8rem; }
+.native-coordination .native-connections__viewport { max-block-size: 19rem; }
+.native-coordination .native-connections__diagram { inline-size: 100%; min-inline-size: 36rem; block-size: auto; }
+.native-coordination .native-connections__detail { padding: 0; }
+.native-coordination .native-connections__detail > :not(summary) { margin: .7rem; }
+.native-coordination .native-connections__count { font-size: .75rem; margin-block: .45rem; }
+.native-coordination .native-team__roster { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.native-coordination .native-team__roster > li { padding: .55rem; gap: .3rem; }
+.native-coordination .native-team__roster p { font-size: .75rem; margin: 0; }
+.studio-people-reading { margin-block: .8rem; min-inline-size: 0; max-inline-size: 100%; }
+.studio-session-overview { margin-block-end: .8rem; min-inline-size: 0; max-inline-size: 100%; }
+.studio-session-overview__cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.native-coordination .studio-session-overview__card { text-align: start; display: grid; align-content: start; gap: .3rem; padding: .6rem; background: #dce9df; min-inline-size: 0; }
+.studio-session-overview__card small { font-size: .75rem; font-weight: 400; }
+.native-coordination .studio-session-overview__card[aria-pressed='true'] { background: var(--native-signal); box-shadow: inset 0 .2rem #2a776c; }
+.studio-session-details { margin-block: .6rem; }
+.studio-session-details > summary { padding: .55rem; }
+.native-coordination .native-assembly__team-list details { margin: 0; padding: 0; }
+.native-coordination .native-assembly__team-list details > summary { padding: .45rem; font-size: .75rem; }
+@media (max-width: 65rem) {
+  .studio-arrangement-deck { grid-template-columns: minmax(0, 1fr); }
+  .studio-arrangement-deck > .native-reel { max-inline-size: 25rem; justify-self: center; inline-size: 100%; }
+}
+@media (max-width: 42rem) {
+  .studio-team-lanes, .native-coordination .native-assembly__team-list { grid-template-columns: minmax(0, 1fr); }
+  .native-coordination .native-team__roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .studio-session-overview__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .native-coordination .studio-session-overview__card { font-size: .8rem; }
+}
+@media (forced-colors: active) {
+  .studio-session-tracks, .studio-team-lane { background: Canvas; color: CanvasText; }
+  .native-coordination .studio-session-tracks :is(th, td, caption, button) { color: CanvasText; background: Canvas; }
+  .native-coordination .studio-session-tracks__pad { border: 2px solid ButtonText; }
+}

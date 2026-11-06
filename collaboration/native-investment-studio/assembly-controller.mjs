@@ -91,8 +91,13 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const item = document.createElement('li');
       const choose = button(team.label, 'team-open', team.id);
       choose.dataset.assemblyTeam = team.id;
-      const members = document.createElement('p');
-      members.textContent = team.personIds.map(id => people.get(id).label).join(' · ') || 'Choose people for this team.';
+      const members = document.createElement('ul'); members.className = 'studio-team-lane__people';
+      for (const id of team.personIds) {
+        const entry = document.createElement('li'), person = document.createElement('button');
+        person.type = 'button'; person.textContent = people.get(id).label; person.dataset.teamPersonId = id;
+        person.className = 'studio-team-lane__person native-control--navigate'; entry.append(person); members.append(entry);
+      }
+      if (!team.personIds.length) { const entry = document.createElement('li'); entry.textContent = 'Choose people for this team.'; members.append(entry); }
       const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
       const up = button('Move up', 'team-up', team.id), down = button('Move down', 'team-down', team.id);
       up.disabled = index === 0; down.disabled = index === next.state.teams.length - 1;
@@ -102,7 +107,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       remove.setAttribute('aria-label', `Remove team: ${team.label}`);
       actions.append(up, down, remove); item.append(choose, members);
       appendAssuranceBadges(document, item, support.get(team.id) ?? [], { kind: 'team', id: team.id, label: team.label });
-      item.append(actions); fragment.append(item);
+      const settings = document.createElement('details'), caption = document.createElement('summary'); caption.textContent = 'Arrange this team';
+      settings.append(caption, actions); item.append(settings); fragment.append(item);
       teamControls.set(team.id, choose);
     });
     elements.teams.replaceChildren(fragment);

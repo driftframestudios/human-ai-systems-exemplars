@@ -44,20 +44,23 @@ function apply(studio, proposal) {
   assert.equal(result.ok, true, result.error?.message); return result.projection;
 }
 
-test('the finite catalogue carries four authored directed arrangements and immutable source descriptions', () => {
+test('the finite catalogue carries authored directed arrangements and immutable source descriptions', () => {
   const catalogue = listCoordinationTemplates();
   assert.deepEqual(catalogue.map(row => [row.id, row.teams.map(team => team.id), row.connections.map(edge => [edge.id, edge.senderSlotId, edge.receiverSlotId])]), [
     ['pod', ['pod', 'partner'], [['handoff', 'pod', 'partner'], ['feedback', 'partner', 'pod']]],
     ['guild', ['practice', 'delivery'], [['guidance', 'practice', 'delivery'], ['learning', 'delivery', 'practice']]],
     ['project-team', ['sponsor', 'project', 'operations'], [['direction', 'sponsor', 'project'], ['handover', 'project', 'operations'], ['feedback', 'operations', 'project']]],
     ['shared-service', ['requester', 'service'], [['request', 'requester', 'service'], ['response', 'service', 'requester']]],
+    ['stream-aligned', ['stream', 'enablement', 'operations'], [['enable', 'enablement', 'stream'], ['deliver', 'stream', 'operations'], ['learn', 'operations', 'stream']]],
+    ['matrix', ['delivery', 'practice', 'sponsor'], [['expertise', 'practice', 'delivery'], ['priority', 'sponsor', 'delivery'], ['review', 'delivery', 'sponsor']]],
+    ['tiger-team', ['response', 'specialists', 'owner'], [['diagnose', 'specialists', 'response'], ['resolve', 'response', 'specialists'], ['return', 'response', 'owner']]],
   ]);
   assert.ok(Object.isFrozen(catalogue)); assert.ok(Object.isFrozen(catalogue[0].connections[0]));
   assert.strictEqual(listCoordinationTemplates(), catalogue);
 });
 
 test('each template starts from the one-team example, preserves people and work owners, and orders authored slots', () => {
-  for (const [id, groups, edges] of [['pod', 2, 2], ['guild', 2, 2], ['project-team', 3, 3], ['shared-service', 2, 2]]) {
+  for (const [id, groups, edges] of [['pod', 2, 2], ['guild', 2, 2], ['project-team', 3, 3], ['shared-service', 2, 2], ['stream-aligned', 3, 3], ['matrix', 3, 3], ['tiger-team', 3, 3]]) {
     const studio = createStudio(), before = studio.read(), raw = request(id), original = JSON.stringify(raw);
     raw.teams.reverse(); raw.connections.reverse();
     const reversed = JSON.stringify(raw), proposal = prepareCoordinationTemplate(before, raw);

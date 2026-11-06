@@ -4,6 +4,7 @@ import { preparePersonDraftValues } from './person-draft.mjs';
 import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
+import { createSessionTracks } from './arrangement-surfaces.mjs';
 
 const FIELDS = Object.freeze(['ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -30,6 +31,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const summaryPreview = document.createElement('span');
   summaryPreview.className = 'native-coordination__summary-preview';
   elements.summary.append(summaryPreview);
+  const participation = document.createElement('section'); participation.className = 'studio-people-reading';
+  participation.setAttribute('aria-label', 'People and shared sessions');
+  const ratesRack = elements.roster.closest('.studio-people-rates');
+  if (ratesRack) ratesRack.before(participation); else elements.roster.after(participation);
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
@@ -116,6 +121,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       fragment.append(item);
     }
     elements.roster.replaceChildren(fragment);
+    participation.replaceChildren(createSessionTracks(document, { plan: next.state }));
     elements.empty.hidden = next.state.people.length > 0;
     projection = next;
   }
@@ -240,7 +246,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (disposed) return;
     const button = event.target.closest('button');
     if (!button || !root.contains(button) || button.disabled) return;
-    if (button.dataset.personId) { select(button.dataset.personId); return; }
+    const personId = button.dataset.personId ?? button.dataset.teamPersonId;
+    if (personId) { select(personId); return; }
     const action = button.dataset.personAction;
     if (action === 'review' || action === 'use-current' || action === 'discard') {
       const view = editor.read();
@@ -276,6 +283,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     releaseRetiredLease();
     rateControls.dispose();
     summaryPreview.remove();
+    participation.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;
     if (!sharedEditing) editing.dispose();
