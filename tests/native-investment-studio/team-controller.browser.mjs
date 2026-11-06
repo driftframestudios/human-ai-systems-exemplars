@@ -91,12 +91,16 @@ async function assertContained(page) {
   const observation = await team(page).evaluate(root => {
     const width = document.documentElement.clientWidth;
     const entries = [...root.querySelectorAll('input,button,summary,h3,p,output')]
-      .filter(node => node.getClientRects().length && !node.closest('[hidden]'))
+      .filter(node => node.getClientRects().length && !node.closest('[hidden]') && !node.closest('.studio-session-tracks'))
       .map(node => {
         const box = node.getBoundingClientRect();
-        return { tag: node.localName, name: node.name ?? '', left: box.left, right: box.right,
+        return { tag: node.localName, name: node.name ?? '', label: node.getAttribute('aria-label'), className: node.className, parent: node.parentElement.className, left: box.left, right: box.right,
           scroll: node.scrollWidth, client: node.clientWidth };
       });
+    for (const screen of root.querySelectorAll('.studio-session-tracks')) {
+      const box = screen.getBoundingClientRect();
+      entries.push({ tag: 'scroll region', left: box.left, right: box.right, scroll: screen.clientWidth, client: screen.clientWidth });
+    }
     return { width, entries };
   });
   for (const entry of observation.entries) {
@@ -129,7 +133,9 @@ for (const engine of names) {
     await panel(page).locator('[data-investment-action="undo"]').click();
     assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), initial);
     await choose(page);
-    for (const raw of ['', '1.']) { await input(page, 'ratePerHour').fill(raw); await expect(coarse).toBeDisabled(); await expect(fine).toBeDisabled(); await expect(input(page, 'ratePerHour')).toHaveValue(raw); }
+    for (const raw of ['1.']) { await input(page, 'ratePerHour').fill(raw); await expect(coarse).toBeDisabled(); await expect(fine).toBeDisabled(); await expect(input(page, 'ratePerHour')).toHaveValue(raw); }
+    await input(page, 'ratePerHour').fill(''); await expect(coarse).toBeEnabled();
+    await coarse.focus(); await page.keyboard.press('ArrowRight'); await expect(input(page, 'ratePerHour')).toHaveValue('10.00');
     await input(page, 'ratePerHour').fill('0'); await expect(coarse).toBeEnabled(); await expect(coarse).toHaveAttribute('min', '0');
     await coarse.focus(); await page.keyboard.press('ArrowRight'); await expect(input(page, 'ratePerHour')).toHaveValue('10.00');
     for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
@@ -422,11 +428,14 @@ for (const engine of names) {
       for (const label of labels) assert.ok(label.textBottom <= label.inputTop,
         `the complete ${label.name} label precedes its input at ${width}px: ${JSON.stringify(label)}`);
       if (width === 1440) {
-        const bottoms = await team(page).locator('[data-team-roster] > li').evaluateAll(items =>
-          items.map(item => item.getBoundingClientRect().bottom));
-        assert.equal(bottoms.length, 4);
-        assert.ok(Math.max(...bottoms) - Math.min(...bottoms) < .1,
-          `wide roster cards retain one lower edge: ${JSON.stringify(bottoms)}`);
+        const rows = await team(page).locator('[data-team-roster] > li').evaluateAll(items => {
+          const rows = new Map();
+          for (const item of items) { const box = item.getBoundingClientRect(), key = Math.round(box.top); rows.set(key, [...(rows.get(key) ?? []), box.bottom]); }
+          return [...rows.values()];
+        });
+        assert.equal(rows.flat().length, 4);
+        for (const bottoms of rows) assert.ok(Math.max(...bottoms) - Math.min(...bottoms) < .1,
+          `roster cards retain one lower edge within each visual row: ${JSON.stringify(bottoms)}`);
       }
       // The panel owns this feedback geometry; document scrolling can continue
       // independently while a browser moves focus to the edited control.

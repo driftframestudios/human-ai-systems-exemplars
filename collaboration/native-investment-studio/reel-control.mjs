@@ -63,3 +63,20 @@ export function createReel(document, { label, choices, value, onSelect, variant 
 export function revealReelResult(element) {
   element.dataset.reelArrival = element.dataset.reelArrival === 'odd' ? 'even' : 'odd';
 }
+
+// Animate the same keyed pad from its earlier lane to its new reading.
+export function animateRackChange(container, render, { selector = '[data-studio-pad]', key = 'studioPad' } = {}) {
+  const before = new Map([...container.querySelectorAll(selector)].map(pad => [pad.dataset[key], pad.getBoundingClientRect()]));
+  render();
+  const root = container.closest('[data-native-coordination]'), window = container.ownerDocument.defaultView;
+  if (!root || root.dataset.nativeMotion === 'off' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (const pad of container.querySelectorAll(selector)) {
+    const old = before.get(pad.dataset[key]), next = pad.getBoundingClientRect();
+    if (!old?.width || !next.width || Math.abs(old.x - next.x) + Math.abs(old.y - next.y) < 2 || !pad.animate) continue;
+    pad.animate([
+      { transform: `translate(${old.x - next.x}px, ${old.y - next.y}px) scale(.94)`, opacity: .55 },
+      { transform: 'none', opacity: 1, boxShadow: 'inset 0 0 0 .2rem var(--native-signal)', offset: .8 },
+      { transform: 'none', opacity: 1, boxShadow: 'inset 0 0 0 0 transparent' },
+    ], { duration: root.dataset.nativeMotion === 'lower' ? 640 : 320, easing: 'cubic-bezier(.22,.7,.25,1)' });
+  }
+}

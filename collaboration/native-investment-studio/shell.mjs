@@ -2,7 +2,7 @@ const INSTANCES = new WeakMap();
 const CHAPTER_KEYS = new Set(['coordination', 'people', 'work', 'change', 'assurance', 'horizon', 'investment']);
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const MOTION = Object.freeze({
-  chapter: { frames: [{ opacity: .82 }, { opacity: 1 }], options: { duration: 160, easing: 'ease-out' } },
+  chapter: { frames: [{ opacity: .2, transform: 'translateY(18px)', filter: 'blur(2px)' }, { opacity: 1, transform: 'none', filter: 'none' }], options: { duration: 420, easing: 'cubic-bezier(.22,.7,.25,1)' } },
   context: { frames: [{ opacity: .65, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], options: { duration: 280, easing: 'ease-out' } },
 });
 const HISTORY_KEY = '__contextCanvasNativeStudio';
