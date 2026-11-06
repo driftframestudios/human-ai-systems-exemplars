@@ -20,7 +20,8 @@ function rehearsal(id = 'recovery-attempt') {
 }
 
 test('reference assumptions and concept choices preserve native money, explicit quantities and caller ownership', () => {
-  const plan = createShowcasePlan(), before = preparePlan(plan), settings = plan.assuranceSettings;
+  const plan = createShowcasePlan(); plan.assuranceSettings.quality.sigmaHalfSteps = 6;
+  const before = preparePlan(plan), settings = plan.assuranceSettings;
   assert.equal(before.assurance.quality.estimate.status, 'unavailable');
   assert.equal(before.assurance.recovery.estimate.amountCents, 0);
   settings.context.referenceHorizon = { quantity: 1, unit: 'sprints' };

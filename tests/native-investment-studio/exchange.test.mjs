@@ -136,7 +136,8 @@ test('Change settings survive preview, baseline and export while their money sta
 });
 
 test('Assurance file preview retains its illustration and linked work independently of accepted investment', () => {
-  const studio = createStudio(createShowcasePlan()), exchange = createPlanExchange(studio, editingFixture());
+  const plan = createShowcasePlan(); plan.assuranceSettings.quality.sigmaHalfSteps = 6;
+  const studio = createStudio(plan), exchange = createPlanExchange(studio, editingFixture());
   const initial = studio.read(), bytes = studio.exportText(); studio.setBaseline(initial);
   const candidate = JSON.parse(bytes);
   candidate.assuranceSettings.context.referenceHorizon = { quantity: 1, unit: 'sprints' };

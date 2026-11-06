@@ -153,6 +153,7 @@ export function createShowcasePlan() {
     ],
   };
   plan.scoreSettings.cadence = createShowcaseCadence(plan, 4);
+  plan.assuranceSettings.quality.sigmaHalfSteps = 8;
   return seedShowcaseChangeSupport(plan);
 }
 
