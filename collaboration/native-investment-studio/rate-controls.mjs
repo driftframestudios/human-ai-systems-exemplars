@@ -6,7 +6,7 @@ const DETENT_DEGREES = 30;
 const amountText = cents => `${Math.floor(cents / 100)}.${String(cents % 100).padStart(2, '0')}`;
 
 // Whole-dollar detents keep the entered cent offset. At a boundary, take only
-// the complete steps that fit; an unknown rate remains unknown.
+// the complete steps that fit; an unedited unknown rate remains unknown.
 export function shiftRateCents(cents, dollars, steps) {
   if (cents === null) return null;
   if (!Number.isSafeInteger(cents) || cents < 0 || cents > LIMITS.rateCentsPerHour
@@ -44,7 +44,8 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
       if (disposed) return null;
       const view = read();
       return view?.enabled && view.token && typeof view.raw === 'string'
-        && Number.isSafeInteger(view.cents) && view.cents >= 0 && view.cents <= LIMITS.rateCentsPerHour ? view : null;
+        && (view.raw.trim() === '' || Number.isSafeInteger(view.cents) && view.cents >= 0 && view.cents <= LIMITS.rateCentsPerHour)
+        ? { ...view, cents: view.cents ?? 0 } : null;
     }
     function paintAngle() { dial.style.setProperty('--native-knob-angle', `${angle % 360}deg`); }
     function release(restore = false) {

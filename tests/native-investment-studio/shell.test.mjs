@@ -147,7 +147,7 @@ test('About authors its working chapter panels and retains the existing deep-lin
   for (const id of ['native-coordination-title', 'native-team-title', 'native-session-title']) {
     assert.equal(about.split(`id="${id}"`).length - 1, 1, `${id} has one stable destination`);
   }
-  assert.equal(about.split('Enterprise work is a cross-functional investment. Plan the people, work, disruption, and learning your initiative needs.').length - 1, 1);
+  assert.equal(about.split('Plan the people, work, disruption, and learning your initiative needs.').length - 1, 1);
 });
 
 test('admission retains the complete authored reading when a control/panel relationship is invalid', () => {
@@ -379,7 +379,7 @@ test('chapter selection, contextual arrival and local inspection retain distinct
   assert.equal(f.animations.length, 0);
   motion.set('full');
   f.list.send('click', { target: f.records.get('coordination').button });
-  assert.equal(f.animations[0].options.duration, 160); assert.equal(f.animations[0].frames[0].transform, undefined);
+  assert.equal(f.animations[0].options.duration, 420); assert.equal(f.animations[0].frames[0].transform, 'translateY(18px)');
   assert.equal(f.root.getAttribute('data-native-route-kind'), 'chapter');
   shell.select('people', { kind: 'context' });
   assert.equal(f.animations[0].cancelled, true); assert.equal(f.animations[1].options.duration, 280);

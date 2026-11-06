@@ -102,6 +102,31 @@ for (const engine of names) {
     await expect(root(page).locator('.native-coordination__amp [data-native-motion-controls]')).toBeVisible();
     await expect(motion('full')).toBeChecked();
     await motion('lower').check(); await expect(root(page)).toHaveAttribute('data-native-motion', 'lower');
+    await chapter(page, 'coordination').evaluate(panel => {
+      const details = document.createElement('details'); details.dataset.motionExample = '';
+      details.innerHTML = '<summary>Inspect this example</summary><p style="min-height:80px">Working context</p>';
+      panel.prepend(details);
+    });
+    const disclosure = root(page).locator('[data-motion-example]');
+    for (const [mode, duration] of [['full', 240], ['lower', 480]]) {
+      await motion(mode).check();
+      const opened = await disclosure.evaluate(async details => {
+        details.querySelector('summary').click();
+        const effects = details.getAnimations(), durations = effects.map(effect => effect.effect.getTiming().duration);
+        await Promise.all(effects.map(effect => effect.finished.catch(() => {})));
+        return { durations, open: details.open };
+      });
+      assert.deepEqual(opened, { durations: [duration], open: true });
+      const interrupted = await disclosure.evaluate(details => {
+        details.querySelector('summary').click();
+        const active = details.getAnimations().length;
+        details.closest('[data-native-coordination]').querySelector('[data-native-motion-choice="off"]').click();
+        return { active, open: details.open, remaining: details.getAnimations().length };
+      });
+      assert.deepEqual(interrupted, { active: 1, open: false, remaining: 0 }, 'turning motion off settles the requested close');
+    }
+    await disclosure.evaluate(details => details.remove());
+    await motion('lower').check();
     await page.evaluate(async () => {
       const { createReel } = await import('/collaboration/native-investment-studio/reel-control.mjs');
       window.reelSelections = [];
@@ -151,7 +176,7 @@ for (const engine of names) {
     await expect(tab(page, 'people')).toHaveAttribute('tabindex', '0');
     await tab(page, 'people').press('Enter');
     await selected(page, 'people');
-    await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
+    await chapter(page, 'people').locator('[data-team-person-id="product-one"]').click();
     await person(page, 'ratePerHour').fill('105');
     await expect(root(page).locator('[data-person-total]')).toHaveText('$1,215.00');
     await expect(total(page)).toHaveText('$1,200.00');
@@ -209,7 +234,7 @@ for (const engine of names) {
     await selected(page, 'people');
     assert.equal(new URL(page.url()).hash, '#native-team-title');
     await expect(page.locator('#native-team-title')).toBeInViewport();
-    await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
+    await chapter(page, 'people').locator('[data-team-person-id="product-one"]').click();
     await person(page, 'ratePerHour').fill('103');
     await page.evaluate(() => {
       const nativeAnimate = Element.prototype.animate;
@@ -277,7 +302,7 @@ for (const engine of names) {
     await expect(work(page, 'minutesPerSession')).toHaveValue('30');
     await expect(work(page, 'minutesPerSession')).toBeEditable();
     await tab(page, 'people').click();
-    await chapter(page, 'people').locator('[data-person-id="product-one"]').click();
+    await chapter(page, 'people').locator('[data-team-person-id="product-one"]').click();
     await expect(person(page, 'ratePerHour')).toHaveValue('100.00');
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'coordination').click();

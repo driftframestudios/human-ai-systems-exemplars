@@ -4,7 +4,7 @@ import { createDraftCoordinator } from './editing.mjs';
 import { INTEGER, money } from './display.mjs';
 import { mountTeamPanel } from './team-controller.mjs';
 import { mountChapterShell } from './shell.mjs';
-import { mountStudioMotion } from './motion.mjs';
+import { mountStudioMotion, revealStudioDestination } from './motion.mjs';
 import { createStudioIcon } from './icons.mjs';
 import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
@@ -209,20 +209,20 @@ export function mountCoordinationPanel(root, options = {}) {
       else if (['role', 'contribution'].includes(route.origin?.kind)) responsibilityPanel?.open(route.origin.targetId);
       returnRoutes.pop(); render(); renderReturnRoute();
       if (route.origin && editing[route.origin.kind].read().status === 'stale') {
-        document.activeElement?.scrollIntoView({ block: 'center' }); return;
+        revealStudioDestination(document.activeElement, { block: 'center' }); return;
       }
       const list = [...root.querySelectorAll('[data-support-owner-kind]')].find(element => element.dataset.supportOwnerKind === route.ownerKind && element.dataset.supportOwnerId === route.ownerId);
       const candidates = [...(list?.querySelectorAll('[data-support-kind]') ?? [])].filter(element => element.dataset.supportKind === route.sourceKind && element.dataset.supportId === route.sourceId);
       const badge = candidates.find(element => element.dataset.supportStanding === route.sourceStanding) ?? candidates[0];
       const fallback = [...root.querySelectorAll(route.ownerKind === 'person' ? '[data-team-roster] [data-person-id]' : '[data-assembly-team]')].find(element => (element.dataset.personId ?? element.dataset.assemblyTeam) === route.ownerId);
       const destination = badge ?? fallback;
-      destination?.scrollIntoView({ block: 'center' }); destination?.focus({ preventScroll: true });
+      revealStudioDestination(destination, { block: 'center' }); destination?.focus({ preventScroll: true });
       return;
     }
     if (route.kind === 'connectionsView' || route.kind === 'peopleView') {
       returnRoutes.pop(); render(); renderReturnRoute();
       const destination = root.querySelector(route.kind === 'peopleView' ? '.studio-people-reading' : '[data-native-connection-view]');
-      destination?.scrollIntoView({ block: 'start' });
+      revealStudioDestination(destination);
       destination?.querySelector('button, select')?.focus({ preventScroll: true });
       return;
     }
@@ -263,6 +263,13 @@ export function mountCoordinationPanel(root, options = {}) {
       assemblyPanel?.create(target.kind === 'create-team' ? 'team.create' : 'person.create');
       render(); return;
     }
+    if (target.kind === 'create-session') {
+      const parked = editing.park();
+      if (!parked.ok) { announce(parked.error.message); return; }
+      returnRoutes.push({ kind: 'connectionsView', target: 'connections', held: false });
+      chapterShell?.select('coordination', { kind: 'context' }); workPanel?.create(); render();
+      revealStudioDestination(root.querySelector('[data-native-session-editor] [data-native-configure]')); return;
+    }
     const collection = { team: 'teams', work: 'work', person: 'people', contribution: 'contributions' }[target.kind];
     if (!collection || !studio.read().state[collection].some(row => row.id === target.id)) return;
     const parked = editing.park();
@@ -280,7 +287,7 @@ export function mountCoordinationPanel(root, options = {}) {
       : target.kind === 'contribution' ? '[data-responsibility-configure="contribution"]' : '[data-native-session-editor] [data-native-configure]');
     // Each receiving panel selects the right field or stale-edit recovery.
     // Retain a successor's focus when a callback has already opened other work.
-    if (destination?.contains(document.activeElement)) destination.scrollIntoView({ block: 'start' });
+    if (destination?.contains(document.activeElement)) revealStudioDestination(destination);
   }
   function inspectAssuranceSupport(button) {
     if (disposed) return;
@@ -315,7 +322,7 @@ export function mountCoordinationPanel(root, options = {}) {
     const destination = navigation.kind === 'person' ? root.querySelector('[data-native-team-editor]')
       : navigation.kind === 'work' ? root.querySelector('[data-native-session-editor]')
         : navigation.kind === 'connection' ? root.querySelector('[data-native-connection-editor]') : root.querySelector(`[data-native-chapter-panel="${navigation.id}"]`);
-    destination?.scrollIntoView({ block: 'start' });
+    revealStudioDestination(destination);
     destination?.querySelector('select, button, summary, input')?.focus({ preventScroll: true });
   }
   function createSessionFromHorizon(context) {
@@ -327,7 +334,7 @@ export function mountCoordinationPanel(root, options = {}) {
     returnRoutes.push({ kind: 'score', target: 'score', held, creating: 'session', creationTarget: result.view.draft.sessionId });
     render(); renderReturnRoute();
     const destination = root.querySelector('[data-native-session-editor]');
-    destination?.scrollIntoView({ block: 'start' });
+    revealStudioDestination(destination);
     destination?.querySelector('[name="label"]')?.focus({ preventScroll: true });
   }
   function useHorizonExample(id) {
@@ -372,12 +379,13 @@ export function mountCoordinationPanel(root, options = {}) {
     const form = root.querySelector(scope), input = form?.querySelector(`[name="${field}"]`)
       ?? form?.querySelector(`[data-${kind}-field="${field}"]`);
     if (!input) return;
+    if (kind === 'capability') capabilityPanel?.revealField?.(field);
     if (['capability', 'change', 'assurance'].includes(kind)) {
       for (let ancestor = input.parentElement; ancestor && ancestor !== form; ancestor = ancestor.parentElement) {
         if (ancestor.tagName === 'DETAILS') ancestor.open = true;
       }
     }
-    input.focus();
+    input.focus({ preventScroll: true }); revealStudioDestination(input);
     if (pendingReturnFocus === request && root.ownerDocument.activeElement === input) pendingReturnFocus = null;
   }
 
@@ -565,7 +573,7 @@ export function mountCoordinationPanel(root, options = {}) {
       event.preventDefault(); chapterShell?.select('coordination', { kind: 'context' });
       connectionView?.selectArrangement(arrangementLink.dataset.nativeOpenArrangement);
       const destination = root.querySelector('[data-native-connection-view]');
-      destination?.scrollIntoView({ block: 'start' });
+      revealStudioDestination(destination);
       destination?.querySelector('button, select')?.focus({ preventScroll: true }); return;
     }
     const scoreLink = event.target.closest('[data-native-open-score]');
@@ -733,7 +741,7 @@ export function mountCoordinationPanel(root, options = {}) {
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'connection' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
-    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing,
+    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing, onNavigate: navigateFromConnections,
       onBegin: () => beginCoordination('template'),
       canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'template' && !purposePanel?.isOpen(),
