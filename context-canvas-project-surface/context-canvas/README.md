@@ -750,6 +750,15 @@ seams in the same three engines. The existing gallery contract owns full
 selection, recovery, and export behavior. Its companion article retains its
 independent Debrief composition and essay checks.
 
+The native Studio extends About with `studio-instrument.css` for shared reels
+and motion, followed by `studio-arrangements.css`, `studio-change.css` and
+`studio-assurance.css` for their chapter racks. The authored About page loads
+these after `about.css`; chapter selectors retain their local extension point.
+The [Studio source map](../../collaboration/native-investment-studio/implementation-reference.md#source-map)
+names the rendering owners and the [experience journal](../../collaboration/native-investment-studio/experience-journal.md)
+records the interaction decisions. ASCII Zine Field and Cobalt Evidence Field
+guide the control and contrast grammar.
+
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |

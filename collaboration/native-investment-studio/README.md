@@ -28,7 +28,17 @@ through #720–#722.
 Coordination keeps the period overview and MIDI session tracks together. Team
 connections and working-session details open on demand. Select participants
 directly; a session can bring people from different teams together. Full motion
-is the default, with a Lower choice and support for system motion preferences.
+is the default. The amp head offers half-speed Lower motion and Off; system
+reduced-motion preferences suppress animation.
+
+People uses team lanes and session tracks. Change pairs viewpoint and framework
+reels with faders, work lanes and supporting-session pads. Quality & recovery
+pairs pre-release and post-release reels with a six-channel fader bank, CRT
+reference chart, rehearsal lanes and support tracks. Presets populate the view;
+select a pad to inspect its existing editor, then Apply or Cancel. The Abilities
+support tables remain the comparable view of responsibility, preparation,
+review and observation. [#727](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/727)
+records this visual interaction route.
 
 The [experience journal](experience-journal.md) preserves the interaction intent
 and review findings. The [capability transfer map](implementation-reference.md#capability-transfer-map)

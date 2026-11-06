@@ -1,0 +1,72 @@
+/* Quality & recovery: assurance-controller.mjs owns the rack, phase pads and
+   drilldowns. Shared reel controls and About provide the base control grammar. */
+.native-assurance [data-assurance-fields] > .native-quality-rack { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, .7fr); gap: 1rem; padding: 1rem; border: .2rem solid #5e796b; border-radius: .5rem; background: #20372f; color: #f8f1d7; }
+.native-quality-rack__reels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 1rem; min-inline-size: 0; }
+.native-quality-rack .native-reel { min-inline-size: 0; }
+.native-quality-rack .native-assurance__statistics { display: grid; align-content: center; gap: .4rem; min-inline-size: 0; margin: 0; padding: .65rem; border: 1px solid #819c8a; border-radius: .35rem; color: #e0efdc; background: #142c24; }
+.native-quality-rack .native-assurance__statistics p { margin: 0; color: #c1dacd; font-size: .7rem; }
+.native-quality-rack .native-assurance__scope { margin: 0; padding: .35rem; }
+.native-quality-rack .native-assurance__scope-head { display: grid; gap: .3rem; font-size: .65rem; }
+.native-quality-rack__faders { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .6rem; min-inline-size: 0; }
+.native-quality-rack__channel { display: grid; grid-template-rows: 1.5rem 1.5rem 8rem 2.6rem; justify-items: center; align-items: center; min-inline-size: 0; padding: .6rem .35rem; color: #eff5da; background: linear-gradient(#304b40, #1c332b); border: 1px solid #789382; border-radius: .2rem; box-shadow: inset 0 .15rem .2rem #0b2118; }
+.native-quality-rack__channel label { margin: 0; color: #f4efd5; font-size: .8rem; font-weight: 750; }
+.native-quality-rack__channel output { font: 650 .75rem/1.4 ui-monospace, monospace; color: #7ee7cd; }
+.native-quality-rack__channel--sigma { border: .18rem double #ecce74; background: linear-gradient(#4b4835, #26362b); }
+.native-quality-rack__channel--sigma output { color: #ffdf86; font-size: 1rem; }
+.native-assurance .native-quality-rack__channel input[type='range'] { appearance: auto; writing-mode: vertical-lr; direction: rtl; inline-size: 7.8rem; block-size: 2.75rem; min-inline-size: 7.8rem; min-block-size: 2.75rem; max-inline-size: 7.8rem; padding: .2rem; margin: 0; accent-color: #78e4c9; border: 1px solid #476b59; border-radius: .2rem; background: repeating-linear-gradient(0deg, transparent 0 .7rem, #b6d7bc33 .7rem .75rem), linear-gradient(to top, #579a82 var(--quality-level, 50%), #10271e var(--quality-level, 50%)); }
+.native-assurance .native-quality-rack__channel--sigma input[type='range'] { accent-color: #f4d37d; background: repeating-linear-gradient(0deg, transparent 0 .7rem, #ead99644 .7rem .75rem), linear-gradient(to top, #aa8f44 var(--quality-level, 50%), #252c1c var(--quality-level, 50%)); }
+.native-quality-rack__ends { display: grid; text-align: center; gap: .15rem; color: #b7ccbc; font-size: .63rem; line-height: 1.3; }
+.native-quality-rack .native-assurance__sigma-scale { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem; padding: 0; color: #ead89b; font-size: .6rem; }
+.native-quality-board { display: grid; grid-template-columns: 1.2fr 1fr .9fr; gap: .65rem; min-inline-size: 0; margin-block: 1rem; }
+.native-quality-board__lane { min-inline-size: 0; padding: .65rem; background: #d8e2d3; border: .13rem solid #6d8374; border-block-start: .35rem solid #007d70; }
+.native-quality-board__lane[data-quality-phase='rehearse'] { border-block-start-color: #4c4ce0; background: #dde3f0; }
+.native-quality-board__lane[data-quality-phase='operate'] { border-block-start-color: #8c5a80; background: #e8dde5; }
+.native-quality-board__lane h4 { margin: 0; font-size: 1rem; font-weight: 750; }
+.native-quality-board__lane > p { margin: .25rem 0 .6rem; font-size: .75rem; }
+.native-quality-board .native-assurance__selection { margin: 0; padding: 0; border: 0; }
+.native-quality-board .native-assurance__selection legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+.native-quality-board .native-assurance__rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; }
+.native-quality-board [data-quality-phase='rehearse'] .native-assurance__rail,
+.native-quality-board [data-quality-phase='operate'] .native-assurance__rail { grid-template-columns: 1fr; }
+.native-quality-board .native-assurance__rail label { display: grid; grid-template-columns: 1.1rem minmax(0, 1fr); align-items: start; gap: .4rem; min-inline-size: 0; padding: .5rem; background: #f5f0da; border: 1px solid #708877; border-block-end: .2rem solid #879b84; border-radius: .15rem; font-size: .7rem; line-height: 1.3; cursor: pointer; }
+.native-quality-board .native-assurance__rail strong { font-weight: 650; }
+.native-quality-board .native-assurance__rail small { display: block; margin-block-start: .3rem; font-size: .65rem; }
+.native-quality-board .native-assurance__rail label[data-included='false'] { border-style: dashed; background: #e2e4d8; }
+.native-quality-board .native-assurance__rail label:has(:checked) { background: #6fd7ba; border-block-start: .2rem solid #285b48; box-shadow: inset 0 .12rem .18rem #164b3d66; }
+.native-quality-board [data-quality-phase='rehearse'] .native-assurance__rail label:has(:checked) { background: #b7c4ff; }
+.native-quality-tracks { overflow: auto; max-inline-size: 100%; padding: .5rem; background: #1c392e; border: .2rem solid #597564; border-radius: .25rem; }
+.native-quality-tracks table { inline-size: 100%; min-inline-size: 32rem; border-collapse: separate; border-spacing: .25rem; margin: 0; color: #eff1d7; background: #1c392e; }
+.native-quality-tracks caption { padding: .35rem; color: #d3e7ce; text-align: start; font: .75rem/1.4 ui-monospace, monospace; }
+.native-quality-tracks :is(th, td) { padding: .15rem; text-align: start; vertical-align: middle; border: 0; background: transparent; }
+.native-quality-tracks thead th { color: #d3e7ce; background: #1c392e; font: 650 .7rem/1.4 ui-monospace, monospace; }
+.native-coordination .native-quality-tracks button { min-inline-size: 0; min-block-size: 2.5rem; max-inline-size: 100%; padding: .4rem 1.6rem .4rem .5rem; border: 1px solid #769582; border-block-end-width: .2rem; border-radius: .15rem; box-shadow: none; color: #17342c; background: #e6ebdc; font-size: .72rem; text-align: start; }
+.native-coordination .native-quality-tracks td button + button { margin-inline-start: .35rem; }
+.native-coordination .native-quality-tracks .native-quality-tracks__pad { padding: .4rem .6rem; inline-size: 100%; min-inline-size: 6rem; color: #cedbcb; background: #294b3e; border-style: dashed; }
+.native-coordination .native-quality-tracks .native-quality-tracks__pad[aria-pressed='true'] { color: #123e2f; background: #75d7b7; border-style: solid; border-block-end-color: #3c8a69; box-shadow: inset 0 .1rem .1rem #edf5d288; }
+.native-quality-drilldown { min-inline-size: 0; margin-block: .75rem; }
+.native-quality-drilldown > :not(summary) { margin: .65rem; }
+@media (max-width: 64rem) {
+  .native-assurance [data-assurance-fields] > .native-quality-rack { grid-template-columns: 1fr; }
+  .native-quality-rack__faders { grid-row: auto; }
+  .native-quality-rack .native-assurance__statistics { grid-template-columns: minmax(0, 1fr) minmax(0, .6fr); align-items: center; }
+  .native-quality-board { grid-template-columns: 1fr 1fr; }
+  .native-quality-board__lane[data-quality-phase='prepare'] { grid-column: 1 / -1; }
+  .native-quality-board [data-quality-phase='prepare'] .native-assurance__rail { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 40rem) {
+  .native-assurance [data-assurance-fields] > .native-quality-rack { padding: .5rem; gap: .65rem; }
+  .native-quality-rack__reels { grid-template-columns: 1fr; gap: .6rem; }
+  .native-quality-rack__faders { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .native-quality-rack .native-assurance__statistics { display: block; }
+  .native-quality-rack__channel { grid-template-rows: 2.5rem 1.5rem 6.5rem 2.6rem; }
+  .native-assurance .native-quality-rack__channel input[type='range'] { inline-size: 6rem; min-inline-size: 6rem; max-inline-size: 6rem; }
+  .native-quality-rack .native-assurance__sigma-scale { gap: .2rem; white-space: normal; }
+  .native-quality-board { grid-template-columns: 1fr; }
+  .native-quality-board [data-quality-phase='prepare'] .native-assurance__rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+  .native-quality-rack, .native-quality-board__lane, .native-quality-rack__channel, .native-quality-tracks, .native-quality-tracks table { color: CanvasText; background: Canvas; border-color: CanvasText; }
+  .native-quality-rack :is(label, output, p), .native-quality-tracks :is(caption, thead th) { color: CanvasText; background: Canvas; }
+  .native-quality-tracks button, .native-quality-board .native-assurance__rail label { color: ButtonText; background: ButtonFace; border-color: ButtonText; }
+  .native-quality-board .native-assurance__rail label:has(:checked), .native-quality-tracks .native-quality-tracks__pad[aria-pressed='true'] { border: .2rem solid Highlight; }
+}

@@ -1235,3 +1235,22 @@ and Tiger Team. Turning the reel previews populated teams, connections and
 supporting sessions locally; Apply accepts the arrangement and Undo restores
 it. The connection diagram remains a component in the rack. The initial
 Coordination horizon keeps its accepted compact composition.
+
+### Quality and recovery rack
+
+Issue #731 splits quality exploration between pre-release and post-release
+reels. Quality, urgency, compliance, training and fidelity faders select
+authored concept and rehearsal configurations; the highlighted sigma fader
+also drives the mathematical reference display. Prepare, Rehearse and
+Operate & learn lanes expose those choices as pads beside actual support
+tracks. Rehearsals begin with context, assumptions, a response and responsible
+people so the visitor can inspect a useful proposal immediately. Observed
+evidence remains a separately entered result. Supporting sessions continue to
+own accepted effort and cost.
+
+Independent review caught a static-owner selector that could match a populated
+track pad after remount. Exact empty data hooks now identify the authored
+receivers. The focused remount journey proves a populated track can be mounted
+again, retain its accepted plan, and open a new proposal. Desktop and ordinary
+mobile observations cover visible reels, aligned faders, local track scrolling
+and editor recovery.
