@@ -420,6 +420,7 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     "fmi-clinical-trial-coordination.html",
     "fmi-lims-eln-replatforming.html",
     "genomic-viewer-replatforming.html",
+    "ehr-three-front-doors.html",
     "three-way-comparative-return.html",
     "who-to-believe-reviews-platform.html",
   ];
@@ -428,7 +429,7 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
-      /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served)\b[\s\S]*?<\/dd>/u,
+      /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served|was)\b[\s\S]*?<\/dd>/u,
       route,
     );
   }
@@ -437,7 +438,6 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
     "ehr-discrete-genomic-result.html",
     "ehr-interface-engine-replatform.html",
     "ehr-pgx-alert-failure.html",
-    "ehr-three-front-doors.html",
     "ehr-two-charts-one-result.html",
   ];
   for (const route of scenarioRoutes) {
@@ -449,6 +449,12 @@ test("Debrief role fields use direct autobiographical attribution", async () => 
       route,
     );
   }
+
+  assert.match(
+    compactAccountByRoute(compactSource, "ehr-three-front-doors.html"),
+    /<dt>Scope and role<\/dt>\s*<dd>[^<]*Other ClinOps teams handled direct integration\.<\/dd>/u,
+    "Three Portals preserves the distinct integration responsibility",
+  );
 
   const [aiSystems, hiring, threeWay] = await Promise.all([
     readCanvasFile("ai-systems.html"),
