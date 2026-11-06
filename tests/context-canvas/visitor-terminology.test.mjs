@@ -84,7 +84,7 @@ const aiSystemsRoomContexts = [
 }));
 
 const reportedConsequenceColumnHeader =
-  /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
+  /<th scope="col"(?: data-label="Reported consequence")?>(?:Reported consequence|What changed)<\/th>/u;
 
 // The Review Routing graph retains this exact source node label across its
 // machine-readable contract and equivalent semantic reading. Each bounded
@@ -209,14 +209,20 @@ function classifyRoomUses(source, contexts = tableReadingRoomContexts) {
   });
 }
 
-test("About uses visitor-facing setting, role, and handoff language", async () => {
+test("About distinguishes human decisions, model contributions and software controls", async () => {
   const html = await readCanvasFile("index.html");
-
-  assert.match(html, /settings where a software decision/u);
-  assert.match(html, /Participants across roles gained/u);
-  assert.match(html, /people across roles gain/u);
-  assert.match(html, /work, memory, and judgment held together/u);
-  assert.match(html, /evidence notes and decision handoffs carry the source/u);
+  const roles = html.match(/<div class="about-decision-grid">([\s\S]*?)<\/div>/u)?.[1];
+  assert.ok(roles, "About carries the distinct responsibility reading");
+  const articles = [...roles.matchAll(/<article>([\s\S]*?)<\/article>/gu)].map(([, article]) => article);
+  assert.equal(articles.length, 3, "people, models and software each have their own responsibility group");
+  for (const [article, heading, actions] of [
+    [articles[0], /<h3>People\b/u, [/Define the question/u, /Interpret evidence/u, /Approve materially meaningful actions/u]],
+    [articles[1], /<h3>AI models\b/u, [/Detection models/u, /Predictive models/u, /Generative models/u]],
+    [articles[2], /<h3>Software\b/u, [/sources, versions/u, /permission checks/u, /Save the context/u]],
+  ]) {
+    assert.match(article, heading);
+    for (const action of actions) assert.match(article, action);
+  }
   assert.match(html, /href="hiring-surfaces-talent-agent-intake\.html#amplified-hiring-reach"/u);
   assert.doesNotMatch(html, /\brooms?\b|\bviewlets?\b/iu);
 });
@@ -383,6 +389,7 @@ for (const { name, source, expected, contexts } of [
 for (const { name, source, expected } of [
   { name: "native column header", source: '<th scope="col">Reported consequence</th>', expected: true },
   { name: "labeled native column header", source: '<th scope="col" data-label="Reported consequence">Reported consequence</th>', expected: true },
+  { name: "everyday result wording", source: '<th scope="col" data-label="Reported consequence">What changed</th>', expected: true },
   { name: "row header retains its different role", source: '<th scope="row" data-label="Reported consequence">Reported consequence</th>', expected: false },
   { name: "data cell retains its different role", source: '<td scope="col" data-label="Reported consequence">Reported consequence</td>', expected: false },
   { name: "supplemental label leaves native scope unspecified", source: '<th data-label="Reported consequence">Reported consequence</th>', expected: false },

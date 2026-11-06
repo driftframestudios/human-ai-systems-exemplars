@@ -51,14 +51,19 @@ function findNamedItemList(value, name) {
   return null;
 }
 
-test("the public topology keeps the three Comet Spectrum surfaces distinct", async () => {
+function bodyLinkDestinations(source) {
+  const body = source.slice(source.indexOf("<body")).replace(/<!--[\s\S]*?-->/gu, "");
+  return new Set([...body.matchAll(/<a\b[^>]*\bhref="([^"]+)"[^>]*>[\s\S]*?<\/a>/gu)]
+    .map(([, href]) => href));
+}
+
+function assertPublicTopology(about, aiSystems, limsDebrief) {
   const surfaces = [
-    ["index.html", "Public collaboration system"],
-    ["ai-systems.html", "Public system topology"],
+    ["index.html", "Public collaboration system", about],
+    ["ai-systems.html", "Public system topology", aiSystems],
   ];
 
-  for (const [route, listName] of surfaces) {
-    const source = await canvasFile(route);
+  for (const [route, listName, source] of surfaces) {
     const itemList = jsonLd(source)
       .map((entry) => findNamedItemList(entry, listName))
       .find(Boolean);
@@ -69,18 +74,31 @@ test("the public topology keeps the three Comet Spectrum surfaces distinct", asy
     for (const expected of cometSurfaces) {
       const item = itemList.itemListElement.find((candidate) => candidate.url === expected.url);
       assert.equal(item?.name, expected.name, `${route} names the distinct job at ${expected.url}`);
-      assert.match(source, new RegExp(`href="${expected.url}"`, "u"), `${route} links ${expected.url}`);
     }
   }
 
-  const limsDebrief = await canvasFile("fmi-lims-eln-replatforming.html");
-  for (const expected of cometSurfaces) {
-    assert.match(
-      limsDebrief,
-      new RegExp(`href="${expected.url.replaceAll(".", "\\.")}"`, "u"),
-      `the LIMS/ELN Debrief links ${expected.url}`,
-    );
+  assert.ok(bodyLinkDestinations(about).has("ai-systems.html"), "About leads to AI Systems' public project collection");
+  for (const [route, source] of [["AI Systems", aiSystems], ["LIMS/ELN Debrief", limsDebrief]]) {
+    const destinations = bodyLinkDestinations(source);
+    for (const expected of cometSurfaces) {
+      assert.ok(destinations.has(expected.url), `${route} links ${expected.url}`);
+    }
   }
+}
+
+test("About routes to the public project collection with distinct Comet Spectrum destinations", async () => {
+  const sources = await Promise.all([
+    "index.html", "ai-systems.html", "fmi-lims-eln-replatforming.html",
+  ].map(canvasFile));
+  assertPublicTopology(...sources);
+
+  const [about, aiSystems, limsDebrief] = sources;
+  assert.throws(() => assertPublicTopology(
+    about.replace(/<a\b[^>]*\bhref="ai-systems\.html"[^>]*>[\s\S]*?<\/a>/gu, '<!--$&-->'), aiSystems, limsDebrief,
+  ), /About leads to AI Systems/u, "metadata and commented-out links leave the onward route unavailable");
+  assert.throws(() => assertPublicTopology(
+    about, aiSystems.replaceAll('href="https://cometspectrum.io/"', 'href="https://cometspectrum.ai/"'), limsDebrief,
+  ), /AI Systems links https:\/\/cometspectrum\.io\//u, "the evidence destination remains distinct from the schema destination");
 });
 
 test("the AI Systems reading order follows the visitor's decision path", async () => {
@@ -91,7 +109,7 @@ test("the AI Systems reading order follows the visitor's decision path", async (
     return index;
   };
 
-  assert.match(source, />Schemas and skills<\/a>/u);
+  assert.ok(bodyLinkDestinations(source).has("{{PUBLIC_URL_SKILL_CATALOG}}"), "the project collection exposes the public skill catalog");
   assert.match(
     source,
     /href="https:\/\/github\.com\/driftframestudios\/lims-eln-program-specification"/u,
@@ -155,13 +173,18 @@ test("the AI Systems reading order follows the visitor's decision path", async (
       < position('id="lims-eln-constellation-title"'),
     "the LIMS/ELN source constellation belongs to Implementation Architecture",
   );
-  assert.ok(
-    position('id="implementation-title"')
-      < position('id="public-system-topology-title"')
-      && position('id="public-system-topology-title"')
-        < position('id="registry-readings-title"'),
-    "the public topology follows Implementation Architecture and precedes the Registry reading set",
-  );
+  const assertProjectReadingOrder = (reading) => {
+    const indices = ["instrument-title", "public-system-topology-title", "conditioning-field-title"]
+      .map(id => reading.indexOf(`id="${id}"`));
+    assert.ok(indices.every(index => index >= 0), "the introductory instruments, projects and methods each have a reading destination");
+    assert.ok(indices[0] < indices[1] && indices[1] < indices[2],
+      "the public projects follow the introductory instruments and precede the deeper methods");
+  };
+  assertProjectReadingOrder(source);
+  assert.throws(() => assertProjectReadingOrder(source.replace(
+    /id="(public-system-topology-title|conditioning-field-title)"/gu,
+    (_, id) => `id="${id === "public-system-topology-title" ? "conditioning-field-title" : "public-system-topology-title"}"`,
+  )), /public projects follow/u, "moving the project collection behind the methods changes the reading contract");
   assert.ok(
     position('id="population-title"')
       < position('id="benchmark-reading-title"'),
