@@ -8,7 +8,7 @@ const noop = () => {};
 // plan; session duration and investment retain their existing model owners.
 export function createCadenceView(root, {
   onSelect = noop, onNavigate = noop, onPeriod = noop, onAddSession = noop,
-  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onCreateHorizon = noop, onTryReview = noop,
+  onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onTryReview = noop, flowRoot = null,
 } = {}) {
   const document = root.ownerDocument;
   let disposed = false, previewReading = null, previousPeriodId;
@@ -41,11 +41,11 @@ export function createCadenceView(root, {
   }
   function click(event) {
     const control = event.target.closest('[data-cadence-action]');
-    if (disposed || !control || !root.contains(control)) return;
+    if (disposed || !control || !(root.contains(control) || flowRoot?.contains(control))) return;
     const item = actions.get(control.dataset.cadenceKey); if (!item) return;
     const receivers = { select: onSelect, navigate: onNavigate, period: onPeriod,
       'add-session': onAddSession, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
-      'add-stage': onAddStage, 'create-horizon': onCreateHorizon, 'try-review': onTryReview };
+      'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon, 'try-review': onTryReview };
     receivers[item.action]?.(item.target);
   }
   function showPreview(event) {
@@ -55,6 +55,7 @@ export function createCadenceView(root, {
   root.addEventListener('click', click);
   root.addEventListener('pointerover', showPreview);
   root.addEventListener('focusin', showPreview);
+  flowRoot?.addEventListener('click', click);
 
   function refresh(projection, { periodId = null, selected = null, preview = false } = {}) {
     if (disposed) return;
@@ -65,6 +66,7 @@ export function createCadenceView(root, {
     const fragment = document.createDocumentFragment();
     root.classList.add('native-cadence'); root.dataset.cadenceReading = preview ? 'proposed' : 'accepted';
     if (!cadence) {
+      flowRoot?.replaceChildren();
       const invitation = node('div', undefined, 'native-cadence__invitation');
       invitation.append(node('h4', 'Give this work a place in the plan'),
         node('p', 'Preview a sprint arrangement for these sessions. Their people, duration and investment stay together.'),
@@ -276,10 +278,11 @@ export function createCadenceView(root, {
       fragment.append(demonstration);
     }
 
-    const flow = disclosure('Stages & handoffs · inspect relationships', 'flow', expanded);
+    const flow = flowRoot ? node('div') : disclosure('Stages & handoffs', 'flow', expanded);
     flow.classList.add('native-cadence__flow');
     const flowHeading = node('header', undefined, 'native-cadence__section-heading');
-    flowHeading.append(node('h4', 'Stages & handoffs'), create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'add-stage'));
+    flowHeading.append(create('Add stage', 'add-stage', { periodId: activePeriod?.id ?? null }, 'add-stage'),
+      create('Connect work', 'add-handoff', null, 'add-handoff'));
     flow.append(flowHeading);
     const stageRows = node('div', undefined, 'native-cadence__stages');
     for (const stage of stages.filter(inPeriod)) {
@@ -318,7 +321,7 @@ export function createCadenceView(root, {
     if (handoffRows.childElementCount) flow.append(handoffRows);
     for (const decision of decisions.filter(row => row.periodId === null)) flow.append(decisionMarker(decision, 'unplaced'));
     for (const delay of model.delays.filter(row => row.toPeriodId === null)) flow.append(delayMarker(delay));
-    fragment.append(flow);
+    if (flowRoot) flowRoot.replaceChildren(flow); else fragment.append(flow);
 
     const unplaced = occurrences.filter(row => row.periodId === null || !periodById.has(row.periodId));
     if (unplaced.length) {
@@ -355,6 +358,7 @@ export function createCadenceView(root, {
   return Object.freeze({ refresh, dispose() {
     if (disposed) return; disposed = true; actions.clear(); previewReading = null;
     root.removeEventListener('click', click); root.removeEventListener('pointerover', showPreview); root.removeEventListener('focusin', showPreview);
+    flowRoot?.removeEventListener('click', click);
     root.classList.remove('native-cadence'); delete root.dataset.cadenceReading;
   } });
 }

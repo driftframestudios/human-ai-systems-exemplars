@@ -46,7 +46,7 @@ const bytes = page => page.evaluate(() => window.scoreFixture.studio.exportText(
 
 const cadence = page => score(page).locator('[data-score-projection]');
 const period = (page, id) => cadence(page).locator(`[data-cadence-period="${id}"]`);
-const flow = page => cadence(page).locator('[data-cadence-disclosure="flow"]');
+const flow = page => score(page).locator('[data-cadence-disclosure="flow"]');
 const inspector = page => score(page).locator('.native-score__inspector');
 async function showFlow(page) {
   if (!await flow(page).evaluate(element => element.open)) await flow(page).locator(':scope > summary').click();
@@ -65,7 +65,7 @@ for (const engine of names) {
     await expect(cadence(page).locator('.native-cadence__board')).toHaveAttribute('data-cadence-level', 'plan');
     await expect(cadence(page).locator('.native-cadence__period')).toHaveCount(4);
     for (const key of ['flow', 'people'])
-      assert.equal(await cadence(page).locator(`[data-cadence-disclosure="${key}"]`).evaluate(element => element.open), false);
+      assert.equal(await score(page).locator(`[data-cadence-disclosure="${key}"]`).evaluate(element => element.open), false);
     for (const width of [1273, 390]) {
       await page.setViewportSize({ width, height: 1000 });
       await score(page).scrollIntoViewIfNeeded();
@@ -139,9 +139,26 @@ for (const engine of names) {
     await undo(page); assert.equal(await bytes(page), accepted);
   });
 
+  test(`${engine}: horizon units switch immediately while preserving work and Undo`, async t => {
+    const page = await open(t, engine), accepted = await bytes(page), original = JSON.parse(accepted);
+    await score(page).locator('[data-cadence-basis][value="quarter"]').check();
+    await expect(cadence(page)).toHaveAttribute('data-cadence-reading', 'accepted');
+    const changed = JSON.parse(await bytes(page));
+    assert.equal(changed.scoreSettings.cadence.basis, 'quarter');
+    assert.deepEqual(changed.work, original.work);
+    await expect(score(page).locator('.native-score__pending')).toBeHidden();
+    await period(page, 'period-1').getByRole('button', { name: 'Quarter 1 Open quarter detail', exact: true }).click();
+    await expect(cadence(page).getByRole('heading', { name: 'Month 3', exact: true })).toBeVisible();
+    await undo(page); assert.equal(await bytes(page), accepted);
+  });
+
   test(`${engine}: decisions and delays are created beside a stage or handoff`, async t => {
     const page = await open(t, engine), accepted = await bytes(page);
     await showFlow(page);
+    const stage = flow(page).locator('[data-cadence-key="stage:understand"]');
+    await stage.click();
+    await inspector(page).getByRole('button', { name: 'Cancel changes', exact: true }).click();
+    await expect(stage).toBeFocused();
     await flow(page).getByRole('button', { name: 'Add a decision for Understand the request', exact: true }).click();
     await expect(inspector(page).getByRole('heading', { name: 'New decision for Understand the request', exact: true })).toBeVisible();
     await expect(input(page, 'gate.gate-1.label')).toBeFocused();

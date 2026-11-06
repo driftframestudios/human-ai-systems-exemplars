@@ -1,3 +1,4 @@
+import { revealStudioDestination } from './motion.mjs';
 import { createDraftCoordinator } from './editing.mjs';
 import { money, duration } from './display.mjs';
 import { preparePersonDraftValues } from './person-draft.mjs';
@@ -187,8 +188,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     notify(epoch, focus ? () => {
-      if (editor.read().status === 'editing') inputs.ratePerHour.focus();
-      else if (editor.read().status === 'stale') elements.recovery.querySelector('button').focus();
+      if (editor.read().status === 'editing') inputs.ratePerHour.focus({ preventScroll: true });
+      else if (editor.read().status === 'stale') elements.recovery.querySelector('button').focus({ preventScroll: true });
+      revealStudioDestination(elements.configure);
     } : null);
   }
 
