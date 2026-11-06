@@ -348,34 +348,32 @@ test('rapid transitions cancel the previous animation and reduced motion release
   shell.dispose(); motion.dispose();
 });
 
-test('Studio motion starts full, preserves explicit preference under system reduction, and retires live effects', async () => {
+test('Studio motion supports half speed and off while system reduction suppresses animation', async () => {
   const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
   assert.strictEqual(mountStudioMotion(f.root), motion);
   assert.deepEqual(motion.read(), { requested: 'full', effective: 'full', systemReduced: false, disposed: false });
-  shell.select('people'); assert.equal(f.animations.length, 1);
-  assert.equal(f.root.getAttribute('data-native-motion'), 'full');
+  shell.select('people'); assert.equal(f.animations[0].options.duration, 280);
   motion.set('lower'); assert.equal(f.animations[0].cancelled, true);
-  shell.select('coordination'); assert.equal(f.animations.length, 1);
-  motion.set('full'); shell.select('people');
+  shell.select('coordination'); assert.equal(f.animations[1].options.duration, 560);
+  motion.set('off'); assert.equal(f.animations[1].cancelled, true);
+  shell.select('people'); assert.equal(f.animations.length, 2);
+  motion.set('full'); shell.select('coordination');
   f.media.matches = true; f.media.send('change');
-  assert.equal(f.animations[1].cancelled, true);
+  assert.equal(f.animations[2].cancelled, true);
   assert.deepEqual(motion.read(), { requested: 'full', effective: 'lower', systemReduced: true, disposed: false });
-  shell.select('coordination'); assert.equal(f.animations.length, 2);
+  shell.select('people'); assert.equal(f.animations.length, 3);
   f.media.matches = false; f.media.send('change');
-  assert.equal(motion.read().effective, 'full'); shell.select('people');
-  motion.dispose(); assert.equal(f.animations[2].cancelled, true);
-  assert.equal(motion.read().effective, 'lower'); assert.equal(f.root.getAttribute('data-native-motion'), null);
+  assert.equal(motion.read().effective, 'full'); shell.select('coordination');
+  motion.dispose(); assert.equal(f.animations[3].cancelled, true);
+  assert.equal(motion.read().effective, 'off'); assert.equal(f.root.getAttribute('data-native-motion'), null);
   assert.equal(motion.set('full'), false); shell.dispose();
   assert.equal(f.media.listenerCount(), 0);
-  f.media.matches = true;
-  const fresh = mountStudioMotion(f.root);
-  assert.deepEqual(fresh.read(), { requested: 'full', effective: 'lower', systemReduced: true, disposed: false }); fresh.dispose();
   await Promise.resolve();
 });
 
 test('chapter selection, contextual arrival and local inspection retain distinct bounded motion and static cues', async () => {
   const f = fixture(), motion = mountStudioMotion(f.root), shell = mountChapterShell(f.root, { motion });
-  motion.set('lower');
+  motion.set('off');
   shell.select('people', { kind: 'context' });
   assert.equal(f.records.get('people').panel.getAttribute('data-native-arrival'), 'context');
   assert.equal(f.animations.length, 0);
@@ -391,7 +389,7 @@ test('chapter selection, contextual arrival and local inspection retain distinct
   motion.indicate(inspector); assert.equal(f.animations[2].options.duration, 180);
   assert.equal(inspector.getAttribute('data-native-arrival'), 'inspection');
   motion.indicate(inspector); assert.equal(f.animations[2].cancelled, true);
-  motion.set('lower'); assert.equal(f.animations[3].cancelled, true);
+  motion.set('off'); assert.equal(f.animations[3].cancelled, true);
   motion.indicate(inspector); assert.equal(f.animations.length, 4);
   assert.equal(inspector.getAttribute('data-native-arrival'), 'inspection');
   motion.set('full'); motion.indicate(inspector);

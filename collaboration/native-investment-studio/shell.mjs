@@ -95,10 +95,10 @@ export function mountChapterShell(root, { onSelect = () => {}, motion = null } =
   }
 
   function animatePanel(panel, generation, kind) {
-    if (disposed || motion?.read().effective !== 'full' || reducedMotion?.matches || document.visibilityState === 'hidden' || typeof panel.animate !== 'function') return;
+    if (disposed || !motion || motion.read().effective === 'off' || motion.read().systemReduced || reducedMotion?.matches || document.visibilityState === 'hidden' || typeof panel.animate !== 'function') return;
     // An unavailable animation leaves the selected semantic state complete.
     try {
-      const current = panel.animate(MOTION[kind].frames, MOTION[kind].options);
+      const current = panel.animate(MOTION[kind].frames, { ...MOTION[kind].options, duration: MOTION[kind].options.duration * (motion.read().effective === 'lower' ? 2 : 1) });
       const release = () => { if (animation === current) animation = null; };
       current.finished.then(release, release);
       if (disposed || generation !== selectionGeneration) {
@@ -309,7 +309,7 @@ export function mountChapterShell(root, { onSelect = () => {}, motion = null } =
     listen(window, 'pagehide', event => { if (!event.persisted) dispose(); });
     listen(document, 'visibilitychange', () => { if (document.visibilityState === 'hidden') cancelMotion(); });
     if (reducedMotion?.addEventListener) listen(reducedMotion, 'change', () => { if (reducedMotion.matches) cancelMotion(); });
-    if (motion) cleanup.push(motion.subscribe(value => { if (value.effective !== 'full') cancelMotion(); }));
+    if (motion) cleanup.push(motion.subscribe(cancelMotion));
     list.hidden = false;
     reconcileFragment({ restoreEntry: true });
     if (disposed) return receiver;

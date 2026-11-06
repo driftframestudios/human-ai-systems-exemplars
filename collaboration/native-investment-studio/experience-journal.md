@@ -1183,3 +1183,24 @@ chapter behavior. The current sprint/quarter model and accepted Coordination
 landing composition remain the receiving context. This choice supersedes the
 action-pad simplification for Abilities. Ordinary mobile widths retain the
 comparable columns through local horizontal scrolling.
+
+
+## 2026-11-06 — Reels and shared motion
+
+The approved route in #727 carries populated boards and MIDI tracks through
+People, Coordination details, Change, and Quality & recovery. The existing
+Coordination horizon and restored Abilities tables remain useful anchors.
+Reels choose authored configurations; faders refine them; details retain the
+existing people, sessions, observations, saved edits, and Apply/Cancel owners.
+
+Issue #729 establishes one native-button reel with direct choices, arrow-key
+selection, a next-choice hub, and a separate decorative rotor. The amp head
+owns Off, Lower and Full motion. Full is the default, Lower takes twice as
+long, and Off or the system reduced-motion preference suppresses animation.
+Chapter fades, contextual arrivals, local focus cues, and reel-driven reveals
+retain distinct effects. Motion changes leave selected content and plan state
+complete. Chapter CSS follows the shared control stylesheet, with each new
+rack retaining a named source owner.
+
+This supersedes the earlier lens-local lower/full control. Performance work
+and public tagged publication retain their human-cued receiving events.
