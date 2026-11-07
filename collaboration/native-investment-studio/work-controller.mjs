@@ -11,6 +11,7 @@ import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
 
 const INSTANCES = new WeakMap();
+let receiverSequence = 0;
 const NUMBER_FIELDS = Object.freeze(['hoursPerSession', 'minutesPerSession', 'occurrences']);
 const FIELDS = Object.freeze(['label', 'teamId', ...NUMBER_FIELDS, 'funding', 'status']);
 const ERROR_FIELDS = Object.freeze([...FIELDS, 'personIds']);
@@ -48,6 +49,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     ['durationHours', '[data-native-duration-hours]'], ['durationMinutes', '[data-native-duration-minutes]'],
     ['context', '[data-native-session-context]'], ['status', '[data-native-session-status]'],
   ].map(([key, selector]) => [key, requireElement(selector)]));
+  elements.configure.id ||= `studio-session-settings-${++receiverSequence}`;
   const agreement = elements.name.closest('.native-coordination__agreement');
   const agreementRack = document.createElement('details'); agreementRack.className = 'studio-session-details';
   const agreementCaption = document.createElement('summary'); agreementCaption.textContent = 'People and supported work';
@@ -635,6 +637,10 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close,
     isOpen: () => !disposed && elements.configure.open,
+    readReceiver: () => ({ selectedId: disposed ? null : selectedId,
+      expanded: !disposed && isActive() && elements.configure.open
+        && !elements.configure.closest('[hidden], details:not([open])'),
+      controlsId: elements.configure.id }),
     resume() {
       if (disposed) return;
       composing = false;

@@ -2711,13 +2711,6 @@ p#on-dark-iron-ore {
 .native-coordination summary::marker { color: var(--native-text); }
 .native-coordination__actions > button { min-inline-size: min(9rem, 100%); }
 .native-coordination button.native-control--create { justify-self: start; inline-size: fit-content; min-inline-size: min(9rem, 100%); max-inline-size: 100%; }
-.native-coordination button.native-control--remove,
-.native-coordination button[data-removal='true'] {
-    background: var(--native-zine-rose);
-    border-color: var(--native-zine-rose-ink);
-    border-inline-start-width: .35rem;
-    color: var(--native-zine-rose-ink);
-}
 /* Membership toggles keep both geometry and the explicit ordering controls. */
 .native-coordination .native-coordination__member {
     align-content: start;
@@ -2756,7 +2749,6 @@ p#on-dark-iron-ore {
     .native-coordination { --native-zine-field: Canvas; --native-zine-rose: Canvas; --native-zine-rose-ink: ButtonText; }
     .native-zine__rail { display: none; }
     .native-coordination select, .native-coordination__amp .native-zine__stamp { box-shadow: none; }
-    .native-coordination button.native-control--remove { border-style: double; }
     .native-coordination .native-coordination__member[data-selected='false'] { border-style: dashed; }
 }
 @media print {
@@ -3527,8 +3519,6 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-cadence__track-table thead th { background: #213f32; color: #fff4d4; }
 .native-cadence__track-table tr > :first-child { position: sticky; inset-inline-start: 0; z-index: 1; inline-size: 10rem; background: #213f32; box-shadow: .2rem 0 0 #10261e; }
 .native-coordination .native-cadence__track-period { inline-size: 100%; min-inline-size: 0; padding: .45rem 1.35rem .45rem .4rem; border: 0; border-radius: .1rem; background: #eee7c5; color: #18372b; box-shadow: inset 0 -.15rem #a7ae91; font-size: .75rem; text-align: start; }
-.native-coordination .native-cadence__track-name { display: grid; gap: .25rem; inline-size: 100%; min-inline-size: 0; padding: .4rem 1.35rem .4rem .35rem; border: 1px solid #668b73; border-radius: .1rem; background: #2e5140; color: #f0f4d8; box-shadow: none; font-size: .75rem; text-align: start; }
-.native-cadence__track-name small { color: #c2decc; font: 500 .65rem/1.4 ui-monospace, monospace; }
 .native-cadence__pads { display: grid; grid-template-columns: repeat(var(--cadence-pad-columns), minmax(0, 1fr)); grid-auto-flow: row dense; align-content: center; gap: .3rem; min-block-size: 2.75rem; }
 .native-coordination .native-cadence__pad { display: grid; align-content: center; gap: .15rem; inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .3rem 1rem .3rem .35rem; border: 1px solid #84e8c8; border-block-end: .25rem solid #379580; border-radius: .15rem; background: #64d5b7; color: #112f24; box-shadow: 0 .12rem 0 #02180d; font: 750 .7rem/1.25 ui-monospace, monospace; text-align: start; }
 .native-coordination .native-cadence__pad small { color: inherit; white-space: nowrap; font: 550 .63rem/1.3 ui-monospace, monospace; }

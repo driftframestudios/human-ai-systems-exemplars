@@ -60,7 +60,7 @@
 .native-coordination .native-zine__return { background: var(--about-cool-blue); border-inline-start-color: var(--about-cobalt); }
 .native-coordination :is(.native-coordination__actions .native-control--navigate, .studio-team-lane__add) { box-shadow: none; background: transparent; border: 1px solid var(--native-rule); }
 .native-coordination :is(.studio-team-lane, .native-cadence__period, .native-cadence__stage, .native-score__stage, .native-arrangement__lane) .native-control--create { box-shadow: none; border: 1px dashed var(--native-rule); background: color-mix(in srgb, var(--native-signal) 18%, var(--native-paper)); }
-.native-coordination :is(button,a).native-control--navigate[data-native-destination-active='true']::after,
+.native-coordination :is(button,a).native-control--navigate:not([data-studio-session-id])[data-native-destination-active='true']::after,
 .native-coordination :is(button,a).native-control--navigate[aria-expanded='true']::after { transform: translateY(-50%) rotate(135deg); }
 .native-coordination button[type='submit'] { background: var(--native-signal); }
 .native-coordination input[type='text']:not([inputmode]):not(:disabled), .native-coordination textarea:not(:disabled) { background: var(--native-zine-field); color: var(--native-text); border-color: var(--native-rule); }
@@ -80,4 +80,38 @@
  .native-coordination__amp .native-motion__choices label { color: ButtonText; border-color: ButtonText; }
  .native-coordination__amp .native-motion input { appearance: auto; }
  .native-coordination__amp .native-motion__choices label:has(:checked) { border-color: Highlight; color: Highlight; }
+}
+
+/* Shared row controls retain chapter-owned table and pad geometry. Selection
+   comes from the session receiver; expansion describes its visible editor. */
+.native-coordination .studio-track-key {
+ display: grid; gap: .25rem; inline-size: 100%; min-inline-size: 0;
+ padding: .4rem 1.35rem .4rem .35rem; border: 1px solid #668b73;
+ border-radius: .1rem; background: #2e5140; color: #f0f4d8;
+ box-shadow: none; font-size: .75rem; text-align: start;
+}
+.studio-track-key strong { font-size: inherit; }
+.studio-track-key small { color: #c2decc; font: 500 .65rem/1.4 ui-monospace, monospace; }
+.native-coordination .studio-track-key[aria-pressed='true'] {
+ background: #164d3d; border-color: var(--native-signal);
+ box-shadow: inset .2rem 0 0 var(--native-signal);
+}
+.native-coordination button.native-control--create.studio-rack-add {
+ min-inline-size: 0; min-block-size: 2.75rem; margin: 0; padding: .4rem .55rem;
+ border: 1px dashed var(--native-rule); border-radius: .15rem;
+ background: color-mix(in srgb, var(--native-signal) 18%, var(--native-paper));
+ color: var(--native-text); box-shadow: none; font-size: .75rem;
+}
+.native-coordination button.native-control--remove,
+.native-coordination button[data-removal='true'] {
+    background: var(--native-zine-rose);
+    border-color: var(--native-zine-rose-ink);
+    border-inline-start-width: .35rem;
+    color: var(--native-zine-rose-ink);
+}
+@media (forced-colors: active) {
+ .native-coordination .studio-track-key { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
+ .studio-track-key small { color: inherit; }
+ .native-coordination .studio-track-key[aria-pressed='true'] { outline: .15rem solid Highlight; outline-offset: -.2rem; }
+ .native-coordination button.native-control--remove { border-style: double; }
 }

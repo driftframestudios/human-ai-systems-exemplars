@@ -287,7 +287,7 @@ export function mountAssurancePanel(root, { studio, editing, onBegin = () => {},
     for (const concept of concepts) {
       const row = node('tr'), title = node('th'); title.scope = 'row';
       const inspect = button(concept.label, 'inspect-concept', { assuranceConceptId: concept.id });
-      inspect.classList.add('native-control--navigate', 'native-cadence__track-name'); title.append(inspect);
+      inspect.classList.add('native-control--navigate', 'studio-track-key'); title.append(inspect);
       const included = raw[`concept.${concept.id}.included`] === 'yes', stateCell = node('td');
       const locked = included && Boolean(constraints.required[concept.id]);
       const pad = button(locked ? '◆ Included' : included ? 'Included' : 'Available', 'toggle-concept', { assuranceConceptId: concept.id });

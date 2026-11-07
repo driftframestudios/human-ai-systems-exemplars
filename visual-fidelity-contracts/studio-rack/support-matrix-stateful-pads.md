@@ -68,6 +68,7 @@ refer to them. Apply, Cancel and Undo keep their existing acceptance boundaries.
 | [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs) and [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Table meaning, selected card and adjacent retained editor |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Component support, quality inclusion and their existing draft owners |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Native people/session relationship table |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Shared session keys and participation pads reflect the selected session and its actual receiver visibility |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Scoped table, rail, pad and adjacent-rack variants |
 | [Capability browser checks](../../tests/native-investment-studio/capability.browser.mjs) | Support states, retained selected drafts, shared work and readable table controls |
 | [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Component selection, linked work, pressure-driven pad movement and recovery |
@@ -82,13 +83,16 @@ interpretation remains a human walkthrough question.
 ## Re-entry and future scope
 
 Revisit when a cell changes meaning, a pad changes operation, a source record
-gains a new state, or an inspector moves. The prospective
+gains a new state, or an inspector moves. The
 [Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
 uses Shared sessions as a participation reading: each column names a person and
 each row names shared work. A populated pad means that person participates;
-selection identifies the session being inspected. The whole-session key and its
-participation pads are to identify the same selected record without treating all
-populated pads as active inspectors.
+selection identifies the session being inspected. Accepted-session keys and
+participation pads now mirror the same selected record and visible receiver.
+Participation remains the pad's relationship meaning; selected/open cues describe
+inspection. Proposed-only sessions keep their proposal-settings destination and
+remain outside the accepted-session receiver's state. The permanent Team planning
+enclosure is the next #765 increment.
 
 The existing `native-quality-tracks` is the preferred aesthetic precedent for
 future in-rack selection matrices: compact named rows, dark table housing,

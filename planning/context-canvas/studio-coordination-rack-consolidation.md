@@ -5,15 +5,16 @@ shows when sessions happen; **Team planning** shows who works together. Shared
 instrument controls make both views familiar while their labels preserve those
 different questions.
 
-**Standing — 7 November 2026:** this is the reconciled planning decision for
+**Standing — 7 November 2026:** this is the approved consolidation route for
 [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765).
 Current behavior remains in the [Studio source](../../collaboration/native-investment-studio/README.md).
-PR #769 recorded the initial distinction and preparation route. The subsequent
-planning exploration adds direct empty-space creation, participant movement,
-attached editorial companions, a more precise duration composition and scoped
-removal/recovery. Runtime
-work follows in focused PRs after planning. The current aesthetic, compact
-landing and useful existing operations remain the reference.
+PR #769 recorded the initial distinction and preparation route, refined in
+PR #774. The first runtime increment implements shared session controls; the
+permanent Team planning section and secondary rack are the next focused PR.
+Direct empty-space creation, participant movement, attached editorial companions,
+duration enclosures and scoped removal/recovery retain their separate receivers
+below. The current aesthetic, compact landing and existing operations remain the
+reference.
 
 ## Same work, distinct readings
 
@@ -34,30 +35,30 @@ person and an open editor remain separately observable states.
 
 ## Common controls and enclosure
 
-Use the current horizon's Session tracks keys as the shared art direction.
-The existing handoff key supplies the selected-state precedent. Inactive keys
-have a quieter face; selection has a persistent border/pressed treatment;
-the caret points down while that record's receiving editor is open. A closed
-receiver has a right-facing cue. Keyboard focus remains independently visible.
-Disclosure semantics identify the actual controlled editor.
-Before relocation, the key still names the existing session-settings destination;
-its open cue describes that real receiver. Adjacent-panel wording and control
-relationships begin when the adjacent panel is mounted.
+The shared `studio-track-key` role adopts the horizon's Session tracks art
+direction and the handoff key's selected-state precedent. Inactive keys have a
+quieter face; selection has a persistent border/pressed treatment. Keyboard focus
+remains independently visible. The caret points down while that record's actual
+session-settings receiver is visible and open; a closed receiver keeps a
+right-facing cue even when its record stays selected.
 
-Both views need state from the receiving session editor. Today the score
-controller routes work selections before assigning its local selection, and
-Shared sessions callers omit the renderer's selected ID. The global last-click
-cue is useful motion feedback; the existing editor/coordinator must supply
-durable selected-record and open-state meaning.
+The session editor supplies record identity, open visibility and the controlled
+element ID through `readReceiver()`. `rack-controls.mjs` mirrors that state into
+the controls in both readings, in place, preserving focus and horizontal scroll.
+Accepted-session keys and populated pads receive the same selected-record and
+expanded state. Proposed-only arrangement sessions keep their proposal route;
+their synthetic IDs stay outside the accepted-session receiver. The global
+last-click effect remains transient motion feedback. Existing session-settings
+destination wording remains accurate until an adjacent editor is mounted.
 
-One shared style role in the existing instrument stylesheet can cover the row
-keys and Add session controls; receiving styles retain column geometry. A plus
-begins creation. The final Add confirms the item being prepared. Horizon entry
-supplies its period/subdivision; Team planning supplies its known context. Both
-continue through the same creation owner, including cross-team participants.
+`studio-rack-add` supplies the shared Add session treatment in the existing
+instrument stylesheet; receiving styles retain column geometry. A plus begins
+creation. The final Add confirms the item being prepared. Horizon entry supplies
+its period/subdivision; Team planning supplies its known context. Both continue
+through the current creation owner, including cross-team participants.
 
-The darker Team planning rack adopts the horizon's bezel, compact header,
-readout alignment and named horizontal scroll region. Keep the header outside
+In the next #765 increment, the darker Team planning rack adopts the horizon's
+bezel, compact header, readout alignment and named horizontal scroll region. Keep the header outside
 scrolling content, extending #756's scope treatment. Existing Quality lanes and
 pads supply composition precedents for compact choices; each receiving control
 keeps its own participation, selection or editing meaning.
@@ -205,8 +206,10 @@ disclosure/inspector and `motion.mjs`'s disclosure owner during composition.
 
 The [removal research](../../collaboration/native-investment-studio/removal-recovery-research.md)
 compares five patterns and recommends a quiet rose Remove control with an
-explicit object/scope. Preserve the already generic `native-control--remove`
-role as its shared skin is consolidated. Routine recoverable accepted removal
+explicit object/scope. The first #765 increment moves the existing
+`native-control--remove` skin into the shared instrument stylesheet unchanged.
+The proposed visual refinement and recovery behavior remain with #773.
+Routine recoverable accepted removal
 can have a concise rack-local result and named Undo; meaningful linked effects
 receive a compact adjacent consequence choice. Existing membership and
 cadence/stage/handoff drafts retain Apply/Cancel. Direct Team arrangement
@@ -229,7 +232,7 @@ expanding the first style PR into a deletion-model rewrite.
 
 | Issue | Owns | Receives / prepares |
 | --- | --- | --- |
-| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Semantic contract, shared session controls, then Team planning composition in focused PRs | Current front; prepares the following receivers |
+| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls implemented in the first increment; permanent Team planning composition next | Current front; prepares the following receivers |
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Receives #765; settles record identity before adjacent editors |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Duration/rate enclosures | Receives shared grammar; can proceed alongside #766; precedes both adjacent editor issues |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |

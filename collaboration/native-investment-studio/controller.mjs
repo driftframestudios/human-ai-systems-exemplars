@@ -12,6 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
+import { syncSessionControls } from './rack-controls.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
 import { mountConnectionView } from './connection-view.mjs';
@@ -107,6 +108,9 @@ export function mountCoordinationPanel(root, options = {}) {
   }
 
   function text(name, value) { elements[name].textContent = value; }
+  function syncSessionReceiver() {
+    if (!disposed && workPanel) syncSessionControls(root, workPanel.readReceiver());
+  }
   function announce(message) { text('status', message); }
   function resumePeople() {
     if (peopleEditor === 'assembly') assemblyPanel?.resume();
@@ -562,6 +566,7 @@ export function mountCoordinationPanel(root, options = {}) {
     changePanel?.refresh();
     assurancePanel?.refresh();
     scorePanel?.refresh();
+    if (current()) syncSessionReceiver();
     return view;
   }
 
@@ -732,6 +737,8 @@ export function mountCoordinationPanel(root, options = {}) {
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
+    const sessionWorkspace = root.querySelector('[data-native-workspace="session"]');
+    if (sessionWorkspace) listen(sessionWorkspace, 'toggle', syncSessionReceiver);
     connectionView = mountConnectionView(requireElement('[data-native-connection-view]'), { projection: studio.read(),
       onSelect: id => { if (!disposed && connectionPanel?.select(id) === false) render(); },
       onNavigate: navigateFromConnections, onDetachArrangement: id => templatePanel?.detach(id) });
@@ -741,7 +748,7 @@ export function mountCoordinationPanel(root, options = {}) {
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'connection' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
-    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing, onNavigate: navigateFromConnections,
+    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing, onNavigate: navigateFromConnections, onViewChanged: syncSessionReceiver,
       onBegin: () => beginCoordination('template'),
       canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'template' && !purposePanel?.isOpen(),
@@ -752,7 +759,7 @@ export function mountCoordinationPanel(root, options = {}) {
       onBegin: () => beginCoordination('score'), canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       onNavigate: navigateFromScore, onInspect: element => motion?.indicate(element, { kind: 'inspection' }),
-      onCreateSession: createSessionFromHorizon, onExample: useHorizonExample,
+      onCreateSession: createSessionFromHorizon, onExample: useHorizonExample, onViewChanged: syncSessionReceiver,
       onAccepted: () => render(), onEditing: () => render() });
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,

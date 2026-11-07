@@ -2,7 +2,6 @@
    accepted/proposed records; this extension gives their controls a shared rack. */
 .native-coordination {
   --studio-editorial-surface: var(--studio-editorial);
-  --studio-track-key: color-mix(in srgb, var(--about-deep-teal) 25%, var(--studio-screen));
   --studio-extra-work: color-mix(in srgb, var(--about-gold) 60%, var(--native-paper));
 }
 .studio-team-lanes,
@@ -39,9 +38,6 @@
 .native-coordination .studio-session-tracks thead th { font: 600 .7rem/1.3 system-ui, sans-serif; inline-size: 6rem; min-inline-size: 5.5rem; overflow-wrap: normal; }
 .native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { inline-size: 13rem; min-inline-size: 11rem; text-align: start; }
 .native-coordination .studio-session-tracks tbody td { border-block-end: 1px solid var(--native-rule); }
-.native-coordination .studio-session-tracks__name { inline-size: 100%; display: grid; justify-items: start; text-align: start; gap: .15rem; padding: .4rem .6rem; background: var(--studio-track-key); color: var(--native-paper); border: 1px solid var(--about-sea-glass); box-shadow: inset 0 -.15rem var(--studio-screen); }
-.studio-session-tracks__name strong { font-size: .8rem; }
-.studio-session-tracks__name small { font-size: .7rem; font-weight: 400; }
 .native-coordination .studio-session-tracks__pad { min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
 .native-coordination .studio-session-tracks__pad.native-control--navigate { padding-inline: .3rem 1rem; }
 .native-coordination .studio-session-tracks__pad.native-control--navigate::after { inset-inline-end: .3rem; inline-size: .35rem; block-size: .35rem; }
@@ -49,7 +45,6 @@
 .native-coordination .studio-session-tracks__pad[data-status='paused'] { background: var(--about-muted); border-style: dashed; color: var(--native-paper); }
 .studio-session-tracks__empty { color: var(--about-sea-glass); }
 .native-coordination .studio-session-tracks__legend { font: .7rem/1.4 ui-monospace, monospace; margin: .35rem; color: var(--native-paper); }
-.studio-session-tracks tr[data-selected='true'] .studio-session-tracks__name { border-color: var(--native-signal); background: var(--about-deep-teal); }
 .studio-arrangement-deck { display: grid; grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.7fr); gap: 1rem; align-items: start; min-inline-size: 0; }
 .native-coordination :is(.native-connections, .native-connection-template__form, .studio-connections-tracks) { min-inline-size: 0; max-inline-size: 100%; }
 .native-coordination .native-connection-template__form, .native-coordination .native-patch-bay { grid-template-columns: minmax(0, 1fr); }
@@ -98,7 +93,6 @@
 .studio-lifecycle__lane { min-inline-size: 0; border: 1px solid var(--native-rule); border-block-start: .2rem solid var(--about-deep-teal); background: var(--studio-peach); padding: .5rem; display: grid; align-content: start; gap: .35rem; }
 .studio-lifecycle__lane h5 { font-size: .8rem; margin: 0 0 .2rem; }
 .native-coordination .studio-lifecycle__pad { inline-size: 100%; min-inline-size: 0; min-block-size: 2.75rem; padding: .4rem 1.5rem .4rem .5rem; text-align: start; background: var(--studio-editorial-surface); border: 1px solid var(--native-rule); box-shadow: inset 0 -.15rem var(--about-sea-glass); font-size: .8rem; }
-.native-coordination .studio-session-tracks button.studio-track-create { background: var(--studio-screen); color: var(--native-paper); border: 1px dashed var(--about-sea-glass); box-shadow: none; margin: .35rem; }
 .native-coordination .native-cadence__flow { background: var(--studio-peach); }
 .native-coordination .native-cadence__flow .native-score__inspector { margin: .6rem 0 0; padding: .5rem; border: 0; border-block-start: 1px solid var(--native-rule); box-shadow: none; }
 .native-coordination .native-cadence__flow :is(.native-cadence__stage, .native-cadence__handoff) { background: var(--studio-editorial-surface); }

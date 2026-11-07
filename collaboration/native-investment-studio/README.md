@@ -30,11 +30,13 @@ and Change disclosure cues ([#760](https://github.com/driftframestudios/human-ai
 Its visual grammar is recorded in [#755](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/755).
 Coordination's scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756))
 keeps **Plan overview** and the selected sprint or quarter inside the rack.
-The next [Coordination consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
-defines common rack controls while preserving two readings: the horizon shows
-when sessions happen; Team planning shows who participates. Shared styling and
-the permanent Team planning section are scoped in
-[#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765).
+The [Coordination consolidation](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
+in [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+gives both readings shared session keys and Add controls: the horizon shows
+when sessions happen; Team planning shows who participates. Selected keys follow
+the session editor's current record, and their carets follow its visible open
+state. The permanent Team planning section and secondary rack enclosure are the
+next focused increment in that issue.
 Direct arrangement selection ([#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766))
 and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
 prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
@@ -52,9 +54,10 @@ and attached editorial companions
 ([#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)).
 The [removal/recovery recommendation](removal-recovery-research.md) in
 [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773)
-adds a shared rose Remove treatment, compact amp **Undo (n)** and scoped local
-recovery. Coordination supplies the reviewed example before removal controls
-spread to other chapters.
+adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
+recovery. The existing Remove skin now lives with the shared instrument styles;
+its behavior stays with the current owners. Coordination supplies the reviewed
+recovery example before the new removal pattern spreads to other chapters.
 These are prospective increments. Current arrangement preview/Apply, editor
 placement and creation flows remain available until their replacements land.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
@@ -134,8 +137,9 @@ their recorded timing and offer an explicit sprint-arrangement proposal.
 Team planning offers a complementary view: its Shared sessions columns name
 people, and its pads show participation. The horizon's columns name periods,
 and its pads show occurrences. Both open the same working-session records.
-The next consolidation will give these readings consistent session keys and
-Add controls while keeping that distinction visible. A future New session row
+Both readings use the same session-key and Add treatment. The selected key stays
+identifiable when its editor closes; its caret opens only with the visible
+session-settings receiver. A future New session row
 will provide ghosted creation space inside the rack; existing row cells retain
 their occurrence or participation meaning. People and available time and
 Stages & handoffs will remain compact editorial companions attached below the
@@ -233,6 +237,7 @@ checked source and remaining review boundary.
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
+| Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,

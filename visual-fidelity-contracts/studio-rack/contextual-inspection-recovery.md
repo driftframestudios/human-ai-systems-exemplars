@@ -64,6 +64,7 @@ at ordinary phone widths and enlarged text.
 | Owner or observation | Responsibility |
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Session editor identity and visibility mirrored into the mounted controls in both Coordination readings |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
 | [Capability](../../collaboration/native-investment-studio/capability-controller.mjs), [Change](../../collaboration/native-investment-studio/change-controller.mjs), [Assurance](../../collaboration/native-investment-studio/assurance-controller.mjs) | Selected records and their local receivers |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Adjacent rack, track controls and workbench composition |
@@ -79,15 +80,14 @@ operation and geometry; human walkthrough establishes whether the cue is clear.
 
 ## Re-entry and future scope
 
-The next [Coordination control consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
-is to make the session keys in both racks agree about the selected record and
-open receiver. Durable selection comes from the editor's current record; the
-transient indication of the last clicked destination remains presentation.
-Closing a receiver restores its closed caret while preserving any separately
-retained selection or draft. When an existing path still navigates to a remote
-editor, its destination wording continues to identify that actual receiver.
-An open caret describes the visible receiver it controls; adjacent-panel wording
-and control relationships begin when the adjacent panel is mounted.
+The first [Coordination control increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+makes session keys in both racks agree about the selected record and open
+receiver. `readReceiver()` supplies the editor's identity, visible open state and
+element ID; the shared synchronizer updates the controls in place. The transient
+last-click effect retains its presentation role. Closing or hiding the receiver
+restores its closed caret while preserving any separately retained selection or
+draft. Session-settings wording and `aria-controls` identify the existing remote
+editor. Adjacent-panel wording begins when the adjacent panel is mounted.
 
 Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)

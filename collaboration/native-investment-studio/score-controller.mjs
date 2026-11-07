@@ -18,7 +18,7 @@ const cadenceFrom = raw => { try { return JSON.parse(raw.cadence ?? 'null'); } c
 // The score draft retains the transaction. This controller owns the visitor's
 // selected period and contextual inspector; zoom never enters accepted state.
 export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {}, onAccepted = () => {},
-  onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
+  onViewChanged = () => {}, onNavigate = () => {}, onCreateSession = () => {}, onExample = () => {}, onInspect = () => {}, canOpen = () => true, isActive = canOpen }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.score, instance = 'score-' + ++sequence, cleanup = [], controls = new Map();
   let disposed = false, generation = 0, composing = false, retiredToken = null, periodId = null;
@@ -278,6 +278,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (disposed) return current;
     const reading = proposed?.ok ? proposed.projection : current.projection;
     view.refresh(reading, { periodId, selected, preview: Boolean(proposed?.ok && current.draft.changed) });
+    onViewChanged();
     const isNew = created.has(selected.kind + ':' + selected.id);
     title.textContent = isNew ? 'New ' + LABELS[selected.kind] : selected.kind === 'horizon' ? 'Arrange the work' : 'Inspect ' + (LABELS[selected.kind] ?? 'the work');
     if (isNew && selected.kind === 'gate') {
