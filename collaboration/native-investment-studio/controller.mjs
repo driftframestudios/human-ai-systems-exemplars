@@ -183,6 +183,7 @@ export function mountCoordinationPanel(root, options = {}) {
   }
   function createPrerequisite(button) {
     const kind = button.dataset.nativeReturn, creating = button.dataset.nativeCreate;
+    if (kind === 'template') templatePanel?.settleText();
     if (!['session', 'connection', 'assembly', 'contribution', 'template', 'capability', 'change', 'assurance'].includes(kind) || !['person', 'team', 'session'].includes(creating)) return;
     const view = kind === 'template' ? null : editing[kind].read();
     const target = view?.draft?.[{ session: 'sessionId', connection: 'connectionId', assembly: 'assemblyId', contribution: 'contributionId', capability: 'capabilityId', change: 'changeId', assurance: 'assuranceId' }[kind]];
@@ -234,7 +235,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (!templatePanel?.open()) return;
       returnRoutes.pop(); render(); renderReturnRoute();
       templatePanel.focus();
-      announce('Your arrangement entries are ready. Choose the added person and preview the arrangement.');
+      announce('Your arrangement entries are ready. Choose the added person to update the arrangement.');
       return;
     }
     const panel = { session: workPanel, connection: connectionPanel, assembly: assemblyPanel, contribution: responsibilityPanel, capability: capabilityPanel, change: changePanel, assurance: assurancePanel, score: scorePanel }[route.kind];

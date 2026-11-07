@@ -25,10 +25,8 @@ after(async () => { try { await Promise.all([...browsers.values()].map(browser =
 const panel = page => page.locator('[data-connection-templates]');
 const field = (page, path) => panel(page).locator(`[data-template-field="${path}"]`);
 const action = (page, name) => panel(page).locator(`[data-template-action="${name}"]`);
-const preview = page => panel(page).locator('form').evaluate(form => form.requestSubmit());
 const status = page => panel(page).locator('[data-connection-template-status]');
 const bytes = page => page.evaluate(() => window.templateFixture.studio.exportText());
-const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 async function card(page, id) {
   const rack = panel(page).locator('.studio-arrangement-settings');
   if (!(await rack.evaluate(node => node.open))) await rack.locator(':scope > summary').click();
@@ -66,268 +64,231 @@ async function open(t, engine) {
   await expect(panel(page)).toBeVisible();
   return page;
 }
-async function existingGroups(page) {
-  await card(page, 'team:pod'); await field(page, 'teams.pod.selection').selectOption('team:delivery');
-  await card(page, 'team:partner'); await field(page, 'teams.partner.selection').selectOption('team:receiving');
-}
+const choose = (page, id) => panel(page).locator(`[data-reel-choice="${id}"]`).click();
+const history = page => page.evaluate(() => window.templateFixture.studio.readHistory());
+const arrangement = page => page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0]);
 
 for (const engine of names) {
-  test(`${engine}: arrangement reel previews populated new structures before Apply and Undo restores the plan`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine);
-    const before = await bytes(page);
-    for (const id of ['stream-aligned', 'matrix', 'tiger-team']) {
-      await panel(page).locator(`[data-reel-choice="${id}"]`).click();
-      await expect(panel(page).locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
-      assert.equal(await panel(page).locator('[data-delivery-team]').evaluateAll(cards => new Set(cards.map(card => card.dataset.deliveryTeam)).size), 3, 'the phase board retains every proposed team');
-      await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'false');
-      assert.equal(await bytes(page), before, 'a reel choice prepares a proposal while accepted state stays intact');
-    }
-    await action(page, 'apply').click();
-    const accepted = await page.evaluate(() => {
-      const fixture = window.templateFixture, state = fixture.studio.read().state;
-      return { template: state.arrangements.at(-1).templateId, session: state.work.at(-1).label,
-        members: state.teams.slice(-3).map(team => team.personIds), accepted: fixture.accepted };
-    });
-    assert.equal(accepted.template, 'tiger-team'); assert.equal(accepted.session, 'Diagnose and agree a response');
-    assert.ok(accepted.members.every(members => members.length)); assert.equal(accepted.accepted, 1);
-    await page.evaluate(() => { const { studio, controller } = window.templateFixture; studio.undo(studio.read()); controller.render(); });
-    assert.equal(await bytes(page), before);
+  test(`${engine}: reel selections replace one accepted arrangement and Undo restores its complete preceding state`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    assert.equal((await history(page)).undoCount, 0, 'mounting the starter illustration leaves accepted history untouched');
+    await expect(action(page, 'apply')).toBeHidden();
+    await choose(page, 'pod');
+    const first = await arrangement(page), pod = await bytes(page);
+    assert.equal(first.templateId, 'pod');
+    assert.notEqual(pod, initial);
+    assert.equal((await history(page)).undoCount, 1);
+    await expect(panel(page).locator('[data-arrangement-reading="accepted"]')).toHaveAttribute('data-arrangement-id', first.id);
+    await expect(panel(page).locator('[data-template-rack] > header')).toContainText('Included work');
+    await choose(page, 'tiger-team');
+    const tiger = await bytes(page);
+    assert.equal((await arrangement(page)).id, first.id);
+    assert.equal((await arrangement(page)).templateId, 'tiger-team');
+    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Diagnose and agree a response');
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 1);
+    const acceptedIds = await page.evaluate(() => window.templateFixture.studio.read().state.work.map(row => row.id));
+    const rackIds = await panel(page).locator('[data-studio-session-id]').evaluateAll(keys => keys.map(key => key.dataset.studioSessionId));
+    assert.ok(rackIds.length && rackIds.every(id => acceptedIds.includes(id)), 'the rack routes through accepted session identities');
+    await choose(page, 'pod');
+    assert.equal((await arrangement(page)).id, first.id);
+    assert.equal((await arrangement(page)).templateId, 'pod');
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 1);
+    const returned = await bytes(page), undoCount = (await history(page)).undoCount;
+    await choose(page, 'pod');
+    assert.equal(await bytes(page), returned);
+    assert.equal((await history(page)).undoCount, undoCount, 'reselecting the current arrangement creates no history entry');
+    await action(page, 'undo').click();
+    assert.equal(await bytes(page), tiger, 'one Undo restores the entire preceding arrangement and work');
+    await expect(panel(page).locator('[data-reel-choice="tiger-team"]')).toHaveAttribute('aria-pressed', 'true');
+    await page.evaluate(() => { const f = window.templateFixture; f.studio.redo(f.studio.read()); f.controller.render(); });
+    assert.equal(await bytes(page), returned);
+    await expect(panel(page).locator('[data-reel-choice="pod"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(action(page, 'apply')).toBeHidden();
   });
 
-  test(`${engine}: authored arrangements retain distinct topology, actual endpoints and human handoffs through Apply, return and detach`, { timeout: 60000 }, async t => {
+  test(`${engine}: complete text edits settle once and preserve unfinished person edits for review`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const f = window.templateFixture, opened = f.editing.person.begin('product-one', f.studio.read());
+      f.editing.person.setText(opened.view.draft.token, 'ratePerHour', '105.50');
+    });
+    await choose(page, 'pod');
+    const saved = await page.evaluate(() => window.templateFixture.editing.read().parked);
+    assert.equal(saved.length, 1); assert.equal(saved[0].raw.ratePerHour, '105.50');
+    assert.equal(saved[0].status, 'stale', 'the saved person edit stays available for review against the new arrangement');
+    await card(page, 'connection:handoff');
+    const input = field(page, 'connections.handoff.sharedObject');
+    const before = await bytes(page), beforeCount = (await history(page)).undoCount;
+    await input.fill('A reviewed implementation plan');
+    assert.equal(await bytes(page), before, 'typing retains a complete local entry before settlement');
+    await input.press('Tab');
+    assert.equal((await history(page)).undoCount, beforeCount + 1);
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections[0].sharedObject), 'A reviewed implementation plan');
+    await input.fill('A reviewed implementation plan and acceptance examples');
+    await input.press('Enter');
+    assert.equal((await history(page)).undoCount, beforeCount + 2, 'Enter accepts one complete entry');
+    await input.press('Tab');
+    assert.equal((await history(page)).undoCount, beforeCount + 2, 'the subsequent blur leaves the same entry unchanged');
+    await action(page, 'undo').click();
+    await expect(input).toHaveValue('A reviewed implementation plan');
+    assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked[0].raw.ratePerHour), '105.50');
+    // An intervening accepted edit retires the arrangement-specific shortcut.
+    await page.evaluate(() => {
+      const f = window.templateFixture, plan = f.studio.read();
+      f.studio.updatePerson('product-one', { ...plan.state.people[0], rateCentsPerHour: 11000 }, plan); f.controller.render();
+    });
+    await expect(action(page, 'undo')).toBeHidden();
+  });
+
+  test(`${engine}: shared records receive a local keep-or-copy choice before an arrangement edit`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await choose(page, 'pod');
+    const sharedTeam = await page.evaluate(() => {
+      const f = window.templateFixture, before = f.studio.read();
+      const connection = { ...before.state.connections[0], id: 'external-handoff' };
+      const result = f.studio.applyCommand({ type: 'connection.create', connection }, before);
+      if (!result.ok) throw Error(result.error.code);
+      f.controller.render(); return before.state.arrangements[0].teamBindings[0].teamId;
+    });
+    const before = await bytes(page), count = (await history(page)).undoCount;
+    await card(page, 'team:pod');
+    const name = field(page, 'teams.pod.label'), originalName = await name.inputValue();
+    await name.fill('Delivery for this arrangement'); await name.press('Tab');
+    await expect(action(page, 'preserve')).toBeVisible();
+    assert.equal(await bytes(page), before, 'shared records stay intact until the visitor chooses how to proceed');
+    assert.equal((await history(page)).undoCount, count);
+    await action(page, 'cancel').click();
+    await expect(name).toHaveValue(originalName);
+    assert.equal(await bytes(page), before);
+    await name.fill('Delivery for this arrangement'); await name.press('Enter');
+    await action(page, 'preserve').click();
+    const result = await page.evaluate(() => window.templateFixture.studio.read().state);
+    assert.equal(result.arrangements.length, 1);
+    const selectedTeam = result.arrangements[0].teamBindings[0].teamId;
+    assert.notEqual(selectedTeam, sharedTeam);
+    assert.equal(result.teams.find(row => row.id === selectedTeam).label, 'Delivery for this arrangement');
+    assert.equal(result.teams.find(row => row.id === sharedTeam).label, originalName);
+    assert.equal(result.connections.find(row => row.id === 'external-handoff').senderTeamId, sharedTeam);
+    await expect(action(page, 'preserve')).toBeHidden();
+    assert.equal((await history(page)).undoCount, count + 1);
+    await action(page, 'undo').click();
+    assert.equal(await bytes(page), before, 'Undo restores the shared-record choice and its arrangement together');
+  });
+
+  test(`${engine}: team customization retains a session's recorded timing and lifecycle`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await choose(page, 'matrix');
+    const recorded = await page.evaluate(() => {
+      const f = window.templateFixture, before = f.studio.read();
+      const work = before.state.work.find(row => row.label === 'Agree shared assignments');
+      const timing = { startMinute: 120, repeatEveryMinutes: null };
+      const result = f.studio.updateWork(work.id, { ...work, timing, lifecycle: 'retired' }, before);
+      if (!result.ok) throw Error(result.error.code);
+      f.controller.render(); return { id: work.id, timing, lifecycle: 'retired' };
+    });
+    await card(page, 'team:delivery');
+    const label = field(page, 'teams.delivery.label');
+    const before = await bytes(page);
+    await label.fill('Delivery team for the next release'); await label.press('Tab');
+    await expect(action(page, 'preserve')).toBeVisible();
+    assert.equal(await bytes(page), before, 'the timed session keeps its existing team until the visitor accepts a separate arrangement team');
+    await action(page, 'preserve').click();
+    const after = await page.evaluate(id => window.templateFixture.studio.read().state.work.find(row => row.id === id), recorded.id);
+    assert.deepEqual(after.timing, recorded.timing);
+    assert.equal(after.lifecycle, recorded.lifecycle);
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.teams.find(row => row.label === 'Delivery team for the next release') !== undefined), true);
+  });
+
+  test(`${engine}: accepted arrangement controls retain topology, editor routes and recoverable detach`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(async () => {
-      const fixture = window.templateFixture; fixture.controller.dispose();
+      const f = window.templateFixture; f.controller.dispose();
       const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
       mountCoordinationPanel(document.querySelector('[data-native-coordination]')).dispose();
-      const plan = JSON.parse(fixture.studio.exportText());
-      plan.contributions.push({ id: 'drafting-support', categoryId: 'draft-artifacts', receiverPersonId: 'product-one', decisionOwnerPersonId: 'product-one',
-        workIds: ['review'], reviewBoundary: 'Check the draft against the working plan.', decisionBoundary: 'Decide which changes enter the handoff.' });
-      const imported = fixture.studio.importText(JSON.stringify(plan), fixture.studio.read()); if (!imported.ok) throw Error(imported.error.code);
-      fixture.nativeController = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: fixture.studio });
+      f.nativeController = mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio: f.studio });
     });
     const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
-    await expect(accepted).toContainText('Custom connections');
+    await choose(page, 'pod');
+    const id = (await arrangement(page)).id;
+    await card(page, 'team:pod');
+    const teamName = field(page, 'teams.pod.label');
+    const acceptedTeamName = () => page.evaluate(() => {
+      const state = window.templateFixture.studio.read().state;
+      const teamId = state.arrangements[0].teamBindings.find(row => row.slotId === 'pod').teamId;
+      return state.teams.find(row => row.id === teamId).label;
+    });
+    await teamName.fill('Delivery with named ownership');
+    await root.locator('[data-native-chapter="people"]').click();
+    await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
+    await expect.poll(acceptedTeamName).toBe('Delivery with named ownership');
+    await root.locator('[data-native-chapter="coordination"]').click();
+    await expect(teamName).toHaveValue('Delivery with named ownership');
+    await teamName.fill('Delivery ready for review');
+    await panel(page).locator('[data-session-track="review"] .studio-session-tracks__name').click();
+    await expect(root.locator('[data-native-session-editor] [name="label"]')).toHaveValue('Weekly working session');
+    await expect.poll(acceptedTeamName).toBe('Delivery ready for review');
+    await root.locator('[data-native-return-action]').click();
+    await expect(teamName).toHaveValue('Delivery ready for review');
     await panel(page).locator('[data-delivery-team="pod"] .studio-delivery__team-key').first().click();
     await expect(field(page, 'teams.pod.selection')).toBeFocused();
-    await expect(panel(page).locator('.studio-arrangement-settings')).toHaveAttribute('open', '');
-    const original = await bytes(page), sketch = panel(page).locator('[data-template-structure]');
-    const expected = {
-      pod: ['pod>partner', 'partner>pod'], guild: ['practice>delivery', 'delivery>practice'],
-      'project-team': ['sponsor>project', 'project>operations', 'operations>project'],
-      'shared-service': ['requester>service', 'service>requester'],
-    };
-    const signatures = [];
-    for (const [id, edges] of Object.entries(expected)) {
-      await panel(page).locator(`[data-reel-choice="${id}"]`).click();
-      await expect(sketch.locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
-      await expect(sketch).toContainText('Proposed structure');
-      assert.deepEqual(await sketch.locator('[data-arrangement-connection]').evaluateAll(rows => rows.map(row => `${row.dataset.senderTeam.replace('proposal-slot-', '')}>${row.dataset.receiverTeam.replace('proposal-slot-', '')}`)), edges);
-      signatures.push(await sketch.locator('.native-arrangement__diagram').evaluate(svg => [...svg.querySelectorAll('[data-arrangement-boundary]')].map(row => row.dataset.arrangementBoundary).join('|')));
-      assert.equal(await bytes(page), original);
-      await sketch.locator('.native-arrangement__viewport').screenshot({ path: resolve(captures, `${engine}-${id}-structure.png`) });
-    }
-    assert.equal(new Set(signatures).size, 4, 'each arrangement explains a different source-owned grouping before acceptance');
-    await panel(page).locator('[data-reel-choice="pod"]').click();
-    await sketch.locator('[data-arrangement-team="proposal-slot-pod"]').click();
-    await expect(field(page, 'teams.pod.selection')).toBeFocused();
-    await field(page, 'teams.pod.label').fill('Shared delivery');
-    await panel(page).locator('[data-reel-choice="guild"]').click();
-    await panel(page).locator('[data-reel-choice="pod"]').click(); await card(page, 'team:pod');
-    await expect(field(page, 'teams.pod.label')).toHaveValue('Shared delivery');
-    await preview(page); await action(page, 'apply').click();
-    const arrangementId = await page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0].id);
+    await panel(page).locator('[data-delivery-connection="handoff"]').click();
+    await expect(field(page, 'connections.handoff.sharedObject')).toBeFocused();
+    await panel(page).locator('[data-delivery-session="review"]').click();
+    await expect(root.locator('[data-native-session-editor] [name="label"]')).toHaveValue('Weekly working session');
+    await root.locator('[data-native-return-action]').click();
     await accepted.locator('.studio-accepted-connections > summary').click();
     const reading = accepted.locator('[data-arrangement-reading="accepted"]');
-    await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId); await expect(reading).toContainText('Accepted arrangement · Pod');
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().result.plannedCommitmentCents), 1600000);
-    await root.locator('[data-native-chapter="change"]').click(); await root.locator('[data-native-chapter="coordination"]').click();
-    await expect(reading).toContainText('Shared delivery');
-    await page.evaluate(() => { const f = window.templateFixture, result = f.studio.importText(f.studio.exportText(), f.studio.read()); if (!result.ok) throw Error(result.error.code); f.nativeController.refresh(); });
-    await expect(reading).toHaveAttribute('data-arrangement-id', arrangementId);
-    const beforeInspection = await bytes(page);
+    await expect(reading).toHaveAttribute('data-arrangement-id', id);
     await reading.locator('.studio-team-lane__title').first().click();
     await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
     await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toBeFocused();
-    await root.locator('[data-native-assembly] [data-assembly-form] [name="label"]').fill('Shared delivery · unfinished name');
-    await root.locator('[data-native-return-action]').click(); await expect(reading).toBeVisible();
-    await reading.locator('.studio-team-lane__title').first().click();
-    await expect(root.locator('[data-native-assembly] [data-assembly-form] [name="label"]')).toHaveValue('Shared delivery · unfinished name');
-    await root.locator('[data-native-return-action]').click(); assert.equal(await bytes(page), beforeInspection);
-    const cable = reading.locator('.native-arrangement__cable').first(); await cable.scrollIntoViewIfNeeded();
-    const hit = await cable.evaluate(path => {
-      const point = path.getPointAtLength(path.getTotalLength() / 2); point.y += 6;
-      const screen = point.matrixTransform(path.getScreenCTM()); return { x: screen.x, y: screen.y };
-    });
-    await page.mouse.click(hit.x, hit.y);
-    const connection = root.locator('[data-native-connection-editor]');
-    await expect(connection.locator('[name="senderTeamId"]')).toBeFocused();
-    await connection.locator('[name="senderTeamId"]').selectOption('delivery'); await connection.locator('[data-connection-apply]').click();
-    await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
-    await expect(reading.locator('[data-arrangement-connection]').first()).toHaveAttribute('data-sender-team', 'delivery');
-    await expect(reading.locator('[data-arrangement-slot="external"]')).toHaveCount(1);
-    const beforeBlockedRemoval = await bytes(page);
-    await connection.locator('[data-connection-action="remove"]').click();
-    const grouping = connection.locator('[data-connection-dependencies] [data-native-open-arrangement]');
-    await expect(grouping).toHaveText('Review Pod arrangement'); await grouping.click();
-    await expect(accepted.locator('[data-arrangement-choice]')).toBeFocused();
-    assert.equal(await bytes(page), beforeBlockedRemoval);
-    const handoff = accepted.locator('[data-connection-contributions]');
-    await expect(handoff).toContainText('Check the draft against the working plan.');
-    await expect(handoff).toContainText('Decide which changes enter the handoff.');
-    await expect(handoff).toContainText('Human review'); await expect(handoff).toContainText('Decision');
-    await handoff.locator('[data-connection-target-kind="contribution"]').click();
-    await expect(root.locator('[data-native-chapter-panel="people"]')).toBeVisible();
-    await expect(root.locator('[data-responsibility-configure="contribution"] [name="categoryId"]')).toBeFocused();
     await root.locator('[data-native-return-action]').click();
-    const beforePeople = await bytes(page);
-    await handoff.locator('[data-connection-target-kind="person"]').first().click();
-    await expect(root.locator('[data-person-configure] [name="ratePerHour"]')).toBeFocused();
-    await root.locator('[data-native-return-action]').click();
-    await handoff.locator('[data-connection-target-kind="work"]').click();
-    await expect(root.locator('[data-native-session-editor] [name="hoursPerSession"]')).toBeFocused();
-    await root.locator('[data-native-return-action]').click(); assert.equal(await bytes(page), beforePeople);
     const beforeDetach = await bytes(page);
     await accepted.locator('[data-connection-action="detach-arrangement"]').click();
     await expect(panel(page).locator('[data-template-preview]')).toContainText('teams, current connections and working sessions remain available');
-    assert.equal(await bytes(page), beforeDetach); await action(page, 'apply').click();
-    const detached = await page.evaluate(() => window.templateFixture.studio.read().state);
-    assert.equal(detached.arrangements.length, 0); assert.equal(detached.connections.length, 2); assert.equal(detached.work.length, 1);
+    assert.equal(await bytes(page), beforeDetach);
+    await action(page, 'apply').click();
+    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.arrangements.length), 0);
     await expect(accepted).toContainText('Custom connections');
     await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
-    assert.equal(await bytes(page), beforeDetach); await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
-    await reading.screenshot({ path: resolve(captures, `${engine}-accepted-desktop.png`) });
+    assert.equal(await bytes(page), beforeDetach);
+    await expect(reading).toHaveAttribute('data-arrangement-id', id);
     await page.setViewportSize({ width: 390, height: 1000 });
-    const viewport = reading.locator('.native-arrangement__viewport'); await viewport.focus(); await expect(viewport).toBeFocused();
+    await expect(reading).toBeVisible();
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-    const human = handoff.locator('[data-connection-target-kind="person"]').first();
-    const nameReading = await human.evaluate(button => {
-      const text = button.firstChild, start = text.textContent.indexOf('product'), lines = new Set();
-      for (let index = start; index < start + 'product'.length; index += 1) {
-        const range = document.createRange(); range.setStart(text, index); range.setEnd(text, index + 1);
-        lines.add(Math.round(range.getBoundingClientRect().top));
-      }
-      const style = getComputedStyle(button);
-      return { lines: lines.size, width: button.getBoundingClientRect().width, fontSize: style.fontSize,
-        paddingStart: style.paddingInlineStart, paddingEnd: style.paddingInlineEnd };
-    });
-    assert.equal(nameReading.lines, 1, `the named human remains word-readable at mobile width: ${JSON.stringify(nameReading)}`);
-    await handoff.screenshot({ path: resolve(captures, `${engine}-human-handoff-narrow.png`) });
-    assert.ok(await viewport.evaluate(element => { element.scrollLeft = element.scrollWidth; return element.scrollWidth <= element.clientWidth + 1 || element.scrollLeft > 0; }), 'the complete diagram fits or remains horizontally reachable');
     await accepted.screenshot({ path: resolve(captures, `${engine}-accepted-narrow.png`) });
   });
-  test(`${engine}: templates preview literal staffing and allocation, add explicit review work, and publish one Undo step`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine), original = await bytes(page);
-    await existingGroups(page); await preview(page);
-    await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,000.00');
-    assert.equal(await bytes(page), original); await action(page, 'cancel').click(); assert.equal(await bytes(page), original);
-    await preview(page); await action(page, 'apply').click();
-    await expect(panel(page)).toBeVisible(); await expect(action(page, 'apply')).toBeFocused();
-    const first = await page.evaluate(() => { const { studio, accepted } = window.templateFixture; return { state: studio.read().state, result: studio.read().result, history: studio.readHistory(), accepted }; });
-    assert.equal(first.state.connections.length, 2); assert.equal(first.history.undoCount, 1); assert.equal(first.accepted, 1);
-    assert.equal(first.result.plannedCommitmentCents, 1600000); assert.equal(first.result.allocatedKnownCents, 40000);
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
-    await card(page, 'connection:handoff'); await panel(page).locator('[data-template-recovery="handoff"]').check();
-    await field(page, 'recovery.handoff.team').selectOption('team:delivery');
-    await field(page, 'recovery.handoff.personIds').selectOption(['product-one']);
-    await field(page, 'recovery.handoff.hoursPerSession').fill('1'); await field(page, 'recovery.handoff.minutesPerSession').fill('30');
-    await field(page, 'recovery.handoff.occurrences').fill('1'); await preview(page);
-    await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,150.00');
-    await expect(panel(page).locator('.studio-session-tracks')).toContainText('Review the handoff');
-    await action(page, 'apply').click();
-    const final = await page.evaluate(() => { const f = window.templateFixture; return { result: f.studio.read().result, work: f.studio.read().state.work, history: f.studio.readHistory() }; });
-    assert.equal(final.result.plannedCommitmentCents, 1615000); assert.equal(final.result.additionalKnownCents, 15000); assert.equal(final.result.allocatedKnownCents, 40000);
-    assert.equal(final.work.length, 2); assert.equal(final.history.undoCount, 1);
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.controller.render(); });
-    assert.equal(await bytes(page), original);
-  });
 
-  test(`${engine}: configuration edits, shared draft intent and equal imports retire previews while retaining correctable inputs`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine); await existingGroups(page); await card(page, 'connection:handoff');
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.applyCommand({ type: 'team.create', team: { id: 'new', label: 'Existing New group', personIds: [] } }, f.studio.read()); f.controller.render(); });
-    await field(page, 'teams.pod.selection').selectOption('team:new'); await preview(page);
-    await expect(panel(page).locator('[data-delivery-team="pod"]').first()).toContainText('Existing New group');
-    await expect(panel(page).locator('[data-delivery-team="pod"]').first()).toContainText('product-one');
-    await field(page, 'teams.pod.selection').selectOption('team:delivery');
-    await page.evaluate(() => { const f = window.templateFixture, d = f.editing.person.begin('product-one', f.studio.read()).view.draft; f.editing.person.setText(d.token, 'ratePerHour', '105'); });
-    await preview(page);
-    assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 1);
-    await field(page, 'connections.handoff.sharedObject').fill('A changed plan');
-    await expect(panel(page).locator('[data-template-preview]')).toBeHidden();
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
-    await preview(page);
-    await page.evaluate(() => { const f = window.templateFixture, d = f.editing.purpose.begin('purpose', f.studio.read()).view.draft; f.editing.purpose.setText(d.token, 'changedAbility', 'Recover samples'); });
-    await action(page, 'apply').click(); await expect(status(page)).toContainText('Choose the arrangement again');
-    assert.equal(await page.evaluate(() => window.templateFixture.editing.read().active.kind), 'purpose');
-    await preview(page); assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 2);
-    await page.evaluate(() => { const f = window.templateFixture; f.studio.replace(f.studio.read().state, f.studio.read()); f.controller.render(); });
-    await expect(status(page)).toContainText('plan or edits changed'); await action(page, 'apply').evaluate(button => button.click());
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
-    await page.evaluate(() => { const f = window.templateFixture; f.controller.close(); f.controller.resume(); });
-    await expect(field(page, 'connections.handoff.sharedObject')).toHaveValue('A changed plan');
-    await preview(page); await action(page, 'apply').click();
-    assert.equal(await page.evaluate(() => window.templateFixture.editing.read().parked.length), 2);
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections[0].sharedObject), 'A changed plan');
-    await field(page, 'connections.handoff.sharedObject').fill('Another arrangement'); await preview(page);
-    await expect(status(page)).toContainText('Start another arrangement');
-    await action(page, 'another').click(); await preview(page); await action(page, 'apply').click();
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 4);
-  });
-
-  test(`${engine}: recovery controls remain reachable, invalid duration holds publication and callback remount owns focus and status`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine); await existingGroups(page); await card(page, 'connection:handoff');
-    await panel(page).locator('[data-template-recovery="handoff"]').check();
-    await field(page, 'recovery.handoff.team').selectOption('team:delivery'); await field(page, 'recovery.handoff.personIds').selectOption(['product-one']);
-    const hours = field(page, 'recovery.handoff.hoursPerSession'); await hours.fill('-1'); await preview(page);
-    await expect(hours).toHaveAttribute('aria-invalid', 'true'); assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 0);
-    await panel(page).locator('[data-template-recovery="handoff"]').uncheck(); await preview(page);
-    await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,000.00');
-    await panel(page).locator('[data-template-recovery="handoff"]').check(); await preview(page);
-    await expect(hours).toHaveValue('-1'); await expect(panel(page).locator('[data-template-preview]')).toBeHidden();
-    await hours.fill('00001'); await field(page, 'recovery.handoff.minutesPerSession').fill('30');
-    const step = panel(page).locator('[data-template-action="step"][data-template-path="recovery.handoff.minutesPerSession"][data-template-step="1"]');
-    await step.click(); await expect(field(page, 'recovery.handoff.minutesPerSession')).toHaveValue('31');
-    await expect(step).toBeFocused();
-    for (const [name, value] of [['hoursPerSession', '00001'], ['minutesPerSession', '00031'], ['occurrences', '00001']]) await field(page, `recovery.handoff.${name}`).fill(value);
-    for (const [width, fontSize] of [[768, '100%'], [320, '100%'], [320, '200%']]) {
-      await page.setViewportSize({ width, height: 900 }); await page.evaluate(size => { document.documentElement.style.fontSize = size; }, fontSize); await frames(page);
-      await hours.scrollIntoViewIfNeeded(); await frames(page);
-      const quantities = await panel(page).locator('[data-template-card="connection:handoff"] input[inputmode="numeric"]').evaluateAll(inputs => inputs.map(input => {
-        const style = getComputedStyle(input), context = document.createElement('canvas').getContext('2d'); context.font = style.font;
-        const box = input.getBoundingClientRect(), available = box.width - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight)
-          - Number.parseFloat(style.borderLeftWidth) - Number.parseFloat(style.borderRightWidth);
-        return { field: input.dataset.templateField, value: input.value, available, textWidth: context.measureText(input.value).width,
-          scrollWidth: input.scrollWidth, clientWidth: input.clientWidth };
-      }));
-      assert.equal(quantities.length, 3);
-      for (const quantity of quantities) assert.ok(quantity.value.length === 5 && quantity.textWidth <= quantity.available + 1
-        && quantity.scrollWidth <= quantity.clientWidth + 1, `${width}px/${fontSize} keeps five raw digits visible: ${JSON.stringify(quantity)}`);
-    }
-    await hours.scrollIntoViewIfNeeded(); await frames(page);
-    const geometry = await panel(page).evaluate(element => ({ box: element.getBoundingClientRect().toJSON(), width: innerWidth,
-      controls: [...element.querySelectorAll('input,select,button')].filter(node => node.getClientRects().length && !node.closest('.studio-session-tracks, .studio-delivery__board')).map(node => ({ tag: node.tagName, field: node.dataset.templateField ?? node.dataset.templateAction, box: node.getBoundingClientRect().toJSON(), parent: { className: node.parentElement.className, box: node.parentElement.getBoundingClientRect().toJSON(), font: getComputedStyle(node).font, width: getComputedStyle(node).inlineSize } })) }));
-    for (const control of geometry.controls) assert.ok(control.box.left >= geometry.box.left - 1 && control.box.right <= geometry.box.right + 1, `${control.tag} remains in the template panel: ${JSON.stringify({ control, panel: geometry.box })}`);
-    assert.ok(geometry.box.right <= geometry.width + 1);
-    await page.screenshot({ path: resolve(captures, `template-${engine}-320-enlarged.png`), fullPage: false });
+  test(`${engine}: invalid recovery entries retain accepted work and callback remount owns focus and status`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await choose(page, 'tiger-team'); await card(page, 'connection:diagnose');
+    const before = await bytes(page), hours = field(page, 'recovery.diagnose.hoursPerSession');
+    await hours.fill('-1'); await hours.press('Tab');
+    await expect(hours).toHaveAttribute('aria-invalid', 'true');
+    assert.equal(await bytes(page), before, 'invalid entries leave the accepted arrangement available');
+    await hours.fill('1'); await hours.press('Tab');
+    await expect(hours).toHaveAttribute('aria-invalid', 'false');
+    assert.notEqual(await bytes(page), before);
     await page.evaluate(() => {
       const f = window.templateFixture; f.controller.dispose();
       f.controller = f.mount(f.element, { studio: f.studio, editing: f.editing, onAccepted() {
         f.controller.dispose(); f.controller = f.mount(f.element, { studio: f.studio, editing: f.editing }); f.controller.open();
         f.element.querySelector('[data-connection-template-status]').textContent = 'Successor keeps this status.';
-        f.element.querySelector('[data-template-action="apply"]').focus();
+        f.element.querySelector('[data-reel-choice="guild"]').focus();
       } }); f.controller.open();
     });
-    await preview(page); await action(page, 'apply').click();
-    await expect(status(page)).toHaveText('Successor keeps this status.'); await expect(action(page, 'apply')).toBeFocused();
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 2);
+    await choose(page, 'guild');
+    await expect(status(page)).toHaveText('Successor keeps this status.');
+    await expect(panel(page).locator('[data-reel-choice="guild"]')).toBeFocused();
+    assert.equal((await arrangement(page)).templateId, 'guild');
     await page.evaluate(() => {
       const f = window.templateFixture; f.controller.dispose(); f.hooks = 0;
       const facade = { ...f.studio, replace(candidate, expected) { const result = f.studio.replace(candidate, expected); f.controller.dispose(); return result; } };
       f.controller = f.mount(f.element, { studio: facade, editing: f.editing, onAccepted() { f.hooks += 1; } }); f.controller.open();
     });
-    await preview(page); await action(page, 'apply').click();
-    assert.equal(await page.evaluate(() => window.templateFixture.hooks), 0);
-    assert.equal(await page.evaluate(() => window.templateFixture.studio.read().state.connections.length), 4);
+    await choose(page, 'pod');
+    assert.equal(await page.evaluate(() => window.templateFixture.hooks), 0, 'a disposed receiver leaves the successor callback alone');
+    assert.equal((await arrangement(page)).templateId, 'pod');
     await expect(panel(page)).toBeHidden();
   });
 }

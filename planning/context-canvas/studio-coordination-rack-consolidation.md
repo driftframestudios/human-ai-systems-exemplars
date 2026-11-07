@@ -10,10 +10,12 @@ different questions.
 Current behavior remains in the [Studio source](../../collaboration/native-investment-studio/README.md).
 PR #769 recorded the initial distinction and preparation route, refined in
 PR #774. PR #775 delivered shared session controls; PR #778 completed the permanent
-Team planning section and secondary rack. The approved
+Team planning section and secondary rack. PR #781 delivered
 [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
-increment combines proposed teams, sessions and handoffs into an editorial
-delivery board, with its focused PR owning verification and independent review.
+by combining teams, sessions and handoffs into an editorial delivery board.
+[#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+adds direct arrangement replacement and local Undo; its focused PR owns the
+transaction and receiver evidence.
 Direct empty-space creation, participant movement, attached editorial companions,
 duration enclosures and scoped removal/recovery retain their separate receivers
 below. The current aesthetic, compact landing and existing operations remain the
@@ -29,7 +31,7 @@ reference.
 | A populated pad | A session occurrence | A person's participation in a session |
 | Record identity | Existing work ID, plus occurrence/period where relevant | The same work ID, plus person where relevant |
 | Visual emphasis | Primary instrument rack | Subtly darker secondary instrument rack, with editorial surroundings |
-| Amount | Current plan's included work | Accepted investment, or whole-plan proposed investment while a preview is prepared; a linked-work amount belongs to #766 |
+| Amount | Current plan’s included work | Included work in this arrangement, with shared sessions priced once; the amp retains the whole-plan amount |
 
 Both readings address the same session editor. Duration, repetitions, people
 and funding retain their existing owners. A participation pad expresses who is
@@ -49,9 +51,9 @@ The session editor supplies record identity, open visibility and the controlled
 element ID through `readReceiver()`. `rack-controls.mjs` mirrors that state into
 the controls in both readings, in place, preserving focus and horizontal scroll.
 Accepted-session keys and populated pads receive the same selected-record and
-expanded state. Proposed-only arrangement sessions keep their proposal route;
-their synthetic IDs stay outside the accepted-session receiver. The global
-last-click effect remains transient motion feedback. Existing session-settings
+expanded state. The starter arrangement illustration keeps its initial route;
+a deliberate choice accepts the arrangement and its rack uses accepted IDs.
+The global last-click effect remains transient motion feedback. Existing session-settings
 destination wording remains accurate until an adjacent editor is mounted.
 
 `studio-rack-add` supplies the shared Add session treatment in the existing
@@ -133,23 +135,24 @@ Team planning is a permanent semantic section with the following order:
 3. The short arrangement hint below the zoetrope/structure deck.
 4. Secondary rack header and investment readout, followed by the delivery-phase
    board and Shared sessions participation tracks.
-5. Existing preview/Apply controls, customization and accepted connection details;
-   adjacent selected-object editing remains a later issue.
+5. Local Undo, customization and accepted connection details; adjacent
+   selected-object editing remains a later issue.
 
 The About composition uses an ordinary section and exposed template container.
-The template controller retains its existing edit-retention, preview freshness
-and acceptance owners; its legacy disclosure receiver stays supported.
-`delivery-board.mjs` composes proposed team/member, session and handoff controls
-inside the secondary rack. The editorial structure retains the topology above;
+The template controller settles direct choices through the accepted plan and
+keeps other unfinished editors with the shared coordinator. Its legacy disclosure
+receiver stays supported. `delivery-board.mjs` composes team/member, session and
+handoff controls inside the secondary rack. The editorial structure retains the topology above;
 the accepted-arrangement reader retains its existing team and connection routes.
 `createSessionTracks` keeps a visible heading and Add session above its named
 local scroll region. The broader arrangement owner keeps existing connection
 and session operations available.
 
-The readout labels the whole-plan accepted amount until preview supplies a
-whole-plan proposed amount. Missing rates retain the known-amount label. This
-composition preserves preview, Apply, Cancel and Start another arrangement;
-the direct acceptance and linked-work amount below belong to #766.
+The readout names Included work in this arrangement. Its distinct linked
+sessions are priced once through the existing cost projection; missing rates
+retain a known-amount label. The amp retains the whole-plan amount. A local Undo
+returns the preceding accepted plan while the current arrangement remains the
+latest accepted change.
 
 ### Editorial delivery board
 
@@ -168,8 +171,9 @@ A pure presentation projection uses stable template/slot identities and explicit
 phase mappings. Source-owned stage labels remain context for their sessions;
 custom stages and supporting work retain routes. Team/member cards address
 existing team customization; handoffs address connection customization. Accepted
-sessions and proposed-only review sessions keep their current distinct receivers.
-The board changes presentation, while preview, Apply and Undo keep plan ownership.
+sessions use their accepted record IDs after arrangement selection. The board
+owns presentation; the arrangement transaction and existing history own plan
+changes and recovery.
 
 The proposed-team strip, duplicated connection-button strip and Delivery lifecycle
 disclosure are superseded in this receiver. Remaining attached summaries retain
@@ -186,18 +190,24 @@ same configuration changes nothing; A → B → A revises that instance rather t
 accumulating generated teams and sessions. Unrelated and shared records retain
 their identities and references.
 
-This needs a focused transaction change. The current template engine appends
-generated records, permits identical replay, and rejects changed rows using an
-existing identity. Simply calling its Apply operation on every selection would
-preserve those append/collision semantics. The replacement operation should
-prepare and accept one complete change through the current history owner.
+The focused replacement owner prepares one complete change before acceptance.
+It updates records owned by this arrangement and preserves unrelated and shared
+records with their references. When a changed record is shared, a compact local
+choice can keep that record and use separate replacement records within the same
+arrangement instance. The earlier append-oriented template API keeps its own
+compatibility boundary.
+
+Text customization settles on field exit or Enter; bounded selections settle
+immediately. Invalid entries remain locally correctable. Repeated unchanged
+choices leave history intact. Local Undo is bound to its accepted change and
+retires after another edit; Investment retains full Undo/Redo recovery.
 
 The rack's amount comes from the existing projection of its distinct linked
 sessions. The amp retains the whole-plan amount. After direct acceptance, use
-current structure and Included work wording. Preserve the editorial styling of
-today's Proposed structure cards; proposed wording continues only while a
-proposal actually exists. Existing raw edits remain recoverable through the
-coordinator. This exception concerns arrangement choices; ordinary session and
+current structure and Included work wording. The initial illustration precedes
+the first deliberate selection and leaves accepted state intact. Preserve the
+editorial card styling and use proposed wording for an actual pending proposal.
+Existing raw edits remain recoverable through the coordinator. This exception concerns arrangement choices; ordinary session and
 person field editing retains its acceptance boundary.
 
 ## Duration and rate modules before editor placement
@@ -276,8 +286,8 @@ expanding the first style PR into a deletion-model rewrite.
 | Issue | Owns | Receives / prepares |
 | --- | --- | --- |
 | [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), permanent Team planning and secondary rack (#778) | Complete; supplies shared control and enclosure ownership |
-| [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Receives #765; phase scope and reel-driven projection preserve existing acceptance and editor owners |
-| [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Receives #765; settles record identity before adjacent editors |
+| [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Delivered in #781; supplies phase scope and the combined reading |
+| [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Supplies stable accepted identity before adjacent editors; its PR carries transaction and recovery evidence |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Duration/rate enclosures | Receives shared grammar; can proceed alongside #766; precedes both adjacent editor issues |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |
 | [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Shares #757's contextual panel contract and existing editor owners |
@@ -293,9 +303,9 @@ retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
-as accepted foundations. #765's reviewed composition and #779's delivery-board refinement prepare
-#766 and #767. #766 preserves sessions created through the new entry when
-arrangements change; #767 receives the exact
+as accepted foundations. #765’s reviewed composition, #779’s delivery board and
+#766’s direct replacement prepare the next receivers. #766 preserves sessions
+created through the new entry when arrangements change; #767 receives the exact
 duration hierarchy; #757/#768 receive nested matrices, shared names and companion
 routes. #758 now has a recommended first record and #770 its contextual entry.
 The underlying issue acceptance remains with each receiver.

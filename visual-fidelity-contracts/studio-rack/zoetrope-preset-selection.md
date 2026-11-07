@@ -30,8 +30,10 @@ is named and both results remain understandable together.
 
 The shared reel owns presentation and emits a selected ID. Its receiving
 controller owns what that choice means. A viewpoint can change the reading;
-a framework or arrangement can update a proposal. Those operations retain their
-existing Apply and Undo boundaries. A visible animation never accepts work.
+a framework can update a proposal. Team arrangement accepts a deliberate choice
+through one reversible replacement transaction. Focus-only movement and
+decorative rotation preserve accepted state. Other receivers retain their own
+Apply and Undo boundaries.
 
 Teal and cobalt reel variants, authored option counts and paired configurations
 may vary. The choice labels remain stationary while the center rotates. Selected
@@ -63,7 +65,7 @@ to fit an arbitrary circle.
 | --- | --- |
 | [Reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Choice map, button group, stepping, rotor state and disposal |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Housing, rotor, pressed treatment, motion and forced-color variant |
-| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Authored arrangement proposal and preview/Apply |
+| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) and [template transactions](../../collaboration/native-investment-studio/connection-templates.mjs) | Direct arrangement replacement, field settlement, included-work reading and local Undo |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Viewpoint/framework and preparation/recovery consequences |
 | [Shell browser checks](../../tests/native-investment-studio/shell.browser.mjs) | Shared reel semantics and motion preferences |
 | [Connection template](../../tests/native-investment-studio/connection-template.browser.mjs), [Change](../../tests/native-investment-studio/change.browser.mjs), [Assurance](../../tests/native-investment-studio/assurance.browser.mjs) | Populated choice results, preserved draft ownership and chapter-specific recovery |
@@ -78,19 +80,25 @@ about faster comprehension need observation with people using the showcase.
 
 Revisit when choice count, label length, consequence, motion or ownership changes.
 Keep configuration presets source-owned and predictable while exploring new
-visual variants. The prospective [Team planning arrangement flow](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
-changes that receiver's acceptance boundary: selecting a reel position is to
-update one arrangement instance immediately through the plan owner and retain
-Undo. Repeated selections update that instance and preserve unrelated work.
+visual variants. The [Team planning arrangement flow](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+accepts a deliberate reel selection immediately through the plan owner, with
+local Undo. Repeated choices revise the same instance; an unchanged choice
+leaves history intact. Unrelated and shared work retains identity and references.
+The starter illustration remains a reading until that first deliberate selection.
 The surrounding [Team planning composition](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
 keeps the reel and editorial structure together, followed by the short hint and
-secondary rack. This planned receiver is specific to Team arrangements; other
+secondary rack. This direct receiver is specific to Team arrangements; other
 reels and editors retain their existing reading or proposal behavior.
 
-The Team rack's amount is to name the linked-work subtotal it actually projects.
-Once a selection is accepted, its amount describes the accepted arrangement;
-proposal wording belongs to an actual pending proposal. Sharing a session across
-teams or relationships keeps that session's single cost identity. The reel
-continues to emit a selected ID, while its controller owns transaction identity,
-accepted investment and recovery. Current preview/Apply behavior remains the
-runtime authority until this focused increment lands.
+The Team rack names its amount Included work and prices distinct linked sessions
+once. The amp keeps whole-plan investment. Proposed wording belongs to an actual
+pending proposal. Its controller owns the replacement identity, accepted amount
+and recovery; the reel continues to emit a selected ID.
+
+Customization uses the same arrangement identity. Bounded choices settle
+immediately; text settles on field exit or Enter. Invalid entries remain
+correctable, and the shared editing coordinator preserves other unfinished work.
+A shared-record conflict offers a compact choice to preserve that record and use
+separate replacement records. Local Undo targets the arrangement’s latest accepted
+change; later accepted edits retire that shortcut while history remains available
+in Investment. Future global amp recovery stays with #773.

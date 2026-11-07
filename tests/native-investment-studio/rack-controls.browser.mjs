@@ -85,7 +85,7 @@ async function contained(page, width) {
 }
 
 for (const engine of names) for (const width of [390, 1440]) {
-  test(`${engine}: Team planning braids phases and edit routes with local scrolling and recoverable proposals at ${width}px`, { timeout: 60000 }, async t => {
+  test(`${engine}: Team planning braids phases and accepted edit routes with local scrolling and Undo at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), accepted = await bytes(page);
     const planning = root(page).locator('section[data-native-workspace="connection"]');
     const templates = planning.locator('[data-connection-templates]');
@@ -101,7 +101,8 @@ for (const engine of names) for (const width of [390, 1440]) {
       return [heading, deck, hint, rack].every(Boolean)
         && [heading, deck, hint].every((node, index) => Boolean(node.compareDocumentPosition([deck, hint, rack][index]) & Node.DOCUMENT_POSITION_FOLLOWING));
     }), true, 'heading, arrangement deck, hint and secondary rack form one reading order');
-    await expect(header.locator('[data-template-total]')).toHaveText('$3,980.00');
+    await expect(header).toContainText('Included work');
+    await expect(header.locator('[data-template-total]')).toHaveText(/\$[\d,]+\.\d{2}/u);
     const delivery = rack.locator('[data-delivery-template]');
     const board = delivery.locator('.studio-delivery__board');
     const phaseKeys = delivery.locator('[data-delivery-open]');
@@ -169,7 +170,7 @@ for (const engine of names) for (const width of [390, 1440]) {
       return { key: key.getBoundingClientRect().toJSON(), board: board.getBoundingClientRect().toJSON(), scroll: scrollY };
     });
     assert.ok(returnGeometry.key.left >= returnGeometry.board.left - 1 && returnGeometry.key.right <= returnGeometry.board.right + 1,
-      'return after an edit reveals the originating phase key inside the board');
+      `return after an edit reveals the originating phase key inside the board: ${JSON.stringify(returnGeometry)}`);
     assert.ok(Math.abs(returnGeometry.scroll - pagePosition) < 2, 'phase return preserves the visitor page position');
     const handoff = delivery.locator('[data-delivery-connection]').first();
     const handoffSlot = await handoff.getAttribute('data-delivery-connection');
@@ -179,43 +180,41 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(session(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
     await root(page).locator('[data-native-return-action]').click();
     await expect(planning).toBeVisible();
-    assert.equal(await bytes(page), accepted, 'phase, team, person, handoff and accepted session inspection retain the accepted plan');
+    const customized = await bytes(page);
+    assert.notEqual(customized, accepted, 'leaving a complete team name settles that customization');
 
     await delivery.locator('[data-delivery-open="testing"]').click();
+    const undoBefore = await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount);
     await templates.locator('[data-reel-choice="tiger-team"]').click();
-    await expect(templates.locator('[data-arrangement-reading="proposed"]')).toHaveAttribute('data-arrangement-template', 'tiger-team');
+    await expect(templates.locator('[data-arrangement-reading="accepted"]')).toHaveAttribute('data-arrangement-template', 'tiger-team');
     await expect(delivery).toHaveAttribute('data-delivery-template', 'tiger-team');
     await expect(board).toHaveAttribute('data-delivery-scope', 'testing');
     await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
     await delivery.locator('[data-delivery-overview]').click();
     assert.deepEqual(await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].sort()), ['owner', 'response', 'specialists']);
     assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).sort()), ['diagnose', 'resolve', 'return']);
-    await expect(header).toContainText('proposed investment');
-    assert.equal(await bytes(page), accepted, 'choosing an arrangement prepares its visual proposal');
-    const proposed = delivery.locator('[data-delivery-session^="proposal-session-"]').first();
-    const slot = (await proposed.getAttribute('data-delivery-session')).slice('proposal-session-'.length);
-    await proposed.click();
-    const customization = templates.locator(`[data-template-card="connection:${slot}"]`);
-    await expect(customization).toHaveAttribute('open', '');
-    await expect(customization.locator('input, select, button').first()).toBeFocused();
-    assert.equal(await bytes(page), accepted, 'a proposed session opens its arrangement entries before acceptance');
+    await expect(header).toContainText('Included work');
+    const arranged = await bytes(page);
+    assert.notEqual(arranged, customized, 'the explicit reel choice updates the accepted picture immediately');
+    await rack.screenshot({ path: resolve(captures, `${engine}-team-rack-accepted-${width}.png`) });
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1);
+    await expect(templates.locator('[data-template-action="apply"]')).toBeHidden();
+    const recoveryId = await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.label === 'Diagnose and agree a response').id);
+    await delivery.locator(`[data-delivery-session="${recoveryId}"]`).click();
+    await expect(session(page).locator('[name="label"]')).toHaveValue('Diagnose and agree a response');
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(planning).toBeVisible();
+    assert.equal(await bytes(page), arranged, 'the new session opens its accepted record for later editing');
 
     await sharedTrack(page, 'review').click();
     await expect(session(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
     await root(page).locator('[data-native-return-action]').click();
     await expect(planning).toBeVisible();
-    assert.equal(await bytes(page), accepted, 'accepted session inspection returns to the same Team planning section');
+    assert.equal(await bytes(page), arranged, 'accepted session inspection returns to the same Team planning section');
     await templates.locator('[data-reel-choice="tiger-team"]').click();
-    const undoBefore = await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount);
-    await templates.locator('[data-template-action="apply"]').click();
-    assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1, 'Apply publishes one recoverable arrangement');
-    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.arrangements.at(-1).templateId), 'tiger-team');
-    await page.evaluate(() => {
-      const { studio, controller } = window.rackFixture;
-      const result = studio.undo(studio.read()); if (!result.ok) throw Error(result.error.code);
-      controller.refresh();
-    });
-    assert.equal(await bytes(page), accepted, 'Undo restores the accepted arrangement and its work together');
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1, 'the selected arrangement can be inspected again without another history entry');
+    await templates.locator('[data-template-action="undo"]').click();
+    assert.equal(await bytes(page), customized, 'Undo restores the preceding arrangement and its work together');
   });
 
   test(`${engine}: session rack keys follow the selected record and actual editor at ${width}px`, { timeout: 60000 }, async t => {

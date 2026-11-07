@@ -45,23 +45,24 @@ header, with originating focus and local scroll restored on return. The approved
 #765 consolidation gives both Coordination readings shared session keys and
 Add controls through PR #775. The editor supplies selected-record and visible-open
 state. PR #778 completed Team planning's permanent section and darker secondary
-rack. The #779 increment braids its proposed teams, people, sessions and handoffs
-into six delivery-phase lanes, with a local phase view and Delivery overview
-return. The arrangement reel changes that proposal immediately. PR #769 and
+rack. PR #781 delivered #779: teams, people, sessions and handoffs share six
+delivery-phase lanes, with a local phase view and Delivery overview return.
+The #766 increment makes deliberate arrangement choices update one accepted
+instance directly, with local Undo and a linked-work amount. PR #769 and
 PR #774 recorded the earlier route and related design decisions. Direct
 creation (#770), participant controls (#771), attached editorial companions
 (#772) and scoped removal/shared Undo (#773) retain their focused issues.
-Direct arrangement selection (#766), dial enclosures (#767) and adjacent
-people/team (#757) and session (#768) editing also retain their bounded scopes.
-Existing editor placement, arrangement preview/Apply and creation ownership
-remain the runnable contract.
+Dial enclosures (#767) prepare adjacent people/team (#757) and session (#768)
+editing. Existing editor placement and creation ownership remain the runnable
+contract; Team arrangement has its own direct acceptance boundary.
 
 ### State, people and evidence
 
 | Owned meaning | Consequence for the experience |
 | --- | --- |
 | Accepted plan | One immutable projection supplies the accepted amount, work relationships, comparisons and downloads. |
-| Editor proposal | Raw text and selections remain with their editor until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
+| Editor proposal | Ordinary editors retain raw text and selections until Apply. Its amount describes the proposed change. Cancel returns to accepted values. |
+| Team arrangement | A deliberate reel choice revises one accepted arrangement. Bounded customization choices settle immediately; text settles on field exit or Enter. Local Undo restores the preceding plan. |
 | Saved edit | The shared coordinator retains target-bound unfinished work. A changed accepted identity can require explicit review even when values happen to match. |
 | History and baseline | Undo/Redo traverse accepted changes. A baseline is an independent comparison and restore point. Saved drafts retain their separate recovery route. |
 | Person | One identity, hourly rate and funded-time account can participate in several teams and sessions. Role labels identify the illustrative people. |
@@ -73,8 +74,10 @@ remain the runnable contract.
 | Status and removal | Pausing a connection or changing a check's inclusion preserves separately owned work. Removal reviews references before accepting the requested change. |
 | Evidence | Planned support, rehearsal and recorded observations retain different meanings. Imported findings preserve the reviewer, context and observed revision. Authored examples illustrate possible responses. |
 
-The amp displays accepted investment. Reels and faders can change a draft and
-its illustration; a presentation effect never accepts work or awards readiness.
+The amp displays accepted investment. Each reel’s receiving controller owns
+its consequence: Team arrangement accepts a deliberate choice; other reels and
+faders retain their reading or draft behavior. Decorative movement carries no
+acceptance or readiness meaning.
 A missing rate retains a known-amount reading and a route to its person editor.
 Line attribution and independently rounded subtotals keep their explanatory
 meaning; the plan's complete funding pools own the settled amount.
@@ -191,8 +194,8 @@ visitor can explore cross-functional work directly.
 **People and team planning.** Team lanes and person/session tracks lead. Selecting
 a person opens their existing settings; rates and ordering remain in a compact
 secondary route. Team arrangement reels show populated structures and actual
-work directions. The selected arrangement proposes teams, connections and
-supporting sessions together; Apply accepts it and Undo restores the prior plan.
+work directions. A deliberate arrangement choice accepts teams, connections
+and supporting sessions together; Undo restores the prior plan.
 A changed endpoint can show an adapted arrangement. Removing template grouping
 preserves the teams, work and connections. Earlier files retain a custom reading
 until a template is explicitly authored.
@@ -260,8 +263,9 @@ entry, screenshot or technical description presents the earlier behavior.
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
 | Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route now implements shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
-| Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; preview and Apply retain their acceptance meaning. |
-| Separate proposed-team strip, connection-button strip and Delivery lifecycle disclosure inside Team planning | #779 supersedes these parallel readings with one editorial delivery board. Six phase lanes combine team/member, session and handoff cards; the reel changes the proposal immediately. Shared sessions retains the people-by-session matrix below. Remaining attached disclosures preserve their spring reveal. |
+| Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; #766 supplies direct arrangement acceptance. |
+| Separate proposed-team strip, connection-button strip and Delivery lifecycle disclosure inside Team planning | #779 supersedes these parallel readings with one editorial delivery board. Six phase lanes combine team/member, session and handoff cards; the reel changes the selected structure immediately. Shared sessions retains the people-by-session matrix below. Remaining attached disclosures preserve their spring reveal. |
+| Arrangement preview, Apply and Start another arrangement | #766 replaces the regular selection flow with one revisable accepted instance and local Undo. Shared records retain their identities; text customization settles as a complete field edit. Included work describes deduplicated linked sessions. Existing grouping removal keeps its explicit confirmation. |
 | Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
@@ -278,9 +282,9 @@ meanings. The first #765 increment gives them shared session keys and Add
 controls. `work-controller.mjs` supplies its receiver through `readReceiver()`;
 `rack-controls.mjs` mirrors the selected ID, visible open state and controlled
 element ID into mounted controls. In-place synchronization preserves focus and
-horizontal position. Proposed-only arrangement records retain their proposal
-route rather than borrowing an accepted session's selected state. The last-click
-motion cue remains presentation feedback.
+horizontal position. The initial arrangement illustration keeps its starter
+route; after selection, the board and tracks address accepted session IDs. The
+last-click motion cue remains presentation feedback.
 
 Team planning is a permanent sibling section: heading, zoetrope with editorial
 team structure, concise hint, then a subtly darker secondary rack. Its delivery
@@ -291,26 +295,27 @@ matrix. Phase columns give the reel a visible consequence while Shared sessions
 continues to answer who participates in each session below the board.
 
 The board is an authored delivery projection. Explicit template/slot mappings
-place proposed roles and handoffs; plan-owned stage relationships remain readable
+place the selected roles and handoffs; plan-owned stage relationships remain readable
 with their sessions. A phase selection and Delivery overview return change only
 the presentation. The horizon continues to own sprint/quarter placement. Team
 and member cards open the relevant team customization, handoffs open connection
-customization, and accepted or proposed sessions retain their distinct existing
-receivers. Repeated references retain one work identity and cost account.
+customization, and accepted sessions reach their existing receiver. Repeated
+references retain one work identity and cost account.
 
 Independent review found a phone return-focus gap in #780: editing a team
 rebuilt the focused phase and lost its overview scroll position. The receiver
 now retains phase/return context, and the board brings the originating key
 inside its local viewport before restoring focus. The edit-and-return journey
-observes that visible target alongside the retained proposal.
+observes that visible target alongside the retained phase context.
 
 The rack heading, investment readout and Add session stay outside local scroll
-regions. The amount names accepted investment until a preview supplies whole-plan
-proposed investment; missing rates keep a known-amount label. Apply, Cancel
-preview and Start another arrangement retain their acceptance roles.
+regions. Included work prices the arrangement’s distinct linked sessions once;
+missing rates keep a known-amount label. The amp continues to show the whole plan.
 
-`connection-template-controller.mjs` owns this composition and its proposal
-lifecycle. `delivery-board.mjs` owns the phase projection and local scope;
+`connection-template-controller.mjs` owns this composition, its field settlement
+and scoped Undo. `connection-templates.mjs` prepares the replacement transaction
+against the accepted plan; the existing Studio history owns acceptance and
+recovery. `delivery-board.mjs` owns the phase projection and local scope;
 `connection-view.mjs` retains the editorial topology and accepted-arrangement
 readings. `arrangement-surfaces.mjs` owns the participation table and its fixed
 header/local scroller. About markup owns the permanent section; arrangement CSS
@@ -333,11 +338,24 @@ follow the same extraction rule: reconcile consumers and contract references
 when an actual shared owner exists; local geometry and domain state remain with
 their receiving owners.
 
-Direct arrangement selection needs a replacement transaction for one instance,
-with Undo. The current template engine appends generated records and detects
-identity collisions; applying it repeatedly would not create the requested
-revisable example. #766 owns that change. Accepted structure and Included work
-wording follow its actual state; the editorial card art direction remains.
+The #766 replacement transaction updates one arrangement instance. Repeating
+its unchanged configuration leaves history intact; switching configurations
+keeps unrelated and shared records by identity. A shared record that needs a
+separate replacement receives a compact local choice. The initial illustration
+changes no accepted state until the visitor selects an arrangement.
+
+Bounded customization selections settle immediately. Text fields settle on blur
+or Enter so a field edit creates one history entry. Invalid text remains
+correctable locally; other unfinished editors remain with the shared coordinator.
+Local Undo targets the arrangement change that created it and retires after a
+later accepted edit. Investment retains the full Undo/Redo history. This
+supersedes the earlier regular preview/Apply flow while retaining the editorial
+card treatment and the explicit confirmation for removing template grouping.
+A completed text edit lets its pointer destination finish before the board
+refreshes, preserving phase focus and local scroll. Review of
+[#782](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/782)
+also established that authored timing and retired session state survive an
+unrelated customization or later arrangement choice.
 
 Before adjacent editors, #767 encloses Hours, Minutes and their combined output
 in one duration module. A larger readout sits above the dials. Minutes has a
@@ -537,12 +555,10 @@ tracked in [#777](https://github.com/driftframestudios/human-ai-systems-exemplar
 The composition PR records the passing current journeys separately from those
 baseline failures.
 
-For re-entry, use #779 and its receiving PR for the delivery-board projection,
-reel variation, receiver routing and phone/laptop evidence. The source projection
-check and rack browser journey observe that bounded composition. #765 is complete;
-#766's direct arrangement selection and #767's enclosed controls remain the next
-receivers. They prepare
-adjacent people/team (#757) and session (#768) editors. PR #764 remains the
+For re-entry, use PR #781 for the delivery-board projection and #766’s receiving
+PR for the direct replacement transaction, local Undo and accepted-record
+routing. Their source and rack browser journeys observe those bounded changes.
+#767’s enclosed controls are the next preparation for adjacent people/team (#757) and session (#768) editors. PR #764 remains the
 accepted scope-navigation reference. Retain the current creation/confirmation
 contract while #758 defines its separate replacement.
 Pause before general performance refinement in

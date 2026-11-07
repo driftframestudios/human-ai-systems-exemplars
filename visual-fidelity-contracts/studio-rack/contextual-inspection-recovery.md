@@ -42,7 +42,7 @@ preserving their compact rack styling.
 
 ## Preserve the visitor's work
 
-Raw entries remain with the selected editor until Apply. The accepted amount
+Ordinary editor proposals retain raw entries until Apply. The accepted amount
 stays separate from its proposal. Chapter changes can retain work in Saved edits;
 a later accepted change may require review before that saved proposal applies.
 Cancel preserves accepted records. Undo/Redo and baseline comparison keep their
@@ -91,12 +91,11 @@ editor. Adjacent-panel wording begins when the adjacent panel is mounted.
 
 Team planning is a permanent section. Its arrangement reel and secondary rack
 remain available while selection opens the existing template, connection or
-session receiver. The template controller retains its preview, Apply, Cancel
-and edit-retention ownership; the section's persistent visibility is separate
-from which editor is active. The delivery board's phase keys select a local
+session receiver. Arrangement selection accepts directly through its own
+transaction and local Undo. The shared coordinator keeps other unfinished
+editors recoverable; persistent visibility remains separate from editor activity. The delivery board's phase keys select a local
 presentation scope; Delivery overview restores the originating phase key and
-scroll position. The controller preserves that phase while its proposal view
-rerenders. Team/member, handoff and session cards route to the existing editors
+scroll position. The controller preserves that phase while its view rerenders. Team/member, handoff and session cards route to the existing editors
 for those records. Remaining attached disclosures keep the spring reveal.
 
 The selected session key currently opens or travels to the remote receiver.
@@ -131,10 +130,14 @@ local inspection; Person settings keeps its explicit destination when it opens
 the People chapter. Both paths use the existing owners and preserve return
 context, instead of maintaining separate copies of a form.
 
-The planned [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
-has its own immediate acceptance and Undo boundary. The existing person, session
-and other editor proposals continue to use their current Apply and recovery
-owners. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+The [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+has its own immediate acceptance and local Undo boundary. Its stable arrangement
+identity keeps accepted record routes useful across choices. Bounded customization
+choices settle immediately; text settles on blur or Enter, with invalid entries
+retained for correction. Local Undo is bound to the arrangement change that
+created it; a later accepted edit retires the shortcut. Investment continues to
+own the complete history controls. Existing person, session and other editor
+proposals retain their current Apply and recovery owners. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 remains a separate future creation decision. The
 [blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) reveals
 the same named Add control on pointer hover or keyboard focus and retains a

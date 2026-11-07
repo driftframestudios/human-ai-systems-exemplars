@@ -47,7 +47,7 @@ function reordered(rows, ids) {
   });
 }
 
-function dependencies(state, collection, id) {
+export function recordReferences(state, collection, id) {
   const references = [];
   const include = (rows, name, field, matches) => {
     for (const row of rows) {
@@ -165,7 +165,7 @@ function dependencies(state, collection, id) {
 function removal(base, collection, id, targetField) {
   const rows = base.state[collection];
   const index = position(rows, id, `command.${targetField}`);
-  const references = dependencies(base.state, collection, id);
+  const references = recordReferences(base.state, collection, id);
   if (references.length) {
     return { projection: base, error: Object.freeze({
       code: 'dependencies', path: `command.${targetField}`,

@@ -228,11 +228,12 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   const svgNode = (tag, attributes = {}, text = '') => { const item = document.createElementNS(SVG, tag); for (const [key, value] of Object.entries(attributes)) item.setAttribute(key, String(value)); item.textContent = text; return item; };
   const section = node('section', undefined, 'native-arrangement');
   Object.assign(section.dataset, { arrangementId: arrangement.id, arrangementTemplate: arrangement.templateId, arrangementReading: reading, arrangementAdapted: String(arrangement.adapted) });
-  const heading = node('h4', `${reading === 'accepted' ? 'Accepted arrangement' : 'Proposed structure'} · ${arrangement.label}`, 'native-arrangement__identity');
+  const standing = { accepted: 'Current arrangement', proposed: 'Proposed structure', example: 'Example arrangement' }[reading];
+  const heading = node('h4', `${standing} · ${arrangement.label}`, 'native-arrangement__identity');
   const status = node('p', reading === 'proposed' ? 'Proposed teams and handoffs · Apply to keep.'
-    : arrangement.adapted ? 'Adapted arrangement. The cables show the current connection endpoints; the original slot roles remain labeled.' : 'The current connections follow this arrangement’s roles.', 'native-arrangement__status');
+    : reading === 'example' ? 'Choose an arrangement to use it.' : arrangement.adapted ? 'Adapted arrangement. The cables show the current connection endpoints; the original slot roles remain labeled.' : 'The current connections follow this arrangement’s roles.', 'native-arrangement__status');
   const viewport = node('div', undefined, 'native-arrangement__viewport'); viewport.tabIndex = 0; viewport.setAttribute('role', 'region'); viewport.setAttribute('aria-label', `${arrangement.label} topology; scroll to inspect the complete structure`);
-  const geometry = arrangementGeometry(arrangement, plan), svg = svgNode('svg', { class: 'native-arrangement__diagram', viewBox: `0 0 ${geometry.width} ${geometry.height}`, width: geometry.width, height: geometry.height, role: 'group', 'aria-label': `${reading === 'accepted' ? 'Accepted' : 'Proposed'} ${arrangement.label} structure` });
+  const geometry = arrangementGeometry(arrangement, plan), svg = svgNode('svg', { class: 'native-arrangement__diagram', viewBox: `0 0 ${geometry.width} ${geometry.height}`, width: geometry.width, height: geometry.height, role: 'group', 'aria-label': `${standing} · ${arrangement.label} structure` });
   svg.append(svgNode('title', {}, `${arrangement.label}: ${arrangement.purpose}`), svgNode('desc', {}, 'The named teams and current directed connections are available as buttons in the reading below. Dashed cables are paused.'));
   const boundary = (x, y, width, height, label) => {
     const group = svgNode('g', { class: 'native-arrangement__boundary', 'data-arrangement-boundary': label });
@@ -248,7 +249,7 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   for (const edge of geometry.edges) {
     const row = edge.connection, group = svgNode('g', { class: 'native-arrangement__edge', 'data-arrangement-connection': row.id, 'data-sender-team': row.senderTeamId, 'data-receiver-team': row.receiverTeamId, 'data-status': row.status, 'data-adapted': String(edge.adapted) });
     group.setAttribute('role', 'button'); group.setAttribute('tabindex', '-1'); group.setAttribute('aria-label', `${edge.slotLabel}: ${row.sharedObject || 'Shared object to choose'}`);
-    group.setAttribute('data-arrangement-target-kind', reading === 'proposed' ? 'template-connection' : 'connection'); group.setAttribute('data-arrangement-target-id', reading === 'proposed' ? edge.slotId : row.id);
+    group.setAttribute('data-arrangement-target-kind', reading !== 'accepted' ? 'template-connection' : 'connection'); group.setAttribute('data-arrangement-target-id', reading !== 'accepted' ? edge.slotId : row.id);
     group.append(svgNode('title', {}, `${edge.slotLabel}: ${row.sharedObject}`),
       svgNode('path', { d: edge.path, fill: 'none', class: 'native-arrangement__hit', 'aria-hidden': 'true' }),
       svgNode('path', { d: edge.path, fill: 'none', class: 'native-arrangement__cable' }), svgNode('polygon', { points: edge.arrow })); svg.append(group);
@@ -256,7 +257,7 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   for (const team of geometry.nodes) {
     const group = svgNode('g', { class: 'native-arrangement__team', 'data-arrangement-team': team.id, 'data-arrangement-slot': team.slotId ?? 'external' });
     group.setAttribute('role', 'button'); group.setAttribute('tabindex', '-1'); group.setAttribute('aria-label', `${team.role}: ${team.label}`);
-    group.setAttribute('data-arrangement-target-kind', reading === 'proposed' ? 'template-team' : 'team'); group.setAttribute('data-arrangement-target-id', reading === 'proposed' ? team.slotId : team.id);
+    group.setAttribute('data-arrangement-target-kind', reading !== 'accepted' ? 'template-team' : 'team'); group.setAttribute('data-arrangement-target-id', reading !== 'accepted' ? team.slotId : team.id);
     group.append(svgNode('title', {}, `${team.role}: ${team.label}`), svgNode('rect', { x: team.x - 110, y: team.y - 36, width: 220, height: 72, rx: 7 }),
       svgNode('text', { x: team.x, y: team.y - 13, 'text-anchor': 'middle', class: 'native-arrangement__role' }, team.role));
     const text = svgNode('text', { x: team.x, y: team.y + 9, 'text-anchor': 'middle' });
@@ -267,7 +268,7 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   const route = (label, kind, id) => { const control = node('button', label, 'native-control--navigate'); control.type = 'button'; Object.assign(control.dataset, { arrangementTargetKind: kind, arrangementTargetId: id }); return control; };
   for (const row of arrangement.connections) {
     const edge = row.connection, from = geometry.nodes.find(team => team.id === edge.senderTeamId), to = geometry.nodes.find(team => team.id === edge.receiverTeamId);
-    const control = route(row.slotLabel, reading === 'proposed' ? 'template-connection' : 'connection', reading === 'proposed' ? row.slotId : edge.id);
+    const control = route(row.slotLabel, reading !== 'accepted' ? 'template-connection' : 'connection', reading !== 'accepted' ? row.slotId : edge.id);
     control.title = `${from.label} → ${to.label}: ${edge.sharedObject || 'Shared work'}${edge.status === 'paused' ? ' · Paused' : ''}`;
     connections.append(control);
   }
