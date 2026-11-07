@@ -150,7 +150,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     if (phase.sessions.length) {
       const group = collection('Shared work', 'studio-delivery__group studio-delivery__sessions');
       for (const { work, stageLabels } of phase.sessions) {
-        const control = button('', 'studio-delivery__session native-control--navigate', () => onSession(work.id));
+        const control = button('', 'studio-delivery__session native-control--navigate', event => onSession(work.id, event.currentTarget));
         control.dataset.deliverySession = work.id;
         if (acceptedSessionIds.has(work.id)) control.dataset.studioSessionId = work.id;
         control.dataset.funding = work.funding;

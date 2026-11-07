@@ -1,3 +1,5 @@
+import { revealStudioDestination } from './motion.mjs';
+
 // Rack readings borrow the session editor's identity and visibility. Updating
 // attributes in place preserves each reading's focus and horizontal position.
 export function syncSessionControls(root, { selectedId, expanded, controlsId }) {
@@ -20,21 +22,30 @@ export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = re
   host.id = `studio-rack-editor-${++editorSequence}`;
   const heading = document.createElement('header'); heading.className = 'studio-rack-editor__heading';
   const title = document.createElement('h4'); title.id = `${host.id}-title`;
+  const context = document.createElement('small'); context.className = 'studio-rack-editor__origin'; context.hidden = true;
   host.setAttribute('aria-labelledby', title.id);
   const close = document.createElement('button'); close.type = 'button';
   close.textContent = 'Close'; close.dataset.rackEditorClose = '';
   const body = document.createElement('div'); body.className = 'studio-rack-editor__body';
-  heading.append(title, close); host.append(heading, body); root.append(host);
+  const identity = document.createElement('div'); identity.append(title, context);
+  heading.append(identity, close); host.append(heading, body); root.append(host);
   const homes = new Map(Object.entries(editors).map(([kind, nodes]) => [kind, nodes.map(node => {
     const marker = document.createComment(`home: ${kind} editor`); node.before(marker);
     return { node, marker };
   })]));
-  let selected = null, origin = null, originScope = null, originPhase = null;
+  let selected = null, origin = null, originScope = null, originPhase = null, originKey = null;
+  const recordOf = control => control.dataset.studioSessionId
+    ? { kind: 'session', id: control.dataset.studioSessionId }
+    : { kind: control.dataset.studioRecordKind, id: control.dataset.studioRecordId };
+  const keyOf = control => control?.dataset.studioEntryKey ?? control?.dataset.cadenceKey ?? control?.dataset.deliverySession
+    ?? (control?.dataset.studioSessionPerson ? `participant:${control.dataset.studioSessionPerson}` : null)
+    ?? (control?.classList.contains('studio-track-key') ? 'session-row' : control?.getAttribute('aria-label'));
   const controls = () => [...root.querySelectorAll('[data-studio-record-kind]')];
   function sync() {
     if (selected) {
       const label = readLabel(selected) ?? selected.label;
-      title.textContent = `${selected.kind === 'person' ? 'Person' : 'Team'} settings · ${label}`;
+      title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session' }[selected.kind]} settings · ${label}`;
+      context.textContent = selected.originLabel ?? ''; context.hidden = !selected.originLabel;
       close.setAttribute('aria-label', `Close ${label} settings`);
     }
     for (const control of controls()) {
@@ -48,14 +59,21 @@ export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = re
   function restore() {
     for (const records of homes.values()) for (const { node, marker } of records) marker.after(node);
   }
-  function returnFocus() {
-    const candidates = controls().filter(control => selected?.kind === control.dataset.studioRecordKind
-      && selected.id === control.dataset.studioRecordId && control.getClientRects().length);
-    const target = origin?.isConnected && origin.getClientRects().length ? origin
-      : candidates.find(control => originScope?.contains(control)
+  function returnFocus(preferred) {
+    const candidates = [...controls(), ...root.querySelectorAll('[data-studio-session-id]')].filter(control => {
+      const record = recordOf(control);
+      return selected?.kind === record.kind && selected.id === record.id && control.getClientRects().length;
+    });
+    const target = preferred?.isConnected && preferred.getClientRects().length ? preferred
+      : origin?.isConnected && origin.getClientRects().length ? origin
+      : candidates.find(control => originScope?.contains(control) && originKey
+        && keyOf(control) === originKey
+        && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)
+      ?? candidates.find(control => originScope?.contains(control)
         && control.closest('[data-delivery-phase]')?.dataset.deliveryPhase === originPhase)
       ?? candidates[0];
     target?.focus({ preventScroll: true });
+    revealStudioDestination(target);
   }
   const requestClose = () => onClose();
   close.addEventListener('click', requestClose);
@@ -65,15 +83,17 @@ export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = re
     isOpen: kind => !host.hidden && selected?.kind === kind,
     show(record, source, anchor) {
       restore(); selected = { ...record }; origin = source;
+      host.dataset.rackEditorKind = record.kind;
       originScope = anchor; originPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
+      originKey = keyOf(source);
       anchor.after(host);
       body.replaceChildren(...homes.get(record.kind).map(({ node }) => node));
       host.hidden = false; sync();
     },
-    hide({ home = false, focus = false } = {}) {
+    hide({ home = false, focus = false, source = null } = {}) {
       host.hidden = true;
       if (home) restore();
-      sync(); if (focus) returnFocus();
+      sync(); if (focus) returnFocus(source);
     },
     sync,
     dispose() {

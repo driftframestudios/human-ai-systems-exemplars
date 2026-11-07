@@ -7,7 +7,7 @@ cues, creation entry, Apply/Cancel and saved work across the Studio.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 reviewed 7 November 2026. It inherits [Studio Rack Composition](README.md).
-The Abilities rack, Coordination person/team receiver and Quality workbench are
+The Abilities rack, Coordination record receiver and Quality workbench are
 current examples.
 
 ## Fit and smallest useful dose
@@ -66,7 +66,7 @@ at ordinary phone widths and enlarged text.
 | Owner or observation | Responsibility |
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
-| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Session editor identity and visibility mirrored into the mounted controls in both Coordination readings |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session editor placed below its origin, with identity and visibility mirrored into both Coordination readings |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Canonical person/team controls move to one adjacent receiver; existing owners retain draft and acceptance state |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
 | [Capability](../../collaboration/native-investment-studio/capability-controller.mjs), [Change](../../collaboration/native-investment-studio/change-controller.mjs), [Assurance](../../collaboration/native-investment-studio/assurance-controller.mjs) | Selected records and their local receivers |
@@ -90,8 +90,8 @@ receiver. `readReceiver()` supplies the editor's identity, visible open state an
 element ID; the shared synchronizer updates the controls in place. The transient
 last-click effect retains its presentation role. Closing or hiding the receiver
 restores its closed caret while preserving any separately retained selection or
-draft. Session-settings wording and `aria-controls` identify the existing remote
-editor. Adjacent-panel wording begins when the adjacent panel is mounted.
+draft. Session-settings wording and `aria-controls` identify the adjacent
+receiver supplied by #768.
 
 Team planning is a permanent section. Its arrangement reel and secondary rack
 remain available while selection opens the existing template, connection or
@@ -102,14 +102,16 @@ presentation scope; Delivery overview restores the originating phase key and
 scroll position. The controller preserves that phase while its view rerenders.
 People and accepted-team cards open their canonical adjacent editor;
 illustrative teams awaiting acceptance retain template customization. Handoff
-and session cards retain their existing receivers. Remaining attached
+cards retain their connection receiver; session cards use the adjacent session
+receiver. Remaining attached
 disclosures keep the spring reveal.
 
-The selected session key currently opens or travels to the remote receiver.
-Its downward caret reports actual visibility; it does not yet imply a second
-click closes an adjacent panel. #768 owns that future open/close behavior when
-the session editor moves into the rack. This composition prepares those later
-receivers while current editors continue to own their drafts.
+The selected session row key toggles its adjacent receiver. Its downward caret
+reports actual visibility; its pressed face retains the selected record after
+closure. Occurrence and participation pads continue to inspect their named work.
+The same session owner receives each entry and keeps its draft identity across
+cross-rack navigation. This supersedes the earlier repeated travel to a remote
+session editor.
 
 The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 places one `studio-rack-editor` after the stable Team planning template or
@@ -129,12 +131,18 @@ Inclusion and reorder controls retain their existing meanings.
 
 The dark heading, named object and Close sit above a peach editorial body.
 The person's rate enclosure retains the shared quantity skin and exact controls.
-The future [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-will reuse this placement and return grammar with the enclosed duration module:
+The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+uses this placement and return grammar with the enclosed duration module:
 larger readout above Hours and secondary peach Minutes, with repetition separate
 nearby. A session opened from a period occurrence carries that occurrence
-context; Shared sessions supplies its people context. Each route reveals one
-existing editor and retains its origin for close and return.
+context; Shared sessions supplies its people context. The heading names the
+session and originating rack. Each route reveals the same existing editor and
+retains its origin for Close. A row key toggles the panel; occurrence pads can
+focus placement while duration still governs every occurrence of that session.
+Period/subdivision and delivery-phase presentation remain with their scope owners.
+Close retains unfinished input and restores the initiating key or pad; Cancel
+discards the proposal; Apply uses the existing acceptance owner. A failed switch
+keeps the admitted record and its panel identity aligned.
 
 The receiver may swing open as its own rack directly beneath the parent. Use
 Quality's track-selection matrix when the selected object's people or support

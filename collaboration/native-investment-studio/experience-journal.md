@@ -52,12 +52,13 @@ instance directly, with local Undo and a linked-work amount. PR #769 and
 PR #774 recorded the earlier route and related design decisions. Direct
 creation (#770), participant controls (#771), attached editorial companions
 (#772) and scoped removal/shared Undo (#773) retain their focused issues.
-PR #785 delivered the enclosed duration and rate modules (#767). The #757
-person/team receiver now brings the canonical editors below Team planning's
-selected rack, preserving those modules and the People chapter. Close retains
-the proposal; Cancel discards it; Apply accepts it through the existing owner.
-Adjacent session editing (#768) and immediate creation retain their separate
-issues. Team arrangement keeps its direct acceptance boundary.
+PR #785 delivered the enclosed duration and rate modules (#767). PR #786 delivered
+#757: canonical person/team editors open below Team planning's selected rack,
+preserving those modules and the People chapter. The #768 increment extends the
+same placement grammar to session editing from the horizon and Team planning.
+Close retains the proposal; Cancel discards it; Apply accepts it through the
+existing owner. Immediate creation retains its separate issue. Team arrangement
+keeps its direct acceptance boundary.
 
 ### State, people and evidence
 
@@ -99,8 +100,11 @@ regions. That label names the actual destination. Returning restores the period
 control used to enter from either the board or the tracks, along with the
 overview's local scroll. One scope owner drives the breadcrumb, lanes and tracks.
 Period membership and order are authored. Scope changes preserve plan bytes,
-pending edits, effort and investment. The session editor owns people, duration,
-occurrence count, funding and placement.
+pending edits, effort and investment. The adjacent session editor owns people,
+duration, occurrence count, funding and placement. Its heading names the session
+and originating rack. A row key toggles its panel; an occurrence pad opens the
+same editor with its particular placement in context. Closing returns focus to
+that entry while keeping the selected period and unfinished work available.
 
 Example buttons replace the plan in place with Undo available. The Sprints /
 Business quarters choice immediately regroups the existing work and supports
@@ -265,15 +269,16 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route supplies shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare #757's adjacent person/team receiver; #768 retains adjacent session editing. |
+| Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route supplies shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent person/team (#757) and session (#768) receivers. |
 | Team planning inside an outer disclosure, with team/member cards in the editorial structure | PR #778 made Team planning permanent and moved the team/member reading into a darker secondary rack. The reel and editorial topology remain above it; #766 supplies direct arrangement acceptance. |
 | Separate proposed-team strip, connection-button strip and Delivery lifecycle disclosure inside Team planning | #779 supersedes these parallel readings with one editorial delivery board. Six phase lanes combine team/member, session and handoff cards; the reel changes the selected structure immediately. Shared sessions retains the people-by-session matrix below. Remaining attached disclosures preserve their spring reveal. |
 | Arrangement preview, Apply and Start another arrangement | #766 replaces the regular selection flow with one revisable accepted instance and local Undo. Shared records retain their identities; text customization settles as a complete field edit. Included work describes deduplicated linked sessions. Existing grouping removal keeps its explicit confirmation. |
 | Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
-| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes, gives Minutes a secondary peach face, and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input; #768 may later express occurrences as pads. The shared instrument stylesheet now owns the enclosure geometry. |
+| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes, gives Minutes a secondary peach face, and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
 | Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
+| Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 opens the canonical session editor below the originating horizon or Team planning rack. Its heading retains the session and origin. The active row key toggles the panel; pads inspect their occurrence or participation context. Close retains the proposal and returns focus. |
 | Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
 
 ## Coordination consolidation
@@ -304,7 +309,7 @@ with their sessions. A phase selection and Delivery overview return change only
 the presentation. The horizon continues to own sprint/quarter placement. People
 and accepted-team cards open their adjacent editor; illustrative teams awaiting
 acceptance retain template customization. Handoffs open connection customization,
-and accepted sessions reach their existing receiver. Repeated
+and accepted sessions open their canonical receiver directly below the rack. Repeated
 references retain one work identity and cost account.
 
 Independent review found a phone return-focus gap in #780: editing a team
@@ -343,8 +348,25 @@ and restores the originating logical card, including after a board rebuild.
 Apply uses the current person/team owner and keeps the editor open. Record
 switching parks unfinished proposals and resumes them with a fresh edit lease.
 Chapter changes return the canonical controls to their People homes. This
-placement owner supplies a reusable receiver without creating a second form or
-changing membership, removal or creation semantics.
+placement owner supplies a reusable receiver while existing controllers retain
+membership, removal and creation semantics.
+
+#768 extends that receiver to the canonical session controls. Horizon row keys,
+occurrence pads, delivery-board cards and Shared sessions participation pads
+carry their actual origin into the placement route. The panel names the session
+and the rack supplying its context. The selected row remains pressed and its
+caret follows the visible panel. Activating that row again closes it; pads
+continue to inspect, so selecting an occurrence can address its placement.
+
+The session owner retains raw input, draft identity, duration and placement.
+Cross-entry through the other rack moves the receiver while preserving the same
+proposal. Close returns to the originating key or pad and keeps the draft;
+Cancel and Apply retain their established discard and acceptance operations.
+Period/subdivision scope and delivery-phase scope remain with their presentation
+owners. The larger duration readout, Hours dial, secondary peach Minutes module
+and circular step pairs stay together. Working sessions retains its exact
+repetition input. Creation continues through the existing draft/confirmation
+route until #758 and #770 change that contract.
 
 The whole Studio supplies reusable compositions: Quality tracks' preferred
 matrix skin separates inspect, include, link and create actions; Abilities
@@ -385,7 +407,7 @@ Its larger readout sits above both dials. Minutes has a secondary peach inner
 face; each dial sits above-left of its exact field and circular step pair. The
 visible gap and the pair's start/end alignment beneath the input preserve the
 familiar adjustment pattern. Working sessions remains separate nearby and keeps
-its repetition meaning; #768 can later express occurrences as pads.
+its repetition meaning when the editor opens adjacent to either Coordination rack.
 
 `studio-quantity-module` supplies the shared enclosure skin, with
 `studio-duration` naming the duration composition. Rate hosts receive the same
@@ -401,7 +423,8 @@ release, so scrolling during the turn preserves the intended adjustment.
 Releasing the gesture discards that origin; the next turn measures its current
 position. Exact output agreement and explicit cancellation retain their existing
 contracts. #757 reuses the rate enclosure in the adjacent person editor. #768
-will carry the same quantity and contextual return grammar into session editing.
+carries the duration module into session editing beside its originating rack,
+with the same quantity and contextual return grammar.
 
 #770 adds empty New session regions inside the racks, with a ghost plus on
 fine-pointer hover, equivalent focus presentation and a visible touch entry.
@@ -593,9 +616,10 @@ baseline failures.
 For re-entry, use PR #781 for the delivery-board projection and PR #783 for the
 direct replacement transaction, local Undo and accepted-record routing. The
 #767 enclosure increment, delivered in PR #785, supplies the shared duration and
-rate composition. The #757 receiver reuses canonical person/team editors and
-their retained drafts; its receiving PR owns the focused opening, switching,
-acceptance and return observations. #768 is the adjacent session receiver.
+rate composition. PR #786 supplies #757's canonical person/team receiver.
+The #768 session receiver extends that placement and return owner; its receiving
+PR owns the focused occurrence/participation entry, switching, retained draft,
+acceptance and return observations.
 PR #764 remains the accepted scope-navigation reference. Retain
 the current creation/confirmation contract while #758 defines its separate replacement.
 Pause before general performance refinement in

@@ -82,7 +82,7 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
   const fallback = root.querySelector('[data-score-fallback]'); if (fallback) fallback.hidden = true;
   root.append(toolbar, pending, projectionRoot, flowPanel, status);
   const view = createCadenceView(projectionRoot, {
-    onSelect: target => select(target, true), onNavigate: target => navigate(target),
+    onSelect: (target, source) => select(target, true, source), onNavigate: (target, source) => navigate(target, source),
     onPeriod: id => { periodId = id; render(); }, onAddSession: context => createSession(context),
     onAddDecision: anchor => addDecision(anchor), onAddDelay: anchor => addDelay(anchor),
     onAddStage: () => addStage(), onAddHandoff: () => addHandoff(), onCreateHorizon: () => proposeHorizon(), flowRoot,
@@ -130,10 +130,10 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (focus) (fields.querySelector('input, select, textarea') ?? title).focus();
     return result;
   }
-  function select(target, reveal = false) {
+  function select(target, reveal = false, source = null) {
     if (disposed || !isActive()) return;
     if (target.kind === 'availability') target = { ...target, kind: studio.read().state.scoreSettings.cadence?.availability.some(row => row.personId === target.id) ? 'person' : 'legacy-availability' };
-    if (target.kind === 'work') { navigate(target); return; }
+    if (target.kind === 'work') { navigate(target, source); return; }
     if (target.kind === 'dependency') {
       const old = studio.read().state.scoreSettings.dependencies.find(row => row.id === target.id);
       const match = studio.read().state.scoreSettings.cadence?.handoffs.find(row => row.id === target.id || row.from.kind === 'work' && row.from.id === old?.fromWorkId && row.to.kind === 'work' && row.to.id === old?.toWorkId);
@@ -146,10 +146,12 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     if (!retains(epoch, mark)) return;
     if (reveal) { (fields.querySelector('input, select, textarea') ?? title).focus({ preventScroll: true }); revealStudioDestination(inspector); onInspect(inspector); }
   }
-  function navigate(target) {
+  function navigate(target, source = null) {
     if (disposed || !resolveScoreDestination(target, studio.read().state)) return;
-    const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
-    onNavigate(target, { kind: 'score', targetId: 'score', routeKind: 'context' });
+    if (target.kind !== 'work' || !source) {
+      const parked = editing.park(); if (!parked.ok) { announce(parked.error.message); return; }
+    }
+    onNavigate(target, { kind: 'score', targetId: 'score', routeKind: 'context', source });
   }
   function createSession(context) {
     if (disposed || !isActive()) return;

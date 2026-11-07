@@ -123,10 +123,15 @@ People and accepted-team keys select an object; membership controls continue to
 edit its proposal. `studio-record-key` reports selected and expanded states
 separately, and closing retains the draft while restoring the originating key's
 focus. The existing control groups remain useful; a larger matrix is a
-composition option when the relationships benefit from comparison. The future
+composition option when the relationships benefit from comparison. The
 [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-inherits the same contextual opening and return grammar while retaining its own
-participation and duration owners.
+uses the same contextual opening and return grammar while retaining its own
+participation and duration owners. A participation pad opens that session's
+canonical editor below its originating rack; it keeps its meaning as a person/
+session intersection. Row keys toggle the panel, while pads retain inspection.
+Close preserves the draft and returns to the initiating pad or key. Moving to
+the same work in the temporal rack retains that proposal and the existing
+scope owners.
 
 An unused participation cell keeps its person/session meaning. The future
 [empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
