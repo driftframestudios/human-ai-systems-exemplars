@@ -60,6 +60,40 @@ async function open(t, engine) {
 }
 
 for (const engine of names) {
+  test(`${engine}: Change track carets follow their local inspector through selection and collapse`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine), initial = await bytes(page);
+    const trackControls = id => panel(page).locator(`.native-change__track-label[data-change-component="${id}"]`);
+    const inspector = panel(page).locator('.native-change__inspectors');
+    async function expectDisclosure(id, expanded) {
+      const controls = trackControls(id);
+      await expect(controls).toHaveCount(2);
+      for (const control of await controls.all()) {
+        await expect(control).toHaveAttribute('aria-expanded', String(expanded));
+        await expect.poll(() => control.evaluate(element => {
+          const matrix = new DOMMatrix(getComputedStyle(element, '::after').transform);
+          return Math.round(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI);
+        })).toBe(expanded ? 135 : 45);
+        const destination = await control.getAttribute('aria-controls');
+        assert.equal(destination, await component(page, 'kotter', id).getAttribute('id'));
+      }
+    }
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await expectDisclosure('urgency', false); await expectDisclosure('coalition', false);
+      await trackControls('urgency').first().focus(); await page.keyboard.press('Enter');
+      await expectDisclosure('urgency', true); await expectDisclosure('coalition', false);
+      await expect(component(page, 'kotter', 'urgency')).toBeVisible();
+      await trackControls('coalition').last().click();
+      await expectDisclosure('urgency', false); await expectDisclosure('coalition', true);
+      await expect(component(page, 'kotter', 'coalition')).toBeVisible();
+      await inspector.locator(':scope > summary').focus(); await page.keyboard.press('Space');
+      await expectDisclosure('coalition', false);
+      await panel(page).locator('[data-change-tracks]').screenshot({ path: resolve(captures, `${engine}-track-disclosures-${width}.png`) });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    }
+    assert.equal(await bytes(page), initial, 'opening and closing a component preserves the accepted plan');
+  });
+
   test(`${engine}: reels choose an authored framework and faders vary its work view before Apply`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     const lens = value => panel(page).locator(`[data-change-lens-wheel] [data-reel-choice="${value}@1.0.0"]`);
