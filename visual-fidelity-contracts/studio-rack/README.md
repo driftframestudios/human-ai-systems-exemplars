@@ -114,8 +114,9 @@ The [shell browser route](../../tests/native-investment-studio/shell.browser.mjs
 observes chapter, motion, focus and host behavior. The five operation contracts
 route to their narrower checks. [Foundation checks](../../tests/visual-fidelity-contracts/foundation-contracts.test.mjs)
 establish catalog validity and source-path closure, rather than visual approval.
-[Scope breadcrumbs inside racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756),
-[a common swinging editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+Coordination's [in-rack scope navigation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
+keeps its Plan overview return and selected period inside the existing screen.
+[A common swinging editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 remain future design decisions. Their receiving issues establish scope before
 implementation; this family preserves the current experience meanwhile.

@@ -83,7 +83,7 @@ for (const engine of names) {
     const clip = cadence(page).locator('.native-cadence__clip').first(); await clip.focus();
     await expect(cadence(page).locator('[data-cadence-preview-reading]')).toContainText('Needs Research synthesis');
     await expect(cadence(page).locator('[data-cadence-preview-reading]')).toContainText('per person');
-    await cadence(page).getByRole('button', { name: 'Whole plan', exact: true }).click();
+    await cadence(page).getByRole('button', { name: 'Plan overview', exact: true }).click();
     assert.equal(await bytes(page), accepted, 'period navigation preserves accepted bytes');
     const tracks = cadence(page).locator('.native-cadence__track-table');
     await expect(tracks).toBeVisible();
@@ -117,6 +117,42 @@ for (const engine of names) {
         await undo(page); assert.equal(await bytes(page), accepted);
       }
     }
+  });
+
+  for (const { width, basis, origin } of [
+    { width: 1273, basis: 'sprint', origin: 'period' },
+    { width: 390, basis: 'sprint', origin: 'track-period' },
+    { width: 1273, basis: 'quarter', origin: 'track-period' },
+    { width: 390, basis: 'quarter', origin: 'period' },
+  ]) test(`${engine}: ${basis} scope stays in the rack and returns to its ${origin} at ${width}px`, async t => {
+    const page = await open(t, engine, { viewport: { width, height: 1000 } });
+    if (basis === 'quarter') await score(page).locator('[data-cadence-basis][value="quarter"]').check();
+    const accepted = await bytes(page), count = score(page).locator('[data-cadence-count]');
+    await count.fill('5'); await count.blur();
+    const entry = cadence(page).locator(`[data-cadence-key="${origin}:period-4"]`);
+    await entry.focus();
+    const positions = () => cadence(page).evaluate(element => ['board', 'tracks'].map(name => element.querySelector(`.native-cadence__${name}`).scrollLeft));
+    const before = await positions();
+    await page.keyboard.press('Enter');
+    const rack = cadence(page).locator('.native-cadence__screen');
+    const nav = rack.getByRole('navigation', { name: 'Plan scope' });
+    const back = nav.getByRole('button', { name: 'Plan overview', exact: true });
+    const current = nav.getByRole('heading', { name: `${basis === 'sprint' ? 'Sprint' : 'Quarter'} 4`, exact: true });
+    await expect(back).toBeFocused(); await expect(current).toHaveAttribute('aria-current', 'page');
+    const bounds = await nav.boundingBox(); const rackBounds = await rack.boundingBox();
+    assert.ok(bounds.x >= rackBounds.x && bounds.x + bounds.width <= rackBounds.x + rackBounds.width + 1);
+    const primary = await page.locator('.nav__top--sticky').boundingBox();
+    assert.ok(bounds.y >= primary.y + primary.height && bounds.y + bounds.height <= 1000, 'scope and return stay clear of the About navigation');
+    for (const name of ['board', 'tracks']) await rack.locator(`.native-cadence__${name}`).evaluate(element => { element.scrollLeft = element.scrollWidth; });
+    assert.deepEqual(await nav.boundingBox(), bounds, 'rack scope stays outside the scrolling lanes and tracks');
+    await page.screenshot({ path: resolve(captures, `${engine}-scope-${basis}-${width}.png`) });
+    await page.keyboard.press('Enter');
+    await expect(entry).toBeFocused();
+    const after = await positions();
+    before.forEach((value, index) => assert.ok(Math.abs(after[index] - value) <= 1, `${origin} scroll ${index}: ${value} → ${after[index]}`));
+    await expect(count).toHaveValue('5');
+    await expect(cadence(page)).toHaveAttribute('data-cadence-reading', 'proposed');
+    assert.equal(await bytes(page), accepted, 'scope changes retain the accepted plan and pending horizon');
   });
 
   test(`${engine}: horizon changes preview before Apply and a shorter plan retains unplaced sessions`, async t => {

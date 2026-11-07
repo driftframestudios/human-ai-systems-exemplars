@@ -39,10 +39,12 @@ result and recovery path:
 
 The 7 November interaction route delivered dial retention (#753, PR #761) and
 Change disclosure cues (#754, PR #760), with visual-contract persistence in #755.
-The current aesthetic and component placement remain the reference. In-rack scope navigation (#756),
-adjacent person/team editing (#757), and immediate addition with later editing
-(#758) are coordination stubs pending human scope. Those proposals remain
-prospective; existing placement and creation-state ownership continue in service.
+The current aesthetic and component placement remain the reference. The human
+then authorized #756 specifically for Coordination's Plan overview rack: keep
+the selected period and its overview return together inside the instrument.
+Adjacent person/team editing (#757) and immediate addition with later editing
+(#758) remain coordination stubs pending human scope. Existing editor placement
+and creation-state ownership continue in service.
 
 ### State, people and evidence
 
@@ -74,10 +76,15 @@ Each illustrative sprint contains two weeks. A separately authored two-quarter
 example carries preparation into rollout and operating adoption. Its sessions
 represent work within that wider initiative; the amount prices the included work.
 
-The view has three useful depths: whole plan, selected sprint or quarter, then
-its session or decision. Period membership and order are authored. Zoom changes
-what the visitor sees while preserving plan bytes, effort and investment.
-The session editor owns people, duration, occurrence count, funding and placement.
+The view has three useful depths: plan overview, selected sprint or quarter,
+then its session or decision. The rack header names the selected period beside
+the **Plan overview** return, outside the board and tracks' horizontal scroll
+regions. That label names the actual destination. Returning restores the period
+control used to enter from either the board or the tracks, along with the
+overview's local scroll. One scope owner drives the breadcrumb, lanes and tracks.
+Period membership and order are authored. Scope changes preserve plan bytes,
+pending edits, effort and investment. The session editor owns people, duration,
+occurrence count, funding and placement.
 
 Example buttons replace the plan in place with Undo available. The Sprints /
 Business quarters choice immediately regroups the existing work and supports
@@ -242,7 +249,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Moving further components into racks during this interaction pass | Preserve current placement. Record scope navigation, adjacent editors and immediate creation in #756–#758 for a human-defined next increment. |
+| Holding all further in-rack work for scope definition | The human authorized #756 for the Coordination Plan overview rack. Preserve other placements while adjacent editors (#757) and immediate creation (#758) receive their own scope decisions. |
+| Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
 
 ## Material decision history
@@ -372,9 +380,12 @@ projections. The complete Context Canvas source suite now passes. This supersede
 the earlier standing of twelve reproduced baseline failures; the receiving PRs
 retain the exact observations and reviewed commits.
 
-For re-entry, reconcile #753–#755 with the current source and their reviewed
-delivery. The next design-scope decisions are #756–#758; retain the current
-creation/confirmation contract until a bounded replacement is authorized.
+For re-entry, reconcile #756 with the Coordination rack, its focused browser
+journey and reviewed delivery. Its bounded scope supports future contextual
+panels by keeping navigation with the view it describes; each editor still owns
+its existing proposal and return. The next design-scope decisions are #757 and
+#758. Retain the current creation/confirmation contract until a bounded
+replacement is authorized.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

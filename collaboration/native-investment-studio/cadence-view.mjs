@@ -1,5 +1,6 @@
 import { duration, money } from './display.mjs';
 import { CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
+import { revealStudioDestination } from './motion.mjs';
 
 const DECISIONS = Object.freeze({ open: 'Open for review', proceed: 'Proceed in this model', revise: 'Revise the plan', hold: 'Hold this commitment' });
 const noop = () => {};
@@ -11,7 +12,7 @@ export function createCadenceView(root, {
   onAddDecision = noop, onAddDelay = noop, onAddStage = noop, onAddHandoff = noop, onCreateHorizon = noop, onTryReview = noop, flowRoot = null,
 } = {}) {
   const document = root.ownerDocument;
-  let disposed = false, previewReading = null, previousPeriodId;
+  let disposed = false, previewReading = null, previousPeriodId, overviewReturn, periodOriginKey;
   const actions = new Map();
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -43,6 +44,7 @@ export function createCadenceView(root, {
     const control = event.target.closest('[data-cadence-action]');
     if (disposed || !control || !(root.contains(control) || flowRoot?.contains(control))) return;
     const item = actions.get(control.dataset.cadenceKey); if (!item) return;
+    if (item.action === 'period' && item.target !== null) periodOriginKey = control.dataset.cadenceKey;
     const receivers = { select: onSelect, navigate: onNavigate, period: onPeriod,
       'add-session': onAddSession, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
       'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon, 'try-review': onTryReview };
@@ -61,11 +63,16 @@ export function createCadenceView(root, {
     if (disposed) return;
     const expanded = new Set([...root.querySelectorAll('[data-cadence-disclosure][open]')].map(element => element.dataset.cadenceDisclosure));
     const focusKey = root.contains(document.activeElement) ? document.activeElement.dataset.cadenceKey : null;
+    const scrollPosition = {
+      board: root.querySelector('.native-cadence__board')?.scrollLeft ?? 0,
+      tracks: root.querySelector('.native-cadence__tracks')?.scrollLeft ?? 0,
+    };
     actions.clear();
     const { state, result } = projection, cadence = state.scoreSettings.cadence;
     const fragment = document.createDocumentFragment();
     root.classList.add('native-cadence'); root.dataset.cadenceReading = preview ? 'proposed' : 'accepted';
     if (!cadence) {
+      previousPeriodId = undefined; overviewReturn = undefined;
       flowRoot?.replaceChildren();
       const invitation = node('div', undefined, 'native-cadence__invitation');
       invitation.append(node('h4', 'Give this work a place in the plan'),
@@ -81,7 +88,13 @@ export function createCadenceView(root, {
     const activePeriod = periodById.get(periodId) ?? null;
     const currentPeriodId = activePeriod?.id ?? null;
     const periodChanged = previousPeriodId !== undefined && previousPeriodId !== currentPeriodId;
-    const arrivalFocus = periodChanged ? currentPeriodId === null ? `period:${previousPeriodId}` : 'whole-plan' : focusKey;
+    if (periodChanged && previousPeriodId === null) {
+      overviewReturn = { focusKey: periodOriginKey ?? `period:${currentPeriodId}`, scrollPosition };
+    }
+    periodOriginKey = undefined;
+    const arrivalFocus = periodChanged ? currentPeriodId === null
+      ? overviewReturn?.focusKey ?? `period:${previousPeriodId}` : 'plan-overview' : focusKey;
+    const restoredScroll = periodChanged ? activePeriod ? null : overviewReturn?.scrollPosition : scrollPosition;
     previousPeriodId = currentPeriodId;
     const subdivisionName = cadence.basis === 'quarter' ? 'Month' : 'Week';
     const subdivisionCount = CADENCE_SUBDIVISIONS[cadence.basis];
@@ -104,19 +117,18 @@ export function createCadenceView(root, {
     const inPeriod = row => !activePeriod || row.periodIds?.includes(activePeriod.id)
       || row.fromPeriodId === activePeriod.id || row.toPeriodId === activePeriod.id;
 
-    const breadcrumb = node('nav', undefined, 'native-cadence__breadcrumb'); breadcrumb.setAttribute('aria-label', 'Plan detail');
-    const whole = button('Whole plan', 'period', null, 'whole-plan', 'native-cadence__return');
-    whole.setAttribute('aria-current', activePeriod ? 'false' : 'page'); breadcrumb.append(whole);
-    if (activePeriod) {
-      const separator = node('span', '›'); separator.setAttribute('aria-hidden', 'true');
-      const current = node('span', activePeriod.label); current.setAttribute('aria-current', 'page');
-      breadcrumb.append(separator, current);
-    }
-    if (activePeriod) fragment.append(breadcrumb);
-
     const screen = node('section', undefined, 'native-cadence__screen'); screen.setAttribute('aria-label', activePeriod ? `${activePeriod.label} sessions and decisions` : 'Sprint and quarter plan overview');
     const reading = node('header', undefined, 'native-cadence__reading');
-    const context = node('div'); context.append(node('h4', activePeriod?.label ?? 'Plan overview'));
+    const context = node('div');
+    const heading = node('h4', activePeriod?.label ?? 'Plan overview');
+    if (activePeriod) {
+      const breadcrumb = node('nav', undefined, 'native-cadence__breadcrumb'); breadcrumb.setAttribute('aria-label', 'Plan scope');
+      const overview = button('Plan overview', 'period', null, 'plan-overview', 'native-cadence__return');
+      const arrow = node('span', '←'); arrow.setAttribute('aria-hidden', 'true'); overview.prepend(arrow);
+      const separator = node('span', '›'); separator.setAttribute('aria-hidden', 'true');
+      heading.setAttribute('aria-current', 'page');
+      breadcrumb.append(overview, separator, heading); context.append(breadcrumb);
+    } else context.append(heading);
     const cost = node('dl', undefined, 'native-cadence__amount');
     const amountLabel = result.plannedCommitmentCents === null ? 'Known included work' : 'Included work';
     cost.append(node('dt', preview ? `Proposed · ${amountLabel.toLowerCase()}` : amountLabel), node('dd', money(result.knownCommitmentCents)));
@@ -353,7 +365,12 @@ export function createCadenceView(root, {
     }
     availability.append(personRows); fragment.append(availability);
     root.replaceChildren(fragment);
-    if (arrivalFocus) [...root.querySelectorAll('[data-cadence-key]')].find(element => element.dataset.cadenceKey === arrivalFocus)?.focus({ preventScroll: !periodChanged });
+    if (restoredScroll) { board.scrollLeft = restoredScroll.board; tracks.scrollLeft = restoredScroll.tracks; }
+    if (arrivalFocus) {
+      const arrival = [...root.querySelectorAll('[data-cadence-key]')].find(element => element.dataset.cadenceKey === arrivalFocus);
+      arrival?.focus({ preventScroll: !periodChanged });
+      if (periodChanged) revealStudioDestination(activePeriod ? reading : arrival);
+    }
   }
   return Object.freeze({ refresh, dispose() {
     if (disposed) return; disposed = true; actions.clear(); previewReading = null;

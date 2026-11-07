@@ -28,8 +28,9 @@ their source owners.
 The interaction pass delivered dial retention ([#761](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/761))
 and Change disclosure cues ([#760](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/760)).
 Its visual grammar is recorded in [#755](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/755).
-Further in-rack scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)),
-person/team editor placement ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
+Coordination's scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756))
+keeps **Plan overview** and the selected sprint or quarter inside the rack.
+Person/team editor placement ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
 and immediate addition followed by editing ([#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758))
 await the human's scope decision. Existing creation and editor flows remain the
 working contract.
@@ -44,8 +45,8 @@ family's production guide and specimen.
 ## Try the experience
 
 1. Open a sprint in the **Coordination horizon**, then a session. Its people,
-   duration and placement explain the work behind the visual. **Whole plan**
-   returns to the overview.
+   duration and placement explain the work behind the visual. **Plan overview**
+   returns to the period control you opened.
 2. Change the **Pilot decision review** from 30 to 45 minutes. Read the proposed
    amount, then Apply or Cancel. The illustrative pilot starts at $3,980;
    extending its four reviews adds $370.
@@ -88,7 +89,11 @@ Example buttons replace the plan in place with Undo available. Choosing
 supports Undo. Changing the period count previews a horizon for Apply or Cancel;
 a shorter horizon retains affected sessions under **Choose a period**.
 
-Open a period to see its weeks or months. Select a session to inspect its people,
+Open a period to see its weeks or months. The rack header keeps the selected
+sprint or quarter beside **Plan overview**, above the board and tracks' local
+scroll regions. Returning restores the originating period control and its place
+in the overview; changing scope preserves accepted work and pending edits.
+Select a session to inspect its people,
 duration and individual occurrence placements. **Add session** begins a draft
 in the selected period; its final confirmation accepts that draft. Increasing
 **Working sessions** adds occurrences awaiting placement. Increasing Hours or
