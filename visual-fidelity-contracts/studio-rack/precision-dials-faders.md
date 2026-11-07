@@ -20,12 +20,14 @@ field form a complete dose. Brief labels replace repeated operating paragraphs.
 
 | Current quantity | Receiving treatment |
 | --- | --- |
-| Hours and Minutes | One enclosed duration module; larger combined readout above a primary Hours dial and secondary peach Minutes group |
+| Hours and Minutes | One enclosed duration module; larger combined readout above peach Hours and paper Minutes, with borderless inner groups |
 | Hourly rate | One named enclosure for relative $10/$5 dials, the exact amount and centered $1 steps |
 | Framework component emphasis | Aligned fader channels with names, values and distinct active fill |
 | Quality assumptions | Named faders beside the reference visualization and authored result |
 
-The dial's housing and light stay fixed while its pointer turns. Step buttons
+The dial's housing and light stay fixed while its pointer turns. The pointer
+stays in the outer half of the face toward the indicated endpoint, keeping its outward
+direction legible at both coarse and fine sizes. Step buttons
 form a compact centered pair beneath the matching field. Fader channels align
 their labels, tracks and readouts; descriptive text has its own reading area.
 The thumb stays visually distinct from the active fill. A selected channel uses
@@ -90,8 +92,14 @@ and both Hours/Minutes dial–field–step groups. Its readout sits above both d
 and is larger than the individual field values. This supersedes the earlier
 beside-readout wide layout.
 
-Hours keeps the larger dial. Minutes uses the smaller dial in a secondary peach
-inner enclosure. Labels and size carry the distinction alongside color. Each
+The [dial refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788)
+gives Hours a peach inner face and Minutes a paper face. These groups have no
+visible border; the outer duration enclosure carries the boundary. Hours uses
+the monetary coarse dial's 6rem size and Minutes the fine dial's 4.75rem size.
+Both use the same .7rem face inset and pointer treatment as rate controls: at
+most 1rem long, shortened proportionately to stay outside the face's center.
+This supersedes the earlier peach Minutes enclosure and smaller duration-only
+dial sizes. Labels and size carry the distinction alongside color. Each
 dial sits above-left of its exact field and stepper. The input remains above the
 circular minus/plus pair, with the visible gap and the pair aligned to the
 field's start and end. The fixed housing, light and pointer artwork retain their
@@ -116,7 +124,7 @@ borrows the canonical controls, including the person's enclosed rate module.
 Its local close retains the current proposal; returning to People restores the
 same controls and value owner. [Session editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 places the canonical duration module directly below its originating Coordination
-rack. The larger readout, primary Hours and secondary peach Minutes remain one
+rack. The larger readout, peach Hours and secondary paper Minutes remain one
 enclosure; exact fields and circular steps preserve their layout. Close retains
 the proposal, including incomplete exact entry. Working sessions keeps its
 separate count input and placement meaning. A future occurrence-pad treatment

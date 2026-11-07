@@ -150,19 +150,17 @@
 .native-time__overview { display: grid; gap: .5rem; min-inline-size: 0; }
 .native-time__overview > .native-coordination__control-title { margin: 0; }
 .native-time-controls .native-time__quantities {
- container-type: normal; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+ container-type: normal; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
  align-items: stretch; gap: .75rem; margin: 0;
 }
 .native-time-controls .native-time__part {
  grid-template-columns: minmax(0, 1fr); padding: .6rem; gap: .5rem;
- border: 1px solid var(--native-rule); border-radius: .3rem; background: var(--native-paper);
+ border: 0; border-radius: .3rem; background: var(--native-paper);
 }
-.native-time-controls .native-coordination__control--minutes { background: var(--studio-peach); }
+.native-time-controls .native-coordination__control--hours { background: var(--studio-peach); }
 .native-time__part > label { font-weight: 750; }
-.native-time__adjustment { display: flex; flex-wrap: wrap; align-items: start; gap: .5rem; min-inline-size: 0; max-inline-size: 12rem; }
+.native-time__adjustment { display: flex; flex-wrap: wrap; align-items: start; gap: .5rem; min-inline-size: 0; max-inline-size: 12.5rem; }
 .native-time__adjustment .native-knob { flex: 0 0 auto; margin: 0; }
-.native-time__adjustment .native-knob--hours { inline-size: 5.5rem; }
-.native-time__adjustment .native-knob--minutes { inline-size: 4.5rem; }
 .native-time__adjustment .native-coordination__stepper { margin-block-start: 1.5rem; margin-inline-start: auto; }
 .native-time-controls .native-coordination__stepper { --native-input-measure: calc(5ch + 1.25rem); grid-template-columns: repeat(2, minmax(0, 1fr)); inline-size: min(100%, calc(5.5rem + .35rem)); }
 .native-time-controls .native-coordination__stepper input { inline-size: min(var(--native-input-measure), 100%); }
@@ -189,11 +187,9 @@
 .native-rate__dials { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
 .native-rate__part { display: grid; justify-items: center; align-content: start; gap: .4rem; }
 .native-rate__label { font: 700 .75rem/1.4 ui-monospace, monospace; }
-.native-rate__dial--coarse { inline-size: 6rem; }
-.native-rate__dial--fine { inline-size: 4.75rem; }
+.native-knob--hours, .native-rate__dial--coarse { inline-size: 6rem; }
+.native-knob--minutes, .native-rate__dial--fine { inline-size: 4.75rem; }
 .native-rate-controls .native-knob { margin: 0; }
-.native-rate-controls .native-knob__face { inset: .7rem; }
-.native-rate-controls .native-knob__pointer::before { block-size: 1rem; }
 .native-rate__note { font-size: .75rem; line-height: 1.45; max-inline-size: 42ch; }
 @media (forced-colors: active) {
     .native-rate-controls .native-knob { inline-size: 7rem; block-size: 2.75rem; }
@@ -203,6 +199,5 @@
  .studio-quantity-module, .native-time-controls .native-time__part, .native-coordination__duration-display {
   background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none;
  }
- .native-time-controls .native-coordination__control--minutes { border-style: double; }
  .native-time__adjustment .native-knob { inline-size: 6rem; }
 }

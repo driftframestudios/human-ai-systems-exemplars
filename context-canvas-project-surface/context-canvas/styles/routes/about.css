@@ -2603,9 +2603,10 @@ p#on-dark-iron-ore {
 .native-remote > summary::after { content: 'REMOTE / SESSION'; display: block; margin-block-start: .35rem; color: var(--about-deep-teal); font: 650 .7rem/1.5 ui-monospace, monospace; letter-spacing: .08em; }
 .native-knob { --native-knob-angle: 2.29deg; position: relative; inline-size: 7.5rem; max-inline-size: 100%; aspect-ratio: 1; margin-block: .55rem .8rem; border: .125rem solid var(--native-ink); border-radius: 50%; background: var(--native-paper); }
 .native-knob__ticks { position: absolute; inset: .35rem; border: .1rem dashed var(--native-ink); border-radius: 50%; }
-.native-knob__face { position: absolute; inset: 1rem; border: .125rem solid var(--native-ink); border-radius: 50%; background: linear-gradient(135deg, #b5d6d0 0%, #36534e 42%, #1f2421 70%); box-shadow: .2rem .25rem 0 #45534b, inset .1rem .12rem 0 #e6f2de; }
+.native-knob__face { position: absolute; inset: .7rem; border: .125rem solid var(--native-ink); border-radius: 50%; background: linear-gradient(135deg, #b5d6d0 0%, #36534e 42%, #1f2421 70%); box-shadow: .2rem .25rem 0 #45534b, inset .1rem .12rem 0 #e6f2de; }
 .native-knob__pointer { position: absolute; inset: .35rem; border-radius: 50%; transform: rotate(var(--native-knob-angle)); }
-.native-knob__pointer::before { content: ''; position: absolute; inset-block-start: .15rem; inset-inline-start: calc(50% - .13rem); inline-size: .26rem; block-size: 1.35rem; border-radius: .125rem; background: #f8f1d9; box-shadow: .07rem .07rem 0 #1f2421; }
+/* Keep the radial mark wholly outside the center, including smaller fine dials. */
+.native-knob__pointer::before { content: ''; position: absolute; inset-block-start: .15rem; inset-inline-start: calc(50% - .13rem); inline-size: .26rem; block-size: min(1rem, calc(50% - .3rem)); border-radius: .125rem; background: #f8f1d9; box-shadow: .07rem .07rem 0 #1f2421; }
 .native-coordination .native-knob input[type='range'] { position: absolute; inset: 0; margin: 0; inline-size: 100%; block-size: 100%; min-block-size: 0; max-inline-size: none; padding: 0; border: 0; opacity: 0; cursor: grab; touch-action: none; }
 .native-knob:has(input:focus-visible) { outline: .2rem solid var(--native-focus); outline-offset: .25rem; }
 .native-knob[data-dragging='true'] input[type='range'] { cursor: grabbing; }

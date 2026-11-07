@@ -54,11 +54,15 @@ creation (#770), participant controls (#771), attached editorial companions
 (#772) and scoped removal/shared Undo (#773) retain their focused issues.
 PR #785 delivered the enclosed duration and rate modules (#767). PR #786 delivered
 #757: canonical person/team editors open below Team planning's selected rack,
-preserving those modules and the People chapter. The #768 increment extends the
-same placement grammar to session editing from the horizon and Team planning.
+preserving those modules and the People chapter. PR #787 delivered #768, extending
+the same placement grammar to session editing from the horizon and Team planning.
 Close retains the proposal; Cancel discards it; Apply accepts it through the
 existing owner. Immediate creation retains its separate issue. Team arrangement
-keeps its direct acceptance boundary.
+keeps its direct acceptance boundary. #788 refines duration's borderless peach
+Hours and paper Minutes, using the monetary coarse/fine dial geometry. The
+prospective #789 Session detail deck moves existing-session editing inside Plan
+overview while retaining those owners; it is a planning decision rather than
+implemented placement.
 
 ### State, people and evidence
 
@@ -276,7 +280,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
-| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes, gives Minutes a secondary peach face, and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
+| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
+| Bordered Hours/Minutes inner groups, peach Minutes and smaller duration-only dial artwork | #788 gives borderless peach Hours and paper Minutes. Duration reuses monetary coarse/fine sizes and the same face/pointer treatment; the outward pointer remains legible at each endpoint. The outer enclosure, readout and gesture owners remain. |
 | Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
 | Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 opens the canonical session editor below the originating horizon or Team planning rack. Its heading retains the session and origin. The active row key toggles the panel; pads inspect their occurrence or participation context. Close retains the proposal and returns focus. |
 | Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
@@ -363,7 +368,7 @@ Cross-entry through the other rack moves the receiver while preserving the same
 proposal. Close returns to the originating key or pad and keeps the draft;
 Cancel and Apply retain their established discard and acceptance operations.
 Period/subdivision scope and delivery-phase scope remain with their presentation
-owners. The larger duration readout, Hours dial, secondary peach Minutes module
+owners. The larger duration readout, peach Hours, secondary paper Minutes
 and circular step pairs stay together. Working sessions retains its exact
 repetition input. Creation continues through the existing draft/confirmation
 route until #758 and #770 change that contract.
@@ -403,8 +408,11 @@ also established that authored timing and retired session state survive an
 unrelated customization or later arrangement choice.
 
 The #767 duration module encloses Hours, Minutes and their combined output.
-Its larger readout sits above both dials. Minutes has a secondary peach inner
-face; each dial sits above-left of its exact field and circular step pair. The
+Its larger readout sits above both dials. #788 refines the inner groups to
+borderless peach Hours and paper Minutes. Duration now shares the monetary
+coarse/fine dial sizes, face inset and shorter outward pointer. This supersedes
+peach Minutes and duration-specific smaller geometry; the gesture logic stays
+with its existing owner. Each dial sits above-left of its exact field and circular step pair. The
 visible gap and the pair's start/end alignment beneath the input preserve the
 familiar adjustment pattern. Working sessions remains separate nearby and keeps
 its repetition meaning when the editor opens adjacent to either Coordination rack.
@@ -426,12 +434,24 @@ contracts. #757 reuses the rate enclosure in the adjacent person editor. #768
 carries the duration module into session editing beside its originating rack,
 with the same quantity and contextual return grammar.
 
-#770 adds empty New session regions inside the racks, with a ghost plus on
-fine-pointer hover, equivalent focus presentation and a visible touch entry.
-Existing temporal row cells still represent occurrences; person/session cells
-still represent participation. #758 recommends an immediately created session
-with useful defaults, followed by adjacent editing and a clear return. Creation
-Undo and later edit Cancel keep separate meanings.
+#789 proposes a Session detail deck between Plan overview's period board and
+Session tracks. A tape-like selected clip loads one named session into the deck.
+Duration remains shared across repetitions; occurrence pads select placement;
+independent participant switches describe the session's ordered membership.
+The [consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
+records the source-backed nonmodal recommendation and stable-mount preparation:
+the current cadence view rebuilds its screen, so an in-rack receiver needs a
+stable slot before borrowing the canonical controls. Close retains the proposal
+and returns to the clip; the existing coordinator handles session switches.
+This remains prospective. #768's adjacent placement continues to own behavior
+until a reviewed deck replaces that receiver in Plan overview.
+
+#758 recommends an immediately created session with useful defaults and creation
+Undo. It precedes #770's empty New session regions, whose ghost plus appears on
+fine-pointer hover and focus, with a visible touch entry. Existing temporal row
+cells still represent occurrences; person/session cells still represent
+participation. These creation increments are independent of #789's editing of
+existing sessions. Creation Undo and later edit Cancel keep separate meanings.
 
 #771 reuses keyed pad movement for explicit participant reordering; inclusion
 keeps card positions stable. Its future percentage proposal names Time in this
@@ -610,18 +630,25 @@ Two legacy browser journeys still target superseded visitor entries. Both fail
 on the clean shared-control baseline: one reaches a closed People rate editor,
 and one expects the removed showcase brief. Their focused observation repair is
 tracked in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777).
-The composition PR records the passing current journeys separately from those
-baseline failures.
+Repair these routes in a narrow check-focused PR before #789's deeper in-rack
+composition, using today's accepted People and Investment entries. This gives
+the next increment a meaningful cross-chapter baseline while preserving the
+current interface. The earlier composition PR's passing current journeys and
+these known baseline failures remain distinct evidence.
 
 For re-entry, use PR #781 for the delivery-board projection and PR #783 for the
 direct replacement transaction, local Undo and accepted-record routing. The
 #767 enclosure increment, delivered in PR #785, supplies the shared duration and
 rate composition. PR #786 supplies #757's canonical person/team receiver.
-The #768 session receiver extends that placement and return owner; its receiving
-PR owns the focused occurrence/participation entry, switching, retained draft,
+PR #787 delivered the #768 session receiver with that placement and return owner;
+it owns the focused occurrence/participation entry, switching, retained draft,
 acceptance and return observations.
 PR #764 remains the accepted scope-navigation reference. Retain
 the current creation/confirmation contract while #758 defines its separate replacement.
+#788's receiving PR owns the duration skin and pointer observation. #789 receives
+the proposed in-rack Session detail deck; its first boundary is existing-session
+editing, followed by visual occurrence and participant controls. #758 then #770
+receive immediate creation and contextual empty-space entry.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

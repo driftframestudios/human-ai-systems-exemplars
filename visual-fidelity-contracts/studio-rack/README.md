@@ -92,8 +92,9 @@ The load order in [About HTML](../../context-canvas-project-surface/context-canv
 is `about.css`, then `studio-instrument.css`, followed by the chapter extensions.
 The About owner defines `--native-*` from `--about-*`; the shared instrument owner
 maps `--studio-*` and owns the shared `studio-quantity-module` enclosure.
-`studio-duration` groups the larger output above Hours and secondary peach
-Minutes; rate hosts use the same enclosure grammar for their named amount.
+`studio-duration` groups the larger output above borderless peach Hours and
+secondary paper Minutes; duration and rate controls share coarse/fine dial
+geometry. Rate hosts use the same enclosure grammar for their named amount.
 Receiving chapter styles extend those mappings. This contract
 introduces no parallel token file or generated stylesheet.
 
