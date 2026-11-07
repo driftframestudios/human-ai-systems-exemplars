@@ -30,10 +30,19 @@ and Change disclosure cues ([#760](https://github.com/driftframestudios/human-ai
 Its visual grammar is recorded in [#755](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/755).
 Coordination's scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756))
 keeps **Plan overview** and the selected sprint or quarter inside the rack.
-Person/team editor placement ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
-and immediate addition followed by editing ([#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758))
-await the human's scope decision. Existing creation and editor flows remain the
-working contract.
+The next [Coordination consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
+defines common rack controls while preserving two readings: the horizon shows
+when sessions happen; Team planning shows who participates. Shared styling and
+the permanent Team planning section are scoped in
+[#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765).
+Direct arrangement selection ([#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766))
+and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
+prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
+and session editors ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)).
+These are prospective increments. Current arrangement preview/Apply, editor
+placement and creation flows remain available until their replacements land;
+[#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+retains immediate addition as its own decision.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -104,6 +113,12 @@ Decisions attach to a stage or handoff. Delays name affected work and can propos
 its later placement. Availability opens beside the person and period it concerns;
 funded time keeps its separate accounting meaning. Older saved plans retain
 their recorded timing and offer an explicit sprint-arrangement proposal.
+
+Team planning offers a complementary view: its Shared sessions columns name
+people, and its pads show participation. The horizon's columns name periods,
+and its pads show occurrences. Both open the same working-session records.
+The next consolidation will give these readings consistent session keys and
+Add controls while keeping that distinction visible.
 
 ### Inspect support and keep the result
 

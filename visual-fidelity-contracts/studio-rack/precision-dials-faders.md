@@ -57,6 +57,7 @@ values, and Undo operates on accepted history.
 | --- | --- |
 | [Rate controls](../../collaboration/native-investment-studio/rate-controls.mjs) | Relative coarse/fine gestures and current-editor checks |
 | [Time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Shared Hours/Minutes control and exact field agreement |
+| [About session markup](../../context-canvas-project-surface/context-canvas/index.html) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Static duration controls, field identities and session readout projection |
 | [Change](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controllers](../../collaboration/native-investment-studio/assurance-controller.mjs) | Fader meaning and result projection |
 | [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Existing dial, stepper and fader geometry |
 | [Team browser checks](../../tests/native-investment-studio/team-controller.browser.mjs) and [session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Exact value agreement, gesture/cancellation, retained drafts and Apply/Undo |
@@ -73,9 +74,36 @@ preserves the pointer/cancellation rationale.
 
 ## Re-entry and future scope
 
+The prospective [control enclosure increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
+prepares duration and rate controls for the adjacent
+[person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+editors. It is a prerequisite composition change for both receivers, beginning
+with Coordination and keeping shared controls consistent in their existing
+supporting-session receivers.
+
+The planned duration module places the short **Time per person, per session**
+label, `output.native-coordination__duration-display`, and the existing Hours and
+Minutes groups inside one bounded instrument enclosure. The larger Hours dial
+and smaller Minutes dial stay beside their exact fields and centered step pairs.
+Working sessions remains an adjacent quantity with its own label: it changes
+repetition, while Hours and Minutes describe each session. The readout is to sit
+directly in that instrument face, with its existing output/input associations.
+The current static session markup and dynamic `createTimeControls` factory must
+receive the same structure so supporting-session proposals keep the same
+operation. Ordinary mobile reflow retains the readout and quantities within that
+enclosure; existing dial artwork remains the visual reference.
+
+The corresponding rate module is to enclose the $10/$5 dials, exact monetary
+field and centered $1 steps as one named hourly-rate control. Its fixed housing,
+light, pointer and coarse/fine size hierarchy preserve the existing art direction.
+These enclosures change grouping and presentation; current raw-entry, gesture,
+editor identity and acceptance owners continue to govern values.
+
 Use real pointer gestures when investigating an engine-specific reset: brief
 inside/outside movements, release, focus transfer and deliberate cancellation
-distinguish completion from rollback. Revisit when value meaning, bounds, native
-event handling or editor identity changes. Additional controls or rearranged
-racks remain separately scoped; preserve the current tactile styling while
-repairing a demonstrated interaction fault.
+distinguish completion from rollback. The enclosure's focused observation should
+also establish readable labels, contained controls and visible feedback at phone
+and laptop widths. Revisit when value meaning, bounds, native event handling or
+editor identity changes. Its receiving PR supplies actual implementation and
+browser evidence; this contract records the planned composition.

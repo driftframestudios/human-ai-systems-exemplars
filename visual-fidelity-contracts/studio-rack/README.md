@@ -8,8 +8,9 @@ is the reference implementation.
 
 **Standing:** review candidate, version `0.1.0`, ID
 `vfc:studio-rack-composition`; source reviewed 7 November 2026. This family records
-the accepted design and its implementation boundaries. Each receiving PR owns
-its actual verification result. Publication remains a separately reviewed action.
+the accepted design and its implementation boundaries. Prospective receiving
+decisions below retain their own Issues and delivery evidence. Each receiving PR
+owns its actual verification result. Publication remains a separately reviewed action.
 
 ## Choose a visual mode and an operation
 
@@ -116,7 +117,25 @@ route to their narrower checks. [Foundation checks](../../tests/visual-fidelity-
 establish catalog validity and source-path closure, rather than visual approval.
 Coordination's [in-rack scope navigation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
 keeps its Plan overview return and selected period inside the existing screen.
-[A common swinging editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-and [immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-remain future design decisions. Their receiving issues establish scope before
-implementation; this family preserves the current experience meanwhile.
+
+The next Coordination composition is planned in
+[#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765):
+Coordination horizon remains the primary rack, and Team planning becomes a
+permanent sibling section with editorial structure cards and a subtly darker
+secondary rack. Both are to share session-key states, Add session treatment,
+header/readout alignment and bounded scrolling. Horizon columns express time;
+Shared sessions columns express people. Their common housing preserves those
+different relationships. The existing palette, reels, pads and tactile depth
+provide the art direction for this consolidation.
+
+The planned Team arrangement flow in
+[#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+accepts a selection through one updateable arrangement and Undo. Other editors
+retain their current proposal and Apply owners. Before adjacent editors move,
+[#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
+defines duration and rate enclosures that fit within the rack. Coordination-first
+[person/team editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+and [session editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+are the later receivers. [Immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+keeps its separate creation decision. These are prospective contracts; current
+runtime owners remain the implementation authority until their focused PRs land.

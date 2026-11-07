@@ -8,8 +8,8 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 7 November 2026 reconciliation preserves a current contract and material
-decision history, with the accepted visual grammar now owned by the
+The 7 November 2026 reconciliation preserves the current contract, the next
+Coordination composition decision and material history. The visual grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
@@ -39,12 +39,14 @@ result and recovery path:
 
 The 7 November interaction route delivered dial retention (#753, PR #761) and
 Change disclosure cues (#754, PR #760), with visual-contract persistence in #755.
-The current aesthetic and component placement remain the reference. The human
-then authorized #756 specifically for Coordination's Plan overview rack: keep
-the selected period and its overview return together inside the instrument.
-Adjacent person/team editing (#757) and immediate addition with later editing
-(#758) remain coordination stubs pending human scope. Existing editor placement
-and creation-state ownership continue in service.
+The current aesthetic and component placement remain the reference. PR #764
+delivered #756: the selected period and Plan overview return share the rack
+header, with originating focus and local scroll restored on return. The next
+planning decision is semantic and stylistic consolidation in #765 before
+adjacent editor placement. Direct arrangement selection (#766), dial enclosures
+(#767), and adjacent session editing (#768) now have bounded receiving issues
+alongside the updated person/team editor issue #757. Existing editor placement,
+arrangement preview/Apply and creation ownership remain the runnable contract.
 
 ### State, people and evidence
 
@@ -249,9 +251,44 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Holding all further in-rack work for scope definition | The human authorized #756 for the Coordination Plan overview rack. Preserve other placements while adjacent editors (#757) and immediate creation (#758) receive their own scope decisions. |
+| Holding all further in-rack work for scope definition | PR #764 delivered #756. The next planning decision places semantic/style consolidation (#765), direct arrangement selection (#766) and enclosed controls (#767) before adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
+
+## Next Coordination composition
+
+The [consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
+records the next design determination. The horizon answers when work happens;
+Team planning answers who works together. Both use existing session identities,
+but period/occurrence columns and people/participation columns keep their own
+meanings. Shared session keys and Add controls are the first implementation
+receiver. Durable selection comes from the receiving editor; the last-click
+motion cue remains presentation feedback.
+
+Team planning is to become a permanent sibling section: heading, zoetrope with
+editorial team structure, concise hint, then a subtly darker secondary rack.
+Its housing and control states follow the horizon. Quality's compact lanes and
+pads supply composition precedents for choices with explicit local meaning.
+
+Direct arrangement selection needs a replacement transaction for one instance,
+with Undo. The current template engine appends generated records and detects
+identity collisions; applying it repeatedly would not create the requested
+revisable example. #766 owns that change. Accepted structure and Included work
+wording follow its actual state; the editorial card art direction remains.
+
+Before adjacent editors, #767 encloses Hours, Minutes and their combined output
+in one duration module. Working sessions stays nearby as a separate repetition
+module; monetary controls use the same housing grammar with their own units.
+The main static session markup and dynamic supporting-session factory receive
+the composition together. Their gesture, raw-value and acceptance owners stay
+in place. #757 and #768 then reuse one contextual panel/return grammar in
+Coordination; #758 retains immediate-add semantics separately.
+
+#717 remains a parallel zine-test quality repair. The source still conflates
+viewport position with document position, while the preceding hosted checks
+passed. If that observation blocks the shared delivery workflow, repair its
+geometry proof first. It is independent of the Studio runtime and the current
+semantic planning decision.
 
 ## Material decision history
 
@@ -380,12 +417,12 @@ projections. The complete Context Canvas source suite now passes. This supersede
 the earlier standing of twelve reproduced baseline failures; the receiving PRs
 retain the exact observations and reviewed commits.
 
-For re-entry, reconcile #756 with the Coordination rack, its focused browser
-journey and reviewed delivery. Its bounded scope supports future contextual
-panels by keeping navigation with the view it describes; each editor still owns
-its existing proposal and return. The next design-scope decisions are #757 and
-#758. Retain the current creation/confirmation contract until a bounded
-replacement is authorized.
+For re-entry, start with #765 and the consolidation plan. Its shared-controls
+and Team planning composition increments prepare #766's direct arrangement
+selection and #767's enclosed controls. Those receivers prepare the adjacent
+people/team (#757) and session (#768) editors. PR #764 remains the accepted
+scope-navigation reference. Retain the current creation/confirmation contract
+while #758 defines its separate replacement.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

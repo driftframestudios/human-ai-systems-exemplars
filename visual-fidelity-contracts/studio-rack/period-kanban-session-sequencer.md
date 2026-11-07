@@ -82,8 +82,27 @@ comprehension result from a music-production manual.
 Revisit this contract when scope, period meaning, record identity or the editor
 return changes. The [in-rack scope increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
 is bounded to Coordination's Plan overview screen. It supersedes the earlier
-Whole plan label and return placed outside the rack. Future contextual editing
-panels retain their own scope decisions and existing editor owners meanwhile.
-A focused mobile/desktop journey should observe
-the chosen period, session, return focus and retained accepted plan; exact calendar
-or performance expansion needs its own consequential question.
+Whole plan label and return placed outside the rack.
+
+The prospective [Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+uses the current screen as the composition reference for Team planning's Shared
+sessions. The two readings retain distinct axes and inspection scopes:
+
+| Reading | Columns and pads | Meaning of a session selection |
+| --- | --- | --- |
+| Coordination horizon | Periods or subdivisions; pads locate occurrences in the plan | A session, with its occurrence context when selected from an occurrence pad |
+| Team planning: Shared sessions | People; pads show participation in a working session | The shared session and its participating people |
+
+Both are to use the same session-key art direction, a clearly inactive state,
+durable selection and a caret that follows the related receiver's open state.
+Add session is to keep one macro-level treatment while carrying the useful local
+context into creation. Team planning retains its darker secondary housing and
+editorial structure cards. Its participant columns preserve their relationship
+meaning when this shared composition is implemented.
+
+The later [adjacent session editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+will receive either entry path through the same existing session owner. Current
+editors remain in place while that scope and the preceding control enclosures
+are delivered. A focused mobile/desktop journey should observe the chosen period
+or people context, session, return focus and retained accepted plan; exact
+calendar or performance expansion needs its own consequential question.

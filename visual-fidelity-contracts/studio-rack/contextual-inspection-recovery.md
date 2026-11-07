@@ -79,10 +79,29 @@ operation and geometry; human walkthrough establishes whether the cue is clear.
 
 ## Re-entry and future scope
 
-A [common panel that swings open inside or below the rack](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-remains a future design decision. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-is also a future change to the current draft/confirmation boundary. Each needs a
-scoped receiver, explicit default record and recovery decision before
-implementation. Preserve current editors and acceptance while those alternatives
-are defined. Revisit this contract when a control changes operation, its receiver
-moves or recovery changes.
+The next [Coordination control consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+is to make the session keys in both racks agree about the selected record and
+open receiver. Durable selection comes from the editor's current record; the
+transient indication of the last clicked destination remains presentation.
+Closing a receiver restores its closed caret while preserving any separately
+retained selection or draft. When an existing path still navigates to a remote
+editor, its destination wording continues to identify that actual receiver.
+An open caret describes the visible receiver it controls; adjacent-panel wording
+and control relationships begin when the adjacent panel is mounted.
+
+Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+are future Coordination-first receivers. Both follow the shared
+[duration and rate enclosures](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767).
+A session opened from a period occurrence carries that occurrence context; a
+session opened from Shared sessions carries its people context. Each path is to
+reveal one existing session editor and retain an origin for close and return.
+
+The planned [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+has its own immediate acceptance and Undo boundary. The existing person, session
+and other editor proposals continue to use their current Apply and recovery
+owners. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+remains a separate future creation decision. These planned panels need their
+scoped receiver and focus/recovery observations before their delivery is claimed.
+Revisit this contract when a control changes operation, its receiver moves or
+recovery changes.
