@@ -25,7 +25,7 @@ visual system for every chapter.
 
 | Visitor operation | Contract |
 | --- | --- |
-| Move between the whole plan, a period and its sessions | [Period Kanban & Session Sequencer](period-kanban-session-sequencer.md) |
+| Move between an overview, a named period or delivery phase, and its work | [Period Kanban & Session Sequencer](period-kanban-session-sequencer.md) |
 | Compare support and select the work behind a cell | [Support Matrix & Stateful Pads](support-matrix-stateful-pads.md) |
 | Explore a populated configuration | [Zoetrope Preset Selection](zoetrope-preset-selection.md) |
 | Adjust time, money or emphasis | [Precision Dials & Faders](precision-dials-faders.md) |
@@ -107,11 +107,11 @@ for a real shared receiving use.
 | Owner | Responsibility |
 | --- | --- |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared `studio-track-key` / `studio-rack-add` roles and the existing Remove skin |
-| [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, session tracks, arrangement readings and the darker secondary Team planning enclosure |
+| [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, editorial delivery-phase cards, session tracks and the darker secondary Team planning enclosure |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Session keys and pads mirror the actual session editor's identity, visibility and controlled element |
-| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning's editorial topology, single team/member-lane rendering, investment reading and participation table with a fixed header/local scroller |
+| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning's proposal, editorial topology, phase projection and scope, investment reading, and participation table with a fixed header/local scroller |
 
 Ordinary phone and laptop widths are the receiving range for this showcase.
 Text and controls reflow; genuinely two-dimensional tables and tracks retain a
@@ -143,13 +143,22 @@ receiver closes. Horizon columns express time; Shared sessions columns express
 people. Their local table geometry preserves those different relationships.
 
 Team planning is a permanent sibling section with the reel and editorial
-structure above a concise hint and subtly darker secondary rack. The rack
-contains the proposed team/member lanes, Shared sessions and a compact Delivery
-lifecycle disclosure. Its heading, amount and Add session remain outside local
-participant-table scrolling. The readout labels accepted investment or whole-plan
-proposed investment according to the existing preview state. The existing
-palette, reels, pads and tactile depth connect this secondary enclosure to the
-primary horizon while preserving their distinct readings.
+topology above a concise hint and subtly darker secondary rack. Its
+[delivery-board refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
+combines proposed teams, people, sessions and handoffs into six phase lanes.
+Editorial card faces and distinct team, session and handoff treatments sit
+against the darker housing. Shared sessions retains its participation reading
+below. The board's phase name and Delivery overview return stay above its local
+scroller; the rack amount and Add session remain outside participant-table
+scrolling. The readout labels accepted or whole-plan proposed investment
+according to the existing preview state.
+
+A delivery phase is an authored grouping of work and responsibility; the horizon
+continues to own sprint and quarter placement. The reel updates the proposed
+board immediately while each card addresses its existing editor. Remaining
+attached disclosures retain their spring reveal. The existing palette, reels,
+pads and tactile depth connect this secondary enclosure to the primary horizon
+while preserving their distinct readings.
 
 The [editorial-companion increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
 treats Editorial Rack as an attached sub-rack skin.

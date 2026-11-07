@@ -93,9 +93,17 @@ Team planning is a permanent section. Its arrangement reel and secondary rack
 remain available while selection opens the existing template, connection or
 session receiver. The template controller retains its preview, Apply, Cancel
 and edit-retention ownership; the section's persistent visibility is separate
-from which editor is active. The local Delivery lifecycle disclosure keeps its
-own reveal state. This composition prepares the later adjacent receivers while
-the current editors continue to own their drafts.
+from which editor is active. The delivery board's phase keys select a local
+presentation scope; Delivery overview restores the originating phase key and
+scroll position. The controller preserves that phase while its proposal view
+rerenders. Team/member, handoff and session cards route to the existing editors
+for those records. Remaining attached disclosures keep the spring reveal.
+
+The selected session key currently opens or travels to the remote receiver.
+Its downward caret reports actual visibility; it does not yet imply a second
+click closes an adjacent panel. #768 owns that future open/close behavior when
+the session editor moves into the rack. This composition prepares those later
+receivers while current editors continue to own their drafts.
 
 Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)

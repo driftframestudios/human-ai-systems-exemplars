@@ -78,7 +78,7 @@ for (const engine of names) {
     for (const id of ['stream-aligned', 'matrix', 'tiger-team']) {
       await panel(page).locator(`[data-reel-choice="${id}"]`).click();
       await expect(panel(page).locator('[data-arrangement-reading]')).toHaveAttribute('data-arrangement-template', id);
-      await expect(panel(page).locator('.studio-team-lane')).toHaveCount(3);
+      assert.equal(await panel(page).locator('[data-delivery-team]').evaluateAll(cards => new Set(cards.map(card => card.dataset.deliveryTeam)).size), 3, 'the phase board retains every proposed team');
       await expect(action(page, 'apply')).toHaveAttribute('aria-disabled', 'false');
       assert.equal(await bytes(page), before, 'a reel choice prepares a proposal while accepted state stays intact');
     }
@@ -108,7 +108,7 @@ for (const engine of names) {
     });
     const root = page.locator('[data-native-coordination]'), accepted = page.locator('[data-native-connection-view]');
     await expect(accepted).toContainText('Custom connections');
-    await panel(page).locator('.studio-team-lane__title').first().click();
+    await panel(page).locator('[data-delivery-team="pod"] .studio-delivery__team-key').first().click();
     await expect(field(page, 'teams.pod.selection')).toBeFocused();
     await expect(panel(page).locator('.studio-arrangement-settings')).toHaveAttribute('open', '');
     const original = await bytes(page), sketch = panel(page).locator('[data-template-structure]');
@@ -246,8 +246,8 @@ for (const engine of names) {
     const page = await open(t, engine); await existingGroups(page); await card(page, 'connection:handoff');
     await page.evaluate(() => { const f = window.templateFixture; f.studio.applyCommand({ type: 'team.create', team: { id: 'new', label: 'Existing New group', personIds: [] } }, f.studio.read()); f.controller.render(); });
     await field(page, 'teams.pod.selection').selectOption('team:new'); await preview(page);
-    await expect(panel(page).locator('.studio-team-lane').first()).toContainText('Existing New group');
-    await expect(panel(page).locator('.studio-team-lane').first()).toContainText('product-one');
+    await expect(panel(page).locator('[data-delivery-team="pod"]').first()).toContainText('Existing New group');
+    await expect(panel(page).locator('[data-delivery-team="pod"]').first()).toContainText('product-one');
     await field(page, 'teams.pod.selection').selectOption('team:delivery');
     await page.evaluate(() => { const f = window.templateFixture, d = f.editing.person.begin('product-one', f.studio.read()).view.draft; f.editing.person.setText(d.token, 'ratePerHour', '105'); });
     await preview(page);
@@ -305,7 +305,7 @@ for (const engine of names) {
     }
     await hours.scrollIntoViewIfNeeded(); await frames(page);
     const geometry = await panel(page).evaluate(element => ({ box: element.getBoundingClientRect().toJSON(), width: innerWidth,
-      controls: [...element.querySelectorAll('input,select,button')].filter(node => node.getClientRects().length && !node.closest('.studio-session-tracks')).map(node => ({ tag: node.tagName, field: node.dataset.templateField ?? node.dataset.templateAction, box: node.getBoundingClientRect().toJSON(), parent: { className: node.parentElement.className, box: node.parentElement.getBoundingClientRect().toJSON(), font: getComputedStyle(node).font, width: getComputedStyle(node).inlineSize } })) }));
+      controls: [...element.querySelectorAll('input,select,button')].filter(node => node.getClientRects().length && !node.closest('.studio-session-tracks, .studio-delivery__board')).map(node => ({ tag: node.tagName, field: node.dataset.templateField ?? node.dataset.templateAction, box: node.getBoundingClientRect().toJSON(), parent: { className: node.parentElement.className, box: node.parentElement.getBoundingClientRect().toJSON(), font: getComputedStyle(node).font, width: getComputedStyle(node).inlineSize } })) }));
     for (const control of geometry.controls) assert.ok(control.box.left >= geometry.box.left - 1 && control.box.right <= geometry.box.right + 1, `${control.tag} remains in the template panel: ${JSON.stringify({ control, panel: geometry.box })}`);
     assert.ok(geometry.box.right <= geometry.width + 1);
     await page.screenshot({ path: resolve(captures, `template-${engine}-320-enlarged.png`), fullPage: false });

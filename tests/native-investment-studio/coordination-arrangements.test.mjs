@@ -8,6 +8,7 @@ import { createDraftCoordinator } from '../../collaboration/native-investment-st
 import { createPlanExchange } from '../../collaboration/native-investment-studio/exchange.mjs';
 import { prepareCoordinationTemplate, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
 import { getCoordinationTemplate, projectCoordinationArrangements, describeArrangementReference, describeArrangementChanges } from '../../collaboration/native-investment-studio/coordination-arrangements.mjs';
+import { projectDeliveryBoard } from '../../collaboration/native-investment-studio/delivery-board.mjs';
 import { LIMITS, SCHEMA_BYTE_LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
 
 function podRequest(proposalId = 'working-pod') {
@@ -162,4 +163,52 @@ test('exchange previews identity and binding changes even when accepted amounts 
   changed.arrangements = []; result = exchange.previewText(JSON.stringify(changed));
   assert.deepEqual(result.view.preview.changes.arrangements.removed, ['working-pod']);
   exchange.dispose(); editing.dispose();
+});
+
+
+test('delivery phases retain every team, handoff and working session while preserving authored stage context', () => {
+  const plan = structuredClone(pod().read().state);
+  plan.work.push({ ...plan.work[0], id: 'support', label: 'Prepare the receiving group' });
+  plan.scoreSettings.stages = [
+    { id: 'first-look', label: 'First look together', workIds: ['review'] },
+    { id: 'readiness', label: 'Readiness review', workIds: ['review'] },
+  ];
+  const arrangement = projectCoordinationArrangements(plan).arrangements[0];
+  const before = JSON.stringify({ arrangement, plan });
+  const phases = projectDeliveryBoard({ arrangement, plan });
+  assert.deepEqual(phases.map(phase => phase.label), ['Planning', 'Design', 'Implementation', 'Testing', 'Deployment', 'Maintenance']);
+  assert.deepEqual([...new Set(phases.flatMap(phase => phase.teams.map(team => team.slotId)))].sort(), ['partner', 'pod']);
+  assert.deepEqual(phases.flatMap(phase => phase.connections.map(connection => connection.slotId)).sort(), ['feedback', 'handoff']);
+  const sessions = phases.flatMap(phase => phase.sessions);
+  assert.deepEqual(sessions.map(session => session.work.id).sort(), ['review', 'support']);
+  assert.deepEqual(sessions.find(session => session.work.id === 'review').stageLabels, ['First look together', 'Readiness review']);
+  assert.deepEqual(sessions.find(session => session.work.id === 'support').stageLabels, []);
+  assert.equal(JSON.stringify({ arrangement, plan }), before, 'the board reads existing work without accepting or moving it');
+});
+
+test('delivery phase placement follows record identity while visitor labels and handoff endpoints stay readable', () => {
+  const plan = structuredClone(pod().read().state);
+  plan.scoreSettings.stages = [{ id: 'review', label: 'Review the result', workIds: ['review'] }];
+  const original = projectCoordinationArrangements(plan).arrangements[0];
+  const signature = phases => phases.map(phase => ({ id: phase.id,
+    teams: phase.teams.map(team => team.slotId),
+    connections: phase.connections.map(connection => connection.slotId),
+    sessions: phase.sessions.map(session => session.work.id) }));
+  const before = signature(projectDeliveryBoard({ arrangement: original, plan }));
+  plan.work[0].label = 'Operations conversation';
+  plan.teams[0].label = 'New group name';
+  plan.scoreSettings.stages[0].label = 'A visitor-written stage';
+  plan.connections[0].sharedObject = 'Revised instructions';
+  [plan.connections[0].senderTeamId, plan.connections[0].receiverTeamId]
+    = [plan.connections[0].receiverTeamId, plan.connections[0].senderTeamId];
+  const arrangement = projectCoordinationArrangements(plan).arrangements[0];
+  const phases = projectDeliveryBoard({ arrangement, plan });
+  assert.deepEqual(signature(phases), before, 'renaming and editing a connection preserve the authored phase grouping');
+  const handoff = phases.flatMap(phase => phase.connections).find(connection => connection.slotId === 'handoff');
+  assert.equal(handoff.connection.senderTeamId, 'working-pod-team-partner');
+  assert.equal(handoff.connection.sharedObject, 'Revised instructions');
+  const review = phases.find(phase => phase.id === 'testing').sessions[0];
+  assert.equal(review.work.label, 'Operations conversation');
+  assert.deepEqual(review.stageLabels, ['A visitor-written stage']);
+  assert.equal(phases.flatMap(phase => phase.teams).find(team => team.slotId === 'pod').team.label, 'New group name');
 });

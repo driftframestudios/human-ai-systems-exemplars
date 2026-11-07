@@ -4,7 +4,9 @@ Give visitors two coordinated readings of enterprise work: named periods show
 the plan's shape, while session tracks reveal the work inside those periods.
 Opening a sprint or quarter makes its weeks or months available without losing
 the **Plan overview** return. Use the [Coordination view](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
-as the current example.
+as the current example. Team planning adapts this overview/detail pattern into
+an editorial delivery-phase board; its lanes describe work and responsibility,
+while the horizon's lanes retain period placement.
 
 **Standing:** review candidate `0.1.0`; ID
 `vfc:period-kanban-session-sequencer`; reviewed 7 November 2026. This operation
@@ -25,6 +27,7 @@ expresses the authored working arrangement.
 | Stable meaning | Visible composition |
 | --- | --- |
 | A named sprint or quarter | A lane with its own heading and creation entry |
+| An illustrative delivery phase | An editorial lane grouping teams, sessions and handoffs; temporal placement stays with the horizon |
 | A working session | Corresponding board clip and track reading with the same record identity |
 | Plan overview versus period scope | Current period name and a visible Plan overview return inside the rack header |
 | Work awaiting placement | An explicit Choose a period reading that retains the session |
@@ -64,12 +67,14 @@ stacking may change geometry while preserving reading order and record identity.
 
 | Owner or observation | What it establishes |
 | --- | --- |
-| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Board, breadcrumb, tracks, focus return, details and actions |
+| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Period board, breadcrumb, tracks, focus return, details and actions |
+| [Delivery board](../../collaboration/native-investment-studio/delivery-board.mjs) | Authored phase projection, distinct editorial cards, local phase scope and overview return |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs) and [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Authored periods and the accepted/proposed arrangement boundary |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | The selected session's draft and receiver state; synchronized selected/open cues across both Coordination readings |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) and cadence rules in [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css) | Receiving lane and track geometry; shared rack tokens stay inherited |
 | [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, in-rack scope cues, return focus and local scroll, retained plan/draft state, placement, horizon recovery and in-place example replacement |
 | [Session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Placement with its draft, duration/occurrence distinction and cross-team participation |
+| [Rack browser checks](../../tests/native-investment-studio/rack-controls.browser.mjs) | Shared receiver state, phase scope, reel-driven proposal routes and phone/laptop containment |
 
 The [instrument research](../../collaboration/native-investment-studio/usability-research.md#digital-instrument-composition--5-november-2026)
 uses Arrangement View's overview and locators as a design precedent. Its dated
@@ -101,12 +106,27 @@ pressed while its closed receiver restores the right-facing caret. A shared
 creation flow. Chapter styles continue to own column geometry.
 
 Team planning is permanent, with subtly darker secondary housing that follows
-the horizon's enclosure and header alignment. Its editorial structure remains
-above the rack; proposed team/member lanes appear once inside it. Shared sessions
-keeps its visible heading and Add control above a named participation-table
-scroll region. The investment reading also stays outside that scroller. The
-table's people columns retain their relationship meaning beside the horizon's
-period columns, and existing preview/Apply ownership stays intact.
+the horizon's enclosure and header alignment. The reel and editorial topology
+remain above it. The [delivery board](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
+combines team/member, session and handoff cards under Planning, Design,
+Implementation, Testing, Deployment and Maintenance. A phase key opens that
+phase locally, with a visible Delivery overview return restoring its originating
+key and overview position. Phase scope changes presentation only.
+
+Explicit template/slot mappings give reel selections a visible change in roles
+and handoffs. Stage labels remain source-owned session context; custom-stage
+and supporting work retain routes. These lanes express an illustrative delivery
+pattern. Dates, period placement, completion and readiness retain their separate
+owners. Team/member cards open team customization; handoff cards open connection
+customization; sessions retain their accepted or proposed editor destinations.
+
+The board supersedes the proposed-team strip, duplicated connection-button strip
+and Delivery lifecycle disclosure in this receiver. Shared sessions follows with
+its visible heading and Add control above a named participation-table scroller.
+The phase scope and investment reading stay outside local scrolling. The table's
+people columns retain their relationship meaning beside the horizon's period
+columns, and existing preview/Apply ownership stays intact. Other attached
+summaries preserve the existing spring reveal.
 
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 makes unused rack space actionable. A dedicated

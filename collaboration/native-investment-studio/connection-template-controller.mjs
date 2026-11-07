@@ -3,10 +3,11 @@ import { PlanError } from './contract.mjs';
 import { listCoordinationTemplates, prepareCoordinationTemplate, applyCoordinationTemplate } from './connection-templates.mjs';
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 import { money } from './display.mjs';
-import { createArrangementReading, createArrangementTeamLanes } from './connection-view.mjs';
+import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
 import { createReel, revealReelResult } from './reel-control.mjs';
-import { createLifecycleLanes, createSessionTracks } from './arrangement-surfaces.mjs';
+import { createSessionTracks } from './arrangement-surfaces.mjs';
+import { createDeliveryBoard } from './delivery-board.mjs';
 import { revealStudioDestination } from './motion.mjs';
 
 const INSTANCES = new WeakMap();
@@ -36,6 +37,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const instance = `connection-template-${++nextInstance}`, cleanup = [];
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
   let projection = studio.read(), bindings = new WeakMap(), controls = new Map(), optionSources = [], dynamic = [];
+  const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
   const configurations = new Map();
   const invalid = new Set();
   let fieldSequence = 0;
@@ -59,7 +61,8 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
       if (!active(canOpen) || (!active() && !open())) return;
-      choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview(); revealReelResult(structure);
+      choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview();
+      revealReelResult(structure); revealReelResult(delivery);
     } });
   const arrangementDeck = document.createElement('div'); arrangementDeck.className = 'studio-arrangement-deck';
   arrangementDeck.append(reel.element, structure);
@@ -204,6 +207,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         teamId: row.recovery.team.startsWith('slot:') ? `proposal-slot-${row.recovery.team.slice(5)}` : row.recovery.team.slice(5),
         personIds: row.recovery.personIds, ...parsed.admitted, funding: row.recovery.funding, status: row.recovery.status }];
     });
+    const proposedIds = new Set(proposedWork.map(row => row.id));
+    for (const row of connections) {
+      const workId = `proposal-session-${row.slotId}`;
+      if (proposedIds.has(workId)) row.connection.workIds = [...row.connection.workIds, workId];
+    }
     const previewPlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
     function inspectTemplate(target) {
       if (!active()) return;
@@ -217,17 +225,13 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
       else onNavigate({ kind: 'work', id });
     };
-    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate, includeTeamLanes: false }));
-    const teamsHeading = element('h5', 'Proposed teams', 'studio-team-rack__section-title');
-    const teamScroll = element('div', undefined, 'studio-team-rack__teams');
-    teamScroll.setAttribute('role', 'region'); teamScroll.setAttribute('aria-label', 'Proposed teams and people'); teamScroll.tabIndex = 0;
-    teamScroll.append(createArrangementTeamLanes(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate }));
-    const lifecycle = element('details', undefined, 'studio-team-rack__lifecycle');
-    lifecycle.append(element('summary', 'Delivery lifecycle'), createLifecycleLanes(document, { plan: previewPlan, onSession: inspectSession }));
-    rackBody.replaceChildren(teamsHeading, teamScroll,
+    const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
+    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
+    rackBody.replaceChildren(createDeliveryBoard(document, { arrangement, plan: previewPlan, acceptedSessionIds,
+      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
-        sessionIds: new Set(projection.state.work.map(work => work.id)),
-        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }), lifecycle);
+        sessionIds: acceptedSessionIds,
+        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
     onViewChanged();
   }
   function refresh(rebuild = false) {

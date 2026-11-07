@@ -92,26 +92,3 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
   if (!plan.work.length) screen.append(node(document, 'p', '', 'Add a working session to connect people and work.'));
   return screen;
 }
-
-export function createLifecycleLanes(document, { plan, onSession }) {
-  const section = node(document, 'section', 'studio-lifecycle');
-  section.append(node(document, 'h4', '', 'Delivery lifecycle'));
-  const lanes = node(document, 'div', 'studio-lifecycle__lanes');
-  const work = new Map(plan.work.map(row => [row.id, row]));
-  const included = new Set();
-  const stageRows = plan.scoreSettings.stages.map(stage => ({ label: stage.label, workIds: stage.workIds }));
-  for (const stage of stageRows) for (const id of stage.workIds) included.add(id);
-  const additional = plan.work.filter(row => !included.has(row.id)).map(row => row.id);
-  if (additional.length) stageRows.push({ label: 'Supporting work', workIds: additional });
-  for (const stage of stageRows) {
-    const lane = node(document, 'section', 'studio-lifecycle__lane'); lane.append(node(document, 'h5', '', stage.label));
-    for (const id of stage.workIds) {
-      const session = work.get(id); if (!session) continue;
-      const pad = node(document, 'button', 'studio-lifecycle__pad native-control--navigate', session.label); pad.type = 'button';
-      pad.addEventListener('click', () => onSession(id)); lane.append(pad);
-    }
-    if (lane.children.length === 1) lane.append(node(document, 'p', '', 'Choose supporting work in Stages & handoffs.'));
-    lanes.append(lane);
-  }
-  section.append(lanes); return section;
-}
