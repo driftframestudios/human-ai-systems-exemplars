@@ -119,9 +119,13 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
       }
       release(); refresh();
     });
-    for (const type of ['pointercancel', 'lostpointercapture']) listen(knob, type, event => { if (gesture?.pointerId === event.pointerId) release(true); });
+    // Capture and focus can end before pointerup. Keep the displayed adjustment;
+    // explicit cancellation alone restores the amount where the turn began.
+    listen(knob, 'lostpointercapture', event => { if (gesture?.pointerId === event.pointerId) release(); });
+    listen(knob, 'pointercancel', event => { if (gesture?.pointerId === event.pointerId) release(true); });
+    listen(knob, 'blur', () => release());
     listen(knob, 'keydown', event => { if (gesture && event.key === 'Escape') { event.preventDefault(); release(true); } else if (gesture) release(); });
-    listen(window, 'blur', () => release(true)); listen(forcedColors, 'change', () => { release(true); refresh(); });
+    listen(window, 'blur', () => release()); listen(forcedColors, 'change', () => { release(true); refresh(); });
     refresh();
     return { refresh, release, dispose() { release(); cleanup.splice(0).forEach(remove => remove()); knob.disabled = true; } };
   });

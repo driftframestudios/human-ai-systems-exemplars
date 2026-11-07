@@ -186,6 +186,41 @@ for (const engine of names) {
     assert.equal(await page.evaluate(() => window.teamFixture.studio.read().state.people[0].rateCentsPerHour), 10000);
   });
 
+  test(`${engine}: brief rate turns retain their amount after release, focus transfer and capture loss`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine); await choose(page);
+    const rate = input(page, 'ratePerHour');
+    const initial = await page.evaluate(() => window.teamFixture.studio.exportText());
+    for (const [dollars, seed, expected, outside] of [[10, '0.25', '10.25', false], [5, '40.25', '45.25', true]]) {
+      const knob = settings(page).locator(`[data-rate-step="${dollars}"]`);
+      for (const ending of ['release', 'focus', 'capture']) {
+        await rate.fill(seed); await knob.scrollIntoViewIfNeeded();
+        await knob.evaluate(node => {
+          window.teamFixture.captureLossWasTrusted = false;
+          node.addEventListener('pointerdown', event => { window.teamFixture.pointerId = event.pointerId; }, { once: true });
+          node.addEventListener('lostpointercapture', event => { window.teamFixture.captureLossWasTrusted = event.isTrusted; }, { once: true });
+        });
+        const box = await knob.boundingBox(), radius = box.width * (outside ? .8 : .4);
+        const center = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        await page.mouse.move(center.x, center.y - box.height * .4); await page.mouse.down();
+        await page.mouse.move(center.x + radius * .707, center.y - radius * .707, { steps: 3 });
+        await expect(rate).toHaveValue(expected);
+        if (ending === 'focus') {
+          await rate.focus();
+          assert.equal(await knob.evaluate(node => node.hasPointerCapture(window.teamFixture.pointerId)), false, 'focus transfer ends the turn');
+        }
+        if (ending === 'capture') {
+          await knob.evaluate(node => node.releasePointerCapture(window.teamFixture.pointerId));
+          await page.mouse.move(center.x + radius * .71, center.y - radius * .7);
+          await expect.poll(() => page.evaluate(() => window.teamFixture.captureLossWasTrusted)).toBe(true);
+        }
+        await page.mouse.up(); await rate.focus();
+        await expect(rate).toHaveValue(expected);
+        await expect(knob).toHaveAttribute('aria-valuetext', `$${expected} per hour`);
+        assert.equal(await page.evaluate(() => window.teamFixture.studio.exportText()), initial, 'dial adjustments remain a draft until Apply');
+      }
+    }
+  });
+
   test(`${engine}: person funding edits price exact amounts while draft, cancel and unknown rates stay distinct`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await expect(accepted(page)).toHaveText('$1,200.00');
