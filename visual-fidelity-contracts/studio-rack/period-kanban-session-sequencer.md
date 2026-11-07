@@ -66,7 +66,7 @@ stacking may change geometry while preserving reading order and record identity.
 | --- | --- |
 | [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Board, breadcrumb, tracks, focus return, details and actions |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs) and [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Authored periods and the accepted/proposed arrangement boundary |
-| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) | The selected session's people, duration, count and placement draft |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | The selected session's draft and receiver state; synchronized selected/open cues across both Coordination readings |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) and cadence rules in [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css) | Receiving lane and track geometry; shared rack tokens stay inherited |
 | [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, in-rack scope cues, return focus and local scroll, retained plan/draft state, placement, horizon recovery and in-place example replacement |
 | [Session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Placement with its draft, duration/occurrence distinction and cross-team participation |
@@ -84,21 +84,25 @@ return changes. The [in-rack scope increment](https://github.com/driftframestudi
 is bounded to Coordination's Plan overview screen. It supersedes the earlier
 Whole plan label and return placed outside the rack.
 
-The prospective [Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
-uses the current screen as the composition reference for Team planning's Shared
-sessions. The two readings retain distinct axes and inspection scopes:
+The [Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+shares session controls between this screen and Team planning's Shared sessions.
+The two readings retain distinct axes and inspection scopes:
 
 | Reading | Columns and pads | Meaning of a session selection |
 | --- | --- | --- |
 | Coordination horizon | Periods or subdivisions; pads locate occurrences in the plan | A session, with its occurrence context when selected from an occurrence pad |
 | Team planning: Shared sessions | People; pads show participation in a working session | The shared session and its participating people |
 
-Both are to use the same session-key art direction, a clearly inactive state,
-durable selection and a caret that follows the related receiver's open state.
-Add session is to keep one macro-level treatment while carrying the useful local
-context into creation. Team planning retains its darker secondary housing and
-editorial structure cards. Its participant columns preserve their relationship
-meaning when this shared composition is implemented.
+Both use `studio-track-key` for a quieter inactive face, persistent selection and
+a caret tied to the session editor's visible open state. The controls identify
+that actual receiver through `aria-controls`; a selected record can remain
+pressed while its closed receiver restores the right-facing caret. A shared
+`studio-rack-add` treatment carries the useful local context into the current
+creation flow. Chapter styles continue to own column geometry.
+
+The next #765 increment makes Team planning permanent and gives its rack a
+subtly darker secondary housing with the horizon's enclosure and header alignment.
+Its editorial structure cards and participant-column meaning remain distinct.
 
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 makes unused rack space actionable. A dedicated

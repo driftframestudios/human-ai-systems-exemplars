@@ -19,7 +19,7 @@ let nextInstance = 0;
 // One bounded configuration and one prepared proposal belong to this receiver.
 // Row drafts continue to use the shared coordinator and accepted state owner.
 export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
+  onViewChanged = () => {}, onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
   const details = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
   if (!details) throw new TypeError('Supply the coordination template disclosure.');
   if (INSTANCES.has(details)) return INSTANCES.get(details);
@@ -203,7 +203,9 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate }));
     delivery.replaceChildren(createLifecycleLanes(document, { plan: previewPlan, onSession: inspectSession }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
+        sessionIds: new Set(projection.state.work.map(work => work.id)),
         onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
+    onViewChanged();
   }
   function refresh(rebuild = false) {
     if (disposed) return;

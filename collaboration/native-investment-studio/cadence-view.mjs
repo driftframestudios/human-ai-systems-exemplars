@@ -28,12 +28,13 @@ export function createCadenceView(root, {
   }
   function selection(label, kind, id, key, selected, extra = {}, className = '') {
     const control = button(label, 'select', { kind, id, ...extra }, key, className);
+    if (kind === 'work') control.dataset.studioSessionId = id;
     control.setAttribute('aria-pressed', String(selected?.kind === kind && selected.id === id
       && (extra.occurrenceIndex === undefined || selected.occurrenceIndex === undefined || selected.occurrenceIndex === extra.occurrenceIndex)));
     return control;
   }
   function create(label, action, target, key) {
-    return button(label, action, target, key, 'native-control--create native-cadence__create');
+    return button(label, action, target, key, `native-control--create native-cadence__create${action === 'add-session' ? ' studio-rack-add' : ''}`);
   }
   function disclosure(label, key, expanded) {
     const details = node('details', undefined, 'native-cadence__details');
@@ -239,7 +240,7 @@ export function createCadenceView(root, {
     trackHead.append(headings); const trackBody = node('tbody');
     for (const item of state.work.filter(item => !activePeriod || visible.some(row => row.workId === item.id))) {
       const tr = node('tr'), label = node('th'); label.scope = 'row';
-      const name = selection(item.label, 'work', item.id, `track-work:${item.id}`, selected, {}, 'native-cadence__track-name native-control--navigate');
+      const name = selection(item.label, 'work', item.id, `track-work:${item.id}`, selected, {}, 'studio-track-key native-cadence__track-name native-control--navigate');
       name.setAttribute('aria-label', `${item.label}, ${duration(item.minutesPerOccurrence)} per person. Open session settings.`); label.append(name); tr.append(label);
       for (const column of trackColumns) {
         const cell = node('td'), pads = node('div', undefined, 'native-cadence__pads');

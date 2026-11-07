@@ -108,7 +108,7 @@
 .native-quality-story h6 { margin: 0 0 .3rem; font-size: .8rem; font-weight: 750; }
 .native-quality-story p { margin: 0; font-size: .8rem; }
 .native-quality-story__edit { margin-block: .5rem; }
-.native-coordination .native-quality-tracks .native-cadence__track-name { display: grid; gap: .25rem; inline-size: 100%; padding: .4rem 1.35rem .4rem .35rem; color: var(--studio-screen-text); background: var(--studio-screen); border-color: var(--studio-line); box-shadow: none; font-size: .75rem; }
+.native-coordination .native-quality-tracks .studio-track-key { display: grid; gap: .25rem; inline-size: 100%; padding: .4rem 1.35rem .4rem .35rem; color: var(--studio-screen-text); background: var(--studio-screen); border-color: var(--studio-line); box-shadow: none; font-size: .75rem; }
 .native-quality-tracks table { min-inline-size: 48rem; }
 .native-quality-tracks th:first-child { inline-size: 12rem; }
 .native-quality-tracks th:not(:first-child) { min-inline-size: 6rem; }

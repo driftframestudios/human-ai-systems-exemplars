@@ -106,10 +106,11 @@ for a real shared receiving use.
 
 | Owner | Responsibility |
 | --- | --- |
-| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes and shared refinements |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes, shared `studio-track-key` / `studio-rack-add` roles and the existing Remove skin |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, session tracks and arrangement readings |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Session keys and pads mirror the actual session editor's identity, visibility and controlled element |
 
 Ordinary phone and laptop widths are the receiving range for this showcase.
 Text and controls reflow; genuinely two-dimensional tables and tracks retain a
@@ -133,15 +134,18 @@ establish catalog validity and source-path closure, rather than visual approval.
 Coordination's [in-rack scope navigation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
 keeps its Plan overview return and selected period inside the existing screen.
 
-The next Coordination composition is planned in
-[#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765):
-Coordination horizon remains the primary rack, and Team planning becomes a
-permanent sibling section with editorial structure cards and a subtly darker
-secondary rack. Both are to share session-key states, Add session treatment,
-header/readout alignment and bounded scrolling. Horizon columns express time;
-Shared sessions columns express people. Their common housing preserves those
-different relationships. The existing palette, reels, pads and tactile depth
-provide the art direction for this consolidation.
+The first [Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+increment gives Session tracks and Shared sessions the same session-key and Add
+treatment. Selected-record styling comes from the session editor; the open caret
+requires its visible receiver. The selected key remains identifiable after that
+receiver closes. Horizon columns express time; Shared sessions columns express
+people. Their local table geometry preserves those different relationships.
+
+The next #765 increment makes Team planning a permanent sibling section with
+editorial structure cards and a subtly darker secondary rack. Its planned
+enclosure shares the primary horizon's header/readout alignment and bounded
+scrolling. The existing palette, reels, pads and tactile depth provide the art
+direction for that remaining composition work.
 
 The [editorial-companion increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
 treats Editorial Rack as an attached sub-rack skin.
@@ -166,6 +170,8 @@ sized with secondary actions. Its written label names the object and scope;
 color reinforces that meaning. Cancel retains its ghost treatment, and creation
 retains the plus cue. A Coordination prototype is the first visual receiver;
 human review of that example precedes the wider chapter adoption.
+The current Remove skin has moved into the shared instrument owner unchanged;
+the proposed visual refinement and recovery behavior remain with #773.
 
 The planned Team arrangement flow in
 [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)

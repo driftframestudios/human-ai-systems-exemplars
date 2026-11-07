@@ -8,8 +8,8 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 7 November 2026 reconciliation preserves the current contract, the next
-Coordination composition decision and material history. The visual grammar is owned by the
+The 7 November 2026 reconciliation preserves the current contract, the focused
+Coordination consolidation route and material history. The visual grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
@@ -41,16 +41,17 @@ The 7 November interaction route delivered dial retention (#753, PR #761) and
 Change disclosure cues (#754, PR #760), with visual-contract persistence in #755.
 The current aesthetic and component placement remain the reference. PR #764
 delivered #756: the selected period and Plan overview return share the rack
-header, with originating focus and local scroll restored on return. The next
-planning decision is semantic and stylistic consolidation in #765 before
-adjacent editor placement. PR #769 recorded its first contract and issue route.
-The continued planning exploration draws on patterns across the whole Studio,
-with direct creation (#770), participant controls (#771), attached editorial
-companions (#772) and scoped removal/shared Undo (#773) receiving focused issues.
-Direct arrangement selection (#766),
-dial enclosures (#767) and adjacent people/team (#757) and session (#768) editing
-retain their bounded scopes. Existing editor placement, arrangement preview/Apply
-and creation ownership remain the runnable contract.
+header, with originating focus and local scroll restored on return. The approved
+#765 consolidation now gives both Coordination readings shared session keys and
+Add controls. The editor supplies selected-record and visible-open state; the
+permanent Team planning section and secondary rack enclosure are next. PR #769
+and PR #774 recorded that route and the related design decisions. Direct
+creation (#770), participant controls (#771), attached editorial companions
+(#772) and scoped removal/shared Undo (#773) retain their focused issues.
+Direct arrangement selection (#766), dial enclosures (#767) and adjacent
+people/team (#757) and session (#768) editing also retain their bounded scopes.
+Existing editor placement, arrangement preview/Apply and creation ownership
+remain the runnable contract.
 
 ### State, people and evidence
 
@@ -255,20 +256,25 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Holding all further in-rack work for scope definition | PR #764 delivered #756. The next planning decision places semantic/style consolidation (#765), direct arrangement selection (#766) and enclosed controls (#767) before adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
+| Holding all further in-rack work for scope definition | PR #764 delivered #756. The approved route now implements shared session controls in #765, with its permanent Team planning composition next. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
+| Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
 | PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | The refined plan places a larger readout above the duration dials, makes Minutes secondary, and preserves the circular stepper geometry at each dial's lower right. Working sessions keeps its input initially and may later become an occurrence-pad lane. These are prospective composition decisions in #767/#768. |
 | Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
 
-## Next Coordination composition
+## Coordination consolidation
 
 The [consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
-records the next design determination. The horizon answers when work happens;
+records the approved route. The horizon answers when work happens;
 Team planning answers who works together. Both use existing session identities,
 but period/occurrence columns and people/participation columns keep their own
-meanings. Shared session keys and Add controls are the first implementation
-receiver. Durable selection comes from the receiving editor; the last-click
+meanings. The first #765 increment gives them shared session keys and Add
+controls. `work-controller.mjs` supplies its receiver through `readReceiver()`;
+`rack-controls.mjs` mirrors the selected ID, visible open state and controlled
+element ID into mounted controls. In-place synchronization preserves focus and
+horizontal position. Proposed-only arrangement records retain their proposal
+route rather than borrowing an accepted session's selected state. The last-click
 motion cue remains presentation feedback.
 
 Team planning is to become a permanent sibling section: heading, zoetrope with
@@ -280,12 +286,14 @@ Change/Quality supply keyed movement; editorial disclosures supply the spring
 reveal. Adjacent panels can open into their own rack. Change and Quality retain
 their intentionally different faders.
 
-Generic names belong to genuinely shared roles and owners. Extracted track
-keys, participation pads, duration modules, reorder controls and editorial
-drawers should be discoverable beyond their first chapter. Update their
-consumers and contract references together; local geometry and domain state
-attributes retain their receiving owners. This is scoped consolidation, with
-current component names remaining accurate until their extraction lands.
+Generic names belong to genuinely shared roles and owners. `studio-track-key`
+and `studio-rack-add` now live in the shared instrument stylesheet, while chapter
+styles retain track and table geometry. Quality's existing session-key consumer
+uses the generic name with its chapter-specific layout retained. Future shared
+participation pads, duration modules, reorder controls and editorial drawers
+follow the same extraction rule: reconcile consumers and contract references
+when an actual shared owner exists; local geometry and domain state remain with
+their receiving owners.
 
 Direct arrangement selection needs a replacement transaction for one instance,
 with Undo. The current template engine appends generated records and detects
@@ -327,9 +335,11 @@ flowRoot and motion owners as their enclosure changes.
 #773 receives the [removal/recovery research](removal-recovery-research.md): quiet
 rose removal with explicit scope, a concise local result and exact-removal Undo
 for ordinary accepted changes, and a compact consequence choice when linked
-effects need a decision. Draft operations retain Apply/Cancel. The already
-generic removal class can serve the shared skin. Establish the Coordination
-example first; human review releases its wider chapter adoption.
+effects need a decision. Draft operations retain Apply/Cancel. The first #765
+increment moves the existing generic Remove skin to the shared instrument
+stylesheet unchanged; #773 owns its proposed refinement and recovery behavior.
+Establish the Coordination example first; human review releases its wider
+chapter adoption.
 
 The proposed amp **Undo (n)** button exposes the existing accepted-plan history
 from every chapter, with a concise indication of its latest target. Its count
@@ -474,9 +484,15 @@ projections. The complete Context Canvas source suite now passes. This supersede
 the earlier standing of twelve reproduced baseline failures; the receiving PRs
 retain the exact observations and reviewed commits.
 
-For re-entry, start with #765 and the consolidation plan. Its shared-controls
-and Team planning composition increments prepare #766's direct arrangement
-selection and #767's enclosed controls. Those receivers prepare the adjacent
+The first #765 shared-control increment passed 595 source checks and six
+receiver journeys covering Chromium, Firefox and WebKit at ordinary phone and
+laptop widths. The existing Chromium dial and participant journeys also passed.
+These observations establish receiver-state agreement and the exercised gesture
+and selection behavior. Independent review and the PR retain delivery authority.
+
+For re-entry, start with #765 and the consolidation plan. Its shared-control
+increment prepares the permanent Team planning composition next, then #766's
+direct arrangement selection and #767's enclosed controls. Those receivers prepare the adjacent
 people/team (#757) and session (#768) editors. PR #764 remains the accepted
 scope-navigation reference. Retain the current creation/confirmation contract
 while #758 defines its separate replacement.

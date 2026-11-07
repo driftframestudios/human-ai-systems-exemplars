@@ -43,7 +43,7 @@ export function createTeamLanes(document, { plan, teams = plan.teams, onNavigate
   return board;
 }
 
-export function createSessionTracks(document, { plan, onSession, onAdd, selectedId = null, label = 'People in working sessions' }) {
+export function createSessionTracks(document, { plan, onSession, onAdd, sessionIds = new Set(plan.work.map(work => work.id)), label = 'People in working sessions' }) {
   const screen = node(document, 'div', 'studio-session-tracks');
   screen.setAttribute('role', 'region'); screen.setAttribute('aria-label', label); screen.tabIndex = 0;
   const table = node(document, 'table');
@@ -54,9 +54,11 @@ export function createSessionTracks(document, { plan, onSession, onAdd, selected
   head.append(heading); table.append(head);
   const body = node(document, 'tbody');
   for (const work of plan.work) {
-    const row = node(document, 'tr'); row.dataset.sessionTrack = work.id; row.dataset.selected = String(work.id === selectedId);
+    const row = node(document, 'tr'); row.dataset.sessionTrack = work.id;
     const title = node(document, 'th'); title.scope = 'row';
-    const choose = node(document, 'button', 'studio-session-tracks__name native-control--navigate'); choose.type = 'button';
+    const choose = node(document, 'button', 'studio-track-key studio-session-tracks__name native-control--navigate'); choose.type = 'button';
+    if (sessionIds.has(work.id)) choose.dataset.studioSessionId = work.id;
+    choose.setAttribute('aria-label', `${work.label}. ${sessionIds.has(work.id) ? 'Open session settings.' : 'Open proposed session settings.'}`);
     choose.append(node(document, 'strong', '', work.label), node(document, 'small', '', `${duration(work.minutesPerOccurrence)} each · ${work.occurrences} sessions`));
     if (onSession) choose.addEventListener('click', () => onSession(work.id));
     else choose.dataset.nativeWorkOpen = work.id;
@@ -66,6 +68,7 @@ export function createSessionTracks(document, { plan, onSession, onAdd, selected
       const cell = node(document, 'td');
       if (members.has(person.id)) {
         const pad = node(document, 'button', 'studio-session-tracks__pad native-control--navigate', work.status === 'paused' ? 'Ⅱ' : work.funding === 'additional' ? '◆' : '●'); pad.type = 'button';
+        if (sessionIds.has(work.id)) pad.dataset.studioSessionId = work.id;
         pad.dataset.funding = work.funding; pad.dataset.status = work.status;
         pad.setAttribute('aria-label', `${person.label} · ${work.label} · ${duration(work.minutesPerOccurrence)} per session · ${work.funding === 'additional' ? 'extra investment' : 'within funded time'}${work.status === 'paused' ? ' · paused' : ''}. Open session settings.`);
         pad.title = `${person.label} · ${duration(work.minutesPerOccurrence)} per session`;
@@ -79,7 +82,7 @@ export function createSessionTracks(document, { plan, onSession, onAdd, selected
   }
   table.append(body); screen.append(table);
   if (onAdd) {
-    const add = node(document, 'button', 'native-control--create studio-track-create', 'Add session'); add.type = 'button';
+    const add = node(document, 'button', 'native-control--create studio-rack-add', 'Add session'); add.type = 'button';
     add.addEventListener('click', onAdd); screen.append(add);
   }
   screen.append(node(document, 'p', 'studio-session-tracks__legend', '● Funded time · ◆ Extra investment · Ⅱ Paused'));
