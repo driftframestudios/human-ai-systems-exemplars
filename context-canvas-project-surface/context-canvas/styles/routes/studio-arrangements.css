@@ -30,13 +30,16 @@
 .studio-team-lanes__actions { grid-column: 1 / -1; }
 .studio-session-tracks {
   background: var(--studio-screen); color: var(--native-paper); border: .25rem solid var(--native-rule); border-radius: .25rem;
-  overflow-x: auto; margin-block: .8rem; padding: .45rem; max-inline-size: 100%;
+  margin-block: .8rem; padding: .45rem; min-inline-size: 0; max-inline-size: 100%;
 }
+.studio-session-tracks__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: .35rem; }
+.native-coordination .studio-session-tracks__heading h5 { color: var(--native-paper); font: 650 .8rem/1.4 ui-monospace, monospace; margin: 0; }
+.studio-session-tracks__scroll { overflow-x: auto; min-inline-size: 0; max-inline-size: 100%; }
 .native-coordination .studio-session-tracks table { inline-size: 100%; min-inline-size: 36rem; border-collapse: separate; border-spacing: .25rem; background: transparent; margin: 0; }
-.native-coordination .studio-session-tracks caption { text-align: start; font: 600 .75rem/1.4 ui-monospace, monospace; padding: .35rem; color: var(--native-paper); }
+.native-coordination .studio-session-tracks caption { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .native-coordination .studio-session-tracks :is(th, td) { background: transparent; color: var(--native-paper); padding: .15rem; border: 0; text-align: center; vertical-align: middle; }
 .native-coordination .studio-session-tracks thead th { font: 600 .7rem/1.3 system-ui, sans-serif; inline-size: 6rem; min-inline-size: 5.5rem; overflow-wrap: normal; }
-.native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { inline-size: 13rem; min-inline-size: 11rem; text-align: start; }
+.native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { position: sticky; inset-inline-start: 0; z-index: 1; inline-size: 13rem; min-inline-size: 11rem; text-align: start; background: var(--studio-screen); }
 .native-coordination .studio-session-tracks tbody td { border-block-end: 1px solid var(--native-rule); }
 .native-coordination .studio-session-tracks__pad { min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
 .native-coordination .studio-session-tracks__pad.native-control--navigate { padding-inline: .3rem 1rem; }
@@ -73,7 +76,6 @@
 .native-coordination .native-assembly__team-list details .native-coordination__actions { gap: .35rem; margin: .4rem 0 0; }
 .native-coordination .native-assembly__team-list details button { box-shadow: none; }
 .native-coordination .studio-team-planning { background: var(--studio-editorial-surface); }
-.native-coordination .studio-team-planning > summary { font-size: 1.1rem; font-weight: 750; }
 .native-coordination [data-template-exposed] { border: 0; background: transparent; box-shadow: none; margin: 0; }
 .native-coordination [data-template-exposed] > summary { display: none; }
 .native-coordination .native-connection-template__form > .native-coordination__hint { margin: 0; }
@@ -86,7 +88,27 @@
 .native-coordination .native-connection-template__preview p { margin: 0; font-size: .8rem; }
 .native-coordination .native-connection-template__preview output { font: 700 1rem/1.3 ui-monospace, monospace; }
 .native-coordination button[data-template-action='apply'] { background: var(--native-signal); }
-.studio-arrangement-delivery { min-inline-size: 0; }
+.studio-team-rack {
+  min-inline-size: 0; max-inline-size: 100%; padding: clamp(.65rem, 1.6vw, 1.2rem);
+  border: .25rem solid var(--native-rule); border-radius: .5rem;
+  background: #10251f; color: var(--native-paper); box-shadow: inset 0 0 1.8rem #041711;
+}
+.studio-team-rack__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem 1rem; border-block-end: 1px solid var(--about-sea-glass); padding-block-end: .65rem; }
+.native-coordination .studio-team-rack__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 system-ui, sans-serif; }
+.studio-rack-amount { margin: 0; }
+.studio-rack-amount dt { color: var(--native-paper); font: 500 .7rem/1.4 ui-monospace, monospace; }
+.studio-rack-amount dd { margin: 0; color: var(--native-signal); font: 600 clamp(1.2rem, 2.3vw, 1.65rem)/1.4 ui-monospace, monospace; letter-spacing: -.025em; white-space: nowrap; }
+.studio-team-rack__body { min-inline-size: 0; }
+.studio-team-rack__teams { min-inline-size: 0; max-inline-size: 100%; overflow-x: auto; }
+.studio-team-rack .studio-team-lanes { grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); margin-block: .35rem .65rem; }
+.native-coordination .studio-team-rack__section-title { margin: .65rem 0 .35rem; color: var(--native-paper); font: 650 .8rem/1.4 ui-monospace, monospace; }
+.studio-team-rack .studio-team-lane { color: var(--native-text); }
+.native-coordination .studio-team-rack .studio-session-tracks { border: 0; border-block-start: 1px solid var(--about-sea-glass); border-radius: 0; background: transparent; padding: .4rem 0 0; margin-block: .8rem .4rem; }
+.native-coordination .studio-team-rack__lifecycle { border: 0; border-block-start: 1px solid var(--about-sea-glass); background: transparent; box-shadow: none; margin: 0; padding: 0; }
+.native-coordination .studio-team-rack__lifecycle > summary { padding: .6rem .1rem; background: transparent; color: var(--native-paper); }
+.native-coordination .studio-team-rack__lifecycle > summary::marker { color: currentColor; }
+.studio-team-rack__lifecycle .studio-lifecycle { color: var(--native-text); }
+.studio-team-rack__lifecycle .studio-lifecycle > h4 { color: var(--native-paper); }
 .studio-lifecycle { margin-block: .6rem; }
 .studio-lifecycle > h4 { font-size: .9rem; margin-block: .4rem; }
 .studio-lifecycle__lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .5rem; }
@@ -105,12 +127,14 @@
 }
 @media (max-width: 42rem) {
   .studio-team-lanes, .native-coordination .native-assembly__team-list { grid-template-columns: minmax(0, 1fr); }
+  .studio-team-rack .studio-team-lanes { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(13rem, 85%); padding-block-end: .25rem; }
   .native-coordination .native-team__roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .studio-lifecycle__lanes { grid-template-columns: minmax(0, 1fr); }
   .native-coordination .native-arrangement__diagram { min-inline-size: 28rem; }
 }
 @media (forced-colors: active) {
-  .studio-session-tracks, .studio-team-lane { background: Canvas; color: CanvasText; }
+  .studio-team-rack, .studio-session-tracks, .studio-team-lane { background: Canvas; color: CanvasText; box-shadow: none; }
+  .native-coordination .studio-team-rack :is(h4, h5, dt, dd, summary), .native-coordination .studio-session-tracks__heading h5 { color: CanvasText; }
   .native-coordination .studio-session-tracks :is(th, td, caption, button) { color: CanvasText; background: Canvas; }
   .native-coordination .studio-session-tracks__pad { border: 2px solid ButtonText; }
 }

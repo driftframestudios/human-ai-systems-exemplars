@@ -42,10 +42,11 @@ Change disclosure cues (#754, PR #760), with visual-contract persistence in #755
 The current aesthetic and component placement remain the reference. PR #764
 delivered #756: the selected period and Plan overview return share the rack
 header, with originating focus and local scroll restored on return. The approved
-#765 consolidation now gives both Coordination readings shared session keys and
-Add controls. The editor supplies selected-record and visible-open state; the
-permanent Team planning section and secondary rack enclosure are next. PR #769
-and PR #774 recorded that route and the related design decisions. Direct
+#765 consolidation gives both Coordination readings shared session keys and
+Add controls through PR #775. The editor supplies selected-record and visible-open
+state. Team planning now has a permanent section and darker secondary rack,
+completing the composition scope for the next focused review. PR #769 and PR #774
+recorded that route and the related design decisions. Direct
 creation (#770), participant controls (#771), attached editorial companions
 (#772) and scoped removal/shared Undo (#773) retain their focused issues.
 Direct arrangement selection (#766), dial enclosures (#767) and adjacent
@@ -256,7 +257,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
-| Holding all further in-rack work for scope definition | PR #764 delivered #756. The approved route now implements shared session controls in #765, with its permanent Team planning composition next. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
+| Holding all further in-rack work for scope definition | PR #764 delivered #756. The #765 route now implements shared session controls and permanent Team planning. Direct arrangement selection (#766) and enclosed controls (#767) prepare adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
+| Team planning inside an outer disclosure, with team/member cards in the editorial structure | Team planning is a permanent section. The reel and editorial topology lead into a concise hint and darker secondary rack; team/member lanes appear once inside that rack. Its header, investment readout and Add session stay visible during local participant-table scrolling. Preview and Apply retain their existing acceptance meaning. |
 | Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
@@ -277,14 +279,29 @@ horizontal position. Proposed-only arrangement records retain their proposal
 route rather than borrowing an accepted session's selected state. The last-click
 motion cue remains presentation feedback.
 
-Team planning is to become a permanent sibling section: heading, zoetrope with
-editorial team structure, concise hint, then a subtly darker secondary rack.
-Its housing and control states follow the horizon. The whole Studio supplies
-reusable compositions: Quality tracks' preferred matrix skin separates inspect,
-include, link and create actions; Abilities supplies the adjacent inspector;
-Change/Quality supply keyed movement; editorial disclosures supply the spring
-reveal. Adjacent panels can open into their own rack. Change and Quality retain
-their intentionally different faders.
+Team planning is a permanent sibling section: heading, zoetrope with editorial
+team structure, concise hint, then a subtly darker secondary rack. Its housing
+and control states follow the horizon. Proposed team/member lanes appear once
+within the rack, followed by Shared sessions and a compact Delivery lifecycle
+disclosure. The rack heading, amount and Add session stay outside the table's
+local horizontal scroll region. The amount names accepted investment until a
+preview supplies whole-plan proposed investment; missing rates keep a known
+amount label. Apply, Cancel preview and Start another arrangement retain their
+existing acceptance roles.
+
+`connection-template-controller.mjs` owns this composition and its proposal
+lifecycle. `connection-view.mjs` supplies the editorial topology and the extracted
+`createArrangementTeamLanes` rendering, while `arrangement-surfaces.mjs` owns
+the participation table and its fixed header/local scroller. About markup owns
+the permanent section; arrangement CSS owns the darker secondary housing. The
+controller keeps legacy disclosure receivers usable while the About page uses
+an ordinary exposed container.
+
+The whole Studio supplies reusable compositions: Quality tracks' preferred
+matrix skin separates inspect, include, link and create actions; Abilities
+supplies the adjacent inspector; Change/Quality supply keyed movement; editorial
+disclosures supply the spring reveal. Adjacent panels can open into their own
+rack. Change and Quality retain their intentionally different faders.
 
 Generic names belong to genuinely shared roles and owners. `studio-track-key`
 and `studio-rack-add` now live in the shared instrument stylesheet, while chapter
@@ -484,18 +501,27 @@ projections. The complete Context Canvas source suite now passes. This supersede
 the earlier standing of twelve reproduced baseline failures; the receiving PRs
 retain the exact observations and reviewed commits.
 
-The first #765 shared-control increment passed 595 source checks and six
-receiver journeys covering Chromium, Firefox and WebKit at ordinary phone and
-laptop widths. The existing Chromium dial and participant journeys also passed.
-These observations establish receiver-state agreement and the exercised gesture
-and selection behavior. Independent review and the PR retain delivery authority.
+PR #775 owns the shared-control evidence: source checks and receiver journeys in
+Chromium, Firefox and WebKit at ordinary phone/laptop widths, plus the exercised
+dial and participant behavior. The permanent Team planning increment has its own
+receiving PR for composition, preview/acceptance and local-scroll evidence with
+independent review. It also repairs the visible reel return in
+[#776](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/776):
+the template receiver now owns focus after a person is added.
 
-For re-entry, start with #765 and the consolidation plan. Its shared-control
-increment prepares the permanent Team planning composition next, then #766's
-direct arrangement selection and #767's enclosed controls. Those receivers prepare the adjacent
-people/team (#757) and session (#768) editors. PR #764 remains the accepted
-scope-navigation reference. Retain the current creation/confirmation contract
-while #758 defines its separate replacement.
+Two legacy browser journeys still target superseded visitor entries. Both fail
+on the clean shared-control baseline: one reaches a closed People rate editor,
+and one expects the removed showcase brief. Their focused observation repair is
+tracked in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777).
+The composition PR records the passing current journeys separately from those
+baseline failures.
+
+For re-entry, reconcile #765 and its focused composition PR with the
+consolidation plan. Once that review settles the issue, #766's direct arrangement
+selection and #767's enclosed controls are the next receivers. They prepare
+adjacent people/team (#757) and session (#768) editors. PR #764 remains the
+accepted scope-navigation reference. Retain the current creation/confirmation
+contract while #758 defines its separate replacement.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

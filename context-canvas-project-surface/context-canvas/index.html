@@ -239,15 +239,12 @@
             <header class="native-score__heading"><p class="native-zine__eyebrow">Arrange the work · inspect the consequences</p><h3 id="native-score-title">Coordination horizon</h3><p>Open a sprint to see the sessions, people and decisions that carry the work forward.</p></header>
             <p data-score-fallback>The pilot moves through research, prototype work, an operations rehearsal and review. The interactive horizon lets you inspect that illustrative sequence and try another arrangement.</p>
           </section>
-          <details class="native-coordination__workspace studio-team-planning" data-native-workspace="connection" open><summary>Team planning</summary>
-          <section class="native-patch-bay" aria-labelledby="native-patch-bay-title">
-            <h3 id="native-patch-bay-title" class="native-zine__heading">Arrange teams around the work</h3>
-            <p class="native-coordination__hint">Connect teams through the work they share.</p>
-            <details class="native-connection-template" data-connection-templates data-template-exposed open hidden>
-              <summary>Team arrangement</summary>
+          <section class="native-patch-bay studio-team-planning" data-native-workspace="connection" aria-labelledby="native-patch-bay-title">
+            <h3 id="native-patch-bay-title" class="native-zine__heading">Team planning</h3>
+            <div class="native-connection-template" data-connection-templates data-template-exposed hidden>
               <div data-connection-template-body></div>
               <p class="native-coordination__status" data-connection-template-status role="status" aria-live="polite" aria-atomic="true"></p>
-            </details>
+            </div>
             <div data-native-connection-view></div>
             <section class="native-connection" data-native-connection-editor aria-labelledby="native-connection-title">
               <div class="native-connection__heading" data-connection-toolbar hidden><h4 id="native-connection-title">Connect the work</h4><button type="button" class="native-control--create" data-connection-action="create" disabled>Add connection</button></div>
@@ -314,7 +311,6 @@
               <p class="native-coordination__status" data-connection-status role="status" aria-live="polite" aria-atomic="true"></p>
             </section>
           </section>
-          </details>
           <details class="native-coordination__workspace" data-native-workspace="session"><summary>Working sessions</summary>
           <section class="native-session" data-native-session-editor aria-labelledby="native-session-title">
           <div class="native-session__toolbar" data-native-session-toolbar hidden>

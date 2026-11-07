@@ -241,7 +241,7 @@ for (const engine of names) {
     };
     await expect(brief).toBeVisible();
     await expect(root(page).locator('[data-native-workspace="session"]')).not.toHaveAttribute('open', '');
-    await expect(root(page).locator('[data-native-workspace="connection"]')).not.toHaveAttribute('open', '');
+    await expect(root(page).locator('section[data-native-workspace="connection"]')).toBeVisible();
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');

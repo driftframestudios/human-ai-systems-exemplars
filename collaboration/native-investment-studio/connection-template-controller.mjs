@@ -3,7 +3,7 @@ import { PlanError } from './contract.mjs';
 import { listCoordinationTemplates, prepareCoordinationTemplate, applyCoordinationTemplate } from './connection-templates.mjs';
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 import { money } from './display.mjs';
-import { createArrangementReading } from './connection-view.mjs';
+import { createArrangementReading, createArrangementTeamLanes } from './connection-view.mjs';
 import { getCoordinationTemplate } from './coordination-arrangements.mjs';
 import { createReel, revealReelResult } from './reel-control.mjs';
 import { createLifecycleLanes, createSessionTracks } from './arrangement-surfaces.mjs';
@@ -20,18 +20,19 @@ let nextInstance = 0;
 // Row drafts continue to use the shared coordinator and accepted state owner.
 export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
   onViewChanged = () => {}, onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
-  const details = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
-  if (!details) throw new TypeError('Supply the coordination template disclosure.');
-  if (INSTANCES.has(details)) return INSTANCES.get(details);
+  const panel = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
+  if (!panel) throw new TypeError('Supply the coordination template panel.');
+  if (INSTANCES.has(panel)) return INSTANCES.get(panel);
   if (!studio || !['read', 'readAcceptance', 'replace'].every(key => typeof studio[key] === 'function')
       || !editing || !['read', 'park'].every(key => typeof editing[key] === 'function')
       || ![onBegin, onEditing, onAccepted, isActive, canOpen].every(callback => typeof callback === 'function')) {
     throw new TypeError('Supply the Studio, its draft coordinator and receiver callbacks.');
   }
-  const document = details.ownerDocument, body = details.querySelector('[data-connection-template-body]');
-  const exposed = details.hasAttribute('data-template-exposed');
-  const status = details.querySelector('[data-connection-template-status]'), summary = details.querySelector('summary');
-  if (!body || !status || !summary) throw new TypeError('Supply the complete coordination template disclosure.');
+  const document = panel.ownerDocument, body = panel.querySelector('[data-connection-template-body]');
+  const disclosure = panel.tagName === 'DETAILS';
+  const exposed = !disclosure || panel.hasAttribute('data-template-exposed');
+  const status = panel.querySelector('[data-connection-template-status]'), summary = panel.querySelector('summary');
+  if (!body || !status || disclosure && !summary) throw new TypeError('Supply the complete coordination template panel.');
   const instance = `connection-template-${++nextInstance}`, cleanup = [];
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
   let projection = studio.read(), bindings = new WeakMap(), controls = new Map(), optionSources = [], dynamic = [];
@@ -44,7 +45,17 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const choiceLabel = document.createElement('label'); choiceLabel.textContent = 'Arrangement'; choiceLabel.append(choice);
   const description = document.createElement('p'); description.className = 'native-coordination__hint';
   const structure = document.createElement('div'); structure.dataset.templateStructure = '';
-  const delivery = document.createElement('div'); delivery.className = 'studio-arrangement-delivery';
+  const delivery = document.createElement('section'); delivery.className = 'studio-team-rack'; delivery.dataset.templateRack = '';
+  const rackHeading = element('header', undefined, 'studio-team-rack__heading');
+  const rackTitle = element('h4', 'Teams and shared work'); rackTitle.id = `${instance}-rack-title`;
+  delivery.setAttribute('aria-labelledby', rackTitle.id);
+  const readout = element('dl', undefined, 'studio-rack-amount');
+  const amountLabel = element('dt', 'Accepted investment');
+  const amount = element('output'); amount.dataset.templateTotal = '';
+  const amountValue = element('dd'); amountValue.append(amount); readout.append(amountLabel, amountValue);
+  rackHeading.append(rackTitle, readout);
+  const rackBody = element('div', undefined, 'studio-team-rack__body');
+  delivery.append(rackHeading, rackBody);
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
       if (!active(canOpen) || (!active() && !open())) return;
@@ -63,7 +74,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const applyButton = button('Apply arrangement', 'apply'); applyButton.className = 'native-control--confirm';
   const cancelButton = button('Cancel preview', 'cancel'), anotherButton = button('Start another arrangement', 'another');
   actions.append(applyButton, cancelButton, anotherButton);
-  form.append(choiceLabel, description, arrangementDeck, actions, previewRegion, delivery, customization); body.replaceChildren(form);
+  form.append(choiceLabel, arrangementDeck, description, delivery, actions, previewRegion, customization); body.replaceChildren(form);
   function option(value, label) { const node = document.createElement('option'); node.value = value; node.textContent = label; return node; }
   function element(tag, text, className) {
     const node = document.createElement(tag); if (text !== undefined) node.textContent = text;
@@ -74,8 +85,14 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function owns(epoch) { return !disposed && epoch === generation; }
   function active(gate = isActive) { return !disposed && gate() && !disposed; }
   function announce(text) { if (!disposed) status.textContent = text; }
+  function acceptedReadout() {
+    const result = projection.result;
+    amountLabel.textContent = result.plannedCommitmentCents === null ? 'Known accepted investment' : 'Accepted investment';
+    amount.textContent = money(result.knownCommitmentCents);
+  }
   function retirePreview() {
     proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren(); applyButton.setAttribute('aria-disabled', 'false');
+    acceptedReadout();
     applyButton.textContent = 'Apply arrangement';
     for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = false;
     anotherButton.hidden = false;
@@ -200,17 +217,24 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
       else onNavigate({ kind: 'work', id });
     };
-    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate }));
-    delivery.replaceChildren(createLifecycleLanes(document, { plan: previewPlan, onSession: inspectSession }),
+    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate, includeTeamLanes: false }));
+    const teamsHeading = element('h5', 'Proposed teams', 'studio-team-rack__section-title');
+    const teamScroll = element('div', undefined, 'studio-team-rack__teams');
+    teamScroll.setAttribute('role', 'region'); teamScroll.setAttribute('aria-label', 'Proposed teams and people'); teamScroll.tabIndex = 0;
+    teamScroll.append(createArrangementTeamLanes(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate }));
+    const lifecycle = element('details', undefined, 'studio-team-rack__lifecycle');
+    lifecycle.append(element('summary', 'Delivery lifecycle'), createLifecycleLanes(document, { plan: previewPlan, onSession: inspectSession }));
+    rackBody.replaceChildren(teamsHeading, teamScroll,
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
         sessionIds: new Set(projection.state.work.map(work => work.id)),
-        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
+        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }), lifecycle);
     onViewChanged();
   }
   function refresh(rebuild = false) {
     if (disposed) return;
     const next = studio.read(), changed = next !== projection;
     projection = next;
+    if (!proposal) acceptedReadout();
     if (changed) for (const source of optionSources) source.update();
     for (const update of dynamic) update();
     if (changed || rebuild) renderStructure();
@@ -304,11 +328,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   }
   function renderPreview(prepared) {
     const summary = prepared.summary;
-    const total = element('output', money(summary.money.afterTotalCents)); total.dataset.templateTotal = '';
+    amountLabel.textContent = summary.money.afterTotalCents === null ? 'Known whole-plan proposed investment' : 'Whole-plan proposed investment';
+    amount.textContent = money(summary.money.afterTotalCents ?? summary.money.afterKnownCents);
     const change = summary.money.totalDeltaCents === null ? `Known investment ${money(summary.money.afterKnownCents)} · choose missing rates.`
       : `Current ${money(summary.money.beforeTotalCents)} · Change ${money(summary.money.totalDeltaCents)}`;
-    const amount = element('p', 'Proposed investment '); amount.append(total);
-    previewRegion.replaceChildren(amount, element('p', change));
+    previewRegion.replaceChildren(element('p', change));
     previewRegion.hidden = false; applyButton.setAttribute('aria-disabled', 'false');
   }
   function parkAndNotify(epoch) {
@@ -372,22 +396,22 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!active(canOpen)) return false;
     const epoch = ++generation;
     if (!parkAndNotify(epoch)) return false;
-    acknowledged = true; details.open = true; refresh(); return true;
+    acknowledged = true; if (disclosure) panel.open = true; refresh(); return true;
   }
   function close() {
     if (disposed) return;
-    generation += 1; acknowledged = false; if (!exposed) details.open = false;
+    generation += 1; acknowledged = false; if (disclosure && !exposed) panel.open = false;
   }
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1; proposal = null; configuration = null;
     cleanup.forEach(remove => remove()); reel.dispose(); bindings = new WeakMap(); controls.clear(); optionSources = []; dynamic = [];
-    body.replaceChildren(); status.textContent = ''; details.open = false; details.hidden = true; INSTANCES.delete(details);
+    body.replaceChildren(); status.textContent = ''; if (disclosure) panel.open = false; panel.hidden = true; INSTANCES.delete(panel);
   }
-  listen(details, 'toggle', () => {
+  if (disclosure) listen(panel, 'toggle', () => {
     if (disposed || exposed) return;
-    if (details.open && !acknowledged) { if (!open() && !disposed) details.open = false; }
-    else if (!details.open) acknowledged = false;
+    if (panel.open && !acknowledged) { if (!open() && !disposed) panel.open = false; }
+    else if (!panel.open) acknowledged = false;
   });
   listen(form, 'focusin', () => { if (exposed && !active() && active(canOpen)) open(); });
   for (const type of ['input', 'change']) listen(form, type, event => {
@@ -436,9 +460,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       }
     }
   });
-  configuration = startingConfiguration(TEMPLATES[0]); configurations.set(configuration.templateId, configuration); build(); retirePreview(); details.hidden = false;
-  if (exposed) details.open = true;
-  const controller = Object.freeze({ open, resume: open, close, detach, isOpen: () => !disposed && details.open, render: refresh, dispose });
-  INSTANCES.set(details, controller);
+  configuration = startingConfiguration(TEMPLATES[0]); configurations.set(configuration.templateId, configuration); build(); retirePreview(); panel.hidden = false;
+  if (disclosure && exposed) panel.open = true;
+  const controller = Object.freeze({ open, resume: open, close, detach,
+    focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
+    isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
+  INSTANCES.set(panel, controller);
   return controller;
 }

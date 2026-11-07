@@ -9,8 +9,9 @@ different questions.
 [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765).
 Current behavior remains in the [Studio source](../../collaboration/native-investment-studio/README.md).
 PR #769 recorded the initial distinction and preparation route, refined in
-PR #774. The first runtime increment implements shared session controls; the
-permanent Team planning section and secondary rack are the next focused PR.
+PR #774. PR #775 delivered shared session controls. The second runtime increment
+makes Team planning a permanent section with its secondary rack; its receiving
+PR owns verification and independent review for the remaining #765 composition.
 Direct empty-space creation, participant movement, attached editorial companions,
 duration enclosures and scoped removal/recovery retain their separate receivers
 below. The current aesthetic, compact landing and existing operations remain the
@@ -26,7 +27,7 @@ reference.
 | A populated pad | A session occurrence | A person's participation in a session |
 | Record identity | Existing work ID, plus occurrence/period where relevant | The same work ID, plus person where relevant |
 | Visual emphasis | Primary instrument rack | Subtly darker secondary instrument rack, with editorial surroundings |
-| Amount | Current plan's included work | Included work linked to the arrangement, counted once |
+| Amount | Current plan's included work | Accepted investment, or whole-plan proposed investment while a preview is prepared; a linked-work amount belongs to #766 |
 
 Both readings address the same session editor. Duration, repetitions, people
 and funding retain their existing owners. A participation pad expresses who is
@@ -57,11 +58,12 @@ creation. The final Add confirms the item being prepared. Horizon entry supplies
 its period/subdivision; Team planning supplies its known context. Both continue
 through the current creation owner, including cross-team participants.
 
-In the next #765 increment, the darker Team planning rack adopts the horizon's
-bezel, compact header, readout alignment and named horizontal scroll region. Keep the header outside
-scrolling content, extending #756's scope treatment. Existing Quality lanes and
-pads supply composition precedents for compact choices; each receiving control
-keeps its own participation, selection or editing meaning.
+The darker Team planning rack adopts the horizon's bezel, compact header and
+readout alignment. Its heading, amount and Add session sit outside the named
+participation-table scroll region, extending #756's scope treatment. Existing
+team/member lanes appear once inside the rack, followed by Shared sessions and
+a compact Delivery lifecycle disclosure. Each control keeps its participation,
+selection or editing meaning.
 
 ### Reuse across chapters, with meaningful differences
 
@@ -121,18 +123,29 @@ work and does not block editor placement.
 
 ## Team planning flow
 
-Make Team planning a permanent semantic section with the following order:
+Team planning is a permanent semantic section with the following order:
 
 1. **Team planning** heading, parallel to Coordination horizon.
 2. Zoetrope beside the editorial team structure.
 3. The short arrangement hint below the zoetrope/structure deck.
-4. Secondary rack header and included-work amount, followed by team/work lanes
-   and Shared sessions participation tracks.
-5. Contextual details and, in a later issue, the adjacent selected-object editor.
+4. Secondary rack header and investment readout, followed by proposed team/member
+   lanes, Shared sessions participation tracks and the Delivery lifecycle disclosure.
+5. Existing preview/Apply controls, customization and accepted connection details;
+   adjacent selected-object editing remains a later issue.
 
-The current outer open disclosure and exposed inner template disclosure have
-different owners. Replace their layout assumptions deliberately. Preserve
-existing connection and session operations through the resulting compact view.
+The About composition uses an ordinary section and exposed template container.
+The template controller retains its existing edit-retention, preview freshness
+and acceptance owners; its legacy disclosure receiver stays supported. Shared
+`createArrangementTeamLanes` rendering places the proposed team/member cards
+inside the secondary rack once, while the editorial structure retains the
+topology and relationship routes. `createSessionTracks` keeps a visible heading
+and Add session above its named local scroll region. The broader arrangement
+owner keeps existing connection and session operations available.
+
+The readout labels the whole-plan accepted amount until preview supplies a
+whole-plan proposed amount. Missing rates retain the known-amount label. This
+composition preserves preview, Apply, Cancel and Start another arrangement;
+the direct acceptance and linked-work amount below belong to #766.
 
 ### Direct arrangement selection
 
@@ -232,7 +245,7 @@ expanding the first style PR into a deletion-model rewrite.
 
 | Issue | Owns | Receives / prepares |
 | --- | --- | --- |
-| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls implemented in the first increment; permanent Team planning composition next | Current front; prepares the following receivers |
+| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), then permanent Team planning and its secondary rack | Composition implemented; the focused receiving PR's checks and independent review settle this issue |
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Receives #765; settles record identity before adjacent editors |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Duration/rate enclosures | Receives shared grammar; can proceed alongside #766; precedes both adjacent editor issues |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |
@@ -249,8 +262,9 @@ retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
-as accepted foundations. #765 remains the current front. #766 preserves sessions
-created through the new entry when arrangements change; #767 receives the exact
+as accepted foundations. #765's reviewed composition hands the next work to
+#766 and #767. #766 preserves sessions created through the new entry when
+arrangements change; #767 receives the exact
 duration hierarchy; #757/#768 receive nested matrices, shared names and companion
 routes. #758 now has a recommended first record and #770 its contextual entry.
 The underlying issue acceptance remains with each receiver.

@@ -98,7 +98,7 @@ for (const engine of names) {
     await expect(action(page, 'person-create')).toBeVisible();
     await tab(page, 'coordination').click();
     const workspace = root(page).locator('[data-native-workspace="connection"]');
-    if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
+    await expect(workspace.getByRole('heading', { name: 'Team planning', exact: true })).toBeVisible();
     await workspace.locator('.studio-accepted-connections > summary').click();
     const lane = root(page).locator('[data-team-lane="delivery"]');
     await lane.getByRole('button', { name: 'Choose people', exact: true }).click();

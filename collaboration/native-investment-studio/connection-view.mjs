@@ -214,7 +214,16 @@ export function arrangementGeometry(arrangement, plan) {
   return { width: 960, height: Math.max(460, ...nodes.map(row => row.y + 80)), nodes, edges };
 }
 
-export function createArrangementReading(document, { arrangement, plan, reading = 'accepted', onNavigate = () => {} }) {
+export function createArrangementTeamLanes(document, { arrangement, plan, reading = 'accepted', onNavigate = () => {} }) {
+  const slots = new Map(arrangement.teams.map(row => [row.team.id, row.slotId]));
+  return createTeamLanes(document, { plan, teams: arrangement.teams.map(row => row.team), proposed: reading === 'proposed',
+    onAdd: reading === 'accepted' ? target => onNavigate({ kind: `create-${target.kind}` }) : null,
+    onNavigate(target) {
+      onNavigate(reading === 'proposed' ? { kind: 'template-team', id: slots.get(target.id) } : target);
+    } });
+}
+
+export function createArrangementReading(document, { arrangement, plan, reading = 'accepted', onNavigate = () => {}, includeTeamLanes = true }) {
   const node = (tag, text, className) => { const item = document.createElement(tag); if (text !== undefined) item.textContent = text; if (className) item.className = className; return item; };
   const svgNode = (tag, attributes = {}, text = '') => { const item = document.createElementNS(SVG, tag); for (const [key, value] of Object.entries(attributes)) item.setAttribute(key, String(value)); item.textContent = text; return item; };
   const section = node('section', undefined, 'native-arrangement');
@@ -262,13 +271,9 @@ export function createArrangementReading(document, { arrangement, plan, reading 
     control.title = `${from.label} → ${to.label}: ${edge.sharedObject || 'Shared work'}${edge.status === 'paused' ? ' · Paused' : ''}`;
     connections.append(control);
   }
-  const lanes = createTeamLanes(document, { plan, teams: arrangement.teams.map(row => row.team), proposed: reading === 'proposed',
-    onAdd: reading === 'accepted' ? target => onNavigate({ kind: `create-${target.kind}` }) : null,
-    onNavigate(target) {
-      const binding = arrangement.teams.find(row => row.team.id === target.id);
-      onNavigate(reading === 'proposed' ? { kind: 'template-team', id: binding.slotId } : target);
-    } });
-  section.append(heading, status, lanes, viewport, connections);
+  section.append(heading, status);
+  if (includeTeamLanes) section.append(createArrangementTeamLanes(document, { arrangement, plan, reading, onNavigate }));
+  section.append(viewport, connections);
   section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); });
   svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); } });
   return section;

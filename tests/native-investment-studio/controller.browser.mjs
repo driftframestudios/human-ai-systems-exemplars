@@ -328,9 +328,8 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,822.50');
 
     await tab('coordination').click();
-    await panel(page).locator('details[data-native-workspace="connection"] > summary').click();
-    await arrangements.locator(':scope > summary').click();
-    await arrangements.locator('[data-template-action="preview"]').click();
+    await expect(panel(page).getByRole('heading', { name: 'Team planning', exact: true })).toBeVisible();
+    await arrangements.locator('[data-reel-choice="pod"]').click();
     await expect(arrangements.locator('[data-template-total]')).toHaveText('$1,822.50');
     await expect(graph.locator('.native-connections__list button[data-connection-select]')).toHaveCount(0);
     await arrangements.locator('[data-template-action="apply"]').click();

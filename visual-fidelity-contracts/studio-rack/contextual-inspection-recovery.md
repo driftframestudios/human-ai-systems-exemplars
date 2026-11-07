@@ -89,6 +89,14 @@ restores its closed caret while preserving any separately retained selection or
 draft. Session-settings wording and `aria-controls` identify the existing remote
 editor. Adjacent-panel wording begins when the adjacent panel is mounted.
 
+Team planning is a permanent section. Its arrangement reel and secondary rack
+remain available while selection opens the existing template, connection or
+session receiver. The template controller retains its preview, Apply, Cancel
+and edit-retention ownership; the section's persistent visibility is separate
+from which editor is active. The local Delivery lifecycle disclosure keeps its
+own reveal state. This composition prepares the later adjacent receivers while
+the current editors continue to own their drafts.
+
 Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 are future Coordination-first receivers. Both follow the shared

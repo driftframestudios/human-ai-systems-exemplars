@@ -545,8 +545,8 @@ for (const engine of names) {
 
     await tab(page, 'coordination').click();
     const arrangement = root(page).locator('[data-connection-templates]');
-    await root(page).locator('[data-native-workspace="connection"] > summary').click();
-    await arrangement.locator(':scope > summary').click();
+    await expect(arrangement).toBeVisible();
+    await arrangement.locator('.studio-arrangement-settings > summary').click();
     const team = arrangement.locator('[data-template-card^="team:"]').first();
     await team.locator('summary').click();
     await team.locator('[data-template-field$=".label"]').fill('Local design team');
@@ -555,11 +555,11 @@ for (const engine of names) {
     await assembly.locator('[data-assembly-form] [name="label"]').fill('Robin');
     await assembly.locator('[data-assembly-apply]').click();
     await root(page).locator('[data-native-return-action]').click();
-    await expect(arrangement).toHaveAttribute('open', '');
+    await expect(arrangement).toBeVisible();
     await expect(team.locator('[data-template-field$=".label"]')).toHaveValue('Local design team');
     await expect(team.locator('summary')).toContainText('Local design team');
     await expect(team.locator('[data-template-field$=".personIds"] option').filter({ hasText: 'Robin' })).toHaveCount(1);
-    await expect(arrangement.locator('[data-template-choice]')).toBeFocused();
+    await expect(arrangement.locator('[data-reel-choice="pod"][aria-pressed="true"]')).toBeFocused();
   });
 
   test(`${engine}: a complete session publishes once and reconciles participant, pause and funding choices`, { timeout: 60000 }, async t => {
