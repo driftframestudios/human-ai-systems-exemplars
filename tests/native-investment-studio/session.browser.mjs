@@ -668,6 +668,7 @@ for (const engine of names) {
     await select(page).selectOption('review'); await field(page, 'minutesPerSession').fill('45');
     await select(page).selectOption(newId); await field(page, 'label').fill('Revised planning name');
     await tab(page, 'people').click();
+    await root(page).locator('[data-native-team-editor] .studio-people-rates > summary').click();
     await root(page).locator('[data-native-team-editor] [data-person-id="product-one"]').click();
     await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();
