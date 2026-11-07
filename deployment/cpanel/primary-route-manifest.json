@@ -18,6 +18,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/delivery-board.mjs",
+      "projected_path": "collaboration/native-investment-studio/delivery-board.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/change-showcase.mjs",
       "projected_path": "collaboration/native-investment-studio/change-showcase.mjs",
       "media_type": "text/javascript"

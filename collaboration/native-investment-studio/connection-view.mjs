@@ -223,7 +223,7 @@ export function createArrangementTeamLanes(document, { arrangement, plan, readin
     } });
 }
 
-export function createArrangementReading(document, { arrangement, plan, reading = 'accepted', onNavigate = () => {}, includeTeamLanes = true }) {
+export function createArrangementReading(document, { arrangement, plan, reading = 'accepted', onNavigate = () => {}, includeTeamLanes = true, includeConnections = true }) {
   const node = (tag, text, className) => { const item = document.createElement(tag); if (text !== undefined) item.textContent = text; if (className) item.className = className; return item; };
   const svgNode = (tag, attributes = {}, text = '') => { const item = document.createElementNS(SVG, tag); for (const [key, value] of Object.entries(attributes)) item.setAttribute(key, String(value)); item.textContent = text; return item; };
   const section = node('section', undefined, 'native-arrangement');
@@ -273,7 +273,8 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   }
   section.append(heading, status);
   if (includeTeamLanes) section.append(createArrangementTeamLanes(document, { arrangement, plan, reading, onNavigate }));
-  section.append(viewport, connections);
+  section.append(viewport);
+  if (includeConnections) section.append(connections);
   section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); });
   svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); } });
   return section;

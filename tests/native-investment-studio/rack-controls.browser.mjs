@@ -85,7 +85,7 @@ async function contained(page, width) {
 }
 
 for (const engine of names) for (const width of [390, 1440]) {
-  test(`${engine}: Team planning stays visible with local track scrolling and recoverable proposals at ${width}px`, { timeout: 60000 }, async t => {
+  test(`${engine}: Team planning braids phases and edit routes with local scrolling and recoverable proposals at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), accepted = await bytes(page);
     const planning = root(page).locator('section[data-native-workspace="connection"]');
     const templates = planning.locator('[data-connection-templates]');
@@ -102,6 +102,17 @@ for (const engine of names) for (const width of [390, 1440]) {
         && [heading, deck, hint].every((node, index) => Boolean(node.compareDocumentPosition([deck, hint, rack][index]) & Node.DOCUMENT_POSITION_FOLLOWING));
     }), true, 'heading, arrangement deck, hint and secondary rack form one reading order');
     await expect(header.locator('[data-template-total]')).toHaveText('$3,980.00');
+    const delivery = rack.locator('[data-delivery-template]');
+    const board = delivery.locator('.studio-delivery__board');
+    const phaseKeys = delivery.locator('[data-delivery-open]');
+    await expect(phaseKeys).toHaveText(['Planning', 'Design', 'Implementation', 'Testing', 'Deployment', 'Maintenance']);
+    await expect(board).toHaveAttribute('data-delivery-scope', 'overview');
+    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).sort()), ['feedback', 'handoff']);
+    await expect(delivery.locator('[data-delivery-session]')).toHaveCount(4);
+    await expect(rack.locator('.studio-team-rack__lifecycle')).toHaveCount(0);
+    await expect(templates.locator('[data-template-structure] .studio-arrangement-connections')).toHaveCount(0);
+    const originalTeams = await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].sort());
+    assert.deepEqual(originalTeams, ['partner', 'pod']);
     const tracks = shared(page).locator('.studio-session-tracks__scroll');
     await header.scrollIntoViewIfNeeded();
     const headerBounds = await header.boundingBox();
@@ -112,17 +123,78 @@ for (const engine of names) for (const width of [390, 1440]) {
     if (width === 390) assert.ok(scrolling.overflow && scrolling.offset > 0, 'participant tracks remain reachable inside the phone rack');
     assert.deepEqual(await header.boundingBox(), headerBounds, 'the header and investment reading stay outside the scrolling tracks');
     await tracks.evaluate(element => { element.scrollLeft = 0; });
+    const scope = delivery.locator('.studio-delivery__scope');
+    const scopeBounds = await scope.boundingBox();
+    const boardScrolling = await board.evaluate(element => {
+      element.scrollLeft = element.scrollWidth;
+      return { offset: element.scrollLeft, overflow: element.scrollWidth > element.clientWidth + 1 };
+    });
+    if (width === 390) assert.ok(boardScrolling.overflow && boardScrolling.offset > 0, 'delivery phases remain reachable inside the phone rack');
+    assert.deepEqual(await scope.boundingBox(), scopeBounds, 'the phase heading and return stay outside the scrolling board');
+    await board.evaluate(element => { element.scrollLeft = 0; });
     await contained(page, width);
     await rack.screenshot({ path: resolve(captures, `${engine}-team-rack-${width}.png`) });
     if (width === 1440) await planning.screenshot({ path: resolve(captures, `${engine}-team-planning-${width}.png`) });
 
+    await delivery.locator('[data-delivery-open="design"]').click();
+    await expect(board).toHaveAttribute('data-delivery-scope', 'design');
+    await expect(delivery.locator('[data-delivery-current]')).toHaveText('Design');
+    await expect(delivery.locator('[data-delivery-overview]')).toBeFocused();
+    await expect(delivery.locator('[data-delivery-phase]:visible')).toHaveCount(1);
+    const designTeam = delivery.locator('[data-delivery-phase="design"] [data-delivery-team]').first();
+    const teamSlot = await designTeam.getAttribute('data-delivery-team');
+    await designTeam.locator('.studio-delivery__team-key').click();
+    await expect(templates.locator(`[data-template-field="teams.${teamSlot}.selection"]`)).toBeFocused();
+    await designTeam.locator('[data-delivery-person]').first().click();
+    await expect(templates.locator(`[data-template-field="teams.${teamSlot}.selection"]`)).toBeFocused();
+    await delivery.locator('[data-delivery-overview]').click();
+    await expect(board).toHaveAttribute('data-delivery-scope', 'overview');
+    await expect(delivery.locator('[data-delivery-open="design"]')).toBeFocused();
+
+    const maintenanceKey = delivery.locator('[data-delivery-open="maintenance"]');
+    await maintenanceKey.scrollIntoViewIfNeeded();
+    await maintenanceKey.click();
+    const maintenanceTeam = delivery.locator('[data-delivery-phase="maintenance"] [data-delivery-team]').first();
+    const maintenanceSlot = await maintenanceTeam.getAttribute('data-delivery-team');
+    await maintenanceTeam.locator('.studio-delivery__team-key').click();
+    await templates.locator(`[data-template-field="teams.${maintenanceSlot}.label"]`).fill('Partner group for continuing support');
+    await expect(board).toHaveAttribute('data-delivery-scope', 'maintenance');
+    const returnKey = delivery.locator('[data-delivery-overview]');
+    await returnKey.scrollIntoViewIfNeeded();
+    const pagePosition = await page.evaluate(() => scrollY);
+    await returnKey.click();
+    await expect(maintenanceKey).toBeFocused();
+    const returnGeometry = await maintenanceKey.evaluate(key => {
+      const board = key.closest('.studio-delivery__board');
+      return { key: key.getBoundingClientRect().toJSON(), board: board.getBoundingClientRect().toJSON(), scroll: scrollY };
+    });
+    assert.ok(returnGeometry.key.left >= returnGeometry.board.left - 1 && returnGeometry.key.right <= returnGeometry.board.right + 1,
+      'return after an edit reveals the originating phase key inside the board');
+    assert.ok(Math.abs(returnGeometry.scroll - pagePosition) < 2, 'phase return preserves the visitor page position');
+    const handoff = delivery.locator('[data-delivery-connection]').first();
+    const handoffSlot = await handoff.getAttribute('data-delivery-connection');
+    await handoff.click();
+    await expect(templates.locator(`[data-template-field="connections.${handoffSlot}.sharedObject"]`)).toBeFocused();
+    await delivery.locator('[data-delivery-session="review"]').click();
+    await expect(session(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
+    await root(page).locator('[data-native-return-action]').click();
+    await expect(planning).toBeVisible();
+    assert.equal(await bytes(page), accepted, 'phase, team, person, handoff and accepted session inspection retain the accepted plan');
+
+    await delivery.locator('[data-delivery-open="testing"]').click();
     await templates.locator('[data-reel-choice="tiger-team"]').click();
     await expect(templates.locator('[data-arrangement-reading="proposed"]')).toHaveAttribute('data-arrangement-template', 'tiger-team');
+    await expect(delivery).toHaveAttribute('data-delivery-template', 'tiger-team');
+    await expect(board).toHaveAttribute('data-delivery-scope', 'testing');
+    await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
+    await delivery.locator('[data-delivery-overview]').click();
+    assert.deepEqual(await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].sort()), ['owner', 'response', 'specialists']);
+    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).sort()), ['diagnose', 'resolve', 'return']);
     await expect(header).toContainText('proposed investment');
     assert.equal(await bytes(page), accepted, 'choosing an arrangement prepares its visual proposal');
-    const proposed = shared(page).locator('[data-session-track^="proposal-session-"]').first();
-    const slot = (await proposed.getAttribute('data-session-track')).slice('proposal-session-'.length);
-    await proposed.locator('.studio-session-tracks__name').click();
+    const proposed = delivery.locator('[data-delivery-session^="proposal-session-"]').first();
+    const slot = (await proposed.getAttribute('data-delivery-session')).slice('proposal-session-'.length);
+    await proposed.click();
     const customization = templates.locator(`[data-template-card="connection:${slot}"]`);
     await expect(customization).toHaveAttribute('open', '');
     await expect(customization.locator('input, select, button').first()).toBeFocused();

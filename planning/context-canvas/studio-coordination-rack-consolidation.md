@@ -9,9 +9,11 @@ different questions.
 [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765).
 Current behavior remains in the [Studio source](../../collaboration/native-investment-studio/README.md).
 PR #769 recorded the initial distinction and preparation route, refined in
-PR #774. PR #775 delivered shared session controls. The second runtime increment
-makes Team planning a permanent section with its secondary rack; its receiving
-PR owns verification and independent review for the remaining #765 composition.
+PR #774. PR #775 delivered shared session controls; PR #778 completed the permanent
+Team planning section and secondary rack. The approved
+[#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
+increment combines proposed teams, sessions and handoffs into an editorial
+delivery board, with its focused PR owning verification and independent review.
 Direct empty-space creation, participant movement, attached editorial companions,
 duration enclosures and scoped removal/recovery retain their separate receivers
 below. The current aesthetic, compact landing and existing operations remain the
@@ -22,7 +24,7 @@ reference.
 | Meaning | Coordination horizon | Team planning |
 | --- | --- | --- |
 | Visitor question | When does this work happen? | Who works together? |
-| Board | Sprints/quarters, then weeks/months | Team lanes, people and shared work |
+| Board | Sprints/quarters, then weeks/months | Delivery phases containing teams, people, sessions and handoffs |
 | Track columns | Periods or their subdivisions | People |
 | A populated pad | A session occurrence | A person's participation in a session |
 | Record identity | Existing work ID, plus occurrence/period where relevant | The same work ID, plus person where relevant |
@@ -61,8 +63,9 @@ through the current creation owner, including cross-team participants.
 The darker Team planning rack adopts the horizon's bezel, compact header and
 readout alignment. Its heading, amount and Add session sit outside the named
 participation-table scroll region, extending #756's scope treatment. Existing
-team/member lanes appear once inside the rack, followed by Shared sessions and
-a compact Delivery lifecycle disclosure. Each control keeps its participation,
+team/member, session and handoff affordances share an editorial delivery board,
+followed by Shared sessions. The board's phase scope and Delivery overview return
+stay above its own local scroller. Each control keeps its participation,
 selection or editing meaning.
 
 ### Reuse across chapters, with meaningful differences
@@ -128,24 +131,51 @@ Team planning is a permanent semantic section with the following order:
 1. **Team planning** heading, parallel to Coordination horizon.
 2. Zoetrope beside the editorial team structure.
 3. The short arrangement hint below the zoetrope/structure deck.
-4. Secondary rack header and investment readout, followed by proposed team/member
-   lanes, Shared sessions participation tracks and the Delivery lifecycle disclosure.
+4. Secondary rack header and investment readout, followed by the delivery-phase
+   board and Shared sessions participation tracks.
 5. Existing preview/Apply controls, customization and accepted connection details;
    adjacent selected-object editing remains a later issue.
 
 The About composition uses an ordinary section and exposed template container.
 The template controller retains its existing edit-retention, preview freshness
-and acceptance owners; its legacy disclosure receiver stays supported. Shared
-`createArrangementTeamLanes` rendering places the proposed team/member cards
-inside the secondary rack once, while the editorial structure retains the
-topology and relationship routes. `createSessionTracks` keeps a visible heading
-and Add session above its named local scroll region. The broader arrangement
-owner keeps existing connection and session operations available.
+and acceptance owners; its legacy disclosure receiver stays supported.
+`delivery-board.mjs` composes proposed team/member, session and handoff controls
+inside the secondary rack. The editorial structure retains the topology above;
+the accepted-arrangement reader retains its existing team and connection routes.
+`createSessionTracks` keeps a visible heading and Add session above its named
+local scroll region. The broader arrangement owner keeps existing connection
+and session operations available.
 
 The readout labels the whole-plan accepted amount until preview supplies a
 whole-plan proposed amount. Missing rates retain the known-amount label. This
 composition preserves preview, Apply, Cancel and Start another arrangement;
 the direct acceptance and linked-work amount below belong to #766.
+
+### Editorial delivery board
+
+The #779 synthesis selects six one-word phases: Planning, Design, Implementation,
+Testing, Deployment and Maintenance. Compact editorial cards give team/member,
+session and handoff controls distinct readings against the darker rack face.
+The phase keys open a local scope with a visible Delivery overview return. These
+are illustrative delivery relationships; the horizon owns actual period placement.
+
+Three shapes were compared: phase columns with mixed cards, team columns with
+phase ribbons, and a team-by-phase matrix. Phase columns bring the existing
+parallel readings together while giving reel selections an immediate visible
+consequence. The people-by-session matrix remains useful below for participation.
+
+A pure presentation projection uses stable template/slot identities and explicit
+phase mappings. Source-owned stage labels remain context for their sessions;
+custom stages and supporting work retain routes. Team/member cards address
+existing team customization; handoffs address connection customization. Accepted
+sessions and proposed-only review sessions keep their current distinct receivers.
+The board changes presentation, while preview, Apply and Undo keep plan ownership.
+
+The proposed-team strip, duplicated connection-button strip and Delivery lifecycle
+disclosure are superseded in this receiver. Remaining attached summaries retain
+the spring reveal. Session keys retain current destination behavior and actual
+receiver-driven caret state; the later adjacent session panel in #768 will own
+its corresponding open/close interaction.
 
 ### Direct arrangement selection
 
@@ -245,7 +275,8 @@ expanding the first style PR into a deletion-model rewrite.
 
 | Issue | Owns | Receives / prepares |
 | --- | --- | --- |
-| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), then permanent Team planning and its secondary rack | Composition implemented; the focused receiving PR's checks and independent review settle this issue |
+| [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), permanent Team planning and secondary rack (#778) | Complete; supplies shared control and enclosure ownership |
+| [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Receives #765; phase scope and reel-driven projection preserve existing acceptance and editor owners |
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Receives #765; settles record identity before adjacent editors |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Duration/rate enclosures | Receives shared grammar; can proceed alongside #766; precedes both adjacent editor issues |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |
@@ -262,7 +293,7 @@ retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
-as accepted foundations. #765's reviewed composition hands the next work to
+as accepted foundations. #765's reviewed composition and #779's delivery-board refinement prepare
 #766 and #767. #766 preserves sessions created through the new entry when
 arrangements change; #767 receives the exact
 duration hierarchy; #757/#768 receive nested matrices, shared names and companion
@@ -279,8 +310,9 @@ check. Its bounded geometry proof is already specified in the issue.
 ## Contract and evidence ownership
 
 Extend the existing [six-contract family](../../visual-fidelity-contracts/studio-rack/README.md):
-Studio Rack owns shared housing; Period Kanban owns temporal meaning; Support
-Matrix owns participation; Contextual Inspection owns selected/open/return
+Studio Rack owns shared housing; Period Kanban distinguishes temporal lanes from
+the delivery-phase variant; Support Matrix owns participation; Contextual
+Inspection owns selected/open/return
 behavior; Zoetrope owns arrangement selection; Precision Dials owns quantity
 modules. Mark proposed changes as prospective until their receiving PR lands.
 

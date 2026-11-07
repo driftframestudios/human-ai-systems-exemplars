@@ -37,6 +37,10 @@ when sessions happen; Team planning shows who participates. Selected keys follow
 the session editor's current record, and their carets follow its visible open
 state. Team planning is a permanent section with the arrangement reel and
 editorial structure above a subtly darker rack for teams and shared work.
+The [delivery-board increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
+combines proposed teams, people, sessions and handoffs in editorial phase lanes.
+The arrangement reel changes this proposed picture immediately; Shared sessions
+keeps its complementary participation reading below.
 Direct arrangement selection ([#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766))
 and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
 prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
@@ -135,12 +139,20 @@ funded time keeps its separate accounting meaning. Older saved plans retain
 their recorded timing and offer an explicit sprint-arrangement proposal.
 
 Team planning follows the horizon as a permanent section. Its arrangement reel
-and editorial structure lead into a short hint, then a darker secondary rack.
-The rack holds the proposed team/member lanes and Shared sessions table; Delivery
-lifecycle opens locally when useful. The heading, investment readout and Add
-session remain visible while the participation table scrolls sideways. The
-readout names accepted investment until a preview supplies whole-plan proposed
-investment; Apply accepts that preview.
+and editorial topology lead into a short hint, then a darker secondary rack.
+The delivery board combines team/member, session and handoff cards under
+**Planning, Design, Implementation, Testing, Deployment and Maintenance**.
+Choose a phase to inspect it; **Delivery overview** returns to the complete board.
+The phase reading describes how the proposed work fits together. Sprint and
+quarter placement stays with the horizon.
+
+Turning the arrangement reel changes team and handoff placement immediately.
+Team/member cards open their team customization; handoffs open connection
+settings; sessions open their existing accepted or proposed editor. Shared
+sessions follows the board with people as its columns. Rack headings, the
+investment readout and Add session stay outside local horizontal scrolling.
+The amount names accepted investment until a preview supplies whole-plan
+proposed investment; Apply accepts that preview.
 
 Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
