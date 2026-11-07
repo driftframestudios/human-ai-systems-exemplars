@@ -3,7 +3,7 @@
 Give visitors two coordinated readings of enterprise work: named periods show
 the plan's shape, while session tracks reveal the work inside those periods.
 Opening a sprint or quarter makes its weeks or months available without losing
-the whole-plan return. Use the [Coordination view](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
+the **Plan overview** return. Use the [Coordination view](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
 as the current example.
 
 **Standing:** review candidate `0.1.0`; ID
@@ -26,7 +26,7 @@ expresses the authored working arrangement.
 | --- | --- |
 | A named sprint or quarter | A lane with its own heading and creation entry |
 | A working session | Corresponding board clip and track reading with the same record identity |
-| Whole-plan versus period scope | Current period name and a visible Whole plan return |
+| Plan overview versus period scope | Current period name and a visible Plan overview return inside the rack header |
 | Work awaiting placement | An explicit Choose a period reading that retains the session |
 | A decision, handoff or delay | A named marker or relation with its actual receiver and context |
 | Funded, extra or paused work | Text or accessible wording plus distinct shape, border or color |
@@ -44,8 +44,12 @@ still provides the useful reading on touch and keyboard paths.
 
 ## Interaction and state ownership
 
-The current view uses a Plan detail navigation region and a Whole plan return
-when a period is open. Scope changes restore meaningful focus. Add session
+The current view keeps the selected sprint or quarter and **Plan overview**
+return in the rack header, outside the board and tracks' horizontal scroll
+regions. The return names its destination. One scope owner supplies this cue,
+the board and the tracks. Returning restores the originating period control and
+local scroll, whether the visitor entered from a lane heading or a track heading.
+Changing scope preserves pending edits as well as accepted work. Add session
 starts an editor draft in the selected period; confirmation accepts that item.
 Hours and Minutes change the length of each occurrence; Working sessions changes
 how many occurrences need placement. People may participate across team bounds.
@@ -64,7 +68,7 @@ stacking may change geometry while preserving reading order and record identity.
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs) and [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Authored periods and the accepted/proposed arrangement boundary |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) | The selected session's people, duration, count and placement draft |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) and cadence rules in [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css) | Receiving lane and track geometry; shared rack tokens stay inherited |
-| [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, unchanged accepted plan during navigation, placement, horizon recovery and in-place example replacement |
+| [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, in-rack scope cues, return focus and local scroll, retained plan/draft state, placement, horizon recovery and in-place example replacement |
 | [Session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Placement with its draft, duration/occurrence distinction and cross-team participation |
 
 The [instrument research](../../collaboration/native-investment-studio/usability-research.md#digital-instrument-composition--5-november-2026)
@@ -76,8 +80,10 @@ comprehension result from a music-production manual.
 ## Re-entry and future scope
 
 Revisit this contract when scope, period meaning, record identity or the editor
-return changes. The [in-rack breadcrumb and scope-selector redesign](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
-remains a future receiving decision. Preserve the current overview and tracks
-while that placement is defined. A focused mobile/desktop journey should observe
+return changes. The [in-rack scope increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)
+is bounded to Coordination's Plan overview screen. It supersedes the earlier
+Whole plan label and return placed outside the rack. Future contextual editing
+panels retain their own scope decisions and existing editor owners meanwhile.
+A focused mobile/desktop journey should observe
 the chosen period, session, return focus and retained accepted plan; exact calendar
 or performance expansion needs its own consequential question.

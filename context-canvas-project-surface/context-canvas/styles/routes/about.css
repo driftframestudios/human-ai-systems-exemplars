@@ -3453,13 +3453,13 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 .native-cadence :is(section, article, div, nav, h5) { min-inline-size: 0; }
 .native-coordination .native-cadence small { margin: 0; }
 .native-cadence__breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; font-size: .85rem; }
-.native-coordination .native-cadence__return { border: 1px solid #4d7166; border-radius: .15rem; background: #edf1e5; box-shadow: none; font-size: .8rem; }
-.native-coordination .native-cadence__return[aria-current='page'] { color: #fff9e7; background: #26473e; border-color: #26473e; box-shadow: inset 0 .15rem .15rem #061c1666; }
+.native-coordination .native-cadence__return { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #4d7166; border-radius: .15rem; background: #edf1e5; color: #16332c; box-shadow: none; font-size: .8rem; }
 .native-cadence__breadcrumb > [aria-current='page'] { font-weight: 750; }
 .native-cadence__screen { padding: clamp(.65rem, 1.6vw, 1.2rem); border: .25rem solid #50665d; border-radius: .5rem; background: #172d26; color: #e4f0db; box-shadow: inset 0 0 1.8rem #061b16; }
 .native-cadence__reading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .5rem 1.5rem; padding-block-end: .65rem; margin-block-end: .65rem; border-block-end: 1px solid #698c7d; }
 .native-cadence__eyebrow { display: block; margin-block-end: .35rem; color: #88e3cd; font: 650 .7rem/1.4 ui-monospace, monospace; letter-spacing: .09em; text-transform: uppercase; }
 .about-page .native-score .native-cadence__reading h4 { margin: 0 0 .35rem; color: #fff4d4; font-size: clamp(1.05rem, 1.6vw, 1.3rem); }
+.about-page .native-score .native-cadence__breadcrumb h4 { margin: 0; }
 .native-score .native-cadence__reading p { margin: 0; max-inline-size: 58ch; color: #c0d7ca; font-size: .8rem; }
 .native-cadence__amount { flex: 0 0 auto; margin: 0; }
 .native-cadence__amount dt { color: #dce9d9; font: 500 .7rem/1.4 ui-monospace, monospace; }
