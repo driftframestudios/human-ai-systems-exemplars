@@ -127,9 +127,13 @@ function mountTimeDial({ unit, dial, knob, note, read, write }) {
   });
   listen(knob, 'pointermove', turn);
   listen(knob, 'pointerup', event => { if (gesture?.pointerId === event.pointerId) { turn(event); release(); } });
-  for (const type of ['pointercancel', 'lostpointercapture']) listen(knob, type, event => { if (gesture?.pointerId === event.pointerId) release(true); });
+  // Focus/capture transfer settles the visible duration. Explicit cancellation
+  // retains its separate route back to the amount where the turn began.
+  listen(knob, 'lostpointercapture', event => { if (gesture?.pointerId === event.pointerId) release(); });
+  listen(knob, 'pointercancel', event => { if (gesture?.pointerId === event.pointerId) release(true); });
+  listen(knob, 'blur', () => release());
   listen(knob, 'keydown', event => { if (event.key === 'Escape' && gesture) { event.preventDefault(); release(true); } else if (gesture) release(); });
-  listen(window, 'blur', () => release(true)); listen(forcedColors, 'change', () => release(true));
+  listen(window, 'blur', () => release()); listen(forcedColors, 'change', () => release(true));
   dial.hidden = false; refresh();
   return Object.freeze({ refresh, release, dispose() { if (disposed) return; release(); disposed = true; cleanup.splice(0).forEach(release => release()); knob.disabled = true; dial.hidden = true; if (note) note.hidden = true; } });
 }

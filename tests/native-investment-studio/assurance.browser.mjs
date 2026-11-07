@@ -144,6 +144,11 @@ for (const engine of names) {
     await minutesDial.scrollIntoViewIfNeeded(); await minutesDial.evaluate(node => node.addEventListener('pointerdown', event => { window.assuranceFixture.pointerId = event.pointerId; }, { once: true }));
     const dialBox = await minutesDial.boundingBox(); await page.mouse.move(dialBox.x + dialBox.width * .9, dialBox.y + dialBox.height / 2); await page.mouse.down();
     await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
+    await minutesDial.evaluate(node => node.releasePointerCapture(window.assuranceFixture.pointerId));
+    await page.mouse.move(dialBox.x + dialBox.width * .91, dialBox.y + dialBox.height / 2);
+    await page.mouse.up(); await field(page, 'proposal.minutesPerSession').focus();
+    await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
+    await page.mouse.move(dialBox.x + dialBox.width * .9, dialBox.y + dialBox.height / 2); await page.mouse.down();
     await tab(page, 'people').focus(); await page.keyboard.press('Enter');
     assert.equal(await minutesDial.evaluate(node => node.hasPointerCapture(window.assuranceFixture.pointerId)), false);
     await minutesDial.evaluate(node => node.dispatchEvent(new PointerEvent('pointermove', { pointerId: window.assuranceFixture.pointerId, clientX: 0, clientY: 0, bubbles: true })));
