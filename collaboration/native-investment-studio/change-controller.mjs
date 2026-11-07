@@ -252,6 +252,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
         && active?.kind === 'change' && active.token === view.draft.token };
   }, write(token, field, value) { const epoch = ++generation; changed(editor.setText(token, 'proposal.' + field, value), epoch); } });
   let trackSignature = '';
+  function syncTrackDisclosures() {
+    for (const control of tracks.querySelectorAll('.native-change__track-label')) {
+      const { changeFramework, changeComponent } = control.dataset;
+      control.setAttribute('aria-expanded', String(inspectors.open && selectedComponents.get(changeFramework) === changeComponent));
+    }
+  }
+  listen(inspectors, 'toggle', syncTrackDisclosures);
   function renderTracks(reading, view, editable) {
     const works = view.projection.state.work.filter(work => work.lifecycle === 'active');
     const signature = JSON.stringify([reading.framework.id, reading.components, selectedComponents.get(reading.framework.id), inspectors.open,
@@ -269,7 +276,6 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       const row = node('tr'), title = node('th'); title.scope = 'row'; row.append(title);
       const inspect = button(component.label, 'component'); inspect.className = 'native-change__track-label';
       Object.assign(inspect.dataset, { changeFramework: reading.framework.id, changeComponent: component.componentId });
-      inspect.setAttribute('aria-expanded', String(inspectors.open && selectedComponents.get(reading.framework.id) === component.componentId));
       title.append(inspect);
       for (const work of works) {
         const cell = node('td'), pad = button('', 'support-pad'), linked = component.workIds.includes(work.id);
@@ -283,11 +289,13 @@ export function mountChangePanel(root, { studio, editing, onBegin = () => {}, on
       const planCell = node('td'), plan = button('Plan session', 'component');
       plan.className = 'native-change__track-label';
       Object.assign(plan.dataset, { changeFramework: reading.framework.id, changeComponent: component.componentId });
+      for (const control of [inspect, plan]) control.setAttribute('aria-controls', `${instance}-component-${reading.framework.id}-${component.componentId}`);
       plan.setAttribute('aria-label', `Choose supporting work for ${component.label}`); planCell.append(plan); row.append(planCell);
       body.append(row);
     }
     table.append(caption, head, body); tracks.replaceChildren(table);
     if (!works.length) tracks.replaceChildren(node('p', 'Add a working session to connect it to this change.'));
+    syncTrackDisclosures();
     if (focusedPad) [...tracks.querySelectorAll('button')].find(pad => pad.dataset.changeMap === focusedPad.map && pad.dataset.changeWork === focusedPad.work)?.focus({ preventScroll: true });
   }
 
