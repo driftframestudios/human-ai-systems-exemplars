@@ -144,6 +144,22 @@ for (const engine of names) {
       await coarse.scrollIntoViewIfNeeded(); await assertContained(page);
       const [large, small] = await Promise.all([coarse.boundingBox(), fine.boundingBox()]);
       assert.ok(large.width > small.width && small.width >= 44, `coarse/fine targets stay distinct at ${width}px`);
+      if (!enlarged) {
+        const module = settings(page).locator('.studio-quantity-module.studio-rate');
+        const geometry = await module.evaluate(node => {
+          const outer = node.getBoundingClientRect();
+          return { left:outer.left, right:outer.right, top:outer.top, bottom:outer.bottom,
+            names:[...node.querySelectorAll('input[type="text"]')].map(input => input.name),
+            targets:[...node.querySelectorAll('input,button,.native-knob')].map(target => {
+              const box=target.getBoundingClientRect(); return { left:box.left, right:box.right, top:box.top, bottom:box.bottom };
+            }) };
+        });
+        assert.deepEqual(geometry.names, ['ratePerHour'], 'one rate enclosure owns its shared exact amount');
+        assert.ok(geometry.targets.every(box => box.left >= geometry.left && box.right <= geometry.right
+          && box.top >= geometry.top && box.bottom <= geometry.bottom), 'rate dials and precision controls stay inside the same housing');
+        assert.ok(geometry.left >= 0 && geometry.right <= width, 'the rate module fits the phone/laptop viewport');
+        await module.screenshot({ path: resolve(captures, `${engine}-rate-module-${width}.png`) });
+      }
     }
     await settings(page).locator('.native-rate-controls').screenshot({ path: resolve(captures, `${engine}-rate-dials-enlarged.png`) });
   });

@@ -2159,24 +2159,7 @@ p#on-dark-iron-ore {
 .native-coordination__preview p:empty { display: none; }
 .native-coordination fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
 .native-coordination__controls { container-type: inline-size; display: grid; gap: 1.5rem; margin-block: 1.25rem; }
-.native-coordination__duration-group { display: grid; gap: .75rem; min-inline-size: 0; }
 .native-coordination__control-title { font-weight: 650; }
-.native-coordination__duration-display {
-    background: var(--native-ink);
-    border: .125rem solid var(--native-rule);
-    border-radius: .3rem;
-    box-shadow: .2rem .2rem 0 var(--native-key-shadow);
-    color: var(--native-signal);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .75rem;
-    inline-size: min(100%, 16rem);
-    padding: .75rem;
-    text-align: center;
-}
-.native-coordination__duration-display > span { display: grid; gap: .2rem; min-inline-size: 0; }
-.native-coordination__duration-display strong { font: 500 clamp(1.4rem, 4vw, 2rem)/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; }
-.native-coordination__duration-display > span > span { font-size: .75rem; }
 .native-coordination__feedback { display: grid; gap: .5rem; }
 .native-coordination__control { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
 .native-coordination label { font-weight: 650; }
@@ -2227,7 +2210,7 @@ p#on-dark-iron-ore {
 }
 @media (forced-colors: active) {
     .native-coordination { --native-focus: Highlight; --native-text: CanvasText; --native-ink: CanvasText; --native-paper: Canvas; --native-signal: LinkText; --native-rule: CanvasText; --native-error: CanvasText; box-shadow: none; }
-    .native-coordination :is(button, details), .native-coordination__duration-display { box-shadow: none; }
+    .native-coordination :is(button, details) { box-shadow: none; }
     .native-coordination input[aria-invalid='true'] { border-style: dashed; }
     .native-coordination__chapters button[aria-selected='true'] { border-style: double; border-color: Highlight; box-shadow: none; }
     .native-coordination__chapters button:focus-visible { outline-color: Highlight; }
@@ -2244,9 +2227,6 @@ p#on-dark-iron-ore {
 @container (min-width: 31rem) {
     .native-coordination__controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
     .native-coordination__control--count { grid-column: auto; }
-}
-@container (max-width: 12rem) {
-    .native-coordination__duration-display { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Team Assembly extends the native instrument; About owns its palette and flow. */
@@ -2636,18 +2616,6 @@ p#on-dark-iron-ore {
 .native-minutes-control > label { font-weight: 700; }
 .native-minutes-control .native-knob { margin: 0; }
 .native-knob__help { max-inline-size: 30ch; margin-block-end: .7rem !important; }
-@container (min-width: 20rem) {
-    .native-coordination__duration-group { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; align-items: center; }
-    .native-coordination__duration-group > .native-coordination__control-title { grid-column: 1 / -1; }
-    .native-coordination__duration-group > .native-knob__help, .native-coordination__duration-group > #native-duration-limit { grid-column: 1 / -1; }
-    .native-coordination__duration-group > .native-minutes-control { grid-column: 2; grid-row: 2 / span 2; }
-    .native-coordination__duration-group > .native-coordination__control--hours { grid-column: 1; }
-    .native-coordination__duration-group > .native-coordination__control--minutes { grid-column: 2; }
-}
-@container (min-width: 31rem) {
-    .native-coordination__duration-group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .native-coordination__duration-group > .native-knob__help { grid-column: 1; grid-row: 3; margin: 0 !important; }
-}
 @media (min-width: 80rem) {
     .native-showcase { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
 }
@@ -2853,46 +2821,14 @@ p#on-dark-iron-ore {
     .native-change__selectors select option:hover { outline: .125rem solid var(--native-rule); outline-offset: -.125rem; }
 }
 
-/* Shared session-time controls: Session's static form and supporting proposals. */
-.native-time-controls { display: grid; gap: 1rem; min-inline-size: 0; }
-.native-time-controls .native-time__overview { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: .75rem; }
-.native-time-controls .native-time__overview > * { min-inline-size: 0; }
-.native-time-controls .native-minutes-control { inline-size: 100%; max-inline-size: 9rem; }
-.native-time-controls .native-knob { inline-size: min(100%, 7.5rem); }
-.native-time-controls .native-coordination__control { grid-template-columns: minmax(0, 1fr); }
-.native-time-controls .native-time__overview > .native-coordination__control-title { grid-column: 1 / -1; margin: 0; }
-.native-time-controls .native-time__overview > .native-minutes-control { grid-column: auto; grid-row: auto; justify-self: start; }
-.native-time-controls .native-time__overview > .native-knob__help { grid-column: auto; grid-row: auto; max-inline-size: 40ch; margin: 0 !important; }
-.native-time-controls .native-time__quantities { container-type: normal; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 1rem; margin: 0; }
-.native-time-controls .native-coordination__control--count { grid-column: auto; }
-.native-time-controls .native-time__feedback { grid-column: 1 / -1; }
-.native-time-controls .native-time__feedback:has(> :not([hidden]):not(:empty)) { padding-block-start: .2rem; }
-.native-time-controls .native-coordination__stepper { --native-input-measure: calc(5ch + 1.25rem); grid-template-columns: repeat(2, minmax(0, 1fr)); inline-size: min(100%, calc(5.5rem + .35rem)); }
-.native-time-controls .native-coordination__stepper input { inline-size: min(var(--native-input-measure), 100%); }
-.native-time-controls .native-time__adjustment { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; min-inline-size: 0; min-block-size: 6rem; }
-.native-time-controls .native-time__adjustment .native-knob { margin: 0; }
-.native-time-controls .native-knob--hours { flex: 0 0 5.5rem; inline-size: 5.5rem; }
-.native-time-controls .native-knob--minutes { flex: 0 0 4.5rem; inline-size: 4.5rem; }
-.native-time-controls .native-time__part > label { font-weight: 750; }
 .native-support-proposal { display: grid; gap: 1.25rem; min-inline-size: 0; }
 .native-support-proposal__metadata { display: grid; align-items: start; gap: 1.25rem; min-inline-size: 0; }
 .native-support-proposal__details { display: grid; gap: 1.25rem; min-inline-size: 0; }
 .native-support-proposal > *, .native-support-proposal__metadata > *, .native-support-proposal__details > * { min-inline-size: 0; }
-.native-support-proposal .native-time-controls { padding-block: 1rem; border-block: .0625rem dashed var(--native-rule); }
 @container (min-width: 32rem) {
     .native-support-proposal__metadata { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .native-support-proposal .native-change__choices, .native-support-proposal .native-assurance__choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@container (min-width: 26rem) {
-    .native-time-controls .native-time__overview { grid-template-columns: auto minmax(0, 1fr); }
-    .native-time-controls .native-time__overview > .native-knob__help { grid-column: 2; grid-row: 2; }
-    .native-time-controls .native-time__quantities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .native-time-controls .native-time__quantities > .native-coordination__control { grid-template-rows: subgrid; grid-row: span 4; }
-}
-@container (min-width: 48rem) {
-    .native-time-controls .native-time__quantities { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(8rem, .65fr); }
-}
-
 /* Assurance compact controls and selected inspectors. The chapter owns the
    query boundary; selection changes the visible record, preserving its fields. */
 .native-assurance [hidden] { display: none !important; }
@@ -3311,20 +3247,6 @@ details.native-capability__section:not([open]) { padding-block-end: 0; }
 
 .native-coordination :is(button, a).native-control--navigate { position: relative; padding-inline-end: 1.8rem; }
 .native-coordination :is(button, a).native-control--navigate::after { content: ''; position: absolute; inset-block-start: 50%; inset-inline-end: .55rem; inline-size: .5rem; block-size: .5rem; border-block-start: .12rem solid currentColor; border-inline-end: .12rem solid currentColor; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
-.native-rate-controls { display: grid; gap: .45rem; min-inline-size: 0; margin-block: .5rem; }
-.native-rate__dials { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
-.native-rate__part { display: grid; justify-items: center; align-content: start; gap: .4rem; }
-.native-rate__label { font: 700 .75rem/1.4 ui-monospace, monospace; }
-.native-rate__dial--coarse { inline-size: 6rem; }
-.native-rate__dial--fine { inline-size: 4.75rem; }
-.native-rate-controls .native-knob { margin: 0; }
-.native-rate-controls .native-knob__face { inset: .7rem; }
-.native-rate-controls .native-knob__pointer::before { block-size: 1rem; }
-.native-rate__note { font-size: .75rem; line-height: 1.45; max-inline-size: 42ch; }
-@media (forced-colors: active) {
-    .native-rate-controls .native-knob { inline-size: 7rem; block-size: 2.75rem; }
-}
-
 /* A new decision is an explicit creation task within the retained arrangement. */
 .native-score__inspector[data-creating-decision='true'] > h4 { padding: .7rem .85rem; border-inline-start: .3rem solid #64d7be; background: #203a34; color: #fff3d4; }
 .native-score__inspector[data-creating-decision='true'] .native-score__field:has([data-score-field$='.label']) { grid-column: 1 / -1; }

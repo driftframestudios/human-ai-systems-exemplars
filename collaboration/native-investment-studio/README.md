@@ -41,10 +41,12 @@ editorial structure above a subtly darker rack for teams and shared work.
 The [delivery-board increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
 combines teams, people, sessions and handoffs in editorial phase lanes.
 [Direct arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
-updates one arrangement through the accepted plan and makes Undo available locally.
+updates one arrangement through the accepted plan and makes Undo available locally,
+as delivered in [#783](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/783).
 Shared sessions keeps its complementary participation reading below.
-Enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
-are the next preparation for adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
+Enclosed duration and rate modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
+now group each named quantity with its controls. They prepare adjacent people/team
+([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
 and session editors ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)).
 The plan draws on the whole Studio: Quality's selection matrices, Abilities'
 adjacent inspector, Change/Quality pad movement and the editorial disclosures.
@@ -207,8 +209,15 @@ prepared. An arrow identifies a destination or inspector. A caret reveals nearby
 content and points down while it is open. Small fixed choice sets remain visible,
 and selected choices stay visually pressed. Cancel uses a shadow-free ghost treatment.
 
-Hours and Minutes have separately sized dials beside exact fields. Rates have
-$10 and $5 dials, $1 step buttons and direct entry. An explicit rate gesture can
+The duration module keeps its combined Hours/Minutes readout above both dials.
+Hours has the larger dial; Minutes has a smaller dial in a peach enclosure. Each
+exact field and circular step pair sits toward the lower right of its dial. **Working sessions**
+remains a separate nearby repetition control. Main and supporting-session editors
+share this arrangement, with phone reflow inside the same enclosure. A duration
+turn keeps its adjustment stable if the focused page scrolls during the gesture.
+
+Rate modules enclose one named amount with its $10 and $5 dials, $1 step buttons
+and direct entry. An explicit rate gesture can
 start a blank amount; an untouched blank remains unknown. A dial retains its
 displayed draft adjustment when focus or pointer capture ends. Escape or pointer
 cancellation restores the start of the active turn; Apply still accepts the

@@ -47,14 +47,14 @@ Add controls through PR #775. The editor supplies selected-record and visible-op
 state. PR #778 completed Team planning's permanent section and darker secondary
 rack. PR #781 delivered #779: teams, people, sessions and handoffs share six
 delivery-phase lanes, with a local phase view and Delivery overview return.
-The #766 increment makes deliberate arrangement choices update one accepted
+PR #783 delivered #766: deliberate arrangement choices update one accepted
 instance directly, with local Undo and a linked-work amount. PR #769 and
 PR #774 recorded the earlier route and related design decisions. Direct
 creation (#770), participant controls (#771), attached editorial companions
 (#772) and scoped removal/shared Undo (#773) retain their focused issues.
-Dial enclosures (#767) prepare adjacent people/team (#757) and session (#768)
-editing. Existing editor placement and creation ownership remain the runnable
-contract; Team arrangement has its own direct acceptance boundary.
+The enclosed duration and rate modules (#767) give adjacent people/team (#757)
+and session (#768) editing a shared quantity composition. Existing editor placement
+and creation ownership remain the runnable contract; Team arrangement has its own direct acceptance boundary.
 
 ### State, people and evidence
 
@@ -269,7 +269,7 @@ entry, screenshot or technical description presents the earlier behavior.
 | Last-click styling or independent rack selection used as session-editor state | Both Coordination readings now receive the editor's selected record, visible open state and controlled element ID. Selection persists while a closed or hidden receiver restores the closed caret. Transient destination motion retains its presentation role. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
-| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | The refined plan places a larger readout above the duration dials, makes Minutes secondary, and preserves the circular stepper geometry at each dial's lower right. Working sessions keeps its input initially and may later become an occurrence-pad lane. These are prospective composition decisions in #767/#768. |
+| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes, gives Minutes a secondary peach face, and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input; #768 may later express occurrences as pads. The shared instrument stylesheet now owns the enclosure geometry. |
 | Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
 
 ## Coordination consolidation
@@ -357,16 +357,28 @@ refreshes, preserving phase focus and local scroll. Review of
 also established that authored timing and retired session state survive an
 unrelated customization or later arrangement choice.
 
-Before adjacent editors, #767 encloses Hours, Minutes and their combined output
-in one duration module. A larger readout sits above the dials. Minutes has a
-secondary rose/peach enclosure or reel-like outline. Each dial sits above-left
-of its exact field/stepper; the input, circular pair, gap and start/end alignment
-retain their familiar arrangement. Working sessions keeps its separate repetition
-meaning and initially its existing input; #768 can later express occurrences
-as pads. Monetary controls use the housing grammar with their own units.
-The main static session markup and dynamic supporting-session factory receive
-the composition together. Their gesture, raw-value and acceptance owners stay
-in place. #757 and #768 share one contextual panel/return grammar in Coordination.
+The #767 duration module encloses Hours, Minutes and their combined output.
+Its larger readout sits above both dials. Minutes has a secondary peach inner
+face; each dial sits above-left of its exact field and circular step pair. The
+visible gap and the pair's start/end alignment beneath the input preserve the
+familiar adjustment pattern. Working sessions remains separate nearby and keeps
+its repetition meaning; #768 can later express occurrences as pads.
+
+`studio-quantity-module` supplies the shared enclosure skin, with
+`studio-duration` naming the duration composition. Rate hosts receive the same
+housing grammar around one named amount, $10/$5 dials and $1 steps. The shared
+instrument stylesheet owns this geometry; the superseded About wide-layout rules
+are reconciled into that owner. The main static session markup and dynamic
+supporting-session factory receive the same composition. Their output/input
+associations, artwork, raw-value and acceptance owners stay in place. Browser
+verification exposed a WebKit scroll during a focused duration refresh. The
+[#784 repair](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/784)
+captures the angular origin at pointerdown and keeps it through movement and
+release, so scrolling during the turn preserves the intended adjustment.
+Releasing the gesture discards that origin; the next turn measures its current
+position. Exact output agreement and explicit cancellation retain their existing
+contracts. #757 and #768 share one future contextual panel/return grammar in
+Coordination.
 
 #770 adds empty New session regions inside the racks, with a ghost plus on
 fine-pointer hover, equivalent focus presentation and a visible touch entry.
@@ -555,12 +567,13 @@ tracked in [#777](https://github.com/driftframestudios/human-ai-systems-exemplar
 The composition PR records the passing current journeys separately from those
 baseline failures.
 
-For re-entry, use PR #781 for the delivery-board projection and #766’s receiving
-PR for the direct replacement transaction, local Undo and accepted-record
-routing. Their source and rack browser journeys observe those bounded changes.
-#767’s enclosed controls are the next preparation for adjacent people/team (#757) and session (#768) editors. PR #764 remains the
-accepted scope-navigation reference. Retain the current creation/confirmation
-contract while #758 defines its separate replacement.
+For re-entry, use PR #781 for the delivery-board projection and PR #783 for the
+direct replacement transaction, local Undo and accepted-record routing. The
+#767 enclosure increment supplies the shared duration and rate composition;
+its receiving PR owns the focused phone/laptop and dial-behavior observations.
+Adjacent people/team (#757) and session (#768) editors receive these enclosed
+controls next. PR #764 remains the accepted scope-navigation reference. Retain
+the current creation/confirmation contract while #758 defines its separate replacement.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

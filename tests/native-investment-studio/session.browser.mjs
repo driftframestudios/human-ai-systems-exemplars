@@ -86,8 +86,8 @@ async function prepareSession(page) {
   await field(page, 'occurrences').fill('2');
 }
 
-async function dialPoint(page, degrees, unit = 'minutes') {
-  const box = await knob(page, unit).boundingBox();
+async function dialPoint(page, degrees, unit = 'minutes', turnBox = null) {
+  const box = turnBox ?? await knob(page, unit).boundingBox();
   assert.ok(box, 'the mounted dial has a visible pointer target');
   const radians = degrees * Math.PI / 180, radius = Math.min(box.width, box.height) * .38;
   return { x: box.x + box.width / 2 + Math.sin(radians) * radius,
@@ -98,8 +98,9 @@ async function beginTurn(page, degrees, unit = 'minutes') {
   await knob(page, unit).evaluate(node => node.addEventListener('pointerdown', event => {
     window.sessionFixture.knobPointerId = event.pointerId;
   }, { once: true }));
-  const point = await dialPoint(page, degrees, unit);
+  const box = await knob(page, unit).boundingBox(), point = await dialPoint(page, degrees, unit, box);
   await page.mouse.move(point.x, point.y); await page.mouse.down();
+  return box;
 }
 const captured = (page, unit = 'minutes') => knob(page, unit).evaluate(node => node.hasPointerCapture(window.sessionFixture.knobPointerId));
 
@@ -228,6 +229,23 @@ for (const engine of names) {
     await map.screenshot({ path: resolve(captures, `${engine}-session-map-narrow.png`) });
   });
 
+  test(`${engine}: a duration turn retains its amount when the page scrolls before release`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine), accepted = await bytes(page);
+    await beginTurn(page, 0, 'hours');
+    await expect(field(page, 'hoursPerSession')).toHaveValue('12');
+    assert.equal(await captured(page, 'hours'), true);
+    const before = await page.evaluate(() => scrollY);
+    await page.evaluate(() => window.scrollBy({ top:120, behavior:'instant' }));
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
+    await page.mouse.up();
+    await expect(field(page, 'hoursPerSession')).toHaveValue('12');
+    assert.equal(await captured(page, 'hours'), false);
+    await beginTurn(page, -90, 'hours'); await page.mouse.up();
+    await expect(field(page, 'hoursPerSession')).toHaveValue('4');
+    await expect(field(page, 'minutesPerSession')).toHaveValue('30');
+    assert.equal(await bytes(page), accepted, 'scrolling and later turns remain draft edits');
+  });
+
   test(`${engine}: the Hours dial changes its own duration part and preserves Minutes through precision, cancellation and the combined cap`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), accepted = await bytes(page), hours = knob(page, 'hours');
     await expect(dial(page, 'hours')).toBeVisible(); await expect(hours).toHaveAttribute('max', '23');
@@ -316,10 +334,10 @@ for (const engine of names) {
       await expect(field(page, 'minutesPerSession')).toHaveValue('45');
       assert.equal(await dial(page).getAttribute('data-dragging'), null, 'a touch tap ends its captured turn');
     }
-    await beginTurn(page, 0);
+    const turnBox = await beginTurn(page, 0);
     assert.equal(await captured(page), true, 'the owned turn captures its pointer');
     for (const angle of [90, 135, 175, -175]) {
-      const point = await dialPoint(page, angle); await page.mouse.move(point.x, point.y);
+      const point = await dialPoint(page, angle, 'minutes', turnBox); await page.mouse.move(point.x, point.y);
     }
     await expect(field(page, 'minutesPerSession')).toHaveValue('59');
     await page.keyboard.press('Escape');
@@ -728,7 +746,36 @@ for (const engine of names) {
     assert.ok(memberGeometry.every(row => row.toggle < row.label * .25 && row.words > row.label * .6), 'Membership switches leave most of each card width for its role and rate.');
     await members.screenshot({ path: resolve(captures, `${engine}-participants-1259.png`) });
     await sessions(page).screenshot({ path: resolve(captures, `${engine}-wide.png`) });
-    for (const [width, enlarged] of [[1440, true], [768, false], [320, true]]) {
+    const time = form(page).locator('.native-time-controls');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const geometry = await time.evaluate(node => {
+        const box = element => { const r = element.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom, width:r.width }; };
+        const module = node.querySelector('.studio-duration'), output = module.querySelector('output');
+        const parts = [...module.querySelectorAll('.native-time__part')].map(group => ({ ...box(group),
+          dial:box(group.querySelector('.native-knob')), field:box(group.querySelector('.native-coordination__stepper')),
+          background:getComputedStyle(group).backgroundColor }));
+        return { module:box(module), output:box(output), parts, border:parseFloat(getComputedStyle(module).borderTopWidth),
+          outputFont:parseFloat(getComputedStyle(output.querySelector('strong')).fontSize),
+          fieldFont:parseFloat(getComputedStyle(module.querySelector('.native-coordination__stepper input')).fontSize),
+          separateCount:!module.contains(node.querySelector('.native-coordination__control--count')),
+          outputFor:output.htmlFor.value, fieldIds:[...module.querySelectorAll('.native-coordination__stepper input')].map(input => input.id) };
+      });
+      await time.screenshot({ path: resolve(captures, `${engine}-duration-module-${width}.png`) });
+      assert.equal(geometry.parts.length, 2);
+      assert.ok(geometry.border > 0 && geometry.outputFont > geometry.fieldFont, 'the shared housing gives the combined duration a larger reading');
+      assert.ok(geometry.separateCount, 'repetition keeps its separate meaning beside the duration module');
+      assert.deepEqual(geometry.outputFor.split(' '), geometry.fieldIds);
+      assert.ok(geometry.parts.every(part => geometry.output.bottom <= part.top && part.left >= geometry.module.left
+        && part.right <= geometry.module.right && part.bottom <= geometry.module.bottom), 'readout and both unit controls share one bounded enclosure');
+      assert.ok(geometry.parts.every(part => part.field.top > part.dial.top && part.field.left >= (width === 1440 ? part.dial.right - 1 : part.dial.left + 1)),
+        `each dial drives its lower-right exact field at ${width}px: ${JSON.stringify(geometry)}`);
+      assert.ok(geometry.parts[0].dial.width > geometry.parts[1].dial.width);
+      assert.notEqual(geometry.parts[0].background, geometry.parts[1].background);
+      if (width === 1440) assert.ok(Math.abs(geometry.parts[0].top-geometry.parts[1].top) < 1, 'Hours and Minutes sit side by side');
+      assert.ok(geometry.module.left >= 0 && geometry.module.right <= width, 'the duration housing stays inside the phone/laptop viewport');
+    }
+    for (const [width, enlarged] of [[1440, true], [768, false], [390, false]]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.evaluate(enlarged => { document.documentElement.style.fontSize = enlarged ? '200%' : ''; }, enlarged);
       await field(page, 'hoursPerSession').scrollIntoViewIfNeeded(); await frames(page);
@@ -738,11 +785,11 @@ for (const engine of names) {
         context.font = `${css.fontStyle} ${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
         return { left: box.left, right: box.right, width: document.documentElement.clientWidth,
           content: box.width - parseFloat(css.borderLeftWidth) - parseFloat(css.borderRightWidth)
-            - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight), digits: context.measureText('00000').width };
+            - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight), digits: context.measureText(input.name === 'occurrences' ? '00000' : '00').width };
       }));
       assert.equal(geometry.length, 3);
       assert.ok(geometry.every(box => box.left >= -.5 && box.right <= box.width + .5 && box.content >= box.digits),
-        `Five-digit controls stay in the ${width}px viewport: ${JSON.stringify(geometry)}`);
+        `Duration pairs and five-digit repetition stay in the ${width}px viewport: ${JSON.stringify(geometry)}`);
       const containment = await sessions(page).evaluate(element => {
         const chapter = element.closest('[data-native-chapter-panel]').getBoundingClientRect();
         const remote = element.querySelector('[data-native-configure]');

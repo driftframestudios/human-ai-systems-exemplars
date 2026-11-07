@@ -106,8 +106,11 @@ receivers while current editors continue to own their drafts.
 
 Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-are future Coordination-first receivers. Both follow the shared
+are future Coordination-first receivers. Both receive the shared
 [duration and rate enclosures](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767).
+The current duration module already keeps the larger combined readout above
+Hours and secondary peach Minutes, with repetition separate nearby. Relocation
+reuses that module and its existing draft owner.
 A session opened from a period occurrence carries that occurrence context; a
 session opened from Shared sessions carries its people context. Each path is to
 reveal one existing session editor and retain an origin for close and return.
