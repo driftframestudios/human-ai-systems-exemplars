@@ -39,6 +39,13 @@ const total = page => root(page).locator('[data-native-total]');
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.assemblyFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+const adjacent = page => root(page).locator('.studio-rack-editor');
+const record = (page, kind, id) => root(page).locator(`.studio-accepted-connections [data-studio-record-kind="${kind}"][data-studio-record-id="${id}"]`).first();
+async function openTeamPlanning(page) {
+  await tab(page, 'coordination').click();
+  const reading = root(page).locator('.studio-accepted-connections');
+  if (!(await reading.evaluate(node => node.open))) await reading.locator(':scope > summary').click();
+}
 
 async function open(t, engine, full = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
@@ -102,11 +109,176 @@ for (const engine of names) {
     await workspace.locator('.studio-accepted-connections > summary').click();
     const lane = root(page).locator('[data-team-lane="delivery"]');
     await lane.getByRole('button', { name: 'Choose people', exact: true }).click();
-    await expect(tab(page, 'people')).toHaveAttribute('aria-selected', 'true');
-    await expect(people(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
-    await expect(people(page).locator('[data-assembly-members]')).toBeVisible();
+    await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(adjacent(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
+    await expect(adjacent(page).locator('[data-assembly-members]')).toBeVisible();
     assert.equal(await bytes(page), accepted);
   });
+  test(`${engine}: adjacent person editing retains one owner through Close, switching, Cancel and Apply`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true), accepted = await bytes(page);
+    await page.evaluate(() => { window.assemblyFixture.personNode = document.querySelector('[data-person-configure]'); });
+    await openTeamPlanning(page);
+    const first = record(page, 'person', 'product-one'), second = record(page, 'person', 'product-two');
+    const editor = root(page).locator('[data-person-configure]');
+    const rate = editor.locator('[name="ratePerHour"]');
+    await first.click();
+    await expect(tab(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
+    await expect(adjacent(page)).toBeVisible(); await expect(rate).toBeFocused();
+    assert.equal(await adjacent(page).evaluate(node => node.previousElementSibling.matches('[data-native-connection-view]')), true, 'the receiver follows the rack that supplied the pointer target');
+    await expect(editor).toHaveCount(1); await expect(adjacent(page).locator('[data-person-configure]')).toHaveCount(1);
+    await expect(first).toHaveAttribute('aria-expanded', 'true');
+    assert.equal(await first.evaluate(node => document.getElementById(node.getAttribute('aria-controls'))?.contains(document.querySelector('[data-person-configure]'))), true);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height:1000 }); await frames(page);
+      const geometry = await adjacent(page).evaluate(node => {
+        const outer=node.getBoundingClientRect();
+        return { left:outer.left, right:outer.right, nestedForm:Boolean(node.closest('form')),
+          targets:[...node.querySelectorAll('input,button,.native-knob')].filter(target => target.getClientRects().length).map(target => {
+            const box=target.getBoundingClientRect(); return { left:box.left, right:box.right };
+          }) };
+      });
+      const amount = await rate.evaluate(input => {
+        const css = getComputedStyle(input), context = document.createElement('canvas').getContext('2d');
+        context.font = `${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
+        return { available:input.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight), text:context.measureText(input.value).width };
+      });
+      assert.ok(amount.available >= amount.text, `the current hourly rate remains readable at ${width}px: ${JSON.stringify(amount)}`);
+      assert.equal(geometry.nestedForm, false, 'the existing person form has its own submission boundary');
+      assert.ok(geometry.left >= 0 && geometry.right <= width && geometry.targets.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
+      await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' })); await frames(page);
+      await page.screenshot({ path:resolve(captures, `${engine}-adjacent-person-${width}-viewport.png`) });
+      await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-person-${width}.png`) });
+    }
+    await page.setViewportSize({ width:1440, height:1000 });
+    await rate.fill('00101.50');
+    await page.evaluate(() => { window.assemblyFixture.personToken = window.assemblyFixture.editing.person.read().draft.token; });
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(first).toBeFocused();
+    await expect(first).toHaveAttribute('aria-expanded', 'false');
+    assert.equal(await bytes(page), accepted);
+    await first.click(); await expect(rate).toHaveValue('00101.50');
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.token === window.assemblyFixture.personToken), true);
+    await first.click(); await expect(adjacent(page)).toBeHidden();
+    await first.click(); await expect(rate).toHaveValue('00101.50');
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.token === window.assemblyFixture.personToken), true, 'same-record disclosure keeps its existing draft lease');
+    await second.click(); await rate.fill('123.45');
+    await first.click(); await expect(rate).toHaveValue('00101.50');
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.person.read().draft.personId), 'product-one');
+    await record(page, 'team', 'delivery').click();
+    await expect(adjacent(page).locator('[data-assembly-configure]')).toBeVisible();
+    await expect(adjacent(page).locator('[data-person-configure]')).toHaveCount(0);
+    await first.click(); await expect(rate).toHaveValue('00101.50');
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.read().active.kind), 'person');
+    assert.equal(await bytes(page), accepted);
+    await editor.locator('[data-person-action="cancel"]').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(first).toBeFocused();
+    await first.click(); await expect(rate).toHaveValue('100.00');
+    await rate.fill('110.00'); await editor.locator('[data-person-action="apply"]').click();
+    await expect(adjacent(page)).toBeVisible();
+    assert.deepEqual(await page.evaluate(() => window.assemblyFixture.studio.read().state.people.slice(0, 2).map(row => row.rateCentsPerHour)), [11000, 10000]);
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(first).toBeFocused();
+    await tab(page, 'people').click();
+    await people(page).locator('[data-person-id="product-one"]').click();
+    await expect(people(page).locator('[data-person-configure]')).toBeVisible(); await expect(rate).toHaveValue('110.00');
+    assert.equal(await editor.evaluate(node => node === window.assemblyFixture.personNode), true, 'both chapters use the original person editor');
+    await expect(root(page).locator('[data-person-configure]')).toHaveCount(1);
+  });
+
+  test(`${engine}: adjacent team editing preserves membership controls and phone/laptop rack geometry`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, true), accepted = await bytes(page);
+    await page.evaluate(() => { window.assemblyFixture.teamNode = document.querySelector('[data-assembly-configure]'); });
+    await openTeamPlanning(page);
+    const trigger = record(page, 'team', 'delivery'), editor = root(page).locator('[data-assembly-configure]');
+    const name = editor.locator('[name="label"]'), member = editor.locator('[data-assembly-member="engineering-two"]');
+    const laneGeometry = () => root(page).locator('.studio-accepted-connections [data-team-lane], .studio-accepted-connections [data-team-lane] [data-studio-record-kind]').evaluateAll(nodes => nodes.map(node => {
+      const box = node.getBoundingClientRect(), rack = node.closest('.studio-team-lanes').getBoundingClientRect();
+      const rounded = value => Math.round(value * 1000) / 1000;
+      return { id:node.dataset.teamLane ?? `${node.dataset.studioRecordKind}/${node.dataset.studioRecordId}`,
+        top:rounded(box.top-rack.top), left:rounded(box.left-rack.left), width:rounded(box.width), height:rounded(box.height) };
+    }));
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height:1000 }); await frames(page);
+      const before = await laneGeometry();
+      await trigger.click(); await expect(adjacent(page)).toBeVisible();
+      await expect(name).toHaveValue('Product and Engineering');
+      await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      assert.deepEqual(await laneGeometry(), before, 'opening the adjacent editor preserves the initiating lanes');
+      const geometry = await adjacent(page).evaluate(node => {
+        const outer=node.getBoundingClientRect(), chapter=node.closest('[data-native-chapter-panel]').getBoundingClientRect();
+        const controls=[...node.querySelectorAll('input,button,select,textarea')].filter(target => target.getClientRects().length);
+        return { left:outer.left, right:outer.right, chapterLeft:chapter.left, chapterRight:chapter.right,
+          targets:controls.map(target => { const box=target.getBoundingClientRect(); return { left:box.left, right:box.right }; }),
+          overflow:document.documentElement.scrollWidth > innerWidth + 1 };
+      });
+      assert.ok(geometry.left >= geometry.chapterLeft && geometry.right <= geometry.chapterRight && geometry.left >= 0 && geometry.right <= width, JSON.stringify(geometry));
+      assert.ok(geometry.targets.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
+      assert.equal(geometry.overflow, false);
+      await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' })); await frames(page);
+      await page.screenshot({ path:resolve(captures, `${engine}-adjacent-team-${width}-viewport.png`) });
+      await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-team-${width}.png`) });
+      await adjacent(page).locator('[data-rack-editor-close]').click();
+      await expect(trigger).toBeFocused(); await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    }
+    await trigger.click(); await name.fill('Delivery together'); await member.uncheck();
+    await editor.getByRole('button', { name:'Move up: product-two in the team', exact:true }).click();
+    await page.evaluate(() => { window.assemblyFixture.teamToken = window.assemblyFixture.editing.assembly.read().draft.token; });
+    await adjacent(page).locator('[data-rack-editor-close]').click(); await trigger.click();
+    await expect(name).toHaveValue('Delivery together'); await expect(member).not.toBeChecked();
+    assert.equal(await page.evaluate(() => window.assemblyFixture.editing.assembly.read().draft.token === window.assemblyFixture.teamToken), true);
+    assert.equal(await bytes(page), accepted);
+    await editor.locator('[data-assembly-cancel]').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(trigger).toBeFocused();
+    await trigger.click(); await expect(name).toHaveValue('Product and Engineering'); await expect(member).toBeChecked();
+    await name.fill('Delivery together'); await member.uncheck();
+    await editor.getByRole('button', { name:'Move up: product-two in the team', exact:true }).click();
+    await editor.locator('[data-assembly-apply]').click(); await expect(adjacent(page)).toBeVisible();
+    await expect(adjacent(page).getByRole('heading', {name:'Team settings · Delivery together', exact:true})).toBeVisible();
+    assert.deepEqual(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0]), {
+      id:'delivery', label:'Delivery together', personIds:['product-two', 'product-one', 'engineering-one'], lifecycle:'active',
+    });
+    await adjacent(page).locator('[data-rack-editor-close]').click(); await expect(trigger).toBeFocused();
+    await tab(page, 'people').click(); await people(page).locator('[data-assembly-team="delivery"]').click();
+    await expect(people(page).locator('[data-assembly-configure]')).toBeVisible();
+    assert.equal(await editor.evaluate(node => node === window.assemblyFixture.teamNode), true, 'the People chapter receives its original membership editor');
+    await expect(root(page).locator('[data-assembly-configure]')).toHaveCount(1);
+  });
+
+  test(`${engine}: a refused adjacent record switch keeps the visible identity with its existing draft`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(() => {
+      const { studio, controller } = window.assemblyFixture;
+      const plan = JSON.parse(studio.exportText()), example = plan.people[0];
+      for (let index = 0; index < 9; index += 1) {
+        const person = { ...example, id:`additional-person-${index}`, label:`Additional person ${index + 1}` };
+        plan.people.push(person); plan.teams[0].personIds.push(person.id);
+      }
+      const result = studio.importText(JSON.stringify(plan), studio.read());
+      if (!result.ok) throw new Error('The additional people fixture must be admitted.');
+      controller.refresh();
+    });
+    const accepted = await bytes(page);
+    await openTeamPlanning(page);
+    const rate = adjacent(page).locator('[data-person-configure] [name="ratePerHour"]');
+    for (let index = 0; index < 8; index += 1) {
+      await record(page, 'person', `additional-person-${index}`).click();
+      await rate.fill(String(101 + index));
+    }
+    await page.evaluate(() => { window.assemblyFixture.retainedToken = window.assemblyFixture.editing.person.read().draft.token; });
+    const next = record(page, 'person', 'additional-person-8');
+    await next.click();
+    await expect(adjacent(page).getByRole('heading', { name:'Person settings · Additional person 8', exact:true })).toBeVisible();
+    await expect(rate).toHaveValue('108');
+    await expect(next).toHaveAttribute('aria-expanded', 'false');
+    await expect(next).toHaveAttribute('aria-pressed', 'false');
+    await expect(record(page, 'person', 'additional-person-7')).toHaveAttribute('aria-expanded', 'true');
+    assert.deepEqual(await page.evaluate(() => {
+      const { editing, retainedToken } = window.assemblyFixture, draft = editing.person.read().draft;
+      return { personId:draft.personId, sameToken:draft.token === retainedToken };
+    }), { personId:'additional-person-7', sameToken:true });
+    assert.equal(await bytes(page), accepted);
+  });
+
   test(`${engine}: team membership toggles retain row geometry and checkbox focus`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await people(page).locator('[data-assembly-team="delivery"]').click();
@@ -207,7 +379,7 @@ for (const engine of names) {
     await expect(root(page).locator('[data-native-purpose] form')).toBeHidden();
     await root(page).locator('[data-amp-panel="purpose"]').click();
     await expect(field(page, 'label')).toHaveValue('Operations');
-    await tab(page, 'coordination').click();
+    await people(page).locator('.studio-people-reading .studio-session-tracks__pad').first().click();
     await root(page).locator('[data-native-configure] input[name="hoursPerSession"]').fill('2');
     await root(page).locator('[data-native-configure] [data-action="apply"]').click();
     await tab(page, 'people').click();

@@ -53,7 +53,7 @@ export function projectDeliveryBoard({ arrangement, plan }) {
 // The receiver owns proposed records and edit routes. This view owns only its
 // phase focus and the return to the full delivery reading.
 export function createDeliveryBoard(document, { arrangement, plan, acceptedSessionIds,
-  onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
+  acceptedTeamIds = new Set(), onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
   const node = (tag, text, className) => {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -121,18 +121,27 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       const group = collection('People', 'studio-delivery__group studio-delivery__teams');
       for (const binding of phase.teams) {
         const card = node('article', undefined, 'studio-delivery__team'); card.dataset.deliveryTeam = binding.slotId;
-        const inspect = () => onNavigate({ kind: 'template-team', id: binding.slotId });
+        const inspect = event => onNavigate({ kind: 'template-team', id: binding.slotId }, event.currentTarget);
         const team = button(binding.team.label, 'studio-delivery__team-key native-control--navigate', inspect);
+        if (acceptedTeamIds.has(binding.team.id)) {
+          team.dataset.studioRecordKind = 'team'; team.dataset.studioRecordId = binding.team.id;
+        }
         if (binding.slotLabel !== binding.team.label) team.append(node('small', binding.slotLabel));
         const members = node('ul', undefined, 'studio-delivery__people');
         for (const id of binding.team.personIds) {
           const person = people.get(id); if (!person) continue;
-          const item = node('li'), control = button(person.label, 'studio-delivery__person native-control--navigate', inspect);
-          control.dataset.deliveryPerson = id; control.setAttribute('aria-label', `${person.label}. Edit people in ${binding.team.label}.`);
+          const item = node('li'), control = button(person.label, 'studio-delivery__person', event => onNavigate({ kind: 'person', id }, event.currentTarget));
+          control.dataset.deliveryPerson = id;
+          control.dataset.studioRecordKind = 'person'; control.dataset.studioRecordId = id;
+          control.setAttribute('aria-label', `${person.label}. Person settings.`);
           item.append(control); members.append(item);
         }
         if (!members.children.length) {
-          const item = node('li'); item.append(button('Choose people', 'studio-delivery__person native-control--navigate', inspect)); members.append(item);
+          const item = node('li'), choose = button('Choose people', 'studio-delivery__person native-control--navigate', inspect);
+          if (acceptedTeamIds.has(binding.team.id)) {
+            choose.dataset.studioRecordKind = 'team'; choose.dataset.studioRecordId = binding.team.id;
+          }
+          item.append(choose); members.append(item);
         }
         card.append(team, members); group.append(card);
       }

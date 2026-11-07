@@ -17,7 +17,8 @@ const REFERENCE_LABELS = Object.freeze({ people: 'Person', teams: 'Team', work: 
 // The host lends its accepted owner and assembly draft port. This receiver owns
 // only the People chapter's creation, membership, ordering and removal controls.
 export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, onRecordCreated = () => {}, onPersonCreated = () => {}, isActive = () => true, canOpen = isActive }) {
+  onAccepted = () => {}, onRecordCreated = () => {}, onPersonCreated = () => {}, onClose = () => false,
+  isActive = () => true, canOpen = isActive }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = name => {
@@ -321,6 +322,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const closedAt = generation;
       onEditing();
       if (currentOperation(closedAt)) {
+        const handled = onClose();
+        if (handled === true || !currentOperation(closedAt)) return;
         const target = descriptor.collection === 'teams' ? teamControls.get(descriptor.id)
           : descriptor.mode === 'remove' ? elements.person : null;
         (target ?? root.querySelector(`[data-assembly-action="${descriptor.collection === 'teams' ? 'team' : 'person'}-create"]`)).focus();
@@ -395,7 +398,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   }
   function click(event) {
     const control = event.target.closest('button[data-assembly-action]');
-    if (!control || !root.contains(control) || control.disabled || disposed) return;
+    if (!control || (!root.contains(control) && !elements.configure.contains(control)) || control.disabled || disposed) return;
     const action = control.dataset.assemblyAction, id = control.dataset.assemblyId;
     if (action === 'person-create' || action === 'team-create') { create(action === 'person-create' ? 'person.create' : 'team.create'); return; }
     if (action === 'team-open') { open(makeAssemblyTarget('team.update', id)); return; }
@@ -426,7 +429,9 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     cleanup.length = 0;
     if (editing.read().active?.kind === 'assembly') editing.park();
     elements.fieldset.disabled = true; elements.configure.open = false;
-    for (const control of root.querySelectorAll('[data-assembly-action]')) control.disabled = true;
+    for (const container of [root, elements.configure]) {
+      for (const control of container.querySelectorAll('[data-assembly-action]')) control.disabled = true;
+    }
     elements.person.disabled = true;
     delete root.dataset.assemblyReady;
     INSTANCES.delete(root);
@@ -441,7 +446,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     }, dispose });
   try {
     for (const control of root.querySelectorAll('[data-assembly-action]')) control.disabled = false;
-    listen(root, 'click', click);
+    listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
+    listen(elements.configure, 'click', click);
     listen(elements.form, 'input', input);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { rateControls.release(); composing = true; rateControls.refresh(); });

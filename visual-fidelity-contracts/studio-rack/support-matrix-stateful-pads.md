@@ -69,6 +69,7 @@ refer to them. Apply, Cancel and Undo keep their existing acceptance boundaries.
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Component support, quality inclusion and their existing draft owners |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) and [connection view](../../collaboration/native-investment-studio/connection-view.mjs) | Native people/session relationship table, fixed heading/Add control, local participant scroller and shared team/member-lane rendering |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Shared session keys and participation pads reflect the selected session and its actual receiver visibility |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Person/team record keys open one adjacent canonical editor; inclusion remains with its existing draft owner |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Scoped table, rail, pad and adjacent-rack variants |
 | [Capability browser checks](../../tests/native-investment-studio/capability.browser.mjs) | Support states, retained selected drafts, shared work and readable table controls |
 | [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Component selection, linked work, pressure-driven pad movement and recovery |
@@ -114,12 +115,18 @@ clearly available pads, and solid pressed inclusion states. Its Quality support
 and inclusion meanings remain specific to that receiver. A Coordination panel
 names whether its pads choose people, select a session or reveal settings. A
 short option set can use a pad rail; a matrix earns its space when named row and
-column relationships help the visitor compare. The planned
-[person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-receivers may open a complete selection rack directly beneath the parent while
-preserving one selected object and close/return path. Current record and draft
-owners continue to supply state until those increments land.
+column relationships help the visitor compare.
+
+The [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+opens the canonical editor directly below Team planning's initiating rack.
+People and accepted-team keys select an object; membership controls continue to
+edit its proposal. `studio-record-key` reports selected and expanded states
+separately, and closing retains the draft while restoring the originating key's
+focus. The existing control groups remain useful; a larger matrix is a
+composition option when the relationships benefit from comparison. The future
+[session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+inherits the same contextual opening and return grammar while retaining its own
+participation and duration owners.
 
 An unused participation cell keeps its person/session meaning. The future
 [empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
