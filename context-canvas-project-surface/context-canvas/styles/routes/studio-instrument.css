@@ -1,5 +1,6 @@
 /* Native Studio presentation controls. Loaded after About; chapter rack styles
-   follow this owner. ASCII Zine Field and Cobalt Evidence Field guide its palette. */
+   follow this owner. visual-fidelity-contracts/studio-rack/README.md maps the
+   Editorial and Instrument Rack modes to About's palette and ASCII Zine Field. */
 .native-coordination {
  --studio-speed: 1;
  --studio-editorial: color-mix(in srgb, var(--about-sea-glass) 24%, var(--native-paper));

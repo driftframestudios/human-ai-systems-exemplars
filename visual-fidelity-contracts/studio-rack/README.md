@@ -1,0 +1,121 @@
+# Studio Rack Composition
+
+Studio Rack Composition makes people, work and investment easy to explore through
+a compact, tactile planning instrument. A visitor can scan a populated example,
+select a period or pad, adjust a useful quantity, and inspect the resulting work.
+The [running About Studio](../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination)
+is the reference implementation.
+
+**Standing:** review candidate, version `0.1.0`, ID
+`vfc:studio-rack-composition`; source reviewed 7 November 2026. This family records
+the accepted design and its implementation boundaries. Each receiving PR owns
+its actual verification result. Publication remains a separately reviewed action.
+
+## Choose a visual mode and an operation
+
+The family contains this composition contract and five operation contracts.
+They describe reusable relationships across chapters, rather than a separate
+visual system for every chapter.
+
+| Mode | Useful work | Stable visual relationship |
+| --- | --- | --- |
+| **Editorial Rack** | Read people, work, relationships and concise context | Pale paper, sea-glass or peach fields; clear headings; compact lanes, tables and adjacent editors |
+| **Instrument Rack** | Select a configuration, adjust a quantity and see its response | Dark face, bounded bezel, light labels, precise readouts and visibly selected controls |
+
+| Visitor operation | Contract |
+| --- | --- |
+| Move between the whole plan, a period and its sessions | [Period Kanban & Session Sequencer](period-kanban-session-sequencer.md) |
+| Compare support and select the work behind a cell | [Support Matrix & Stateful Pads](support-matrix-stateful-pads.md) |
+| Explore a populated configuration | [Zoetrope Preset Selection](zoetrope-preset-selection.md) |
+| Adjust time, money or emphasis | [Precision Dials & Faders](precision-dials-faders.md) |
+| Open detail, retain an edit and return | [Contextual Inspection & Recovery](contextual-inspection-recovery.md) |
+
+One pale board and one dark control field are a sufficient dose. Chapter-specific
+color, lane arrangements and illustration remain available where they explain
+the work. The [Tiffany Ledger Field](../tiffany-ledger-field.md) owns the surrounding
+About composition; [ASCII Zine Field](../ascii-zine-field.md) supplies restrained
+print-shop character. [Cobalt Operating Field](../cobalt-operating-field.md)
+supplies related guidance for named work relationships. This family maps those
+ideas into the Studio's existing owners.
+
+## Preserve the composition
+
+The compact amp presents identity, accepted investment, chapter selection,
+Purpose, Saved edits and animation choices. Coordination begins with a period
+overview and MIDI-style tracks. Detail opens when the visitor requests it;
+complete chronological readings remain available through reports.
+
+Pale reading areas and dark instruments keep distinct jobs. Headings, quantities,
+relation labels and action labels have distinct weight and spacing. Short
+monospace labels give an instrument character; sustained explanation keeps its
+ordinary reading treatment. Existing palette roles and density remain the
+starting point for an iteration.
+
+The housing stays fixed while pointers, selected pads and authored result views
+respond. Upper-left light, modest corners and lower-right or inset depth preserve
+the tactile character. Selection uses shape, border or written state with color.
+Decorative ASCII and CRT texture stay clear of labels, hit targets and focus.
+
+| Control purpose | Shared visual reading |
+| --- | --- |
+| Begin creating an item | Written Add action with a plus cue |
+| Confirm the prepared item | Ordinary Add or Apply commit treatment |
+| Choose among visible options | Persistent pressed selection |
+| Reveal nearby content | Caret reflecting that content's open state |
+| Open another view or inspector | Destination wording and an arrow |
+| Cancel a proposal | Shadow-free ghost treatment |
+| Remove an item or relationship | Rose treatment and explicit scope |
+
+## Keep state and motion legible
+
+One accepted plan supplies the amp amount, relationships and downloads. An
+editor's proposal has its own reading until Apply. Cancel, saved edits, Undo and
+baseline comparison retain their existing owners. Selected-for-inspection,
+included-in-plan and observed evidence remain separate meanings.
+
+The amp offers Off, Half-speed and Full-speed; Full-speed is the current default.
+System reduced-motion preferences suppress animation. Static labels, values and
+selection remain complete in every mode. Chapter arrival, contextual movement,
+local inspection and a pad changing lanes receive different treatments. A long
+reveal yields to visitor input. These are presentation changes, outside plan
+serialization, pricing and history.
+
+## Source and extension ownership
+
+The load order in [About HTML](../../context-canvas-project-surface/context-canvas/index.html)
+is `about.css`, then `studio-instrument.css`, followed by the chapter extensions.
+The About owner defines `--native-*` from `--about-*`; the shared instrument owner
+maps `--studio-*`. Receiving chapter styles extend those mappings. This contract
+introduces no parallel token file or generated stylesheet.
+
+| Owner | Responsibility |
+| --- | --- |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes and shared refinements |
+| [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, session tracks and arrangement readings |
+| [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
+| [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
+
+Ordinary phone and laptop widths are the receiving range for this showcase.
+Text and controls reflow; genuinely two-dimensional tables and tracks retain a
+named local scroll region. Forced colors retains native meaning and selection.
+The host's scriptless counterpart and printable reports have their own evidence
+routes; this family makes no claim that every interactive rack prints as shown.
+
+## Evidence and revision
+
+The [research record](../../collaboration/native-investment-studio/usability-research.md#digital-instrument-composition--5-november-2026)
+connects official instrument manuals, WAI guidance and local design choices.
+Manuals supply interaction precedents; they do not establish that this aesthetic
+improves enterprise decisions. The [current journal](../../collaboration/native-investment-studio/experience-journal.md#superseded-directions)
+resolves older directions: named periods, a compact landing, Full-speed default
+and report-owned long detail supersede the earlier arrangements.
+
+The [shell browser route](../../tests/native-investment-studio/shell.browser.mjs)
+observes chapter, motion, focus and host behavior. The five operation contracts
+route to their narrower checks. [Foundation checks](../../tests/visual-fidelity-contracts/foundation-contracts.test.mjs)
+establish catalog validity and source-path closure, rather than visual approval.
+[Scope breadcrumbs inside racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756),
+[a common swinging editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+and [immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+remain future design decisions. Their receiving issues establish scope before
+implementation; this family preserves the current experience meanwhile.

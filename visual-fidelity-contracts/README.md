@@ -17,6 +17,7 @@ executable, versioned contract material listed here.
 | A relationship-heavy operating map | [Cobalt Operating Field](./cobalt-operating-field.md) | System boundaries, work, investment, direction, and recovery |
 | A consequential chronology | [Cobalt Temporal Field](./cobalt-temporal-field.md) | Source-supported intervals, returns, recurrence, and changed meaning |
 | A workshop or studio with print-shop character | [ASCII Zine Field](./ascii-zine-field.md) | Expressive mastheads, quiet texture, recognizable controls, and clear recovery |
+| A populated planning showcase with lanes, tracks, reels and pads | [Studio Rack Composition](./studio-rack/README.md) | Coherent Editorial and Instrument Rack modes, linked to five reusable operation contracts |
 | A source-led account followed by an implementation reading | [Dual-Track Debrief Composition](./dual-track-debrief-composition.md) | Selection guidance for paired, program, comparative, temporal, and single-field readings |
 | A question about state ownership, contrast, reflow, print, or publication | [Shared foundations](#use-the-shared-foundations) | Reusable implementation and verification rules |
 | A Figma, DTCG, compiler, or component-token integration | [Design-token pipeline](./foundations/design-token-pipeline.md) | Source authority, compatibility, generated artifacts, runtime adapters, recovery, and receipts |
@@ -44,6 +45,11 @@ executable, versioned contract material listed here.
 
 ### Repository composition contracts
 
+- [Studio Rack Composition](./studio-rack/README.md) — the native Investment
+  Studio's pale Editorial Rack and dark Instrument Rack, with focused contracts
+  for period boards and session tracks, support matrices and pads, preset reels,
+  precision controls, and contextual inspection. Current source and its checks
+  lead; further migration into racks remains a scoped design decision.
 - [ASCII Zine Field guide](./ascii-zine-field/index.html) — a review candidate
   for warm-paper studios and workshop artifacts, with ASCII ornament, native
   controls, an [interactive specimen](./ascii-zine-field.specimen.html), and the
