@@ -16,11 +16,13 @@ by combining teams, sessions and handoffs into an editorial delivery board.
 [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
 adds direct arrangement replacement and local Undo; its focused PR owns the
 transaction and receiver evidence.
-PR #785 supplies duration/rate enclosures and PR #786 supplies the first adjacent
-person/team receiver. #768 extends that receiver to sessions from either rack.
-Direct empty-space creation, participant movement, attached editorial companions
-and scoped removal/recovery retain their separate receivers below. The current
-aesthetic, compact landing and existing operations remain the reference.
+PR #785 supplies duration/rate enclosures, PR #786 supplies the adjacent person/team
+receiver and PR #787 extends it to sessions from either rack. #788 refines the
+duration skin and shared dial artwork. The next proposed composition in #789
+places a Session detail deck inside Plan overview. Existing-session editing is
+ready for this focused composition change; immediate creation and empty-space
+entry retain their separate acceptance boundaries. The current aesthetic,
+compact landing and existing operations remain the reference.
 
 ## Same work, distinct readings
 
@@ -111,6 +113,8 @@ deliberate action creates a useful example in the known context, then selects
 its editor. The visitor adjusts duration and returns; creation Undo and later
 edit Cancel remain distinct. #768 supplies the adjacent receiver. This is a
 future acceptance change; current draft/confirmation flows continue to work.
+#758 precedes #770's immediate empty-space entry. Both can follow the in-rack
+editing deck: an existing session already has its identity and draft owner.
 
 ### Participants: movement first, a named quantity later
 
@@ -201,7 +205,7 @@ keeps the editor open. Record switching uses saved proposals and a fresh resume
 lease. The parent cards retain their geometry as the panel opens in page flow.
 
 PR #786 owns the person/team opening, switching, acceptance and return evidence.
-#768 extends the same placement owner to the canonical session editor. A horizon
+PR #787 delivered #768 through the same placement owner and canonical session editor. A horizon
 entry retains the period/subdivision and occurrence when supplied; Team planning
 retains its selected delivery phase and participation context. The heading names
 the session and originating rack. A row key toggles its panel, while an occurrence
@@ -213,6 +217,73 @@ the proposal, and Apply accepts through the session owner. The duration enclosur
 and exact Working sessions input remain intact. #758/#770, #771, #772 and #773
 keep creation, participant changes, attached companions and removal/recovery as
 separate increments.
+
+### Proposed Session detail deck inside Plan overview
+
+[#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
+recommends one compact, nonmodal **Session detail deck** between the period board
+and Session tracks, within the existing instrument housing. It is a prospective
+composition variation of the Studio Rack, Period Kanban and Contextual Inspection
+contracts. Current behavior remains the adjacent receiver delivered in #768.
+
+The selected clip can read like a loaded tape. Its name, team and visible
+selection connect the board to the deck; the selected sprint/quarter and Plan
+overview return remain above both. A repeated triggering clip or Close dismisses
+the deck and restores that origin. Close retains the proposal, Cancel discards
+it and Apply accepts it once. Selecting different work uses the existing saved
+draft coordinator. The deck opens only while an item is being inspected, keeping
+the initial overview compact.
+
+| Deck area | Direct operation and retained meaning |
+| --- | --- |
+| Session identity | Rename the selected work and choose its team in a compact tape-like header |
+| Duration | Reuse the enclosed Hours/Minutes module; duration applies to every occurrence of this session |
+| Working sessions | Numbered occurrence pads with an exact count and explicit Add occurrence; a new occurrence belongs to this work |
+| Placement | Select an occurrence, then its sprint/quarter and Week 1/2 or Month 1/2/3 using visible choice pads |
+| People | Independent inclusion switches on named participant tracks; explicit Move up/down changes their order |
+| Acceptance | Retain the existing proposed amount, Apply, ghost Cancel and Close meanings |
+
+One ordered `personIds` collection and one duration currently apply to all
+occurrences. People controls therefore describe participation in the session;
+per-occurrence placement pads describe where each repetition happens. Native
+checkboxes suit independent inclusion; exclusive choices suit period/subdivision
+selection. A people-by-occurrence matrix would require a separate membership
+model. #771's keyed movement can accompany participant tracks; its percentage
+model remains a later, independent decision.
+
+The principal implementation preparation is a stable receiving slot.
+`cadence-view.mjs#refresh` currently replaces its complete screen. Extract stable
+board, deck and tracks regions or retain the deck slot across refresh before
+placing canonical controls inside it. Keep one `work-controller.mjs` owner,
+one form and one editing lease. Small presentation adapters can expose occurrence
+pads and participant tracks through the existing setters. Mobile stacking
+preserves the same order, exact fields and visible Close.
+
+The evidence supports this composition choice within a bounded transfer:
+
+- [Ableton Clip View](https://www.ableton.com/en/live-manual/12/clip-view/) keeps
+  properties and content tied to the selected clip while arrangement context
+  remains available. The Studio adopts this selection/detail relationship and
+  tape treatment; visitor comprehension still needs a focused walkthrough.
+- [WAI disclosure guidance](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
+  supports the trigger's open/closed cue and keyboard activation. Native controls
+  retain their ordinary semantics inside the deck.
+- [WAI modal-dialog guidance](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+  requires an inert background and contained keyboard focus for a modal overlay.
+  Existing draft switching already protects unfinished work, so the first deck
+  stays nonmodal. A later compact variant may replace the sequence presentation
+  within the rack, with covered controls genuinely hidden from interaction.
+
+#758 and #770 are creation dependencies, rather than prerequisites for this
+existing-session editor. First repair
+[#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)'s
+two stale browser journeys against current People and Investment entries in a
+separate check-focused PR. This supplies a useful cross-chapter baseline; the
+accepted interface remains the behavior authority. Then deliver the stable deck,
+occurrence/people presentations, #758's useful defaults and creation Undo, and
+#770's contextual empty-space entries. #773 supplies the shared recovery surface;
+it retains its own scope. Keep deck verification to one retained-draft, placement,
+participant and return journey at phone/laptop widths.
 
 ### Direct arrangement selection
 
@@ -249,7 +320,9 @@ person field editing retains its acceptance boundary.
 groups **Time per person, per session**, the combined Hours/Minutes output and
 both dial–field–step groups in one instrument enclosure. The larger readout sits
 above both dials. Hours retains its larger primary dial; Minutes has a smaller
-dial in a secondary peach inner enclosure. Each exact field and circular step
+dial. #788 makes Hours peach and Minutes paper, removes their inner borders,
+and shares the monetary coarse/fine dial sizes, face inset and pointer. This
+supersedes the earlier peach Minutes treatment. Each exact field and circular step
 pair sits toward its dial's lower right. The gap between circles and their
 start/end alignment beneath the input remain recognizable.
 
@@ -320,16 +393,21 @@ expanding the first style PR into a deletion-model rewrite.
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Delivered in #783; supplies stable accepted identity before adjacent editors |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Shared duration/rate enclosures | Delivered in #785; supplies the quantity hierarchy and shared housing |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Delivered in #786; supplies canonical placement, retained drafts and local close/return |
-| [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Extends the shared receiver with origin, occurrence and session-draft context; preserves the duration module |
+| [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Delivered in #787; supplies origin, occurrence and session-draft context |
+| [#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788) | Duration skin and shared dial artwork | Borderless peach Hours and paper Minutes with reusable coarse/fine geometry |
+| [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777) | Current-entry observations for two legacy browser journeys | Repair before #789 to establish a useful People/Investment baseline; preserve the accepted interface |
+| [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789) | Proposed Session detail deck inside Plan overview | Stable receiving slot, canonical editor and visual occurrence/participant controls; existing-session work can proceed independently of creation changes |
 | [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) → [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Immediate session acceptance, then empty-space entry | Receives common creation controls and an adjacent edit/return route; retains existing creation until ready |
 | [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant movement; separately, scoped percentage semantics | Movement can accompany shared controls; the percentage model remains independent future work |
 | [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Receives the shared shell; prepares contextual editors without changing their draft ownership |
 | [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773) | Scoped removal, amp Undo, then a Coordination local-recovery example | Receives shared controls/history; human review releases cross-chapter removal adoption |
 
-The reviewed #757 implementation supplies shared panel placement; #768 applies
-it to sessions. #771's movement and #772's companion shell can develop alongside
-this receiver. Percentage modeling and immediate-add acceptance
-retain separate increments; neither expands the first common-control PR.
+The reviewed #757/#768 implementations supply shared panel placement and session
+editing ownership. #789 can now compose that owner inside Plan overview.
+#771's movement can accompany participant tracks, and #772's companion shell can
+develop alongside the deck. Percentage modeling and immediate-add acceptance
+retain separate increments. #758 precedes #770's new-record entry, while both
+remain independent of the existing-session composition.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
@@ -372,4 +450,5 @@ the canonical controls. Session editing adds occurrence/participation entries,
 cross-rack draft retention and the active row's close/reopen operation. Existing source and
 gesture checks retain their boundary. Each focused PR receives independent
 review, updates current README/journal guidance, and passes its evidence to the
-next issue. A reviewed adjacent panel completes this preparation route.
+next issue. The reviewed adjacent panel supplies the current behavior; #789
+receives the focused in-rack composition decision.

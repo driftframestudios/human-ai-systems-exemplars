@@ -133,7 +133,7 @@ The dark heading, named object and Close sit above a peach editorial body.
 The person's rate enclosure retains the shared quantity skin and exact controls.
 The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 uses this placement and return grammar with the enclosed duration module:
-larger readout above Hours and secondary peach Minutes, with repetition separate
+larger readout above peach Hours and secondary paper Minutes, with repetition separate
 nearby. A session opened from a period occurrence carries that occurrence
 context; Shared sessions supplies its people context. The heading names the
 session and originating rack. Each route reveals the same existing editor and
@@ -144,13 +144,53 @@ Close retains unfinished input and restores the initiating key or pad; Cancel
 discards the proposal; Apply uses the existing acceptance owner. A failed switch
 keeps the admitted record and its panel identity aligned.
 
-The receiver may swing open as its own rack directly beneath the parent. Use
-Quality's track-selection matrix when the selected object's people or support
-relationships benefit from comparable rows and pads; use a simpler pad group
-for a short independent choice set. Keep the selected object's name and a
-clearly named Close/Return above the local controls. A visitor can add a session,
-open its adjacent duration module, adjust it, then close or return to the same
-period/people context. Closing and Cancel retain their distinct proposal rules.
+### Proposed variation: Session detail deck
+
+[#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
+proposes a **Session detail deck** inside Plan overview, between its period board
+and Session tracks. This is a complementary composition within the existing
+family; #768's adjacent receiver remains the current implementation. Its detailed
+[readiness decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
+defines the stable receiving slot and issue order.
+
+A tape-like selected clip identifies the record loaded into the deck. The session
+name, current period and Plan overview return remain identifiable. The initiating
+clip toggles its deck; Close returns focus to that clip and retains its draft.
+Apply and Cancel keep their accepted-change and discard operations. One form,
+one session owner and one edit lease receive all entry points, including a
+selected occurrence. The stable deck slot survives board/track refreshes.
+
+The deck uses the enclosed duration module, numbered occurrence pads and named
+participant tracks. Period and subdivision pads place the selected occurrence.
+Participant switches independently include people for the session as a whole;
+Move up/down alone changes their order. The current shared duration and ordered
+membership apply to every occurrence. Quality's track-selection matrix supplies
+the preferred compact skin, while each control retains this receiving meaning.
+
+[Ableton's Clip View](https://www.ableton.com/en/live-manual/12/clip-view/)
+provides a selected-record detail precedent. The proposed Studio deck applies
+that relationship through enterprise session labels and native controls. The
+first deck remains a nonmodal disclosure: the existing coordinator retains
+unfinished edits during selection changes. A blocking overlay would require
+the inert background and contained focus described by the
+[WAI modal-dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+This recommendation preserves context and existing switching behavior; a visitor
+walkthrough determines how clearly the tape/deck metaphor reads.
+
+#758 supplies immediate accepted creation and its Undo boundary; #770 composes
+that owner into empty-space entry. Neither is required to place existing-session
+editing inside the rack. #777's stale browser-entry repair supplies the current
+cross-chapter baseline before the deck increment. Retain the current
+Add/confirmation journey until those changes land. #771's keyed participant
+movement can accompany the deck; its percentage model remains separate. Phone reflow retains the title, exact fields,
+independent inclusion and a visible Close without adding a full-page modal.
+
+### Other contextual receivers
+
+An adjacent receiver remains useful where the parent reading should stay intact.
+Use Quality's selection matrix when people or support relationships benefit from
+comparable rows and pads; use a simpler pad group for a short independent choice
+set. Keep the selected object's name and Close/Return above its local controls.
 
 The planned [editorial sub-racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
 are another permitted receiver. People and available time

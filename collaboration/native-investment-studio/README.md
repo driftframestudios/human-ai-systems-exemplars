@@ -53,13 +53,23 @@ places the existing editor below the selected Team planning rack. Close retains
 the draft; Cancel discards it; Apply accepts through the existing owner.
 The People chapter uses those same controls. Adjacent session editing
 ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768))
-extends this receiver to the horizon and Team planning. The heading names the
-session and its originating rack; both routes use the same session draft and
-enclosed duration controls.
+delivered in PR #787 extends this receiver to the horizon and Team planning.
+The heading names the session and its originating rack; both routes use the
+same session draft and enclosed duration controls.
 The plan draws on the whole Studio: Quality's selection matrices, Abilities'
 adjacent inspector, Change/Quality pad movement and the editorial disclosures.
 Shared components gain role-based names as they are extracted; intentional
 chapter differences, including the two fader styles, remain useful.
+
+The next proposed composition is a
+[Session detail deck](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
+inside Plan overview ([#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)).
+It would open between the period board and Session tracks, retaining the current
+session owner, duration module and Close/Apply/Cancel behavior. Existing-session
+editing can move there independently of immediate creation. Repair
+[#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)'s
+stale People/Investment browser entries first to give that change a useful
+cross-chapter baseline.
 
 The continued planning route adds empty-space session creation
 ([#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)),
@@ -78,7 +88,8 @@ remain available until their replacements land. The arrangement reel already
 uses its direct acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 now names sessions as the recommended first immediate-add record, with later
-editing and creation Undo kept distinct.
+editing and creation Undo kept distinct. It precedes #770's empty-space entry;
+neither blocks the proposed deck for already-created sessions.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -237,7 +248,10 @@ content and points down while it is open. Small fixed choice sets remain visible
 and selected choices stay visually pressed. Cancel uses a shadow-free ghost treatment.
 
 The duration module keeps its combined Hours/Minutes readout above both dials.
-Hours has the larger dial; Minutes has a smaller dial in a peach enclosure. Each
+Hours uses a peach inner face; Minutes uses paper. Both inner groups are
+borderless, blending into the overall enclosure. Their larger/smaller dials use
+the same coarse/fine sizes, face inset and pointer as the monetary controls
+([#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788)). Each
 exact field and circular step pair sits toward the lower right of its dial. **Working sessions**
 remains a separate nearby repetition control. Main and supporting-session editors
 share this arrangement, with phone reflow inside the same enclosure. A duration
