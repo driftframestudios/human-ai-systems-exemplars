@@ -75,7 +75,7 @@ async function open(t, engine, full = false) {
       panel: mountConnectionPanel(element.querySelector('[data-native-connection-editor]'), { studio }) };
   });
   await expect(editor(page)).toHaveAttribute('data-connection-ready', 'true');
-  await page.locator('details[data-native-workspace="connection"] > summary').click();
+  await expect(page.locator('section[data-native-workspace="connection"]')).toBeVisible();
   return page;
 }
 

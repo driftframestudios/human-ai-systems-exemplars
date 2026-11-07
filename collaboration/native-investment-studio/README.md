@@ -35,8 +35,8 @@ in [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues
 gives both readings shared session keys and Add controls: the horizon shows
 when sessions happen; Team planning shows who participates. Selected keys follow
 the session editor's current record, and their carets follow its visible open
-state. The permanent Team planning section and secondary rack enclosure are the
-next focused increment in that issue.
+state. Team planning is a permanent section with the arrangement reel and
+editorial structure above a subtly darker rack for teams and shared work.
 Direct arrangement selection ([#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766))
 and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
 prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
@@ -134,12 +134,19 @@ its later placement. Availability opens beside the person and period it concerns
 funded time keeps its separate accounting meaning. Older saved plans retain
 their recorded timing and offer an explicit sprint-arrangement proposal.
 
-Team planning offers a complementary view: its Shared sessions columns name
-people, and its pads show participation. The horizon's columns name periods,
-and its pads show occurrences. Both open the same working-session records.
-Both readings use the same session-key and Add treatment. The selected key stays
-identifiable when its editor closes; its caret opens only with the visible
-session-settings receiver. A future New session row
+Team planning follows the horizon as a permanent section. Its arrangement reel
+and editorial structure lead into a short hint, then a darker secondary rack.
+The rack holds the proposed team/member lanes and Shared sessions table; Delivery
+lifecycle opens locally when useful. The heading, investment readout and Add
+session remain visible while the participation table scrolls sideways. The
+readout names accepted investment until a preview supplies whole-plan proposed
+investment; Apply accepts that preview.
+
+Shared sessions columns name people, and its pads show participation. The
+horizon's columns name periods, and its pads show occurrences. Both open the
+same working-session records with the same session-key and Add treatment. The
+selected key stays identifiable when its editor closes; its caret opens only
+with the visible session-settings receiver. A future New session row
 will provide ghosted creation space inside the rack; existing row cells retain
 their occurrence or participation meaning. People and available time and
 Stages & handoffs will remain compact editorial companions attached below the
@@ -237,6 +244,7 @@ checked source and remaining review boundary.
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
+| Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 

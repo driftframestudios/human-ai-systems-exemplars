@@ -45,13 +45,20 @@ export function createTeamLanes(document, { plan, teams = plan.teams, onNavigate
 
 export function createSessionTracks(document, { plan, onSession, onAdd, sessionIds = new Set(plan.work.map(work => work.id)), label = 'People in working sessions' }) {
   const screen = node(document, 'div', 'studio-session-tracks');
-  screen.setAttribute('role', 'region'); screen.setAttribute('aria-label', label); screen.tabIndex = 0;
+  const heading = node(document, 'header', 'studio-session-tracks__heading');
+  heading.append(node(document, 'h5', '', label));
+  if (onAdd) {
+    const add = node(document, 'button', 'native-control--create studio-rack-add', 'Add session'); add.type = 'button';
+    add.addEventListener('click', onAdd); heading.append(add);
+  }
+  const scroll = node(document, 'div', 'studio-session-tracks__scroll');
+  scroll.setAttribute('role', 'region'); scroll.setAttribute('aria-label', label); scroll.tabIndex = 0;
   const table = node(document, 'table');
   table.append(node(document, 'caption', '', label));
-  const head = node(document, 'thead'), heading = node(document, 'tr');
-  const first = node(document, 'th', '', 'Working session'); first.scope = 'col'; heading.append(first);
-  for (const person of plan.people) { const th = node(document, 'th', '', person.label); th.scope = 'col'; heading.append(th); }
-  head.append(heading); table.append(head);
+  const head = node(document, 'thead'), headings = node(document, 'tr');
+  const first = node(document, 'th', '', 'Working session'); first.scope = 'col'; headings.append(first);
+  for (const person of plan.people) { const th = node(document, 'th', '', person.label); th.scope = 'col'; headings.append(th); }
+  head.append(headings); table.append(head);
   const body = node(document, 'tbody');
   for (const work of plan.work) {
     const row = node(document, 'tr'); row.dataset.sessionTrack = work.id;
@@ -80,11 +87,7 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     }
     body.append(row);
   }
-  table.append(body); screen.append(table);
-  if (onAdd) {
-    const add = node(document, 'button', 'native-control--create studio-rack-add', 'Add session'); add.type = 'button';
-    add.addEventListener('click', onAdd); screen.append(add);
-  }
+  table.append(body); scroll.append(table); screen.append(heading, scroll);
   screen.append(node(document, 'p', 'studio-session-tracks__legend', '● Funded time · ◆ Extra investment · Ⅱ Paused'));
   if (!plan.work.length) screen.append(node(document, 'p', '', 'Add a working session to connect people and work.'));
   return screen;

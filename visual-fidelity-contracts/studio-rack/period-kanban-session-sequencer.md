@@ -100,9 +100,13 @@ pressed while its closed receiver restores the right-facing caret. A shared
 `studio-rack-add` treatment carries the useful local context into the current
 creation flow. Chapter styles continue to own column geometry.
 
-The next #765 increment makes Team planning permanent and gives its rack a
-subtly darker secondary housing with the horizon's enclosure and header alignment.
-Its editorial structure cards and participant-column meaning remain distinct.
+Team planning is permanent, with subtly darker secondary housing that follows
+the horizon's enclosure and header alignment. Its editorial structure remains
+above the rack; proposed team/member lanes appear once inside it. Shared sessions
+keeps its visible heading and Add control above a named participation-table
+scroll region. The investment reading also stays outside that scroller. The
+table's people columns retain their relationship meaning beside the horizon's
+period columns, and existing preview/Apply ownership stays intact.
 
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 makes unused rack space actionable. A dedicated

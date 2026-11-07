@@ -62,9 +62,8 @@ async function open(t, engine) {
     receiver.controller = mountConnectionTemplatePanel(element, { studio, editing, onAccepted() { receiver.accepted += 1; } });
     window.templateFixture = receiver;
   });
-  const workspace = page.locator('details[data-native-workspace="connection"]');
-  if (!await workspace.evaluate(element => element.open)) await workspace.locator(':scope > summary').click();
-  await panel(page).evaluate(element => { element.open = true; }); await expect(panel(page)).toHaveAttribute('open', '');
+  await expect(page.locator('section[data-native-workspace="connection"]')).toBeVisible();
+  await expect(panel(page)).toBeVisible();
   return page;
 }
 async function existingGroups(page) {
@@ -112,7 +111,6 @@ for (const engine of names) {
     await panel(page).locator('.studio-team-lane__title').first().click();
     await expect(field(page, 'teams.pod.selection')).toBeFocused();
     await expect(panel(page).locator('.studio-arrangement-settings')).toHaveAttribute('open', '');
-    await panel(page).evaluate(element => { element.open = true; });
     const original = await bytes(page), sketch = panel(page).locator('[data-template-structure]');
     const expected = {
       pod: ['pod>partner', 'partner>pod'], guild: ['practice>delivery', 'delivery>practice'],
@@ -138,7 +136,6 @@ for (const engine of names) {
     await panel(page).locator('[data-reel-choice="pod"]').click(); await card(page, 'team:pod');
     await expect(field(page, 'teams.pod.label')).toHaveValue('Shared delivery');
     await preview(page); await action(page, 'apply').click();
-    await panel(page).evaluate(element => { element.open = true; });
     const arrangementId = await page.evaluate(() => window.templateFixture.studio.read().state.arrangements[0].id);
     await accepted.locator('.studio-accepted-connections > summary').click();
     const reading = accepted.locator('[data-arrangement-reading="accepted"]');
@@ -199,7 +196,6 @@ for (const engine of names) {
     await expect(accepted).toContainText('Custom connections');
     await page.evaluate(() => { const f = window.templateFixture; f.studio.undo(f.studio.read()); f.nativeController.refresh(); });
     assert.equal(await bytes(page), beforeDetach); await expect(reading).toHaveAttribute('data-arrangement-adapted', 'true');
-    await panel(page).evaluate(element => { element.open = true; });
     await reading.screenshot({ path: resolve(captures, `${engine}-accepted-desktop.png`) });
     await page.setViewportSize({ width: 390, height: 1000 });
     const viewport = reading.locator('.native-arrangement__viewport'); await viewport.focus(); await expect(viewport).toBeFocused();
@@ -226,7 +222,7 @@ for (const engine of names) {
     await expect(panel(page).locator('[data-template-total]')).toHaveText('$16,000.00');
     assert.equal(await bytes(page), original); await action(page, 'cancel').click(); assert.equal(await bytes(page), original);
     await preview(page); await action(page, 'apply').click();
-    await expect(panel(page)).toHaveAttribute('open', ''); await expect(action(page, 'apply')).toBeFocused();
+    await expect(panel(page)).toBeVisible(); await expect(action(page, 'apply')).toBeFocused();
     const first = await page.evaluate(() => { const { studio, accepted } = window.templateFixture; return { state: studio.read().state, result: studio.read().result, history: studio.readHistory(), accepted }; });
     assert.equal(first.state.connections.length, 2); assert.equal(first.history.undoCount, 1); assert.equal(first.accepted, 1);
     assert.equal(first.result.plannedCommitmentCents, 1600000); assert.equal(first.result.allocatedKnownCents, 40000);

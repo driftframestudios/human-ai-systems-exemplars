@@ -131,7 +131,7 @@ export function mountCoordinationPanel(root, options = {}) {
     coordinationEditor = kind;
     if (mounted && !resumingCoordination) {
       const workspace = root.querySelector(`[data-native-workspace="${kind === 'template' ? 'connection' : kind}"]`);
-      if (workspace) workspace.open = true;
+      if (workspace?.tagName === 'DETAILS') workspace.open = true;
     }
     purposePanel?.close({ resume: false });
     if (kind !== 'session') workPanel?.close({ park: false });
@@ -233,7 +233,7 @@ export function mountCoordinationPanel(root, options = {}) {
     if (route.kind === 'template') {
       if (!templatePanel?.open()) return;
       returnRoutes.pop(); render(); renderReturnRoute();
-      root.querySelector('[data-template-choice]')?.focus();
+      templatePanel.focus();
       announce('Your arrangement entries are ready. Choose the added person and preview the arrangement.');
       return;
     }

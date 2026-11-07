@@ -67,7 +67,7 @@ refer to them. Apply, Cancel and Undo keep their existing acceptance boundaries.
 | --- | --- |
 | [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs) and [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Table meaning, selected card and adjacent retained editor |
 | [Change controller](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controller](../../collaboration/native-investment-studio/assurance-controller.mjs) | Component support, quality inclusion and their existing draft owners |
-| [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Native people/session relationship table |
+| [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) and [connection view](../../collaboration/native-investment-studio/connection-view.mjs) | Native people/session relationship table, fixed heading/Add control, local participant scroller and shared team/member-lane rendering |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Shared session keys and participation pads reflect the selected session and its actual receiver visibility |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Scoped table, rail, pad and adjacent-rack variants |
 | [Capability browser checks](../../tests/native-investment-studio/capability.browser.mjs) | Support states, retained selected drafts, shared work and readable table controls |
@@ -91,8 +91,11 @@ selection identifies the session being inspected. Accepted-session keys and
 participation pads now mirror the same selected record and visible receiver.
 Participation remains the pad's relationship meaning; selected/open cues describe
 inspection. Proposed-only sessions keep their proposal-settings destination and
-remain outside the accepted-session receiver's state. The permanent Team planning
-enclosure is the next #765 increment.
+remain outside the accepted-session receiver's state. Team planning's permanent
+secondary rack groups the proposed team/member lanes, Shared sessions and a
+compact Delivery lifecycle disclosure. Team lanes appear once in this composition;
+the editorial topology above retains its relationship routes. The Shared sessions
+heading and Add control stay visible while its participant columns scroll locally.
 
 The existing `native-quality-tracks` is the preferred aesthetic precedent for
 future in-rack selection matrices: compact named rows, dark table housing,
