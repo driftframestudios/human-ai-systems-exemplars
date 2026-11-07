@@ -27,6 +27,7 @@ pads move.
 | Included in a proposal | Native checkbox or toggle button with `aria-pressed`, accompanied by written or accessible inclusion state |
 | Included in the accepted plan | Accepted projection supplied by the plan owner |
 | Supporting work linked | Named session or meaningful pad whose accessible name identifies it |
+| Person participating in a session | Participation pad at the named person/session intersection |
 | Support still to choose | Useful empty-state wording and an actionable route |
 | Requirement outside a card's definition | Explicit Not specified reading rather than an invented gap |
 | Recorded observation | Its reviewer, context and revision, distinct from an authored example |
@@ -81,6 +82,19 @@ interpretation remains a human walkthrough question.
 ## Re-entry and future scope
 
 Revisit when a cell changes meaning, a pad changes operation, a source record
-gains a new state, or an inspector moves. Further migration into rack panels waits
-for the receiving scope decision. Preserve the preferred Quality track treatment
-as a reference while adapting each control to its actual operation.
+gains a new state, or an inspector moves. The prospective
+[Coordination consolidation](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+uses Shared sessions as a participation reading: each column names a person and
+each row names shared work. A populated pad means that person participates;
+selection identifies the session being inspected. The whole-session key and its
+participation pads are to identify the same selected record without treating all
+populated pads as active inspectors.
+
+The existing Quality lanes and tracks provide composition precedents for later
+in-rack selections. Their support and inclusion meanings remain specific to
+Quality. A receiving Coordination panel must name whether its pads choose people,
+select a session, or reveal settings. The planned
+[person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+receivers will establish the adjacent editor relationship; current record and
+draft owners continue to supply state until those increments land.

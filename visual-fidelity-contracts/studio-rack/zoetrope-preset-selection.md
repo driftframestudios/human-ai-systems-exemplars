@@ -78,6 +78,19 @@ about faster comprehension need observation with people using the showcase.
 
 Revisit when choice count, label length, consequence, motion or ownership changes.
 Keep configuration presets source-owned and predictable while exploring new
-visual variants. Adding further reels or moving additional components into a
-rack remains a future scoped decision; this contract preserves existing choices
-and the result each one currently controls.
+visual variants. The prospective [Team planning arrangement flow](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+changes that receiver's acceptance boundary: selecting a reel position is to
+update one arrangement instance immediately through the plan owner and retain
+Undo. Repeated selections update that instance and preserve unrelated work.
+The surrounding [Team planning composition](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
+keeps the reel and editorial structure together, followed by the short hint and
+secondary rack. This planned receiver is specific to Team arrangements; other
+reels and editors retain their existing reading or proposal behavior.
+
+The Team rack's amount is to name the linked-work subtotal it actually projects.
+Once a selection is accepted, its amount describes the accepted arrangement;
+proposal wording belongs to an actual pending proposal. Sharing a session across
+teams or relationships keeps that session's single cost identity. The reel
+continues to emit a selected ID, while its controller owns transaction identity,
+accepted investment and recovery. Current preview/Apply behavior remains the
+runtime authority until this focused increment lands.
