@@ -20,8 +20,8 @@ field form a complete dose. Brief labels replace repeated operating paragraphs.
 
 | Current quantity | Receiving treatment |
 | --- | --- |
-| Hours and Minutes | Larger Hours dial, smaller Minutes dial, each beside its own exact field |
-| Hourly rate | Relative $10 and $5 dials, exact amount, centered $1 step buttons |
+| Hours and Minutes | One enclosed duration module; larger combined readout above a primary Hours dial and secondary peach Minutes group |
+| Hourly rate | One named enclosure for relative $10/$5 dials, the exact amount and centered $1 steps |
 | Framework component emphasis | Aligned fader channels with names, values and distinct active fill |
 | Quality assumptions | Named faders beside the reference visualization and authored result |
 
@@ -50,6 +50,9 @@ the gesture, the editor retains the displayed adjustment. A later focus change
 also keeps the completed amount. Explicit Escape or `pointercancel` restores the
 starting raw value while that same draft still owns it. Retiring or parking an
 editor releases the gesture so later events cannot write into its successor.
+A duration turn captures its angular origin at pointerdown and keeps that origin
+through movement and pointerup. Focused-control scrolling therefore preserves
+the intended adjustment; release discards the origin for the next turn.
 
 Native keyboard input, exact entry and single-point step alternatives remain
 available. Forced colors may expose the native range directly. Page scrolling
@@ -64,7 +67,8 @@ values, and Undo operates on accepted history.
 | [Time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Shared Hours/Minutes control and exact field agreement |
 | [About session markup](../../context-canvas-project-surface/context-canvas/index.html) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Static duration controls, field identities and session readout projection |
 | [Change](../../collaboration/native-investment-studio/change-controller.mjs) and [Assurance controllers](../../collaboration/native-investment-studio/assurance-controller.mjs) | Fader meaning and result projection |
-| [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Existing dial, stepper and fader geometry |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Quantity-module enclosures, duration hierarchy and responsive control grouping |
+| [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Retained dial artwork, base steppers and chapter-specific faders |
 | [Team browser checks](../../tests/native-investment-studio/team-controller.browser.mjs) and [session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Exact value agreement, gesture/cancellation, retained drafts and Apply/Undo |
 | [Change](../../tests/native-investment-studio/change.browser.mjs) and [Assurance browser checks](../../tests/native-investment-studio/assurance.browser.mjs) | Framework-specific values and visible consequences |
 
@@ -77,53 +81,42 @@ claim of complete device conformance. The
 [rotary research record](../../collaboration/native-investment-studio/usability-research.md#working-rotary-control-and-contextual-editor)
 preserves the pointer/cancellation rationale.
 
-## Re-entry and future scope
+## Enclosed quantities and re-entry
 
-The prospective [control enclosure increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
-prepares duration and rate controls for the adjacent
-[person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+The [control enclosure increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
+uses `studio-quantity-module` as the shared housing for duration and rates.
+`studio-duration` contains **Time per person, per session**, the combined output
+and both Hours/Minutes dial–field–step groups. Its readout sits above both dials
+and is larger than the individual field values. This supersedes the earlier
+beside-readout wide layout.
+
+Hours keeps the larger dial. Minutes uses the smaller dial in a secondary peach
+inner enclosure. Labels and size carry the distinction alongside color. Each
+dial sits above-left of its exact field and stepper. The input remains above the
+circular minus/plus pair, with the visible gap and the pair aligned to the
+field's start and end. The fixed housing, light and pointer artwork retain their
+existing treatment.
+
+Hours and Minutes share a row when the receiving space permits it and reflow
+inside the enclosure at ordinary phone widths. The output remains above the
+controls. **Working sessions** stays nearby as a separate repetition control:
+duration changes the length of each occurrence, while the count determines how
+many occur. The static About session markup and dynamic `createTimeControls`
+factory use the same composition and retain their output/input associations.
+
+The rate enclosure groups one named hourly rate with the $10/$5 dials, shared
+exact field and centered $1 steps. Duration and money retain their distinct
+units and value owners. Shared enclosure geometry lives in
+`studio-instrument.css`; the former competing About duration layouts are
+reconciled into that owner. Current raw-entry, gesture, editor identity and
+Apply/Cancel owners continue to govern values.
+
+Adjacent [person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-editors. It is a prerequisite composition change for both receivers, beginning
-with Coordination and keeping shared controls consistent in their existing
-supporting-session receivers.
-
-The planned duration module places the short **Time per person, per session**
-label, `output.native-coordination__duration-display`, and the existing Hours and
-Minutes groups inside one bounded instrument enclosure. The readout sits above
-both dials and is larger than their individual exact-value readings, making the
-combined result the visual heading of the control. This refines the earlier
-permission to place the output beside the controls; its exact horizontal
-alignment within the rack remains a receiving composition choice.
-
-Hours keeps the larger dial. Minutes uses the smaller dial in a secondary
-sub-enclosure: a restrained rose/peach face or the simple outlined boundary of
-`fieldset.native-reel` is a suitable starting point. The unit label and size
-hierarchy carry the distinction alongside color. Within each unit group, the
-dial sits above-left and the exact field/stepper group sits below-right. Keep the
-current stepper layout: numeric input above circular minus/plus buttons, the
-visible gap between those buttons, and their alignment at the field's start and
-end. A smaller or differently colored skin preserves this layout and usable hit
-targets. Circular controls remain part of the composition's visual rhythm.
-
-Working sessions retains its repetition meaning. A future adjacent rack may
-show those occurrences as discrete pads or lane items, with a direct way to add
-another occurrence and a readable count. That presentation receives its own
-small behavior check: changing repetition adds or removes occurrences of the
-same work, while changing Hours or Minutes changes each occurrence's duration.
-The enclosure increment can retain the existing count control until that
-receiving composition is ready.
-
-The current static session markup and dynamic `createTimeControls` factory must
-receive the same duration structure so supporting-session proposals keep the
-same operation. Ordinary mobile reflow retains the output above the controls
-and every quantity within the enclosure. Existing output/input associations,
-dial artwork and value owners remain the reference.
-
-The corresponding rate module is to enclose the $10/$5 dials, exact monetary
-field and centered $1 steps as one named hourly-rate control. Its fixed housing,
-light, pointer and coarse/fine size hierarchy preserve the existing art direction.
-These enclosures change grouping and presentation; current raw-entry, gesture,
-editor identity and acceptance owners continue to govern values.
+editors are the next receivers of this composition. Their relocation and
+open/close routes remain separate work. A future session rack may express
+Working sessions as occurrence pads or a compact lane while preserving exact
+count and placement meaning.
 
 The future [participant fader](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
 starts with **Time in this session**, meaning each person's share of one session
@@ -139,4 +132,4 @@ distinguish completion from rollback. The enclosure's focused observation should
 also establish readable labels, contained controls and visible feedback at phone
 and laptop widths. Revisit when value meaning, bounds, native event handling or
 editor identity changes. Its receiving PR supplies actual implementation and
-browser evidence; this contract records the planned composition.
+browser evidence; this contract records the shared composition.

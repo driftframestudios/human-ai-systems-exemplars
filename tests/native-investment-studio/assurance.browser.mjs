@@ -155,27 +155,46 @@ for (const engine of names) {
     await page.mouse.up(); await tab(page, 'assurance').click(); await expect(field(page, 'proposal.minutesPerSession')).toHaveValue('49');
     await field(page, 'proposal.minutesPerSession').fill('30'); await check(page, 'proposal.funding', 'additional').check();
     const time = panel(page).locator('.native-time-controls');
-    for (const width of [1280, 1920]) {
+    for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1100 });
       const boxes = await time.evaluate(node => {
-        const box = element => { const r = element.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, width:r.width, middle:r.y+r.height/2 }; };
-        const part = unit => { const group = node.querySelector(`.native-coordination__control--${unit}`); return { ...box(group), dial:box(group.querySelector('.native-knob')), stepper:box(group.querySelector('.native-coordination__stepper')) }; };
-        return { all:box(node), overview:box(node.querySelector('.native-time__overview')), quantities:box(node.querySelector('.native-time__quantities')),
-          hours:part('hours'), minutes:part('minutes'), count:box(node.querySelector('.native-coordination__control--count')) };
+        const box = element => { const r = element.getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, bottom:r.bottom, width:r.width, height:r.height }; };
+        const module = node.querySelector('.studio-duration');
+        const part = unit => { const group = module.querySelector(`.native-coordination__control--${unit}`); return { ...box(group),
+          dial:box(group.querySelector('.native-knob')), stepper:box(group.querySelector('.native-coordination__stepper')),
+          input:box(group.querySelector('.native-coordination__stepper input')),
+          buttons:[...group.querySelectorAll('.native-coordination__stepper button')].map(box), background:getComputedStyle(group).backgroundColor }; };
+        const count = node.querySelector('.native-coordination__control--count');
+        return { all:box(node), module:box(module), output:box(module.querySelector('output')), hours:part('hours'), minutes:part('minutes'),
+          separateCount:!module.contains(count), border:parseFloat(getComputedStyle(module).borderTopWidth),
+          outputFont:parseFloat(getComputedStyle(module.querySelector('output strong')).fontSize),
+          fieldFont:parseFloat(getComputedStyle(module.querySelector('.native-coordination__stepper input')).fontSize),
+          outputFor:module.querySelector('output').htmlFor.value,
+          fieldIds:[...module.querySelectorAll('.native-coordination__stepper input')].map(input => input.id) };
       });
-      assert.ok(boxes.overview.right <= boxes.quantities.x + 1 && Math.abs(boxes.hours.y-boxes.minutes.y) < 1 && Math.abs(boxes.hours.y-boxes.count.y) < 1,
-        `The compact readout sits beside aligned Hours, Minutes and Working sessions: ${JSON.stringify(boxes)}`);
+      assert.ok(boxes.separateCount, 'Working sessions stays outside the duration enclosure');
+      assert.ok(boxes.border > 0 && boxes.outputFont > boxes.fieldFont, 'a visible housing and larger combined reading establish the duration hierarchy');
+      assert.deepEqual(boxes.outputFor.split(' '), boxes.fieldIds, 'the combined readout keeps both exact-field associations');
+      assert.ok(boxes.output.bottom <= Math.min(boxes.hours.y, boxes.minutes.y), 'the combined duration readout stays above both controls');
       assert.ok(boxes.hours.dial.width > boxes.minutes.dial.width, 'Hours carries the larger dial');
+      assert.notEqual(boxes.hours.background, boxes.minutes.background, 'Minutes has a distinct secondary face');
+      if (width === 1440) assert.ok(Math.abs(boxes.hours.y-boxes.minutes.y) < 1 && boxes.hours.right <= boxes.minutes.x + 1,
+        `Hours and Minutes share a row on laptop: ${JSON.stringify(boxes)}`);
+      for (const unit of ['hours', 'minutes']) {
+        const part = boxes[unit], [minus, plus] = part.buttons;
+        assert.ok(part.stepper.x >= (width === 1440 ? part.dial.right - 1 : part.dial.x + 1) && part.stepper.y > part.dial.y,
+          `${unit} exact field sits toward its dial's lower right: ${JSON.stringify(part)}`);
+        assert.ok(minus.y >= part.input.bottom && plus.y >= part.input.bottom && plus.x > minus.right + 2,
+          `${unit} keeps a spaced pair beneath its exact field`);
+        assert.ok(Math.abs(minus.width-minus.height) < 1 && Math.abs(plus.width-plus.height) < 1, 'steppers retain circular geometry');
+        assert.ok(Math.abs((minus.x+plus.right)-(part.input.x+part.input.right)) < 2, 'step pair stays centered under the field');
+        assert.ok(part.x >= boxes.module.x && part.right <= boxes.module.right && part.bottom <= boxes.module.bottom,
+          `${unit} remains inside its enclosure`);
+      }
+      assert.ok(boxes.all.x >= 0 && boxes.all.right <= width && boxes.module.right <= boxes.all.right,
+        `the supporting duration module stays within the viewport: ${JSON.stringify(boxes)}`);
       await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-${width}.png`) });
-      for (const unit of ['hours', 'minutes']) assert.ok(boxes[unit].dial.right <= boxes[unit].stepper.x + 1
-        && Math.abs(boxes[unit].dial.middle-boxes[unit].stepper.middle) < 1, `${unit} dial stays beside its precision input: ${JSON.stringify(boxes[unit])}`);
-      assert.ok(boxes.quantities.right <= boxes.all.right + 1 && boxes.all.right <= width, JSON.stringify(boxes));
-      await panel(page).locator('[data-assurance-work=""]').screenshot({ path: resolve(captures, `${engine}-supporting-session-${width}.png`) });
     }
-    await page.setViewportSize({ width: 390, height: 1000 });
-    const narrowTime = await time.evaluate(node => { const outer=node.getBoundingClientRect(); return [...node.querySelectorAll('input,button,label,.native-knob')].map(input => { const b=input.getBoundingClientRect(); return {left:b.left,right:b.right,width:b.width,height:b.height,outerLeft:outer.left,outerRight:outer.right}; }); });
-    assert.ok(narrowTime.every(box => box.left >= box.outerLeft - .5 && box.right <= box.outerRight + .5 && box.left >= -.5 && box.right <= 390.5 && box.width > 0 && box.height > 0), JSON.stringify(narrowTime));
-    await time.screenshot({ path: resolve(captures, `${engine}-supporting-time-narrow.png`) });
     await page.setViewportSize({ width: 1440, height: 1100 }); await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
     await expect(panel(page).locator('[data-assurance-work-preview]')).toContainText('30 minutes per person × 2 people × 1 occurrences = 60 aggregate person-minutes');
     await expect(panel(page).locator('[data-assurance-preview]')).toContainText('Proposed investment: $4,080.00. Accepted investment: $3,980.00. Change: $100.00');

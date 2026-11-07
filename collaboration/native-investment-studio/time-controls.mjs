@@ -9,7 +9,8 @@ const labels = Object.freeze({ hoursPerSession: 'Hours', minutesPerSession: 'Min
 export function createTimeControls(document, { idPrefix, fieldPrefix = '', decorateField, decorateStep }) {
   const node = (tag, text, className) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; };
   const element = node('div', undefined, 'native-time-controls');
-  const overview = node('div', undefined, 'native-coordination__duration-group native-time__overview'); overview.setAttribute('role', 'group'); overview.setAttribute('aria-labelledby', `${idPrefix}-duration-label`);
+  const duration = node('div', undefined, 'studio-quantity-module studio-duration'); duration.setAttribute('role', 'group'); duration.setAttribute('aria-labelledby', `${idPrefix}-duration-label`);
+  const overview = node('div', undefined, 'native-time__overview');
   const title = node('p', 'Time per person, per session', 'native-coordination__control-title'); title.id = `${idPrefix}-duration-label`;
   const display = node('output', undefined, 'native-coordination__duration-display'); display.setAttribute('aria-label', 'Draft time per person in one working session'); display.setAttribute('aria-live', 'off');
   const outputs = {};
@@ -44,11 +45,16 @@ export function createTimeControls(document, { idPrefix, fieldPrefix = '', decor
       dial.append(ticks, face, knob); adjustment.append(dial, stepper); group.append(adjustment);
       dials[unit] = { dial, knob, note };
     } else group.append(stepper);
-    group.append(range); quantities.append(group); controls.set(key, { input, error, group, key });
+    group.append(range);
+    if (name === 'occurrences') group.classList.add('studio-repetition');
+    else quantities.append(group);
+    controls.set(key, { input, error, group, key });
   }
-  const context = node('p', '', 'native-coordination__hint'); context.id = `${idPrefix}-context`; quantities.lastElementChild.append(context);
+  const repetition = controls.get(fieldPrefix + 'occurrences').group;
+  const context = node('p', '', 'native-coordination__hint'); context.id = `${idPrefix}-context`; repetition.append(context);
   controls.get(fieldPrefix + 'occurrences').input.setAttribute('aria-describedby', `${context.id} ${idPrefix}-occurrences-range ${idPrefix}-occurrences-error`);
-  element.append(overview, quantities, feedback);
+  duration.append(overview, quantities);
+  element.append(duration, repetition, feedback);
   return Object.freeze({ element, controls, dials, ...dials.minutes, outputs, context });
 }
 
@@ -102,15 +108,15 @@ function mountTimeDial({ unit, dial, knob, note, read, write }) {
         : unit === 'minutes' && max === 0 ? 'Use 0 minutes with 24 hours.' : `Enter 0–${max} ${unit}.`;
     }
   }
-  function pointerAngle(event) {
-    const box = knob.getBoundingClientRect(), x = event.clientX - box.left - box.width / 2, y = event.clientY - box.top - box.height / 2;
+  function pointerAngle(event, center) {
+    const x = event.clientX - center.x, y = event.clientY - center.y;
     if (Math.hypot(x, y) < 4) return null;
     const angle = Math.atan2(y, x) * 180 / Math.PI + 90; return angle > 180 ? angle - 360 : angle;
   }
   function turn(event) {
     if (!gesture || event.pointerId !== gesture.pointerId) return;
     if (current()?.token !== gesture.token) { release(); return; }
-    const angle = pointerAngle(event); if (angle === null) return;
+    const angle = pointerAngle(event, gesture.center); if (angle === null) return;
     const delta = ((angle - gesture.lastAngle + 540) % 360) - 180;
     gesture.angle = Math.min(135, Math.max(-135, gesture.angle + delta)); gesture.lastAngle = angle;
     set(Math.round((gesture.angle + 135) * scale / 270), gesture.token);
@@ -121,8 +127,10 @@ function mountTimeDial({ unit, dial, knob, note, read, write }) {
     const view = current(); if (!view || gesture || !event.isPrimary || event.button !== 0) return;
     event.preventDefault(); knob.focus({ preventScroll: true });
     if (current()?.token !== view.token) return;
-    const angle = pointerAngle(event) ?? -135 + Number(view.raw) * 270 / scale;
-    knob.setPointerCapture(event.pointerId); gesture = { pointerId: event.pointerId, token: view.token, raw: view.raw, lastAngle: angle, angle: Math.min(135, Math.max(-135, angle)) };
+    // Keep the turn's origin stable if a focused-control refresh scrolls the page.
+    const box = knob.getBoundingClientRect(), center = { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    const angle = pointerAngle(event, center) ?? -135 + Number(view.raw) * 270 / scale;
+    knob.setPointerCapture(event.pointerId); gesture = { pointerId: event.pointerId, token: view.token, raw: view.raw, center, lastAngle: angle, angle: Math.min(135, Math.max(-135, angle)) };
     dial.dataset.dragging = 'true'; set(Math.round((gesture.angle + 135) * scale / 270), view.token);
   });
   listen(knob, 'pointermove', turn);

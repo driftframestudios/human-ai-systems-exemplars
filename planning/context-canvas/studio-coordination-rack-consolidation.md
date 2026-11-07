@@ -213,32 +213,31 @@ person field editing retains its acceptance boundary.
 ## Duration and rate modules before editor placement
 
 [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
-prepares the dials for adjacent racks. Enclose **Time per person, per session**,
-the existing combined Hours/Minutes output, and both dial–field–step groups in
-one instrument module. Hours remains the larger dial; Minutes remains smaller.
-Keep **Working sessions** nearby as a separate repetition module.
+groups **Time per person, per session**, the combined Hours/Minutes output and
+both dial–field–step groups in one instrument enclosure. The larger readout sits
+above both dials. Hours retains its larger primary dial; Minutes has a smaller
+dial in a secondary peach inner enclosure. Each exact field and circular step
+pair sits toward its dial's lower right. The gap between circles and their
+start/end alignment beneath the input remain recognizable.
 
-Place the larger readout above the dials within the module face.
-At laptop width the groups can sit side by side; at phone width they reflow
-inside the same enclosure. Give Minutes a secondary rose/peach inner face or a
-simple reel-like outline. Place each dial above-left of its exact field/stepper
-group, so the driver and its value read together. Preserve the input above the
-circular minus/plus pair, the gap between circles and their start/end alignment
-under the input. Skin and size can vary while that layout stays recognizable.
-Preserve output associations, fixed light and the current pointer artwork.
-Apply the same housing grammar to the existing $10/$5 rate dials and their one
-exact amount/$1 controls.
+The two units share a row when space permits and reflow within the same enclosure
+at phone widths. **Working sessions** stays nearby as a separate repetition
+control. #768 may later express occurrences as pads or a compact lane with a
+clear count and placement. Duration changes one occurrence's length; adding an
+occurrence and adding a different session retain their distinct operations.
 
-Working sessions keeps its repetition meaning, with the existing input retained
-for this enclosure pass. #768 may later express occurrences as pads or a compact
-lane with a clear count and placement. Duration changes one occurrence's length;
-adding an occurrence and adding a different session stay distinct operations.
+`studio-quantity-module` supplies the shared housing grammar. `studio-duration`
+contains the duration composition; existing rate hosts use the same skin around
+one named exact amount, $10/$5 dials and $1 steps. The shared instrument stylesheet
+owns enclosure geometry, with the former About duration layout reconciled into
+that owner. The main About session markup and dynamic `time-controls.mjs` factory
+use the same grouping. Their output associations, dial artwork, fixed light,
+gesture handling and Apply/Cancel behavior retain their existing owners.
 
-The main session markup in About HTML and the dynamic supporting-session
-factory in `time-controls.mjs` must receive the duration composition together.
-Their controllers retain value ownership. Reconcile the current wide-screen
-overview column with the enclosure rather than adding another competing rule.
-The retained-value repair from #761 remains the gesture contract.
+The enclosure increment prepares the adjacent editor receivers while their
+current placement stays in service. The retained-value repair from #761 remains
+the gesture contract, and the receiving #767 PR carries focused layout and value
+agreement evidence.
 
 ## Attached editorial companions
 
@@ -287,8 +286,8 @@ expanding the first style PR into a deletion-model rewrite.
 | --- | --- | --- |
 | [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), permanent Team planning and secondary rack (#778) | Complete; supplies shared control and enclosure ownership |
 | [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Delivered in #781; supplies phase scope and the combined reading |
-| [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Supplies stable accepted identity before adjacent editors; its PR carries transaction and recovery evidence |
-| [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Duration/rate enclosures | Receives shared grammar; can proceed alongside #766; precedes both adjacent editor issues |
+| [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Delivered in #783; supplies stable accepted identity before adjacent editors |
+| [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Shared duration/rate enclosures | Implements the quantity hierarchy and shared housing; its reviewed PR prepares both adjacent editor issues |
 | [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |
 | [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Shares #757's contextual panel contract and existing editor owners |
 | [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) → [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Immediate session acceptance, then empty-space entry | Receives common creation controls and an adjacent edit/return route; retains existing creation until ready |
@@ -298,14 +297,14 @@ expanding the first style PR into a deletion-model rewrite.
 
 Either adjacent editor can supply the first reviewed panel example after its
 preparation is accepted. #771's movement and #772's companion shell can develop
-alongside the enclosure work. Percentage modeling and immediate-add acceptance
+alongside adjacent editor work. Percentage modeling and immediate-add acceptance
 retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
 
 The chain review preserves completed #755 (contracts) and #756 (scope navigation)
 as accepted foundations. #765’s reviewed composition, #779’s delivery board and
 #766’s direct replacement prepare the next receivers. #766 preserves sessions
-created through the new entry when arrangements change; #767 receives the exact
+created through the new entry when arrangements change; #767 supplies the shared
 duration hierarchy; #757/#768 receive nested matrices, shared names and companion
 routes. #758 now has a recommended first record and #770 its contextual entry.
 The underlying issue acceptance remains with each receiver.

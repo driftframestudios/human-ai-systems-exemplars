@@ -91,7 +91,10 @@ serialization, pricing and history.
 The load order in [About HTML](../../context-canvas-project-surface/context-canvas/index.html)
 is `about.css`, then `studio-instrument.css`, followed by the chapter extensions.
 The About owner defines `--native-*` from `--about-*`; the shared instrument owner
-maps `--studio-*`. Receiving chapter styles extend those mappings. This contract
+maps `--studio-*` and owns the shared `studio-quantity-module` enclosure.
+`studio-duration` groups the larger output above Hours and secondary peach
+Minutes; rate hosts use the same enclosure grammar for their named amount.
+Receiving chapter styles extend those mappings. This contract
 introduces no parallel token file or generated stylesheet.
 
 As common controls are extracted, their names describe the semantic role they
@@ -192,11 +195,13 @@ The Team arrangement flow in
 accepts a selection through one updateable arrangement and local Undo. Shared
 and unrelated records retain identity; repeated unchanged choices retain history.
 Text customization settles as a complete field edit. Other editors retain their
-current proposal and Apply owners. Before adjacent editors move,
+current proposal and Apply owners. The enclosed controls in
 [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
-defines duration and rate enclosures that fit within the rack. Coordination-first
+group duration and rate controls within the rack grammar. Their existing editors
+retain value and acceptance ownership. Coordination-first
 [person/team editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 are the later receivers. [Immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-keeps its separate creation decision. These are prospective contracts; current
-runtime owners remain the implementation authority until their focused PRs land.
+keeps its separate creation decision. Adjacent editor placement and immediate
+creation are prospective contracts; current runtime owners remain authoritative
+until those focused PRs land.

@@ -347,7 +347,8 @@
                 </div>
                 <div class="native-coordination__feedback native-session__name-feedback" aria-label="Session name and team feedback"><p class="native-coordination__error" id="native-session-name-error" data-native-error="label"></p><p class="native-coordination__error" id="native-session-team-error" data-native-error="teamId"></p></div>
                 <div class="native-time-controls">
-                <div class="native-coordination__duration-group native-time__overview" role="group" aria-labelledby="native-duration-label">
+                <div class="studio-quantity-module studio-duration" role="group" aria-labelledby="native-duration-label">
+                <div class="native-time__overview">
                   <p id="native-duration-label" class="native-coordination__control-title">Time per person, per session</p>
                   <output class="native-coordination__duration-display" for="native-hours native-minutes" aria-label="Draft time per person in one working session" aria-live="off">
                     <span><strong data-native-duration-hours>00</strong><span>hours</span></span>
@@ -387,7 +388,9 @@
                     </div>
                     <p class="native-coordination__hint" id="native-minutes-range" data-native-range="minutesPerSession" hidden>0–59 minutes</p>
                   </div>
-                  <div class="native-coordination__control native-coordination__control--count">
+                </div>
+                </div>
+                  <div class="native-coordination__control native-coordination__control--count studio-repetition">
                     <label for="native-occurrences">Working sessions</label>
                     <div class="native-coordination__stepper">
                       <button type="button" data-field="occurrences" data-step="-1" aria-label="Decrease working sessions by one">−</button>
@@ -397,7 +400,6 @@
                     <p class="native-coordination__hint" id="native-session-context" data-native-session-context>Across this 4-week plan.</p>
                     <p class="native-coordination__hint" id="native-occurrences-range" data-native-range="occurrences" hidden>0–10,000 sessions</p>
                   </div>
-                </div>
                 <div class="native-coordination__feedback native-session__quantity-feedback native-time__feedback" role="group" aria-label="Quantity feedback">
                   <p class="native-coordination__hint" data-native-hours-knob-note hidden>Enter hours above to use the dial.</p>
                   <p class="native-coordination__hint" data-native-knob-note hidden>Enter minutes above to use the dial.</p>

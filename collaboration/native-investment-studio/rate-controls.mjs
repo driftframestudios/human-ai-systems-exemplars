@@ -23,6 +23,7 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
   const element = document.createElement('div'); element.className = 'native-rate-controls';
   const dials = document.createElement('div'); dials.className = 'native-rate__dials';
   element.append(dials); host.append(element);
+  host.classList.add('studio-quantity-module', 'studio-rate');
   let disposed = false;
   const mounted = [10, 5].map(dollars => {
     const size = dollars === 10 ? 'coarse' : 'fine', part = document.createElement('div'); part.className = 'native-rate__part';
@@ -135,5 +136,5 @@ export function mountRateControls({ host, precision, label = 'Hourly rate', read
   }
   refresh();
   return Object.freeze({ refresh, release(restore = false) { mounted.forEach(dial => dial.release(restore)); },
-    dispose() { if (disposed) return; disposed = true; mounted.forEach(dial => dial.dispose()); element.remove(); }, element, precision });
+    dispose() { if (disposed) return; disposed = true; mounted.forEach(dial => dial.dispose()); element.remove(); host.classList.remove('studio-quantity-module', 'studio-rate'); }, element, precision });
 }
