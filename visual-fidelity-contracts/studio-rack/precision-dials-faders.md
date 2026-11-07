@@ -31,6 +31,11 @@ their labels, tracks and readouts; descriptive text has its own reading area.
 The thumb stays visually distinct from the active fill. A selected channel uses
 more than color alone.
 
+Change and Quality intentionally retain different fader skins. The shared
+contract is named quantity, readable endpoints, exact value and visible response;
+their channel geometry, palette and texture express their own chapter. Reusing a
+Quality selection matrix in another rack leaves this distinction intact.
+
 Absolute time ranges and relative monetary increments retain different meanings.
 The rate adapter preserves cents while stepping whole dollars. An untouched
 blank remains unknown; an explicit rate gesture may begin an amount. Invalid
@@ -84,21 +89,49 @@ supporting-session receivers.
 
 The planned duration module places the short **Time per person, per session**
 label, `output.native-coordination__duration-display`, and the existing Hours and
-Minutes groups inside one bounded instrument enclosure. The larger Hours dial
-and smaller Minutes dial stay beside their exact fields and centered step pairs.
-Working sessions remains an adjacent quantity with its own label: it changes
-repetition, while Hours and Minutes describe each session. The readout is to sit
-directly in that instrument face, with its existing output/input associations.
+Minutes groups inside one bounded instrument enclosure. The readout sits above
+both dials and is larger than their individual exact-value readings, making the
+combined result the visual heading of the control. This refines the earlier
+permission to place the output beside the controls; its exact horizontal
+alignment within the rack remains a receiving composition choice.
+
+Hours keeps the larger dial. Minutes uses the smaller dial in a secondary
+sub-enclosure: a restrained rose/peach face or the simple outlined boundary of
+`fieldset.native-reel` is a suitable starting point. The unit label and size
+hierarchy carry the distinction alongside color. Within each unit group, the
+dial sits above-left and the exact field/stepper group sits below-right. Keep the
+current stepper layout: numeric input above circular minus/plus buttons, the
+visible gap between those buttons, and their alignment at the field's start and
+end. A smaller or differently colored skin preserves this layout and usable hit
+targets. Circular controls remain part of the composition's visual rhythm.
+
+Working sessions retains its repetition meaning. A future adjacent rack may
+show those occurrences as discrete pads or lane items, with a direct way to add
+another occurrence and a readable count. That presentation receives its own
+small behavior check: changing repetition adds or removes occurrences of the
+same work, while changing Hours or Minutes changes each occurrence's duration.
+The enclosure increment can retain the existing count control until that
+receiving composition is ready.
+
 The current static session markup and dynamic `createTimeControls` factory must
-receive the same structure so supporting-session proposals keep the same
-operation. Ordinary mobile reflow retains the readout and quantities within that
-enclosure; existing dial artwork remains the visual reference.
+receive the same duration structure so supporting-session proposals keep the
+same operation. Ordinary mobile reflow retains the output above the controls
+and every quantity within the enclosure. Existing output/input associations,
+dial artwork and value owners remain the reference.
 
 The corresponding rate module is to enclose the $10/$5 dials, exact monetary
 field and centered $1 steps as one named hourly-rate control. Its fixed housing,
 light, pointer and coarse/fine size hierarchy preserve the existing art direction.
 These enclosures change grouping and presentation; current raw-entry, gesture,
 editor identity and acceptance owners continue to govern values.
+
+The future [participant fader](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
+starts with **Time in this session**, meaning each person's share of one session
+occurrence. Its proportion and unit stay visible beside the control. The Issue
+owns the proposed defaults, zero-time behavior and effort/price contract before
+implementation. Membership, funded time and period availability retain their
+different meanings; existing whole-session participation remains authoritative
+until that model change lands.
 
 Use real pointer gestures when investigating an engine-specific reset: brief
 inside/outside movements, release, focus transfer and deliberate cancellation

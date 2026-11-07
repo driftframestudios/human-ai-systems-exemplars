@@ -39,10 +39,27 @@ Direct arrangement selection ([#766](https://github.com/driftframestudios/human-
 and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
 prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
 and session editors ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)).
+The plan draws on the whole Studio: Quality's selection matrices, Abilities'
+adjacent inspector, Change/Quality pad movement and the editorial disclosures.
+Shared components gain role-based names as they are extracted; intentional
+chapter differences, including the two fader styles, remain useful.
+
+The continued planning route adds empty-space session creation
+([#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)),
+participant movement and future time-share controls
+([#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)),
+and attached editorial companions
+([#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)).
+The [removal/recovery recommendation](removal-recovery-research.md) in
+[#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773)
+adds a shared rose Remove treatment, compact amp **Undo (n)** and scoped local
+recovery. Coordination supplies the reviewed example before removal controls
+spread to other chapters.
 These are prospective increments. Current arrangement preview/Apply, editor
-placement and creation flows remain available until their replacements land;
+placement and creation flows remain available until their replacements land.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-retains immediate addition as its own decision.
+now names sessions as the recommended first immediate-add record, with later
+editing and creation Undo kept distinct.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -118,7 +135,11 @@ Team planning offers a complementary view: its Shared sessions columns name
 people, and its pads show participation. The horizon's columns name periods,
 and its pads show occurrences. Both open the same working-session records.
 The next consolidation will give these readings consistent session keys and
-Add controls while keeping that distinction visible.
+Add controls while keeping that distinction visible. A future New session row
+will provide ghosted creation space inside the rack; existing row cells retain
+their occurrence or participation meaning. People and available time and
+Stages & handoffs will remain compact editorial companions attached below the
+rack, with equivalent in-rack entries and clear onward routes to People.
 
 ### Inspect support and keep the result
 

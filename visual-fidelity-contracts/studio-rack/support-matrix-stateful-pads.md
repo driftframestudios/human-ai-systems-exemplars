@@ -90,11 +90,43 @@ selection identifies the session being inspected. The whole-session key and its
 participation pads are to identify the same selected record without treating all
 populated pads as active inspectors.
 
-The existing Quality lanes and tracks provide composition precedents for later
-in-rack selections. Their support and inclusion meanings remain specific to
-Quality. A receiving Coordination panel must name whether its pads choose people,
-select a session, or reveal settings. The planned
+The existing `native-quality-tracks` is the preferred aesthetic precedent for
+future in-rack selection matrices: compact named rows, dark table housing,
+clearly available pads, and solid pressed inclusion states. Its Quality support
+and inclusion meanings remain specific to that receiver. A Coordination panel
+names whether its pads choose people, select a session or reveal settings. A
+short option set can use a pad rail; a matrix earns its space when named row and
+column relationships help the visitor compare. The planned
 [person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-receivers will establish the adjacent editor relationship; current record and
-draft owners continue to supply state until those increments land.
+receivers may open a complete selection rack directly beneath the parent while
+preserving one selected object and close/return path. Current record and draft
+owners continue to supply state until those increments land.
+
+An unused participation cell keeps its person/session meaning. The future
+[empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
+uses a named new-session row or gutter in the surrounding rack; a ghost
+plus indicates that action on hover and focus, with a visible touch equivalent.
+An eventual participation action in the cell names the person and the session.
+This separates creating work, adding participation and inspecting an existing
+record even when they share a pad-shaped control.
+
+The [participant-control increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
+is to reuse the keyed movement of Change's component
+keys through `animateRackChange` in
+[`reel-control.mjs`](../../collaboration/native-investment-studio/reel-control.mjs).
+Consistent Move earlier/later or up/down controls describe the rendered order;
+the receiving layout chooses the directional words that match its geometry.
+Stable person identity, retained focus and the motion preference govern the
+movement. Membership toggles keep the available cards mounted; an explicit
+reorder changes their order. Its later **Time in this session** fader receives
+the quantity decision in [Precision Dials & Faders](precision-dials-faders.md)
+before a pad starts implying a person's share of session time.
+
+The future [removal pattern](../../collaboration/native-investment-studio/removal-recovery-research.md)
+keeps the affected relationship explicit: removing a person from a session,
+removing one occurrence and removing the shared session have distinct scopes.
+Routine removal from accepted work offers named Undo through the existing
+history owner. Draft participation remains an inclusion choice with its existing
+Apply/Cancel boundary. A pad's selection or empty state never silently enlarges
+the operation to related records.

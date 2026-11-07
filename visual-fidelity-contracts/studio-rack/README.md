@@ -33,7 +33,11 @@ visual system for every chapter.
 
 One pale board and one dark control field are a sufficient dose. Chapter-specific
 color, lane arrangements and illustration remain available where they explain
-the work. The [Tiffany Ledger Field](../tiffany-ledger-field.md) owns the surrounding
+the work. Existing compositions across the entire Studio remain available as
+references: a receiver borrows the useful relationship and keeps its own data
+meaning. Quality's track-selection matrix is the preferred visual reference for
+new adjacent selection racks; Change and Quality retain their intentionally
+different fader treatments. The [Tiffany Ledger Field](../tiffany-ledger-field.md) owns the surrounding
 About composition; [ASCII Zine Field](../ascii-zine-field.md) supplies restrained
 print-shop character. [Cobalt Operating Field](../cobalt-operating-field.md)
 supplies related guidance for named work relationships. This family maps those
@@ -89,6 +93,17 @@ The About owner defines `--native-*` from `--about-*`; the shared instrument own
 maps `--studio-*`. Receiving chapter styles extend those mappings. This contract
 introduces no parallel token file or generated stylesheet.
 
+As common controls are extracted, their names describe the semantic role they
+share: track key, duration module, participation pad or editorial drawer. A
+chapter-neutral class or helper belongs with the existing shared instrument or
+component owner when several chapters receive it. Source names such as
+`native-quality-tracks` remain useful references for the current exemplar; a
+shared extraction should receive a generic role name rather than make other
+chapters depend on a Quality-specific name. Chapter owners retain meaningful
+local geometry, palette variants and intentionally different fader treatments.
+Each focused PR reconciles the actual consumers and tests; broad renaming waits
+for a real shared receiving use.
+
 | Owner | Responsibility |
 | --- | --- |
 | [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Rack palette mappings, reels, motion modes and shared refinements |
@@ -127,6 +142,30 @@ header/readout alignment and bounded scrolling. Horizon columns express time;
 Shared sessions columns express people. Their common housing preserves those
 different relationships. The existing palette, reels, pads and tactile depth
 provide the art direction for this consolidation.
+
+The [editorial-companion increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
+treats Editorial Rack as an attached sub-rack skin.
+People and available time and Stages & handoffs retain their concise headings,
+reading character and expandable spring movement, visually joined to the bottom
+of the instrument they explain. Their existing operations remain available from
+meaningful people, session and relationship controls inside that rack. The
+editorial receiver supplies a readable alternative and onward chapter routes;
+shared controller ownership keeps both paths aligned. The initial composition
+stays compact until the visitor opens these details.
+
+An adjacent editor may itself be a Studio Rack Composition that swings open
+beneath its originating rack. Its current object, close/return and relationship
+to the parent remain visible. This permits a useful local instrument without
+turning each nested panel into a repeated chapter. The operation contracts below
+define its selection, quantity and recovery behavior.
+
+The prospective [removal and recovery pattern](../../collaboration/native-investment-studio/removal-recovery-research.md),
+scoped in [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773),
+uses the existing `native-control--remove` role for a low-emphasis rose-outline button,
+sized with secondary actions. Its written label names the object and scope;
+color reinforces that meaning. Cancel retains its ghost treatment, and creation
+retains the plus cue. A Coordination prototype is the first visual receiver;
+human review of that example precedes the wider chapter adoption.
 
 The planned Team arrangement flow in
 [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
