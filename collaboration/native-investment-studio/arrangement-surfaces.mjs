@@ -15,13 +15,15 @@ export function createTeamLanes(document, { plan, teams = plan.teams, onNavigate
   for (const team of teams) {
     const lane = node(document, 'section', 'studio-team-lane'); lane.dataset.teamLane = team.id;
     const title = node(document, 'button', 'studio-team-lane__title native-control--navigate', team.label);
-    title.type = 'button'; title.addEventListener('click', () => onNavigate({ kind: 'team', id: team.id }));
+    title.type = 'button'; title.addEventListener('click', event => onNavigate({ kind: 'team', id: team.id }, event.currentTarget));
+    if (!proposed) { title.dataset.studioRecordKind = 'team'; title.dataset.studioRecordId = team.id; }
     const members = node(document, 'ul', 'studio-team-lane__people');
     for (const id of team.personIds ?? []) {
       const person = people.get(id); if (!person) continue;
       const item = node(document, 'li');
       const control = node(document, 'button', 'studio-team-lane__person native-control--navigate', person.label);
-      control.type = 'button'; control.addEventListener('click', () => onNavigate({ kind: proposed ? 'team' : 'person', id: proposed ? team.id : id }));
+      control.type = 'button'; control.addEventListener('click', event => onNavigate({ kind: proposed ? 'team' : 'person', id: proposed ? team.id : id }, event.currentTarget));
+      if (!proposed) { control.dataset.studioRecordKind = 'person'; control.dataset.studioRecordId = id; }
       item.append(control); members.append(item);
     }
     if (!members.children.length) members.append(node(document, 'li', 'studio-team-lane__empty', 'Choose the people for this team'));
@@ -31,7 +33,8 @@ export function createTeamLanes(document, { plan, teams = plan.teams, onNavigate
     lane.append(title, members, note);
     if (onAdd) {
       const choose = node(document, 'button', 'native-control--navigate studio-team-lane__add', 'Choose people');
-      choose.type = 'button'; choose.addEventListener('click', () => onNavigate({ kind: 'team', id: team.id })); lane.append(choose);
+      choose.type = 'button'; choose.addEventListener('click', event => onNavigate({ kind: 'team', id: team.id }, event.currentTarget)); lane.append(choose);
+      choose.dataset.studioRecordKind = 'team'; choose.dataset.studioRecordId = team.id;
     }
     board.append(lane);
   }

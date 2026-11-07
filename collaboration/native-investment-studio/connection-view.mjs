@@ -218,8 +218,8 @@ export function createArrangementTeamLanes(document, { arrangement, plan, readin
   const slots = new Map(arrangement.teams.map(row => [row.team.id, row.slotId]));
   return createTeamLanes(document, { plan, teams: arrangement.teams.map(row => row.team), proposed: reading === 'proposed',
     onAdd: reading === 'accepted' ? target => onNavigate({ kind: `create-${target.kind}` }) : null,
-    onNavigate(target) {
-      onNavigate(reading === 'proposed' ? { kind: 'template-team', id: slots.get(target.id) } : target);
+    onNavigate(target, source) {
+      onNavigate(reading === 'proposed' ? { kind: 'template-team', id: slots.get(target.id) } : target, source);
     } });
 }
 
@@ -258,6 +258,7 @@ export function createArrangementReading(document, { arrangement, plan, reading 
     const group = svgNode('g', { class: 'native-arrangement__team', 'data-arrangement-team': team.id, 'data-arrangement-slot': team.slotId ?? 'external' });
     group.setAttribute('role', 'button'); group.setAttribute('tabindex', '-1'); group.setAttribute('aria-label', `${team.role}: ${team.label}`);
     group.setAttribute('data-arrangement-target-kind', reading !== 'accepted' ? 'template-team' : 'team'); group.setAttribute('data-arrangement-target-id', reading !== 'accepted' ? team.slotId : team.id);
+    if (reading === 'accepted') { group.dataset.studioRecordKind = 'team'; group.dataset.studioRecordId = team.id; }
     group.append(svgNode('title', {}, `${team.role}: ${team.label}`), svgNode('rect', { x: team.x - 110, y: team.y - 36, width: 220, height: 72, rx: 7 }),
       svgNode('text', { x: team.x, y: team.y - 13, 'text-anchor': 'middle', class: 'native-arrangement__role' }, team.role));
     const text = svgNode('text', { x: team.x, y: team.y + 9, 'text-anchor': 'middle' });
@@ -276,8 +277,8 @@ export function createArrangementReading(document, { arrangement, plan, reading 
   if (includeTeamLanes) section.append(createArrangementTeamLanes(document, { arrangement, plan, reading, onNavigate }));
   section.append(viewport);
   if (includeConnections) section.append(connections);
-  section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); });
-  svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }); } });
+  section.addEventListener('click', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && section.contains(control)) onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }, control); });
+  svg.addEventListener('keydown', event => { const control = event.target.closest('[data-arrangement-target-kind]'); if (control && ['Enter', ' '].includes(event.key)) { event.preventDefault(); onNavigate({ kind: control.dataset.arrangementTargetKind, id: control.dataset.arrangementTargetId }, control); } });
   return section;
 }
 
@@ -352,7 +353,7 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     const selected = reading.arrangements.find(row => row.id === selectedArrangement);
     detach.hidden = !selected; detach.dataset.arrangementId = selected?.id ?? '';
     if (selected) arrangementBody.replaceChildren(createArrangementReading(document, { arrangement: selected, plan: acceptedProjection.state,
-      onNavigate(target) { if (disposed) return; if (target.kind === 'connection') select(target.id, { notify: true }); else onNavigate(target); } }));
+      onNavigate(target, source) { if (disposed) return; if (target.kind === 'connection') select(target.id, { notify: true }); else onNavigate(target, source); } }));
     else arrangementBody.replaceChildren(element('h4', 'native-arrangement__identity', reading.arrangements.length ? 'All current connections' : 'Custom connections'),
       createTeamLanes(document, { plan: acceptedProjection.state, onNavigate,
         onAdd: target => onNavigate({ kind: `create-${target.kind}` }) }));
@@ -436,7 +437,12 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     const contributionModel = createContributionViewModel(acceptedProjection), links = contributionModel.forConnection(row.id);
     contributions.replaceChildren(); contributions.hidden = links.length === 0;
     if (links.length) contributions.append(element('h5', '', 'Assistance and human review'));
-    const route = (label, kind, id) => { const control = button(label, 'navigate'); control.className += ' native-control--navigate'; Object.assign(control.dataset, { connectionTargetKind: kind, connectionTargetId: id }); return control; };
+    const route = (label, kind, id) => {
+      const control = button(label, 'navigate'); control.className += ' native-control--navigate';
+      Object.assign(control.dataset, { connectionTargetKind: kind, connectionTargetId: id });
+      if (kind === 'person' || kind === 'team') { control.dataset.studioRecordKind = kind; control.dataset.studioRecordId = id; }
+      return control;
+    };
     for (const link of links) {
       const contribution = contributionModel.contribution(link.contributionId), card = element('article', 'native-connections__contribution');
       card.dataset.contributionId = contribution.id;
@@ -480,7 +486,7 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
     if (control.dataset.connectionSelect) { select(control.dataset.connectionSelect, { notify: true }); return; }
     const action = control.dataset.connectionAction, view = state.read();
     if (action === 'detach-arrangement') { onDetachArrangement(control.dataset.arrangementId); return; }
-    if (action === 'navigate') { onNavigate({ kind: control.dataset.connectionTargetKind, id: control.dataset.connectionTargetId }); return; }
+    if (action === 'navigate') { onNavigate({ kind: control.dataset.connectionTargetKind, id: control.dataset.connectionTargetId }, control); return; }
     if (action === 'previous') showPage(view.page - 1);
     else if (action === 'next') showPage(view.page + 1);
     else if (action === 'return' && view.selectedId !== null) {

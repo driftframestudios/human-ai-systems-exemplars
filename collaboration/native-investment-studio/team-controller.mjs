@@ -13,7 +13,7 @@ const INSTANCES = new WeakMap();
 
 // The host owns accepted state. This receiver owns one person's editing controls.
 export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive = () => true, canOpen = isActive,
-  onAccepted = () => {}, onEditing = () => {}, onBegin = () => {} }) {
+  onAccepted = () => {}, onEditing = () => {}, onBegin = () => {}, onClose = () => false }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument;
   const find = selector => {
@@ -75,6 +75,10 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const mark = boundary();
     onEditing();
     if (focus && retains(epoch, mark)) focus();
+  }
+  function returnAfterClose(epoch) {
+    const mark = boundary(), handled = onClose();
+    if (handled !== true && retains(epoch, mark)) elements.summary.focus();
   }
   const rateControls = mountRateControls({ host: inputs.ratePerHour.closest('.native-coordination__control'), precision: inputs.ratePerHour,
     read() {
@@ -192,6 +196,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       else if (editor.read().status === 'stale') elements.recovery.querySelector('button').focus({ preventScroll: true });
       revealStudioDestination(elements.configure);
     } : null);
+    return result;
   }
 
   function settle(action) {
@@ -227,7 +232,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       if (!owns(epoch)) return;
       elements.configure.open = false;
       announce('Changes cancelled.');
-      notify(epoch, () => elements.summary.focus());
+      notify(epoch, () => returnAfterClose(epoch));
     }
   }
 
@@ -247,7 +252,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   function click(event) {
     if (disposed) return;
     const button = event.target.closest('button');
-    if (!button || !root.contains(button) || button.disabled) return;
+    if (!button || (!root.contains(button) && !elements.configure.contains(button)) || button.disabled) return;
     const personId = button.dataset.personId ?? button.dataset.teamPersonId;
     if (personId) { select(personId); return; }
     const action = button.dataset.personAction;
@@ -262,7 +267,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       announce(result.ok ? '' : result.error.message);
       if (result.ok && action === 'discard') elements.configure.open = false;
       notify(epoch, result.ok ? () => {
-        if (action === 'discard') elements.summary.focus();
+        if (action === 'discard') returnAfterClose(epoch);
         else inputs.ratePerHour.focus();
       } : null);
       return;
@@ -300,7 +305,8 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     select, resume: () => { if (disposed) return; composing = false; if (selectedId !== null && elements.configure.open) select(selectedId, false); else render(); }, dispose });
   try {
     for (const input of Object.values(inputs)) input.maxLength = 32;
-    listen(root, 'click', click);
+    listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
+    listen(elements.configure, 'click', click);
     listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { rateControls.release(); generation += 1; composing = true; render(); });

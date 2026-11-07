@@ -111,10 +111,11 @@ units and value owners. Shared enclosure geometry lives in
 reconciled into that owner. Current raw-entry, gesture, editor identity and
 Apply/Cancel owners continue to govern values.
 
-Adjacent [person/team](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-and [session](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-editors are the next receivers of this composition. Their relocation and
-open/close routes remain separate work. A future session rack may express
+The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+borrows the canonical controls, including the person's enclosed rate module.
+Its local close retains the current proposal; returning to People restores the
+same controls and value owner. [Session editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+is the next planned receiver of the duration module. A future session rack may express
 Working sessions as occurrence pads or a compact lane while preserving exact
 count and placement meaning.
 

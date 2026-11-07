@@ -12,7 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
-import { syncSessionControls } from './rack-controls.mjs';
+import { syncSessionControls, mountAdjacentRackEditor } from './rack-controls.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
 import { mountConnectionView } from './connection-view.mjs';
@@ -76,6 +76,8 @@ export function mountCoordinationPanel(root, options = {}) {
   let changePanel = null;
   let assurancePanel = null;
   let scorePanel = null;
+  let rackEditor = null;
+  let openingRackKind = null;
   const ampTools = root.querySelector('[data-native-amp-tools]');
   const ampPanels = new Map([...root.querySelectorAll('[data-amp-panel]')].map(button =>
     [button.dataset.ampPanel, { button, panel: root.querySelector(`#${button.getAttribute('aria-controls')}`) }]));
@@ -110,6 +112,60 @@ export function mountCoordinationPanel(root, options = {}) {
   function text(name, value) { elements[name].textContent = value; }
   function syncSessionReceiver() {
     if (!disposed && workPanel) syncSessionControls(root, workPanel.readReceiver());
+    if (!disposed) rackEditor?.sync();
+  }
+  function closeRackEditor() {
+    const selected = rackEditor?.read();
+    if (!selected?.open) return false;
+    if (selected.kind === 'person') teamPanel?.close();
+    else assemblyPanel?.close({ park: false });
+    rackEditor.hide({ focus: true });
+    return true;
+  }
+  function peopleOwnerAvailable(kind) {
+    return (activeChapter === 'people' || activeChapter === 'coordination'
+      && (openingRackKind === kind || rackEditor?.isOpen(kind))) && !purposePanel?.isOpen();
+  }
+  function openRackEditor(target, source) {
+    const collection = target.kind === 'person' ? 'people' : 'teams';
+    const record = studio.read().state[collection].find(row => row.id === target.id);
+    if (!record || !rackEditor) return;
+    const current = rackEditor.read();
+    if (current?.open && current.kind === target.kind && current.id === target.id) { closeRackEditor(); return; }
+    // Stable anchors sit outside both the template form and rebuilt readings.
+    const anchor = source?.closest('[data-native-connection-view]')
+      ?? requireElement('[data-connection-templates]');
+    const before = editing.read().active;
+    const targetId = target.kind === 'person' ? target.id : makeAssemblyTarget('team.update', target.id);
+    let result;
+    try {
+      openingRackKind = target.kind;
+      result = target.kind === 'person' ? teamPanel.select(target.id, false) : assemblyPanel.open(targetId, false);
+    } finally { openingRackKind = null; }
+    const owner = target.kind === 'person' ? teamPanel.read() : assemblyPanel.read();
+    const ownedId = target.kind === 'person' ? owner.draft?.personId : owner.draft?.assemblyId;
+    if (ownedId !== targetId) {
+      // A refused switch retains the previous record and its visible identity.
+      if (current?.open && before?.token === editing.read().active?.token) {
+        try {
+          openingRackKind = current.kind;
+          if (current.kind === 'person') teamPanel.select(current.id, false);
+          else assemblyPanel.open(makeAssemblyTarget('team.update', current.id), false);
+        } finally { openingRackKind = null; }
+      }
+      render(); announce(result?.error?.message ?? 'Finish or cancel the open edits, then choose another record.');
+      return;
+    }
+    rackEditor.show({ ...target, label: record.label }, source, anchor);
+    render();
+    const panel = rackEditor.element.querySelector('details');
+    if (!panel.open || panel.hidden) { rackEditor.hide(); return; }
+    const fields = [...panel.querySelectorAll('input,select,textarea,button')]
+      .filter(control => !control.matches(':disabled') && control.getClientRects().length);
+    (fields.find(control => control.getAttribute('aria-invalid') === 'true')
+      ?? fields.find(control => control.matches('input,select,textarea')) ?? fields[0])?.focus({ preventScroll: true });
+    motion?.indicate(rackEditor.element, { kind: 'inspection' });
+    revealStudioDestination(rackEditor.element);
   }
   function announce(message) { text('status', message); }
   function resumePeople() {
@@ -123,12 +179,14 @@ export function mountCoordinationPanel(root, options = {}) {
       if (coordinationEditor === 'score') scorePanel?.resume();
       else if (coordinationEditor === 'connection') connectionPanel?.resume();
       else if (coordinationEditor === 'template') templatePanel?.resume();
+      else if (coordinationEditor === 'record') resumePeople();
       else workPanel?.resume();
     } finally { resumingCoordination = false; }
   }
   function beginCoordination(kind) {
     if (disposed) return;
     coordinationEditor = kind;
+    if (kind !== 'record') rackEditor?.hide();
     if (mounted && !resumingCoordination) {
       const workspace = root.querySelector(`[data-native-workspace="${kind === 'template' ? 'connection' : kind}"]`);
       if (workspace?.tagName === 'DETAILS') workspace.open = true;
@@ -259,7 +317,7 @@ export function mountCoordinationPanel(root, options = {}) {
     returnRoutes.push({ kind, target, held, inspectedWorkId: id });
     render(); root.querySelector('[data-native-session-select]')?.focus();
   }
-  function navigateFromConnections(target, origin = 'connectionsView') {
+  function navigateFromConnections(target, origin = 'connectionsView', source = null) {
     if (disposed) return;
     if (target.kind === 'create-team' || target.kind === 'create-person') {
       const parked = editing.park();
@@ -277,6 +335,7 @@ export function mountCoordinationPanel(root, options = {}) {
     }
     const collection = { team: 'teams', work: 'work', person: 'people', contribution: 'contributions' }[target.kind];
     if (!collection || !studio.read().state[collection].some(row => row.id === target.id)) return;
+    if (activeChapter === 'coordination' && ['person', 'team'].includes(target.kind)) { openRackEditor(target, source); return; }
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     const returnTarget = origin === 'peopleView' ? 'people' : 'connections';
@@ -693,6 +752,7 @@ export function mountCoordinationPanel(root, options = {}) {
     renderGeneration += 1;
     chapterShell?.dispose();
     motion?.dispose();
+    rackEditor?.dispose();
     connectionView?.dispose();
     connectionPanel?.dispose();
     templatePanel?.dispose();
@@ -742,14 +802,15 @@ export function mountCoordinationPanel(root, options = {}) {
     if (sessionWorkspace) listen(sessionWorkspace, 'toggle', syncSessionReceiver);
     connectionView = mountConnectionView(requireElement('[data-native-connection-view]'), { projection: studio.read(),
       onSelect: id => { if (!disposed && connectionPanel?.select(id) === false) render(); },
-      onNavigate: navigateFromConnections, onDetachArrangement: id => templatePanel?.detach(id) });
+      onNavigate: (target, source) => navigateFromConnections(target, 'connectionsView', source), onDetachArrangement: id => templatePanel?.detach(id) });
     connectionPanel = mountConnectionPanel(requireElement('[data-native-connection-editor]'), { studio, editing,
       onBegin: () => beginCoordination('connection'),
       canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'connection' && !purposePanel?.isOpen(),
       onAccepted: () => render(), onEditing: () => render(),
     });
-    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing, onNavigate: navigateFromConnections, onViewChanged: syncSessionReceiver,
+    templatePanel = mountConnectionTemplatePanel(requireElement('[data-connection-templates]'), { studio, editing,
+      onNavigate: (target, source) => navigateFromConnections(target, 'connectionsView', source), onViewChanged: syncSessionReceiver,
       onBegin: () => beginCoordination('template'),
       canOpen: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
       isActive: () => activeChapter === 'coordination' && coordinationEditor === 'template' && !purposePanel?.isOpen(),
@@ -765,27 +826,37 @@ export function mountCoordinationPanel(root, options = {}) {
     const teamRoot = root.querySelector('[data-native-team-editor]');
     if (teamRoot) teamPanel = mountTeamPanel(teamRoot, { studio, editing,
       onBegin: () => {
+        if (activeChapter === 'coordination') beginCoordination('record');
         peopleEditor = 'person';
         purposePanel?.close({ resume: false });
         assemblyPanel?.close({ park: false });
         responsibilityPanel?.close({ park: false });
       },
-      canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
-      isActive: () => activeChapter === 'people' && peopleEditor === 'person' && !purposePanel?.isOpen(), onAccepted: () => render(),
-      onEditing: () => render() });
+      canOpen: () => peopleOwnerAvailable('person'),
+      isActive: () => peopleOwnerAvailable('person') && peopleEditor === 'person', onAccepted: () => render(),
+      onClose: closeRackEditor, onEditing: () => render() });
     const assemblyRoot = root.querySelector('[data-native-assembly]');
     if (assemblyRoot) assemblyPanel = mountAssemblyPanel(assemblyRoot, { studio, editing,
       onBegin: () => {
+        if (activeChapter === 'coordination') beginCoordination('record');
         peopleEditor = 'assembly';
         purposePanel?.close({ resume: false });
         teamPanel?.close();
         responsibilityPanel?.close({ park: false });
       },
-      canOpen: () => activeChapter === 'people' && !purposePanel?.isOpen(),
-      isActive: () => activeChapter === 'people' && peopleEditor === 'assembly' && !purposePanel?.isOpen(),
+      canOpen: () => peopleOwnerAvailable('team'),
+      isActive: () => peopleOwnerAvailable('team') && peopleEditor === 'assembly',
+      onClose: closeRackEditor,
       onAccepted: () => render(), onEditing: () => render(),
       onRecordCreated: prerequisiteCreated,
       onPersonCreated: id => teamPanel?.select(id),
+    });
+    if (teamPanel && assemblyPanel) rackEditor = mountAdjacentRackEditor(root, {
+      editors: {
+        person: [requireElement('[data-person-configure]'), requireElement('[data-person-status]')],
+        team: [requireElement('[data-assembly-configure]'), requireElement('[data-assembly-status]')],
+      }, onClose: closeRackEditor,
+      readLabel: record => studio.read().state[record.kind === 'person' ? 'people' : 'teams'].find(row => row.id === record.id)?.label,
     });
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
       onBegin: () => {
@@ -842,7 +913,10 @@ export function mountCoordinationPanel(root, options = {}) {
       }
       chapterShell = mountChapterShell(root, { motion, onSelect: chapter => {
         purposePanel?.close({ resume: false });
-        if (activeChapter !== chapter) editing.park();
+        if (activeChapter !== chapter) {
+          editing.park(); rackEditor?.hide({ home: true });
+          if (coordinationEditor === 'record') coordinationEditor = 'template';
+        }
         activeChapter = chapter;
         if (chapter === 'coordination') resumeCoordination();
         else if (chapter === 'people') resumePeople();

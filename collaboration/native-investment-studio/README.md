@@ -45,9 +45,14 @@ updates one arrangement through the accepted plan and makes Undo available local
 as delivered in [#783](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/783).
 Shared sessions keeps its complementary participation reading below.
 Enclosed duration and rate modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
-now group each named quantity with its controls. They prepare adjacent people/team
+group each named quantity with its controls, delivered in
+[#785](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/785).
+Adjacent people/team editing
 ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
-and session editors ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)).
+places the existing editor below the selected Team planning rack. Close retains
+the draft; Cancel discards it; Apply accepts through the existing owner.
+The People chapter uses those same controls. Adjacent session editing remains
+with [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768).
 The plan draws on the whole Studio: Quality's selection matrices, Abilities'
 adjacent inspector, Change/Quality pad movement and the editorial disclosures.
 Shared components gain role-based names as they are extracted; intentional
@@ -65,7 +70,7 @@ adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
 recovery. The existing Remove skin now lives with the shared instrument styles;
 its behavior stays with the current owners. Coordination supplies the reviewed
 recovery example before the new removal pattern spreads to other chapters.
-These are prospective increments. Current editor placement and creation flows
+These are prospective increments. Current session placement and creation flows
 remain available until their replacements land. The arrangement reel already
 uses its direct acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
@@ -156,9 +161,18 @@ setting keeps history intact. **Undo arrangement** restores the preceding plan.
 Shared and unrelated records keep their identities. When a shared record needs
 a separate replacement, a compact local choice preserves the existing record.
 
-Team/member cards open customization; handoffs open connection settings; session
-cards use accepted IDs to reach their existing editors. Text customization settles
-on leaving the field or pressing Enter; bounded choices settle immediately.
+People and accepted-team cards open a named editor directly below the rack.
+The selected card stays pressed; its caret points down while the editor is open.
+Press that card again or choose **Close** to hide the editor and retain its draft.
+**Cancel changes** discards the proposal and returns focus to the originating
+card; **Apply** accepts it and keeps the editor open. Switching records
+keeps unfinished work recoverable. Returning to People restores the same controls
+to that chapter.
+
+Illustrative teams awaiting acceptance keep their template-customization route;
+handoffs open connection settings; session cards reach their existing editors.
+Template text customization settles on leaving the field or pressing Enter;
+bounded choices settle immediately.
 Invalid entries stay available for correction, and other unfinished editors stay
 recoverable through Saved edits. Shared sessions follows the board with people
 as its columns. Rack headings, the readout and Add session stay outside local
@@ -277,6 +291,7 @@ checked source and remaining review boundary.
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
+| Adjacent person/team editing | [`rack-controls.mjs`](rack-controls.mjs) places the existing controls; [`controller.mjs`](controller.mjs), [`team-controller.mjs`](team-controller.mjs) and [`assembly-controller.mjs`](assembly-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor` and `studio-record-key` share the instrument CSS. |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,

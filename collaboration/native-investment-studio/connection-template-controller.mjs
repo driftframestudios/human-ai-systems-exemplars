@@ -266,8 +266,15 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const examplePlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
     const accepted = currentArrangement();
     const arrangement = accepted ?? exampleArrangement, previewPlan = accepted ? projection.state : examplePlan;
-    function inspectTemplate(target) {
-      if (!active()) return;
+    function inspectTemplate(target, source) {
+      if (!active(canOpen)) return;
+      if (target.kind === 'person') { navigate(target, source); return; }
+      if (accepted && ['template-team', 'team'].includes(target.kind)) {
+        const team = target.kind === 'team' ? target.id : arrangement.teams.find(row => row.slotId === target.id)?.team.id;
+        if (team) navigate({ kind: 'team', id: team }, source);
+        return;
+      }
+      if (!active() && !open()) return;
       const kind = ['template-team', 'team'].includes(target.kind) ? 'team' : 'connection';
       const slotId = target.kind === 'team' ? arrangement.teams.find(row => row.team.id === target.id)?.slotId
         : target.kind === 'connection' ? arrangement.connections.find(row => row.connection.id === target.id)?.slotId : target.id;
@@ -283,6 +290,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
     rackBody.replaceChildren(createDeliveryBoard(document, { arrangement, plan: previewPlan, acceptedSessionIds,
+      acceptedTeamIds: new Set(projection.state.teams.map(team => team.id)),
       onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
         sessionIds: acceptedSessionIds,
@@ -417,9 +425,9 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     onEditing(); return owns(epoch);
   }
   function settleText() { return pendingText && dirty ? commit() : true; }
-  function navigate(target) {
+  function navigate(target, source) {
     settleText();
-    if (!disposed) onNavigate(target);
+    if (!disposed) onNavigate(target, source);
   }
   function selectArrangement(id) {
     if (!BY_ID.has(id)) return;
@@ -530,7 +538,10 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (panel.open && !acknowledged) { if (!open() && !disposed) panel.open = false; }
     else if (!panel.open) acknowledged = false;
   });
-  listen(form, 'focusin', () => { if (exposed && !active() && active(canOpen)) open(); });
+  listen(form, 'focusin', event => {
+    if (event.target.closest('[data-studio-record-kind]')) return;
+    if (exposed && !active() && active(canOpen)) open();
+  });
   // Let a pointer's destination receive its click before a completed text edit
   // refreshes the rack. Keyboard blur and Enter can settle immediately.
   listen(document, 'pointerdown', event => { pointerDown = form.contains(event.target); });

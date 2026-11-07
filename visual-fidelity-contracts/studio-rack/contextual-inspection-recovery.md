@@ -7,7 +7,8 @@ cues, creation entry, Apply/Cancel and saved work across the Studio.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
 reviewed 7 November 2026. It inherits [Studio Rack Composition](README.md).
-The Abilities adjacent rack and Quality workbench are current examples.
+The Abilities rack, Coordination person/team receiver and Quality workbench are
+current examples.
 
 ## Fit and smallest useful dose
 
@@ -26,6 +27,7 @@ documentation or report routes.
 | Select a persistent view | Pressed state remains visible while selected |
 | Begin creating an item | Plus and Add wording identify the entry |
 | Confirm the prepared item | Final Add or Apply completes that draft |
+| Close the adjacent editor | Hide its controls, retain its draft and restore the initiating card's focus |
 | Cancel edits | Ghost action returns to accepted values |
 | Remove a relationship or record | Rose action names its scope and keeps the recovery route clear |
 
@@ -65,9 +67,11 @@ at ordinary phone widths and enlarged text.
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Session editor identity and visibility mirrored into the mounted controls in both Coordination readings |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Canonical person/team controls move to one adjacent receiver; existing owners retain draft and acceptance state |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
 | [Capability](../../collaboration/native-investment-studio/capability-controller.mjs), [Change](../../collaboration/native-investment-studio/change-controller.mjs), [Assurance](../../collaboration/native-investment-studio/assurance-controller.mjs) | Selected records and their local receivers |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Adjacent rack, track controls and workbench composition |
+| [Shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css) | Named adjacent editor enclosure, record-key states and contained phone layout |
 | [Editing source checks](../../tests/native-investment-studio/editing.test.mjs) and [shell browser checks](../../tests/native-investment-studio/shell.browser.mjs) | Draft identity, saved work and chapter transitions |
 | [Capability](../../tests/native-investment-studio/capability.browser.mjs), [Change](../../tests/native-investment-studio/change.browser.mjs), [session](../../tests/native-investment-studio/session.browser.mjs) browser checks | Selected receivers, caret state, creation returns and retained input |
 
@@ -95,8 +99,11 @@ session receiver. Arrangement selection accepts directly through its own
 transaction and local Undo. The shared coordinator keeps other unfinished
 editors recoverable; persistent visibility remains separate from editor activity. The delivery board's phase keys select a local
 presentation scope; Delivery overview restores the originating phase key and
-scroll position. The controller preserves that phase while its view rerenders. Team/member, handoff and session cards route to the existing editors
-for those records. Remaining attached disclosures keep the spring reveal.
+scroll position. The controller preserves that phase while its view rerenders.
+People and accepted-team cards open their canonical adjacent editor;
+illustrative teams awaiting acceptance retain template customization. Handoff
+and session cards retain their existing receivers. Remaining attached
+disclosures keep the spring reveal.
 
 The selected session key currently opens or travels to the remote receiver.
 Its downward caret reports actual visibility; it does not yet imply a second
@@ -104,16 +111,30 @@ click closes an adjacent panel. #768 owns that future open/close behavior when
 the session editor moves into the rack. This composition prepares those later
 receivers while current editors continue to own their drafts.
 
-Adjacent [person/team panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-and [session panels](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-are future Coordination-first receivers. Both receive the shared
-[duration and rate enclosures](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767).
-The current duration module already keeps the larger combined readout above
-Hours and secondary peach Minutes, with repetition separate nearby. Relocation
-reuses that module and its existing draft owner.
-A session opened from a period occurrence carries that occurrence context; a
-session opened from Shared sessions carries its people context. Each path is to
-reveal one existing session editor and retain an origin for close and return.
+The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+places one `studio-rack-editor` after the stable Team planning template or
+accepted-connections root, outside the template form and rebuilt board.
+`mountAdjacentRackEditor` moves the canonical configure/status nodes into that
+host. The same controls return to People when the chapter changes. Their
+existing controllers continue to own validation, drafts and acceptance.
+
+The selected `studio-record-key` stays pressed while its caret reports visible
+open state. Selecting that trigger again or choosing Close hides the receiver,
+retains raw entries and the same draft token, and returns focus. Cancel discards
+the proposal and closes the receiver. Logical object, rack and phase identity
+recover the originating focus target when a board rebuild replaced its element.
+Apply accepts through the current owner and keeps the editor open. Switching
+records parks the unfinished proposal; resuming it acquires a fresh edit lease.
+Inclusion and reorder controls retain their existing meanings.
+
+The dark heading, named object and Close sit above a peach editorial body.
+The person's rate enclosure retains the shared quantity skin and exact controls.
+The future [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+will reuse this placement and return grammar with the enclosed duration module:
+larger readout above Hours and secondary peach Minutes, with repetition separate
+nearby. A session opened from a period occurrence carries that occurrence
+context; Shared sessions supplies its people context. Each route reveals one
+existing editor and retains its origin for close and return.
 
 The receiver may swing open as its own rack directly beneath the parent. Use
 Quality's track-selection matrix when the selected object's people or support
@@ -145,8 +166,8 @@ remains a separate future creation decision. The
 [blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) reveals
 the same named Add control on pointer hover or keyboard focus and retains a
 visible touch route. The created item becomes identifiable in its parent rack;
-an optional adjacent edit keeps that origin available. These planned panels need
-their scoped receiver and focus/recovery observations before their delivery is claimed.
+an optional adjacent edit keeps that origin available. Each receiving PR owns
+the scoped focus, retention and recovery observations for its actual controls.
 Revisit this contract when a control changes operation, its receiver moves or
 recovery changes.
 

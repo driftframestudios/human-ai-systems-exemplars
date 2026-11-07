@@ -86,6 +86,31 @@
 }
 .studio-track-key strong { font-size: inherit; }
 .studio-track-key small { color: #c2decc; font: 500 .65rem/1.4 ui-monospace, monospace; }
+/* A record key reveals the canonical editor in an attached editorial tray.
+   Chapter skins retain each key's palette and geometry. */
+.native-coordination .studio-record-key { position: relative; padding-inline-end: 1.5rem; }
+.native-coordination .studio-record-key::after { content: ''; position: absolute; inset-inline-end: .6rem; inset-block-start: 50%; inline-size: .35rem; block-size: .35rem; border-block-start: .1rem solid currentColor; border-inline-end: .1rem solid currentColor; transform: translateY(-50%) rotate(45deg); transition: transform 160ms ease-out; }
+.native-coordination .studio-record-key[aria-expanded='true']::after { transform: translateY(-50%) rotate(135deg); }
+.native-coordination .studio-record-key[aria-pressed='true'] { outline: .13rem solid var(--native-focus); outline-offset: -.13rem; box-shadow: inset .2rem 0 0 var(--native-signal); }
+.studio-rack-editor { min-inline-size: 0; margin-block: .5rem 1rem; border: .25rem solid var(--native-rule); border-radius: .3rem; background: var(--studio-screen); color: var(--native-paper); scroll-margin-block-start: 5rem; }
+.studio-rack-editor[hidden] { display: none; }
+.studio-rack-editor__heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .65rem .8rem; }
+.native-coordination .studio-rack-editor__heading h4 { margin: 0; color: var(--native-paper); font: 650 1rem/1.4 system-ui, sans-serif; }
+.native-coordination [data-rack-editor-close] { min-inline-size: 0; flex-shrink: 0; border: 1px solid var(--native-rule); background: transparent; color: var(--native-paper); box-shadow: none; padding: .4rem .65rem; }
+.studio-rack-editor__body { min-inline-size: 0; background: var(--studio-peach); color: var(--native-text); }
+.native-coordination .studio-rack-editor__body > details { margin: 0; border: 0; box-shadow: none; background: transparent; }
+.studio-rack-editor__body > details > summary { display: none; }
+.studio-rack-editor__body > .native-coordination__status { margin: 0; padding-inline: .8rem; }
+.studio-rack-editor__body > .native-coordination__status:empty { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+ .native-coordination:not([data-native-motion='off']) .studio-rack-editor:not([hidden]) { animation: studio-reel-arrival calc(240ms * var(--studio-speed)) cubic-bezier(.22,.7,.25,1); }
+}
+@media (forced-colors: active) {
+ .studio-rack-editor, .studio-rack-editor__body { background: Canvas; color: CanvasText; }
+ .native-coordination .studio-rack-editor__heading h4 { color: CanvasText; }
+ .native-coordination [data-rack-editor-close] { color: ButtonText; border-color: ButtonText; }
+ .native-coordination .studio-record-key[aria-pressed='true'] { outline-color: Highlight; }
+}
 .native-coordination .studio-track-key[aria-pressed='true'] {
  background: #164d3d; border-color: var(--native-signal);
  box-shadow: inset .2rem 0 0 var(--native-signal);

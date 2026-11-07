@@ -294,7 +294,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await choose(page);
     await input(page, 'ratePerHour').fill('101');
-    await panel(page).locator('[data-native-chapter="coordination"]').click();
+    await team(page).locator('.studio-people-reading .studio-session-tracks__pad').first().click();
     await panel(page).locator('input[name="occurrences"]').fill('7');
     await expect(input(page, 'ratePerHour')).toHaveValue('101');
     await expect(input(page, 'ratePerHour')).toBeDisabled();

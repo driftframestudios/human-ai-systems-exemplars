@@ -135,8 +135,8 @@ Team planning is a permanent semantic section with the following order:
 3. The short arrangement hint below the zoetrope/structure deck.
 4. Secondary rack header and investment readout, followed by the delivery-phase
    board and Shared sessions participation tracks.
-5. Local Undo, customization and accepted connection details; adjacent
-   selected-object editing remains a later issue.
+5. Local Undo, customization and accepted connection details. A selected person
+   or accepted team opens its canonical editor directly below the initiating rack.
 
 The About composition uses an ordinary section and exposed template container.
 The template controller settles direct choices through the accepted plan and
@@ -169,8 +169,9 @@ consequence. The people-by-session matrix remains useful below for participation
 
 A pure presentation projection uses stable template/slot identities and explicit
 phase mappings. Source-owned stage labels remain context for their sessions;
-custom stages and supporting work retain routes. Team/member cards address
-existing team customization; handoffs address connection customization. Accepted
+custom stages and supporting work retain routes. People and accepted-team cards
+address their adjacent canonical editors; illustrative teams keep template
+customization. Handoffs address connection customization. Accepted
 sessions use their accepted record IDs after arrangement selection. The board
 owns presentation; the arrangement transaction and existing history own plan
 changes and recovery.
@@ -180,6 +181,28 @@ disclosure are superseded in this receiver. Remaining attached summaries retain
 the spring reveal. Session keys retain current destination behavior and actual
 receiver-driven caret state; the later adjacent session panel in #768 will own
 its corresponding open/close interaction.
+
+### Adjacent person/team editing
+
+#757 supplies the first adjacent Coordination receiver. One `studio-rack-editor`
+follows the stable Team planning template or accepted-connections root, outside
+the template form and rebuilt board. `mountAdjacentRackEditor` in
+`rack-controls.mjs` borrows the canonical configure/status nodes; the existing
+person and assembly controllers continue to own drafts and acceptance. Chapter
+changes return those nodes to their People homes.
+
+The dark title enclosure and peach editorial body reuse the shared instrument
+skin and enclosed rate module. `studio-record-key` keeps selected and expanded
+states distinct. The selected trigger toggles its local receiver; Close retains
+raw entries and the draft token. Cancel discards the proposal and restores its
+logical origin after a rerender. Apply accepts through the current owner and
+keeps the editor open. Record switching uses saved proposals and a fresh resume
+lease. The parent cards retain their geometry as the panel opens in page flow.
+
+The #757 PR owns the focused phone/laptop opening, switching, acceptance and
+return observations. #768 receives this composition for sessions; #758/#770,
+#771, #772 and #773 keep creation, participant changes, attached companions and
+removal/recovery as separate increments.
 
 ### Direct arrangement selection
 
@@ -287,16 +310,16 @@ expanding the first style PR into a deletion-model rewrite.
 | [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765) | Shared session controls (#775), permanent Team planning and secondary rack (#778) | Complete; supplies shared control and enclosure ownership |
 | [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Delivered in #781; supplies phase scope and the combined reading |
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Delivered in #783; supplies stable accepted identity before adjacent editors |
-| [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Shared duration/rate enclosures | Implements the quantity hierarchy and shared housing; its reviewed PR prepares both adjacent editor issues |
-| [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Receives consolidated composition, accepted arrangement identity and enclosed controls |
+| [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Shared duration/rate enclosures | Delivered in #785; supplies the quantity hierarchy and shared housing |
+| [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Implements one canonical receiver with retained drafts, local close/return and existing acceptance owners |
 | [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Shares #757's contextual panel contract and existing editor owners |
 | [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) → [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Immediate session acceptance, then empty-space entry | Receives common creation controls and an adjacent edit/return route; retains existing creation until ready |
 | [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant movement; separately, scoped percentage semantics | Movement can accompany shared controls; the percentage model remains independent future work |
 | [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Receives the shared shell; prepares contextual editors without changing their draft ownership |
 | [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773) | Scoped removal, amp Undo, then a Coordination local-recovery example | Receives shared controls/history; human review releases cross-chapter removal adoption |
 
-Either adjacent editor can supply the first reviewed panel example after its
-preparation is accepted. #771's movement and #772's companion shell can develop
+#757 supplies the first adjacent panel implementation; its focused review and
+verification govern completion. #771's movement and #772's companion shell can develop
 alongside adjacent editor work. Percentage modeling and immediate-add acceptance
 retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
@@ -305,8 +328,10 @@ The chain review preserves completed #755 (contracts) and #756 (scope navigation
 as accepted foundations. #765’s reviewed composition, #779’s delivery board and
 #766’s direct replacement prepare the next receivers. #766 preserves sessions
 created through the new entry when arrangements change; #767 supplies the shared
-duration hierarchy; #757/#768 receive nested matrices, shared names and companion
-routes. #758 now has a recommended first record and #770 its contextual entry.
+duration hierarchy; #757 supplies the shared placement/return owner for the
+future #768 receiver. A matrix is a permitted receiving composition where
+relationships benefit from comparison. #758 has a recommended first record and
+#770 its contextual entry.
 The underlying issue acceptance remains with each receiver.
 
 [#717](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/717)
@@ -333,7 +358,9 @@ visitor comprehension remains a separate observation.
 
 Keep verification tied to the changed operation: one session selected through
 both readings, one arrangement replacement/Undo path with a shared-record case,
-and one duration-module comparison at phone/laptop widths. Existing source and
+and one duration-module comparison at phone/laptop widths. Adjacent person/team
+editing adds a focused open, switch, retain, accept and return journey through
+the canonical controls. Existing source and
 gesture checks retain their boundary. Each focused PR receives independent
 review, updates current README/journal guidance, and passes its evidence to the
 next issue. A reviewed adjacent panel completes this preparation route.
