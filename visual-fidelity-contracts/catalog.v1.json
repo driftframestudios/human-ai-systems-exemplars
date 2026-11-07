@@ -2,7 +2,7 @@
   "$schema": "https://schemas.vik.guru/visual-fidelity-contracts/1.0.0/catalog.schema.json",
   "schemaVersion": "1.0.0",
   "id": "vfc:catalog",
-  "reviewedOn": "2026-11-05",
+  "reviewedOn": "2026-11-07",
   "authority": {
     "semanticOwner": "Visual Fidelity Contracts maintainers",
     "schemaOwner": "Visual Fidelity Contracts schema maintainers",
@@ -28,6 +28,119 @@
         "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
         "tests/visual-fidelity-contracts/contract-art-directions.browser.mjs",
         "tests/prod-deployment/primary-closure.test.mjs"
+      ]
+    },
+    {
+      "id": "vfc:studio-rack-composition",
+      "title": "Studio Rack Composition",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/README.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/shell.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:period-kanban-session-sequencer",
+      "title": "Period Kanban & Session Sequencer",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/score.browser.mjs",
+        "tests/native-investment-studio/session.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:support-matrix-stateful-pads",
+      "title": "Support Matrix & Stateful Pads",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/support-matrix-stateful-pads.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/capability.browser.mjs",
+        "tests/native-investment-studio/change.browser.mjs",
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:zoetrope-preset-selection",
+      "title": "Zoetrope Preset Selection",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/zoetrope-preset-selection.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/shell.browser.mjs",
+        "tests/native-investment-studio/connection-template.browser.mjs",
+        "tests/native-investment-studio/change.browser.mjs",
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:precision-dials-faders",
+      "title": "Precision Dials & Faders",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/precision-dials-faders.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/team-controller.browser.mjs",
+        "tests/native-investment-studio/session.browser.mjs",
+        "tests/native-investment-studio/assurance.browser.mjs"
+      ]
+    },
+    {
+      "id": "vfc:contextual-inspection-recovery",
+      "title": "Contextual Inspection & Recovery",
+      "kind": "repository_composition_contract",
+      "standing": "review_candidate",
+      "version": "0.1.0",
+      "profile": "legacy_document",
+      "sourcePath": "visual-fidelity-contracts/studio-rack/contextual-inspection-recovery.md",
+      "tokensPath": "context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css",
+      "examples": [
+        "context-canvas-project-surface/context-canvas/index.html"
+      ],
+      "tests": [
+        "tests/visual-fidelity-contracts/foundation-contracts.test.mjs",
+        "tests/native-investment-studio/editing.test.mjs",
+        "tests/native-investment-studio/capability.browser.mjs",
+        "tests/native-investment-studio/change.browser.mjs",
+        "tests/native-investment-studio/session.browser.mjs"
       ]
     },
     {

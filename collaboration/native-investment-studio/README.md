@@ -20,7 +20,19 @@ Coordination and People, Abilities, Change, and Quality & recovery. The linked
 issues retain their acceptance criteria and evidence under
 [milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
 The [journal](experience-journal.md#current-working-contract) records the current
-contract and the decisions that replaced earlier interfaces.
+contract and the decisions that replaced earlier interfaces. The
+[Studio Rack visual contracts](../../visual-fidelity-contracts/studio-rack/README.md)
+describe the accepted composition, its five reusable interaction patterns and
+their source owners.
+
+The interaction pass delivered dial retention ([#761](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/761))
+and Change disclosure cues ([#760](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/760)).
+Its visual grammar is recorded in [#755](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/755).
+Further in-rack scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756)),
+person/team editor placement ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
+and immediate addition followed by editing ([#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758))
+await the human's scope decision. Existing creation and editor flows remain the
+working contract.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -118,13 +130,16 @@ Cancel keeps the accepted plan; Undo and Redo traverse accepted changes.
 
 A plus begins creation; the final Add or Apply confirms the item already being
 prepared. An arrow identifies a destination or inspector. A caret reveals nearby
-content. Small fixed choice sets remain visible, and selected choices stay
-visually pressed. Cancel uses a shadow-free ghost treatment.
+content and points down while it is open. Small fixed choice sets remain visible,
+and selected choices stay visually pressed. Cancel uses a shadow-free ghost treatment.
 
 Hours and Minutes have separately sized dials beside exact fields. Rates have
 $10 and $5 dials, $1 step buttons and direct entry. An explicit rate gesture can
-start a blank amount; an untouched blank remains unknown. Native controls keep
-keyboard operation and exact values available.
+start a blank amount; an untouched blank remains unknown. A dial retains its
+displayed draft adjustment when focus or pointer capture ends. Escape or pointer
+cancellation restores the start of the active turn; Apply still accepts the
+editor's proposal. Native controls keep keyboard operation and exact values
+available.
 
 The amp offers **Off**, **Half-speed** and **Full-speed** animation. Full-speed is
 the default; system reduced-motion preferences suppress animation. Chapter
@@ -177,10 +192,10 @@ checked source and remaining review boundary.
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
-| Visual and interaction rationale | [Experience journal](experience-journal.md), [usability research](usability-research.md), and [ASCII Zine Field](../../visual-fidelity-contracts/ascii-zine-field.md) |
+| Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,
-the worktree and #735's live Issue/PR route. Return to the
+the worktree and the current interaction Issue/PR route above. Return to the
 [Context Canvas README](../../context-canvas-project-surface/context-canvas/README.md)
 for the surrounding pages or the [collaboration directory](../) for adjacent
 exemplars.

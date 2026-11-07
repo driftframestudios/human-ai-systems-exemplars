@@ -8,8 +8,9 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 6 November 2026 reconciliation replaces the accumulating chronological
-continuation notes with a current contract and material decision history.
+The 7 November 2026 reconciliation preserves a current contract and material
+decision history, with the accepted visual grammar now owned by the
+[Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
 
@@ -35,6 +36,13 @@ result and recovery path:
 | Adjacent Abilities inspector | #738 | [#743](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/743) |
 | Framework-specific Change controls | #739 | [#744](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/744) |
 | Quality pads and calm starting preset | #740 | [#745](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/745) |
+
+The 7 November interaction route delivered dial retention (#753, PR #761) and
+Change disclosure cues (#754, PR #760), with visual-contract persistence in #755.
+The current aesthetic and component placement remain the reference. In-rack scope navigation (#756),
+adjacent person/team editing (#757), and immediate addition with later editing
+(#758) are coordination stubs pending human scope. Those proposals remain
+prospective; existing placement and creation-state ownership continue in service.
 
 ### State, people and evidence
 
@@ -106,6 +114,14 @@ reels, aligned faders, exact readouts and responsive visualizations. About's
 existing color tokens own the palette. Chapter styles extend the shared owner
 instead of creating separate button or control systems.
 
+The visual family records this composition and five reusable patterns: Period
+Kanban & Session Sequencer, Support Matrix & Stateful Pads, Zoetrope Preset
+Selection, Precision Dials & Faders, and Contextual Inspection & Recovery.
+Chapter variations use these shared meanings; current runtime and the receiving
+PR supply behavioral evidence. The dated research record supplies principles
+and local design adaptations. Its older elapsed-time, connection-first and
+lower-motion choices yield to the supersession decisions below.
+
 Music-production controllers, euro-rack modules and restrained 16-bit/32-bit
 character guide the tactile treatment. Stationary housings and upper-left light
 keep controls readable while pointers, selected keys and pads respond. ASCII
@@ -125,6 +141,8 @@ refinement remains separate from correcting an observed interaction defect.
 - A plus starts a creation flow. The final Add or Apply confirms the item already
   being prepared. A nested creation action retains its own entry treatment.
 - An arrow announces another view or inspector; a caret opens nearby content.
+  Change track labels and Plan session controls share their actual inspector's
+  expanded state, including closure through its native summary.
   Persistent choices remain visibly pressed. A descriptive title stays distinct
   from the button that edits or navigates from it.
 - Cancel is a shadow-free ghost action. Removal uses rose treatment with exact
@@ -136,6 +154,9 @@ refinement remains separate from correcting an observed interaction defect.
   $10 and $5 dials, centered $1 step buttons and direct entry. Native keyboard
   behavior and units remain visible; long repeated operating paragraphs are
   replaced by useful labels and local validation.
+  A completed adjustment remains in the draft when focus or pointer capture
+  ends. Escape and pointer cancellation restore the start of the active turn.
+  Apply and Cancel continue to own acceptance of the complete editor proposal.
 - Small fixed choice sets expose their options directly. Boolean switches keep
   native checkbox ownership. Long questions and evidence are readable before
   editing instead of being clipped inside a small text field.
@@ -221,6 +242,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Original lower-sigma starting illustration | Healthy 4σ new-showcase default with balanced faders; imported plans retain their settings. |
 | Broad numeric and sub-mobile verification as the completion target | Focused behavioral proof and ordinary mobile/desktop usability. Existing arithmetic coverage remains unless an actual changed calculation needs evidence. |
 | Dev-only integration and repeated checkpoint pauses | The human authorized continuing the working showcase on main through narrow reviewed PRs. Performance and publication retain their explicit holds. |
+| Moving further components into racks during this interaction pass | Preserve current placement. Record scope navigation, adjacent editors and immediate creation in #756–#758 for a human-defined next increment. |
+| Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
 
 ## Material decision history
 
@@ -349,8 +372,10 @@ projections. The complete Context Canvas source suite now passes. This supersede
 the earlier standing of twelve reproduced baseline failures; the receiving PRs
 retain the exact observations and reviewed commits.
 
-For a new iteration, reconcile #735's completed route with runnable source and
-the visitor's next concrete need. Pause before general performance refinement in
+For re-entry, reconcile #753–#755 with the current source and their reviewed
+delivery. The next design-scope decisions are #756–#758; retain the current
+creation/confirmation contract until a bounded replacement is authorized.
+Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains
 [#699](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/699),
