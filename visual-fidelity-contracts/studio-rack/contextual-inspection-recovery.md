@@ -97,11 +97,65 @@ A session opened from a period occurrence carries that occurrence context; a
 session opened from Shared sessions carries its people context. Each path is to
 reveal one existing session editor and retain an origin for close and return.
 
+The receiver may swing open as its own rack directly beneath the parent. Use
+Quality's track-selection matrix when the selected object's people or support
+relationships benefit from comparable rows and pads; use a simpler pad group
+for a short independent choice set. Keep the selected object's name and a
+clearly named Close/Return above the local controls. A visitor can add a session,
+open its adjacent duration module, adjust it, then close or return to the same
+period/people context. Closing and Cancel retain their distinct proposal rules.
+
+The planned [editorial sub-racks](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)
+are another permitted receiver. People and available time
+and Stages & handoffs are to attach visually beneath the main instrument while
+keeping their readable card skin and existing spring disclosure. Their actions
+also have meaningful in-rack entries: a person, session or relationship remains
+the identifiable object before its editor opens. Review availability stays a
+local inspection; Person settings keeps its explicit destination when it opens
+the People chapter. Both paths use the existing owners and preserve return
+context, instead of maintaining separate copies of a form.
+
 The planned [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
 has its own immediate acceptance and Undo boundary. The existing person, session
 and other editor proposals continue to use their current Apply and recovery
 owners. [Immediate addition followed by editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-remains a separate future creation decision. These planned panels need their
-scoped receiver and focus/recovery observations before their delivery is claimed.
+remains a separate future creation decision. The
+[blank-space entry](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) reveals
+the same named Add control on pointer hover or keyboard focus and retains a
+visible touch route. The created item becomes identifiable in its parent rack;
+an optional adjacent edit keeps that origin available. These planned panels need
+their scoped receiver and focus/recovery observations before their delivery is claimed.
 Revisit this contract when a control changes operation, its receiver moves or
 recovery changes.
+
+### Planned removal and Undo
+
+The [removal and recovery research](../../collaboration/native-investment-studio/removal-recovery-research.md)
+defines the Coordination-first prototype in
+[#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773).
+A routine recoverable removal of an
+accepted item takes effect directly and returns a concise local status with a
+named Undo action. The removed object and scope remain clear. That action is
+bound to the removal's history identity; a later edit retires the local shortcut
+instead of letting stale Undo reverse unrelated work. The existing history
+remains the recovery owner, with recovery available beyond a timed message.
+
+When removal affects related records or is irreversible, a compact
+adjacent consequence choice explains the effect before acceptance and uses the
+current relationship owners. The ordinary route preserves shared records and
+their independent meaning. Closing a panel, cancelling a proposal and toggling
+draft participation retain their own behaviors. The proposed rose-outline
+control and local Undo receive human review in Coordination before reuse across
+the other chapters.
+
+The same proposed recovery route adds a compact `native-amp-control` **Undo (n)**
+when accepted changes can be undone. The count describes available history,
+distinct from Saved edits. One activation undoes the latest accepted change
+through the shared history action and its draft-retention behavior; Investment
+and local Undo use that same owner. A short cue names the latest change when
+owned action metadata supplies it, otherwise **Latest plan change** is the
+truthful fallback. After its first appearance the control keeps a stable place
+and shows its unavailable state at zero; a compact Redo neighbor may appear when
+available. The amp retains its concise control row rather than exposing a ledger.
+This is prospective scope in #773; the current amp remains unchanged until its
+reviewed implementation lands.

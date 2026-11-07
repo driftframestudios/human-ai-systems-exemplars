@@ -43,10 +43,14 @@ The current aesthetic and component placement remain the reference. PR #764
 delivered #756: the selected period and Plan overview return share the rack
 header, with originating focus and local scroll restored on return. The next
 planning decision is semantic and stylistic consolidation in #765 before
-adjacent editor placement. Direct arrangement selection (#766), dial enclosures
-(#767), and adjacent session editing (#768) now have bounded receiving issues
-alongside the updated person/team editor issue #757. Existing editor placement,
-arrangement preview/Apply and creation ownership remain the runnable contract.
+adjacent editor placement. PR #769 recorded its first contract and issue route.
+The continued planning exploration draws on patterns across the whole Studio,
+with direct creation (#770), participant controls (#771), attached editorial
+companions (#772) and scoped removal/shared Undo (#773) receiving focused issues.
+Direct arrangement selection (#766),
+dial enclosures (#767) and adjacent people/team (#757) and session (#768) editing
+retain their bounded scopes. Existing editor placement, arrangement preview/Apply
+and creation ownership remain the runnable contract.
 
 ### State, people and evidence
 
@@ -254,6 +258,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | Holding all further in-rack work for scope definition | PR #764 delivered #756. The next planning decision places semantic/style consolidation (#765), direct arrangement selection (#766) and enclosed controls (#767) before adjacent people/team (#757) and session (#768) editors. Current placement remains in service during that preparation. |
 | Whole plan return outside the rack | Plan overview return and selected sprint/quarter share the rack header, clear of horizontal scrolling. The destination wording follows the human's #756 clarification; the board and track return restores the visitor's origin. |
 | Treating every pointer-capture or focus loss as cancellation of a dial turn | Retain the displayed draft adjustment on ordinary capture/focus loss; explicit cancellation restores the active turn's starting value. This addresses an observed reset without changing editor acceptance. |
+| PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | The refined plan places a larger readout above the duration dials, makes Minutes secondary, and preserves the circular stepper geometry at each dial's lower right. Working sessions keeps its input initially and may later become an occurrence-pad lane. These are prospective composition decisions in #767/#768. |
+| Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
 
 ## Next Coordination composition
 
@@ -267,8 +273,19 @@ motion cue remains presentation feedback.
 
 Team planning is to become a permanent sibling section: heading, zoetrope with
 editorial team structure, concise hint, then a subtly darker secondary rack.
-Its housing and control states follow the horizon. Quality's compact lanes and
-pads supply composition precedents for choices with explicit local meaning.
+Its housing and control states follow the horizon. The whole Studio supplies
+reusable compositions: Quality tracks' preferred matrix skin separates inspect,
+include, link and create actions; Abilities supplies the adjacent inspector;
+Change/Quality supply keyed movement; editorial disclosures supply the spring
+reveal. Adjacent panels can open into their own rack. Change and Quality retain
+their intentionally different faders.
+
+Generic names belong to genuinely shared roles and owners. Extracted track
+keys, participation pads, duration modules, reorder controls and editorial
+drawers should be discoverable beyond their first chapter. Update their
+consumers and contract references together; local geometry and domain state
+attributes retain their receiving owners. This is scoped consolidation, with
+current component names remaining accurate until their extraction lands.
 
 Direct arrangement selection needs a replacement transaction for one instance,
 with Undo. The current template engine appends generated records and detects
@@ -277,12 +294,52 @@ revisable example. #766 owns that change. Accepted structure and Included work
 wording follow its actual state; the editorial card art direction remains.
 
 Before adjacent editors, #767 encloses Hours, Minutes and their combined output
-in one duration module. Working sessions stays nearby as a separate repetition
-module; monetary controls use the same housing grammar with their own units.
+in one duration module. A larger readout sits above the dials. Minutes has a
+secondary rose/peach enclosure or reel-like outline. Each dial sits above-left
+of its exact field/stepper; the input, circular pair, gap and start/end alignment
+retain their familiar arrangement. Working sessions keeps its separate repetition
+meaning and initially its existing input; #768 can later express occurrences
+as pads. Monetary controls use the housing grammar with their own units.
 The main static session markup and dynamic supporting-session factory receive
 the composition together. Their gesture, raw-value and acceptance owners stay
-in place. #757 and #768 then reuse one contextual panel/return grammar in
-Coordination; #758 retains immediate-add semantics separately.
+in place. #757 and #768 share one contextual panel/return grammar in Coordination.
+
+#770 adds empty New session regions inside the racks, with a ghost plus on
+fine-pointer hover, equivalent focus presentation and a visible touch entry.
+Existing temporal row cells still represent occurrences; person/session cells
+still represent participation. #758 recommends an immediately created session
+with useful defaults, followed by adjacent editing and a clear return. Creation
+Undo and later edit Cancel keep separate meanings.
+
+#771 reuses keyed pad movement for explicit participant reordering; inclusion
+keeps card positions stable. Its future percentage proposal names Time in this
+session, with a visible duration denominator. The current model gives each
+participant the full session duration; share-based effort therefore needs a
+separate stored/projection contract. Availability and funded time remain
+distinct. This exploration can run alongside the composition work.
+
+#772 attaches People and available time and Stages & handoffs directly below the
+rack as editorial sub-racks. Their useful controls, collapsed initial state,
+spring reveal and onward People routes remain. Equivalent in-rack entries
+address the same records and editors. Keep the existing native disclosure,
+flowRoot and motion owners as their enclosure changes.
+
+#773 receives the [removal/recovery research](removal-recovery-research.md): quiet
+rose removal with explicit scope, a concise local result and exact-removal Undo
+for ordinary accepted changes, and a compact consequence choice when linked
+effects need a decision. Draft operations retain Apply/Cancel. The already
+generic removal class can serve the shared skin. Establish the Coordination
+example first; human review releases its wider chapter adoption.
+
+The proposed amp **Undo (n)** button exposes the existing accepted-plan history
+from every chapter, with a concise indication of its latest target. Its count
+describes remaining recoverable changes, while Saved edits continues to describe
+unfinished proposals. The button acts directly; it introduces no long history
+ledger. Current history exposes counts but no action descriptions, so exact
+labels must come from owned action metadata, with a truthful latest-change
+fallback. Park unfinished work through the existing coordinator before recovery.
+Local Undo removal remains bound to its specific acceptance and retires after
+an intervening change. The global owner stays authoritative.
 
 #717 remains a parallel zine-test quality repair. The source still conflates
 viewport position with document position, while the preceding hosted checks

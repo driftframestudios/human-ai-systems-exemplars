@@ -100,6 +100,32 @@ context into creation. Team planning retains its darker secondary housing and
 editorial structure cards. Its participant columns preserve their relationship
 meaning when this shared composition is implemented.
 
+The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
+makes unused rack space actionable. A dedicated
+new-session row places `native-cadence__pads` creation zones under each visible
+period or subdivision. At laptop and wide widths, each zone reveals an outlined
+ghost pad with a plus on hover; keyboard focus reveals the same cue, and touch
+has a visible Add entry. The control owns a real hit target and activation, so
+moving across or scrolling through blank space simply previews the affordance.
+Creation retains the chosen sprint/quarter and any explicit subdivision.
+
+Current session-row cells sit at an existing session/period intersection. An
+entry within that row names an additional occurrence of the existing work; the
+new-session row names a new record. Shared sessions has a different empty-cell
+meaning: the named person is outside that session. Its dedicated new-session
+row/gutter carries a written Add session label, while a future action at a
+person/session intersection names participation or editing. Both new-record
+routes are to use the creation owner selected in
+[#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+and the [contextual return contract](contextual-inspection-recovery.md).
+
+People and available time and Stages & handoffs remain useful
+[editorial companions](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772).
+Their planned attachment to the rack's lower edge preserves compact
+disclosure, spring movement and contextual scope. The corresponding people and
+relationship pads offer the same operations inside the instrument; both paths
+continue to address the same records and editors.
+
 The later [adjacent session editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 will receive either entry path through the same existing session owner. Current
 editors remain in place while that scope and the preceding control enclosures
