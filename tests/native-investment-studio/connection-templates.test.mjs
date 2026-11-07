@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createExamplePlan, preparePlan } from '../../collaboration/native-investment-studio/contract.mjs';
 import { LIMITS } from '../../collaboration/native-investment-studio/config.mjs';
-import { listCoordinationTemplates, prepareCoordinationTemplate, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
+import { listCoordinationTemplates, prepareCoordinationTemplate, prepareCoordinationReplacement, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
 
 function request(id = 'pod', proposalId = 'sample') {
   const template = listCoordinationTemplates().find(row => row.id === id);
@@ -327,4 +327,132 @@ test('a final publication failure leaves the preview, history and all accepted c
   assert.equal(studio.read().state.teams.length, 1); assert.equal(studio.read().state.connections.length, 0);
   assert.equal(studio.readHistory().undoCount, 1); assert.equal(proposal.projection.state.connections.length, 2);
   assert.equal(applyCoordinationTemplate(studio, proposal).error.code, 'stale-edit');
+});
+
+
+test('direct choices replace one arrangement, keep unrelated records, and traverse one complete history entry', () => {
+  const studio = createStudio(), original = studio.read();
+  const choose = raw => apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+  const pod = choose(request());
+  const matrixRequest = request('matrix'); matrixRequest.connections[0].recoveryWork = recovery();
+  const matrix = choose(matrixRequest);
+  assert.equal(matrix.state.arrangements.length, 1);
+  assert.equal(matrix.state.arrangements[0].id, 'sample');
+  assert.equal(matrix.state.arrangements[0].templateId, 'matrix');
+  assert.deepEqual(matrix.state.people, original.state.people);
+  assert.deepEqual(matrix.state.teams.filter(row => !row.id.startsWith('sample-')), original.state.teams);
+  assert.deepEqual(matrix.state.work.filter(row => !row.id.startsWith('sample-')), original.state.work);
+  assert.equal(matrix.state.teams.some(row => row.id === 'sample-team-pod'), false);
+  assert.equal(studio.readHistory().undoCount, 2);
+  assert.equal(studio.undo(matrix).ok, true); assert.deepEqual(studio.read().state, pod.state);
+  assert.equal(studio.redo(studio.read()).ok, true); assert.deepEqual(studio.read().state, matrix.state);
+  const back = choose(request());
+  assert.equal(back.state.arrangements.length, 1);
+  assert.deepEqual(back.state.work, original.state.work);
+  assert.deepEqual(back.state.teams, pod.state.teams);
+  const history = studio.readHistory(), acceptance = studio.readAcceptance();
+  assert.strictEqual(choose(request()), back);
+  assert.deepEqual(studio.readHistory(), history); assert.strictEqual(studio.readAcceptance(), acceptance);
+});
+
+test('settled customization updates owned identities and equal replay keeps collection order and revision capacity', () => {
+  const studio = createStudio(), raw = request(); raw.connections[0].recoveryWork = recovery();
+  apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+  raw.teams[0].label = 'Service design'; raw.connections[0].recoveryWork.minutesPerOccurrence = 45;
+  const changed = apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+  assert.equal(changed.state.teams.find(row => row.id === 'sample-team-pod').label, 'Service design');
+  assert.equal(changed.state.work.find(row => row.id === 'sample-recovery-handoff').minutesPerOccurrence, 45);
+  assert.equal(changed.state.arrangements.length, 1);
+  const later = structuredClone(changed.state);
+  later.teams.push({ id: 'later-team', label: 'Another group', personIds: ['product-one'], lifecycle: 'active' });
+  later.revision = LIMITS.revision;
+  const capped = createStudio(later), before = capped.read();
+  assert.strictEqual(apply(capped, prepareCoordinationReplacement(before, raw)), before);
+  assert.equal(capped.readHistory().undoCount, 0);
+});
+
+test('work added to an arrangement team and shared sessions survive a later reel choice by identity', () => {
+  const studio = createStudio();
+  apply(studio, prepareCoordinationReplacement(studio.read(), request()));
+  const before = studio.read();
+  const added = { ...before.state.work[0], id: 'visitor-session', teamId: 'sample-team-pod', label: 'Visitor session' };
+  assert.equal(studio.applyCommand({ type: 'work.create', work: added }, before).ok, true);
+  const accepted = studio.read();
+  const next = apply(studio, prepareCoordinationReplacement(accepted, request('guild')));
+  assert.deepEqual(next.state.work, accepted.state.work);
+  assert.deepEqual(next.state.teams.find(row => row.id === 'sample-team-pod'), accepted.state.teams.find(row => row.id === 'sample-team-pod'));
+  assert.equal(next.state.teams.some(row => row.id === 'sample-team-partner'), false);
+  assert.deepEqual(next.state.scoreSettings, accepted.state.scoreSettings);
+  assert.equal(next.state.arrangements.length, 1);
+  assert.equal(studio.undo(next).ok, true); assert.deepEqual(studio.read().state, accepted.state);
+});
+
+test('shared generated records receive an explicit separate-copy choice and keep every external reference', () => {
+  const studio = createStudio(), raw = request();
+  raw.connections[0].recoveryWork = recovery({ teamId: 'sample-team-pod' });
+  apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+  const initial = studio.read();
+  const external = { ...initial.state.connections[0], id: 'external-handoff' };
+  assert.equal(studio.applyCommand({ type: 'connection.create', connection: external }, initial).ok, true);
+  const before = studio.read(), preservedTeam = before.state.teams.find(row => row.id === 'sample-team-pod');
+  raw.teams[0].label = 'A different delivery group';
+  raw.connections[0].recoveryWork.minutesPerOccurrence = 30;
+  unchanged(studio, () => prepareCoordinationReplacement(before, raw), 'retained-record-choice');
+  const choice = prepareCoordinationReplacement(before, raw, { preserveShared: true });
+  const after = apply(studio, choice), arrangement = after.state.arrangements[0];
+  assert.equal(arrangement.id, 'sample'); assert.equal(after.state.arrangements.length, 1);
+  assert.equal(arrangement.teamBindings[0].teamId, 'sample-team-pod-copy-1');
+  assert.deepEqual(after.state.teams.find(row => row.id === preservedTeam.id), preservedTeam);
+  assert.deepEqual(after.state.connections.find(row => row.id === external.id), external);
+  assert.deepEqual(after.state.work.find(row => row.id === 'sample-recovery-handoff'), before.state.work.find(row => row.id === 'sample-recovery-handoff'));
+  const copy = after.state.work.find(row => row.id === 'sample-recovery-handoff-copy-1');
+  assert.equal(copy.minutesPerOccurrence, 30); assert.equal(copy.teamId, 'sample-team-pod-copy-1');
+  const again = apply(studio, prepareCoordinationReplacement(after, raw));
+  assert.strictEqual(again, after);
+  assert.equal(studio.undo(after).ok, true); assert.deepEqual(studio.read().state, before.state);
+});
+
+
+test('adapted connection endpoints and imported connection identities stay explicit during customization', () => {
+  for (const imported of [false, true]) {
+    const studio = createStudio(), raw = request();
+    apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+    const state = structuredClone(studio.read().state);
+    const edge = state.connections[0];
+    edge.senderTeamId = 'delivery';
+    if (imported) {
+      edge.id = 'authored-handoff';
+      state.arrangements[0].connectionBindings[0].connectionId = edge.id;
+    }
+    const adapted = createStudio(state), before = adapted.read();
+    raw.connections[0].sharedObject = 'A revised shared object';
+    unchanged(adapted, () => prepareCoordinationReplacement(before, raw), 'retained-record-choice');
+    const next = apply(adapted, prepareCoordinationReplacement(before, raw, { preserveShared: true }));
+    assert.deepEqual(next.state.connections.find(row => row.id === edge.id), edge);
+    const bound = next.state.arrangements[0].connectionBindings[0].connectionId;
+    assert.notEqual(bound, edge.id);
+    assert.equal(next.state.connections.find(row => row.id === bound).senderTeamId, 'sample-team-pod');
+    assert.strictEqual(apply(adapted, prepareCoordinationReplacement(next, raw)), next);
+  }
+});
+
+
+test('authored recovery timing and lifecycle survive arrangement customization and switching', () => {
+  const studio = createStudio(), raw = request('matrix');
+  raw.connections[0].recoveryWork = recovery();
+  apply(studio, prepareCoordinationReplacement(studio.read(), raw));
+  const generated = studio.read().state.work.find(row => row.id === 'sample-recovery-expertise');
+  const authored = { ...generated, timing: { startMinute: 120, repeatEveryMinutes: null }, lifecycle: 'retired' };
+  assert.equal(studio.updateWork(authored.id, authored, studio.read()).ok, true);
+  const before = studio.read();
+  raw.teams[0].label = 'Revised delivery group';
+  unchanged(studio, () => prepareCoordinationReplacement(before, raw), 'retained-record-choice');
+  raw.connections[0].recoveryWork = recovery({ timing: authored.timing, lifecycle: authored.lifecycle });
+  const proposal = prepareCoordinationReplacement(before, raw);
+  assert.ok(proposal.summary.retainedRecords.some(row => row.collection === 'work' && row.id === authored.id));
+  const customized = apply(studio, proposal);
+  assert.deepEqual(customized.state.work.find(row => row.id === authored.id), authored);
+  const switched = apply(studio, prepareCoordinationReplacement(customized, request('guild')));
+  assert.deepEqual(switched.state.work.find(row => row.id === authored.id), authored);
+  assert.equal(studio.undo(switched).ok, true); assert.deepEqual(studio.read().state, customized.state);
 });

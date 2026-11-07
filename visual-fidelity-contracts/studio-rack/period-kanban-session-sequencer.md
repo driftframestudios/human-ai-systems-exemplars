@@ -118,14 +118,15 @@ and handoffs. Stage labels remain source-owned session context; custom-stage
 and supporting work retain routes. These lanes express an illustrative delivery
 pattern. Dates, period placement, completion and readiness retain their separate
 owners. Team/member cards open team customization; handoff cards open connection
-customization; sessions retain their accepted or proposed editor destinations.
+customization; accepted sessions reach their existing editor through stable IDs.
 
 The board supersedes the proposed-team strip, duplicated connection-button strip
 and Delivery lifecycle disclosure in this receiver. Shared sessions follows with
 its visible heading and Add control above a named participation-table scroller.
 The phase scope and investment reading stay outside local scrolling. The table's
 people columns retain their relationship meaning beside the horizon's period
-columns, and existing preview/Apply ownership stays intact. Other attached
+columns. Team arrangement choices use their direct replacement and Undo owner;
+ordinary session editors retain their existing proposal/Apply boundary. Other attached
 summaries preserve the existing spring reveal.
 
 The [empty-space creation increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)

@@ -1,10 +1,10 @@
 import { LIMITS } from './config.mjs';
 import { PlanError } from './contract.mjs';
-import { listCoordinationTemplates, prepareCoordinationTemplate, applyCoordinationTemplate } from './connection-templates.mjs';
+import { listCoordinationTemplates, prepareCoordinationReplacement, applyCoordinationTemplate, isGeneratedArrangementRecord } from './connection-templates.mjs';
 import { prepareWorkDraftValues, stepWorkDraftValues, WORK_DRAFT_TEXT_LIMIT } from './draft.mjs';
 import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
-import { getCoordinationTemplate } from './coordination-arrangements.mjs';
+import { getCoordinationTemplate, projectCoordinationArrangements } from './coordination-arrangements.mjs';
 import { createReel, revealReelResult } from './reel-control.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
 import { createDeliveryBoard } from './delivery-board.mjs';
@@ -17,8 +17,8 @@ const sameAcceptance = (a, b) => a.instance === b.instance && a.token === b.toke
 const named = row => `${row.label}${row.lifecycle === 'retired' ? ' · retired' : ''}`;
 let nextInstance = 0;
 
-// One bounded configuration and one prepared proposal belong to this receiver.
-// Row drafts continue to use the shared coordinator and accepted state owner.
+// One arrangement identity belongs to this receiver. Explicit choices settle
+// through the accepted owner; raw text remains local until its edit is complete.
 export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
   onViewChanged = () => {}, onAccepted = () => {}, onNavigate = () => {}, isActive = () => true, canOpen = isActive }) {
   const panel = root.matches('[data-connection-templates]') ? root : root.querySelector('[data-connection-templates]');
@@ -36,6 +36,8 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   if (!body || !status || disclosure && !summary) throw new TypeError('Supply the complete coordination template panel.');
   const instance = `connection-template-${++nextInstance}`, cleanup = [];
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
+  let arrangementId = null, dirty = false, committing = false, undoProjection = null;
+  let pointerDown = false, pendingText = false, settleTimer = null;
   let projection = studio.read(), bindings = new WeakMap(), controls = new Map(), optionSources = [], dynamic = [];
   const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
   const configurations = new Map();
@@ -52,7 +54,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const rackTitle = element('h4', 'Teams and shared work'); rackTitle.id = `${instance}-rack-title`;
   delivery.setAttribute('aria-labelledby', rackTitle.id);
   const readout = element('dl', undefined, 'studio-rack-amount');
-  const amountLabel = element('dt', 'Accepted investment');
+  const amountLabel = element('dt', 'Included work');
   const amount = element('output'); amount.dataset.templateTotal = '';
   const amountValue = element('dd'); amountValue.append(amount); readout.append(amountLabel, amountValue);
   rackHeading.append(rackTitle, readout);
@@ -61,7 +63,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
       if (!active(canOpen) || (!active() && !open())) return;
-      choice.value = id; choice.dispatchEvent(new document.defaultView.Event('change', { bubbles: true })); preview();
+      selectArrangement(id);
       revealReelResult(structure); revealReelResult(delivery);
     } });
   const arrangementDeck = document.createElement('div'); arrangementDeck.className = 'studio-arrangement-deck';
@@ -75,8 +77,10 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   previewRegion.dataset.templatePreview = ''; previewRegion.hidden = true; previewRegion.setAttribute('aria-label', 'Arrangement preview');
   const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
   const applyButton = button('Apply arrangement', 'apply'); applyButton.className = 'native-control--confirm';
-  const cancelButton = button('Cancel preview', 'cancel'), anotherButton = button('Start another arrangement', 'another');
-  actions.append(applyButton, cancelButton, anotherButton);
+  const cancelButton = button('Keep current arrangement', 'cancel'); cancelButton.className = 'native-control--cancel';
+  const undoButton = button('Undo arrangement', 'undo'); undoButton.className = 'native-control--cancel'; undoButton.hidden = true;
+  const preserveButton = button('Keep shared records and use this arrangement', 'preserve'); preserveButton.className = 'native-control--confirm'; preserveButton.hidden = true;
+  actions.append(undoButton, applyButton, preserveButton, cancelButton);
   form.append(choiceLabel, arrangementDeck, description, delivery, actions, previewRegion, customization); body.replaceChildren(form);
   function option(value, label) { const node = document.createElement('option'); node.value = value; node.textContent = label; return node; }
   function element(tag, text, className) {
@@ -88,19 +92,25 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function owns(epoch) { return !disposed && epoch === generation; }
   function active(gate = isActive) { return !disposed && gate() && !disposed; }
   function announce(text) { if (!disposed) status.textContent = text; }
+  function currentArrangement() {
+    return projectCoordinationArrangements(projection.state).arrangements.find(row => row.id === arrangementId);
+  }
   function acceptedReadout() {
-    const result = projection.result;
-    amountLabel.textContent = result.plannedCommitmentCents === null ? 'Known accepted investment' : 'Accepted investment';
-    amount.textContent = money(result.knownCommitmentCents);
+    const arrangement = currentArrangement();
+    const linked = new Set(arrangement ? arrangement.connections.flatMap(row => row.connection.workIds)
+      : configuration.connections.flatMap(row => row.workIds));
+    const lines = projection.result.ledger.filter(row => linked.has(row.workId)).flatMap(row => row.lines);
+    amountLabel.textContent = lines.some(row => row.cents === null) ? 'Known included work' : 'Included work';
+    amount.textContent = money(lines.reduce((total, row) => total + (row.cents ?? 0), 0));
+    undoButton.hidden = undoProjection !== projection || !studio.readHistory?.().undoCount;
   }
   function retirePreview() {
-    proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren(); applyButton.setAttribute('aria-disabled', 'false');
-    acceptedReadout();
-    applyButton.textContent = 'Apply arrangement';
+    proposal = null; previewRegion.hidden = true; previewRegion.replaceChildren();
+    applyButton.hidden = true; preserveButton.hidden = true; cancelButton.hidden = true;
     for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = false;
-    anotherButton.hidden = false;
+    acceptedReadout();
   }
-  function touch() { rawRevision += 1; generation += 1; retirePreview(); announce(''); }
+  function touch() { rawRevision += 1; generation += 1; dirty = true; retirePreview(); announce(''); }
   function fresh(preview) {
     if (disposed || !preview || preview.revision !== rawRevision) return false;
     const current = studio.read(), acceptance = studio.readAcceptance(), drafts = editing.read();
@@ -125,17 +135,53 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       const assigned = people.filter((row, position) => position % template.teams.length === index).map(row => row.id);
       return { slotId: slot.id, selection: 'new', label: slot.label, personIds: assigned.length ? assigned : people.slice(0, 1).map(row => row.id) };
     });
-    return { templateId: template.id, proposalId: nextPrefix(template, projection.state),
+    return { templateId: template.id, proposalId: arrangementId ?? nextPrefix(template, projection.state),
       teams,
       connections: template.connections.map(slot => ({ slotId: slot.id, receiverPersonId: teams.find(team => team.slotId === slot.receiverSlotId).personIds[0] ?? '',
         sharedObject: slot.sharedObject ?? 'Working plan', responseExpectation: slot.responseExpectation ?? '',
         workIds: projection.state.work.length ? [projection.state.work[0].id] : [], status: 'active', recoveryEnabled: Boolean(slot.sessionLabel && people.length),
         recovery: { label: slot.sessionLabel ?? 'Review the handoff', team: `slot:${slot.receiverSlotId}`,
           personIds: teams.find(team => team.slotId === slot.receiverSlotId).personIds.slice(), hoursPerSession: '0', minutesPerSession: '30',
-          occurrences: '1', funding: 'additional', status: 'planned' } })),
+          occurrences: '1', funding: 'additional', status: 'planned', timing: null, lifecycle: 'active' } })),
     };
   }
-  function teamId(row) { return row.selection === 'new' ? `${configuration.proposalId}-team-${row.slotId}` : row.selection.slice(5); }
+  function acceptedConfiguration(row) {
+    const template = BY_ID.get(row.templateId), config = startingConfiguration(template);
+    config.proposalId = row.id;
+    const teams = new Map(projection.state.teams.map(team => [team.id, team]));
+    const connections = new Map(projection.state.connections.map(edge => [edge.id, edge]));
+    const work = new Map(projection.state.work.map(session => [session.id, session]));
+    config.teams = row.teamBindings.map(binding => {
+      const team = teams.get(binding.teamId);
+      return { slotId: binding.slotId, selection: isGeneratedArrangementRecord(row.id, 'team', binding.slotId, team.id) ? 'new' : `team:${team.id}`,
+        acceptedId: team.id, label: team.label, personIds: [...team.personIds] };
+    });
+    config.connections = row.connectionBindings.map(binding => {
+      const edge = connections.get(binding.connectionId), defaults = config.connections.find(item => item.slotId === binding.slotId);
+      const recovery = edge.workIds.map(id => work.get(id)).find(session => isGeneratedArrangementRecord(row.id, 'recovery', binding.slotId, session.id));
+      const teamSlot = recovery && row.teamBindings.find(item => item.teamId === recovery.teamId);
+      return { ...defaults, receiverPersonId: edge.receiverPersonId ?? '', sharedObject: edge.sharedObject,
+        responseExpectation: edge.responseExpectation ?? '', workIds: edge.workIds.filter(id => id !== recovery?.id), status: edge.status,
+        recoveryEnabled: Boolean(recovery), recovery: recovery ? { label: recovery.label,
+          team: teamSlot ? `slot:${teamSlot.slotId}` : `team:${recovery.teamId}`, personIds: [...recovery.personIds],
+          hoursPerSession: String(Math.floor(recovery.minutesPerOccurrence / 60)), minutesPerSession: String(recovery.minutesPerOccurrence % 60),
+          occurrences: String(recovery.occurrences), funding: recovery.funding, status: recovery.status, timing: recovery.timing, lifecycle: recovery.lifecycle } : defaults.recovery };
+    });
+    return config;
+  }
+  function receiveAccepted() {
+    let row = projection.state.arrangements.find(item => item.id === arrangementId);
+    if (!row && !dirty) row = projection.state.arrangements[0];
+    if (row) {
+      arrangementId = row.id; configuration = acceptedConfiguration(row);
+      configurations.set(configuration.templateId, configuration);
+    } else {
+      arrangementId = null;
+      configuration = startingConfiguration(BY_ID.get(configuration?.templateId) ?? TEMPLATES[0]);
+    }
+    dirty = false;
+  }
+  function teamId(row) { return row.selection === 'new' ? row.acceptedId ?? `${configuration.proposalId}-team-${row.slotId}` : row.selection.slice(5); }
   function teamLabel(row) {
     return row.selection === 'new' ? row.label : projection.state.teams.find(team => team.id === row.selection.slice(5))?.label ?? `${row.selection.slice(5)} · removed team`;
   }
@@ -191,6 +237,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function peopleOptions() { return projection.state.people.map(row => [row.id, named(row)]); }
   function workOptions() { return projection.state.work.map(row => [row.id, named(row)]); }
   function renderStructure() {
+    const focused = document.activeElement;
+    const focusKey = ['deliveryOpen', 'deliveryOverview', 'deliverySession', 'deliveryConnection', 'deliveryPerson']
+      .find(key => focused && Object.hasOwn(focused.dataset ?? {}, key));
+    const focusValue = focusKey ? focused.dataset[focusKey] : null;
+    const focusPhase = focused?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
     const template = BY_ID.get(configuration.templateId);
     const teams = configuration.teams.map(row => ({ slotId: row.slotId, slotLabel: template.teams.find(slot => slot.id === row.slotId).label,
       team: { id: `proposal-slot-${row.slotId}`, label: teamLabel(row).trim() || 'Team name to choose', personIds: row.personIds } }));
@@ -200,7 +251,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         connection: { id: `proposal-edge-${slot.id}`, senderTeamId: `proposal-slot-${slot.senderSlotId}`, receiverTeamId: `proposal-slot-${slot.receiverSlotId}`,
           sharedObject: row.sharedObject, status: row.status, workIds: row.workIds } };
     });
-    const arrangement = { id: configuration.proposalId, templateId: template.id, templateVersion: template.version, label: template.label, purpose: template.description, adapted: false, teams, connections };
+    const exampleArrangement = { id: configuration.proposalId, templateId: template.id, templateVersion: template.version, label: template.label, purpose: template.description, adapted: false, teams, connections };
     const proposedWork = configuration.connections.filter(row => row.recoveryEnabled).flatMap(row => {
       const parsed = prepareWorkDraftValues(row.recovery); if (parsed.errors.length) return [];
       return [{ id: `proposal-session-${row.slotId}`, label: row.recovery.label,
@@ -212,39 +263,63 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       const workId = `proposal-session-${row.slotId}`;
       if (proposedIds.has(workId)) row.connection.workIds = [...row.connection.workIds, workId];
     }
-    const previewPlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
+    const examplePlan = { ...projection.state, teams: [...projection.state.teams, ...teams.map(row => row.team)], work: [...projection.state.work, ...proposedWork] };
+    const accepted = currentArrangement();
+    const arrangement = accepted ?? exampleArrangement, previewPlan = accepted ? projection.state : examplePlan;
     function inspectTemplate(target) {
       if (!active()) return;
-      const kind = target.kind === 'template-team' ? 'team' : 'connection';
-      const section = [...groups.querySelectorAll('[data-template-card]')].find(section => section.dataset.templateCard === `${kind}:${target.id}`);
+      const kind = ['template-team', 'team'].includes(target.kind) ? 'team' : 'connection';
+      const slotId = target.kind === 'team' ? arrangement.teams.find(row => row.team.id === target.id)?.slotId
+        : target.kind === 'connection' ? arrangement.connections.find(row => row.connection.id === target.id)?.slotId : target.id;
+      const section = [...groups.querySelectorAll('[data-template-card]')].find(section => section.dataset.templateCard === `${kind}:${slotId}`);
       if (!section) return; customization.open = true; section.open = true;
       section.querySelector('input,select,button')?.focus({ preventScroll: true }); revealStudioDestination(section);
     }
     const inspectSession = id => {
       const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
       if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
-      else onNavigate({ kind: 'work', id });
+      else navigate({ kind: 'work', id });
     };
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
-    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: 'proposed', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
+    structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
     rackBody.replaceChildren(createDeliveryBoard(document, { arrangement, plan: previewPlan, acceptedSessionIds,
       onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView }),
       createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
         sessionIds: acceptedSessionIds,
-        onAdd: () => onNavigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
+        onAdd: () => navigate({ kind: 'create-session' }), label: 'Shared sessions · people who take part' }));
+    const board = rackBody.querySelector('.studio-delivery__board');
+    if (deliveryView.phaseId === null) board.scrollLeft = deliveryView.overviewScroll;
+    if (focusKey) {
+      const target = [...rackBody.querySelectorAll('button')].find(node => node.dataset[focusKey] === focusValue
+        && (!focusPhase || node.closest('[data-delivery-phase]')?.dataset.deliveryPhase === focusPhase));
+      if (target) {
+        const bounds = board.getBoundingClientRect(), key = target.getBoundingClientRect();
+        if (key.left < bounds.left) board.scrollLeft += key.left - bounds.left;
+        else if (key.right > bounds.right) board.scrollLeft += key.right - bounds.right;
+        if (deliveryView.phaseId === null) deliveryView.overviewScroll = board.scrollLeft;
+        target.focus({ preventScroll: true });
+      }
+    }
     onViewChanged();
   }
   function refresh(rebuild = false) {
     if (disposed) return;
     const next = studio.read(), changed = next !== projection;
     projection = next;
-    if (!proposal) acceptedReadout();
+    if (changed && !dirty && !committing) { receiveAccepted(); build(); return; }
+    acceptedReadout();
     if (changed) for (const source of optionSources) source.update();
     for (const update of dynamic) update();
     if (changed || rebuild) renderStructure();
-    if (proposal && !fresh(proposal)) { applyButton.setAttribute('aria-disabled', 'true'); announce('The plan or edits changed. Choose the arrangement again to refresh its proposal.'); }
+    if (proposal && !fresh(proposal)) {
+      retirePreview(); announce('The plan changed. Choose the arrangement again.');
+    }
   }
   function build() {
+    const openCards = new Set([...groups.querySelectorAll('details[open]')].map(node => node.dataset.templateCard));
+    const focused = document.activeElement;
+    const focusPath = focused?.dataset.templateField, focusRecovery = focused?.dataset.templateRecovery;
+    const stepPath = focused?.dataset.templatePath, step = focused?.dataset.templateStep;
     bindings = new WeakMap(); controls = new Map(); optionSources = []; dynamic = []; invalid.clear(); groups.replaceChildren();
     const template = BY_ID.get(configuration.templateId); choice.value = template.id; reel.select(template.id); description.textContent = template.description;
     for (const row of configuration.teams) {
@@ -253,7 +328,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         options: () => [['new', 'Create a team'], ...projection.state.teams.map(team => [`team:${team.id}`, named(team)])] });
       const labelInput = field(group, `teams.${row.slotId}.label`, 'Team name', row, 'label', { max: LIMITS.label });
       const members = field(group, `teams.${row.slotId}.personIds`, 'People', row, 'personIds', { options: peopleOptions, multiple: true });
-      const creationHelp = element('p', 'Choose the people, then Apply arrangement to add these teams and handoffs together.', 'native-coordination__hint');
+      const creationHelp = element('p', 'Selections update this arrangement. Undo restores the previous choice.', 'native-coordination__hint');
       group.prepend(creationHelp);
       const addPerson = element('button', 'Add a person'); addPerson.type = 'button';
       addPerson.className = 'native-control--create native-control--navigate'; addPerson.dataset.nativeCreate = 'person'; addPerson.dataset.nativeReturn = 'template';
@@ -261,7 +336,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       dynamic.push(() => {
         creationHelp.hidden = row.selection !== 'new';
         const selectedNames = row.personIds.map(id => projection.state.people.find(person => person.id === id)?.label ?? id);
-        group.parentElement.querySelector('summary').textContent = `${definition.label} · ${row.selection === 'new' ? 'New team: ' : ''}${teamLabel(row)} · ${selectedNames.slice(0, 2).join(', ') || 'Choose people'}${selectedNames.length > 2 ? ` + ${selectedNames.length - 2} more` : ''}`;
+        group.parentElement.querySelector('summary').textContent = `${definition.label} · ${teamLabel(row)} · ${selectedNames.slice(0, 2).join(', ') || 'Choose people'}${selectedNames.length > 2 ? ` + ${selectedNames.length - 2} more` : ''}`;
         labelInput.closest('.native-coordination__control').hidden = row.selection !== 'new';
         members.labels[0].textContent = row.selection === 'new' ? 'People' : 'Add people';
       });
@@ -295,6 +370,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         options: () => [['planned', 'Planned'], ['paused', 'Paused']] });
     }
     refresh(true);
+    for (const card of groups.querySelectorAll('details')) card.open = openCards.has(card.dataset.templateCard);
+    const focusTarget = stepPath ? [...groups.querySelectorAll('[data-template-step]')].find(node => node.dataset.templatePath === stepPath && node.dataset.templateStep === step)
+      : focusPath ? controls.get(focusPath)?.input
+        : focusRecovery ? [...groups.querySelectorAll('[data-template-recovery]')].find(node => node.dataset.templateRecovery === focusRecovery) : null;
+    focusTarget?.focus({ preventScroll: true });
   }
   function request() {
     const relevant = path => {
@@ -303,7 +383,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       if (kind === 'teams' && field === 'label') return configuration.teams.find(row => row.slotId === slotId).selection === 'new';
       return true;
     };
-    if ([...invalid].some(relevant)) throw new PlanError('text', 'template', 'Correct the marked fields before previewing.');
+    if ([...invalid].some(relevant)) throw new PlanError('text', 'template', 'Complete the marked fields to update this arrangement.');
     const template = BY_ID.get(configuration.templateId);
     const teams = configuration.teams.map(row => row.selection === 'new'
       ? { slotId: row.slotId, kind: 'new', label: row.label, personIds: [...row.personIds] }
@@ -319,7 +399,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         const selectedTeam = row.recovery.team.startsWith('slot:')
           ? teamId(configuration.teams.find(team => team.slotId === row.recovery.team.slice(5))) : row.recovery.team.slice(5);
         recoveryWork = { label: row.recovery.label, teamId: selectedTeam, personIds: [...row.recovery.personIds], ...parsed.admitted,
-          funding: row.recovery.funding, status: row.recovery.status, timing: null, lifecycle: 'active' };
+          funding: row.recovery.funding, status: row.recovery.status, timing: row.recovery.timing, lifecycle: row.recovery.lifecycle };
       }
       return { slotId: row.slotId, receiverPersonId: row.receiverPersonId || null, sharedObject: row.sharedObject,
         responseExpectation: row.responseExpectation.trim() || null, workIds: [...row.workIds], status: row.status, recoveryWork };
@@ -330,51 +410,83 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const control = controls.get(path); if (!control) return;
     control.error.textContent = message; control.input.setAttribute('aria-invalid', 'true');
   }
-  function renderPreview(prepared) {
-    const summary = prepared.summary;
-    amountLabel.textContent = summary.money.afterTotalCents === null ? 'Known whole-plan proposed investment' : 'Whole-plan proposed investment';
-    amount.textContent = money(summary.money.afterTotalCents ?? summary.money.afterKnownCents);
-    const change = summary.money.totalDeltaCents === null ? `Known investment ${money(summary.money.afterKnownCents)} · choose missing rates.`
-      : `Current ${money(summary.money.beforeTotalCents)} · Change ${money(summary.money.totalDeltaCents)}`;
-    previewRegion.replaceChildren(element('p', change));
-    previewRegion.hidden = false; applyButton.setAttribute('aria-disabled', 'false');
-  }
   function parkAndNotify(epoch) {
     const result = editing.park(); if (!owns(epoch)) return false;
     if (!result.ok) { announce(result.error.message); return false; }
     onBegin(); if (!owns(epoch)) return false;
     onEditing(); return owns(epoch);
   }
-  function preview() {
-    if (!active()) return false;
-    const epoch = ++generation; retirePreview();
-    if (!parkAndNotify(epoch)) return false;
-    refresh();
-    const base = studio.read(), acceptance = studio.readAcceptance(), draft = editing.read(), revision = rawRevision;
+  function settleText() { return pendingText && dirty ? commit() : true; }
+  function navigate(target) {
+    settleText();
+    if (!disposed) onNavigate(target);
+  }
+  function selectArrangement(id) {
+    if (!BY_ID.has(id)) return;
+    if (id === configuration.templateId && currentArrangement() && !dirty) return;
+    if (!active(canOpen) || (!active() && !open())) return;
+    configurations.set(configuration.templateId, configuration);
+    touch(); projection = studio.read();
+    configuration = configurations.get(id) ?? startingConfiguration(BY_ID.get(id));
+    configuration.proposalId = arrangementId ?? configuration.proposalId;
+    build(); commit();
+  }
+  function commit({ preserveShared = false } = {}) {
+    if (committing || !active()) return false;
+    pendingText = false;
+    const epoch = ++generation; retirePreview(); committing = true;
     try {
-      const prepared = prepareCoordinationTemplate(base, request());
-      if (!owns(epoch)) return false;
+      if (!parkAndNotify(epoch)) return false;
+      refresh();
+      const base = studio.read(), acceptance = studio.readAcceptance(), draft = editing.read(), revision = rawRevision;
+      const prepared = prepareCoordinationReplacement(base, request(), { preserveShared });
       const candidate = { prepared, base, acceptance, intent: draft.intent, revision };
-      if (!fresh(candidate)) { announce('The plan or edits changed. Choose the arrangement again to refresh its proposal.'); return false; }
-      proposal = candidate; renderPreview(prepared); announce('Preview ready. Apply to update the plan.'); return true;
+      if (!owns(epoch) || !fresh(candidate)) return false;
+      const result = applyCoordinationTemplate(studio, prepared);
+      if (!owns(epoch)) return false;
+      if (!result.ok) { announce(result.error.message); return false; }
+      const changed = result.projection !== base;
+      arrangementId = configuration.proposalId;
+      projection = result.projection;
+      if (changed) undoProjection = result.projection;
+      receiveAccepted(); build();
+      const intent = editing.read().intent;
+      if (changed) onAccepted(result.projection);
+      if (!owns(epoch) || studio.read() !== result.projection || editing.read().intent !== intent) return true;
+      announce(changed ? `${BY_ID.get(configuration.templateId).label} arrangement updated. Undo is available.` : 'Arrangement is current.');
+      return true;
     } catch (error) {
       if (!owns(epoch)) return false;
       if (!(error instanceof PlanError)) throw error;
-      announce(error.code === 'identity-collision' ? 'This arrangement has different entries in the plan. Start another arrangement.' : error.message); return false;
-    }
+      if (error.code === 'retained-record-choice') {
+        proposal = { base: studio.read(), acceptance: studio.readAcceptance(), intent: editing.read().intent, revision: rawRevision };
+        previewRegion.replaceChildren(element('p', 'Some arrangement records support other work. Keep those records and use separate records for this choice?'));
+        previewRegion.hidden = false; preserveButton.hidden = false; cancelButton.hidden = false;
+      }
+      announce(error.message); return false;
+    } finally { committing = false; }
   }
   function apply() {
-    if (!active()) return false;
-    if (!proposal && !preview()) return false;
+    if (!active() || !proposal?.command) return false;
     const epoch = ++generation, held = proposal;
-    if (!fresh(held)) { announce('The plan changed. Choose the arrangement again to refresh its proposal.'); return false; }
-    const result = held.command ? studio.applyCommand(held.command, held.base) : applyCoordinationTemplate(studio, held.prepared);
+    if (!fresh(held)) { announce('The plan changed. Open this grouping again.'); return false; }
+    const result = studio.applyCommand(held.command, held.base);
     if (!owns(epoch)) return false;
     if (!result.ok) { announce(result.error.message); return false; }
-    const intent = editing.read().intent;
-    onAccepted(result.projection); if (!owns(epoch)) return false;
-    if (studio.read() !== result.projection || editing.read().intent !== intent) return true;
-    retirePreview(); refresh(); announce(held.command ? 'Template grouping removed. The teams, connections and sessions remain in the plan.' : 'Arrangement applied.'); return true;
+    dirty = false; retirePreview(); refresh(); onAccepted(result.projection);
+    if (owns(epoch)) announce('Grouping removed. Teams, connections and sessions remain.');
+    return true;
+  }
+  function undo() {
+    if (!active() || undoProjection !== studio.read()) return false;
+    const epoch = ++generation;
+    if (!parkAndNotify(epoch)) return false;
+    const result = studio.undo(undoProjection);
+    if (!owns(epoch)) return false;
+    if (!result.ok) { announce(result.error.message); return false; }
+    undoProjection = null; dirty = false; retirePreview(); refresh(); onAccepted(result.projection);
+    if (owns(epoch)) announce('Previous arrangement restored.');
+    return true;
   }
   function detach(id) {
     if (!open()) return false;
@@ -388,7 +500,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!fresh(candidate)) return false;
     proposal = candidate;
     for (const element of [choiceLabel, description, arrangementDeck, customization]) element.hidden = true;
-    anotherButton.hidden = true;
+    applyButton.hidden = false; cancelButton.hidden = false;
     applyButton.textContent = 'Use connections without template';
     const template = getCoordinationTemplate(row.templateId, row.templateVersion);
     previewRegion.replaceChildren(element('h4', `Use ${template.label} connections without the template?`),
@@ -409,6 +521,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1; proposal = null; configuration = null;
+    document.defaultView.clearTimeout(settleTimer); pendingText = false;
     cleanup.forEach(remove => remove()); reel.dispose(); bindings = new WeakMap(); controls.clear(); optionSources = []; dynamic = [];
     body.replaceChildren(); status.textContent = ''; if (disclosure) panel.open = false; panel.hidden = true; INSTANCES.delete(panel);
   }
@@ -418,21 +531,39 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     else if (!panel.open) acknowledged = false;
   });
   listen(form, 'focusin', () => { if (exposed && !active() && active(canOpen)) open(); });
+  // Let a pointer's destination receive its click before a completed text edit
+  // refreshes the rack. Keyboard blur and Enter can settle immediately.
+  listen(document, 'pointerdown', event => { pointerDown = form.contains(event.target); });
+  const finishPointer = () => {
+    pointerDown = false;
+    document.defaultView.clearTimeout(settleTimer);
+    settleTimer = document.defaultView.setTimeout(() => {
+      settleTimer = null;
+      if (pendingText && dirty && !disposed) { pendingText = false; commit(); }
+    }, 0);
+  };
+  listen(document, 'pointerup', finishPointer);
+  listen(document, 'pointercancel', finishPointer);
+
   for (const type of ['input', 'change']) listen(form, type, event => {
-    if (!active()) return;
-    if (event.target === choice && type === 'change') {
-      const selected = BY_ID.get(choice.value);
-      if (!selected) { choice.value = configuration.templateId; return; }
-      touch(); projection = studio.read(); configurations.set(configuration.templateId, configuration);
-      configuration = configurations.get(selected.id) ?? startingConfiguration(selected); configurations.set(selected.id, configuration); build(); return;
-    }
+    if (committing || !active()) return;
+    if (event.target === choice && type === 'change') { selectArrangement(choice.value); return; }
     const binding = bindings.get(event.target);
-    if (!binding || binding.event !== type) return;
-    touch(); binding.update(); for (const update of dynamic) update();
-    if (event.target.dataset.templateField?.startsWith('teams.')) for (const source of optionSources) if (source.dependsOnGroups) source.update();
-    renderStructure();
+    if (!binding) return;
+    if (binding.event === type) {
+      touch(); binding.update(); for (const update of dynamic) update();
+      if (event.target.dataset.templateField?.startsWith('teams.')) for (const source of optionSources) if (source.dependsOnGroups) source.update();
+    }
+    if (type === 'change' && dirty) {
+      if (binding.event === 'input' && pointerDown) pendingText = true;
+      else commit();
+    }
   });
-  listen(form, 'submit', event => { event.preventDefault(); event.stopPropagation(); preview(); });
+  listen(form, 'keydown', event => {
+    if (event.key !== 'Enter' || event.target.tagName !== 'INPUT' || event.target.type === 'checkbox') return;
+    event.preventDefault(); event.stopPropagation(); if (dirty) commit();
+  });
+  listen(form, 'submit', event => { event.preventDefault(); event.stopPropagation(); if (dirty) commit(); });
   listen(form, 'click', event => {
     const target = event.target.closest('[data-template-action]');
     if (!target || !form.contains(target) || !active()) return;
@@ -441,15 +572,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     target.focus();
     if (!owns(focusedAt) || !active()) return;
     switch (target.dataset.templateAction) {
-      case 'preview': preview(); break;
       case 'apply': apply(); break;
-      case 'cancel': {
-        const epoch = ++generation; retirePreview(); onEditing();
-        if (owns(epoch)) announce('Preview cancelled.'); break;
-      }
-      case 'another':
-        touch(); projection = studio.read(); configuration.proposalId = nextPrefix(BY_ID.get(configuration.templateId), projection.state);
-        refresh(true); announce('Ready to preview another arrangement.'); break;
+      case 'undo': undo(); break;
+      case 'preserve': if (fresh(proposal)) commit({ preserveShared: true }); break;
+      case 'cancel':
+        dirty = false; receiveAccepted(); retirePreview(); build(); announce('Current arrangement retained.'); break;
       case 'step': {
         const path = target.dataset.templatePath, control = controls.get(path);
         const stepped = stepWorkDraftValues(control.record, control.key, Number(target.dataset.templateStep));
@@ -459,14 +586,13 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
         for (const [key, sibling] of controls) if (sibling.record === control.record && ['hoursPerSession', 'minutesPerSession', 'occurrences'].includes(sibling.key)) {
           sibling.input.value = control.record[sibling.key]; invalid.delete(key); sibling.error.textContent = ''; sibling.input.setAttribute('aria-invalid', 'false');
         }
-        renderStructure();
-        break;
+        commit(); break;
       }
     }
   });
-  configuration = startingConfiguration(TEMPLATES[0]); configurations.set(configuration.templateId, configuration); build(); retirePreview(); panel.hidden = false;
+  configuration = startingConfiguration(TEMPLATES[0]); receiveAccepted(); build(); retirePreview(); panel.hidden = false;
   if (disclosure && exposed) panel.open = true;
-  const controller = Object.freeze({ open, resume: open, close, detach,
+  const controller = Object.freeze({ open, resume: open, close, detach, settleText,
     focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
     isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
   INSTANCES.set(panel, controller);

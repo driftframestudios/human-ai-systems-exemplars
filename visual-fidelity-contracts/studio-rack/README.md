@@ -74,8 +74,9 @@ Decorative ASCII and CRT texture stay clear of labels, hit targets and focus.
 ## Keep state and motion legible
 
 One accepted plan supplies the amp amount, relationships and downloads. An
-editor's proposal has its own reading until Apply. Cancel, saved edits, Undo and
-baseline comparison retain their existing owners. Selected-for-inspection,
+ordinary editor’s proposal has its own reading until Apply. Team arrangement
+choices settle directly with local Undo. Cancel, saved edits, history and baseline
+comparison retain their existing owners. Selected-for-inspection,
 included-in-plan and observed evidence remain separate meanings.
 
 The amp offers Off, Half-speed and Full-speed; Full-speed is the current default.
@@ -111,7 +112,7 @@ for a real shared receiving use.
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Session keys and pads mirror the actual session editor's identity, visibility and controlled element |
-| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning's proposal, editorial topology, phase projection and scope, investment reading, and participation table with a fixed header/local scroller |
+| [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning’s direct arrangement transaction, editorial topology, phase projection and scope, included-work reading, and participation table with a fixed header/local scroller |
 
 Ordinary phone and laptop widths are the receiving range for this showcase.
 Text and controls reflow; genuinely two-dimensional tables and tracks retain a
@@ -145,17 +146,17 @@ people. Their local table geometry preserves those different relationships.
 Team planning is a permanent sibling section with the reel and editorial
 topology above a concise hint and subtly darker secondary rack. Its
 [delivery-board refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
-combines proposed teams, people, sessions and handoffs into six phase lanes.
+combines teams, people, sessions and handoffs into six phase lanes.
 Editorial card faces and distinct team, session and handoff treatments sit
 against the darker housing. Shared sessions retains its participation reading
 below. The board's phase name and Delivery overview return stay above its local
 scroller; the rack amount and Add session remain outside participant-table
-scrolling. The readout labels accepted or whole-plan proposed investment
-according to the existing preview state.
+scrolling. Included work prices the accepted arrangement’s distinct linked
+sessions once; the amp keeps whole-plan investment.
 
 A delivery phase is an authored grouping of work and responsibility; the horizon
-continues to own sprint and quarter placement. The reel updates the proposed
-board immediately while each card addresses its existing editor. Remaining
+continues to own sprint and quarter placement. A deliberate reel choice updates
+one accepted arrangement immediately, and each card addresses its existing editor. Remaining
 attached disclosures retain their spring reveal. The existing palette, reels,
 pads and tactile depth connect this secondary enclosure to the primary horizon
 while preserving their distinct readings.
@@ -186,10 +187,12 @@ human review of that example precedes the wider chapter adoption.
 The current Remove skin has moved into the shared instrument owner unchanged;
 the proposed visual refinement and recovery behavior remain with #773.
 
-The planned Team arrangement flow in
+The Team arrangement flow in
 [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
-accepts a selection through one updateable arrangement and Undo. Other editors
-retain their current proposal and Apply owners. Before adjacent editors move,
+accepts a selection through one updateable arrangement and local Undo. Shared
+and unrelated records retain identity; repeated unchanged choices retain history.
+Text customization settles as a complete field edit. Other editors retain their
+current proposal and Apply owners. Before adjacent editors move,
 [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767)
 defines duration and rate enclosures that fit within the rack. Coordination-first
 [person/team editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)

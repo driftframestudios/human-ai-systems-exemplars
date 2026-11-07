@@ -90,8 +90,8 @@ each row names shared work. A populated pad means that person participates;
 selection identifies the session being inspected. Accepted-session keys and
 participation pads now mirror the same selected record and visible receiver.
 Participation remains the pad's relationship meaning; selected/open cues describe
-inspection. Proposed-only sessions keep their proposal-settings destination and
-remain outside the accepted-session receiver's state. Team planning's permanent
+inspection. The initial arrangement illustration precedes acceptance; after a
+choice, its session keys use accepted IDs and the shared receiver state. Team planning's permanent
 secondary rack groups an editorial delivery board and Shared sessions. The
 board's phase lanes combine team/member, session and handoff cards; a team can
 appear in several phases as an illustrative role while keeping one identity.
@@ -100,11 +100,12 @@ keeps its separate participation meaning, and its heading and Add control stay
 visible while participant columns scroll locally.
 
 The [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs)
-uses explicit template/slot mappings to vary the proposed picture with the reel.
+uses explicit template/slot mappings to vary the selected picture with the reel.
 Every session and handoff retains its own card and receiver; source stage labels
 remain session context. This replaces the separate team strip and lifecycle
 disclosure in Team planning. The [Period Kanban variant](period-kanban-session-sequencer.md)
-owns phase scope and return, while the existing proposal owner retains Apply.
+owns phase scope and return. Team arrangement selection updates one accepted
+instance with local Undo; ordinary session editors retain their Apply boundary.
 Remaining attached disclosures keep their spring reveal.
 
 The existing `native-quality-tracks` is the preferred aesthetic precedent for

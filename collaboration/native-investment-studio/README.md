@@ -8,8 +8,9 @@ visitor something useful to inspect and change immediately.
 
 Semantic HTML, CSS and vanilla JavaScript carry the experience. One accepted
 plan connects Coordination, People, Abilities, Change, Quality & recovery and
-Investment. Editors retain their proposals until Apply; Cancel, saved edits,
-Undo and baseline comparison make exploration recoverable.
+Investment. Team arrangement choices update the accepted plan directly with Undo.
+Other editors retain their proposals until Apply; Cancel, saved edits and baseline
+comparison make exploration recoverable.
 
 ## Current state
 
@@ -38,12 +39,12 @@ the session editor's current record, and their carets follow its visible open
 state. Team planning is a permanent section with the arrangement reel and
 editorial structure above a subtly darker rack for teams and shared work.
 The [delivery-board increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
-combines proposed teams, people, sessions and handoffs in editorial phase lanes.
-The arrangement reel changes this proposed picture immediately; Shared sessions
-keeps its complementary participation reading below.
-Direct arrangement selection ([#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766))
-and enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
-prepare adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
+combines teams, people, sessions and handoffs in editorial phase lanes.
+[Direct arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
+updates one arrangement through the accepted plan and makes Undo available locally.
+Shared sessions keeps its complementary participation reading below.
+Enclosed dial modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
+are the next preparation for adjacent people/team ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
 and session editors ([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)).
 The plan draws on the whole Studio: Quality's selection matrices, Abilities'
 adjacent inspector, Change/Quality pad movement and the editorial disclosures.
@@ -62,8 +63,9 @@ adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
 recovery. The existing Remove skin now lives with the shared instrument styles;
 its behavior stays with the current owners. Coordination supplies the reviewed
 recovery example before the new removal pattern spreads to other chapters.
-These are prospective increments. Current arrangement preview/Apply, editor
-placement and creation flows remain available until their replacements land.
+These are prospective increments. Current editor placement and creation flows
+remain available until their replacements land. The arrangement reel already
+uses its direct acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
 now names sessions as the recommended first immediate-add record, with later
 editing and creation Undo kept distinct.
@@ -143,16 +145,24 @@ and editorial topology lead into a short hint, then a darker secondary rack.
 The delivery board combines team/member, session and handoff cards under
 **Planning, Design, Implementation, Testing, Deployment and Maintenance**.
 Choose a phase to inspect it; **Delivery overview** returns to the complete board.
-The phase reading describes how the proposed work fits together. Sprint and
+The phase reading describes how the selected work fits together. Sprint and
 quarter placement stays with the horizon.
 
-Turning the arrangement reel changes team and handoff placement immediately.
-Team/member cards open their team customization; handoffs open connection
-settings; sessions open their existing accepted or proposed editor. Shared
-sessions follows the board with people as its columns. Rack headings, the
-investment readout and Add session stay outside local horizontal scrolling.
-The amount names accepted investment until a preview supplies whole-plan
-proposed investment; Apply accepts that preview.
+Choosing a team arrangement accepts its teams, handoffs and included sessions
+together. Later choices revise the same arrangement; choosing its unchanged
+setting keeps history intact. **Undo arrangement** restores the preceding plan.
+Shared and unrelated records keep their identities. When a shared record needs
+a separate replacement, a compact local choice preserves the existing record.
+
+Team/member cards open customization; handoffs open connection settings; session
+cards use accepted IDs to reach their existing editors. Text customization settles
+on leaving the field or pressing Enter; bounded choices settle immediately.
+Invalid entries stay available for correction, and other unfinished editors stay
+recoverable through Saved edits. Shared sessions follows the board with people
+as its columns. Rack headings, the readout and Add session stay outside local
+horizontal scrolling. **Included work** prices the arrangement’s distinct linked
+sessions once; the amp keeps the whole-plan amount. Before the first selection,
+the starter illustration remains available without changing the accepted plan.
 
 Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
@@ -241,9 +251,9 @@ the locked Playwright browsers. The
 and [suite catalog](../../tests/suites/README.md) identify other routes and
 prerequisites.
 
-Prefer observations of a meaningful action: a control changes the right draft,
-Apply accepts it, Cancel or Undo restores the expected state, and a return finds
-the visitor's work. Layout changes earn ordinary mobile and desktop observations;
+Prefer observations of a meaningful action: a control changes the intended
+record or draft, its acceptance route works, Cancel or Undo restores the expected
+state, and a return finds the visitor’s work. Layout changes earn ordinary mobile and desktop observations;
 engine-sensitive controls earn the relevant alternate-engine check. Keep local
 comparison images in ignored `.visual-runs/`. The receiving PR records the exact
 checked source and remaining review boundary.
