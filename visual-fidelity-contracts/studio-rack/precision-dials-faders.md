@@ -115,9 +115,12 @@ The adjacent [person/team receiver](https://github.com/driftframestudios/human-a
 borrows the canonical controls, including the person's enclosed rate module.
 Its local close retains the current proposal; returning to People restores the
 same controls and value owner. [Session editing](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-is the next planned receiver of the duration module. A future session rack may express
-Working sessions as occurrence pads or a compact lane while preserving exact
-count and placement meaning.
+places the canonical duration module directly below its originating Coordination
+rack. The larger readout, primary Hours and secondary peach Minutes remain one
+enclosure; exact fields and circular steps preserve their layout. Close retains
+the proposal, including incomplete exact entry. Working sessions keeps its
+separate count input and placement meaning. A future occurrence-pad treatment
+can earn a distinct receiving change while the present controls remain useful.
 
 The future [participant fader](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771)
 starts with **Time in this session**, meaning each person's share of one session

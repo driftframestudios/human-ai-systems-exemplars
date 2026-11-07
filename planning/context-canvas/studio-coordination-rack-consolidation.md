@@ -16,10 +16,11 @@ by combining teams, sessions and handoffs into an editorial delivery board.
 [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
 adds direct arrangement replacement and local Undo; its focused PR owns the
 transaction and receiver evidence.
-Direct empty-space creation, participant movement, attached editorial companions,
-duration enclosures and scoped removal/recovery retain their separate receivers
-below. The current aesthetic, compact landing and existing operations remain the
-reference.
+PR #785 supplies duration/rate enclosures and PR #786 supplies the first adjacent
+person/team receiver. #768 extends that receiver to sessions from either rack.
+Direct empty-space creation, participant movement, attached editorial companions
+and scoped removal/recovery retain their separate receivers below. The current
+aesthetic, compact landing and existing operations remain the reference.
 
 ## Same work, distinct readings
 
@@ -53,8 +54,9 @@ the controls in both readings, in place, preserving focus and horizontal scroll.
 Accepted-session keys and populated pads receive the same selected-record and
 expanded state. The starter arrangement illustration keeps its initial route;
 a deliberate choice accepts the arrangement and its rack uses accepted IDs.
-The global last-click effect remains transient motion feedback. Existing session-settings
-destination wording remains accurate until an adjacent editor is mounted.
+The global last-click effect remains transient motion feedback. Session settings
+now opens beside the originating rack. Repeating its active row key closes the
+panel; occurrence and participation pads retain their inspection routes.
 
 `studio-rack-add` supplies the shared Add session treatment in the existing
 instrument stylesheet; receiving styles retain column geometry. A plus begins
@@ -135,8 +137,8 @@ Team planning is a permanent semantic section with the following order:
 3. The short arrangement hint below the zoetrope/structure deck.
 4. Secondary rack header and investment readout, followed by the delivery-phase
    board and Shared sessions participation tracks.
-5. Local Undo, customization and accepted connection details. A selected person
-   or accepted team opens its canonical editor directly below the initiating rack.
+5. Local Undo, customization and accepted connection details. A selected person,
+   accepted team or session opens its canonical editor below the initiating rack.
 
 The About composition uses an ordinary section and exposed template container.
 The template controller settles direct choices through the accepted plan and
@@ -178,11 +180,10 @@ changes and recovery.
 
 The proposed-team strip, duplicated connection-button strip and Delivery lifecycle
 disclosure are superseded in this receiver. Remaining attached summaries retain
-the spring reveal. Session keys retain current destination behavior and actual
-receiver-driven caret state; the later adjacent session panel in #768 will own
-its corresponding open/close interaction.
+the spring reveal. Session keys retain receiver-driven selected/open state, and
+#768 supplies their adjacent open/close interaction.
 
-### Adjacent person/team editing
+### Adjacent record editing
 
 #757 supplies the first adjacent Coordination receiver. One `studio-rack-editor`
 follows the stable Team planning template or accepted-connections root, outside
@@ -199,10 +200,19 @@ logical origin after a rerender. Apply accepts through the current owner and
 keeps the editor open. Record switching uses saved proposals and a fresh resume
 lease. The parent cards retain their geometry as the panel opens in page flow.
 
-The #757 PR owns the focused phone/laptop opening, switching, acceptance and
-return observations. #768 receives this composition for sessions; #758/#770,
-#771, #772 and #773 keep creation, participant changes, attached companions and
-removal/recovery as separate increments.
+PR #786 owns the person/team opening, switching, acceptance and return evidence.
+#768 extends the same placement owner to the canonical session editor. A horizon
+entry retains the period/subdivision and occurrence when supplied; Team planning
+retains its selected delivery phase and participation context. The heading names
+the session and originating rack. A row key toggles its panel, while an occurrence
+or participation pad opens the named work for inspection.
+
+Cross-entry moves the same session receiver and retains its current proposal.
+Close restores the initiating control with its local context; Cancel discards
+the proposal, and Apply accepts through the session owner. The duration enclosure
+and exact Working sessions input remain intact. #758/#770, #771, #772 and #773
+keep creation, participant changes, attached companions and removal/recovery as
+separate increments.
 
 ### Direct arrangement selection
 
@@ -245,8 +255,7 @@ start/end alignment beneath the input remain recognizable.
 
 The two units share a row when space permits and reflow within the same enclosure
 at phone widths. **Working sessions** stays nearby as a separate repetition
-control. #768 may later express occurrences as pads or a compact lane with a
-clear count and placement. Duration changes one occurrence's length; adding an
+control in #768's adjacent receiver. Duration changes one occurrence's length; adding an
 occurrence and adding a different session retain their distinct operations.
 
 `studio-quantity-module` supplies the shared housing grammar. `studio-duration`
@@ -257,10 +266,9 @@ that owner. The main About session markup and dynamic `time-controls.mjs` factor
 use the same grouping. Their output associations, dial artwork, fixed light,
 gesture handling and Apply/Cancel behavior retain their existing owners.
 
-The enclosure increment prepares the adjacent editor receivers while their
-current placement stays in service. The retained-value repair from #761 remains
-the gesture contract, and the receiving #767 PR carries focused layout and value
-agreement evidence.
+The adjacent editor receivers use this enclosure intact. The retained-value
+repair from #761 remains the gesture contract, and the receiving #767 PR carries
+focused layout and value agreement evidence.
 
 ## Attached editorial companions
 
@@ -311,16 +319,16 @@ expanding the first style PR into a deletion-model rewrite.
 | [#779](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779) | Editorial delivery board combining teams, sessions and handoffs | Delivered in #781; supplies phase scope and the combined reading |
 | [#766](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766) | Direct arrangement update, included-work reading and Undo | Delivered in #783; supplies stable accepted identity before adjacent editors |
 | [#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767) | Shared duration/rate enclosures | Delivered in #785; supplies the quantity hierarchy and shared housing |
-| [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Implements one canonical receiver with retained drafts, local close/return and existing acceptance owners |
-| [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Shares #757's contextual panel contract and existing editor owners |
+| [#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757) | Adjacent person/team editor in Coordination | Delivered in #786; supplies canonical placement, retained drafts and local close/return |
+| [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768) | Adjacent session editor from either Coordination rack | Extends the shared receiver with origin, occurrence and session-draft context; preserves the duration module |
 | [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758) → [#770](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770) | Immediate session acceptance, then empty-space entry | Receives common creation controls and an adjacent edit/return route; retains existing creation until ready |
 | [#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771) | Shared participant movement; separately, scoped percentage semantics | Movement can accompany shared controls; the percentage model remains independent future work |
 | [#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772) | Attached editorial companions and equivalent rack entries | Receives the shared shell; prepares contextual editors without changing their draft ownership |
 | [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773) | Scoped removal, amp Undo, then a Coordination local-recovery example | Receives shared controls/history; human review releases cross-chapter removal adoption |
 
-#757 supplies the first adjacent panel implementation; its focused review and
-verification govern completion. #771's movement and #772's companion shell can develop
-alongside adjacent editor work. Percentage modeling and immediate-add acceptance
+The reviewed #757 implementation supplies shared panel placement; #768 applies
+it to sessions. #771's movement and #772's companion shell can develop alongside
+this receiver. Percentage modeling and immediate-add acceptance
 retain separate increments; neither expands the first common-control PR.
 Publication, sticky amp work and general performance retain their own routes.
 
@@ -328,8 +336,8 @@ The chain review preserves completed #755 (contracts) and #756 (scope navigation
 as accepted foundations. #765’s reviewed composition, #779’s delivery board and
 #766’s direct replacement prepare the next receivers. #766 preserves sessions
 created through the new entry when arrangements change; #767 supplies the shared
-duration hierarchy; #757 supplies the shared placement/return owner for the
-future #768 receiver. A matrix is a permitted receiving composition where
+duration hierarchy; #757 supplies the shared placement/return owner used by
+#768. A matrix is a permitted receiving composition where
 relationships benefit from comparison. #758 has a recommended first record and
 #770 its contextual entry.
 The underlying issue acceptance remains with each receiver.
@@ -360,7 +368,8 @@ Keep verification tied to the changed operation: one session selected through
 both readings, one arrangement replacement/Undo path with a shared-record case,
 and one duration-module comparison at phone/laptop widths. Adjacent person/team
 editing adds a focused open, switch, retain, accept and return journey through
-the canonical controls. Existing source and
+the canonical controls. Session editing adds occurrence/participation entries,
+cross-rack draft retention and the active row's close/reopen operation. Existing source and
 gesture checks retain their boundary. Each focused PR receives independent
 review, updates current README/journal guidance, and passes its evidence to the
 next issue. A reviewed adjacent panel completes this preparation route.

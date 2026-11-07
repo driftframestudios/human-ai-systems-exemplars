@@ -51,8 +51,11 @@ Adjacent people/team editing
 ([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
 places the existing editor below the selected Team planning rack. Close retains
 the draft; Cancel discards it; Apply accepts through the existing owner.
-The People chapter uses those same controls. Adjacent session editing remains
-with [#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768).
+The People chapter uses those same controls. Adjacent session editing
+([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768))
+extends this receiver to the horizon and Team planning. The heading names the
+session and its originating rack; both routes use the same session draft and
+enclosed duration controls.
 The plan draws on the whole Studio: Quality's selection matrices, Abilities'
 adjacent inspector, Change/Quality pad movement and the editorial disclosures.
 Shared components gain role-based names as they are extracted; intentional
@@ -135,8 +138,10 @@ Open a period to see its weeks or months. The rack header keeps the selected
 sprint or quarter beside **Plan overview**, above the board and tracks' local
 scroll regions. Returning restores the originating period control and its place
 in the overview; changing scope preserves accepted work and pending edits.
-Select a session to inspect its people,
-duration and individual occurrence placements. **Add session** begins a draft
+Select a session to open its people,
+duration and individual occurrence placements directly below the rack. The
+period remains selected. A row key toggles the receiving panel; an
+occurrence pad opens that occurrence's placement. **Add session** begins a draft
 in the selected period; its final confirmation accepts that draft. Increasing
 **Working sessions** adds occurrences awaiting placement. Increasing Hours or
 Minutes makes each occurrence longer.
@@ -169,8 +174,16 @@ card; **Apply** accepts it and keeps the editor open. Switching records
 keeps unfinished work recoverable. Returning to People restores the same controls
 to that chapter.
 
+Session cards, row keys and participation pads open the same session editor
+below their originating rack. The panel names the session and its source;
+**Close** keeps the draft and returns focus to the initiating control. Repeating
+an active row key closes it; occurrence and participation pads keep their
+inspection operation. Switching between the horizon and Team planning retains
+the proposal, selected period and delivery phase. **Cancel changes** discards
+the proposal; **Apply changes** accepts it through the existing session owner.
+
 Illustrative teams awaiting acceptance keep their template-customization route;
-handoffs open connection settings; session cards reach their existing editors.
+handoffs open connection settings.
 Template text customization settles on leaving the field or pressing Enter;
 bounded choices settle immediately.
 Invalid entries stay available for correction, and other unfinished editors stay
@@ -184,7 +197,7 @@ Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
 same working-session records with the same session-key and Add treatment. The
 selected key stays identifiable when its editor closes; its caret opens only
-with the visible session-settings receiver. A future New session row
+with the visible adjacent session-settings receiver. A future New session row
 will provide ghosted creation space inside the rack; existing row cells retain
 their occurrence or participation meaning. People and available time and
 Stages & handoffs will remain compact editorial companions attached below the
@@ -291,7 +304,7 @@ checked source and remaining review boundary.
 | Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
-| Adjacent person/team editing | [`rack-controls.mjs`](rack-controls.mjs) places the existing controls; [`controller.mjs`](controller.mjs), [`team-controller.mjs`](team-controller.mjs) and [`assembly-controller.mjs`](assembly-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor` and `studio-record-key` share the instrument CSS. |
+| Adjacent people, team and session editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls; [`controller.mjs`](controller.mjs) routes their rack origin. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,

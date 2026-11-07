@@ -2360,10 +2360,10 @@ p#on-dark-iron-ore {
 }
 .native-session__toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
 .native-session__toolbar > div:first-child { display: grid; gap: .5rem; flex: 1 1 19rem; min-inline-size: 0; }
-[data-native-session-editor] select { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; min-block-size: 2.75rem; padding: .55rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }
-[data-native-session-editor] .native-coordination__configuration form { padding-inline: clamp(.25rem, 2vw, 1.15rem); }
-[data-native-session-editor] button, [data-native-session-editor] summary { padding-inline: clamp(.25rem, 2vw, .85rem); }
-[data-native-session-editor] .native-coordination__stepper button { padding: 0; }
+:is([data-native-session-editor], [data-rack-editor-kind="session"]) select { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; min-block-size: 2.75rem; padding: .55rem; border: .125rem solid var(--native-rule); border-radius: .25rem; background: var(--native-paper); color: var(--native-text); font: inherit; }
+:is([data-native-session-editor], [data-rack-editor-kind="session"]) .native-coordination__configuration form { padding-inline: clamp(.25rem, 2vw, 1.15rem); }
+:is([data-native-session-editor], [data-rack-editor-kind="session"]) :is(button, summary) { padding-inline: clamp(.25rem, 2vw, .85rem); }
+:is([data-native-session-editor], [data-rack-editor-kind="session"]) .native-coordination__stepper button { padding: 0; }
 .native-session__settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
 .native-session__settings-grid > div { display: grid; align-content: start; gap: .55rem; min-inline-size: 0; }
 .native-session__settings-grid input[name='label'] { font: inherit; text-align: start; padding-inline: .5rem; }

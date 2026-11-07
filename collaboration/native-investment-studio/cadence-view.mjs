@@ -49,7 +49,7 @@ export function createCadenceView(root, {
     const receivers = { select: onSelect, navigate: onNavigate, period: onPeriod,
       'add-session': onAddSession, 'add-decision': onAddDecision, 'add-delay': onAddDelay,
       'add-stage': onAddStage, 'add-handoff': onAddHandoff, 'create-horizon': onCreateHorizon, 'try-review': onTryReview };
-    receivers[item.action]?.(item.target);
+    receivers[item.action]?.(item.target, control);
   }
   function showPreview(event) {
     const control = event.target.closest('[data-cadence-preview]');

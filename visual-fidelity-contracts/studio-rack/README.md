@@ -114,7 +114,7 @@ for a real shared receiving use.
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) | People lanes, editorial delivery-phase cards, session tracks and the darker secondary Team planning enclosure |
 | [Abilities](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Chapter composition and locally scoped variants |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs), [controller](../../collaboration/native-investment-studio/controller.mjs), [editing](../../collaboration/native-investment-studio/editing.mjs) | Presentation, chapter routing and retained proposal ownership |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | Session keys and pads mirror the actual session editor's identity, visibility and controlled element |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) and [work controller](../../collaboration/native-investment-studio/work-controller.mjs) | One canonical session editor opens below its originating rack; keys and pads mirror its identity, visibility and controlled element |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Adjacent person/team placement borrows canonical controls; current owners retain drafts, validation and acceptance |
 | [Connection template controller](../../collaboration/native-investment-studio/connection-template-controller.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [connection view](../../collaboration/native-investment-studio/connection-view.mjs) and [arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs) | Team planning’s direct arrangement transaction, editorial topology, phase projection and scope, included-work reading, and participation table with a fixed header/local scroller |
 
@@ -175,14 +175,16 @@ editorial receiver supplies a readable alternative and onward chapter routes;
 shared controller ownership keeps both paths aligned. The initial composition
 stays compact until the visitor opens these details.
 
-Coordination's adjacent person/team editor is a `studio-rack-editor` beneath
-its originating Team planning rack. Its dark heading names the object and Close;
+Coordination's adjacent record editor is a `studio-rack-editor` beneath
+its originating horizon or Team planning rack. Its dark heading names the object and Close;
 its peach editorial body receives the existing controls and quantity enclosure.
 The parent cards keep their geometry while the local reveal occupies page flow.
-One canonical editor serves this receiver and People, preserving raw entries,
-membership meaning and acceptance ownership. `studio-record-key` reports the
-selected object separately from the receiver's open caret. The operation
-contracts below define close/return, quantity and recovery behavior.
+Canonical people/team controls also serve People, preserving raw entries,
+membership meaning and acceptance ownership. Session entries use their existing
+work owner, preserving period/occurrence or participation context and the same
+duration module. Record and session keys report selection separately from the
+receiver's open caret; an active row key closes the panel while pads inspect.
+The operation contracts below define close/return, quantity and recovery behavior.
 
 The prospective [removal and recovery pattern](../../collaboration/native-investment-studio/removal-recovery-research.md),
 scoped in [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773),
@@ -204,8 +206,8 @@ current proposal and Apply owners. The enclosed controls in
 group duration and rate controls within the rack grammar. Their existing editors
 retain value and acceptance ownership. Coordination's
 [person/team editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-now use the adjacent receiver; [session editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-are its next planned recipients. [Immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-keeps its separate creation decision. Session relocation, attached editorial
+and [session editors](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+use the shared adjacent receiver. [Immediate-add behavior](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
+keeps its separate creation decision. Attached editorial
 companions and refined removal remain prospective; their focused issues retain
 acceptance and delivery ownership.

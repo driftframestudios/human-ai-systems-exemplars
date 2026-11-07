@@ -24,7 +24,8 @@ const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice
 // One complete session form borrows the host's shared draft coordinator. The
 // accepted plan, history and all other chapter drafts keep their existing owners.
 export function mountWorkPanel(root, { studio, editing, workId = 'review', onBegin = () => {},
-  onEditing = () => {}, onAccepted = () => {}, onRecordCreated = () => {}, isActive = () => true }) {
+  onEditing = () => {}, onAccepted = () => {}, onRecordCreated = () => {}, onClose = () => false,
+  isActive = () => true }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.session;
   const requireElement = selector => {
@@ -439,6 +440,18 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     else if (view.status === 'editing') (descriptor.mode === 'remove' ? elements.cancel : descriptor.mode === 'create' ? inputs.label : inputs.hoursPerSession).focus({ preventScroll: true });
     revealStudioDestination(elements.configure);
   }
+  function focusOccurrence(index) {
+    const view = editor.read(), epoch = generation;
+    if (disposed || !isActive() || !elements.configure.open || view.status !== 'editing'
+      || !Number.isSafeInteger(index) || index < 0 || index >= Number(view.draft?.raw.occurrences)) return false;
+    placementPage = Math.floor(index / PLACEMENT_PAGE_SIZE);
+    render();
+    if (!owns(epoch) || editor.read().draft?.token !== view.draft.token) return false;
+    const control = placementControls.get(index)?.periodId;
+    if (!control || control.matches(':disabled') || !control.getClientRects().length) return false;
+    control.focus({ preventScroll: true });
+    return true;
+  }
   function opened(result, epoch, focus) {
     if (!owns(epoch)) return result;
     composing = false;
@@ -527,7 +540,11 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       if (descriptor.mode === 'create') selectedId = fallback();
       selectedTarget = null; close({ park: false }); render(); announce('Changes cancelled.');
       const closedAt = generation; onEditing();
-      if (owns(closedAt)) (elements.configure.hidden ? elements.add : elements.summary).focus();
+      if (owns(closedAt)) {
+        const handled = onClose();
+        if (handled === true || !owns(closedAt)) return;
+        (elements.configure.hidden ? elements.add : elements.summary).focus();
+      }
       return;
     }
     const accepted = result.projection ?? studio.read();
@@ -536,7 +553,11 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     if (descriptor.mode === 'remove') {
       selectedTarget = null; selectedId = fallback(); close({ park: false }); render(); announce('Session removed.');
       const closedAt = generation; onEditing();
-      if (owns(closedAt)) (selectedId === null ? elements.add : elements.select).focus();
+      if (owns(closedAt)) {
+        const handled = onClose();
+        if (handled === true || !owns(closedAt)) return;
+        (selectedId === null ? elements.add : elements.select).focus();
+      }
       return;
     }
     if (descriptor.mode === 'create') onRecordCreated(descriptor);
@@ -595,7 +616,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function click(event) {
     const button = event.target.closest('button');
-    if (!button || !root.contains(button) || button.disabled || disposed) return;
+    if (!button || (!root.contains(button) && !elements.configure.contains(button)) || button.disabled || disposed) return;
     const action = button.dataset.action ?? button.dataset.sessionAction;
     if (action === 'placement-previous' || action === 'placement-next') {
       placementPage += action === 'placement-previous' ? -1 : 1;
@@ -635,7 +656,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     durationDials?.dispose();
     delete root.dataset.sessionReady; INSTANCES.delete(root);
   }
-  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close,
+  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close, focusOccurrence,
     isOpen: () => !disposed && elements.configure.open,
     readReceiver: () => ({ selectedId: disposed ? null : selectedId,
       expanded: !disposed && isActive() && elements.configure.open
@@ -657,7 +678,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       ['hoursPerSession', Math.floor(LIMITS.minutesPerOccurrence / CONTRACT.minutesPerHour), 'hours'],
       ['minutesPerSession', CONTRACT.minutesPerHour - 1, 'minutes'], ['occurrences', LIMITS.occurrences, 'sessions'],
     ]) requireElement(`[data-native-range="${field}"]`).textContent = `0–${INTEGER.format(maximum)} ${unit}`;
-    listen(root, 'click', click);
+    listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
+    listen(elements.configure, 'click', click);
     listen(elements.select, 'change', () => select(elements.select.value));
     listen(elements.form, 'input', edit);
     listen(placementElements.rows, 'change', editPlacement);

@@ -192,6 +192,9 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code); controller.refresh();
     });
     const map = sessions(page).locator('.native-session-map');
+    const supportedWork = sessions(page).locator('.studio-session-details');
+    await supportedWork.locator(':scope > summary').click();
+    await expect(map).toBeVisible();
     await expect(map.locator('[data-native-session-map-people] li')).toHaveText(['Product lead', 'Engineering lead', 'Quality reviewer']);
     await expect(map.locator('[data-native-team]')).toHaveText('Engineering');
     await expect(map).toContainText('Readiness findings and rollout conditions');
@@ -219,6 +222,8 @@ for (const engine of names) {
     await expect(trace.locator('[data-native-trace-summary]')).toContainText('$3,980.00 total');
     assert.equal(await bytes(page), before, 'reading the shared cost breakdown preserves the plan');
     await tab(page, 'coordination').click();
+    if (!await supportedWork.evaluate(node => node.open)) await supportedWork.locator(':scope > summary').click();
+    await expect(map).toBeVisible();
     for (const width of [900, 1000, 1322]) {
       await page.setViewportSize({ width, height: 1000 });
       await map.screenshot({ path: resolve(captures, `${engine}-session-map-${width}.png`) });

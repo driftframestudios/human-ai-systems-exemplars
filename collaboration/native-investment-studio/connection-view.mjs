@@ -453,7 +453,12 @@ export function mountConnectionView(root, { projection, onSelect = () => {}, onN
         group.append(human ? route(human.name, 'person', human.id) : element('p', '', 'Choose the accountable person'));
         group.append(element('p', '', boundary || (title === 'Human review' ? 'Describe what the receiver should review.' : 'Describe the decision this person will make.'))); card.append(group);
       }
-      for (const id of link.sharedWorkIds) card.append(route(`Inspect ${acceptedProjection.state.work.find(work => work.id === id).label}`, 'work', id));
+      for (const id of link.sharedWorkIds) {
+        const control = route(`Inspect ${acceptedProjection.state.work.find(work => work.id === id).label}`, 'work', id);
+        control.dataset.studioSessionId = id;
+        control.dataset.studioEntryKey = `connection:${row.id}/contribution:${contribution.id}/work:${id}`;
+        card.append(control);
+      }
       for (const gap of contribution.gaps) card.append(element('p', 'native-connections__attention', gap.message));
       contributions.append(card);
     }

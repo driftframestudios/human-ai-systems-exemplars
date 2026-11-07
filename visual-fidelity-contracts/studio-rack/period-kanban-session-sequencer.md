@@ -57,6 +57,13 @@ starts an editor draft in the selected period; confirmation accepts that item.
 Hours and Minutes change the length of each occurrence; Working sessions changes
 how many occurrences need placement. People may participate across team bounds.
 
+Session inspection opens one adjacent panel below the originating rack. Its
+heading names the selected work and source. The active row key toggles this
+panel; an occurrence pad opens its placement context. Close returns focus to the
+origin and retains the proposal. Scope remains stable while the same session is
+opened from Team planning, whose phase and participation reading retain their
+own meaning.
+
 The board uses headed sections and buttons. Session tracks use a captioned native
 table with row and column headers. A named keyboard-reachable scroll region
 preserves their two-dimensional relationship on ordinary mobile widths.
@@ -117,8 +124,9 @@ Explicit template/slot mappings give reel selections a visible change in roles
 and handoffs. Stage labels remain source-owned session context; custom-stage
 and supporting work retain routes. These lanes express an illustrative delivery
 pattern. Dates, period placement, completion and readiness retain their separate
-owners. Team/member cards open team customization; handoff cards open connection
-customization; accepted sessions reach their existing editor through stable IDs.
+owners. People and accepted-team cards open their adjacent editors; illustrative
+teams retain customization. Handoff cards open connection customization;
+accepted sessions reach their adjacent canonical editor through stable IDs.
 
 The board supersedes the proposed-team strip, duplicated connection-button strip
 and Delivery lifecycle disclosure in this receiver. Shared sessions follows with
@@ -155,9 +163,9 @@ disclosure, spring movement and contextual scope. The corresponding people and
 relationship pads offer the same operations inside the instrument; both paths
 continue to address the same records and editors.
 
-The later [adjacent session editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-will receive either entry path through the same existing session owner. Current
-editors remain in place while that scope and the preceding control enclosures
-are delivered. A focused mobile/desktop journey should observe the chosen period
-or people context, session, return focus and retained accepted plan; exact
-calendar or performance expansion needs its own consequential question.
+The [adjacent session editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+receives both readings through the same existing session owner. The enclosed
+duration module and exact repetition input stay intact. A focused phone/laptop
+journey observes occurrence and participation entry, row-key close/reopen,
+cross-rack draft retention, Apply/Cancel, return focus and retained period/phase
+scope. Exact calendar or performance expansion needs its own consequential question.

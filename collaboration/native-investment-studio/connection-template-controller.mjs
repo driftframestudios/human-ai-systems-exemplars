@@ -282,10 +282,10 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
       if (!section) return; customization.open = true; section.open = true;
       section.querySelector('input,select,button')?.focus({ preventScroll: true }); revealStudioDestination(section);
     }
-    const inspectSession = id => {
+    const inspectSession = (id, source) => {
       const proposed = configuration.connections.find(row => `proposal-session-${row.slotId}` === id);
       if (proposed) inspectTemplate({ kind: 'template-connection', id: proposed.slotId });
-      else navigate({ kind: 'work', id });
+      else navigate({ kind: 'work', id }, source);
     };
     const acceptedSessionIds = new Set(projection.state.work.map(work => work.id));
     structure.replaceChildren(createArrangementReading(document, { arrangement, plan: previewPlan, reading: accepted ? 'accepted' : 'example', onNavigate: inspectTemplate, includeTeamLanes: false, includeConnections: false }));
@@ -539,7 +539,9 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     else if (!panel.open) acknowledged = false;
   });
   listen(form, 'focusin', event => {
-    if (event.target.closest('[data-studio-record-kind]')) return;
+    // Browsing the rack (including WebKit's scroll-region focus) keeps the
+    // current record owner until an explicit rack action selects another one.
+    if (event.target.closest('[data-template-rack], [data-studio-record-kind], [data-studio-session-id]')) return;
     if (exposed && !active() && active(canOpen)) open();
   });
   // Let a pointer's destination receive its click before a completed text edit

@@ -10,7 +10,7 @@ import { mountPurposePanel, PURPOSE_LABELS } from './purpose-controller.mjs';
 import { mountInvestmentPanel } from './investment-controller.mjs';
 import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
-import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
+import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, makeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
 import { syncSessionControls, mountAdjacentRackEditor } from './rack-controls.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
@@ -111,15 +111,21 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function syncSessionReceiver() {
-    if (!disposed && workPanel) syncSessionControls(root, workPanel.readReceiver());
+    if (!disposed && workPanel) {
+      const receiver = workPanel.readReceiver();
+      if (rackEditor?.isOpen('session')) receiver.controlsId = rackEditor.element.id;
+      syncSessionControls(root, receiver);
+    }
     if (!disposed) rackEditor?.sync();
   }
-  function closeRackEditor() {
+  function closeRackEditor(source = null) {
     const selected = rackEditor?.read();
     if (!selected?.open) return false;
     if (selected.kind === 'person') teamPanel?.close();
+    else if (selected.kind === 'session') workPanel?.close({ park: false });
     else assemblyPanel?.close({ park: false });
-    rackEditor.hide({ focus: true });
+    rackEditor.hide({ focus: true, source });
+    syncSessionReceiver();
     return true;
   }
   function peopleOwnerAvailable(kind) {
@@ -127,45 +133,58 @@ export function mountCoordinationPanel(root, options = {}) {
       && (openingRackKind === kind || rackEditor?.isOpen(kind))) && !purposePanel?.isOpen();
   }
   function openRackEditor(target, source) {
-    const collection = target.kind === 'person' ? 'people' : 'teams';
+    const collection = { person: 'people', team: 'teams', session: 'work' }[target.kind];
     const record = studio.read().state[collection].find(row => row.id === target.id);
     if (!record || !rackEditor) return;
     const current = rackEditor.read();
-    if (current?.open && current.kind === target.kind && current.id === target.id) { closeRackEditor(); return; }
+    const toggle = target.kind !== 'session' || source?.classList.contains('studio-track-key');
+    if (toggle && current?.open && current.kind === target.kind && current.id === target.id
+      && rackEditor.element.previousElementSibling?.contains(source)) { closeRackEditor(source); return; }
     // Stable anchors sit outside both the template form and rebuilt readings.
-    const anchor = source?.closest('[data-native-connection-view]')
+    const anchor = source?.closest('[data-score-projection]') ?? source?.closest('[data-native-connection-view]')
       ?? requireElement('[data-connection-templates]');
+    const originLabel = target.kind === 'session' ? (source?.closest('[data-score-projection]')
+      ? `Coordination horizon${target.periodId ? ` · ${studio.read().state.scoreSettings.cadence?.periods.find(period => period.id === target.periodId)?.label ?? ''}` : ''}`
+      : source?.closest('[data-native-connection-view]') ? 'Coordination connections'
+        : `Team planning · ${source?.closest('[data-delivery-label]')?.dataset.deliveryLabel ?? 'Shared sessions'}`) : null;
     const before = editing.read().active;
-    const targetId = target.kind === 'person' ? target.id : makeAssemblyTarget('team.update', target.id);
+    const ownerFor = kind => ({ person: teamPanel, team: assemblyPanel, session: workPanel })[kind];
+    const open = record => record.kind === 'team'
+      ? assemblyPanel.open(makeAssemblyTarget('team.update', record.id), false)
+      : ownerFor(record.kind).select(record.id, false);
+    const targetId = target.kind === 'team' ? makeAssemblyTarget('team.update', target.id)
+      : target.kind === 'session' ? makeSessionTarget('work.update', target.id) : target.id;
     let result;
     try {
       openingRackKind = target.kind;
-      result = target.kind === 'person' ? teamPanel.select(target.id, false) : assemblyPanel.open(targetId, false);
+      result = open(target);
     } finally { openingRackKind = null; }
-    const owner = target.kind === 'person' ? teamPanel.read() : assemblyPanel.read();
-    const ownedId = target.kind === 'person' ? owner.draft?.personId : owner.draft?.assemblyId;
+    const owner = ownerFor(target.kind).read();
+    const ownedId = owner.draft?.[{ session: 'sessionId', person: 'personId', team: 'assemblyId' }[target.kind]];
     if (ownedId !== targetId) {
       // A refused switch retains the previous record and its visible identity.
       if (current?.open && before?.token === editing.read().active?.token) {
         try {
           openingRackKind = current.kind;
-          if (current.kind === 'person') teamPanel.select(current.id, false);
-          else assemblyPanel.open(makeAssemblyTarget('team.update', current.id), false);
+          open(current);
         } finally { openingRackKind = null; }
       }
       render(); announce(result?.error?.message ?? 'Finish or cancel the open edits, then choose another record.');
       return;
     }
-    rackEditor.show({ ...target, label: record.label }, source, anchor);
+    rackEditor.show({ ...target, label: record.label, originLabel }, source, anchor);
     render();
     const panel = rackEditor.element.querySelector('details');
     if (!panel.open || panel.hidden) { rackEditor.hide(); return; }
     const fields = [...panel.querySelectorAll('input,select,textarea,button')]
       .filter(control => !control.matches(':disabled') && control.getClientRects().length);
-    (fields.find(control => control.getAttribute('aria-invalid') === 'true')
-      ?? fields.find(control => control.matches('input,select,textarea')) ?? fields[0])?.focus({ preventScroll: true });
+    const occurrenceFocused = target.kind === 'session' && workPanel.focusOccurrence(target.occurrenceIndex);
+    if (!occurrenceFocused) {
+      (fields.find(control => control.getAttribute('aria-invalid') === 'true')
+        ?? fields.find(control => control.matches('input,select,textarea')) ?? fields[0])?.focus({ preventScroll: true });
+    }
     motion?.indicate(rackEditor.element, { kind: 'inspection' });
-    revealStudioDestination(rackEditor.element);
+    revealStudioDestination(occurrenceFocused ? document.activeElement : rackEditor.element);
   }
   function announce(message) { text('status', message); }
   function resumePeople() {
@@ -186,8 +205,8 @@ export function mountCoordinationPanel(root, options = {}) {
   function beginCoordination(kind) {
     if (disposed) return;
     coordinationEditor = kind;
-    if (kind !== 'record') rackEditor?.hide();
-    if (mounted && !resumingCoordination) {
+    if (kind !== 'record' && !openingRackKind) rackEditor?.hide({ home: true });
+    if (mounted && !resumingCoordination && !openingRackKind) {
       const workspace = root.querySelector(`[data-native-workspace="${kind === 'template' ? 'connection' : kind}"]`);
       if (workspace?.tagName === 'DETAILS') workspace.open = true;
     }
@@ -336,6 +355,9 @@ export function mountCoordinationPanel(root, options = {}) {
     const collection = { team: 'teams', work: 'work', person: 'people', contribution: 'contributions' }[target.kind];
     if (!collection || !studio.read().state[collection].some(row => row.id === target.id)) return;
     if (activeChapter === 'coordination' && ['person', 'team'].includes(target.kind)) { openRackEditor(target, source); return; }
+    if (activeChapter === 'coordination' && target.kind === 'work' && source) {
+      openRackEditor({ ...target, kind: 'session' }, source); return;
+    }
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     const returnTarget = origin === 'peopleView' ? 'people' : 'connections';
@@ -375,6 +397,9 @@ export function mountCoordinationPanel(root, options = {}) {
     if (disposed) return;
     const navigation = resolveScoreDestination(target, studio.read().state);
     if (!navigation) return;
+    if (navigation.kind === 'work' && origin.source) {
+      openRackEditor({ ...target, kind: 'session' }, origin.source); return;
+    }
     const held = editing.read().parked.some(row => row.kind === 'score');
     retainReturnAncestors('score', 'score');
     returnRoutes.push({ kind: 'score', target: 'score', held, inspectedWorkId: navigation.kind === 'work' ? navigation.id : null });
@@ -698,7 +723,7 @@ export function mountCoordinationPanel(root, options = {}) {
       if (result?.view?.status === 'stale') announce('Your saved entries are here. Review them against the current plan, then continue.');
       return;
     }
-    if (button.hasAttribute('data-native-work-open')) { navigateFromConnections({ kind: 'work', id: button.dataset.nativeWorkOpen }, 'peopleView'); return; }
+    if (button.hasAttribute('data-native-work-open')) { navigateFromConnections({ kind: 'work', id: button.dataset.nativeWorkOpen }, 'peopleView', button); return; }
     if (button.hasAttribute('data-native-create')) { createPrerequisite(button); return; }
     if (button.hasAttribute('data-native-return-action')) { returnToDraft(); return; }
     if (button.hasAttribute('data-native-return-team')) { addCreatedPersonToTeam(); return; }
@@ -796,7 +821,7 @@ export function mountCoordinationPanel(root, options = {}) {
     workPanel = mountWorkPanel(requireElement('[data-native-session-editor]'), { studio, editing, workId,
       onBegin: () => beginCoordination('session'), onRecordCreated: prerequisiteCreated,
       isActive: () => activeChapter === 'coordination' && !purposePanel?.isOpen(),
-      onAccepted: () => render(), onEditing: () => render(),
+      onClose: closeRackEditor, onAccepted: () => render(), onEditing: () => render(),
     });
     const sessionWorkspace = root.querySelector('[data-native-workspace="session"]');
     if (sessionWorkspace) listen(sessionWorkspace, 'toggle', syncSessionReceiver);
@@ -855,8 +880,9 @@ export function mountCoordinationPanel(root, options = {}) {
       editors: {
         person: [requireElement('[data-person-configure]'), requireElement('[data-person-status]')],
         team: [requireElement('[data-assembly-configure]'), requireElement('[data-assembly-status]')],
+        session: [requireElement('[data-native-session-editor] [data-native-configure]'), requireElement('[data-native-session-status]')],
       }, onClose: closeRackEditor,
-      readLabel: record => studio.read().state[record.kind === 'person' ? 'people' : 'teams'].find(row => row.id === record.id)?.label,
+      readLabel: record => studio.read().state[{ person: 'people', team: 'teams', session: 'work' }[record.kind]].find(row => row.id === record.id)?.label,
     });
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
       onBegin: () => {

@@ -12,10 +12,12 @@ const names = process.env.NATIVE_STUDIO_BROWSER ? [process.env.NATIVE_STUDIO_BRO
 for (const name of names) assert.ok(Object.hasOwn(engines, name));
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-rack-controls');
-let server, fixture;
+let server, fixture, complete;
 before(async () => {
   await mkdir(captures, { recursive: true });
-  fixture = createNativeAboutFixture(await readFile(resolve(import.meta.dirname, '../..' + route), 'utf8'));
+  const source = await readFile(resolve(import.meta.dirname, '../..' + route), 'utf8');
+  fixture = createNativeAboutFixture(source);
+  complete = source.replace('data="../img/plot/about_prompt_conditions_cartography.svg"', 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   server = await startStaticServer();
   for (const name of names) browsers.set(name, await engines[name].launch());
 });
@@ -26,13 +28,12 @@ after(async () => {
 const root = page => page.locator('[data-native-coordination]');
 const horizon = page => root(page).locator('[data-score-projection]');
 const shared = page => root(page).locator('[data-connection-templates] .studio-session-tracks');
-const session = page => root(page).locator('[data-native-session-editor]');
-const workspace = page => root(page).locator('[data-native-workspace="session"]');
-const configure = page => session(page).locator('[data-native-configure]');
+const adjacent = page => root(page).locator('.studio-rack-editor');
+const configure = page => root(page).locator('[data-native-configure]');
 const track = (page, id) => horizon(page).locator(`[data-cadence-key="track-work:${id}"]`);
 const sharedTrack = (page, id) => shared(page).locator(`[data-session-track="${id}"] .studio-session-tracks__name`);
 const bytes = page => page.evaluate(() => window.rackFixture.studio.exportText());
-async function open(t, engine, width) {
+async function open(t, engine, width, full = false) {
   const context = await browsers.get(engine).newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
   page.on('request', request => pending.add(request));
@@ -44,7 +45,7 @@ async function open(t, engine, width) {
   });
   await page.route('**/*', request => {
     const url = new URL(request.request().url());
-    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: fixture });
+    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: full ? complete : fixture });
     return url.origin === server.origin ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate owner</title>' });
   });
   await page.goto(server.origin + route); await page.evaluate(() => document.fonts.ready);
@@ -53,18 +54,21 @@ async function open(t, engine, width) {
     const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
     const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
     const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+    const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
     const element = document.querySelector('[data-native-coordination]');
     mountCoordinationPanel(element).dispose();
     const studio = createStudio(createShowcasePlan());
-    window.rackFixture = { studio, controller: mountCoordinationPanel(element, { studio }) };
+    window.rackFixture = { studio, controller: mountCoordinationPanel(element, { studio }), editing: createDraftCoordinator(studio) };
   });
   return page;
 }
 async function receiverReading(page, selectedId, expanded) {
   const keys = root(page).locator('[data-studio-session-id]');
   assert.ok(await keys.count() >= 8, 'both racks expose accepted session controls');
-  const controlsId = await configure(page).getAttribute('id');
-  assert.ok(controlsId, 'session keys name their existing settings receiver');
+  const controlsId = await keys.first().getAttribute('aria-controls');
+  assert.ok(controlsId, 'session keys name their mounted settings receiver');
+  assert.equal(await root(page).locator(`[id="${controlsId}"]`).count(), 1);
+  if (expanded) assert.equal(await root(page).locator(`[id="${controlsId}"]`).evaluate(node => node.matches('[data-native-configure]') || Boolean(node.querySelector('[data-native-configure]'))), true, 'expanded controls identify the visible canonical settings');
   await expect.poll(() => keys.evaluateAll((controls, expected) => controls.every(control => {
     const selected = control.dataset.studioSessionId === expected.selectedId;
     return control.getAttribute('aria-pressed') === String(selected)
@@ -146,8 +150,11 @@ for (const engine of names) for (const width of [390, 1440]) {
     const teamSlot = await designTeam.getAttribute('data-delivery-team');
     await designTeam.locator('.studio-delivery__team-key').click();
     await expect(templates.locator(`[data-template-field="teams.${teamSlot}.selection"]`)).toBeFocused();
-    await designTeam.locator('[data-delivery-person]').first().click();
-    await expect(templates.locator(`[data-template-field="teams.${teamSlot}.selection"]`)).toBeFocused();
+    const person = designTeam.locator('[data-delivery-person]').first();
+    await person.click();
+    await expect(adjacent(page).locator('[data-person-configure] [name="ratePerHour"]')).toBeFocused();
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(person).toBeFocused();
     await delivery.locator('[data-delivery-overview]').click();
     await expect(board).toHaveAttribute('data-delivery-scope', 'overview');
     await expect(delivery.locator('[data-delivery-open="design"]')).toBeFocused();
@@ -176,10 +183,15 @@ for (const engine of names) for (const width of [390, 1440]) {
     const handoffSlot = await handoff.getAttribute('data-delivery-connection');
     await handoff.click();
     await expect(templates.locator(`[data-template-field="connections.${handoffSlot}.sharedObject"]`)).toBeFocused();
+    await delivery.locator('[data-delivery-open="testing"]').click();
     await delivery.locator('[data-delivery-session="review"]').click();
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
-    await root(page).locator('[data-native-return-action]').click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(planning).toBeVisible();
+    await expect(delivery.locator('[data-delivery-session="review"]')).toBeFocused();
+    await expect(board).toHaveAttribute('data-delivery-scope', 'testing');
+    await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
+    await delivery.locator('[data-delivery-overview]').click();
     const customized = await bytes(page);
     assert.notEqual(customized, accepted, 'leaving a complete team name settles that customization');
 
@@ -201,15 +213,17 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(templates.locator('[data-template-action="apply"]')).toBeHidden();
     const recoveryId = await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.label === 'Diagnose and agree a response').id);
     await delivery.locator(`[data-delivery-session="${recoveryId}"]`).click();
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Diagnose and agree a response');
-    await root(page).locator('[data-native-return-action]').click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Diagnose and agree a response');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(planning).toBeVisible();
+    await expect(delivery.locator(`[data-delivery-session="${recoveryId}"]`)).toBeFocused();
     assert.equal(await bytes(page), arranged, 'the new session opens its accepted record for later editing');
 
     await sharedTrack(page, 'review').click();
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
-    await root(page).locator('[data-native-return-action]').click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(planning).toBeVisible();
+    await expect(sharedTrack(page, 'review')).toBeFocused();
     assert.equal(await bytes(page), arranged, 'accepted session inspection returns to the same Team planning section');
     await templates.locator('[data-reel-choice="tiger-team"]').click();
     assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1, 'the selected arrangement can be inspected again without another history entry');
@@ -217,53 +231,125 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(await bytes(page), customized, 'Undo restores the preceding arrangement and its work together');
   });
 
-  test(`${engine}: session rack keys follow the selected record and actual editor at ${width}px`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine, width), accepted = await bytes(page);
-    await expect(track(page, 'review')).toHaveAttribute('aria-pressed', 'true');
-    await expect(sharedTrack(page, 'review')).toHaveAttribute('aria-pressed', 'true');
-    assert.equal(await workspace(page).evaluate(element => element.open), false);
+  test(`${engine}: adjacent session editing retains draft, scope and return across both racks at ${width}px`, { timeout: 90000 }, async t => {
+    const page = await open(t, engine, width, true), accepted = await bytes(page);
+    await page.evaluate(() => { window.rackFixture.sessionNode = document.querySelector('[data-native-configure]'); });
     await receiverReading(page, 'review', false);
-    const closedCaret = await caret(track(page, 'review'));
-    await contained(page, width);
-    await horizon(page).locator('.native-cadence__screen').screenshot({ path: resolve(captures, `${engine}-horizon-${width}.png`) });
-    await shared(page).screenshot({ path: resolve(captures, `${engine}-shared-${width}.png`) });
-
+    const closedCaret = await caret(track(page, 'pairing'));
     await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
-    await expect(horizon(page).getByRole('heading', { name: 'Sprint 2', exact: true })).toHaveAttribute('aria-current', 'page');
-    await receiverReading(page, 'review', false);
-    await track(page, 'pairing').click();
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
+    const currentPeriod = horizon(page).getByRole('heading', { name: 'Sprint 2', exact: true });
+    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
+    const pad = horizon(page).locator('.native-cadence__pad[data-studio-session-id="pairing"]').first();
+    const occurrence = Number((await pad.getAttribute('data-cadence-key')).split(':').at(-1));
+    const rackShape = () => horizon(page).locator('.native-cadence__screen').evaluate(node => {
+      const box = node.getBoundingClientRect(); return { width:box.width, height:box.height };
+    });
+    await pad.focus();
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const before = await rackShape();
+    const sourceScroll = await horizon(page).locator('.native-cadence__tracks').evaluate(node => node.scrollLeft);
+    await page.keyboard.press('Enter');
+    await expect(adjacent(page)).toBeVisible();
+    await expect(adjacent(page).locator('.studio-rack-editor__origin')).toContainText('Coordination horizon');
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
+    const placement = configure(page).locator(`[data-placement-index="${occurrence}"][data-placement-field="periodId"]`);
+    await expect(placement).toBeFocused();
+    await expect.poll(() => placement.evaluate(node => {
+      const box = node.getBoundingClientRect(), nav = document.querySelector('.nav__top--sticky')?.getBoundingClientRect();
+      return box.top >= (nav?.bottom ?? 0) && box.bottom <= innerHeight;
+    })).toBe(true);
     await receiverReading(page, 'pairing', true);
+    assert.deepEqual(await rackShape(), before, 'the adjacent reveal preserves its source rack geometry');
+    assert.equal(await adjacent(page).evaluate(node => Boolean(node.previousElementSibling?.matches('[data-score-projection]'))), true,
+      'the horizon receiver follows its stable rack owner outside the generated projection');
+    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true, 'the adjacent panel borrows the canonical session owner');
+    await expect(configure(page)).toHaveCount(1);
+    const geometry = await adjacent(page).evaluate(node => {
+      const box = node.getBoundingClientRect();
+      const module = node.querySelector('.native-time-controls');
+      return { left:box.left, right:box.right, nestedForm:Boolean(node.closest('form')),
+        module:module.getBoundingClientRect().toJSON(),
+        targets:[...module.querySelectorAll('input,button,.native-knob')].filter(target => target.getClientRects().length).map(target => {
+          const rect=target.getBoundingClientRect(); return { left:rect.left,right:rect.right };
+        }) };
+    });
+    assert.equal(geometry.nestedForm, false);
+    assert.ok(geometry.left >= 0 && geometry.right <= width + 1 && geometry.targets.every(box => box.left >= geometry.left - 1 && box.right <= geometry.right + 1), JSON.stringify(geometry));
+    await adjacent(page).evaluate(node => node.scrollIntoView({ block:'start', behavior:'instant' }));
+    await page.screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}-viewport.png`) });
+    await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-session-${width}.png`) });
+    const minutes = configure(page).locator('[name="minutesPerSession"]');
+    await configure(page).locator('[data-native-minutes-knob]').press('ArrowUp');
+    await expect(minutes).toHaveValue('1');
+    await expect(configure(page).locator('[data-native-duration-minutes]')).toHaveText('01');
+    await minutes.fill('045');
+    await page.evaluate(() => { window.rackFixture.sessionToken = window.rackFixture.editing.session.read().draft.token; });
+    await track(page, 'pairing').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(track(page, 'pairing')).toBeFocused();
+    await pad.click(); await expect(minutes).toHaveValue('045');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();
+    assert.equal(await horizon(page).locator('.native-cadence__tracks').evaluate(node => node.scrollLeft), sourceScroll, 'Close keeps the originating track position');
+    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
+    await receiverReading(page, 'pairing', false);
+    assert.equal(await bytes(page), accepted);
+    await track(page, 'pairing').click();
+    await expect(minutes).toHaveValue('045');
     const openCaret = await caret(track(page, 'pairing'));
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(horizon(page).getByRole('heading', { name: 'Sprint 2', exact: true })).toHaveAttribute('aria-current', 'page');
-
-    await sharedTrack(page, 'research').click();
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Research synthesis');
-    await receiverReading(page, 'research', true);
-    await session(page).locator('[data-native-session-select]').selectOption('pairing');
-    await expect(session(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
-    await receiverReading(page, 'pairing', true);
-
-    await configure(page).locator(':scope > summary').click();
-    await receiverReading(page, 'pairing', false);
-    assert.equal(await caret(track(page, 'pairing')), closedCaret, 'closing retires the open caret while preserving selection');
+    assert.notEqual(openCaret, closedCaret, 'the selected row points into its open receiver');
     await track(page, 'pairing').click();
-    await receiverReading(page, 'pairing', true);
-    await workspace(page).locator(':scope > summary').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(track(page, 'pairing')).toBeFocused();
     await receiverReading(page, 'pairing', false);
-    assert.equal(await caret(track(page, 'pairing')), closedCaret, 'closing the enclosing workspace also retires the open caret');
-    await workspace(page).locator(':scope > summary').click();
+    await track(page, 'pairing').click();
+    await expect(minutes).toHaveValue('045');
+    const participant = shared(page).locator('[data-session-track="pairing"] .studio-session-tracks__pad').first();
+    await participant.click();
+    await expect(adjacent(page)).toBeVisible(); await expect(minutes).toHaveValue('045');
+    await expect(adjacent(page).locator('.studio-rack-editor__origin')).toContainText('Team planning');
+    assert.equal(await page.evaluate(() => window.rackFixture.editing.session.read().draft.token === window.rackFixture.sessionToken), true,
+      'cross-rack inspection retains the same session lease');
+    assert.equal(await adjacent(page).evaluate(node => node.previousElementSibling?.matches('[data-connection-templates]')), true,
+      'participation inspection uses the Team planning receiver');
     await receiverReading(page, 'pairing', true);
-    await horizon(page).getByRole('button', { name: 'Plan overview', exact: true }).click();
-    await receiverReading(page, 'pairing', true);
-    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
-    await receiverReading(page, 'pairing', true);
-    await expect(horizon(page).getByRole('heading', { name: 'Sprint 2', exact: true })).toHaveAttribute('aria-current', 'page');
-    assert.equal(await bytes(page), accepted, 'selection, settings inspection and return preserve the accepted plan');
-    assert.notEqual(openCaret, closedCaret, 'the row caret points into its expanded receiver');
-    assert.deepEqual(await skin(track(page, 'pairing')), await skin(sharedTrack(page, 'pairing')), 'expanded row keys share their skin');
-    assert.deepEqual(await skin(horizon(page).locator('.studio-rack-add').first()), await skin(shared(page).locator('.studio-rack-add')), 'Add session uses one rack treatment');
+    await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-shared-session-${width}.png`) });
+    await sharedTrack(page, 'research').click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Research synthesis');
+    await receiverReading(page, 'research', true);
+    await sharedTrack(page, 'pairing').click();
+    await expect(minutes).toHaveValue('045');
+    await configure(page).locator('[data-action="cancel"]').click();
+    await expect(adjacent(page)).toBeHidden(); await expect(sharedTrack(page, 'pairing')).toBeFocused();
+    await expect.poll(() => sharedTrack(page, 'pairing').evaluate(node => {
+      const box = node.getBoundingClientRect(), nav = document.querySelector('.nav__top--sticky')?.getBoundingClientRect();
+      return box.top >= (nav?.bottom ?? 0) && box.bottom <= innerHeight;
+    })).toBe(true);
+    assert.equal(await bytes(page), accepted, 'Cancel discards the session proposal');
+    await participant.click();
+    await expect(minutes).toHaveValue('0');
+    const undoBefore = await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount);
+    await minutes.fill('45');
+    await configure(page).locator('[data-action="apply"]').click();
+    await expect(adjacent(page)).toBeVisible();
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.work.find(row => row.id === 'pairing').minutesPerOccurrence), 105);
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount), undoBefore + 1, 'Apply accepts through the existing owner once');
+    await adjacent(page).locator('[data-rack-editor-close]').click(); await expect(participant).toBeFocused();
+    await expect(currentPeriod).toHaveAttribute('aria-current', 'page');
+    await receiverReading(page, 'pairing', false);
+    assert.deepEqual(await skin(track(page, 'pairing')), await skin(sharedTrack(page, 'pairing')), 'both readings share the session key treatment');
+
+    const connections = root(page).locator('[data-native-connection-view]');
+    await connections.locator('.studio-accepted-connections > summary').click();
+    await connections.locator('button[data-connection-select="scope"]').click();
+    const support = connections.getByRole('button', { name:'Inspect Research synthesis', exact:true });
+    const entryKey = await support.getAttribute('data-studio-entry-key');
+    assert.ok(entryKey, 'supporting work keeps a stable connection-specific entry');
+    await support.click();
+    await configure(page).locator('[name="label"]').fill('Research synthesis with operating context');
+    await configure(page).locator('[data-action="apply"]').click();
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toBeFocused();
+    await expect(connections.locator('button[data-connection-select="scope"]')).toHaveAttribute('aria-current', 'true');
+    await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toHaveText('Inspect Research synthesis with operating context');
     await contained(page, width);
   });
 }
