@@ -40,11 +40,19 @@ retain their session matrix and open a compact Work / Receiver and decision pair
 Role choices, contribution choices and team/support membership accept directly
 through shared history; person quantities and text retain Apply.
 
-Abilities retains both support tables and one selected module for responsibility,
-preparation, review or observation. Useful record additions accept immediately;
-Abilities support assignments keep their own Apply boundary. Investment's
-VHS-C decks organize Plan investment, Compare a change and Keep a plan using the
-existing pricing, baseline and saved-plan owners.
+Abilities retains both support tables and one selected dark rack for
+responsibility, preparation, review or observation. Compact paired controls use
+paper resting pads, signal selection and chocolate companions. Useful record
+additions accept immediately; support assignments keep their own Apply boundary.
+Change's four action keys use the same resting/selected grammar, with state tied
+to the open component receiver.
+
+Investment receives the preserved five-type VHS-C workbench with independently
+owned decks, connected reels and fixed-light money controls. The shared accepted
+plan supplies work and pricing; each deck retains its comparison assumptions.
+Baseline and saved-plan owners remain accessible through compact utility routes.
+The [Investment contract](investment-master-reels.md) identifies the exact
+specimen and the live receiving owners.
 
 ## Choose the operation contract
 
@@ -185,10 +193,11 @@ Meaningful supersessions are explicit:
 | Local cassette Undo or detached primary editors | Amp Undo and local canonical receivers retain their current roles |
 
 [The current journal](../../collaboration/native-investment-studio/experience-journal.md)
-records the broader current rationale. #836 carries the compact People receiving
-increment on dev. The primary route manifest registers its CSS alongside the
-shared browser module closure.
-Participant shares (#798), independent response records (#816), deeper financial
-decks (#818), performance (#679), production Reset (#808) and public release
+records the broader current rationale. #836 carries the compact People receiver;
+#848 extends the compact support pattern through Abilities, #849 settles Change
+action state and #818 receives the financial workbench on dev. The primary route
+manifest registers their CSS and shared browser module closure.
+Participant shares (#798), independent response records (#816),
+performance (#679), production Reset (#808) and public release
 (#686) keep their own outcomes and authority. Revisit a contract when its data
 meaning, receiver, acceptance boundary or visual relationship changes.

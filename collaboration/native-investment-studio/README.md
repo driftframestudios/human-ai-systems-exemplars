@@ -8,13 +8,10 @@ quantity controls. Semantic HTML, CSS and vanilla JavaScript carry the experienc
 
 ## Current state
 
-`main` retains the approved showcase. `dev` receives the compact rack integration.
-The current People receiver belongs to
-[#836](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/836),
-with its shared creation-control dependency supplied through
-[#837](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/837).
-Creation and recovery were established in #831/#833, with local navigation in
-[#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832).
+`main` retains the approved showcase. `dev` receives the compact rack integration:
+People (#836), readable Abilities support racks (#848), selected Change actions
+(#849), and independent financial comparison decks (#818). Shared creation,
+local navigation and accepted recovery retain their existing owners.
 A human cue selects promotion to main. The preserved
 [chapter workbench](../../planning/context-canvas/studio-rack-tape-study.html)
 remains in `planning/` as the art and interaction reference; its independent
@@ -64,9 +61,18 @@ The live showcase enables two additional contributions through
 artifacts, alongside Cross-source synthesis. The default preset retains its
 smaller fixture.
 
-Abilities retains both support tables and opens one compact selected module.
-Add people, teams or sessions directly to that module's support selection, then
-Apply to accept the relationship. The preserved
+Abilities retains **What people can do** and **How the team works**, comparing
+responsibility, preparation, review and observation. Selecting a cell opens one
+dark rack with a readable item heading, local return, Apply and Close. Its People
+view places team and participants beside decision owner and status. Supporting
+work uses compact paired groups; observation material uses chocolate companions.
+Native pads retain their written selected state and fit ordinary mobile widths.
+Add people, teams or sessions in that module, then Apply to accept the support
+relationship. Close retains unfinished work. Change's Raise, Reduce, Eliminate
+and Create rail follows the same paper-resting/signal-selected grammar: the
+selected face identifies the action whose component inspector is open.
+
+The preserved
 workbench duration geometry now serves the Showcase: 64px fixed-light dials,
 peach Hours, paper Minutes, a shared readout and circular steps. Session pads own
 repetition inside a neighboring dark module, with Add at the top right and Remove
@@ -76,10 +82,18 @@ Local headers identify the owning rack and current item, with an owner return
 and Close. Prepared forms offer Apply beside Close and at the bottom, sharing
 validation and the accepted-state owner. Direct edits show Saved.
 
-Investment has three VHS-C navigation decks: **Plan investment**, **Compare a
-change** and **Keep a plan**. They reveal the existing pricing, baseline and
-saved-plan owners. Deeper independently editable financial decks remain with
-[#818](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818).
+Investment loads five independent VHS-C decks: **Plan investment**, **Customer
+rollout**, **Commercial cohort**, **Service operations** and **Capital choices**.
+Choose a deck, turn its connected reels, or adjust money and assumptions to see
+the comparison change. New decks keep independent settings, and the amp's Undo
+recovers accepted edits and removals. The chunky shelf, internal grip texture,
+fixed-light money dials and chocolate companion panels carry the preserved
+workbench artwork into the live Studio.
+
+Plan investment reads accepted people, work and funding. Its explicit funding
+controls update that shared plan. Other comparison assumptions retain their own
+meaning and leave the accepted work price intact. **Compare a change** and
+**Keep a plan** remain compact routes to baseline, recovery, files and reports.
 
 ## Try the experience
 
@@ -103,8 +117,12 @@ saved-plan owners. Deeper independently editable financial decks remain with
    Choose a contribution to connect its work, receiver and decision owner.
    Empty slots add records with editing closed, and amp Undo restores accepted
    changes. An Abilities support cell opens its own local proposal controls.
-6. Turn a Change or Quality reel, or compare a baseline in Investment. Each
-   reading uses the same accepted people and work.
+6. Turn a Change or Quality reel. Open an action pad to inspect the work it
+   selects; the pressed face follows the open receiver.
+7. In Investment, load a financial deck and try its reels and money dials. Add
+   another deck to explore an independent variation, or save a baseline through
+   **Compare a change**. **Keep a plan** carries accepted work and deck settings
+   together in a saved file.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
 Known people may participate across teams. Removing a session clears its supporting
@@ -117,6 +135,7 @@ commitments and findings.
 | Operation | Visual cue and behavior |
 | --- | --- |
 | Load a plan or investment grouping | Preserved cassette/deck face with a selected outline |
+| Adjust a financial comparison | Connected reels and quantity controls update the loaded deck; one continuous dial gesture produces one Undo step |
 | Inspect existing work | Named pad or track key; selected/open state follows the live receiver |
 | Add another session to a plan | Plus target in its track cell; keeps earlier placements and the current scope |
 | Create separate work in a period | Lane creation or New plan row; the board keeps all records visible |
@@ -174,6 +193,7 @@ NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:team-browse
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:assembly-browser
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:responsibility-browser
 NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:capability-browser
+NATIVE_STUDIO_BROWSER=chromium npm run test:native-investment-studio:investment-browser
 ```
 
 The [assembly journey](../../tests/native-investment-studio/assembly.browser.mjs)
@@ -181,8 +201,11 @@ observes direct membership and ordering, Undo, removal dependencies, retained
 drafts and the borrowed person form. The
 [responsibility journey](../../tests/native-investment-studio/responsibility.browser.mjs)
 observes the visible role rail, contribution choices, retained note data and the
-People composition at phone and desktop widths. These routes establish local
-source behavior; the receiving release owns hosted verification.
+People composition at phone and desktop widths. The Abilities journey observes
+readable choices, hidden-section behavior, retained proposals and accepted
+recovery. Investment checks independent deck identities, connected selections,
+saved round trips and grouped dial recovery. These routes establish local source
+behavior; the receiving release owns hosted verification.
 
 Browser journeys enter an editor through its visible owning rack. Scope chapter
 tabs to the amp's Studio chapters rail; local rack tabs have their own scope.
@@ -213,11 +236,14 @@ actual checks and their scope. Performance refinement stays with
 | Shared participation and support links | [shared-session-rack.mjs](shared-session-rack.mjs) |
 | Session fields and repetition pads | [work-controller.mjs](work-controller.mjs), [session-occurrence-controls.mjs](session-occurrence-controls.mjs) |
 | Duration module and dial interaction | [time-controls.mjs](time-controls.mjs), [duration contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) |
-| Cassette and Investment deck presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
+| Plan cassette presentation | [tape-picker.mjs](tape-picker.mjs), [tape styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css) |
+| Financial decks, connected reels and controls | [investment-workbench.mjs](investment-workbench.mjs), [investment-controls.mjs](investment-controls.mjs), [Investment styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-investment.css) |
+| Deck definitions, saved assumptions and derived comparisons | [investment-catalog.mjs](investment-catalog.mjs), [investment-state.mjs](investment-state.mjs), [investment-projection.mjs](investment-projection.mjs), [investment-financials.mjs](investment-financials.mjs) |
+| Baseline, file exchange and Investment integration | [investment-controller.mjs](investment-controller.mjs) |
 | People lanes, roster and direct membership/order | [assembly-controller.mjs](assembly-controller.mjs), [team-controller.mjs](team-controller.mjs) |
 | Visible role mix and contribution choices | [responsibility-controller.mjs](responsibility-controller.mjs) |
 | People composition and borrowed compact person form | [studio-people.css](../../context-canvas-project-surface/context-canvas/styles/routes/studio-people.css), loaded after Arrangement styles |
-| Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs) |
+| Abilities support and proposal controls | [capability-controller.mjs](capability-controller.mjs), [Abilities styles](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css) |
 | Shared creation target, accepted additions and names | [rack-creation-controls.mjs](rack-creation-controls.mjs), [rack-record-creation.mjs](rack-record-creation.mjs), [creation-label.mjs](creation-label.mjs) |
 | Populated showcase and opt-in People examples | [presets.mjs](presets.mjs), with live selection in [controller.mjs](controller.mjs) |
 | Current rationale and supersessions | [experience journal](experience-journal.md) |
@@ -225,5 +251,5 @@ actual checks and their scope. Performance refinement stays with
 The visual contracts map further chapter-specific source and CSS owners. Follow
 [milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23)
 for current work. Participant time shares (#798), independent response records
-(#816), deeper Investment decks (#818), production Reset (#808) and the human-cued
+(#816), production Reset (#808) and the human-cued
 public release (#686) retain their separate receiving decisions.

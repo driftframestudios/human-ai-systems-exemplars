@@ -76,7 +76,9 @@ then identifies each behavior's implementation owner.
   and contribution geometry, and the canonical Person form borrowed by Coordination.
 - `capabilities.mjs` owns the versioned ability/practice definitions and legacy interpretation.
 - `capability-proposals.mjs` prepares atomic support/work/observation changes; `capability-draft.mjs` owns their bounded raw form.
-- `capability-controller.mjs` receives cards, reverse reading, the manual and one settings form through the shared editor lease.
+- `capability-controller.mjs` receives two support tables and one local selected
+  proposal rack through the shared editor lease. `studio-abilities.css` owns the
+  table keys, readable dark header, paired support groups and mobile composition.
 - `change-models.mjs` transfers the original framework, lens, attention and Four Actions definitions into a finite immutable catalogue; its pure projection reads admitted Change settings.
 - `change-methods.mjs` explains each offered suggestion with its useful result,
   inputs, question and example. It records prototype adaptations separately from
@@ -97,6 +99,14 @@ then identifies each behavior's implementation owner.
 - `browser-download.mjs` owns temporary links and retained object URLs through
   dispatch, failure, replacement and disposal. Report and JSON controllers keep
   their format, accepted snapshot and visitor-feedback ownership.
+- `investment-workbench.mjs` and `investment-controls.mjs` own the loaded deck,
+  connected reels and money controls; `studio-investment.css` owns their receiving
+  artwork. `investment-catalog.mjs` defines types and presets,
+  `investment-state.mjs` admits and encodes assumptions,
+  `investment-projection.mjs` reads accepted work/pricing, and
+  `investment-financials.mjs` derives comparisons through the existing financial
+  core. `investment-controller.mjs` joins those owners to canonical edits and
+  retains baseline and file-exchange utilities.
 - `controller.mjs` owns `mountCoordinationPanel`, one root-scoped DOM receiver,
   explicit Apply/Cancel, accepted-state rendering, and listener cleanup.
 - About's `index.html` owns the semantic panel and its scriptless example;
@@ -155,13 +165,13 @@ original-model economic equivalence remains the receiving task in #705.
 | --- | --- | --- |
 | Arrange people and shared work | Person/team identities, roles, exact rates, funded time, membership, stable participant cards, hours/minutes dials and explicit AI contribution → human review → decision links through shared work. Person, assembly, responsibility and session checks exercise Apply, Cancel and recovery. | Full Studio keeps aggregate role quantities and its allocation model; #705 owns translation. |
 | See how teams coordinate | Pod, Guild, Project team and Shared service templates preserve arrangement identity and actual directed handoffs. Connection and template checks follow teams, people and supporting sessions. | Original routes remain usable independently. |
-| Explain desired abilities and supporting practices | Two semantic tables compare responsibility, preparation, review and observation across customer abilities and team practices. Their cells open the matching editors. Card reverses share existing work and preserve named decision owners. Capability checks exercise retained drafts and shared support. | Original activity catalogue remains available in the full Studio. |
+| Explain desired abilities and supporting practices | Two semantic tables compare responsibility, preparation, review and observation across customer abilities and team practices. Cells open one compact dark support rack with paired People/work controls, preserving named decision owners and shared sessions. Capability checks exercise readable choices, hidden receivers, retained drafts and accepted recovery. | Original activity catalogue remains available in the full Studio. |
 | Interpret change | Six frameworks, eight lenses, attention faders and method explanations retain distinct meanings. Supporting sessions carry actual investment. Change checks cover framework retention, lens interaction and proposal funding. | Broader source-derived heuristic effects keep their original analytical owner. |
 | Prepare quality, recovery and learning | Quality pads, planned response work, human-reviewed observations and People/team support badges have exact accepted/proposed consequences. Assurance checks distinguish reference estimates, planned work and observed outcomes. | Original quality shares, blended rates and disruption equations remain in the full Studio and its analysis owners. |
 | Arrange sessions and decisions | Sprint and quarter overviews open into weeks or months. Contextual editors retain sessions, availability, stages, handoffs, decisions and delays; reports carry the detailed agenda. Score checks cover view-only zoom, creation, Apply/Cancel/Undo and retained placement. | Earlier saved plans retain exact elapsed timing. Working calendars and automatic scheduling require explicit assumptions in later work. |
-| Explain investment and a changed commitment | Accepted investment, a saved baseline and their difference share the native staffing and extra-work ledger. The optional cost breakdown remains in Investment. Comparison checks distinguish unknown amounts, pooled rounding, allocated work and replaced plan identities. | Reserve, complexity, planning bands, cumulative/cash-flow, service and commercial models remain with the full Studio; #705 receives native analytical translation. |
+| Explain investment and a changed commitment | Five independently owned financial decks combine shared accepted pricing with explicit comparison assumptions, connected reels and quantity controls. Baseline and file/report routes remain available. Investment checks distinguish record identity, saved settings, unknown amounts, explicit funding changes and grouped Undo. | The full Studio retains its larger analytical composition and source economics. #705 continues to own broader model equivalence and translation. |
 | Try another initiative | Six authored rehearsal families populate purpose, people, work, prerequisites, change support and quality. Preset/report checks independently price the examples and verify round-trip ownership. | The six original factories retain their original economic meanings; the native families disclose their explicit assumptions. |
-| Keep, compare and carry a plan | Versioned native 0.9.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange and report checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
+| Keep, compare and carry a plan | Versioned native 0.10.0 JSON, prior-version migration, baseline, Undo/Redo and immutable report/brief captures share accepted state. Exchange carries work and financial-deck assumptions together. Checks cover rejected files, delayed reads, escaping and saved drafts. | Original analytical files retain their own importer until #705's conversion is accepted. |
 | Move through the showcase | Amp keys, contextual arrows and local inspector cues distinguish navigation. Full motion is the default; Lower plays effects at half speed, while Off and the system reduced-motion setting suppress animation. About provides ordinary vertical flow and a closed static counterpart. Focused browser journeys cover normal mobile and desktop interaction. | Sticky amp navigation remains #699; later performance work remains #679. |
 
 The comparison reads the accepted plan and saved baseline. Allocated work stays
@@ -171,9 +181,10 @@ preserves the separately human-cued tagged-release boundary in #686.
 
 ## Portable state
 
-The envelope uses kind `native-investment-plan`, schema version `0.9.0`, and
+The envelope uses kind `native-investment-plan`, schema version `0.10.0`, and
 model version `0.1.0`. It carries `planId`, `revision`, `currency: "USD"`,
-`horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings` and `scoreSettings` records, and the ordered collections below. Stable IDs carry identity;
+`horizonWeeks`, closed `purpose`, `changeSettings`, `assuranceSettings`,
+`scoreSettings` and `investmentSettings` records, and the ordered collections below. Stable IDs carry identity;
 labels and array positions carry presentation.
 
 | Collection | Fields | Meaning |
@@ -185,11 +196,40 @@ labels and array positions carry presentation.
 | `capabilityEvidence` | `id`, `subject`, `stage`, `context`, `observation`, `recorderPersonId`, `reviewBoundary`, `observedPlanRevision` | An explicit observation of a typed ability/practice subject, retained independently of current support checks. |
 | `contributions` | `id`, `categoryId`, `receiverPersonId`, `decisionOwnerPersonId`, `workIds`, `reviewBoundary`, `decisionBoundary` | A named AI-output record with explicit human review and decision responsibilities and supporting work. |
 | `connections` | `id`, `senderTeamId`, `receiverTeamId`, `receiverPersonId`, `sharedObject`, `responseExpectation`, `workIds`, `status` | A directed team handoff with a receiving person, stated object, response expectation and active/paused state. |
+| `investmentSettings.decks` | `id`, `type`, `sequence`, `settings` | An independently editable financial comparison. Its closed settings are defined by type; selection remains local view state. |
 
 Numeric fields use admitted finite integers within source-owned limits. Rates
 are integer cents per hour; effort is integer minutes. Closed field projections
 keep accepted state limited to the declared contract. A future schema revision
 can introduce a new field with its admission, meaning, and exchange behavior.
+
+### Financial comparison decks
+
+Schema 0.10 adds `investmentSettings` version 1.0.0. Earlier native plans migrate
+to one populated deck of each supported type. The type catalogue identifies Plan
+investment, Customer rollout, Commercial cohort, Service operations and Capital
+choices. Stable IDs distinguish copies of the same type. A closed field descriptor
+defines each saved choice, quantity range and step; UI controls use those same
+bounds. Numeric assumptions travel as integer hundredths, with conversion owned
+by `investment-state.mjs`. Deck identity and sequence remain unscaled.
+
+`investment-projection.mjs` reads canonical people, work, cadence and price lines
+into an owned financial view. `investment-financials.mjs` derives the selected
+comparison through the existing investment-analysis core. Deck assumptions and
+connected-reel presets replace the closed settings through
+`investment.settings.replace`; the explicit funding control continues to use
+`work.funding.set`. This keeps accepted work pricing and comparison assumptions
+legible as separate inputs.
+
+The existing history owner accepts an optional owned Symbol for a continuous
+control gesture. Consecutive changes with that token share one prior projection;
+Undo/Redo, baseline operations and a different accepted edit separate history.
+Ordinary commands retain their individual Undo entries. Local deck navigation
+leaves the accepted projection intact. Controls release interaction state on
+replacement and teardown; a same-ID import with a different type constructs the
+matching editor. The Investment browser/source routes observe these identity,
+recovery and ownership boundaries without duplicating a financial arithmetic
+matrix.
 
 ### Quality, recovery and learning
 
@@ -2281,7 +2321,10 @@ return restores its raw entries, with stale recovery retaining focus when needed
 
 `investment-controller.mjs` owns baseline comparison, history and plan exchange.
 The contribution-trace panel and its runtime modules were retired following
-human review. The original compact controls remain the visitor path.
+human review. Compact baseline and exchange utilities remain beside the financial
+workbench. The workbench loads independent comparison decks and connects their
+reels and quantity controls through the accepted settings owner described under
+[Financial comparison decks](#financial-comparison-decks).
 
 `showcase-scenarios.mjs` authors six native rehearsal families through the
 existing admitted plan. `reports.mjs` synchronously derives HTML and text from
