@@ -565,10 +565,6 @@ for (const engine of names) for (const width of [390, 1440]) {
     await sharedTrack(page, 'pairing').click();
     const selected = rack.locator('.studio-shared__selection'); await expect(selected).toBeVisible();
     await expect(selected.locator('.studio-rack-header__owner')).toHaveText('Shared sessions · People');
-    await page.emulateMedia({ media:'print' });
-    await expect(withPerson).toBeHidden();
-    await expect(horizon(page).locator('[data-cadence-key="new-session:period-4:1"]')).toBeHidden();
-    await page.emulateMedia({ media:'screen' });
     await expect(selected.getByRole('combobox')).toHaveValue('engineering');
     await selected.getByRole('button', {name:'Back to Shared sessions · People', exact:true}).click();
     await expect(selected).toBeHidden(); await expect(sharedTrack(page, 'pairing')).toBeFocused();

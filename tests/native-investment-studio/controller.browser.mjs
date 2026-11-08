@@ -74,8 +74,9 @@ async function open(t, engine, options = {}) {
       mountCoordinationPanel(root).dispose();
       mountCoordinationPanel(root, { studio: createStudio() });
     }, { controllerPath, statePath, selector });
-    await sessionTrack(page).click();
+    await sessionEntry(page).click();
     await expect(page.locator(`${selector} [data-native-configure]`)).toHaveAttribute('open', '');
+    await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeVisible();
     await expect(page.locator(`${selector} input[name="hoursPerSession"]`)).toBeEditable();
   }
   await settleRequests();
@@ -85,7 +86,9 @@ async function open(t, engine, options = {}) {
 const panel = page => page.locator(selector);
 const action = (page, name) => panel(page).locator(`[data-action="${name}"]`);
 const settingsSummary = page => panel(page).locator('[data-native-configure] > summary');
-const sessionTrack = page => panel(page).locator('[data-connection-templates] [data-session-track="review"] .studio-session-tracks__name');
+// Shared-session rows expose compact controls; the delivery card opens the
+// canonical session owner whose raw draft and lifecycle are exercised here.
+const sessionEntry = page => panel(page).locator('[data-delivery-session="review"]:visible').first();
 const closeSession = page => panel(page).locator('.studio-rack-editor [data-rack-editor-close]').click();
 const input = (page, name = 'minutesPerSession') => panel(page).locator(`input[name="${name}"]`);
 const total = page => panel(page).locator('[data-native-total]');
@@ -102,6 +105,12 @@ async function setDuration(page, hours, minutes) {
 }
 
 async function assertCompactControls(page) {
+  const duration = await panel(page).locator('[data-native-configure] .studio-duration').evaluate(module => {
+    const housing = module.getBoundingClientRect(), readout = module.querySelector('output').getBoundingClientRect();
+    return { housingLeft: housing.left, housingRight: housing.right, readoutLeft: readout.left, readoutRight: readout.right };
+  });
+  assert.ok(duration.readoutLeft >= duration.housingLeft && duration.readoutRight <= duration.housingRight,
+    `the duration readout fits its own housing at the current text size: ${JSON.stringify(duration)}`);
   const observations = await panel(page).locator('[data-native-configure] input[inputmode]').evaluateAll(inputs => inputs.map(input => {
     const style = getComputedStyle(input);
     const box = input.getBoundingClientRect();
@@ -201,7 +210,8 @@ async function assertInputPositionsThroughFeedback(page, capture = null) {
 
 async function begin(page) {
   const configure = panel(page).locator('[data-native-configure]');
-  if (!(await configure.isVisible()) || !(await configure.evaluate(node => node.open))) await sessionTrack(page).click();
+  if (!(await configure.isVisible()) || !(await configure.evaluate(node => node.open))) await sessionEntry(page).click();
+  await expect(input(page)).toBeVisible();
   await expect(input(page)).toBeEditable();
 }
 
@@ -211,7 +221,7 @@ async function assertAmount(page, value) {
 
 async function assertContained(page) {
   const observed = await panel(page).evaluate(root => {
-    const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
+    const rectangle = node => { const box = node.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, element: node.localName, className: node.className, name: node.getAttribute('name') ?? node.getAttribute('data-action') }; };
     const localScroll = '[data-native-chapter-list], .studio-delivery__board, .studio-session-tracks__scroll, .native-cadence__board, .native-cadence__tracks';
     const rendered = node => {
       // Chapter and rack journeys own content inside their local scroll regions.
@@ -491,8 +501,8 @@ for (const engine of names) {
     if (engine === 'webkit') await panel(page).screenshot({ path: resolve(captures, 'coordination-desktop.png') });
     const configure = panel(page).locator('[data-native-configure]');
     await closeSession(page);
-    await expect(configure).not.toHaveAttribute('open', ''); await expect(sessionTrack(page)).toBeFocused();
-    await sessionTrack(page).click();
+    await expect(configure).not.toHaveAttribute('open', ''); await expect(sessionEntry(page)).toBeFocused();
+    await sessionEntry(page).click();
     await expect(configure).toHaveAttribute('open', '');
     await expect(input(page)).toHaveValue('45');
     await input(page).focus();

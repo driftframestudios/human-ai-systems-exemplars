@@ -119,7 +119,11 @@ Working sessions heading/count, and **Remove session** at the bottom right after
 the placement pads. It uses the regular `#1c302d` dark rack face, `1px #668b73`
 edge, `.7rem` padding and `4px` corners. The duration module stretches to the
 height of that neighboring slot; its internal dial, readout and step geometry
-remain the specimen above. An empty feedback region contributes no grid track
+remain the specimen above. At constrained width or enlarged text, the receiving
+title/readout row may wrap, and the Hours/Minutes readout segments may wrap within
+their housing. The amount stays fully readable inside the module. This #846
+receiving constraint preserves the normal-size artwork and the planning specimen.
+An empty feedback region contributes no grid track
 or gap. Named **Funding and status** groups use native radio pads in two columns,
 with a minimum `4.5rem` height and clear pressed selection. Each radio sits at
 the top left beside its label and concise hint. That module fills the space

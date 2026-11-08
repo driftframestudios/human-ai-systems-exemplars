@@ -184,6 +184,12 @@ observes the visible role rail, contribution choices, retained note data and the
 People composition at phone and desktop widths. These routes establish local
 source behavior; the receiving release owns hosted verification.
 
+Browser journeys enter an editor through its visible owning rack. Scope chapter
+tabs to the amp's Studio chapters rail; local rack tabs have their own scope.
+Creation accepts a seed before selection opens its editor, while prerequisite
+detours keep their existing draft route. Observe accepted state and recovery
+through those visitor paths when a composition changes.
+
 Browser fixtures need local HTTP binding and the installed Playwright engines.
 Their shared [lifecycle owner](../../tests/native-investment-studio/browser-fixture-lifecycle.mjs)
 joins pending setup before releasing browsers and the server, including when a

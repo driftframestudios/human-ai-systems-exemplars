@@ -18,7 +18,10 @@ commands and recovery owners.
 #836 carries the compact People receiver with shared creation controls from #837.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair
-keeps focused verification usable across that integration. Promotion to main and
+keeps focused verification usable across that integration. #844 updates the
+browser journeys to enter current visible rack owners, superseding their retired
+disclosure routes while retaining accepted-state and recovery observations.
+Promotion to main and
 a tagged public release each await
 the human's cue. Performance refinement belongs to #679. Ordinary mobile and
 laptop/wide layouts are the supported visual comparison points.
@@ -251,7 +254,10 @@ Duration receivers adopt the exact preserved workbench geometry: equal 64px dial
 8px face inset, stationary gradient/rim/shadow, rotating 4×12px pointer, peach
 Hours and paper Minutes. The shared dark readout sits above them. Exact fields
 and 30px circular steps sit below/right with the preserved gap; the two columns
-wrap internally at phone widths. These smaller controls remain native and named.
+wrap internally at phone widths. #846 lets the title/readout row and its two
+readout segments wrap when enlarged text needs more room. The readout stays
+inside its housing; normal-size artwork and the planning specimen stay intact.
+These smaller controls remain native and named.
 Money dials retain their separate coarse/fine quantity contract.
 Module stretching changes the outer slot geometry while preserving that dial
 specimen. Funding and Status use readable native radio pads with a persistent
