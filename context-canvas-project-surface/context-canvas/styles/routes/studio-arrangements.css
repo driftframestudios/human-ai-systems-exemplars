@@ -1,22 +1,19 @@
-/* People, team-arrangement and working-session readings. Controllers own the
+/* Team-arrangement and working-session readings. Controllers own the
    accepted/proposed records; this extension gives their controls a shared rack. */
 .native-coordination {
   --studio-editorial-surface: var(--studio-editorial);
   --studio-extra-work: color-mix(in srgb, var(--about-gold) 60%, var(--native-paper));
 }
-.studio-team-lanes,
-.native-coordination .native-assembly__team-list {
+.studio-team-lanes {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem;
   margin-block: .65rem; padding: 0; list-style: none;
 }
-.studio-team-lane,
-.native-coordination .native-assembly__team-list > li {
+.studio-team-lane {
   min-inline-size: 0; margin: 0; padding: .55rem; border: 1px solid var(--native-rule);
   border-block-start: .25rem solid var(--about-deep-teal); background: var(--studio-editorial-surface);
   box-shadow: none; display: flex; flex-direction: column; gap: .45rem;
 }
 .native-coordination .studio-team-lane__title { inline-size: 100%; text-align: start; font-weight: 750; }
-.native-coordination [data-assembly-team] { inline-size: 100%; text-align: start; }
 .studio-team-lane__people { display: grid; gap: .3rem; list-style: none; margin: 0; padding: 0; }
 .studio-team-lane__people li { margin: 0; padding: 0; }
 .native-coordination .studio-team-lane__person {
@@ -63,18 +60,8 @@
 .native-coordination .native-connections__detail { padding: 0; }
 .native-coordination .native-connections__detail > :not(summary) { margin: .7rem; }
 .native-coordination .native-connections__count { font-size: .75rem; margin-block: .45rem; }
-.native-coordination .native-team__roster { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
-.native-coordination .native-team__roster > li { padding: .55rem; gap: .3rem; }
-.native-coordination .native-team__roster p { font-size: .75rem; margin: 0; }
-.studio-people-reading { margin-block: .8rem; min-inline-size: 0; max-inline-size: 100%; }
 .studio-session-details { margin-block: .6rem; }
 .studio-session-details > summary { padding: .55rem; }
-.native-coordination .native-assembly__team-list details { margin: 0; padding: 0; }
-.native-coordination .native-assembly__team-list details > summary { padding: .45rem; font-size: .75rem; }
-.native-coordination .native-assembly__team-list details { border: 0; border-block-start: 1px solid var(--native-rule); background: transparent; box-shadow: none; }
-.native-coordination .native-assembly__team-list details > summary { background: transparent; font-weight: 650; }
-.native-coordination .native-assembly__team-list details .native-coordination__actions { gap: .35rem; margin: .4rem 0 0; }
-.native-coordination .native-assembly__team-list details button { box-shadow: none; }
 .native-coordination .studio-team-planning { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .native-coordination [data-template-exposed] { border: 0; background: transparent; box-shadow: none; margin: 0; }
 .native-coordination [data-template-exposed] > summary { display: none; }
@@ -179,8 +166,7 @@
   .studio-arrangement-deck > .native-reel { max-inline-size: 25rem; justify-self: center; inline-size: 100%; }
 }
 @media (max-width: 42rem) {
-  .studio-team-lanes, .native-coordination .native-assembly__team-list { grid-template-columns: minmax(0, 1fr); }
-  .native-coordination .native-team__roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .studio-team-lanes { grid-template-columns: minmax(0, 1fr); }
   .native-coordination .native-arrangement__diagram { min-inline-size: 28rem; }
 }
 @media (forced-colors: active) {

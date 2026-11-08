@@ -78,15 +78,129 @@ async function role(page, id = 'product-one') {
   await people(page).locator(`[data-person-id="${id}"]`).click();
   await settings(page, 'role').locator('summary').click();
 }
-async function contribution(page, category = 'source-retrieval') {
-  await add(page).click();
-  await field(page, 'contribution', 'categoryId').selectOption(category);
-  await field(page, 'contribution', 'receiverPersonId').selectOption('product-one');
-  await field(page, 'contribution', 'decisionOwnerPersonId').selectOption('engineering-one');
+async function draftField(page, kind, name, value) {
+  await field(page, kind, name).evaluate((control, value) => {
+    control.value = value; control.dispatchEvent(new Event('input', { bubbles: true }));
+  }, value);
+}
+async function contribution(page, category = 'source-retrieval', { draft = false } = {}) {
+  if (draft) await page.evaluate(async () => {
+    const { mountResponsibilityPanel } = await import('/collaboration/native-investment-studio/responsibility-controller.mjs');
+    mountResponsibilityPanel(document.querySelector('[data-native-team-editor]'), window.responsibilityFixture).create();
+  });
+  else {
+    await add(page).click();
+    await expect(add(page)).toBeFocused();
+    await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
+    await people(page).locator('.native-responsibility__selector').last().click();
+  }
+  for (const [name, value] of [['categoryId', category], ['receiverPersonId', 'product-one'], ['decisionOwnerPersonId', 'engineering-one']]) {
+    if (draft) await draftField(page, 'contribution', name, value);
+    else await field(page, 'contribution', name).selectOption(value);
+  }
   await member(page, 'review').check();
 }
 
 for (const engine of names) {
+  test(`${engine}: contribution acceptance and Close preserve same-instance successor focus`, async t => {
+    const page = await open(t, engine);
+    const results = await page.evaluate(async () => {
+      const { mountResponsibilityPanel } = await import('/collaboration/native-investment-studio/responsibility-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.responsibilityFixture.controller.dispose(); window.responsibilityFixture.editing.dispose();
+      const element = document.querySelector('[data-native-team-editor]'); element.hidden = false;
+      const results = [];
+      for (const phase of ['accepted', 'editing', 'close']) {
+        const studio = createStudio(createShowcasePlan({ peopleExamples: true })), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        const succeed = () => {
+          if (!armed || (phase !== 'close' && !studio.readHistory().undoCount)) return;
+          armed = false; receiver.refresh(); receiver.open('contribution.update:source-index');
+          element.querySelector('[name="categoryId"]').focus();
+        };
+        receiver = mountResponsibilityPanel(element, { studio, editing,
+          onAccepted: () => { if (phase === 'accepted') succeed(); },
+          onEditing: () => { if (phase !== 'accepted') succeed(); } });
+        receiver.open('contribution.update:evidence-draft'); armed = true;
+        if (phase === 'close') element.querySelector('[data-responsibility-configure="contribution"] [data-rack-editor-close]').click();
+        else {
+          const input = element.querySelector('[data-responsibility-work="pairing"]');
+          input.checked = true; input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        results.push({ phase, target: editing.contribution.read().draft?.targetId, focused: document.activeElement.name,
+          added: studio.read().state.contributions.find(row => row.id === 'evidence-draft').workIds.includes('pairing'),
+          changes: studio.readHistory().undoCount });
+        receiver.dispose(); editing.dispose();
+      }
+      return results;
+    });
+    assert.deepEqual(results, ['accepted', 'editing', 'close'].map(phase => ({ phase, target: 'source-index', focused: 'categoryId',
+      added: phase !== 'close', changes: phase === 'close' ? 0 : 1 })));
+  });
+
+  test(`${engine}: People racks retain parallel groups, direct responsibility choices and compact local receivers`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine);
+    await page.evaluate(async () => {
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { studio, controller } = window.responsibilityFixture;
+      studio.replace(createShowcasePlan({ peopleExamples: true }), studio.read()); controller.refresh();
+    });
+    assert.equal((await state(page)).contributions.length, 3);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const lanes = people(page).locator('.studio-team-lanes');
+      const geometry = await lanes.evaluate(element => ({ width: element.clientWidth, scroll: element.scrollWidth,
+        rows: [...element.querySelectorAll('[data-people-team]')].map(lane => Math.round(lane.getBoundingClientRect().top)) }));
+      assert.equal(new Set(geometry.rows).size, 1, 'teams remain one row of parallel groups');
+      if (width === 390) assert.ok(geometry.scroll > geometry.width, 'phone team lanes remain locally reachable');
+      await expect(people(page).locator('.studio-people-rates')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+      await people(page).screenshot({ path: resolve(captures, `${engine}-people-racks-${width}.png`) });
+      await people(page).locator('[data-person-id="maya"]').click();
+      const person = people(page).locator('[data-person-configure]');
+      const personBox = await person.boundingBox();
+      assert.ok(personBox.height < 700, `person controls fit a phone-height reading at ${width}: ${personBox.height}`);
+      await person.screenshot({ path: resolve(captures, `${engine}-person-rack-${width}.png`) });
+      await person.locator('[data-person-rack-close]').click();
+      await people(page).locator('.native-responsibility__selector').first().click();
+      const work = await settings(page, 'contribution').locator('.studio-contribution-work').boundingBox();
+      const humans = await settings(page, 'contribution').locator('.studio-contribution-people').boundingBox();
+      if (width === 1440) assert.ok(humans.x > work.x + work.width, 'work and human responsibility share one row');
+      else assert.ok(humans.y >= work.y + work.height, 'phone reading follows work into human responsibility');
+      const outside = await settings(page, 'contribution').evaluate(element => {
+        const outer = element.getBoundingClientRect();
+        return [...element.querySelectorAll('button,select')].filter(control => control.getClientRects().length)
+          .filter(control => { const box = control.getBoundingClientRect(); return box.top < outer.top - 1 || box.bottom > outer.bottom + 1; })
+          .map(control => control.getAttribute('aria-label') ?? control.name ?? control.textContent);
+      });
+      assert.deepEqual(outside, [], 'the contribution receiver contains every visible control');
+      await settings(page, 'contribution').screenshot({ path: resolve(captures, `${engine}-contribution-rack-${width}.png`) });
+      await settings(page, 'contribution').locator('[data-rack-editor-close]').click();
+    }
+    await people(page).locator('[data-person-id="maya"]').click();
+    await people(page).locator('[data-person-configure] [name="ratePerHour"]').fill('unfinished');
+    await settings(page, 'role').locator('summary').click();
+    await field(page, 'role', 'functionId').focus();
+    await field(page, 'role', 'functionId').selectOption('engineering');
+    await expect(field(page, 'role', 'functionId')).toBeFocused();
+    assert.equal((await state(page)).people[0].role.functionId, 'engineering');
+    const retained = await page.evaluate(() => window.responsibilityFixture.editing.read().parked.find(row => row.kind === 'person'));
+    assert.equal(retained.raw.ratePerHour, 'unfinished');
+    await people(page).locator('.native-responsibility__selector').first().click();
+    const before = await state(page), investment = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
+    await field(page, 'contribution', 'receiverPersonId').focus();
+    await field(page, 'contribution', 'receiverPersonId').selectOption('ari');
+    await expect(field(page, 'contribution', 'receiverPersonId')).toBeFocused();
+    const changed = (await state(page)).contributions[0];
+    assert.equal(changed.receiverPersonId, 'ari');
+    assert.equal(changed.decisionOwnerPersonId, before.contributions[0].decisionOwnerPersonId, 'receiver choice preserves independent decision authority');
+    assert.equal(changed.reviewBoundary, before.contributions[0].reviewBoundary);
+    assert.deepEqual(await page.evaluate(() => window.responsibilityFixture.studio.read().result), investment);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.deepEqual((await state(page)).contributions, before.contributions);
+  });
+
   test(`${engine}: role choices and all six contribution categories retain literal investment and exchange meaning`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const before = await page.evaluate(() => window.responsibilityFixture.studio.read().result);
@@ -96,9 +210,8 @@ for (const engine of names) {
       await settings(page, 'role').locator(`[data-role-field="${name}"]`).click();
       await field(page, 'role', name).selectOption(name === 'change' ? 'npt:collective-action' : value);
     }
-    await apply(page, 'role').click();
     await expect(settings(page, 'role')).toHaveAttribute('open', '');
-    await expect(apply(page, 'role')).toBeFocused();
+    await expect(settings(page, 'role').locator('.studio-rack-header__saved')).toHaveText('Saved');
     assert.deepEqual((await state(page)).people[0].role, expectedRole);
     await expect(settings(page, 'role').locator('summary')).toContainText('Engineering');
     await expect(settings(page, 'role').locator('summary')).not.toContainText('Unsaved edits');
@@ -108,7 +221,6 @@ for (const engine of names) {
     for (const category of categories) {
       await contribution(page, category);
       await expect(total(page)).toHaveText('$1,200.00');
-      await apply(page, 'contribution').click();
     }
     const accepted = await state(page);
     assert.deepEqual(accepted.contributions.map(({ id, ...row }) => row), categories.map(categoryId => ({
@@ -116,12 +228,12 @@ for (const engine of names) {
       reviewBoundary: null, decisionBoundary: null,
     })));
     assert.deepEqual(await page.evaluate(() => window.responsibilityFixture.studio.read().result), before);
-    await expect(people(page).locator('[data-responsibility-list] tbody tr')).toHaveCount(6);
+    await expect(people(page).locator('[data-responsibility-list] tbody tr:not(.studio-contribution-add)')).toHaveCount(6);
     await expect(people(page).locator('[data-responsibility-list]')).toContainText('For product-one');
     const opener = people(page).locator('.native-responsibility__selector[data-responsibility-action="open"]').last();
     await expect(opener).toHaveAttribute('aria-expanded', 'true');
     assert.equal(await opener.getAttribute('aria-controls'), await settings(page, 'contribution').getAttribute('id'));
-    await field(page, 'contribution', 'receiverPersonId').selectOption('engineering-one');
+    await draftField(page, 'contribution', 'receiverPersonId', 'engineering-one');
     await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'false');
     await expect(settings(page, 'contribution')).not.toHaveAttribute('open', '');
     await opener.click(); await expect(opener).toHaveAttribute('aria-expanded', 'true');
@@ -130,7 +242,7 @@ for (const engine of names) {
     await action(page, 'contribution', 'cancel').click();
     await tab(page, 'investment').click();
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
-    assert.equal((await state(page)).contributions.length, 5);
+    assert.deepEqual((await state(page)).contributions.at(-1).workIds, [], 'Undo reverses the last accepted support change');
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="redo"]').click();
     assert.deepEqual((await state(page)).contributions, accepted.contributions);
     await expect(total(page)).toHaveText('$1,200.00');
@@ -149,7 +261,7 @@ for (const engine of names) {
     await expect(support).toHaveAttribute('data-included', 'false');
     await support.click();
     await expect(settings(page, 'contribution').locator('textarea')).toHaveCount(0);
-    await member(page, 'review').check(); await apply(page, 'contribution').click();
+    await member(page, 'review').check();
     await expect(support).toHaveAttribute('data-included', 'true');
     const contribution = (await state(page)).contributions.find(row => row.id === 'kept-source');
     assert.deepEqual(contribution.workIds, ['review']);
@@ -160,8 +272,8 @@ for (const engine of names) {
   test(`${engine}: saved role and contribution forms retain exact targets through renamed, retired and conflicting records`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await role(page);
-    await field(page, 'role', 'functionId').selectOption('data-ml');
-    await contribution(page);
+    await draftField(page, 'role', 'functionId', 'data-ml');
+    await contribution(page, 'source-retrieval', { draft: true });
     await people(page).locator('[data-person-id="product-two"]').click();
     await expect(root(page).locator('[data-native-saved-count]')).toHaveText('2');
     const contributionKey = await root(page).locator('[data-saved-open^="contribution:"]').getAttribute('data-saved-open');
@@ -196,7 +308,7 @@ for (const engine of names) {
     assert.ok(added); assert.equal(added.receiverPersonId, 'product-one');
     assert.equal(added.reviewBoundary, null);
     await expect(total(page)).toHaveText('$1,200.00');
-    await field(page, 'contribution', 'receiverPersonId').selectOption('product-two');
+    await draftField(page, 'contribution', 'receiverPersonId', 'product-two');
     await page.evaluate(() => {
       const { studio, controller } = window.responsibilityFixture;
       const plan = structuredClone(studio.read().state); plan.people[1].label = 'First new name';
@@ -229,7 +341,6 @@ for (const engine of names) {
     await people(page).locator('[data-responsibility-action="work-up"][data-responsibility-id="follow-up"]').click();
     await field(page, 'contribution', 'receiverPersonId').selectOption('');
     await field(page, 'contribution', 'decisionOwnerPersonId').selectOption('');
-    await apply(page, 'contribution').click();
     const row = (await state(page)).contributions[0];
     assert.deepEqual(row.workIds, ['follow-up', 'review']);
     assert.equal(row.receiverPersonId, null); assert.equal(row.decisionOwnerPersonId, null); assert.equal(row.reviewBoundary, null);
@@ -250,8 +361,7 @@ for (const engine of names) {
     assert.equal((await state(page)).contributions.length, 0);
     await expect(add(page)).toBeFocused();
     await expect(total(page)).toHaveText('$1,200.00');
-    await add(page).click();
-    await field(page, 'contribution', 'categoryId').selectOption('source-retrieval');
+    await contribution(page, 'source-retrieval', { draft: true });
     await member(page, 'follow-up').check();
     await page.evaluate(() => {
       const { studio, controller } = window.responsibilityFixture;

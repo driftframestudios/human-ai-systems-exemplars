@@ -8,6 +8,7 @@ import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
 import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -37,6 +38,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const participation = document.createElement('section'); participation.className = 'studio-people-reading';
   participation.setAttribute('aria-label', 'People and shared sessions');
   const ratesRack = elements.roster.closest('.studio-people-rates');
+  const oldAdd = root.querySelector('[data-assembly-action="person-create"]');
+  const addPerson = createRackAddControl(document, { label: 'Add person', dataset: { assemblyAction: 'person-create' } });
+  oldAdd?.replaceWith(addPerson);
   if (ratesRack) ratesRack.before(participation); else elements.roster.after(participation);
   if (ratesRack) ratesRack.append(elements.configure, elements.status);
   const localHeader = mountRackHeader(elements.configure, { title: 'Person settings', owner: 'People',
@@ -112,8 +116,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const capacity = new Map(next.result.capacity.map(row => [row.personId, row]));
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.people.map(row => [row.personId, row.badges]));
     const fragment = document.createDocumentFragment();
-    for (const person of next.state.people) {
+    for (const [index, person] of next.state.people.entries()) {
       const item = document.createElement('li');
+      item.className = 'studio-roster-card'; item.dataset.rosterPerson = person.id;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'native-control--navigate';
@@ -132,9 +137,19 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
       const space = document.createElement('p');
       space.textContent = remaining < 0 ? `${duration(-remaining)} above funded time` : `${duration(remaining)} of funded time available`;
       item.append(button, saved, team, detail, space);
+      const order = document.createElement('div'); order.className = 'studio-person-order native-coordination__actions';
+      for (const [action, label, disabled] of [['person-up', 'Move earlier', index === 0], ['person-down', 'Move later', index === next.state.people.length - 1], ['person-remove', 'Remove', false]]) {
+        const control = document.createElement('button'); control.type = 'button'; control.textContent = label;
+        control.dataset.assemblyAction = action; control.dataset.assemblyId = person.id; control.disabled = disabled;
+        control.setAttribute('aria-label', `${label}: ${person.label}`);
+        if (action === 'person-remove') control.className = 'native-control--remove';
+        order.append(control);
+      }
+      item.append(order);
       appendAssuranceBadges(document, item, support.get(person.id) ?? [], { kind: 'person', id: person.id, label: person.label });
       fragment.append(item);
     }
+    const addition = document.createElement('li'); addition.className = 'studio-roster-add'; addition.append(addPerson); fragment.append(addition);
     elements.roster.replaceChildren(fragment);
     participation.replaceChildren(createSessionTracks(document, { plan: next.state }));
     elements.empty.hidden = next.state.people.length > 0;
@@ -203,9 +218,9 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     rateControls.refresh();
     announce(result.ok ? '' : result.error.message);
     notify(epoch, focus ? () => {
-      if (editor.read().status === 'editing') inputs.ratePerHour.focus({ preventScroll: true });
-      else if (editor.read().status === 'stale') elements.recovery.querySelector('button').focus({ preventScroll: true });
-      revealStudioDestination(elements.configure);
+      const destination = editor.read().status === 'stale' ? elements.recovery.querySelector('button') : inputs.ratePerHour;
+      if (['editing', 'stale'].includes(editor.read().status)) destination.focus({ preventScroll: true });
+      revealStudioDestination(destination);
     } : null);
     return result;
   }

@@ -96,9 +96,44 @@ async function ada(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: direct team membership preserves a same-instance successor's focus`, async t => {
+    const page = await open(t, engine);
+    const results = await page.evaluate(async () => {
+      const { mountAssemblyPanel } = await import('/collaboration/native-investment-studio/assembly-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.assemblyFixture.controller.dispose(); window.assemblyFixture.editing.dispose();
+      const element = document.querySelector('[data-native-assembly]'); element.hidden = false;
+      const results = [];
+      for (const phase of ['accepted', 'editing']) {
+        const studio = createStudio(createShowcasePlan()), editing = createDraftCoordinator(studio);
+        let receiver, armed = false;
+        const succeed = () => {
+          if (!armed || !studio.readHistory().undoCount) return;
+          armed = false; receiver.refresh(); receiver.open('team.update:engineering');
+          element.querySelector('[data-assembly-form] [name="label"]').focus();
+        };
+        receiver = mountAssemblyPanel(element, { studio, editing,
+          onAccepted: () => { if (phase === 'accepted') succeed(); },
+          onEditing: () => { if (phase === 'editing') succeed(); } });
+        receiver.open('team.update:product'); armed = true;
+        const input = element.querySelector('[data-assembly-member="jules"]');
+        input.checked = true; input.dispatchEvent(new Event('change', { bubbles: true }));
+        results.push({ phase, target: editing.assembly.read().draft?.targetId, focused: document.activeElement.name,
+          added: studio.read().state.teams.find(row => row.id === 'product').personIds.includes('jules'),
+          changes: studio.readHistory().undoCount });
+        receiver.dispose(); editing.dispose();
+      }
+      return results;
+    });
+    assert.deepEqual(results, ['accepted', 'editing'].map(phase => ({ phase, target: 'engineering', focused: 'label', added: true, changes: 1 })));
+  });
+
   test(`${engine}: People adds usable people and teams directly inside their racks with amp Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await action(page, 'person-create').click();
+    await expect(action(page, 'person-create')).toBeFocused();
     const personEditor = people(page).locator('[data-person-configure]');
     await expect(personEditor).not.toHaveAttribute('open', '');
     const addedPerson = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.at(-1));
@@ -128,6 +163,7 @@ for (const engine of names) {
     await expect(personApply).toHaveCount(1); await expect(personApply).toBeDisabled();
     await personEditor.locator('[data-person-action="close"]').click();
     await action(page, 'team-create').click();
+    await expect(action(page, 'team-create')).toBeFocused();
     await expect(people(page).locator('[data-assembly-configure]')).not.toHaveAttribute('open', '');
     const createdTeam = await page.evaluate(() => window.assemblyFixture.studio.read().state.teams.at(-1));
     assert.equal(createdTeam.label, 'New team 1');
@@ -135,10 +171,11 @@ for (const engine of names) {
     await expect(people(page).locator('.native-assembly__teams [data-assembly-configure]')).toBeVisible();
     await expect(field(page, 'label')).toHaveValue('New team 1');
     await field(page, 'label').fill('Service team');
-    await people(page).locator(`[data-assembly-member="${addedId}"]`).check();
+    const addedMember = people(page).locator(`[data-assembly-member="${addedId}"]`);
+    await addedMember.check();
     const teamApply = people(page).locator('[data-assembly-configure] [data-editor-apply]');
-    await expect(teamApply).toHaveCount(1); await expect(teamApply).toBeEnabled(); await teamApply.click();
-    await expect(teamApply).toBeFocused(); await expect(teamApply).toBeDisabled();
+    await expect(teamApply).toHaveCount(1); await expect(teamApply).toBeDisabled();
+    await expect(addedMember).toBeFocused();
     await expect(apply(page)).toHaveAttribute('aria-disabled', 'true');
     const addedTeam = await page.evaluate(() => window.assemblyFixture.studio.read().state.teams.at(-1));
     assert.equal(addedTeam.label, 'Service team'); assert.deepEqual(addedTeam.personIds, [addedId]);
@@ -324,7 +361,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), accepted);
   });
 
-  test(`${engine}: team membership toggles retain row geometry and checkbox focus`, { timeout: 60000 }, async t => {
+  test(`${engine}: direct People team membership retains row geometry, focus and shared recovery`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await people(page).locator('[data-assembly-team="delivery"]').click();
     await expect(people(page).locator('[data-assembly-summary]')).toHaveText('Settings · Product and Engineering');
@@ -342,11 +379,22 @@ for (const engine of names) {
       await page.keyboard.press('Space');
       await expect(checkbox).not.toBeChecked(); await expect(checkbox).toBeFocused();
       assert.deepEqual(await geometry(), before);
+      assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].personIds.includes('product-one')), false,
+        'the checkbox changes accepted membership directly');
       await page.keyboard.press('Space'); assert.deepEqual(await geometry(), before);
-      assert.equal(await bytes(page), accepted);
+      assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].personIds.at(-1)), 'product-one',
+        'a newly included person joins at the end of the accepted team order');
     }
+    const { revision: membershipRevision, ...afterMembership } = JSON.parse(await bytes(page));
+    const sequence = await page.evaluate(() => window.assemblyFixture.studio.readAcceptance().sequence);
     await participantMovement(page, list);
-    assert.equal(await bytes(page), accepted, 'team ordering stays in the existing membership draft');
+    const { revision: movementRevision, ...afterMovement } = JSON.parse(await bytes(page));
+    assert.deepEqual(afterMovement, afterMembership, 'moving back and restoring the last member reproduces the plan content');
+    assert.equal(movementRevision, membershipRevision + 4);
+    assert.equal(await page.evaluate(() => window.assemblyFixture.studio.readAcceptance().sequence), sequence + 4,
+      'each explicit movement or membership change enters shared accepted history');
+    for (let count = 0; count < 8; count += 1) await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), accepted, 'shared Undo restores the complete original membership and order');
   });
   test(`${engine}: people and teams publish exact funded amounts, keep membership order and resolve removal dependencies`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
@@ -369,7 +417,7 @@ for (const engine of names) {
     await expect(field(page, 'ratePerHour')).toHaveValue('125.25');
     await apply(page).click();
     await expect(total(page)).toHaveText('$1,450.50');
-    await expect(people(page).locator('[data-person-configure]')).toHaveAttribute('open', '');
+    await expect(people(page).locator('[data-person-configure]')).not.toHaveAttribute('open', '');
     const adaId = await page.evaluate(() => window.assemblyFixture.studio.read().state.people.find(row => row.label === 'Ada').id);
     assert.equal(await page.evaluate(id => window.assemblyFixture.studio.read().state.people.find(row => row.id === id).rateCentsPerHour, adaId), 12525);
     await prepareCreation(page, 'team');
@@ -386,23 +434,20 @@ for (const engine of names) {
     assert.deepEqual(design.personIds, ['product-one', adaId]);
     await expect(total(page)).toHaveText('$1,450.50');
     await expect(people(page).locator('[data-assembly-configure]')).toHaveAttribute('open', '');
-    await people(page).locator(`[data-assembly-team="${design.id}"]`).locator('..').locator('details > summary').click();
     await people(page).locator(`[data-assembly-action="team-up"][data-assembly-id="${design.id}"]`).click();
     assert.equal(await page.evaluate(() => window.assemblyFixture.studio.read().state.teams[0].id), design.id);
     await expect(people(page).locator(`[data-assembly-team="${design.id}"]`)).toBeFocused();
-    await people(page).locator('[data-assembly-person]').selectOption('product-one');
     const retained = await bytes(page);
-    await action(page, 'person-remove').click();
+    await people(page).locator('[data-assembly-action="person-remove"][data-assembly-id="product-one"]').click();
     await expect(people(page).locator('[data-assembly-dependencies]')).toContainText('Team: Design');
     await expect(people(page).locator('[data-assembly-dependencies]')).toContainText('Work:');
     await expect(apply(page)).toBeDisabled();
     assert.equal(await bytes(page), retained);
     await cancel(page).click();
+    await expect(people(page).locator('[data-roster-person="product-one"] [data-assembly-action="person-remove"]')).toBeFocused();
     await people(page).locator(`[data-assembly-team="${design.id}"]`).click();
     await people(page).locator(`[data-assembly-member="${adaId}"]`).uncheck();
-    await apply(page).click();
-    await people(page).locator('[data-assembly-person]').selectOption(adaId);
-    await action(page, 'person-remove').click(); await apply(page).click();
+    await people(page).locator(`[data-assembly-action="person-remove"][data-assembly-id="${adaId}"]`).click(); await apply(page).click();
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'investment').click();
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();

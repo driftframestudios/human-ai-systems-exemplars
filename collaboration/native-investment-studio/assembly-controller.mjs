@@ -11,6 +11,7 @@ import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { animateRackChange } from './reel-control.mjs';
 import { createRackRecord } from './rack-record-creation.mjs';
 import { syncReorderButtons, mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEXT_FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
@@ -29,13 +30,16 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (!element) throw new TypeError('Supply the complete People and Teams panel.');
     return element;
   };
-  const elements = Object.fromEntries(['person', 'people-tools', 'teams', 'empty', 'configure', 'summary', 'form',
+  const elements = Object.fromEntries(['teams', 'empty', 'configure', 'summary', 'form',
     'fieldset', 'name-group', 'name-label', 'person-fields', 'members-group', 'members', 'confirm',
     'dependencies', 'feedback', 'general-error', 'preview', 'total', 'preview-note', 'apply', 'cancel',
     'recovery', 'current', 'fresh-id', 'status'].map(name => [name, find(name)]));
   const inputs = Object.fromEntries(TEXT_FIELDS.map(field => [field, elements.form.elements.namedItem(field)]));
   const errors = Object.fromEntries([...TEXT_FIELDS, 'personIds'].map(field => [field, find(`error="${field}"`)]));
   const teamRack = elements.teams.closest('.native-assembly__teams');
+  const oldAdd = root.querySelector('[data-assembly-action="team-create"]');
+  const addTeam = createRackAddControl(document, { label: 'Add team', dataset: { assemblyAction: 'team-create' } });
+  oldAdd?.replaceWith(addTeam);
   if (teamRack) teamRack.append(elements.configure, elements.status);
   const localHeader = mountRackHeader(elements.configure, { title: 'Team settings', owner: 'Teams',
     closeAttribute: 'data-team-rack-close', applyAttribute: 'data-editor-apply',
@@ -46,8 +50,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
   localHeader.update({ source: elements.apply });
   const editor = editing.assembly;
   const cleanup = [];
-  let projection = null, people = new Map(), personPositions = new Map(), teams = new Map(), references = new Map();
-  let selectedPerson = null, selectedTarget = null, memberProjection = null, memberIds = null;
+  let projection = null, people = new Map(), teams = new Map(), references = new Map();
+  let selectedTarget = null, memberProjection = null, memberIds = null;
   let memberControls = new Map(), teamControls = new Map(), memberOrder = [], membersTarget = null;
   let disposed = false, composing = false, acknowledgedOpen = false, generation = 0;
 
@@ -72,37 +76,19 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (id !== null) control.dataset.assemblyId = id;
     return control;
   }
-  function selectPersonControls() {
-    const index = personPositions.get(selectedPerson) ?? -1;
-    elements.person.disabled = index < 0;
-    for (const control of elements['people-tools'].querySelectorAll('[data-assembly-action]')) {
-      const action = control.dataset.assemblyAction;
-      if (action === 'person-remove') control.setAttribute('aria-label', `Remove from plan: ${people.get(selectedPerson)?.label ?? 'selected person'}`);
-      control.disabled = index < 0 || action === 'person-up' && index === 0
-        || action === 'person-down' && index === projection.state.people.length - 1;
-    }
-  }
   function renderLists(next) {
     if (next === projection) return;
     projection = next;
     people = new Map(next.state.people.map(person => [person.id, person]));
-    personPositions = new Map(next.state.people.map((person, index) => [person.id, index]));
     teams = new Map(next.state.teams.map(team => [team.id, team]));
     references = new Map(['people', 'teams', 'work', 'practices'].map(collection =>
       [collection, new Map(next.state[collection].map(row => [row.id, row.label ?? row.id]))]));
-    if (!people.has(selectedPerson)) selectedPerson = next.state.people[0]?.id ?? null;
-    const options = next.state.people.map(person => {
-      const option = document.createElement('option'); option.value = person.id; option.textContent = person.label;
-      return option;
-    });
-    elements.person.replaceChildren(...options);
-    elements.person.value = selectedPerson ?? '';
-    selectPersonControls();
     teamControls = new Map();
     const support = new Map(projectAssuranceConsequences(next).accepted.badges.teams.map(row => [row.teamId, row.badges]));
     const fragment = document.createDocumentFragment();
     next.state.teams.forEach((team, index) => {
       const item = document.createElement('li');
+      item.dataset.peopleTeam = team.id;
       const choose = button(team.label, 'team-open', team.id);
       choose.dataset.assemblyTeam = team.id;
       const members = document.createElement('ul'); members.className = 'studio-team-lane__people';
@@ -113,18 +99,18 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       }
       if (!team.personIds.length) { const entry = document.createElement('li'); entry.textContent = 'Choose people for this team.'; members.append(entry); }
       const actions = document.createElement('div'); actions.className = 'native-coordination__actions';
-      const up = button('Move up', 'team-up', team.id), down = button('Move down', 'team-down', team.id);
+      const up = button('Move left', 'team-up', team.id), down = button('Move right', 'team-down', team.id);
       up.disabled = index === 0; down.disabled = index === next.state.teams.length - 1;
-      up.setAttribute('aria-label', `Move ${team.label} up`); down.setAttribute('aria-label', `Move ${team.label} down`);
+      up.setAttribute('aria-label', `Move ${team.label} left`); down.setAttribute('aria-label', `Move ${team.label} right`);
       const remove = button('Remove team', 'team-remove', team.id);
       remove.className = 'native-control--remove';
       remove.setAttribute('aria-label', `Remove team: ${team.label}`);
       actions.append(up, down, remove); item.append(choose, members);
       appendAssuranceBadges(document, item, support.get(team.id) ?? [], { kind: 'team', id: team.id, label: team.label });
-      const settings = document.createElement('details'), caption = document.createElement('summary'); caption.textContent = 'Arrange this team';
-      settings.append(caption, actions); item.append(settings); fragment.append(item);
+      item.append(actions); fragment.append(item);
       teamControls.set(team.id, choose);
     });
+    const addition = document.createElement('li'); addition.className = 'studio-team-add'; addition.append(addTeam); fragment.append(addition);
     elements.teams.replaceChildren(fragment);
     elements.empty.hidden = next.state.teams.length > 0;
   }
@@ -196,8 +182,6 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const view = editor.read();
     if (disposed) return view;
     renderLists(view.projection);
-    if (elements.person.value !== (selectedPerson ?? '')) elements.person.value = selectedPerson ?? '';
-    selectPersonControls();
     selectedTarget = view.draft?.assemblyId ?? selectedTarget;
     const descriptor = describeAssemblyTarget(view.draft?.assemblyId ?? selectedTarget);
     const draft = view.draft;
@@ -306,8 +290,11 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (!currentOperation(epoch)) return;
     if (!result.ok) { render(); announce(result.error.message); return; }
     onAccepted(result.projection); if (!currentOperation(epoch)) return;
-    if (kind === 'person') { selectedPerson = result.id; close({ park: false }); render(); onPersonCreated(result.id); }
-    else { close({ park: false }); render(); }
+    close({ park: false }); render();
+    const closedAt = generation, intent = editing.read().intent;
+    if (kind === 'person') onPersonCreated(result.id);
+    if (currentOperation(closedAt) && editing.read().intent === intent)
+      root.querySelector(`[data-assembly-action="${kind}-create"]`)?.focus();
   }
   function close({ park = true } = {}) {
     if (disposed) return;
@@ -325,7 +312,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     onEditing();
     if (currentOperation(epoch) && focus) focus();
   }
-  function settle(action) {
+  function settle(action, { focus = true } = {}) {
     if (disposed) return;
     rateControls.release();
     const view = editor.read();
@@ -335,10 +322,10 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const result = editor[action](view.draft.token);
     if (!currentOperation(epoch)) return;
     if (!result.ok) {
-      changed(result, epoch, () => {
+      changed(result, epoch, focus ? () => {
         const field = TEXT_FIELDS.find(name => result.error.path === `draft.${name}`);
         if (field) inputs[field].focus();
-      });
+      } : null);
       return;
     }
     if (action === 'cancel') {
@@ -349,7 +336,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
         const handled = onClose();
         if (handled === true || !currentOperation(closedAt)) return;
         const target = descriptor.collection === 'teams' ? teamControls.get(descriptor.id)
-          : descriptor.mode === 'remove' ? elements.person : null;
+          : descriptor.mode === 'remove' ? root.querySelector(`[data-roster-person="${descriptor.id}"] [data-assembly-action="person-remove"]`) : null;
         (target ?? root.querySelector(`[data-assembly-action="${descriptor.collection === 'teams' ? 'team' : 'person'}-create"]`)).focus();
       }
       return;
@@ -359,7 +346,7 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (descriptor.mode === 'create') onRecordCreated(descriptor);
     if (!currentOperation(epoch)) return;
     if (descriptor.form === 'person.create') {
-      selectedPerson = descriptor.id; close({ park: false }); render(); announce('Person added.');
+      close({ park: false }); render(); announce('Person added.');
       onPersonCreated(descriptor.id);
       return;
     }
@@ -368,7 +355,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       render(); acknowledgedOpen = true; elements.configure.open = true;
       announce(descriptor.mode === 'create' ? 'Team added.' : 'Team updated.');
       onEditing();
-      if (currentOperation(epoch)) focusSubmitControl(elements.apply);
+      if (focus && currentOperation(epoch)) focusSubmitControl(elements.apply);
+      return currentOperation(epoch) && editor.read().draft?.targetId === descriptor.id;
     } else {
       close({ park: false }); render(); announce(descriptor.collection === 'people' ? 'Person removed.' : 'Team removed.');
       const closedAt = generation;
@@ -387,13 +375,15 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     const parked = editing.park();
     if (!parked.ok) { announce(parked.error.message); return; }
     [ids[index], ids[destination]] = [ids[destination], ids[index]];
-    const result = studio.applyCommand({ type: 'collection.reorder', collection, ids }, expected);
-    if (!currentOperation(epoch)) return;
-    if (result.ok) onAccepted(result.projection);
-    else onEditing();
-    if (!currentOperation(epoch)) return;
-    render(); announce(result.ok ? 'Order updated.' : result.error.message);
-    if (result.ok) (collection === 'people' ? elements.person : teamControls.get(id))?.focus();
+    const container = collection === 'people' ? root.querySelector('[data-team-roster]') : elements.teams;
+    animateRackChange(container, () => {
+      const result = studio.applyCommand({ type: 'collection.reorder', collection, ids }, expected);
+      if (!currentOperation(epoch)) return;
+      if (result.ok) onAccepted(result.projection); else onEditing();
+      if (!currentOperation(epoch)) return;
+      render(); announce(result.ok ? 'Order updated. Undo is available.' : result.error.message);
+      if (result.ok) (collection === 'people' ? container.querySelector(`[data-person-id="${id}"]`) : teamControls.get(id))?.focus({ preventScroll: true });
+    }, { selector: collection === 'people' ? '[data-roster-person]' : '[data-people-team]', key: collection === 'people' ? 'rosterPerson' : 'peopleTeam' });
   }
   function membership(id, direction = null, checked = false) {
     const view = editor.read();
@@ -410,8 +400,12 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    const update = () => changed(editor.setIds(view.draft.token, 'personIds', ids), epoch,
-      () => memberControls.get(id)?.checkbox.focus());
+    const update = () => {
+      changed(editor.setIds(view.draft.token, 'personIds', ids), epoch);
+      if (!currentOperation(epoch)) return;
+      const completed = describeAssemblyTarget(editor.read().draft?.assemblyId)?.mode !== 'update' || settle('apply', { focus: false });
+      if (completed && !disposed) memberControls.get(id)?.checkbox.focus({ preventScroll: true });
+    };
     if (direction !== null) animateRackChange(elements.members, update,
       { selector: '[data-assembly-member-row]', key: 'assemblyMemberRow' });
     else update();
@@ -436,8 +430,8 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     if (action === 'close') { closeLocal(); return; }
     if (action === 'person-create' || action === 'team-create') { addRecord(action === 'person-create' ? 'person' : 'team'); return; }
     if (action === 'team-open') { open(makeAssemblyTarget('team.update', id)); return; }
-    if (action === 'team-remove' || action === 'person-remove') { open(makeAssemblyTarget(action === 'team-remove' ? 'team.remove' : 'person.remove', action === 'team-remove' ? id : selectedPerson)); return; }
-    if (action === 'person-up' || action === 'person-down') { move('people', selectedPerson, action === 'person-up' ? -1 : 1); return; }
+    if (action === 'team-remove' || action === 'person-remove') { open(makeAssemblyTarget(action === 'team-remove' ? 'team.remove' : 'person.remove', id)); return; }
+    if (action === 'person-up' || action === 'person-down') { move('people', id, action === 'person-up' ? -1 : 1); return; }
     if (action === 'team-up' || action === 'team-down') { move('teams', id, action === 'team-up' ? -1 : 1); return; }
     if (action === 'member-up' || action === 'member-down') { membership(id, action === 'member-up' ? -1 : 1); return; }
     if (action === 'cancel') { settle('cancel'); return; }
@@ -466,7 +460,6 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     for (const container of [root, elements.configure]) {
       for (const control of container.querySelectorAll('[data-assembly-action]')) control.disabled = true;
     }
-    elements.person.disabled = true;
     delete root.dataset.assemblyReady;
     INSTANCES.delete(root);
   }
@@ -489,9 +482,6 @@ export function mountAssemblyPanel(root, { studio, editing, onBegin = () => {}, 
     listen(elements.members, 'change', event => {
       const id = event.target.dataset.assemblyMember;
       if (memberControls.get(id)?.checkbox === event.target) membership(id, null, event.target.checked);
-    });
-    listen(elements.person, 'change', () => {
-      if (people.has(elements.person.value)) { selectedPerson = elements.person.value; selectPersonControls(); }
     });
     listen(elements.configure.querySelector('summary'), 'click', event => {
       if (!disposed && !elements.configure.open && selectedTarget && canOpen()) {
