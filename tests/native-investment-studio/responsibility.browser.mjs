@@ -237,8 +237,9 @@ for (const engine of names) {
     await expect(people(page).locator('[data-responsibility-list]')).toContainText('Follow-up session');
     await page.evaluate(() => {
       const { studio } = window.responsibilityFixture;
-      const result = studio.applyCommand({ type: 'work.remove', workId: 'follow-up' }, studio.read());
-      if (result.ok || result.error.code !== 'dependencies' || !result.error.references.some(row => row.collection === 'contributions')) throw new Error('Supporting work removal must retain its contribution reference.');
+      const result = studio.previewCommand({ type: 'work.remove', workId: 'follow-up' }, studio.read());
+      if (!result.ok || result.projection.state.contributions[0].workIds.join(',') !== 'review')
+        throw new Error('Removing supporting work must keep its contribution with the remaining session.');
     });
     await people(page).locator(`[data-responsibility-action="remove"][data-responsibility-id="${row.id}"]`).click();
     await expect(people(page).locator('[data-responsibility-confirm]')).toContainText('Remove Source retrieval?');

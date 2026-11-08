@@ -16,6 +16,8 @@
 .native-coordination .studio-session-deck { border: 0; box-shadow: none; }
 .native-coordination .studio-session-deck > form {
  padding: .7rem; background: #20382f; color: var(--native-paper);
+ --canvas-link-color: var(--canvas-link-on-dark);
+ --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
 }
 .studio-session-deck [data-native-session-fields] { display: grid; gap: .7rem; min-inline-size: 0; }
 .studio-session-deck [data-native-session-fields] > * { min-inline-size: 0; }

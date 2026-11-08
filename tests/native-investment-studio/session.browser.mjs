@@ -173,9 +173,10 @@ for (const engine of names) {
     await legacy(page, 'apply').click();
     assert.deepEqual(JSON.parse(await bytes(page)).scoreSettings.cadence.placements.filter(row => row.workId === 'review')
       .map(row => row.occurrenceIndex), [0, 1], 'reducing the sessions retires only their trailing placements');
+    assert.deepEqual(JSON.parse(await bytes(page)).practices, accepted.practices, 'removing occurrences retains parent-plan support links');
   });
 
-  test(`${engine}: session removal explains supporting Change, quality, recovery and learning references`, { timeout: 45000 }, async t => {
+  test(`${engine}: session removal dissolves supporting links and amp Undo restores them`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {
       const { studio, controller } = window.sessionFixture, plan = JSON.parse(studio.exportText());
@@ -193,11 +194,33 @@ for (const engine of names) {
     });
     const before = await bytes(page);
     await action(page, 'remove').click();
-    const references = sessions(page).locator('[data-native-session-dependencies]');
-    await expect(references).toContainText('Quality concept: Acceptance criteria / specification by example');
-    await expect(references).toContainText('Recovery event: Replay the interrupted request');
-    await expect(legacy(page, 'apply')).toBeDisabled();
+    await expect(sessions(page).locator('[data-native-session-dependencies]')).toBeHidden();
+    await expect(sessions(page).locator('[data-native-session-confirm]')).toContainText('Undo restores them');
+    await expect(legacy(page, 'apply')).toBeEnabled();
+    assert.equal(await bytes(page), before, 'the concise confirmation keeps the accepted plan intact');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const confirmation = root(page).locator('[data-rack-editor-kind="session"]');
+      await confirmation.screenshot({ path: resolve(captures, `${engine}-remove-session-${width}.png`) });
+    }
+    await legacy(page, 'apply').click();
+    const accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.work, []);
+    assert.equal(await root(page).evaluate(node => {
+      const active = document.activeElement;
+      return node.contains(active) && active.matches('button') && Boolean(active.getClientRects().length)
+        && !active.closest('[data-rack-editor-kind="session"]');
+    }), true, 'removing the selected record returns keyboard focus to a surviving rack control');
+    const assurance = accepted.assuranceSettings;
+    assert.deepEqual(assurance.quality.concepts.find(row => row.conceptId === 'acceptance-criteria').workIds, []);
+    assert.deepEqual(assurance.recoveryEvents[0].workIds, []);
+    assert.deepEqual(assurance.learningActions[0].workIds, []);
+    assert.deepEqual(assurance.rehearsals[0].workIds, []);
+    assert.deepEqual(accepted.changeSettings.frameworkMaps.find(row => row.frameworkId === 'kotter')
+      .components.find(row => row.componentId === 'vision').workIds, []);
+    await root(page).locator('[data-studio-undo]').click();
     assert.equal(await bytes(page), before);
+    await expect(root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible')).toBeVisible();
   });
 
   test(`${engine}: loaded session settings stay in the rack and preserve accepted work until Apply`, { timeout: 45000 }, async t => {
@@ -699,24 +722,17 @@ for (const engine of names) {
     await expect(field(page, 'label')).toHaveValue('Revised planning name');
   });
 
-  test(`${engine}: removal preserves references and empty plans can receive a new session`, { timeout: 60000 }, async t => {
+  test(`${engine}: removal Cancel keeps the plan and confirmed removal leaves room for new work`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     const original = await bytes(page);
     await action(page, 'remove').click();
-    await expect(sessions(page).locator('[data-native-session-dependencies]')).toContainText('Actively negotiate expectations');
-    await expect(legacy(page, 'apply')).toBeDisabled(); assert.equal(await bytes(page), original);
+    await expect(legacy(page, 'apply')).toBeEnabled(); assert.equal(await bytes(page), original);
     await legacy(page, 'cancel').click();
-    await prepareSession(page); await legacy(page, 'apply').click();
+    assert.equal(await bytes(page), original);
+    await chooseSession(page, 'review');
     await action(page, 'remove').click(); await legacy(page, 'apply').click();
-    await expect(total(page)).toHaveText('$1,200.00');
-    await expect(action(page, 'create')).toBeVisible();
-    await page.evaluate(() => {
-      const { studio, controller } = window.sessionFixture;
-      const plan = JSON.parse(studio.exportText()); plan.work = []; plan.practices = [];
-      const result = studio.importText(JSON.stringify(plan), studio.read());
-      if (!result.ok) throw Error(result.error.code);
-      controller.refresh();
-    });
+    assert.deepEqual(JSON.parse(await bytes(page)).practices[0].supportBindings[0].workIds, []);
+    await expect(total(page)).toHaveText('$0.00');
     await expect(root(page).locator('.studio-session-tracks__name:visible')).toHaveCount(0);
     await expect(action(page, 'create')).toBeEnabled();
     await prepareSession(page); await legacy(page, 'apply').click();

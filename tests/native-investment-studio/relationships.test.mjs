@@ -198,10 +198,10 @@ test('removal reports every human, endpoint and supporting-work dependency in st
   ]);
   assert.deepEqual(held(studio, { type: 'team.remove', teamId: 'reviewers' }, 'dependencies').references,
     [{ collection: 'connections', id: 'handoff', field: 'receiverTeamId' }]);
-  assert.deepEqual(held(studio, { type: 'work.remove', workId: 'review' }, 'dependencies').references, [
-    { collection: 'contributions', id: 'source-review', field: 'workIds' }, { collection: 'connections', id: 'handoff', field: 'workIds' },
-    { collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' },
-  ]);
+  const preview = studio.previewCommand({ type: 'work.remove', workId: 'review' }, studio.read());
+  assert.equal(preview.ok, true);
+  assert.deepEqual(preview.projection.state.contributions[0].workIds, []);
+  assert.deepEqual(preview.projection.state.connections[0].workIds, []);
   apply(studio, { type: 'contribution.remove', contributionId: 'source-review' });
   apply(studio, { type: 'connection.remove', connectionId: 'handoff' });
   apply(studio, { type: 'team.remove', teamId: 'reviewers' });

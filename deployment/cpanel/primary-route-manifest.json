@@ -498,6 +498,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/work-removal.mjs",
+      "projected_path": "collaboration/native-investment-studio/work-removal.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/open-lesson-field/index.html",
       "projected_path": "collaboration/open-lesson-field/index.html",
       "media_type": "text/html"

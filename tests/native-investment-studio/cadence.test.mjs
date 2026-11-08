@@ -6,7 +6,7 @@ import { createExamplePlan, preparePlan, prepareImport } from '../../collaborati
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
 import { createPlanExchange } from '../../collaboration/native-investment-studio/exchange.mjs';
 import { createDraftCoordinator } from '../../collaboration/native-investment-studio/editing.mjs';
-import { describeScoreChanges, describeScoreReference } from '../../collaboration/native-investment-studio/score-reference.mjs';
+import { describeScoreChanges } from '../../collaboration/native-investment-studio/score-reference.mjs';
 import { prepareCoordinationTemplate, applyCoordinationTemplate } from '../../collaboration/native-investment-studio/connection-templates.mjs';
 
 function periodPlan() {
@@ -100,14 +100,16 @@ test('session edits replace only their own placements and direct count reduction
   assert.deepEqual(preparePlan(reordered).score.cadence.occurrences.map(row => row.workId), ['review', 'followup']);
 });
 
-test('typed handoffs, decision anchors and delays admit meaningful references and identify deletion receivers', () => {
+test('typed handoffs, decision anchors and delays admit meaningful references and dissolve with removed work', () => {
   const plan = periodPlan();
   plan.scoreSettings.cadence.delays = [{ id: 'receiving-delay', label: 'Await receiving review', anchor: { kind: 'handoff', id: 'review-handoff' },
     fromPeriodId: 'period-1', toPeriodId: 'period-2', reason: 'The receiving team reviews the evidence next sprint.', receiverPersonId: 'product-one' }];
   const studio = createStudio(plan), before = studio.read();
-  const removal = studio.applyCommand({ type: 'work.remove', workId: 'followup' }, before);
-  assert.equal(removal.error.code, 'dependencies');
-  assert.equal(describeScoreReference(before.state.scoreSettings, removal.error.references.find(row => row.field.startsWith('cadence.'))).kind, 'handoff');
+  const removal = studio.previewCommand({ type: 'work.remove', workId: 'followup' }, before);
+  assert.equal(removal.ok, true);
+  assert.deepEqual(removal.projection.state.scoreSettings.cadence.handoffs, []);
+  assert.deepEqual(removal.projection.state.scoreSettings.cadence.delays, []);
+  assert.deepEqual(removal.projection.state.scoreSettings.gates, []);
   for (const [code, mutate] of [
     ['reference', row => { row.scoreSettings.cadence.decisionAnchors[0].id = 'missing'; }],
     ['reference', row => { row.scoreSettings.cadence.delays[0].anchor.id = 'missing'; }],

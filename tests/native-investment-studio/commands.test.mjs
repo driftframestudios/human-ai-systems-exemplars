@@ -179,9 +179,6 @@ test('removal returns complete deterministic references while every accepted own
       { collection: 'work', id: 'review', field: 'teamId' },
       { collection: 'practices', id: 'shared-expectations', field: 'teamId' },
     ]],
-    [{ type: 'work.remove', workId: 'review' }, [
-      { collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' },
-    ]],
   ];
   for (const [command, references] of cases) {
     const error = held(studio, command, 'dependencies');
@@ -215,15 +212,15 @@ test('explicit whole-plan reassignment releases removal guards and supports hist
   assert.equal(original.result.knownCommitmentCents, 120000);
 });
 
-test('cross-team practices remain visible removal dependencies and released identities stay reusable', () => {
+test('session removal retains cross-team practices and released identities stay reusable', () => {
   const plan = createExamplePlan();
   plan.teams.push({ id: 'assurance', label: 'Assurance', personIds: [], lifecycle: 'active' });
   plan.practices.push(createLegacyPractice('peer-assurance', 'assurance', 'assurance', ['review']));
   const studio = createStudio(plan);
-  assert.deepEqual(held(studio, { type: 'work.remove', workId: 'review' }, 'dependencies').references, [
-    { collection: 'practices', id: 'shared-expectations', field: 'supportBindings[0].workIds' },
-    { collection: 'practices', id: 'peer-assurance', field: 'supportBindings[0].workIds' },
-  ]);
+  const preview = studio.previewCommand({ type: 'work.remove', workId: 'review' }, studio.read());
+  assert.equal(preview.ok, true);
+  assert.deepEqual(preview.projection.state.practices.map(row => row.supportBindings[0].workIds), [[], []]);
+  assert.equal(studio.read().state.work.length, 1);
   apply(studio, { type: 'person.create', person: person('temporary') });
   apply(studio, { type: 'person.remove', personId: 'temporary' });
   assert.equal(studio.updatePerson('temporary', person('temporary'), studio.read()).error.code, 'reference');

@@ -154,7 +154,7 @@ test('retirement preserves separately owned funding and evidence; removal expose
   assert.deepEqual(studio.read().state.work, before.state.work); assert.equal(studio.read().result.plannedCommitmentCents, 1600000);
 });
 
-test('people, team and work removal include every new capability and observation dependency', () => {
+test('people and team removal include every capability and observation dependency', () => {
   const studio = createStudio(funded()); apply(studio, request());
   command(studio, { type: 'capability.evidence.record', evidence: evidence() });
   const expected = [
@@ -164,10 +164,6 @@ test('people, team and work removal include every new capability and observation
       { collection: 'capabilityEvidence', id: 'observation-one', field: 'recorderPersonId' },
     ]],
     [{ type: 'team.remove', teamId: 'delivery' }, [{ collection: 'abilities', id: 'history', field: 'teamId' }]],
-    [{ type: 'work.remove', workId: 'review' }, [
-      { collection: 'abilities', id: 'history', field: 'supportBindings[0].workIds' },
-      { collection: 'abilities', id: 'history', field: 'supportBindings[1].workIds' },
-    ]],
   ];
   for (const [input, references] of expected) {
     const before = studio.read(), history = studio.readHistory(), result = studio.applyCommand(input, before);

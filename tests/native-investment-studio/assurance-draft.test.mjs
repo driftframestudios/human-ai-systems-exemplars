@@ -1,4 +1,5 @@
 import '../../tools/node-runtime-admission.mjs';
+import { recordReferences } from '../../collaboration/native-investment-studio/commands.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createStudio } from '../../collaboration/native-investment-studio/state.mjs';
@@ -91,8 +92,8 @@ test('removal references name the actual quality, recovery, learning and rehears
   settings.rehearsals = [{ id: 'rehearsal-one', definitionId: 'recovery-failure', definitionVersion: '1.0.0', context: 'Try a failed restart', assumptions: null, response: null, reviewerPersonId: 'noor', observedPlanRevision: 0, observation: null, workIds: ['review'], connectionIds: ['readiness'], personIds: ['sam'] }];
   const studio = createStudio(plan), before = studio.read();
   const removal = studio.previewCommand({ type: 'work.remove', workId: 'review' }, before);
-  assert.equal(removal.ok, false); assert.equal(removal.error.code, 'dependencies');
-  assert.deepEqual(removal.error.references.map(reference => describeAssuranceReference(before.state.assuranceSettings, reference)).filter(Boolean), [
+  assert.equal(removal.ok, true);
+  assert.deepEqual(recordReferences(before.state, 'work', 'review').map(reference => describeAssuranceReference(before.state.assuranceSettings, reference)).filter(Boolean), [
     'Quality concept: Independent review', 'Recovery event: Recover the interrupted request',
     'Learning action: Connect quality evidence to release and post-release learning',
     'Rehearsal: A recovery rehearsal reveals a gap · Try a failed restart',
