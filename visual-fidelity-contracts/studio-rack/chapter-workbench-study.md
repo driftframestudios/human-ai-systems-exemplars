@@ -6,8 +6,10 @@ support tables and selected-record modules give each question a useful visual
 form inside one shared rack.
 
 **Standing:** active `dev` composition study, version `0.1.0`, ID
-`vfc:chapter-workbench-study`; recorded 7 November 2026. The receiving work is
-[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
+`vfc:chapter-workbench-study`; updated 8 November 2026. The all-chapter work was
+received in [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
+The current [#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves approved art and develops Investment comparison decks.
 The [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
 has its own illustrative page-local state. This contract guides that study;
 the [working Studio](../../collaboration/native-investment-studio/README.md)
@@ -29,22 +31,35 @@ and navigation carries a destination cue. A caret identifies local inspection;
 an arrow identifies a route to another chapter. Focus remains visible separately
 from persistent selection.
 
-The [Loaded Tape Duration Panel](loaded-tape-duration-panel.md) is an exact,
-human-approved reference. Preserve its complete appearance and scale, its Hours
-and Minutes controls, readout, circular steppers, and neighboring Working sessions
-geometry. New chapters reach that same session module through a marked route;
-they do not create another duration editor or restyle this reference.
+The [Loaded Tape Duration Panel](loaded-tape-duration-panel.md) is a
+human-approved reference. Preserve its scale, palette, Hours and Minutes controls,
+readout, circular steppers, and neighboring Working sessions geometry. Version
+`0.1.1` keeps the face lighting and shadow fixed while the pointer turns,
+superseding the earlier complete-face rotation. New chapters reach that same
+session module through a marked route; they do not create another duration editor.
+
+The [Cassette Plan Shelf](cassette-plan-shelf.md) separately preserves the exact
+blocky cassette faces and `160ms ease-out` hover response from `cedafc3`. At
+`650px` and below, the shelf stays a horizontal local scroller with `168px`
+plan buttons. Its heading is now **Plans**, with **New plan** and **+ Session**
+describing creation and repetition. The names change while source identities,
+duration ownership and approved art remain intact.
+
+The loaded detail panel retains **`unfurl .2s ease-out`**, from opacity `.3`
+and `translateY(-6px)` to opacity `1` and `translateY(0)`. System reduced motion
+keeps the panel readable without animation. This arrival belongs to the loaded
+panel; refreshing a value should preserve the active control.
 
 ## Give each chapter its own useful reading
 
 | Chapter | First visual | Selected module and visible consequence |
 | --- | --- | --- |
-| Coordination | Sprint lanes, cassette shelf and session tracks | Load a session; adjust its duration, place occurrences, choose people and route a response. The selected sprint and Plan overview return remain visible. |
+| Coordination | Sprint lanes, Plans cassette shelf and session tracks | Load a plan item; adjust its shared duration, place its sessions, choose people and route a response. The selected sprint and Plan overview return remain visible. |
 | People | Team lanes with person pads, followed by a session participation matrix | Load a person or team. Rate, funded time and membership controls update the shared illustration; a participation pad changes that person's inclusion in the named session. |
 | Abilities | **What people can do** and **How the team works** support tables | A cell loads responsibility, preparation, review or observation for that ability or practice. Supporting-work pads refer to the same sessions used elsewhere. |
 | Change | Framework/viewpoint reels, an emphasis bank and work-stage lanes | Framework choice supplies different named components; faders visibly redistribute the illustration. A selected component exposes its stage and supporting-session pads. |
 | Quality & recovery | Before/after-release reels, a compact CRT-style reading and check pads | The selected check exposes inclusion and supporting work. Sigma attention and Change urgency alter the authored attention reading; the initial 4σ setting presents a calm starting example. |
-| Investment | Funded-time and extra-investment session lanes, concise totals and sprint bars | Select a session to see the people/time behind its amount, change its funding group, or open its controls. Save comparison captures a simple amount for the next change. |
+| Investment | VHS-C-style deck choices, with Plan investment loaded initially | Plan investment retains funded-time and extra-investment session lanes, concise totals and sprint bars. Added comparison tapes expose their own assumptions and visual results. |
 
 The two Abilities tables keep their native row/column relationships and legible
 headers. Session participation is a native table with checkbox pads, rather than
@@ -75,14 +90,58 @@ Preserve these distinctions:
 
 - Team membership and session participation are independent. A person can take
   part across team boundaries.
-- A session owns its shared duration and people. An occurrence places that
-  session in a sprint/week; numbered pads own repetition.
+- A Plans item owns its shared duration and people. Its visible sessions are
+  repeated sprint/week placements (`occurrences` in the study source); numbered
+  pads own repetition. This vocabulary leaves the production session contract
+  unchanged.
 - Change, Quality and Abilities link to existing session identities. Their
   selection and support controls have different jobs.
 - The study's funding groups organize the same priced sessions. They do not
   reproduce production's funded-time allocation model.
 - The study's saved comparison is one illustrative amount. Production retains
   its fuller baseline, report, import and recovery semantics.
+
+## Investment decks preserve their own question
+
+Plan investment remains the initial master tape and contains the existing
+shared-session cost board, loaded cost detail and sprint distribution. Preserve
+**Extra investment's `#403d32` chocolate field**, edge, title and written funding
+meaning. Its contrast with the funded-time lane remains useful inside the larger
+deck composition.
+
+The complete lane reference is revision `cedafc3` of
+[the Investment stylesheet](../../planning/context-canvas/studio-study-investment.css),
+with typography and native-button defaults inherited from
+[the study shell](../../planning/context-canvas/studio-rack-tape-study.html).
+Preserve this housing and control rhythm when nesting it beneath a master tape:
+
+| Part | Preserved treatment |
+| --- | --- |
+| Host board | Two equal columns; `.7rem` gap and padding; `#10261e` field; `2px solid #668b73` border; `5px` corners. At `650px` and below, use one column. The enclosing Investment grid has `.8rem` gaps. |
+| Extra investment lane | `min-width:0`; `#403d32` field; `1px solid #668b73` border; `.7rem` padding. The neighboring funded-time lane retains `#2d4237`. |
+| Title and explanation | Inherited `16px/1.4 system-ui,sans-serif`; `1rem` title in `#f8f1d9`; `.8rem` hint in `#c2decc`, with `.4rem 0 .7rem` margins. |
+| Session pads | Full-width grid, `.4rem` inner gap and `.5rem 0` margin; `.45rem .7rem` padding; minimum height `2.5rem`; `1px solid #668b73`; `3px` corners; `0 3px 0 #0d1916` shadow. Paper `#f8f1d9` contrasts with `#213252` text; the amount/effort line is `.8rem`. |
+| Pad state | Hover uses peach `#fff3e8` and a mint border. Selection uses `#b7e4cf` with `#102e25` text, a `2px solid #f8f1d9` outline offset `1px`, mint border and inset `0 3px 5px #17514780` shadow. |
+
+**Add comparison tape** offers one of each bounded enterprise illustration:
+
+| Tape | Controls and reading |
+| --- | --- |
+| Customer rollout | Teams, setup cost and training hours; a quarter-start pad locates the rollout. The reading separates setup and training cost. |
+| Commercial cohort | Retained opening revenue, expansion in that cohort and new customer revenue. The reading separates opening-cohort retention from total quarterly revenue. |
+| Service operations | People, adoption and minutes released per use. The result stays in hours per week. |
+| Capital choices | Keep current, Pilot or Rollout; quarterly net benefit, quarterly discount and a two-, four- or eight-quarter horizon. The reading compares present value after upfront cost. |
+
+Each tape owns its settings and labels its units. Presets, native sliders and
+concise outputs make those questions directly explorable. The VHS-C artwork
+distinguishes these master decks from Coordination's preserved plan cassettes.
+
+Adding, adjusting or removing a comparison uses the shared study Undo owner.
+The shell's planned-session total and Plan investment continue to derive from
+shared people, duration and sessions. A comparison's modeled revenue, service
+capacity or capital result stays within that tape; it does not silently change
+the shared work cost. Production adoption would receive its own data and
+financial-meaning contract after the illustration is reviewed.
 
 Unassigned session definitions and independent response cards remain explicit
 production contract decisions. This study makes those experiences tangible
@@ -96,7 +155,7 @@ Participant percentages retain their separate route in #798.
 | [Study shell](../../planning/context-canvas/studio-rack-tape-study.html) | Chapter rail, shared model/history, Coordination board and tape module, return routing, study-wide art and exact duration enclosure |
 | [People/Abilities module](../../planning/context-canvas/studio-study-people-abilities.mjs) and [CSS](../../planning/context-canvas/studio-study-people-abilities.css) | Team lanes, person/team controls, participation table, both support tables and loaded ability/practice controls |
 | [Change/Quality module](../../planning/context-canvas/studio-study-change-quality.mjs) and [CSS](../../planning/context-canvas/studio-study-change-quality.css) | Reels, framework components, emphasis channels, quality attention illustration, check and supporting-work pads |
-| [Investment module](../../planning/context-canvas/studio-study-investment.mjs) and [CSS](../../planning/context-canvas/studio-study-investment.css) | Study-only session pricing, funding lanes, saved comparison and sprint distribution |
+| [Investment module](../../planning/context-canvas/studio-study-investment.mjs) and [CSS](../../planning/context-canvas/studio-study-investment.css) | Study-only session pricing, preserved funding lanes, saved comparison, sprint distribution and additional VHS-C comparison decks |
 | [Production time controls](../../collaboration/native-investment-studio/time-controls.mjs) | Reused exact-field, circular-step and rotary duration behavior; production source remains unchanged by this study |
 
 Study CSS stays scoped to its own document and chapter roots. Shared component
@@ -110,8 +169,12 @@ ownership unresolved.
 Use a populated ordinary-phone/laptop journey to assess chapter selection,
 shared-record edits, a supporting-session round trip and Undo. Inspect legibility,
 local table scrolling, loaded-module placement, selected-state contrast and
-reduced-motion behavior. Compare the exact duration panel with its approved
-reference whenever inherited shell styles or placement change.
+reduced-motion behavior. Compare the duration panel and cassette shelf
+with their separate approved references, including the duration lighting revision,
+whenever inherited shell styles or placement change. Investment review also
+checks that a comparison edit stays within its named model and Undo restores it.
+A native range should keep its active element and gesture while the surrounding
+reading updates.
 
 Source inspection establishes the receiving modules and their mutation routes.
 Browser observations establish only the exercised interactions and viewports;

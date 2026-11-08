@@ -5,9 +5,12 @@ together. Each chapter presents a compact visual reading of the same illustrativ
 work. A selected pad loads its controls nearby; a marked session route opens the
 shared tape module and returns to the originating chapter.
 
-**Standing — 7 November 2026:** active design exploration on `dev`, coordinated in
-[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
-This expands the approved direction from
+**Standing — 8 November 2026:** active design exploration on `dev`, with the
+current preservation and Investment increment coordinated in
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
+The all-chapter composition arrived through
+[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805),
+expanding the approved direction from
 [#804](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804),
 which established the loaded-tape Coordination study. The
 [interactive study](studio-rack-tape-study.html) now gives all Studio chapters
@@ -17,12 +20,17 @@ records this receiving composition. The
 [running Studio source](../../collaboration/native-investment-studio/README.md)
 continues to define production behavior and its accepted-state boundaries.
 
-The exact duration and neighboring Working sessions layout remains frozen in the
+The duration geometry, palette and neighboring Working sessions layout remain
+preserved in the
 [Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
-The all-chapter direction supersedes the single-chapter study boundary while
-preserving that approval. Work continues on `dev`; merging remains held while
-the human reviews the connected experience. The production bridges described
-below remain prospective.
+Its `0.1.1` lighting correction keeps the dial face and shadow still while the
+pointer rotates; the original complete-face rotation is superseded.
+The new [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
+preserves the artwork, hover and narrow shelf at `cedafc3`. The visible shelf now
+reads Plans, with New plan and + Session for its two creation operations. The
+loaded panel's downward unfurl and Investment's chocolate Extra investment lane
+also remain. Work continues on `dev`; merging is held while the human reviews
+the connected experience. The production bridges below remain prospective.
 
 ## One workbench, different questions
 
@@ -34,12 +42,12 @@ distinct.
 
 | Chapter and visitor question | Visual composition | Shared consequence |
 | --- | --- | --- |
-| **Coordination:** Where does this work happen? | Sprint board, cassette shelf, sequencer and loaded duration/occurrence module | Session duration, occurrence placement and people feed the other chapter readings. The study starts with four sprints; production retains its sprint/quarter model. |
+| **Coordination:** Where does this work happen? | Sprint board, Plans cassette shelf, sequencer and loaded duration/session module | Shared duration, session placement and people feed the other chapter readings. The study starts with four sprints; production retains its sprint/quarter model. |
 | **People:** Who takes part, and what time is available? | Team lanes, loaded person/team controls and a people-by-session matrix | Rate and participation changes update the same sessions' illustrative investment. Team membership stays independent from session participation. |
 | **Abilities:** What should become possible? | The two existing support-table forms, followed by a loaded ability/practice editor | Responsibility, preparation, review and authored observation choices refer to the shared people, teams and session IDs. |
 | **Change:** What helps this practice take hold? | Framework/viewpoint reels, emphasis faders and Prepare/Practice/Carry forward lanes | Framework and emphasis choices visibly change the work reading. Supporting-session pads connect a selected component to existing work. |
 | **Quality & recovery:** What should people rehearse or review? | Before/after-release reels, a compact CRT and selected check pads | Included checks link to shared sessions. Sigma attention and Change urgency vary an authored attention illustration with a calm 4σ starting state. |
-| **Investment:** Where does the planned effort go? | Session cost cards in funded/extra lanes, selected-session people and sprint bars | Amounts use the current people, rates, duration and occurrences. A saved comparison makes the effect of an edit visible. Funding groups retain the same total. |
+| **Investment:** Where does the planned effort go, and what else can be compared? | VHS-C master decks: Plan investment retains session costs, funding lanes and sprint bars; additional tapes offer bounded enterprise comparisons | The shared amount uses current people, rates, duration and sessions. Other tapes keep their own units and assumptions; their outputs stay separate from the shared-session total. |
 
 The shell owns page-local model snapshots and Undo. Chapter adapters read that
 model and submit changes through one mutation callback. A supporting-session link
@@ -53,6 +61,32 @@ allocation, retained drafts, portable plans and full baseline/report behavior
 keep their existing owners. The study's saved comparison is a single amount;
 its quality trace is an illustration of attention, rather than measured process
 capability or a forecast.
+
+## Investment comparisons inside one deck
+
+**Plan investment** is the initial VHS-C master tape. It retains the existing
+funding lanes, session cost detail, saved amount and sprint distribution. The
+Extra investment lane keeps its chocolate `#403d32` field. **Add comparison tape**
+opens four choices, one of each: Customer rollout, Commercial cohort, Service
+operations and Capital choices. Each loads a compact group of sliders and
+choice pads. The
+[chapter contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md#investment-decks-preserve-their-own-question)
+maps those controls to their distinct readings.
+
+The [existing investment analysis domains](../../collaboration/investment-analysis/README.md#two-axes)
+provide the conceptual starting point. This study selects a short illustration
+from each: setup and training cost, opening-cohort revenue, hours released each
+week, and end-quarter discounted benefits after upfront cost. Those quantities
+retain their units. Commercial retention concerns the opening cohort; new
+customer revenue enters its separate total. Released service time remains hours.
+The fuller analysis package retains its own contracts and exchange behavior.
+
+The study stores added decks and authored settings in `model.study.investment`.
+Its shared history owns additions, adjustments and removal. Selecting a deck is
+view state. **Remove tape** removes a comparison from the shelf; Undo restores
+it. Plan investment and the shell continue to use `priceStudy`, derived from
+people, duration and placed sessions. Other deck results remain separate from
+that amount. Production adoption remains a later receiving decision.
 
 ## Four viable compositions
 
@@ -69,32 +103,36 @@ The tape shelf and response routing supply the next model increment once their
 illustrated behavior has been reviewed. A compact Event list supplies an optional
 precise reading of the current selection.
 
-## The proposed working sequence
+## The working sequence and its names
 
-1. **Define the session.** Add a tape with a useful name and the existing duration
-   module. In the target design, people and placement can follow. The tape is the
-   visual face of a session definition.
-2. **Place an occurrence.** Choose a sprint or quarter, then its week or month.
-   The arrangement displays a clip for this occurrence of the session.
+1. **Create a plan item.** New plan adds a named cassette to the Plans shelf.
+   Its existing duration module defines time per person for each of its sessions.
+   People and placement can follow in the study.
+2. **Place a session.** Choose a sprint and week. The arrangement displays a
+   clip for this session. The production bridge retains quarter/month placement
+   as a separate existing option.
 3. **Choose people.** Session rows and named person columns expose native checkbox
    pads. A selected row loads the same session's controls; checking a person
    changes participation.
-4. **Repeat when useful.** Add occurrence creates another placement of the same
-   session. Numbered pads show and select its repetitions.
+4. **Repeat when useful.** + Session creates another placement of the loaded
+   plan item. Numbered pads show and select its sessions.
 5. **Connect the result.** A handoff identifies receiving work. A response is a
    separately named card that can be routed into the next sequence.
 
-Three Add operations keep different meanings. **Add session** creates an identity;
-**Add occurrence** repeats that session; **Add sprint** or **Add quarter** creates
-a planning container. Duration describes time per person for each occurrence.
-Sprint and quarter placement describes where an occurrence belongs in the plan.
+The study's visitor terms now distinguish **New plan** from **+ Session**.
+Internally the named item remains a `tapes` record and each session remains an
+`occurrences` placement. These labels change without migrating the underlying
+record or the production model. **Plan overview** returns to the complete
+arrangement. Sprints and quarters remain planning containers, separately from
+the work placed in them.
 
-Occurrence pads become the sole visible repetition control in this proposed
-composition. They show the count and supply Add occurrence and a scoped Remove
-occurrence action. This supersedes the duplicate numeric **Working sessions**
-field in the proposed rack layout. The existing compact Hours/Minutes module,
-larger readout and circular steppers remain intact. An occurrence is never
-silently treated as a sprint, week or additional session definition.
+Numbered session pads are the study's sole visible repetition control. They
+show the count and provide its Add/remove operations. This supersedes the
+duplicate numeric Working sessions field only in the study composition.
+The compact Hours/Minutes module, readout and circular steppers retain their
+approved geometry and palette, with fixed dial lighting as described above.
+Later production bridges use the existing session and occurrence meanings
+explicitly, as mapped below.
 
 ## A compact rack with persistent modules
 
@@ -113,19 +151,23 @@ its concise title/readout row, neighboring peach Hours and paper Minutes groups,
 equal `64px` dials, exact fields and circular steppers. Numbered occurrence pads
 remain beside it in Working sessions, with placement and host controls; the
 duplicate numeric count stays hidden. The dedicated contract records the entire
-duration panel for exact later recall.
+duration panel for later recall, with its explicit fixed-lighting revision.
 
 This approval supersedes the study's earlier open-ended panel-sizing exploration.
-Angled, blocky 16/32-bit cassette artwork can develop within the Studio palette
-around that fixed composition. The art direction remains experimental; the
-approved panel's geometry, colors and readout retain their own reference.
+The angled, blocky cassette artwork is now also a preserved development reference.
+Its separate contract pins the `160ms ease-out` hover transform, selection and
+the horizontal `168px` plan strip at `650px` and below. New Investment VHS-C
+artwork can develop alongside those original plan faces. The existing detail
+panel keeps `unfurl .2s ease-out`, moving down from `translateY(-6px)` and opacity
+`.3` to its resting position and full opacity. Reduced motion retains the
+same readable panel with animation disabled.
 
-The scope trail reads **Plan overview › Sprint 2**; the loaded module separately
-names **Prototype pairing · Occurrence 2**. The overview control returns to that
-scope. A session can span several periods, so the selected occurrence supplies
-context while the session retains its identity. Choosing another occurrence
-retains the session's shared duration and people. Closing the module returns to
-its source. The dev study keeps immediate changes in its page-local model; a
+The scope trail reads **Plan overview › Sprint 2**; the loaded module names the
+selected item and its numbered session pad supplies placement context. The
+overview control returns to that scope. A plan item can span several periods;
+choosing another session retains its shared duration and people. Closing the
+module returns to its source. The dev study keeps immediate changes in its
+page-local model; a
 production bridge preserves unfinished values through the current draft owner.
 
 Task navigation uses pads, object selection and the breadcrumb. Show/hide controls
@@ -244,7 +286,8 @@ that family; accepted contracts remain the runtime reference during review.
 | [Period Kanban & Session Sequencer](../../visual-fidelity-contracts/studio-rack/period-kanban-session-sequencer.md) | Name the tape/session and clip/occurrence distinction; keep overview/period/session scope visible; give placement and repetition separate controls. |
 | [Support Matrix & Stateful Pads](../../visual-fidelity-contracts/studio-rack/support-matrix-stateful-pads.md) | Distinguish checked participation, selected row and selected occurrence. Quality's matrix remains the visual reference for native checkbox pads. |
 | [Precision Dials & Faders](../../visual-fidelity-contracts/studio-rack/precision-dials-faders.md) | Preserve the enclosed duration module and its peach Hours/paper Minutes hierarchy; compose occurrence pads alongside it and remove the duplicate visible count editor. |
-| [Loaded Tape Duration Panel](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) | Preserve the human-approved development panel exactly at the named study revision, including equal 64px dials, readout, steppers, local colors, neighboring occurrence panel and responsive geometry. Production adoption retains a separate review. |
+| [Loaded Tape Duration Panel](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) | Preserve the named baseline's equal 64px dials, readout, steppers, colors and responsive geometry. Apply the approved fixed-lighting revision: stationary face and shadow, rotating pointer. Production adoption retains a separate review. |
+| [Cassette Plan Shelf](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md) | Preserve the original tilted blocky plan faces, depth, selection and 160ms hover, including the horizontal shelf at 650px and below. Investment's new VHS-C artwork remains a separate illustration. |
 | [Contextual Inspection & Recovery](../../visual-fidelity-contracts/studio-rack/contextual-inspection-recovery.md) | Extend the stable deck into persistent compact modules; task selection opens the relevant work surface, while show/hide expresses display preference. Preserve draft, exact return focus and the actual open-state cue. |
 | [Zoetrope Preset Selection](../../visual-fidelity-contracts/studio-rack/zoetrope-preset-selection.md) | Presets visibly change the board, tape choices and routing through their existing arrangement transaction and recovery. |
 
@@ -259,7 +302,7 @@ Ordinary phone widths retain usable controls and a named local matrix scroller.
 1. Review the connected dev experience: define and place a tape, change its
    participation from People, link it to an ability or check, inspect the
    investment consequence and Undo. Inspect each chapter's compact first view
-   and the return from its session route. Preserve the exact duration reference.
+   and the return from its session route. Preserve the revised duration reference.
 2. Choose a first production bridge after that review. A view-only consolidation
    can use a focused PR: stable loaded-tape module, compact duration and occurrence
    pads, scoped selection, and a bounded
@@ -282,8 +325,8 @@ the production duration factory is a reused input.
 
 Verification stays tied to the changed behavior: populated phone/laptop journeys
 through chapter selection, adjustment, return and Undo; a focused observation
-that checkboxes update the intended session; and an exact duration comparison
-when shell styles change. The receiving Issue records the observed result.
+that checkboxes update the intended session; and a duration geometry/lighting
+comparison when shell styles change. The receiving Issue records the observed result.
 Later production contracts receive their own boundary checks and existing owner
 regression route. Independent review precedes each production merge. Public
 release and performance refinement retain their separate human-cued scope.

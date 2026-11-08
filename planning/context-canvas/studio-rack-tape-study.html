@@ -26,7 +26,9 @@
     button { border:1px solid var(--edge); border-radius:3px; min-height:2.5rem; padding:.45rem .7rem; color:var(--paper); background:#29433b; box-shadow:0 3px 0 #0d1916; text-align:left; }
     button:hover { border-color:var(--mint); background:#36574a; } button[aria-pressed=true] { background:var(--mint); color:var(--ink); box-shadow:inset 0 3px 5px #17514780; border-color:var(--mint); }
     button.add { background:#d5ead9; color:var(--ink); border-color:#528b73; font-weight:650; white-space:nowrap; }
-    button.ghost { background:transparent; box-shadow:none; } button.remove { background:var(--rose); color:#71394d; border-color:#965368; }
+    button.ghost { background:transparent; box-shadow:none; }
+    button.ghost[aria-pressed=true] { background:var(--mint); color:var(--ink); box-shadow:inset 0 3px 5px #17514780; }
+    button.remove { background:var(--rose); color:#71394d; border-color:#965368; }
     .workspace { display:grid; grid-template-columns:210px minmax(0,1fr); gap:1rem; align-items:start; }
     .library { padding:.8rem; background:linear-gradient(90deg,#34443a 0 3px,transparent 3px calc(100% - 3px),#0d1a14 calc(100% - 3px)),#12231f; border:1px solid var(--edge); border-radius:6px; box-shadow:inset 0 0 12px #071c1580; }
     .library h2 { margin-bottom:.7rem; } .tapes { display:grid; gap:.65rem; margin-bottom:.8rem; }
@@ -60,7 +62,7 @@
     .deck-head label { flex:1 1 14rem; } .deck-head label small { display:block; color:var(--mint); }
     .modules { display:grid; grid-template-columns:minmax(230px,1fr) minmax(240px,1fr); gap:.7rem; padding:.7rem; background:#35483d; }
     .module { background:var(--ink); border:1px solid var(--edge); padding:.7rem; border-radius:4px; min-width:0; }
-    /* Exact approved panel: vfc:loaded-tape-duration-panel, baseline be8ec7f. */
+    /* Approved geometry: vfc:loaded-tape-duration-panel; fixed lighting rotates only the indicator. */
     #duration { --ink:#172724; --rack:#1c302d; --screen:#102622; --edge:#668b73; --mint:#66dcc2; --paper:#f7f0d6; --peach:#f2d0b6; --rose:#ecd3dc; --lavender:#d8cce8; --muted:#b5cbbf; color:var(--paper); }
     .module h3,.module>label { margin-bottom:.5rem; } label { display:block; font-size:.83rem; }
     select,input[type=text],input[type=number] { border:1px solid var(--edge); border-radius:3px; min-height:2.4rem; padding:.35rem .5rem; background:#f7f0d6; color:var(--ink); max-width:100%; }
@@ -73,8 +75,9 @@
     .native-coordination__control--minutes { background:var(--paper); } .native-time__part>label { font-weight:700; }
     .native-time__adjustment { display:flex; align-items:center; justify-content:space-between; gap:.25rem; flex-wrap:wrap; }
     .native-knob { width:64px; height:64px; position:relative; margin:.4rem 0; flex:0 0 auto; border:1px solid var(--ink); border-radius:50%; background:repeating-conic-gradient(from -135deg,#586d5a 0 1deg,transparent 1deg 27deg); }
-    .native-knob__face { position:absolute; inset:8px; border-radius:50%; background:linear-gradient(135deg,#71938b,#213934 60%,#0d1d19); box-shadow:2px 3px 2px #243b37; border:2px solid #bccdc0; transform:rotate(var(--native-knob-angle,-135deg)); pointer-events:none; }
-    .native-knob__pointer { position:absolute; top:5px; left:calc(50% - 2px); height:12px; width:4px; border-radius:3px; background:var(--paper); }
+    .native-knob__face { position:absolute; inset:8px; border-radius:50%; background:linear-gradient(135deg,#71938b,#213934 60%,#0d1d19); box-shadow:2px 3px 2px #243b37; border:2px solid #bccdc0; pointer-events:none; }
+    .native-knob__pointer { position:absolute; inset:0; transform:rotate(var(--native-knob-angle,-135deg)); }
+    .native-knob__pointer::before { content:''; position:absolute; top:5px; left:calc(50% - 2px); height:12px; width:4px; border-radius:3px; background:var(--paper); }
     .native-knob input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:grab; touch-action:none; margin:0; } .native-knob:focus-within { outline:3px solid #7251b4; outline-offset:3px; }
     .native-coordination__stepper { display:grid; grid-template-columns:30px 30px; gap:.35rem .5rem; margin-top:1.6rem; }
     .native-coordination__stepper input { grid-column:1/-1; grid-row:1; width:68px; min-height:2rem; font:700 .9rem ui-monospace,monospace; text-align:center; padding:.2rem; }
@@ -98,6 +101,7 @@
     .people-editor label { flex:1 1 10rem; } .people-editor input { width:100%; }
     .routing { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6rem; } .routing article { border:1px solid var(--edge); background:#2c4035; padding:.6rem; }
     .routing h3 { color:var(--muted); margin-bottom:.5rem; } .response { display:block; width:100%; background:var(--lavender); color:var(--ink); margin:.5rem 0; }
+    .routing .add { width:100%; margin-top:.4rem; font-size:.8rem; }
     .response:hover { background:#e3d8ef; } .response small { display:block; margin-top:.25rem; }
     .hint { color:var(--muted); font-size:.8rem; } .team-strip { display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0; }
     .events button { box-shadow:none; min-height:2rem; background:transparent; color:var(--mint); text-decoration:underline; }
@@ -148,10 +152,10 @@
   <section class="rack" aria-label="Loaded tape workbench">
     <header class="head"><div><p class="micro">Studio / arrangement desk</p><h1>Make room for the work.</h1><p>Arrange the people, work and support a plan needs.</p></div><div class="controls"><output id="study-total" class="study-total" aria-label="Illustrative planned investment"></output><button id="undo" class="ghost" disabled>Undo</button><button id="reset" class="ghost">Reset study</button></div></header>
     <nav id="study-chapters" class="study-chapters" aria-label="Studio chapters"></nav>
-    <div class="study-chapter-heading" id="study-chapter-heading"><h2 id="study-chapter-title">Coordination</h2><p id="study-chapter-description">Load a session. Place its occurrences. Bring people into the work.</p></div>
+    <div class="study-chapter-heading" id="study-chapter-heading"><h2 id="study-chapter-title">Coordination</h2><p id="study-chapter-description">Load a plan. Place its sessions. Bring people into the work.</p></div>
     <div id="study-return" class="study-return" hidden></div>
     <div class="workspace" id="chapter-coordination">
-      <aside class="library"><h2>Session tapes</h2><div class="tapes" id="tapes"></div><button id="add-tape" class="add">＋ New session</button></aside>
+      <aside class="library"><h2>Plans</h2><div class="tapes" id="tapes"></div><button id="add-tape" class="add">＋ New plan</button></aside>
       <div class="main">
         <nav class="breadcrumbs" aria-label="Plan scope" id="breadcrumbs"></nav>
         <div class="board" id="board" aria-label="Plan periods"></div>
@@ -159,7 +163,7 @@
           <div class="deck-head bar"><label><small>Loaded session</small><input id="tape-name" type="text" maxlength="80" aria-label="Session name"></label><button id="unload" class="ghost">Close ×</button></div>
           <div class="modules">
             <div class="module" id="duration"></div>
-            <section class="module" aria-label="Working sessions"><div class="bar"><h3>Working sessions</h3><button id="add-occurrence" class="add">＋ Occurrence</button></div><div id="occurrences" class="occurrences"></div><div class="location"><label>Sprint<select id="period"></select></label><label>Week<select id="week"><option value="1">Week 1</option><option value="2">Week 2</option></select></label></div><div class="bar"><label>Hosted by <select id="host"></select></label><button id="remove-occurrence" class="remove">Remove occurrence</button></div></section>
+            <section class="module" aria-label="Working sessions"><div class="bar"><h3>Working sessions</h3><button id="add-occurrence" class="add">＋ Session</button></div><div id="occurrences" class="occurrences"></div><div class="location"><label>Sprint<select id="period"></select></label><label>Week<select id="week"><option value="1">Week 1</option><option value="2">Week 2</option></select></label></div><div class="bar"><label>Hosted by <select id="host"></select></label><button id="remove-occurrence" class="remove">Remove session</button></div></section>
           </div>
         </section>
         <section class="reading" aria-label="Session arrangement">
@@ -230,7 +234,7 @@ function render(keepEditor) {
   $('tapes').replaceChildren(...model.tapes.map(item=>{
     const node=keyed(button('',event=>selected(item.id,0,event.currentTarget),'tape',item.id===view.tape&&view.deck),`tape-${item.id}`);
     const face=el('span',undefined,'cassette'),reels=el('span',undefined,'reels'); reels.setAttribute('aria-hidden','true');
-    face.append(el('small',item.team ? model.teams.find(team=>team.id===item.team)?.name : 'Choose people when ready'),el('strong',item.name),reels,el('small',`${item.hours ? `${item.hours}h ` : ''}${item.minutes || !item.hours ? `${item.minutes}m` : ''} · ${item.occurrences.length} ${item.occurrences.length===1?'occurrence':'occurrences'}`,'tape__duration')); node.append(face);
+    face.append(el('small',item.team ? model.teams.find(team=>team.id===item.team)?.name : 'Choose people when ready'),el('strong',item.name),reels,el('small',`${item.hours ? `${item.hours}h ` : ''}${item.minutes || !item.hours ? `${item.minutes}m` : ''} · ${item.occurrences.length} ${item.occurrences.length===1?'session':'sessions'}`,'tape__duration')); node.append(face);
     return node;
   }));
   const home=keyed(button('Plan overview',()=>{const period=view.period;view.period=0;view.eventPage=0;render();returnFocus(period ? `period-${period}` : 'scope-home');}),'scope-home'); home.setAttribute('aria-current',view.period===0?'location':'false');
@@ -273,7 +277,7 @@ function setTime(field,value,key) { if(!Number.isFinite(value)) {renderDeck();re
 }
 for(const field of ['hoursPerSession','minutesPerSession']) duration.controls.get(field).input.addEventListener('change',event=>setTime(field,Number(event.target.value)));
 for(const unit of ['hours','minutes']) duration.dials[unit].knob.addEventListener('pointerdown',()=>{turnKey=null;},true);
-function addOccurrence(period=view.period||1,week=1,origin) { change(()=>{if(origin)view.origin=origin;tape().occurrences.push({period,week});view.occurrence=tape().occurrences.length-1;view.deck=true;},'Occurrence added. Set its sprint and week in the loaded session.'); }
+function addOccurrence(period=view.period||1,week=1,origin) { change(()=>{if(origin)view.origin=origin;tape().occurrences.push({period,week});view.occurrence=tape().occurrences.length-1;view.deck=true;},'Session added. Choose its sprint and week.'); }
 function renderTracks() {
   $('tracks').hidden=view.reading!=='tracks';$('events').hidden=view.reading!=='events';
   $('tracks-tab').setAttribute('aria-pressed',String(view.reading==='tracks'));$('events-tab').setAttribute('aria-pressed',String(view.reading==='events'));
@@ -284,7 +288,7 @@ function renderTracks() {
     for(let slot=0;slot<8;slot++) {const period=Math.floor(slot/2)+1,week=slot%2+1;if(view.period&&view.period!==period) continue;
       const matches=item.occurrences.map((occ,index)=>({...occ,index})).filter(occ=>occ.period===period&&occ.week===week);
       const cell=keyed(button(matches.length>1?String(matches.length):matches.length?'':'＋',event=>{if(matches.length) selected(item.id,matches[0].index,event.currentTarget);else{view.tape=item.id;addOccurrence(period,week,event.currentTarget.dataset.focusKey);}},matches.length?'':'empty'),`slot-${item.id}-${slot}`);
-      cell.setAttribute('aria-label',`${item.name}, Sprint ${period}, Week ${week}${matches.length ? `, ${matches.length} occurrence${matches.length>1?'s':''}` : ', add occurrence'}`);
+      cell.setAttribute('aria-label',`${item.name}, Sprint ${period}, Week ${week}${matches.length ? `, ${matches.length} session${matches.length>1?'s':''}` : ', add session'}`);
       cell.title=cell.getAttribute('aria-label'); cell.dataset.selected=String(view.deck&&item.id===view.tape&&matches.some(match=>match.index===view.occurrence)); slots.append(cell);
     }
     if(view.period) slots.style.gridTemplateColumns='repeat(2,1fr)'; row.append(slots);$('tracks').append(row);
@@ -300,7 +304,7 @@ function renderTracks() {
     pages.append(el('span',`Page ${view.eventPage+1} of ${pageCount}`,'hint'));$('events').append(pages);}
 }
 function renderMatrix(keepEditor) {
-  const table=el('table',undefined,'matrix');table.append(el('caption','Participation in every occurrence of a session'));
+  const table=el('table',undefined,'matrix');table.append(el('caption','People in every session of a plan'));
   const thead=el('thead'),head=el('tr'),label=el('th','Session');label.scope='col';head.append(label);
   for(const person of model.people){const th=el('th');th.scope='col';th.append(keyed(button(person.name,()=>openInline('person',person.id),'ghost',view.person===person.id),`person-${person.id}`));head.append(th);}thead.append(head);table.append(thead);
   const body=el('tbody');for(const item of model.tapes){const row=el('tr'),th=el('th');th.scope='row';th.append(keyed(button(item.name,event=>selected(item.id,0,event.currentTarget),'',view.tape===item.id&&view.deck),`matrix-tape-${item.id}`));row.append(th);
@@ -312,26 +316,57 @@ function renderMatrix(keepEditor) {
   if(view.team && keepEditor!=='team'){const team=model.teams.find(t=>t.id===view.team),label=el('label','Team name'),input=el('input');input.type='text';input.value=team.name;input.addEventListener('change',()=>change(()=>{team.name=input.value.trim()||team.name;},'Team updated.', undefined, 'team'));label.append(input);$('team-editor').replaceChildren(label);
     for(const person of model.people){const member=el('label',person.name),check=el('input');check.type='checkbox';check.checked=team.people.includes(person.id);check.addEventListener('change',()=>change(()=>{team.people=check.checked?[...team.people,person.id]:team.people.filter(id=>id!==person.id);},'Team membership updated. Session participation stays independently editable.', undefined, 'team'));member.prepend(check);$('team-editor').append(member);} $('team-editor').append(button('Close ×',()=>{const id=view.team;view.team=null;renderMatrix();returnFocus(`team-${id}`);},'ghost'));}
 }
+const responseStatuses = [{id:'requested',name:'Requested'},{id:'ready',name:'Ready to share'},{id:'received',name:'Received'}];
+function addResponse(status='requested') {
+  change(()=>{
+    const id=crypto.randomUUID();
+    model.responses.push({id,name:'New response',from:view.tape,to:model.tapes.find(item=>item.id!==view.tape)?.id||view.tape,status});
+    view.response=id;
+  },`Response added · ${responseStatuses.find(item=>item.id===status).name}.`);
+  $('response-editor').querySelector('input')?.focus();
+}
 function renderRouting(keepEditor) {
-  $('routing').replaceChildren();for(const [status,title] of [['requested','Requested'],['ready','Ready to share'],['received','Received']]){const lane=el('article');lane.append(el('h3',title));for(const response of model.responses.filter(r=>r.status===status)){const node=keyed(button('',()=>openInline('response',response.id),'response',view.response===response.id),`response-${response.id}`);node.append(el('strong',response.name),el('small',`${model.tapes.find(t=>t.id===response.from)?.name||'Source to choose'} → ${model.tapes.find(t=>t.id===response.to)?.name||'Receiver to choose'}`));lane.append(node);} $('routing').append(lane);}
+  // Keep lane actions and response keys mounted while a field settles on blur.
+  for(const node of $('routing').querySelectorAll('[data-response-id]')) {
+    if(!model.responses.some(item=>item.id===node.dataset.responseId)) node.remove();
+  }
+  for(const {id:status,name:title} of responseStatuses) {
+    let lane=$('routing').querySelector(`[data-status="${status}"]`);
+    if(!lane) {
+      lane=el('article'); lane.dataset.status=status; lane.append(el('h3',title));
+      const add=keyed(button('＋ Response',()=>addResponse(status),'add'),`add-response-${status}`);
+      add.setAttribute('aria-label',`Add response: ${title}`); lane.append(add); $('routing').append(lane);
+    }
+    for(const response of model.responses.filter(item=>item.status===status)) {
+      let node=[...$('routing').querySelectorAll('[data-response-id]')].find(item=>item.dataset.responseId===response.id);
+      if(!node) {
+        node=keyed(button('',()=>openInline('response',response.id),'response'),`response-${response.id}`);
+        node.dataset.responseId=response.id; node.append(el('strong'),el('small'));
+      }
+      node.setAttribute('aria-pressed',String(view.response===response.id));
+      node.querySelector('strong').textContent=response.name;
+      node.querySelector('small').textContent=`${model.tapes.find(item=>item.id===response.from)?.name||'Source to choose'} → ${model.tapes.find(item=>item.id===response.to)?.name||'Receiver to choose'}`;
+      if(node.parentElement!==lane) lane.insertBefore(node,lane.querySelector('.add'));
+    }
+  }
   $('response-editor').hidden=!view.response;if(!view.response || keepEditor==='response')return;const response=model.responses.find(r=>r.id===view.response),nodes=[];
   const label=el('label','Response'),name=el('input');name.type='text';name.value=response.name;name.addEventListener('change',()=>change(()=>{response.name=name.value.trim()||response.name;},'Response updated.', undefined, 'response'));label.append(name);nodes.push(label);
-  for(const [field,title,records] of [['from','From session',model.tapes],['to','To session',model.tapes],['status','Status',[{id:'requested',name:'Requested'},{id:'ready',name:'Ready to share'},{id:'received',name:'Received'}]]]){const label=el('label',title),select=el('select');options(select,records,response[field]);select.addEventListener('change',()=>change(()=>{response[field]=select.value;},'Response routing updated.', undefined, 'response'));label.append(select);nodes.push(label);}nodes.push(button('Close ×',()=>{const id=view.response;view.response=null;renderRouting();returnFocus(`response-${id}`);},'ghost'));$('response-editor').replaceChildren(...nodes);
+  for(const [field,title,records] of [['from','From plan',model.tapes],['to','To plan',model.tapes],['status','Status',responseStatuses]]){const label=el('label',title),select=el('select');options(select,records,response[field]);select.addEventListener('change',()=>change(()=>{response[field]=select.value;},'Response routing updated.', undefined, 'response'));label.append(select);nodes.push(label);}nodes.push(button('Close ×',()=>{const id=view.response;view.response=null;renderRouting();returnFocus(`response-${id}`);},'ghost'));$('response-editor').replaceChildren(...nodes);
 }
-keyed($('add-tape'),'new-session');
-$('add-tape').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.tapes.push({id,name:'New working session',hours:0,minutes:30,team:'',people:[],occurrences:[]});view.tape=id;view.occurrence=0;view.deck=true;view.origin='new-session';},'Session tape added. Choose people and add an occurrence when ready.'));
+keyed($('add-tape'),'new-plan');
+$('add-tape').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.tapes.push({id,name:'New plan',hours:0,minutes:30,team:'',people:[],occurrences:[]});view.tape=id;view.occurrence=0;view.deck=true;view.origin='new-plan';},'Plan added. Add sessions and choose people when ready.'));
 $('add-occurrence').addEventListener('click',()=>addOccurrence());
-$('remove-occurrence').addEventListener('click',()=>change(()=>{tape().occurrences.splice(view.occurrence,1);view.occurrence=Math.max(0,view.occurrence-1);},'Occurrence removed. Undo restores it.'));
+$('remove-occurrence').addEventListener('click',()=>change(()=>{tape().occurrences.splice(view.occurrence,1);view.occurrence=Math.max(0,view.occurrence-1);},'Session removed. Undo restores it.'));
 $('tape-name').addEventListener('change',event=>change(()=>{tape().name=event.target.value.trim()||tape().name;},'Session renamed.'));
-$('period').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].period=Number(event.target.value);},'Occurrence moved to the selected sprint.'));
-$('week').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].week=Number(event.target.value);},'Occurrence moved to the selected week.'));
+$('period').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].period=Number(event.target.value);},'Session moved to the selected sprint.'));
+$('week').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].week=Number(event.target.value);},'Session moved to the selected week.'));
 $('host').addEventListener('change',event=>change(()=>{tape().team=event.target.value;},'Host team updated.'));
 $('unload').addEventListener('click',()=>{dials.release();view.deck=false;render();if(!returnFocus(view.origin))returnFocus(`tape-${view.tape}`);});
 $('undo').addEventListener('click',()=>{dials.release();model=history.pop();turnKey=null;if(!model.tapes.some(t=>t.id===view.tape))view.tape=model.tapes[0].id;view.occurrence=Math.min(view.occurrence,Math.max(0,tape().occurrences.length-1));if(!model.responses.some(r=>r.id===view.response))view.response=null;render();$('status').textContent='Previous edit restored.';});
 $('reset').addEventListener('click',()=>{dials.release();remember();model=structuredClone(seed);Object.assign(view,{tape:'pairing',occurrence:0,period:0,deck:true,eventPage:0,person:null,team:null,response:null});render();$('status').textContent='Study reset. Undo restores your previous arrangement.';});
 for(const reading of ['tracks','events'])$(`${reading}-tab`).addEventListener('click',()=>{view.reading=reading;renderTracks();});
 $('people-toggle').addEventListener('click',()=>{const hidden=!$('people-panel').hidden;$('people-panel').hidden=hidden;$('people-toggle').setAttribute('aria-expanded',String(!hidden));$('people-toggle').textContent=hidden?'Show people':'Hide people';});
-$('add-response').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.responses.push({id,name:'New response',from:view.tape,to:model.tapes.find(t=>t.id!==view.tape)?.id||view.tape,status:'requested'});view.response=id;},'Response added. Choose its source and receiver.'));
+$('add-response').addEventListener('click',()=>addResponse());
 
 const chapterLabels = { coordination:'Coordination', people:'People', abilities:'Abilities', change:'Change', quality:'Quality & recovery', investment:'Investment' };
 const chapterAPI = {
@@ -344,7 +379,7 @@ const chapterAPI = {
   }
 };
 const chapters = {
-  coordination:{title:'Coordination',description:'Load a session. Place its occurrences. Bring people into the work.'},
+  coordination:{title:'Coordination',description:'Load a plan. Place its sessions. Bring people into the work.'},
   ...createPeopleAbilities(chapterAPI), ...createChangeQuality(chapterAPI), ...createInvestment(chapterAPI)
 };
 const chapterContainers = new Map([['coordination',$('chapter-coordination')]]);

@@ -7,32 +7,40 @@ The [running About Studio](../../context-canvas-project-surface/context-canvas/i
 is the reference implementation.
 
 **Standing:** review candidate, version `0.1.0`, ID
-`vfc:studio-rack-composition`; source reviewed 7 November 2026. This family records
+`vfc:studio-rack-composition`; source reviewed 8 November 2026. This family records
 the accepted design and its implementation boundaries. Prospective receiving
 decisions below retain their own Issues and delivery evidence. Each receiving PR
 owns its actual verification result. Publication remains a separately reviewed action.
 
 The [chapter workbench study](../../planning/context-canvas/studio-rack-tape-workbench.md)
-in [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
-extends #804's loaded-tape illustration across all Studio chapters. Its
+extends #804's loaded-tape illustration across all Studio chapters through
+[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
+The current [#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves the approved cassette art, clarifies Plans/session wording and explores
+Investment comparison decks. Its
 [development composition contract](chapter-workbench-study.md) connects team
 lanes, support tables, reels, check pads and investment lanes through shared
 illustrative identities and Undo. The study maps outside Coordination operations
 to proposed rack homes, consolidates repetition around occurrence pads, and
 separates session identity from plan/period scope. Production retains its current
 owners; each adopted change receives focused implementation and review.
-The human-approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
-is a dedicated component reference within this family. It preserves the exact
-dev panel and its neighboring Working sessions layout for later recall. The
-chapter expansion reuses that exact reference while surrounding cassette art
-and chapter compositions can evolve. Merging remains held during the dev study.
+Two dedicated references preserve the approved development components. The
+[Loaded Tape Duration Panel](loaded-tape-duration-panel.md) keeps its panel scale,
+palette and neighboring Working sessions geometry. Its revised light treatment
+fixes the face and shadow while the pointer turns. The
+[Cassette Plan Shelf](cassette-plan-shelf.md) keeps the tilted blocky faces,
+hover movement, selected outline and horizontal shelf at `650px` and below.
+The loaded detail panel also retains its short downward unfurl. Investment's
+chocolate Extra investment lane remains `#403d32` as its new comparison decks
+develop. These local approvals leave the remaining chapter composition open to
+iteration. Merging remains held during the dev study.
 
 ## Choose a visual mode and an operation
 
 Choose the operation contract that explains what the visitor can do. These
 contracts describe reusable relationships across chapters, with room for each
-chapter's own composition. The development workbench and its approved duration
-panel retain the separate standing described above.
+chapter's own composition. The development workbench and its preserved component
+references retain the separate standing described above.
 
 | Mode | Useful work | Stable visual relationship |
 | --- | --- | --- |

@@ -36,17 +36,20 @@ work is coordinated under
 Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
 through the repository's local server. The
 [#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
-extends #804's loaded-tape composition across all Studio chapters. One compact
-chapter rail connects the same illustrative people, teams and sessions:
+extended #804's loaded-tape composition across all Studio chapters. The current
+[#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves the cassette artwork, clarifies the Plans shelf and develops compact
+Investment comparison decks. One chapter rail connects the same illustrative
+people, teams and work:
 
 | Chapter | Try in the study |
 | --- | --- |
-| Coordination | Load a tape, adjust duration, place occurrences and choose participants. |
+| Coordination | Load an item from Plans, adjust duration, add or place its sessions and choose participants. |
 | People | Select a person from team lanes; adjust rate or funded time and change session participation. |
 | Abilities | Select a cell in either support table; connect responsibility, preparation, review or an illustrative observation. |
 | Change | Turn the framework/viewpoint reels, vary the emphasis and connect work in the stage lanes. |
 | Quality & recovery | Explore preparation/recovery presets, the attention display and linked check pads. |
-| Investment | Read the session cost lanes, save a comparison and inspect the effect of a shared-session edit. |
+| Investment | Load Plan investment for shared-session costs, or add a compact comparison tape for a different enterprise question. |
 
 Edits take effect directly in the study's page-local model with shared Undo.
 Marked session routes open the Coordination module and offer a return to the
@@ -56,12 +59,25 @@ maps these operations and the later production bridges; the
 [Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
 records the shared composition, chapter distinctions and source owners.
 
-The human-approved **Time per person** panel retains its exact scale and
-appearance, with the neighboring **Working sessions** layout preserved through the
+The human-approved **Time per person** panel retains its scale, geometry and
+palette, with the neighboring **Working sessions** layout preserved through the
 [Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
-Occurrence pads remain the study's repetition control. Other chapters reach that
-same duration module; the surrounding palette and blocky cassette artwork retain
-their own room for iteration.
+Its approved lighting correction keeps the face gradient and shadow still while
+the pointer rotates. The earlier complete-face rotation is superseded.
+The numbered pads remain the study's repetition control. The shelf reads
+**Plans**: **New plan** creates an item, and **+ Session** repeats the loaded
+item. These visible labels retain the existing study identities and duration
+owner. Other chapters reach that same module.
+
+The separate
+[Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
+preserves the current artwork, hover motion and narrow horizontal shelf at
+`cedafc3`. The detail panel keeps its short downward easing; Investment retains
+the chocolate Extra investment lane. Add comparison tape offers Customer rollout,
+Commercial cohort, Service operations and Capital choices alongside Plan
+investment. These VHS-C-style decks keep their own units and assumptions; the
+shared-session total retains its original owner. Adding, adjusting and removing
+a comparison share the study's Undo action.
 
 The working showcase on `main` keeps its accepted plan, canonical editors and
 recovery behavior. The study's unassigned tapes, response cards and simplified

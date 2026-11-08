@@ -5,12 +5,15 @@ one compact panel. Hours and Minutes share a readout, neighboring dial groups
 and exact fields, while the adjacent Working sessions panel owns repetitions
 and their placement.
 
-**Standing:** human-approved `dev` visual reference, version `0.1.0`, ID
-`vfc:loaded-tape-duration-panel`; recorded 7 November 2026. The entire duration
-panel's appearance and scale are approved as-is. The precise baseline is
+**Standing:** human-approved `dev` visual reference, version `0.1.1`, ID
+`vfc:loaded-tape-duration-panel`; updated 8 November 2026. The panel preserves
+its approved scale, geometry and palette with one deliberate lighting correction:
+the dial face stays still while its pointer turns. The original recall baseline is
 `be8ec7f8ebfafa6aaef9958d088411e45df80f8a` at
 `planning/context-canvas/studio-rack-tape-study.html`, including the shared control
-factory at that revision. This contract preserves that development illustration;
+factory at that revision. The approved correction below supersedes that baseline's
+rotating face in [#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
+This contract preserves the development illustration and its explicit revision;
 the [production quantity contract](precision-dials-faders.md) retains its current
 receivers and separate implementation authority. Merging remains held while the
 development study continues.
@@ -21,8 +24,9 @@ The [study](../../planning/context-canvas/studio-rack-tape-study.html) mounts th
 duration controls inside `div#duration.module`, the first child of `.modules`
 in the loaded-session deck. This complete panel is the reference: its enclosing
 surface, spacing, label, readout, Hours/Minutes groups, dial artwork, exact fields
-and circular step buttons. The surrounding cassette artwork can evolve while
-this panel keeps its approved appearance.
+and circular step buttons. Its fixed light direction makes the dial's movement
+read as a physical control. The separate
+[Cassette Plan Shelf](cassette-plan-shelf.md) now preserves the neighboring artwork.
 
 The default reference loads **Prototype pairing**, showing **01 hours · 30
 minutes**. Values change through the real shared controls; the panel geometry
@@ -44,16 +48,17 @@ association with both exact fields.
             Hours               dial + exact field + circular − / +
             Minutes             dial + exact field + circular − / +
     .module                     Working sessions
-      occurrence pads           selected repetition + Add occurrence
+      session pads              selected repetition + Session
       placement                 Sprint / Week
-      host / removal            Hosted by / Remove occurrence
+      host / removal            Hosted by / Remove session
 ```
 
 ## Exact appearance and scale
 
-The source revision above is the byte-level recall authority. The following
-values name its material visual relationships so a later collaborator can
-recognize and preserve the panel without rediscovering its cascade.
+The source revision above is the byte-level recall authority for the original
+appearance. Apply the fixed-lighting correction below to recover the current
+reference. The following values name the material relationships so a later
+collaborator can preserve the panel without rediscovering its cascade.
 
 | Element or inherited rule | Approved baseline |
 | --- | --- |
@@ -70,8 +75,9 @@ recognize and preserve the panel without rediscovering its cascade.
 | `.native-time__adjustment` | Wrapping flex; centered cross-axis; `space-between`; `.25rem` gap; dial before the field/step group |
 | Both `.native-knob` housings | Equal `64px × 64px`; `.4rem 0` margin; `flex:0 0 auto`; `1px` ink border; circular silhouette |
 | Tick ring | `repeating-conic-gradient(from -135deg,#586d5a 0 1deg,transparent 1deg 27deg)` |
-| Dial face | Absolute `8px` inset; circular; `2px solid #bccdc0`; `linear-gradient(135deg,#71938b,#213934 60%,#0d1d19)`; `2px 3px 2px #243b37` shadow |
-| Face pointer | Top `5px`; left `calc(50% - 2px)`; `4px × 12px`; `3px` corners; paper fill; face rotates through `--native-knob-angle`, default `-135deg` |
+| Fixed dial face | Absolute `8px` inset; circular; `2px solid #bccdc0`; `linear-gradient(135deg,#71938b,#213934 60%,#0d1d19)`; `2px 3px 2px #243b37` shadow; face has no transform |
+| Rotating pointer carrier | `.native-knob__pointer` is absolute with `inset:0`; `transform:rotate(var(--native-knob-angle,-135deg))`; its face-sized box turns around the center |
+| Pointer mark | Carrier's `::before`; top `5px`; left `calc(50% - 2px)`; `4px × 12px`; `3px` corners; paper fill |
 | Exact field | `68px` wide; minimum height `2rem`; `.2rem` padding; centered `700 .9rem ui-monospace,monospace`; paper background, ink text, `1px` edge border and `3px` corners |
 | Stepper layout | Two `30px` columns; `.35rem .5rem` row/column gaps; `1.6rem` top margin; field spans both columns in row one; minus and plus occupy row two |
 | Circular steps | `30px × 30px`; minimum height `30px`; zero padding; paper background, ink text/border; inherited `0 3px 0 #0d1916` button shadow |
@@ -83,21 +89,27 @@ inherited `.5` opacity. The transparent range input fills the dial with
 `touch-action:none`; native exact fields and step buttons remain independent
 ways to adjust the same value. Face artwork has `pointer-events:none`.
 
+The fixed face owns simulated light: its gradient, rim and lower-right shadow
+retain the same orientation at every value. The transparent pointer carrier
+owns rotation. This supersedes rotating the complete face, which turned the
+shadow and light source with the knob. The correction changes neither the dial
+footprint nor the quantity, focus, exact-field or gesture owners.
+
 The current study hides `.native-time__part > p`, `.native-time__feedback` and
 `.studio-repetition`. The visible quantity module therefore stays concise.
 The numeric Working sessions editor supplied by the factory remains hidden;
-occurrence pads in the neighboring panel are the visible repetition owner.
+numbered session pads in the neighboring panel are the visible repetition owner.
 This is the study's composition, with production validation and recovery still
 governed by their existing owners.
 
 ## Neighboring module and responsive context
 
 The approved Working sessions panel remains beside the duration panel at wider
-viewports. It has the same `.module` enclosure. Its heading and Add occurrence
+viewports. It has the same `.module` enclosure. Its heading and **+ Session**
 action share a wrapping `.bar` with centered alignment, `space-between` and an
 `.8rem` gap. Numbered pads wrap with a `.4rem` gap and `.5rem 0` margin; each has
 a minimum width of `2.3rem`. Sprint/Week selectors occupy two equal columns with
-a `.5rem` gap and `.65rem 0` margin. Hosted by and Remove occurrence retain the
+a `.5rem` gap and `.65rem 0` margin. Hosted by and Remove session retain the
 following compact action row.
 
 The layout reference is exact and intentionally local:
@@ -127,10 +139,13 @@ step group centers inside its colored field. The surrounding workspace uses a
 `210px` tape shelf above `1000px`, `170px` at `1000px` and below, and a block layout
 at `650px` and below. These parent constraints are part of accurate comparison.
 
-The containing deck has a `2px solid #9ab29c` border, `5px` corners, `.8rem 0`
-margin and `#35483d` background. Its compact dark heading provides the loaded
-session name and Close. The duration panel's height follows its contents and
-the shared row; a fixed-height replacement requires a new visual comparison.
+The original hosting deck used a `2px solid #9ab29c` border and `#35483d`
+background. The current study keeps its `5px` corners and `.8rem 0` margin while
+the surrounding art uses a `#668b73` edge and `#2b3e34` face. The `.modules`
+background remains `#35483d` behind the duration panel's rounded corners, and
+`#duration` retains its own palette. The compact dark heading provides the
+loaded session name and Close. The duration panel's height follows its contents
+and the shared row; a fixed-height replacement requires a new visual comparison.
 
 ## Behavior, recall and revision
 
@@ -146,22 +161,28 @@ decorated dials in this study while exact fields and circular steps remain
 available. Its `.2s` deck unfurl is a receiving-context effect, separate from the
 duration controls themselves.
 
-For exact recall, read the study and its shared module from the same revision:
+For original recall, read the study and its shared module from the same revision:
 
 ```sh
 git show be8ec7f8ebfafa6aaef9958d088411e45df80f8a:planning/context-canvas/studio-rack-tape-study.html
 git show be8ec7f8ebfafa6aaef9958d088411e45df80f8a:collaboration/native-investment-studio/time-controls.mjs
 ```
 
+For current recall, keep those geometry/color rules and replace face rotation
+with the carrier and pointer mark defined above. The neighboring repetition
+labels now use Session; the source still stores `occurrences` internally.
+
 Compare the complete loaded panel at an ordinary phone width and a laptop width,
-including the neighboring occurrence panel and the breakpoint change. Inspect
+including the neighboring repetition panel and the breakpoint change. Inspect
 the initial `01 / 30` readout, a changed value, exact-field focus and a dial turn.
-These observations establish fidelity to this approved reference. A proposed
-production adoption receives its own review for placement, state ownership and
-responsive integration.
+During that turn, verify a changing pointer angle with a fixed face gradient,
+border and shadow. These observations establish fidelity to the revised
+reference. A proposed production adoption receives its own review for placement,
+state ownership and responsive integration.
 
 This reference supersedes the earlier open-ended sizing exploration for the
 development study's duration and Working sessions panels. The approved production
 coarse/fine duration sizes remain in [Precision Dials & Faders](precision-dials-faders.md).
-Angled, blocky 16/32-bit cassette artwork remains an evolving experiment around
-this fixed panel; it does not redefine the approved duration geometry or colors.
+The 8 November lighting correction supersedes only the original face-rotation
+mechanism. The plan cassette's separate preserved treatment and any new VHS-C
+comparison art leave the duration geometry and colors intact.

@@ -8,8 +8,9 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 7 November 2026 reconciliation preserves the accepted main contract and
-separates the all-chapter dev workbench from production decisions. The visual grammar is owned by the
+The 8 November 2026 reconciliation preserves the accepted main contract and
+separates the all-chapter dev workbench from production decisions. The visual
+grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
@@ -82,8 +83,11 @@ how to incorporate more operations directly into the rack. The
 established the loaded tape, people-by-session matrix, scoped period navigation
 and response routing. The approved
 [#805 direction](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
-extends that compact composition to all chapters. It supersedes treating the
-illustration as Coordination-only. The
+extended that compact composition to all chapters. It supersedes treating the
+illustration as Coordination-only. The current
+[#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves the cassette treatment, simplifies its visible naming and adds bounded
+Investment comparison decks. The
 [proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
 [Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
 now describe the connected experience and its receiving owners.
@@ -92,8 +96,10 @@ The same illustrative session and person identities connect the chapters.
 People uses team lanes and a participation matrix; Abilities retains both support
 tables and a loaded-record editor. Change uses framework/viewpoint reels,
 emphasis faders and linked work. Quality & recovery combines before/after-release
-choices, a CRT-style attention reading and check pads. Investment shows the
-shared sessions in funding lanes with a simple saved comparison. Marked session
+choices, a CRT-style attention reading and check pads. Investment initially loads
+Plan investment, preserving the shared-session funding lanes and simple saved
+comparison. Additional VHS-C-style decks offer customer rollout, commercial
+cohort, service operations and capital-choice illustrations. Marked session
 routes return to the same Coordination module and provide a route back.
 
 The shell owns page-local edits and Undo; chapter adapters read and change that
@@ -101,20 +107,41 @@ model. A rate, duration or participation edit therefore has a visible consequenc
 in the investment reading. Linking existing work from another chapter refers to
 the same session, rather than pricing another copy. The study's funding lanes
 group session amounts; production's allocation rules and full baseline/report
-semantics retain their existing owners. Quality starts at 4σ with balanced
-attention. Its response to urgency is an authored illustration, separate from
-observed process capability or a forecast.
+semantics retain their existing owners. The added comparison decks use the
+shared Undo owner while keeping their assumptions and outputs separate from
+the shared-session amount. The shelf offers one of each comparison type.
+Customer rollout separates setup and training; Commercial cohort distinguishes
+opening-cohort retention from new revenue; Service operations preserves hours
+released per week; Capital choices compares end-quarter discounted benefits
+after upfront cost. These adapt a bounded question from each existing investment
+analysis domain. Quality starts at 4σ with balanced attention. Its response to
+urgency is an authored illustration, separate from observed process capability
+or a forecast.
 
 The human approved the compact **Time per person** and **Working sessions**
 layout before this chapter expansion. The
 [duration-panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md)
 preserves the complete panel at `be8ec7f`: palette, readout, dial faces, circular
-steppers and responsive geometry. That reference remains exact while chapter
-surroundings and blocky cassette art evolve. New chapter routes reuse it rather
-than creating parallel duration editors. Occurrence pads remain the study's sole
-repetition control; session definitions, occurrences and planning periods retain
-their separate meanings. Production keeps its accepted count field until a
-focused consolidation receives review.
+steppers and responsive geometry. The human's subsequent lighting correction
+revises that contract to `0.1.1`: the face gradient, rim and shadow remain fixed;
+the pointer carrier turns. The previous rotation of the entire face is
+superseded, with geometry, palette and gesture ownership preserved.
+The human also asked to preserve the complete cassette artwork and animation.
+The new [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
+pins that treatment at `cedafc3`: angled blocky faces, exact depth and palette,
+the `160ms ease-out` hover and the horizontal shelf at `650px` and below.
+The loaded detail panel retains its `.2s ease-out` downward unfurl from opacity
+`.3` and `translateY(-6px)`. Investment's Extra investment lane keeps its
+chocolate `#403d32` field. These preserved references distinguish settled art
+from the surrounding development experiments.
+
+The shelf now reads **Plans**. **New plan** creates the named item; **+ Session**
+adds another session to that item. Cassette faces say **sessions** instead of
+**occurrences**. The source still stores the same `tapes` and `occurrences` IDs
+and arrays; this iteration changes the visitor vocabulary and keeps duration
+and participant ownership intact. Numbered pads remain the repetition control.
+Plan overview still means the complete arrangement. Production retains its
+accepted session/count contract until a focused consolidation receives review.
 
 The proposal still maps Coordination's outside controls, including Customize
 teams and handoffs, to one useful home and its existing owner. Events remains an
@@ -346,8 +373,11 @@ entry, screenshot or technical description presents the earlier behavior.
 | Earlier direction | Current replacement and reason |
 | --- | --- |
 | Coordination-only loaded-tape illustration in #804 | #805 extends the compact workbench across People, Abilities, Change, Quality & recovery and Investment. Shared illustrative identities and Undo make the chapter relationships reviewable; production integration remains a later decision. |
-| The complete dev illustration treated as tentative layout | The duration and Working sessions panel scale/layout is now human-approved as the dev reference. The dedicated duration-panel contract preserves its exact baseline; surrounding cassette art and further rack integration remain iterative, with merging held. |
-| Separate numeric Working sessions and occurrence pads | The loaded-tape study uses occurrence pads as its single visible repetition control, retained through #805. Production keeps its accepted field until review. Add session, Add occurrence and Add sprint/quarter retain separate meanings. |
+| The complete dev illustration treated as tentative layout | The duration panel and neighboring Working sessions geometry have their own exact reference. #806 also preserves the cassette artwork, hover and narrow shelf in a separate contract, plus the loaded-panel unfurl and chocolate Extra investment lane. Other chapter compositions remain iterative, with merging held. |
+| Rotating the duration dial's entire face, including its gradient and shadow | The approved #806 lighting correction keeps the face and simulated light fixed. A full-face transparent carrier rotates only the existing pointer mark. Duration geometry, palette and value/gesture owners remain preserved; the duration contract is now version 0.1.1. |
+| Session tapes, New session and Occurrence as the study's shelf vocabulary | #806 uses Plans, New plan and + Session; faces show their session count. The same source identities and duration owner remain. This visible naming change leaves production's session model intact. |
+| Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
+| Investment limited to one shared-session cost reading in the dev study | Plan investment retains that complete reading as its initial master tape. Added VHS-C comparison tapes explore separate enterprise questions with their own units and shared Undo; their outputs leave the shared-session total unchanged. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
 | Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
@@ -789,14 +819,14 @@ also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-The next receiving decision is the #805 all-chapter dev workbench. Source
-inspection identifies the shared shell and chapter adapters; its receiving
-Issue records the matching browser observations and coverage. Earlier
-Coordination and duration observations cover that earlier study state. Human
-review now assesses the connected chapters, compactness and cross-chapter
-consequences before choosing a production bridge. The approved duration panel
-retains its exact reference throughout. Future percentage semantics remain with
-#798 and broader removal with #773.
+The next receiving decision is the #806 dev refinement of the all-chapter
+workbench. Its receiving Issue records matching source and browser observations;
+#805 retains the earlier connected-chapter evidence. Human review now assesses
+the clarified Plans/session language, preserved cassette and panel treatment,
+and added Investment decks before choosing a production bridge. The approved
+duration panel retains its geometry and palette with the approved fixed-lighting
+revision. Future percentage
+semantics remain with #798 and broader removal with #773.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains
