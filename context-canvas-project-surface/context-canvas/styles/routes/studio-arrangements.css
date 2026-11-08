@@ -41,7 +41,7 @@
 .native-coordination .studio-session-tracks thead th { font: 600 .7rem/1.3 system-ui, sans-serif; inline-size: 6rem; min-inline-size: 5.5rem; overflow-wrap: normal; }
 .native-coordination .studio-session-tracks :is(thead, tbody) th:first-child { position: sticky; inset-inline-start: 0; z-index: 1; inline-size: 13rem; min-inline-size: 11rem; text-align: start; background: var(--studio-screen); }
 .native-coordination .studio-session-tracks tbody td { border-block-end: 1px solid var(--native-rule); }
-.native-coordination .studio-session-tracks__pad { min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
+.native-coordination .studio-session-tracks__pad { inline-size: 100%; min-inline-size: 2.75rem; min-block-size: 2.75rem; padding: .2rem; background: var(--native-signal); color: var(--about-ink-strong); border: 1px solid var(--about-mint-green); border-radius: .2rem; box-shadow: inset 0 -.22rem var(--about-deep-teal); }
 .native-coordination .studio-session-tracks__pad.native-control--navigate { padding-inline: .3rem 1rem; }
 .native-coordination .studio-session-tracks__pad.native-control--navigate::after { inset-inline-end: .3rem; inline-size: .35rem; block-size: .35rem; }
 .native-coordination .studio-session-tracks__pad[data-funding='additional'] { background: var(--studio-extra-work); border-color: var(--native-paper); box-shadow: inset 0 -.22rem var(--about-muted); }
@@ -139,7 +139,12 @@
   .studio-delivery__board:not([data-delivery-scope='overview']) .studio-delivery__content { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
   .studio-delivery__board:not([data-delivery-scope='overview']) .studio-delivery__phase > h5 { max-inline-size: 16rem; }
 }
+/* Team arrangement loads its rack from the preserved workbench's downward unfurl. */
+@keyframes studio-team-load { from { opacity: .3; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes studio-team-load-even { from { opacity: .3; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: no-preference) {
+  .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .studio-team-rack[data-reel-arrival] { animation: studio-team-load calc(200ms * var(--studio-speed)) ease-out; }
+  .native-coordination:is([data-native-motion='full'],[data-native-motion='lower']) .studio-team-rack[data-reel-arrival='even'] { animation-name: studio-team-load-even; }
   .native-coordination[data-native-motion='full'] .studio-delivery__board[data-delivery-arrival='phase'] { animation: native-cadence-open 240ms ease-out both; }
   .native-coordination[data-native-motion='full'] .studio-delivery__board[data-delivery-arrival='overview'] { animation: native-cadence-return 180ms ease-out both; }
   .native-coordination[data-native-motion='lower'] .studio-delivery__board[data-delivery-arrival='phase'] { animation: native-cadence-open 480ms ease-out both; }

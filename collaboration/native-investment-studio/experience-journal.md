@@ -8,8 +8,8 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 8 November 2026 reconciliation preserves the accepted main contract and
-separates the all-chapter dev workbench from production decisions. The visual
+The 8 November 2026 reconciliation preserves the accepted main contract,
+the planning workbench reference and the receiving dev Showcase iteration. The visual
 grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
@@ -186,18 +186,32 @@ optional bounded reading. Unassigned tapes and independent response cards need
 explicit production model decisions; participant percentages stay with #798.
 The working showcase retains its accepted plan, draft, Apply, Cancel and recovery
 contracts while the study uses immediate illustrative edits. The human now
-approved the planning workbench's promotion to main and dev in #810. This
+approved the planning workbench's promotion to main and dev in #810; PR #814
+preserves that reference on main after independent review and hosted checks. This
 supersedes the blanket hold on merging the study. Its Investment art and controls
 are pinned at `93bc69a`; the main Showcase runtime remains anchored at `9338acc`.
 
-The active dev Showcase integration is #811. Study scale and form factor guide
-compact module placement; the Showcase remains the art-direction authority for
-dials, zoetropes, output depth, Kanban/sequence surfaces and participation legend.
-The initial bridge broadens the Studio's usable field and compacts the existing
-session deck. Chocolate repetition housing complements the dark instrument
-surfaces; editorial secondary panels retain their useful contrast. Existing
-contextual creation and Undo owners remain. The numeric count stays available
-until occurrence pads gain a decrement route.
+The first receiving dev Showcase iteration is #811. Its wider Studio field keeps
+the surrounding About prose at its reading measure. The existing session deck
+uses a compact dark enclosure, equal 64px Showcase dials, bottom-right exact
+fields and a raised combined readout. Chocolate occurrence and repetition panels
+sit alongside duration when space permits, then stack on phones. This supersedes
+the loaded session's broad apricot interior and larger coarse/fine geometry;
+other quantity receivers and the exact planning specimen retain their contracts.
+Showcase zoetropes, Kanban/sequence surfaces and participation legend remain the
+art-direction authority. Shared sessions pads fill their cells. Team arrangement
+loads its changed rack downward over 200ms at full speed, honoring the shared
+motion controls and system preference. The incidental inspector border is gone.
+Existing contextual creation and Undo owners remain. The numeric count stays
+available because occurrence pads currently add and place repetitions; its
+decrement route keeps removal available during this visual integration.
+
+Independent review accepted the CSS boundary. Existing session journeys checked
+draft retention, occurrence placement, both receivers and return focus across
+Chromium, Firefox and WebKit. Phone/laptop and container-seam observations found
+contained controls; the new arrangement reveal also honored reduced motion.
+These observations cover this receiving layout and existing operations. The
+following issues retain the larger interaction and model work.
 
 #812 owns direct team/handoff rack integration, and #813 owns cassette/deck
 projection. Future dev Showcase promotions require the human cue. The preserved

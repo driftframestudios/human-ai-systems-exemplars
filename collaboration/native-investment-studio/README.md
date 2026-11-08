@@ -15,7 +15,12 @@ recoverable.
 
 ## Current state
 
-The working showcase is on `main`. Coordination combines a sprint/quarter board,
+The accepted showcase is on `main`; the next integration is on `dev` under
+[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811).
+The dev version uses more of the available canvas, compact dark session controls
+and a chocolate Working sessions panel. It retains Showcase dial artwork and
+canonical editing behavior. A human cue selects promotion to main.
+Coordination combines a sprint/quarter board,
 session sequencer, shared-session participation reading and a delivery board.
 One canonical session editor occupies the detail deck between the period board
 and tracks, or the adjacent Team planning receiver. Duration, participation and
@@ -34,9 +39,10 @@ work is coordinated under
 ### Explore the preserved chapter workbench
 
 Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
-through the repository's local server. The human approved its planning-source
-promotion to `main` and `dev` in
-[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+through the repository's local server. Its approved planning-source promotion to
+`main` and `dev` is preserved through
+[#814](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/814),
+completing [#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
 The approved Investment specimen is `93bc69a`. The
 [#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
 extended #804's loaded-tape composition across all Studio chapters. The preservation work in
@@ -107,8 +113,10 @@ recovery behavior. The study's unassigned plans, response cards and financial
 comparisons are illustrative contracts to review before production adoption.
 The workbench remains in `planning/` as a reference. The actual About Showcase
 now iterates on `dev`: [#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
-starts with wider rack compositions and compact session modules, preserving
-Showcase dials, zoetropes, output styling and canonical behavior. The Showcase
+receives the wider rack composition and compact session modules. Shared sessions
+pads fill their track cells; a Team arrangement choice loads its rack with the
+study's short downward easing. Showcase dials, zoetropes, output styling and
+canonical behavior retain their owners. The Showcase
 on `main` remains the reference anchor. A human cue selects each later promotion.
 Direct team/handoff integration follows in
 [#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812),
@@ -311,12 +319,15 @@ and selected choices stay visually pressed. Cancel uses a shadow-free ghost trea
 
 The duration module keeps its combined Hours/Minutes readout above both dials.
 Hours uses a peach inner face; Minutes uses paper. Both inner groups are
-borderless, blending into the overall enclosure. Their larger/smaller dials use
-the same coarse/fine sizes, face inset and pointer as the monetary controls
-([#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788)). Each
+borderless, blending into the overall enclosure. Main retains the monetary
+coarse/fine sizes from
+[#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788).
+Dev's loaded session deck uses equal 64px dials and the same Showcase face,
+pointer and raised output; other quantity receivers retain their own geometry. Each
 exact field and circular step pair sits toward the lower right of its dial.
 Repetition remains a separate quantity: the session detail deck adds numbered
-occurrence pads beside the exact **Working sessions** control. Main and
+occurrence pads beside the exact **Working sessions** control. Dev keeps that
+count's decrement route until occurrence pads support removal. Main and
 supporting-session editors share the duration enclosure, with phone reflow inside
 it. A duration
 turn keeps its adjustment stable if the focused page scrolls during the gesture.

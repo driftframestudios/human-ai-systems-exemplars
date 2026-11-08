@@ -219,6 +219,38 @@
 .native-knob--minutes, .native-rate__dial--fine { inline-size: 4.75rem; }
 .native-rate-controls .native-knob { margin: 0; }
 .native-rate__note { font-size: .75rem; line-height: 1.45; max-inline-size: 42ch; }
+/* Loaded session geometry follows the compact workbench duration panel. The
+   canonical dial face, tick ring, pointer and raised output remain Showcase art. */
+.studio-session-deck .studio-duration {
+ display: grid; gap: .55rem; min-inline-size: 0; padding: .7rem;
+ border: 1px solid #668b73; border-radius: .25rem; background: var(--studio-screen);
+ color: var(--native-paper); box-shadow: none;
+}
+.studio-session-deck .native-time__overview { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.studio-session-deck .native-time__overview > .native-coordination__control-title { flex: 0 1 9rem; font-size: .8rem; line-height: 1.4; }
+.studio-session-deck .native-coordination__duration-display {
+ flex: 0 0 auto; display: flex; gap: .8rem; inline-size: auto; padding: .3rem .65rem;
+}
+.studio-session-deck .native-coordination__duration-display strong { font-size: 1.65rem; }
+.studio-session-deck .native-coordination__duration-display > span { gap: .1rem; }
+.studio-session-deck .native-coordination__duration-display > span > span { font-size: .65rem; }
+.studio-session-deck .native-time__quantities { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+.studio-session-deck .native-time-controls .native-time__part { gap: .3rem; padding: .5rem; color: var(--native-text); }
+.studio-session-deck .native-time__part > label { font-size: .8rem; }
+.studio-session-deck .native-time__adjustment { align-items: start; justify-content: space-between; gap: .25rem; max-inline-size: none; }
+.studio-session-deck .native-time__adjustment .native-knob { inline-size: 4rem; margin-block: .4rem; }
+.studio-session-deck .native-time__adjustment .native-coordination__stepper { margin-block-start: 1.6rem; margin-inline-start: auto; }
+.studio-session-deck .native-time-controls .native-coordination__stepper {
+ grid-template-columns: repeat(2, 2rem); gap: .35rem .5rem; inline-size: 4.5rem;
+}
+.native-coordination .studio-session-deck .native-time-controls .native-coordination__stepper input {
+ inline-size: 4.5rem; min-block-size: 2rem; padding: .2rem;
+ font: 700 .9rem/1.4 ui-monospace, monospace; text-align: center;
+}
+.native-coordination .studio-session-deck .native-time-controls .native-coordination__stepper button {
+ inline-size: 2rem; min-inline-size: 2rem; block-size: 2rem; min-block-size: 2rem;
+ padding: 0; font-size: 1rem;
+}
 @media (forced-colors: active) {
     .native-rate-controls .native-knob { inline-size: 7rem; block-size: 2.75rem; }
 }
@@ -228,6 +260,9 @@
   background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none;
  }
  .native-time__adjustment .native-knob { inline-size: 6rem; }
+ .studio-session-deck .studio-duration, .studio-session-deck .native-time-controls .native-time__part,
+ .studio-session-deck .native-coordination__duration-display { background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none; }
+ .studio-session-deck .native-time__adjustment .native-knob { inline-size: 100%; block-size: 2.75rem; }
 }
 
 /* Attached editorial companions retain native disclosure and motion ownership.

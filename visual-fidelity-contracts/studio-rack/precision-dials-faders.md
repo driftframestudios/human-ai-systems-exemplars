@@ -10,8 +10,9 @@ reviewed 7 November 2026. It inherits the shared control and motion treatment in
 [Studio Rack Composition](README.md).
 The separately approved [Loaded Tape Duration Panel](loaded-tape-duration-panel.md)
 preserves an exact `dev` study reference. Its smaller equal-sized dials and
-neighboring occurrence panel have their own scope; the current production
-receivers below retain their established geometry and acceptance owners.
+neighboring occurrence panel have their own scope. Main retains the established
+geometry below; dev's loaded session receiver adapts its compact form factor in
+#811 while keeping the same acceptance owners.
 
 ## Fit and smallest useful dose
 
@@ -146,8 +147,9 @@ has a human-approved duration and Working sessions layout, preserved exactly in
 its own [Loaded Tape Duration Panel contract](loaded-tape-duration-panel.md) at
 revision `be8ec7f8ebfafa6aaef9958d088411e45df80f8a`. The complete panel retains its
 compact title/readout row, peach Hours and paper Minutes, equal `64px` dials,
-exact fields and circular steppers. These are study-specific dimensions, distinct
-from the production coarse/fine sizes above.
+exact fields and circular steppers. These dimensions define the preserved study
+specimen. The receiving dev session deck below adopts its scale through the
+Showcase's own artwork.
 
 The two neighboring modules use `minmax(230px,1fr) minmax(240px,1fr)` columns,
 with `.7rem` gap and padding, above `1000px`. They stack at `1000px` and below.
@@ -158,6 +160,27 @@ panels. Its standalone contract records the full cascade, source owner and recal
 route while cassette artwork continues to evolve. Production adoption remains a
 separate reviewed change on dev; Showcase promotion to main remains human-cued.
 The planning specimen itself is authorized for main/dev preservation in #810.
+
+### Receiving dev session composition
+
+[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
+applies compact geometry only within `studio-session-deck`. Shared instrument CSS
+owns the dark duration enclosure, title/readout row, equal 4rem dials and 2rem
+circular steps. Session CSS owns the dark form and chocolate occurrence/count
+housing. Hours keeps peach and Minutes paper. Their fixed light, face inset,
+pointer and raised combined output retain Showcase artwork; exact fields and
+their separated circular step pair sit below-right of each dial and wrap locally
+when space is narrow.
+
+Duration and placement share equal columns at the Studio's 44rem container seam,
+then stack. The count remains a compact chocolate footer to duration because it
+currently supplies decrement. Occurrence pads select and place repetitions;
+Add occurrence and the count still use the canonical draft owner. This adaptation
+supersedes the prior loaded-session geometry on dev while preserving the exact
+planning specimen and other rate/duration receivers. Main adoption remains
+human-cued.
+
+### Participant time shares
 
 The future [participant fader contract](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798)
 is separate from #771's shared movement controls. **Time in this session** would
