@@ -68,7 +68,7 @@ export function mountRackEditor(root, { editors, onClose, readLabel = record => 
   function sync() {
     if (selected) {
       const label = readLabel(selected) ?? selected.label;
-      title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session' }[selected.kind]} settings · ${label}`;
+      title.textContent = `${{ person: 'Person', team: 'Team', session: 'Session', connection: 'Handoff' }[selected.kind]} settings · ${label}`;
       context.textContent = selected.originLabel ?? ''; context.hidden = !selected.originLabel;
       close.setAttribute('aria-label', `Close ${label} settings`);
     }

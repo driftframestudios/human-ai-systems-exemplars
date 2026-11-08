@@ -53,7 +53,7 @@ export function projectDeliveryBoard({ arrangement, plan }) {
 // The receiver owns proposed records and edit routes. This view owns only its
 // phase focus and the return to the full delivery reading.
 export function createDeliveryBoard(document, { arrangement, plan, acceptedSessionIds,
-  acceptedTeamIds = new Set(), onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
+  acceptedTeamIds = new Set(), acceptedConnectionIds = new Set(), onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
   const node = (tag, text, className) => {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -121,8 +121,10 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       const group = collection('People', 'studio-delivery__group studio-delivery__teams');
       for (const binding of phase.teams) {
         const card = node('article', undefined, 'studio-delivery__team'); card.dataset.deliveryTeam = binding.slotId;
-        const inspect = event => onNavigate({ kind: 'template-team', id: binding.slotId }, event.currentTarget);
+        const inspect = event => onNavigate(acceptedTeamIds.has(binding.team.id)
+          ? { kind: 'team', id: binding.team.id } : { kind: 'template-team', id: binding.slotId }, event.currentTarget);
         const team = button(binding.team.label, 'studio-delivery__team-key native-control--navigate', inspect);
+        team.dataset.studioEntryKey = `delivery-team:${binding.slotId}`;
         if (acceptedTeamIds.has(binding.team.id)) {
           team.dataset.studioRecordKind = 'team'; team.dataset.studioRecordId = binding.team.id;
         }
@@ -138,6 +140,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
         }
         if (!members.children.length) {
           const item = node('li'), choose = button('Choose people', 'studio-delivery__person native-control--navigate', inspect);
+          choose.dataset.studioEntryKey = `delivery-team-people:${binding.slotId}`;
           if (acceptedTeamIds.has(binding.team.id)) {
             choose.dataset.studioRecordKind = 'team'; choose.dataset.studioRecordId = binding.team.id;
           }
@@ -166,8 +169,13 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       const group = collection('Handoffs', 'studio-delivery__group studio-delivery__handoffs');
       for (const binding of phase.connections) {
         const edge = binding.connection;
-        const control = button('', 'studio-delivery__handoff native-control--navigate', () => onNavigate({ kind: 'template-connection', id: binding.slotId }));
+        const control = button('', 'studio-delivery__handoff native-control--navigate', event => onNavigate(acceptedConnectionIds.has(edge.id)
+          ? { kind: 'connection', id: edge.id } : { kind: 'template-connection', id: binding.slotId }, event.currentTarget));
+        if (acceptedConnectionIds.has(edge.id)) {
+          control.dataset.studioRecordKind = 'connection'; control.dataset.studioRecordId = edge.id;
+        }
         control.dataset.deliveryConnection = binding.slotId; control.dataset.status = edge.status;
+        control.dataset.studioEntryKey = `delivery-handoff:${binding.slotId}`;
         control.append(node('strong', binding.slotLabel), node('small', `${teamNames.get(edge.senderTeamId)} → ${teamNames.get(edge.receiverTeamId)}`),
           node('small', edge.sharedObject || 'Choose shared work', 'studio-delivery__object'));
         control.title = edge.sharedObject || 'Choose shared work';

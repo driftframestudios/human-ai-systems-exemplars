@@ -6,7 +6,7 @@ editor owns its proposal. This contract connects compact disclosures, destinatio
 cues, creation entry, Apply/Cancel and saved work across the Studio.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:contextual-inspection-recovery`;
-reviewed 7 November 2026. It inherits [Studio Rack Composition](README.md).
+dev integration revised 8 November 2026. It inherits [Studio Rack Composition](README.md).
 The Abilities rack, Coordination record receiver and Quality workbench are
 current examples.
 
@@ -67,8 +67,9 @@ at ordinary phone widths and enlarged text.
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
 | [Session creation](../../collaboration/native-investment-studio/session-creation.mjs), [work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Useful Coordination session defaults, existing acceptance owner, contextual opening and local Undo bound to the accepted creation state |
-| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session form in Plan overview's stable deck or Team planning's adjacent receiver, with identity and visibility mirrored into both readings |
-| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Canonical person/team controls move to one adjacent receiver; existing owners retain draft and acceptance state |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session form in Plan overview's stable deck or the dev Team planning slot, with identity and visibility mirrored into both readings |
+| [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs), [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) and [connection controller](../../collaboration/native-investment-studio/connection-controller.mjs) | Canonical person/team/handoff configure and status nodes share one receiver; existing owners retain events, drafts and acceptance |
+| [Rack record creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) and [Studio controller](../../collaboration/native-investment-studio/controller.mjs) | Useful team/handoff defaults through existing draft owners, accepted addition, contextual opening and local Undo |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
 | [Capability](../../collaboration/native-investment-studio/capability-controller.mjs), [Change](../../collaboration/native-investment-studio/change-controller.mjs), [Assurance](../../collaboration/native-investment-studio/assurance-controller.mjs) | Selected records and their local receivers |
 | [Abilities CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css), [Change CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-change.css), [Assurance CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-assurance.css) | Adjacent rack, track controls and workbench composition |
@@ -95,31 +96,35 @@ draft. Session-settings wording and `aria-controls` identify the canonical
 receiver supplied by #768 and placed inside Plan overview by #789.
 
 Team planning is a permanent section. Its arrangement reel and secondary rack
-remain available while selection opens the existing template, connection or
-session receiver. Arrangement selection accepts directly through its own
+remain available while selection opens the canonical object receiver. Arrangement selection accepts directly through its own
 transaction and local Undo. The shared coordinator keeps other unfinished
 editors recoverable; persistent visibility remains separate from editor activity. The delivery board's phase keys select a local
 presentation scope; Delivery overview restores the originating phase key and
 scroll position. The controller preserves that phase while its view rerenders.
-People and accepted-team cards open their canonical adjacent editor;
-illustrative teams awaiting acceptance retain template customization. Handoff
-cards retain their connection receiver; session cards use the adjacent session
-receiver. Remaining attached
-disclosures keep the spring reveal.
+On dev, person, team, session and handoff cards open their canonical editor
+between delivery board and Shared sessions. A deliberate starter-card selection
+first accepts the preset and then opens the corresponding real record. Its Undo
+restores the preceding plan. Remaining attached disclosures keep the spring
+reveal; the former Customize teams and handoffs section is superseded by these
+record entries.
 
 The selected session key's downward caret reports actual visibility; its pressed
 face retains the selected record after closure. The exact initiating horizon
 control or Team planning row key toggles the receiver; Team planning delivery
 cards and participation pads inspect their context. A different occurrence or participation entry selects its
 own context. The same session owner receives each entry and keeps its draft
-identity across the horizon deck and Team planning's adjacent receiver.
+identity across the horizon deck and Team planning's detail slot.
 
-The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
-places one `studio-rack-editor` after the stable Team planning template or
-accepted-connections root, outside the template form and rebuilt board.
-`mountRackEditor` moves the canonical configure/status nodes into that
-host. The same controls return to People when the chapter changes. Their
-existing controllers continue to own validation, drafts and acceptance.
+The [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
+established one `studio-rack-editor` near Team planning. The dev
+[#812 integration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812)
+places it inside a stable slot between the delivery board and Shared sessions,
+and extends the same borrowing route to handoffs. `mountRackEditor` moves the
+canonical configure/status nodes into that slot. The same controls return to
+their original homes when needed; their controllers keep validation, drafts and
+acceptance. The borrowed configure node owns its action listener, while the
+original root excludes those events. Input, membership, recovery and removal
+continue through the canonical owner exactly once.
 
 The selected `studio-record-key` stays pressed while its caret reports visible
 open state. Selecting that trigger again or choosing Close hides the receiver,
@@ -130,13 +135,17 @@ Apply accepts through the current owner and keeps the editor open. Switching
 records parks the unfinished proposal; resuming it acquires a fresh edit lease.
 Inclusion and reorder controls retain their existing meanings.
 
-The dark heading, named object and Close sit above a peach editorial body.
-The person's rate enclosure retains the shared quantity skin and exact controls.
+The dark heading keeps the named object and Close together. The receiving
+record body uses its established compact styling and shared quantity controls;
+editorial cards remain a readable counterpoint to the dark rack. The outer
+Coordination sections leave enclosure to those racks, with ordinary phone reflow
+preserving their available width. Main retains the earlier adjacent placement
+and surrounding skin as the comparison anchor.
 The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 established this return grammar with the enclosed duration module: larger
 readout above peach Hours and secondary paper Minutes, with repetition separate
-nearby. #789 extends its placement owner into the horizon while Team planning
-continues to use the adjacent host. Each route preserves its period/occurrence or
+nearby. #789 extends its placement owner into the horizon; #812 on dev gives
+Team planning the corresponding slot inside its rack. Each route preserves its period/occurrence or
 participation context. A failed switch keeps the admitted record and its panel
 identity aligned.
 
@@ -144,8 +153,8 @@ identity aligned.
 
 [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
 places a **Session detail deck** inside Plan overview, between its period board
-and Session tracks. This supersedes #768's below-rack horizon placement while
-preserving Team planning's adjacent receiver. The
+and Session tracks. This supersedes #768's below-rack horizon placement. #812 on
+dev places Team planning's receiver between its delivery board and Shared sessions. The
 [composition decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
 defines the stable receiving slot and issue order.
 
@@ -224,9 +233,10 @@ readings appear when the visitor supplies a horizon.
 
 The [direct Team arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
 has its own immediate acceptance and local Undo boundary. Its stable arrangement
-identity keeps accepted record routes useful across choices. Bounded customization
-choices settle immediately; text settles on blur or Enter, with invalid entries
-retained for correction. Local Undo is bound to the arrangement change that
+identity keeps accepted record routes useful across choices. On dev, further
+record customization opens the canonical editor inside the rack and retains its Apply/Cancel boundary, with invalid entries available for
+correction. This supersedes the separate template-customization form for that
+receiving version. Local Undo is bound to the arrangement change that
 created it; a later accepted edit retires the shortcut. Investment continues to
 own the complete history controls. Existing person, session and other editor
 proposals retain their current Apply and recovery owners.
@@ -243,6 +253,15 @@ change. It parks unfinished edits before reversing the addition through shared
 history and closing the removed record's editor. A later accepted change retires
 that local shortcut. Investment retains complete Undo history. This preserves
 the distinction between recovering creation and discarding an editing proposal.
+
+The dev #812 rack adds **Add team** and **Add handoff** through the existing
+assembly and connection draft owners. Each accepts a useful starting record and
+opens it in the same detail slot. Cancel reverts subsequent edits while preserving
+the added identity; Close retains the proposal. Local Undo is bound to that
+accepted addition, and the shared history remains the complete recovery owner.
+Handoffs retain sending/receiving teams, optional recipient and response, and
+supporting sessions. Independent response cards and routing are a separate
+model decision in [#816](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/816).
 
 The [contextual creation rows](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 reuse that owner with a native New session row in both Coordination sequencers.

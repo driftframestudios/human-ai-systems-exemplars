@@ -113,11 +113,11 @@ for (const engine of names) for (const width of [390, 1440]) {
     const phaseKeys = delivery.locator('[data-delivery-open]');
     await expect(phaseKeys).toHaveText(['Planning', 'Design', 'Implementation', 'Testing', 'Deployment', 'Maintenance']);
     await expect(board).toHaveAttribute('data-delivery-scope', 'overview');
-    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).sort()), ['feedback', 'handoff']);
+    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).filter(id => !id.startsWith('custom-connection:')).sort()), ['feedback', 'handoff']);
     await expect(delivery.locator('[data-delivery-session]')).toHaveCount(4);
     await expect(rack.locator('.studio-team-rack__lifecycle')).toHaveCount(0);
     await expect(templates.locator('[data-template-structure] .studio-arrangement-connections')).toHaveCount(0);
-    const originalTeams = await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].sort());
+    const originalTeams = await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].filter(id => !id.startsWith('custom-team:')).sort());
     assert.deepEqual(originalTeams, ['partner', 'pod']);
     const tracks = shared(page).locator('.studio-session-tracks__scroll');
     await header.scrollIntoViewIfNeeded();
@@ -148,9 +148,16 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(delivery.locator('[data-delivery-overview]')).toBeFocused();
     await expect(delivery.locator('[data-delivery-phase]:visible')).toHaveCount(1);
     const designTeam = delivery.locator('[data-delivery-phase="design"] [data-delivery-team]').first();
-    const teamSlot = await designTeam.getAttribute('data-delivery-team');
     await designTeam.locator('.studio-delivery__team-key').click();
-    await expect(templates.locator(`[data-template-field="teams.${teamSlot}.selection"]`)).toBeFocused();
+    await expect(templates.locator('.studio-arrangement-settings')).toHaveCount(0);
+    await expect(templates.locator('[data-team-rack-editor] [data-assembly-configure] [name="label"]')).toBeFocused();
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
+    assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.arrangements.length), 1,
+      'opening a starter team accepts its arrangement before canonical editing');
+    const acceptedTeamId = await designTeam.locator('.studio-delivery__team-key').getAttribute('data-studio-record-id');
+    assert.ok(acceptedTeamId && !acceptedTeamId.startsWith('proposal-'), 'the rack opens the accepted team identity');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(designTeam.locator('.studio-delivery__team-key')).toBeFocused();
     const person = designTeam.locator('[data-delivery-person]').first();
     await person.click();
     await expect(adjacent(page).locator('[data-person-configure] [name="ratePerHour"]')).toBeFocused();
@@ -164,9 +171,11 @@ for (const engine of names) for (const width of [390, 1440]) {
     await maintenanceKey.scrollIntoViewIfNeeded();
     await maintenanceKey.click();
     const maintenanceTeam = delivery.locator('[data-delivery-phase="maintenance"] [data-delivery-team]').first();
-    const maintenanceSlot = await maintenanceTeam.getAttribute('data-delivery-team');
     await maintenanceTeam.locator('.studio-delivery__team-key').click();
-    await templates.locator(`[data-template-field="teams.${maintenanceSlot}.label"]`).fill('Partner group for continuing support');
+    await adjacent(page).locator('[data-assembly-configure] [name="label"]').fill('Partner group for continuing support');
+    await adjacent(page).locator('[data-assembly-apply]').click();
+    await expect(maintenanceTeam.locator('.studio-delivery__team-key')).toContainText('Partner group for continuing support');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(board).toHaveAttribute('data-delivery-scope', 'maintenance');
     const returnKey = delivery.locator('[data-delivery-overview]');
     await returnKey.scrollIntoViewIfNeeded();
@@ -180,10 +189,16 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.ok(returnGeometry.key.left >= returnGeometry.board.left - 1 && returnGeometry.key.right <= returnGeometry.board.right + 1,
       `return after an edit reveals the originating phase key inside the board: ${JSON.stringify(returnGeometry)}`);
     assert.ok(Math.abs(returnGeometry.scroll - pagePosition) < 2, 'phase return preserves the visitor page position');
-    const handoff = delivery.locator('[data-delivery-connection]').first();
-    const handoffSlot = await handoff.getAttribute('data-delivery-connection');
+    const handoff = delivery.locator('[data-delivery-connection]:not([data-delivery-connection^="custom-connection:"])').first();
     await handoff.click();
-    await expect(templates.locator(`[data-template-field="connections.${handoffSlot}.sharedObject"]`)).toBeFocused();
+    await expect(templates.locator('[data-team-rack-editor] [data-connection-configure] [name="senderTeamId"]')).toBeFocused();
+    const handoffId = await handoff.getAttribute('data-studio-record-id');
+    await adjacent(page).locator('[data-connection-configure] [name="sharedObject"]').fill('Reviewed work and receiving instructions');
+    await adjacent(page).locator('[data-connection-apply]').click();
+    assert.equal(await page.evaluate(id => window.rackFixture.studio.read().state.connections.find(row => row.id === id).sharedObject, handoffId),
+      'Reviewed work and receiving instructions', 'the in-rack handoff editor accepts through the canonical connection owner');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(handoff).toBeFocused();
     await delivery.locator('[data-delivery-open="testing"]').click();
     await delivery.locator('[data-delivery-session="review"]').click();
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Pilot decision review');
@@ -194,7 +209,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
     await delivery.locator('[data-delivery-overview]').click();
     const customized = await bytes(page);
-    assert.notEqual(customized, accepted, 'leaving a complete team name settles that customization');
+    assert.notEqual(customized, accepted, 'starter acceptance and explicit Apply retain team and handoff changes');
 
     await delivery.locator('[data-delivery-open="testing"]').click();
     const undoBefore = await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount);
@@ -204,8 +219,8 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(board).toHaveAttribute('data-delivery-scope', 'testing');
     await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
     await delivery.locator('[data-delivery-overview]').click();
-    assert.deepEqual(await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].sort()), ['owner', 'response', 'specialists']);
-    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).sort()), ['diagnose', 'resolve', 'return']);
+    assert.deepEqual(await delivery.locator('[data-delivery-team]').evaluateAll(cards => [...new Set(cards.map(card => card.dataset.deliveryTeam))].filter(id => !id.startsWith('custom-team:')).sort()), ['owner', 'response', 'specialists']);
+    assert.deepEqual(await delivery.locator('[data-delivery-connection]').evaluateAll(controls => controls.map(control => control.dataset.deliveryConnection).filter(id => !id.startsWith('custom-connection:')).sort()), ['diagnose', 'resolve', 'return']);
     await expect(header).toContainText('Included work');
     const arranged = await bytes(page);
     assert.notEqual(arranged, customized, 'the explicit reel choice updates the accepted picture immediately');
@@ -420,7 +435,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(adjacent(page).locator('.studio-rack-editor__origin')).toContainText('Team planning');
     assert.equal(await page.evaluate(() => window.rackFixture.editing.session.read().draft.token === window.rackFixture.sessionToken), true,
       'cross-rack inspection retains the same session lease');
-    assert.equal(await adjacent(page).evaluate(node => node.previousElementSibling?.matches('[data-connection-templates]')), true,
+    assert.equal(await adjacent(page).evaluate(node => node.parentElement.matches('[data-team-rack-editor]')), true,
       'participation inspection uses the Team planning receiver');
     await receiverReading(page, 'pairing', true);
     await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-shared-session-${width}.png`) });
@@ -464,6 +479,94 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(connections.locator('button[data-connection-select="scope"]')).toHaveAttribute('aria-current', 'true');
     await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toHaveText('Inspect Research synthesis with operating context');
     await contained(page, width);
+  });
+
+  test(`${engine}: Team planning creates visible teams and handoffs with local Undo at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width), original = await bytes(page);
+    const templates = root(page).locator('[data-connection-templates]');
+    const rack = templates.locator('[data-template-rack]');
+    const read = () => page.evaluate(() => ({ state:window.rackFixture.studio.read().state,
+      undoCount:window.rackFixture.studio.readHistory().undoCount }));
+    const before = await read();
+    const addTeam = rack.locator('[data-template-action="create-team"]');
+    const addHandoff = rack.locator('[data-template-action="create-connection"]');
+    const close = adjacent(page).locator('[data-rack-editor-close]');
+    const undo = root(page).locator('[data-rack-creation-undo]');
+
+    await addTeam.click();
+    const teamCreation = await read(), originalTeamIds = new Set(before.state.teams.map(row => row.id));
+    const teams = teamCreation.state.teams.filter(row => !originalTeamIds.has(row.id));
+    assert.equal(teams.length, 1); assert.equal(teamCreation.undoCount, before.undoCount + 1);
+    const team = teams[0], teamKey = rack.locator(`.studio-delivery__team-key[data-studio-record-id="${team.id}"]`);
+    await expect(teamKey).toHaveCount(1);
+    await expect(teamKey).toContainText(team.label);
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
+    const teamName = adjacent(page).locator('[data-assembly-configure] [name="label"]');
+    await expect(teamName).toHaveValue(team.label);
+    const acceptedTeam = await bytes(page);
+    await teamName.fill('Review partners');
+    await adjacent(page).locator('[data-assembly-cancel]').click();
+    assert.equal(await bytes(page), acceptedTeam, 'Cancel keeps the newly accepted team while discarding the later edit');
+    await expect(addTeam).toBeFocused();
+    await teamKey.click();
+    await expect(teamName).toHaveValue(team.label);
+    await undo.click();
+    assert.equal(await bytes(page), original, 'creation Undo restores the preceding plan');
+    await expect(teamKey).toHaveCount(0); await expect(addTeam).toBeFocused();
+
+    await addHandoff.click();
+    const handoffCreation = await read(), originalHandoffIds = new Set(before.state.connections.map(row => row.id));
+    const handoffs = handoffCreation.state.connections.filter(row => !originalHandoffIds.has(row.id));
+    assert.equal(handoffs.length, 1); assert.equal(handoffCreation.undoCount, before.undoCount + 1);
+    const handoff = handoffs[0];
+    assert.ok(before.state.teams.some(team => team.id === handoff.senderTeamId)
+      && before.state.teams.some(team => team.id === handoff.receiverTeamId), 'the new handoff connects accepted teams');
+    assert.notEqual(handoff.senderTeamId, handoff.receiverTeamId);
+    const handoffKey = rack.locator(`.studio-delivery__handoff[data-studio-record-id="${handoff.id}"]`);
+    await expect(handoffKey).toHaveCount(1); await expect(handoffKey).toContainText(handoff.sharedObject);
+    const sharedObject = adjacent(page).locator('[data-connection-configure] [name="sharedObject"]');
+    await expect(sharedObject).toHaveValue(handoff.sharedObject);
+    assert.equal(await adjacent(page).evaluate(node => node.parentElement.matches('[data-team-rack-editor]')), true);
+    await contained(page, width);
+    if (engine === 'chromium') await adjacent(page).screenshot({ path:resolve(captures, `new-handoff-in-rack-${width}.png`) });
+    const acceptedHandoff = await bytes(page);
+    await sharedObject.fill('Implementation plan for review');
+    await adjacent(page).getByRole('button', { name:'Cancel changes', exact:true }).click();
+    assert.equal(await bytes(page), acceptedHandoff, 'Cancel retains the newly created handoff');
+    await expect(addHandoff).toBeFocused();
+    await handoffKey.click(); await expect(sharedObject).toHaveValue(handoff.sharedObject);
+    await undo.click();
+    assert.equal(await bytes(page), original, 'Undo removes only the handoff addition');
+    await expect(handoffKey).toHaveCount(0); await expect(addHandoff).toBeFocused();
+
+    await addHandoff.click();
+    const next = (await read()).state.connections.find(row => !originalHandoffIds.has(row.id));
+    await sharedObject.fill('Reviewed work ready for the receiving team');
+    await adjacent(page).locator('[data-connection-apply]').click();
+    const edited = await read();
+    assert.equal(edited.state.connections.find(row => row.id === next.id).sharedObject, 'Reviewed work ready for the receiving team');
+    assert.equal(edited.undoCount, before.undoCount + 2, 'the later Apply accepts exactly one subsequent edit');
+    await close.click(); await expect(addHandoff).toBeFocused();
+    const nextKey = rack.locator(`.studio-delivery__handoff[data-studio-record-id="${next.id}"]`);
+    await expect(nextKey).toContainText('Reviewed work ready for the receiving team');
+    await nextKey.click(); await expect(sharedObject).toHaveValue('Reviewed work ready for the receiving team');
+    await close.click(); await expect(nextKey).toBeFocused();
+    assert.equal((await read()).state.connections.length, before.state.connections.length + 1, 'record inspection creates no extra handoff');
+    const connection = adjacent(page).locator('[data-connection-configure]');
+    await nextKey.click();
+    await connection.locator('[data-connection-action="remove"]').click();
+    await expect(adjacent(page)).toBeVisible();
+    await expect(connection.locator('[data-connection-confirm]')).toBeVisible();
+    await connection.getByRole('button', { name:'Cancel changes', exact:true }).click();
+    await expect(adjacent(page)).toBeHidden(); await expect(nextKey).toBeFocused();
+    assert.ok((await read()).state.connections.some(row => row.id === next.id), 'cancelling in-rack removal keeps the accepted handoff');
+    await nextKey.click();
+    await connection.locator('[data-connection-action="remove"]').click();
+    await expect(adjacent(page)).toBeVisible();
+    await connection.locator('[data-connection-apply]').click();
+    await expect(adjacent(page)).toBeHidden();
+    assert.equal((await read()).state.connections.some(row => row.id === next.id), false, 'confirmed in-rack removal removes the chosen handoff');
+
   });
 
   test(`${engine}: rack session creation accepts once and separates creation Undo from later edits at ${width}px`, { timeout: 60000 }, async t => {
@@ -537,7 +640,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(teamPlan.undoCount, edited.undoCount + 1);
     assert.deepEqual(teamPlan.placements.filter(row => row.workId === teamSessions[0].id), [],
       'unscoped Team planning creation leaves its occurrence awaiting placement');
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'adjacent');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
     await expect(configure(page).locator('[name="label"]')).toHaveValue(teamSessions[0].label);
     assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true);
     await expect(configure(page).locator('[data-placement-index="0"][data-placement-field="periodId"]')).toHaveValue('');
@@ -602,7 +705,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.deepEqual(personalSessions[0].personIds, [researcher.id], 'the creation pad uses its named accepted person');
     assert.equal(personalPlan.undoCount, quarterPlan.undoCount + 1);
     assert.deepEqual(personalPlan.placements.filter(row => row.workId === personalSessions[0].id), []);
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'adjacent');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
     await expect(configure(page).locator(`[data-session-person="${researcher.id}"]`)).toBeChecked();
     await root(page).locator('[data-rack-creation-undo]').click();
     assert.equal(await bytes(page), quarterBytes);

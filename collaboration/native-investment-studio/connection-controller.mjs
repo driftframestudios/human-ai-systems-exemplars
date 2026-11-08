@@ -14,7 +14,7 @@ const named = row => row ? `${row.label}${row.lifecycle === 'retired' ? ' · ret
 // The host owns the plan and its diagram/list. This receiver lends one complete
 // connection form to the shared draft coordinator.
 export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}, onEditing = () => {},
-  onAccepted = () => {}, isActive = () => true, canOpen = isActive }) {
+  onAccepted = () => {}, onClose = () => false, isActive = () => true, canOpen = isActive }) {
   if (INSTANCES.has(root)) return INSTANCES.get(root);
   const document = root.ownerDocument, editor = editing.connection;
   const find = selector => {
@@ -227,7 +227,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   function begin(method, value, focus) {
     if (disposed) return;
     const epoch = ++generation, before = boundary();
-    onBegin();
+    onBegin(describeConnectionTarget(value));
     const active = editing.read().active;
     if (!owns(epoch) || studio.read() !== before.projection || editing.read().intent !== before.intent
       || (active && active.token !== before.token)) return;
@@ -251,7 +251,11 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
     close({ park: false }); const epoch = generation;
     render(); if (!owns(epoch)) return;
     announce(message); const mark = boundary(); onEditing();
-    if (retains(epoch, mark)) (elements.configure.hidden ? elements.add : elements.summary).focus();
+    if (retains(epoch, mark)) {
+      const handled = onClose();
+      if (handled === true || !retains(epoch, mark)) return;
+      (elements.configure.hidden ? elements.add : elements.summary).focus();
+    }
   }
   function settle(action) {
     if (disposed) return;
@@ -309,7 +313,7 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   }
   function click(event) {
     const control = event.target.closest('[data-connection-action]');
-    if (disposed || !control || !root.contains(control) || control.disabled) return;
+    if (disposed || !control || (!root.contains(control) && !elements.configure.contains(control)) || control.disabled) return;
     const action = control.dataset.connectionAction;
     if (action === 'create') { create(); return; }
     if (action === 'remove') {
@@ -341,7 +345,9 @@ export function mountConnectionPanel(root, { studio, editing, onBegin = () => {}
   try {
     inputs.status.replaceChildren(option('active', 'Active'), option('paused', 'Paused'));
     for (const field of FIELDS) if (inputs[field].tagName === 'TEXTAREA') inputs[field].maxLength = CONNECTION_FORMS['connection.create'].fields[field].maxLength;
-    listen(root, 'click', click); listen(elements.form, 'input', edit);
+    listen(root, 'click', event => { if (!elements.configure.contains(event.target)) click(event); });
+    listen(elements.configure, 'click', click);
+    listen(elements.form, 'input', edit);
     listen(elements.form, 'submit', event => { event.preventDefault(); settle('apply'); });
     listen(elements.form, 'compositionstart', () => { generation += 1; composing = true; });
     listen(elements.form, 'compositionend', event => { composing = false; edit(event); });
