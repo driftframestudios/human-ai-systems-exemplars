@@ -164,7 +164,7 @@ occurrence. Add occurrence changes this session's count through its draft owner;
 the exact count remains available. Unplaced retains the repetition for later placement.
 The dev #811 receiving skin compacts these controls inside a dark form, with
 chocolate repetition panels and the Showcase's raised duration readout. The
-enclosing timing inspector uses normal flow with its incidental border removed.
+separate Relationship settings inspector retains normal flow with its incidental border removed.
 Its controls, focus and proposal ownership remain the same.
 Participant switches independently include people for the session as a whole;
 Move up/down alone changes their order. The current shared duration and ordered
