@@ -176,6 +176,9 @@ below-right with the preserved .5rem horizontal gap. This is the adopted duratio
 skin; monetary dials retain their distinct coarse/fine contract.
 
 Duration and placement share equal columns in a wide session rack, then stack.
+The title/readout row and readout segments wrap when enlarged text requires it;
+the complete readout remains within its housing (#846). Normal-size geometry
+continues to follow the preserved specimen.
 Session pads select and place repetitions, with Add session and Remove session
 using the canonical draft owner. The duplicate numeric count stays synchronized
 and hidden in rack mode. Main retains its accepted reference until promotion is

@@ -43,10 +43,15 @@ const total = page => root(page).locator('[data-native-total]');
 const workAction = (page, name) => chapter(page, 'coordination').locator(`[data-action="${name}"]`);
 const personAction = (page, name) => chapter(page, 'people').locator(`[data-person-action="${name}"]`);
 const frame = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+async function openSession(page) {
+  if (!await work(page, 'minutesPerSession').isVisible())
+    await root(page).locator('.native-cadence__track-name[data-studio-session-id="review"]:visible, [data-delivery-session="review"]:visible').first().click();
+}
 
 async function open(t, engine, { fragment = '', complete = false, ...options } = {}) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...options });
   const page = await context.newPage();
+  page.setDefaultTimeout(5000);
   const telemetry = monitor(page);
   const requests = new Set();
   page.on('request', request => requests.add(request));
@@ -153,7 +158,7 @@ for (const engine of names) {
     const page = await open(t, engine);
     await selected(page, 'coordination');
     await expect(root(page).getByRole('tablist', { name: 'Studio chapters' })).toHaveCount(1);
-    await expect(root(page).getByRole('tab', { name: 'People', exact: true })).toHaveCount(1);
+    await expect(root(page).getByRole('tablist', { name: 'Studio chapters' }).getByRole('tab', { name: 'People', exact: true })).toHaveCount(1);
     await expect(tab(page, 'people').locator('svg[aria-hidden="true"][focusable="false"]')).toHaveCount(1);
     assert.equal(new URL(page.url()).hash, '');
     await tab(page, 'people').click();
@@ -163,7 +168,7 @@ for (const engine of names) {
     await page.goForward();
     await selected(page, 'people');
     await tab(page, 'coordination').click();
-    await root(page).locator('[data-native-workspace="session"] > summary').click();
+    await openSession(page);
     await work(page, 'minutesPerSession').fill('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
     await tab(page, 'coordination').focus();
@@ -243,7 +248,7 @@ for (const engine of names) {
       history.replaceState({ chapterFixture: 'retained' }, '', location.href);
     });
     await tab(page, 'coordination').click();
-    await root(page).locator('[data-native-workspace="session"] > summary').click();
+    await openSession(page);
     await work(page, 'minutesPerSession').fill('40');
     await tab(page, 'people').click();
     await person(page, 'ratePerHour').focus();

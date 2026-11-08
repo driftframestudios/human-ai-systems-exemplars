@@ -310,7 +310,8 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$2,840.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$1,140.00');
-    await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,480.00');
+    // Included work retains the paused 30-minute follow-up: half of $120 + $100.
+    await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,590.00');
     await score.getByRole('button', { name: 'Two-quarter rollout', exact: true }).click();
     await expect(chapter(page, 'coordination')).toHaveAttribute('aria-selected', 'true');
     await expect(score.locator('.native-cadence__period')).toHaveCount(2);

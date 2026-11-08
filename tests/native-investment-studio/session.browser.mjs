@@ -48,7 +48,17 @@ async function chooseSession(page, id) {
   await closeSession(page);
   const cassette = root(page).locator(`[data-studio-plan-id="${id}"]:visible`);
   if (await cassette.count()) await cassette.click();
-  await root(page).locator(`.native-cadence__track-name[data-studio-session-id="${id}"]:visible, .studio-session-tracks__name[data-studio-session-id="${id}"]:visible`).first().click();
+  await sessionEntry(page, id).click();
+}
+const sessionEntry = (page, id) => root(page).locator(`.native-cadence__track-name[data-studio-session-id="${id}"]:visible, [data-delivery-session="${id}"]:visible`).first();
+async function addSession(page) {
+  const existing = new Set(JSON.parse(await bytes(page)).work.map(work => work.id));
+  await action(page, 'create').click();
+  // Creation accepts the seed with its editor closed; select it to refine it.
+  // An empty people/team roster still opens the canonical prerequisite draft.
+  const created = JSON.parse(await bytes(page)).work.find(work => !existing.has(work.id));
+  if (created) await chooseSession(page, created.id);
+  await expect(form(page)).toBeVisible();
 }
 const member = (page, id) => sessions(page).locator(`[data-session-person="${id}"]`);
 const total = page => root(page).locator('[data-native-total]');
@@ -88,14 +98,14 @@ async function open(t, engine, full = false, contextOptions = {}) {
     const studio = createStudio();
     window.sessionFixture = { studio, controller: mountCoordinationPanel(element, { studio }), editing: createDraftCoordinator(studio) };
   });
-  await root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible').click();
+  await chooseSession(page, 'review');
   return page;
 }
 
 async function prepareSession(page) {
   const close = root(page).locator('[data-rack-editor-close]:visible');
   if (await close.count()) await close.click();
-  await action(page, 'create').click();
+  await addSession(page);
   await field(page, 'label').fill('Planning together');
   await field(page, 'teamId').selectOption('delivery');
   await member(page, 'product-one').check();
@@ -148,7 +158,8 @@ for (const engine of names) {
     await placements.screenshot({ path: resolve(captures, `${engine}-placements-mobile.png`) });
     await page.setViewportSize({ width: 1440, height: 1000 });
     const thirdPeriod = placements.locator('[data-occurrence-field="periodId"][value="period-3"]');
-    await thirdPeriod.check();
+    await firstPeriod.press('ArrowLeft');
+    await expect(thirdPeriod).toBeChecked();
     await expect(thirdPeriod).toBeFocused();
     assert.equal(await bytes(page), before, 'choosing a sprint stays in the draft');
     await legacy(page, 'cancel').click();
@@ -220,7 +231,7 @@ for (const engine of names) {
       .components.find(row => row.componentId === 'vision').workIds, []);
     await root(page).locator('[data-studio-undo]').click();
     assert.equal(await bytes(page), before);
-    await expect(root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible')).toBeVisible();
+    await expect(sessionEntry(page, 'review')).toBeVisible();
   });
 
   test(`${engine}: loaded session settings stay in the rack and preserve accepted work until Apply`, { timeout: 45000 }, async t => {
@@ -238,7 +249,7 @@ for (const engine of names) {
     assert.equal(await bytes(page), before);
     await legacy(page, 'cancel').click();
     await closeSession(page);
-    const track = root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible');
+    const track = sessionEntry(page, 'review');
     await expect(track).toContainText('30 min each');
     await expect(track).toHaveAttribute('aria-expanded', 'false');
     await track.click();
@@ -463,7 +474,7 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code);
       controller.refresh();
     });
-    await action(page, 'create').click();
+    await addSession(page);
     await field(page, 'label').fill('First working session');
     await field(page, 'minutesPerSession').fill('45');
     await form(page).locator('[data-native-create="team"]').click();
@@ -560,13 +571,16 @@ for (const engine of names) {
     await expect(assembly.locator('fieldset')).toBeEnabled();
   });
 
-  test(`${engine}: contribution session prerequisites return to their owning draft`, { timeout: 60000 }, async t => {
+  test(`${engine}: contribution session prerequisites return to their owning contribution`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await tab(page, 'people').click();
     await root(page).locator('[data-responsibility-action="create"]').click();
+    const contributionId = await page.evaluate(() => window.sessionFixture.studio.read().state.contributions.at(-1).id);
+    await root(page).locator(`[data-contribution-id="${contributionId}"]`).click();
     const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
     await contribution.locator('[name="categoryId"]').selectOption('draft-artifacts');
     await contribution.locator('[name="receiverPersonId"]').selectOption('product-one');
+    assert.equal(await page.evaluate(id => window.sessionFixture.studio.read().state.contributions.find(row => row.id === id).receiverPersonId, contributionId), 'product-one');
     await contribution.locator('[data-native-create="session"]').click();
     await field(page, 'label').fill('Notes review');
     await field(page, 'teamId').selectOption('delivery');
@@ -574,12 +588,14 @@ for (const engine of names) {
     await legacy(page, 'apply').click();
     await root(page).locator('[data-native-return-action]').click();
     await expect(contribution.locator('[name="receiverPersonId"]')).toHaveValue('product-one');
-    await expect(contribution.locator('[data-responsibility-action="review"]')).toBeFocused();
-    await contribution.locator('[data-responsibility-action="review"]').click();
+    await expect(contribution.locator('[name="categoryId"]')).toBeFocused();
+    await expect(contribution.locator('[data-responsibility-recovery]')).toBeHidden();
     const workId = await page.evaluate(() => window.sessionFixture.studio.read().state.work.find(row => row.label === 'Notes review').id);
+    const unlinked = await bytes(page);
     await contribution.locator(`[data-responsibility-work="${workId}"]`).check();
-    await contribution.locator('[data-responsibility-apply]').click();
-    assert.deepEqual(await page.evaluate(() => window.sessionFixture.studio.read().state.contributions[0].workIds), [workId]);
+    assert.deepEqual(await page.evaluate(id => window.sessionFixture.studio.read().state.contributions.find(row => row.id === id).workIds, contributionId), [workId]);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), unlinked, 'the direct support link has its own Undo step');
   });
 
   test(`${engine}: a complete session publishes once and reconciles participant, pause and funding choices`, { timeout: 60000 }, async t => {
@@ -655,8 +671,8 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code); controller.refresh();
     });
     const original = await bytes(page), originalTeams = JSON.parse(original).teams;
-    await root(page).locator('[data-rack-editor-close]').click();
-    await action(page, 'create').click();
+    await closeSession(page);
+    await addSession(page);
     const seed = await bytes(page), addedId = JSON.parse(seed).work.at(-1).id;
     assert.equal(JSON.parse(seed).work.length, JSON.parse(original).work.length + 1, 'Add creates a session immediately');
     for (const keep of [false, true]) {
@@ -674,7 +690,7 @@ for (const engine of names) {
         assert.equal(await bytes(page), seed);
         const close = root(page).locator('[data-rack-editor-close]:visible');
         if (await close.count()) await close.click();
-        await root(page).locator(`.studio-session-tracks__name[data-studio-session-id="${addedId}"]:visible`).click();
+        await chooseSession(page, addedId);
       }
     }
     const created = await bytes(page), createdState = JSON.parse(created);
@@ -733,7 +749,7 @@ for (const engine of names) {
     await action(page, 'remove').click(); await legacy(page, 'apply').click();
     assert.deepEqual(JSON.parse(await bytes(page)).practices[0].supportBindings[0].workIds, []);
     await expect(total(page)).toHaveText('$0.00');
-    await expect(root(page).locator('.studio-session-tracks__name:visible')).toHaveCount(0);
+    await expect(root(page).locator('[data-delivery-session]:visible')).toHaveCount(0);
     await expect(action(page, 'create')).toBeEnabled();
     await prepareSession(page); await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$400.00');
