@@ -140,14 +140,17 @@ remain preserved references.
 | Contribution | Functional work linked to people and sessions, with retained responsibility fields; membership alone grants no decision authority. |
 | Effort and funding | Duration, session count and participants establish effort. Shared work is priced once; funded staffing and extra investment stay separate. |
 | Unknown and zero | A blank value remains unknown. Zero is an entered value. An explicit dial gesture can establish a value. |
-| Removal | A named object and reference-aware canonical command determine scope. Reversible Remove has quiet rose treatment. |
+| Removal | A named session and its dependent links leave together in one canonical command; amp Undo restores the exact prior plan. Other record types retain their existing reference checks. Remove has quiet rose treatment. |
 | Evidence | Planned support, authored rehearsal and recorded observation have distinct meanings. |
 
 The amp's Undo uses the same history as Investment. It parks unfinished edits
 before returning to the prior accepted projection. New-session creation can be
-undone independently of later unaccepted field changes. Canonical reference checks
-remain useful when a record is shared; future atomic unlink/reassign routes need
-their own model boundary.
+undone independently of later unaccepted field changes. Session removal prunes
+support bindings, placements, incident handoffs/dependencies and their dependent
+delays. Stage-backed decisions survive; a decision whose only anchor was a removed
+handoff leaves with it. Other people, teams, evidence and ordering stay intact.
+Removing one occurrence retains the parent session's plan-wide references.
+After deleting the open record, focus returns to a surviving rack control.
 
 Creating a prerequisite returns to the same visible session receiver and focuses
 its review or requested field. Empty-plan creation uses that receiver directly;
@@ -214,6 +217,7 @@ participant time shares remain with #798; production Reset remains with #808.
 
 | Earlier direction | Current receiving decision |
 | --- | --- |
+| Shared-session references block removing a session | #833 clears the session and its dependent links atomically; amp Undo restores them together. |
 | Per-file root teardown inspects only resources already assigned | #827 joins pending setup through one shared lifecycle owner, then releases every acquired browser and server once. |
 | #813 cassette selection opens editing and offers Undo beside the shelf | #820 loads plan scope with detail closed; Undo belongs to native amp controls. |
 | Team name/membership changes require Apply and a proposed total | Direct canonical team changes update the board and shared accepted history. |

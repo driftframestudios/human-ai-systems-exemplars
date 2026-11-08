@@ -68,7 +68,8 @@ saved-plan owners. Deeper independently editable financial decks remain with
    reading uses the same accepted people and work.
 
 The authored people use work-based names such as Researcher and Quality reviewer.
-Known people may participate across teams. Their rates and example arrangements
+Known people may participate across teams. Removing a session clears its supporting
+links and dependent timing relationships; amp Undo restores the whole change. Their rates and example arrangements
 help a visitor explore relationships; people doing real work retain authority over
 commitments and findings.
 
@@ -85,7 +86,7 @@ commitments and findings.
 | Change membership or order | Checkbox pads and compact movement controls |
 | Accept a proposal | Raised Apply beside Close delegates to the canonical bottom action, sharing validation and focus behavior |
 | Cancel or close | Quiet ghost action; Cancel discards, Close retains unfinished work |
-| Remove a named object | Muted rose control using existing reference-aware recovery |
+| Remove a named object | Muted rose control; session removal clears its links in one recoverable edit |
 | Undo accepted changes | Stable native amp control; cassette shelves retain their selection role |
 
 The [control research](rack-control-research.md) explains this hierarchy and its
