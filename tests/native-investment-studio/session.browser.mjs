@@ -29,16 +29,34 @@ after(async () => {
   finally { await server?.close(); }
 });
 const root = page => page.locator('[data-native-coordination]');
-const sessions = page => root(page).locator('[data-native-session-editor]');
+// The session owner lends its form to the active rack. Locate it from the
+// Studio root so these behavior cases follow the same live form after a handoff.
+const sessions = page => root(page);
 const form = page => sessions(page).locator('[data-native-configure] form');
 const field = (page, name) => form(page).locator(`[name="${name}"]`);
-const action = (page, name) => sessions(page).locator(`[data-session-action="${name}"]`);
+const action = (page, name) => name === 'create'
+  ? root(page).locator('[data-studio-entry-key="shared-session-add"]')
+  : name === 'remove' ? root(page).locator('[data-rack-remove-plan]')
+    : sessions(page).locator(`[data-session-action="${name}"]`);
 const legacy = (page, name) => sessions(page).locator(`[data-action="${name}"]`);
-const select = page => sessions(page).locator('[data-native-session-select]');
+const currentSessionId = page => page.evaluate(async () => {
+  const { describeSessionTarget } = await import('/collaboration/native-investment-studio/command-draft.mjs');
+  return describeSessionTarget(window.sessionFixture.controller.read().draft?.sessionId)?.id;
+});
+async function closeSession(page) {
+  const close = root(page).locator('[data-rack-editor-close]:visible');
+  if (await close.count()) await close.click();
+}
+async function chooseSession(page, id) {
+  await closeSession(page);
+  const cassette = root(page).locator(`[data-studio-plan-id="${id}"]:visible`);
+  if (await cassette.count()) await cassette.click();
+  await root(page).locator(`.native-cadence__track-name[data-studio-session-id="${id}"]:visible, .studio-session-tracks__name[data-studio-session-id="${id}"]:visible`).first().click();
+}
 const member = (page, id) => sessions(page).locator(`[data-session-person="${id}"]`);
 const total = page => root(page).locator('[data-native-total]');
-const knob = (page, unit = 'minutes') => sessions(page).locator(`[data-native-${unit}-knob]`);
-const dial = (page, unit = 'minutes') => sessions(page).locator(`[data-native-${unit}-dial]`);
+const knob = (page, unit = 'minutes') => form(page).locator(`[data-native-${unit}-knob]`);
+const dial = (page, unit = 'minutes') => form(page).locator(`[data-native-${unit}-dial]`);
 const tab = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const bytes = page => page.evaluate(() => window.sessionFixture.studio.exportText());
 const frames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -46,6 +64,7 @@ const frames = page => page.evaluate(() => new Promise(resolve => requestAnimati
 async function open(t, engine, full = false, contextOptions = {}) {
   const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...contextOptions });
   const page = await context.newPage(), telemetry = monitor(page), pending = new Set();
+  page.setDefaultTimeout(5000);
   page.on('request', request => pending.add(request));
   page.on('requestfinished', request => pending.delete(request));
   page.on('requestfailed', request => pending.delete(request));
@@ -72,16 +91,19 @@ async function open(t, engine, full = false, contextOptions = {}) {
     const studio = createStudio();
     window.sessionFixture = { studio, controller: mountCoordinationPanel(element, { studio }), editing: createDraftCoordinator(studio) };
   });
-  await page.locator('details[data-native-workspace="session"] > summary').click();
+  await root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible').click();
   return page;
 }
 
 async function prepareSession(page) {
+  const close = root(page).locator('[data-rack-editor-close]:visible');
+  if (await close.count()) await close.click();
   await action(page, 'create').click();
   await field(page, 'label').fill('Planning together');
   await field(page, 'teamId').selectOption('delivery');
   await member(page, 'product-one').check();
   await member(page, 'product-two').check();
+  for (const id of ['engineering-one', 'engineering-two']) await member(page, id).uncheck();
   await field(page, 'hoursPerSession').fill('1');
   await field(page, 'minutesPerSession').fill('0');
   await field(page, 'occurrences').fill('2');
@@ -116,11 +138,11 @@ for (const engine of names) {
       const studio = createStudio(createShowcasePlan());
       window.sessionFixture = { studio, controller: mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio }) };
     });
-    await select(page).selectOption('review');
-    const placements = sessions(page).locator('.native-session__placements');
-    const firstPeriod = placements.getByRole('combobox', { name: 'Session 1 · Sprint', exact: true });
+    await chooseSession(page, 'review');
+    const placements = sessions(page).locator('[data-session-occurrences]');
+    const firstPeriod = placements.locator('[data-occurrence-field="periodId"][value="period-4"]');
     const before = await bytes(page);
-    await expect(firstPeriod).toHaveValue('period-4');
+    await expect(firstPeriod).toBeChecked();
     await page.setViewportSize({ width: 390, height: 1000 });
     await placements.scrollIntoViewIfNeeded();
     const bounds = await placements.evaluate(element => ({ left: element.getBoundingClientRect().left,
@@ -128,16 +150,17 @@ for (const engine of names) {
     assert.ok(bounds.left >= 0 && bounds.right <= bounds.viewport + 1 && bounds.pageWidth <= bounds.viewport + 1, JSON.stringify(bounds));
     await placements.screenshot({ path: resolve(captures, `${engine}-placements-mobile.png`) });
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await firstPeriod.focus();
-    await firstPeriod.selectOption('period-3');
-    await expect(firstPeriod).toBeFocused();
+    const thirdPeriod = placements.locator('[data-occurrence-field="periodId"][value="period-3"]');
+    await thirdPeriod.check();
+    await expect(thirdPeriod).toBeFocused();
     assert.equal(await bytes(page), before, 'choosing a sprint stays in the draft');
     await legacy(page, 'cancel').click();
-    await select(page).selectOption('review');
-    await expect(firstPeriod).toHaveValue('period-4');
-    await field(page, 'occurrences').fill('5');
-    await expect(placements.getByRole('combobox', { name: 'Session 5 · Sprint', exact: true })).toHaveValue('');
-    await firstPeriod.selectOption('period-3');
+    await chooseSession(page, 'review');
+    await expect(firstPeriod).toBeChecked();
+    await placements.locator('[data-session-occurrence-add]').click();
+    await expect(placements.locator('[data-session-occurrence="4"]')).toHaveAttribute('data-placed', 'false');
+    await placements.locator('[data-session-occurrence="0"]').click();
+    await thirdPeriod.check();
     await legacy(page, 'apply').click();
     const accepted = JSON.parse(await bytes(page)), work = accepted.work.find(row => row.id === 'review');
     assert.equal(work.minutesPerOccurrence, 30);
@@ -146,13 +169,16 @@ for (const engine of names) {
     const placed = accepted.scoreSettings.cadence.placements.filter(row => row.workId === 'review');
     assert.equal(placed.find(row => row.occurrenceIndex === 0).periodId, 'period-3');
     assert.equal(placed.some(row => row.occurrenceIndex === 4), false);
-    await field(page, 'occurrences').fill('2');
+    for (const index of [4, 3, 2]) {
+      await placements.locator(`[data-session-occurrence="${index}"]`).click();
+      await placements.locator('[data-session-occurrence-remove]').click();
+    }
     await legacy(page, 'apply').click();
     assert.deepEqual(JSON.parse(await bytes(page)).scoreSettings.cadence.placements.filter(row => row.workId === 'review')
       .map(row => row.occurrenceIndex), [0, 1], 'reducing the sessions retires only their trailing placements');
   });
 
-  test(`${engine}: session diagram names Change, quality, recovery, learning and rehearsal support`, { timeout: 45000 }, async t => {
+  test(`${engine}: session removal explains supporting Change, quality, recovery and learning references`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.evaluate(() => {
       const { studio, controller } = window.sessionFixture, plan = JSON.parse(studio.exportText());
@@ -168,14 +194,7 @@ for (const engine of names) {
       const result = studio.importText(JSON.stringify(plan), studio.read());
       if (!result.ok) throw Error(JSON.stringify(result.error)); controller.refresh();
     });
-    const before = await bytes(page), support = sessions(page).locator('[data-native-session-map-support]');
-    await expect(support).toContainText('Vision');
-    await expect(support).toContainText('Acceptance criteria / specification by example');
-    await expect(support).toContainText('Replay the interrupted request');
-    await expect(support).toContainText('Source framing and facilitation');
-    await expect(support).toContainText('A reviewer changes the acceptance conditions');
-    await expect(support).not.toContainText('Supporting links can be added');
-    assert.equal(await bytes(page), before);
+    const before = await bytes(page);
     await action(page, 'remove').click();
     const references = sessions(page).locator('[data-native-session-dependencies]');
     await expect(references).toContainText('Quality concept: Acceptance criteria / specification by example');
@@ -184,55 +203,29 @@ for (const engine of names) {
     assert.equal(await bytes(page), before);
   });
 
-  test(`${engine}: accepted session diagram stays above settings while whole-plan costs remain in Investment`, { timeout: 60000 }, async t => {
-    const page = await open(t, engine);
-    await page.evaluate(async () => {
-      const { createShowcasePlan } = await import('/collaboration/native-investment-studio/presets.mjs');
-      const { studio, controller } = window.sessionFixture;
-      const result = studio.importText(JSON.stringify(createShowcasePlan()), studio.read());
-      if (!result.ok) throw Error(result.error.code); controller.refresh();
-    });
-    const map = sessions(page).locator('.native-session-map');
-    const supportedWork = sessions(page).locator('.studio-session-details');
-    await supportedWork.locator(':scope > summary').click();
-    await expect(map).toBeVisible();
-    await expect(map.locator('[data-native-session-map-people] li')).toHaveText(['Product lead', 'Engineering lead', 'Quality reviewer']);
-    await expect(map.locator('[data-native-team]')).toHaveText('Engineering');
-    await expect(map).toContainText('Readiness findings and rollout conditions');
-    await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
-    await expect(total(page)).toHaveText('$3,980.00');
-    const before = await bytes(page);
-    const settings = sessions(page).locator('[data-native-configure]');
-    const geometry = () => map.evaluate(el => { const box = el.getBoundingClientRect(); return { x: box.x, y: box.y + scrollY, width: box.width, height: box.height }; });
-    for (const width of [1152, 1322, 1920]) {
+  test(`${engine}: loaded session settings stay in the rack and preserve accepted work until Apply`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine), before = await bytes(page);
+    const rack = root(page).locator('[data-rack-editor-kind="session"]');
+    await expect(rack).toBeVisible();
+    await expect(rack).toContainText('Weekly working session');
+    for (const width of [1280, 390]) {
       await page.setViewportSize({ width, height: 1000 });
-      if (await settings.getAttribute('open') !== null) await settings.locator('summary').click();
-      const accepted = await geometry();
-      await settings.locator('summary').click(); await frames(page);
-      assert.ok(Object.entries(await geometry()).every(([key, value]) => Math.abs(value - accepted[key]) < .1), 'opening settings preserves accepted diagram placement within subpixel rounding');
+      const bounds = await rack.evaluate(element => { const b = element.getBoundingClientRect(); return {left:b.left,right:b.right,width:innerWidth}; });
+      assert.ok(bounds.left >= 0 && bounds.right <= bounds.width + 1, JSON.stringify(bounds));
     }
     await field(page, 'minutesPerSession').fill('45');
-    await expect(map.locator('[data-native-session-map-time]')).toHaveText('30 min per person · 4 working sessions');
+    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$1,800.00');
     assert.equal(await bytes(page), before);
-    await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
     await legacy(page, 'cancel').click();
-    assert.equal(await bytes(page), before);
+    await closeSession(page);
+    const track = root(page).locator('.studio-session-tracks__name[data-studio-session-id="review"]:visible');
+    await expect(track).toContainText('30 min each');
+    await expect(track).toHaveAttribute('aria-expanded', 'false');
+    await track.click();
+    await expect(field(page, 'minutesPerSession')).toHaveValue('30');
     await tab(page, 'investment').click();
-    const trace = root(page).locator('[data-native-chapter-panel="investment"] [data-native-trace]');
-    await trace.locator('summary').click();
-    await expect(trace.locator('[data-native-trace-summary]')).toContainText('$3,980.00 total');
-    assert.equal(await bytes(page), before, 'reading the shared cost breakdown preserves the plan');
-    await tab(page, 'coordination').click();
-    if (!await supportedWork.evaluate(node => node.open)) await supportedWork.locator(':scope > summary').click();
-    await expect(map).toBeVisible();
-    for (const width of [900, 1000, 1322]) {
-      await page.setViewportSize({ width, height: 1000 });
-      await map.screenshot({ path: resolve(captures, `${engine}-session-map-${width}.png`) });
-    }
-    await page.setViewportSize({ width: 390, height: 1000 });
-    const reading = await map.evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth, nodes: [...el.querySelectorAll('li, h3, h4')].map(n => ({ client: n.clientWidth, scroll: n.scrollWidth })) }));
-    assert.ok(reading.scroll <= reading.client + 1); assert.ok(reading.nodes.every(n => n.scroll <= n.client + 1));
-    await map.screenshot({ path: resolve(captures, `${engine}-session-map-narrow.png`) });
+    await expect(total(page)).toHaveText('$1,200.00');
+    assert.equal(await bytes(page), before);
   });
 
   test(`${engine}: a duration turn retains its amount when the page scrolls before release`, { timeout: 45000 }, async t => {
@@ -258,11 +251,11 @@ for (const engine of names) {
     await hours.scrollIntoViewIfNeeded();
     const point = await dialPoint(page, -135 + 2 * 270 / 24, 'hours'); await page.mouse.click(point.x, point.y);
     await expect(field(page, 'hoursPerSession')).toHaveValue('2'); await expect(field(page, 'minutesPerSession')).toHaveValue('30');
-    await expect(sessions(page).locator('[data-native-duration-hours]')).toHaveText('02');
-    await expect(sessions(page).locator('[data-native-duration-minutes]')).toHaveText('30');
+    await expect(form(page).locator('[data-native-duration-hours]')).toHaveText('02');
+    await expect(form(page).locator('[data-native-duration-minutes]')).toHaveText('30');
     await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$6,000.00');
     await hours.focus(); await page.keyboard.press('ArrowUp'); await expect(field(page, 'hoursPerSession')).toHaveValue('3');
-    await sessions(page).locator('[data-field="hoursPerSession"][data-step="-1"]').click(); await expect(hours).toHaveValue('2');
+    await form(page).locator('[data-field="hoursPerSession"][data-step="-1"]').click(); await expect(hours).toHaveValue('2');
     await field(page, 'hoursPerSession').fill('002'); await expect(hours).toHaveValue('2');
     await beginTurn(page, 0, 'hours'); await expect(field(page, 'hoursPerSession')).toHaveValue('12');
     await page.keyboard.press('Escape'); await page.mouse.up(); await expect(field(page, 'hoursPerSession')).toHaveValue('002');
@@ -272,7 +265,7 @@ for (const engine of names) {
     await field(page, 'hoursPerSession').fill('23'); await hours.focus(); await page.keyboard.press('End');
     await expect(field(page, 'hoursPerSession')).toHaveValue('23'); await expect(field(page, 'minutesPerSession')).toHaveValue('30');
     await expect(hours).toHaveAttribute('aria-valuetext', '23 hours per session');
-    await expect(sessions(page).locator('[data-native-hours-knob-note]')).toBeHidden();
+    await expect(form(page).locator('[data-native-hours-knob-note]')).toBeHidden();
     await field(page, 'minutesPerSession').fill('0'); await expect(hours).toHaveAttribute('max', '24');
     await hours.focus(); await page.keyboard.press('End'); await expect(field(page, 'hoursPerSession')).toHaveValue('24');
     await expect(knob(page)).toHaveAttribute('max', '0'); await expect(field(page, 'minutesPerSession')).toHaveValue('0');
@@ -304,20 +297,20 @@ for (const engine of names) {
       await field(page, 'minutesPerSession').fill(text);
       await expect(knob(page)).toBeDisabled();
       await expect(dial(page)).toHaveAttribute('data-value-state', 'unavailable');
-      await expect(sessions(page).locator('[data-native-knob-note]')).toBeVisible();
+      await expect(form(page).locator('[data-native-knob-note]')).toBeVisible();
       await expect(field(page, 'minutesPerSession')).toHaveValue(text);
     }
     await field(page, 'minutesPerSession').fill('44');
-    await sessions(page).locator('[data-field="minutesPerSession"][data-step="1"]').click();
+    await form(page).locator('[data-field="minutesPerSession"][data-step="1"]').click();
     await expect(knob(page)).toHaveValue('45');
     await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,800.00');
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work[0].minutesPerOccurrence), 45);
     await tab(page, 'investment').click();
-    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-studio-undo]').click();
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'coordination').click();
-    await select(page).selectOption('review');
+    await chooseSession(page, 'review');
     if (await legacy(page, 'review').isVisible()) await legacy(page, 'review').click();
     await knob(page).focus(); await page.keyboard.press('End');
     await legacy(page, 'cancel').click();
@@ -453,7 +446,7 @@ for (const engine of names) {
     await action(page, 'create').click();
     await field(page, 'label').fill('First working session');
     await field(page, 'minutesPerSession').fill('45');
-    await sessions(page).locator('[data-native-create="team"]').click();
+    await form(page).locator('[data-native-create="team"]').click();
     const assembly = root(page).locator('[data-native-assembly]');
     const assemblyForm = assembly.locator('[data-assembly-form]');
     await assemblyForm.locator('[name="label"]').fill('First team');
@@ -491,7 +484,7 @@ for (const engine of names) {
   test(`${engine}: restarting a prerequisite retires its obsolete route and descendants while retaining their drafts`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await field(page, 'label').fill('Session to resume');
-    await sessions(page).locator('[data-native-create="team"]').click();
+    await form(page).locator('[data-native-create="team"]').click();
     const assembly = root(page).locator('[data-native-assembly]');
     const creation = assembly.locator('[data-assembly-form]');
     await creation.locator('[name="label"]').fill('Earlier team draft');
@@ -502,7 +495,7 @@ for (const engine of names) {
     await saved.locator('[data-saved-open^="session:"]').click();
     await expect(field(page, 'label')).toHaveValue('Session to resume');
     await expect(root(page).locator('[data-native-return-route]')).toBeHidden();
-    await sessions(page).locator('[data-native-create="team"]').click();
+    await form(page).locator('[data-native-create="team"]').click();
     await creation.locator('[name="label"]').fill('Receiving team');
     await assembly.locator('[data-assembly-apply]').click();
     await root(page).locator('[data-native-return-action]').click();
@@ -516,7 +509,7 @@ for (const engine of names) {
   test(`${engine}: resuming a nested origin through Saved edits retains its earlier return destination`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await field(page, 'label').fill('Session waiting for a team');
-    await sessions(page).locator('[data-native-create="team"]').click();
+    await form(page).locator('[data-native-create="team"]').click();
     const assembly = root(page).locator('[data-native-assembly]'), creation = assembly.locator('[data-assembly-form]');
     await creation.locator('[name="label"]').fill('Team waiting for a person');
     await assembly.locator('[data-native-create="person"][data-native-return="assembly"]').click();
@@ -536,7 +529,7 @@ for (const engine of names) {
   test(`${engine}: discarding the saved origin releases its return route and keeps the current creation form`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await field(page, 'label').fill('Unfinished session');
-    await sessions(page).locator('[data-native-create="team"]').click();
+    await form(page).locator('[data-native-create="team"]').click();
     const assembly = root(page).locator('[data-assembly-form]');
     await assembly.locator('[name="label"]').fill('Current team draft');
     const saved = root(page).locator('[data-native-saved]');
@@ -547,44 +540,26 @@ for (const engine of names) {
     await expect(assembly.locator('fieldset')).toBeEnabled();
   });
 
-  test(`${engine}: contribution prerequisites and arrangement people return to their owning drafts`, { timeout: 60000 }, async t => {
+  test(`${engine}: contribution session prerequisites return to their owning draft`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await tab(page, 'people').click();
     await root(page).locator('[data-responsibility-action="create"]').click();
     const contribution = root(page).locator('[data-responsibility-configure="contribution"]');
     await contribution.locator('[name="categoryId"]').selectOption('draft-artifacts');
-    await contribution.locator('[name="reviewBoundary"]').fill('Review the working notes.');
+    await contribution.locator('[name="receiverPersonId"]').selectOption('product-one');
     await contribution.locator('[data-native-create="session"]').click();
     await field(page, 'label').fill('Notes review');
     await field(page, 'teamId').selectOption('delivery');
     await member(page, 'product-one').check();
     await legacy(page, 'apply').click();
     await root(page).locator('[data-native-return-action]').click();
-    await expect(contribution.locator('[name="reviewBoundary"]')).toHaveValue('Review the working notes.');
+    await expect(contribution.locator('[name="receiverPersonId"]')).toHaveValue('product-one');
     await expect(contribution.locator('[data-responsibility-action="review"]')).toBeFocused();
     await contribution.locator('[data-responsibility-action="review"]').click();
     const workId = await page.evaluate(() => window.sessionFixture.studio.read().state.work.find(row => row.label === 'Notes review').id);
     await contribution.locator(`[data-responsibility-work="${workId}"]`).check();
     await contribution.locator('[data-responsibility-apply]').click();
     assert.deepEqual(await page.evaluate(() => window.sessionFixture.studio.read().state.contributions[0].workIds), [workId]);
-
-    await tab(page, 'coordination').click();
-    const arrangement = root(page).locator('[data-connection-templates]');
-    await expect(arrangement).toBeVisible();
-    await arrangement.locator('.studio-arrangement-settings > summary').click();
-    const team = arrangement.locator('[data-template-card^="team:"]').first();
-    await team.locator('summary').click();
-    await team.locator('[data-template-field$=".label"]').fill('Local design team');
-    await team.locator('[data-native-create="person"]').click();
-    const assembly = root(page).locator('[data-native-assembly]');
-    await assembly.locator('[data-assembly-form] [name="label"]').fill('Robin');
-    await assembly.locator('[data-assembly-apply]').click();
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(arrangement).toBeVisible();
-    await expect(team.locator('[data-template-field$=".label"]')).toHaveValue('Local design team');
-    await expect(team.locator('summary')).toContainText('Local design team');
-    await expect(team.locator('[data-template-field$=".personIds"] option').filter({ hasText: 'Robin' })).toHaveCount(1);
-    await expect(arrangement.locator('[data-reel-choice="pod"][aria-pressed="true"]')).toBeFocused();
   });
 
   test(`${engine}: a complete session publishes once and reconciles participant, pause and funding choices`, { timeout: 60000 }, async t => {
@@ -592,7 +567,7 @@ for (const engine of names) {
     await prepareSession(page);
     // Two people × $100/hour × one hour × two sessions adds $400.
     await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$1,600.00');
-    await expect(total(page)).toHaveText('$1,200.00');
+    await expect(total(page)).toHaveText('$1,400.00');
     const before = await page.evaluate(() => window.sessionFixture.studio.readAcceptance().sequence);
     await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,600.00');
@@ -606,7 +581,7 @@ for (const engine of names) {
     await expect(form(page).getByRole('radio', { name: 'Paused', exact: true })).toBeChecked();
     await expect(sessions(page).locator('[data-native-session-pause-note]')).toBeVisible();
     assert.equal(await bytes(page), acceptedSession, 'choosing a status previews the session while accepted work stays exact');
-    await legacy(page, 'cancel').click(); await sessions(page).locator('[data-native-configure] > summary').click();
+    await legacy(page, 'cancel').click(); await chooseSession(page, added.id);
     await expect(form(page).getByRole('radio', { name: 'Planned', exact: true })).toBeChecked();
     await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeChecked();
     await expect(form(page).getByRole('radio', { name: 'Extra investment', exact: true })).toBeEnabled();
@@ -660,13 +635,27 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code); controller.refresh();
     });
     const original = await bytes(page), originalTeams = JSON.parse(original).teams;
+    await root(page).locator('[data-rack-editor-close]').click();
+    await action(page, 'create').click();
+    const seed = await bytes(page), addedId = JSON.parse(seed).work.at(-1).id;
+    assert.equal(JSON.parse(seed).work.length, JSON.parse(original).work.length + 1, 'Add creates a session immediately');
     for (const keep of [false, true]) {
-      await prepareSession(page);
+      await field(page, 'label').fill('Planning together');
       await field(page, 'teamId').selectOption('review-host');
+      for (const personId of ['product-one', 'product-two']) await member(page, personId).check();
+      for (const personId of ['engineering-one', 'engineering-two']) await member(page, personId).uncheck();
+      await field(page, 'hoursPerSession').fill('1');
+      await field(page, 'minutesPerSession').fill('0');
+      await field(page, 'occurrences').fill('2');
       await expect(sessions(page).locator('[data-native-session-error]')).toBeEmpty();
-      assert.equal(await bytes(page), original, 'cross-team selection remains a draft');
+      assert.equal(await bytes(page), seed, 'settings remain a draft after the initial addition');
       await legacy(page, keep ? 'apply' : 'cancel').click();
-      if (!keep) assert.equal(await bytes(page), original);
+      if (!keep) {
+        assert.equal(await bytes(page), seed);
+        const close = root(page).locator('[data-rack-editor-close]:visible');
+        if (await close.count()) await close.click();
+        await root(page).locator(`.studio-session-tracks__name[data-studio-session-id="${addedId}"]:visible`).click();
+      }
     }
     const created = await bytes(page), createdState = JSON.parse(created);
     assert.equal(createdState.work.at(-1).teamId, 'review-host');
@@ -677,7 +666,7 @@ for (const engine of names) {
     const editedState = JSON.parse(await bytes(page));
     assert.deepEqual(editedState.work.at(-1).personIds, ['product-one', 'product-two', 'engineering-one']);
     assert.deepEqual(editedState.teams, originalTeams);
-    for (const expected of [created, original]) {
+    for (const expected of [created, seed, original]) {
       await page.evaluate(() => {
         const { studio, controller } = window.sessionFixture;
         const result = studio.undo(studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
@@ -689,27 +678,27 @@ for (const engine of names) {
   test(`${engine}: session selection retains separate drafts through chapters and stale-plan review`, { timeout: 60000 }, async t => {
     const page = await open(t, engine);
     await prepareSession(page); await legacy(page, 'apply').click();
-    const newId = await select(page).inputValue();
-    await select(page).selectOption('review'); await field(page, 'minutesPerSession').fill('45');
-    await select(page).selectOption(newId); await field(page, 'label').fill('Revised planning name');
+    const newId = await currentSessionId(page);
+    await chooseSession(page, 'review'); await field(page, 'minutesPerSession').fill('45');
+    await chooseSession(page, newId); await field(page, 'label').fill('Revised planning name');
     await tab(page, 'people').click();
-    await root(page).locator('[data-native-team-editor] .studio-people-rates > summary').click();
     await root(page).locator('[data-native-team-editor] [data-person-id="product-one"]').click();
     await root(page).locator('[data-person-configure] input[name="ratePerHour"]').fill('105');
     await root(page).locator('[data-person-action="apply"]').click();
     await expect(total(page)).toHaveText('$1,625.00');
     await tab(page, 'coordination').click();
+    await chooseSession(page, newId);
     await expect(field(page, 'label')).toHaveValue('Revised planning name');
     await expect(root(page)).toHaveAttribute('data-native-state', 'stale');
     await legacy(page, 'review').click(); await legacy(page, 'apply').click();
-    await select(page).selectOption('review');
+    await chooseSession(page, 'review');
     await expect(field(page, 'minutesPerSession')).toHaveValue('45');
     await expect(field(page, 'minutesPerSession')).toBeDisabled();
     await legacy(page, 'review').click();
     // Original: 4.5h × ($105 + 3 × $100) = $1,822.50; added: 2h × ($105 + $100) = $410.
     await expect(sessions(page).locator('[data-native-preview-total]')).toHaveText('$2,232.50');
     await legacy(page, 'apply').click(); await expect(total(page)).toHaveText('$2,232.50');
-    await select(page).selectOption(newId);
+    await chooseSession(page, newId);
     await expect(field(page, 'label')).toHaveValue('Revised planning name');
   });
 
@@ -723,7 +712,7 @@ for (const engine of names) {
     await prepareSession(page); await legacy(page, 'apply').click();
     await action(page, 'remove').click(); await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$1,200.00');
-    await expect(select(page)).toBeFocused();
+    await expect(action(page, 'create')).toBeVisible();
     await page.evaluate(() => {
       const { studio, controller } = window.sessionFixture;
       const plan = JSON.parse(studio.exportText()); plan.work = []; plan.practices = [];
@@ -731,11 +720,11 @@ for (const engine of names) {
       if (!result.ok) throw Error(result.error.code);
       controller.refresh();
     });
-    await expect(select(page)).toBeDisabled();
+    await expect(root(page).locator('.studio-session-tracks__name:visible')).toHaveCount(0);
     await expect(action(page, 'create')).toBeEnabled();
     await prepareSession(page); await legacy(page, 'apply').click();
     await expect(total(page)).toHaveText('$400.00');
-    await expect(select(page)).toBeEnabled();
+    await expect(field(page, 'label')).toBeEditable();
     assert.equal(await page.evaluate(() => window.sessionFixture.studio.read().state.work.length), 1);
   });
 
@@ -752,7 +741,7 @@ for (const engine of names) {
     }));
     assert.ok(memberGeometry.every(row => row.toggle < row.label * .25 && row.words > row.label * .6), 'Membership switches leave most of each card width for its role and rate.');
     await members.screenshot({ path: resolve(captures, `${engine}-participants-1259.png`) });
-    await sessions(page).screenshot({ path: resolve(captures, `${engine}-wide.png`) });
+    await root(page).locator('[data-rack-editor-kind="session"]').screenshot({ path: resolve(captures, `${engine}-wide.png`) });
     const time = form(page).locator('.native-time-controls');
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
@@ -775,9 +764,11 @@ for (const engine of names) {
       assert.deepEqual(geometry.outputFor.split(' '), geometry.fieldIds);
       assert.ok(geometry.parts.every(part => geometry.output.bottom <= part.top && part.left >= geometry.module.left
         && part.right <= geometry.module.right && part.bottom <= geometry.module.bottom), 'readout and both unit controls share one bounded enclosure');
-      assert.ok(geometry.parts.every(part => part.field.top > part.dial.top && part.field.left >= (width === 1440 ? part.dial.right - 1 : part.dial.left + 1)),
-        `each dial drives its lower-right exact field at ${width}px: ${JSON.stringify(geometry)}`);
-      assert.ok(geometry.parts[0].dial.width > geometry.parts[1].dial.width);
+      assert.ok(geometry.parts.every(part => part.field.top > part.dial.top && (width === 1440
+        ? part.field.left >= part.dial.right - 1
+        : Math.abs((part.field.left + part.field.right) - (part.dial.left + part.dial.right)) < 2)),
+        `exact fields sit beside their dials on laptop and centered below them on mobile: ${JSON.stringify(geometry)}`);
+      assert.ok(geometry.parts[0].dial.width >= geometry.parts[1].dial.width, 'Hours retains equal or greater visual weight than Minutes');
       assert.notEqual(geometry.parts[0].background, geometry.parts[1].background);
       if (width === 1440) assert.ok(Math.abs(geometry.parts[0].top-geometry.parts[1].top) < 1, 'Hours and Minutes sit side by side');
       assert.ok(geometry.module.left >= 0 && geometry.module.right <= width, 'the duration housing stays inside the phone/laptop viewport');
@@ -792,13 +783,13 @@ for (const engine of names) {
         context.font = `${css.fontStyle} ${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
         return { left: box.left, right: box.right, width: document.documentElement.clientWidth,
           content: box.width - parseFloat(css.borderLeftWidth) - parseFloat(css.borderRightWidth)
-            - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight), digits: context.measureText(input.name === 'occurrences' ? '00000' : '00').width };
+            - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight), digits: context.measureText(input.value.padStart(2, '0')).width };
       }));
       assert.equal(geometry.length, 3);
       assert.ok(geometry.every(box => box.left >= -.5 && box.right <= box.width + .5 && box.content >= box.digits),
-        `Duration pairs and five-digit repetition stay in the ${width}px viewport: ${JSON.stringify(geometry)}`);
+        `Duration and the current session count stay in the ${width}px viewport: ${JSON.stringify(geometry)}`);
       const containment = await sessions(page).evaluate(element => {
-        const chapter = element.closest('[data-native-chapter-panel]').getBoundingClientRect();
+        const chapter = element.querySelector('[data-native-chapter-panel="coordination"]').getBoundingClientRect();
         const remote = element.querySelector('[data-native-configure]');
         return [remote, remote.querySelector('form'), ...remote.querySelectorAll('input, select, button, textarea')]
           .filter(control => control.getClientRects().length > 0)
@@ -816,12 +807,12 @@ for (const engine of names) {
       assert.ok(Math.abs(await field(page, 'occurrences').evaluate(input => input.getBoundingClientRect().top + scrollY) - before) < 1);
       await field(page, 'minutesPerSession').fill('0');
     }
-    const increment = sessions(page).locator('[data-field="hoursPerSession"][data-step="1"]');
+    const increment = form(page).locator('[data-field="hoursPerSession"][data-step="1"]');
     await increment.focus(); await page.keyboard.press('Enter');
     await expect(field(page, 'hoursPerSession')).toHaveValue('2');
     const inputBox = await field(page, 'hoursPerSession').boundingBox(), buttonBox = await increment.boundingBox();
     assert.ok(buttonBox.y >= inputBox.y + inputBox.height - 1);
-    await sessions(page).screenshot({ path: resolve(captures, `${engine}-narrow.png`) });
+    await root(page).locator('[data-rack-editor-kind="session"]').screenshot({ path: resolve(captures, `${engine}-narrow.png`) });
     await field(page, 'label').scrollIntoViewIfNeeded();
     const box = await field(page, 'label').boundingBox(), before = await page.evaluate(() => scrollY);
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.wheel(0, 400);
@@ -860,27 +851,29 @@ for (const engine of names) {
       editing.dispose();
 
       const nextStudio = createStudio(), nextEditing = createDraftCoordinator(nextStudio);
+      const successorControl = document.createElement('button'); successorControl.textContent = 'Successor editor';
+      document.body.append(successorControl);
       let completed = false, switched = false;
       const next = mountWorkPanel(element, { studio: nextStudio, editing: nextEditing,
         onAccepted() { completed = true; }, onEditing() {
           if (!completed) return;
           completed = false;
           switched = nextEditing.person.begin('product-one', nextStudio.read()).ok;
-          element.querySelector('[data-session-action="create"]').focus();
+          successorControl.focus();
         } });
       next.select('review');
       const minutes = element.querySelector('[name="minutesPerSession"]');
       minutes.value = '45'; minutes.dispatchEvent(new Event('input', { bubbles: true }));
       element.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       const successor = { switched, active: nextEditing.read().active?.kind ?? null,
-        focusedAction: document.activeElement.dataset.sessionAction ?? document.activeElement.dataset.action ?? null,
+        retainedSuccessorFocus: document.activeElement === successorControl,
         sessionStatus: nextEditing.session.read().status, total: nextStudio.read().result.knownCommitmentCents };
-      next.dispose(); nextEditing.dispose();
+      next.dispose(); nextEditing.dispose(); successorControl.remove();
       return { retired, successor };
     });
     assert.deepEqual(observations.retired, { callbacks: 0, ready: false, active: null, disabled: true,
       preservedAccepted: true, retainedRaw: 'Retained during preview' });
-    assert.deepEqual(observations.successor, { switched: true, active: 'person', focusedAction: 'create',
+    assert.deepEqual(observations.successor, { switched: true, active: 'person', retainedSuccessorFocus: true,
       sessionStatus: 'idle', total: 180000 });
   });
 }

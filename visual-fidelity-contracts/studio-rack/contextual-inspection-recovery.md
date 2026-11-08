@@ -10,6 +10,21 @@ dev integration revised 8 November 2026. It inherits [Studio Rack Composition](R
 The Abilities rack, Coordination record receiver and Quality workbench are
 current examples.
 
+## Dev receiving contract
+
+#820 loads a cassette with its editor closed. Existing board/track clips open the
+canonical session form in the optional rack slot. Team selection instead replaces
+the delivery board with compact direct controls and a Delivery overview return.
+Team name, membership and ordering use canonical accepted commands. Other forms
+retain Apply, Cancel and saved-edit recovery. Native amp Undo recovers accepted
+history and has no cassette-shelf duplicate.
+
+Abilities uses one selected support module; reverse and beside modes are retired.
+Hidden legacy form homes remain available to their owners, while current entry
+routes borrow the live nodes into a visible rack. A cross-chapter request therefore
+opens the same local receiver even when the original detached panel is hidden.
+This receiving rule supersedes the earlier requirement to reveal detached editors.
+
 ## Fit and smallest useful dose
 
 Use an adjacent inspector when the visual object remains useful context for its
@@ -50,8 +65,11 @@ a later accepted change may require review before that saved proposal applies.
 Cancel preserves accepted records. Undo/Redo and baseline comparison keep their
 own accepted-state meaning.
 
-A creation detour retains its origin and a visible return. Focus returns to a
-useful current control. Discarding or superseding the origin retires its return
+A creation detour retains its origin and a visible return. The canonical recovery
+form enters the visible rack before focus returns to its review control or
+requested field, including when a stale draft awaits an edit lease. Direct local
+creation uses the rack's existing Close route. Completing, discarding or
+superseding the origin retires its return
 route. Participant toggles preserve their mounted rows; explicit reorder owns
 movement. Nearby reveals keep their context visible, while longer movement yields
 to visitor input and settles directly when motion is off or system-reduced.

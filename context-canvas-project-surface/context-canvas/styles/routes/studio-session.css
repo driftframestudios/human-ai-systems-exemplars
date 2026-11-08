@@ -6,7 +6,7 @@
 .native-cadence__session-slot:empty,
 .native-cadence__session-slot:not(:has(> :not([hidden]))) { display: none; }
 .native-cadence__session-slot { min-inline-size: 0; }
-.native-cadence__session-slot .studio-rack-editor { margin: 0; border-color: #668b73; }
+.native-cadence__session-slot .studio-rack-editor { margin: 0; border:0; box-shadow:none; }
 .native-cadence__session-slot .studio-rack-editor__heading { border-block-end: .15rem solid var(--native-signal); }
 [data-rack-editor-kind='session'] .studio-rack-editor__body { background: var(--studio-screen); color: var(--native-paper); }
 .native-coordination .native-cadence__clip[aria-expanded='true'] {
@@ -54,9 +54,9 @@
 .native-coordination .studio-session-deck .native-session__members > li[data-selected='false'] {
  background: var(--studio-screen); border-inline-start-color: #668b73; border-style: dashed;
 }
-.studio-session-deck .native-session__members label { display: flex; flex: 1 1 20rem; align-items: center; gap: .7rem; }
+.studio-session-deck .native-session__members label { display: flex; flex: 1 1 10rem; align-items: center; gap: .7rem; }
 .studio-session-deck .native-session__members label > span { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .75rem; }
-.studio-session-deck .native-session__members strong { flex: 1 1 11rem; color: inherit; font-size: .85rem; }
+.studio-session-deck .native-session__members strong { flex: 1 1 7rem; color: inherit; font-size: .85rem; }
 .studio-session-deck .native-session__members label small { font-size: .7rem; color: #c2decc; }
 .studio-session-deck .native-session__members .native-coordination__member-status { color: var(--studio-screen-text); }
 .native-coordination .studio-session-deck .native-coordination__manipulation { gap: .5rem; margin: 0; }
@@ -107,6 +107,9 @@
  .studio-session-deck [data-native-session-fields] > * { grid-column: 1 / -1; }
  .studio-session-deck [data-native-session-fields] > .native-time-controls { grid-column: 1; }
  .studio-session-deck [data-native-session-fields] > .studio-occurrences { grid-column: 2; align-self: stretch; }
+ .studio-session-deck [data-native-session-fields] > .native-session__participant-group { grid-column:1; }
+ .studio-session-deck [data-native-session-fields] > .native-session__settings-grid:has(#native-session-funding) { grid-column:2; grid-template-columns:1fr; }
+
 }
 @media (max-width: 42rem) {
  .native-coordination .studio-session-deck .native-session__members > li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem; }

@@ -47,6 +47,19 @@ track pads because their neighboring work lanes supply the selected component's
 context. These are permitted variants of the same operation, not interchangeable
 labels for different evidence states.
 
+## Compact dev receivers
+
+The two Abilities tables remain comparable, with one selected support module below.
+People uses a contribution-by-session matrix and a role-facet rail. Removing visible
+free-text contribution fields preserves existing stored responsibility values.
+Team membership pads stay in place while inclusion changes; reorder controls use
+stable person identities and the existing movement effect. Direct team changes
+accept through shared history, while contribution/support forms retain Apply.
+
+Creation regions in #821 have their own named object and scope. An empty person/
+session intersection continues to describe participation. It never creates a new
+person or session merely because it is empty.
+
 ## Reading, motion and recovery
 
 Native tables retain captions and scoped row/column headers. Every meaningful

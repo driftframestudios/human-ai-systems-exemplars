@@ -212,3 +212,28 @@ test('delivery phase placement follows record identity while visitor labels and 
   assert.deepEqual(review.stageLabels, ['A visitor-written stage']);
   assert.equal(phases.flatMap(phase => phase.teams).find(team => team.slotId === 'pod').team.label, 'New group name');
 });
+
+test('unbound delivery teams follow their work stages and handoffs follow the receiving team', () => {
+  const plan = structuredClone(pod().read().state);
+  const arrangement = structuredClone(projectCoordinationArrangements(plan).arrangements[0]);
+  const extraTeams = ['discovery', 'engineering', 'quality', 'support'].map(id => ({
+    slotId: `custom-team:${id}`, slotLabel: id, team: { id, label: id, personIds: [] },
+  }));
+  arrangement.teams.push(...extraTeams);
+  plan.work.push(...['discovery', 'engineering', 'quality'].map(id => ({ ...plan.work[0], id: `${id}-session`, teamId: id })));
+  plan.scoreSettings.stages = [
+    { id: 'understand', label: 'Understand', workIds: ['discovery-session'] },
+    { id: 'build', label: 'Build', workIds: ['engineering-session'] },
+    { id: 'review', label: 'Review', workIds: ['quality-session'] },
+  ];
+  arrangement.connections.push({ slotId: 'custom-handoff', connection: {
+    id: 'custom-handoff', senderTeamId: 'engineering', receiverTeamId: 'quality', workIds: [],
+  } });
+  const phases = projectDeliveryBoard({ arrangement, plan });
+  const placement = Object.fromEntries(phases.flatMap(phase => phase.teams
+    .filter(row => row.slotId.startsWith('custom-team:')).map(row => [row.team.id, phase.id])));
+  assert.deepEqual(placement, { discovery: 'planning', engineering: 'implementation', quality: 'testing', support: 'testing' });
+  assert.equal(phases.find(phase => phase.connections.some(row => row.slotId === 'custom-handoff')).id, 'testing');
+  assert.equal(phases.find(phase => phase.connections.some(row => row.slotId === 'handoff')).id, 'deployment',
+    'the template keeps its existing authored handoff phase');
+});

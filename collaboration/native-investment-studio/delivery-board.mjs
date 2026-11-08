@@ -27,21 +27,34 @@ export function projectDeliveryBoard({ arrangement, plan }) {
   const byPhase = new Map(phases.map(phase => [phase.id, phase]));
   const teams = new Map(arrangement.teams.map(row => [row.slotId, row]));
   const layout = LAYOUTS[arrangement.templateId];
-  const includedTeams = new Set(), linkedPhases = new Map(), stageLabels = new Map(), stagePhases = new Map();
-  for (const [index, slot] of (layout?.teams ?? []).entries()) {
-    const team = teams.get(slot);
-    if (team) { phases[index].teams.push(team); includedTeams.add(slot); }
-  }
-  for (const team of arrangement.teams) if (!includedTeams.has(team.slotId)) phases[0].teams.push(team);
-  for (const row of arrangement.connections) {
-    const phase = byPhase.get(layout?.connections[row.slotId]) ?? phases[0];
-    phase.connections.push(row);
-    for (const id of row.connection.workIds) if (!linkedPhases.has(id)) linkedPhases.set(id, phase.id);
-  }
+  const includedTeams = new Set(), linkedPhases = new Map(), stageLabels = new Map(), stagePhases = new Map(), teamPhases = new Map();
   for (const stage of plan.scoreSettings.stages) for (const id of stage.workIds) {
     if (!stageLabels.has(id)) stageLabels.set(id, []);
     stageLabels.get(id).push(stage.label);
     if (STAGE_PHASES[stage.id] && !stagePhases.has(id)) stagePhases.set(id, STAGE_PHASES[stage.id]);
+  }
+  const workPhases = new Map();
+  for (const work of plan.work) if (stagePhases.has(work.id) && !workPhases.has(work.teamId))
+    workPhases.set(work.teamId, stagePhases.get(work.id));
+  for (const [index, slot] of (layout?.teams ?? []).entries()) {
+    const team = teams.get(slot);
+    if (team) {
+      phases[index].teams.push(team); includedTeams.add(slot);
+      if (!teamPhases.has(team.team.id)) teamPhases.set(team.team.id, phases[index].id);
+    }
+  }
+  let unbound = 0;
+  for (const team of arrangement.teams) if (!includedTeams.has(team.slotId)) {
+    // An unbound team follows its authored work stage when available. Other
+    // teams use successive phases, keeping Planning from becoming a ledger.
+    const phase = byPhase.get(workPhases.get(team.team.id)) ?? phases[unbound % phases.length];
+    unbound += 1; phase.teams.push(team); teamPhases.set(team.team.id, phase.id);
+  }
+  for (const row of arrangement.connections) {
+    const phase = byPhase.get(layout?.connections[row.slotId])
+      ?? byPhase.get(teamPhases.get(row.connection.receiverTeamId)) ?? phases[0];
+    phase.connections.push(row);
+    for (const id of row.connection.workIds) if (!linkedPhases.has(id)) linkedPhases.set(id, phase.id);
   }
   for (const work of plan.work) {
     const phaseId = stagePhases.get(work.id) ?? linkedPhases.get(work.id) ?? 'planning';

@@ -17,10 +17,7 @@
 .native-capability-rack .native-capability__choices label { min-block-size: 3rem; background: var(--native-paper); }
 .native-capability-example-reading { padding: .8rem; border-inline-start: .25rem solid var(--about-cobalt); background: var(--about-cool-blue); display: grid; gap: .5rem; }
 .native-capability-example-reading p { font-size: .9rem; }
-.native-coordination [data-capability-action='beside']::before { content: '○'; margin-inline-end: .4rem; }
-.native-coordination [data-capability-action='beside'][aria-pressed='true']::before { content: '●'; }
 @media (min-width: 48rem) {
- .native-capability-rack [data-capability-reverse] { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; }
  .native-capability-rack [data-capability-people] { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .7rem; }
  .native-capability-rack [data-capability-people] > summary { grid-column: 1 / -1; }
 }
@@ -28,3 +25,34 @@
  .native-capability-pad-rail, .native-capability-example-pads { background: Canvas; }
  .native-coordination .native-capability-pad-rail button[aria-pressed='true'], .native-coordination .native-capability-example-pads button[aria-pressed='true'] { outline: .2rem solid Highlight; }
 }
+/* One selected support module; role and contribution controls share rack scale. */
+.native-capability-rack .native-capability__choices label { display:flex; align-items:center; gap:.5rem; padding:.45rem; border:1px solid #668b73; border-radius:3px; color:var(--native-text); }
+.native-capability-rack .native-capability__choices label:has(:checked) { background:var(--native-signal); }
+.native-capability-rack .native-capability__choices input { flex:0 0 auto; }
+.native-coordination .studio-role-pads { display:flex; flex-wrap:wrap; gap:.35rem; padding:.5rem; background:#20382f; border:1px solid #668b73; border-radius:3px; }
+.native-coordination .studio-role-pads button { background:#29483a; color:#f7f0d6; border:1px solid #668b73; box-shadow:none; font-size:.8rem; }
+.native-coordination .studio-role-pads button[aria-pressed='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 2px 3px #173c3155; }
+[data-responsibility-list] { min-inline-size:0; max-inline-size:100%; overflow-x:auto; }
+.studio-contribution-tracks { inline-size:100%; border-collapse:separate; border-spacing:.25rem; padding:.45rem; background:#20382f; }
+.native-coordination .studio-contribution-tracks :is(th,td) { background:transparent; color:#f7f0d6; padding:.25rem; min-inline-size:5rem; font-size:.75rem; }
+.native-coordination .studio-contribution-tracks th:first-child { min-inline-size:11rem; text-align:left; }
+.studio-contribution-tracks__pad { display:block; min-inline-size:2.5rem; min-block-size:2rem; border:1px solid #668b73; border-radius:2px; background:#142e25; }
+.studio-contribution-tracks__pad[data-included='true'] { background:var(--native-signal); color:var(--native-text); box-shadow:inset 0 -3px #3c8d7b; }
+.native-coordination .studio-contribution-tracks__pad button { inline-size:100%; }
+.studio-contribution-tracks .studio-track-key small { display:block; margin-block-start:.2rem; font-size:.7rem; font-weight:400; }
+@media(forced-colors:active) {
+ .native-coordination :is(.studio-role-pads,.studio-contribution-tracks) { background:Canvas; color:CanvasText; }
+ .native-coordination .studio-contribution-tracks :is(th,td) { color:CanvasText; }
+ .native-coordination .studio-role-pads button { color:ButtonText; background:ButtonFace; }
+ .native-coordination .studio-role-pads button[aria-pressed='true'],.studio-contribution-tracks__pad[data-included='true'] { outline:2px solid Highlight; }
+}
+
+.native-capability-rack [data-capability-configure] > summary { display:none; }
+.native-capability-rack [data-capability-people] > h5 { grid-column:1/-1; }
+.native-capability__linked-work { display:flex; flex-wrap:wrap; gap:.45rem; }
+
+.native-coordination .studio-contribution-tracks .native-responsibility__selector { position:relative; background:#2e5140; color:#f0f4d8; border:1px solid #668b73; }
+.studio-contribution-tracks .native-responsibility__selector::after { border:0; border-block-start:.12rem solid currentColor; border-inline-end:.12rem solid currentColor; rotate:0deg; transform:translateY(-50%) rotate(45deg); }
+.studio-contribution-tracks .native-responsibility__selector[aria-expanded='true']::after { rotate:0deg; transform:translateY(-50%) rotate(135deg); }
+.native-coordination .studio-contribution-tracks .native-responsibility__selector[aria-pressed='true'] { background:#164d3d; }
+@media(forced-colors:active) { .native-coordination .studio-contribution-tracks .native-responsibility__selector { color:ButtonText; background:ButtonFace; border-color:ButtonText; } }

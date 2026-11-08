@@ -44,6 +44,24 @@
 .native-coordination[data-native-motion='lower'] .native-cadence__board[data-cadence-arrival='period'] { animation: native-cadence-open 480ms ease-out both; }
 .native-coordination[data-native-motion='lower'] .native-cadence__board[data-cadence-arrival='plan'] { animation: native-cadence-return 360ms ease-out both; }
 
+/* Workbench control hierarchy: local operations stay quiet; accepting a form
+   keeps the raised action. Cassette, reel and sequencer artwork retain owners. */
+.native-coordination [data-native-chapter-panel] { font-size:.9rem; }
+.native-coordination :where([data-native-chapter-panel]) button { border-width:1px; box-shadow:none; padding:.45rem .7rem; min-block-size:2.5rem; }
+.native-coordination :where([data-native-chapter-panel]) button:active:not(:disabled,[aria-disabled='true']) { box-shadow:inset 0 2px 3px #173c3133; transform:none; }
+.native-coordination :where([data-native-chapter-panel]) button[type='submit'] { box-shadow:.2rem .2rem 0 var(--native-key-shadow); border-width:2px; }
+.native-coordination :where([data-native-chapter-panel]) :is(input:not([type='checkbox'],[type='radio'],[type='range']),select,textarea) { border:1px solid #668b73; }
+.native-coordination .native-control--remove { border:1px solid #965368; background:#ecd3dc; color:#71394d; box-shadow:none; }
+.native-coordination .native-control--remove:active:not(:disabled) { box-shadow:none; transform:none; }
+.native-coordination :is(.native-score__heading,.studio-team-planning > h3) { margin-block-end:.65rem; }
+.native-coordination .native-score__heading > p { font-size:.8rem; margin-block:.3rem; }
+.native-coordination .native-score__heading > .native-zine__eyebrow { display:none; }
+.native-coordination :is(.native-cadence__screen,.studio-team-rack) { --studio-local-control:#29433b; --studio-local-text:#f7f0d6; }
+.native-coordination :is(.native-cadence__loaded-plan,.studio-team-rack__record-scope) { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; margin-block:.4rem; }
+.native-coordination .native-cadence__loaded-plan { color:#e4f0db; font-size:.8rem; }
+.native-coordination .native-cadence__loaded-plan button { background:transparent; color:#e4f0db; border-color:#668b73; }
+.native-coordination .native-cadence__period-add { align-self:start; min-block-size:2.5rem; }
+
 /* Editorial Rack pairs pale work lanes with the dark Instrument Rack. */
 .native-coordination__amp { gap: 1rem; }
 .about-page .native-coordination__identity h3 { font-size: clamp(1.4rem, 2.3vw, 2rem); max-inline-size: none; margin-block: 0 .5rem; }
@@ -105,9 +123,15 @@
 .studio-rack-editor__body > details > summary { display: none; }
 .studio-rack-editor__body > .native-coordination__status { margin: 0; padding-inline: .8rem; }
 .studio-rack-editor__body > .native-coordination__status:empty { display: none; }
+@keyframes studio-record-change-a { from { opacity:.75; filter:brightness(1.12); } to { opacity:1; filter:brightness(1); } }
+@keyframes studio-record-change-b { from { opacity:.75; filter:brightness(1.12); } to { opacity:1; filter:brightness(1); } }
 @media (prefers-reduced-motion: no-preference) {
- .native-coordination:not([data-native-motion='off']) .studio-rack-editor:not([hidden]) { animation: studio-reel-arrival calc(240ms * var(--studio-speed)) cubic-bezier(.22,.7,.25,1); }
+ .native-coordination:not([data-native-motion='off']) .studio-rack-editor:not([hidden]) { animation:studio-reel-arrival calc(240ms * var(--studio-speed)) cubic-bezier(.22,.7,.25,1); }
+ .native-coordination[data-native-motion='full'] .studio-rack-editor[data-rack-arrival='change'] { animation:studio-record-change-a 160ms ease-out; }
+ .native-coordination[data-native-motion='full'] .studio-rack-editor[data-rack-arrival='change'][data-rack-arrival-variant='b'] { animation-name:studio-record-change-b; }
+ .native-coordination[data-native-motion='lower'] .studio-rack-editor[data-rack-arrival='change'] { animation:none; }
 }
+
 @media (forced-colors: active) {
  .studio-rack-editor, .studio-rack-editor__body { background: Canvas; color: CanvasText; }
  .native-coordination .studio-rack-editor__heading h4 { color: CanvasText; }
@@ -135,6 +159,12 @@
 .native-coordination button.studio-rack-create-zone:focus-visible {
  outline: 2px solid var(--native-signal); outline-offset: 2px;
  background: color-mix(in srgb, var(--native-signal) 18%, transparent);
+}
+/* Empty lane space is the action target; populated clips keep their own jobs. */
+.native-coordination button.native-control--create.studio-rack-create-area { flex:1 1 3rem; align-self:stretch; min-block-size:3rem; margin:0; }
+.native-cadence__period:has(> .studio-rack-create-area) > .native-cadence__clips { flex:0 0 auto; }
+@media (hover:hover) and (pointer:fine) {
+ .native-coordination button.studio-rack-create-area:not(:hover,:focus-visible) { color:transparent; border-color:transparent; background:transparent; }
 }
 @media (hover: hover) and (pointer: fine) {
  .native-coordination button.studio-rack-create-zone:hover {
@@ -219,38 +249,34 @@
 .native-knob--minutes, .native-rate__dial--fine { inline-size: 4.75rem; }
 .native-rate-controls .native-knob { margin: 0; }
 .native-rate__note { font-size: .75rem; line-height: 1.45; max-inline-size: 42ch; }
-/* Loaded session geometry follows the compact workbench duration panel. The
-   canonical dial face, tick ring, pointer and raised output remain Showcase art. */
-.studio-session-deck .studio-duration {
- display: grid; gap: .55rem; min-inline-size: 0; padding: .7rem;
- border: 1px solid #668b73; border-radius: .25rem; background: var(--studio-screen);
- color: var(--native-paper); box-shadow: none;
+/* The preserved Loaded Tape Duration specimen supplies all duration receivers.
+   A fixed face holds the lighting; only the pointer rotates. */
+.native-coordination .studio-duration {
+ display:grid; gap:.55rem; min-inline-size:0; padding:.7rem;
+ border:1px solid #668b73; border-radius:4px; background:#1c302d;
+ color:#f7f0d6; box-shadow:none;
 }
-.studio-session-deck .native-time__overview { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.studio-session-deck .native-time__overview > .native-coordination__control-title { flex: 0 1 9rem; font-size: .8rem; line-height: 1.4; }
-.studio-session-deck .native-coordination__duration-display {
- flex: 0 0 auto; display: flex; gap: .8rem; inline-size: auto; padding: .3rem .65rem;
-}
-.studio-session-deck .native-coordination__duration-display strong { font-size: 1.65rem; }
-.studio-session-deck .native-coordination__duration-display > span { gap: .1rem; }
-.studio-session-deck .native-coordination__duration-display > span > span { font-size: .65rem; }
-.studio-session-deck .native-time__quantities { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
-.studio-session-deck .native-time-controls .native-time__part { gap: .3rem; padding: .5rem; color: var(--native-text); }
-.studio-session-deck .native-time__part > label { font-size: .8rem; }
-.studio-session-deck .native-time__adjustment { align-items: start; justify-content: space-between; gap: .25rem; max-inline-size: none; }
-.studio-session-deck .native-time__adjustment .native-knob { inline-size: 4rem; margin-block: .4rem; }
-.studio-session-deck .native-time__adjustment .native-coordination__stepper { margin-block-start: 1.6rem; margin-inline-start: auto; }
-.studio-session-deck .native-time-controls .native-coordination__stepper {
- grid-template-columns: repeat(2, 2rem); gap: .35rem .5rem; inline-size: 4.5rem;
-}
-.native-coordination .studio-session-deck .native-time-controls .native-coordination__stepper input {
- inline-size: 4.5rem; min-block-size: 2rem; padding: .2rem;
- font: 700 .9rem/1.4 ui-monospace, monospace; text-align: center;
-}
-.native-coordination .studio-session-deck .native-time-controls .native-coordination__stepper button {
- inline-size: 2rem; min-inline-size: 2rem; block-size: 2rem; min-block-size: 2rem;
- padding: 0; font-size: 1rem;
-}
+.native-coordination .native-time__overview { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.55rem; }
+.native-coordination .native-time__overview > .native-coordination__control-title { flex:0 1 9rem; font-size:.8rem; line-height:1.4; }
+.native-coordination .native-coordination__duration-display { flex:0 0 auto; display:flex; gap:.8rem; inline-size:auto; color:#66dcc2; background:#0e211d; border:1px solid #668b73; padding:.3rem .8rem; border-radius:4px; box-shadow:none; }
+.native-coordination .native-coordination__duration-display > span { display:grid; gap:0; text-align:center; font:.65rem ui-monospace,monospace; }
+.native-coordination .native-coordination__duration-display strong { font-size:1.65rem; font-weight:500; }
+.native-coordination .native-coordination__duration-display > span > span { font-size:.65rem; }
+.native-coordination .native-time__quantities { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem; }
+.native-coordination .native-time-controls .native-time__part { padding:.5rem; gap:.3rem; background:#f2d0b6; color:#172724; border:0; border-radius:4px; }
+.native-coordination .native-time-controls .native-coordination__control--minutes { background:#f7f0d6; }
+.native-coordination .native-time__part > label { font-weight:700; font-size:.8rem; }
+.native-coordination .native-time__adjustment { display:flex; align-items:center; justify-content:space-between; gap:.25rem; flex-wrap:wrap; max-inline-size:none; }
+.native-coordination .native-time__adjustment .native-knob { inline-size:64px; block-size:64px; margin:.4rem 0; flex:0 0 auto; border:1px solid #172724; background:repeating-conic-gradient(from -135deg,#586d5a 0 1deg,transparent 1deg 27deg); }
+.native-time__adjustment .native-knob__ticks { display:none; }
+.native-time__adjustment .native-knob__face { inset:8px; background:linear-gradient(135deg,#71938b,#213934 60%,#0d1d19); box-shadow:2px 3px 2px #243b37; border:2px solid #bccdc0; }
+.native-time__adjustment .native-knob__pointer { inset:0; }
+.native-time__adjustment .native-knob__pointer::before { inset-block-start:5px; inset-inline-start:calc(50% - 2px); block-size:12px; inline-size:4px; border-radius:3px; background:#f7f0d6; box-shadow:none; }
+.native-coordination .native-time__adjustment .native-coordination__stepper { margin-block-start:1.6rem; margin-inline-start:0; }
+.native-coordination .native-time-controls .native-coordination__stepper { grid-template-columns:30px 30px; gap:.35rem .5rem; inline-size:68px; }
+.native-coordination .native-time-controls .native-coordination__stepper input { grid-column:1/-1; grid-row:1; inline-size:68px; min-block-size:2rem; font:700 .9rem/1.4 ui-monospace,monospace; text-align:center; padding:.2rem; border:1px solid #668b73; }
+.native-coordination .native-time-controls .native-coordination__stepper button { min-block-size:30px; min-inline-size:30px; inline-size:30px; block-size:30px; border-radius:50%; padding:0; background:#f7f0d6; color:#172724; text-align:center; border:1px solid #172724; box-shadow:0 3px 0 #0d1916; font-size:1rem; }
+@media (max-width:650px) { .native-coordination .native-time__adjustment { justify-content:center; } }
 @media (forced-colors: active) {
     .native-rate-controls .native-knob { inline-size: 7rem; block-size: 2.75rem; }
 }

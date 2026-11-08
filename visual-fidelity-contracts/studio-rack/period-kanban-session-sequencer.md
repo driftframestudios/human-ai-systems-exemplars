@@ -13,6 +13,22 @@ while the horizon's lanes retain period placement.
 inherits the palette, control families and motion modes of
 [Studio Rack Composition](README.md).
 
+## Dev receiving refinement
+
+Under #820/#821, a cassette filters the current board and tracks without opening
+an editor. Plan and period filters have distinct visible returns. The shelf stays
+attached to the rack; a selected session's compact working area sits between board
+and tracks. Add sprint/quarter accepts immediately through the current cadence
+owner. Amp Undo recovers it.
+
+The lane's empty remainder is a native named creation button. Fine-pointer hover
+and keyboard focus expose its outline, plus and short label; touch keeps the
+invitation visible. It uses the same new-session command as the dedicated track
+row. Existing populated cells preserve inspection/participation. Selected-session
+pads own repetition through Add session and Remove session while canonical fields
+remain synchronized. Custom teams distribute through delivery phases using their
+known stage relationships; template-specific placement retains its meaning.
+
 ## Fit and smallest useful dose
 
 Use a compact period board with its aligned session tracks when visitors need

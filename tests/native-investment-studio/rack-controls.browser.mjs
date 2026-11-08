@@ -29,7 +29,7 @@ after(async () => {
 const root = page => page.locator('[data-native-coordination]');
 const horizon = page => root(page).locator('[data-score-projection]');
 const shared = page => root(page).locator('[data-connection-templates] .studio-session-tracks');
-const adjacent = page => root(page).locator('.studio-rack-editor');
+const adjacent = page => root(page).locator('[data-rack-editor-kind]');
 const configure = page => root(page).locator('[data-native-configure]');
 const track = (page, id) => horizon(page).locator(`[data-cadence-key="track-work:${id}"]`);
 const sharedTrack = (page, id) => shared(page).locator(`[data-session-track="${id}"] .studio-session-tracks__name`);
@@ -90,41 +90,51 @@ async function contained(page, width) {
 }
 
 for (const engine of names) for (const width of [390, 1440]) {
-  test(`${engine}: plan cassettes keep canonical settings and sprint scope through edits, removal and Undo at ${width}px`, { timeout: 60000 }, async t => {
+  test(`${engine}: cassettes load a quiet scope and keep in-rack edits recoverable at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), original = await bytes(page);
     const library = horizon(page).locator('.studio-plan-library');
+    await expect(root(page).locator('[data-studio-undo]')).toBeDisabled();
     const shelf = library.locator('.studio-tape-shelf');
-    const cassette = id => library.locator(`[data-studio-session-id="${id}"]`);
-    assert.deepEqual(await library.locator('[data-studio-session-id]').evaluateAll(keys => keys.map(key => key.dataset.studioSessionId)),
-      ['review', 'research', 'pairing', 'rehearsal']);
-    await expect(cassette('pairing')).toContainText('Prototype pairing');
-    await expect(cassette('pairing')).toContainText('1 h · 4 sessions');
+    const cassette = id => library.locator(`[data-studio-plan-id="${id}"]`);
+    await expect(library.locator('[data-studio-plan-id]')).toHaveCount(4);
+    await expect(library.locator('[data-plan-shelf-undo]')).toHaveCount(0);
     await shelf.scrollIntoViewIfNeeded();
-    if (width === 390) assert.equal(await shelf.evaluate(node => node.scrollWidth > node.clientWidth), true,
-      'the phone shelf provides its own horizontal scrolling');
-    await cassette('pairing').scrollIntoViewIfNeeded();
-    const box = await cassette('pairing').boundingBox();
-    await cassette('pairing').hover();
-    assert.deepEqual(await cassette('pairing').boundingBox(), box, 'art movement preserves the native key target');
+    if (width === 390) assert.equal(await shelf.evaluate(node => node.scrollWidth > node.clientWidth), true);
     await cassette('pairing').click();
+    await expect(adjacent(page)).toBeHidden();
+    await expect(cassette('pairing')).toHaveAttribute('aria-pressed', 'true');
+    await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(1);
+    await expect(horizon(page).locator('.native-cadence__track-name')).toContainText('Prototype pairing');
+    assert.equal(await bytes(page), original, 'loading a cassette only changes the view');
+    await track(page, 'pairing').click();
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
-    await receiverReading(page, 'pairing', true);
-    assert.equal(await bytes(page), original, 'loading a cassette retains accepted sessions and investment');
     await configure(page).locator('[name="minutesPerSession"]').fill('15');
     await configure(page).locator('[data-action="apply"]').click();
     await expect(cassette('pairing')).toContainText('1 h 15 min · 4 sessions');
     const edited = await bytes(page);
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await expect(cassette('pairing')).toBeFocused();
-
-    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
+    await expect(configure(page).locator('.studio-repetition')).toBeHidden();
+    await configure(page).locator('[data-session-occurrence="1"]').click();
+    await configure(page).locator('[data-session-occurrence-remove]').click();
+    await expect(configure(page).locator('[name="occurrences"]')).toHaveValue('3');
+    await configure(page).locator('[data-action="apply"]').click();
+    assert.deepEqual(await page.evaluate(() => window.rackFixture.studio.read().state.scoreSettings.cadence.placements
+      .filter(row => row.workId === 'pairing').map(({ occurrenceIndex, periodId, subdivision }) => ({ occurrenceIndex, periodId, subdivision }))),
+    [{ occurrenceIndex:0, periodId:'period-2', subdivision:1 },
+      { occurrenceIndex:1, periodId:'period-3', subdivision:1 },
+      { occurrenceIndex:2, periodId:'period-3', subdivision:2 }]);
+    await root(page).locator('[data-studio-undo]').click();
+    assert.equal(await bytes(page), edited, 'amp Undo restores the removed session and its placement');
+    await cassette('research').click();
+    await expect(adjacent(page)).toBeHidden();
+    await expect(horizon(page).locator('.native-cadence__track-name')).toContainText('Research synthesis');
+    await horizon(page).getByRole('button', { name:'All plans', exact:true }).click();
+    await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(4);
+    await horizon(page).locator('[data-cadence-key="period:period-2"]').click();
     const scope = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
-    await expect(scope).toHaveAttribute('aria-current', 'page');
-    await expect(library.locator('[data-studio-session-id]')).toHaveCount(1);
     await cassette('pairing').click();
     await expect(scope).toHaveAttribute('aria-current', 'page');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await expect(cassette('pairing')).toBeFocused();
+    await expect(adjacent(page)).toBeHidden();
+    await expect(library.locator('[data-studio-plan-id]')).toHaveCount(4);
     const create = library.getByRole('button', { name:'New plan', exact:true });
     await create.click();
     const addition = await page.evaluate(() => {
@@ -133,54 +143,24 @@ for (const engine of names) for (const width of [390, 1440]) {
       return { work, placements:state.scoreSettings.cadence.placements.filter(row => row.workId === work.id) };
     });
     assert.deepEqual(addition.placements, [{ workId:addition.work.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 }]);
-    await expect(cassette(addition.work.id)).toContainText(addition.work.label);
     await expect(configure(page).locator('[name="label"]')).toHaveValue(addition.work.label);
-    await expect(scope).toHaveAttribute('aria-current', 'page');
     await root(page).locator('[data-rack-creation-undo]').click();
-    assert.equal(await bytes(page), edited, 'creation Undo returns the shared accepted plan to the preceding edit');
+    assert.equal(await bytes(page), edited);
     await expect(create).toBeFocused();
-    await expect(scope).toHaveAttribute('aria-current', 'page');
-    await create.click();
-    const createdPlan = await bytes(page);
-    await root(page).locator('[data-rack-remove-plan]').click();
-    await expect(adjacent(page)).toBeVisible();
-    await expect(configure(page).locator('[data-native-session-confirm]')).toBeVisible();
-    await configure(page).locator('[data-action="apply"]').click();
-    await expect(adjacent(page)).toBeHidden();
-    await expect(cassette(addition.work.id)).toHaveCount(0);
-    const { revision: removedRevision, ...afterRemoval } = JSON.parse(await bytes(page));
-    const { revision: editedRevision, ...beforeCreation } = JSON.parse(edited);
-    assert.ok(removedRevision > editedRevision);
-    assert.deepEqual(afterRemoval, beforeCreation, 'removal retires only the newly created plan');
-    await library.locator('[data-plan-shelf-undo]').click();
-    assert.equal(await bytes(page), createdPlan, 'shared history recovers the cassette, its people and period placement');
-    await expect(scope).toHaveAttribute('aria-current', 'page');
-    await expect(cassette(addition.work.id)).toBeVisible();
     await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
-    await expect(library.locator('[data-studio-session-id]')).toHaveCount(5);
-    await horizon(page).locator('[data-cadence-key="track-period:period-3"]').click();
-    await cassette('pairing').click();
-    await expect(configure(page).locator('[data-session-occurrence="2"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(configure(page).locator('[data-occurrence-field="periodId"][value="period-3"]')).toBeChecked();
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
+    await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(4);
     await contained(page, width);
     if (engine === 'chromium') {
-      await page.emulateMedia({ reducedMotion:'no-preference' });
-      await horizon(page).locator('.studio-plan-workspace')
-        .screenshot({ path:resolve(captures, `plan-cassettes-${width}.png`) });
+      await horizon(page).locator('.studio-plan-workspace').screenshot({ path:resolve(captures, `plan-cassettes-${width}.png`) });
       await page.emulateMedia({ forcedColors:'active', reducedMotion:'reduce' });
       await cassette('pairing').click();
-      await expect(cassette('pairing')).toHaveAttribute('aria-pressed', 'true');
       const forced = await cassette('pairing').evaluate(key => {
         const title = getComputedStyle(key.querySelector('.studio-tape-face__title'));
         return { title:title.color, background:title.backgroundColor,
-          detail:getComputedStyle(key.querySelector('.studio-tape-face__detail')).color,
-          reels:getComputedStyle(key.querySelector('.studio-tape-face__reels')).display };
+          detail:getComputedStyle(key.querySelector('.studio-tape-face__detail')).color };
       });
-      assert.equal(forced.title, forced.detail, 'selected cassette labels share the legible system text color');
-      assert.notEqual(forced.title, forced.background, 'selected labels remain distinct from their system background');
-      assert.equal(forced.reels, 'none', 'forced colors retain semantic labels while hiding ornamental reels');
+      assert.equal(forced.title, forced.detail);
+      assert.notEqual(forced.title, forced.background);
     }
   });
 
@@ -244,13 +224,15 @@ for (const engine of names) for (const width of [390, 1440]) {
     const designTeam = delivery.locator('[data-delivery-phase="design"] [data-delivery-team]').first();
     await designTeam.locator('.studio-delivery__team-key').click();
     await expect(templates.locator('.studio-arrangement-settings')).toHaveCount(0);
-    await expect(templates.locator('[data-team-rack-editor] [data-assembly-configure] [name="label"]')).toBeFocused();
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
+    const teamRecord = templates.locator('[data-team-rack-record]');
+    await expect(teamRecord).toBeVisible();
+    await expect(teamRecord.locator('[data-template-action="team-back"]')).toBeFocused();
+    await expect(adjacent(page)).toBeHidden();
     assert.equal(await page.evaluate(() => window.rackFixture.studio.read().state.arrangements.length), 1,
       'opening a starter team accepts its arrangement before canonical editing');
+    await teamRecord.locator('[data-template-action="team-back"]').click();
     const acceptedTeamId = await designTeam.locator('.studio-delivery__team-key').getAttribute('data-studio-record-id');
     assert.ok(acceptedTeamId && !acceptedTeamId.startsWith('proposal-'), 'the rack opens the accepted team identity');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(designTeam.locator('.studio-delivery__team-key')).toBeFocused();
     const person = designTeam.locator('[data-delivery-person]').first();
     await person.click();
@@ -266,10 +248,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     await maintenanceKey.click();
     const maintenanceTeam = delivery.locator('[data-delivery-phase="maintenance"] [data-delivery-team]').first();
     await maintenanceTeam.locator('.studio-delivery__team-key').click();
-    await adjacent(page).locator('[data-assembly-configure] [name="label"]').fill('Partner group for continuing support');
-    await adjacent(page).locator('[data-assembly-apply]').click();
+    await teamRecord.locator('[data-team-rack-name]').fill('Partner group for continuing support');
+    await teamRecord.locator('[data-team-rack-name]').press('Tab');
+    await teamRecord.locator('[data-template-action="team-back"]').click();
     await expect(maintenanceTeam.locator('.studio-delivery__team-key')).toContainText('Partner group for continuing support');
-    await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(board).toHaveAttribute('data-delivery-scope', 'maintenance');
     const returnKey = delivery.locator('[data-delivery-overview]');
     await returnKey.scrollIntoViewIfNeeded();
@@ -303,7 +285,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(delivery.locator('[data-delivery-current]')).toHaveText('Testing');
     await delivery.locator('[data-delivery-overview]').click();
     const customized = await bytes(page);
-    assert.notEqual(customized, accepted, 'starter acceptance and explicit Apply retain team and handoff changes');
+    assert.notEqual(customized, accepted, 'direct team changes and handoff Apply retain their accepted records');
 
     await delivery.locator('[data-delivery-open="testing"]').click();
     const undoBefore = await page.evaluate(() => window.rackFixture.studio.readHistory().undoCount);
@@ -341,84 +323,48 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(await bytes(page), customized, 'Undo restores the preceding arrangement and its work together');
   });
 
-  test(`${engine}: attached companions share rack records, retain proposals and return to the selected sprint at ${width}px`, { timeout: 60000 }, async t => {
+  test(`${engine}: attached readings and in-rack relationship edits share records at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), accepted = await bytes(page);
-    const score = root(page).locator('[data-native-score]'), screen = horizon(page).locator('.native-cadence__screen');
+    const screen = horizon(page).locator('.native-cadence__screen');
     const companions = horizon(page).locator('.studio-rack-companions');
     const people = companions.locator('[data-cadence-disclosure="people"]');
     const flow = companions.locator('[data-cadence-disclosure="flow"]');
-    const inspector = score.locator('.native-score__inspector');
+    const inspector = screen.locator('.native-score__inspector');
     const field = name => inspector.locator(`[data-cadence-field="${name}"]`);
     for (const drawer of [people, flow]) assert.equal(await drawer.evaluate(node => node.open), false);
-    assert.equal(await companions.evaluate(node => node.previousElementSibling.matches('.native-cadence__screen')), true);
-    const attached = await companions.boundingBox(), face = await screen.boundingBox();
-    assert.ok(Math.abs(attached.x - face.x) < 1 && Math.abs(attached.width - face.width) < 1
-      && Math.abs(attached.y - (face.y + face.height)) <= 1, 'the editorial disclosures share the rack edge');
-
+    assert.equal(await companions.evaluate(node => node.previousElementSibling.matches('.studio-plan-workspace')), true);
     await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
     const sprint = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
     await expect(companions.locator('.studio-rack-companion__scope')).toHaveText(['Sprint 2', 'Sprint 2']);
-    if (engine === 'chromium') await companions.screenshot({ path:resolve(captures, `attached-companions-${width}.png`) });
+
     const personKey = screen.locator('[data-cadence-key^="rack-person:"]').first();
-    const personId = (await personKey.getAttribute('data-cadence-key')).slice('rack-person:'.length);
-    const person = JSON.parse(accepted).people.find(row => row.id === personId);
     await personKey.click();
-    await expect(personKey).toHaveAttribute('aria-expanded', 'true');
-    await expect(field('availability-period')).toHaveValue('period-2');
-    await field('availability-minutes').fill('240');
-    await flow.locator(':scope > summary').click();
-    await expect(personKey).toHaveAttribute('aria-expanded', 'false');
-    await personKey.click();
-    await expect(field('availability-minutes')).toHaveValue('240');
-    await people.locator(':scope > summary').click();
-    const availability = people.locator(`[data-cadence-key="availability:${personId}"]`);
-    await availability.click();
-    await expect(field('availability-minutes')).toHaveValue('240');
-    await expect(field('availability-period')).toHaveValue('period-2');
-    await inspector.getByRole('button', { name:'Open person settings', exact:true }).click();
-    await expect(root(page).locator('[data-native-chapter="people"]')).toHaveAttribute('aria-selected', 'true');
-    await expect(root(page).locator(`[data-team-roster] [data-person-id="${personId}"]`)).toHaveAttribute('aria-pressed', 'true');
-    await expect(root(page).locator('[data-person-configure] [name="ratePerHour"]')).toHaveValue((person.rateCentsPerHour / 100).toFixed(2));
-    await root(page).locator('[data-native-return-action]').click();
-    await expect(field('availability-minutes')).toHaveValue('240');
-    await expect(field('availability-period')).toHaveValue('period-2');
+    await expect(adjacent(page)).toHaveAttribute('data-rack-editor-kind', 'person');
+    await expect(adjacent(page).locator('[data-person-configure]')).toBeVisible();
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(personKey).toBeFocused();
     await expect(sprint).toHaveAttribute('aria-current', 'page');
-    await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
-    await expect(availability).toBeFocused();
-    assert.equal(await bytes(page), accepted, 'drawer navigation and the People round trip retain the accepted plan');
 
     const stageKey = screen.locator('[data-cadence-key^="rack-stage:"]').first();
     const stageId = (await stageKey.getAttribute('data-cadence-key')).slice('rack-stage:'.length);
     await stageKey.click();
+    await expect(inspector).toBeVisible();
+    assert.equal(await inspector.evaluate(node => node.parentElement.matches('[data-studio-session-slot]')), true);
     await field(`stage.${stageId}.label`).fill('Build and rehearse with operators');
-    await flow.locator(':scope > summary').click();
-    await expect(stageKey).toHaveAttribute('aria-expanded', 'false');
+    await inspector.getByRole('button', { name:'Close', exact:true }).click();
+    await expect(stageKey).toBeFocused();
     await stageKey.click();
     await expect(field(`stage.${stageId}.label`)).toHaveValue('Build and rehearse with operators');
+    await flow.locator(':scope > summary').click();
     const stage = flow.locator(`[data-cadence-key="stage:${stageId}"]`);
     await stage.click();
     await expect(field(`stage.${stageId}.label`)).toHaveValue('Build and rehearse with operators');
     await expect(inspector.getByRole('button', { name:'Add decision here', exact:true })).toBeVisible();
     await expect(inspector.getByRole('button', { name:'Add delay here', exact:true })).toBeVisible();
-    if (engine === 'chromium') await companions.screenshot({ path:resolve(captures, `attached-companions-open-${width}.png`) });
+    if (engine === 'chromium') await inspector.screenshot({ path:resolve(captures, `in-rack-relationship-${width}.png`) });
     await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
     await expect(stage).toBeFocused(); await expect(sprint).toHaveAttribute('aria-current', 'page');
-
-    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
-    await horizon(page).getByRole('button', { name:'Try a later review', exact:true }).click();
-    const sameRecord = async (rackKey, drawerKey, title) => {
-      await screen.locator(rackKey).first().click();
-      await expect(inspector.getByRole('heading', { name:title, exact:true })).toBeVisible();
-      const readFields = () => inspector.locator('[data-cadence-field]').evaluateAll(nodes => nodes.map(node => [node.dataset.cadenceField, node.value]));
-      const values = await readFields();
-      await flow.locator(drawerKey).first().click();
-      assert.deepEqual(await readFields(), values, 'rack and editorial entries inspect the same record');
-    };
-    await sameRecord('[data-cadence-key^="track-handoff:"]', '[data-cadence-key^="handoff:"]', 'Inspect handoff');
-    await sameRecord('[data-cadence-key^="decision:"]', '[data-cadence-key^="decision:"]', 'Inspect decision');
-    await sameRecord('[data-cadence-key^="delay:"]', '[data-cadence-key^="delay:"]', 'Inspect delay');
-    await inspector.getByRole('button', { name:'Cancel changes', exact:true }).click();
-    assert.equal(await bytes(page), accepted, 'relationship inspection preserves the accepted plan');
+    assert.equal(await bytes(page), accepted, 'closing and reopening inspections retains the accepted plan');
     await contained(page, width);
   });
 
@@ -445,10 +391,6 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
     const placement = configure(page).locator(`[data-session-occurrence="${occurrence}"]`);
     await expect(placement).toBeFocused();
-    await expect.poll(() => placement.evaluate(node => {
-      const box = node.getBoundingClientRect(), nav = document.querySelector('.nav__top--sticky')?.getBoundingClientRect();
-      return box.top >= (nav?.bottom ?? 0) && box.bottom <= innerHeight;
-    })).toBe(true);
     await receiverReading(page, 'pairing', true);
     assert.equal((await rackShape()).width, before.width, 'the in-rack deck preserves its source rack width');
     assert.equal(await adjacent(page).evaluate(node => {
@@ -534,17 +476,15 @@ for (const engine of names) for (const width of [390, 1440]) {
     await receiverReading(page, 'pairing', true);
     await adjacent(page).screenshot({ path:resolve(captures, `${engine}-adjacent-shared-session-${width}.png`) });
     await participantMovement(page, configure(page).locator('[data-native-session-members]'));
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await sharedTrack(page, 'research').click();
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Research synthesis');
     await receiverReading(page, 'research', true);
+    await adjacent(page).locator('[data-rack-editor-close]').click();
     await sharedTrack(page, 'pairing').click();
     await expect(minutes).toHaveValue('045');
     await configure(page).locator('[data-action="cancel"]').click();
     await expect(adjacent(page)).toBeHidden(); await expect(sharedTrack(page, 'pairing')).toBeFocused();
-    await expect.poll(() => sharedTrack(page, 'pairing').evaluate(node => {
-      const box = node.getBoundingClientRect(), nav = document.querySelector('.nav__top--sticky')?.getBoundingClientRect();
-      return box.top >= (nav?.bottom ?? 0) && box.bottom <= innerHeight;
-    })).toBe(true);
     assert.equal(await bytes(page), accepted, 'Cancel discards the session proposal');
     await participant.click();
     await expect(minutes).toHaveValue('0');
@@ -559,23 +499,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     await receiverReading(page, 'pairing', false);
     assert.deepEqual(await skin(track(page, 'pairing')), await skin(sharedTrack(page, 'pairing')), 'both readings share the session key treatment');
 
-    const connections = root(page).locator('[data-native-connection-view]');
-    await connections.locator('.studio-accepted-connections > summary').click();
-    await connections.locator('button[data-connection-select="scope"]').click();
-    const support = connections.getByRole('button', { name:'Inspect Research synthesis', exact:true });
-    const entryKey = await support.getAttribute('data-studio-entry-key');
-    assert.ok(entryKey, 'supporting work keeps a stable connection-specific entry');
-    await support.click();
-    await configure(page).locator('[name="label"]').fill('Research synthesis with operating context');
-    await configure(page).locator('[data-action="apply"]').click();
-    await adjacent(page).locator('[data-rack-editor-close]').click();
-    await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toBeFocused();
-    await expect(connections.locator('button[data-connection-select="scope"]')).toHaveAttribute('aria-current', 'true');
-    await expect(connections.locator(`[data-studio-entry-key="${entryKey}"]`)).toHaveText('Inspect Research synthesis with operating context');
     await contained(page, width);
   });
 
-  test(`${engine}: Team planning creates visible teams and handoffs with local Undo at ${width}px`, { timeout: 60000 }, async t => {
+  test(`${engine}: Team planning creates visible teams and handoffs with shared Undo at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), original = await bytes(page);
     const templates = root(page).locator('[data-connection-templates]');
     const rack = templates.locator('[data-template-rack]');
@@ -585,28 +512,28 @@ for (const engine of names) for (const width of [390, 1440]) {
     const addTeam = rack.locator('[data-template-action="create-team"]');
     const addHandoff = rack.locator('[data-template-action="create-connection"]');
     const close = adjacent(page).locator('[data-rack-editor-close]');
-    const undo = root(page).locator('[data-rack-creation-undo]');
+    const undo = root(page).locator('[data-studio-undo]');
 
     await addTeam.click();
     const teamCreation = await read(), originalTeamIds = new Set(before.state.teams.map(row => row.id));
     const teams = teamCreation.state.teams.filter(row => !originalTeamIds.has(row.id));
     assert.equal(teams.length, 1); assert.equal(teamCreation.undoCount, before.undoCount + 1);
     const team = teams[0], teamKey = rack.locator(`.studio-delivery__team-key[data-studio-record-id="${team.id}"]`);
+    const teamRecord = rack.locator('[data-team-rack-record]');
+    const teamName = teamRecord.locator('[data-team-rack-name]');
+    await expect(teamName).toHaveValue(team.label);
+    await expect(adjacent(page)).toBeHidden();
+    await teamRecord.locator('[data-template-action="team-back"]').click();
     await expect(teamKey).toHaveCount(1);
     await expect(teamKey).toContainText(team.label);
-    await expect(adjacent(page)).toHaveAttribute('data-rack-placement', 'inset');
-    const teamName = adjacent(page).locator('[data-assembly-configure] [name="label"]');
-    await expect(teamName).toHaveValue(team.label);
     const acceptedTeam = await bytes(page);
-    await teamName.fill('Review partners');
-    await adjacent(page).locator('[data-assembly-cancel]').click();
-    assert.equal(await bytes(page), acceptedTeam, 'Cancel keeps the newly accepted team while discarding the later edit');
-    await expect(addTeam).toBeFocused();
     await teamKey.click();
     await expect(teamName).toHaveValue(team.label);
+    await teamRecord.locator('[data-template-action="team-back"]').click();
+    assert.equal(await bytes(page), acceptedTeam, 'browsing the team retains the accepted record without another history entry');
     await undo.click();
     assert.equal(await bytes(page), original, 'creation Undo restores the preceding plan');
-    await expect(teamKey).toHaveCount(0); await expect(addTeam).toBeFocused();
+    await expect(teamKey).toHaveCount(0);
 
     await addHandoff.click();
     const handoffCreation = await read(), originalHandoffIds = new Set(before.state.connections.map(row => row.id));

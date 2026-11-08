@@ -176,14 +176,17 @@ for (const engine of names) {
       assert.ok(boxes.border > 0 && boxes.outputFont > boxes.fieldFont, 'a visible housing and larger combined reading establish the duration hierarchy');
       assert.deepEqual(boxes.outputFor.split(' '), boxes.fieldIds, 'the combined readout keeps both exact-field associations');
       assert.ok(boxes.output.bottom <= Math.min(boxes.hours.y, boxes.minutes.y), 'the combined duration readout stays above both controls');
-      assert.ok(boxes.hours.dial.width > boxes.minutes.dial.width, 'Hours carries the larger dial');
+      assert.equal(boxes.hours.dial.width, 64, 'Hours uses the preserved compact duration specimen');
+      assert.equal(boxes.minutes.dial.width, 64, 'Minutes shares the dial geometry and keeps its secondary color');
       assert.notEqual(boxes.hours.background, boxes.minutes.background, 'Minutes has a distinct secondary face');
       if (width === 1440) assert.ok(Math.abs(boxes.hours.y-boxes.minutes.y) < 1 && boxes.hours.right <= boxes.minutes.x + 1,
         `Hours and Minutes share a row on laptop: ${JSON.stringify(boxes)}`);
       for (const unit of ['hours', 'minutes']) {
         const part = boxes[unit], [minus, plus] = part.buttons;
-        assert.ok(part.stepper.x >= (width === 1440 ? part.dial.right - 1 : part.dial.x + 1) && part.stepper.y > part.dial.y,
-          `${unit} exact field sits toward its dial's lower right: ${JSON.stringify(part)}`);
+        assert.ok(part.stepper.y > part.dial.y && (width === 1440
+          ? part.stepper.x >= part.dial.right - 1
+          : part.stepper.y >= part.dial.bottom),
+          `${unit} exact field follows the dial, wrapping below on phone: ${JSON.stringify(part)}`);
         assert.ok(minus.y >= part.input.bottom && plus.y >= part.input.bottom && plus.x > minus.right + 2,
           `${unit} keeps a spaced pair beneath its exact field`);
         assert.ok(Math.abs(minus.width-minus.height) < 1 && Math.abs(plus.width-plus.height) < 1, 'steppers retain circular geometry');
@@ -202,10 +205,10 @@ for (const engine of names) {
     await action(page, 'apply').click(); await expect(total(page)).toHaveText('$4,080.00');
     await expect(event.locator('summary')).toContainText('Repeat the interrupted request');
     await event.locator('[data-assurance-action="work"]').click(); await expect(root(page).locator('[data-native-chapter-panel="coordination"]')).toBeVisible();
-    await root(page).locator('[data-session-action="remove"]').click();
+    await root(page).locator('[data-rack-remove-plan]').click();
     const dependencies = root(page).locator('[data-native-session-dependencies]');
     await expect(dependencies).toContainText('Recovery event: Recover the interrupted request.');
-    await expect(root(page).locator('[data-native-session-editor] [data-action="apply"]')).toBeDisabled();
+    await expect(root(page).locator('[data-native-configure] [data-action="apply"]')).toBeDisabled();
     await dependencies.locator('[data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();
     await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
     await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
@@ -314,7 +317,6 @@ for (const engine of names) {
     assert.equal(state.work.length, 4); assert.equal(state.work.find(row => row.id === 'rehearsal').minutesPerOccurrence, 30);
     assert.equal(state.assuranceSettings.rehearsals[0].definitionId, 'specialist-unavailable');
     await tab(page, 'people').click(); const people = root(page).locator('[data-native-assembly]');
-    await root(page).getByText('Rates and available time', { exact: true }).click();
     await people.locator('[data-assembly-person]').selectOption(state.people.find(row => row.label === 'Additional reviewer').id);
     await people.locator('[data-assembly-action="person-remove"]').click();
     await expect(people.locator('[data-assembly-dependencies]')).toContainText('Rehearsal: A specialist is unavailable for the planned review');

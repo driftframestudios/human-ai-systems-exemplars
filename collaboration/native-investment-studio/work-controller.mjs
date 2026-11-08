@@ -84,6 +84,17 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   elements.fields.querySelector('.native-time-controls').after(placementElements.fieldset);
   const occurrenceControls = mountSessionOccurrenceControls(document, {
     onPlacement: writePlacement,
+    onRemove(index) {
+      const view = editor.read();
+      if (disposed || composing || view.status !== 'editing' || !view.draft
+        || !Number.isSafeInteger(index) || index < 0 || index >= Number(view.draft.raw.occurrences)) return;
+      const epoch = ++generation, token = view.draft.token;
+      const remaining = placementValues(view.draft.raw).filter(item => item.occurrenceIndex !== index)
+        .map(item => ({ ...item, occurrenceIndex: item.occurrenceIndex > index ? item.occurrenceIndex - 1 : item.occurrenceIndex }));
+      const result = operate('step', token, 'occurrences', -1);
+      if (!owns(epoch) || !result.ok) { changed(result, epoch); return; }
+      changed(operate('setText', token, 'cadencePlacements', JSON.stringify(remaining)), epoch);
+    },
     onAdd() {
       const view = editor.read();
       if (disposed || composing || view.status !== 'editing' || !view.draft) return;
@@ -194,12 +205,14 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const cadence = (view.draft?.baseProjection ?? projection).state.scoreSettings.cadence;
     placementElements.fieldset.hidden = !cadence || rackMode;
     occurrenceControls.root.hidden = !cadence || !rackMode;
+    elements.fields.querySelector('.studio-repetition').hidden = Boolean(cadence) && rackMode;
     if (!cadence) return;
     if (placementToken !== view.draft?.token) { placementToken = view.draft?.token; placementPage = 0; placementSignature = null; }
     const entered = Number(raw.occurrences);
     const count = Number.isSafeInteger(entered) && entered >= 0 && entered <= LIMITS.occurrences ? entered : 0;
     if (rackMode) occurrenceControls.render({ identity: selectedTarget ?? selectedId, cadence,
       count, placements: placementValues(raw),
+      canRemove: view.status === 'editing' && !composing,
       canAdd: view.status === 'editing' && !composing && count < LIMITS.occurrences
         && !view.draft?.errors.some(error => error.path === 'draft.occurrences'),
       error: view.draft?.errors.find(error => error.path === 'draft.cadencePlacements')?.message });
@@ -465,7 +478,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const view = editor.read(), descriptor = describeSessionTarget(view.draft?.sessionId);
     if (view.status === 'stale') (view.creationConflict ? elements.fresh : elements.recovery.querySelector('button')).focus({ preventScroll: true });
     else if (view.status === 'editing') (descriptor.mode === 'remove' ? elements.cancel : descriptor.mode === 'create' ? inputs.label : inputs.hoursPerSession).focus({ preventScroll: true });
-    revealStudioDestination(elements.configure);
+    if (!rackMode) revealStudioDestination(elements.configure);
   }
   function focusOccurrence(index) {
     const view = editor.read(), epoch = generation;
@@ -730,6 +743,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     placementElements.fieldset.remove();
     occurrenceControls.dispose();
     elements.configure.classList.remove('studio-session-deck');
+    elements.fields.querySelector('.studio-repetition').hidden = false;
     agreementRack.before(agreement); agreementRack.remove();
     const active = editing.read().active;
     if (active?.kind === 'session') retiredToken = active.token;
