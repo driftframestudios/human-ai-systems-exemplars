@@ -346,6 +346,7 @@
         "tests/native-investment-studio/score-draft.test.mjs",
         "tests/native-investment-studio/score-models.test.mjs",
         "tests/native-investment-studio/score-time.test.mjs",
+        "tests/native-investment-studio/session-creation.test.mjs",
         "tests/native-investment-studio/session-draft.test.mjs",
         "tests/native-investment-studio/session-editing.test.mjs",
         "tests/native-investment-studio/shell.test.mjs",
