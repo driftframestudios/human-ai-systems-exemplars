@@ -3,6 +3,11 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/native-investment-studio/rack-creation-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/rack-creation-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/creation-label.mjs",
       "projected_path": "collaboration/native-investment-studio/creation-label.mjs",
       "media_type": "text/javascript"

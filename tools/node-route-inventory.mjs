@@ -46,6 +46,7 @@ const BROWSER_SHARED = new Set([
   'collaboration/native-investment-studio/time-controls.mjs',
   'collaboration/native-investment-studio/motion.mjs',
   'collaboration/native-investment-studio/rack-controls.mjs',
+  'collaboration/native-investment-studio/rack-creation-controls.mjs',
   'collaboration/native-investment-studio/tape-picker.mjs',
   'collaboration/native-investment-studio/rack-record-creation.mjs',
   'collaboration/native-investment-studio/session-occurrence-controls.mjs',

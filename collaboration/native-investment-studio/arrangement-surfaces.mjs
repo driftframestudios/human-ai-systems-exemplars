@@ -1,3 +1,4 @@
+import { createRackAddControl } from './rack-creation-controls.mjs';
 import { duration } from './display.mjs';
 
 const node = (document, tag, className, text) => {
@@ -99,9 +100,8 @@ export function createSessionTracks(document, { plan, onSession, onAdd, sessionI
     for (const person of plan.people) {
       const cell = node(document, 'td');
       if (acceptedPersonIds.has(person.id)) {
-        const add = node(document, 'button', 'native-control--create studio-rack-add studio-rack-create-zone', 'Add session');
-        add.type = 'button'; add.dataset.studioEntryKey = `shared-session-add:${person.id}`;
-        add.setAttribute('aria-label', `Add a session with ${person.label}`);
+        const add = createRackAddControl(document, { label: `Add a session with ${person.label}`,
+          dataset: { studioEntryKey: `shared-session-add:${person.id}` } });
         add.addEventListener('click', event => onAdd({ personId: person.id }, event.currentTarget)); cell.append(add);
       }
       row.append(cell);

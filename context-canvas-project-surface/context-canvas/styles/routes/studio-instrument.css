@@ -156,6 +156,8 @@
  color: var(--native-paper); background: transparent; border: 1px dashed var(--native-rule);
  box-shadow: none; white-space: normal; line-height: 1.3;
 }
+.native-coordination button.studio-rack-create-zone::before { content:none; }
+.studio-rack-create-zone__icon { font:700 1.5rem/1 ui-monospace,monospace; color:inherit; }
 .native-coordination button.studio-rack-create-zone:focus-visible {
  outline: 2px solid var(--native-signal); outline-offset: 2px;
  background: color-mix(in srgb, var(--native-signal) 18%, transparent);

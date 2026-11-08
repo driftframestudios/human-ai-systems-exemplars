@@ -1,3 +1,4 @@
+import { createRackAddControl } from './rack-creation-controls.mjs';
 import { duration } from './display.mjs';
 import { mountRackHeader, syncReorderButtons } from './rack-controls.mjs';
 import { animateRackChange } from './reel-control.mjs';
@@ -110,10 +111,10 @@ export function mountSharedSessionRack(container, { onCommand, onNavigate, onCre
     }
     const addRow = node('tr', undefined, 'studio-rack-create-row'), label = node('th', 'New session'); label.scope = 'row'; addRow.append(label);
     for (const person of plan.people) {
-      const cell = node('td'), create = button('Add session', 'native-control--create studio-rack-add studio-rack-create-zone',
-        event => onCreate('session', { personId: person.id }, event.currentTarget));
-      create.dataset.studioEntryKey = `shared-session-add:${person.id}`;
-      create.setAttribute('aria-label', `Add a session with ${person.label}`); cell.append(create); addRow.append(cell);
+      const cell = node('td'), create = createRackAddControl(document, { label: `Add a session with ${person.label}`,
+        dataset: { studioEntryKey: `shared-session-add:${person.id}` } });
+      create.addEventListener('click', event => onCreate('session', { personId: person.id }, event.currentTarget));
+      cell.append(create); addRow.append(cell);
     }
     body.append(addRow); panels.get('people').replaceChildren(scroll);
   }
