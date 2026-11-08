@@ -217,6 +217,16 @@ Comparison amounts and financial metrics are derived from the selected deck's
 settings. The explicit Plan investment funding action uses the existing shared
 work command; comparison assumptions retain their separate analytical meaning.
 
+The final Investment reels use `reel-control.mjs` and shared instrument styling,
+matching Team planning, Change and Quality. A small financial adapter supplies
+choice identity and consequences; the shared control owns stationary perimeter
+buttons, central Next, arrow stepping, selected output, rotor and disposal.
+Teal primary and cobalt secondary reels keep dimensions distinct. Paired or
+three-reel groups stack when their labels need more room. This supersedes the
+specimen's illustrative reel renderer in the live chapter, while preserving the
+reference itself and all connected financial behavior. Full, Lower, Off and
+system motion preferences come from the existing Studio owner.
+
 The VHS-C shelf keeps the reference's chunky depth, large left reel, internal
 grip texture and moving inner face. Chocolate companion modules and static
 monetary readout positions preserve its scale. Monetary dials use large/small
@@ -360,6 +370,7 @@ participant time shares remain with #798; production Reset remains with #808.
 | Pale Abilities receiver and inherited table/control styling | A dark readable header, paired compact support groups, explicit foreground/background pairs and native-size choices. |
 | Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
 | Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
+| Live Investment repeats the specimen's illustrative reel artwork | The shared Showcase zoetrope control carries financial choices; the planning specimen retains its original illustration. |
 | Rates disclosure and long contribution note editors | Direct roster/rate controls, role facets and a contribution/session matrix; stored note data is retained. |
 | Large raised buttons for most actions | Quiet local controls, preserved selected-state artwork and stronger Apply emphasis. |
 | Standalone Add controls in every lane | Named empty creation areas reuse the existing accepted creation command where scope is clear. |

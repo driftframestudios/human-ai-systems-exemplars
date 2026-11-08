@@ -90,6 +90,12 @@ recovers accepted edits and removals. The chunky shelf, internal grip texture,
 fixed-light money dials and chocolate companion panels carry the preserved
 workbench artwork into the live Studio.
 
+Investment's reels use the same Showcase zoetrope control as Team planning,
+Change and Quality: stationary option buttons, a rotating center, central Next
+and a readable selected output. Their financial presets retain their connected
+effects. The planning workbench's reel illustration remains a reference; the
+live chapter uses the shared Showcase presentation and motion preferences.
+
 Plan investment reads accepted people, work and funding. Its explicit funding
 controls update that shared plan. Other comparison assumptions retain their own
 meaning and leave the accepted work price intact. **Compare a change** and

@@ -156,7 +156,7 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
       fieldset.append(labelNode, output, input); group(domain).append(fieldset); updates.push(state => { input.value = String(state[field]); input.setAttribute('aria-valuetext', format(state[field])); output.value = format(state[field]); });
     }
     function reel(field, label, choices, receive) {
-      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
+      const control = createChoiceReel({ id: `investment-${id}-${field}`, label, secondary: reels.children.length > 0, options: choices.map(([id, label]) => ({ id, label })), read: () => read()[field], write: value => receive ? receive(value) : write(field, value) }); controls.push(control); reels.append(control.element); updates.push(state => control.update(state[field]));
     }
     function lifecycle() {
       reel('lifecycle', 'Lifecycle', [...FINANCIAL_PRESETS[type].map(item => [item.id, item.label]), ['custom', 'Custom']], value => change(model => {
@@ -303,5 +303,5 @@ export function createInvestmentWorkbench({ getModel, change, openSession, setFu
     sequence.append(periods); if (model.periods.length) root.append(sequence);
     container.replaceChildren(root);
   }
-  return { render, release() { loaded?.release(); }, dispose() { for (const editor of editors.values()) editor.dispose(); editors.clear(); outer?.remove(); } };
+  return { render, release() { loaded?.release(); }, dispose() { for (const editor of editors.values()) editor.dispose(); editors.clear(); domainControl?.dispose(); outer?.remove(); } };
 }
