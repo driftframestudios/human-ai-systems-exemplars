@@ -15,7 +15,7 @@ let editorSequence = 0;
 
 // Placement borrows mounted controls. Drafts, validation and acceptance stay
 // with the existing editor, including when its controls return to their home.
-export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = record => record.label }) {
+export function mountRackEditor(root, { editors, onClose, readLabel = record => record.label }) {
   const document = root.ownerDocument;
   const host = document.createElement('section');
   host.className = 'studio-rack-editor'; host.hidden = true;
@@ -82,13 +82,19 @@ export function mountAdjacentRackEditor(root, { editors, onClose, readLabel = re
     element: host,
     read: () => selected && { ...selected, open: !host.hidden },
     isOpen: kind => !host.hidden && selected?.kind === kind,
-    show(record, source, anchor) {
-      restore(); selected = { ...record }; origin = source;
+    isOrigin: source => Boolean(source && originScope?.contains(source) && originKey === keyOf(source)
+      && originPhase === source.closest('[data-delivery-phase]')?.dataset.deliveryPhase),
+    show(record, source, anchor, { container = null } = {}) {
+      if (selected?.kind !== record.kind) restore();
+      selected = { ...record }; origin = source;
       host.dataset.rackEditorKind = record.kind;
+      host.dataset.rackPlacement = container ? 'inset' : 'adjacent';
       originScope = anchor; originPhase = source?.closest('[data-delivery-phase]')?.dataset.deliveryPhase;
       originKey = keyOf(source);
-      anchor.after(host);
-      body.replaceChildren(...homes.get(record.kind).map(({ node }) => node));
+      if (container) { if (host.parentElement !== container) container.append(host); }
+      else if (anchor.nextSibling !== host) anchor.after(host);
+      const nodes = homes.get(record.kind).map(({ node }) => node);
+      if (nodes.some((node, index) => body.children[index] !== node)) body.replaceChildren(...nodes);
       host.hidden = false; sync();
     },
     hide({ home = false, focus = false, source = null } = {}) {

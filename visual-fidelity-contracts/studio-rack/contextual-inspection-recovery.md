@@ -66,7 +66,7 @@ at ordinary phone widths and enlarged text.
 | Owner or observation | Responsibility |
 | --- | --- |
 | [Editing coordinator](../../collaboration/native-investment-studio/editing.mjs) and [controller](../../collaboration/native-investment-studio/controller.mjs) | Active editor, saved drafts, chapter routes and creation returns |
-| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session editor placed below its origin, with identity and visibility mirrored into both Coordination readings |
+| [Work controller](../../collaboration/native-investment-studio/work-controller.mjs), [cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | Canonical session form in Plan overview's stable deck or Team planning's adjacent receiver, with identity and visibility mirrored into both readings |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [team controller](../../collaboration/native-investment-studio/team-controller.mjs) and [assembly controller](../../collaboration/native-investment-studio/assembly-controller.mjs) | Canonical person/team controls move to one adjacent receiver; existing owners retain draft and acceptance state |
 | [Motion](../../collaboration/native-investment-studio/motion.mjs) | Local indication, disclosure settling and interruptible destination reveal |
 | [Capability](../../collaboration/native-investment-studio/capability-controller.mjs), [Change](../../collaboration/native-investment-studio/change-controller.mjs), [Assurance](../../collaboration/native-investment-studio/assurance-controller.mjs) | Selected records and their local receivers |
@@ -90,8 +90,8 @@ receiver. `readReceiver()` supplies the editor's identity, visible open state an
 element ID; the shared synchronizer updates the controls in place. The transient
 last-click effect retains its presentation role. Closing or hiding the receiver
 restores its closed caret while preserving any separately retained selection or
-draft. Session-settings wording and `aria-controls` identify the adjacent
-receiver supplied by #768.
+draft. Session-settings wording and `aria-controls` identify the canonical
+receiver supplied by #768 and placed inside Plan overview by #789.
 
 Team planning is a permanent section. Its arrangement reel and secondary rack
 remain available while selection opens the existing template, connection or
@@ -106,17 +106,17 @@ cards retain their connection receiver; session cards use the adjacent session
 receiver. Remaining attached
 disclosures keep the spring reveal.
 
-The selected session row key toggles its adjacent receiver. Its downward caret
-reports actual visibility; its pressed face retains the selected record after
-closure. Occurrence and participation pads continue to inspect their named work.
-The same session owner receives each entry and keeps its draft identity across
-cross-rack navigation. This supersedes the earlier repeated travel to a remote
-session editor.
+The selected session key's downward caret reports actual visibility; its pressed
+face retains the selected record after closure. The exact initiating horizon
+control or Team planning row key toggles the receiver; Team planning delivery
+cards and participation pads inspect their context. A different occurrence or participation entry selects its
+own context. The same session owner receives each entry and keeps its draft
+identity across the horizon deck and Team planning's adjacent receiver.
 
 The adjacent [person/team receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757)
 places one `studio-rack-editor` after the stable Team planning template or
 accepted-connections root, outside the template form and rebuilt board.
-`mountAdjacentRackEditor` moves the canonical configure/status nodes into that
+`mountRackEditor` moves the canonical configure/status nodes into that
 host. The same controls return to People when the chapter changes. Their
 existing controllers continue to own validation, drafts and acceptance.
 
@@ -132,43 +132,42 @@ Inclusion and reorder controls retain their existing meanings.
 The dark heading, named object and Close sit above a peach editorial body.
 The person's rate enclosure retains the shared quantity skin and exact controls.
 The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-uses this placement and return grammar with the enclosed duration module:
-larger readout above peach Hours and secondary paper Minutes, with repetition separate
-nearby. A session opened from a period occurrence carries that occurrence
-context; Shared sessions supplies its people context. The heading names the
-session and originating rack. Each route reveals the same existing editor and
-retains its origin for Close. A row key toggles the panel; occurrence pads can
-focus placement while duration still governs every occurrence of that session.
-Period/subdivision and delivery-phase presentation remain with their scope owners.
-Close retains unfinished input and restores the initiating key or pad; Cancel
-discards the proposal; Apply uses the existing acceptance owner. A failed switch
-keeps the admitted record and its panel identity aligned.
+established this return grammar with the enclosed duration module: larger
+readout above peach Hours and secondary paper Minutes, with repetition separate
+nearby. #789 extends its placement owner into the horizon while Team planning
+continues to use the adjacent host. Each route preserves its period/occurrence or
+participation context. A failed switch keeps the admitted record and its panel
+identity aligned.
 
-### Proposed variation: Session detail deck
+### Session detail deck inside Plan overview
 
 [#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
-proposes a **Session detail deck** inside Plan overview, between its period board
-and Session tracks. This is a complementary composition within the existing
-family; #768's adjacent receiver remains the current implementation. Its detailed
-[readiness decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
+places a **Session detail deck** inside Plan overview, between its period board
+and Session tracks. This supersedes #768's below-rack horizon placement while
+preserving Team planning's adjacent receiver. The
+[composition decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
 defines the stable receiving slot and issue order.
 
 A tape-like selected clip identifies the record loaded into the deck. The session
-name, current period and Plan overview return remain identifiable. The initiating
-clip toggles its deck; Close returns focus to that clip and retains its draft.
-Apply and Cancel keep their accepted-change and discard operations. One form,
-one session owner and one edit lease receive all entry points, including a
-selected occurrence. The stable deck slot survives board/track refreshes.
+name, current period and Plan overview return remain identifiable. The exact
+initiating control toggles its deck; Close returns focus to that control and
+retains raw entries and the edit lease. Another occurrence changes the inspected
+repetition while the form stays open. Apply accepts through the current owner;
+Cancel reverts its proposal. One canonical form, one session owner and one edit
+lease receive all entry points. The stable deck slot preserves live controls
+through board/track refreshes and cross-rack navigation.
 
 The deck uses the enclosed duration module, numbered occurrence pads and named
-participant tracks. Period and subdivision pads place the selected occurrence.
+participant tracks. Native period and week/month radio pads place the selected
+occurrence. Add occurrence changes this session's count through its draft owner;
+the exact count remains available. Unplaced retains the repetition for later placement.
 Participant switches independently include people for the session as a whole;
 Move up/down alone changes their order. The current shared duration and ordered
 membership apply to every occurrence. Quality's track-selection matrix supplies
 the preferred compact skin, while each control retains this receiving meaning.
 
 [Ableton's Clip View](https://www.ableton.com/en/live-manual/12/clip-view/)
-provides a selected-record detail precedent. The proposed Studio deck applies
+provides a selected-record detail precedent. The Studio deck applies
 that relationship through enterprise session labels and native controls. The
 first deck remains a nonmodal disclosure: the existing coordinator retains
 unfinished edits during selection changes. A blocking overlay would require
@@ -177,13 +176,14 @@ the inert background and contained focus described by the
 This recommendation preserves context and existing switching behavior; a visitor
 walkthrough determines how clearly the tape/deck metaphor reads.
 
-#758 supplies immediate accepted creation and its Undo boundary; #770 composes
-that owner into empty-space entry. Neither is required to place existing-session
-editing inside the rack. #777's stale browser-entry repair supplies the current
-cross-chapter baseline before the deck increment. Retain the current
-Add/confirmation journey until those changes land. #771's keyed participant
-movement can accompany the deck; its percentage model remains separate. Phone reflow retains the title, exact fields,
-independent inclusion and a visible Close without adding a full-page modal.
+#758 is the next authorized increment for immediate accepted creation and Undo;
+#770 then composes that owner into empty-space entry. #789 preserves the current
+Add session/confirmation journey. The repaired #777 browser routes supply
+current cross-chapter entry points. #771 retains broader participant movement
+and percentage semantics; the deck uses the existing inclusion and order owner.
+Phone reflow retains the title, exact fields, independent inclusion and visible
+Close. The receiving PR records the actual retention, placement, return and
+geometry observations; the contract describes their intended meaning.
 
 ### Other contextual receivers
 

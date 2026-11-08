@@ -57,12 +57,19 @@ starts an editor draft in the selected period; confirmation accepts that item.
 Hours and Minutes change the length of each occurrence; Working sessions changes
 how many occurrences need placement. People may participate across team bounds.
 
-Session inspection opens one adjacent panel below the originating rack. Its
-heading names the selected work and source. The active row key toggles this
-panel; an occurrence pad opens its placement context. Close returns focus to the
-origin and retains the proposal. Scope remains stable while the same session is
-opened from Team planning, whose phase and participation reading retain their
-own meaning.
+Session inspection opens one detail deck between Plan overview's board and
+tracks. A stable receiving slot preserves its canonical form during surrounding
+refreshes. The selected sprint/quarter and Plan overview return remain visible.
+The exact initiating control toggles the deck; another occurrence selects its
+placement. Close returns focus to the origin and retains the proposal. Team
+planning opens that same form in its adjacent receiver, preserving both the
+draft and its distinct phase/participation reading.
+
+Numbered occurrence pads select a repetition. Native radio pads choose its
+sprint/quarter and week/month; Add occurrence changes this work's count through
+the current draft. Shared duration and ordered participant switches govern every
+occurrence. A different session still begins through Add session and its current
+confirmation route. Apply accepts the proposal; Cancel reverts it.
 
 The board uses headed sections and buttons. Session tracks use a captioned native
 table with row and column headers. A named keyboard-reachable scroll region
@@ -74,10 +81,11 @@ stacking may change geometry while preserving reading order and record identity.
 
 | Owner or observation | What it establishes |
 | --- | --- |
-| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Period board, breadcrumb, tracks, focus return, details and actions |
+| [Cadence view](../../collaboration/native-investment-studio/cadence-view.mjs) | Period board, breadcrumb, tracks, stable session-deck slot, focus return, details and actions |
 | [Delivery board](../../collaboration/native-investment-studio/delivery-board.mjs) | Authored phase projection, distinct editorial cards, local phase scope and overview return |
 | [Cadence model](../../collaboration/native-investment-studio/cadence.mjs) and [score controller](../../collaboration/native-investment-studio/score-controller.mjs) | Authored periods and the accepted/proposed arrangement boundary |
 | [Work controller](../../collaboration/native-investment-studio/work-controller.mjs) and [rack controls](../../collaboration/native-investment-studio/rack-controls.mjs) | The selected session's draft and receiver state; synchronized selected/open cues across both Coordination readings |
+| [Occurrence controls](../../collaboration/native-investment-studio/session-occurrence-controls.mjs) | Local repetition selection and native period/subdivision choices presented through the session owner's setters |
 | [Arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) and cadence rules in [About CSS](../../context-canvas-project-surface/context-canvas/styles/routes/about.css) | Receiving lane and track geometry; shared rack tokens stay inherited |
 | [Score browser checks](../../tests/native-investment-studio/score.browser.mjs) | Period drill-down, in-rack scope cues, return focus and local scroll, retained plan/draft state, placement, horizon recovery and in-place example replacement |
 | [Session browser checks](../../tests/native-investment-studio/session.browser.mjs) | Placement with its draft, duration/occurrence distinction and cross-team participation |
@@ -163,9 +171,15 @@ disclosure, spring movement and contextual scope. The corresponding people and
 relationship pads offer the same operations inside the instrument; both paths
 continue to address the same records and editors.
 
-The [adjacent session editor](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
-receives both readings through the same existing session owner. The enclosed
-duration module and exact repetition input stay intact. A focused phone/laptop
-journey observes occurrence and participation entry, row-key close/reopen,
-cross-rack draft retention, Apply/Cancel, return focus and retained period/phase
-scope. Exact calendar or performance expansion needs its own consequential question.
+The [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
+supplies both readings with one existing session owner. The
+[detail-deck increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)
+places that form between Plan overview's board and tracks while preserving Team
+planning's adjacent route. Its focused phone/laptop observation must distinguish
+the same retained form from a replacement during refresh, exact-trigger closure
+from another occurrence's selection, and draft placement from accepted work.
+The receiving PR also records cross-rack retention, Apply/Cancel, return focus
+and period/phase context. The duration module and exact repetition input remain
+available. #758's immediate creation, then #770's empty-space entry, follow as
+separate authorized increments. Exact calendar or performance expansion needs
+its own consequential question.

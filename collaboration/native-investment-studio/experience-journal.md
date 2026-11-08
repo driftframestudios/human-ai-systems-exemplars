@@ -57,12 +57,15 @@ PR #785 delivered the enclosed duration and rate modules (#767). PR #786 deliver
 preserving those modules and the People chapter. PR #787 delivered #768, extending
 the same placement grammar to session editing from the horizon and Team planning.
 Close retains the proposal; Cancel discards it; Apply accepts it through the
-existing owner. Immediate creation retains its separate issue. Team arrangement
-keeps its direct acceptance boundary. #788 refines duration's borderless peach
-Hours and paper Minutes, using the monetary coarse/fine dial geometry. The
-prospective #789 Session detail deck moves existing-session editing inside Plan
-overview while retaining those owners; it is a planning decision rather than
-implemented placement.
+existing owner. Team arrangement keeps its direct acceptance boundary. PR #790
+delivered #788's borderless peach Hours and paper Minutes with the monetary
+coarse/fine dial geometry. PR #793 repaired the current-entry browser routes
+(#777), enlarged-text readout (#791) and idempotent editor restoration (#792).
+#789 now places the Session detail deck inside Plan overview while Team planning
+keeps its adjacent receiver. One canonical form and session owner serve both.
+The next authorized increments are immediate session creation (#758), then
+empty-space entry (#770); their acceptance boundaries remain separate from
+editing an existing session.
 
 ### State, people and evidence
 
@@ -104,11 +107,13 @@ regions. That label names the actual destination. Returning restores the period
 control used to enter from either the board or the tracks, along with the
 overview's local scroll. One scope owner drives the breadcrumb, lanes and tracks.
 Period membership and order are authored. Scope changes preserve plan bytes,
-pending edits, effort and investment. The adjacent session editor owns people,
-duration, occurrence count, funding and placement. Its heading names the session
-and originating rack. A row key toggles its panel; an occurrence pad opens the
-same editor with its particular placement in context. Closing returns focus to
-that entry while keeping the selected period and unfinished work available.
+pending edits, effort and investment. The Session detail deck sits between the
+period board and Session tracks in a stable slot. Its canonical form owns people,
+duration, occurrence count, funding and placement. The selected period and Plan
+overview return remain visible. Repeating the exact initiating control closes
+the deck; a different occurrence selects its own placement context. Close
+retains the draft and returns focus to that entry. Apply accepts through the
+existing owner; Cancel reverts the proposal.
 
 Example buttons replace the plan in place with Undo available. The Sprints /
 Business quarters choice immediately regroups the existing work and supports
@@ -118,8 +123,12 @@ their recorded timing until an explicit period-arrangement proposal is accepted.
 
 A period's Add session action opens a new draft in that period with useful
 example context. Confirming Add session accepts the prepared item. More
-occurrences create additional placements to choose; more Hours or Minutes makes
-each occurrence longer. These separate operations remain visible beside the work.
+occurrences create additional placements to choose. The deck's numbered pads
+select one repetition; native radio pads then choose its sprint/quarter and
+week/month. Add occurrence increases the existing work's count. More Hours or
+Minutes makes every occurrence longer, and the ordered participant switches
+apply to every occurrence. Those shared session properties remain distinct from
+an individual repetition's placement.
 
 Stages group sessions. Handoffs connect the work that prepares a result to its
 receiver. Decisions attach to a stage or handoff and retain their question,
@@ -283,7 +292,8 @@ entry, screenshot or technical description presents the earlier behavior.
 | PR #769's flexible above-or-beside duration readout and fixed neighboring repetition module | #767 encloses the larger readout above Hours/Minutes and keeps the exact field/circular pair toward each dial's lower right. Working sessions retains its separate input when #768 relocates the editor. The shared instrument stylesheet owns the enclosure geometry. |
 | Bordered Hours/Minutes inner groups, peach Minutes and smaller duration-only dial artwork | #788 gives borderless peach Hours and paper Minutes. Duration reuses monetary coarse/fine sizes and the same face/pointer treatment; the outward pointer remains legible at each endpoint. The outer enclosure, readout and gesture owners remain. |
 | Team and member cards sharing template customization, with accepted people/team edits reached through People | #757 routes people and accepted teams to their canonical editor beneath the initiating Team planning rack. The same controls return to People on a chapter change. Illustrative teams awaiting acceptance retain template customization. |
-| Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 opens the canonical session editor below the originating horizon or Team planning rack. Its heading retains the session and origin. The active row key toggles the panel; pads inspect their occurrence or participation context. Close retains the proposal and returns focus. |
+| Session keys repeatedly traveling to a remote editor, with their caret reporting only its visibility | #768 introduced canonical session editing below the originating horizon or Team planning rack, preserving session identity, draft and return focus. #789 refines the horizon placement in the next row. |
+| #768 placing the horizon's session editor below the entire rack | #789 moves that canonical form into a stable Session detail deck between Plan overview's board and tracks. Team planning retains the adjacent placement. The exact initiating control toggles the deck, while another occurrence selects its placement; one owner preserves the shared draft and session properties. |
 | Immediate addition awaiting an unspecified first record type | Sessions are the recommended first receiver in #758, with an explicit New session row/region in #770. Existing matrix cells retain occurrence or participation meaning. Runtime creation remains unchanged until that increment lands. |
 
 ## Coordination consolidation
@@ -338,7 +348,7 @@ owns the darker housing and editorial board cards. Remaining attached disclosure
 continue through the existing spring/reveal owner. The controller keeps legacy
 disclosure receivers usable while About uses an ordinary exposed container.
 
-The #757 receiver uses `mountAdjacentRackEditor` in `rack-controls.mjs` to move
+The #757 receiver uses `mountRackEditor` in `rack-controls.mjs` to move
 the canonical person or team controls and status into one `studio-rack-editor`.
 It sits after the stable template or accepted-connections root, outside the
 template form and rebuilt board. The parent rack retains its cards and geometry;
@@ -356,22 +366,31 @@ Chapter changes return the canonical controls to their People homes. This
 placement owner supplies a reusable receiver while existing controllers retain
 membership, removal and creation semantics.
 
-#768 extends that receiver to the canonical session controls. Horizon row keys,
-occurrence pads, delivery-board cards and Shared sessions participation pads
-carry their actual origin into the placement route. The panel names the session
-and the rack supplying its context. The selected row remains pressed and its
-caret follows the visible panel. Activating that row again closes it; pads
-continue to inspect, so selecting an occurrence can address its placement.
+#768 extended the receiver to canonical session controls. #789 now gives that
+owner two placements: a stable Session detail deck between the horizon board
+and tracks, or the adjacent Team planning panel. Horizon keys and occurrence
+pads, delivery cards and participation pads carry their actual origin into the
+route. The selected row stays pressed; its caret follows visible disclosure.
+Repeating the initiating horizon control toggles the deck. Shared-session row
+keys toggle the adjacent receiver; delivery cards and participation pads inspect
+their session. Choosing another occurrence changes the inspected repetition
+while keeping the form open.
 
-The session owner retains raw input, draft identity, duration and placement.
-Cross-entry through the other rack moves the receiver while preserving the same
-proposal. Close returns to the originating key or pad and keeps the draft;
-Cancel and Apply retain their established discard and acceptance operations.
-Period/subdivision scope and delivery-phase scope remain with their presentation
-owners. The larger duration readout, peach Hours, secondary paper Minutes
-and circular step pairs stay together. Working sessions retains its exact
-repetition input. Creation continues through the existing draft/confirmation
-route until #758 and #770 change that contract.
+`cadence-view.mjs` preserves the deck slot while it refreshes the board and tracks.
+`mountRackEditor` lends the canonical form to that slot or the adjacent host;
+`work-controller.mjs` retains raw entries, the edit lease and acceptance.
+`session-occurrence-controls.mjs` presents numbered repetitions and native radio
+choices for their period and week/month. Add occurrence delegates the count
+change to the session owner. Participant switches edit one ordered collection,
+and the duration module governs every occurrence. The exact repetition field
+remains available; the session model keeps duration and participation shared.
+
+Cross-entry moves the same form and proposal. Close retains the draft and returns
+to the initiating key or pad; Cancel reverts; Apply accepts through the existing
+owner. Period/subdivision and delivery-phase scope remain with their presentation
+owners. The duration readout, peach Hours, paper Minutes and circular step pairs
+stay together. Creation continues through the existing draft/confirmation route
+until #758, followed by #770, delivers the authorized replacement.
 
 The whole Studio supplies reusable compositions: Quality tracks' preferred
 matrix skin separates inspect, include, link and create actions; Abilities
@@ -414,8 +433,8 @@ coarse/fine dial sizes, face inset and shorter outward pointer. This supersedes
 peach Minutes and duration-specific smaller geometry; the gesture logic stays
 with its existing owner. Each dial sits above-left of its exact field and circular step pair. The
 visible gap and the pair's start/end alignment beneath the input preserve the
-familiar adjustment pattern. Working sessions remains separate nearby and keeps
-its repetition meaning when the editor opens adjacent to either Coordination rack.
+familiar adjustment pattern. Working sessions remains a separate repetition
+quantity in the in-rack deck and adjacent receiver.
 
 `studio-quantity-module` supplies the shared enclosure skin, with
 `studio-duration` naming the duration composition. Rate hosts receive the same
@@ -434,17 +453,14 @@ contracts. #757 reuses the rate enclosure in the adjacent person editor. #768
 carries the duration module into session editing beside its originating rack,
 with the same quantity and contextual return grammar.
 
-#789 proposes a Session detail deck between Plan overview's period board and
-Session tracks. A tape-like selected clip loads one named session into the deck.
-Duration remains shared across repetitions; occurrence pads select placement;
-independent participant switches describe the session's ordered membership.
-The [consolidation plan](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
-records the source-backed nonmodal recommendation and stable-mount preparation:
-the current cadence view rebuilds its screen, so an in-rack receiver needs a
-stable slot before borrowing the canonical controls. Close retains the proposal
-and returns to the clip; the existing coordinator handles session switches.
-This remains prospective. #768's adjacent placement continues to own behavior
-until a reviewed deck replaces that receiver in Plan overview.
+#789's Session detail deck uses that duration module inside Plan overview and
+retains the same session owner. The
+[consolidation decision](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
+records why a stable, nonmodal receiving slot fits this showcase: the selected
+work and period remain available while the form retains live input. Numbered
+occurrences and participant tracks provide direct operations through existing
+setters. The supersession above changes the horizon placement; Team planning's
+adjacent receiver remains useful for its participation reading.
 
 #758 recommends an immediately created session with useful defaults and creation
 Undo. It precedes #770's empty New session regions, whose ghost plus appears on
@@ -626,7 +642,7 @@ repairs the visible reel return in
 [#776](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/776):
 the template receiver now owns focus after a person is added.
 
-The #777 browser-route repair supersedes the earlier known-failure standing.
+The #777 browser-route repair in PR #793 supersedes the earlier known-failure standing.
 People journeys open the rate disclosure; arrangement choices use direct
 acceptance; the populated-showcase journey enters through horizon session keys
 and accepted connections. Editing, comparison, downloads and recovery remain
@@ -648,10 +664,12 @@ it owns the focused occurrence/participation entry, switching, retained draft,
 acceptance and return observations.
 PR #764 remains the accepted scope-navigation reference. Retain
 the current creation/confirmation contract while #758 defines its separate replacement.
-#788's receiving PR owns the duration skin and pointer observation. #789 receives
-the approved in-rack Session detail deck; its first boundary is existing-session
-editing, followed by visual occurrence and participant controls. #758 then #770
-receive immediate creation and contextual empty-space entry.
+PR #790 owns #788's duration skin and pointer observation. #789's receiving PR
+records the stable in-rack Session detail deck, existing-session draft/return
+behavior and occurrence/participant controls. This journal records the design
+and ownership; that PR supplies its checked-source receipt. #758 then #770 are
+the authorized next increments for immediate creation and contextual empty-space
+entry.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

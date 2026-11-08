@@ -61,14 +61,21 @@ adjacent inspector, Change/Quality pad movement and the editorial disclosures.
 Shared components gain role-based names as they are extracted; intentional
 chapter differences, including the two fader styles, remain useful.
 
-The approved next composition is a
-[Session detail deck](../../planning/context-canvas/studio-coordination-rack-consolidation.md#proposed-session-detail-deck-inside-plan-overview)
+The current composition is the approved
+[Session detail deck](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
 inside Plan overview ([#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)).
-It will open between the period board and Session tracks, retaining the current
-session owner, duration module and Close/Apply/Cancel behavior. The browser-route
+One canonical form occupies a stable slot between the period board and Session
+tracks. The selected sprint or quarter stays visible with its Plan overview
+return. Numbered occurrence pads choose the repetition to place; native radio
+pads choose its period and week or month. Participant switches and duration
+continue to describe the whole session. Team planning retains its adjacent
+editor, borrowing that same form and draft. The receiving PR records verification
+and delivery of this increment. The browser-route
 repair in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)
-uses the current People, arrangement and populated-showcase entries. Its responsive
-journey also protects the shared duration readout at enlarged text (#791).
+uses the current People, arrangement and populated-showcase entries, delivered
+in PR #793. Its responsive journey also protects the shared duration readout at
+enlarged text (#791); returning an editor to its home preserves focus (#792).
+PR #790 delivered the duration skin and shared dial artwork (#788).
 Existing-session editing precedes immediate creation (#758), then empty-space
 entry (#770).
 
@@ -84,13 +91,12 @@ adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
 recovery. The existing Remove skin now lives with the shared instrument styles;
 its behavior stays with the current owners. Coordination supplies the reviewed
 recovery example before the new removal pattern spreads to other chapters.
-These are prospective increments. Current session placement and creation flows
-remain available until their replacements land. The arrangement reel already
-uses its direct acceptance and local Undo route.
+These are prospective increments. The arrangement reel already uses its direct
+acceptance and local Undo route.
 [#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-now names sessions as the recommended first immediate-add record, with later
-editing and creation Undo kept distinct. It precedes #770's empty-space entry;
-neither blocks the proposed deck for already-created sessions.
+names sessions as the first immediate-add record, with later editing and creation
+Undo kept distinct. The authorized sequence is #789, then #758, then #770. The
+existing Add session and confirmation route remains in use during the deck increment.
 
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
@@ -150,13 +156,17 @@ Open a period to see its weeks or months. The rack header keeps the selected
 sprint or quarter beside **Plan overview**, above the board and tracks' local
 scroll regions. Returning restores the originating period control and its place
 in the overview; changing scope preserves accepted work and pending edits.
-Select a session to open its people,
-duration and individual occurrence placements directly below the rack. The
-period remains selected. A row key toggles the receiving panel; an
-occurrence pad opens that occurrence's placement. **Add session** begins a draft
-in the selected period; its final confirmation accepts that draft. Increasing
-**Working sessions** adds occurrences awaiting placement. Increasing Hours or
-Minutes makes each occurrence longer.
+Select a session to open its detail deck between the board and tracks. The
+period remains selected. Activating the exact initiating control again closes
+the deck; selecting another occurrence changes the inspected repetition.
+**Close** retains the draft and returns focus to its source. **Apply changes**
+accepts the proposal; **Cancel changes** reverts it.
+
+Choose a numbered occurrence, then its sprint or quarter and week or month.
+**Add occurrence** increases this session's repetition count; the exact
+**Working sessions** field remains available. Hours, Minutes and the ordered
+participant switches apply to every occurrence. **Add session** begins a distinct
+work record in the selected period; its final confirmation accepts that draft.
 
 **Stages & handoffs** reveals the work's relationships and their editors.
 Decisions attach to a stage or handoff. Delays name affected work and can propose
@@ -186,13 +196,12 @@ card; **Apply** accepts it and keeps the editor open. Switching records
 keeps unfinished work recoverable. Returning to People restores the same controls
 to that chapter.
 
-Session cards, row keys and participation pads open the same session editor
-below their originating rack. The panel names the session and its source;
-**Close** keeps the draft and returns focus to the initiating control. Repeating
-an active row key closes it; occurrence and participation pads keep their
-inspection operation. Switching between the horizon and Team planning retains
-the proposal, selected period and delivery phase. **Cancel changes** discards
-the proposal; **Apply changes** accepts it through the existing session owner.
+Team planning's session cards, row keys and participation pads open the same
+canonical session form below their originating rack. Its heading names the
+session and source. Switching between this adjacent receiver and Plan overview's
+in-rack deck retains the proposal, selected period and delivery phase. Shared-session
+row keys toggle this adjacent receiver; delivery cards and participation pads
+inspect their session. Horizon entries toggle the deck when repeated. Close, Cancel and Apply keep the same meanings in both locations.
 
 Illustrative teams awaiting acceptance keep their template-customization route;
 handoffs open connection settings.
@@ -209,7 +218,7 @@ Shared sessions columns name people, and its pads show participation. The
 horizon's columns name periods, and its pads show occurrences. Both open the
 same working-session records with the same session-key and Add treatment. The
 selected key stays identifiable when its editor closes; its caret opens only
-with the visible adjacent session-settings receiver. A future New session row
+with the visible session-settings receiver. A future New session row
 will provide ghosted creation space inside the rack; existing row cells retain
 their occurrence or participation meaning. People and available time and
 Stages & handoffs will remain compact editorial companions attached below the
@@ -253,9 +262,11 @@ Hours uses a peach inner face; Minutes uses paper. Both inner groups are
 borderless, blending into the overall enclosure. Their larger/smaller dials use
 the same coarse/fine sizes, face inset and pointer as the monetary controls
 ([#788](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/788)). Each
-exact field and circular step pair sits toward the lower right of its dial. **Working sessions**
-remains a separate nearby repetition control. Main and supporting-session editors
-share this arrangement, with phone reflow inside the same enclosure. A duration
+exact field and circular step pair sits toward the lower right of its dial.
+Repetition remains a separate quantity: the session detail deck adds numbered
+occurrence pads beside the exact **Working sessions** control. Main and
+supporting-session editors share the duration enclosure, with phone reflow inside
+it. A duration
 turn keeps its adjustment stable if the focused page scrolls during the gesture.
 
 Rate modules enclose one named amount with its $10 and $5 dials, $1 step buttons
@@ -316,10 +327,10 @@ checked source and remaining review boundary.
 | About composition, shared controls and chapter styling | [About HTML](../../context-canvas-project-surface/context-canvas/index.html), [shared instrument CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-instrument.css), then the corresponding `studio-*.css` route owner |
 | Plan state, admission, history, pricing and exchange | [Implementation reference](implementation-reference.md#portable-state) and its [source map](implementation-reference.md#source-map) |
 | Drafts, saved work and return routes | [`editing.mjs`](editing.mjs), [`controller.mjs`](controller.mjs), and the [editing contract](implementation-reference.md#shared-editing-and-saved-drafts) |
-| Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs) |
+| Periods, placements and contextual session editing | [`cadence.mjs`](cadence.mjs), [`cadence-view.mjs`](cadence-view.mjs), [`score-controller.mjs`](score-controller.mjs), [`work-controller.mjs`](work-controller.mjs); [`session-occurrence-controls.mjs`](session-occurrence-controls.mjs) presents one occurrence's placement through the session owner's setters |
 | Team planning, arrangement structure and shared-session rack | [`connection-template-controller.mjs`](connection-template-controller.mjs), [`connection-view.mjs`](connection-view.mjs), [`arrangement-surfaces.mjs`](arrangement-surfaces.mjs), and [arrangement CSS](../../context-canvas-project-surface/context-canvas/styles/routes/studio-arrangements.css) |
 | Shared session selection and disclosure cues | [`rack-controls.mjs`](rack-controls.mjs) mirrors the receiver state from [`work-controller.mjs`](work-controller.mjs); `studio-track-key` and `studio-rack-add` live in the shared instrument CSS |
-| Adjacent people, team and session editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls; [`controller.mjs`](controller.mjs) routes their rack origin. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
+| In-rack session deck and adjacent record editing | [`rack-controls.mjs`](rack-controls.mjs) places canonical controls with `mountRackEditor`; [`controller.mjs`](controller.mjs) routes their origin to the stable horizon slot or Team planning's adjacent host. [`team-controller.mjs`](team-controller.mjs), [`assembly-controller.mjs`](assembly-controller.mjs) and [`work-controller.mjs`](work-controller.mjs) retain selection, draft and acceptance ownership. `studio-rack-editor`, record keys and session keys share the instrument CSS. |
 | Visual and interaction rationale | [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md), [experience journal](experience-journal.md), and [usability research](usability-research.md) |
 
 For re-entry, reconcile the journal's current contract with runnable source,
