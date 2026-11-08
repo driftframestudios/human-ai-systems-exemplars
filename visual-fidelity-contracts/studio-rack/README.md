@@ -7,16 +7,48 @@ The [running About Studio](../../context-canvas-project-surface/context-canvas/i
 is the reference implementation.
 
 **Standing:** review candidate, version `0.1.0`, ID
-`vfc:studio-rack-composition`; source reviewed 7 November 2026. This family records
+`vfc:studio-rack-composition`; source reviewed 8 November 2026. This family records
 the accepted design and its implementation boundaries. Prospective receiving
 decisions below retain their own Issues and delivery evidence. Each receiving PR
 owns its actual verification result. Publication remains a separately reviewed action.
 
+The [chapter workbench study](../../planning/context-canvas/studio-rack-tape-workbench.md)
+extends #804's loaded-tape illustration across all Studio chapters through
+[#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
+The current [#809 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809)
+refines Investment deck depth, connected allocation reels and money scale after
+#807 established the deeper comparisons and recoverable plan exploration.
+The [Investment Master Shelf & Financial Reels](investment-master-reels.md)
+contract owns the VHS-C channel, chocolate companions, $1,000/$100 and $100/$5
+controls with stable readout placement,
+while #806 retains the approved cassette art and duration-lighting correction. Its
+[development composition contract](chapter-workbench-study.md) connects team
+lanes, support tables, reels, check pads and investment lanes through shared
+illustrative identities and Undo. The study maps outside Coordination operations
+to proposed rack homes, consolidates repetition around occurrence pads, and
+separates session identity from plan/period scope. Production retains its current
+owners; each adopted change receives focused implementation and review.
+Two dedicated references preserve the approved development components. The
+[Loaded Tape Duration Panel](loaded-tape-duration-panel.md) keeps its panel scale,
+palette and neighboring Working sessions geometry. Its revised light treatment
+fixes the face and shadow while the pointer turns. The
+[Cassette Plan Shelf](cassette-plan-shelf.md) keeps the tilted blocky faces,
+hover movement, selected outline and horizontal shelf at `650px` and below.
+The loaded detail panel also retains its short downward unfurl. Investment's
+chocolate Extra investment lane remains `#403d32`; additional chocolate
+companion panels separate financial controls and readings within the rack. These local approvals leave the remaining chapter composition open to
+iteration. The planning reference is authorized for main/dev preservation in
+[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+The actual Showcase integrates on dev through
+[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811),
+with main retaining its reference runtime until the human cues promotion.
+
 ## Choose a visual mode and an operation
 
-The family contains this composition contract and five operation contracts.
-They describe reusable relationships across chapters, rather than a separate
-visual system for every chapter.
+Choose the operation contract that explains what the visitor can do. These
+contracts describe reusable relationships across chapters, with room for each
+chapter's own composition. The development workbench and its preserved component
+references retain the separate standing described above.
 
 | Mode | Useful work | Stable visual relationship |
 | --- | --- | --- |

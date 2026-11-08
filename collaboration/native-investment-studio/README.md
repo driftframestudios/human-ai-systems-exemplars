@@ -15,109 +15,120 @@ recoverable.
 
 ## Current state
 
-The working showcase is on main. The cohesion route in
-[#735](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/735)
-was delivered through independently reviewed PRs #741–#745: shared controls,
-Coordination and People, Abilities, Change, and Quality & recovery. The linked
-issues retain their acceptance criteria and evidence under
-[milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
-The [journal](experience-journal.md#current-working-contract) records the current
-contract and the decisions that replaced earlier interfaces. The
+The working showcase is on `main`. Coordination combines a sprint/quarter board,
+session sequencer, shared-session participation reading and a delivery board.
+One canonical session editor occupies the detail deck between the period board
+and tracks, or the adjacent Team planning receiver. Duration, participation and
+placement retain their existing draft, Apply, Cancel and recovery owners.
+People and Stages controls open the same records as the compact editorial drawers
+attached beneath the horizon. PR #802 delivered their consolidation and shared
+participant movement after independent review.
+
+The [journal](experience-journal.md#current-working-contract) records the settled
+rationale and supersessions. The
 [Studio Rack visual contracts](../../visual-fidelity-contracts/studio-rack/README.md)
-describe the accepted composition, its five reusable interaction patterns and
-their source owners.
+describe the accepted composition and reusable interaction patterns. Current
+work is coordinated under
+[milestone 23](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/23).
 
-The interaction pass delivered dial retention ([#761](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/761))
-and Change disclosure cues ([#760](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/760)).
-Its visual grammar is recorded in [#755](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/755).
-Coordination's scope navigation ([#756](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/756))
-keeps **Plan overview** and the selected sprint or quarter inside the rack.
-The [Coordination consolidation](../../planning/context-canvas/studio-coordination-rack-consolidation.md)
-in [#765](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/765)
-gives both readings shared session keys and Add controls: the horizon shows
-when sessions happen; Team planning shows who participates. Selected keys follow
-the session editor's current record, and their carets follow its visible open
-state. Team planning is a permanent section with the arrangement reel and
-editorial structure above a subtly darker rack for teams and shared work.
-The [delivery-board increment](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/779)
-combines teams, people, sessions and handoffs in editorial phase lanes.
-[Direct arrangement selection](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/766)
-updates one arrangement through the accepted plan and makes Undo available locally,
-as delivered in [#783](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/783).
-Shared sessions keeps its complementary participation reading below.
-Enclosed duration and rate modules ([#767](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/767))
-group each named quantity with its controls, delivered in
-[#785](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/785).
-Adjacent people/team editing
-([#757](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/757))
-places the existing editor below the selected Team planning rack. Close retains
-the draft; Cancel discards it; Apply accepts through the existing owner.
-The People chapter uses those same controls. Adjacent session editing
-([#768](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768))
-delivered in PR #787 extends this receiver to the horizon and Team planning.
-The heading names the session and its originating rack; both routes use the
-same session draft and enclosed duration controls.
-The plan draws on the whole Studio: Quality's selection matrices, Abilities'
-adjacent inspector, Change/Quality pad movement and the editorial disclosures.
-Shared components gain role-based names as they are extracted; intentional
-chapter differences, including the two fader styles, remain useful.
+### Explore the preserved chapter workbench
 
-The current composition is the approved
-[Session detail deck](../../planning/context-canvas/studio-coordination-rack-consolidation.md#session-detail-deck-inside-plan-overview)
-inside Plan overview ([#789](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/789)).
-One canonical form occupies a stable slot between the period board and Session
-tracks. The selected sprint or quarter stays visible with its Plan overview
-return. Numbered occurrence pads choose the repetition to place; native radio
-pads choose its period and week or month. Participant switches and duration
-continue to describe the whole session. Team planning retains its adjacent
-editor, borrowing that same form and draft. The receiving PR records verification
-and delivery of this increment. The browser-route
-repair in [#777](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/777)
-uses the current People, arrangement and populated-showcase entries, delivered
-in PR #793. Its responsive journey also protects the shared duration readout at
-enlarged text (#791); returning an editor to its home preserves focus (#792).
-PR #790 delivered the duration skin and shared dial artwork (#788).
-PR #794 delivered the deck after independent review. PR #795 delivered immediate
-session creation (#758) after independent review and passing hosted checks.
-PR #797 delivered #770's **New session** rows inside both Coordination sequencers,
-reusing that accepted-creation and Undo owner.
+Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
+through the repository's local server. The human approved its planning-source
+promotion to `main` and `dev` in
+[#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
+The approved Investment specimen is `93bc69a`. The
+[#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
+extended #804's loaded-tape composition across all Studio chapters. The preservation work in
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+keeps the approved cassette art and duration panel. The financial comparisons in
+[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+now receive the
+[#809 refinement](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809):
+chunkier VHS-C decks, connected budget reels and money controls matched to scale. One chapter rail connects the same illustrative
+people, teams and work:
 
-The current consolidation combines shared participant movement
-([#771](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/771))
-with attached editorial companions
-([#772](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/772)).
-Session and team membership editors share explicit Move up/down behavior; inclusion
-keeps cards in place. Compact People and Stages controls inside the horizon open
-the same records as the pale drawers attached below it. Their receiving PR owns
-the focused review and browser observations.
+| Chapter | Try in the study |
+| --- | --- |
+| Coordination | Load an item from Plans, adjust duration, add or place its sessions and choose participants. Remove plan and Undo make exploration recoverable. |
+| People | Select a person from team lanes; adjust rate or funded time and change session participation. |
+| Abilities | Select a cell in either support table; connect responsibility, preparation, review or an illustrative observation. |
+| Change | Turn the framework/viewpoint reels, vary the emphasis and connect work in the stage lanes. |
+| Quality & recovery | Explore preparation/recovery presets, the attention display and linked check pads. |
+| Investment | Load any preloaded comparison, turn its reels or money dials, and add another independent deck to explore a variation. |
 
-The future **Time in this session** percentage model has its own contract in
-[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
-Current participation still gives each selected person the full session duration.
+Edits take effect directly in the study's page-local model with shared Undo.
+Marked session routes open the Coordination module and offer a return to the
+originating chapter. Reload starts the authored example again. The
+[design proposal](../../planning/context-canvas/studio-rack-tape-workbench.md)
+maps these operations and the later production bridges; the
+[Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
+records the shared composition, chapter distinctions and source owners.
+
+The human-approved **Time per person** panel retains its scale, geometry and
+palette, with the neighboring **Working sessions** layout preserved through the
+[Loaded Tape Duration Panel contract](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md).
+Its approved lighting correction keeps the face gradient and shadow still while
+the pointer rotates. The earlier complete-face rotation is superseded.
+The numbered pads remain the study's repetition control. The shelf reads
+**Plans**: **New plan** creates an item, and **+ Session** repeats the loaded
+item. These visible labels retain the existing study identities and duration
+owner. Other chapters reach that same module.
+
+The separate
+[Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
+preserves the current artwork, hover motion and narrow horizontal shelf at
+`cedafc3`. The detail panel keeps its short downward easing. The
+[Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+records the wider VHS-C bodies, deeper extrusion, larger left reel and stippling
+inside each cassette. The dark green channel and chocolate companion panels preserve the
+existing art direction. One of every comparison type is ready to explore;
+**New investment deck** creates an independent copy and **Remove deck** has Undo.
+
+Plan investment pairs an **Investment approach** reel with an **Investment lens**.
+Approaches visibly change budget reserve and opportunity allocations. The lens
+filters the funding board and sprint amounts. Direct adjustments show Custom;
+the shared-session cost continues to come from the same people and work.
+Lifecycle, alternative and metric reels retain concise financial readings in
+the other decks. Larger amounts use $1,000/$100 dials; unit costs retain $100/$5.
+Each money readout has a fixed position, with expected thousands below the
+heading and smaller unit costs at its right. Values retain that placement while
+adjusted.
+
+Remove plan also supports an empty Coordination shelf. New plan starts again;
+Undo restores the removed item and its links. Independent response cards retain
+visible unassigned endpoints after their source or receiver is removed. Reset
+restores the authored workbench. The corresponding production amp control is
+planned separately in
+[#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
+
+The working showcase on `main` keeps its accepted plan, canonical editors and
+recovery behavior. The study's unassigned plans, response cards and financial
+comparisons are illustrative contracts to review before production adoption.
+The workbench remains in `planning/` as a reference. The actual About Showcase
+now iterates on `dev`: [#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
+starts with wider rack compositions and compact session modules, preserving
+Showcase dials, zoetropes, output styling and canonical behavior. The Showcase
+on `main` remains the reference anchor. A human cue selects each later promotion.
+Direct team/handoff integration follows in
+[#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812),
+and cassette/deck projection in
+[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813).
+
+### Continuing routes
+
+Participant time shares remain with
+[#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798);
+current participation gives each selected person the full session duration.
 The [removal/recovery recommendation](removal-recovery-research.md) in
 [#773](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/773)
-adds a refined rose Remove treatment, compact amp **Undo (n)** and scoped local
-recovery. The existing Remove skin now lives with the shared instrument styles;
-its behavior stays with the current owners. Coordination supplies the reviewed
-recovery example before the new removal pattern spreads to other chapters.
-The refined removal pattern remains prospective. The arrangement reel already
-uses its direct acceptance and local Undo route.
-[#758](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/758)
-gives Coordination rack Add session actions a useful accepted starting record,
-then opens its existing editor. **Undo session addition** reverses that creation
-while it remains the latest accepted change. Cancel reverts later draft edits
-and preserves the added session. The guided creation route remains available
-when a team or person must first be supplied. The
-[contextual creation rows](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
-pass the chosen period/subdivision or accepted person into this same owner.
-PR #797 records the focused entry and recovery observations.
-
+retains its refined rose Remove treatment, compact amp Undo and scoped recovery
+proposal. Existing direct arrangement/session creation already supplies local Undo.
 The showcase supports ordinary phone and laptop widths. Performance refinement
 remains with [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The separately human-cued tagged public release remains with
 [#686](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/686),
-including the ASCII composition skill's public projection and the visual
-family's production guide and specimen.
+including the ASCII composition skill and visual family's public projection.
 
 ## Try the experience
 
