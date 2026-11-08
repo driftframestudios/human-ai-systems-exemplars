@@ -1,6 +1,7 @@
 import { duration, money } from './display.mjs';
 import { CADENCE_PERIOD_LIMIT, CADENCE_SUBDIVISIONS, projectCadence } from './cadence.mjs';
 import { LIMITS } from './config.mjs';
+import { createRackAddControl } from './rack-creation-controls.mjs';
 import { createTapePicker } from './tape-picker.mjs';
 import { revealStudioDestination } from './motion.mjs';
 
@@ -37,6 +38,10 @@ export function createCadenceView(root, {
   }
   function create(label, action, target, key) {
     return button(label, action, target, key, `native-control--create native-cadence__create${action === 'add-session' ? ' studio-rack-add' : ''}`);
+  }
+  function createSlot(label, action, target, key, className = '') {
+    actions.set(key, { action, target });
+    return createRackAddControl(document, { label, className, dataset: { cadenceAction: action, cadenceKey: key } });
   }
   function disclosure(label, key) {
     const details = node('details', undefined, 'native-cadence__details studio-rack-companion');
@@ -274,9 +279,8 @@ export function createCadenceView(root, {
       for (const delay of model.delays.filter(row => row.toPeriodId === period.id && subdivision === null)) {
         clips.append(delayMarker(delay));
       }
-      const addSession = create('Add session', 'add-session', { periodId: period.id, subdivision: subdivision ?? 1 }, `add-session:${period.id}:${subdivision ?? 'overview'}`);
-      addSession.classList.add('studio-rack-create-zone', 'studio-rack-create-area');
-      addSession.setAttribute('aria-label', `Add a session in ${period.label}${subdivision === null ? '' : `, ${subdivisionLabel(subdivision)}`}`);
+      const addSession = createSlot(`Add a session in ${period.label}${subdivision === null ? '' : `, ${subdivisionLabel(subdivision)}`}`,
+        'add-session', { periodId: period.id, subdivision: subdivision ?? 1 }, `add-session:${period.id}:${subdivision ?? 'overview'}`, 'studio-rack-create-area');
       column.append(clips, addSession);
       return column;
     }
@@ -349,11 +353,9 @@ export function createCadenceView(root, {
             part.append(pad);
           }
           const destination = `${column.period.label}, ${subdivisionLabel(subdivision)}`;
-          const add = create('', 'add-occurrence', { workId: item.id, periodId: column.period.id, subdivision },
+          const add = createSlot(`Add ${item.label} session in ${destination}`, 'add-occurrence', { workId: item.id, periodId: column.period.id, subdivision },
             `add-occurrence:${item.id}:${column.period.id}:${subdivision}`);
-          add.classList.add('studio-rack-create-zone');
           add.disabled = item.occurrences >= LIMITS.occurrences;
-          add.setAttribute('aria-label', `Add ${item.label} session in ${destination}`);
           add.dataset.cadencePreview = `Add another ${item.label} session in ${destination}. ${duration(item.minutesPerOccurrence)} per person.`;
           part.append(add); pads.append(part);
         }
@@ -369,11 +371,9 @@ export function createCadenceView(root, {
         ? Array.from({ length: subdivisionCount }, (_, index) => index + 1) : [column.subdivision];
       pads.style.setProperty('--cadence-pad-columns', String(subdivisions.length));
       for (const subdivision of subdivisions) {
-        const add = create('', 'add-session', { periodId: column.period.id, subdivision },
-          `new-session:${column.period.id}:${subdivision}`);
-        add.classList.add('studio-rack-create-zone');
         const destination = `${column.period.label}, ${subdivisionLabel(subdivision)}`;
-        add.setAttribute('aria-label', `Add a new plan in ${destination}`);
+        const add = createSlot(`Add a new plan in ${destination}`, 'add-session', { periodId: column.period.id, subdivision },
+          `new-session:${column.period.id}:${subdivision}`);
         add.dataset.cadencePreview = `Add a new plan in ${destination}, then select it to adjust its people and duration.`;
         pads.append(add);
       }

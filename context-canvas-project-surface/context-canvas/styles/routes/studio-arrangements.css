@@ -228,7 +228,7 @@
 
 /* Shared sessions owns direct relationship pads and a local handoff receiver.
    The delivery board remains an independent sibling working area. */
-.studio-delivery__add { display:flex; flex-wrap:wrap; gap:.4rem; margin-block-start:auto; padding-block-start:.65rem; }
+.studio-delivery__add { display:grid; gap:.4rem; margin-block-start:auto; padding-block-start:.65rem; }
 .native-coordination .studio-delivery__add button { min-inline-size:0; font-size:.72rem; }
 .studio-shared__tabs,.studio-shared__controls { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
 .native-coordination .studio-shared__tabs .studio-track-key { inline-size:auto; min-inline-size:5.5rem; min-block-size:2.75rem; padding:.45rem .7rem; }

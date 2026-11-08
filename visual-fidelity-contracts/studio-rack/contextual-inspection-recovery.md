@@ -30,6 +30,11 @@ matrix remains available below it. Person controls retain their readable peach
 surface inside the dark rack. A shared header names the owning view, current record and its acceptance action. The owner return and Close restore the originating record and local scope.
 Team membership uses the sequencer's clear selected face and available state.
 
+Adjacent editors reserve one rem above and below the receiving module. The in-rack
+session slot owns this padding where the borrowed editor itself is flush. The
+clearance includes nearby button shadows and outlines, so opening a module keeps
+the preceding Add sprint/quarter and lane controls visually separate.
+
 ## Recognizable controls
 
 | Operation | Cue and consequence |

@@ -17,15 +17,20 @@ remains in `planning/` as the art and interaction reference; its independent
 illustrative state is separate from the Showcase's canonical plan.
 
 Coordination's Plans shelf attaches to its sprint/quarter board and sequencer.
+Its desktop scroll area accommodates up to 80rem of cassettes; mobile keeps a
+compact horizontal strip.
 A cassette loads a plan with detail closed. Existing clips open local editing;
 a plus in that plan's track adds another session while retaining earlier placements.
 Period-lane creation and the New plan row create separate records and keep All
 plans visible. New records use unique names such as **New session 1** and stay
 closed until selected. Week/month creation areas fill each track cell; pointer
-hover and keyboard focus reveal the plus, while touch keeps it visible. The
+hover and keyboard focus reveal the plus, while touch keeps it visible. A shared
+`rack-creation-controls.mjs` factory owns these native targets across period,
+participation and contribution racks; each controller retains its creation meaning. The
 selected period and Plan overview return remain visible.
 Team planning follows with its arrangement reel and delivery board. Each lane
-can add a team or handoff in place. Team name, membership and order update directly
+can add a team or handoff in place through two full-width ghost actions at its
+bottom. Both labels remain visible for pointer, keyboard and touch visitors. Team name, membership and order update directly
 with a Saved indicator. Shared sessions has its own **People / Handoffs** switch:
 checkbox pads assign participants or link work, and a row key opens compact host
 and ordering controls. Handoff editing stays inside the selected working area.

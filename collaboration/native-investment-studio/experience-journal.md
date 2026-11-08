@@ -14,7 +14,7 @@ understandable through direct exploration. Useful examples and visible changes
 lead. An accepted plan supplies all six chapters; edits use existing canonical
 commands and recovery owners.
 
-`main` retains the approved reference. The living integration is `dev`, with
+`main` retains the approved reference. The living integration is `dev`, where
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture
 repair keeps focused verification usable across that integration. Promotion to main and a tagged public release each await
@@ -25,7 +25,8 @@ laptop/wide layouts are the supported visual comparison points.
 
 The Plans cassette shelf attaches directly to the full height of the period rack.
 Its blocky angled artwork and size stay intact while the surrounding controls are
-more compact. At phone width the shelf becomes a horizontal strip. A cassette
+more compact. The desktop scroll area now accommodates 80rem of cassettes,
+superseding its four-cassette-height limit. At phone width the shelf becomes a horizontal strip. A cassette
 selects its plan and filters the board/tracks; it closes the detail receiver.
 All plans returns from this filter. Period selection remains independent, with a
 visible selected sprint/quarter and Plan overview return inside the rack.
@@ -35,7 +36,8 @@ session tracks, then small People and Stages routes. An existing clip opens the
 canonical session controls between board and tracks. Close restores the originating
 scope. A first opening uses the downward reveal; changing the selected record
 keeps the same receiver and its position. The detail border stays flush with its
-rack. Duration and Working sessions fill neighboring slots on a wide rack.
+rack; the receiving slot reserves one rem above and below the module, replacing
+the former zero-gap insertion so adjacent controls and painted borders stay clear. Duration and Working sessions fill neighboring slots on a wide rack.
 Working sessions uses the regular dark module housing, with its heading/count
 and Add in the top row and Remove at the bottom right. Funding and Status have a
 named module with large stateful pads beside Participants. Each radio sits at
@@ -53,7 +55,9 @@ plus while touch keeps it visible.
 Empty period-lane space and the sequencer's New plan row create distinct work
 records with editing closed. Ordinary creation names follow **New {item} N**,
 using the first available name in that collection. Selecting the new record
-opens its canonical editor. Fine-pointer hover and keyboard focus expose the
+opens its canonical editor. The shared `rack-creation-controls.mjs` factory supplies a native button, an
+explicit accessible name, and a decorative plus. Each receiving controller keeps
+its own record, occurrence or contribution operation. Fine-pointer hover and keyboard focus expose the
 lane's plus; touch keeps it visible. Those additions
 retain All plans so every earlier clip stays visible. Shelf New plan deliberately
 loads the newly created cassette. This resolves the reported apparent replacement
@@ -80,7 +84,10 @@ then the delivery-phase board and shared-session matrix. A selected team replace
 the board contents with its name, stable membership pads and reorder controls.
 The Delivery overview breadcrumb returns locally. Name, membership and ordering
 changes accept directly with visible Saved feedback. Each delivery lane adds a
-team or handoff there, replacing duplicate header additions. The placement of
+team or handoff there, replacing duplicate header additions. Two full-width ghost
+actions stay visible at the lane bottom: Add team and Add handoff have distinct
+meanings and remain discoverable on touch and by keyboard. This supersedes the
+small side-by-side lane buttons. The placement of
 new IDs is local view state: refresh and Undo/redo retain it; a new mount derives
 imported phase placement from relationships. Custom teams follow their authored work stage where
 available, otherwise spread across phases; their handoffs follow the receiving

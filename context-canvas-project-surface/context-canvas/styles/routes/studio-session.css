@@ -5,7 +5,7 @@
    own quantity and editorial compositions. */
 .native-cadence__session-slot:empty,
 .native-cadence__session-slot:not(:has(> :not([hidden]))) { display: none; }
-.native-cadence__session-slot { min-inline-size: 0; }
+.native-cadence__session-slot { min-inline-size: 0; padding-block: 1rem; }
 .native-cadence__session-slot .studio-rack-editor { margin: 0; border:0; box-shadow:none; }
 .native-cadence__session-slot .studio-rack-editor__heading { border-block-end: .15rem solid var(--native-signal); }
 [data-rack-editor-kind='session'] .studio-rack-editor__body { background: var(--studio-screen); color: var(--native-paper); }

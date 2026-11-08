@@ -189,6 +189,12 @@ for (const engine of names) for (const width of [390, 1440]) {
     await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
     await expect(horizon(page).locator('.native-cadence__track-name')).toHaveCount(4);
     await contained(page, width);
+    for (let index = 0; index < 4; index++) await create.click();
+    const shelfShape = await shelf.evaluate(node => ({ height:node.clientHeight, horizontal:node.scrollWidth > node.clientWidth,
+      count:node.querySelectorAll('.studio-tape-key').length }));
+    assert.equal(shelfShape.count, 8);
+    if (width === 1440) assert.ok(shelfShape.height > 640, 'the full-height shelf shows more than the former four-cassette area');
+    else assert.ok(shelfShape.horizontal && shelfShape.height < 300, 'mobile keeps a compact horizontal shelf');
     if (engine === 'chromium') {
       await horizon(page).locator('.studio-plan-workspace').screenshot({ path:resolve(captures, `plan-cassettes-${width}.png`) });
       await page.emulateMedia({ forcedColors:'active', reducedMotion:'reduce' });
@@ -442,6 +448,12 @@ for (const engine of names) for (const width of [390, 1440]) {
         && Boolean(slot.previousElementSibling.closest('.native-cadence__screen'))
         && tracks.matches('.native-cadence__tracks');
     }), true, 'the deck sits inside the persistent screen before Session tracks');
+    const clearance = await adjacent(page).evaluate(node => {
+      const board = node.closest('.native-cadence__screen').querySelector('.native-cadence__board');
+      const paintedBottom = Math.max(...[...board.querySelectorAll('button')].map(control => control.getBoundingClientRect().bottom + 6));
+      return node.getBoundingClientRect().top - paintedBottom;
+    });
+    assert.ok(clearance >= 8, `the opened editor clears the board controls and their painted depth: ${clearance}px`);
     assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true, 'the adjacent panel borrows the canonical session owner');
     await expect(configure(page)).toHaveCount(1);
     const geometry = await adjacent(page).evaluate(node => {
@@ -553,6 +565,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     await sharedTrack(page, 'pairing').click();
     const selected = rack.locator('.studio-shared__selection'); await expect(selected).toBeVisible();
     await expect(selected.locator('.studio-rack-header__owner')).toHaveText('Shared sessions · People');
+    await page.emulateMedia({ media:'print' });
+    await expect(withPerson).toBeHidden();
+    await expect(horizon(page).locator('[data-cadence-key="new-session:period-4:1"]')).toBeHidden();
+    await page.emulateMedia({ media:'screen' });
     await expect(selected.getByRole('combobox')).toHaveValue('engineering');
     await selected.getByRole('button', {name:'Back to Shared sessions · People', exact:true}).click();
     await expect(selected).toBeHidden(); await expect(sharedTrack(page, 'pairing')).toBeFocused();
@@ -631,6 +647,19 @@ for (const engine of names) for (const width of [390, 1440]) {
     const close = adjacent(page).locator('[data-rack-editor-close]');
     const undo = root(page).locator('[data-studio-undo]');
 
+    await addTeam.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    const controls = await addTeam.locator('xpath=..').evaluate(group => [...group.children].map(button => {
+      const rect = button.getBoundingClientRect(), box = group.getBoundingClientRect(), style = getComputedStyle(button);
+      return { width:rect.width, groupWidth:box.width, height:rect.height, color:style.color, shadow:style.boxShadow,
+        plus:button.querySelector('[aria-hidden="true"]')?.textContent, name:button.getAttribute('aria-label') };
+    }));
+    assert.equal(controls.length, 2);
+    for (const control of controls) {
+      assert.ok(Math.abs(control.width-control.groupWidth) < 2 && control.height >= 44, 'each lane action spans the lane with a reachable target');
+      assert.notEqual(control.color, 'rgba(0, 0, 0, 0)', 'both different creation jobs stay visible');
+      assert.equal(control.shadow, 'none'); assert.equal(control.plus, '+'); assert.ok(control.name);
+    }
     await addTeam.click();
     const teamCreation = await read(), originalTeamIds = new Set(before.state.teams.map(row => row.id));
     const teams = teamCreation.state.teams.filter(row => !originalTeamIds.has(row.id));
@@ -792,6 +821,10 @@ for (const engine of names) for (const width of [390, 1440]) {
     const selected = shared(page).locator('.studio-shared__selection');
     await expect(selected.locator('h4')).toHaveText(created.label);
     await expect(selected.locator('.studio-rack-header__owner')).toHaveText('Shared sessions · People');
+    await page.emulateMedia({ media:'print' });
+    await expect(withPerson).toBeHidden();
+    await expect(horizon(page).locator('[data-cadence-key="new-session:period-4:1"]')).toBeHidden();
+    await page.emulateMedia({ media:'screen' });
     await selected.locator('[data-rack-editor-close]').click();
     await root(page).locator('[data-studio-undo]').click();
     assert.deepEqual((await read()).state, accepted.state);
