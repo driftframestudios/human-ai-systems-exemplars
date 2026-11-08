@@ -1724,14 +1724,14 @@ the About fallback stylesheet hides controls that require a mounted editor.
 
 Session selection retains each unfinished edit under its own stable target.
 Changing chapters parks that target and returning resumes it. Creation offers
-all admitted people and identifies those outside the selected team; validation
-keeps the current membership contract explicit. Changing the team retains the
-selected people for correction. Paused sessions retain declared effort and
+all admitted people and identifies those outside the selected team. Known
+people may participate across teams. Changing the team retains the selected
+people; missing references remain visible for correction. Paused sessions retain declared effort and
 cost. Included funding attributes the session to funded time while extra
 funding contributes to the commitment.
 
-Removal shows any practice that still references the session. An empty work
-collection keeps Add session available. Creation collisions offer a fresh ID
+Removal confirms the named session and its links as one recoverable change.
+An empty work collection keeps Add session available. Creation collisions offer a fresh ID
 with the entered values intact. Cancellation closes the settings and returns
 focus to the entry control; successful removal returns focus to selection or
 Add session. Callback guards preserve a successor editor's focus and resources.
