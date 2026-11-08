@@ -3,6 +3,16 @@
   "version": "1",
   "files": [
     {
+      "source_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
+      "projected_path": "collaboration/native-investment-studio/session-occurrence-controls.mjs",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-session.css",
+      "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-session.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css",
       "projected_path": "context-canvas-project-surface/context-canvas/styles/routes/studio-abilities.css",
       "media_type": "text/css"

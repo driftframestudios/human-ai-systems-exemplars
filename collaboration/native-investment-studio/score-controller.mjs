@@ -483,5 +483,6 @@ export function mountScorePanel(root, { studio, editing, onBegin = () => {}, onE
     for (const el of [toolbar, pending, projectionRoot, flowPanel, status]) el.remove(); if (fallback) fallback.hidden = false; INSTANCES.delete(root);
   }
   render();
-  const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select, dispose }); INSTANCES.set(root, controller); return controller;
+  const controller = Object.freeze({ open, close, refresh: render, resume: () => open('score', false), select,
+    getSessionSlot: () => view.getSessionSlot(), dispose }); INSTANCES.set(root, controller); return controller;
 }

@@ -231,7 +231,7 @@ for (const engine of names) for (const width of [390, 1440]) {
     assert.equal(await bytes(page), customized, 'Undo restores the preceding arrangement and its work together');
   });
 
-  test(`${engine}: adjacent session editing retains draft, scope and return across both racks at ${width}px`, { timeout: 90000 }, async t => {
+  test(`${engine}: in-rack session editing retains draft, scope and return across both racks at ${width}px`, { timeout: 90000 }, async t => {
     const page = await open(t, engine, width, true), accepted = await bytes(page);
     await page.evaluate(() => { window.rackFixture.sessionNode = document.querySelector('[data-native-configure]'); });
     await receiverReading(page, 'review', false);
@@ -252,16 +252,20 @@ for (const engine of names) for (const width of [390, 1440]) {
     await expect(adjacent(page)).toBeVisible();
     await expect(adjacent(page).locator('.studio-rack-editor__origin')).toContainText('Coordination horizon');
     await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
-    const placement = configure(page).locator(`[data-placement-index="${occurrence}"][data-placement-field="periodId"]`);
+    const placement = configure(page).locator(`[data-session-occurrence="${occurrence}"]`);
     await expect(placement).toBeFocused();
     await expect.poll(() => placement.evaluate(node => {
       const box = node.getBoundingClientRect(), nav = document.querySelector('.nav__top--sticky')?.getBoundingClientRect();
       return box.top >= (nav?.bottom ?? 0) && box.bottom <= innerHeight;
     })).toBe(true);
     await receiverReading(page, 'pairing', true);
-    assert.deepEqual(await rackShape(), before, 'the adjacent reveal preserves its source rack geometry');
-    assert.equal(await adjacent(page).evaluate(node => Boolean(node.previousElementSibling?.matches('[data-score-projection]'))), true,
-      'the horizon receiver follows its stable rack owner outside the generated projection');
+    assert.equal((await rackShape()).width, before.width, 'the in-rack deck preserves its source rack width');
+    assert.equal(await adjacent(page).evaluate(node => {
+      const slot = node.parentElement, tracks = slot.nextElementSibling;
+      return slot.matches('[data-studio-session-slot]') && slot.closest('.native-cadence__screen')
+        && Boolean(slot.previousElementSibling.closest('.native-cadence__screen'))
+        && tracks.matches('.native-cadence__tracks');
+    }), true, 'the deck sits inside the persistent screen before Session tracks');
     assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true, 'the adjacent panel borrows the canonical session owner');
     await expect(configure(page)).toHaveCount(1);
     const geometry = await adjacent(page).evaluate(node => {
@@ -282,10 +286,34 @@ for (const engine of names) for (const width of [390, 1440]) {
     await configure(page).locator('[data-native-minutes-knob]').press('ArrowUp');
     await expect(minutes).toHaveValue('1');
     await expect(configure(page).locator('[data-native-duration-minutes]')).toHaveText('01');
+    const knob = configure(page).locator('[data-native-minutes-knob]');
+    await knob.scrollIntoViewIfNeeded();
+    await knob.evaluate(node => node.addEventListener('pointerdown', event => { window.rackPointerId = event.pointerId; }, { once: true }));
+    const dialBox = await knob.boundingBox();
+    await page.mouse.move(dialBox.x + dialBox.width / 2, dialBox.y + 8);
+    await page.mouse.down();
+    await page.mouse.move(dialBox.x + dialBox.width - 8, dialBox.y + dialBox.height / 2, { steps: 3 });
+    assert.equal(await knob.evaluate(node => node.hasPointerCapture(window.rackPointerId)), true, 'refresh preserves the active dial capture');
+    await expect(knob).toBeFocused();
+    await page.mouse.up();
+    const turned = await minutes.inputValue();
+    await configure(page).locator('[name="label"]').focus();
+    await expect(minutes).toHaveValue(turned);
     await minutes.fill('045');
+    await expect(minutes).toBeFocused();
+    assert.equal(await configure(page).evaluate(node => node === window.rackFixture.sessionNode), true, 'refresh retains the live canonical form');
+    const occurrenceRack = configure(page).locator('[data-session-occurrences]');
+    await occurrenceRack.locator('[data-occurrence-field="periodId"][value="period-3"]').check();
+    const placed = await page.evaluate(() => JSON.parse(window.rackFixture.editing.session.read().draft.raw.cadencePlacements));
+    assert.equal(placed.find(row => row.occurrenceIndex === occurrence).periodId, 'period-3');
+    await occurrenceRack.locator('[data-session-occurrence-add]').click();
+    await expect(configure(page).locator('[name="occurrences"]')).toHaveValue('5');
+    await expect(occurrenceRack.locator('[data-session-occurrence="4"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(occurrenceRack.locator('[data-occurrence-field="periodId"][value=""]')).toBeChecked();
+    assert.equal(await bytes(page), accepted, 'placement and occurrence pads change the proposal until Apply');
     await page.evaluate(() => { window.rackFixture.sessionToken = window.rackFixture.editing.session.read().draft.token; });
-    await track(page, 'pairing').click();
-    await expect(adjacent(page)).toBeHidden(); await expect(track(page, 'pairing')).toBeFocused();
+    await pad.click();
+    await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();
     await pad.click(); await expect(minutes).toHaveValue('045');
     await adjacent(page).locator('[data-rack-editor-close]').click();
     await expect(adjacent(page)).toBeHidden(); await expect(pad).toBeFocused();

@@ -5,10 +5,12 @@ import { describeAssuranceReference, getQualityConcept, getLearningPromptDefinit
 import { SESSION_FORMS, makeSessionTarget, describeSessionTarget } from './command-draft.mjs';
 import { CONTRACT, LIMITS, PRACTICES } from './config.mjs';
 import { INTEGER, money, duration } from './display.mjs';
-import { CONTRIBUTION_CATEGORIES } from './roles.mjs';
+import { CONTRIBUTION_CATEGORIES, ROLE_CATALOGUES } from './roles.mjs';
 import { capabilityWorkIds, getCapabilityDefinition } from './capabilities.mjs';
 import { getChangeFramework, getChangeComponent } from './change-models.mjs';
 import { CADENCE_SUBDIVISIONS } from './cadence.mjs';
+import { mountSessionOccurrenceControls } from './session-occurrence-controls.mjs';
+import { animateRackChange } from './reel-control.mjs';
 
 const INSTANCES = new WeakMap();
 let receiverSequence = 0;
@@ -20,6 +22,7 @@ const LABELS = Object.freeze({ label: 'Session name', teamId: 'Team', hoursPerSe
 const FUNDING = Object.freeze({ additional: 'Extra investment', allocated: 'Included in funded time' });
 const PLACEMENT_PAGE_SIZE = 12;
 const PRACTICE_LABELS = new Map(PRACTICES.map(practice => [practice.id, practice.action]));
+const FUNCTION_LABELS = new Map(ROLE_CATALOGUES.functionId.map(role => [role.id, role.label]));
 
 // One complete session form borrows the host's shared draft coordinator. The
 // accepted plan, history and all other chapter drafts keep their existing owners.
@@ -77,6 +80,17 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   placementElements.fieldset.append(placementElements.legend, placementElements.rows,
     placementElements.error, placementElements.pager);
   elements.fields.querySelector('.native-time-controls').after(placementElements.fieldset);
+  const occurrenceControls = mountSessionOccurrenceControls(document, {
+    onPlacement: writePlacement,
+    onAdd() {
+      const view = editor.read();
+      if (disposed || composing || view.status !== 'editing' || !view.draft) return;
+      const epoch = ++generation;
+      changed(operate('step', view.draft.token, 'occurrences', 1), epoch);
+    },
+  });
+  occurrenceControls.root.hidden = true;
+  placementElements.fieldset.after(occurrenceControls.root);
   const remoteTitle = elements.summary.querySelector('[data-native-remote-title]') ?? elements.summary;
   const dials = Object.fromEntries(['hours', 'minutes'].map(unit => {
     const dial = root.querySelector(`[data-native-${unit}-dial]`);
@@ -93,6 +107,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   let retiredToken = null, membersTarget = null, memberOrder = [];
   let placementPage = 0, placementSignature = null, placementToken = null, placementControls = new Map();
   let durationDials;
+  let rackMode = false;
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -175,11 +190,17 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   }
   function renderPlacements(raw, view) {
     const cadence = (view.draft?.baseProjection ?? projection).state.scoreSettings.cadence;
-    placementElements.fieldset.hidden = !cadence;
+    placementElements.fieldset.hidden = !cadence || rackMode;
+    occurrenceControls.root.hidden = !cadence || !rackMode;
     if (!cadence) return;
     if (placementToken !== view.draft?.token) { placementToken = view.draft?.token; placementPage = 0; placementSignature = null; }
     const entered = Number(raw.occurrences);
     const count = Number.isSafeInteger(entered) && entered >= 0 && entered <= LIMITS.occurrences ? entered : 0;
+    if (rackMode) occurrenceControls.render({ identity: selectedTarget ?? selectedId, cadence,
+      count, placements: placementValues(raw),
+      canAdd: view.status === 'editing' && !composing && count < LIMITS.occurrences
+        && !view.draft?.errors.some(error => error.path === 'draft.occurrences'),
+      error: view.draft?.errors.find(error => error.path === 'draft.cadencePlacements')?.message });
     const pages = Math.max(1, Math.ceil(count / PLACEMENT_PAGE_SIZE));
     placementPage = Math.min(placementPage, pages - 1);
     const first = placementPage * PLACEMENT_PAGE_SIZE, last = Math.min(count, first + PLACEMENT_PAGE_SIZE);
@@ -298,16 +319,21 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
         item = document.createElement('li'); item.className = 'native-coordination__member';
         const label = document.createElement('label'), words = document.createElement('span');
         const name = document.createElement('strong'), rate = document.createElement('small'), state = document.createElement('small');
+        const role = document.createElement('small'); role.dataset.sessionMemberRole = '';
         state.className = 'native-coordination__member-status';
         checkbox.type = 'checkbox'; checkbox.dataset.sessionPerson = id;
-        words.append(name, rate, state); label.append(checkbox, words);
+        words.append(name, rate, role, state); label.append(checkbox, words);
         const actions = document.createElement('div'); actions.className = 'native-coordination__actions native-coordination__manipulation';
         actions.append(memberButton('Move up', 'person-up', id, true), memberButton('Move down', 'person-down', id, true));
         item.append(label, actions);
       }
       item.dataset.selected = String(selected); checkbox.checked = selected;
+      item.dataset.sessionMember = id;
       item.querySelector('strong').textContent = person?.label ?? `${id} · removed person`;
       item.querySelector('small').textContent = !person ? 'Remove this selection.' : person.rateCentsPerHour === null ? 'Hourly rate needed' : `${money(person.rateCentsPerHour)}/hour`;
+      const role = item.querySelector('[data-session-member-role]');
+      role.textContent = FUNCTION_LABELS.get(person?.role?.functionId) ?? '';
+      role.hidden = !rackMode || !role.textContent;
       item.querySelector('.native-coordination__member-status').textContent = selected ? `Included · ${positions.get(id) + 1}` : 'Available';
       const [up, down] = item.querySelectorAll('button'), index = positions.get(id);
       up.disabled = index === undefined || index === 0; down.disabled = index === undefined || index === ids.length - 1;
@@ -444,6 +470,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     const view = editor.read(), epoch = generation;
     if (disposed || !isActive() || !elements.configure.open || view.status !== 'editing'
       || !Number.isSafeInteger(index) || index < 0 || index >= Number(view.draft?.raw.occurrences)) return false;
+    if (rackMode) return occurrenceControls.select(index, { focus: true });
     placementPage = Math.floor(index / PLACEMENT_PAGE_SIZE);
     render();
     if (!owns(epoch) || editor.read().draft?.token !== view.draft.token) return false;
@@ -589,7 +616,10 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
       const selected = new Set(ids); let next = 0;
       memberOrder = memberOrder.map(member => selected.has(member) ? ids[next++] : member);
     }
-    changed(operate('setIds', view.draft.token, 'personIds', ids), epoch, () => memberControls.get(id)?.focus());
+    const update = () => changed(operate('setIds', view.draft.token, 'personIds', ids), epoch, () => memberControls.get(id)?.focus());
+    if (rackMode && delta !== null) animateRackChange(elements.members, update,
+      { selector: '[data-session-member]', key: 'sessionMember' });
+    else update();
   }
   function edit(event) {
     const field = event.target.name;
@@ -603,16 +633,26 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
   function editPlacement(event) {
     const control = event.target, index = Number(control.dataset.placementIndex), field = control.dataset.placementField;
     if (disposed || placementControls.get(index)?.[field] !== control) return;
+    writePlacement(index, field, control.value);
+  }
+  function writePlacement(index, field, value) {
     const view = editor.read();
-    if (view.status !== 'editing' || !view.draft) return;
+    if (disposed || view.status !== 'editing' || !view.draft) return;
     const placements = placementValues(view.draft.raw), current = placements.find(item => item.occurrenceIndex === index);
     const remaining = placements.filter(item => item.occurrenceIndex !== index);
-    const next = field === 'periodId' ? (control.value ? { occurrenceIndex: index, periodId: control.value, subdivision: current?.subdivision ?? 1 } : null)
-      : { ...current, subdivision: Number(control.value) };
+    const next = field === 'periodId' ? (value ? { occurrenceIndex: index, periodId: value, subdivision: current?.subdivision ?? 1 } : null)
+      : { ...current, subdivision: Number(value) };
     if (next) remaining.push(next);
     remaining.sort((left, right) => left.occurrenceIndex - right.occurrenceIndex);
     const epoch = ++generation;
     changed(operate('setText', view.draft.token, 'cadencePlacements', JSON.stringify(remaining)), epoch);
+  }
+  function setRackMode(enabled) {
+    if (disposed || rackMode === Boolean(enabled)) return;
+    rackMode = Boolean(enabled);
+    elements.configure.classList.toggle('studio-session-deck', rackMode);
+    membersProjection = null;
+    render();
   }
   function click(event) {
     const button = event.target.closest('button');
@@ -646,6 +686,8 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     for (const release of cleanup) release();
     cleanup.length = 0;
     placementElements.fieldset.remove();
+    occurrenceControls.dispose();
+    elements.configure.classList.remove('studio-session-deck');
     agreementRack.before(agreement); agreementRack.remove();
     const active = editing.read().active;
     if (active?.kind === 'session') retiredToken = active.token;
@@ -656,7 +698,7 @@ export function mountWorkPanel(root, { studio, editing, workId = 'review', onBeg
     durationDials?.dispose();
     delete root.dataset.sessionReady; INSTANCES.delete(root);
   }
-  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close, focusOccurrence,
+  const receiver = Object.freeze({ read: () => editor.read(), render, refresh: render, select, open, create, close, focusOccurrence, setRackMode,
     isOpen: () => !disposed && elements.configure.open,
     readReceiver: () => ({ selectedId: disposed ? null : selectedId,
       expanded: !disposed && isActive() && elements.configure.open

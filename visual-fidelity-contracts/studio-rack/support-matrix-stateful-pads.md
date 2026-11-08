@@ -127,13 +127,25 @@ composition option when the relationships benefit from comparison. The
 [session receiver](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/768)
 uses the same contextual opening and return grammar while retaining its own
 participation and duration owners. A participation pad opens that session's
-canonical editor below its originating rack; it keeps its meaning as a person/
-session intersection. Row keys toggle the panel, while pads retain inspection.
-Close preserves the draft and returns to the initiating pad or key. Moving to
-the same work in the temporal rack retains that proposal and the existing
-scope owners.
+canonical editor below its originating Team planning rack; it keeps its meaning
+as a person/session intersection. Horizon entries and shared-session row keys toggle their
+receiver; another entry supplies its own inspection context. Close preserves the
+draft and returns to that control. Moving to the same work in the temporal rack
+places the canonical form in #789's stable Session detail deck between the
+period board and tracks, retaining the proposal and existing scope owners.
 
-An unused participation cell keeps its person/session meaning. The future
+The deck uses named participant tracks with native inclusion switches and the
+existing explicit reorder controls. One ordered participant collection applies
+to every occurrence of that session, as does its duration. Numbered occurrence
+pads select the repetition whose placement is being edited; native radio pads
+choose its sprint/quarter and week/month. Add occurrence delegates a count change
+to the current session draft. These controls use Quality's compact track skin
+while preserving their distinct inclusion, ordering and placement meanings.
+The exact repetition field stays available. Apply accepts these changes together;
+Cancel reverts them, and Close retains their unfinished draft.
+
+An unused participation cell keeps its person/session meaning. Following #789,
+#758 supplies the authorized immediate-creation owner before the
 [empty-space creation route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/770)
 uses a named new-session row or gutter in the surrounding rack; a ghost
 plus indicates that action on hover and focus, with a visible touch equivalent.

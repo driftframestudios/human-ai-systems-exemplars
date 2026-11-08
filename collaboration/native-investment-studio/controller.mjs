@@ -12,7 +12,7 @@ import { mountStudioReports } from './reports-controller.mjs';
 import { mountAssemblyPanel } from './assembly-controller.mjs';
 import { describeAssemblyTarget, makeAssemblyTarget, describeSessionTarget, makeSessionTarget, describeRoleTarget, describeContributionTarget, makeContributionTarget, describeConnectionTarget } from './command-draft.mjs';
 import { mountWorkPanel } from './work-controller.mjs';
-import { syncSessionControls, mountAdjacentRackEditor } from './rack-controls.mjs';
+import { syncSessionControls, mountRackEditor } from './rack-controls.mjs';
 import { mountResponsibilityPanel, RESPONSIBILITY_LABELS, responsibilityValue } from './responsibility-controller.mjs';
 import { mountConnectionPanel, CONNECTION_LABELS } from './connection-controller.mjs';
 import { mountConnectionView } from './connection-view.mjs';
@@ -137,11 +137,11 @@ export function mountCoordinationPanel(root, options = {}) {
     const record = studio.read().state[collection].find(row => row.id === target.id);
     if (!record || !rackEditor) return;
     const current = rackEditor.read();
-    const toggle = target.kind !== 'session' || source?.classList.contains('studio-track-key');
+    const horizonSource = source?.closest('[data-score-projection]');
+    const toggle = target.kind !== 'session' || horizonSource || source?.classList.contains('studio-track-key');
     if (toggle && current?.open && current.kind === target.kind && current.id === target.id
-      && rackEditor.element.previousElementSibling?.contains(source)) { closeRackEditor(source); return; }
-    // Stable anchors sit outside both the template form and rebuilt readings.
-    const anchor = source?.closest('[data-score-projection]') ?? source?.closest('[data-native-connection-view]')
+      && rackEditor.isOrigin(source)) { closeRackEditor(source); return; }
+    const anchor = horizonSource ?? source?.closest('[data-native-connection-view]')
       ?? requireElement('[data-connection-templates]');
     const originLabel = target.kind === 'session' ? (source?.closest('[data-score-projection]')
       ? `Coordination horizon${target.periodId ? ` · ${studio.read().state.scoreSettings.cadence?.periods.find(period => period.id === target.periodId)?.label ?? ''}` : ''}`
@@ -172,7 +172,9 @@ export function mountCoordinationPanel(root, options = {}) {
       render(); announce(result?.error?.message ?? 'Finish or cancel the open edits, then choose another record.');
       return;
     }
-    rackEditor.show({ ...target, label: record.label, originLabel }, source, anchor);
+    const container = target.kind === 'session' && horizonSource ? scorePanel.getSessionSlot() : null;
+    workPanel?.setRackMode?.(Boolean(container));
+    rackEditor.show({ ...target, label: record.label, originLabel }, source, anchor, { container });
     render();
     const panel = rackEditor.element.querySelector('details');
     if (!panel.open || panel.hidden) { rackEditor.hide(); return; }
@@ -205,7 +207,10 @@ export function mountCoordinationPanel(root, options = {}) {
   function beginCoordination(kind) {
     if (disposed) return;
     coordinationEditor = kind;
-    if (kind !== 'record' && !openingRackKind) rackEditor?.hide({ home: true });
+    if (kind !== 'record' && !openingRackKind) {
+      rackEditor?.hide({ home: true });
+      workPanel?.setRackMode?.(false);
+    }
     if (mounted && !resumingCoordination && !openingRackKind) {
       const workspace = root.querySelector(`[data-native-workspace="${kind === 'template' ? 'connection' : kind}"]`);
       if (workspace?.tagName === 'DETAILS') workspace.open = true;
@@ -876,7 +881,7 @@ export function mountCoordinationPanel(root, options = {}) {
       onRecordCreated: prerequisiteCreated,
       onPersonCreated: id => teamPanel?.select(id),
     });
-    if (teamPanel && assemblyPanel) rackEditor = mountAdjacentRackEditor(root, {
+    if (teamPanel && assemblyPanel) rackEditor = mountRackEditor(root, {
       editors: {
         person: [requireElement('[data-person-configure]'), requireElement('[data-person-status]')],
         team: [requireElement('[data-assembly-configure]'), requireElement('[data-assembly-status]')],
@@ -940,7 +945,7 @@ export function mountCoordinationPanel(root, options = {}) {
       chapterShell = mountChapterShell(root, { motion, onSelect: chapter => {
         purposePanel?.close({ resume: false });
         if (activeChapter !== chapter) {
-          editing.park(); rackEditor?.hide({ home: true });
+          editing.park(); rackEditor?.hide({ home: true }); workPanel?.setRackMode?.(false);
           if (coordinationEditor === 'record') coordinationEditor = 'template';
         }
         activeChapter = chapter;
