@@ -60,7 +60,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       inputs: Object.fromEntries(fields.map(field => [field, form.elements.namedItem(field)])),
       errors: Object.fromEntries([...fields, ...(kind === 'contribution' ? ['workIds'] : [])].map(field =>
         [field, query(`[data-responsibility-error="${field}"]`)])),
-      acknowledged: false, target: null, composing: false }];
+      acknowledged: false, target: null, composing: false, inputAcceptance: null, entryIntent: null }];
   }));
   const contribution = groups.contribution;
   Object.assign(contribution, { settings: find('[data-responsibility-fields]'), members: find('[data-responsibility-work]'),
@@ -236,7 +236,9 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     const removing = descriptor?.mode === 'remove' && Boolean(draft);
     const row = group.kind === 'role' ? people.get(descriptor?.id ?? selectedPerson) : contributions.get(descriptor?.id);
     const raw = draft?.raw ?? (group.kind === 'role' ? roleRaw(row) : contributionRaw(row));
-    group.fieldset.disabled = group.kind === 'role' && !draft ? false : !draft || view.status !== 'editing';
+    group.fieldset.disabled = group.kind === 'role'
+      ? !canOpen() || Boolean(draft && !['editing', 'parked'].includes(view.status))
+      : !draft || view.status !== 'editing';
     group.configure.dataset.editing = String(group.acknowledged);
     group.recovery.hidden = !draft || view.status !== 'stale';
     group.configure.hidden = group.kind === 'role' ? selectedPerson === null && !draft : !group.target && !draft;
@@ -333,6 +335,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (!owns(epoch)) return result;
     announce(result.ok ? '' : result.error.message);
     const token = editing[kind].read().draft?.token;
+    group.entryIntent = editing.read().intent;
     onEditing();
     if (owns(epoch) && editing[kind].read().draft?.token === token && focus) focusForm(kind);
     return result;
@@ -348,6 +351,17 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     return opened(kind, operate(kind, 'begin', target, projection), epoch, focus);
   }
   function selectPerson(id, focus = true) { if (!disposed && people.has(id)) return open(makeRoleTarget('role.update', id), focus); }
+  function ensureRoleOwner({ focusRecovery = false } = {}) {
+    const group = groups.role, view = editing.role.read();
+    if (disposed || !canOpen() || !group.target) return false;
+    if (group.acknowledged && view.status === 'editing' && keyFor('role', view.draft) === group.target) return true;
+    const target = group.target, epoch = generation + 1;
+    const result = open(target, false);
+    if (!owns(epoch) || !group.acknowledged || group.target !== target
+      || result?.view.draft?.token !== editing.role.read().draft?.token || group.entryIntent !== editing.read().intent) return false;
+    if (focusRecovery && editing.role.read().status === 'stale') focusForm('role');
+    return editing.role.read().status === 'editing';
+  }
   function create() {
     if (disposed) return;
     const epoch = ++generation; onBegin();
@@ -396,7 +410,7 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
     if (owns(epoch) && studio.read() === accepted && editing.read().intent === intent && editing.read().active === null) onEditing();
   }
   function settle(kind, action, { focus = true } = {}) {
-    if (disposed) return;
+    if (disposed || kind === 'role' && action === 'apply' && !ensureRoleOwner({ focusRecovery: true })) return;
     const group = groups[kind], view = editing[kind].read();
     const origin = document.activeElement;
     group.configure.dataset.directAcceptance = String(!focus);
@@ -466,15 +480,17 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
   function edit(kind, event) {
     const group = groups[kind], field = event.target.name;
     if (disposed || group.inputs[field] !== event.target) return;
+    group.inputAcceptance = null;
     const value = event.target.value;
-    if (kind === 'role' && !group.acknowledged && canOpen()) {
-      const target = group.target; open(target, false);
-      if (group.target !== target) return;
-    }
+    if (kind === 'role' && !ensureRoleOwner({ focusRecovery: true })) return;
     const draft = editing[kind].read().draft;
     if (!draft || !group.acknowledged) return;
     const epoch = ++generation;
-    changed(kind, operate(kind, 'setText', draft.token, field, value), epoch);
+    const result = operate(kind, 'setText', draft.token, field, value), intent = editing.read().intent;
+    changed(kind, result, epoch);
+    if (owns(epoch) && editing[kind].read().draft?.token === draft.token && editing.read().intent === intent) {
+      group.inputAcceptance = { token: draft.token, intent };
+    }
   }
   function click(event) {
     const control = event.target.closest('[data-responsibility-action]');
@@ -530,12 +546,14 @@ export function mountResponsibilityPanel(root, { studio, editing, onBegin = () =
       for (const field of group.fields) if (group.inputs[field].tagName === 'TEXTAREA') group.inputs[field].maxLength = form.fields[field].maxLength;
       listen(group.form, 'input', event => edit(kind, event));
       if (kind === 'role') listen(group.form, 'focusin', event => {
-        if (!disposed && group.inputs[event.target.name] === event.target && !group.acknowledged && group.target && canOpen()) open(group.target, false);
+        if (!disposed && group.inputs[event.target.name] === event.target) ensureRoleOwner({ focusRecovery: true });
       });
       listen(group.form, 'change', event => {
         if (disposed || group.inputs[event.target.name] !== event.target || group.composing) return;
+        const acceptance = group.inputAcceptance; group.inputAcceptance = null;
         const view = editing[kind].read(), descriptor = describe(keyFor(kind, view.draft));
-        if (view.status === 'editing' && view.draft?.changed && descriptor?.mode === 'update') settle(kind, 'apply', { focus: false });
+        if (acceptance?.token === view.draft?.token && acceptance?.intent === editing.read().intent
+          && view.status === 'editing' && view.draft?.changed && descriptor?.mode === 'update') settle(kind, 'apply', { focus: false });
       });
       listen(group.form, 'submit', event => { event.preventDefault(); settle(kind, 'apply'); });
       listen(group.form, 'compositionstart', () => { group.composing = true; });

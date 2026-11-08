@@ -102,6 +102,53 @@ async function contribution(page, category = 'source-retrieval', { draft = false
 }
 
 for (const engine of names) {
+  test(`${engine}: visible role choices resume after Undo and Close and yield to a same-target successor`, async t => {
+    const page = await open(t, engine);
+    await field(page, 'role', 'functionId').selectOption('engineering');
+    await root(page).locator('[data-studio-undo]').click();
+    await field(page, 'role', 'functionId').selectOption('data-ml');
+    assert.equal((await state(page)).people[0].role.functionId, 'data-ml', 'Undo leaves the visible facet ready for another choice');
+    await draftField(page, 'role', 'functionId', 'engineering');
+    await settings(page, 'role').locator('[data-rack-editor-close]').click();
+    await expect(field(page, 'role', 'functionId')).toBeEnabled();
+    await field(page, 'role', 'functionId').focus();
+    await expect(field(page, 'role', 'functionId')).toHaveValue('engineering');
+    assert.equal((await state(page)).people[0].role.functionId, 'data-ml', 'resuming a saved choice preserves its proposal boundary');
+    await field(page, 'role', 'functionId').selectOption('design-research');
+    assert.equal((await state(page)).people[0].role.functionId, 'design-research');
+    const interrupted = await page.evaluate(async () => {
+      const { mountResponsibilityPanel } = await import('/collaboration/native-investment-studio/responsibility-controller.mjs');
+      const { createStudio } = await import('/collaboration/native-investment-studio/state.mjs');
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      window.responsibilityFixture.controller.dispose(); window.responsibilityFixture.editing.dispose();
+      const element = document.querySelector('[data-native-team-editor]'); element.hidden = false;
+      const results = [];
+      for (const mode of ['receiver', 'coordinator', 'intent']) {
+        const studio = createStudio(), editing = createDraftCoordinator(studio);
+        let receiver, armed = true;
+        const takeOver = () => {
+          if (!armed) return; armed = false;
+          if (mode === 'receiver') receiver.selectPerson('product-one', false);
+          else if (mode === 'coordinator') {
+            editing.park(); editing.role.begin('role.update:product-one', studio.read());
+          }
+          editing.role.setText(editing.role.read().draft.token, 'functionId', 'design-research'); receiver.refresh();
+        };
+        receiver = mountResponsibilityPanel(element, { studio, editing,
+          onBegin() { if (mode === 'receiver') takeOver(); },
+          onEditing() { if (mode !== 'receiver') takeOver(); } });
+        const input = element.querySelector('[name="functionId"]'); input.value = 'engineering';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        results.push({ mode, raw: editing.role.read().draft.raw.functionId, accepted: studio.read().state.people[0].role.functionId,
+          changes: studio.readHistory().undoCount });
+        receiver.dispose(); editing.dispose();
+      }
+      return results;
+    });
+    assert.deepEqual(interrupted, ['receiver', 'coordinator', 'intent'].map(mode => ({ mode, raw: 'design-research', accepted: null, changes: 0 })),
+      'interrupted input and change preserve the successor proposal and canonical lease');
+  });
   test(`${engine}: contribution acceptance and Close preserve same-instance successor focus`, async t => {
     const page = await open(t, engine);
     const results = await page.evaluate(async () => {
