@@ -16,6 +16,9 @@ commands and recovery owners.
 
 `main` retains the approved reference. The living integration is `dev`.
 #836 carries the compact People receiver with shared creation controls from #837.
+#848 carries that composition into Abilities; #849 makes Change action selection
+visible; #818 receives the full financial-deck workbench in the live Investment
+chapter. Each feature uses its own focused reviewed delivery.
 #831/#833 establish accepted creation and recoverable session removal; #832
 consolidates local headers and Shared sessions. The #827 browser-fixture repair
 keeps focused verification usable across that integration. #844 updates the
@@ -175,25 +178,61 @@ validation and accepted history retain their existing owners.
 
 Abilities retains both native support tables: What people can do and How the
 team works, with responsibility, preparation, review and observation columns.
-One selected compact module follows the tables. People, Prepare, Review and
-Example pads select the relevant controls. Supporting person/team/session creation
-stays in the selected module, retaining its entries and preselecting the new
-record. Creation accepts immediately; Apply accepts the support relationship.
-Close retains the draft. The reverse-card and side-by-side
-modes are retired. Existing proposals, shared work identity and pricing remain.
+One selected dark module follows the selected catalogue, with a readable item heading,
+owner return, Apply and Close. Its compact pads select Outcome, People,
+Before this, Prepare, Review or Example result. The People receiver pairs
+team/participants with decision owner/status; support groups occupy neighboring
+halves, and observation material uses chocolate companions. Phone widths stack
+the halves while keeping choices legible. Chapter-owned CSS defines both text
+and background for pale catalogue keys and the dark header, preserves native
+choice sizes, and respects hidden sections before applying responsive grids.
+These rules supersede the inherited table text and generic form sizing that
+made Trace evidence, Close and People controls difficult to read or use.
+
+Supporting person/team/session creation stays in the selected module, retaining
+its entries and preselecting the new record. The shared creation factory gives
+these named local targets the same ghost treatment as other rack additions.
+Creation accepts immediately; Apply accepts the support relationship. Close
+retains the draft. Existing proposals, shared work identity and pricing remain.
 
 Change keeps its framework/viewpoint reels, piano-like keys and distinct faders.
+Raise, Reduce, Eliminate and Create retain stable native buttons and paper
+resting faces. The selected action uses the Quality rail's inset signal face
+while its component inspector is open. Selection follows the live receiver;
+closing it or inspecting through another route clears the action state. When a
+small framework maps several actions to one component, only the chosen action
+is selected. These inspection controls leave accepted plan history intact.
 Quality & recovery keeps its contrasting controller pads, quality/recovery reels
 and dark attention display. Both retain connected support and concise explanations.
 Selected signals describe plan choices; authored examples remain distinct from
 observed evidence. Quantity, emphasis and motion changes have visible effects.
 
-Investment's current VHS-C decks organize Plan investment, Compare a change and
-Keep a plan. Deck navigation changes the view while canonical pricing, baseline,
-history and saved-plan previews retain their owners. The richer independently
-editable comparison decks remain with #818. The chocolate companion surface,
-chunky tape depth, internal grip texture and static monetary readout positions
-remain preserved references.
+Investment receives the full workbench as five preloaded, independently owned
+deck types: Plan investment, Customer rollout, Commercial cohort, Service
+operations and Capital choices. A deck identity owns its assumptions; adding
+another deck of the same type creates an independent variation. Deck selection
+is local view state. Connected reels set compatible presets and change the
+visible comparison; direct quantity adjustments can make a preset custom.
+Comparison amounts and financial metrics are derived from the selected deck's
+settings. The explicit Plan investment funding action uses the existing shared
+work command; comparison assumptions retain their separate analytical meaning.
+
+The VHS-C shelf keeps the reference's chunky depth, large left reel, internal
+grip texture and moving inner face. Chocolate companion modules and static
+monetary readout positions preserve its scale. Monetary dials use large/small
+steps appropriate to the amount, alongside exact fields and circular steps.
+This supersedes the three fixed navigation decks from #813. Compare a change
+and Keep a plan remain compact utility routes to the canonical baseline,
+recovery, file and report owners.
+
+Schema 0.10 carries versioned investment settings in the accepted plan. Earlier
+plans migrate to the five populated defaults. Numeric comparison assumptions
+travel as integer hundredths and decode at the financial adapter; identity,
+sequence and choice fields keep their own meanings. Existing canonical history
+owns these edits. One continuous dial gesture shares one owned token and one
+Undo entry; a later gesture or intervening accepted operation starts another.
+The runtime owns its modules and delivery closure. The planning specimen remains
+an unchanged art and interaction reference.
 
 ### State, people and recovery
 
@@ -203,6 +242,7 @@ remain preserved references.
 | Ordinary editor proposal | Typed person settings and other proposal forms keep raw values in the coordinator until Apply. Cancel restores accepted values; Close can preserve a saved edit. |
 | Direct rack operation | Arrangement selection, Coordination team membership/name/order, People collection/member order and membership, role values, contribution choices/support, period creation, existing-plan occurrence append and record additions use canonical accepted commands. |
 | Global Undo | A stable native amp control describes accepted history and remains disabled at zero. Cassette selection adds no local Undo. |
+| Financial comparison | A stable deck ID owns its type and assumptions. Saved files carry those settings, and shared Undo recovers accepted edits. Connected reels change the loaded deck; explicit work funding retains its canonical command. |
 | Saved edit | Target-bound unfinished work remains distinct from accepted history. A changed accepted identity may require explicit review in the visible rack before an edit lease resumes. |
 | Baseline | An independent comparison and restore point, separate from Undo and unfinished edits. |
 | Person | A stable identity with role-based example name, rate and funded-time account; may join several teams and sessions. |
@@ -317,6 +357,9 @@ participant time shares remain with #798; production Reset remains with #808.
 | All custom teams fall into Planning | Existing stage relationships or distributed phase placement keep the delivery board balanced. |
 | Separate connection diagram and detached session settings | In-rack board/track routes use the canonical owners locally. |
 | Reverse/beside Abilities views and nested detail groups | Comparable support tables plus one selected compact module. |
+| Pale Abilities receiver and inherited table/control styling | A dark readable header, paired compact support groups, explicit foreground/background pairs and native-size choices. |
+| Change action pads share one undifferentiated face | Paper resting faces and an inset signal face identify the action with the open inspector. |
+| Three fixed Investment navigation decks | Five independently editable financial deck types; baseline and exchange remain compact utility routes. |
 | Rates disclosure and long contribution note editors | Direct roster/rate controls, role facets and a contribution/session matrix; stored note data is retained. |
 | Large raised buttons for most actions | Quiet local controls, preserved selected-state artwork and stronger Apply emphasis. |
 | Standalone Add controls in every lane | Named empty creation areas reuse the existing accepted creation command where scope is clear. |
@@ -356,5 +399,7 @@ Use the README to run the current proof and the Visual Fidelity Contracts for
 composition. #831 owns compact creation; #832 carries local navigation and the
 Shared sessions workflow; #833 owns atomic session removal and recovery.
 #836 owns the People composition and direct responsibility choices, with #837
-supplying its shared creation-control dependency. Broader financial models, response records,
-performance and public release retain their separate issues.
+supplying its shared creation-control dependency. #848 applies the compact
+receiving pattern to Abilities; #849 settles Change action state; #818 receives
+the financial workbench. Independent response records, performance and public
+release retain their separate issues.

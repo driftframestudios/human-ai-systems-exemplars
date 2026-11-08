@@ -764,11 +764,15 @@ independent Debrief composition and essay checks.
 
 The native Studio extends About with `studio-instrument.css` for shared reels
 and motion, followed by `studio-arrangements.css`, `studio-people.css`,
-`studio-change.css` and `studio-assurance.css` for their chapter racks.
+`studio-change.css`, `studio-assurance.css` and `studio-investment.css` for their chapter racks.
 `studio-people.css` follows Arrangement and owns People geometry plus the compact
 canonical Person form wherever that form is borrowed; `studio-abilities.css`
-retains the separate support-table composition. The primary route manifest
-registers the People stylesheet in the About asset closure. The authored About page loads
+owns the support tables and compact selected dark rack. `studio-investment.css`
+owns the live five-type financial workbench, its deck shelf and quantity modules.
+Its runtime modules live under `collaboration/native-investment-studio/`;
+the preserved planning specimen remains a separate reference. The primary route
+manifest registers these styles and their runtime dependencies in the About
+asset closure. The authored About page loads
 these after `about.css`; chapter selectors retain their local extension point.
 The [Studio source map](../../collaboration/native-investment-studio/implementation-reference.md#source-map)
 names the rendering owners and the [experience journal](../../collaboration/native-investment-studio/experience-journal.md)
