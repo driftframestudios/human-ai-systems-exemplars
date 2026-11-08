@@ -67,8 +67,10 @@ saved-plan owners. Deeper independently editable financial decks remain with
 3. Use a track's plus to add a session to that plan. A period-lane creation target
    or the New plan row adds separate work; shelf New plan also loads that cassette.
    These additions accept directly with editing closed; the stable amp **Undo**
-   recovers them. Select a period to edit its short caption while keeping the
-   Sprint/Quarter heading. The live example includes a paused follow-up.
+   recovers them. The small **Edit** beside a period caption opens its local field;
+   Save label updates that caption while keeping the Sprint/Quarter heading.
+   A refused save keeps your text for retry. The live example includes a paused
+   follow-up.
 4. Turn the Team arrangement reel, then choose a team. Change membership through
    its pads and return through **Delivery overview**. In Shared sessions, choose
    **People** to assign participants or **Handoffs** to link the work. The last

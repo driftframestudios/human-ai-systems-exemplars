@@ -11,11 +11,12 @@ const engines = { chromium, firefox, webkit };
 const names = process.env.NATIVE_STUDIO_BROWSER ? [process.env.NATIVE_STUDIO_BROWSER] : Object.keys(engines);
 const browsers = new Map(), route = '/context-canvas-project-surface/context-canvas/index.html';
 const captures = resolve(import.meta.dirname, '../../.visual-runs/native-score');
-let server, fixture;
+let server, fixture, complete;
 registerBrowserFixture(async own => {
   await mkdir(captures, { recursive: true });
   const source = await readFile(resolve(import.meta.dirname, '../../context-canvas-project-surface/context-canvas/index.html'), 'utf8');
   fixture = createNativeAboutFixture(source);
+  complete = source.replace('data="../img/plot/about_prompt_conditions_cartography.svg"', 'data-fixture-object-source="../img/plot/about_prompt_conditions_cartography.svg"');
   server = await own(startStaticServer());
   for (const name of names) browsers.set(name, await own(engines[name].launch()));
 });
@@ -23,12 +24,13 @@ const root = page => page.locator('[data-native-coordination]');
 const score = page => root(page).locator('[data-native-score]');
 const input = (page, key) => score(page).locator(`input[data-cadence-field="${key}"],select[data-cadence-field="${key}"],textarea[data-cadence-field="${key}"]`);
 async function open(t, engine, options = {}) {
-  const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...options });
+  const { full = false, ...contextOptions } = options;
+  const context = await browsers.get(engine).newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', ...contextOptions });
   const page = await context.newPage(), telemetry = monitor(page);
   t.after(async () => { try { assertTelemetry(telemetry); } finally { await context.close(); } });
   await page.route('**/*', request => {
     const url = new URL(request.request().url());
-    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: fixture });
+    if (url.origin === server.origin && url.pathname === route) return request.fulfill({ status: 200, contentType: 'text/html', body: full ? complete : fixture });
     return url.origin === server.origin ? request.continue() : request.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Separate owner</title>' });
   });
   await page.goto(server.origin + route); await page.evaluate(() => document.fonts.ready);
@@ -202,7 +204,10 @@ for (const engine of names) {
   test(`${engine}: period captions retain period identity, work and Undo`, async t => {
     const page = await open(t, engine), original = JSON.parse(await bytes(page));
     const lane = period(page, 'period-4'), editor = lane.locator('.native-cadence__period-label');
-    await editor.locator('summary').click();
+    await editor.getByRole('button', { name:'Edit Sprint 4 caption' }).click();
+    await editor.getByRole('button', { name:'Save label' }).click();
+    assert.deepEqual(JSON.parse(await bytes(page)), original, 'an unchanged stage summary stays derived');
+    await editor.getByRole('button', { name:'Edit Sprint 4 caption' }).click();
     await editor.getByRole('textbox', { name:'Period caption' }).fill('Prepare the receiving teams');
     await editor.getByRole('button', { name:'Save label' }).click();
     const changed = JSON.parse(await bytes(page));
@@ -214,6 +219,76 @@ for (const engine of names) {
     await expect(lane.getByRole('button', { name:'Sprint 4 Open sprint detail', exact:true })).toBeVisible();
     await undo(page);
     await expect(lane.locator('.native-cadence__stage-labels')).toHaveText('Build and rehearse · Review the evidence');
+  });
+
+  for (const width of [390, 1440]) test(`${engine}: period caption edit stays compact beside its saved text on the full About page at ${width}px`, async t => {
+    const page = await open(t, engine, { full:true, viewport:{ width, height:1000 } });
+    const original = JSON.parse(await bytes(page));
+    await cadence(page).locator('[data-studio-plan-id="review"]').click();
+    await cadence(page).locator('[data-cadence-key="track-work:review"]').click();
+    const session = root(page).locator('[data-native-configure]');
+    await session.locator('[name="label"]').fill('Review title still being prepared');
+    const lane = period(page, 'period-4'), editor = lane.locator('.native-cadence__period-label');
+    const edit = editor.getByRole('button', { name:'Edit Sprint 4 caption' });
+    await edit.click();
+    const caption = editor.getByRole('textbox', { name:'Period caption' });
+    await expect(caption).toHaveValue('Build and rehearse · Review the evidence');
+    await caption.fill('Prepare the receiving teams');
+    await caption.press('Enter');
+    await expect(editor.locator('.native-cadence__stage-labels')).toHaveText('Prepare the receiving teams');
+    await expect(edit).toBeFocused();
+    await expect(edit).toHaveAttribute('aria-expanded', 'false');
+    await expect(editor.locator('form')).toBeHidden();
+    await expect(cadence(page).locator('[data-studio-plan-id="review"]')).toHaveAttribute('aria-pressed', 'true');
+    const accepted = JSON.parse(await bytes(page));
+    assert.deepEqual(accepted.work, original.work, 'saving a caption leaves the unfinished session edit parked');
+    assert.equal(await page.evaluate(async () => {
+      const { createDraftCoordinator } = await import('/collaboration/native-investment-studio/editing.mjs');
+      return createDraftCoordinator(window.scoreFixture.studio).read().parked.find(record => record.kind === 'session')?.raw.label;
+    }), 'Review title still being prepared');
+    const shape = await editor.evaluate(node => {
+      const button = node.querySelector('.native-cadence__caption-edit'), reading = node.querySelector('.native-cadence__caption');
+      const box = button.getBoundingClientRect();
+      return { width:box.width, height:box.height, decoration:getComputedStyle(button).textDecorationLine,
+        sameRow:reading.contains(button) && reading.contains(node.querySelector('.native-cadence__stage-labels')),
+        pageWidth:document.documentElement.scrollWidth };
+    });
+    assert.ok(shape.width < 70 && shape.height < 36, JSON.stringify(shape));
+    assert.equal(shape.decoration, 'underline'); assert.equal(shape.sameRow, true);
+    assert.ok(shape.pageWidth <= width + 1, JSON.stringify(shape));
+    await lane.screenshot({ path:resolve(captures, `${engine}-period-caption-${width}.png`) });
+    await undo(page);
+    await expect(lane.locator('.native-cadence__stage-labels')).toHaveText('Build and rehearse · Review the evidence');
+    assert.deepEqual(JSON.parse(await bytes(page)).scoreSettings.cadence.periods, original.scoreSettings.cadence.periods);
+  });
+
+  test(`${engine}: period caption keeps typed text after an interrupted save and retries with Undo`, async t => {
+    const page = await open(t, engine, { full:true });
+    await page.evaluate(async () => {
+      const { mountCoordinationPanel } = await import('/collaboration/native-investment-studio/controller.mjs');
+      const accepted = window.scoreFixture.studio; window.scoreFixture.controller.dispose();
+      let interrupt = true;
+      const studio = { ...accepted, replace(...args) {
+        if (interrupt) { interrupt = false; return { ok:false, error:{ code:'stale', message:'The plan changed. Try saving this caption again.' } }; }
+        return accepted.replace(...args);
+      } };
+      window.scoreFixture = { studio, controller:mountCoordinationPanel(document.querySelector('[data-native-coordination]'), { studio }) };
+    });
+    const original = await bytes(page), editor = period(page, 'period-4').locator('.native-cadence__period-label');
+    const edit = editor.getByRole('button', { name:'Edit Sprint 4 caption' });
+    await edit.focus(); await edit.press('Enter');
+    const caption = editor.getByRole('textbox', { name:'Period caption' });
+    await caption.fill('Keep the receiving team ready');
+    await editor.getByRole('button', { name:'Save label' }).click();
+    assert.equal(await bytes(page), original);
+    await expect(caption).toHaveValue('Keep the receiving team ready');
+    await expect(caption).toBeFocused();
+    await expect(edit).toHaveAttribute('aria-expanded', 'true');
+    await expect(editor.getByRole('alert')).toHaveText('The plan changed. Try saving this caption again.');
+    await caption.press('Enter');
+    await expect(editor.locator('.native-cadence__stage-labels')).toHaveText('Keep the receiving team ready');
+    await expect(edit).toBeFocused();
+    await undo(page); assert.equal(await bytes(page), original);
   });
 
   test(`${engine}: an in-board period addition is accepted immediately and Undo restores it`, async t => {
@@ -382,7 +457,7 @@ for (const engine of names) {
         const result = studio.replace(candidate, studio.read()); if (!result.ok) throw Error(result.error.code); controller.refresh();
       }, hasCadence);
       const retained = await bytes(page);
-      await root(page).locator('[data-connection-templates] [data-session-track="followup"] .studio-session-tracks__name').click();
+      await root(page).locator(hasCadence ? '[data-cadence-key="track-work:followup"]' : '[data-delivery-session="followup"]').click();
       await root(page).locator('[data-rack-remove-plan]').click();
       await expect(root(page).locator('[data-native-session-dependencies]')).toBeHidden();
       assert.equal(await bytes(page), retained, 'confirmation preserves the relationship with or without a cadence');

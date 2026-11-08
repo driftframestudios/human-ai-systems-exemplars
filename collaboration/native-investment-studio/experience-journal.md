@@ -66,6 +66,13 @@ automatic cassette filtering hid previous clips. Add sprint/quarter retains its
 separate accepted horizon operation. A selected period can retain its Sprint or
 Quarter name while a short caption replaces its derived stage summary. Clearing
 the caption restores that summary. Captions travel with the plan and Undo.
+A small underlined Edit now sits beside the displayed caption, superseding the
+large Edit label disclosure. The fixed Sprint/Quarter identity remains visible
+above it. Save reports acceptance through the canonical owner; an interrupted
+save retains the local field and a retry message. Cancel returns to the accepted
+caption. An unchanged derived summary stays derived rather than becoming an
+accidental override. This distinguishes the field being edited and preserves
+unfinished work during projection refresh.
 The live example includes a paused follow-up, so its resting state demonstrates
 both active and paused work without changing the canonical test fixture.
 

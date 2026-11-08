@@ -76,8 +76,13 @@ closed; the named representation opens its receiver when selected. Existing pads
 inspection meaning; Shared sessions cells keep their participation meaning.
 
 A selected period offers a short caption override while its Sprint/Quarter
-heading stays stable. The caption travels with accepted state, download and Undo.
-Clearing it restores the derived stage summary. The live showcase includes a
+heading stays stable. A compact underlined Edit sits beside the actual caption
+and opens one local field with Save label and ghost Cancel. Its expanded state
+and focus follow that field. Successful save updates the visible caption and
+returns focus to Edit; refusal retains the typed text and a local retry message.
+This supersedes the large Edit label disclosure. The caption travels with
+accepted state, download and Undo. Clearing it restores the derived stage summary;
+saving an unchanged summary keeps its derivation. The live showcase includes a
 paused follow-up so the board and cassette shelf demonstrate that state.
 
 ## Session working area
