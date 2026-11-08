@@ -84,10 +84,12 @@ established the loaded tape, people-by-session matrix, scoped period navigation
 and response routing. The approved
 [#805 direction](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
 extended that compact composition to all chapters. It supersedes treating the
-illustration as Coordination-only. The current
-[#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
-preserves the cassette treatment, simplifies its visible naming and adds bounded
-Investment comparison decks. The
+illustration as Coordination-only.
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+preserves the cassette treatment, visible naming and fixed duration lighting.
+The current [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+adds preloaded independent comparison tapes, connected financial reels, money
+dials and recoverable removal of a complete Coordination plan. The
 [proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) and
 [Chapter Workbench contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md)
 now describe the connected experience and its receiving owners.
@@ -109,14 +111,25 @@ the same session, rather than pricing another copy. The study's funding lanes
 group session amounts; production's allocation rules and full baseline/report
 semantics retain their existing owners. The added comparison decks use the
 shared Undo owner while keeping their assumptions and outputs separate from
-the shared-session amount. The shelf offers one of each comparison type.
-Customer rollout separates setup and training; Commercial cohort distinguishes
-opening-cohort retention from new revenue; Service operations preserves hours
-released per week; Capital choices compares end-quarter discounted benefits
-after upfront cost. These adapt a bounded question from each existing investment
-analysis domain. Quality starts at 4σ with balanced attention. Its response to
-urgency is an authored illustration, separate from observed process capability
-or a forecast.
+the shared-session amount. One of every financial tape type is preloaded; New investment tape
+creates another independent instance. Domain navigation selects a
+tape type. Lifecycle presets, alternatives and metric choices change a compact
+loaded reading with visible consequences. Customer rollout carries price and
+contribution; Commercial cohort separates opening-cohort retention from new
+revenue and acquisition; Service operations keeps time, budget and capacity
+units visible; Capital choices carries quarterly flows, NPV, IRR and payback.
+The canonical core supplies financial formulas through a small study adapter.
+
+The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+records the larger-left-reel VHS-C art, stippled body and vertical shelf with a
+horizontal phone presentation. Chocolate companion panels now offset the dark
+rack around money controls and related comparisons, extending the preserved
+Extra investment treatment. $100 and $5 relative dials share one amount, exact
+entry and circular $1 steps. Their face lighting remains fixed. Reusable controls
+retain stable nodes and return edits through the existing history owner.
+
+Quality starts at 4σ with balanced attention. Its response to urgency remains
+an authored illustration, separate from observed process capability or a forecast.
 
 The human approved the compact **Time per person** and **Working sessions**
 layout before this chapter expansion. The
@@ -140,6 +153,11 @@ adds another session to that item. Cassette faces say **sessions** instead of
 **occurrences**. The source still stores the same `tapes` and `occurrences` IDs
 and arrays; this iteration changes the visitor vocabulary and keeps duration
 and participant ownership intact. Numbered pads remain the repetition control.
+Remove plan clears explicit support/funding references and leaves independent
+response cards with visible unassigned endpoints. People and teams remain. The
+last plan can be removed and recreated; Undo restores its full snapshot, while
+Reset restores the original example. The production amp Reset is separately
+planned in [#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
 Plan overview still means the complete arrangement. Production retains its
 accepted session/count contract until a focused consolidation receives review.
 
@@ -377,7 +395,9 @@ entry, screenshot or technical description presents the earlier behavior.
 | Rotating the duration dial's entire face, including its gradient and shadow | The approved #806 lighting correction keeps the face and simulated light fixed. A full-face transparent carrier rotates only the existing pointer mark. Duration geometry, palette and value/gesture owners remain preserved; the duration contract is now version 0.1.1. |
 | Session tapes, New session and Occurrence as the study's shelf vocabulary | #806 uses Plans, New plan and + Session; faces show their session count. The same source identities and duration owner remain. This visible naming change leaves production's session model intact. |
 | Separate numeric Working sessions and occurrence pads | The dev study uses numbered session pads as its single visible repetition control. Production keeps its accepted field until review. New plan creates the study item; + Session repeats it; a sprint/quarter remains the planning container. |
-| Investment limited to one shared-session cost reading in the dev study | Plan investment retains that complete reading as its initial master tape. Added VHS-C comparison tapes explore separate enterprise questions with their own units and shared Undo; their outputs leave the shared-session total unchanged. |
+| Investment limited to one shared-session cost reading in the dev study | Plan investment retains that reading. #807 preloads financial comparison tapes with connected reels and money dials, preserving separate units and shared Undo. |
+| #806's optional comparison decks, limited to one of each type | #807 preloads all five types and gives every added copy its own identity, settings and comparison state. Domain navigation changes the loaded view; financial edits stay in their tape. |
+| Coordination plans available only for creation and editing in the study | #807 adds direct Remove plan, explicit reference cleanup, an empty-shelf New plan route and snapshot Undo. Production Reset stays separately scoped in #808. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
 | Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
@@ -819,11 +839,11 @@ also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-The next receiving decision is the #806 dev refinement of the all-chapter
+The next receiving decision is the #807 dev refinement of the all-chapter
 workbench. Its receiving Issue records matching source and browser observations;
 #805 retains the earlier connected-chapter evidence. Human review now assesses
-the clarified Plans/session language, preserved cassette and panel treatment,
-and added Investment decks before choosing a production bridge. The approved
+the independent financial comparison tapes, connected reels, chocolate
+companions and recoverable plan removal before choosing a production bridge. The approved
 duration panel retains its geometry and palette with the approved fixed-lighting
 revision. Future percentage
 semantics remain with #798 and broader removal with #773.

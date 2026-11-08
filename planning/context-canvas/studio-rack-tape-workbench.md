@@ -6,8 +6,10 @@ work. A selected pad loads its controls nearby; a marked session route opens the
 shared tape module and returns to the originating chapter.
 
 **Standing — 8 November 2026:** active design exploration on `dev`, with the
-current preservation and Investment increment coordinated in
-[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806).
+current financial-reel and recovery increment coordinated in
+[#807](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807).
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+retains the approved cassette, duration-lighting and panel references.
 The all-chapter composition arrived through
 [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805),
 expanding the approved direction from
@@ -64,29 +66,41 @@ capability or a forecast.
 
 ## Investment comparisons inside one deck
 
-**Plan investment** is the initial VHS-C master tape. It retains the existing
-funding lanes, session cost detail, saved amount and sprint distribution. The
-Extra investment lane keeps its chocolate `#403d32` field. **Add comparison tape**
-opens four choices, one of each: Customer rollout, Commercial cohort, Service
-operations and Capital choices. Each loads a compact group of sliders and
-choice pads. The
-[chapter contract](../../visual-fidelity-contracts/studio-rack/chapter-workbench-study.md#investment-decks-preserve-their-own-question)
-maps those controls to their distinct readings.
+A vertical VHS-C channel starts with Plan investment, Customer rollout,
+Commercial cohort, Service operations and Capital choices. Each tape opens a
+compact comparison rack. New investment tape creates another independently adjustable
+copy, and Remove tape participates in the shared Undo history. This supersedes
+#806's optional one-of-each shelf. Phone widths use the preserved horizontal
+shelf pattern, with chunky Investment artwork and its larger left reel.
+
+The [Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+connects the financial meaning, art direction, source owners and controls.
+Chocolate brown panels offset the dark rack around related comparisons and
+controls; Extra investment retains its approved lane treatment. The $100/$5
+module borrows the duration panel's scale and fixed lighting while presenting
+one monetary amount. Circular $1 steps and direct entry remain available.
 
 The [existing investment analysis domains](../../collaboration/investment-analysis/README.md#two-axes)
-provide the conceptual starting point. This study selects a short illustration
-from each: setup and training cost, opening-cohort revenue, hours released each
-week, and end-quarter discounted benefits after upfront cost. Those quantities
-retain their units. Commercial retention concerns the opening cohort; new
-customer revenue enters its separate total. Released service time remains hours.
-The fuller analysis package retains its own contracts and exchange behavior.
+supply populated questions. A domain reel selects the corresponding tape;
+lifecycle and alternative reels change bounded assumptions; metric choices
+bring retention, acquisition, net contribution, discounted return or recovery
+into the foreground. Compact bars and cash-flow strips make those changes
+visible. The calculation core retains its formula ownership, with a small
+study adapter for presets and financial projections.
 
-The study stores added decks and authored settings in `model.study.investment`.
-Its shared history owns additions, adjustments and removal. Selecting a deck is
-view state. **Remove tape** removes a comparison from the shelf; Undo restores
-it. Plan investment and the shell continue to use `priceStudy`, derived from
-people, duration and placed sessions. Other deck results remain separate from
-that amount. Production adoption remains a later receiving decision.
+Each comparison stores its own settings under `model.study.investment.tapes`.
+Its stable ID separates independent copies. The shell owns Undo; selection
+remains view state. The amp's shared work total retains `priceStudy` as its
+owner. Money, period rates, retained revenue and released hours stay legibly
+separate. All comparisons begin populated and can be explored through controls.
+Production transfer receives its own model and acceptance decision after review.
+
+Coordination now also supports removing a complete plan. The shell clears its
+explicit supporting-work/funding references and preserves independent response
+cards with unassigned endpoints. People and teams remain available. The final
+plan can be removed; New plan starts another and Undo restores the snapshot.
+The dev Reset restores the original example. Production's compact Reset route
+is planned in [#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
 
 ## Four viable compositions
 
@@ -287,6 +301,7 @@ that family; accepted contracts remain the runtime reference during review.
 | [Support Matrix & Stateful Pads](../../visual-fidelity-contracts/studio-rack/support-matrix-stateful-pads.md) | Distinguish checked participation, selected row and selected occurrence. Quality's matrix remains the visual reference for native checkbox pads. |
 | [Precision Dials & Faders](../../visual-fidelity-contracts/studio-rack/precision-dials-faders.md) | Preserve the enclosed duration module and its peach Hours/paper Minutes hierarchy; compose occurrence pads alongside it and remove the duplicate visible count editor. |
 | [Loaded Tape Duration Panel](../../visual-fidelity-contracts/studio-rack/loaded-tape-duration-panel.md) | Preserve the named baseline's equal 64px dials, readout, steppers, colors and responsive geometry. Apply the approved fixed-lighting revision: stationary face and shadow, rotating pointer. Production adoption retains a separate review. |
+| [Investment Master Shelf & Financial Reels](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md) | Preserve the VHS-C channel, chocolate companions, reusable money/reel controls and financial units while keeping independent comparison settings recoverable. |
 | [Cassette Plan Shelf](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md) | Preserve the original tilted blocky plan faces, depth, selection and 160ms hover, including the horizontal shelf at 650px and below. Investment's new VHS-C artwork remains a separate illustration. |
 | [Contextual Inspection & Recovery](../../visual-fidelity-contracts/studio-rack/contextual-inspection-recovery.md) | Extend the stable deck into persistent compact modules; task selection opens the relevant work surface, while show/hide expresses display preference. Preserve draft, exact return focus and the actual open-state cue. |
 | [Zoetrope Preset Selection](../../visual-fidelity-contracts/studio-rack/zoetrope-preset-selection.md) | Presets visibly change the board, tape choices and routing through their existing arrangement transaction and recovery. |

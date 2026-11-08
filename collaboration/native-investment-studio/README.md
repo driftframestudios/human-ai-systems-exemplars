@@ -36,20 +36,22 @@ work is coordinated under
 Open the [interactive study](../../planning/context-canvas/studio-rack-tape-study.html)
 through the repository's local server. The
 [#805 exploration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805)
-extended #804's loaded-tape composition across all Studio chapters. The current
-[#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
-preserves the cassette artwork, clarifies the Plans shelf and develops compact
-Investment comparison decks. One chapter rail connects the same illustrative
+extended #804's loaded-tape composition across all Studio chapters. The preservation work in
+[#806](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
+keeps the approved cassette art and duration panel. The current
+[#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+deepens financial comparisons through preloaded VHS-C tapes, connected reels
+and coarse/fine money dials. One chapter rail connects the same illustrative
 people, teams and work:
 
 | Chapter | Try in the study |
 | --- | --- |
-| Coordination | Load an item from Plans, adjust duration, add or place its sessions and choose participants. |
+| Coordination | Load an item from Plans, adjust duration, add or place its sessions and choose participants. Remove plan and Undo make exploration recoverable. |
 | People | Select a person from team lanes; adjust rate or funded time and change session participation. |
 | Abilities | Select a cell in either support table; connect responsibility, preparation, review or an illustrative observation. |
 | Change | Turn the framework/viewpoint reels, vary the emphasis and connect work in the stage lanes. |
 | Quality & recovery | Explore preparation/recovery presets, the attention display and linked check pads. |
-| Investment | Load Plan investment for shared-session costs, or add a compact comparison tape for a different enterprise question. |
+| Investment | Load any preloaded comparison, turn its reels or money dials, and add another independent tape to explore a variation. |
 
 Edits take effect directly in the study's page-local model with shared Undo.
 Marked session routes open the Coordination module and offer a return to the
@@ -72,12 +74,21 @@ owner. Other chapters reach that same module.
 The separate
 [Cassette Plan Shelf contract](../../visual-fidelity-contracts/studio-rack/cassette-plan-shelf.md)
 preserves the current artwork, hover motion and narrow horizontal shelf at
-`cedafc3`. The detail panel keeps its short downward easing; Investment retains
-the chocolate Extra investment lane. Add comparison tape offers Customer rollout,
-Commercial cohort, Service operations and Capital choices alongside Plan
-investment. These VHS-C-style decks keep their own units and assumptions; the
-shared-session total retains its original owner. Adding, adjusting and removing
-a comparison share the study's Undo action.
+`cedafc3`. The detail panel keeps its short downward easing. The
+[Investment Master Shelf & Financial Reels contract](../../visual-fidelity-contracts/studio-rack/investment-master-reels.md)
+records the companion VHS-C channel, larger left reel, stippling and additional
+chocolate brown panels. One of every comparison type is ready to explore;
+New investment tape creates another independent instance. Lifecycle, domain,
+alternative and metric reels connect concise financial readings, with $100/$5
+money dials and direct controls. Plan investment retains the original funding
+board and shared-session costs; other comparison outputs keep their own units.
+
+Remove plan also supports an empty Coordination shelf. New plan starts again;
+Undo restores the removed item and its links. Independent response cards retain
+visible unassigned endpoints after their source or receiver is removed. Reset
+restores the authored workbench. The corresponding production amp control is
+planned separately in
+[#808](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/808).
 
 The working showcase on `main` keeps its accepted plan, canonical editors and
 recovery behavior. The study's unassigned tapes, response cards and simplified

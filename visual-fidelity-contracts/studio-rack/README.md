@@ -15,9 +15,11 @@ owns its actual verification result. Publication remains a separately reviewed a
 The [chapter workbench study](../../planning/context-canvas/studio-rack-tape-workbench.md)
 extends #804's loaded-tape illustration across all Studio chapters through
 [#805](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/805).
-The current [#806 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/806)
-preserves the approved cassette art, clarifies Plans/session wording and explores
-Investment comparison decks. Its
+The current [#807 iteration](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/807)
+deepens preloaded Investment comparisons and recoverable plan exploration.
+The [Investment Master Shelf & Financial Reels](investment-master-reels.md)
+contract adds the VHS-C channel, chocolate companions and $100/$5 controls,
+while #806 retains the approved cassette art and duration-lighting correction. Its
 [development composition contract](chapter-workbench-study.md) connects team
 lanes, support tables, reels, check pads and investment lanes through shared
 illustrative identities and Undo. The study maps outside Coordination operations
@@ -31,8 +33,8 @@ fixes the face and shadow while the pointer turns. The
 [Cassette Plan Shelf](cassette-plan-shelf.md) keeps the tilted blocky faces,
 hover movement, selected outline and horizontal shelf at `650px` and below.
 The loaded detail panel also retains its short downward unfurl. Investment's
-chocolate Extra investment lane remains `#403d32` as its new comparison decks
-develop. These local approvals leave the remaining chapter composition open to
+chocolate Extra investment lane remains `#403d32`; additional chocolate
+companion panels separate financial controls and readings within the rack. These local approvals leave the remaining chapter composition open to
 iteration. Merging remains held during the dev study.
 
 ## Choose a visual mode and an operation

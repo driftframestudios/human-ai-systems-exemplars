@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="studio-study-people-abilities.css">
   <link rel="stylesheet" href="studio-study-change-quality.css">
   <link rel="stylesheet" href="studio-study-investment.css">
+  <link rel="stylesheet" href="studio-investment-controls.css">
   <style>
     /* About/Studio palette and rack paint, composed here without importing its layout rules. */
     :root { color-scheme: dark; --ink:#1f2421; --rack:#242a24; --screen:#10261e; --edge:#668b73; --mint:#56d8c9; --paper:#f8f1d9; --peach:#fff3e8; --rose:#ecd3dc; --lavender:#e6d7ef; --muted:#c2decc; --text:#213252; --key-shadow:#45534b; font:16px/1.4 system-ui,sans-serif; background:#92d1c0; color:var(--paper); }
@@ -155,12 +156,12 @@
     <div class="study-chapter-heading" id="study-chapter-heading"><h2 id="study-chapter-title">Coordination</h2><p id="study-chapter-description">Load a plan. Place its sessions. Bring people into the work.</p></div>
     <div id="study-return" class="study-return" hidden></div>
     <div class="workspace" id="chapter-coordination">
-      <aside class="library"><h2>Plans</h2><div class="tapes" id="tapes"></div><button id="add-tape" class="add">＋ New plan</button></aside>
+      <aside class="library"><h2>Plans</h2><div class="tapes" id="tapes"></div><p id="plans-empty" class="hint" hidden>Create a plan to start.</p><button id="add-tape" class="add">＋ New plan</button></aside>
       <div class="main">
         <nav class="breadcrumbs" aria-label="Plan scope" id="breadcrumbs"></nav>
         <div class="board" id="board" aria-label="Plan periods"></div>
         <section class="deck" id="deck" aria-label="Loaded session">
-          <div class="deck-head bar"><label><small>Loaded session</small><input id="tape-name" type="text" maxlength="80" aria-label="Session name"></label><button id="unload" class="ghost">Close ×</button></div>
+          <div class="deck-head bar"><label><small>Loaded session</small><input id="tape-name" type="text" maxlength="80" aria-label="Session name"></label><div class="controls"><button id="remove-plan" class="remove">Remove plan</button><button id="unload" class="ghost">Close ×</button></div></div>
           <div class="modules">
             <div class="module" id="duration"></div>
             <section class="module" aria-label="Working sessions"><div class="bar"><h3>Working sessions</h3><button id="add-occurrence" class="add">＋ Session</button></div><div id="occurrences" class="occurrences"></div><div class="location"><label>Sprint<select id="period"></select></label><label>Week<select id="week"><option value="1">Week 1</option><option value="2">Week 2</option></select></label></div><div class="bar"><label>Hosted by <select id="host"></select></label><button id="remove-occurrence" class="remove">Remove session</button></div></section>
@@ -204,6 +205,18 @@ const tape = () => model.tapes.find(item => item.id === view.tape);
 const el = (tag, text, className) => { const node = document.createElement(tag); if(text !== undefined) node.textContent = text; if(className) node.className = className; return node; };
 function button(text, action, className, pressed) { const node = el('button',text,className); node.type='button'; if(pressed !== undefined) node.setAttribute('aria-pressed',String(pressed)); node.addEventListener('click',action); return node; }
 function remember(key) { if(!key || key !== turnKey) { history.push(structuredClone(model)); if(history.length>30) history.shift(); } turnKey=key || null; }
+function removePlan(id) {
+  const withoutPlan = ids => ids.filter(value => value !== id);
+  model.tapes = model.tapes.filter(item => item.id !== id);
+  for(const response of model.responses) for(const field of ['from','to']) if(response[field]===id) response[field]='';
+  for(const capability of model.study.capabilities) for(const field of ['preparation','review']) capability[field]=withoutPlan(capability[field]);
+  for(const owner of [model.study.changeRack,model.study.qualityRack]) {
+    for(const key of Object.keys(owner.links)) owner.links[key]=withoutPlan(owner.links[key]);
+  }
+  const investment=model.study.investment;
+  const fundingMaps=[investment.funding,...(investment.tapes||[]).filter(item=>item.type==='plan').map(item=>item.settings.funding)];
+  for(const funding of fundingMaps) if(funding) delete funding[id];
+}
 // Field settlement preserves its editor so a blur cannot replace the next click target.
 function change(action, message, key, keepEditor) { remember(key); action(); render(keepEditor); if(message) $('status').textContent=message; }
 function selected(id, index=0, source) {
@@ -228,9 +241,13 @@ function openInline(kind,id) {
 function keyed(node,key) { node.dataset.focusKey=key; return node; }
 function render(keepEditor) {
   const focus=document.activeElement?.dataset.focusKey;
+  if(!tape()) { view.tape=model.tapes[0]?.id||null;view.occurrence=0;view.deck=Boolean(view.tape);view.origin=view.tape?`tape-${view.tape}`:'new-plan'; }
+  view.occurrence=Math.min(view.occurrence,Math.max(0,(tape()?.occurrences.length||0)-1));
   if(!model.people.some(person=>person.id===view.person)) view.person=null;
   if(!model.teams.some(team=>team.id===view.team)) view.team=null;
+  if(!model.responses.some(response=>response.id===view.response)) view.response=null;
   $('undo').disabled=history.length===0; $('undo').textContent=`Undo${history.length ? ` (${history.length})` : ''}`;
+  $('plans-empty').hidden=model.tapes.length>0;
   $('tapes').replaceChildren(...model.tapes.map(item=>{
     const node=keyed(button('',event=>selected(item.id,0,event.currentTarget),'tape',item.id===view.tape&&view.deck),`tape-${item.id}`);
     const face=el('span',undefined,'cassette'),reels=el('span',undefined,'reels'); reels.setAttribute('aria-hidden','true');
@@ -251,13 +268,15 @@ function render(keepEditor) {
       clip.append(el('strong',item.name),el('small',`Week ${occ.week} · ${item.people.length ? item.people.map(id=>model.people.find(person=>person.id===id).name).join(', ') : 'People to choose'}`)); clips.append(clip);
     });
     const place=keyed(button('＋ Place session',event=>addOccurrence(period,week||1,event.currentTarget.dataset.focusKey),'add'),`place-${period}-${week}`);
-    place.setAttribute('aria-label',`Place ${tape().name} in Sprint ${period}${week ? `, Week ${week}` : ''}`);place.title=place.getAttribute('aria-label');
+    place.disabled=!tape();place.setAttribute('aria-label',tape()?`Place ${tape().name} in Sprint ${period}${week ? `, Week ${week}` : ''}`:'Create a plan to place sessions');place.title=place.getAttribute('aria-label');
     lane.append(clips,place); $('board').append(lane);
   }
   renderDeck(); renderTracks(); renderMatrix(keepEditor); renderRouting(keepEditor); renderChapter(); returnFocus(focus);
 }
 function renderDeck() {
-  $('deck').hidden=!view.deck; const item=tape();
+  const item=tape();$('deck').hidden=!view.deck||!item;
+  for(const control of duration.element.querySelectorAll('input,button')) control.disabled=!item;
+  if(!item) { dials.refresh();return; }
   if(document.activeElement!==$('tape-name')) $('tape-name').value=item.name;
   for(const [field,value] of [['hoursPerSession',item.hours],['minutesPerSession',item.minutes]]) duration.controls.get(field).input.value=String(value);
   renderTimeReadout(duration,{hoursPerSession:String(item.hours),minutesPerSession:String(item.minutes)}); dials.refresh();
@@ -270,14 +289,14 @@ function renderDeck() {
 }
 const duration=createTimeControls(document,{idPrefix:'study',decorateField(){},decorateStep(step,field,direction){step.addEventListener('click',()=>setTime(field,Number(duration.controls.get(field).input.value)+direction));}});
 $('duration').append(duration.element);
-const dials=mountDurationDials({dials:duration.dials,read(){const item=tape();return{token:item.id,enabled:view.deck&&view.chapter==='coordination',hours:String(item.hours),minutes:String(item.minutes)};},write(token,field,value){if(token===view.tape) setTime(field,Number(value),`dial-${token}-${field}`);}});
-function setTime(field,value,key) { if(!Number.isFinite(value)) {renderDeck();return;} const unit=field==='hoursPerSession'?'hours':'minutes',other=unit==='hours'?'minutes':'hours';
+const dials=mountDurationDials({dials:duration.dials,read(){const item=tape();return{token:item?.id||null,enabled:Boolean(item)&&view.deck&&view.chapter==='coordination',hours:item?String(item.hours):'',minutes:item?String(item.minutes):''};},write(token,field,value){if(token===view.tape) setTime(field,Number(value),`dial-${token}-${field}`);}});
+function setTime(field,value,key) { if(!tape()) return;if(!Number.isFinite(value)) {renderDeck();return;} const unit=field==='hoursPerSession'?'hours':'minutes',other=unit==='hours'?'minutes':'hours';
   const max=unit==='hours'?(tape()[other]>0?23:24):(tape()[other]===24?0:59);
   change(()=>{tape()[unit]=Math.max(0,Math.min(max,Math.round(value)));},'',key);
 }
 for(const field of ['hoursPerSession','minutesPerSession']) duration.controls.get(field).input.addEventListener('change',event=>setTime(field,Number(event.target.value)));
 for(const unit of ['hours','minutes']) duration.dials[unit].knob.addEventListener('pointerdown',()=>{turnKey=null;},true);
-function addOccurrence(period=view.period||1,week=1,origin) { change(()=>{if(origin)view.origin=origin;tape().occurrences.push({period,week});view.occurrence=tape().occurrences.length-1;view.deck=true;},'Session added. Choose its sprint and week.'); }
+function addOccurrence(period=view.period||1,week=1,origin) { if(!tape()) return;change(()=>{if(origin)view.origin=origin;tape().occurrences.push({period,week});view.occurrence=tape().occurrences.length-1;view.deck=true;},'Session added. Choose its sprint and week.'); }
 function renderTracks() {
   $('tracks').hidden=view.reading!=='tracks';$('events').hidden=view.reading!=='events';
   $('tracks-tab').setAttribute('aria-pressed',String(view.reading==='tracks'));$('events-tab').setAttribute('aria-pressed',String(view.reading==='events'));
@@ -320,7 +339,7 @@ const responseStatuses = [{id:'requested',name:'Requested'},{id:'ready',name:'Re
 function addResponse(status='requested') {
   change(()=>{
     const id=crypto.randomUUID();
-    model.responses.push({id,name:'New response',from:view.tape,to:model.tapes.find(item=>item.id!==view.tape)?.id||view.tape,status});
+    model.responses.push({id,name:'New response',from:view.tape||'',to:model.tapes.find(item=>item.id!==view.tape)?.id||view.tape||'',status});
     view.response=id;
   },`Response added · ${responseStatuses.find(item=>item.id===status).name}.`);
   $('response-editor').querySelector('input')?.focus();
@@ -351,10 +370,17 @@ function renderRouting(keepEditor) {
   }
   $('response-editor').hidden=!view.response;if(!view.response || keepEditor==='response')return;const response=model.responses.find(r=>r.id===view.response),nodes=[];
   const label=el('label','Response'),name=el('input');name.type='text';name.value=response.name;name.addEventListener('change',()=>change(()=>{response.name=name.value.trim()||response.name;},'Response updated.', undefined, 'response'));label.append(name);nodes.push(label);
-  for(const [field,title,records] of [['from','From plan',model.tapes],['to','To plan',model.tapes],['status','Status',responseStatuses]]){const label=el('label',title),select=el('select');options(select,records,response[field]);select.addEventListener('change',()=>change(()=>{response[field]=select.value;},'Response routing updated.', undefined, 'response'));label.append(select);nodes.push(label);}nodes.push(button('Close ×',()=>{const id=view.response;view.response=null;renderRouting();returnFocus(`response-${id}`);},'ghost'));$('response-editor').replaceChildren(...nodes);
+  const planChoices=[{id:'',name:'Choose a plan'},...model.tapes];
+  for(const [field,title,records] of [['from','From plan',planChoices],['to','To plan',planChoices],['status','Status',responseStatuses]]){const label=el('label',title),select=el('select');options(select,records,response[field]);select.addEventListener('change',()=>change(()=>{response[field]=select.value;},'Response routing updated.', undefined, 'response'));label.append(select);nodes.push(label);}nodes.push(button('Close ×',()=>{const id=view.response;view.response=null;renderRouting();returnFocus(`response-${id}`);},'ghost'));$('response-editor').replaceChildren(...nodes);
 }
 keyed($('add-tape'),'new-plan');
 $('add-tape').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.tapes.push({id,name:'New plan',hours:0,minutes:30,team:'',people:[],occurrences:[]});view.tape=id;view.occurrence=0;view.deck=true;view.origin='new-plan';},'Plan added. Add sessions and choose people when ready.'));
+$('remove-plan').addEventListener('click',()=>{
+  const item=tape();if(!item)return;dials.release();
+  const index=model.tapes.indexOf(item);
+  change(()=>{removePlan(item.id);view.tape=model.tapes[Math.min(index,model.tapes.length-1)]?.id||null;view.occurrence=0;view.deck=Boolean(view.tape);view.origin=view.tape?`tape-${view.tape}`:'new-plan';},`${item.name} removed. Undo restores it.`);
+  if(returnFocus(view.origin)) document.activeElement.scrollIntoView({block:'nearest'});
+});
 $('add-occurrence').addEventListener('click',()=>addOccurrence());
 $('remove-occurrence').addEventListener('click',()=>change(()=>{tape().occurrences.splice(view.occurrence,1);view.occurrence=Math.max(0,view.occurrence-1);},'Session removed. Undo restores it.'));
 $('tape-name').addEventListener('change',event=>change(()=>{tape().name=event.target.value.trim()||tape().name;},'Session renamed.'));
@@ -362,7 +388,7 @@ $('period').addEventListener('change',event=>change(()=>{tape().occurrences[view
 $('week').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].week=Number(event.target.value);},'Session moved to the selected week.'));
 $('host').addEventListener('change',event=>change(()=>{tape().team=event.target.value;},'Host team updated.'));
 $('unload').addEventListener('click',()=>{dials.release();view.deck=false;render();if(!returnFocus(view.origin))returnFocus(`tape-${view.tape}`);});
-$('undo').addEventListener('click',()=>{dials.release();model=history.pop();turnKey=null;if(!model.tapes.some(t=>t.id===view.tape))view.tape=model.tapes[0].id;view.occurrence=Math.min(view.occurrence,Math.max(0,tape().occurrences.length-1));if(!model.responses.some(r=>r.id===view.response))view.response=null;render();$('status').textContent='Previous edit restored.';});
+$('undo').addEventListener('click',()=>{if(!history.length)return;dials.release();model=history.pop();turnKey=null;render();$('status').textContent='Previous edit restored.';});
 $('reset').addEventListener('click',()=>{dials.release();remember();model=structuredClone(seed);Object.assign(view,{tape:'pairing',occurrence:0,period:0,deck:true,eventPage:0,person:null,team:null,response:null});render();$('status').textContent='Study reset. Undo restores your previous arrangement.';});
 for(const reading of ['tracks','events'])$(`${reading}-tab`).addEventListener('click',()=>{view.reading=reading;renderTracks();});
 $('people-toggle').addEventListener('click',()=>{const hidden=!$('people-panel').hidden;$('people-panel').hidden=hidden;$('people-toggle').setAttribute('aria-expanded',String(!hidden));$('people-toggle').textContent=hidden?'Show people':'Hide people';});
