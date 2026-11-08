@@ -7,7 +7,7 @@ import { mountRateControls } from './rate-controls.mjs';
 import { projectAssuranceConsequences } from './assurance-consequences.mjs';
 import { appendAssuranceBadges } from './assurance-badges.mjs';
 import { createSessionTracks } from './arrangement-surfaces.mjs';
-import { mountSubmitMirror, focusSubmitControl } from './rack-controls.mjs';
+import { mountRackHeader, focusSubmitControl } from './rack-controls.mjs';
 
 const FIELDS = Object.freeze(['label', 'ratePerHour', 'fundedHours', 'fundedMinutes']);
 const LABELS = Object.freeze({ label: 'Name', ratePerHour: 'Hourly rate', fundedHours: 'Funded hours', fundedMinutes: 'Funded minutes' });
@@ -39,13 +39,13 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
   const ratesRack = elements.roster.closest('.studio-people-rates');
   if (ratesRack) ratesRack.before(participation); else elements.roster.after(participation);
   if (ratesRack) ratesRack.append(elements.configure, elements.status);
-  const localHeading = document.createElement('div'); localHeading.className = 'studio-people-editor__heading';
-  const localTitle = document.createElement('h4'); localTitle.textContent = 'Person settings';
-  const localClose = document.createElement('button'); localClose.type = 'button'; localClose.textContent = 'Close';
-  localClose.dataset.personAction = 'close'; localClose.className = 'native-control--cancel';
-  const localTools = document.createElement('div'); localTools.className = 'studio-rack-editor__tools'; localTools.append(localClose);
-  localHeading.append(localTitle, localTools); elements.summary.after(localHeading);
-  const topApply = mountSubmitMirror(localTools, { before: localClose }); topApply.setSource(elements.apply);
+  const localHeader = mountRackHeader(elements.configure, { title: 'Person settings', owner: 'People',
+    closeAttribute: 'data-person-rack-close', applyAttribute: 'data-editor-apply',
+    onClose: event => { event.stopPropagation(); closeLocal(); } });
+  localHeader.element.classList.add('studio-people-editor__heading');
+  localHeader.close.dataset.personAction = 'close';
+  elements.summary.after(localHeader.element);
+  localHeader.update({ source: elements.apply });
   const inputs = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-configure] [name="${field}"]`)]));
   const errors = Object.fromEntries(FIELDS.map(field => [field, find(`[data-person-error="${field}"]`)]));
   const editing = sharedEditing ?? createDraftCoordinator(studio);
@@ -153,7 +153,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     for (const marker of elements.roster.querySelectorAll('[data-person-saved]')) marker.hidden = !parked.has(marker.dataset.personSaved);
     elements.configure.hidden = selectedId === null;
     elements.name.textContent = people.get(selectedId)?.label ?? 'Person unavailable';
-    localTitle.textContent = people.get(selectedId)?.label ?? 'Person settings';
+    localHeader.update({ title: people.get(selectedId)?.label ?? 'Person settings', source: elements.apply });
     elements.fieldset.disabled = view.status !== 'editing';
     elements.recovery.hidden = view.status !== 'stale';
     const currentPerson = people.get(selectedId);
@@ -260,6 +260,14 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     render();
   }
 
+  function closeLocal() {
+    if (disposed) return;
+      rateControls.release(); const epoch = ++generation; composing = false;
+      if (editing.read().active?.kind === 'person') editing.park();
+      elements.configure.open = false; onEditing();
+      if (owns(epoch) && onClose() !== true && owns(epoch)) elements.roster.querySelector(`[data-person-id="${selectedId}"]`)?.focus();
+  }
+
   function click(event) {
     if (disposed) return;
     const button = event.target.closest('button');
@@ -267,13 +275,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     const personId = button.dataset.personId ?? button.dataset.teamPersonId;
     if (personId) { select(personId); return; }
     const action = button.dataset.personAction;
-    if (action === 'close') {
-      rateControls.release(); const epoch = ++generation; composing = false;
-      if (editing.read().active?.kind === 'person') editing.park();
-      elements.configure.open = false; onEditing();
-      if (owns(epoch) && onClose() !== true && owns(epoch)) elements.roster.querySelector(`[data-person-id="${selectedId}"]`)?.focus();
-      return;
-    }
+    if (action === 'close') { closeLocal(); return; }
     if (action === 'review' || action === 'use-current' || action === 'discard') {
       const view = editor.read();
       if (!view.draft) return;
@@ -307,7 +309,7 @@ export function mountTeamPanel(root, { studio, editing: sharedEditing, isActive 
     if (active?.kind === 'person') retiredToken = active.token;
     releaseRetiredLease();
     rateControls.dispose();
-    topApply.dispose(); summaryPreview.remove(); localHeading.remove();
+    localHeader.dispose(); summaryPreview.remove();
     participation.remove();
     for (const release of cleanup) release();
     cleanup.length = 0;

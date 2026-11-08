@@ -6,7 +6,7 @@ keep distinct meanings even when they share a compact rack treatment.
 
 **Standing:** review candidate `0.1.0`; ID `vfc:support-matrix-stateful-pads`;
 dev receiving contract revised 8 November 2026 for
-[#828](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/828).
+[#832](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/832).
 Palette and shared controls inherit [Studio Rack Composition](README.md).
 `main` remains the approved reference until a human cues dev promotion.
 
@@ -16,7 +16,8 @@ Palette and shared controls inherit [Studio Rack Composition](README.md).
 | --- | --- |
 | Abilities | The What people can do and How the team works tables retain responsibility, preparation, review and observation columns. A cell opens one selected support module at the relevant section. |
 | People | The roster and team racks contain local editors. The contribution/session matrix and role-facet rail retain their own readings and existing stored responsibility values. |
-| Team planning | Delivery overview groups people, work and handoffs by phase. Shared sessions separately shows each person's participation in each session and remains visible while the Delivery working area edits a person, team or handoff. |
+| Delivery overview | Teams, work and handoffs share delivery-phase lanes. Lane creation keeps a new team or handoff in its local phase while Shared sessions remains an independent working area. |
+| Shared sessions | People and Handoffs tabs select the relationship shown by a checkbox matrix. Rows are accepted sessions; columns are people or handoffs. A row opens compact host-team and participant-order controls. Handoff headings open the canonical editor inside this module. |
 | Change and Quality | Compact track matrices select a component or quality concept; neighboring work lanes provide its support context. Quality's dark housing and clear pressed pads are the preferred aesthetic precedent for new selection matrices. |
 | Working sessions | Numbered pads select an occurrence. Period and subdivision choices place it; participant switches and explicit order controls apply to the session as a whole. |
 | Funding and Status | Named large radio pads place the selection control at the top left, beside a short label and hint. Persistent pressed state carries the choice. |
@@ -32,8 +33,8 @@ named scope; moving a pad preserves its identity and relationship meaning.
 | Selected for inspection | Pressed choice identifies the record; expanded state reports its visible receiver. |
 | Included in a proposal | Native checkbox or named toggle expresses inclusion. The proposal's Apply boundary remains clear. |
 | Included in accepted work | The accepted projection supplies the state. Team planning membership changes update it directly. |
-| Person participating | The named person/session intersection expresses participation. Selecting its pad inspects that session. |
-| Linked support | A named session or accessible pad identifies the supporting work. |
+| Person participating | The named person/session checkbox accepts participation directly. The final included person stays visibly selected and disabled, with a concise instruction to add another person first. |
+| Linked support | Shared sessions · Handoffs uses native checkbox pads to accept session support directly. Other support matrices retain their existing proposal boundary. |
 | Support to choose | Concise empty-state wording opens the corresponding local controls. |
 | Outside a card's definition | Not specified preserves the authored definition's scope. |
 | Recorded observation | Reviewer, context and revision distinguish the observation from an authored example. |
@@ -51,10 +52,10 @@ existing plan's temporal track appends a working session to that plan and retain
 its earlier placements. The horizon's period lanes and New plan row create
 distinct records and retain the All plans view. Shelf New plan deliberately loads
 its new cassette. Shared sessions creation uses accepted-person context; its
-existing person/session cells continue to represent participation.
+existing person/session cells change participation directly. This differs from the temporal meaning of a session track’s empty cell. Shared sessions maintains its own selected view and local return.
 
-People's Add person and Add team accept useful records and open their local
-editors. Abilities can add a person, team or supporting session from the selected
+People's Add person and Add team accept useful records with editing closed.
+Selecting the record opens its local editor. Abilities can add a person, team or supporting session from the selected
 module, then select it in the current proposal. Creation enters accepted history;
 Apply accepts its support assignment. Cancel restores the prior assignment while
 the newly created record remains available. The stable amp Undo uses that same
@@ -64,7 +65,7 @@ validation and return focus. The existing bottom row remains available.
 
 Membership toggles keep available cards mounted in place. Move up/down changes
 ordered IDs explicitly, with the shared keyed transition and focus on the moved
-person. The selected people currently receive the full session duration for
+person. Handoff supporting-work order uses the same keyed movement. The selected people currently receive the full session duration for
 every occurrence. A percentage fader remains scoped in
 [#798](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/798).
 The [inspection contract](contextual-inspection-recovery.md) owns local Close,
@@ -95,6 +96,7 @@ interaction analogy; human walkthrough evaluates whether it helps this visitor.
 | Route | Responsibility or observation |
 | --- | --- |
 | [Capability controller](../../collaboration/native-investment-studio/capability-controller.mjs), [capabilities](../../collaboration/native-investment-studio/capabilities.mjs) | Support-table meaning, one selected module and retained support proposal |
+| [Shared session rack](../../collaboration/native-investment-studio/shared-session-rack.mjs) | People/Handoffs tabs, direct relationship pads, last-person feedback and compact selected-row controls |
 | [Arrangement surfaces](../../collaboration/native-investment-studio/arrangement-surfaces.mjs), [delivery board](../../collaboration/native-investment-studio/delivery-board.mjs), [Team planning controller](../../collaboration/native-investment-studio/connection-template-controller.mjs) | Participation matrix, phase projection, independent modules and direct team membership |
 | [Team](../../collaboration/native-investment-studio/team-controller.mjs), [assembly](../../collaboration/native-investment-studio/assembly-controller.mjs), [rack creation](../../collaboration/native-investment-studio/rack-record-creation.mjs) owners | Local People editing and accepted record creation |
 | [Rack controls](../../collaboration/native-investment-studio/rack-controls.mjs), [reel control](../../collaboration/native-investment-studio/reel-control.mjs) | Selected/open cues, movement labels, keyed motion, Apply delegation and return identity |
@@ -107,6 +109,8 @@ operation check establishes that journey; visual inspection and human review
 supply the composition and interpretation observations.
 
 ## Supersession and next boundary
+
+#832 supersedes Shared sessions participation pads that opened a full session form. Native checkbox pads now change the named relation, while row selection and handoff-heading selection have distinct local receivers.
 
 This dev contract supersedes Abilities reverse/beside inspection modes, detached
 People editing as the primary route, and hiding Shared sessions during a Delivery

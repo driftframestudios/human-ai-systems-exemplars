@@ -237,3 +237,16 @@ test('unbound delivery teams follow their work stages and handoffs follow the re
   assert.equal(phases.find(phase => phase.connections.some(row => row.slotId === 'handoff')).id, 'deployment',
     'the template keeps its existing authored handoff phase');
 });
+
+test('receiver lane placement keeps newly added teams and handoffs in their creation phase', () => {
+  const plan = createShowcasePlan();
+  const team = { id:'new-team', label:'New team 1', personIds:[], lifecycle:'active' };
+  plan.teams.push(team);
+  const connection = { id:'new-handoff', senderTeamId:plan.teams[0].id, receiverTeamId:team.id, workIds:[], sharedObject:'New handoff 1' };
+  const arrangement = { teams:[{slotId:'custom-team:new-team', team}], connections:[{slotId:'custom-handoff:new-handoff',connection}] };
+  const placements = { team:new Map([[team.id,'maintenance']]), connection:new Map([[connection.id,'design']]) };
+  const phases = projectDeliveryBoard({arrangement,plan,placements});
+  assert.equal(phases.find(phase => phase.teams.some(row => row.team.id === team.id)).id,'maintenance');
+  assert.equal(phases.find(phase => phase.connections.some(row => row.connection.id === connection.id)).id,'design');
+  assert.equal(Object.hasOwn(team,'phaseId'),false,'placement stays with this receiver rather than adding an exported team field');
+});

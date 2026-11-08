@@ -48,6 +48,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "collaboration/native-investment-studio/shared-session-rack.mjs",
+      "projected_path": "collaboration/native-investment-studio/shared-session-rack.mjs",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "collaboration/native-investment-studio/arrangement-surfaces.mjs",
       "projected_path": "collaboration/native-investment-studio/arrangement-surfaces.mjs",
       "media_type": "text/javascript"

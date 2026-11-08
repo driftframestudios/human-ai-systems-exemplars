@@ -22,7 +22,7 @@ const LAYOUTS = Object.freeze({
 });
 const STAGE_PHASES = Object.freeze({ understand: 'planning', build: 'implementation', review: 'testing' });
 
-export function projectDeliveryBoard({ arrangement, plan }) {
+export function projectDeliveryBoard({ arrangement, plan, placements = {} }) {
   const phases = PHASES.map(phase => ({ ...phase, teams: [], connections: [], sessions: [] }));
   const byPhase = new Map(phases.map(phase => [phase.id, phase]));
   const teams = new Map(arrangement.teams.map(row => [row.slotId, row]));
@@ -47,11 +47,11 @@ export function projectDeliveryBoard({ arrangement, plan }) {
   for (const team of arrangement.teams) if (!includedTeams.has(team.slotId)) {
     // An unbound team follows its authored work stage when available. Other
     // teams use successive phases, keeping Planning from becoming a ledger.
-    const phase = byPhase.get(workPhases.get(team.team.id)) ?? phases[unbound % phases.length];
+    const phase = byPhase.get(placements.team?.get(team.team.id)) ?? byPhase.get(workPhases.get(team.team.id)) ?? phases[unbound % phases.length];
     unbound += 1; phase.teams.push(team); teamPhases.set(team.team.id, phase.id);
   }
   for (const row of arrangement.connections) {
-    const phase = byPhase.get(layout?.connections[row.slotId])
+    const phase = byPhase.get(placements.connection?.get(row.connection.id)) ?? byPhase.get(layout?.connections[row.slotId])
       ?? byPhase.get(teamPhases.get(row.connection.receiverTeamId)) ?? phases[0];
     phase.connections.push(row);
     for (const id of row.connection.workIds) if (!linkedPhases.has(id)) linkedPhases.set(id, phase.id);
@@ -66,7 +66,7 @@ export function projectDeliveryBoard({ arrangement, plan }) {
 // The receiver owns proposed records and edit routes. This view owns only its
 // phase focus and the return to the full delivery reading.
 export function createDeliveryBoard(document, { arrangement, plan, acceptedSessionIds,
-  acceptedTeamIds = new Set(), acceptedConnectionIds = new Set(), onNavigate, onSession, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
+  acceptedTeamIds = new Set(), acceptedConnectionIds = new Set(), onNavigate, onSession, onAdd, viewState = { phaseId: null, overviewScroll: 0, returnPhase: null } }) {
   const node = (tag, text, className) => {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -77,7 +77,7 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
     const control = node('button', label, className); control.type = 'button';
     control.addEventListener('click', action); return control;
   };
-  const phases = projectDeliveryBoard({ arrangement, plan });
+  const phases = projectDeliveryBoard({ arrangement, plan, placements: viewState.placements });
   const people = new Map(plan.people.map(person => [person.id, person]));
   const teamNames = new Map(plan.teams.map(team => [team.id, team.label]));
   const root = node('section', undefined, 'studio-delivery'); root.dataset.deliveryTemplate = arrangement.templateId;
@@ -197,7 +197,16 @@ export function createDeliveryBoard(document, { arrangement, plan, acceptedSessi
       }
       content.append(group);
     }
-    lane.append(content); board.append(lane); columns.set(phase.id, lane); phaseKeys.set(phase.id, key);
+    if (onAdd) {
+      const actions = node('div', undefined, 'studio-delivery__add');
+      for (const [kind, label] of [['team', 'Add team'], ['connection', 'Add handoff']]) {
+        const add = button(label, 'native-control--create studio-rack-add', event => onAdd(kind, phase.id, event.currentTarget));
+        add.dataset.studioEntryKey = `delivery-add:${phase.id}:${kind}`;
+        add.setAttribute('aria-label', `${label} in ${phase.label}`); actions.append(add);
+      }
+      lane.append(content, actions);
+    } else lane.append(content);
+    board.append(lane); columns.set(phase.id, lane); phaseKeys.set(phase.id, key);
   }
   selectPhase(columns.has(viewState.phaseId) ? viewState.phaseId : null, { focus: false });
   return root;

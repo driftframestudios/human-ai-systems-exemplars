@@ -30,7 +30,7 @@ changes the accepted horizon and enters amp Undo history.
 | Period board | Sprint/quarter lanes; grouped work clips or individual sessions at detail scope | Work and its occurrence context |
 | Session tracks | Periods or weeks/months; each plan's occurrence pads | A particular working session, with a separate plus target for another |
 | Delivery overview | Planning, Design, Implementation, Testing, Deployment, Maintenance | An authored phase grouping of people, work and handoffs |
-| Shared sessions | People columns against shared work rows | Participation, separate from temporal placement |
+| Shared sessions | People or handoff columns against shared work rows | Direct participation/support links, separate from temporal placement |
 
 Period position expresses an authored arrangement; duration and participant
 effort keep their own units. Funding, paused state and relationship markers
@@ -103,15 +103,18 @@ presentation and keeps its Delivery overview return in view.
 
 Selecting a team opens its name, stable membership pads and reorder controls
 inside the delivery working area. Person and handoff forms use that local area.
-Shared sessions stays visible as an independent participation module. A handoff
+Shared sessions stays visible as an independent module with People/Handoffs
+checkbox matrices. Row selection opens compact host and participant-order
+controls locally. Handoff headings open their canonical form inside this module.
+Owner/current headers keep the return route visible; direct edits show Saved. A handoff
 can create a team there and return to the retained handoff at the requested field.
 Shared-session Add entries carry accepted-person context into the same creation
 owner. Ordinary field proposals retain Apply; Coordination team name, membership
 and order accept directly.
 
-The horizon's handoff editor asks for From work, To work and an optional Team
-connection. A fresh draft presents its creation fields, acceptance, Cancel and
-Close. An accepted stage/handoff can then carry decisions or delays. Existing
+The horizon adds a default handoff between available work records with details
+closed. Selecting it opens From work, To work and an optional Team connection.
+An accepted stage/handoff can carry decisions or delays. Existing
 relationship removal sits in the bottom-right action position. The handoff
 omits a cost preview that does not help choose its endpoints.
 

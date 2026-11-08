@@ -5,9 +5,9 @@ import { money } from './display.mjs';
 import { createArrangementReading } from './connection-view.mjs';
 import { getCoordinationTemplate, projectCoordinationArrangements } from './coordination-arrangements.mjs';
 import { createReel, revealReelResult, animateRackChange } from './reel-control.mjs';
-import { createSessionTracks } from './arrangement-surfaces.mjs';
+import { mountSharedSessionRack } from './shared-session-rack.mjs';
 import { createDeliveryBoard } from './delivery-board.mjs';
-import { syncReorderButtons } from './rack-controls.mjs';
+import { syncReorderButtons, mountRackHeader } from './rack-controls.mjs';
 
 const INSTANCES = new WeakMap();
 const TEMPLATES = listCoordinationTemplates();
@@ -36,7 +36,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   let disposed = false, acknowledged = false, generation = 0, rawRevision = 0, configuration, proposal = null;
   let arrangementId = null, dirty = false, committing = false, undoProjection = null;
   let projection = studio.read();
-  const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null };
+  const deliveryView = { phaseId: null, overviewScroll: 0, returnPhase: null, placements: { team: new Map(), connection: new Map() } };
   let selectedTeamId = null, memberOrder = [], previousMemberIds = null, teamReturnKey = null, teamReturnPhase = null, teamReturn = null;
   const configurations = new Map();
   const form = document.createElement('div'); form.className = 'native-connection-template__form';
@@ -53,27 +53,29 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   const amountLabel = element('dt', 'Included work');
   const amount = element('output'); amount.dataset.templateTotal = '';
   const amountValue = element('dd'); amountValue.append(amount); readout.append(amountLabel, amountValue);
-  const rackActions = element('div', undefined, 'native-coordination__actions');
-  const addTeam = button('Add team', 'create-team'), addHandoff = button('Add handoff', 'create-connection');
-  for (const control of [addTeam, addHandoff]) {
-    control.className = 'native-control--create';
-    control.dataset.studioEntryKey = `team-rack:${control.dataset.templateAction}`;
-  }
-  rackActions.append(addTeam, addHandoff);
-  rackHeading.append(rackTitle, readout, rackActions);
+  rackHeading.append(rackTitle, readout);
   const rackBody = element('div', undefined, 'studio-team-rack__body');
   const boardSlot = element('div'); boardSlot.dataset.teamRackBoard = '';
   const editorSlot = element('div'); editorSlot.dataset.teamRackEditor = '';
   const teamEditor = element('section', undefined, 'studio-team-rack__record'); teamEditor.dataset.teamRackRecord = '';
-  const teamScope = element('header', undefined, 'studio-team-rack__record-scope');
-  const teamBack = button('← Delivery overview', 'team-back'); teamBack.className = 'studio-delivery__return';
-  const teamTitle = element('h5', 'Team settings'); teamTitle.id = `${instance}-team-title`;
-  teamEditor.setAttribute('aria-labelledby', teamTitle.id); teamScope.append(teamBack, teamTitle);
+  const teamHeader = mountRackHeader(teamEditor, { title: 'Team settings', owner: 'Delivery overview',
+    id: `${instance}-team-title`, onClose: closeTeam });
+  const teamBack = teamHeader.parent; teamBack.dataset.templateAction = 'team-back';
+  teamEditor.setAttribute('aria-labelledby', teamHeader.title.id);
   const teamFields = element('div', undefined, 'studio-team-rack__record-fields');
   let teamFieldsSignature = null;
-  teamEditor.append(teamScope, teamFields);
+  teamEditor.append(teamFields);
   rackBody.append(boardSlot, editorSlot);
   delivery.append(rackHeading, rackBody);
+  const shared = mountSharedSessionRack(rackBody, {
+    onCommand(command, message) {
+      return active(canOpen) && (active() || open()) && directCommand(command, message);
+    },
+    onNavigate: navigate,
+    onCreate: (kind, context, source) => navigate({ kind: `create-${kind}`, ...context }, source),
+    onCloseEditor() { if (shared.editorSlot.querySelector('.studio-rack-editor:not([hidden])'))
+      shared.editorSlot.querySelector('[data-rack-editor-close]')?.click(); },
+  });
   const reel = createReel(document, { label: 'Team arrangement', choices: TEMPLATES, value: TEMPLATES[0].id,
     onSelect(id) {
       if (!active(canOpen) || (!active() && !open())) return;
@@ -205,12 +207,13 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!owns(epoch)) return false;
     if (!result.ok) { announce(result.error.message); return false; }
     refresh(true); onAccepted(result.projection);
-    if (owns(epoch)) announce(message);
+    if (owns(epoch)) { announce(message); if (selectedTeamId) teamHeader.update({ title: projection.state.teams.find(row => row.id === selectedTeamId)?.label ?? 'Team settings', owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Saved' }); }
     return true;
   }
   function renderTeam() {
     const team = projection.state.teams.find(row => row.id === selectedTeamId);
     if (!team) { selectedTeamId = null; return false; }
+    teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Saved' });
     const signature = JSON.stringify([team.id, team.personIds, projection.state.people.map(person => [person.id, person.label])]);
     if (signature === teamFieldsSignature) {
       teamFields.querySelector('[data-team-rack-name]').value = team.label;
@@ -219,10 +222,12 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     teamFieldsSignature = signature;
     const label = element('label', 'Team name');
     const name = element('input'); name.value = team.label; name.dataset.teamRackName = '';
+    name.addEventListener('input', () => teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Editing name' }));
     name.addEventListener('change', () => {
       const current = studio.read().state.teams.find(row => row.id === team.id);
-      if (current) directCommand({ type: 'team.update', teamId: team.id,
-        team: { ...current, label: name.value.trim() } }, 'Team name updated. Undo is available.');
+      if (current && !directCommand({ type: 'team.update', teamId: team.id,
+        team: { ...current, label: name.value.trim() } }, 'Team name updated. Undo is available.'))
+        teamHeader.update({ title: team.label, owner: teamReturn ? 'Handoff settings' : 'Delivery overview', saved: 'Check team name' });
     });
     label.append(name);
     const members = element('fieldset', undefined, 'studio-team-members');
@@ -291,7 +296,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const source = [...panel.querySelectorAll('[data-studio-entry-key]')]
       .find(node => node.dataset.studioEntryKey === teamReturnKey
         && (node.closest('[data-delivery-phase]')?.dataset.deliveryPhase ?? null) === teamReturnPhase);
-    (source ?? addTeam).focus({ preventScroll: true });
+    (source ?? panel.querySelector('[data-delivery-open]'))?.focus({ preventScroll: true });
   }
   function renderStructure() {
     const focused = document.activeElement;
@@ -373,15 +378,11 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     const board = createDeliveryBoard(document, { arrangement: rackArrangement, plan: previewPlan, acceptedSessionIds,
       acceptedTeamIds: new Set(projection.state.teams.map(team => team.id)),
       acceptedConnectionIds: new Set(projection.state.connections.map(connection => connection.id)),
-      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView });
+      onNavigate: inspectTemplate, onSession: inspectSession, viewState: deliveryView,
+      onAdd(kind, deliveryPhase, source) { navigate({ kind: `create-${kind}`, deliveryPhase }, source); } });
     const nextBoard = renderTeam() ? teamEditor : board;
     if (boardSlot.firstElementChild !== nextBoard) boardSlot.replaceChildren(nextBoard);
-    const nextTracks = createSessionTracks(document, { plan: previewPlan, onSession: inspectSession,
-      sessionIds: acceptedSessionIds, acceptedPersonIds: new Set(projection.state.people.map(person => person.id)),
-      onAdd: (context, source) => navigate({ kind: 'create-session', ...context }, source), label: 'Shared sessions · people who take part' });
-    const currentTracks = rackBody.querySelector(':scope > .studio-session-tracks');
-    if (currentTracks) currentTracks.replaceWith(nextTracks);
-    else rackBody.append(nextTracks);
+    shared.update(projection.state);
     const boardScroller = rackBody.querySelector('.studio-delivery__board');
     if (boardScroller && deliveryView.phaseId === null) boardScroller.scrollLeft = deliveryView.overviewScroll;
     if (boardScroller && focusKey) {
@@ -545,7 +546,7 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
   function dispose() {
     if (disposed) return;
     disposed = true; generation += 1; proposal = null; configuration = null;
-    cleanup.forEach(remove => remove()); reel.dispose();
+    cleanup.forEach(remove => remove()); reel.dispose(); shared.dispose(); teamHeader.dispose();
     body.replaceChildren(); status.textContent = ''; if (disclosure) panel.open = false; panel.hidden = true; INSTANCES.delete(panel);
   }
   if (disclosure) listen(panel, 'toggle', () => {
@@ -569,22 +570,19 @@ export function mountConnectionTemplatePanel(root, { studio, editing, onBegin = 
     if (!owns(focusedAt) || !active()) return;
     switch (target.dataset.templateAction) {
       case 'apply': apply(); break;
-      case 'team-back': closeTeam(); break;
+      case 'team-back': break;
       case 'undo': undo(); break;
       case 'preserve': if (fresh(proposal)) commit({ preserveShared: true }); break;
       case 'cancel':
         dirty = false; receiveAccepted(); retirePreview(); build(); announce('Current arrangement retained.'); break;
-      case 'create-team': navigate({ kind: 'create-team' }, target); break;
-      case 'create-connection': {
-        const teams = currentArrangement()?.teams.map(binding => binding.team) ?? projection.state.teams;
-        navigate({ kind: 'create-connection', senderTeamId: teams[0]?.id, receiverTeamId: teams[1]?.id ?? teams[0]?.id }, target);
-        break;
-      }
     }
   });
   configuration = startingConfiguration(TEMPLATES[0]); receiveAccepted(); build(); retirePreview(); panel.hidden = false;
   if (disclosure && exposed) panel.open = true;
   const controller = Object.freeze({ open, resume: open, close, detach, settleText, openTeam, setEditorOpen,
+    recordCreated(kind, id, context) {
+      if (deliveryView.placements[kind] && context?.deliveryPhase) deliveryView.placements[kind].set(id, context.deliveryPhase);
+    },
     isTeamOpen: () => selectedTeamId !== null && teamEditor.isConnected,
     focus() { if (!disposed) reel.element.querySelector('[data-reel-choice][aria-pressed="true"]')?.focus(); },
     isOpen: () => !disposed && (disclosure ? panel.open : acknowledged), render: refresh, dispose });
