@@ -361,7 +361,7 @@ for (const engine of names) {
     await action(page, 'person-remove').click(); await apply(page).click();
     await expect(total(page)).toHaveText('$1,200.00');
     await tab(page, 'investment').click();
-    await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(total(page)).toHaveText('$1,450.50');
     assert.equal(await page.evaluate(id => window.assemblyFixture.studio.read().state.people.some(row => row.id === id), adaId), true);
   });

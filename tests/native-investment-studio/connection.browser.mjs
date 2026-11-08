@@ -100,10 +100,10 @@ for (const engine of names) {
     const personId = await page.evaluate(() => window.connectionFixture.studio.read().state.people.find(row => row.label === 'Taylor').id);
     await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
     await root(page).locator('[data-native-chapter="investment"]').click();
-    await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(root(page).locator('[data-native-return-note]')).toContainText('outside the current plan');
     await expect(root(page).locator('[data-native-return-team]')).toBeHidden();
-    await root(page).locator('[data-investment-action="redo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="redo"]').click();
     await expect(root(page).locator('[data-native-return-note]')).toContainText('Include them in Receiving team');
     await root(page).locator('[data-native-return-team]').click();
     await expect(assembly.locator(`[data-assembly-member="${personId}"]`)).toBeChecked();

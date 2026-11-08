@@ -4,7 +4,7 @@ Let visitors load a financial comparison, turn a reel or dial, and see what
 changes. A cassette identifies the comparison; a compact loaded rack connects
 its assumptions, cash or capacity reading and alternative choices.
 
-**Standing:** approved reference specimen, version `0.1.2`, ID
+**Standing:** approved reference specimen, version `0.1.3`, ID
 `vfc:investment-master-reels`; 8 November 2026, receiving
 [#809](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/809).
 This contract extends the [Chapter Workbench Study](chapter-workbench-study.md).
@@ -43,6 +43,31 @@ dark-rack art, zoetrope styling and inset time/money readouts; the workbench
 supplies compact scale, module arrangement and direct operations. The human
 chooses deliberate changes to the received art. The reference stays available
 beside those changes rather than silently following a redesigned runtime.
+
+## Showcase receiving composition
+
+Issue #813 adopts the VHS-C face and shelf on `dev`, with the shared
+[`tape-picker.mjs`](../../collaboration/native-investment-studio/tape-picker.mjs)
+and [`studio-tapes.css`](../../context-canvas-project-surface/context-canvas/styles/routes/studio-tapes.css)
+owners. Its first three decks are fixed navigation groups: Plan investment
+reads accepted costs, Compare a change retains baseline/history, and Keep a plan
+retains replacement previews, files and reports. Their panels stay mounted while
+deck selection changes visibility. A selection leaves accepted pricing and pending
+previews with their existing owners.
+
+The four cost readings use a dark loaded rack and chocolate Extra work companion.
+Existing detailed forms and reports keep their light reading surfaces and dark
+text. Shelf titles and direct loaded-rack headings remain light. The body retains
+its internal grip, large left reel and deep extrusion. Stable outer keys keep
+focus while the faces move. Rem-based shelf widths preserve the normal 16px
+reference geometry and accommodate enlarged text; phone shelves scroll locally.
+
+The independent financial deck types, add/remove-copy behavior and connected
+assumption reels below describe the preserved planning specimen. Their Showcase
+model adoption is a separate receiving task in
+[#818](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/818).
+This distinguishes an adopted visual picker from an independently owned financial
+comparison. A future receiving increment updates that boundary deliberately.
 
 ## Load a comparison from the shelf
 

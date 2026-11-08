@@ -2,6 +2,13 @@ import { createPlanExchange } from './exchange.mjs';
 import { listPresets } from './presets.mjs';
 import { money } from './display.mjs';
 import { createDownloadOwner } from './browser-download.mjs';
+import { createTapePicker } from './tape-picker.mjs';
+
+const DECKS = Object.freeze([
+  { id: 'plan', title: 'Plan investment', eyebrow: 'Accepted plan', detail: 'Staffing and shared work' },
+  { id: 'compare', title: 'Compare a change', eyebrow: 'Baseline comparison', detail: 'Save, change and recover' },
+  { id: 'exchange', title: 'Keep a plan', eyebrow: 'Plans and reports', detail: 'Open, replace or download' },
+]);
 
 export function mountInvestmentPanel(root, { studio, editing, onChange }) {
   const document = root.ownerDocument;
@@ -16,6 +23,52 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
   let projection = null, baseline = null, renderedPreview = null;
   let disposed = false, fileSelection = 0;
   const downloads = createDownloadOwner(root);
+  const shelf = get('deck-shelf');
+  const panels = new Map([...root.querySelectorAll('[data-investment-deck-panel]')]
+    .map(panel => [panel.dataset.investmentDeckPanel, panel]));
+  let selectedDeck = 'plan';
+
+  function selectDeck(id) {
+    if (disposed || !panels.has(id)) return;
+    selectedDeck = id;
+    for (const [key, panel] of panels) panel.hidden = key !== id;
+    for (const button of shelf.querySelectorAll('[data-investment-deck]'))
+      button.setAttribute('aria-pressed', String(button.dataset.investmentDeck === id));
+    get('loaded').dataset.investmentLoadedDeck = id;
+  }
+  function renderReadings(host, rows) {
+    host.replaceChildren(...rows.map(([label, value]) => {
+      const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;
+    }));
+  }
+  function refreshDecks() {
+    const result = projection.result;
+    const oldShelf = shelf.querySelector('.studio-tape-shelf');
+    const scroll = { left: oldShelf?.scrollLeft ?? 0, top: oldShelf?.scrollTop ?? 0 };
+    const focusedId = shelf.contains(document.activeElement) ? document.activeElement.dataset.investmentDeck : null;
+    const amounts = {
+      plan: money(result.knownCommitmentCents),
+      compare: baseline ? money(result.knownCommitmentCents - baseline.projection.result.knownCommitmentCents) : 'Set a baseline',
+      exchange: 'Current plan',
+    };
+    const entries = DECKS.map(deck => ({ ...deck, amount: amounts[deck.id],
+      ...(deck.id === 'plan' && result.plannedCommitmentCents === null ? { eyebrow: 'Known plan cost' } : {}),
+      ...(deck.id === 'compare' && baseline ? { detail: result.plannedCommitmentCents === null || baseline.projection.result.plannedCommitmentCents === null ? 'Change in known amount' : 'Change from baseline' } : {}),
+      attributes: { 'data-investment-deck': deck.id, 'aria-controls': `native-investment-deck-${deck.id}` } }));
+    shelf.replaceChildren(createTapePicker(document, { variant: 'investment', label: 'Investment decks',
+      entries, selectedId: selectedDeck, onSelect: selectDeck }));
+    renderReadings(get('plan-readings'), [
+      [result.plannedCommitmentCents === null ? 'Known total' : 'Accepted investment', money(result.knownCommitmentCents)],
+      ['Staffing', money(result.fundedKnownCents)],
+      ['Extra work', money(result.additionalKnownCents)],
+      ['Included in staffing', money(result.allocatedKnownCents)],
+    ]);
+    selectDeck(selectedDeck);
+    const nextShelf = shelf.querySelector('.studio-tape-shelf');
+    nextShelf.scrollLeft = scroll.left; nextShelf.scrollTop = scroll.top;
+    if (focusedId) shelf.querySelector(`[data-investment-deck="${focusedId}"]`)?.focus({ preventScroll: true });
+  }
 
   function listen(element, name, callback) {
     element.addEventListener(name, callback);
@@ -32,6 +85,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     refresh();
     announce(result.ok ? 'Review the replacement example, then use this plan.' : result.error.message);
     if (result.ok) {
+      selectDeck('exchange');
       const destination = root.querySelector('#native-plan-preview-title');
       destination.scrollIntoView({ block: 'start' }); destination.focus({ preventScroll: true });
     }
@@ -62,6 +116,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     buttons.restore.disabled = baseline === null;
     buttons.baseline.textContent = baseline ? 'Replace baseline' : 'Save baseline';
     if (changed) {
+      refreshDecks();
       const rows = [
         [projection.result.plannedCommitmentCents === null ? 'Current known total' : 'Current total', money(projection.result.knownCommitmentCents)],
         [baseline?.projection.result.plannedCommitmentCents === null ? 'Baseline known total' : 'Baseline total', baseline ? money(baseline.projection.result.knownCommitmentCents) : 'Save a baseline to compare'],
@@ -70,10 +125,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
         projection.result.plannedCommitmentCents !== null && baseline.projection.result.plannedCommitmentCents !== null ? 'Change' : 'Change in known amount',
         money(projection.result.knownCommitmentCents - baseline.projection.result.knownCommitmentCents),
       ]);
-      comparison.replaceChildren(...rows.map(([label, value]) => {
-        const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
-        dt.textContent = label; dd.textContent = value; row.append(dt, dd); return row;
-      }));
+      renderReadings(comparison, rows);
     }
     const view = exchange.read();
     previewElement.hidden = view.preview === null;
@@ -130,7 +182,7 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
       refreshAll();
       if (disposed) return;
       announce(result.ok ? 'Plan updated. Undo restores the previous plan.' : result.error.message);
-      if (result.ok) buttons.undo.focus({ preventScroll: true });
+      if (result.ok) { selectDeck('compare'); buttons.undo.focus({ preventScroll: true }); }
     }
   });
   listen(file, 'change', async () => {
@@ -145,10 +197,10 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     if (disposed || selection !== fileSelection) return;
     refresh();
     announce(result.ok ? 'Review the changes, then use this plan.' : result.error.message);
-    if (result.ok) root.querySelector('#native-plan-preview-title').focus({ preventScroll: true });
+    if (result.ok) { selectDeck('exchange'); root.querySelector('#native-plan-preview-title').focus({ preventScroll: true }); }
   });
   refresh();
-  return Object.freeze({ refresh, previewPreset, dispose() {
+  return Object.freeze({ refresh, previewPreset, selectDeck, dispose() {
     if (disposed) return;
     disposed = true; fileSelection += 1;
     for (const release of cleanup) release();
@@ -157,5 +209,8 @@ export function mountInvestmentPanel(root, { studio, editing, onChange }) {
     select.replaceChildren();
     for (const button of Object.values(buttons)) button.disabled = true;
     file.disabled = true;
+    shelf.replaceChildren();
+    for (const panel of panels.values()) panel.hidden = false;
+    delete get('loaded').dataset.investmentLoadedDeck;
   } });
 }

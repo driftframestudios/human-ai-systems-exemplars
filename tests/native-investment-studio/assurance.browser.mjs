@@ -101,7 +101,7 @@ for (const engine of names) {
     await field(page, 'proposal.label').fill('Check the release access rules');
     assert.equal(await bytes(page), accepted);
     await action(page, 'cancel').click(); assert.equal(await bytes(page), accepted);
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
     await tab(page, 'assurance').click();
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1100 });
@@ -119,7 +119,7 @@ for (const engine of names) {
   test(`${engine}: recovery work previews its people and $100 before Apply, baseline comparison and Undo`, { timeout: 60000 }, async t => {
     const page = await open(t, engine), initial = await bytes(page);
     await expect(total(page)).toHaveText('$3,980.00');
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'assurance').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="baseline"]').click(); await tab(page, 'assurance').click();
     await panel(page).getByRole('button', { name: 'Recovery events and learning work', exact: true }).click(); await action(page, 'add-event').click();
     const event = panel(page).locator('[data-assurance-event="event-1"]');
     await field(page, 'event.event-1.label').fill('Recover the interrupted request');
@@ -208,7 +208,7 @@ for (const engine of names) {
     await expect(root(page).locator('[data-native-session-editor] [data-action="apply"]')).toBeDisabled();
     await dependencies.locator('[data-native-open-assurance]').click(); await expect(panel(page)).toBeVisible();
     await tab(page, 'investment').click(); await expect(root(page).locator('[data-investment-comparison]')).toContainText('Change$100.00');
-    await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); assert.equal(await bytes(page), initial);
     await tab(page, 'assurance').click(); if (await action(page, 'current').isVisible()) await action(page, 'current').click();
     await panel(page).getByRole('button', { name: 'Quality illustration', exact: true }).click();
     await panel(page).locator('[data-assurance-assumptions] > summary').click();
@@ -292,7 +292,7 @@ for (const engine of names) {
     if (!await field(page, 'rehearsal.rehearsal-1.context').isVisible()) await recoveryResponse.getByText('Edit this example', { exact: true }).click();
     await field(page, 'rehearsal.rehearsal-1.context').fill('Observe a failed restart');
     await action(page, 'apply').click();
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click(); await tab(page, 'assurance').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click(); await tab(page, 'assurance').click();
     if (await action(page, 'current').isVisible()) await action(page, 'current').click();
     await selectScenario(page, 'specialist-unavailable'); await scenario('specialist-unavailable').locator('[data-assurance-action="rehearse"]').click();
     const specialistResponse = scenario('specialist-unavailable').locator('[data-assurance-rehearsal="rehearsal-1"]');

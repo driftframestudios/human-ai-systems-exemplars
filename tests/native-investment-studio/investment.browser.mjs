@@ -41,6 +41,11 @@ const field = (page, name) => purpose(page).locator(`[name="${name}"]`);
 const chapter = (page, name) => root(page).locator(`[data-native-chapter="${name}"]`);
 const investment = page => root(page).locator('[data-native-chapter-panel="investment"]');
 const action = (page, name) => investment(page).locator(`[data-investment-action="${name}"]`);
+const loadDeck = (page, id) => investment(page).locator(`[data-investment-deck="${id}"]`).click();
+async function performAction(page, name) {
+  await loadDeck(page, ['undo', 'redo', 'baseline', 'restore'].includes(name) ? 'compare' : 'exchange');
+  await action(page, name).click();
+}
 const total = page => root(page).locator('[data-native-total]');
 const work = (page, name) => root(page).locator(`[data-native-configure] input[name="${name}"]`);
 const frame = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -92,7 +97,7 @@ async function openSession(page) {
 
 async function downloadText(page) {
   const pending = page.waitForEvent('download');
-  await action(page, 'download').click();
+  await performAction(page, 'download');
   const download = await pending;
   assert.equal(download.suggestedFilename(), 'investment-plan.json');
   const stream = await download.createReadStream();
@@ -123,7 +128,7 @@ async function containment(page) {
         return observations;
       }),
     controls: [...element.querySelectorAll('[data-amp-panel], .native-purpose :is(textarea,button,label,summary,p,dt,dd), .native-investment :is(button,input,select,label,p,h3,h4,dt,dd,li)')]
-      .filter(node => node.getClientRects().length && !node.closest('[hidden]'))
+      .filter(node => node.getClientRects().length && !node.closest('[hidden], .studio-tape-shelf'))
       .map(node => {
         const box = node.getBoundingClientRect();
         return { tag: node.localName, text: node.textContent.slice(0, 80), left: box.left, right: box.right };
@@ -139,19 +144,86 @@ async function containment(page) {
 }
 
 for (const engine of names) {
+  test(`${engine}: Investment decks preserve accepted pricing and a pending plan while changing the loaded view`, { timeout: 45000 }, async t => {
+    const page = await open(t, engine);
+    const initial = await bytes(page);
+    await chapter(page, 'investment').click();
+    const shelf = investment(page).locator('[data-investment-deck-shelf]');
+    const panel = id => investment(page).locator(`[data-investment-deck-panel="${id}"]`);
+    await expect(shelf.locator('[data-investment-deck]')).toHaveCount(3);
+    await expect(shelf.locator('[data-investment-deck="plan"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(panel('plan')).toBeVisible();
+    await expect(panel('plan').locator('[data-investment-plan-readings]')).toContainText('Accepted investment$1,200.00');
+    await expect(panel('compare')).toBeHidden();
+    const planKey = shelf.locator('[data-investment-deck="plan"]');
+    await planKey.hover();
+    const restingBox = await planKey.boundingBox();
+    await page.mouse.down();
+    try {
+      assert.equal(await planKey.locator('.studio-tape-face__title').evaluate(node => getComputedStyle(node).color),
+        'rgb(248, 241, 217)', 'the pressed VHS-C title keeps its light ink against the dark body');
+      assert.deepEqual(await planKey.boundingBox(), restingBox, 'the illustrated face moves within a stationary hit target');
+    } finally { await page.mouse.up(); }
+    await shelf.locator('[data-investment-deck="compare"]').focus();
+    await page.keyboard.press('Enter');
+    await expect(panel('compare')).toBeVisible();
+    await expect(panel('plan')).toBeHidden();
+    await performAction(page, 'baseline');
+    assert.equal(await bytes(page), initial, 'loading a deck and saving a baseline preserve accepted work and pricing');
+    await loadDeck(page, 'exchange');
+    await investment(page).locator('[data-investment-preset]').selectOption('discovery-alignment');
+    await performAction(page, 'preset');
+    await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $2,030.00');
+    await loadDeck(page, 'plan');
+    await expect(investment(page).locator('[data-investment-preview]')).toBeHidden();
+    await loadDeck(page, 'exchange');
+    await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $2,030.00');
+    assert.equal(await bytes(page), initial, 'deck navigation retains the proposed replacement without accepting it');
+    await performAction(page, 'apply');
+    await expect(panel('compare')).toBeVisible();
+    await expect(action(page, 'undo')).toBeFocused();
+    await expect(shelf.locator('[data-investment-deck="plan"]')).toContainText('$2,030.00');
+    await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Change$830.00');
+    await performAction(page, 'undo');
+    assert.equal(await bytes(page), initial);
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await loadDeck(page, 'plan');
+      await investment(page).scrollIntoViewIfNeeded();
+      const geometry = await investment(page).evaluate(element => {
+        const library = element.querySelector('.studio-tape-shelf');
+        return { page: document.documentElement.scrollWidth, viewport: innerWidth,
+          shelf: library.clientWidth, content: library.scrollWidth,
+          direction: getComputedStyle(library).display };
+      });
+      assert.ok(geometry.page <= geometry.viewport + 1, 'the local shelf preserves the page width');
+      if (width === 390) assert.ok(geometry.content > geometry.shelf, 'ordinary phones retain a horizontal deck shelf');
+      await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-decks.png`) });
+      for (const id of ['compare', 'exchange']) {
+        await loadDeck(page, id);
+        await panel(id).scrollIntoViewIfNeeded();
+        await expect(panel(id)).toBeVisible();
+        await page.screenshot({ path: resolve(captures, `${engine}-${width}-investment-${id}.png`) });
+      }
+    }
+    await page.emulateMedia({ forcedColors: 'active' });
+    await expect(shelf.locator('.studio-tape-face__reels').first()).toHaveCSS('display', 'none');
+  });
   test(`${engine}: scenario report and collaboration brief carry accepted values while a purpose draft stays saved`, { timeout: 45000 }, async t => {
     const page = await open(t, engine);
     await page.setViewportSize({ width: 390, height: 844 });
     await chapter(page, 'investment').click();
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-preset]').selectOption('discovery-alignment');
-    await action(page, 'preset').click();
+    await performAction(page, 'preset');
     await expect(total(page)).toHaveText('$1,200.00');
-    await action(page, 'apply').click();
+    await performAction(page, 'apply');
     await expect(total(page)).toHaveText('$2,030.00');
     const accepted = await bytes(page);
     await amp(page, 'purpose').click(); await editPurpose(page);
     await field(page, 'changedAbility').fill('Unfinished visitor purpose');
     await chapter(page, 'investment').click();
+    await loadDeck(page, 'exchange');
     const reports = investment(page).locator('[data-studio-reports]');
     const reportButton = reports.getByRole('button', { name: 'Download report', exact: true });
     await page.evaluate(() => {
@@ -255,7 +327,7 @@ for (const engine of names) {
     await expect(score.locator('[data-cadence-basis][value="sprint"]')).toBeChecked();
     await expect(total(page)).toHaveText('$3,980.00');
     await expect(work(page, 'occurrences')).toHaveValue('4');
-    await chapter(page, 'investment').click(); await action(page, 'baseline').click();
+    await chapter(page, 'investment').click(); await performAction(page, 'baseline');
     await chapter(page, 'coordination').click(); await reviewSession();
     await work(page, 'minutesPerSession').fill('45');
     await expect(root(page).locator('[data-native-preview-total]')).toHaveText('$4,350.00');
@@ -275,9 +347,9 @@ for (const engine of names) {
     assert.equal(accepted.planId, 'service-request-pilot');
     assert.deepEqual(accepted.work.find(row => row.id === 'review').personIds, ['maya', 'ari', 'noor']);
     assert.equal(accepted.work.find(row => row.id === 'review').minutesPerOccurrence, 45);
-    await action(page, 'undo').click();
+    await performAction(page, 'undo');
     await expect(total(page)).toHaveText('$3,980.00');
-    await action(page, 'redo').click();
+    await performAction(page, 'redo');
     await expect(total(page)).toHaveText('$4,350.00');
     await chapter(page, 'coordination').click();
     await readiness();
@@ -297,37 +369,40 @@ for (const engine of names) {
     const page = await open(t, engine);
     const before = await bytes(page);
     await chapter(page, 'investment').click();
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-preset]').selectOption('service-request-pilot');
-    await action(page, 'preset').click();
+    await performAction(page, 'preset');
     const changes = investment(page).locator('[data-investment-changes]');
     await expect(changes).toContainText('Service request pilot');
     await expect(changes).toContainText('4 sprints.');
     await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     await expect(changes.locator('li')).toHaveCount(0);
     assert.equal(await bytes(page), before);
-    await action(page, 'apply').click();
+    await performAction(page, 'apply');
     await expect(total(page)).toHaveText('$3,980.00');
     const pilot = await bytes(page), revised = JSON.parse(pilot);
     revised.contributions[0].receiverPersonId = 'noor';
     revised.connections.find(row => row.id === 'readiness').status = 'paused';
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'review-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(revised)) });
     await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     await expect(action(page, 'apply')).toBeEnabled();
     assert.equal(await bytes(page), pilot);
-    await action(page, 'clear').click();
+    await performAction(page, 'clear');
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-preset]').selectOption('shared-working-sessions');
-    await action(page, 'preset').click();
+    await performAction(page, 'preset');
     await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     assert.equal(await bytes(page), pilot);
     await expect(total(page)).toHaveText('$3,980.00');
-    await action(page, 'clear').click();
-    await action(page, 'undo').click();
+    await performAction(page, 'clear');
+    await performAction(page, 'undo');
     assert.equal(await bytes(page), before);
   });
 
   test(`${engine}: arrangement import and detachment retain structure and recover through baseline and Undo`, { timeout: 45000 }, async t => {
     const page = await open(t, engine), before = await bytes(page);
-    await chapter(page, 'investment').click(); await action(page, 'baseline').click();
+    await chapter(page, 'investment').click(); await performAction(page, 'baseline');
     const proposed = await page.evaluate(async () => {
       const { prepareCoordinationTemplate } = await import('/collaboration/native-investment-studio/connection-templates.mjs');
       return prepareCoordinationTemplate(window.investmentFixture.studio.read(), { templateId: 'pod', version: '1.0.0', proposalId: 'review-pod',
@@ -336,12 +411,12 @@ for (const engine of names) {
         connections: ['handoff', 'feedback'].map(slotId => ({ slotId, receiverPersonId: 'product-one', sharedObject: 'Pilot plan',
           responseExpectation: 'Review before proceeding.', workIds: ['review'], status: 'active', recoveryWork: null })) }).projection.serialized;
     });
-    const upload = text => investment(page).locator('[data-investment-file]').setInputFiles({ name: 'arranged-plan.json', mimeType: 'application/json', buffer: Buffer.from(text) });
+    const upload = async text => { await loadDeck(page, 'exchange'); await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'arranged-plan.json', mimeType: 'application/json', buffer: Buffer.from(text) }); };
     const changes = investment(page).locator('[data-investment-changes]'), comparison = investment(page).locator('[data-investment-comparison]');
     await upload(proposed);
     await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     assert.equal(await bytes(page), before); await expect(total(page)).toHaveText('$1,200.00');
-    await action(page, 'apply').click();
+    await performAction(page, 'apply');
     const accepted = await bytes(page);
     assert.deepEqual(JSON.parse(accepted).arrangements, JSON.parse(proposed).arrangements);
     await expect(comparison).toContainText('Change$0.00');
@@ -349,12 +424,12 @@ for (const engine of names) {
     await upload(JSON.stringify(detached));
     await expect(changes).toContainText('This replaces the current plan. Undo restores it.');
     assert.equal(await bytes(page), accepted);
-    await action(page, 'apply').click();
+    await performAction(page, 'apply');
     const after = JSON.parse(await bytes(page)), prior = JSON.parse(accepted);
     assert.deepEqual(after.arrangements, []);
     for (const key of ['people', 'teams', 'work', 'connections']) assert.deepEqual(after[key], prior[key]);
     await expect(total(page)).toHaveText('$1,200.00');
-    await action(page, 'undo').click(); assert.equal(await bytes(page), accepted);
+    await performAction(page, 'undo'); assert.equal(await bytes(page), accepted);
   });
 
   test(`${engine}: Purpose edits apply, cancel and recover saved text through the shared owner`, { timeout: 45000 }, async t => {
@@ -421,7 +496,7 @@ for (const engine of names) {
     await chapter(page, 'investment').click();
     await expect(action(page, 'undo')).toBeDisabled();
     await expect(investment(page).locator('[data-investment-trace]')).toHaveCount(0);
-    await action(page, 'baseline').click();
+    await performAction(page, 'baseline');
     await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Baseline total$1,200.00');
     await chapter(page, 'coordination').click(); await openSession(page);
     await work(page, 'minutesPerSession').fill('45');
@@ -429,32 +504,33 @@ for (const engine of names) {
     await expect(total(page)).toHaveText('$1,800.00');
     await chapter(page, 'investment').click();
     await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Change$600.00');
-    await action(page, 'undo').click();
+    await performAction(page, 'undo');
     await expect(total(page)).toHaveText('$1,200.00');
     await expect(action(page, 'undo')).toBeDisabled();
-    await action(page, 'redo').click();
+    await performAction(page, 'redo');
     await expect(total(page)).toHaveText('$1,800.00');
-    await action(page, 'restore').click();
+    await performAction(page, 'restore');
     await expect(total(page)).toHaveText('$1,200.00');
     await expect(investment(page).locator('[data-investment-comparison]')).toContainText('Change$0.00');
     const retained = await bytes(page);
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-preset]').selectOption('funded-working-sessions');
-    await action(page, 'preset').click();
+    await performAction(page, 'preset');
     await expect(investment(page).locator('#native-plan-preview-title')).toBeFocused();
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,200.00');
     await expect(investment(page).locator('[data-investment-changes]')).toContainText('funded hours per person.');
     assert.equal(await bytes(page), retained);
-    await action(page, 'clear').click();
+    await performAction(page, 'clear');
     await expect(investment(page).locator('[data-investment-preview]')).toBeHidden();
     await expect(action(page, 'preset')).toBeFocused();
     assert.equal(await bytes(page), retained);
-    await action(page, 'preset').click();
-    await action(page, 'apply').click();
+    await performAction(page, 'preset');
+    await performAction(page, 'apply');
     await expect(action(page, 'undo')).toBeFocused();
     await expect(root(page).locator('[data-native-funded]')).toHaveText('$1,200.00');
     await expect(root(page).locator('[data-native-additional]')).toHaveText('$0.00');
     await expect(root(page).locator('[data-native-allocated]')).toHaveText('$1,200.00');
-    await action(page, 'undo').click();
+    await performAction(page, 'undo');
     assert.equal(await bytes(page), retained);
   });
 
@@ -471,16 +547,18 @@ for (const engine of names) {
     for (const row of [...legacy.teams, ...legacy.work]) delete row.lifecycle;
     for (const row of legacy.work) row.timing = null;
     legacy.schemaVersion = '0.1.0'; legacy.people[0].rateCentsPerHour = 12500;
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'legacy-plan.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
     await expect(investment(page).locator('[data-investment-preview-total]')).toHaveText('Total: $1,275.00');
     await expect(investment(page).locator('[data-investment-changes]')).toContainText('Updated this file from format 0.1.0 to 0.9.0.');
     assert.equal(await bytes(page), initial);
-    await action(page, 'apply').click();
+    await performAction(page, 'apply');
     await expect(total(page)).toHaveText('$1,275.00');
     const accepted = await bytes(page);
     const admitted = JSON.parse(accepted);
     assert.equal(admitted.schemaVersion, '0.9.0');
     assert.deepEqual(Object.values(admitted.purpose), [null, null, null, null, null, null]);
+    await loadDeck(page, 'exchange');
     await investment(page).locator('[data-investment-file]').setInputFiles({ name: 'incomplete.json', mimeType: 'application/json', buffer: Buffer.from('{"unfinished":') });
     await expect(investment(page).locator('[data-investment-status]')).toContainText('complete JSON plan');
     await expect(investment(page).locator('[data-investment-preview]')).toBeHidden();
@@ -531,6 +609,7 @@ for (const engine of names) {
             receiver = mount(false);
             handoffs++;
             element.querySelector('[data-investment-status]').textContent = `Successor owns update ${handoffs}.`;
+            receiver.selectDeck('exchange');
             element.querySelector('[data-investment-action="download"]').focus();
           } });
         }
@@ -540,7 +619,7 @@ for (const engine of names) {
         };
         fixture.receiverLifecycle.arm();
       }, editingPath);
-      await action(page, 'baseline').click();
+      await performAction(page, 'baseline');
       await expect(investment(page).locator('[data-investment-status]')).toHaveText('Successor owns update 1.');
       await expect(action(page, 'download')).toBeFocused();
       assert.equal(await page.evaluate(() => window.investmentFixture.studio.readBaseline().projection.result.plannedCommitmentCents), 127500);
@@ -549,9 +628,10 @@ for (const engine of names) {
         fixture.receiverLifecycle.arm();
         fixture.beforeSuccessorApply = fixture.studio.readAcceptance().sequence;
       });
-      await investment(page).locator('[data-investment-preset]').selectOption('funded-working-sessions');
-      await action(page, 'preset').click();
-      await action(page, 'apply').click();
+      await loadDeck(page, 'exchange');
+    await investment(page).locator('[data-investment-preset]').selectOption('funded-working-sessions');
+      await performAction(page, 'preset');
+      await performAction(page, 'apply');
       await expect(investment(page).locator('[data-investment-status]')).toHaveText('Successor owns update 2.');
       await expect(action(page, 'download')).toBeFocused();
       assert.deepEqual(await page.evaluate(() => ({
@@ -579,6 +659,7 @@ for (const engine of names) {
         async finish() { this.result = await this.file.arrayBuffer(); this.dispatchEvent(new Event('load')); }
       };
     });
+    await loadDeck(page, 'exchange');
     const upload = investment(page).locator('[data-investment-file]');
     await upload.setInputFiles(makeFile(45));
     await expect(investment(page).locator('[data-investment-status]')).toHaveText('Reading the plan…');

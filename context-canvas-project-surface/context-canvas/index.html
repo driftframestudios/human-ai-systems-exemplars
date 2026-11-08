@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="styles/routes/studio-arrangements.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-change.css" media="all">
   <link rel="stylesheet" href="styles/routes/studio-assurance.css" media="all">
+  <link rel="stylesheet" href="styles/routes/studio-tapes.css" media="all">
   <noscript><link rel="stylesheet" href="styles/routes/about-noscript.css" media="all"></noscript>
   <link rel="author" type="text/plain" href="humans.txt">
   <link rel="manifest" href="manifest.json">
@@ -815,44 +816,56 @@
         </section>
         <section class="native-investment" id="native-studio-investment" data-native-chapter-panel="investment" aria-labelledby="native-investment-title">
           <h3 id="native-investment-title" class="native-zine__heading">Keep and compare your plan.</h3>
-          <div class="native-investment__grid">
-            <section class="native-investment__card" aria-labelledby="native-history-title">
-              <h4 id="native-history-title">Try a change</h4>
-              <p data-investment-history>Undo follows applied changes.</p>
-              <div class="native-coordination__actions"><button type="button" data-investment-action="undo" disabled>Undo</button><button type="button" data-investment-action="redo" disabled>Redo</button></div>
-              <dl class="native-investment__comparison" data-investment-comparison></dl>
-              <div class="native-coordination__actions"><button type="button" data-investment-action="baseline">Save baseline</button><button type="button" data-investment-action="restore" disabled>Restore baseline</button></div>
-            </section>
-            <section class="native-investment__card" aria-labelledby="native-exchange-title">
-              <h4 id="native-exchange-title">Start from a plan</h4>
-              <label for="native-preset">Starting plan</label>
-              <select id="native-preset" data-investment-preset></select>
-              <button type="button" data-investment-action="preset">Preview starting plan</button>
-              <label for="native-plan-file">Open a saved plan</label>
-              <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json">
-              <button type="button" data-investment-action="download">Download current plan</button>
-            </section>
-          </div>
-          <details class="native-coordination__trace" data-native-trace>
-            <summary>Whole-plan cost breakdown</summary>
-            <div class="native-coordination__trace-body">
-              <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
-              <ul class="native-coordination__ledger" data-native-trace-list>
-                <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
-                <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
-                <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
-                <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
-                <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
-                <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
-              </ul>
+          <div class="studio-investment-workspace" data-investment-workspace>
+            <div data-investment-deck-shelf></div>
+            <div class="studio-investment-loaded" data-investment-loaded>
+              <section id="native-investment-deck-plan" data-investment-deck-panel="plan" aria-labelledby="native-investment-plan-title">
+                <h4 id="native-investment-plan-title">Plan investment</h4>
+                <dl class="studio-investment-readings" data-investment-plan-readings></dl>
+                <details class="native-coordination__trace" data-native-trace>
+                  <summary>Whole-plan cost breakdown</summary>
+                  <div class="native-coordination__trace-body">
+                    <p data-native-trace-summary>Staffing $2,840.00 + extra work $1,140.00 = $3,980.00 total. Work included in staffing: $1,480.00.</p>
+                    <ul class="native-coordination__ledger" data-native-trace-list>
+                      <li><h4>Product lead</h4><p>$120 per hour · 4 h funded · 2 h extra work · $720.00 total</p></li>
+                      <li><h4>Researcher</h4><p>$100 per hour · 4 h funded · $400.00 total</p></li>
+                      <li><h4>Engineering lead</h4><p>$140 per hour · 6 h funded · 2 h extra work · $1,120.00 total</p></li>
+                      <li><h4>Engineer</h4><p>$120 per hour · 6 h funded · $720.00 total</p></li>
+                      <li><h4>Quality reviewer</h4><p>$110 per hour · 2 h funded · 4 h extra work · $660.00 total</p></li>
+                      <li><h4>Operations specialist</h4><p>$90 per hour · 2 h funded · 2 h extra work · $360.00 total</p></li>
+                    </ul>
+                  </div>
+                </details>
+              </section>
+              <div id="native-investment-deck-compare" data-investment-deck-panel="compare">
+                <section class="native-investment__card" aria-labelledby="native-history-title">
+                  <h4 id="native-history-title">Compare a change</h4>
+                  <p data-investment-history>Undo follows applied changes.</p>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="undo" disabled>Undo</button><button type="button" data-investment-action="redo" disabled>Redo</button></div>
+                  <dl class="native-investment__comparison" data-investment-comparison></dl>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="baseline">Save baseline</button><button type="button" data-investment-action="restore" disabled>Restore baseline</button></div>
+                </section>
+              </div>
+              <div id="native-investment-deck-exchange" data-investment-deck-panel="exchange">
+                <section class="native-investment__card" aria-labelledby="native-exchange-title">
+                  <h4 id="native-exchange-title">Start from a plan</h4>
+                  <label for="native-preset">Starting plan</label>
+                  <select id="native-preset" data-investment-preset></select>
+                  <button type="button" data-investment-action="preset">Preview starting plan</button>
+                  <label for="native-plan-file">Open a saved plan</label>
+                  <input id="native-plan-file" data-investment-file type="file" accept=".json,application/json">
+                  <button type="button" data-investment-action="download">Download current plan</button>
+                </section>
+                <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
+                  <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
+                  <p data-investment-preview-total></p>
+                  <div data-investment-changes></div>
+                  <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
+                </section>
+                <div data-investment-reports></div>
+              </div>
             </div>
-          </details>
-          <section class="native-investment__preview" data-investment-preview hidden aria-labelledby="native-plan-preview-title">
-            <h4 id="native-plan-preview-title" tabindex="-1">Try this plan?</h4>
-            <p data-investment-preview-total></p>
-            <div data-investment-changes></div>
-            <div class="native-coordination__actions"><button type="button" data-investment-action="apply">Use this plan</button><button type="button" data-investment-action="clear">Keep current plan</button></div>
-          </section>
+          </div>
           <p class="native-coordination__status" data-investment-status role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
         <p class="native-coordination__fallback" data-native-fallback hidden></p>

@@ -90,6 +90,100 @@ async function contained(page, width) {
 }
 
 for (const engine of names) for (const width of [390, 1440]) {
+  test(`${engine}: plan cassettes keep canonical settings and sprint scope through edits, removal and Undo at ${width}px`, { timeout: 60000 }, async t => {
+    const page = await open(t, engine, width), original = await bytes(page);
+    const library = horizon(page).locator('.studio-plan-library');
+    const shelf = library.locator('.studio-tape-shelf');
+    const cassette = id => library.locator(`[data-studio-session-id="${id}"]`);
+    assert.deepEqual(await library.locator('[data-studio-session-id]').evaluateAll(keys => keys.map(key => key.dataset.studioSessionId)),
+      ['review', 'research', 'pairing', 'rehearsal']);
+    await expect(cassette('pairing')).toContainText('Prototype pairing');
+    await expect(cassette('pairing')).toContainText('1 h · 4 sessions');
+    await shelf.scrollIntoViewIfNeeded();
+    if (width === 390) assert.equal(await shelf.evaluate(node => node.scrollWidth > node.clientWidth), true,
+      'the phone shelf provides its own horizontal scrolling');
+    await cassette('pairing').scrollIntoViewIfNeeded();
+    const box = await cassette('pairing').boundingBox();
+    await cassette('pairing').hover();
+    assert.deepEqual(await cassette('pairing').boundingBox(), box, 'art movement preserves the native key target');
+    await cassette('pairing').click();
+    await expect(configure(page).locator('[name="label"]')).toHaveValue('Prototype pairing');
+    await receiverReading(page, 'pairing', true);
+    assert.equal(await bytes(page), original, 'loading a cassette retains accepted sessions and investment');
+    await configure(page).locator('[name="minutesPerSession"]').fill('15');
+    await configure(page).locator('[data-action="apply"]').click();
+    await expect(cassette('pairing')).toContainText('1 h 15 min · 4 sessions');
+    const edited = await bytes(page);
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(cassette('pairing')).toBeFocused();
+
+    await horizon(page).locator('[data-cadence-key="track-period:period-2"]').click();
+    const scope = horizon(page).getByRole('heading', { name:'Sprint 2', exact:true });
+    await expect(scope).toHaveAttribute('aria-current', 'page');
+    await expect(library.locator('[data-studio-session-id]')).toHaveCount(1);
+    await cassette('pairing').click();
+    await expect(scope).toHaveAttribute('aria-current', 'page');
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await expect(cassette('pairing')).toBeFocused();
+    const create = library.getByRole('button', { name:'New plan', exact:true });
+    await create.click();
+    const addition = await page.evaluate(() => {
+      const state = window.rackFixture.studio.read().state;
+      const work = state.work.find(item => !['review','research','pairing','rehearsal'].includes(item.id));
+      return { work, placements:state.scoreSettings.cadence.placements.filter(row => row.workId === work.id) };
+    });
+    assert.deepEqual(addition.placements, [{ workId:addition.work.id, occurrenceIndex:0, periodId:'period-2', subdivision:1 }]);
+    await expect(cassette(addition.work.id)).toContainText(addition.work.label);
+    await expect(configure(page).locator('[name="label"]')).toHaveValue(addition.work.label);
+    await expect(scope).toHaveAttribute('aria-current', 'page');
+    await root(page).locator('[data-rack-creation-undo]').click();
+    assert.equal(await bytes(page), edited, 'creation Undo returns the shared accepted plan to the preceding edit');
+    await expect(create).toBeFocused();
+    await expect(scope).toHaveAttribute('aria-current', 'page');
+    await create.click();
+    const createdPlan = await bytes(page);
+    await root(page).locator('[data-rack-remove-plan]').click();
+    await expect(adjacent(page)).toBeVisible();
+    await expect(configure(page).locator('[data-native-session-confirm]')).toBeVisible();
+    await configure(page).locator('[data-action="apply"]').click();
+    await expect(adjacent(page)).toBeHidden();
+    await expect(cassette(addition.work.id)).toHaveCount(0);
+    const { revision: removedRevision, ...afterRemoval } = JSON.parse(await bytes(page));
+    const { revision: editedRevision, ...beforeCreation } = JSON.parse(edited);
+    assert.ok(removedRevision > editedRevision);
+    assert.deepEqual(afterRemoval, beforeCreation, 'removal retires only the newly created plan');
+    await library.locator('[data-plan-shelf-undo]').click();
+    assert.equal(await bytes(page), createdPlan, 'shared history recovers the cassette, its people and period placement');
+    await expect(scope).toHaveAttribute('aria-current', 'page');
+    await expect(cassette(addition.work.id)).toBeVisible();
+    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
+    await expect(library.locator('[data-studio-session-id]')).toHaveCount(5);
+    await horizon(page).locator('[data-cadence-key="track-period:period-3"]').click();
+    await cassette('pairing').click();
+    await expect(configure(page).locator('[data-session-occurrence="2"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(configure(page).locator('[data-occurrence-field="periodId"][value="period-3"]')).toBeChecked();
+    await adjacent(page).locator('[data-rack-editor-close]').click();
+    await horizon(page).locator('[data-cadence-key="plan-overview"]').click();
+    await contained(page, width);
+    if (engine === 'chromium') {
+      await page.emulateMedia({ reducedMotion:'no-preference' });
+      await horizon(page).locator('.studio-plan-workspace')
+        .screenshot({ path:resolve(captures, `plan-cassettes-${width}.png`) });
+      await page.emulateMedia({ forcedColors:'active', reducedMotion:'reduce' });
+      await cassette('pairing').click();
+      await expect(cassette('pairing')).toHaveAttribute('aria-pressed', 'true');
+      const forced = await cassette('pairing').evaluate(key => {
+        const title = getComputedStyle(key.querySelector('.studio-tape-face__title'));
+        return { title:title.color, background:title.backgroundColor,
+          detail:getComputedStyle(key.querySelector('.studio-tape-face__detail')).color,
+          reels:getComputedStyle(key.querySelector('.studio-tape-face__reels')).display };
+      });
+      assert.equal(forced.title, forced.detail, 'selected cassette labels share the legible system text color');
+      assert.notEqual(forced.title, forced.background, 'selected labels remain distinct from their system background');
+      assert.equal(forced.reels, 'none', 'forced colors retain semantic labels while hiding ornamental reels');
+    }
+  });
+
   test(`${engine}: Team planning braids phases and accepted edit routes with local scrolling and Undo at ${width}px`, { timeout: 60000 }, async t => {
     const page = await open(t, engine, width), accepted = await bytes(page);
     const planning = root(page).locator('section[data-native-workspace="connection"]');

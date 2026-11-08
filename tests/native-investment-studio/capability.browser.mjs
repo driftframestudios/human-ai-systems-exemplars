@@ -261,7 +261,7 @@ for (const engine of names) {
     await expect(field(page, 'context')).toHaveValue('Recover an accepted change in the pilot');
     await panel(page).screenshot({ path: resolve(captures, `${engine}-card.png`) });
     assert.deepEqual(await page.evaluate(() => { const p = window.capabilityFixture.studio.read(); return [p.state.abilities.length, p.state.work.length, p.state.abilities[0].supportBindings[1].workIds]; }), [1, 2, ['review', 'ability-1-support-2']]);
-    await tab(page, 'investment').click(); await root(page).locator('[data-investment-action="undo"]').click();
+    await tab(page, 'investment').click(); await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     await expect(total(page)).toHaveText('$16,000.00'); assert.equal(await bytes(page), initial);
   });
 

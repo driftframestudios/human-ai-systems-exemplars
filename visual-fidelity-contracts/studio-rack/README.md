@@ -40,8 +40,12 @@ companion panels separate financial controls and readings within the rack. These
 iteration. The planning reference is authorized for main/dev preservation in
 [#810](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/810).
 The actual Showcase integrates on dev through
-[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811),
-with main retaining its reference runtime until the human cues promotion.
+[#811](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/811)
+and [#812](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/812).
+[#813](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/813)
+receives the cassette and Investment deck pickers through a shared semantic
+button/face component and the current session, pricing, baseline and exchange
+owners. Broader financial deck state continues in #818, with main retaining its reference runtime until the human cues promotion.
 
 ## Choose a visual mode and an operation
 

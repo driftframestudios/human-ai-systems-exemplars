@@ -104,7 +104,8 @@ export function mountCoordinationPanel(root, options = {}) {
   const returnButton = returnRegion?.querySelector('[data-native-return-action]');
   const returnTeamButton = returnRegion?.querySelector('[data-native-return-team]');
   let pendingReturnFocus = null;
-  let rackCreation = null, creationUndo = null;
+  let rackCreation = null, creationUndo = null, removePlan = null;
+  let planShelfUndo = null, planShelfUndoProjection = null;
   const rackCollections = Object.freeze({ person: 'people', team: 'teams', session: 'work', connection: 'connections' });
 
   function listen(target, type, handler) {
@@ -114,6 +115,12 @@ export function mountCoordinationPanel(root, options = {}) {
 
   function text(name, value) { elements[name].textContent = value; }
   function syncSessionReceiver() {
+    const shelf = root.querySelector('.studio-plan-library .studio-tape-library');
+    if (shelf && planShelfUndo) {
+      planShelfUndoProjection = studio.read();
+      planShelfUndo.hidden = studio.readHistory().undoCount === 0;
+      shelf.append(planShelfUndo);
+    }
     const selected = rackEditor?.read();
     if (selected?.open && !studio.read().state[rackCollections[selected.kind]].some(record => record.id === selected.id)) {
       closeRackEditor(rackCreation?.entry());
@@ -123,6 +130,8 @@ export function mountCoordinationPanel(root, options = {}) {
         && rackEditor?.isOpen(rackCreation.kind) && rackEditor.read().id === rackCreation.id);
       creationUndo.textContent = `Undo ${rackCreation?.kind === 'connection' ? 'handoff' : rackCreation?.kind ?? 'record'} addition`;
     }
+    if (removePlan) removePlan.hidden = !rackEditor?.isOpen('session')
+      || describeSessionTarget(workPanel?.read().draft?.sessionId)?.mode === 'remove';
     if (!disposed && workPanel) {
       const receiver = workPanel.readReceiver();
       if (rackEditor?.isOpen('session')) receiver.controlsId = rackEditor.element.id;
@@ -953,13 +962,37 @@ export function mountCoordinationPanel(root, options = {}) {
       },
     });
     if (rackEditor) {
+      planShelfUndo = document.createElement('button'); planShelfUndo.type = 'button';
+      planShelfUndo.textContent = 'Undo edit'; planShelfUndo.dataset.planShelfUndo = '';
+      listen(planShelfUndo, 'click', () => {
+        if (disposed || planShelfUndoProjection !== studio.read()) return;
+        const parked = editing.park();
+        if (!parked.ok) { announce(parked.error.message); return; }
+        const result = studio.undo(planShelfUndoProjection);
+        if (!result.ok) { announce(result.error.message); return; }
+        render(); announce('Edit undone.');
+        (planShelfUndo.hidden ? root.querySelector('[data-cadence-key="cassette-add"]') : planShelfUndo)?.focus();
+      });
       creationUndo = document.createElement('button'); creationUndo.type = 'button';
       creationUndo.textContent = 'Undo session addition'; creationUndo.dataset.rackCreationUndo = '';
       creationUndo.hidden = true;
       const heading = rackEditor.element.querySelector('.studio-rack-editor__heading');
       const actions = document.createElement('div'); actions.className = 'studio-rack-editor__tools';
-      actions.append(creationUndo, heading.querySelector('[data-rack-editor-close]')); heading.append(actions);
+      removePlan = document.createElement('button'); removePlan.type = 'button';
+      removePlan.textContent = 'Remove plan'; removePlan.dataset.rackRemovePlan = '';
+      removePlan.className = 'native-control--remove'; removePlan.hidden = true;
+      actions.append(removePlan, creationUndo, heading.querySelector('[data-rack-editor-close]')); heading.append(actions);
       listen(creationUndo, 'click', undoRackCreation);
+      listen(removePlan, 'click', () => {
+        const selected = rackEditor.read();
+        if (!selected?.open || selected.kind !== 'session') return;
+        // Keep the canonical removal form in the loaded rack, including its
+        // dependency review and Cancel path.
+        try {
+          openingRackKind = 'session';
+          workPanel.open(makeSessionTarget('work.remove', selected.id));
+        } finally { openingRackKind = null; }
+      });
     }
     if (teamRoot) responsibilityPanel = mountResponsibilityPanel(teamRoot, { studio, editing,
       onBegin: () => {

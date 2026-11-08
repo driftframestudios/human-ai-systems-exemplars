@@ -131,9 +131,9 @@ for (const engine of names) {
     assert.deepEqual((await state(page)).contributions, accepted.contributions);
     await action(page, 'contribution', 'cancel').click();
     await tab(page, 'investment').click();
-    await root(page).locator('[data-investment-action="undo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="undo"]').click();
     assert.equal((await state(page)).contributions.length, 5);
-    await root(page).locator('[data-investment-action="redo"]').click();
+    await root(page).locator('[data-investment-deck="compare"]').click(); await root(page).locator('[data-investment-action="redo"]').click();
     assert.deepEqual((await state(page)).contributions, accepted.contributions);
     await expect(total(page)).toHaveText('$1,200.00');
   });
