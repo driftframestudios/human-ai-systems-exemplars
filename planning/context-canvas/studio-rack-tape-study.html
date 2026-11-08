@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <meta name="robots" content="noindex">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
+  <title>Loaded tape workbench · Studio interaction study</title>
+  <style>
+    :root { color-scheme: dark; --ink:#172724; --rack:#1c302d; --screen:#102622; --edge:#668b73; --mint:#66dcc2; --paper:#f7f0d6; --peach:#f2d0b6; --rose:#ecd3dc; --lavender:#d8cce8; --muted:#b5cbbf; font:16px/1.4 system-ui,sans-serif; background:#95cdbd; color:var(--paper); }
+    * { box-sizing:border-box; } body { margin:0; } button,input,select { font:inherit; } button,a,input,select { touch-action:manipulation; } button { cursor:pointer; } button:disabled { opacity:.5; cursor:default; }
+    :focus-visible { outline:3px solid #ffd06f; outline-offset:4px; } [hidden] { display:none !important; }
+    a { color:inherit; text-underline-offset:.2em; } h1,h2,h3,p { margin:0; } h1 { font-size:clamp(1.5rem,3vw,2.2rem); letter-spacing:-.04em; } h2 { font-size:1.15rem; } h3 { font-size:1rem; } small { font-size:.78rem; }
+    .study { padding:1rem clamp(.7rem,2vw,2rem); max-width:1680px; margin:auto; }
+    .study-note { display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; color:var(--ink); font-size:.85rem; margin-bottom:1rem; }
+    .rack { background:var(--rack); border:2px solid var(--ink); border-radius:10px; box-shadow:6px 6px 0 #385247; padding:clamp(.65rem,1.6vw,1.5rem); }
+    .head,.bar { display:flex; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap; }
+    .head { border-bottom:1px solid var(--edge); padding-bottom:1rem; margin-bottom:1rem; } .head p { color:var(--muted); margin-top:.25rem; }
+    .micro,.number { font-family:ui-monospace,monospace; } .micro { font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mint); }
+    .controls { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; }
+    button { border:1px solid var(--edge); border-radius:3px; min-height:2.5rem; padding:.45rem .7rem; color:var(--paper); background:#29433b; box-shadow:0 3px 0 #0d1916; text-align:left; }
+    button:hover { border-color:var(--mint); background:#36574a; } button[aria-pressed=true] { background:var(--mint); color:var(--ink); box-shadow:inset 0 3px 5px #17514780; border-color:var(--mint); }
+    button.add { background:#d5ead9; color:var(--ink); border-color:#528b73; font-weight:650; white-space:nowrap; }
+    button.ghost { background:transparent; box-shadow:none; } button.remove { background:var(--rose); color:#71394d; border-color:#965368; }
+    .workspace { display:grid; grid-template-columns:210px minmax(0,1fr); gap:1rem; align-items:start; }
+    .library { padding:.8rem; background:#12231f; border:1px solid var(--edge); border-radius:6px; }
+    .library h2 { margin-bottom:.7rem; } .tapes { display:grid; gap:.65rem; margin-bottom:.8rem; }
+    .tape { width:100%; background:var(--paper); color:var(--ink); border:2px solid #968c72; padding:.65rem; position:relative; }
+    .tape:hover { background:#eee4c2; } .tape[aria-pressed=true] { background:var(--peach); border-color:var(--mint); }
+    .tape strong { display:block; font-size:.9rem; margin:.25rem 0; } .tape small { display:block; }
+    .reels { display:flex; justify-content:space-between; background:#263d35; border:1px solid var(--edge); margin:.5rem 0; height:22px; padding:2px 13px; border-radius:15px; }
+    .reels::before,.reels::after { content:''; width:16px; border-radius:50%; border:4px dotted #c5cfaf; background:#172724; }
+    .main { min-width:0; } .breadcrumbs { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin-bottom:.7rem; }
+    .breadcrumbs button { background:transparent; box-shadow:none; min-height:2rem; padding:.3rem .5rem; text-decoration:underline; }
+    .breadcrumbs span { color:var(--mint); font-size:.85rem; }
+    .board { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.6rem; padding:.7rem; background:var(--screen); border:2px solid var(--edge); border-radius:5px; }
+    .board[data-scoped=true] { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .lane { min-width:0; border:1px solid #496c5a; background:#2c4035; padding:.45rem; }
+    .lane-key { width:100%; background:#d5ddc7; color:var(--ink); font-size:.82rem; font-weight:700; box-shadow:none; }
+    .lane h3.lane-key { padding:.5rem; border-radius:3px; } .lane-key:hover { background:var(--paper); } .clips { display:grid; gap:.35rem; margin-top:.5rem; min-height:2.2rem; }
+    .clip { color:var(--ink); background:var(--peach); font-size:.8rem; box-shadow:0 3px 0 #9a7b60; }
+    .clip:hover { background:#f8ddbe; } .clip small { display:block; } .clip[aria-pressed=true] { outline:2px solid var(--mint); background:var(--peach); }
+    .lane .add { width:100%; font-size:.75rem; margin-top:.5rem; background:transparent; border-style:dashed; color:var(--muted); box-shadow:none; }
+    .deck { border:2px solid #9ab29c; border-radius:5px; margin:.8rem 0; background:#35483d; animation:unfurl .2s ease-out; }
+    .deck-head { background:#182c24; padding:.65rem; border-bottom:1px solid var(--edge); } .deck-head input { max-width:24rem; width:100%; background:transparent; color:var(--paper); font-size:1.05rem; font-weight:700; border:0; border-bottom:1px dashed var(--edge); }
+    .deck-head label { flex:1 1 14rem; } .deck-head label small { display:block; color:var(--mint); }
+    .modules { display:grid; grid-template-columns:minmax(230px,1fr) minmax(240px,1fr); gap:.7rem; padding:.7rem; }
+    .module { background:var(--ink); border:1px solid var(--edge); padding:.7rem; border-radius:4px; min-width:0; }
+    .module h3,.module>label { margin-bottom:.5rem; } label { display:block; font-size:.83rem; }
+    select,input[type=text],input[type=number] { border:1px solid var(--edge); border-radius:3px; min-height:2.4rem; padding:.35rem .5rem; background:#f7f0d6; color:var(--ink); max-width:100%; }
+    select { width:100%; } .native-time-controls { display:block; }
+    .native-time__overview { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.55rem; }
+    .native-coordination__control-title { max-width:9rem; font-size:.8rem; }
+    .native-coordination__duration-display { display:flex; gap:.8rem; color:var(--mint); background:#0e211d; border:1px solid var(--edge); padding:.3rem .8rem; border-radius:4px; }
+    .native-coordination__duration-display>span { display:grid; text-align:center; font: .65rem ui-monospace,monospace; } .native-coordination__duration-display strong { font-size:1.65rem; font-weight:500; }
+    .native-time__quantities { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; } .native-time__part { padding:.5rem; background:var(--peach); color:var(--ink); border-radius:4px; }
+    .native-coordination__control--minutes { background:var(--paper); } .native-time__part>label { font-weight:700; }
+    .native-time__adjustment { display:flex; align-items:center; justify-content:space-between; gap:.25rem; flex-wrap:wrap; }
+    .native-knob { width:64px; height:64px; position:relative; margin:.4rem 0; flex:0 0 auto; border:1px solid var(--ink); border-radius:50%; background:repeating-conic-gradient(from -135deg,#586d5a 0 1deg,transparent 1deg 27deg); }
+    .native-knob__face { position:absolute; inset:8px; border-radius:50%; background:linear-gradient(135deg,#71938b,#213934 60%,#0d1d19); box-shadow:2px 3px 2px #243b37; border:2px solid #bccdc0; transform:rotate(var(--native-knob-angle,-135deg)); pointer-events:none; }
+    .native-knob__pointer { position:absolute; top:5px; left:calc(50% - 2px); height:12px; width:4px; border-radius:3px; background:var(--paper); }
+    .native-knob input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:grab; touch-action:none; margin:0; } .native-knob:focus-within { outline:3px solid #7251b4; outline-offset:3px; }
+    .native-coordination__stepper { display:grid; grid-template-columns:30px 30px; gap:.35rem .5rem; margin-top:1.6rem; }
+    .native-coordination__stepper input { grid-column:1/-1; grid-row:1; width:68px; min-height:2rem; font:700 .9rem ui-monospace,monospace; text-align:center; padding:.2rem; }
+    .native-coordination__stepper button { min-height:30px; width:30px; height:30px; border-radius:50%; padding:0; background:var(--paper); color:var(--ink); text-align:center; border-color:var(--ink); }
+    .native-time__part>p,.native-time__feedback,.studio-repetition { display:none; }
+    .occurrences { display:flex; gap:.4rem; flex-wrap:wrap; margin:.5rem 0; } .occurrences button { min-width:2.3rem; text-align:center; }
+    .location { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.65rem 0; }
+    .reading { border:2px solid var(--edge); background:var(--screen); padding:.7rem; border-radius:5px; margin:.8rem 0; }
+    .reading .bar { margin-bottom:.7rem; } .track-scroll,.matrix-scroll { overflow-x:auto; }
+    .track { display:grid; grid-template-columns:145px minmax(260px,1fr); align-items:center; gap:.6rem; margin:.35rem 0; }
+    .track>button { box-shadow:none; font-size:.8rem; text-align:left; min-height:2.7rem; }
+    .track-slots { display:grid; grid-template-columns:repeat(8,1fr); gap:.25rem; background:repeating-linear-gradient(90deg,transparent,transparent calc(12.5% - 1px),#375a49 calc(12.5% - 1px),#375a49 12.5%); padding:.3rem 0; }
+    .track-slots button { min-height:1.8rem; padding:0; background:var(--mint); border:1px solid #aff2d6; box-shadow:0 3px 0 #2b786b; border-radius:2px; }
+    .track-slots button[data-selected=true] { outline:2px solid var(--paper); outline-offset:1px; } .track-slots .empty { background:transparent; box-shadow:none; border:1px dashed transparent; color:transparent; }
+    .track-slots .empty:hover,.track-slots .empty:focus-visible { border-color:var(--mint); color:var(--mint); }
+    table { width:100%; border-collapse:separate; border-spacing:4px; font-size:.8rem; } th { text-align:left; color:var(--muted); font-weight:600; } th,td { padding:.35rem; } tbody th { min-width:145px; } td { background:#233f34; }
+    .matrix td { text-align:center; min-width:74px; } .matrix th button { box-shadow:none; padding:.35rem; font-size:.78rem; } .matrix label { display:grid; place-items:center; min-height:2rem; cursor:pointer; }
+    input[type=checkbox] { width:1.35rem; height:1.35rem; accent-color:var(--mint); cursor:pointer; }
+    .matrix td:has(:checked) { background:#467862; } .matrix input:checked { accent-color:var(--paper); }
+    .people-editor { display:flex; gap:.6rem; align-items:end; flex-wrap:wrap; padding:.6rem; background:#31483b; border:1px solid var(--edge); margin-top:.5rem; }
+    .people-editor label { flex:1 1 10rem; } .people-editor input { width:100%; }
+    .routing { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6rem; } .routing article { border:1px solid var(--edge); background:#2c4035; padding:.6rem; }
+    .routing h3 { color:var(--muted); margin-bottom:.5rem; } .response { display:block; width:100%; background:var(--lavender); color:var(--ink); margin:.5rem 0; }
+    .response:hover { background:#e3d8ef; } .response small { display:block; margin-top:.25rem; }
+    .hint { color:var(--muted); font-size:.8rem; } .team-strip { display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0; }
+    .events button { box-shadow:none; min-height:2rem; background:transparent; color:var(--mint); text-decoration:underline; }
+    .status { min-height:1.6rem; color:var(--mint); margin:.6rem 0; font-size:.85rem; }
+    footer { color:var(--ink); font-size:.72rem; margin:1.2rem .25rem; max-width:60rem; }
+    @keyframes unfurl { from { opacity:.3; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+    @media(max-width:1000px) { .workspace { grid-template-columns:170px minmax(0,1fr); } .modules { grid-template-columns:1fr; } }
+    @media(max-width:650px) { .workspace { display:block; } .library { margin-bottom:.8rem; } .tapes { display:flex; overflow-x:auto; padding:2px 2px 6px; } .tape { flex:0 0 168px; } .board { grid-template-columns:repeat(2,minmax(0,1fr)); } .routing { grid-template-columns:1fr; } .track { grid-template-columns:110px minmax(240px,1fr); } .rack { box-shadow:3px 3px 0 #385247; } .native-time__adjustment { justify-content:center; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+    @media(forced-colors:active) { .native-knob { display:none; } button[aria-pressed=true] { border:3px solid Highlight; } .clip,.response { border:2px solid ButtonText; } }
+  </style>
+</head>
+<body>
+<main class="study">
+  <div class="study-note"><strong>Dev interaction study · illustrative state</strong><a href="../../context-canvas-project-surface/context-canvas/index.html#native-studio-coordination">Open the current Studio ↗</a><a href="studio-rack-tape-workbench.md">Read the design proposal ↗</a></div>
+  <section class="rack" aria-label="Loaded tape workbench">
+    <header class="head"><div><p class="micro">Studio / arrangement desk</p><h1>Make room for the work.</h1><p>Choose a session. Set its rhythm. Bring people into it.</p></div><div class="controls"><button id="undo" class="ghost" disabled>Undo</button><button id="reset" class="ghost">Reset study</button></div></header>
+    <div class="workspace">
+      <aside class="library"><h2>Session tapes</h2><div class="tapes" id="tapes"></div><button id="add-tape" class="add">＋ New session</button></aside>
+      <div class="main">
+        <nav class="breadcrumbs" aria-label="Plan scope" id="breadcrumbs"></nav>
+        <div class="board" id="board" aria-label="Plan periods"></div>
+        <section class="deck" id="deck" aria-label="Loaded session">
+          <div class="deck-head bar"><label><small>Loaded session</small><input id="tape-name" type="text" maxlength="80" aria-label="Session name"></label><button id="unload" class="ghost">Close ×</button></div>
+          <div class="modules">
+            <div class="module" id="duration"></div>
+            <section class="module" aria-label="Working sessions"><div class="bar"><h3>Working sessions</h3><button id="add-occurrence" class="add">＋ Occurrence</button></div><div id="occurrences" class="occurrences"></div><div class="location"><label>Sprint<select id="period"></select></label><label>Week<select id="week"><option value="1">Week 1</option><option value="2">Week 2</option></select></label></div><div class="bar"><label>Hosted by <select id="host"></select></label><button id="remove-occurrence" class="remove">Remove occurrence</button></div></section>
+          </div>
+        </section>
+        <section class="reading" aria-label="Session arrangement">
+          <div class="bar"><h2>Arrangement</h2><div class="controls" aria-label="Arrangement reading"><button id="tracks-tab" aria-pressed="true">Tracks</button><button id="events-tab" aria-pressed="false">Events</button></div></div>
+          <div class="track-scroll" id="tracks"></div><div class="matrix-scroll" id="events" hidden></div>
+        </section>
+        <section class="reading" aria-label="People and teams"><div class="bar"><h2>People × sessions</h2><button id="people-toggle" class="ghost" aria-expanded="true">Hide people</button></div><div id="people-panel"><p class="hint">Each lit pad brings that person into the session.</p><div class="matrix-scroll" id="matrix"></div><div class="team-strip" id="teams" aria-label="Teams"></div><div class="people-editor" id="person-editor" hidden></div><div class="people-editor" id="team-editor" hidden></div></div></section>
+        <section class="reading" aria-label="Feedback routing"><div class="bar"><h2>Pass work forward</h2><button id="add-response" class="add">＋ Response</button></div><div class="routing" id="routing"></div><div class="people-editor" id="response-editor" hidden></div></section>
+        <p id="status" class="status" role="status"></p>
+      </div>
+    </div>
+  </section>
+  <footer>This study keeps changes in this page until reload. Its unassigned tapes and routable responses explore possible model extensions. The current Studio retains its accepted plan and recovery behavior.<br>© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</footer>
+</main>
+<script type="module">
+import { createTimeControls, mountDurationDials, renderTimeReadout } from '../../collaboration/native-investment-studio/time-controls.mjs';
+
+const $ = id => document.getElementById(id);
+const seed = {
+  people: [{id:'research',name:'Researcher',rate:100},{id:'product',name:'Product lead',rate:120},{id:'engineering',name:'Engineer',rate:120},{id:'quality',name:'Quality reviewer',rate:110}],
+  teams: [{id:'discover',name:'Product & research',people:['research','product']},{id:'build',name:'Engineering',people:['engineering','product']},{id:'review',name:'Quality & operations',people:['quality']}],
+  tapes: [
+    {id:'synthesis',name:'Research synthesis',hours:1,minutes:0,team:'discover',people:['research','product'],occurrences:[{period:1,week:1},{period:1,week:2}]},
+    {id:'pairing',name:'Prototype pairing',hours:1,minutes:30,team:'build',people:['engineering','product'],occurrences:[{period:2,week:1},{period:2,week:2},{period:3,week:1}]},
+    {id:'decision',name:'Pilot decision review',hours:0,minutes:45,team:'review',people:['product','quality'],occurrences:[{period:3,week:2},{period:4,week:1}]}
+  ],
+  responses:[{id:'evidence',name:'Research findings',from:'synthesis',to:'pairing',status:'ready'},{id:'review-note',name:'Pilot readiness',from:'pairing',to:'decision',status:'requested'}]
+};
+let model = structuredClone(seed);
+const view = { tape:'pairing', occurrence:0, period:0, deck:true, origin:'tape-pairing', reading:'tracks', eventPage:0, person:null, team:null, response:null };
+const history = []; let turnKey = null;
+const tape = () => model.tapes.find(item => item.id === view.tape);
+const el = (tag, text, className) => { const node = document.createElement(tag); if(text !== undefined) node.textContent = text; if(className) node.className = className; return node; };
+function button(text, action, className, pressed) { const node = el('button',text,className); node.type='button'; if(pressed !== undefined) node.setAttribute('aria-pressed',String(pressed)); node.addEventListener('click',action); return node; }
+function remember(key) { if(!key || key !== turnKey) { history.push(structuredClone(model)); if(history.length>30) history.shift(); } turnKey=key || null; }
+// Field settlement preserves its editor so a blur cannot replace the next click target.
+function change(action, message, key, keepEditor) { remember(key); action(); render(keepEditor); if(message) $('status').textContent=message; }
+function selected(id, index=0, source) {
+  const origin=source?.dataset.focusKey || `tape-${id}`;
+  dials.release(); turnKey=null; view.tape=id; view.occurrence=index; view.origin=origin; view.deck=true; render();
+}
+function options(select, records, value) { select.replaceChildren(...records.map(item=>{const option=el('option',item.name); option.value=String(item.id); return option;})); select.value=String(value); }
+function returnFocus(key) {
+  const target=key && document.querySelector(`[data-focus-key="${key}"]`);
+  if(!target || target.closest('[hidden]')) return false;
+  target.focus({preventScroll:true}); return true;
+}
+function openInline(kind,id) {
+  const opening=view[kind]!==id;
+  view[kind]=opening?id:null;
+  if(kind==='person') view.team=null;
+  if(kind==='team') view.person=null;
+  render();
+  if(opening) $(`${kind}-editor`).querySelector('input,select')?.focus();
+  else returnFocus(`${kind}-${id}`);
+}
+function keyed(node,key) { node.dataset.focusKey=key; return node; }
+function render(keepEditor) {
+  const focus=document.activeElement?.dataset.focusKey;
+  $('undo').disabled=history.length===0; $('undo').textContent=`Undo${history.length ? ` (${history.length})` : ''}`;
+  $('tapes').replaceChildren(...model.tapes.map(item=>{
+    const node=keyed(button('',event=>selected(item.id,0,event.currentTarget),'tape',item.id===view.tape&&view.deck),`tape-${item.id}`);
+    node.append(el('small',item.team ? model.teams.find(team=>team.id===item.team)?.name : 'Choose people when ready'),el('strong',item.name),el('span',undefined,'reels'),el('small',`${item.hours ? `${item.hours}h ` : ''}${item.minutes ? `${item.minutes}m` : ''} · ${item.occurrences.length} ${item.occurrences.length===1?'occurrence':'occurrences'}`));
+    return node;
+  }));
+  const home=keyed(button('Plan overview',()=>{const period=view.period;view.period=0;view.eventPage=0;render();returnFocus(period ? `period-${period}` : 'scope-home');}),'scope-home'); home.setAttribute('aria-current',view.period===0?'location':'false');
+  $('breadcrumbs').replaceChildren(home);
+  if(view.period) { $('breadcrumbs').append(el('span','›'),el('span',`Sprint ${view.period}`)); $('breadcrumbs').lastChild.setAttribute('aria-current','location'); }
+  $('board').replaceChildren(); $('board').dataset.scoped=String(Boolean(view.period));
+  const periods=view.period ? [view.period] : [1,2,3,4];
+  for(const period of periods) for(const week of view.period ? [1,2] : [0]) {
+    const lane=el('section',undefined,'lane');
+    lane.append(view.period ? el('h3',`Week ${week}`,'lane-key') : keyed(button(`Sprint ${period}`,()=>{view.period=period;view.eventPage=0;render();returnFocus('scope-home');},'lane-key'),`period-${period}`));
+    const clips=el('div',undefined,'clips');
+    for(const item of model.tapes) item.occurrences.forEach((occ,index)=>{if(occ.period!==period || (week&&occ.week!==week)) return;
+      const clip=keyed(button('',event=>selected(item.id,index,event.currentTarget),'clip',view.deck&&view.tape===item.id&&view.occurrence===index),`clip-${item.id}-${index}`);
+      clip.append(el('strong',item.name),el('small',`Week ${occ.week} · ${item.people.length ? item.people.map(id=>model.people.find(person=>person.id===id).name).join(', ') : 'People to choose'}`)); clips.append(clip);
+    });
+    const place=keyed(button('＋ Place session',event=>addOccurrence(period,week||1,event.currentTarget.dataset.focusKey),'add'),`place-${period}-${week}`);
+    place.setAttribute('aria-label',`Place ${tape().name} in Sprint ${period}${week ? `, Week ${week}` : ''}`);place.title=place.getAttribute('aria-label');
+    lane.append(clips,place); $('board').append(lane);
+  }
+  renderDeck(); renderTracks(); renderMatrix(keepEditor); renderRouting(keepEditor); returnFocus(focus);
+}
+function renderDeck() {
+  $('deck').hidden=!view.deck; const item=tape();
+  if(document.activeElement!==$('tape-name')) $('tape-name').value=item.name;
+  for(const [field,value] of [['hoursPerSession',item.hours],['minutesPerSession',item.minutes]]) duration.controls.get(field).input.value=String(value);
+  renderTimeReadout(duration,{hoursPerSession:String(item.hours),minutesPerSession:String(item.minutes)}); dials.refresh();
+  $('occurrences').replaceChildren(...item.occurrences.map((occ,index)=>keyed(button(String(index+1),()=>{view.occurrence=index;render();},'',index===view.occurrence),`occ-${index}`)));
+  const occurrence=item.occurrences[view.occurrence];
+  options($('period'),[1,2,3,4].map(id=>({id,name:`Sprint ${id}`})),occurrence?.period||1);
+  $('week').value=String(occurrence?.week||1); $('period').disabled=$('week').disabled=!occurrence;
+  $('remove-occurrence').disabled=!occurrence;
+  options($('host'),[{id:'',name:'Choose a team'},...model.teams],item.team);
+}
+const duration=createTimeControls(document,{idPrefix:'study',decorateField(){},decorateStep(step,field,direction){step.addEventListener('click',()=>setTime(field,Number(duration.controls.get(field).input.value)+direction));}});
+$('duration').append(duration.element);
+const dials=mountDurationDials({dials:duration.dials,read(){const item=tape();return{token:item.id,enabled:view.deck,hours:String(item.hours),minutes:String(item.minutes)};},write(token,field,value){if(token===view.tape) setTime(field,Number(value),`dial-${token}-${field}`);}});
+function setTime(field,value,key) { if(!Number.isFinite(value)) {renderDeck();return;} const unit=field==='hoursPerSession'?'hours':'minutes',other=unit==='hours'?'minutes':'hours';
+  const max=unit==='hours'?(tape()[other]>0?23:24):(tape()[other]===24?0:59);
+  change(()=>{tape()[unit]=Math.max(0,Math.min(max,Math.round(value)));},'',key);
+}
+for(const field of ['hoursPerSession','minutesPerSession']) duration.controls.get(field).input.addEventListener('change',event=>setTime(field,Number(event.target.value)));
+for(const unit of ['hours','minutes']) duration.dials[unit].knob.addEventListener('pointerdown',()=>{turnKey=null;},true);
+function addOccurrence(period=view.period||1,week=1,origin) { change(()=>{if(origin)view.origin=origin;tape().occurrences.push({period,week});view.occurrence=tape().occurrences.length-1;view.deck=true;},'Occurrence added. Set its sprint and week in the loaded session.'); }
+function renderTracks() {
+  $('tracks').hidden=view.reading!=='tracks';$('events').hidden=view.reading!=='events';
+  $('tracks-tab').setAttribute('aria-pressed',String(view.reading==='tracks'));$('events-tab').setAttribute('aria-pressed',String(view.reading==='events'));
+  $('tracks').replaceChildren(); const rows=[];
+  for(const item of model.tapes) {
+    const row=el('div',undefined,'track'); row.append(keyed(button(item.name,event=>selected(item.id,0,event.currentTarget),'',view.deck&&view.tape===item.id),`track-${item.id}`));
+    const slots=el('div',undefined,'track-slots');
+    for(let slot=0;slot<8;slot++) {const period=Math.floor(slot/2)+1,week=slot%2+1;if(view.period&&view.period!==period) continue;
+      const matches=item.occurrences.map((occ,index)=>({...occ,index})).filter(occ=>occ.period===period&&occ.week===week);
+      const cell=keyed(button(matches.length>1?String(matches.length):matches.length?'':'＋',event=>{if(matches.length) selected(item.id,matches[0].index,event.currentTarget);else{view.tape=item.id;addOccurrence(period,week,event.currentTarget.dataset.focusKey);}},matches.length?'':'empty'),`slot-${item.id}-${slot}`);
+      cell.setAttribute('aria-label',`${item.name}, Sprint ${period}, Week ${week}${matches.length ? `, ${matches.length} occurrence${matches.length>1?'s':''}` : ', add occurrence'}`);
+      cell.title=cell.getAttribute('aria-label'); cell.dataset.selected=String(view.deck&&item.id===view.tape&&matches.some(match=>match.index===view.occurrence)); slots.append(cell);
+    }
+    if(view.period) slots.style.gridTemplateColumns='repeat(2,1fr)'; row.append(slots);$('tracks').append(row);
+    item.occurrences.forEach((occ,index)=>{if(!view.period||occ.period===view.period) rows.push({item,index,...occ});});
+  }
+  rows.sort((a,b)=>a.period-b.period||a.week-b.week);
+  const table=el('table',undefined,'events'),caption=el('caption',view.period?`Events in Sprint ${view.period}`:'Events across the plan');table.append(caption);
+  const head=el('thead'),hr=el('tr');for(const text of ['When','Session','People']){const th=el('th',text);th.scope='col';hr.append(th);}head.append(hr);table.append(head);const body=el('tbody');
+  const pageSize=6,pageCount=Math.max(1,Math.ceil(rows.length/pageSize));view.eventPage=Math.min(view.eventPage,pageCount-1);
+  for(const row of rows.slice(view.eventPage*pageSize,(view.eventPage+1)*pageSize)){const tr=el('tr');tr.append(el('td',`Sprint ${row.period} · Week ${row.week}`));const td=el('td');td.append(keyed(button(row.item.name,event=>selected(row.item.id,row.index,event.currentTarget)),`event-${row.item.id}-${row.index}`));tr.append(td,el('td',row.item.people.map(id=>model.people.find(p=>p.id===id).name).join(', ')||'Choose people'));body.append(tr);} table.append(body);$('events').replaceChildren(table);
+  if(pageCount>1){const pages=el('nav',undefined,'controls');pages.setAttribute('aria-label','Event pages');
+    for(const [direction,label] of [[-1,'Previous'],[1,'Next']]){const control=button(label,()=>{view.eventPage+=direction;renderTracks();const next=$('events').querySelector(`[data-event-page="${direction}"]`);(next?.disabled?$('events').querySelector(`[data-event-page="${-direction}"]`):next)?.focus();},'ghost');control.dataset.eventPage=String(direction);control.disabled=direction<0?view.eventPage===0:view.eventPage===pageCount-1;pages.append(control);}
+    pages.append(el('span',`Page ${view.eventPage+1} of ${pageCount}`,'hint'));$('events').append(pages);}
+}
+function renderMatrix(keepEditor) {
+  const table=el('table',undefined,'matrix');table.append(el('caption','Participation in every occurrence of a session'));
+  const thead=el('thead'),head=el('tr'),label=el('th','Session');label.scope='col';head.append(label);
+  for(const person of model.people){const th=el('th');th.scope='col';th.append(keyed(button(person.name,()=>openInline('person',person.id),'ghost',view.person===person.id),`person-${person.id}`));head.append(th);}thead.append(head);table.append(thead);
+  const body=el('tbody');for(const item of model.tapes){const row=el('tr'),th=el('th');th.scope='row';th.append(keyed(button(item.name,event=>selected(item.id,0,event.currentTarget),'',view.tape===item.id&&view.deck),`matrix-tape-${item.id}`));row.append(th);
+    for(const person of model.people){const td=el('td'),label=el('label'),check=keyed(el('input'),`member-${item.id}-${person.id}`);check.type='checkbox';check.checked=item.people.includes(person.id);check.setAttribute('aria-label',`${person.name} in ${item.name}`);
+      check.addEventListener('change',()=>change(()=>{item.people=check.checked?[...item.people,person.id]:item.people.filter(id=>id!==person.id);},`${person.name} ${check.checked?'joins':'is available for'} ${item.name}.`));label.append(check);td.append(label);row.append(td);}body.append(row);}table.append(body);$('matrix').replaceChildren(table);
+  $('teams').replaceChildren(el('span','Teams:','hint'),...model.teams.map(team=>keyed(button(team.name,()=>openInline('team',team.id),'ghost',view.team===team.id),`team-${team.id}`)));
+  $('person-editor').hidden=!view.person;$('team-editor').hidden=!view.team;
+  if(view.person && keepEditor!=='person'){const person=model.people.find(p=>p.id===view.person),name=el('label','Person'),input=el('input');input.type='text';input.value=person.name;input.addEventListener('change',()=>change(()=>{person.name=input.value.trim()||person.name;},'Person updated.', undefined, 'person'));name.append(input);const rateLabel=el('label','Hourly rate · USD'),rate=el('input');rate.type='number';rate.min='0';rate.value=String(person.rate);rate.addEventListener('change',()=>change(()=>{person.rate=Math.max(0,Number(rate.value)||0);},'Illustrative rate updated.', undefined, 'person'));rateLabel.append(rate);$('person-editor').replaceChildren(name,rateLabel,button('Close ×',()=>{const id=view.person;view.person=null;renderMatrix();returnFocus(`person-${id}`);},'ghost'));}
+  if(view.team && keepEditor!=='team'){const team=model.teams.find(t=>t.id===view.team),label=el('label','Team name'),input=el('input');input.type='text';input.value=team.name;input.addEventListener('change',()=>change(()=>{team.name=input.value.trim()||team.name;},'Team updated.', undefined, 'team'));label.append(input);$('team-editor').replaceChildren(label);
+    for(const person of model.people){const member=el('label',person.name),check=el('input');check.type='checkbox';check.checked=team.people.includes(person.id);check.addEventListener('change',()=>change(()=>{team.people=check.checked?[...team.people,person.id]:team.people.filter(id=>id!==person.id);},'Team membership updated. Session participation stays independently editable.', undefined, 'team'));member.prepend(check);$('team-editor').append(member);} $('team-editor').append(button('Close ×',()=>{const id=view.team;view.team=null;renderMatrix();returnFocus(`team-${id}`);},'ghost'));}
+}
+function renderRouting(keepEditor) {
+  $('routing').replaceChildren();for(const [status,title] of [['requested','Requested'],['ready','Ready to share'],['received','Received']]){const lane=el('article');lane.append(el('h3',title));for(const response of model.responses.filter(r=>r.status===status)){const node=keyed(button('',()=>openInline('response',response.id),'response',view.response===response.id),`response-${response.id}`);node.append(el('strong',response.name),el('small',`${model.tapes.find(t=>t.id===response.from)?.name||'Source to choose'} → ${model.tapes.find(t=>t.id===response.to)?.name||'Receiver to choose'}`));lane.append(node);} $('routing').append(lane);}
+  $('response-editor').hidden=!view.response;if(!view.response || keepEditor==='response')return;const response=model.responses.find(r=>r.id===view.response),nodes=[];
+  const label=el('label','Response'),name=el('input');name.type='text';name.value=response.name;name.addEventListener('change',()=>change(()=>{response.name=name.value.trim()||response.name;},'Response updated.', undefined, 'response'));label.append(name);nodes.push(label);
+  for(const [field,title,records] of [['from','From session',model.tapes],['to','To session',model.tapes],['status','Status',[{id:'requested',name:'Requested'},{id:'ready',name:'Ready to share'},{id:'received',name:'Received'}]]]){const label=el('label',title),select=el('select');options(select,records,response[field]);select.addEventListener('change',()=>change(()=>{response[field]=select.value;},'Response routing updated.', undefined, 'response'));label.append(select);nodes.push(label);}nodes.push(button('Close ×',()=>{const id=view.response;view.response=null;renderRouting();returnFocus(`response-${id}`);},'ghost'));$('response-editor').replaceChildren(...nodes);
+}
+keyed($('add-tape'),'new-session');
+$('add-tape').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.tapes.push({id,name:'New working session',hours:0,minutes:30,team:'',people:[],occurrences:[]});view.tape=id;view.occurrence=0;view.deck=true;view.origin='new-session';},'Session tape added. Choose people and add an occurrence when ready.'));
+$('add-occurrence').addEventListener('click',()=>addOccurrence());
+$('remove-occurrence').addEventListener('click',()=>change(()=>{tape().occurrences.splice(view.occurrence,1);view.occurrence=Math.max(0,view.occurrence-1);},'Occurrence removed. Undo restores it.'));
+$('tape-name').addEventListener('change',event=>change(()=>{tape().name=event.target.value.trim()||tape().name;},'Session renamed.'));
+$('period').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].period=Number(event.target.value);},'Occurrence moved to the selected sprint.'));
+$('week').addEventListener('change',event=>change(()=>{tape().occurrences[view.occurrence].week=Number(event.target.value);},'Occurrence moved to the selected week.'));
+$('host').addEventListener('change',event=>change(()=>{tape().team=event.target.value;},'Host team updated.'));
+$('unload').addEventListener('click',()=>{dials.release();view.deck=false;render();if(!returnFocus(view.origin))returnFocus(`tape-${view.tape}`);});
+$('undo').addEventListener('click',()=>{dials.release();model=history.pop();turnKey=null;if(!model.tapes.some(t=>t.id===view.tape))view.tape=model.tapes[0].id;view.occurrence=Math.min(view.occurrence,Math.max(0,tape().occurrences.length-1));if(!model.responses.some(r=>r.id===view.response))view.response=null;render();$('status').textContent='Previous edit restored.';});
+$('reset').addEventListener('click',()=>{dials.release();remember();model=structuredClone(seed);Object.assign(view,{tape:'pairing',occurrence:0,period:0,deck:true,eventPage:0,person:null,team:null,response:null});render();$('status').textContent='Study reset. Undo restores your previous arrangement.';});
+for(const reading of ['tracks','events'])$(`${reading}-tab`).addEventListener('click',()=>{view.reading=reading;renderTracks();});
+$('people-toggle').addEventListener('click',()=>{const hidden=!$('people-panel').hidden;$('people-panel').hidden=hidden;$('people-toggle').setAttribute('aria-expanded',String(!hidden));$('people-toggle').textContent=hidden?'Show people':'Hide people';});
+$('add-response').addEventListener('click',()=>change(()=>{const id=crypto.randomUUID();model.responses.push({id,name:'New response',from:view.tape,to:model.tapes.find(t=>t.id!==view.tape)?.id||view.tape,status:'requested'});view.response=id;},'Response added. Choose its source and receiver.'));
+render();
+</script>
+</body>
+</html>

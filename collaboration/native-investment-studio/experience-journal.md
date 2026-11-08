@@ -8,8 +8,8 @@ PRs own current acceptance and delivery. The
 [implementation reference](implementation-reference.md) carries deeper contracts,
 and [usability research](usability-research.md) records the bounded research.
 
-The 7 November 2026 reconciliation preserves the current contract, the focused
-Coordination consolidation route and material history. The visual grammar is owned by the
+The 7 November 2026 reconciliation preserves the accepted main contract and
+separates the new dev composition study from production decisions. The visual grammar is owned by the
 [Studio Rack contracts](../../visual-fidelity-contracts/studio-rack/README.md).
 The supersession table identifies deliberate reversals. Earlier prose and exact
 interim check counts remain recoverable in Git history.
@@ -69,10 +69,42 @@ delivered #758's immediate session creation after independent review and passing
 hosted checks; it also corrected the source-test routing registration (#796).
 PR #797 delivered #770's native New session rows inside both Coordination
 sequencers. Creation Undo remains distinct from cancelling later edits to the
-added session. The current #771/#772 increment shares participant movement across
-session and team editors and attaches compact editorial drawers beneath the
-horizon. Its receiving PR owns delivery and exercised behavior. The future
-percentage model is split into #798; broader removal remains with #773.
+added session. PR #802 delivered #771/#772: shared participant movement across
+session and team editors and compact editorial drawers attached beneath the
+horizon. Its review and observations own that delivery. The future percentage
+model remains in #798; broader removal remains with #773.
+
+### Current exploration: a loaded tape within the rack
+
+The human requested ideation on `dev`, refreshed from `main`, before deciding
+how to incorporate more operations directly into the rack. The
+[#804 study](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804)
+and [proposal](../../planning/context-canvas/studio-rack-tape-workbench.md) compare
+loaded-tape modules, a people-by-session matrix, deeper scope navigation and a
+tape shelf with independent response routing. The interactive study gives these
+ideas their own illustrative state; the working showcase continues to use the
+accepted plan and canonical editors described below.
+
+The proposed consolidation includes all Coordination controls outside the rack,
+particularly Customize teams and handoffs. Every operation receives one named
+home and an explicit owner. A session definition, its repeated occurrences and
+the sprint/quarter containers retain separate meanings. Occurrence pads and
+Add occurrence replace the duplicate numeric Working sessions control in the
+study. Production retains that field pending review of the composition.
+
+The recommended composition keeps a stable loaded-session module, the existing
+duration mechanics, a compact participation matrix and the plan/period return.
+Events provides an optional bounded reading. Show/hide expresses a display
+preference instead of introducing a required step in editing. A separate
+response card illustrates routing a result to receiving work; unassigned tapes
+and independent response identity each need a small production model contract.
+Participant percentages remain separately scoped in #798.
+
+This is a prospective supersession of layout guidance, with the accepted
+interaction and recovery contracts intact. A human choice of composition is the
+next receiver before runtime integration. The dev CSS repair separately aligns
+the two Coordination racks, reduces nested gutters and keeps Plan session labels
+readable at ordinary phone widths. It preserves their current transaction owners.
 
 ### State, people and evidence
 
@@ -293,6 +325,7 @@ entry, screenshot or technical description presents the earlier behavior.
 
 | Earlier direction | Current replacement and reason |
 | --- | --- |
+| Separate numeric Working sessions and occurrence pads | In the #804 dev study, occurrence pads become the single visible repetition control. This is a prospective consolidation; production keeps its accepted field until review. Add session, Add occurrence and Add sprint/quarter retain separate meanings. |
 | Elapsed minutes, window starts/ends after, and minute-based planning zoom | Named sprints or quarters with week/month drill-down. Visitors recognize enterprise periods immediately; session duration retains exact units. |
 | Eight persistent timing-inspector categories | Direct period/session selection plus Stages & handoffs; availability opens in context. This keeps the initial view visual and concise. |
 | Lower motion by default and a lens-local motion selector | Full-speed by default; Off / Half-speed / Full-speed in the amp, with system reduction suppressing animation. |
@@ -728,13 +761,17 @@ behavior and occurrence/participant controls. This journal records the design
 and ownership; PR #794 records its completed review and delivery. PR #795 owns
 #758's immediate-add, later-edit and exact-creation Undo observations. PR #797
 owns #770's contextual period/person entry, ordinary phone/laptop geometry and
-return observations. The #771/#772 receiving PR records participant order/focus
+return observations. PR #802 records #771/#772 participant order/focus
 and motion, attached drawer containment and same-record operation routes. Review
 also preserved relationship recovery before a cadence exists (#801). The same
 pass restores the existing stage-choice layout (#799) and aligns the assembly
 rate check with deliberate adjustment from an unknown rate (#800).
 This journal records design and ownership rather than an unrun check result.
-Future percentage semantics remain with #798 and broader removal with #773.
+The next receiving decision is the #804 dev interaction study: choose the
+loaded-tape/matrix composition and the first bounded production bridge. Its
+research supports the design inference; human review establishes whether the
+composition fits this showcase. Future percentage semantics remain with #798
+and broader removal with #773.
 Pause before general performance refinement in
 [#679](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/679).
 The future compact sticky amp remains

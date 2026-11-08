@@ -12,6 +12,14 @@ the accepted design and its implementation boundaries. Prospective receiving
 decisions below retain their own Issues and delivery evidence. Each receiving PR
 owns its actual verification result. Publication remains a separately reviewed action.
 
+The [loaded-tape dev study](../../planning/context-canvas/studio-rack-tape-workbench.md)
+in [#804](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/804)
+explores a compact composition across these existing contracts. It maps every
+outside Coordination operation to a proposed rack home, consolidates repetition
+around occurrence pads, and separates session identity from plan/period scope.
+Its proposed refinements remain reviewable alongside this accepted grammar;
+production changes receive their own focused implementation and review.
+
 ## Choose a visual mode and an operation
 
 The family contains this composition contract and five operation contracts.
